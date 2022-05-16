@@ -1,0 +1,96 @@
+# Query: autocomplete
+# ContextLines: 1
+
+22 results - 4 files
+
+pages\Adminisrator\Company\CompanyModule.js:
+   99                            <AvField name="Name" value={EditData.Name} type="text"
+  100:                             placeholder=" Please Enter Name " autoComplete="off"
+  101                              validate={{
+
+  112                          <Col sm={4}>
+  113:                           <AvField name="Address" value={EditData.Address} type="text" autoComplete="off"
+  114                              placeholder=" Please Enter Address "
+
+  126                          <Col sm={4}>
+  127:                           <AvField name="GSTIN" autoComplete="off"
+  128                              value={EditData.GSTIN} type="text"
+
+  142                          <Col sm={4}>
+  143:                           <AvField name="PhoneNo" type="tel" autoComplete="off"
+  144                              value={EditData.PhoneNo}
+
+  163                            <AvField name="CompanyAbbreviation" value={EditData.CompanyAbbreviation} type="text"
+  164:                             autoComplete="off"
+  165                              placeholder=" Please Enter Company Abbreviation"
+
+  179                            <AvField name="EmailID" value={EditData.EmailID} type="email"
+  180:                             autoComplete="off"
+  181                              placeholder="example@example.com" validate={{
+
+  195                              placeholder="Please Enter Company Group ID"
+  196:                             autoComplete="off"
+  197                              validate={{
+
+pages\Adminisrator\HPages\HPageMaster.js:
+  129                                                          placeholder=" Please Enter Name "
+  130:                                                         autoComplete='off'
+  131                                                          validate={{
+
+  145                                                          placeholder=" Please Enter Discription "
+  146:                                                         autoComplete='off'
+  147                                                      />
+
+  159                                                      options={optionModule}
+  160:                                                     autoComplete='off'
+  161                                                      onChange={(e) => { HModuleSelectOnChangeHandller(e) }}
+
+  173                                                      value={selectSubModule}
+  174:                                                     autoComplete='off'
+  175                                                      options={optionSubModule}
+
+  188                                                      <AvField name="DisplayIndex" value={EditData.DisplayIndex} type="text"
+  189:                                                         autoComplete='off' placeholder=" Please Enter DisplayIndex" validate={{
+  190                                                              number: true,
+
+  207                                                          }}
+  208:                                                         autoComplete='off'
+  209                                                      />
+
+  223                                                          }}
+  224:                                                         autoComplete='off' />
+  225                                                  </Col>
+
+pages\Adminisrator\Modules\Modules.js:
+  107                                                          placeholder="Please Enter Name"
+  108:                                                         autoComplete='off' validate={{
+  109                                                              required: { value: true, errorMessage: 'Please enter a Name' },
+
+  119                                                  <Col sm={4}>
+  120:                                                     <AvField name="DisplayIndex" autoComplete='off'
+  121                                                          placeholder="Please Enter DisplayIndex"
+
+  136                                                      <AvField name="Icon"
+  137:                                                         autoComplete='off'
+  138                                                          placeholder="Please Enter IconPath"
+
+pages\Adminisrator\SubModule\SubModules.js:
+  103                              name="Name"
+  104:                             id="txtName" autoComplete="off"
+  105                              value={EditData.Name}
+
+  122                            onChange={(e) => { handllerModuleID(e) }}
+  123:                           autoComplete="off"
+  124                          />
+
+  140                              required
+  141:                             autoComplete="off"
+  142                            />
+
+  157                              name="DisplayIndex"
+  158:                             autoComplete="off"
+  159                              value={EditData.DisplayIndex}
+
+  175                            <AvField name="IsActive"
+  176:                             autoComplete="off"
+  177                              checked={(EditData.ID === 0) ? false : EditData.IsActive}
