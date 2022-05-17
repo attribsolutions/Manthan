@@ -28,7 +28,6 @@ const UserList = () => {
     const [deleteIn, setDeleteIn] = useState('');
     const [modal_center, setmodal_center] = useState(false);
 
-
     const {pages,editData, updateMessage} = useSelector((state) => ({
         pages: state.User_Registration_Reducer.pages,
         editData:state.User_Registration_Reducer.editData,
@@ -150,7 +149,8 @@ useEffect(() => {
                        
                         <button 
                
-               className="badge badge-soft-danger font-size-12"                          className="badge badge-soft-danger font-size-12"
+               className="badge badge-soft-danger font-size-12"                      
+                   
                             
                 onClick={() => {
                     const deleteID= window.confirm(

@@ -162,7 +162,8 @@ const pagesListColumns = [
                    
                     <button 
                
-               className="badge badge-soft-danger font-size-12"                          className="badge badge-soft-danger font-size-12"
+               className="badge badge-soft-danger font-size-12"                        
+                
                             
                 onClick={() => {
                     const deleteID= window.confirm(
