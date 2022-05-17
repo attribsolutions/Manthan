@@ -56,4 +56,14 @@ export const EDIT_USER="/UserList"
 export const UPDATE_SUCCESS_DATA="/UserList"
 
 
-
+/// M_Employees api
+export const GET_DESIGNATIONID="/Designation"
+export const GET_EMPLOYEETYPE="/EmployeeTypeByID"
+export const GET_STATE="/State"
+export const GET_REGION="/Region"
+export const POST_EMPLOYEEDATA="/M_Employees"
+export const GET_COMAPNY_API="/ C_Companies"
+export const GET_EMPLOYEE_LIST_API="/M_Employees"
+export const Delete_EmployeeID="/M_Employees"
+export const edit_EmployeeID="/M_Employees"
+export const Update_Employee_ID="/M_Employees"

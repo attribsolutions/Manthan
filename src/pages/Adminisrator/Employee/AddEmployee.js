@@ -3,8 +3,10 @@ import Select from "react-select";
 import { Card, CardBody, Col, Container, Row, CardHeader, Label, Button,Input } from "reactstrap";
 import { AvForm, AvInput, AvGroup, AvFeedback } from "availity-reactstrap-validation";
 import { useDispatch, useSelector } from "react-redux";
-import {getDesignationID,getEmployeeType,getState,getRegion,postEmployee,getCompany} from "../../store/actions";
-import Breadcrumbs from "../../components/Common/Breadcrumb";
+import {getDesignationID,getEmployeeType,getState,getRegion,postEmployee,getCompany}
+ from "../../../store/Administrator/M_Employee/action";
+ import Breadcrumbs from "../../../components/Common/Breadcrumb";
+
 import AvField from "availity-reactstrap-validation/lib/AvField";
 
 const AddEmployee = () => {
