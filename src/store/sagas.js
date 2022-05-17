@@ -17,7 +17,7 @@ import SubModuleSaga from "./Administrator/SubModules/saga"
 import PageListSaga from "./Administrator/PageMaster/saga"
 import HPageSaga from "./Administrator/HPages/saga"
 import OrdersSaga from "./Purchase/Orders/saga"
-
+import UserRegistrationSaga from "./Administrator/UserRegistrationRedux/saga"
 
 export default function* rootSaga() {
   yield all([
@@ -34,6 +34,7 @@ export default function* rootSaga() {
     fork(PageListSaga),
     fork(HPageSaga),
     fork(OrdersSaga),
+    fork(UserRegistrationSaga),
 
   ])
 }

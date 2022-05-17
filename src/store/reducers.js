@@ -19,7 +19,7 @@ import PageList from "./Administrator/PageMaster/reducer"
 import H_Pages from './Administrator/HPages/reducer'
 import OrdersReducers from './Purchase/Orders/reducer'
 
-
+import User_Registration_Reducer from "./Administrator/UserRegistrationRedux/reducer"
 
 const rootReducer = combineReducers({
   Layout,
@@ -35,7 +35,7 @@ const rootReducer = combineReducers({
   SubModules,
   H_Pages,
   PageList,
-
+  User_Registration_Reducer,
   // Purchase
   OrdersReducers
 })
