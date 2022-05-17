@@ -89,6 +89,21 @@ const postJwtRegister = (url, data) => {
 
 // USER REGISTRATION
 
+export const getEmployeeAPI = () => get(url.GET_EMPLOYEE_API)
+
+export const getRolesAPI = () => get(url.GET_ROLE_API)
+
+export const postAddUser = (data) => post(url.POST_ADD_USER,data )
+
+export const UserGetApi=()=> get(url.USER_GET_API)
+
+export const deteletRoleID=(id)=> del(`${url.DELETE_USER}/${id}` )/////// delete api
+export const editRoleID=(id)=> get(`${url.EDIT_USER}/${id}` )/////// edit api
+export const putUpdateRole = (data,id) => put(`${url.UPDATE_SUCCESS_DATA}/${id}`,data )///// update api
+
+
+// USER REGISTRATION
+
 export const getEmployee = () => get(url.GET_EMPLOYEE)
 
 export const getRoles = () => get(url.GET_ROLE)

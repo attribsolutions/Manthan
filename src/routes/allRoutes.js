@@ -21,6 +21,10 @@ import HPageMaster from "../pages/Adminisrator/HPages/HPageMaster";
 import OrderPage from "../pages/Purchase/Orders/OrderPage";
 import OrderList from "../pages/Purchase/Orders/OrderList"
 import HorizontalChart from "../pages/ChartJs/HorizontalChart";
+import AddUser from "../pages/Adminisrator/UserRegistration/AddUser";
+import UserList from "../pages/Adminisrator/UserRegistration/UserList";
+import AddEmployee from "../pages/Adminisrator/Employee/AddEmployee";
+import Employee_List from "../pages/Adminisrator/Employee/Employee_List";
 
 const userRoutes = [
 
@@ -43,6 +47,10 @@ const userRoutes = [
   { path: "/orders", component: OrderPage },
   { path: "/ordersList", component: OrderList },
   { path: "/Hchart", component: HorizontalChart },
+  {path:"/AddUser",component:AddUser},
+  {path:"/UserList",component:UserList},
+  {path:"/AddEmployee",component:AddEmployee},
+  {path:"/Employee_List",component:Employee_List},
 
   // this route should be at the end of all other routes
   { path: "/", exact: true, component: () => <Redirect to="/dashboard" /> },
