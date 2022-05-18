@@ -87,6 +87,34 @@ const postJwtRegister = (url, data) => {
     })
 }
 
+/// M_Employees api
+export const getDesignationIDapi = () => get(url.GET_DESIGNATIONID)
+export const getEmployeeTypeapi = () => get(url.GET_EMPLOYEETYPE)
+export const getStateapi = () => get(url.GET_STATE)
+export const getRegionapi = () => get(url.GET_REGION)
+export const getComapnyapi = () => get(url.GET_COMAPNY_API)
+export const postEmployeeData = (data) => post(url.POST_EMPLOYEEDATA,data )
+export const getEmployeelistApi=()=> get(url.GET_EMPLOYEE_LIST_API)////// get api
+export const deteletEmployeeID=(id)=> del(`${url.Delete_EmployeeID}/${id}` )/////// delete api
+export const editEmployeeAPI=(id)=> get(`${url.edit_EmployeeID}/${id}` )/////// edit api
+export const updateEmployeeAPI = (data,id) => put(`${url.Update_Employee_ID}/${id}`,data )
+
+
+// USER REGISTRATION
+
+export const getEmployeeAPI = () => get(url.GET_EMPLOYEE_API)
+
+export const getRolesAPI = () => get(url.GET_ROLE_API)
+
+export const postAddUser = (data) => post(url.POST_ADD_USER,data )
+
+export const UserGetApi=()=> get(url.USER_GET_API)
+
+export const deteletRoleID=(id)=> del(`${url.DELETE_USER}/${id}` )/////// delete api
+export const editRoleID=(id)=> get(`${url.EDIT_USER}/${id}` )/////// edit api
+export const putUpdateRole = (data,id) => put(`${url.UPDATE_SUCCESS_DATA}/${id}`,data )///// update api
+
+
 // USER REGISTRATION
 
 export const getEmployee = () => get(url.GET_EMPLOYEE)

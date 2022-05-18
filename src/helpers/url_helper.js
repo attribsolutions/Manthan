@@ -46,5 +46,24 @@ export const HPAGES_LIST="/H_Pages"/// post api
 export const GET_EMPLOYEE="/M_Employees"   //// get M_Employees api
 export const GET_ROLE="/M_Roles"///get api
 
+/// User Registration
+export const GET_EMPLOYEE_API="/M_Employees"   //// get M_Employees api
+export const GET_ROLE_API="/M_Roles"///get api
+export const POST_ADD_USER="/UserList"
+export const USER_GET_API="/UserList"
+export const DELETE_USER="/UserList"
+export const EDIT_USER="/UserList"
+export const UPDATE_SUCCESS_DATA="/UserList"
 
 
+/// M_Employees api
+export const GET_DESIGNATIONID="/Designation"
+export const GET_EMPLOYEETYPE="/EmployeeTypeByID"
+export const GET_STATE="/State"
+export const GET_REGION="/Region"
+export const POST_EMPLOYEEDATA="/M_Employees"
+export const GET_COMAPNY_API="/ C_Companies"
+export const GET_EMPLOYEE_LIST_API="/M_Employees"
+export const Delete_EmployeeID="/M_Employees"
+export const edit_EmployeeID="/M_Employees"
+export const Update_Employee_ID="/M_Employees"
