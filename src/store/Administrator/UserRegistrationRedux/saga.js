@@ -5,6 +5,7 @@ import {GET_EMPLOYEE,GET_ROLE,ADD_USER,GET_USER,
   DELETE_USER,EDIT_USER,UPDATE_USER}from './actionType'
 import{getEmployeeSuccess,getRolesSuccess,addUserSuccess,
   getUserSuccess,deleteSuccess,editSuccess,updateSuccess}from "./actions";
+import { UserListAPI } from "./UserListAPI";
 
 /// employee dropdown list
 function* Employeelist() {
@@ -73,8 +74,8 @@ function* editUser({ id }) {
   try {
     if (!id <= 0) {
       const response = yield call(editRoleID, id);
-      yield put(editSuccess(response));
-      console.log("response",response)
+      yield put(editSuccess(UserListAPI));
+      console.log(" userlist api response",UserListAPI)
     } else {
       yield put(editSuccess({ Status: 'false' }));
     }

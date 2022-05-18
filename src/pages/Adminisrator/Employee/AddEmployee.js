@@ -3,27 +3,62 @@ import Select from "react-select";
 import { Card, CardBody, Col, Container, Row, CardHeader, Label, Button,Input } from "reactstrap";
 import { AvForm, AvInput, AvGroup, AvFeedback } from "availity-reactstrap-validation";
 import { useDispatch, useSelector } from "react-redux";
-import {getDesignationID,getEmployeeType,getState,getRegion,postEmployee,getCompany} from "../../store/actions";
-import Breadcrumbs from "../../components/Common/Breadcrumb";
+import {getDesignationID,getEmployeeType,getState,getRegion,postEmployee,getCompany,updateEmployeeID} 
+from "../../../store/Administrator/M_Employee/action";
+import Breadcrumbs from "../../../components/Common/Breadcrumb";
 import AvField from "availity-reactstrap-validation/lib/AvField";
 
-const AddEmployee = () => {
+const AddEmployee = (props) => {
     const dispatch = useDispatch();
-    
+    const [EditData, setEditData] = useState([]);
+    const [IsEdit, setIsEdit] = useState(false);
+    var isEditData = props.state;
+    console.log("isEditData in AddList Page",isEditData)
+
     const [DesignationIDselect, setDesignationID] = useState("");
     const [EmployeeTypeselect, setEmployeeType] = useState("");
     const [Stateselect, setState] = useState("");
     const [Regionselect, setRegion] = useState("");
     const [Companyselect, setCompany] = useState("");
-    const [LoginName, setName] = useState("");
-    const [Address, setAddress] = useState("");
-    const [PhoneNo, setMobile] = useState("");
-    const [Email, setEmailID] = useState("");
-    const [pan, setPAN] = useState("");
-    const [AadharNo, setAadharNo] = useState("");
-    const [WorkingHours, setWorkingHours] = useState("");
    
-   
+    useEffect(() => {
+      if (!(isEditData === undefined)) {
+        setEditData(isEditData);
+        setIsEdit(true);
+        setDesignationID({
+          value: isEditData.DesignationID.ID,
+          label: isEditData.DesignationID.Name
+        })
+        setEmployeeType({
+          value: isEditData.EmployeeType.ID,
+          label: isEditData.EmployeeType.Name
+        })
+        setState({
+          value: isEditData.State.ID,
+          label: isEditData.State.Name
+        })
+        setRegion({
+          value: isEditData.Region.ID,
+          label: isEditData.Region.Name
+        })
+        setCompany({
+          value: isEditData.Companie.ID,
+          label: isEditData.Companie.Name
+        })
+      }
+    }, [IsEdit])
+console.log("data",EditData)
+    const { AddUserMessage, } = useSelector((state) => ({
+      AddUserMessage: state.M_EmployeesReducer.AddUserMessage,
+    }));
+    console.log("AddUserMessage",AddUserMessage)
+    useEffect(() => {
+      if ((AddUserMessage.Status === "true")) {
+        dispatch(postEmployee(undefined))
+      }
+    }, [AddUserMessage.Status])
+
+    
   /// DesignationIDDropDown
 useEffect(() => {
     dispatch(getDesignationID());
@@ -107,10 +142,22 @@ useEffect(() => {
 
       }),
     }
-    dispatch(postEmployee(requestOptions.body));
-    console.log("requestOptions",requestOptions.body)
-    console.log("values",values) 
-}
+    // dispatch(postEmployee(requestOptions.body));
+    // console.log("requestOptions",requestOptions.body)
+    // console.log("values",values)
+    if (IsEdit) {
+      dispatch(updateEmployeeID(requestOptions.body, EditData.ID));
+      setEditData([]);
+    }
+
+    else {
+      dispatch(postEmployee(requestOptions.body));
+      // alert1.show(<div style={{ color: 'purple' }}>User Register Successfully</div>)
+    }
+
+  };
+    
+
 
   return (
     <React.Fragment>
@@ -133,7 +180,7 @@ useEffect(() => {
                           Name
                         </Label>
                         <Col sm={4}>
-                          <AvField name="LoginName" id="txtName" value={LoginName}
+                          <AvField name="LoginName" id="txtName" value={EditData.Name}
                             type="text"
                             placeholder="Please Enter Name"
                             // autoComplete='off'
@@ -149,7 +196,7 @@ useEffect(() => {
                           Address
                         </Label>
                         <Col sm={4}>
-                          <AvField name="Address" value={Address} type="text"
+                          <AvField name="Address" value={EditData.Address} type="text"
                             placeholder=" Please Enter Address "
                             validate={{
                               required: { value: true, errorMessage: 'Please Enter your Address' },
@@ -165,7 +212,7 @@ useEffect(() => {
                         </Label>
                         <Col sm={4}>
                           <AvField name="PhoneNo" type="tel"
-                            value={PhoneNo}
+                            value={EditData.Mobile}
                             placeholder="+91 "
                             validate={{
                               required: { value: true, errorMessage: 'Please Enter your Mobile NO' },
@@ -188,7 +235,7 @@ useEffect(() => {
                         </Label>
                         <Col sm={4}>
                           <AvField name="Email" type="email"
-                            value={Email}
+                            value={EditData.EmailID}
                             placeholder="Enter your EmailID "
                             validate={{
                               required: { value: true, errorMessage: 'Please Enter your EmailID' },
@@ -204,15 +251,17 @@ useEffect(() => {
                     </AvGroup>
                       
                     <Row className="mb-4">
+                   
                     <Label className="col-sm-2 col-form-label">
                         BOD
                         </Label>
                  <div class="col-lg-2">
+                   
                  <Input
                   className="form-control"
                   id="dateInput"
                   type="date"
-                  defaultValue={""}
+                  Value={EditData.BOD}
                   on
                 //    id="example-date-input"
                 />
@@ -226,7 +275,7 @@ useEffect(() => {
                         </Label>
                         <Col sm={4}>
                           <AvField name="pan" type="text"
-                            value={pan}
+                            value={EditData.PAN}
                             placeholder="Enter your PAN No. "
                             validate={{
                               required: { value: true, errorMessage: 'Please Enter your PAN No.' },
@@ -248,7 +297,7 @@ useEffect(() => {
                         </Label>
                         <Col sm={4}>
                           <AvField name="AadharNo" type="text"
-                            value={AadharNo}
+                            value={EditData.AadharNo}
                             placeholder="Enter your AadharNo. "
                             validate={{
                               required: { value: true, errorMessage: 'Please Enter your AadharNo' },
@@ -269,7 +318,7 @@ useEffect(() => {
                         WorkingHours
                         </Label>
                         <Col sm={4}>
-                          <AvField name="WorkingHours" id="text" value={WorkingHours}
+                          <AvField name="WorkingHours" id="text" value={EditData.WorkingHours}
                             type="text"
                             placeholder="Please Enter WorkingHours"
                             // autoComplete='off' 
@@ -319,7 +368,7 @@ useEffect(() => {
                   className="form-control"
                   id="dateInput"
                   type="date"
-                  defaultValue={""}
+                  Value={EditData.JoiningDate}
                   on
                    />
                   </div>
@@ -373,13 +422,19 @@ useEffect(() => {
                     <Row className="justify-content-end">
                       <Col sm={2}>
                         <div>
-                          <Button
+                          {IsEdit ? <Button
                             type="submit"
                             className="btn btn-success w-md"
                           >
-                           Submit
+                            Update
                           </Button>
-                            
+                            : <Button
+                              type="submit"
+                              className="btn btn-success w-md"
+                            >
+                              Save
+                            </Button>}
+
                         </div>
                       </Col>{" "}
                       <Col sm={10}></Col>

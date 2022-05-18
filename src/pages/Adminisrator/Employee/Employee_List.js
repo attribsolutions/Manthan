@@ -1,17 +1,15 @@
 import React, { useEffect, useState } from 'react'
 import { useHistory } from "react-router-dom";
-import Breadcrumbs from "../../components/Common/Breadcrumb";
-import MetaTags from "react-meta-tags";
-import { Button } from "reactstrap";
+import Breadcrumbs from "../../../components/Common/Breadcrumb";
 import {
     Modal,
     Col,
     Row,
 } from "reactstrap";
-import { useAlert } from "react-alert";
+// import { useAlert } from "react-alert";
 import {
     getEmployeelist,editEmployeeeId,delete_Employee_ID,updateEmployeeIDSuccess
-} from "../../store/M_Employee/action";
+} from "../../../store/Administrator/M_Employee/action";
 import paginationFactory, {
     PaginationListStandalone,
     PaginationProvider, SizePerPageDropdownStandalone,
@@ -23,7 +21,7 @@ import AddEmployee from './AddEmployee';
 
 const Employee_List = () => {
     const [EditId, setId] = useState('')
-    const alert1 = useAlert();
+    // const alert1 = useAlert();
     const dispatch = useDispatch();
     const [deleteIn, setDeleteIn] = useState('');
     const history = useHistory();
@@ -32,36 +30,42 @@ const Employee_List = () => {
 
     const { pages,editData,updateMessage} = useSelector((state) => ({
         pages:state.M_EmployeesReducer.pages, 
-        editData:state.CompanyReducer.editData,
-        updateMessage:state.CompanyReducer.updateMessage,
+        editData:state.M_EmployeesReducer.editData,
+        updateMessage:state.M_EmployeesReducer.updateMessage,
         
     }));
-console.log("Data",pages)
+// console.log("Data",pages)
 
 useEffect(()=>{
-    // dispatch(editModuleID(0));
+    
     dispatch(getEmployeelist());
 },[dispatch]);
 
-const deleteHandeler = (id, name) => {
+// const deleteHandeler = (id, name) => {
 
-    alert1.error(<div style={{ color: 'red' }}>Are You Sure Want To Delete:{name}</div>, {
-        actions: [
-            {
-                copy:
-                    <div style={{ color: 'blue' }}>Yes</div>, onClick: () => {
-                        dispatch(delete_Employee_ID(id));
-                        setDeleteIn(id);
-                    }
-            }
-        ],
-        closeCopy: <div style={{ color: 'Black' }}>NO</div>
-    });
-}
+//     alert1.error(<div style={{ color: 'red' }}>Are You Sure Want To Delete:{name}</div>, {
+//         actions: [
+//             {
+//                 copy:
+//                     <div style={{ color: 'blue' }}>Yes</div>, onClick: () => {
+//                         dispatch(delete_Employee_ID(id));
+//                         setDeleteIn(id);
+//                     }
+//             }
+//         ],
+//         closeCopy: <div style={{ color: 'Black' }}>NO</div>
+//     });
+// }
 
+const deleteHandeler = (id) => { 
+    console.log("deleted id",id)
+    setDeleteIn(id);
+    dispatch(delete_Employee_ID(id));
+    dispatch(getEmployeelist());  
+};
 useEffect(() => {
-    if (updateMessage.Status === 'true') {
-        dispatch(updateEmployeeIDSuccess({ Status: 'false' }));
+    if (updateMessage.Status === "true") {
+        dispatch(updateEmployeeIDSuccess(''));
         tog_center()
         dispatch(getEmployeelist());
     }
@@ -166,14 +170,18 @@ const pagesListColumns = [
                         <i class="mdi mdi-pencil font-size-18" id="edittooltip"></i>
                     </buton>{" "}
                    
-                     <buton
+                    <buton
                         className="badge badge-soft-danger font-size-12"
                         
                         onClick={() => {
-                            deleteHandeler(pages.ID, pages.Name);
-                        }}
-                        
-                    >
+                            const deleteID= window.confirm(
+                              "Are you sure you want to Delete ?"
+                                    )
+                           if ( deleteID=== true) {
+                            deleteHandeler(pages.ID );
+                                    }
+                                 
+                                }}>
                         <i class="mdi mdi-delete font-size-18" ></i>
                     </buton>
                 </div>
@@ -182,8 +190,6 @@ const pagesListColumns = [
     },
 ]
    
-
-    
 return (
     <React.Fragment>
         <div className="page-content">
@@ -208,7 +214,7 @@ return (
                                         IsButtonVissible={true}
                                         a={toolkitProps.searchProps}
                                         breadcrumbCount={pages.length}
-                                        Path={"/AddEmployee"}
+                                        RedirctPath={"/AddEmployee"}
                                     />
                                     <Row>
                                         <Col xl="12">

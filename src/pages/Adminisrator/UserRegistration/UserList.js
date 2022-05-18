@@ -28,7 +28,6 @@ const UserList = () => {
     const [deleteIn, setDeleteIn] = useState('');
     const [modal_center, setmodal_center] = useState(false);
 
-
     const {pages,editData, updateMessage} = useSelector((state) => ({
         pages: state.User_Registration_Reducer.pages,
         editData:state.User_Registration_Reducer.editData,
@@ -57,14 +56,14 @@ useEffect(() => {
     useEffect(() => {
         if (updateMessage.Status === true) {
             dispatch(updateSuccess({ Status: false }))
-            // dispatch(getUser());
+            dispatch(getUser());
             tog_center()
         }
     }, [updateMessage.Status]);
     console.log("updateMessage",updateMessage)
 
     useEffect(() => {
-        if (editData.Status === "true") {
+        if (editData.Status === true) {
             // dispatch(editUserId(0));
             tog_center()
             console.log("editData after useEffecteee",editData)
@@ -148,22 +147,21 @@ useEffect(() => {
                             <i class="mdi mdi-pencil font-size-18" id="edittooltip"></i>
                         </buton>{" "}
                        
-                        <button 
-               
-               className="badge badge-soft-danger font-size-12"                          className="badge badge-soft-danger font-size-12"
-                            
-                onClick={() => {
-                    const deleteID= window.confirm(
-                      "Are you sure you want to Delete ?"
-                            )
-                   if ( deleteID=== true) {
-                    deleteHandeler(user.ID,user.LoginName );
-                            }
-                         
-                        }}>
-                      
-                      <i class="mdi mdi-delete font-size-18" ></i>
-                       </button>
+                        
+                       <buton
+                        className="badge badge-soft-danger font-size-12"
+                        
+                        onClick={() => {
+                            const deleteID= window.confirm(
+                              "Are you sure you want to Delete ?"
+                                    )
+                           if ( deleteID=== true) {
+                            deleteHandeler(user.ID );
+                                    }
+                                 
+                                }}>
+                        <i class="mdi mdi-delete font-size-18" ></i>
+                    </buton>
                     </div>
                 </>
             ),
@@ -194,7 +192,7 @@ useEffect(() => {
                                             IsButtonVissible={true}
                                             a={toolkitProps.searchProps}
                                             breadcrumbCount={pages.length}
-                                            Path={"/AddUser"}
+                                            RedirctPath={"/AddUser"}
                                         />
                                         <Row>
                                             <Col xl="12">
@@ -230,7 +228,7 @@ useEffect(() => {
                             toggle={() => { tog_center() }}
                             size="xl"
                         >
-                            <AddUser state={editData.Data} />
+                            <AddUser state={editData} />
                         </Modal>
                               </div>
                       </React.Fragment>
