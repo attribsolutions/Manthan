@@ -67,9 +67,9 @@ export const getRegion = () => ({
     Data,id
   });
   
-  export const PostEmployeeSuccess = (PostMessage) => ({
+  export const PostEmployeeSuccess = (AddUserMessage) => ({
     type: POST_EMPLOYEE_SUCCESS,
-    payload: PostMessage,
+    payload: AddUserMessage,
   });
 /// get Empoyee list 
   export const getEmployeelist = () => ({

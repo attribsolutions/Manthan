@@ -20,7 +20,7 @@ import {
     State:[],
     Region:[],
     PostPage:[],
-    PostMessage:[],
+    AddUserMessage:[],
     Company:[],
     pages:[],
     deleteID: [],
@@ -77,7 +77,7 @@ import {
       case POST_EMPLOYEE_SUCCESS:
         return {
           ...state,
-          PostMessage: action.payload,
+          AddUserMessage: action.payload,
         };
 
            //// get api

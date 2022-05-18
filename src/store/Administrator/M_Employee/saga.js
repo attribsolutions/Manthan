@@ -47,7 +47,7 @@ function* State_saga() {
     
       const response = yield call(getStateapi);
       yield put(getStateESuccess(response.Data));
-      //  console.log('inside a function employee',response)
+    //    console.log('inside a function employee',response)
     } catch (error) {
       console.log("State_saga page error", error);
     }
@@ -115,7 +115,8 @@ function* DeleteEmployeeID({ id }) {
     try {
       if (!id <= 0) {
         const response = yield call(editEmployeeAPI, id);
-        yield put(editEmployeeSuccess(response.Data));
+        yield put(editEmployeeSuccess(response));
+        console.log("response in saga page",response)
       } else {
         yield put(editEmployeeSuccess({ Status: 'false' }));
       }
@@ -136,7 +137,7 @@ function* DeleteEmployeeID({ id }) {
       }
       // debugger;
     } catch (error) {
-      yield console.log("updateRole  saga page error   :", error);
+      yield console.log("updateEmployeeID saga page error   :", error);
     }
   }
 

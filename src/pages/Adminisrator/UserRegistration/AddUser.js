@@ -3,9 +3,11 @@ import Select from "react-select";
 import { Card, CardBody, Col, Container, Row, CardHeader, Label, Button } from "reactstrap";
 import { AvForm, AvInput, AvGroup, AvFeedback } from "availity-reactstrap-validation";
 import { useDispatch, useSelector } from "react-redux";
-import { getEmployee, getRoles, addUser, updateID }from  "../../../store/Administrator/UserRegistrationRedux/actions";
+import { getEmployee, getRoles, addUser, updateID } 
+from  "../../../store/Administrator/UserRegistrationRedux/actions";
 import Breadcrumbs from "../../../components/Common/Breadcrumb";
 import AvField from "availity-reactstrap-validation/lib/AvField";
+import { UserListAPI } from "../../../store/Administrator/UserRegistrationRedux/UserListAPI";
 // import { useAlert } from "react-alert";
 
 const AddUser = (props) => {
@@ -19,8 +21,8 @@ const AddUser = (props) => {
   const [RoleDropDown, setRoleDropDown] = useState("");
 
   // console.log("EmployeeID in UseState",EmployeeSelect)
-  var isEditData = props.state;
-  // console.log("isEditData",isEditData)
+  var isEditData = UserListAPI.Data;
+  console.log("UserListAPI",isEditData)
 
   useEffect(() => {
     if (!(isEditData === undefined)) {
@@ -31,7 +33,7 @@ const AddUser = (props) => {
         value: isEditData.EmployeeID,
         label: isEditData.EmployeeID
       })
-    // setRoleData(EditData.RollData)
+    setRoleData(isEditData.RoleID)
     }
   }, [IsEdit])
   //  console.log("isEditData in useeffect",isEditData)
@@ -41,7 +43,7 @@ const AddUser = (props) => {
   }));
 
   useEffect(() => {
-    if ((AddUserMessage.Status === "true")) {
+    if ((AddUserMessage.Status === true)) {
       dispatch(addUser(undefined))
     }
   }, [AddUserMessage.Status])
@@ -156,7 +158,7 @@ const AddUser = (props) => {
                         </Label>
                         <Col sm={4}>
                           <AvField name="Email" type="email"
-                            value={EditData.Email}
+                            value={EditData.email}
                             placeholder="Enter your EmailID "
                             // autoComplete='off'
                             validate={{
@@ -280,15 +282,15 @@ const AddUser = (props) => {
                                 </thead>
                                 <tbody >
                                   {RoleData.map((TableValue) => (
-                                    <tr key={TableValue.value}>
+                                    <tr key={TableValue.ID}>
                                       <td>
                                         <h5 className="my-0 text-primary">
-                                          {TableValue.label}
+                                          {TableValue.Name}
                                         </h5>
                                       </td>
                                       <td>
                                         <h5 className="my-0 text-primary">
-                                          {TableValue.value}
+                                          {TableValue.ID}
                                         </h5>
                                       </td>
                                       <td>

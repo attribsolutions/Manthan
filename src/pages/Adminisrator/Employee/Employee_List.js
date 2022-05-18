@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useHistory } from "react-router-dom";
 import Breadcrumbs from "../../../components/Common/Breadcrumb";
-import MetaTags from "react-meta-tags";
-import { Button } from "reactstrap";
 import {
     Modal,
     Col,
@@ -29,46 +27,58 @@ const Employee_List = () => {
     const history = useHistory();
     const { SearchBar } = Search;
     const [modal_center, setmodal_center] = useState(false);
-     
-   
+
     const { pages,editData,updateMessage} = useSelector((state) => ({
         pages:state.M_EmployeesReducer.pages, 
-        // editData:state.CompanyReducer.editData,
-        // updateMessage:state.CompanyReducer.updateMessage,
+        editData:state.M_EmployeesReducer.editData,
+        updateMessage:state.M_EmployeesReducer.updateMessage,
         
     }));
-console.log("Data",pages)
+// console.log("Data",pages)
 
 useEffect(()=>{
-    // dispatch(editModuleID(0));
+    
     dispatch(getEmployeelist());
 },[dispatch]);
 
+// const deleteHandeler = (id, name) => {
 
+//     alert1.error(<div style={{ color: 'red' }}>Are You Sure Want To Delete:{name}</div>, {
+//         actions: [
+//             {
+//                 copy:
+//                     <div style={{ color: 'blue' }}>Yes</div>, onClick: () => {
+//                         dispatch(delete_Employee_ID(id));
+//                         setDeleteIn(id);
+//                     }
+//             }
+//         ],
+//         closeCopy: <div style={{ color: 'Black' }}>NO</div>
+//     });
+// }
 
 const deleteHandeler = (id) => { 
-    console.log("id",id)
+    console.log("deleted id",id)
     setDeleteIn(id);
     dispatch(delete_Employee_ID(id));
     dispatch(getEmployeelist());  
 };
-
-// useEffect(() => {
-//     if (updateMessage.Status === 'true') {
-//         dispatch(updateEmployeeIDSuccess({ Status: 'false' }));
-//         tog_center()
-//         dispatch(getEmployeelist());
-//     }
-// }, [updateMessage.Status]);
+useEffect(() => {
+    if (updateMessage.Status === "true") {
+        dispatch(updateEmployeeIDSuccess(''));
+        tog_center()
+        dispatch(getEmployeelist());
+    }
+}, [updateMessage.Status]);
 
 // console.log("updateMessage after useEffect in list ",updateMessage)
 
-// useEffect(() => {
-//     if (editData.Status === 'true') {
-//         tog_center()
-//     }
-// }, [editData]);
-// console.log("editData",editData)
+useEffect(() => {
+    if (editData.Status === 'true') {
+        tog_center()
+    }
+}, [editData]);
+console.log("editData",editData)
 
 const EditPageHandler = (id) => {
     dispatch(editEmployeeeId(id));
@@ -160,31 +170,26 @@ const pagesListColumns = [
                         <i class="mdi mdi-pencil font-size-18" id="edittooltip"></i>
                     </buton>{" "}
                    
-                    <button 
-               
-               className="badge badge-soft-danger font-size-12"                        
-                
-                            
-                onClick={() => {
-                    const deleteID= window.confirm(
-                      "Are you sure you want to Delete ?"
-                            )
-                   if ( deleteID=== true) {
-                    deleteHandeler(pages.ID );
-                            }
-                         
-                        }}>
-                      
-                      <i class="mdi mdi-delete font-size-18" ></i>
-                       </button>
+                    <buton
+                        className="badge badge-soft-danger font-size-12"
+                        
+                        onClick={() => {
+                            const deleteID= window.confirm(
+                              "Are you sure you want to Delete ?"
+                                    )
+                           if ( deleteID=== true) {
+                            deleteHandeler(pages.ID );
+                                    }
+                                 
+                                }}>
+                        <i class="mdi mdi-delete font-size-18" ></i>
+                    </buton>
                 </div>
             </>
         ),
     },
 ]
    
-
-    
 return (
     <React.Fragment>
         <div className="page-content">
@@ -209,7 +214,7 @@ return (
                                         IsButtonVissible={true}
                                         a={toolkitProps.searchProps}
                                         breadcrumbCount={pages.length}
-                                        Path={"/AddEmployee"}
+                                        RedirctPath={"/AddEmployee"}
                                     />
                                     <Row>
                                         <Col xl="12">
@@ -245,7 +250,7 @@ return (
                         toggle={() => { tog_center() }}
                         size="xl"
                     >
-                        <AddEmployee state={editData} />
+                        <AddEmployee state={editData.Data} />
                     </Modal>
                           </div>
                   </React.Fragment>
