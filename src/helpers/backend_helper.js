@@ -1,5 +1,5 @@
 import axios from "axios"
-import { del, get, put,  post,  } from "./api_helper"
+import { del, get, put, post, } from "./api_helper"
 import * as url from "./url_helper"
 
 // Gets the logged in user data from local session
@@ -87,41 +87,6 @@ const postJwtRegister = (url, data) => {
     })
 }
 
-/// M_Employees api
-export const getDesignationIDapi = () => get(url.GET_DESIGNATIONID)
-export const getEmployeeTypeapi = () => get(url.GET_EMPLOYEETYPE)
-export const getStateapi = () => get(url.GET_STATE)
-export const getRegionapi = () => get(url.GET_REGION)
-export const getComapnyapi = () => get(url.GET_COMAPNY_API)
-export const postEmployeeData = (data) => post(url.POST_EMPLOYEEDATA,data )
-export const getEmployeelistApi=()=> get(url.GET_EMPLOYEE_LIST_API)////// get api
-export const deteletEmployeeID=(id)=> del(`${url.Delete_EmployeeID}/${id}` )/////// delete api
-export const editEmployeeAPI=(id)=> get(`${url.edit_EmployeeID}/${id}` )/////// edit api
-export const updateEmployeeAPI = (data,id) => put(`${url.Update_Employee_ID}/${id}`,data )
-
-
-// USER REGISTRATION
-
-export const getEmployeeAPI = () => get(url.GET_EMPLOYEE_API)
-
-export const getRolesAPI = () => get(url.GET_ROLE_API)
-
-export const postAddUser = (data) => post(url.POST_ADD_USER,data )
-
-export const UserGetApi=()=> get(url.USER_GET_API)
-
-export const deteletRoleID=(id)=> del(`${url.DELETE_USER}/${id}` )/////// delete api
-export const editRoleID=(id)=> get(`${url.EDIT_USER}/${id}` )/////// edit api
-export const putUpdateRole = (data,id) => put(`${url.UPDATE_SUCCESS_DATA}/${id}`,data )///// update api
-
-
-// USER REGISTRATION
-
-export const getEmployee = () => get(url.GET_EMPLOYEE)
-
-export const getRoles = () => get(url.GET_ROLE)
-// export const getModule = () => get(url.GET_MODULE)
-// Login Method
 const postJwtLogin = data => post(url.POST_JWT_LOGIN, data)
 
 // postForgetPwd
@@ -130,64 +95,79 @@ const postJwtForgetPwd = data => post(url.POST_FAKE_JWT_PASSWORD_FORGET, data)
 // postSocialLogin
 export const postSocialLogin = data => post(url.SOCIAL_LOGIN, data)
 
-//order Page
+/// Employees  Component All Apis 
+export const getDesignationID_For_Dropdown = () => get(url.GET_DESIGNATIONID)
+export const getEmployeeType_For_Dropdown = () => get(url.GET_EMPLOYEE_TYPE)
+export const getState_For_Dropdown = () => get(url.GET_STATE)
+export const getRegion_For_Dropdown = () => get(url.GET_REGION)
+export const getComapny_For_Dropdown = () => get(url.COMPANY_API_URL)
+export const post_EmployeeData = (data) => post(url.EMPLOYEE_API_URL, data) //save And Update
+export const get_EmployeelistApi = () => get(url.EMPLOYEE_API_URL) // get api
+export const detelet_EmployeeID = (id) => del(`${url.EMPLOYEE_API_URL}/${id}`) // delete api
+export const edit_EmployeeAPI = (id) => get(`${url.EMPLOYEE_API_URL}/${id}`) // edit api
+export const update_EmployeeAPI = (data, id) => put(`${url.EMPLOYEE_API_URL}/${id}`, data)// update 
+
+//User Registration  All APIs 
+export const getEmployee_Dropdown_For_UserRegistration_API = () => get(url.EMPLOYEE_API_URL)//get api for Dropdown_list data 
+export const RolesListDropdown_For_UserRegistration_API = () => get(url.ROLE_API_URL)
+export const User_Component_PostMethod_API = (data) => post(url.USER_API_URL, data)//post for (save and update) User_Component
+export const User_Component_GetMethod_API = () => get(url.USER_API_URL) //Get User_Component
+export const User_Component_Delete_Method_API = (id) => del(`${url.USER_API_URL}/${id}`) // delete api
+export const User_Component_EditById_API = (id) => get(`${url.USER_API_URL}/${id}`) // edit api
+export const User_Component_Update_API = (data, id) => put(`${url.USER_API_URL}/${id}`, data) // update api
+
+
 export const getOrderPage = () => get(url.GET_ORDER)
 export const submitOrderPage = (data) => post(url.SUBMIT_ORDER_PAGE, data)
-//Edit Order
-export const editOrderID = (id) => get(url.EDIT_ORDER_ID)
-//Order List
+export const editOrderID = (id) => get(url.EDIT_ORDER_ID)//Edit Order
 export const getOrderList = (data) => get(`${url.GET_ORDER_LIST}?FromDate=${data['FromDate']}&ToDate=${data['ToDate']}&CustomerID=${data['CustomerID']}&DivisionID=${data['DivisionID']}`)
 export const getDivisionOrders = () => get(`${url.GET_ORDER_LIST}?FromDate=2022-01-25&ToDate=2022-01-25&CustomerID=0&DivisionID=3`)
 
-
 //Administrator   Modules submit  
-export const postSubmitModules = (data) => post(url.SUBMIT_H_MODULES, data)
+export const postSubmitModules = (data) => post(url.H_MODULES_API_URL, data)
 //module-list get API method
-export const Fetch_ModulesList =() => get(url.FETCH_MODULES_LIST, )
+export const Fetch_ModulesList = () => get(url.H_MODULES_API_URL,)
 // Delete_Modules_By-ID
-export const delete_ModuleID =(id) => del(`${url.FETCH_MODULES_LIST}/${id}` )
+export const delete_ModuleID = (id) => del(`${url.H_MODULES_API_URL}/${id}`)
 // Edit_Modules- by_ID
-export const edit_ModuleID =(id) => get(`${url.FETCH_MODULES_LIST}/${id}` )
+export const edit_ModuleID = (id) => get(`${url.H_MODULES_API_URL}/${id}`)
 // Update_Modules- by_ID
-export const updateModule_ID =(data,id) => put(`${url.FETCH_MODULES_LIST}/${id}`,data )
+export const updateModule_ID = (data, id) => put(`${url.H_MODULES_API_URL}/${id}`, data)
 
-//Administrator Company
 //Fetch Company LIst
-export const fetch_CompanyList =() => get(url.COMPANY_lIST, )
+export const fetch_CompanyList = () => get(url.COMPANY_API_URL,)
 // Edit_Company- by_ID
-export const edit_CompanyID =(id) => get(`${url.COMPANY_lIST}/${id}` )
+export const edit_CompanyID = (id) => get(`${url.COMPANY_API_URL}/${id}`)
 // Delete_Company_By-ID
-export const delete_CompanyID =(id) => del(`${url.COMPANY_lIST}/${id}` )
+export const delete_CompanyID = (id) => del(`${url.COMPANY_API_URL}/${id}`)
 // Company_Modules submit  
-export const postSubmit_Company = (data) => post(url.COMPANY_lIST, data)
+export const postSubmit_Company = (data) => post(url.COMPANY_API_URL, data)
 // Update_Company- by_ID
-export const updateCompany_ID =(data,id) => put(`${url.COMPANY_lIST}/${id}`,data )
-  
+export const updateCompany_ID = (data, id) => put(`${url.COMPANY_API_URL}/${id}`, data)
+
 //PageList And PageMaster
 export const getDefaultModule = () => get(url.GET_DEFAULT_MODULE)
-export const postDefaultMogeuleId=(id)=> get(url.POST_MODULE_ID,id)
+export const postDefaultMogeuleId = (id) => get(url.POST_MODULE_ID, id)
+export const postSubModule = (id) => get(`${url.H_SUB_MODULES_API_URL}/${id}`)
+export const postAddPage = (data) => post(url.H_SUB_MODULES_API_URL, data)
 
-export const postSubModule=(id)=> get(`${url.POST_SUB_MODULE}/${id}`)
-export const postAddPage = (data) => post(url.POST_ADD_PAGE,data )
-
-export const getPageAcess=()=> get(url.GET_PAGE_ACCESS)
-
+export const getPageAcess = () => get(url.GET_PAGE_ACCESS)
 
 //// H_subModule Api
-export const saveH_SubModules = (data) => post(url.H_SUB_MODULES,data )
-export const get_SubModulesListData_ApiCall = () => get(url.H_SUB_MODULES)
+export const saveH_SubModules = (data) => post(url.H_SUB_MODULES_API_URL, data)
+export const get_SubModulesListData_ApiCall = () => get(url.H_SUB_MODULES_API_URL)
 
-export const deleteSubModulesUsingID_ApiCall=(id)=> del(`${url.H_SUB_MODULES}/${id}` )/////// delete api
-export const getSubModulesEditDataUsingID_ApiCall=(id)=> get(`${url.H_SUB_MODULES}/${id}` )/////// edit api
-export const putUpdateSubModule = (Data,id) => put(`${url.H_SUB_MODULES}/${id}`,Data )///// update api
+export const deleteSubModulesUsingID_ApiCall = (id) => del(`${url.H_SUB_MODULES_API_URL}/${id}`)/////// delete api
+export const getSubModulesEditDataUsingID_ApiCall = (id) => get(`${url.H_SUB_MODULES_API_URL}/${id}`)/////// edit api
+export const putUpdateSubModule = (Data, id) => put(`${url.H_SUB_MODULES_API_URL}/${id}`, Data)///// update api
 
 //H_pages
-export const get_H_SubModule_HPages=(id)=> get(`${url.H_SUB_MODULES_FROM_HPAGES}/${id}` )/////// Get subModule For H_pages
-export const Fetch_HPagesListApi=()=> get(url.HPAGES_LIST )/////// get H_Pages List 
-export const edit_HPageID=(id)=> get(`${url.HPAGES_LIST}/${id}` )///////  get edit H_Pages ID Data 
-export const updateHPages=(Data,id)=>put(`${url.HPAGES_LIST}/${id}`,Data ) /////// Upadate H_Page api
-export const saveHPagesAPI=(Data)=> post(url.HPAGES_LIST, Data)
-export const deletHPagesUsingID_API=(id)=>del(`${url.HPAGES_LIST}/${id}` )
+export const get_H_SubModule_HPages = (id) => get(`${url.H_SUB_MODULES_FROM_HPAGES}/${id}`)/////// Get subModule For H_pages
+export const Fetch_HPagesListApi = () => get(url.H_PAGES_API_URL)/////// get H_Pages List 
+export const edit_HPageID = (id) => get(`${url.H_PAGES_API_URL}/${id}`)///////  get edit H_Pages ID Data 
+export const updateHPages = (Data, id) => put(`${url.H_PAGES_API_URL}/${id}`, Data) /////// Upadate H_Page api
+export const saveHPagesAPI = (Data) => post(url.H_PAGES_API_URL, Data)
+export const deletHPagesUsingID_API = (id) => del(`${url.H_PAGES_API_URL}/${id}`)
 
 export {
   getLoggedInUser,
