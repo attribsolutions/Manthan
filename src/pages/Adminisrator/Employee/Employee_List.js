@@ -40,7 +40,7 @@ const Employee_List = () => {
 // console.log("Data",pages)
 
 useEffect(()=>{
-    dispatch(SpinnerON(true))
+    // dispatch(SpinnerON(true))
     dispatch(getEmployeelist());
 },[dispatch]);
 

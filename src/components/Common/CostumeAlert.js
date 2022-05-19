@@ -47,6 +47,8 @@ const CostumeAlert = () => {
   }
 
   function Ok_handeler() {
+    dispatch(AlertShow({ Status: false }));
+    removeBodyCss()
 
   }
   //Permission Alert Ok button handller
