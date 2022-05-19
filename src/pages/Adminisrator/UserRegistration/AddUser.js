@@ -3,13 +3,16 @@ import Select from "react-select";
 import { Card, CardBody, Col, Container, Row, CardHeader, Label, Button } from "reactstrap";
 import { AvForm, AvInput, AvGroup, AvFeedback } from "availity-reactstrap-validation";
 import { useDispatch, useSelector } from "react-redux";
-import { getEmployee, getRoles, addUser, updateID } 
-from  "../../../store/Administrator/UserRegistrationRedux/actions";
+import { getEmployee, getRoles, addUser, updateID }
+  from "../../../store/Administrator/UserRegistrationRedux/actions";
 import Breadcrumbs from "../../../components/Common/Breadcrumb";
 import AvField from "availity-reactstrap-validation/lib/AvField";
-import { UserListAPI } from "../../../store/Administrator/UserRegistrationRedux/UserListAPI";
+
+ import { UserListAPI } from "../../../store/Administrator/UserRegistrationRedux/UserListAPI";
+ import { useAlert } from "react-alert";
 
 const AddUser = (props) => {
+
   const dispatch = useDispatch();
   const [EditData, setEditData] = useState([]);
   const [IsEdit, setIsEdit] = useState(false);
@@ -18,9 +21,14 @@ const AddUser = (props) => {
   //// M_Roles DropDown
   const [RoleDropDown, setRoleDropDown] = useState("");
 
+  
   var isEditData = props.state;
+  console.log("UserListAPI", isEditData)
+
+  
 
   useEffect(() => {
+    document.getElementById("txtName").focus();
     if (!(isEditData === undefined)) {
       setEditData(isEditData);
       setIsEdit(true);
@@ -28,7 +36,7 @@ const AddUser = (props) => {
         value: isEditData.EmployeeID,
         label: isEditData.EmployeeID
       })
-    setRoleData(isEditData.RoleID)
+      setRoleData(isEditData.RoleID)
     }
   }, [IsEdit])
   //  console.log("isEditData in useeffect",isEditData)
@@ -52,7 +60,7 @@ const AddUser = (props) => {
   const { employee } = useSelector((state) => ({
     employee: state.User_Registration_Reducer.employee
   }));
-// console.log("employee",employee)
+  // console.log("employee",employee)
   const EmployeeValues = employee.map((Data) => ({
     value: Data.ID,
     label: Data.Name
@@ -77,23 +85,19 @@ const AddUser = (props) => {
 
   /// Role Table Validation
   function AddRoleHandler() {
-    // const find = RoleData.find((element) => element === RoleDropDown);
     const find = RoleData.find((element) => {
       return element.value === RoleDropDown.value
     });
     if (RoleDropDown.length <= 0) {
-        window .alert("Select One Role");
-    //   alert1.error(<div style={{ color: 'red' }}>Select One Role</div>)
-    }
+      window.alert("Select One Role");
+      }
     else if (find === undefined) {
       setRoleData([...RoleData, RoleDropDown]);
     }
     else {
-        window .alert("RoleData already Exists");
-    //   alert1.error(<div style={{ color: 'red' }}>RoleData already Exists</div>)
+      window.alert("RoleData already Exists");
     }
   }
-
 
   const handleValidSubmit = (event, values) => {
     const requestOptions = {
@@ -115,7 +119,7 @@ const AddUser = (props) => {
     // console.log("EmployeeID in handlevalidSubmit",EmployeeSelect)
 
     if (RoleData.length <= 0) {
-    //   alert1.error(<div style={{ color: 'red' }}>At Least One RoleData is Select</div>)
+      //   alert1.error(<div style={{ color: 'red' }}>At Least One RoleData is Select</div>)
     }
     else if (IsEdit) {
       dispatch(updateID(requestOptions.body, EditData.ID));
@@ -126,7 +130,6 @@ const AddUser = (props) => {
       dispatch(addUser(requestOptions.body));
       // alert1.show(<div style={{ color: 'purple' }}>User Register Successfully</div>)
     }
-
   };
   // console.log("EmployeeSelect",EmployeeSelect)
   // console.log("IsEdit in handlesubmit",IsEdit)
@@ -146,28 +149,6 @@ const AddUser = (props) => {
                       handleValidSubmit(e, v);
                     }}
                   >
-                    <AvGroup>
-                      <Row className="mb-4">
-                        <Label className="col-sm-2 col-form-label">
-                         EmailID
-                        </Label>
-                        <Col sm={4}>
-                          <AvField name="Email" type="email"
-                            value={EditData.email}
-                            placeholder="Enter your EmailID "
-                            // autoComplete='off'
-                            validate={{
-                              required: { value: true, errorMessage: 'Please Enter your EmailID' },
-                              tel: {
-                                pattern: /\S+@\S+\.\S+/
-                              }
-                            }
-                            }
-                         
-                          />
-                        </Col>
-                      </Row>
-                    </AvGroup>
 
                     <AvGroup>
                       <Row className="mb-4">
@@ -178,8 +159,8 @@ const AddUser = (props) => {
                           <AvField name="LoginName" id="txtName" value={EditData.LoginName}
                             type="text"
                             placeholder="Please Enter LoginName"
-                            // autoComplete='off'
-                             validate={{
+                            autoComplete='off'
+                            validate={{
                               required: { value: true, errorMessage: 'Please enter a LoginName...!' },
                             }} />
                         </Col>
@@ -189,55 +170,41 @@ const AddUser = (props) => {
                     <AvGroup>
                       <Row className="mb-4">
                         <Label className="col-sm-2 col-form-label">
-                          Employee
+                          EmailID
                         </Label>
                         <Col sm={4}>
-                          <Select
-                            value={EmployeeSelect}
-                            options={EmployeeValues}
-                            onChange={(e) => { handllerEmployeeID(e) }}
+                          <AvField name="Email" type="email"
+                            value={EditData.email}
+                            placeholder="Enter your EmailID "
+                            autoComplete='off'
+                            validate={{
+                              required: { value: true, errorMessage: 'Please Enter your EmailID' },
+                              tel: {
+                                pattern: /\S+@\S+\.\S+/
+                              }
+                            }
+                            }
+
                           />
                         </Col>
                       </Row>
                     </AvGroup>
 
+
                     <Row className="mb-4">
-                      <Label
-                        className="col-sm-2 col-form-label"
-                        htmlFor="horizontal-password-inputk"
-                      >
-                        isActive
+                      <Label className="col-sm-2 col-form-label">
+                        Employee
                       </Label>
                       <Col sm={4}>
-                        <AvInput
-                          type="checkbox"
-                          checked={EditData.isActive}
-                          name="isActive"
-                          className="form-control"
-                          id="horizontal-customCheck"
+                        <Select
+                          value={EmployeeSelect}
+                          options={EmployeeValues}
+                          onChange={(e) => { handllerEmployeeID(e) }}
                         />
                       </Col>
                     </Row>
 
-                    <Row className="mb-4">
-                      <Label
-                        className="col-sm-2 col-form-label"
-                        htmlFor="horizontal-password-inputk"
-                      >
-                        Is SendOTP
-                      </Label>
-                      <Col sm={4}>
-                        <AvInput
-                          type="checkbox"
-                          checked={EditData.isSendOTP}
-                          name="isSendOTP"
-                          className="form-control"
-                          id="horizontal-customCheck"
-
-                        />
-                      </Col>
-                    </Row>
-                    <Row className="mb-3">
+                    <Row className="mb-2">
                       <Label className="col-sm-2 col-form-label">
                         Roles
                       </Label>
@@ -280,12 +247,12 @@ const AddUser = (props) => {
                                     <tr key={TableValue.ID}>
                                       <td>
                                         <h5 className="my-0 text-primary">
-                                          {TableValue.Name}
+                                          {TableValue.label}
                                         </h5>
                                       </td>
                                       <td>
                                         <h5 className="my-0 text-primary">
-                                          {TableValue.ID}
+                                          {TableValue.value}
                                         </h5>
                                       </td>
                                       <td>
@@ -296,7 +263,7 @@ const AddUser = (props) => {
                                             setRoleData(
                                               RoleData.filter(
                                                 (item) =>
-                                                  item.value !== TableValue.value
+                                                  item.ID !== TableValue.ID
                                               )
                                             )
                                           }
@@ -320,8 +287,46 @@ const AddUser = (props) => {
                                 </h5>
                               </div>
                             </div>
-                          </>
+                          </>  
                         )}
+                      </Col>
+                    </Row>
+
+
+                    <Row className="mb-4">
+                      <Label
+                        className="col-sm-2 col-form-label"
+                        htmlFor="horizontal-password-inputk"
+                      >
+                        isActive
+                      </Label>
+                      <Col sm={4}>
+                        <AvInput
+                          type="checkbox"
+                          checked={EditData.isActive}
+                          name="isActive"
+                          className="form-control"
+                          id="horizontal-customCheck"
+                        />
+                      </Col>
+                    </Row>
+
+                    <Row className="mb-4">
+                      <Label
+                        className="col-sm-2 col-form-label"
+                        htmlFor="horizontal-password-inputk"
+                      >
+                        Is SendOTP
+                      </Label>
+                      <Col sm={4}>
+                        <AvInput
+                          type="checkbox"
+                          checked={EditData.isSendOTP}
+                          name="isSendOTP"
+                          className="form-control"
+                          id="horizontal-customCheck"
+
+                        />
                       </Col>
                     </Row>
 

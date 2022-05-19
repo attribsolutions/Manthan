@@ -6,12 +6,12 @@ export const UserListAPI=
 {
             RoleID: [
                 {
-                    ID:1,
-                    Name:"abc"
+                    value:3,
+                    label:"abc"
                 },
                 {
-                    ID:2,
-                    Name:"abcd"
+                    value:2,
+                    label:"abcd"
                 }
             ],
             password: "1234",
