@@ -1,45 +1,53 @@
 import { call, put, takeEvery } from "redux-saga/effects";
-import {getEmployeeAPI,getRolesAPI,postAddUser,UserGetApi,deteletRoleID,editRoleID,putUpdateRole}
-from "../../../helpers/backend_helper";
-import {GET_EMPLOYEE,GET_ROLE,ADD_USER,GET_USER,
-  DELETE_USER,EDIT_USER,UPDATE_USER}from './actionType'
-import{getEmployeeSuccess,getRolesSuccess,addUserSuccess,
-  getUserSuccess,deleteSuccess,editSuccess,updateSuccess}from "./actions";
+import {
+  getEmployee_Dropdown_For_UserRegistration_API,
+  RolesListDropdown_For_UserRegistration_API,
+  User_Component_PostMethod_API,
+  User_Component_GetMethod_API,
+  User_Component_Delete_Method_API,
+  User_Component_EditById_API,
+  User_Component_Update_API
+} from "../../../helpers/backend_helper";
+import {
+  GET_EMPLOYEE, GET_ROLE, ADD_USER, GET_USER,
+  DELETE_USER, EDIT_USER, UPDATE_USER
+} from './actionType'
+import {
+  getEmployeeSuccess,
+  getRolesSuccess,
+  addUserSuccess,
+  getUserSuccess,
+  deleteSuccess,
+  editSuccess,
+  updateSuccess
+} from "./actions";
 import { UserListAPI } from "./UserListAPI";
 
 /// employee dropdown list
-function* Employeelist() {
-  
+function* EmployeelistDropdown_GenratorFunction() {
   try {
-  
-    const response = yield call(getEmployeeAPI);
+    const response = yield call(getEmployee_Dropdown_For_UserRegistration_API);
     yield put(getEmployeeSuccess(response.Data));
-    //  console.log('inside a function employee',response)
   } catch (error) {
     console.log("Employeelist  saga page error", error);
   }
 }
 
 /// roles dropdownlist
-function* Rolelist() {
-  
+function* RolesListDropdoun_GenratorFunction() {
   try {
-  
-    const response = yield call(getRolesAPI);
+    const response = yield call(RolesListDropdown_For_UserRegistration_API);
     yield put(getRolesSuccess(response.Data));
-    //  console.log('data',response.Data)
   } catch (error) {
     console.log("Rolelist  saga page error", error);
   }
 }
 
 //// post api
-function* AddUser({ Data }) {
+function* user_save_GenratorFunction({ Data }) {
   try {
-   
     yield console.log("AddUser saga : saga befor axios pass data", Data); //comment line only
-
-    const response = yield call(postAddUser, Data);
+    const response = yield call(User_Component_PostMethod_API, Data);
     yield put(addUserSuccess(response));
     yield console.log(" AddUser saga : after axios Addapi response ", response); //comment line only
   } catch (error) {
@@ -47,48 +55,44 @@ function* AddUser({ Data }) {
   }
 }
 
-//// list api
-function* sagaUserGetApi() {
+////  Get list api
+function* Fetch_UserList_GenratorFunction() {
   try {
-  const response= yield call(UserGetApi);
-      yield put(getUserSuccess(response.Data));
-    // console.log("get saga",response)
-    } catch (error) {
-     console.log("RoleSaga error",error)
-    }
+    const response = yield call(User_Component_GetMethod_API);
+    yield put(getUserSuccess(response.Data));
+  } catch (error) {
+    console.log("RoleSaga error", error)
+  }
 }
 
-  //// delete api 
-  function* deleteUser({ id }) {
-    try {
-      const response = yield call(deteletRoleID, id);
-      yield put(deleteSuccess(response.Data));    
-    } catch (error) {
-      yield console.log("delete User Error : ", error);
-    }
+//// delete api 
+function* Delete_UserList_GenratorFunction({ id }) {
+  try {
+    const response = yield call(User_Component_Delete_Method_API, id);
+    yield put(deleteSuccess(response.Data));
+  } catch (error) {
+    yield console.log("delete User Error : ", error);
   }
+}
 
-  ///// edit api
-  
-function* editUser({ id }) {
+// edit api
+function* Edit_UserList_GenratorFunction({ id }) {
   try {
     if (!id <= 0) {
-      const response = yield call(editRoleID, id);
+      const response = yield call(User_Component_EditById_API, id);
       yield put(editSuccess(UserListAPI));
-      console.log(" userlist api response",UserListAPI)
+      console.log(" userlist api response", UserListAPI)
     } else {
       yield put(editSuccess({ Status: 'false' }));
     }
-
   } catch (error) {
     yield console.log("edit_ID  saga page error  :", error);
   }
 }
-
-function* updateUser({ data, id }) {
+function* Update_User_GenratorFunction({ data, id }) {
   try {
     if (data) {
-      const response = yield call(putUpdateRole, data, id);
+      const response = yield call(User_Component_Update_API, data, id);
       yield put(updateSuccess(response));
     } else {
       yield put(updateSuccess({ Status: "false" }))
@@ -98,15 +102,14 @@ function* updateUser({ data, id }) {
   }
 }
 
-
 function* UserRegistrationSaga() {
-  yield takeEvery(GET_EMPLOYEE, Employeelist);
-  yield takeEvery(GET_ROLE, Rolelist);
-  yield takeEvery(ADD_USER,AddUser);
-  yield takeEvery(GET_USER,sagaUserGetApi)
-  yield takeEvery(DELETE_USER,deleteUser)
-  yield takeEvery(EDIT_USER,editUser)
-  yield takeEvery(UPDATE_USER,updateUser)
-  
+  yield takeEvery(GET_EMPLOYEE, EmployeelistDropdown_GenratorFunction);
+  yield takeEvery(GET_ROLE, RolesListDropdoun_GenratorFunction);
+  yield takeEvery(ADD_USER, user_save_GenratorFunction);
+  yield takeEvery(GET_USER, Fetch_UserList_GenratorFunction)
+  yield takeEvery(DELETE_USER, Delete_UserList_GenratorFunction)
+  yield takeEvery(EDIT_USER, Edit_UserList_GenratorFunction)
+  yield takeEvery(UPDATE_USER, Update_User_GenratorFunction)
+
 }
 export default UserRegistrationSaga;
