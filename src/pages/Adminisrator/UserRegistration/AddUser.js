@@ -7,11 +7,12 @@ import { getEmployee, getRoles, addUser, updateID }
   from "../../../store/Administrator/UserRegistrationRedux/actions";
 import Breadcrumbs from "../../../components/Common/Breadcrumb";
 import AvField from "availity-reactstrap-validation/lib/AvField";
-// import { UserListAPI } from "../../../store/Administrator/UserRegistrationRedux/UserListAPI";
-// import { useAlert } from "react-alert";
+
+ import { UserListAPI } from "../../../store/Administrator/UserRegistrationRedux/UserListAPI";
+ import { useAlert } from "react-alert";
 
 const AddUser = (props) => {
-  //   const alert1 = useAlert();
+
   const dispatch = useDispatch();
   const [EditData, setEditData] = useState([]);
   const [IsEdit, setIsEdit] = useState(false);
@@ -20,14 +21,15 @@ const AddUser = (props) => {
   //// M_Roles DropDown
   const [RoleDropDown, setRoleDropDown] = useState("");
 
-  // console.log("EmployeeID in UseState",EmployeeSelect)
+  
   var isEditData = props.state;
   console.log("UserListAPI", isEditData)
+
+  
 
   useEffect(() => {
     document.getElementById("txtName").focus();
     if (!(isEditData === undefined)) {
-
       setEditData(isEditData);
       setIsEdit(true);
       setEmployeeSelect({
