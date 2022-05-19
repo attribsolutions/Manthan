@@ -7,11 +7,10 @@ import { getEmployee, getRoles, addUser, updateID }
   from "../../../store/Administrator/UserRegistrationRedux/actions";
 import Breadcrumbs from "../../../components/Common/Breadcrumb";
 import AvField from "availity-reactstrap-validation/lib/AvField";
+import { AlertState } from "../../../store/Utilites/CostumeAlert/actions";
 
- import { UserListAPI } from "../../../store/Administrator/UserRegistrationRedux/UserListAPI";
- import { useAlert } from "react-alert";
 
-const AddUser = (props) => {
+ const AddUser = (props) => {
 
   const dispatch = useDispatch();
   const [EditData, setEditData] = useState([]);
@@ -25,8 +24,6 @@ const AddUser = (props) => {
   var isEditData = props.state;
   console.log("UserListAPI", isEditData)
 
-  
-
   useEffect(() => {
     document.getElementById("txtName").focus();
     if (!(isEditData === undefined)) {
@@ -39,7 +36,6 @@ const AddUser = (props) => {
       setRoleData(isEditData.RoleID)
     }
   }, [IsEdit])
-  //  console.log("isEditData in useeffect",isEditData)
 
   const { AddUserMessage, } = useSelector((state) => ({
     AddUserMessage: state.User_Registration_Reducer.AddUserMessage,
@@ -50,7 +46,6 @@ const AddUser = (props) => {
       dispatch(addUser(undefined))
     }
   }, [AddUserMessage.Status])
-  // console.log("PostMessage",AddUserMessage.Status)
 
   /// Employee DropDown
   useEffect(() => {
@@ -60,7 +55,7 @@ const AddUser = (props) => {
   const { employee } = useSelector((state) => ({
     employee: state.User_Registration_Reducer.employee
   }));
-  // console.log("employee",employee)
+
   const EmployeeValues = employee.map((Data) => ({
     value: Data.ID,
     label: Data.Name
@@ -116,10 +111,15 @@ const AddUser = (props) => {
         })),
       }),
     };
-    // console.log("EmployeeID in handlevalidSubmit",EmployeeSelect)
 
     if (RoleData.length <= 0) {
-      //   alert1.error(<div style={{ color: 'red' }}>At Least One RoleData is Select</div>)
+      dispatch(AlertState({
+        Type: 4, Status: true,
+        Message: "At Least One Role Data Add in the Table",
+        RedirectPath: false,
+        PermissionAction: false,
+        
+    }));
     }
     else if (IsEdit) {
       dispatch(updateID(requestOptions.body, EditData.ID));
@@ -128,11 +128,8 @@ const AddUser = (props) => {
 
     else {
       dispatch(addUser(requestOptions.body));
-      // alert1.show(<div style={{ color: 'purple' }}>User Register Successfully</div>)
     }
   };
-  // console.log("EmployeeSelect",EmployeeSelect)
-  // console.log("IsEdit in handlesubmit",IsEdit)
 
   return (
     <React.Fragment>
