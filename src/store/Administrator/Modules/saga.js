@@ -35,7 +35,7 @@ function* SubmitModules({ data }) {
       yield put(AlertState({ Type: 1, Status: true, Message: response.Message, RedirectPath: '/modulesList', AfterResponseAction: false }));
     } else {
       yield put(SpinnerState(false))
-      // yield put(AlertState({ Type: 4, Status: true, Message: "error Message", RedirectPath: false, AfterResponseAction: false }));
+      yield put(AlertState({ Type: 4, Status: true, Message: "error Message", RedirectPath: false, AfterResponseAction: false }));
     }
   } catch (error) {
     yield put(SpinnerState(false))
@@ -84,6 +84,7 @@ function* deleteModule_ID({ id }) {
     yield console.log("deleteModule_ID  saga page error ***  :", error);
   }
 }
+
 function* editModule_ID({ id }) {
   try {
     if (!id <= 0) {

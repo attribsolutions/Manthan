@@ -1,74 +1,78 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect ,useRef} from "react";
 import Select from "react-select";
-import { Card, CardBody, Col, Container, Row, CardHeader, Label, Button,Input } from "reactstrap";
-import { AvForm, AvInput, AvGroup, AvFeedback } from "availity-reactstrap-validation";
+import { Card, CardBody, Col, Container, Row, Label, Button, Input } from "reactstrap";
+import { AvForm, AvGroup, } from "availity-reactstrap-validation";
 import { useDispatch, useSelector } from "react-redux";
-import {getDesignationID,getEmployeeType,getState,getRegion,postEmployee,getCompany,updateEmployeeID} 
-from "../../../store/Administrator/M_Employee/action";
+import { getDesignationID, getEmployeeType, getState, getRegion, PostEmployeeSuccess,postEmployee, getCompany, updateEmployeeID }
+  from "../../../store/Administrator/M_Employee/action";
 import Breadcrumbs from "../../../components/Common/Breadcrumb";
 import AvField from "availity-reactstrap-validation/lib/AvField";
 
 const AddEmployee = (props) => {
-    const dispatch = useDispatch();
-    const [EditData, setEditData] = useState([]);
-    const [IsEdit, setIsEdit] = useState(false);
-    var isEditData = props.state;
-    console.log("isEditData in AddList Page",isEditData)
+  const dispatch = useDispatch();
+  const [EditData, setEditData] = useState([]);
+  const [IsEdit, setIsEdit] = useState(false);
+  const formRef = useRef(null);
+  var isEditData = props.state;
+  console.log("isEditData in AddList Page", isEditData)
 
-    const [DesignationIDselect, setDesignationID] = useState("");
-    const [EmployeeTypeselect, setEmployeeType] = useState("");
-    const [Stateselect, setState] = useState("");
-    const [Regionselect, setRegion] = useState("");
-    const [Companyselect, setCompany] = useState("");
-   
-    useEffect(() => {
-      if (!(isEditData === undefined)) {
-        setEditData(isEditData);
-        setIsEdit(true);
-        setDesignationID({
-          value: isEditData.DesignationID.ID,
-          label: isEditData.DesignationID.Name
-        })
-        setEmployeeType({
-          value: isEditData.EmployeeType.ID,
-          label: isEditData.EmployeeType.Name
-        })
-        setState({
-          value: isEditData.State.ID,
-          label: isEditData.State.Name
-        })
-        setRegion({
-          value: isEditData.Region.ID,
-          label: isEditData.Region.Name
-        })
-        setCompany({
-          value: isEditData.Companie.ID,
-          label: isEditData.Companie.Name
-        })
-      }
-    }, [IsEdit])
-console.log("data",EditData)
-    const { AddUserMessage, } = useSelector((state) => ({
-      AddUserMessage: state.M_EmployeesReducer.AddUserMessage,
-    }));
-    console.log("AddUserMessage",AddUserMessage)
-    useEffect(() => {
-      if ((AddUserMessage.Status === "true")) {
-        dispatch(postEmployee(undefined))
-      }
-    }, [AddUserMessage.Status])
+  const [DesignationIDselect, setDesignationID] = useState("");
+  const [EmployeeTypeselect, setEmployeeType] = useState("");
+  const [Stateselect, setState] = useState("");
+  const [Regionselect, setRegion] = useState("");
+  const [Companyselect, setCompany] = useState("");
 
-    
-  /// DesignationIDDropDown
-useEffect(() => {
+  useEffect(() => {
+    document.getElementById("txtName").focus();
+
+    if (!(isEditData === undefined)) {
+      setEditData(isEditData);
+      setIsEdit(true);
+      setDesignationID({
+        value: isEditData.DesignationID.ID,
+        label: isEditData.DesignationID.Name
+      })
+      setEmployeeType({
+        value: isEditData.EmployeeType.ID,
+        label: isEditData.EmployeeType.Name
+      })
+      setState({
+        value: isEditData.State.ID,
+        label: isEditData.State.Name
+      })
+      setRegion({
+        value: isEditData.Region.ID,
+        label: isEditData.Region.Name
+      })
+      setCompany({
+        value: isEditData.Companie.ID,
+        label: isEditData.Companie.Name
+      })
+    }
+  }, [IsEdit])
+  console.log("data", EditData)
+  const { AddUserMessage, } = useSelector((state) => ({
+    AddUserMessage: state.M_EmployeesReducer.AddUserMessage,
+  }));
+  console.log("AddUserMessage", AddUserMessage)
+
+  useEffect(() => {
+    if ((AddUserMessage.Status === true)) {
+      // dispatch(postEmployee(undefined))
+      dispatch(PostEmployeeSuccess({ Status: false }))
+      formRef.current.reset();
+    }
+  }, [AddUserMessage.Status])
+
+  useEffect(() => {
     dispatch(getDesignationID());
     dispatch(getEmployeeType());
     dispatch(getState());
     dispatch(getRegion());
     dispatch(getCompany());
   }, [dispatch]);
-  
-  const { DesignationID ,EmployeeType,State,Region,Company} = useSelector((state) => ({
+
+  const { DesignationID, EmployeeType, State, Region, Company } = useSelector((state) => ({
     DesignationID: state.M_EmployeesReducer.DesignationID,
     EmployeeType: state.M_EmployeesReducer.EmployeeType,
     State: state.M_EmployeesReducer.State,
@@ -80,7 +84,7 @@ useEffect(() => {
     value: Data.ID,
     label: Data.Name
   }));
-  
+
   function handllerDesignationID(e) {
     setDesignationID(e)
   }
@@ -89,7 +93,7 @@ useEffect(() => {
     value: Data.ID,
     label: Data.Name
   }));
-  
+
   function handllerEmployeeType(e) {
     setEmployeeType(e)
   }
@@ -98,16 +102,16 @@ useEffect(() => {
     value: Data.ID,
     label: Data.Name
   }));
-  
+
   function handllerState(e) {
     setState(e)
   }
-  
+
   const RegionValues = Region.map((Data) => ({
     value: Data.ID,
     label: Data.Name
   }));
-  
+
   function handllerRegion(e) {
     setRegion(e)
   }
@@ -116,53 +120,51 @@ useEffect(() => {
     value: Data.ID,
     label: Data.Name
   }));
-  
+
   function handllerCompany(e) {
     setCompany(e)
   }
-  
+
   const handleValidSubmit = (event, values) => {
-      let DateInput=document.getElementById("dateInput").value;
+    let DateInput = document.getElementById("dateInput").value;
     const requestOptions = {
       body: JSON.stringify({
-        Name:values.LoginName,
-        Address:values.Address,
-        Mobile:values.PhoneNo,
-        EmailID:values.Email,
-        BOD:DateInput,
-        PAN:values.pan,
-        AadharNo:values.AadharNo,
-        WorkingHours:values.WorkingHours,
+        Name: values.LoginName,
+        Address: values.Address,
+        Mobile: values.PhoneNo,
+        EmailID: values.Email,
+        BOD: DateInput,
+        PAN: values.pan,
+        AadharNo: values.AadharNo,
+        WorkingHours: values.WorkingHours,
         DesignationID: DesignationIDselect.value,
         EmployeeType: EmployeeTypeselect.value,
-        JoiningDate:DateInput,
+        JoiningDate: DateInput,
         State: Stateselect.value,
         Region: Regionselect.value,
         Companie: Companyselect.value,
 
       }),
     }
-    // dispatch(postEmployee(requestOptions.body));
-    // console.log("requestOptions",requestOptions.body)
-    // console.log("values",values)
+
     if (IsEdit) {
       dispatch(updateEmployeeID(requestOptions.body, EditData.ID));
-      setEditData([]);
     }
 
     else {
       dispatch(postEmployee(requestOptions.body));
-      // alert1.show(<div style={{ color: 'purple' }}>User Register Successfully</div>)
+
     }
 
   };
-    
 
+  var IsEditModeSaSS=''
+  if(IsEdit===true){IsEditModeSaSS= "-3.5%"};
 
   return (
     <React.Fragment>
-      <div className="page-content">
-        <Breadcrumbs breadcrumbItem={"Employee Registration "} />
+     <div className="page-content" style={{marginTop:IsEditModeSaSS}}>
+        <Breadcrumbs breadcrumbItem={"Employee Master "} />
         <Container fluid>
           <Row>
             <Col lg={12}>
@@ -173,7 +175,7 @@ useEffect(() => {
                       handleValidSubmit(e, v);
                     }}
                   >
-                    
+
                     <AvGroup>
                       <Row className="mb-4">
                         <Label className="col-sm-2 col-form-label">
@@ -184,14 +186,14 @@ useEffect(() => {
                             type="text"
                             placeholder="Please Enter Name"
                             // autoComplete='off'
-                             validate={{
+                            validate={{
                               required: { value: true, errorMessage: 'Please enter your Name...!' },
                             }} />
                         </Col>
                       </Row>
                     </AvGroup>
                     <AvGroup>
-                    <Row className="mb-4">
+                      <Row className="mb-4">
                         <Label className="col-sm-2 col-form-label">
                           Address
                         </Label>
@@ -219,19 +221,19 @@ useEffect(() => {
                               tel: {
                                 pattern: /^(\+\d{1,3}[- ]?)?\d{10}$/
                               }
-                              
+
                             }
                             }
-                         
+
                           />
                         </Col>
                       </Row>
                     </AvGroup>
-                    
+
                     <AvGroup>
                       <Row className="mb-4">
                         <Label className="col-sm-2 col-form-label">
-                         EmailID
+                          EmailID
                         </Label>
                         <Col sm={4}>
                           <AvField name="Email" type="email"
@@ -244,34 +246,34 @@ useEffect(() => {
                               }
                             }
                             }
-                         
+
                           />
                         </Col>
                       </Row>
                     </AvGroup>
-                      
-                    <Row className="mb-4">
-                   
-                    <Label className="col-sm-2 col-form-label">
-                        BOD
-                        </Label>
-                 <div class="col-lg-2">
-                   
-                 <Input
-                  className="form-control"
-                  id="dateInput"
-                  type="date"
-                  Value={EditData.BOD}
-                  on
-                //    id="example-date-input"
-                />
-               </div>
-              </Row>   
 
-                     <AvGroup>
+                    <Row className="mb-4">
+
+                      <Label className="col-sm-2 col-form-label">
+                        BOD
+                      </Label>
+                      <div class="col-lg-2">
+
+                        <Input
+                          className="form-control"
+                          id="dateInput"
+                          type="date"
+                          Value={EditData.BOD}
+                          on
+                        //    id="example-date-input"
+                        />
+                      </div>
+                    </Row>
+
+                    <AvGroup>
                       <Row className="mb-4">
                         <Label className="col-sm-2 col-form-label">
-                         PAN
+                          PAN
                         </Label>
                         <Col sm={4}>
                           <AvField name="pan" type="text"
@@ -284,16 +286,16 @@ useEffect(() => {
                               }
                             }
                             }
-                         
+
                           />
                         </Col>
                       </Row>
                     </AvGroup>
-                    
+
                     <AvGroup>
                       <Row className="mb-4">
                         <Label className="col-sm-2 col-form-label">
-                        AadharNo
+                          AadharNo
                         </Label>
                         <Col sm={4}>
                           <AvField name="AadharNo" type="text"
@@ -306,7 +308,7 @@ useEffect(() => {
                               }
                             }
                             }
-                        
+
                           />
                         </Col>
                       </Row>
@@ -315,7 +317,7 @@ useEffect(() => {
                     <AvGroup>
                       <Row className="mb-4">
                         <Label className="col-sm-2 col-form-label">
-                        WorkingHours
+                          WorkingHours
                         </Label>
                         <Col sm={4}>
                           <AvField name="WorkingHours" id="text" value={EditData.WorkingHours}
@@ -329,115 +331,110 @@ useEffect(() => {
                       </Row>
                     </AvGroup>
 
-                    <AvGroup>
-                      <Row className="mb-4">
-                        <Label className="col-sm-2 col-form-label">
+                    <Row className="mb-4">
+                      <Label className="col-sm-2 col-form-label">
                         DesignationID
-                        </Label>
-                        <Col sm={4}>
-                          <Select
-                            value={DesignationIDselect}
-                            options={DesignationIDValues}
-                            onChange={(e) => { handllerDesignationID(e) }}
-                          />
-                        </Col>
-                      </Row>
-                    </AvGroup>
-
-                    <AvGroup>
-                      <Row className="mb-4">
-                        <Label className="col-sm-2 col-form-label">
-                        EmployeeType
-                        </Label>
-                        <Col sm={4}>
-                          <Select
-                            value={EmployeeTypeselect}
-                            options={EmployeeTypeValues}
-                            onChange={(e) => { handllerEmployeeType(e) }}
-                          />
-                        </Col>
-                      </Row>
-                    </AvGroup>
+                      </Label>
+                      <Col sm={4}>
+                        <Select
+                          value={DesignationIDselect}
+                          options={DesignationIDValues}
+                          onChange={(e) => { handllerDesignationID(e) }}
+                        />
+                      </Col>
+                    </Row>
 
                     <Row className="mb-4">
-                    <Label className="col-sm-2 col-form-label">
-                    JoiningDate
-                        </Label>
-                 <div class="col-lg-2">
-                 <Input
-                  className="form-control"
-                  id="dateInput"
-                  type="date"
-                  Value={EditData.JoiningDate}
-                  on
-                   />
-                  </div>
-                </Row>   
+                      <Label className="col-sm-2 col-form-label">
+                        EmployeeType
+                      </Label>
+                      <Col sm={4}>
+                        <Select
+                          value={EmployeeTypeselect}
+                          options={EmployeeTypeValues}
+                          onChange={(e) => { handllerEmployeeType(e) }}
+                        />
+                      </Col>
+                    </Row>
 
-                  <AvGroup>
-                      <Row className="mb-4">
-                        <Label className="col-sm-2 col-form-label">
+                    <Row className="mb-4">
+                      <Label className="col-sm-2 col-form-label">
+                        JoiningDate
+                      </Label>
+                      <div class="col-lg-2">
+                        <Input
+                          className="form-control"
+                          id="dateInput"
+                          type="date"
+                          Value={EditData.JoiningDate}
+                          on
+                        />
+                      </div>
+                    </Row>
+
+                    <Row className="mb-4">
+                      <Label className="col-sm-2 col-form-label">
                         State
-                        </Label>
-                        <Col sm={4}>
-                          <Select
-                            value={Stateselect}
-                            options={StateValues}
-                            onChange={(e) => { handllerState(e) }}
-                          />
-                        </Col>
-                      </Row>
-                    </AvGroup>
+                      </Label>
+                      <Col sm={4}>
+                        <Select
+                          value={Stateselect}
+                          options={StateValues}
+                          onChange={(e) => { handllerState(e) }}
+                        />
+                      </Col>
+                    </Row>
 
-                    <AvGroup>
-                      <Row className="mb-4">
-                        <Label className="col-sm-2 col-form-label">
+                    <Row className="mb-4">
+                      <Label className="col-sm-2 col-form-label">
                         Region
-                        </Label>
-                        <Col sm={4}>
-                          <Select
-                            value={Regionselect}
-                            options={RegionValues}
-                            onChange={(e) => { handllerRegion(e) }}
-                          />
-                        </Col>
-                      </Row>
-                    </AvGroup>
+                      </Label>
+                      <Col sm={4}>
+                        <Select
+                          value={Regionselect}
+                          options={RegionValues}
+                          onChange={(e) => { handllerRegion(e) }}
+                        />
+                      </Col>
+                    </Row>
 
-                    <AvGroup>
-                      <Row className="mb-4">
-                        <Label className="col-sm-2 col-form-label">
-                     CompanyName
-                        </Label>
-                        <Col sm={4}>
-                          <Select
-                            value={Companyselect}
-                            options={CompanyValues}
-                            onChange={(e) => { handllerCompany(e) }}
-                          />
-                        </Col>
-                      </Row>
-                    </AvGroup>
+                    <Row className="mb-4">
+                      <Label className="col-sm-2 col-form-label">
+                        CompanyName
+                      </Label>
+                      <Col sm={4}>
+                        <Select
+                          value={Companyselect}
+                          options={CompanyValues}
+                          onChange={(e) => { handllerCompany(e) }}
+                        />
+                      </Col>
+                    </Row>
 
                     <Row className="justify-content-end">
+                      <Col sm={10}></Col>
                       <Col sm={2}>
                         <div>
-                          {IsEdit ? <Button
-                            type="submit"
-                            className="btn btn-success w-md"
-                          >
-                            Update
-                          </Button>
-                            : <Button
-                              type="submit"
-                              className="btn btn-success w-md"
-                            >
-                              Save
-                            </Button>}
-
+                          {
+                            IsEdit ? (
+                              <button
+                                type="submit"
+                                data-mdb-toggle="tooltip" data-mdb-placement="top" title="Update Modules ID"
+                                className="btn btn-success w-md"
+                              >
+                                <i class="fas fa-edit me-2"></i>Update
+                              </button>) : (
+                              <button
+                                type="submit"
+                                data-mdb-toggle="tooltip" data-mdb-placement="top" title="Save Modules ID"
+                                className="btn btn-success w-md"
+                              > <i className="fas fa-save me-2"></i> Save
+                              </button>
+                            )
+                          }
                         </div>
-                      </Col>{" "}
-                      <Col sm={10}></Col>
+                      </Col>
+
                     </Row>
 
                   </AvForm>
@@ -449,7 +446,7 @@ useEffect(() => {
           </Row>
         </Container>
       </div>
-    </React.Fragment>
+    </React.Fragment >
   );
 }
 export default AddEmployee
