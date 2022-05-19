@@ -4,6 +4,7 @@ import {
     Modal,
     Row,
 } from "reactstrap";
+import "../../../assets/scss/CustomeTable/datatables.scss"
 import {
     getUser,deleteUser,editUserId,updateSuccess
 } from  "../../../store/Administrator/UserRegistrationRedux/actions";
@@ -91,19 +92,17 @@ useEffect(() => {
             hidden: true,
             formatter: (cellContent, user) => <>{user.ID}</>,
         },
-    
-        {
-            text: "Email",
-            dataField: "email",
-            sort: true,
-            formatter: (cellContent, user) => <>{user.email}</>,
-        },
-    
         {
             text: "LoginName",
             dataField: "LoginName",
             sort: true,
             formatter: (cellContent, user) => <>{user.LoginName}</>,
+        },
+        {
+            text: "Email",
+            dataField: "email",
+            sort: true,
+            formatter: (cellContent, user) => <>{user.email}</>,
         },
         {
             text: "EmployeeID",
@@ -130,9 +129,8 @@ useEffect(() => {
             </>
         },
         {
-            text: " ",
-            dataField: "buttons",
-            sort: true,
+            text: "Actions ",
+          
             formatter: (cellContent, user) => (
                 <>
                    <div class="d-flex gap-3" style={{ display: 'flex', justifyContent: 'center' }} >
@@ -228,7 +226,7 @@ useEffect(() => {
                             toggle={() => { tog_center() }}
                             size="xl"
                         >
-                            <AddUser state={editData} />
+                            <AddUser state={editData.data} />
                         </Modal>
                               </div>
                       </React.Fragment>

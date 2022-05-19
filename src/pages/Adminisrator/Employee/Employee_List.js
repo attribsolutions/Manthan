@@ -7,6 +7,9 @@ import {
     Row,
 } from "reactstrap";
 // import { useAlert } from "react-alert";
+import "../../../assets/scss/CustomeTable/datatables.scss"
+import { AlertState } from "../../../store/Utilites/CostumeAlert/actions";
+import { SpinnerON } from "../../../store/Utilites/Spinner/actions";
 import {
     getEmployeelist,editEmployeeeId,delete_Employee_ID,updateEmployeeIDSuccess
 } from "../../../store/Administrator/M_Employee/action";
@@ -37,32 +40,22 @@ const Employee_List = () => {
 // console.log("Data",pages)
 
 useEffect(()=>{
-    
+    dispatch(SpinnerON(true))
     dispatch(getEmployeelist());
 },[dispatch]);
 
-// const deleteHandeler = (id, name) => {
+//Delete Button Handller
+const deleteHandeler = (id, name) => {
+    dispatch(AlertState({
+        Type: 5, Status: true,
+        Message: `Are you sure you want to delete this item : "${name}"`,
+        RedirectPath: false,
+        PermissionAction: delete_Employee_ID,
+        ID: id
+    }));
+}
 
-//     alert1.error(<div style={{ color: 'red' }}>Are You Sure Want To Delete:{name}</div>, {
-//         actions: [
-//             {
-//                 copy:
-//                     <div style={{ color: 'blue' }}>Yes</div>, onClick: () => {
-//                         dispatch(delete_Employee_ID(id));
-//                         setDeleteIn(id);
-//                     }
-//             }
-//         ],
-//         closeCopy: <div style={{ color: 'Black' }}>NO</div>
-//     });
-// }
 
-const deleteHandeler = (id) => { 
-    console.log("deleted id",id)
-    setDeleteIn(id);
-    dispatch(delete_Employee_ID(id));
-    dispatch(getEmployeelist());  
-};
 useEffect(() => {
     if (updateMessage.Status === "true") {
         dispatch(updateEmployeeIDSuccess(''));
@@ -153,36 +146,29 @@ const pagesListColumns = [
         formatter: (cellContent, pages) => <>{pages.WorkingHours}</>,
     },
     {
-        text: " ",
-        dataField: "buttons",
-        sort: true,
+        text: "Actions",
+       
         formatter: (cellContent, pages) => (
             <>
-               <div class="d-flex gap-3" style={{ display: 'flex', justifyContent: 'center' }} >
-
+              <div className="d-flex gap-3" style={{ display: 'flex', justifyContent: 'center' }} >
                     <buton
                         type="button"
+                        data-mdb-toggle="tooltip" data-mdb-placement="top" title="Edit Modules ID"
                         onClick={() => {
                             EditPageHandler(pages.ID);
                         }}
                         className="badge badge-soft-primary font-size-12"
-                        >
-                        <i class="mdi mdi-pencil font-size-18" id="edittooltip"></i>
-                    </buton>{" "}
-                   
+                    >
+                        <i className="mdi mdi-pencil font-size-18" id="edittooltip"></i>
+                    </buton>
                     <buton
                         className="badge badge-soft-danger font-size-12"
-                        
+                        data-mdb-toggle="tooltip" data-mdb-placement="top" title="Delete Modules ID"
                         onClick={() => {
-                            const deleteID= window.confirm(
-                              "Are you sure you want to Delete ?"
-                                    )
-                           if ( deleteID=== true) {
-                            deleteHandeler(pages.ID );
-                                    }
-                                 
-                                }}>
-                        <i class="mdi mdi-delete font-size-18" ></i>
+                            deleteHandeler(pages.ID, pages.Name);
+                        }}
+                    >
+                        <i className="mdi mdi-delete font-size-18" ></i>
                     </buton>
                 </div>
             </>
@@ -202,7 +188,7 @@ return (
                                             keyField="id"
                                             data={pages}
                                             columns={pagesListColumns}
-                                            bootstrap4
+                                            // bootstrap4
                                             search
                                         >
                                             

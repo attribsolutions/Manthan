@@ -74,8 +74,8 @@ function* editUser({ id }) {
   try {
     if (!id <= 0) {
       const response = yield call(editRoleID, id);
-      yield put(editSuccess(UserListAPI));
-      console.log(" userlist api response",UserListAPI)
+      yield put(editSuccess(response.Data));
+      console.log(" userlist api response",response)
     } else {
       yield put(editSuccess({ Status: 'false' }));
     }
