@@ -81,8 +81,8 @@ function* Edit_UserList_GenratorFunction({ id }) {
     if (!id <= 0) {
 
       const response = yield call(User_Component_EditById_API, id);
-      yield put(editSuccess(UserListAPI));
-      console.log(" userlist api response", UserListAPI)
+      yield put(editSuccess(response.Data));
+      console.log(" userlist api response", response)
 
     } else {
       yield put(editSuccess({ Status: 'false' }));

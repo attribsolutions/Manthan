@@ -10,17 +10,17 @@ import AvField from "availity-reactstrap-validation/lib/AvField";
 import { AlertState } from "../../../store/Utilites/CostumeAlert/actions";
 
 
- const AddUser = (props) => {
+const AddUser = (props) => {
 
   const dispatch = useDispatch();
   const [EditData, setEditData] = useState([]);
   const [IsEdit, setIsEdit] = useState(false);
   const [RoleData, setRoleData] = useState([]);
   const [EmployeeSelect, setEmployeeSelect] = useState("");
-  //// M_Roles DropDown
+
+  // M_Roles DropDown
   const [RoleDropDown, setRoleDropDown] = useState("");
 
-  
   var isEditData = props.state;
   console.log("UserListAPI", isEditData)
 
@@ -84,13 +84,20 @@ import { AlertState } from "../../../store/Utilites/CostumeAlert/actions";
       return element.value === RoleDropDown.value
     });
     if (RoleDropDown.length <= 0) {
-      window.alert("Select One Role");
-      }
+      dispatch(AlertState({
+        Type: 3, Status: true,
+        Message: "Select One Role",
+      }));
+    }
     else if (find === undefined) {
       setRoleData([...RoleData, RoleDropDown]);
     }
     else {
-      window.alert("RoleData already Exists");
+      dispatch(AlertState({
+        Type: 4, Status: true,
+        Message: "RoleData already Exists ",
+      }));
+      // window.alert("RoleData already Exists");
     }
   }
 
@@ -118,8 +125,7 @@ import { AlertState } from "../../../store/Utilites/CostumeAlert/actions";
         Message: "At Least One Role Data Add in the Table",
         RedirectPath: false,
         PermissionAction: false,
-        
-    }));
+      }));
     }
     else if (IsEdit) {
       dispatch(updateID(requestOptions.body, EditData.ID));
@@ -156,7 +162,7 @@ import { AlertState } from "../../../store/Utilites/CostumeAlert/actions";
                           <AvField name="LoginName" id="txtName" value={EditData.LoginName}
                             type="text"
                             placeholder="Please Enter LoginName"
-                            autoComplete='off'
+                            // autoComplete='off'
                             validate={{
                               required: { value: true, errorMessage: 'Please enter a LoginName...!' },
                             }} />
@@ -173,7 +179,7 @@ import { AlertState } from "../../../store/Utilites/CostumeAlert/actions";
                           <AvField name="Email" type="email"
                             value={EditData.email}
                             placeholder="Enter your EmailID "
-                            autoComplete='off'
+                            // autoComplete='off'
                             validate={{
                               required: { value: true, errorMessage: 'Please Enter your EmailID' },
                               tel: {
@@ -186,7 +192,6 @@ import { AlertState } from "../../../store/Utilites/CostumeAlert/actions";
                         </Col>
                       </Row>
                     </AvGroup>
-
 
                     <Row className="mb-4">
                       <Label className="col-sm-2 col-form-label">
@@ -284,7 +289,7 @@ import { AlertState } from "../../../store/Utilites/CostumeAlert/actions";
                                 </h5>
                               </div>
                             </div>
-                          </>  
+                          </>
                         )}
                       </Col>
                     </Row>

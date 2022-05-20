@@ -34,11 +34,8 @@ const UserList = () => {
         editData:state.User_Registration_Reducer.editData,
         updateMessage:state.User_Registration_Reducer.updateMessage,
       }));
-    
-// console.log("ModuleList",ModuleList)
-// console.log("editData",editData)
-console.log("updateMessage",updateMessage)
 
+// console.log("updateMessage",updateMessage)
 
     const deleteHandeler = (id) => { 
         console.log("id",id)

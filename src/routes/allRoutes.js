@@ -25,7 +25,8 @@ import AddUser from "../pages/Adminisrator/UserRegistration/AddUser";
 import UserList from "../pages/Adminisrator/UserRegistration/UserList";
 import AddEmployee from "../pages/Adminisrator/Employee/AddEmployee";
 import Employee_List from "../pages/Adminisrator/Employee/Employee_List";
-
+import AddRole from "../pages/RoleMaster/AddRole";
+// import RoleListPage from "../pages/RoleMaster/RoleListPage"
 const userRoutes = [
 
   //dashboard
@@ -47,10 +48,12 @@ const userRoutes = [
   { path: "/orders", component: OrderPage },
   { path: "/ordersList", component: OrderList },
   { path: "/Hchart", component: HorizontalChart },
-  {path:"/AddUser",component:AddUser},
-  {path:"/UserList",component:UserList},
-  {path:"/AddEmployee",component:AddEmployee},
-  {path:"/Employee_List",component:Employee_List},
+  { path: "/AddUser", component: AddUser },
+  { path: "/UserList", component: UserList },
+  { path: "/AddEmployee", component: AddEmployee },
+  { path: "/Employee_List", component: Employee_List },
+  { path: "/AddRole", component: AddRole },
+  // { path: "/RoleListPage", component: RoleListPage },
 
   // this route should be at the end of all other routes
   { path: "/", exact: true, component: () => <Redirect to="/dashboard" /> },
