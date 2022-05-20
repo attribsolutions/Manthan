@@ -40,7 +40,7 @@ const Employee_List = () => {
 // console.log("Data",pages)
 
 useEffect(()=>{
-    // dispatch(SpinnerON(true))
+    dispatch(SpinnerON(true))
     dispatch(getEmployeelist());
 },[dispatch]);
 
@@ -57,7 +57,7 @@ const deleteHandeler = (id, name) => {
 
 
 useEffect(() => {
-    if (updateMessage.Status === "true") {
+    if (updateMessage.Status === true) {
         dispatch(updateEmployeeIDSuccess(''));
         tog_center()
         dispatch(getEmployeelist());
@@ -121,30 +121,7 @@ const pagesListColumns = [
         sort: true,
         formatter: (cellContent, pages) => <>{pages.EmailID}</>,
     },
-    {
-        text: "BOD",
-        dataField: "BOD",
-        sort: true,
-        formatter: (cellContent, pages) => <>{pages.BOD}</>,
-    },
-    {
-        text: "PAN",
-        dataField: "PAN",
-        sort: true,
-        formatter: (cellContent, pages) => <>{pages.PAN}</>,
-    },
-    {
-        text: "AadharNo",
-        dataField: "AadharNo",
-        sort: true,
-        formatter: (cellContent, pages) => <>{pages.AadharNo}</>,
-    },
-    {
-        text: "WorkingHours",
-        dataField: "WorkingHours",
-        sort: true,
-        formatter: (cellContent, pages) => <>{pages.WorkingHours}</>,
-    },
+    
     {
         text: "Actions",
        
