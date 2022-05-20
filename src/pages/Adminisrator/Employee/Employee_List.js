@@ -66,26 +66,31 @@ useEffect(() => {
 
 // console.log("updateMessage after useEffect in list ",updateMessage)
 
+// Edit Modal Show When Edit Data is true
 useEffect(() => {
     if (editData.Status === 'true') {
         tog_center()
     }
 }, [editData]);
-console.log("editData",editData)
 
+// Edit Button Handler
 const EditPageHandler = (id) => {
     dispatch(editEmployeeeId(id));
     console.log("selected id",id)
 }
+
+ // tag_center -- Control the Edit Modal show and close
 function tog_center() {
     setmodal_center(!modal_center)
 }
+
 const pageOptions = {
     sizePerPage: 15,
     totalSize: pages.length,
     custom:true,
 };
 
+// Employee List component table columns 
 const pagesListColumns = [
     {
         text: "PageID",

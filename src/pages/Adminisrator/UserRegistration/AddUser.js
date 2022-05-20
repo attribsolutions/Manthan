@@ -17,9 +17,9 @@ const AddUser = (props) => {
   const [IsEdit, setIsEdit] = useState(false);
   const [RoleData, setRoleData] = useState([]);
   const [EmployeeSelect, setEmployeeSelect] = useState("");
-  //// M_Roles DropDown
-  const [RoleDropDown, setRoleDropDown] = useState("");
 
+  // M_Roles DropDown
+  const [RoleDropDown, setRoleDropDown] = useState("");
 
   var isEditData = props.state;
   console.log("UserListAPI", isEditData)
@@ -87,8 +87,6 @@ const AddUser = (props) => {
       dispatch(AlertState({
         Type: 3, Status: true,
         Message: "Select One Role",
-        // RedirectPath: false,
-        // PermissionAction: false,
       }));
     }
     else if (find === undefined) {
@@ -194,7 +192,6 @@ const AddUser = (props) => {
                         </Col>
                       </Row>
                     </AvGroup>
-
 
                     <Row className="mb-4">
                       <Label className="col-sm-2 col-form-label">
