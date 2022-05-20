@@ -59,12 +59,10 @@ console.log(isEditData)
         PhoneNo: values.PhoneNo,
         CompanyAbbreviation: values.CompanyAbbreviation,
         EmailID: values.EmailID,
-        CompanyGroupID: values.CompanyGroupID,
-        CreatedBy: 9,
-        UpdatedBy: 9
-      }),
+        CompanyGroup: parseInt(values.CompanyGroupID),
+        }),
     };
-
+console.log("requestOptions.bodyr",requestOptions.body)
     if (IsEdit) {
       dispatch(updateCompanyID(requestOptions.body, EditData.ID));
     }

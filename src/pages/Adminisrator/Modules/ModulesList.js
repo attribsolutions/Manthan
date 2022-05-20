@@ -54,7 +54,7 @@ const ModulesList = () => {
 
     // Edit Modal Show When Edit Data is true
     useEffect(() => {
-        if (editData.Status === 'true') {
+        if (editData.Status === true) {
             dispatch(editModuleID(0));
             tog_center()
         }

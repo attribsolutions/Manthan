@@ -131,7 +131,10 @@ const SidebarContent = (props) => {
                  <li>
                   <Link to="/Hpage">{props.t("Hpage")}</Link>
                 </li>
-              
+                <li>
+                  <Link to="/HpageList">{props.t("Hpage List")}</Link>
+                </li>
+                
                 <li>
                   <Link to="/orders">{props.t("Orders")}</Link>
                 </li>
