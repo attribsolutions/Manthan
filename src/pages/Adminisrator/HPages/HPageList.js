@@ -16,12 +16,13 @@ export default function HPageList() {
     const [modal_center, setmodal_center] = useState(false);
 
     // var HPageListData = [];
-    const { HPageListData, editData, updateMessage } = useSelector((state) => ({
+    const { HPageListData, editData, updateMessage,Teststate } = useSelector((state) => ({
         HPageListData: state.H_Pages.HPagesListData,
         editData: state.H_Pages.editData,
         updateMessage: state.H_Pages.updateMessage,
+        Teststate: state,
     }));
-
+console.log("Teststate",Teststate)
     useEffect(() => {
         dispatch(dispatch(GetHpageListData()))
     }, []);
