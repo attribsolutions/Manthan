@@ -28,23 +28,22 @@ import {
 
 
 function* fetchHPagesList_GneratorFunction() {
-  yield put(SpinnerState(true))
+  // yield put(SpinnerState(true))
   try {
-    const response = yield call(Fetch_HPagesListApi); 
-    console.log(response, "= yield") 
-yield put(SpinnerState(false))
+    const response = yield call(Fetch_HPagesListApi,put);
+    console.log(response, "fetchHPagesList_GneratorFunction")
+    yield put(SpinnerState(false))
     yield put(GetHpageListDataSuccess(response.data));
   } catch (error) {
-    yield put(SpinnerState(false))
+    console.log(" error fetchHPagesList_GneratorFunction", error)
+    // yield put(SpinnerState(false))
     yield put(AlertState({ Type: 3, Status: true, Message: "Network error Message", RedirectPath: false, AfterResponseAction: false }));
   }
 }
 function* GetH_Sub_Modules({ id }) {
-  debugger
-  console.log("GetH_ SUBModules saga id ", id)
   try {
     const response = yield call(get_H_SubModule_HPages, id);
-    yield put(getH_SubModulesSuccess (response.Data))
+    yield put(getH_SubModulesSuccess(response.Data))
   } catch (error) {
     yield put(AlertState({ Type: 3, Status: true, Message: " GetH_Sub_Modules Network error Message", RedirectPath: false, AfterResponseAction: false }));
   }
@@ -53,13 +52,13 @@ function* GetH_Sub_Modules({ id }) {
 function* saveHPageSaga_GneratorFunction({ data }) {
   yield put(SpinnerState(true))
   try {
-    const response = yield call(saveHPagesAPI, data); 
+    const response = yield call(saveHPagesAPI, data);
     if (response.StatusCode === 200) {
       yield put(saveHPagesSuccess({ Status: true }));
       yield put(AlertState({ Type: 1, Status: true, Message: response.Message, RedirectPath: '/HpageList', AfterResponseAction: false }));
-  } else {
-    yield put(AlertState({ Type: 3, Status: true, Message: " save HPageSaga error ", RedirectPath: false, AfterResponseAction: false }));
-  }
+    } else {
+      yield put(AlertState({ Type: 3, Status: true, Message: " save HPageSaga error ", RedirectPath: false, AfterResponseAction: false }));
+    }
   } catch (error) {
     yield put(SpinnerState(false))
     yield put(AlertState({ Type: 3, Status: true, Message: "Network error Message", RedirectPath: false, AfterResponseAction: false }));
@@ -82,14 +81,14 @@ function* update_HPagesUsingID_GenratorFunction({ data, id }) {
   try {
     const response = yield call(updateHPages, data, id);
     yield put(SpinnerState(false))
-    console.log("response",response)
+    console.log("response", response)
     if (response.StatusCode === 200) {
-      yield put(updateHPagesSuccess({Status:true}));
+      yield put(updateHPagesSuccess({ Status: true }));
       yield put(AlertState({
         Type: 1, Status: true,
         Message: response.Message,
         RedirectPath: false,
-        AfterResponseAction: GetHpageListData ,
+        AfterResponseAction: GetHpageListData,
       }))
     }
     else {
@@ -100,16 +99,16 @@ function* update_HPagesUsingID_GenratorFunction({ data, id }) {
         AfterResponseAction: false
       }));
     }
-  
+
   } catch (error) {
     yield put(SpinnerState(false))
     yield put(AlertState({
       Type: 3, Status: true,
-      Message:"network Error",
+      Message: "network Error",
       RedirectPath: false,
       AfterResponseAction: false
     }));
-     console.log("update_Company  saga page error ***  :", error);
+    console.log("update_Company  saga page error ***  :", error);
   }
 }
 
@@ -124,7 +123,7 @@ function* deleteHpagesUsingID_GenratorFunction({ id }) {
         Type: 1, Status: true,
         Message: response.Message,
         RedirectPath: false,
-        AfterResponseAction: GetHpageListData ,
+        AfterResponseAction: GetHpageListData,
       }))
     }
     else {
@@ -146,7 +145,7 @@ function* HPageSaga() {
   yield takeEvery(EDIT_H_PAGES_ID, editHpages_ID);
   yield takeEvery(GET_H_SUB_MODULES, GetH_Sub_Modules);
   yield takeEvery(UPDATE_H_PAGES, update_HPagesUsingID_GenratorFunction);
-  yield takeEvery(DELETE_HPAGES_USING_ID,deleteHpagesUsingID_GenratorFunction)
+  yield takeEvery(DELETE_HPAGES_USING_ID, deleteHpagesUsingID_GenratorFunction)
 }
 
 export default HPageSaga;

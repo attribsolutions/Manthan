@@ -31,6 +31,7 @@ const CompanyList = () => {
         companyList: state.Company.companyList,
         editData: state.Company.editData,
         updateMessage: state.Company.updateMessage,
+        
     }));
 
     useEffect(() => {
@@ -38,7 +39,7 @@ const CompanyList = () => {
     }, []);
 
     useEffect(() => {
-        if (editData.Status === "true") {
+        if (editData.Status === true) {
             tog_center()
         }
         if (updateMessage.Status === true) {
