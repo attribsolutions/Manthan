@@ -40,7 +40,7 @@ const Employee_List = () => {
 // console.log("Data",pages)
 
 useEffect(()=>{
-    // dispatch(SpinnerON(true))
+    dispatch(SpinnerON(true))
     dispatch(getEmployeelist());
 },[dispatch]);
 
@@ -57,7 +57,7 @@ const deleteHandeler = (id, name) => {
 
 
 useEffect(() => {
-    if (updateMessage.Status === "true") {
+    if (updateMessage.Status === true) {
         dispatch(updateEmployeeIDSuccess(''));
         tog_center()
         dispatch(getEmployeelist());
@@ -66,26 +66,31 @@ useEffect(() => {
 
 // console.log("updateMessage after useEffect in list ",updateMessage)
 
+// Edit Modal Show When Edit Data is true
 useEffect(() => {
     if (editData.Status === 'true') {
         tog_center()
     }
 }, [editData]);
-console.log("editData",editData)
 
+// Edit Button Handler
 const EditPageHandler = (id) => {
     dispatch(editEmployeeeId(id));
     console.log("selected id",id)
 }
+
+ // tag_center -- Control the Edit Modal show and close
 function tog_center() {
     setmodal_center(!modal_center)
 }
+
 const pageOptions = {
     sizePerPage: 15,
     totalSize: pages.length,
     custom:true,
 };
 
+// Employee List component table columns 
 const pagesListColumns = [
     {
         text: "PageID",
@@ -121,30 +126,7 @@ const pagesListColumns = [
         sort: true,
         formatter: (cellContent, pages) => <>{pages.EmailID}</>,
     },
-    {
-        text: "BOD",
-        dataField: "BOD",
-        sort: true,
-        formatter: (cellContent, pages) => <>{pages.BOD}</>,
-    },
-    {
-        text: "PAN",
-        dataField: "PAN",
-        sort: true,
-        formatter: (cellContent, pages) => <>{pages.PAN}</>,
-    },
-    {
-        text: "AadharNo",
-        dataField: "AadharNo",
-        sort: true,
-        formatter: (cellContent, pages) => <>{pages.AadharNo}</>,
-    },
-    {
-        text: "WorkingHours",
-        dataField: "WorkingHours",
-        sort: true,
-        formatter: (cellContent, pages) => <>{pages.WorkingHours}</>,
-    },
+    
     {
         text: "Actions",
        
