@@ -5,25 +5,24 @@ import { Card, CardBody, Col, Container, Row, CardHeader, Button, Label, Input }
 import { AvForm, AvInput, AvGroup, AvFeedback, AvField } from "availity-reactstrap-validation";
 import { useDispatch, useSelector } from "react-redux";
 import {
+  editSuccess,
   postRole, updateID
 } from "../../store/Administrator/RoleMasterRedux/action";
 
 const AddRole = (props) => {
-  console.log("props", props)
+
   const dispatch = useDispatch();
   const [EditData, setEditData] = useState([]);
   const [IsEdit, setIsEdit] = useState(false);
   const formRef = useRef(null);
   var isEditData = props.state;
 
-  console.log("isEditData in AddList Page", isEditData)
-
-
   useEffect(() => {
     document.getElementById("txtName").focus();
     if (!(isEditData === undefined)) {
       setEditData(isEditData);
       setIsEdit(true);
+      dispatch(editSuccess({ Status: false }))
     }
   }, [IsEdit])
 
@@ -38,7 +37,6 @@ const AddRole = (props) => {
     }
   }, [AddUserMessage.Status])
 
-  console.log("EditData", IsEdit)
 
   const handleValidUpdate = (event, values) => {
     const requestOptions = {

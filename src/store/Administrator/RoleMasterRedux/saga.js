@@ -70,15 +70,10 @@ function* Post_Roles_GenratorFunction({ Data }) {
   // edit api
   function* Edit_Roles_GenratorFunction({ id }) {
     try {   
-  if(!id<=0){
       const response = yield call(Role_Master_Edit_API, id);
       yield put(editSuccess(response));
-    
-  }else{
-   yield put(editSuccess({ID:0}));
-    }    
   } catch (error) {
-   // yield console.log("editID Error :", error);
+   yield console.log("editID Error :", error);
   }
 }
 

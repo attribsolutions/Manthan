@@ -30,29 +30,25 @@ import { SpinnerON } from '../../store/Utilites/Spinner/actions';
 import "../../assets/scss/CustomeTable/datatables.scss"
 
 const RoleListPage = () => {
-    // const [EditId, setId] = useState('')
+
     const dispatch = useDispatch();
-    const history = useHistory();
-    const { SearchBar } = Search;
     const [modal_center, setmodal_center] = useState(false);
 
     //// get data
-    const { pages, editData, updateMessage} = useSelector((state) => ({
+    const { pages, editData, updateMessage } = useSelector((state) => ({
         pages: state.RoleMaster_Reducer.pages,
         editData: state.RoleMaster_Reducer.editData,
         updateMessage: state.RoleMaster_Reducer.updateMessage,
     }));
 
-    console.log("editData in RoleList Page",editData)
-
     function tog_center() {
         setmodal_center(!modal_center)
     }
-    
-useEffect(()=>{
-    dispatch(SpinnerON(true))
-    dispatch(getRole());
-},[dispatch]);
+
+    useEffect(() => {
+        dispatch(SpinnerON(true))
+        dispatch(getRole());
+    }, [dispatch]);
 
     //// select id for delete row
     const deleteHandeler = (id, name) => {
@@ -72,7 +68,6 @@ useEffect(()=>{
             dispatch(getRole());
         }
     }, [updateMessage.Status]);
-    console.log("updateMessage",updateMessage)
 
     // Edit Modal Show When Edit Data is true
     useEffect(() => {
@@ -80,11 +75,9 @@ useEffect(()=>{
             tog_center()
         }
     }, [editData]);
-    console.log("editData in RoleList Page after useEffect",editData)
-    
+
     //// edit id select
     const EditPageHandler = (id) => {
-        console.log("selected ID", id)
         dispatch(editRoleId(id));
     }
 
@@ -102,14 +95,12 @@ useEffect(()=>{
             hidden: true,
             formatter: (cellContent, Role) => <>{Role.ID}</>,
         },
-
         {
             text: "Name",
             dataField: "Name",
             sort: true,
             formatter: (cellContent, Role) => <>{Role.Name}</>,
         },
-
         {
             text: "Description",
             dataField: "Description",
