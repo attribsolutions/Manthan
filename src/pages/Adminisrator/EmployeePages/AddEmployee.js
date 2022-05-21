@@ -3,8 +3,8 @@ import Select from "react-select";
 import { Card, CardBody, Col, Container, Row, Label, Button, Input } from "reactstrap";
 import { AvForm, AvGroup, } from "availity-reactstrap-validation";
 import { useDispatch, useSelector } from "react-redux";
-import { getDesignationID, getEmployeeType, getState, getRegion, PostEmployeeSuccess,postEmployee, getCompany, updateEmployeeID }
-  from "../../../store/Administrator/M_Employee/action";
+import { getDesignationID, getEmployeeType, getState, getRegion, postEmployee, getCompany, updateEmployeeID }
+  from "../../../store/Administrator/M_EmployeeRedux/action";
 import Breadcrumbs from "../../../components/Common/Breadcrumb";
 import AvField from "availity-reactstrap-validation/lib/AvField";
 

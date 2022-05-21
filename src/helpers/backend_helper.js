@@ -132,47 +132,37 @@ export const getDivisionOrders = () => get(`${url.GET_ORDER_LIST}?FromDate=2022-
 
 //Administrator   Modules submit  
 export const postSubmitModules = (data) => post(url.H_MODULES_API_URL, data)
-//module-list get API method
-export const Fetch_ModulesList = () => get(url.H_MODULES_API_URL,)
-// Delete_Modules_By-ID
-export const delete_ModuleID = (id) => del(`${url.H_MODULES_API_URL}/${id}`)
-// Edit_Modules- by_ID
-export const edit_ModuleID = (id) => get(`${url.H_MODULES_API_URL}/${id}`)
-// Update_Modules- by_ID
-export const updateModule_ID = (data, id) => put(`${url.H_MODULES_API_URL}/${id}`, data)
+export const Fetch_ModulesList = () => get(url.H_MODULES_API_URL,)//module-list get API method
+export const delete_ModuleID = (id) => del(`${url.H_MODULES_API_URL}/${id}`)// Delete_Modules_By-ID
+export const edit_ModuleID = (id) => get(`${url.H_MODULES_API_URL}/${id}`)// Edit_Modules- by_ID
+export const updateModule_ID = (data, id) => put(`${url.H_MODULES_API_URL}/${id}`, data)// Update_Modules- by_ID
 
 //Fetch Company LIst
 export const fetch_CompanyList = () => get(url.COMPANY_API_URL,)
-// Edit_Company- by_ID
-export const edit_CompanyID = (id) => get(`${url.COMPANY_API_URL}/${id}`)
-// Delete_Company_By-ID
-export const delete_CompanyID = (id) => del(`${url.COMPANY_API_URL}/${id}`)
-// Company_Modules submit  
-export const postSubmit_Company = (data) => post(url.COMPANY_API_URL, data)
-// Update_Company- by_ID
-export const updateCompany_ID = (data, id) => put(`${url.COMPANY_API_URL}/${id}`, data)
+export const edit_CompanyID = (id) => get(`${url.COMPANY_API_URL}/${id}`)// Edit_Company- by_ID
+export const delete_CompanyID = (id) => del(`${url.COMPANY_API_URL}/${id}`)// Delete_Company_By-ID
+export const postSubmit_Company = (data) => post(url.COMPANY_API_URL, data)// Company_Modules submit 
+export const updateCompany_ID = (data, id) => put(`${url.COMPANY_API_URL}/${id}`, data)// Update_Company- by_ID
 
 //PageList And PageMaster
 export const getDefaultModule = () => get(url.GET_DEFAULT_MODULE)
 export const postDefaultMogeuleId = (id) => get(url.POST_MODULE_ID, id)
 export const postSubModule = (id) => get(`${url.H_SUB_MODULES_API_URL}/${id}`)
 export const postAddPage = (data) => post(url.H_SUB_MODULES_API_URL, data)
-
 export const getPageAcess = () => get(url.GET_PAGE_ACCESS)
 
-//// H_subModule Api
+// H_subModule Api
 export const saveH_SubModules = (data) => post(url.H_SUB_MODULES_API_URL, data)
 export const get_SubModulesListData_ApiCall = () => get(url.H_SUB_MODULES_API_URL)
-
-export const deleteSubModulesUsingID_ApiCall = (id) => del(`${url.H_SUB_MODULES_API_URL}/${id}`)/////// delete api
-export const getSubModulesEditDataUsingID_ApiCall = (id) => get(`${url.H_SUB_MODULES_API_URL}/${id}`)/////// edit api
-export const putUpdateSubModule = (Data, id) => put(`${url.H_SUB_MODULES_API_URL}/${id}`, Data)///// update api
+export const deleteSubModulesUsingID_ApiCall = (id) => del(`${url.H_SUB_MODULES_API_URL}/${id}`)// delete api
+export const getSubModulesEditDataUsingID_ApiCall = (id) => get(`${url.H_SUB_MODULES_API_URL}/${id}`)// edit api
+export const putUpdateSubModule = (Data, id) => put(`${url.H_SUB_MODULES_API_URL}/${id}`, Data)/// update api
 
 //H_pages
-export const get_H_SubModule_HPages = (id) => get(`${url.H_SUB_MODULES_FROM_HPAGES}/${id}`)/////// Get subModule For H_pages
-export const Fetch_HPagesListApi = () => get(url.H_PAGES_API_URL)/////// get H_Pages List 
-export const edit_HPageID = (id) => get(`${url.H_PAGES_API_URL}/${id}`)///////  get edit H_Pages ID Data 
-export const updateHPages = (Data, id) => put(`${url.H_PAGES_API_URL}/${id}`, Data) /////// Upadate H_Page api
+export const get_H_SubModule_HPages = (id) => get(`${url.H_SUB_MODULES_FROM_HPAGES}/${id}`)// Get subModule For H_pages
+export const Fetch_HPagesListApi = () => get(url.H_PAGES_API_URL)//get H_Pages List 
+export const edit_HPageID = (id) => get(`${url.H_PAGES_API_URL}/${id}`)// get edit H_Pages ID Data 
+export const updateHPages = (Data, id) => put(`${url.H_PAGES_API_URL}/${id}`, Data) // Upadate H_Page api
 export const saveHPagesAPI = (Data) => post(url.H_PAGES_API_URL, Data)
 export const deletHPagesUsingID_API = (id) => del(`${url.H_PAGES_API_URL}/${id}`)
 

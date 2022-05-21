@@ -21,8 +21,8 @@ import {
     saveHPages,
     saveHPagesSuccess,
     updateHPages
-} from "../../../store/Administrator/HPages/actions";
-import { fetchModelsList } from "../../../store/Administrator/Modules/actions";
+} from "../../../store/Administrator/HPagesRedux/actions";
+import { fetchModelsList } from "../../../store/Administrator/ModulesRedux/actions";
 import { MetaTags } from "react-meta-tags";
 
 const HPageMaster = (props) => {

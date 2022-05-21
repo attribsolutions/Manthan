@@ -1,35 +1,43 @@
 import React, { useEffect, useRef, useState } from "react";
-import Breadcrumbs from "../../components/Common/Breadcrumb";
-import { useHistory } from "react-router-dom";
-import { Card, CardBody, Col, Container, Row, CardHeader, Button, Label, Input } from "reactstrap";
-import { AvForm, AvInput, AvGroup, AvFeedback, AvField } from "availity-reactstrap-validation";
+import Breadcrumbs from "../../../components/Common/Breadcrumb";
+import { Card, CardBody, Col, Container, Row, Label, } from "reactstrap";
+import { AvForm, AvGroup, AvField } from "availity-reactstrap-validation";
 import { useDispatch, useSelector } from "react-redux";
 import {
   editSuccess,
   postRole, updateID
-} from "../../store/Administrator/RoleMasterRedux/action";
+} from "../../../store/Administrator/RoleMasterRedux/action";
 
-const AddRole = (props) => {
+const RoleMaster = (props) => {
 
-  const dispatch = useDispatch();
-  const [EditData, setEditData] = useState([]);
-  const [IsEdit, setIsEdit] = useState(false);
   const formRef = useRef(null);
-  var isEditData = props.state;
+  const dispatch = useDispatch();
 
-  useEffect(() => {
+  //SetState  Edit data Geting From Modules List component
+  const [EditData, setEditData] = useState([]);
+
+  //'IsEdit'--if true then update data otherwise it will perfrom save operation
+  const [IsEdit, setIsEdit] = useState(false);
+
+  //*** "isEditdata get all data from ModuleID for Binding  Form controls
+  let editDataGatingFromList = props.state;
+
+  //Access redux store Data /  'save_ModuleSuccess' action data
+  const { AddUserMessage, } = useSelector((state) => ({
+    AddUserMessage: state.RoleMaster_Reducer.AddUserMessage,
+  }));
+  
+    // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
+    useEffect(() => {
     document.getElementById("txtName").focus();
-    if (!(isEditData === undefined)) {
-      setEditData(isEditData);
+    if (!(editDataGatingFromList === undefined)) {
+      setEditData(editDataGatingFromList);
       setIsEdit(true);
       dispatch(editSuccess({ Status: false }))
     }
   }, [IsEdit])
 
-  const { AddUserMessage, } = useSelector((state) => ({
-    AddUserMessage: state.RoleMaster_Reducer.AddUserMessage,
-  }));
-
+  //Access redux store Data /  'save_ModuleSuccess' action data
   useEffect(() => {
     if ((AddUserMessage.Status === "true")) {
       dispatch(postRole({ Status: false }))
@@ -37,7 +45,7 @@ const AddRole = (props) => {
     }
   }, [AddUserMessage.Status])
 
-
+    //'Save' And 'Update' Button Handller
   const handleValidUpdate = (event, values) => {
     const requestOptions = {
       body: JSON.stringify({
@@ -51,39 +59,32 @@ const AddRole = (props) => {
         UpdatedOn: "2022-05-20T11:22:55.711483Z"
       }),
     };
-
-    console.log("values", values)
     if (IsEdit) {
       dispatch(updateID(requestOptions.body, EditData.ID));
     }
-
     else {
       dispatch(postRole(requestOptions.body));
-
     }
-    console.log("requestOptions", requestOptions.body)
-
   };
 
-  var IsEditModeSaSS=''
-  if(IsEdit===true){IsEditModeSaSS= "-3.5%"};
+ // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
+  var IsEditMode_Css = ''
+  if (IsEdit === true) { IsEditMode_Css = "-3.5%" };
 
   return (
     <React.Fragment>
-     <div className="page-content" style={{marginTop:IsEditModeSaSS}}>
+      <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
         <Breadcrumbs breadcrumbItem={"Role Master "} />
         <Container fluid>
           <Row>
             <Col lg={12}>
               <Card>
-
                 <CardBody>
                   <AvForm
                     onValidSubmit={(e, v) => {
                       handleValidUpdate(e, v);
                     }}
                   >
-
                     <AvGroup>
                       <Row className="mb-4">
                         <Label className="col-sm-2 col-form-label">
@@ -94,14 +95,13 @@ const AddRole = (props) => {
                             value={EditData.Name}
                             type="text"
                             placeholder="Please Enter Name"
-                            // autoComplete='off'
+                            autoComplete='off'
                             validate={{
                               required: { value: true, errorMessage: 'Please enter a Name...!' },
                             }} />
                         </Col>
                       </Row>
                     </AvGroup>
-
                     <AvGroup>
                       <Row className="mb-4">
                         <Label className="col-sm-2 col-form-label">
@@ -112,7 +112,7 @@ const AddRole = (props) => {
                             value={EditData.Description}
                             type="text"
                             placeholder="Please Enter Discription"
-                            // autoComplete='off'
+                            autoComplete='off'
                             validate={{
                               required: { value: true, errorMessage: 'Please enter a Discription...!' },
                             }} />
@@ -130,14 +130,13 @@ const AddRole = (props) => {
                             value={EditData.Dashboard}
                             type="text"
                             placeholder="Please Enter Dashboard"
-                            // autoComplete='off'
+                            autoComplete='off'
                             validate={{
                               required: { value: true, errorMessage: 'Please enter a Dashboard...!' },
                             }} />
                         </Col>
                       </Row>
                     </AvGroup>
-
                     <AvGroup>
                       <Row className="mb-4">
                         <Label className="col-sm-2 col-form-label">
@@ -151,7 +150,6 @@ const AddRole = (props) => {
                         </Col>
                       </Row>
                     </AvGroup>
-
                     <Row className="justify-content-end">
                       <Col sm={10}></Col>
                       <Col sm={2}>
@@ -188,4 +186,4 @@ const AddRole = (props) => {
     </React.Fragment>
   );
 }
-export default AddRole
+export default RoleMaster

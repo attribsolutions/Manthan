@@ -5,7 +5,7 @@ import {
     Modal,
     Row,
 } from "reactstrap";
-import { deleteCompanyID, editCompanyID, editCompanyIDSuccess, fetchCompanyList, updateCompanyIDSuccess, } from "../../../store/Administrator/Company/actions";
+import { deleteCompanyID, editCompanyID,fetchCompanyList, updateCompanyIDSuccess, } from "../../../store/Administrator/CompanyRedux/actions";
 import Breadcrumbs from "../../../components/Common/Breadcrumb";
 
 import paginationFactory, {
@@ -55,7 +55,6 @@ const CompanyList = () => {
     // Edit Modal Show When Edit Data is true
     useEffect(() => {
         if (editData.Status === true) {
-            dispatch(editCompanyID(0))
            tog_center()
         }
     }, [editData]);

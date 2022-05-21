@@ -21,7 +21,7 @@ import {
   editSuccess,
   updateSuccess
 } from "./actions";
-import { UserListAPI } from "./UserListAPI";
+// import { UserListAPI } from "./UserListAPI";
 
 /// employee dropdown list
 function* EmployeelistDropdown_GenratorFunction() {

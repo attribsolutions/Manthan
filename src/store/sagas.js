@@ -11,14 +11,14 @@ import Spinner_Saga from "./Utilites/Spinner/saga"
 //import AlertSagas 
 import Alert_Saga from "./Utilites/CostumeAlert/saga"
 // import  Module saga
-import ModulesSaga from "./Administrator/Modules/saga"
-import CompanySaga from "./Administrator/Company/saga"
-import SubModuleSaga from "./Administrator/SubModules/saga"
-import PageListSaga from "./Administrator/PageMaster/saga"
-import HPageSaga from "./Administrator/HPages/saga"
+import ModulesSaga from "./Administrator/ModulesRedux/saga"
+import CompanySaga from "./Administrator/CompanyRedux/saga"
+import SubModuleSaga from "./Administrator/SubModulesRedux/saga"
+import PageListSaga from "./Administrator/PageMasterRedux/saga"
+import HPageSaga from "./Administrator/HPagesRedux/saga"
 import OrdersSaga from "./Purchase/Orders/saga"
 import UserRegistrationSaga from "./Administrator/UserRegistrationRedux/saga"
-import M_EmployeeSaga from "./Administrator/M_Employee/saga"
+import M_EmployeeSaga from "./Administrator/M_EmployeeRedux/saga"
 import RoleMaster_Saga from "./Administrator/RoleMasterRedux/saga"
 export default function* rootSaga() {
   yield all([
