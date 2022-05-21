@@ -1,11 +1,12 @@
-import { DELETE_HPAGES_USING_ID, EDIT_H_PAGES_ID, EDIT_H_PAGES_ID_SUCCESS, EDIT_SUBMODULE_ID, EDIT_SUBMODULE_ID_SUCCESS, GET_HPAGES_LIST_DATA, GET_HPAGES_LIST_DATA_SUCCESS, GET_H_MODULES,
-   GET_H_MODULES_SUCCESS,
-   GET_H_SUB_MODULES,
-   GET_H_SUB_MODULES_SUCCESS, 
-   SAVE_HPAGES, 
-   SAVE_HPAGES_SUCCESS, 
-   UPDATE_H_PAGES, 
-   UPDATE_H_PAGES_SUCCESS, 
+import {
+  DELETE_HPAGES_USING_ID, EDIT_H_PAGES_ID, EDIT_H_PAGES_ID_SUCCESS, EDIT_SUBMODULE_ID, EDIT_SUBMODULE_ID_SUCCESS, GET_HPAGES_LIST_DATA, GET_HPAGES_LIST_DATA_SUCCESS, GET_H_MODULES,
+  GET_H_MODULES_SUCCESS,
+  GET_H_SUB_MODULES,
+  GET_H_SUB_MODULES_SUCCESS,
+  SAVE_HPAGES,
+  SAVE_HPAGES_SUCCESS,
+  UPDATE_H_PAGES,
+  UPDATE_H_PAGES_SUCCESS,
 } from "./actionType";
 
 export const getH_Modules = () => ({
@@ -14,7 +15,7 @@ export const getH_Modules = () => ({
 
 export const getH_ModulesSuccess = (modulesData) => ({
   type: GET_H_MODULES_SUCCESS,
-  payload:modulesData,
+  payload: modulesData,
 });
 export const getH_SubModules = (id) => ({
   type: GET_H_SUB_MODULES,
@@ -24,7 +25,7 @@ export const getH_SubModules = (id) => ({
 
 export const getH_SubModulesSuccess = (SubModulesData) => ({
   type: GET_H_SUB_MODULES_SUCCESS,
-  payload:SubModulesData,
+  payload: SubModulesData,
 });
 
 // // Fetch Modules get Data Actions 
@@ -52,7 +53,7 @@ export const saveHPagesSuccess = (saveMessage) => ({
 // 
 export const deleteHpagesUsingID = (id) => ({
   type: DELETE_HPAGES_USING_ID,
-  payload: id,
+  id,
 });
 // export const deleteModuleIDError = (deleteModuleIDError) => ({
 //   type: DELETE_MODULE_ID_ERROR,
@@ -70,9 +71,9 @@ export const editHPagesIDSuccess = (editData) => ({
   payload: editData,
 });
 
-export const updateHPages = (data,id) => ({
+export const updateHPages = (data, id) => ({
   type: UPDATE_H_PAGES,
-  data,id,
+  data, id,
 });
 export const updateHPagesSuccess = (updateMessage) => ({
   type: UPDATE_H_PAGES_SUCCESS,
