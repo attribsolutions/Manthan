@@ -50,7 +50,7 @@ const SubModulesList = () => {
 
     // Edit Modal Show When Edit Data is true
     useEffect(() => {
-        if (editData.Status === "true") {
+        if (editData.Status === true) {
             setmodal_center(!modal_center)
         };
         if (updateMessage.Status === true) {

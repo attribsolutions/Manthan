@@ -5,7 +5,7 @@ import {
     Modal,
     Row,
 } from "reactstrap";
-import { deleteCompanyID, editCompanyID, fetchCompanyList, updateCompanyIDSuccess, } from "../../../store/Administrator/Company/actions";
+import { deleteCompanyID, editCompanyID, editCompanyIDSuccess, fetchCompanyList, updateCompanyIDSuccess, } from "../../../store/Administrator/Company/actions";
 import Breadcrumbs from "../../../components/Common/Breadcrumb";
 
 import paginationFactory, {
@@ -24,37 +24,50 @@ import { AlertState } from "../../../store/Utilites/CostumeAlert/actions";
 const CompanyList = () => {
 
     const dispatch = useDispatch();
-
     const [modal_center, setmodal_center] = useState(false);
 
+    // get Access redux data
     const { companyList, editData, updateMessage } = useSelector((state) => ({
         companyList: state.Company.companyList,
         editData: state.Company.editData,
         updateMessage: state.Company.updateMessage,
-        
+
     }));
 
+    // tag_center -- Control the Edit Modal show and close
+    function tog_center() {
+        setmodal_center(!modal_center)
+    }
+
+    // Featch Modules List data  First Rendering
     useEffect(() => {
         dispatch(fetchCompanyList());
     }, []);
 
+    // Edit Modal Show and Hide Control whwn Update Success
     useEffect(() => {
-        if (editData.Status === true) {
-            tog_center()
-        }
         if (updateMessage.Status === true) {
             dispatch(updateCompanyIDSuccess({ Status: false }));
             tog_center()
         }
+    }, [updateMessage.Status,dispatch]);
+
+    // Edit Modal Show When Edit Data is true
+    useEffect(() => {
+        if (editData.Status === true) {
+            dispatch(editCompanyID(0))
+           tog_center()
+        }
     }, [editData]);
 
-    function tog_center() {
-        setmodal_center(!modal_center)
-    }
+    // Edit button Handller
     const EditPageHandler = (id) => {
         dispatch(editCompanyID(id));
     }
+
+    //Delete Button Handller
     const deleteHandeler = (id, name) => {
+        debugger
         dispatch(AlertState({
             Type: 5, Status: true,
             Message: `Are you sure you want to delete this item : "${name}"`,
