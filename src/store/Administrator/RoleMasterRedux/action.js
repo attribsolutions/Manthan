@@ -1,21 +1,17 @@
 import {
     GET_Role_API,
     GET_Role_API_SUCCESS,
-
     POST_ROLE,
     POST_SUCCESS,
-
     DELETE_ROLE,
     DELETE_SUCCESS,
-
     EDIT_ROLE,
     EDIT_SUCCESS,
-    
     UPDATE_SUCCESS,
     UPDATE_ROLE,
 } from "./actionTypes"
 
-///get api
+// get api
 export const getRole = () => ({
     type: GET_Role_API,
 });
@@ -25,8 +21,7 @@ export const getRoleSuccess = (pages) => ({
     payload:pages,
 });
 
-
-/// post api
+// post api
 export const postRole = (Data,id) => ({
     type: POST_ROLE,
     Data,id
@@ -37,7 +32,7 @@ export const postRole = (Data,id) => ({
     payload: AddUserMessage,
   });
 
-  ////delete api
+  // delete api
   export const deleteRole = (id) => ({
     type: DELETE_ROLE,
     id ,
@@ -48,7 +43,7 @@ export const postRole = (Data,id) => ({
     payload:deleteMessage
   });
   
-  ///// edit api
+  // edit api
   export const editRoleId =(id)=>({
     type:EDIT_ROLE,
   id,
@@ -58,7 +53,7 @@ export const postRole = (Data,id) => ({
    payload:editData,
   })
 
-  /// update api
+  // update api
   export const updateID=(updateData,ID)=>({
     type:UPDATE_ROLE,
     updateData,ID,
