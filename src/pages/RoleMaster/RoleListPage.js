@@ -132,7 +132,7 @@ useEffect(()=>{
             formatter: (cellContent, Role) => <>{Role.Dashboard}</>,
         },
         {
-            text: "Actions",
+            text: "Action",
 
             formatter: (cellContent, Role) => (
                 <>
@@ -184,7 +184,7 @@ useEffect(()=>{
                                         title={"Count :"}
                                         breadcrumbItem={"Role List Page"}
                                         IsButtonVissible={true}
-                                        a={toolkitProps.searchProps}
+                                        SearchProps={toolkitProps.searchProps}
                                         breadcrumbCount={pages.length}
                                         RedirctPath={"/AddRole"}
                                     />

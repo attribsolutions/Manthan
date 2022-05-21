@@ -46,10 +46,10 @@ function* RolesListDropdoun_GenratorFunction() {
 //// post api
 function* user_save_GenratorFunction({ Data }) {
   try {
-    yield console.log("AddUser saga : saga befor axios pass data", Data); //comment line only
+    yield console.log("AddUser saga : saga befor axios pass data", Data);
     const response = yield call(User_Component_PostMethod_API, Data);
     yield put(addUserSuccess(response));
-    yield console.log(" AddUser saga : after axios Addapi response ", response); //comment line only
+    yield console.log(" AddUser saga : after axios Addapi response ", response); 
   } catch (error) {
     yield console.log("postUser saga error :", error);
   }

@@ -24,14 +24,14 @@ import {
   const RoleMaster_Reducer  = (state = INIT_STATE, action) => {
     switch (action.type) {
 
-        //// get api
+        // get api
         case GET_Role_API_SUCCESS:
             return {
               ...state,
               pages: action.payload,
             }
 
-     //// post api
+     // post api
       case POST_ROLE:
         return {
           ...state,
@@ -43,7 +43,7 @@ import {
           AddUserMessage: action.payload,
         };
   
-    //// delete api
+    // delete api
       case DELETE_ROLE:
         return {
           ...state,
@@ -55,7 +55,7 @@ import {
           deleteSuccessRole: action.payload,
         };
   
-        //// edit api
+        // edit api
       case EDIT_ROLE:
         return {
           ...state,
@@ -67,7 +67,7 @@ import {
           editData: action.payload,
         };
   
-    //// update api
+    // update api
       case UPDATE_SUCCESS:
         return {
           ...state,
