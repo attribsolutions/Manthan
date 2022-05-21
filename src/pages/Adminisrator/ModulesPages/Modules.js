@@ -15,8 +15,9 @@ import { useDispatch, useSelector } from "react-redux";
 import {
     PostModelsSubmit,
     updateModuleID,
-    PostModelsSubmitSuccess
-} from "../../../store/Administrator/Modules/actions";
+    PostModelsSubmitSuccess,
+    editModuleIDSuccess
+} from "../../../store/Administrator/ModulesRedux/actions";
 import Breadcrumbs from "../../../components/Common/Breadcrumb";
 import AvField from "availity-reactstrap-validation/lib/AvField";
 import { MetaTags } from "react-meta-tags";
@@ -46,6 +47,7 @@ const Modules = (props) => {
         if (!(editDataGatingFromList === undefined)) {
             setEditData(editDataGatingFromList);
             setIsEdit(true);
+            dispatch(editModuleIDSuccess({ Status: false }))
         }
     }, [editDataGatingFromList])
 
@@ -76,13 +78,13 @@ const Modules = (props) => {
             dispatch(PostModelsSubmit(requestOptions.body));
         }
     };
-
-    var IsEditModeSaSS=''
-    if(IsEdit===true){IsEditModeSaSS= "-3.5%"};
+ // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
+    var IsEditMode_Css=''
+    if(IsEdit===true){IsEditMode_Css= "-3.5%"};
 
     return (
         <React.Fragment>
-            <div className="page-content" style={{marginTop:IsEditModeSaSS}}>
+            <div className="page-content" style={{marginTop:IsEditMode_Css}}>
                 <MetaTags>
                     <title>Modules| FoodERP-React FrontEnd</title>
                 </MetaTags>

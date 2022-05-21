@@ -8,7 +8,7 @@ export * from "./auth/profile/actions"
 
 
 //administrator  ** modules and list
-export * from "./Administrator/Modules/actions"
+export * from "./Administrator/ModulesRedux/actions"
 
 
 

@@ -155,11 +155,11 @@ const SidebarContent = (props) => {
                 </li>
 
                 <li>
-                  <Link to="/AddRole">{props.t("AddRole")}</Link>
+                  <Link to="/RoleMaster">{props.t("Role Master")}</Link>
                 </li>
 
                 <li>
-                  <Link to="/RoleListPage">{props.t("RoleListPage")}</Link>
+                  <Link to="/RoleList">{props.t("RoleList")}</Link>
                 </li>
               </ul>
             </li>      
