@@ -30,6 +30,7 @@ export async function getModify(url) {
 }
 
 export async function post(url, data, config = {}) {
+  console.log("post",url,data)
   AuthonticationFunction();
   return axiosApi
     .post(url, data, {

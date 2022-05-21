@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { useHistory } from "react-router-dom";
+// import { useHistory } from "react-router-dom";
 import Breadcrumbs from "../../../components/Common/Breadcrumb";
 import {
     Modal,
@@ -23,11 +23,11 @@ import { useSelector, useDispatch } from "react-redux";
 import AddEmployee from './AddEmployee';
 
 const Employee_List = () => {
-    const [EditId, setId] = useState('')
+    // const [EditId, setId] = useState('')
     // const alert1 = useAlert();
     const dispatch = useDispatch();
-    const [deleteIn, setDeleteIn] = useState('');
-    const history = useHistory();
+    // const [deleteIn, setDeleteIn] = useState('');
+    // const history = useHistory();
     const { SearchBar } = Search;
     const [modal_center, setmodal_center] = useState(false);
 
@@ -63,8 +63,6 @@ useEffect(() => {
         dispatch(getEmployeelist());
     }
 }, [updateMessage.Status]);
-
-// console.log("updateMessage after useEffect in list ",updateMessage)
 
 // Edit Modal Show When Edit Data is true
 useEffect(() => {

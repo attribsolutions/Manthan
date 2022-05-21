@@ -51,3 +51,6 @@ export const GET_EMPLOYEE_TYPE="/EmployeeTypeByID"
 export const GET_STATE="/State"
 export const GET_REGION="/Region"
 export const EMPLOYEE_API_URL="/M_Employees"   
+
+// Role Master
+export const ROLE_MASTER_API="/M_Roles"////  role get api

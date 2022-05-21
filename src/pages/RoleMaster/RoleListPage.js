@@ -1,251 +1,233 @@
-// import React, { useEffect, useState } from 'react'
-// import { useHistory } from "react-router-dom";
-// import Breadcrumbs from "../../components/Common/Breadcrumb";
-// import MetaTags from "react-meta-tags";
-// import { Button } from "reactstrap";
+import React, { useEffect, useState } from 'react'
+import { useHistory } from "react-router-dom";
+import Breadcrumbs from "../../components/Common/Breadcrumb";
+import MetaTags from "react-meta-tags";
+import { Button } from "reactstrap";
 
-// import {
-//     Card,
-//     CardBody,
-//     Col,
-//     Container,
-//     Row,
-// } from "reactstrap";
+import {
+    Col,
+    Modal,
+    Row,
+} from "reactstrap";
 
-// import {
-//     getRole,
-//     deleteRole,
-//     editRoleId,
-// } from "../../store/RoleMasterRedux/actions";
+import {
+    getRole,
+    deleteRole,
+    editRoleId,
+    updateSuccess,
+} from "../../store/Administrator/RoleMasterRedux/action";
 
-// import paginationFactory, {
-//     PaginationListStandalone,
-//     PaginationProvider, SizePerPageDropdownStandalone,
-// } from "react-bootstrap-table2-paginator";
-// import ToolkitProvider, { Search } from "react-bootstrap-table2-toolkit";
-// import BootstrapTable from "react-bootstrap-table-next";
-// import { useSelector, useDispatch } from "react-redux";
+import paginationFactory, {
+    PaginationListStandalone,
+    PaginationProvider, SizePerPageDropdownStandalone,
+} from "react-bootstrap-table2-paginator";
+import ToolkitProvider, { Search } from "react-bootstrap-table2-toolkit";
+import BootstrapTable from "react-bootstrap-table-next";
+import { useSelector, useDispatch } from "react-redux";
+import { AlertState } from '../../store/Utilites/CostumeAlert/actions';
+import AddRole from './AddRole';
+import { SpinnerON } from '../../store/Utilites/Spinner/actions';
+import "../../assets/scss/CustomeTable/datatables.scss"
 
-// const RoleListPage = () => {
-//     const [EditId, setId] = useState('')
-//     const dispatch = useDispatch();
-//     const history = useHistory();
-//     const { SearchBar } = Search;
+const RoleListPage = () => {
+    // const [EditId, setId] = useState('')
+    const dispatch = useDispatch();
+    const history = useHistory();
+    const { SearchBar } = Search;
+    const [modal_center, setmodal_center] = useState(false);
+
+    //// get data
+    const { pages, editData, updateMessage} = useSelector((state) => ({
+        pages: state.RoleMaster_Reducer.pages,
+        editData: state.RoleMaster_Reducer.editData,
+        updateMessage: state.RoleMaster_Reducer.updateMessage,
+    }));
+
+    console.log("editData in RoleList Page",editData)
+
+    function tog_center() {
+        setmodal_center(!modal_center)
+    }
     
-// //// get data
-//     const { pages,editData ,} = useSelector((state) => ({
-//         pages:state.RoleMaster.pages,
-//         editData:state.RoleMaster.editData,
-//     }));
-//     console.log("get data",pages);
+useEffect(()=>{
+    dispatch(SpinnerON(true))
+    dispatch(getRole());
+},[dispatch]);
 
-//     console.log("editData",editData); /// id select
-   
-// //// select id for delete row
-//     const deleteHandeler = (id) => { 
-//         setId(id);
-//         dispatch(deleteRole(id));
-//         dispatch(getRole());  
-//     };
+    //// select id for delete row
+    const deleteHandeler = (id, name) => {
+        dispatch(AlertState({
+            Type: 5, Status: true,
+            Message: `Are you sure you want to delete this item : "${name}"`,
+            RedirectPath: false,
+            PermissionAction: deleteRole,
+            ID: id
+        }));
+    }
 
-//     useEffect(()=>{
-//         dispatch(editRoleId(0));
-//         dispatch(getRole());
-//     },[dispatch,EditId]);
-  
-//     /// if editdata is not equal to 0 ,then go to AddRoleList page
-//     useEffect(() => {
-//         if ( !(editData.ID === 0)) {
-//             dispatch(editRoleId(0));
-//             history.push({
-//                 pathname: "/AddRoleList",
-//                 state: editData
-//             });
-//         }
-//     }, [dispatch, editData.ID]);
-  
-// //// edit id select
-//     const EditPageHandler = (id) => {
-//         console.log("selected ID",id)
-//         dispatch(editRoleId(id));
-//     }
+    useEffect(() => {
+        if (updateMessage.Status === true) {
+            dispatch(updateSuccess({ Status: false }))
+            tog_center()
+            dispatch(getRole());
+        }
+    }, [updateMessage.Status]);
+    console.log("updateMessage",updateMessage)
+
+    // Edit Modal Show When Edit Data is true
+    useEffect(() => {
+        if (editData.Status === true) {
+            tog_center()
+        }
+    }, [editData]);
+    console.log("editData in RoleList Page after useEffect",editData)
     
-//     const pageOptions = {
-//         sizePerPage: 10,
-//         totalSize: pages.length,
-//         custom:true,
-//     };
-    
-//     const pagesListColumns = [
-//         {
-//             text: "PageID",
-//             dataField: "ID",
-//             sort: true,
-//             hidden: true,
-//             formatter: (cellContent, Role) => <>{Role.ID}</>,
-//         },
+    //// edit id select
+    const EditPageHandler = (id) => {
+        console.log("selected ID", id)
+        dispatch(editRoleId(id));
+    }
 
-//         {
-//             text: "Name",
-//             dataField: "Name",
-//             sort: true,
-//             formatter: (cellContent, Role) => <>{Role.Name}</>,
-//         },
+    const pageOptions = {
+        sizePerPage: 10,
+        totalSize: pages.length,
+        custom: true,
+    };
 
-//         {
-//             text: "Description",
-//             dataField: "Description",
-//             sort: true,
-//             formatter: (cellContent, Role) => <>{Role.Description}</>,
-//         },
-//         {
-//             text: "IsActive",
-//             dataField: "IsActive",
-//             sort: true,
-//             formatter: (cellContent, Role) =>
-//              <>
-//           {( Role.IsActive)?"true" :"false"}
-//             </>
-//         },
-//         {
-//             text: "Icon",
-//             dataField: "Icon",
-//             sort: true,
-//             formatter: (cellContent, Role) => <>{Role.Icon}</>,
-//         },
-//         {
-//             text: "Dashboard",
-//             dataField: "Dashboard",
-//             sort: true,
-//             formatter: (cellContent, Role) => <>{Role.Dashboard}</>,
-//         },
-//         {
-//             text: "",
-//             dataField: "buttons",
-//             sort: true,
-//             formatter: (cellContent, Role) => (
-//                 <>
-//                     <div>
+    const pagesListColumns = [
+        {
+            text: "PageID",
+            dataField: "ID",
+            sort: true,
+            hidden: true,
+            formatter: (cellContent, Role) => <>{Role.ID}</>,
+        },
 
-//                         <Button
-//                             type="button"
-//                             onClick={() => {
+        {
+            text: "Name",
+            dataField: "Name",
+            sort: true,
+            formatter: (cellContent, Role) => <>{Role.Name}</>,
+        },
 
-//                                 EditPageHandler(Role.ID);    
-//                             }}
-//                             className="me-2 bg-primary badge badge-secondary"
-//                             data-toggle="modal"
-//                             data-target=".bs-example-modal-lg"
-//                         >
-//                             Edit
-//                         </Button>{" "}
-                       
-//                    <button 
-//                            className="me-2 bg-danger badge badge-secondary"
-//                             onClick={() => {
-//                                 const deleteID= window.confirm(
-//                                   "Are you sure you want to Delete ?"
-//                                         )
-//                                if ( deleteID=== true) {
-//                                 deleteHandeler(Role.ID );
-//                                         }
-//                                     }}>
-//                                         Delete
-//                                    </button>
-//                     </div>
-//                 </>
-//             ),
-//         },
-//     ];
+        {
+            text: "Description",
+            dataField: "Description",
+            sort: true,
+            formatter: (cellContent, Role) => <>{Role.Description}</>,
+        },
+        {
+            text: "IsActive",
+            dataField: "isActive",
+            sort: true,
+            formatter: (cellContent, Role) =>
+                <>
+                    {(Role.isActive) ? "true" : "false"}
+                </>
+        },
+        {
+            text: "Dashboard",
+            dataField: "Dashboard",
+            sort: true,
+            formatter: (cellContent, Role) => <>{Role.Dashboard}</>,
+        },
+        {
+            text: "Actions",
 
-//      return (
-//         <React.Fragment>
-//             <div className="page-content">
-//                 <MetaTags>  <title>Role List Page </title>  </MetaTags>
-//                 <Container fluid>
-//                     {/* Render Breadcrumbs */}
-//                     <Breadcrumbs title="Pages Count" breadcrumbItem=" Role List Page " breadcrumbCount={pages.length} />
-//                     <Row>
-//                         <Col lg="12">
-//                             <Card>
-//                                 <CardBody>
-//                                     <PaginationProvider
-//                                         pagination={paginationFactory(pageOptions)}
-//                                     >
-//                                         {({ paginationProps, paginationTableProps }) => (
-//                                             <ToolkitProvider
-//                                                 keyField="id"
-//                                                 data={pages}
-//                                                 columns={pagesListColumns}
-//                                                 bootstrap4
-//                                                 search
-//                                             >
-//                                                 {toolkitProps => (
-//                                                     <React.Fragment>
-//                                                         <Row className="mb-12">
-//                                                             <Col sm="12">
-//                                                                 <div className="search-box ms-12 mb-12 d-inline-block">
-//                                                                     <div className="position-relative">
-//                                                                         <SearchBar {...toolkitProps.searchProps} />
-//                                                                         <i className="bx bx-search-alt search-icon-search" />
-//                                                                     </div>
-//                                                                 </div>
+            formatter: (cellContent, Role) => (
+                <>
+                    <div className="d-flex gap-3" style={{ display: 'flex', justifyContent: 'center' }} >
+                        <buton
+                            type="button"
+                            data-mdb-toggle="tooltip" data-mdb-placement="top" title="Edit Modules ID"
+                            onClick={() => {
+                                EditPageHandler(Role.ID);
+                            }}
+                            className="badge badge-soft-primary font-size-12"
+                        >
+                            <i className="mdi mdi-pencil font-size-18" id="edittooltip"></i>
+                        </buton>
+                        <buton
+                            className="badge badge-soft-danger font-size-12"
+                            data-mdb-toggle="tooltip" data-mdb-placement="top" title="Delete Modules ID"
+                            onClick={() => {
+                                deleteHandeler(Role.ID, Role.Name);
+                            }}
+                        >
+                            <i className="mdi mdi-delete font-size-18" ></i>
+                        </buton>
+                    </div>
+                </>
+            ),
+        },
+    ]
 
-//                                                             </Col>
-//                                                         </Row>
-//                                                         <Row>
-//                                                             <Col xl="12">
-//                                                                 <div className="table-responsive">
-//                                                                     <BootstrapTable
-//                                                                         keyField={"id"}
-//                                                                         responsive
-//                                                                         bordered={false}
-//                                                                         striped={false}
-//                                                                         //defaultSorted={defaultSorted}
-//                                                                         // selectRow={selectRow}
-//                                                                         classes={
-//                                                                             "table align-middle table-nowrap"
-//                                                                         }
-//                                                                         headerWrapperClasses={"thead-light"}
-//                                                                         {...toolkitProps.baseProps}
-//                                                                         {...paginationTableProps}
-//                                                                     />
+    return (
+        <React.Fragment>
+            <div className="page-content">
 
-//                                                                 </div>
-//                                                             </Col>
-//                                                         </Row>
+                <PaginationProvider
+                    pagination={paginationFactory(pageOptions)}
+                >
+                    {({ paginationProps, paginationTableProps }) => (
+                        <ToolkitProvider
+                            keyField="id"
+                            data={pages}
+                            columns={pagesListColumns}
+                            // bootstrap4
+                            search
+                        >
 
-//                                                         <Row className="align-items-md-center mt-30">
-//                                                             <Col className="inner-custom-pagination d-flex">
-//                                                                 <div className="d-inline">
-//                                                                     <SizePerPageDropdownStandalone
-//                                                                         {...paginationProps}
-//                                                                     />
-//                                                                 </div>
-//                                                                 <div className="text-md-right ms-auto">
-//                                                                     <PaginationListStandalone
-//                                                                         {...paginationProps}
-//                                                                     />
-//                                                                 </div>
-//                                                             </Col>
-
-//                                                         </Row>
-//                                                         <br></br>
+                            {toolkitProps => (
+                                <React.Fragment>
+                                    <Breadcrumbs
+                                        title={"Count :"}
+                                        breadcrumbItem={"Role List Page"}
+                                        IsButtonVissible={true}
+                                        a={toolkitProps.searchProps}
+                                        breadcrumbCount={pages.length}
+                                        RedirctPath={"/AddRole"}
+                                    />
+                                    <Row>
+                                        <Col xl="12">
+                                            <div className="table-responsive">
+                                                <BootstrapTable
+                                                    keyField={"id"}
+                                                    responsive
+                                                    bordered={false}
+                                                    striped={false}
+                                                    classes={
+                                                        "table  table-bordered"
+                                                    }
+                                                    {...toolkitProps.baseProps}
+                                                    {...paginationTableProps}
+                                                />
+                                            </div>
+                                        </Col>
+                                    </Row>
+                                    <Row className="align-items-md-center mt-30">
+                                        <Col className="pagination pagination-rounded justify-content-end mb-2">
+                                            <PaginationListStandalone
+                                                {...paginationProps}
+                                            />
+                                        </Col>
+                                    </Row>
+                                </React.Fragment>
+                            )}
+                        </ToolkitProvider>
+                    )}
+                </PaginationProvider>
+                <Modal
+                    isOpen={modal_center}
+                    toggle={() => { tog_center() }}
+                    size="xl"
+                >
+                    <AddRole state={editData} />
+                </Modal>
+            </div>
+        </React.Fragment>
+    );
+};
 
 
-//                                                     </React.Fragment>
-//                                                 )}
-//                                             </ToolkitProvider>
-//                                         )}
-//                                     </PaginationProvider>
-//                                 </CardBody>
-//                             </Card>
-//                         </Col>
-//                     </Row>
-//                 </Container>
-//             </div>
-//         </React.Fragment>
-//     );
-// };
-
-// export default RoleListPage;
+export default RoleListPage;
