@@ -116,6 +116,13 @@ export const User_Component_Delete_Method_API = (id) => del(`${url.USER_API_URL}
 export const User_Component_EditById_API = (id) => get(`${url.USER_API_URL}/${id}`) // edit api
 export const User_Component_Update_API = (data, id) => put(`${url.USER_API_URL}/${id}`, data) // update api
 
+// Role Master
+export const Role_Master_Get_API=()=> get(url.ROLE_MASTER_API)//get api
+export const Role_Master_Post_API = (data) => post(url.ROLE_MASTER_API,data )// post api
+export const Role_Master_Delete_API=(id)=> del(`${url.ROLE_MASTER_API}/${id}` )// delete api
+export const Role_Master_Edit_API=(id)=> get(`${url.ROLE_MASTER_API}/${id}` )// edit api
+export const Role_Master_Update_API = (data,id) => put(`${url.ROLE_MASTER_API}/${id}`,data )// update api
+
 
 export const getOrderPage = () => get(url.GET_ORDER)
 export const submitOrderPage = (data) => post(url.SUBMIT_ORDER_PAGE, data)
