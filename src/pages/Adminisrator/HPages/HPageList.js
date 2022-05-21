@@ -16,19 +16,19 @@ export default function HPageList() {
     const [modal_center, setmodal_center] = useState(false);
 
     // var HPageListData = [];
-    const { HPageListData, editData, updateMessage,Teststate } = useSelector((state) => ({
+    const { HPageListData, editData, updateMessage, Teststate } = useSelector((state) => ({
         HPageListData: state.H_Pages.HPagesListData,
         editData: state.H_Pages.editData,
         updateMessage: state.H_Pages.updateMessage,
         Teststate: state,
     }));
-console.log("Teststate",Teststate)
+    console.log("Teststate", Teststate)
     useEffect(() => {
         dispatch(dispatch(GetHpageListData()))
     }, []);
 
     useEffect(() => {
-        if (editData.Status === 'true') {
+        if (editData.Status === true) {
             setmodal_center(true)
         };
 
@@ -116,7 +116,7 @@ console.log("Teststate",Teststate)
         },
         {
             text: "Is Active",
-            dataField: "isActive",
+            dataField: "IsActive",
             sort: true,
         },
         {

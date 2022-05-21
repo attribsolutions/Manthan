@@ -33,7 +33,7 @@ function* fetchHPagesList_GneratorFunction() {
     const response = yield call(Fetch_HPagesListApi,put);
     console.log(response, "fetchHPagesList_GneratorFunction")
     yield put(SpinnerState(false))
-    yield put(GetHpageListDataSuccess(response.data));
+    yield put(GetHpageListDataSuccess(response.Data));
   } catch (error) {
     console.log(" error fetchHPagesList_GneratorFunction", error)
     // yield put(SpinnerState(false))
@@ -50,11 +50,14 @@ function* GetH_Sub_Modules({ id }) {
 }
 
 function* saveHPageSaga_GneratorFunction({ data }) {
+  debugger
   yield put(SpinnerState(true))
   try {
     const response = yield call(saveHPagesAPI, data);
+    yield put(SpinnerState(false));
     if (response.StatusCode === 200) {
-      yield put(saveHPagesSuccess({ Status: true }));
+      // yield put(saveHPagesSuccess({ Status: true }));
+      debugger
       yield put(AlertState({ Type: 1, Status: true, Message: response.Message, RedirectPath: '/HpageList', AfterResponseAction: false }));
     } else {
       yield put(AlertState({ Type: 3, Status: true, Message: " save HPageSaga error ", RedirectPath: false, AfterResponseAction: false }));
@@ -113,6 +116,7 @@ function* update_HPagesUsingID_GenratorFunction({ data, id }) {
 }
 
 function* deleteHpagesUsingID_GenratorFunction({ id }) {
+  debugger
   yield put(SpinnerState(true))
   try {
     const response = yield call(deletHPagesUsingID_API, id);

@@ -25,7 +25,6 @@ function* fetch_CompanyList_data() {
 }
 function* SubmitCompanyModules({ data }) {
   yield put(SpinnerState(true))
-
   try {
     const response = yield call(postSubmit_Company, data);
     if (response.StatusCode === 200) {
@@ -72,8 +71,12 @@ function* deleteCompany_ID({ id }) {
 }
 function* editCompany_ID({ id }) {
   try {
+    if (!id <= 0) {
       const response = yield call(edit_CompanyID, id);
       yield put(editCompanyIDSuccess(response));
+    } else {
+      yield put(editCompanyIDSuccess({ status: 'false' }));
+    }
   } catch (error) {
     console.log("editCompany_ID  saga page error ***  :", error);
   }

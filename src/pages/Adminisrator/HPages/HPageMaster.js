@@ -49,11 +49,11 @@ const HPageMaster = (props) => {
         if (!(editDataGatingFromList === undefined)) {
             setEditData(editDataGatingFromList);
             setSelectSubModule({
-                label: editDataGatingFromList.SubModuleID,
+                label: editDataGatingFromList.SubModuleName,
                 value: editDataGatingFromList.SubModuleID
             })
             setSelectModule({
-                label: editDataGatingFromList.ModuleID,
+                label: editDataGatingFromList.ModuleName,
                 value: editDataGatingFromList.ModuleID
             })
             setIsEdit(true);
@@ -73,17 +73,16 @@ const HPageMaster = (props) => {
             body: JSON.stringify({
                 Name: values.Name,
                 Description: values.Discription,
-                ModuleID: selectModule.value,
+                Module: selectModule.value,
                 SubModuleID: selectSubModule.value,
                 isActive: values.isActive,
                 DisplayIndex: values.DisplayIndex,
                 Icon: values.Icon,
                 ActualPagePath: values.ActualPagePath,
-                CreatedBy: 54,
-                UpdatedBy: 54,
+                CreatedBy:1,
+                UpdatedBy: 1,
             }),
         };
-        console.log("   body: JSON.stringify({",requestOptions.body)
         if (IsEdit) {
             dispatch(updateHPages(requestOptions.body, EditData.ID));
             formRef.current.reset();
@@ -95,7 +94,6 @@ const HPageMaster = (props) => {
     const HModuleSelectOnChangeHandller = (e) => {
         setSelectModule(e);
         dispatch(getH_SubModules(e.value))
-    debugger
     }
     const optionSubModule = SubModuleData.map((d) => ({
         value: d.ID,
@@ -155,7 +153,7 @@ const HPageMaster = (props) => {
 
                                         <Row className="mb-4">
                                             <Label className="col-sm-3 col-form-label">
-                                                Module ID
+                                                Module
                                             </Label>
                                             <Col sm={4}>
                                                 <Select
@@ -170,7 +168,7 @@ const HPageMaster = (props) => {
 
                                         <Row className="mb-4">
                                             <Label className="col-sm-3 col-form-label">
-                                                Sub ModuleID
+                                                Sub Module
                                             </Label>
                                             <Col sm={4}>
                                                 <ReactSelect

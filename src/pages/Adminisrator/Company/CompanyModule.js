@@ -30,25 +30,31 @@ const CompanyModule = (props) => {
   const [EditData, setEditData] = useState([]);
   const [IsEdit, setIsEdit] = useState(false);
 
-  var isEditData = props.state;
-console.log(isEditData)
+    //*** "isEditdata get all data from ModuleID for Binding  Form controls
+    var editDataGatingFromList = props.state;
+
+  //Access redux store Data /  'save_ModuleSuccess' action data
   const { SubmitSuccesss, } = useSelector((state) => ({
     SubmitSuccesss: state.Company.companySubmitSuccesss,
   }));
 
+  // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
   useEffect(() => {
-    if (!(isEditData === undefined)) {
-      setEditData(isEditData);
+    document.getElementById("txtName").focus();
+    if (!(editDataGatingFromList === undefined)) {
+      setEditData(editDataGatingFromList);
       setIsEdit(true);
     }
-  }, [])
+  }, [editDataGatingFromList]);
+
   useEffect(() => {
     if ((SubmitSuccesss.Status === true)) {
       dispatch(PostCompanySubmitSuccess({ Status: false }))
       formRef.current.reset();
     }
-  }, [SubmitSuccesss.Status])
+  }, [SubmitSuccesss.Status]);
 
+ //'Save' And 'Update' Button Handller
   const handleValidSubmit = (event, values) => {
 
     const requestOptions = {
@@ -59,10 +65,9 @@ console.log(isEditData)
         PhoneNo: values.PhoneNo,
         CompanyAbbreviation: values.CompanyAbbreviation,
         EmailID: values.EmailID,
-        CompanyGroup: parseInt(values.CompanyGroupID),
-        }),
+        CompanyGroup: parseInt(values.CompanyGroup),
+      }),
     };
-console.log("requestOptions.bodyr",requestOptions.body)
     if (IsEdit) {
       dispatch(updateCompanyID(requestOptions.body, EditData.ID));
     }
@@ -93,9 +98,8 @@ console.log("requestOptions.bodyr",requestOptions.body)
                         <Label className="col-sm-3 col-form-label">
                           Name
                         </Label>
-                        <Col sm={4}> 
-                        {/* <AvField name="Name" value={`${EditData.Name}`} type="text" */}
-                          <AvField name="Name" value={EditData.Name} type="text"
+                        <Col sm={4}>
+                          <AvField name="Name" value={EditData.Name} type="text" id='txtName'
                             placeholder=" Please Enter Name " autoComplete="off"
                             validate={{
                               required: { value: true, errorMessage: 'Please Enter a Name' },
@@ -187,10 +191,10 @@ console.log("requestOptions.bodyr",requestOptions.body)
                     <AvGroup>
                       <Row className="mb-4">
                         <Label className="col-sm-3 col-form-label">
-                          Company Group ID
+                          Group Company
                         </Label>
                         <Col sm={4}>
-                          <AvField name="CompanyGroupID" value={EditData.CompanyGroup} type="text"
+                          <AvField name="CompanyGroup" value={EditData.CompanyGroup} type="text"
                             placeholder="Please Enter Company Group ID"
                             autoComplete="off"
                             validate={{
@@ -205,20 +209,20 @@ console.log("requestOptions.bodyr",requestOptions.body)
                       <Col sm={2}>
                         <div>
                           {
-                            IsEdit ?    (  <button
+                            IsEdit ? (<button
                               type="submit"
                               data-mdb-toggle="tooltip" data-mdb-placement="top" title="Update Modules ID"
                               className="btn btn-success w-md"
-                          >
+                            >
                               <i class="fas fa-edit me-2"></i>Update
-                          </button>) : (
-                          <button
-                              type="submit"
-                              data-mdb-toggle="tooltip" data-mdb-placement="top" title="Save Modules ID"
-                              className="btn btn-success w-md"
-                          > <i className="fas fa-save me-2"></i> Save
-                          </button>
-                          )
+                            </button>) : (
+                              <button
+                                type="submit"
+                                data-mdb-toggle="tooltip" data-mdb-placement="top" title="Save Modules ID"
+                                className="btn btn-success w-md"
+                              > <i className="fas fa-save me-2"></i> Save
+                              </button>
+                            )
                           }
                         </div>
                       </Col>{" "}
