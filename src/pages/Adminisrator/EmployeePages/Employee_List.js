@@ -12,7 +12,7 @@ import { AlertState } from "../../../store/Utilites/CostumeAlert/actions";
 import { SpinnerON } from "../../../store/Utilites/Spinner/actions";
 import {
     getEmployeelist,editEmployeeeId,delete_Employee_ID,updateEmployeeIDSuccess
-} from "../../../store/Administrator/M_Employee/action";
+} from "../../../store/Administrator/M_EmployeeRedux/action";
 import paginationFactory, {
     PaginationListStandalone,
     PaginationProvider, SizePerPageDropdownStandalone,

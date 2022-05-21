@@ -3,7 +3,8 @@ import Select from "react-select";
 import { Card, CardBody, Col, Container, Row, Label, Button } from "reactstrap";
 import { AvForm, AvField, AvGroup, AvFeedback, } from "availity-reactstrap-validation";
 import { useDispatch, useSelector } from "react-redux";
-import { GetSubModuleEditDataUsingIDSuccess, SaveSubModuleSuccess, save_H_Sub_Modules, updateSubModule_UsingID } from "../../../store/Administrator/SubModules/actions";
+import { GetSubModuleEditDataUsingIDSuccess, SaveSubModuleSuccess, save_H_Sub_Modules,
+   updateSubModule_UsingID } from "../../../store/Administrator/SubModulesRedux/actions";
 import { fetchModelsList } from "../../../store/actions";
 import Breadcrumbs from "../../../components/Common/Breadcrumb";
 import { MetaTags } from "react-meta-tags";

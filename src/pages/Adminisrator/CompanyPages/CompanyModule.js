@@ -16,10 +16,11 @@ import { useDispatch, useSelector } from "react-redux";
 
 import AvField from "availity-reactstrap-validation/lib/AvField";
 import {
+  editCompanyIDSuccess,
   PostCompanySubmit,
   PostCompanySubmitSuccess,
   updateCompanyID,
-} from "../../../store/Administrator/Company/actions";
+} from "../../../store/Administrator/CompanyRedux/actions";
 import { MetaTags } from "react-meta-tags";
 import Breadcrumbs from "../../../components/Common/Breadcrumb";
 
@@ -44,6 +45,8 @@ const CompanyModule = (props) => {
     if (!(editDataGatingFromList === undefined)) {
       setEditData(editDataGatingFromList);
       setIsEdit(true);
+      dispatch(editCompanyIDSuccess({ Status: false }))
+
     }
   }, [editDataGatingFromList]);
 

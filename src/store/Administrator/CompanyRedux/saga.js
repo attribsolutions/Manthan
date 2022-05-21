@@ -71,12 +71,8 @@ function* deleteCompany_ID({ id }) {
 }
 function* editCompany_ID({ id }) {
   try {
-    if (!id <= 0) {
       const response = yield call(edit_CompanyID, id);
       yield put(editCompanyIDSuccess(response));
-    } else {
-      yield put(editCompanyIDSuccess({ status: 'false' }));
-    }
   } catch (error) {
     console.log("editCompany_ID  saga page error ***  :", error);
   }

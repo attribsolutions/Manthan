@@ -21,7 +21,7 @@ import {
   editSuccess,
   updateSuccess
 } from "./actions";
-import { UserListAPI } from "./UserListAPI";
+// import { UserListAPI } from "./UserListAPI";
 
 /// employee dropdown list
 function* EmployeelistDropdown_GenratorFunction() {
@@ -46,10 +46,10 @@ function* RolesListDropdoun_GenratorFunction() {
 //// post api
 function* user_save_GenratorFunction({ Data }) {
   try {
-    yield console.log("AddUser saga : saga befor axios pass data", Data); //comment line only
+    yield console.log("AddUser saga : saga befor axios pass data", Data);
     const response = yield call(User_Component_PostMethod_API, Data);
     yield put(addUserSuccess(response));
-    yield console.log(" AddUser saga : after axios Addapi response ", response); //comment line only
+    yield console.log(" AddUser saga : after axios Addapi response ", response); 
   } catch (error) {
     yield console.log("postUser saga error :", error);
   }
@@ -79,7 +79,6 @@ function* Delete_UserList_GenratorFunction({ id }) {
 function* Edit_UserList_GenratorFunction({ id }) {
   try {
     if (!id <= 0) {
-
       const response = yield call(User_Component_EditById_API, id);
       yield put(editSuccess(response.Data));
       console.log(" userlist api response", response)

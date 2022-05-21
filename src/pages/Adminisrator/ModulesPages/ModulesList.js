@@ -14,54 +14,55 @@ import ToolkitProvider from 'react-bootstrap-table2-toolkit';
 import Breadcrumbs from "../../../components/Common/Breadcrumb"
 import "../../../assets/scss/CustomeTable/datatables.scss"
 import { useDispatch, useSelector } from "react-redux";
+import { deleteModuleID, editModuleID, fetchModelsList, 
+    updateModuleIDSuccess } from "../../../store/actions";
 import { AlertState } from "../../../store/Utilites/CostumeAlert/actions";
+import Modules from "./Modules";
 import { SpinnerON } from "../../../store/Utilites/Spinner/actions";
-import {
-    deleteSubModuleUsingID,
-    GetSubModuleEditDataUsingID,
-    GetSubModuleEditDataUsingIDSuccess,
-    getSubModules, updateSubModuleSuccess
-} from "../../../store/Administrator/SubModules/actions";
-import SubModules from './SubModules'
+// import "./styles.css";
 
-const SubModulesList = () => {
 
+const ModulesList = () => {
     const dispatch = useDispatch();
     const [modal_center, setmodal_center] = useState(false);
 
     // get Access redux data
     const { TableListData, editData, updateMessage } = useSelector((state) => ({
-        TableListData: state.SubModules.ListData,
-        editData: state.SubModules.editData,
-        updateMessage: state.SubModules.updateMessage,
+        TableListData: state.Modules.modulesList,
+        editData: state.Modules.editData,
+        updateMessage: state.Modules.updateMessage,
     }));
 
     // tag_center -- Control the Edit Modal show and close
     function tog_center() {
-        dispatch(GetSubModuleEditDataUsingIDSuccess({ Status: "false" }))
         setmodal_center(!modal_center)
+        // removeBodyCss()
     }
 
     // Featch Modules List data  First Rendering
     useEffect(() => {
         dispatch(SpinnerON(true))
-        dispatch(getSubModules());
-    }, [dispatch]);
+        dispatch(fetchModelsList());
+    }, []);
+
+    // Edit Modal Show and Hide Control whwn Update Success
+    useEffect(() => {
+        if (updateMessage.Status === true) {
+            dispatch(updateModuleIDSuccess({ Status: false }))
+            tog_center()
+        }
+    }, [updateMessage.Status, dispatch]);
 
     // Edit Modal Show When Edit Data is true
     useEffect(() => {
         if (editData.Status === true) {
-            setmodal_center(!modal_center)
-        };
-        if (updateMessage.Status === true) {
-            dispatch(updateSubModuleSuccess({ Status: false }))
-            setmodal_center(!modal_center)
+            tog_center()
         }
-    }, [editData,updateMessage]);
+    }, [editData]);
 
     // Edit button Handller
     const EditPageHandler = (id) => {
-        dispatch(GetSubModuleEditDataUsingID(id));
+        dispatch(editModuleID(id));
     }
 
     //Delete Button Handller
@@ -70,10 +71,12 @@ const SubModulesList = () => {
             Type: 5, Status: true,
             Message: `Are you sure you want to delete this item : "${name}"`,
             RedirectPath: false,
-            PermissionAction: deleteSubModuleUsingID,
+            PermissionAction: deleteModuleID,
             ID: id
         }));
     }
+ 
+ const rowClasses = row => (row.IsActive ? "alert-row" : "");
 
     //Modules list component table columns 
     const columns = [
@@ -85,13 +88,7 @@ const SubModulesList = () => {
             dataField: 'DisplayIndex',
             text: 'Display Index',
             sort: true
-        },
-        {
-            dataField: 'ModuleName',
-            text: 'ModuleName',
-            sort: true
-        },
-        {
+        }, {
             dataField: 'IsActive',
             text: 'IsActive',
             sort: true
@@ -140,7 +137,7 @@ const SubModulesList = () => {
         <React.Fragment>
             <div className="page-content">
                 <MetaTags>
-                    <title> Sub Modules List| FoodERP-React FrontEnd</title>
+                    <title>Modules List| FoodERP-React FrontEnd</title>
                 </MetaTags>
                 <div className="container-fluid">
                     <PaginationProvider
@@ -160,11 +157,11 @@ const SubModulesList = () => {
                                     <React.Fragment>
                                         <Breadcrumbs
                                             title={"Count :"}
-                                            breadcrumbItem={"Sub Modules List"}
+                                            breadcrumbItem={"Modules List"}
                                             IsButtonVissible={true}
                                             SearchProps={toolkitProps.searchProps}
                                             breadcrumbCount={TableListData.length}
-                                            RedirctPath={"/subModules"}
+                                            RedirctPath={"/Modules"}
                                         />
                                         <Row>
                                             <Col xl="12">
@@ -179,7 +176,9 @@ const SubModulesList = () => {
                                                         headerWrapperClasses={"thead-light"}
                                                         {...toolkitProps.baseProps}
                                                         {...paginationTableProps}
+                                                        rowClasses={rowClasses}
                                                     />
+
                                                 </div>
                                             </Col>
                                         </Row>
@@ -196,17 +195,20 @@ const SubModulesList = () => {
                                 }
                             </ToolkitProvider>
                         )
-                        }</PaginationProvider>
+                        }
+                        
+                        </PaginationProvider>
                     <Modal
                         isOpen={modal_center}
                         toggle={() => { tog_center() }}
                         size="xl"
                     >
-                        <SubModules EditState={editData.Data} />
+                        <Modules state={editData.Data} />
                     </Modal>
                 </div>
             </div>
         </React.Fragment>
     )
 }
-export default SubModulesList
+
+export default ModulesList

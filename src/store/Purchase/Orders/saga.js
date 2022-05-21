@@ -6,8 +6,6 @@ import {
   editOrderSuccess,
 } from "./actions";
 import {
-  getOrderList,
-  getOrderPage,
   submitOrderPage,
   getDivisionOrders,
   editOrderID,
@@ -20,7 +18,7 @@ import {
   EDIT_ORDER,
 } from "./actionType";
 import  ItemUnits  from "./DemoData";
-import FakeItemListData from "../../Administrator/HPages/DemoData";
+// import FakeItemListData from "../../Administrator/HPages/DemoData";
 import orders from "./DemoData";
 function* fetchOrder_GenratorFunction() {
   try {
@@ -47,7 +45,8 @@ function* fetchOrderList({ listData }) {
   try {
     // yield console.log('$$fetchOrderList  before response$',listData)
     // const response = yield call(getOrderList, listData);
-    const response = FakeItemListData;
+    // const response = FakeItemListData;
+    const response = [];
    
     if (response.Msg) {
       // arr.push(response);

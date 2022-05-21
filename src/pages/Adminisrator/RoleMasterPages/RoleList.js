@@ -1,69 +1,42 @@
 import React, { useEffect, useState } from 'react'
-import { useHistory } from "react-router-dom";
-import Breadcrumbs from "../../components/Common/Breadcrumb";
-import MetaTags from "react-meta-tags";
-import { Button } from "reactstrap";
-
+import Breadcrumbs from "../../../components/Common/Breadcrumb";
 import {
     Col,
     Modal,
     Row,
 } from "reactstrap";
-
 import {
     getRole,
     deleteRole,
     editRoleId,
     updateSuccess,
-} from "../../store/Administrator/RoleMasterRedux/action";
+} from "../../../store/Administrator/RoleMasterRedux/action";
 
 import paginationFactory, {
     PaginationListStandalone,
-    PaginationProvider, SizePerPageDropdownStandalone,
-} from "react-bootstrap-table2-paginator";
+    PaginationProvider,} from "react-bootstrap-table2-paginator";
 import ToolkitProvider, { Search } from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 import { useSelector, useDispatch } from "react-redux";
-import { AlertState } from '../../store/Utilites/CostumeAlert/actions';
-import AddRole from './AddRole';
-import { SpinnerON } from '../../store/Utilites/Spinner/actions';
-import "../../assets/scss/CustomeTable/datatables.scss"
+import { AlertState } from '../../../store/Utilites/CostumeAlert/actions';
+import AddRole from './RoleMaster';
+import "../../../assets/scss/CustomeTable/datatables.scss"
 
-const RoleListPage = () => {
-    // const [EditId, setId] = useState('')
+const RoleList = () => {
+
     const dispatch = useDispatch();
-    const history = useHistory();
-    const { SearchBar } = Search;
     const [modal_center, setmodal_center] = useState(false);
 
-    //// get data
-    const { pages, editData, updateMessage} = useSelector((state) => ({
+    // get data
+    const { pages, editData, updateMessage } = useSelector((state) => ({
         pages: state.RoleMaster_Reducer.pages,
         editData: state.RoleMaster_Reducer.editData,
         updateMessage: state.RoleMaster_Reducer.updateMessage,
     }));
 
-    console.log("editData in RoleList Page",editData)
-
-    function tog_center() {
-        setmodal_center(!modal_center)
-    }
-    
-useEffect(()=>{
-    dispatch(SpinnerON(true))
-    dispatch(getRole());
-},[dispatch]);
-
-    //// select id for delete row
-    const deleteHandeler = (id, name) => {
-        dispatch(AlertState({
-            Type: 5, Status: true,
-            Message: `Are you sure you want to delete this item : "${name}"`,
-            RedirectPath: false,
-            PermissionAction: deleteRole,
-            ID: id
-        }));
-    }
+    useEffect(() => {
+        dispatch(getRole());
+    }, [dispatch]);
 
     useEffect(() => {
         if (updateMessage.Status === true) {
@@ -72,7 +45,6 @@ useEffect(()=>{
             dispatch(getRole());
         }
     }, [updateMessage.Status]);
-    console.log("updateMessage",updateMessage)
 
     // Edit Modal Show When Edit Data is true
     useEffect(() => {
@@ -80,12 +52,9 @@ useEffect(()=>{
             tog_center()
         }
     }, [editData]);
-    console.log("editData in RoleList Page after useEffect",editData)
-    
-    //// edit id select
-    const EditPageHandler = (id) => {
-        console.log("selected ID", id)
-        dispatch(editRoleId(id));
+
+    function tog_center() {
+        setmodal_center(!modal_center)
     }
 
     const pageOptions = {
@@ -102,14 +71,12 @@ useEffect(()=>{
             hidden: true,
             formatter: (cellContent, Role) => <>{Role.ID}</>,
         },
-
         {
             text: "Name",
             dataField: "Name",
             sort: true,
             formatter: (cellContent, Role) => <>{Role.Name}</>,
         },
-
         {
             text: "Description",
             dataField: "Description",
@@ -132,8 +99,7 @@ useEffect(()=>{
             formatter: (cellContent, Role) => <>{Role.Dashboard}</>,
         },
         {
-            text: "Actions",
-
+            text: "Action",
             formatter: (cellContent, Role) => (
                 <>
                     <div className="d-flex gap-3" style={{ display: 'flex', justifyContent: 'center' }} >
@@ -161,11 +127,24 @@ useEffect(()=>{
             ),
         },
     ]
+    //select id for delete row
+    const deleteHandeler = (id, name) => {
+        dispatch(AlertState({
+            Type: 5, Status: true,
+            Message: `Are you sure you want to delete this item : "${name}"`,
+            RedirectPath: false,
+            PermissionAction: deleteRole,
+            ID: id
+        }));
+    }
+    // edit Buutton Handller 
+    const EditPageHandler = (id) => {
+        dispatch(editRoleId(id));
+    }
 
     return (
         <React.Fragment>
             <div className="page-content">
-
                 <PaginationProvider
                     pagination={paginationFactory(pageOptions)}
                 >
@@ -174,17 +153,15 @@ useEffect(()=>{
                             keyField="id"
                             data={pages}
                             columns={pagesListColumns}
-                            // bootstrap4
                             search
                         >
-
                             {toolkitProps => (
                                 <React.Fragment>
                                     <Breadcrumbs
                                         title={"Count :"}
                                         breadcrumbItem={"Role List Page"}
                                         IsButtonVissible={true}
-                                        a={toolkitProps.searchProps}
+                                        SearchProps={toolkitProps.searchProps}
                                         breadcrumbCount={pages.length}
                                         RedirctPath={"/AddRole"}
                                     />
@@ -222,7 +199,7 @@ useEffect(()=>{
                     toggle={() => { tog_center() }}
                     size="xl"
                 >
-                    <AddRole state={editData} />
+                    <AddRole state={editData.Data} />
                 </Modal>
             </div>
         </React.Fragment>
@@ -230,4 +207,4 @@ useEffect(()=>{
 };
 
 
-export default RoleListPage;
+export default RoleList;

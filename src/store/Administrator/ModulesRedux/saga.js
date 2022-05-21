@@ -87,12 +87,8 @@ function* deleteModule_ID({ id }) {
 
 function* editModule_ID({ id }) {
   try {
-    if (!id <= 0) {
       const response = yield call(edit_ModuleID, id);
       yield put(editModuleIDSuccess(response));
-    } else {
-      yield put(editModuleIDSuccess({ status: 'false' }));
-    }
   } catch (error) {
     console.log("editModule_ID  saga page error ***  :", error);
   }
