@@ -222,7 +222,7 @@ useEffect(()=>{
                     toggle={() => { tog_center() }}
                     size="xl"
                 >
-                    <AddRole state={editData} />
+                    <AddRole state={editData.Data} />
                 </Modal>
             </div>
         </React.Fragment>

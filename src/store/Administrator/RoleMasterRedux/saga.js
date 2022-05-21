@@ -20,26 +20,40 @@ function* sagaGetApi() {
 }
 
 //Post Method
-function* PostPage({ data }) {
+function* PostPage({ Data }) {
   yield put(SpinnerState(true))
   try {
-    const response = yield call(Role_Master_Post_API, data);
-
+    const response = yield call(Role_Master_Post_API, Data);
+    console.log("response",response)
     if (response.StatusCode === 200) {
-      yield put(SpinnerState(false))
+      // yield put(SpinnerState(false))
       yield put(PostSuccess({ Status: true }));
       yield put(AlertState({ Type: 1, Status: true, Message: response.Message, RedirectPath: '/RoleListPage', AfterResponseAction: false }));
     } else {
       yield put(SpinnerState(false))
       yield put(AlertState({ Type: 4, Status: true, Message: "error Message", RedirectPath: false, AfterResponseAction: false }));
     }
+    console.log("response after ifelse",response)
+
   } catch (error) {
     yield put(SpinnerState(false))
     yield put(AlertState({ Type: 3, Status: true, Message: "Network Error", RedirectPath: false, AfterResponseAction: false }));
 
     yield console.log("PostSubmit RoleMaster  saga page error", error);
   }
+  
 }
+
+//Post Method
+// function* PostPage({ Data }) {
+//   try {
+//     const response = yield call(Role_Master_Post_API, Data);
+//     yield put(PostSuccess(response));
+//     console.log("response in saga page",response)
+//   } catch (error) {
+//     yield console.log("postRole saga error :", error);
+//   }
+// }
 
   // delete api
     function* deleteRole({ id }) {
@@ -75,7 +89,7 @@ function* PostPage({ data }) {
     try {   
   if(!id<=0){
       const response = yield call(Role_Master_Edit_API, id);
-      yield put(editSuccess(response.Data));
+      yield put(editSuccess(response));
     
   }else{
    yield put(editSuccess({ID:0}));
@@ -86,10 +100,10 @@ function* PostPage({ data }) {
 }
 
  // upadate api
-function* updateRole({ data, id }) {
+function* updateRole({ updateData, ID }) {
   try {
     yield put(SpinnerState(true))
-    const response = yield call(Role_Master_Update_API, data, id);
+    const response = yield call(Role_Master_Update_API, updateData, ID);
     yield put(SpinnerState(false))
 
     if (response.StatusCode === 200) {
@@ -115,6 +129,7 @@ function* updateRole({ data, id }) {
     yield console.log("editModule_ID  saga page error ***  :", error);
   }
 }
+
   function* RoleMaster_Saga() {
     yield takeEvery(GET_Role_API, sagaGetApi);
     yield takeEvery(POST_ROLE,PostPage );

@@ -45,7 +45,7 @@ const AddRole = (props) => {
       body: JSON.stringify({
         Name: values.Name,
         Description: values.Description,
-        IsActive: values.isActive,
+        isActive: values.isActive,
         Dashboard: values.Dashboard,
         CreatedBy: 1,
         CreatedOn: "2022-05-20T11:22:55.711483Z",
@@ -53,6 +53,8 @@ const AddRole = (props) => {
         UpdatedOn: "2022-05-20T11:22:55.711483Z"
       }),
     };
+
+    console.log("values",values)
     if (IsEdit) {
       dispatch(updateID(requestOptions.body, EditData.ID));
     }
@@ -61,6 +63,7 @@ const AddRole = (props) => {
       dispatch(postRole(requestOptions.body));
 
     }
+    console.log("requestOptions",requestOptions.body)
 
   };
   
