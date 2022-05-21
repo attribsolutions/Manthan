@@ -21,7 +21,7 @@ import OrdersReducers from './Purchase/Orders/reducer'
 
 import User_Registration_Reducer from "./Administrator/UserRegistrationRedux/reducer"
 import M_EmployeesReducer from "./Administrator/M_Employee/reducer"
-
+import RoleMaster_Reducer from "./Administrator/RoleMasterRedux/reducer"
 const rootReducer = combineReducers({
   Layout,
   Login,
@@ -39,7 +39,8 @@ const rootReducer = combineReducers({
   User_Registration_Reducer,
   M_EmployeesReducer,
   // Purchase
-  OrdersReducers
+  OrdersReducers,
+  RoleMaster_Reducer,
 })
 
 export default rootReducer

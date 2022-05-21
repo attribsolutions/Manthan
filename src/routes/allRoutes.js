@@ -26,7 +26,7 @@ import UserList from "../pages/Adminisrator/UserRegistration/UserList";
 import AddEmployee from "../pages/Adminisrator/Employee/AddEmployee";
 import Employee_List from "../pages/Adminisrator/Employee/Employee_List";
 import AddRole from "../pages/RoleMaster/AddRole";
-// import RoleListPage from "../pages/RoleMaster/RoleListPage"
+import RoleListPage from "../pages/RoleMaster/RoleListPage"
 const userRoutes = [
 
   //dashboard
@@ -53,7 +53,7 @@ const userRoutes = [
   { path: "/AddEmployee", component: AddEmployee },
   { path: "/Employee_List", component: Employee_List },
   { path: "/AddRole", component: AddRole },
-  // { path: "/RoleListPage", component: RoleListPage },
+  { path: "/RoleListPage", component: RoleListPage },
 
   // this route should be at the end of all other routes
   { path: "/", exact: true, component: () => <Redirect to="/dashboard" /> },
