@@ -48,6 +48,7 @@ const AddEmployee = (props) => {
         value: isEditData.Companie.ID,
         label: isEditData.Companie.Name
       })
+     
     }
   }, [IsEdit])
   console.log("data", EditData)
@@ -59,7 +60,7 @@ const AddEmployee = (props) => {
   useEffect(() => {
     if ((AddUserMessage.Status === true)) {
       // dispatch(postEmployee(undefined))
-      dispatch(PostEmployeeSuccess({ Status: false }))
+      dispatch(postEmployee({ Status: false }))
       formRef.current.reset();
     }
   }, [AddUserMessage.Status])
@@ -126,7 +127,8 @@ const AddEmployee = (props) => {
   }
 
   const handleValidSubmit = (event, values) => {
-    let DateInput = document.getElementById("dateInput").value;
+    let DateInput = document.getElementById("dateInput","").value;
+    let DateInput1 = document.getElementById("dateInput1").value;
     const requestOptions = {
       body: JSON.stringify({
         Name: values.LoginName,
@@ -139,7 +141,7 @@ const AddEmployee = (props) => {
         WorkingHours: values.WorkingHours,
         DesignationID: DesignationIDselect.value,
         EmployeeType: EmployeeTypeselect.value,
-        JoiningDate: DateInput,
+        JoiningDate: DateInput1,
         State: Stateselect.value,
         Region: Regionselect.value,
         Companie: Companyselect.value,
@@ -186,9 +188,10 @@ const AddEmployee = (props) => {
                             type="text"
                             placeholder="Please Enter Name"
                             // autoComplete='off'
-                            validate={{
-                              required: { value: true, errorMessage: 'Please enter your Name...!' },
-                            }} />
+                            // validate={{
+                            //   required: { value: true, errorMessage: 'Please enter your Name...!' },
+                            // }}
+                             />
                         </Col>
                       </Row>
                     </AvGroup>
@@ -200,9 +203,9 @@ const AddEmployee = (props) => {
                         <Col sm={4}>
                           <AvField name="Address" value={EditData.Address} type="text"
                             placeholder=" Please Enter Address "
-                            validate={{
-                              required: { value: true, errorMessage: 'Please Enter your Address' },
-                            }}
+                            // validate={{
+                            //   required: { value: true, errorMessage: 'Please Enter your Address' },
+                            // }}
                           />
                         </Col>
                       </Row>
@@ -216,14 +219,11 @@ const AddEmployee = (props) => {
                           <AvField name="PhoneNo" type="tel"
                             value={EditData.Mobile}
                             placeholder="+91 "
-                            validate={{
-                              required: { value: true, errorMessage: 'Please Enter your Mobile NO' },
-                              tel: {
-                                pattern: /^(\+\d{1,3}[- ]?)?\d{10}$/
-                              }
-
-                            }
-                            }
+                            // validate={{
+                            //   required: { value: true, errorMessage: 'Please Enter your Mobile NO' },
+                            //   tel: {
+                            //     pattern: /^(\+\d{1,3}[- ]?)?\d{10}$/
+                            //   } }}
 
                           />
                         </Col>
@@ -239,13 +239,13 @@ const AddEmployee = (props) => {
                           <AvField name="Email" type="email"
                             value={EditData.EmailID}
                             placeholder="Enter your EmailID "
-                            validate={{
-                              required: { value: true, errorMessage: 'Please Enter your EmailID' },
-                              tel: {
-                                pattern: /\S+@\S+\.\S+/
-                              }
-                            }
-                            }
+                            // validate={{
+                            //   required: { value: true, errorMessage: 'Please Enter your EmailID' },
+                            //   tel: {
+                            //     pattern: /\S+@\S+\.\S+/
+                            //   }
+                            // }
+                            // }
 
                           />
                         </Col>
@@ -263,7 +263,7 @@ const AddEmployee = (props) => {
                           className="form-control"
                           id="dateInput"
                           type="date"
-                          Value={EditData.BOD}
+                         Value={EditData.BOD}
                           on
                         //    id="example-date-input"
                         />
@@ -279,13 +279,13 @@ const AddEmployee = (props) => {
                           <AvField name="pan" type="text"
                             value={EditData.PAN}
                             placeholder="Enter your PAN No. "
-                            validate={{
-                              required: { value: true, errorMessage: 'Please Enter your PAN No.' },
-                              tel: {
-                                pattern: /[A-Z]{5}[0-9]{4}[A-Z]{1}$/
-                              }
-                            }
-                            }
+                            // validate={{
+                            //   required: { value: true, errorMessage: 'Please Enter your PAN No.' },
+                            //   tel: {
+                            //     pattern: /[A-Z]{5}[0-9]{4}[A-Z]{1}$/
+                            //   }
+                            // }
+                            // }
 
                           />
                         </Col>
@@ -301,14 +301,13 @@ const AddEmployee = (props) => {
                           <AvField name="AadharNo" type="text"
                             value={EditData.AadharNo}
                             placeholder="Enter your AadharNo. "
-                            validate={{
-                              required: { value: true, errorMessage: 'Please Enter your AadharNo' },
-                              tel: {
-                                pattern: /^[2-9]{1}[0-9]{3}\s[0-9]{4}\s[0-9]{4}$/
-                              }
-                            }
-                            }
-
+                            // validate={{
+                            //   required: { value: true, errorMessage: 'Please Enter your AadharNo' },
+                            //   tel: {
+                            //     pattern: /^[2-9]{1}[0-9]{3}\s[0-9]{4}\s[0-9]{4}$/
+                            //   }
+                            // }
+                            // }
                           />
                         </Col>
                       </Row>
@@ -324,9 +323,10 @@ const AddEmployee = (props) => {
                             type="text"
                             placeholder="Please Enter WorkingHours"
                             // autoComplete='off' 
-                            validate={{
-                              required: { value: true, errorMessage: 'Please enter your WorkingHours ...!' },
-                            }} />
+                            // validate={{
+                            //   required: { value: true, errorMessage: 'Please enter your WorkingHours ...!' },
+                            // }} 
+                            />
                         </Col>
                       </Row>
                     </AvGroup>
@@ -357,16 +357,16 @@ const AddEmployee = (props) => {
                       </Col>
                     </Row>
 
-                    <Row className="mb-4">
+                    <Row className="mb-3">
                       <Label className="col-sm-2 col-form-label">
                         JoiningDate
                       </Label>
                       <div class="col-lg-2">
                         <Input
                           className="form-control"
-                          id="dateInput"
+                          id="dateInput1"
                           type="date"
-                          Value={EditData.JoiningDate}
+                          Value ={EditData.JoiningDate}
                           on
                         />
                       </div>
