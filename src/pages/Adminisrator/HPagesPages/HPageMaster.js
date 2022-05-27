@@ -32,7 +32,7 @@ const HPageMaster = (props) => {
     const dispatch = useDispatch();
 
     const [selectModule, setSelectModule] = useState('');
-    const [selectSubModule, setSelectSubModule] = useState('');
+    // const [selectSubModule, setSelectSubModule] = useState('');
     const [IsEdit, setIsEdit] = useState(false);
     const [EditData, setEditData] = useState([]);
 
@@ -48,10 +48,10 @@ const HPageMaster = (props) => {
 
         if (!(editDataGatingFromList === undefined)) {
             setEditData(editDataGatingFromList);
-            setSelectSubModule({
-                label: editDataGatingFromList.SubModuleName,
-                value: editDataGatingFromList.SubModuleID
-            })
+            // setSelectSubModule({
+            //     label: editDataGatingFromList.SubModuleName,
+            //     value: editDataGatingFromList.SubModuleID
+            // })
             setSelectModule({
                 label: editDataGatingFromList.ModuleName,
                 value: editDataGatingFromList.ModuleID
@@ -62,7 +62,6 @@ const HPageMaster = (props) => {
     useEffect(() => {
         if ((SaveMessage.Status === true)) {
             dispatch(saveHPagesSuccess({ Status: false }))
-            setSelectSubModule('')
             setSelectModule('')
             formRef.current.reset();
         }
@@ -74,7 +73,6 @@ const HPageMaster = (props) => {
                 Name: values.Name,
                 Description: values.Discription,
                 Module: selectModule.value,
-                SubModuleID: selectSubModule.value,
                 isActive: values.isActive,
                 DisplayIndex: values.DisplayIndex,
                 Icon: values.Icon,
@@ -95,10 +93,10 @@ const HPageMaster = (props) => {
         setSelectModule(e);
         dispatch(getH_SubModules(e.value))
     }
-    const optionSubModule = SubModuleData.map((d) => ({
-        value: d.ID,
-        label: d.Name,
-    }));
+    // const optionSubModule = SubModuleData.map((d) => ({
+    //     value: d.ID,
+    //     label: d.Name,
+    // }));
 
     const optionModule = ModuleData.map((d) => ({
         value: d.ID,
@@ -166,7 +164,7 @@ const HPageMaster = (props) => {
                                             </Col>
                                         </Row>
 
-                                        <Row className="mb-4">
+                                        {/* <Row className="mb-4">
                                             <Label className="col-sm-3 col-form-label">
                                                 Sub Module
                                             </Label>
@@ -180,7 +178,7 @@ const HPageMaster = (props) => {
                                                     }}
                                                 />
                                             </Col>
-                                        </Row>
+                                        </Row> */}
                                         <AvGroup>
                                             <Row className="mb-4">
                                                 <Label className="col-sm-3 col-form-label">
