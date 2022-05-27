@@ -26,6 +26,8 @@ import AddEmployee from "../pages/Adminisrator/EmployeePages/AddEmployee";
 import Employee_List from "../pages/Adminisrator/EmployeePages/Employee_List";
 import RoleMaster from "../pages/Adminisrator/RoleMasterPages/RoleMaster";
 import RoleList from "../pages/Adminisrator/RoleMasterPages/RoleList"
+import Error404 from "../pages/Utility/Error404";
+import Error500 from "../pages/Utility/Error500";
 
 const userRoutes = [
 
@@ -33,7 +35,7 @@ const userRoutes = [
   { path: "/dashboard", component: Dashboard },
 
   // Administrator : Modules Path and List
-  { path: "/Modules", component: Modules },
+  { path: "/modulemaster", component: Modules },
   { path: "/modulesList", component: ModulesList },
 
   { path: "/subModules", component: SubModules },
@@ -68,6 +70,10 @@ const authRoutes = [
   { path: "/logout", component: Logout },
   { path: "/login", component: Login },
   { path: "/forgot-password", component: ForgetPwd },
+
+
+  { path: "/pages-404", component: Error404 },
+  { path: "/pages-500", component: Error500 },
 ]
 
 export { userRoutes, authRoutes }

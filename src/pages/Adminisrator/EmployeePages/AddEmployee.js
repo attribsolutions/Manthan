@@ -219,11 +219,11 @@ const AddEmployee = (props) => {
                           <AvField name="PhoneNo" type="tel"
                             value={EditData.Mobile}
                             placeholder="+91 "
-                            // validate={{
-                            //   required: { value: true, errorMessage: 'Please Enter your Mobile NO' },
-                            //   tel: {
-                            //     pattern: /^(\+\d{1,3}[- ]?)?\d{10}$/
-                            //   } }}
+                            validate={{
+                              required: { value: true, errorMessage: 'Please Enter your Mobile NO' },
+                              tel: {
+                                pattern: /^(\+\d{1,3}[- ]?)?\d{10}$/
+                              } }}
 
                           />
                         </Col>

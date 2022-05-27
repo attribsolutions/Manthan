@@ -16,13 +16,12 @@ export default function HPageList() {
     const [modal_center, setmodal_center] = useState(false);
 
     // var HPageListData = [];
-    const { HPageListData, editData, updateMessage, Teststate } = useSelector((state) => ({
+    const { HPageListData, editData, updateMessage } = useSelector((state) => ({
         HPageListData: state.H_Pages.HPagesListData,
         editData: state.H_Pages.editData,
         updateMessage: state.H_Pages.updateMessage,
-        Teststate: state,
     }));
-    console.log("Teststate", Teststate)
+    console.log("editData", editData)
     useEffect(() => {
         dispatch(dispatch(GetHpageListData()))
     }, []);
@@ -94,11 +93,11 @@ export default function HPageList() {
             sort: true,
 
         },
-        {
-            text: "Sub ModuleID",
-            dataField: "SubModuleID",
-            sort: true,
-        },
+        // {
+        //     text: "Sub ModuleID",
+        //     dataField: "SubModuleID",
+        //     sort: true,
+        // },
         {
             text: "DisplayIndex",
             dataField: "DisplayIndex",

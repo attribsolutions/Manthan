@@ -87,14 +87,15 @@ const postJwtRegister = (url, data) => {
     })
 }
 
-const postJwtLogin = data => post(url.POST_JWT_LOGIN, data)
+const Python_postJwtLogin = data => post(url.POST_JWT_LOGIN, data)
 
 // postForgetPwd
 const postJwtForgetPwd = data => post(url.POST_FAKE_JWT_PASSWORD_FORGET, data)
 
 // postSocialLogin
 export const postSocialLogin = data => post(url.SOCIAL_LOGIN, data)
-
+   
+export const RoleAccessApi_url=()=>get(url.ROLE_ACCESS)
 /// Employees  Component All Apis 
 export const getDesignationID_For_Dropdown = () => get(url.GET_DESIGNATIONID)
 export const getEmployeeType_For_Dropdown = () => get(url.GET_EMPLOYEE_TYPE)
@@ -174,7 +175,7 @@ export {
   postFakeProfile,
   postFakeForgetPwd,
   postJwtRegister,
-  postJwtLogin,
+  Python_postJwtLogin,
   postJwtForgetPwd,
   postJwtProfile,
 }

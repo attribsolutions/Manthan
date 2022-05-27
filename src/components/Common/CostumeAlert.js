@@ -18,27 +18,27 @@ const CostumeAlert = () => {
   function tog_standard() {
     dispatch(AlertShow({ Status: false }));
     removeBodyCss()
-
     if (!AlertData.AfterResponseAction === false) {
       let Action = AlertData.AfterResponseAction;
       dispatch(Action());
     };
   }
+  console.log("test1",AlertData)
+  console.log("test1",AlertData.hasOwnProperty('myProperty'))
+
   //remove Css when modul hide Mode 
   function removeBodyCss() {
     document.body.classList.add("no_padding")
   }
+
   // Success Alert Ok button Hnadller
   function Success_Ok_Button_Handeler() {
-
     dispatch(AlertShow({ Status: false }));
     removeBodyCss()
-
     if (!AlertData.AfterResponseAction === false) {
       let Action = AlertData.AfterResponseAction;
       dispatch(Action());
     };
-
     if (!AlertData.RedirectPath === false) {
       history.push({
         pathname: AlertData.RedirectPath,
@@ -49,17 +49,17 @@ const CostumeAlert = () => {
   function Ok_handeler() {
     dispatch(AlertShow({ Status: false }));
     removeBodyCss()
-
   }
+
   //Permission Alert Ok button handller
   function Permission_Ok_handeler() {
     dispatch(AlertShow({ Status: false }));
-
     if (!AlertData.PermissionAction === false) {
       let DeleteId = AlertData.ID
       dispatch(AlertData.PermissionAction(DeleteId))
     };
   }
+
   // All alert Cancel Button handler
   function cancel_handeler() {
     tog_standard();
@@ -123,7 +123,6 @@ const CostumeAlert = () => {
           <UncontrolledAlert color="warning" className="px-4 mb-0 text-center">
             <i className="mdi mdi-alert-outline  d-block display-4 mt-2 mb-3 text-warning"></i>
             <p> <h5 className="text-">{AlertData.Message}</h5></p>
-
             <button
               type="button"
               className="btn btn-primary "

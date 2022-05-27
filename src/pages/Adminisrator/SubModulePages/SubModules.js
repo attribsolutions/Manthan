@@ -1,17 +1,21 @@
 import React, { useEffect, useRef, useState } from "react";
 import Select from "react-select";
-import { Card, CardBody, Col, Container, Row, Label, Button } from "reactstrap";
+import { Card, CardBody, Col, Container, Row, Label, Button, Modal } from "reactstrap";
 import { AvForm, AvField, AvGroup, AvFeedback, } from "availity-reactstrap-validation";
 import { useDispatch, useSelector } from "react-redux";
-import { GetSubModuleEditDataUsingIDSuccess, SaveSubModuleSuccess, save_H_Sub_Modules,
-   updateSubModule_UsingID } from "../../../store/Administrator/SubModulesRedux/actions";
-import { fetchModelsList } from "../../../store/actions";
+import {
+  GetSubModuleEditDataUsingIDSuccess, SaveSubModuleSuccess, save_H_Sub_Modules,
+  updateSubModule_UsingID
+} from "../../../store/Administrator/SubModulesRedux/actions";
+import { fetchModelsList, PostModelsSubmitSuccess } from "../../../store/actions";
 import Breadcrumbs from "../../../components/Common/Breadcrumb";
 import { MetaTags } from "react-meta-tags";
+import Modules from'../ModulesPages/Modules'
 
 const SubModules = (props) => {
   const formRef = useRef(null);
   const dispatch = useDispatch();
+  const [modal_center, setmodal_center] = useState(false);
 
   let editDataGatingFromList = props.EditState;
 
@@ -19,11 +23,13 @@ const SubModules = (props) => {
   const [IsEdit, setIsEdit] = useState(false);
   const [ModuldeSelect, setModuldeSelect] = useState("");
 
-  const { modulesList, saveMessage } = useSelector((state) => ({
+  const { modulesList, saveMessage ,M_Success} = useSelector((state) => ({
     modulesList: state.Modules.modulesList,
-    saveMessage: state.SubModules.saveMessage
+    saveMessage: state.SubModules.saveMessage,
+    M_Success: state.Modules.modulesSubmitSuccesss,
   }));
 
+ 
   useEffect(() => {
     dispatch(fetchModelsList());
     document.getElementById("txtName").focus();
@@ -40,21 +46,33 @@ const SubModules = (props) => {
   }, [dispatch, editDataGatingFromList]);
 
   useEffect(() => {
-    if ((saveMessage.Status === true)) {
-      dispatch(SaveSubModuleSuccess({ Status: false }))
-      setModuldeSelect('')
-      formRef.current.reset();
+    if ((M_Success.Status === true)) {
+        dispatch(PostModelsSubmitSuccess({ Status: false }))
+        formRef.current.reset();
+        // setModuldeSelect()
+        setmodal_center(!modal_center)
+        dispatch(fetchModelsList());
+      
     }
-  }, [saveMessage, dispatch])
+}, [M_Success.Status])
 
   const H_modulesOptions = modulesList.map((Data) => ({
     value: Data.ID,
     label: Data.Name,
   }));
 
+  function tog_center() {
+    // dispatch(GetSubModuleEditDataUsingIDSuccess({ Status: "false" }))
+    setmodal_center(!modal_center)
+}
+
   function handllerModuleID(e) {
     setModuldeSelect(e)
   }
+
+  function AddNewItemsDropdownHandler () {
+    tog_center()
+}
 
   const handleValidUpdate = (event, values) => {
     const requestOptions = {
@@ -123,7 +141,10 @@ const SubModules = (props) => {
                           onChange={(e) => { handllerModuleID(e) }}
                           autocomplete="off"
                         />
+                      </Col>
 
+                      <Col xl={3} lg={4} sm={6} className="icon-demo-content">
+                        <i className="dripicons-plus" onClick={() => { AddNewItemsDropdownHandler()}}></i>
                       </Col>
                     </Row>
                     <AvGroup>
@@ -185,20 +206,20 @@ const SubModules = (props) => {
                       <Col sm={2}>
                         <div>
                           {
-                            IsEdit ?    (  <button
+                            IsEdit ? (<button
                               type="submit"
                               data-mdb-toggle="tooltip" data-mdb-placement="top" title="Update Modules ID"
                               className="btn btn-success w-md"
-                          >
+                            >
                               <i class="fas fa-edit me-2"></i>Update
-                          </button>) : (
-                          <button
-                              type="submit"
-                              data-mdb-toggle="tooltip" data-mdb-placement="top" title="Save Modules ID"
-                              className="btn btn-success w-md"
-                          > <i className="fas fa-save me-2"></i> Save
-                          </button>
-                          )
+                            </button>) : (
+                              <button
+                                type="submit"
+                                data-mdb-toggle="tooltip" data-mdb-placement="top" title="Save Modules ID"
+                                className="btn btn-success w-md"
+                              > <i className="fas fa-save me-2"></i> Save
+                              </button>
+                            )
                           }
                         </div>
                       </Col>{" "}
@@ -208,6 +229,13 @@ const SubModules = (props) => {
               </Card>
             </Col>
           </Row>
+          <Modal
+                        isOpen={modal_center}
+                        toggle={() => { tog_center() }}
+                        size="xl"
+                    >
+                        <Modules  IsComponentMode={true} />
+                    </Modal>
         </Container>
       </div>
     </React.Fragment>
