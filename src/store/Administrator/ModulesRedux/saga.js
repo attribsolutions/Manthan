@@ -28,20 +28,17 @@ function* SubmitModules({ data }) {
   yield put(SpinnerState(true))
   try {
     const response = yield call(postSubmitModules, data);
-
+    yield put(SpinnerState(false))
     if (response.StatusCode === 200) {
-      yield put(SpinnerState(false))
-      yield put(PostModelsSubmitSuccess({ Status: true }));
-      yield put(AlertState({ Type: 1, Status: true, Message: response.Message, RedirectPath: '/modulesList', AfterResponseAction: false }));
+      yield put(PostModelsSubmitSuccess(response));
     } else {
-      yield put(SpinnerState(false))
-      yield put(AlertState({ Type: 4, Status: true, Message: "error Message", RedirectPath: false, AfterResponseAction: false }));
+      yield put(PostModelsSubmitSuccess({ Type: 4, Status: true, Message: "error Message", RedirectPath: false, AfterResponseAction: false }));
     }
   } catch (error) {
     yield put(SpinnerState(false))
+    yield put(PostModelsSubmitSuccess({ Type: 4, Status: true, Message: "error Message", RedirectPath: false, AfterResponseAction: false }));
     yield put(AlertState({ Type: 3, Status: true, Message: "Network Error", RedirectPath: false, AfterResponseAction: false }));
-
-    yield console.log("$$PostSubmitModules  saga page error$", error);
+    console.log("$$PostSubmitModules  saga page error$", error);
   }
 }
 
@@ -87,8 +84,8 @@ function* deleteModule_ID({ id }) {
 
 function* editModule_ID({ id }) {
   try {
-      const response = yield call(edit_ModuleID, id);
-      yield put(editModuleIDSuccess(response));
+    const response = yield call(edit_ModuleID, id);
+    yield put(editModuleIDSuccess(response));
   } catch (error) {
     console.log("editModule_ID  saga page error ***  :", error);
   }
@@ -100,13 +97,13 @@ function* update_Module({ data, id }) {
     yield put(SpinnerState(false))
 
     if (response.StatusCode === 200) {
-      yield put(updateModuleIDSuccess({ Status: true }));
-      yield put(AlertState({
-        Type: 1, Status: true,
-        Message: response.Message,
-        RedirectPath: false,
-        AfterResponseAction: fetchModelsList,
-      }))
+      yield put(updateModuleIDSuccess(response));
+      // yield put(AlertState({
+      //   Type: 1, Status: true,
+      //   Message: response.Message,
+      //   RedirectPath: false,
+      //   AfterResponseAction: fetchModelsList,
+      // }))
     }
     else {
       yield put(AlertState({

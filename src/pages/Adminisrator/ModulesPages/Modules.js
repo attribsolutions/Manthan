@@ -21,8 +21,9 @@ import {
 import Breadcrumbs from "../../../components/Common/Breadcrumb";
 import AvField from "availity-reactstrap-validation/lib/AvField";
 import { MetaTags } from "react-meta-tags";
+import { AlertState } from "../../../store/Utilites/CostumeAlert/actions";
 
-const Modules = (props) => { 
+const Modules = (props) => {
 
     const formRef = useRef(null);
     const dispatch = useDispatch();
@@ -32,14 +33,16 @@ const Modules = (props) => {
 
     //'IsEdit'--if true then update data otherwise it will perfrom save operation
     const [IsEdit, setIsEdit] = useState(false);
+    const [PageMode, setPageMode] = useState(false);
 
     //*** "isEditdata get all data from ModuleID for Binding  Form controls
     let editDataGatingFromList = props.state;
+    let CheckPageMode = props.IsComponentMode;
 
     //Access redux store Data /  'save_ModuleSuccess' action data
-    const { M_Success, } = useSelector((state) => ({
-        M_Success: state.Modules.modulesSubmitSuccesss,
-    })); 
+    const { APIResponse } = useSelector((state) => ({
+        APIResponse: state.Modules.modulesSubmitSuccesss,
+    }));
 
     // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
     useEffect(() => {
@@ -48,16 +51,28 @@ const Modules = (props) => {
             setEditData(editDataGatingFromList);
             setIsEdit(true);
             dispatch(editModuleIDSuccess({ Status: false }))
+            return
         }
-    }, [editDataGatingFromList])
+        if (!(CheckPageMode === undefined)) {
+            setPageMode(true)
+            return
+        }
+    }, [editDataGatingFromList, CheckPageMode])
 
     // This UseEffect clear Form Data and when modules Save Successfully.
     useEffect(() => {
-        if ((M_Success.Status === true)) {
+        if ((APIResponse.Status === true)) {
             dispatch(PostModelsSubmitSuccess({ Status: false }))
             formRef.current.reset();
+            if (PageMode === true) {
+                 dispatch(AlertState({ Type: 1, Status: true, Message: APIResponse.Message,}))
+                }
+                else{
+              dispatch(AlertState({ Type: 1, Status: true, Message: APIResponse.Message, RedirectPath: '/modulesList', AfterResponseAction: false }))
+            }
+
         }
-    }, [M_Success.Status])
+    }, [APIResponse.Status])
 
     //'Save' And 'Update' Button Handller
     const handleValidSubmit = (event, values) => {
@@ -78,17 +93,27 @@ const Modules = (props) => {
             dispatch(PostModelsSubmit(requestOptions.body));
         }
     };
- // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
-    var IsEditMode_Css=''
-    if(IsEdit===true){IsEditMode_Css= "-3.5%"};
+
+
+
+
+
+
+
+
+
+
+    // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
+    var IsEditMode_Css = ''
+    if (IsEdit === true) { IsEditMode_Css = "-3.5%" };
 
     return (
         <React.Fragment>
-            <div className="page-content" style={{marginTop:IsEditMode_Css}}>
+            <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
                 <MetaTags>
                     <title>Modules| FoodERP-React FrontEnd</title>
                 </MetaTags>
-                <Breadcrumbs breadcrumbItem={"Module Page "}  />
+                <Breadcrumbs breadcrumbItem={"Module Page "} />
                 <Container fluid  >
                     <Row>
                         <Col lg={12}>
@@ -176,7 +201,7 @@ const Modules = (props) => {
                                                                 className="btn btn-success w-md"
                                                             > <i className="fas fa-save me-2"></i> Save
                                                             </button>
-                                                            )
+                                                        )
                                                     }
                                                 </div>
                                             </Col>

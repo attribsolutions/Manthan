@@ -20,7 +20,8 @@ export const EDIT_ORDER_ID ="/Order/GetItemListByDivisionID?DivisionID=3"
 //Python Logic 
 export const POST_JWT_LOGIN = "/Login"
 
-
+//role Aceess url
+ export const ROLE_ACCESS="/RoleAccess"
 //PAGE Master
 export const GET_DEFAULT_MODULE="/HModules"
 export const POST_MODULE_ID="/HModules"

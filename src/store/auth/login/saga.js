@@ -1,33 +1,43 @@
 import { call, put, takeEvery } from "redux-saga/effects"
 
 // Login Redux States
-import { LOGIN_USER, LOGOUT_USER,} from "./actionTypes"
-import { apiError, loginSuccess, logoutUserSuccess } from "./actions"
+import {
+  LOGIN_USER, LOGOUT_USER,
+  ROLE_ACCESS_API_CALL
+} from "./actionTypes"
+import {
+  apiError, loginSuccess,
+  logoutUserSuccess,
+   roleAceessActionSuccess
+} from "./actions"
 
 import { getFirebaseBackend } from "../../../helpers/firebase_helper"
 import {
-  postJwtLogin,
+  Python_postJwtLogin, RoleAccessApi_url
 } from "../../../helpers/backend_helper"
 
 const fireBaseBackend = getFirebaseBackend()
 
 function* loginUser({ payload: { user, history } }) {
   try {
-    const response = yield call(postJwtLogin, {
+    const response = yield call(Python_postJwtLogin, {
       LoginName: user.UserName,
       password: user.Password
     })
     if (response.StatusCode === 200) {
-      
+
     }
     else {
-    
+
     }
     localStorage.setItem("token", (response.token))
     yield put(loginSuccess(response))
+    const RoleResponse = yield call(RoleAccessApi_url);
+    yield put(roleAceessActionSuccess(RoleResponse.Data))
+    // console.log('login response',RoleResponse.Data)
     history.push("/dashboard")
   } catch (error) {
-    console.log("login error",error);
+    console.log("login error", error);
   }
 }
 
@@ -44,9 +54,19 @@ function* logoutUser({ payload: { history } }) {
     yield put(apiError(error))
   }
 }
+function* RoleAccessGenratorFunction() {
+  try {
+    const RoleResponse = yield call(RoleAccessApi_url);
+    yield put(roleAceessActionSuccess(RoleResponse.Data))
+  } catch (error) {
+    console.log("RoleAccessGenratorFunction",error)
+    yield put(apiError(error))
+  }
+}
 
 function* authSaga() {
   yield takeEvery(LOGIN_USER, loginUser)
+  yield takeEvery(ROLE_ACCESS_API_CALL, RoleAccessGenratorFunction)
   yield takeEvery(LOGOUT_USER, logoutUser)
 }
 

@@ -49,6 +49,12 @@ const ModulesList = () => {
     useEffect(() => {
         if (updateMessage.Status === true) {
             dispatch(updateModuleIDSuccess({ Status: false }))
+            dispatch(AlertState({
+                Type: 1, Status: true,
+                Message: updateMessage.Message,
+                RedirectPath: false,
+                AfterResponseAction: fetchModelsList,
+              }))
             tog_center()
         }
     }, [updateMessage.Status, dispatch]);

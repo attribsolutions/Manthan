@@ -16,9 +16,20 @@ import { withTranslation } from "react-i18next";
 import MetisMenu from "metismenujs";
 import { withRouter } from "react-router-dom";
 import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { roleAceessAction } from "../../store/auth/login/actions";
+// import { RoleAccessData } from "./APIDEMO";
 
 const SidebarContent = (props) => {
   const ref = useRef();
+  const pathName = props.location.pathname;
+  const dispatch = useDispatch();
+
+useEffect(()=>{
+  dispatch(roleAceessAction())
+  console.log("test side bar use effect")
+},[])
+
 
   const activateParentDropdown = useCallback(item => {
     item.classList.add("active");
@@ -59,6 +70,7 @@ const SidebarContent = (props) => {
   }, []);
 
   // Use ComponentDidMount and ComponentDidUpdate method symultaniously
+
   useEffect(() => {
     const pathName = props.location.pathname;
 
@@ -92,82 +104,119 @@ const SidebarContent = (props) => {
       }
     }
   }
+
+  const { RoleAccessData,} = useSelector((state) => ({
+    RoleAccessData:state.Login.RoleData, 
+}));
   return (
     <React.Fragment>
+      <div style={{ marginLeft: "45px", marginTop: "10px" }}>
+        <img src={"giftBox"} alt="" />
+      </div>
       <SimpleBar style={{ maxHeight: "100%" }} ref={ref}>
         <div id="sidebar-menu">
           <ul className="metismenu list-unstyled" id="side-menu">
             <li className="menu-title">{props.t("Menu")} </li>
-            <li>
-              <Link to="/dashboard" className="">
-                <FeatherIcon icon="home" />
-                <span>{props.t("Dashboard")}</span>
-              </Link>
-            </li>
-            <li>
-              <Link to="/#" className="has-arrow">
-                <FeatherIcon icon="grid" />
-                <span>{props.t("Apps")}</span>
-              </Link>
-              <ul className="sub-menu">
-                <li>
-                  <Link to="/modules">{props.t("Modules")}</Link>
-                </li>
-                <li>
-                  <Link to="/modulesList">{props.t("Modules List")}</Link>
-                </li>
-                <li>
-                  <Link to="/company">{props.t("Company")}</Link>
-                </li>
-                <li>
-                  <Link to="/companyList">{props.t("CompanyList")}</Link>
-                </li>
-                <li>
-                  <Link to="/SubModules">{props.t("SubModules")}</Link>
-                </li>
-                <li>
-                  <Link to="/SubModulesList">{props.t("SubModulesList")}</Link>
-                </li>
-                 <li>
-                  <Link to="/Hpage">{props.t("Hpage")}</Link>
-                </li>
-                <li>
-                  <Link to="/HpageList">{props.t("Hpage List")}</Link>
-                </li>
-                
-                <li>
-                  <Link to="/orders">{props.t("Orders")}</Link>
-                </li>
-                <li>
-                  <Link to="/AddUser">{props.t("AddUser")}</Link>
-                </li>
 
-                <li>
-                  <Link to="/UserList">{props.t("UserList")}</Link>
+            {RoleAccessData.map((item) => {
+              return (
+                <li class={pathName === "/Modules" ? "active mm-active" : ""}>
+                  <Link to="/#" className="has-arrow">
+                    <span>{props.t(item.ModuleName)}</span>
+                  </Link>
+                  <ul className="sub-menu">
+                    {item.ModuleData.map((i, j) => {
+                      return (
+                        <li>
+                              <Link id={j} to={i.ActualPagePath}>{props.t(i.Name)}</Link>
+                        </li>
+                      )
+                    })}
+                  </ul>
                 </li>
-
-                <li>
-                  <Link to="/AddEmployee">{props.t("AddEmployee")}</Link>
-                </li>
-
-                <li>
-                  <Link to="/Employee_List">{props.t("Employee_List")}</Link>
-                </li>
-
-                <li>
-                  <Link to="/RoleMaster">{props.t("Role Master")}</Link>
-                </li>
-
-                <li>
-                  <Link to="/RoleList">{props.t("RoleList")}</Link>
-                </li>
-              </ul>
-            </li>      
+              )
+            })}
           </ul>
         </div>
       </SimpleBar>
     </React.Fragment>
   );
+  // return (
+  //   <React.Fragment>
+  //     <SimpleBar style={{ maxHeight: "100%" }} ref={ref}>
+  //       <div id="sidebar-menu">
+  //         <ul className="metismenu list-unstyled" id="side-menu">
+  //           <li className="menu-title">{props.t("Menu")} </li>
+  //           <li>
+  //             <Link to="/dashboard" className="">
+  //               <FeatherIcon icon="home" />
+  //               <span>{props.t("Dashboard")}</span>
+  //             </Link>
+  //           </li>
+  //           <li>
+  //             <Link to="/#" className="has-arrow">
+  //               <FeatherIcon icon="grid" />
+  //               <span>{props.t("Apps")}</span>
+  //             </Link>
+  //             <ul className="sub-menu">
+  //               <li>
+  //                 <Link to="/modules">{props.t("Modules")}</Link>
+  //               </li>
+  //               <li>
+  //                 <Link to="/modulesList">{props.t("Modules List")}</Link>
+  //               </li>
+  //               <li>
+  //                 <Link to="/company">{props.t("Company")}</Link>
+  //               </li>
+  //               <li>
+  //                 <Link to="/companyList">{props.t("CompanyList")}</Link>
+  //               </li>
+  //               <li>
+  //                 <Link to="/SubModules">{props.t("SubModules")}</Link>
+  //               </li>
+  //               <li>
+  //                 <Link to="/SubModulesList">{props.t("SubModulesList")}</Link>
+  //               </li>
+  //                <li>
+  //                 <Link to="/Hpage">{props.t("Hpage")}</Link>
+  //               </li>
+  //               <li>
+  //                 <Link to="/HpageList">{props.t("Hpage List")}</Link>
+  //               </li>
+
+  //               <li>
+  //                 <Link to="/orders">{props.t("Orders")}</Link>
+  //               </li>
+  //               <li>
+  //                 <Link to="/AddUser">{props.t("AddUser")}</Link>
+  //               </li>
+
+  //               <li>
+  //                 <Link to="/UserList">{props.t("UserList")}</Link>
+  //               </li>
+
+  //               <li>
+  //                 <Link to="/AddEmployee">{props.t("AddEmployee")}</Link>
+  //               </li>
+
+  //               <li>
+  //                 <Link to="/Employee_List">{props.t("Employee_List")}</Link>
+  //               </li>
+
+  //               <li>
+  //                 <Link to="/RoleMaster">{props.t("Role Master")}</Link>
+  //               </li>
+
+  //               <li>
+  //                 <Link to="/RoleList">{props.t("RoleList")}</Link>
+  //               </li>
+  //             </ul>
+  //           </li>      
+  //         </ul>
+  //       </div>
+  //     </SimpleBar>
+  //   </React.Fragment>
+  // );
 };
 
 SidebarContent.propTypes = {
