@@ -18,6 +18,7 @@ import AvField from "availity-reactstrap-validation/lib/AvField";
 import ReactSelect from "react-select";
 import {
     getH_SubModules,
+    getPageList,
     saveHPages,
     saveHPagesSuccess,
     updateHPages
@@ -32,15 +33,21 @@ const HPageMaster = (props) => {
     const dispatch = useDispatch();
 
     const [selectModule, setSelectModule] = useState('');
+    const [selectPageType, setPageType] = useState('');
+    const [selectPageList, setPageList] = useState('');
+    const [selectShowMenu, setShowMenu] = useState('');
     // const [selectSubModule, setSelectSubModule] = useState('');
     const [IsEdit, setIsEdit] = useState(false);
     const [EditData, setEditData] = useState([]);
 
-    const { ModuleData, SubModuleData, SaveMessage } = useSelector((state) => ({
+    const { ModuleData, SubModuleData, SaveMessage ,PageList} = useSelector((state) => ({
         ModuleData: state.Modules.modulesList,
         SubModuleData: state.H_Pages.SubModulesData,
-        SaveMessage: state.H_Pages.saveMessage
+        SaveMessage: state.H_Pages.saveMessage,
+        PageList:state.H_Pages.PageList,
+        
     }));
+console.log("PageList FROM H PAGES",PageList)
 
     useEffect(() => {
         dispatch(fetchModelsList())
@@ -103,6 +110,31 @@ const HPageMaster = (props) => {
         label: d.Name,
     }));
 
+    //  for PageType deropDown
+        const PageType_SelectOnChangeHandller = (e) => {
+        setPageType(e);
+        dispatch(getPageList(e.value))
+    }
+
+    // PageList Dropdown
+    const optionPageList = PageList.map((d) => ({
+        value: d.value,
+        label: d.label,
+    }));
+console.log("optionPageList",optionPageList)
+
+    const PageList_SelectOnChangeHandller = (e) => {
+        console.log("PageListSelectOnChangeHandller",e)
+        setPageList(getPageList(e.value));
+        }
+
+    function ListPage_Dropdown_Handler()
+    {
+        if(selectShowMenu===true || PageList.value ===2)
+        {
+            setPageList();
+        }
+    }
     return (
         <React.Fragment>
             <div className="page-content">
@@ -225,7 +257,58 @@ const HPageMaster = (props) => {
                                                 </Col>
                                             </Row>
                                         </AvGroup>
-                                        <AvGroup>
+                                       
+                                       <AvGroup>
+                                            <Row className="mb-4">
+                                                <Label className="col-sm-3 col-form-label">
+                                                    Show Menu
+                                                </Label>
+                                                <Col sm={4}>
+                                                    <AvField name="Show Menu"
+                                                        checked={selectShowMenu}
+                                                        type="checkbox" validate={{
+                                                        }} />
+                                                </Col>
+                                            </Row>
+                                        </AvGroup>
+                                        <Row className="mb-4">
+                                            <Label className="col-sm-3 col-form-label">
+                                                PageType
+                                            </Label>
+                                            <Col sm={4}>
+                                                <Select
+                                                    value={selectPageType}
+                                                    options={[{
+                                                        value: 1,
+                                                        label: "AddPage",
+                                                    },
+                                                    {
+                                                        value: 2,
+                                                        label: "ListPage",
+                                                    }]}
+                                                    autoComplete='off'
+                                                    onChange={(e) => { PageType_SelectOnChangeHandller(e) }}
+                                                />
+
+                                            </Col>
+                                        </Row>
+
+                                        <Row className="mb-4">
+                                            <Label className="col-sm-3 col-form-label">
+                                                PageList
+                                            </Label>
+                                            <Col sm={4}>
+                                                <Select
+                                                    value={selectPageList}
+                                                    options={optionPageList}
+                                                    autoComplete='off'
+                                                    onChange={(e) => { PageList_SelectOnChangeHandller(e) }}
+                                                   
+                                                />
+
+                                            </Col>
+                                        </Row>
+                                         <AvGroup>
                                             <Row className="mb-4">
                                                 <Label className="col-sm-3 col-form-label">
                                                     IsActive
@@ -238,6 +321,9 @@ const HPageMaster = (props) => {
                                                 </Col>
                                             </Row>
                                         </AvGroup>
+
+                                        
+
                                         <Row className="justify-content-end">
                                             <Col sm={10}></Col>
                                             <Col sm={2}>

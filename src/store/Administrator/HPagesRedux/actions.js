@@ -7,6 +7,10 @@ import {
   SAVE_HPAGES_SUCCESS,
   UPDATE_H_PAGES,
   UPDATE_H_PAGES_SUCCESS,
+  GET_PAGETYPE,
+  GET_PAGETYPE_SUCCESS,
+  GET_PAGELIST,
+  GET_PAGELIST_SUCCESS
 } from "./actionType";
 
 export const getH_Modules = () => ({
@@ -78,4 +82,24 @@ export const updateHPages = (data, id) => ({
 export const updateHPagesSuccess = (updateMessage) => ({
   type: UPDATE_H_PAGES_SUCCESS,
   payload: updateMessage,
+});
+
+// PageType dropdown api 
+export const getPageType = () => ({
+  type: GET_PAGETYPE,
+ 
+});
+export const getPageTypeSuccess = (PageType) => ({
+  type: GET_PAGETYPE_SUCCESS,
+  payload:PageType,
+});
+
+// PageList dropdown api 
+export const getPageList = (id) => ({
+  type: GET_PAGELIST,
+ id,
+});
+export const getPageListSuccess = (PageList) => ({
+  type: GET_PAGELIST_SUCCESS,
+  payload:PageList,
 });

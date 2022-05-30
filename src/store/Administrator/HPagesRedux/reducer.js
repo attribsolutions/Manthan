@@ -3,20 +3,24 @@ import {
   GET_HPAGES_LIST_DATA_SUCCESS,
   GET_H_MODULES_SUCCESS,
   GET_H_SUB_MODULES_SUCCESS,
+  GET_PAGELIST_SUCCESS,
+  GET_PAGETYPE_SUCCESS,
   SAVE_HPAGES_SUCCESS,
   UPDATE_H_PAGES_SUCCESS,
 } from "./actionType"
 
 const INIT_STATE = {
-  modulesData:[],
-  SubModulesData:[],
+  modulesData: [],
+  SubModulesData: [],
   HPagesListData: [],
-  saveMessage:[],
+  saveMessage: [],
   // modulesListError: {},
   // deleteModuleIDSuccess: { Status: 'false' },
   // deleteModuleIDError: {},
   editData: { Status: 'false' },
-  updateMessage: {}
+  updateMessage: {},
+  PageList:[],
+  PageType:[]
 }
 
 const H_Pages = (state = INIT_STATE, action) => {
@@ -27,7 +31,7 @@ const H_Pages = (state = INIT_STATE, action) => {
         ...state,
         modulesData: action.payload,
       }
-      case GET_H_SUB_MODULES_SUCCESS:
+    case GET_H_SUB_MODULES_SUCCESS:
       return {
         ...state,
         SubModulesData: action.payload,
@@ -42,11 +46,11 @@ const H_Pages = (state = INIT_STATE, action) => {
         ...state,
         HPagesListData: action.payload,
       }
-      case EDIT_H_PAGES_ID_SUCCESS:
-        return {
-          ...state,
-          editData: action.payload,
-        }
+    case EDIT_H_PAGES_ID_SUCCESS:
+      return {
+        ...state,
+        editData: action.payload,
+      }
     case SAVE_HPAGES_SUCCESS:
       return {
         ...state,
@@ -68,8 +72,19 @@ const H_Pages = (state = INIT_STATE, action) => {
         updateMessage: action.payload,
       }
 
+    // PageType Dropdown api
+    case GET_PAGETYPE_SUCCESS:
+      return {
+        ...state,
+        PageType: action.payload,
+      };
 
-
+    // PageList Dropdown api
+    case GET_PAGELIST_SUCCESS:
+      return {
+        ...state,
+        PageList: action.payload,
+      };
 
     default:
       return state
