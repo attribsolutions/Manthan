@@ -23,8 +23,8 @@ const CostumeAlert = () => {
       dispatch(Action());
     };
   }
-  console.log("test1",AlertData)
-  console.log("test1",AlertData.hasOwnProperty('myProperty'))
+  // console.log("test1",AlertData)
+  // console.log("test1",AlertData.hasOwnProperty('myProperty'))
 
   //remove Css when modul hide Mode 
   function removeBodyCss() {

@@ -4,6 +4,8 @@ import {
   GetHpageListData,
   GetHpageListDataSuccess,
   getH_SubModulesSuccess,
+  getPageListSuccess,
+  getPageTypeSuccess,
   saveHPagesSuccess,
   updateHPagesSuccess,
 } from "./actions";
@@ -22,9 +24,12 @@ import {
   EDIT_H_PAGES_ID,
   GET_HPAGES_LIST_DATA,
   GET_H_SUB_MODULES,
+  GET_PAGELIST,
+  GET_PAGETYPE,
   SAVE_HPAGES,
   UPDATE_H_PAGES,
 } from "./actionType";
+import PageListDropdownData from "./PageListData";
 
 
 function* fetchHPagesList_GneratorFunction() {
@@ -143,6 +148,27 @@ function* deleteHpagesUsingID_GenratorFunction({ id }) {
     console.log("deleteCompany_ID  saga page error ***  :", error);
   }
 }
+
+//  PageType dropdown list
+function* PageType_DropDown_GenratorFunction() {
+  try {
+    const response = yield call("");
+    yield put(getPageTypeSuccess(response.Data));
+  } catch (error) {
+    console.log("PageType_saga page error", error);
+  }
+}
+
+//  PageType dropdown list
+function* PageList_DropDown_GenratorFunction() {
+  try {
+    // const response = yield call("");
+    console.log("PageList Data saga file",PageListDropdownData.Data)
+    yield put(getPageListSuccess(PageListDropdownData.Data));
+  } catch (error) {
+    console.log("PageList_saga page error", error);
+  }
+}
 function* HPageSaga() {
   yield takeEvery(SAVE_HPAGES, saveHPageSaga_GneratorFunction)
   yield takeEvery(GET_HPAGES_LIST_DATA, fetchHPagesList_GneratorFunction);
@@ -150,6 +176,10 @@ function* HPageSaga() {
   yield takeEvery(GET_H_SUB_MODULES, GetH_Sub_Modules);
   yield takeEvery(UPDATE_H_PAGES, update_HPagesUsingID_GenratorFunction);
   yield takeEvery(DELETE_HPAGES_USING_ID, deleteHpagesUsingID_GenratorFunction)
+  yield takeEvery(GET_PAGETYPE, PageType_DropDown_GenratorFunction)
+  yield takeEvery(GET_PAGELIST, PageList_DropDown_GenratorFunction)
+
+
 }
 
 export default HPageSaga;
