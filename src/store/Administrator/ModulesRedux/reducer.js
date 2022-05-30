@@ -10,14 +10,14 @@ import {
 } from "./actionType"
 
 const INIT_STATE = {
-  modulesSubmitSuccesss: { Status: 'false' },
+  modulesSubmitSuccesss: { Status: false },
   modulesSubmitError: {},
   modulesList: [],
   modulesListError: {},
-  deleteModuleIDSuccess: { Status: 'false' },
+  deleteModuleIDSuccess: { Status:false },
   deleteModuleIDError: {},
-  editData: { Status: 'false' },
-  updateMessage: { Status: 'false' }
+  editData: { Status: false },
+  updateMessage: { Status: false }
 }
 
 const Modules = (state = INIT_STATE, action) => {

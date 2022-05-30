@@ -1,5 +1,6 @@
 import { call, put, takeEvery } from "redux-saga/effects";
 import {
+  deleteModuleIDSuccess,
   editModuleIDSuccess,
   fetchModelsList,
   fetchModelsListError,
@@ -24,107 +25,78 @@ import {
 import { SpinnerState } from "../../Utilites/Spinner/actions";
 import { AlertState } from "../../Utilites/CostumeAlert/actions";
 
-function* SubmitModules({ data }) {
+function* SubmitModules_GenratorFunction({ data }) {
   yield put(SpinnerState(true))
   try {
     const response = yield call(postSubmitModules, data);
     yield put(SpinnerState(false))
-    if (response.StatusCode === 200) {
-      yield put(PostModelsSubmitSuccess(response));
-    } else {
-      yield put(PostModelsSubmitSuccess({ Type: 4, Status: true, Message: "error Message", RedirectPath: false, AfterResponseAction: false }));
-    }
+    yield put(PostModelsSubmitSuccess(response));
   } catch (error) {
     yield put(SpinnerState(false))
-    yield put(PostModelsSubmitSuccess({ Type: 4, Status: true, Message: "error Message", RedirectPath: false, AfterResponseAction: false }));
-    yield put(AlertState({ Type: 3, Status: true, Message: "Network Error", RedirectPath: false, AfterResponseAction: false }));
-    console.log("$$PostSubmitModules  saga page error$", error);
+    yield put(AlertState({ Type: 4, 
+      Status: true, Message: "500 Error Message",
+    }));
   }
 }
 
-function* fetchModulesList() {
-  // yield put(SpinnerState(true))
+function* fetchModulesList_GenratorFunction() {
+  yield put(SpinnerState(true))
   try {
     const response = yield call(Fetch_ModulesList);
     yield put(fetchModelsListSuccess(response.Data));
     yield put(SpinnerState(false))
   } catch (error) {
     yield put(SpinnerState(false))
-    yield put(fetchModelsListError(error));
-    yield console.log("fetchModulesList  saga page error ***  :", error);
+    yield put(AlertState({ Type: 4, 
+      Status: true, Message: "500 Error Message",
+    }));
   }
 }
-function* deleteModule_ID({ id }) {
+function* deleteModule_ID_GenratorFunction({ id }) {
   try {
     yield put(SpinnerState(true))
     const response = yield call(delete_ModuleID, id);
     yield put(SpinnerState(false))
-
-    if (response.StatusCode === 200) {
-      yield put(AlertState({
-        Type: 1, Status: true,
-        Message: response.Message,
-        RedirectPath: false,
-        AfterResponseAction: fetchModelsList,
-      }))
-    }
-    else {
-      yield put(AlertState({
-        Type: 3, Status: true,
-        Message: response.Message,
-        RedirectPath: false,
-        AfterResponseAction: false
-      }));
-    }
+    yield put(deleteModuleIDSuccess(response))
   } catch (error) {
     yield put(SpinnerState(false))
-    yield console.log("deleteModule_ID  saga page error ***  :", error);
+    yield put(AlertState({ Type: 4, 
+      Status: true, Message: "500 Error Message",
+    }));
   }
 }
 
-function* editModule_ID({ id }) {
+function* editModule_ID_GenratorFunction({ id }) {
   try {
     const response = yield call(edit_ModuleID, id);
     yield put(editModuleIDSuccess(response));
   } catch (error) {
-    console.log("editModule_ID  saga page error ***  :", error);
+    yield put(AlertState({ Type: 4, 
+      Status: true, Message: "500 Error Message",
+    }));
   }
 }
-function* update_Module({ data, id }) {
+
+function* update_Module_GenratorFunction({ data, id }) {
   try {
     yield put(SpinnerState(true))
     const response = yield call(updateModule_ID, data, id);
     yield put(SpinnerState(false))
-
-    if (response.StatusCode === 200) {
-      yield put(updateModuleIDSuccess(response));
-      // yield put(AlertState({
-      //   Type: 1, Status: true,
-      //   Message: response.Message,
-      //   RedirectPath: false,
-      //   AfterResponseAction: fetchModelsList,
-      // }))
-    }
-    else {
-      yield put(AlertState({
-        Type: 3, Status: true,
-        Message: response.Message,
-        RedirectPath: false,
-        AfterResponseAction: false
-      }));
-    }
+    yield put(updateModuleIDSuccess(response))
   }
   catch (error) {
     yield put(SpinnerState(false))
-    yield console.log("editModule_ID  saga page error ***  :", error);
+    yield put(AlertState({ Type: 4, 
+      Status: true, Message: "500 Error Message",
+    }));
   }
 }
 function* ModulesSaga() {
-  yield takeEvery(POST_MODULES_SUBMIT, SubmitModules);
-  yield takeEvery(FETCH_MODULES_LIST, fetchModulesList);
-  yield takeEvery(DELETE_MODULE_ID, deleteModule_ID);
-  yield takeEvery(EDIT_MODULE_ID, editModule_ID);
-  yield takeEvery(UPDATE_MODULE_ID, update_Module);
+  yield takeEvery(POST_MODULES_SUBMIT, SubmitModules_GenratorFunction);
+  yield takeEvery(FETCH_MODULES_LIST, fetchModulesList_GenratorFunction);
+  yield takeEvery(DELETE_MODULE_ID, deleteModule_ID_GenratorFunction);
+  yield takeEvery(EDIT_MODULE_ID, editModule_ID_GenratorFunction);
+  yield takeEvery(UPDATE_MODULE_ID, update_Module_GenratorFunction);
 
 
 }

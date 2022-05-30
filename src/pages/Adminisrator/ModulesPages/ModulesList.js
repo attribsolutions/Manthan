@@ -7,59 +7,73 @@ import BootstrapTable from 'react-bootstrap-table-next';
 import paginationFactory, {
     PaginationProvider, PaginationListStandalone,
 } from 'react-bootstrap-table2-paginator';
-
 import ToolkitProvider from 'react-bootstrap-table2-toolkit';
 
 //Import Breadcrumb
 import Breadcrumbs from "../../../components/Common/Breadcrumb"
 import "../../../assets/scss/CustomeTable/datatables.scss"
 import { useDispatch, useSelector } from "react-redux";
-import { deleteModuleID, editModuleID, fetchModelsList, 
-    updateModuleIDSuccess } from "../../../store/actions";
+import {
+    deleteModuleID, deleteModuleIDSuccess, editModuleID, fetchModelsList,
+    updateModuleIDSuccess
+} from "../../../store/actions";
 import { AlertState } from "../../../store/Utilites/CostumeAlert/actions";
 import Modules from "./Modules";
-import { SpinnerON } from "../../../store/Utilites/Spinner/actions";
-// import "./styles.css";
-
 
 const ModulesList = () => {
     const dispatch = useDispatch();
     const [modal_center, setmodal_center] = useState(false);
 
     // get Access redux data
-    const { TableListData, editData, updateMessage } = useSelector((state) => ({
+    const { TableListData, editData, deleteAPIResponse, updateAPIResponse } = useSelector((state) => ({
         TableListData: state.Modules.modulesList,
+        updateAPIResponse: state.Modules.updateMessage,
         editData: state.Modules.editData,
-        updateMessage: state.Modules.updateMessage,
+        deleteAPIResponse: state.Modules.deleteModuleIDSuccess,
     }));
 
-    // tag_center -- Control the Edit Modal show and close
-    function tog_center() {
-        setmodal_center(!modal_center)
-        // removeBodyCss()
-    }
-
-    // Featch Modules List data  First Rendering
+    //  This UseEffect => Featch Modules List data  First Rendering
     useEffect(() => {
-        dispatch(SpinnerON(true))
         dispatch(fetchModelsList());
     }, []);
 
-    // Edit Modal Show and Hide Control whwn Update Success
+    // This UseEffect => UpadateModal Success/Unsucces  Show and Hide Control Alert_modal 
     useEffect(() => {
-        if (updateMessage.Status === true) {
+        if ((updateAPIResponse.Status === true) && (updateAPIResponse.StatusCode === 200)) {
             dispatch(updateModuleIDSuccess({ Status: false }))
             dispatch(AlertState({
                 Type: 1, Status: true,
-                Message: updateMessage.Message,
-                RedirectPath: false,
+                Message: updateAPIResponse.Message,
                 AfterResponseAction: fetchModelsList,
-              }))
+            }))
             tog_center()
+        } else if (deleteAPIResponse.Status === true) {
+            dispatch(AlertState({
+                Type: 3, Status: true,
+                Message: deleteAPIResponse.Message,
+            }));
         }
-    }, [updateMessage.Status, dispatch]);
+    }, [updateAPIResponse.Status, dispatch]);
 
-    // Edit Modal Show When Edit Data is true
+    // This UseEffect => delete Module Success/Unsucces  Show and Hide Control Alert_modal.
+    useEffect(() => {
+        if ((deleteAPIResponse.Status === true) && (deleteAPIResponse.StatusCode === 200)) {
+            dispatch(deleteModuleIDSuccess({ Status: false }))
+            dispatch(AlertState({
+                Type: 1, Status: true,
+                Message: deleteAPIResponse.Message,
+                AfterResponseAction: fetchModelsList,
+            }))
+        } else if (deleteAPIResponse.Status === true) {
+            dispatch(AlertState({
+                Type: 3,
+                Status: true,
+                Message: "error Message",
+            }));
+        }
+    }, [deleteAPIResponse.Status])
+
+    // This UseEffect => Edit Modal Show When Edit Data is true
     useEffect(() => {
         if (editData.Status === true) {
             tog_center()
@@ -81,8 +95,6 @@ const ModulesList = () => {
             ID: id
         }));
     }
- 
- const rowClasses = row => (row.IsActive ? "alert-row" : "");
 
     //Modules list component table columns 
     const columns = [
@@ -139,6 +151,10 @@ const ModulesList = () => {
         custom: true,
     }
 
+    // tag_center -- Control the Edit Modal show and close
+    function tog_center() {
+        setmodal_center(!modal_center)
+    }
     return (
         <React.Fragment>
             <div className="page-content">
@@ -167,7 +183,7 @@ const ModulesList = () => {
                                             IsButtonVissible={true}
                                             SearchProps={toolkitProps.searchProps}
                                             breadcrumbCount={TableListData.length}
-                                            RedirctPath={"/Modules"}
+                                            RedirctPath={"/ModuleMaster"}
                                         />
                                         <Row>
                                             <Col xl="12">
@@ -182,7 +198,6 @@ const ModulesList = () => {
                                                         headerWrapperClasses={"thead-light"}
                                                         {...toolkitProps.baseProps}
                                                         {...paginationTableProps}
-                                                        rowClasses={rowClasses}
                                                     />
 
                                                 </div>
@@ -202,8 +217,8 @@ const ModulesList = () => {
                             </ToolkitProvider>
                         )
                         }
-                        
-                        </PaginationProvider>
+
+                    </PaginationProvider>
                     <Modal
                         isOpen={modal_center}
                         toggle={() => { tog_center() }}
