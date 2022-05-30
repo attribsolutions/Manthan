@@ -16,7 +16,7 @@ import {
     PostModelsSubmit,
     updateModuleID,
     PostModelsSubmitSuccess,
-    editModuleIDSuccess
+    editModuleIDSuccess,
 } from "../../../store/Administrator/ModulesRedux/actions";
 import Breadcrumbs from "../../../components/Common/Breadcrumb";
 import AvField from "availity-reactstrap-validation/lib/AvField";
@@ -40,7 +40,7 @@ const Modules = (props) => {
     let CheckPageMode = props.IsComponentMode;
 
     //Access redux store Data /  'save_ModuleSuccess' action data
-    const { APIResponse } = useSelector((state) => ({
+    const { APIResponse, } = useSelector((state) => ({
         APIResponse: state.Modules.modulesSubmitSuccesss,
     }));
 
@@ -61,16 +61,33 @@ const Modules = (props) => {
 
     // This UseEffect clear Form Data and when modules Save Successfully.
     useEffect(() => {
-        if ((APIResponse.Status === true)) {
+        if ((APIResponse.Status === true) && (APIResponse.StatusCode === 200)) {
             dispatch(PostModelsSubmitSuccess({ Status: false }))
             formRef.current.reset();
             if (PageMode === true) {
-                 dispatch(AlertState({ Type: 1, Status: true, Message: APIResponse.Message,}))
-                }
-                else{
-              dispatch(AlertState({ Type: 1, Status: true, Message: APIResponse.Message, RedirectPath: '/modulesList', AfterResponseAction: false }))
+                dispatch(AlertState({
+                    Type: 1,
+                    Status: true,
+                    Message: APIResponse.Message,
+                }))
             }
-
+            else {
+                dispatch(AlertState({
+                    Type: 1,
+                    Status: true,
+                    Message: APIResponse.Message,
+                    RedirectPath: '/modulesList',
+                    AfterResponseAction: false
+                }))
+            }
+        } else if (APIResponse.Status === true) {
+            dispatch(AlertState({
+                Type: 4,
+                Status: true,
+                Message: "error Message",
+                RedirectPath: false,
+                AfterResponseAction: false
+            }));
         }
     }, [APIResponse.Status])
 
@@ -93,15 +110,6 @@ const Modules = (props) => {
             dispatch(PostModelsSubmit(requestOptions.body));
         }
     };
-
-
-
-
-
-
-
-
-
 
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
     var IsEditMode_Css = ''
@@ -205,7 +213,6 @@ const Modules = (props) => {
                                                     }
                                                 </div>
                                             </Col>
-
                                         </Row>
                                     </AvForm>
                                 </CardBody>
