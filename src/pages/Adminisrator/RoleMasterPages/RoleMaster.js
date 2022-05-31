@@ -5,8 +5,9 @@ import { AvForm, AvGroup, AvField } from "availity-reactstrap-validation";
 import { useDispatch, useSelector } from "react-redux";
 import {
   editSuccess,
-  postRole, updateID
+  postRole, updateID,PostSuccess
 } from "../../../store/Administrator/RoleMasterRedux/action";
+import { AlertState } from "../../../store/Utilites/CostumeAlert/actions";
 
 const RoleMaster = (props) => {
 
@@ -18,6 +19,7 @@ const RoleMaster = (props) => {
 
   //'IsEdit'--if true then update data otherwise it will perfrom save operation
   const [IsEdit, setIsEdit] = useState(false);
+  const [PageMode, setPageMode] = useState(false);
 
   //*** "isEditdata get all data from ModuleID for Binding  Form controls
   let editDataGatingFromList = props.state;
@@ -34,16 +36,41 @@ const RoleMaster = (props) => {
       setEditData(editDataGatingFromList);
       setIsEdit(true);
       dispatch(editSuccess({ Status: false }))
+      return
     }
-  }, [IsEdit])
+  }, [editDataGatingFromList])
 
-  //Access redux store Data /  'save_ModuleSuccess' action data
   useEffect(() => {
-    if ((AddUserMessage.Status === "true")) {
-      dispatch(postRole({ Status: false }))
-      formRef.current.reset();
+    if ((AddUserMessage.Status === true) && (AddUserMessage.StatusCode === 200)) {
+        dispatch(PostSuccess({ Status: false }))
+        // formRef.current.reset();
+        if (PageMode === true) {
+            dispatch(AlertState({
+                Type: 1,
+                Status: true,
+                Message: AddUserMessage.Message,
+            }))
+        }
+        else {
+            dispatch(AlertState({
+                Type: 1,
+                Status: true,
+                Message: AddUserMessage.Message,
+                RedirectPath: '/RoleList',
+                AfterResponseAction: false
+            }))
+        }
+    } 
+    else if (AddUserMessage.Status === true) {
+        dispatch(AlertState({
+            Type: 4,
+            Status: true,
+            Message: "error Message",
+            RedirectPath: false,
+            AfterResponseAction: false
+        }));
     }
-  }, [AddUserMessage.Status])
+}, [AddUserMessage.Status])
 
     //'Save' And 'Update' Button Handller
   const handleValidUpdate = (event, values) => {
