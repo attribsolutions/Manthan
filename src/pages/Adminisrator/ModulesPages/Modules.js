@@ -113,7 +113,7 @@ const Modules = (props) => {
 
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
     var IsEditMode_Css = ''
-    if (IsEdit === true) { IsEditMode_Css = "-3.5%" };
+    if (IsEdit === true||PageMode==true) { IsEditMode_Css = "-3.5%" };
 
     return (
         <React.Fragment>
