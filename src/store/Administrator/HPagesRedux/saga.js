@@ -25,7 +25,6 @@ import {
   GET_HPAGES_LIST_DATA,
   GET_H_SUB_MODULES,
   GET_PAGELIST,
-  GET_PAGETYPE,
   SAVE_HPAGES,
   UPDATE_H_PAGES,
 } from "./actionType";
@@ -150,16 +149,6 @@ function* deleteHpagesUsingID_GenratorFunction({ id }) {
 }
 
 //  PageType dropdown list
-function* PageType_DropDown_GenratorFunction() {
-  try {
-    const response = yield call("");
-    yield put(getPageTypeSuccess(response.Data));
-  } catch (error) {
-    console.log("PageType_saga page error", error);
-  }
-}
-
-//  PageType dropdown list
 function* PageList_DropDown_GenratorFunction() {
   try {
     // const response = yield call("");
@@ -176,7 +165,6 @@ function* HPageSaga() {
   yield takeEvery(GET_H_SUB_MODULES, GetH_Sub_Modules);
   yield takeEvery(UPDATE_H_PAGES, update_HPagesUsingID_GenratorFunction);
   yield takeEvery(DELETE_HPAGES_USING_ID, deleteHpagesUsingID_GenratorFunction)
-  yield takeEvery(GET_PAGETYPE, PageType_DropDown_GenratorFunction)
   yield takeEvery(GET_PAGELIST, PageList_DropDown_GenratorFunction)
 
 

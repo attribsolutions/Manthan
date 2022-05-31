@@ -17,9 +17,9 @@ export const getH_Modules = () => ({
   type: GET_H_MODULES,
 });
 
-export const getH_ModulesSuccess = (modulesData) => ({
+export const getH_ModulesSuccess = (data) => ({
   type: GET_H_MODULES_SUCCESS,
-  payload: modulesData,
+  payload: data,
 });
 export const getH_SubModules = (id) => ({
   type: GET_H_SUB_MODULES,
@@ -27,9 +27,9 @@ export const getH_SubModules = (id) => ({
 });
 
 
-export const getH_SubModulesSuccess = (SubModulesData) => ({
+export const getH_SubModulesSuccess = (data) => ({
   type: GET_H_SUB_MODULES_SUCCESS,
-  payload: SubModulesData,
+  payload: data,
 });
 
 // // Fetch Modules get Data Actions 
@@ -37,17 +37,17 @@ export const GetHpageListData = (data) => ({
   type: GET_HPAGES_LIST_DATA,
   data,
 });
-export const GetHpageListDataSuccess = (HPagesListData) => ({
+export const GetHpageListDataSuccess = (data) => ({
   type: GET_HPAGES_LIST_DATA_SUCCESS,
-  payload: HPagesListData,
+  payload: data,
 });
 export const saveHPages = (data) => ({
   type: SAVE_HPAGES,
   data,
 });
-export const saveHPagesSuccess = (saveMessage) => ({
+export const saveHPagesSuccess = (data) => ({
   type: SAVE_HPAGES_SUCCESS,
-  payload: saveMessage,
+  payload: data,
 });
 // export const fetchModelsListError = (modulesListError) => ({
 //   type: FETCH_MODULES_LIST_ERROR,
@@ -70,36 +70,28 @@ export const editHPagesID = (id) => ({
   type: EDIT_H_PAGES_ID,
   id,
 });
-export const editHPagesIDSuccess = (editData) => ({
+export const editHPagesIDSuccess = (data) => ({
   type: EDIT_H_PAGES_ID_SUCCESS,
-  payload: editData,
+  payload: data,
 });
 
 export const updateHPages = (data, id) => ({
   type: UPDATE_H_PAGES,
   data, id,
 });
-export const updateHPagesSuccess = (updateMessage) => ({
+export const updateHPagesSuccess = (data) => ({
   type: UPDATE_H_PAGES_SUCCESS,
-  payload: updateMessage,
+  payload: data,
 });
 
-// PageType dropdown api 
-export const getPageType = () => ({
-  type: GET_PAGETYPE,
- 
-});
-export const getPageTypeSuccess = (PageType) => ({
-  type: GET_PAGETYPE_SUCCESS,
-  payload:PageType,
-});
+
 
 // PageList dropdown api 
 export const getPageList = (id) => ({
   type: GET_PAGELIST,
  id,
 });
-export const getPageListSuccess = (PageList) => ({
+export const getPageListSuccess = (data) => ({
   type: GET_PAGELIST_SUCCESS,
-  payload:PageList,
+  payload:data,
 });
