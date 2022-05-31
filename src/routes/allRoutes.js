@@ -35,7 +35,7 @@ const userRoutes = [
   { path: "/dashboard", component: Dashboard },
 
   // Administrator : Modules Path and List
-  { path: "/modulemaster", component: Modules },
+  { path: "/moduleMaster", component: Modules },
   { path: "/modulesList", component: ModulesList },
 
   { path: "/subModules", component: SubModules },
