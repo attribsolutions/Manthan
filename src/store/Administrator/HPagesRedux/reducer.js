@@ -4,7 +4,6 @@ import {
   GET_H_MODULES_SUCCESS,
   GET_H_SUB_MODULES_SUCCESS,
   GET_PAGELIST_SUCCESS,
-  GET_PAGETYPE_SUCCESS,
   SAVE_HPAGES_SUCCESS,
   UPDATE_H_PAGES_SUCCESS,
 } from "./actionType"
@@ -17,10 +16,10 @@ const INIT_STATE = {
   // modulesListError: {},
   // deleteModuleIDSuccess: { Status: 'false' },
   // deleteModuleIDError: {},
-  editData: { Status: 'false' },
-  updateMessage: {},
+  editData: { Status: false },
+  updateMessage: { Status: false },
   PageList:[],
-  PageType:[]
+
 }
 
 const H_Pages = (state = INIT_STATE, action) => {
@@ -72,13 +71,7 @@ const H_Pages = (state = INIT_STATE, action) => {
         updateMessage: action.payload,
       }
 
-    // PageType Dropdown api
-    case GET_PAGETYPE_SUCCESS:
-      return {
-        ...state,
-        PageType: action.payload,
-      };
-
+    
     // PageList Dropdown api
     case GET_PAGELIST_SUCCESS:
       return {

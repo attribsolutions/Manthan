@@ -32,13 +32,16 @@ export const H_MODULES_API_URL ="/H_Modules"
 //Company List URL
 export const COMPANY_API_URL ="/C_Companies"
 
+// Company Group drop down api
+export const GET_COMPANYGROUP="/C_CompanyGroups"
+
 export const GET_PAGE_ACCESS="/HPageAccessNames"
 
 export const H_SUB_MODULES_API_URL="/H_SubModules"/// post api
 
 export const H_SUB_MODULES_FROM_HPAGES="/GetSubModuleFromModuleID"/// post api
 
-export const H_PAGES_API_URL="/H_Pages"/// post api
+export const H_PAGES_API_URL="/PagesMaster"/// post api
 
 export const ROLE_API_URL="/M_Roles"///get api
 
