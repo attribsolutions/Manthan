@@ -27,12 +27,13 @@ function* fetch_CompanyList_data() {
   }
 }
 
-function* SubmitCompanyModules({ Data }) {
+function* SubmitCompanyModules({ data }) {
   yield put(SpinnerState(true))
   try {
-    const response = yield call(postSubmit_Company, Data);
+    const response = yield call(postSubmit_Company, data);
     yield put(SpinnerState(false))
     yield put(PostCompanySubmitSuccess(response));
+    console.log("response",response)
   } catch (error) {
     yield put(SpinnerState(false))
     yield put(AlertState({ Type: 4, 

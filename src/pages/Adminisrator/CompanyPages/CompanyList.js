@@ -5,7 +5,7 @@ import {
     Modal,
     Row,
 } from "reactstrap";
-import { deleteCompanyID, editCompanyID,fetchCompanyList, updateCompanyIDSuccess,deleteCompanyIDSuccess, editCompanyIDSuccess } from "../../../store/Administrator/CompanyRedux/actions";
+import { deleteCompany_ID, editCompanyID, fetchCompanyList, updateCompanyIDSuccess, deleteCompanyIDSuccess, editCompanyIDSuccess } from "../../../store/Administrator/CompanyRedux/actions";
 import Breadcrumbs from "../../../components/Common/Breadcrumb";
 
 import paginationFactory, {
@@ -27,7 +27,7 @@ const CompanyList = () => {
     const [modal_center, setmodal_center] = useState(false);
 
     // get Access redux data
-    const { companyList, editData, updateMessage ,deleteCompanyID} = useSelector((state) => ({
+    const { companyList, editData, updateMessage, deleteCompanyID } = useSelector((state) => ({
         companyList: state.Company.companyList,
         editData: state.Company.editData,
         updateMessage: state.Company.updateMessage,
@@ -54,7 +54,7 @@ const CompanyList = () => {
                 AfterResponseAction: fetchCompanyList,
             }))
             tog_center()
-        } 
+        }
         else if (deleteCompanyID.Status === true) {
             dispatch(AlertState({
                 Type: 3, Status: true,
@@ -79,29 +79,29 @@ const CompanyList = () => {
             }));
         }
     }, [deleteCompanyID.Status])
-    
+
     // Edit Modal Show When Edit Data is true
     useEffect(() => {
         if (editData.Status === true) {
-           tog_center()
+            tog_center()
         }
     }, [editData]);
-console.log("editData",editData)
-    
+    console.log("editData", editData)
+
     // Edit button Handller
     const EditPageHandler = (id) => {
-       
+
         dispatch(editCompanyID(id));
     }
 
     //Delete Button Handller
     const deleteHandeler = (id, name) => {
-       
+
         dispatch(AlertState({
             Type: 5, Status: true,
             Message: `Are you sure you want to delete this item : "${name}"`,
             RedirectPath: false,
-            PermissionAction: deleteCompanyID,
+            PermissionAction: deleteCompany_ID,
             ID: id
         }));
     }

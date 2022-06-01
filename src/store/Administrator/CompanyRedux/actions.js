@@ -14,22 +14,15 @@ import {
   UPDATE_COMPANY_ID_SUCCESS
 } from "./actionType";
 
-
-
 export const PostCompanySubmit = (data) => ({
   type: POST_COMPANY_SUBMIT,
   data,
 });
 
-
 export const PostCompanySubmitSuccess = (companySubmitSuccesss) => ({
   type: POST_COMPANY_SUBMIT_SUCCESS,
   payload: companySubmitSuccesss,
 });
-// export const PostModelsSubmitError = (modulesSubmitError) => ({
-//   type: POST_MODULES_SUBMIT_ERROR,
-//   payload: modulesSubmitError,
-// });
 
 // Fetch Modules get Data Actions 
 export const fetchCompanyList = (data) => ({
@@ -56,7 +49,7 @@ export const editCompanyIDSuccess = (editData) => ({
 });
 
 // Delete Company ID Actions
-export const deleteCompanyID = (id) => ({
+export const deleteCompany_ID = (id) => ({
   type: DELETE_COMPANY_ID,
   id,
 });

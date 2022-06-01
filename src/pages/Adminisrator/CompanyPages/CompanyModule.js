@@ -37,7 +37,7 @@ const CompanyModule = (props) => {
   //*** "isEditdata get all data from ModuleID for Binding  Form controls
   var editDataGatingFromList = props.state;
   console.log("editDataGatingFromList from list page", editDataGatingFromList)
-  
+
   //Access redux store Data /  'save_ModuleSuccess' action data
   const { SubmitSuccesss, } = useSelector((state) => ({
     SubmitSuccesss: state.Company.companySubmitSuccesss,
@@ -75,7 +75,7 @@ const CompanyModule = (props) => {
           Type: 1,
           Status: true,
           Message: SubmitSuccesss.Message,
-          RedirectPath: '/CompanyList',
+          RedirectPath: '/companysList',
           AfterResponseAction: false
         }))
       }
@@ -132,6 +132,8 @@ const CompanyModule = (props) => {
       dispatch(PostCompanySubmit(requestOptions.body));
     }
   };
+ 
+
   var IsEditModeSaSS = ''
   if (IsEdit === true) { IsEditModeSaSS = "-3.5%" };
 
@@ -157,7 +159,8 @@ const CompanyModule = (props) => {
                         </Label>
                         <Col sm={4}>
                           <AvField name="Name" value={EditData.Name} type="text" id='txtName'
-                            placeholder=" Please Enter Name " autoComplete="off"
+                            placeholder=" Please Enter Name " 
+                            // autoComplete="off"
                             validate={{
                               required: { value: true, errorMessage: 'Please Enter a Name' },
                             }}
@@ -170,7 +173,8 @@ const CompanyModule = (props) => {
                           Address
                         </Label>
                         <Col sm={4}>
-                          <AvField name="Address" value={EditData.Address} type="text" autoComplete="off"
+                          <AvField name="Address" value={EditData.Address} type="text"
+                          //  autoComplete="off"
                             placeholder=" Please Enter Address "
                             validate={{
                               required: { value: true, errorMessage: 'Please Enter a  Address' },
@@ -184,7 +188,8 @@ const CompanyModule = (props) => {
                           GSTIN
                         </Label>
                         <Col sm={4}>
-                          <AvField name="GSTIN" autoComplete="off"
+                          <AvField name="GSTIN"
+                          //  autoComplete="off"
                             value={EditData.GSTIN} type="text"
                             placeholder="GSTIN "
                             validate={{
@@ -200,7 +205,8 @@ const CompanyModule = (props) => {
                           Phone NO
                         </Label>
                         <Col sm={4}>
-                          <AvField name="PhoneNo" type="tel" autoComplete="off"
+                          <AvField name="PhoneNo" type="tel"
+                          //  autoComplete="off"
                             value={EditData.PhoneNo}
                             placeholder="+91 "
                             validate={{
@@ -221,7 +227,7 @@ const CompanyModule = (props) => {
                         </Label>
                         <Col sm={4}>
                           <AvField name="CompanyAbbreviation" value={EditData.CompanyAbbreviation} type="text"
-                            autoComplete="off"
+                            // autoComplete="off"
                             placeholder=" Please Enter Company Abbreviation"
                             validate={{
                               required: { value: true, errorMessage: 'Please Enter a Company Abbreviation' },
@@ -237,7 +243,7 @@ const CompanyModule = (props) => {
                         </Label>
                         <Col sm={4}>
                           <AvField name="EmailID" value={EditData.EmailID} type="email"
-                            autoComplete="off"
+                            // autoComplete="off"
                             placeholder="example@example.com" validate={{
                               required: { value: true, errorMessage: 'Please Enter a Email ID' },
                             }} />
