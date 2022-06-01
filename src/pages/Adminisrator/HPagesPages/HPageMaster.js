@@ -54,14 +54,14 @@ const HPageMaster = (props) => {
         document.getElementById("txtName").focus();
 
         if (!(editDataGatingFromList === undefined)) {
-            setEditData(editDataGatingFromList);
+            setEditData(editDataGatingFromList[0]);
             // setSelectSubModule({
             //     label: editDataGatingFromList.SubModuleName,
             //     value: editDataGatingFromList.SubModuleID
             // })
             setSelectModule({
-                label: editDataGatingFromList.ModuleName,
-                value: editDataGatingFromList.ModuleID
+                label: editDataGatingFromList[0].ModuleName,
+                value: editDataGatingFromList[0].ModuleID
             })
             setIsEdit(true);
         }
@@ -98,7 +98,7 @@ const HPageMaster = (props) => {
     };
     const HModuleSelectOnChangeHandller = (e) => {
         setSelectModule(e);
-        dispatch(getH_SubModules(e.value))
+        // dispatch(getH_SubModules(e.value))
     }
     // const optionSubModule = SubModuleData.map((d) => ({
     //     value: d.ID,
