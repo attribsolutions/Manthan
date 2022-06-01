@@ -2,6 +2,7 @@ import {
   DELETE_COMPANY_ID_SUCCESS,
   EDIT_COMPANY_ID_SUCCESS,
   FETCH_COMPANY_LIST_SUCCESS,
+  GET_COMPANYGROUP_SUCCESS,
   POST_COMPANY_SUBMIT_SUCCESS,
   UPDATE_COMPANY_ID_SUCCESS,
 } from "./actionType"
@@ -11,8 +12,8 @@ const INIT_STATE = {
   editData: { Status: 'false' },
   deleteCompanyIDSuccess: { Status: 'false' },
   companySubmitSuccesss: { Status: 'false' },
-  updateMessage:{Status: 'false'}
-
+  updateMessage: { Status: 'false' },
+  CompanyGroup:[],
 }
 
 const Company = (state = INIT_STATE, action) => {
@@ -29,7 +30,7 @@ const Company = (state = INIT_STATE, action) => {
         ...state,
         companySubmitSuccesss: action.payload,
       }
-  
+
     case DELETE_COMPANY_ID_SUCCESS:
       return {
         ...state,
@@ -45,12 +46,18 @@ const Company = (state = INIT_STATE, action) => {
         ...state,
         editData: action.payload,
       }
-            case UPDATE_COMPANY_ID_SUCCESS:
-              return {
-                ...state,
-                updateMessage: action.payload,
-              }
+    case UPDATE_COMPANY_ID_SUCCESS:
+      return {
+        ...state,
+        updateMessage: action.payload,
+      }
 
+    /// CompanyGroupDropdown
+    case GET_COMPANYGROUP_SUCCESS:
+      return {
+        ...state,
+        CompanyGroup: action.payload,
+      };
 
 
 

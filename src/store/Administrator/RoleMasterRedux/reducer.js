@@ -12,12 +12,12 @@ import {
 
 const INIT_STATE = {
   pages: [],
-  AddUserMessage: { Status: 'false' },
-  PostPage: [],
+  AddUserMessage: { Status: false },
+  PostPage:{ Status: false },
   deleteRoleID: [],
-  deleteSuccessRole: { Status: 'false' },
-  editData: { Status: 'false' },
-  updateMessage: { Status: 'false' },
+  deleteMessage: { Status: false },
+  editData: { Status: false },
+  updateMessage: { Status: false },
 };
 
 const RoleMaster_Reducer = (state = INIT_STATE, action) => {
@@ -41,16 +41,11 @@ const RoleMaster_Reducer = (state = INIT_STATE, action) => {
         AddUserMessage: action.payload,
       };
 
-    // delete api
-    case DELETE_ROLE:
-      return {
-        ...state,
-        deleteRoleID: action.id,
-      };
+    // // delete api
     case DELETE_SUCCESS:
       return {
         ...state,
-        deleteSuccessRole: action.payload,
+        deleteMessage: action.payload,
       };
 
     // edit api
@@ -66,7 +61,6 @@ const RoleMaster_Reducer = (state = INIT_STATE, action) => {
         ...state,
         updateMessage: action.payload,
       };
-
 
     default:
       return state;

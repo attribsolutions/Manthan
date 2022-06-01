@@ -1,15 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import Breadcrumbs from "../../../components/Common/Breadcrumb";
-import {
-    Col,
-    Modal,
-    Row,
-} from "reactstrap";
+import { Col, Modal,Row} from "reactstrap";
 import {
     getRole,
     deleteRole,
     editRoleId,
     updateSuccess,
+    deleteSuccess,
 } from "../../../store/Administrator/RoleMasterRedux/action";
 
 import paginationFactory, {
@@ -23,28 +20,57 @@ import AddRole from './RoleMaster';
 import "../../../assets/scss/CustomeTable/datatables.scss"
 
 const RoleList = () => {
-
     const dispatch = useDispatch();
     const [modal_center, setmodal_center] = useState(false);
 
-    // get data
-    const { pages, editData, updateMessage } = useSelector((state) => ({
-        pages: state.RoleMaster_Reducer.pages,
+    // get Access redux data
+    const { TableListData, editData, updateMessage,deleteMessage } = useSelector((state) => ({
+        TableListData: state.RoleMaster_Reducer.pages,
         editData: state.RoleMaster_Reducer.editData,
         updateMessage: state.RoleMaster_Reducer.updateMessage,
+        deleteMessage:state.RoleMaster_Reducer.deleteMessage,
     }));
 
+ //  This UseEffect => Featch Modules List data  First Rendering
     useEffect(() => {
         dispatch(getRole());
-    }, [dispatch]);
+    }, []);
+
+    // This UseEffect => UpadateModal Success/Unsucces  Show and Hide Control Alert_modal 
+    useEffect(() => {
+        if ((updateMessage.Status === true) && (updateMessage.StatusCode === 200)) {
+            dispatch(updateSuccess({ Status: false }))
+            dispatch(AlertState({
+                Type: 1, Status: true,
+                Message: updateMessage.Message,
+                AfterResponseAction: getRole,
+            }))
+            tog_center()
+        } 
+        else if (deleteMessage.Status === true) {
+            dispatch(AlertState({
+                Type: 3, Status: true,
+                Message: deleteMessage.Message,
+            }));
+        }
+    }, [updateMessage.Status, dispatch]);
 
     useEffect(() => {
-        if (updateMessage.Status === true) {
-            dispatch(updateSuccess({ Status: false }))
-            tog_center()
-            dispatch(getRole());
+        if ((deleteMessage.Status === true) && (deleteMessage.StatusCode === 200)) {
+            dispatch(deleteSuccess({ Status: false }))
+            dispatch(AlertState({
+                Type: 1, Status: true,
+                Message: deleteMessage.Message,
+                AfterResponseAction: getRole,
+            }))
+        } else if (deleteMessage.Status === true) {
+            dispatch(AlertState({
+                Type: 3,
+                Status: true,
+                Message: "error Message",
+            }));
         }
-    }, [updateMessage.Status]);
+    }, [deleteMessage.Status])
 
     // Edit Modal Show When Edit Data is true
     useEffect(() => {
@@ -57,46 +83,47 @@ const RoleList = () => {
         setmodal_center(!modal_center)
     }
 
+     //select id for delete row
+     const deleteHandeler = (id, name) => {
+        dispatch(AlertState({
+            Type: 5, Status: true,
+            Message: `Are you sure you want to delete this item : "${name}"`,
+            RedirectPath: false,
+            PermissionAction: deleteRole,
+            ID: id
+        }));
+    }
+    // edit Buutton Handller 
+    const EditPageHandler = (id) => {
+        dispatch(editRoleId(id));
+    }
+
     const pageOptions = {
         sizePerPage: 10,
-        totalSize: pages.length,
+        totalSize: TableListData.length,
         custom: true,
     };
 
     const pagesListColumns = [
         {
-            text: "PageID",
-            dataField: "ID",
-            sort: true,
-            hidden: true,
-            formatter: (cellContent, Role) => <>{Role.ID}</>,
-        },
-        {
             text: "Name",
             dataField: "Name",
             sort: true,
-            formatter: (cellContent, Role) => <>{Role.Name}</>,
         },
         {
             text: "Description",
             dataField: "Description",
             sort: true,
-            formatter: (cellContent, Role) => <>{Role.Description}</>,
         },
         {
             text: "IsActive",
             dataField: "isActive",
             sort: true,
-            formatter: (cellContent, Role) =>
-                <>
-                    {(Role.isActive) ? "true" : "false"}
-                </>
         },
         {
             text: "Dashboard",
             dataField: "Dashboard",
             sort: true,
-            formatter: (cellContent, Role) => <>{Role.Dashboard}</>,
         },
         {
             text: "Action",
@@ -127,20 +154,6 @@ const RoleList = () => {
             ),
         },
     ]
-    //select id for delete row
-    const deleteHandeler = (id, name) => {
-        dispatch(AlertState({
-            Type: 5, Status: true,
-            Message: `Are you sure you want to delete this item : "${name}"`,
-            RedirectPath: false,
-            PermissionAction: deleteRole,
-            ID: id
-        }));
-    }
-    // edit Buutton Handller 
-    const EditPageHandler = (id) => {
-        dispatch(editRoleId(id));
-    }
 
     return (
         <React.Fragment>
@@ -151,7 +164,7 @@ const RoleList = () => {
                     {({ paginationProps, paginationTableProps }) => (
                         <ToolkitProvider
                             keyField="id"
-                            data={pages}
+                            data={TableListData}
                             columns={pagesListColumns}
                             search
                         >
@@ -162,8 +175,8 @@ const RoleList = () => {
                                         breadcrumbItem={"Role List Page"}
                                         IsButtonVissible={true}
                                         SearchProps={toolkitProps.searchProps}
-                                        breadcrumbCount={pages.length}
-                                        RedirctPath={"/AddRole"}
+                                        breadcrumbCount={TableListData.length}
+                                        RedirctPath={"/RolesMaster"}
                                     />
                                     <Row>
                                         <Col xl="12">

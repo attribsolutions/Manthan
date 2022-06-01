@@ -180,7 +180,7 @@ return (
                                         IsButtonVissible={true}
                                         a={toolkitProps.searchProps}
                                         breadcrumbCount={pages.length}
-                                        RedirctPath={"/AddEmployee"}
+                                        RedirctPath={"/employeesMaster"}
                                     />
                                     <Row>
                                         <Col xl="12">

@@ -35,30 +35,30 @@ const userRoutes = [
   { path: "/dashboard", component: Dashboard },
 
   // Administrator : Modules Path and List
-  { path: "/moduleMaster", component: Modules },
+  { path: "/modulesMaster", component: Modules },
   { path: "/modulesList", component: ModulesList },
 
-  { path: "/subModules", component: SubModules },
+  { path: "/subModulesMaster", component: SubModules },
   { path: "/subModulesList", component: SubModulesList },
 
   // Administrator : Company Path and List
-  { path: "/company", component: CompanyModule },
-  { path: "/companyList", component: CompanyList },
+  { path: "/companysMaster", component: CompanyModule },
+  { path: "/companysList", component: CompanyList },
 
-  { path: "/HpageList", component: HPageList },
-  { path: "/Hpage", component: HPageMaster },
+  { path: "/pagesList", component: HPageList },
+  { path: "/pagesMaster", component: HPageMaster },
 
-  { path: "/orders", component: OrderPage },
+  { path: "/ordersMaster", component: OrderPage },
   { path: "/ordersList", component: OrderList },
 
-  { path: "/AddUser", component: AddUser },
-  { path: "/UserList", component: UserList },
+  { path: "/usersMaster", component: AddUser },
+  { path: "/usersList", component: UserList },
 
-  { path: "/AddEmployee", component: AddEmployee },
-  { path: "/Employee_List", component: Employee_List },
+  { path: "/employeesMaster", component: AddEmployee },
+  { path: "/employeesList", component: Employee_List },
 
-  { path: "/RoleMaster", component: RoleMaster },
-  { path: "/RoleList", component: RoleList },
+  { path: "/rolesMaster", component: RoleMaster },
+  { path: "/rolesList", component: RoleList },
 
   // this route should be at the end of all other routes
   { path: "/", exact: true, component: () => <Redirect to="/dashboard" /> },

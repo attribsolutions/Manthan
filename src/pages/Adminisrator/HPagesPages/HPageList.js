@@ -85,13 +85,11 @@ export default function HPageList() {
             text: "Description",
             dataField: "Description",
             sort: true,
-
         },
         {
-            text: "Module ID",
-            dataField: "ModuleID",
+            text: "Module Name",
+            dataField: "ModuleName",
             sort: true,
-
         },
         // {
         //     text: "Sub ModuleID",
@@ -157,11 +155,11 @@ export default function HPageList() {
                                 <React.Fragment>
                                     <Breadcrumbs
                                         title={"Count :"}
-                                        breadcrumbItem={"H Page List"}
+                                        breadcrumbItem={"Pages List"}
                                         IsButtonVissible={true}
                                         SearchProps={toolkitProps.searchProps}
                                         breadcrumbCount={HPageListData.length}
-                                        RedirctPath={"/Hpage"}
+                                        RedirctPath={"/pagesMaster"}
                                     />
                                     <Row>
                                         <Col xl="12">

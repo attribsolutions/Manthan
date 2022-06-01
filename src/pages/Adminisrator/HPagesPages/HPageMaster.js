@@ -35,33 +35,33 @@ const HPageMaster = (props) => {
     const [selectModule, setSelectModule] = useState('');
     const [selectPageType, setPageType] = useState('');
     const [selectPageList, setPageList] = useState('');
-    const [selectShowMenu, setShowMenu] = useState('');
+    const [selectShowMenu, setShowMenu] = useState();
     // const [selectSubModule, setSelectSubModule] = useState('');
     const [IsEdit, setIsEdit] = useState(false);
     const [EditData, setEditData] = useState([]);
 
-    const { ModuleData, SubModuleData, SaveMessage ,PageList} = useSelector((state) => ({
+    const { ModuleData, SubModuleData, SaveMessage, PageList } = useSelector((state) => ({
         ModuleData: state.Modules.modulesList,
         SubModuleData: state.H_Pages.SubModulesData,
         SaveMessage: state.H_Pages.saveMessage,
-        PageList:state.H_Pages.PageList,
-        
+        PageList: state.H_Pages.PageList,
+
     }));
-console.log("PageList FROM H PAGES",PageList)
+    console.log("PageList FROM H PAGES", PageList)
 
     useEffect(() => {
         dispatch(fetchModelsList())
         document.getElementById("txtName").focus();
 
         if (!(editDataGatingFromList === undefined)) {
-            setEditData(editDataGatingFromList);
+            setEditData(editDataGatingFromList[0]);
             // setSelectSubModule({
             //     label: editDataGatingFromList.SubModuleName,
             //     value: editDataGatingFromList.SubModuleID
             // })
             setSelectModule({
-                label: editDataGatingFromList.ModuleName,
-                value: editDataGatingFromList.ModuleID
+                label: editDataGatingFromList[0].ModuleName,
+                value: editDataGatingFromList[0].ModuleID
             })
             setIsEdit(true);
         }
@@ -74,7 +74,7 @@ console.log("PageList FROM H PAGES",PageList)
         }
     }, [SaveMessage])
 
-    const handleValidSubmit = (event, values) => {    
+    const handleValidSubmit = (event, values) => {
         const requestOptions = {
             body: JSON.stringify({
                 Name: values.Name,
@@ -84,7 +84,7 @@ console.log("PageList FROM H PAGES",PageList)
                 DisplayIndex: values.DisplayIndex,
                 Icon: values.Icon,
                 ActualPagePath: values.ActualPagePath,
-                CreatedBy:1,
+                CreatedBy: 1,
                 UpdatedBy: 1,
             }),
         };
@@ -98,7 +98,7 @@ console.log("PageList FROM H PAGES",PageList)
     };
     const HModuleSelectOnChangeHandller = (e) => {
         setSelectModule(e);
-        dispatch(getH_SubModules(e.value))
+        // dispatch(getH_SubModules(e.value))
     }
     // const optionSubModule = SubModuleData.map((d) => ({
     //     value: d.ID,
@@ -111,9 +111,11 @@ console.log("PageList FROM H PAGES",PageList)
     }));
 
     //  for PageType deropDown
-        const PageType_SelectOnChangeHandller = (e) => {
+    const PageType_SelectOnChangeHandller = (e) => {
+        if (selectShowMenu===true && PageList.value===2) {
+            dispatch(getPageList(e.value))
+        }
         setPageType(e);
-        dispatch(getPageList(e.value))
     }
 
     // PageList Dropdown
@@ -121,20 +123,13 @@ console.log("PageList FROM H PAGES",PageList)
         value: d.value,
         label: d.label,
     }));
-console.log("optionPageList",optionPageList)
+    console.log("optionPageList", optionPageList)
 
     const PageList_SelectOnChangeHandller = (e) => {
-        console.log("PageListSelectOnChangeHandller",e)
+        console.log("PageListSelectOnChangeHandller", e)
         setPageList(getPageList(e.value));
-        }
-
-    function ListPage_Dropdown_Handler()
-    {
-        if(selectShowMenu===true || PageList.value ===2)
-        {
-            setPageList();
-        }
     }
+
     return (
         <React.Fragment>
             <div className="page-content">
@@ -257,8 +252,8 @@ console.log("optionPageList",optionPageList)
                                                 </Col>
                                             </Row>
                                         </AvGroup>
-                                       
-                                       <AvGroup>
+
+                                        <AvGroup>
                                             <Row className="mb-4">
                                                 <Label className="col-sm-3 col-form-label">
                                                     Show Menu
@@ -303,12 +298,12 @@ console.log("optionPageList",optionPageList)
                                                     options={optionPageList}
                                                     autoComplete='off'
                                                     onChange={(e) => { PageList_SelectOnChangeHandller(e) }}
-                                                   
+
                                                 />
 
                                             </Col>
                                         </Row>
-                                         <AvGroup>
+                                        <AvGroup>
                                             <Row className="mb-4">
                                                 <Label className="col-sm-3 col-form-label">
                                                     IsActive
@@ -321,8 +316,6 @@ console.log("optionPageList",optionPageList)
                                                 </Col>
                                             </Row>
                                         </AvGroup>
-
-                                        
 
                                         <Row className="justify-content-end">
                                             <Col sm={10}></Col>
