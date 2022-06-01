@@ -155,11 +155,11 @@ export default function HPageList() {
                                 <React.Fragment>
                                     <Breadcrumbs
                                         title={"Count :"}
-                                        breadcrumbItem={"H Page List"}
+                                        breadcrumbItem={"Pages List"}
                                         IsButtonVissible={true}
                                         SearchProps={toolkitProps.searchProps}
                                         breadcrumbCount={HPageListData.length}
-                                        RedirctPath={"/Hpage"}
+                                        RedirctPath={"/pagesMaster"}
                                     />
                                     <Row>
                                         <Col xl="12">

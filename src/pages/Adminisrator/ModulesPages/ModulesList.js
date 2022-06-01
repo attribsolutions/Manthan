@@ -183,7 +183,7 @@ const ModulesList = () => {
                                             IsButtonVissible={true}
                                             SearchProps={toolkitProps.searchProps}
                                             breadcrumbCount={TableListData.length}
-                                            RedirctPath={"/moduleMaster"}
+                                            RedirctPath={"/modulesMaster"}
                                         />
                                         <Row>
                                             <Col xl="12">
