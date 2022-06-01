@@ -187,7 +187,7 @@ useEffect(() => {
                                             IsButtonVissible={true}
                                             a={toolkitProps.searchProps}
                                             breadcrumbCount={pages.length}
-                                            RedirctPath={"/AddUser"}
+                                            RedirctPath={"/usersMaster"}
                                         />
                                         <Row>
                                             <Col xl="12">

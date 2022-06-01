@@ -45,7 +45,7 @@ const userRoutes = [
   { path: "/companysMaster", component: CompanyModule },
   { path: "/companysList", component: CompanyList },
 
-  { path: "/HpageList", component: HPageList },
+  { path: "/pagesList", component: HPageList },
   { path: "/pagesMaster", component: HPageMaster },
 
   { path: "/ordersMaster", component: OrderPage },
