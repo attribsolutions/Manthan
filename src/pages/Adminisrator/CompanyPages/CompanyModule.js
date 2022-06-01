@@ -7,7 +7,7 @@ import {
   Row,
   Label,
 } from "reactstrap";
-
+import Select from "react-select";
 import {
   AvForm,
   AvGroup,
@@ -20,6 +20,7 @@ import {
   PostCompanySubmit,
   PostCompanySubmitSuccess,
   updateCompanyID,
+  getCompanyGroup
 } from "../../../store/Administrator/CompanyRedux/actions";
 import { MetaTags } from "react-meta-tags";
 import Breadcrumbs from "../../../components/Common/Breadcrumb";
@@ -30,7 +31,7 @@ const CompanyModule = (props) => {
   const dispatch = useDispatch();
   const [EditData, setEditData] = useState([]);
   const [IsEdit, setIsEdit] = useState(false);
-
+  const [CompanyGroupselect, setCompanyGroup] = useState("");
     //*** "isEditdata get all data from ModuleID for Binding  Form controls
     var editDataGatingFromList = props.state;
 
@@ -57,6 +58,24 @@ const CompanyModule = (props) => {
     }
   }, [SubmitSuccesss.Status]);
 
+  /// CompanyGroupDropDown
+useEffect(() => {
+  dispatch(getCompanyGroup());
+}, [dispatch]);
+
+  const { CompanyGroup } = useSelector((state) => ({
+    CompanyGroup: state.Company.CompanyGroup
+  }));
+  
+  const CompanyGroupValues = CompanyGroup.map((Data) => ({
+    value: Data.ID,
+    label: Data.Name
+  }));
+  
+  function handllerCompanyGroupID(e) {
+    setCompanyGroup(e)
+  }
+  
  //'Save' And 'Update' Button Handller
   const handleValidSubmit = (event, values) => {
 
@@ -68,7 +87,7 @@ const CompanyModule = (props) => {
         PhoneNo: values.PhoneNo,
         CompanyAbbreviation: values.CompanyAbbreviation,
         EmailID: values.EmailID,
-        CompanyGroup: parseInt(values.CompanyGroup),
+        CompanyGroup: CompanyGroupselect.value,
       }),
     };
     if (IsEdit) {
@@ -191,22 +210,18 @@ const CompanyModule = (props) => {
                       </Row>
                     </AvGroup>
 
-                    <AvGroup>
-                      <Row className="mb-4">
-                        <Label className="col-sm-3 col-form-label">
-                          Group Company
-                        </Label>
-                        <Col sm={4}>
-                          <AvField name="CompanyGroup" value={EditData.CompanyGroup} type="text"
-                            placeholder="Please Enter Company Group ID"
-                            autoComplete="off"
-                            validate={{
-                              number: true,
-                              required: { value: true, errorMessage: 'Please Enter Company Group ID' },
-                            }} />
-                        </Col>
-                      </Row>
-                    </AvGroup>
+                    <Row className="mb-4">
+                      <Label className="col-sm-3 col-form-label">
+                      CompanyGroup
+                      </Label>
+                      <Col sm={4}>
+                        <Select
+                          value={CompanyGroupselect}
+                          options={CompanyGroupValues}
+                          onChange={(e) => { handllerCompanyGroupID(e) }}
+                        />
+                      </Col>
+                    </Row>
                     <Row className="justify-content-end">
                       <Col sm={10}></Col>
                       <Col sm={2}>

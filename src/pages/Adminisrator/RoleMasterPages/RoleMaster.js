@@ -43,7 +43,7 @@ const RoleMaster = (props) => {
   useEffect(() => {
     if ((AddUserMessage.Status === true) && (AddUserMessage.StatusCode === 200)) {
         dispatch(PostSuccess({ Status: false }))
-        // formRef.current.reset();
+        formRef.current.reset();
         if (PageMode === true) {
             dispatch(AlertState({
                 Type: 1,
@@ -111,6 +111,7 @@ const RoleMaster = (props) => {
                     onValidSubmit={(e, v) => {
                       handleValidUpdate(e, v);
                     }}
+                    ref={formRef}
                   >
                     <AvGroup>
                       <Row className="mb-4">

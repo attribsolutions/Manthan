@@ -6,6 +6,8 @@ import {
   FETCH_COMPANY_LIST,
   FETCH_COMPANY_LIST_ERROR,
   FETCH_COMPANY_LIST_SUCCESS,
+  GET_COMPANYGROUP,
+  GET_COMPANYGROUP_SUCCESS,
   POST_COMPANY_SUBMIT,
   POST_COMPANY_SUBMIT_SUCCESS,
   UPDATE_COMPANY_ID,
@@ -76,4 +78,14 @@ export const updateCompanyID = (data,id) => ({
 export const updateCompanyIDSuccess = (updateMessage) => ({
   type: UPDATE_COMPANY_ID_SUCCESS,
   payload: updateMessage,
+});
+
+/// CompanyGroup dropdown
+export const getCompanyGroup = () => ({
+  type: GET_COMPANYGROUP,
+ 
+});
+export const getCompanyGroupSuccess = (CompanyGroup) => ({
+  type: GET_COMPANYGROUP_SUCCESS,
+  payload:CompanyGroup,
 });
