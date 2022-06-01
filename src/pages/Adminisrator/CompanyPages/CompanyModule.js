@@ -24,6 +24,7 @@ import {
 } from "../../../store/Administrator/CompanyRedux/actions";
 import { MetaTags } from "react-meta-tags";
 import Breadcrumbs from "../../../components/Common/Breadcrumb";
+import { AlertState } from "../../../store/Utilites/CostumeAlert/actions";
 
 const CompanyModule = (props) => {
 
@@ -32,9 +33,11 @@ const CompanyModule = (props) => {
   const [EditData, setEditData] = useState([]);
   const [IsEdit, setIsEdit] = useState(false);
   const [CompanyGroupselect, setCompanyGroup] = useState("");
-    //*** "isEditdata get all data from ModuleID for Binding  Form controls
-    var editDataGatingFromList = props.state;
-
+  const [PageMode, setPageMode] = useState(false);
+  //*** "isEditdata get all data from ModuleID for Binding  Form controls
+  var editDataGatingFromList = props.state;
+  console.log("editDataGatingFromList from list page", editDataGatingFromList)
+  
   //Access redux store Data /  'save_ModuleSuccess' action data
   const { SubmitSuccesss, } = useSelector((state) => ({
     SubmitSuccesss: state.Company.companySubmitSuccesss,
@@ -46,37 +49,69 @@ const CompanyModule = (props) => {
     if (!(editDataGatingFromList === undefined)) {
       setEditData(editDataGatingFromList);
       setIsEdit(true);
+      setCompanyGroup({
+        value: editDataGatingFromList.CompanyGroup.ID,
+        label: editDataGatingFromList.CompanyGroup.Name
+      })
       dispatch(editCompanyIDSuccess({ Status: false }))
 
     }
   }, [editDataGatingFromList]);
 
+
   useEffect(() => {
-    if ((SubmitSuccesss.Status === true)) {
+    if ((SubmitSuccesss.Status === true) && (SubmitSuccesss.StatusCode === 200)) {
       dispatch(PostCompanySubmitSuccess({ Status: false }))
       formRef.current.reset();
+      if (PageMode === true) {
+        dispatch(AlertState({
+          Type: 1,
+          Status: true,
+          Message: SubmitSuccesss.Message,
+        }))
+      }
+      else {
+        dispatch(AlertState({
+          Type: 1,
+          Status: true,
+          Message: SubmitSuccesss.Message,
+          RedirectPath: '/CompanyList',
+          AfterResponseAction: false
+        }))
+      }
     }
-  }, [SubmitSuccesss.Status]);
+    else if (SubmitSuccesss.Status === true) {
+
+      dispatch(AlertState({
+        Type: 4,
+        Status: true,
+        Message: "error Message",
+        RedirectPath: false,
+        AfterResponseAction: false
+      }));
+    }
+  }, [SubmitSuccesss.Status])
+
 
   /// CompanyGroupDropDown
-useEffect(() => {
-  dispatch(getCompanyGroup());
-}, [dispatch]);
+  useEffect(() => {
+    dispatch(getCompanyGroup());
+  }, [dispatch]);
 
   const { CompanyGroup } = useSelector((state) => ({
     CompanyGroup: state.Company.CompanyGroup
   }));
-  
+
   const CompanyGroupValues = CompanyGroup.map((Data) => ({
     value: Data.ID,
     label: Data.Name
   }));
-  
+
   function handllerCompanyGroupID(e) {
     setCompanyGroup(e)
   }
-  
- //'Save' And 'Update' Button Handller
+
+  //'Save' And 'Update' Button Handller
   const handleValidSubmit = (event, values) => {
 
     const requestOptions = {
@@ -212,7 +247,7 @@ useEffect(() => {
 
                     <Row className="mb-4">
                       <Label className="col-sm-3 col-form-label">
-                      CompanyGroup
+                        CompanyGroup
                       </Label>
                       <Col sm={4}>
                         <Select

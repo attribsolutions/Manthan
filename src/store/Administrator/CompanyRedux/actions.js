@@ -60,16 +60,10 @@ export const deleteCompanyID = (id) => ({
   type: DELETE_COMPANY_ID,
   id,
 });
-export const deleteCompanyIDSuccess = (deleteCompanyIDSuccess) => ({
+export const deleteCompanyIDSuccess = (deleteCompanyID) => ({
   type:DELETE_COMPANY_ID_SUCCESS,
-  payload: deleteCompanyIDSuccess,
+  payload: deleteCompanyID,
 });
-// export const deleteModuleIDError = (deleteModuleIDError) => ({
-//   type: DELETE_MODULE_ID_ERROR,
-//   payload: deleteModuleIDError,
-// });
-
-
 
 export const updateCompanyID = (data,id) => ({
   type: UPDATE_COMPANY_ID,
