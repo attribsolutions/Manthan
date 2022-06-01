@@ -5,7 +5,7 @@ import {
     Modal,
     Row,
 } from "reactstrap";
-import { deleteCompanyID, editCompanyID,fetchCompanyList, updateCompanyIDSuccess, } from "../../../store/Administrator/CompanyRedux/actions";
+import { deleteCompany_ID, editCompanyID, fetchCompanyList, updateCompanyIDSuccess, deleteCompanyIDSuccess, editCompanyIDSuccess } from "../../../store/Administrator/CompanyRedux/actions";
 import Breadcrumbs from "../../../components/Common/Breadcrumb";
 
 import paginationFactory, {
@@ -27,11 +27,11 @@ const CompanyList = () => {
     const [modal_center, setmodal_center] = useState(false);
 
     // get Access redux data
-    const { companyList, editData, updateMessage } = useSelector((state) => ({
+    const { companyList, editData, updateMessage, deleteCompanyID } = useSelector((state) => ({
         companyList: state.Company.companyList,
         editData: state.Company.editData,
         updateMessage: state.Company.updateMessage,
-
+        deleteCompanyID: state.Company.deleteCompanyID,
     }));
 
     // tag_center -- Control the Edit Modal show and close
@@ -44,34 +44,64 @@ const CompanyList = () => {
         dispatch(fetchCompanyList());
     }, []);
 
-    // Edit Modal Show and Hide Control whwn Update Success
+    // This UseEffect => UpadateModal Success/Unsucces  Show and Hide Control Alert_modal 
     useEffect(() => {
-        if (updateMessage.Status === true) {
-            dispatch(updateCompanyIDSuccess({ Status: false }));
+        if ((updateMessage.Status === true) && (updateMessage.StatusCode === 200)) {
+            dispatch(updateCompanyIDSuccess({ Status: false }))
+            dispatch(AlertState({
+                Type: 1, Status: true,
+                Message: updateMessage.Message,
+                AfterResponseAction: fetchCompanyList,
+            }))
             tog_center()
         }
-    }, [updateMessage.Status,dispatch]);
+        else if (deleteCompanyID.Status === true) {
+            dispatch(AlertState({
+                Type: 3, Status: true,
+                Message: deleteCompanyID.Message,
+            }));
+        }
+    }, [updateMessage.Status, dispatch]);
+
+    useEffect(() => {
+        if ((deleteCompanyID.Status === true) && (deleteCompanyID.StatusCode === 200)) {
+            dispatch(deleteCompanyIDSuccess({ Status: false }))
+            dispatch(AlertState({
+                Type: 1, Status: true,
+                Message: deleteCompanyID.Message,
+                AfterResponseAction: fetchCompanyList,
+            }))
+        } else if (deleteCompanyID.Status === true) {
+            dispatch(AlertState({
+                Type: 3,
+                Status: true,
+                Message: "error Message",
+            }));
+        }
+    }, [deleteCompanyID.Status])
 
     // Edit Modal Show When Edit Data is true
     useEffect(() => {
         if (editData.Status === true) {
-           tog_center()
+            tog_center()
         }
     }, [editData]);
+    console.log("editData", editData)
 
     // Edit button Handller
     const EditPageHandler = (id) => {
+
         dispatch(editCompanyID(id));
     }
 
     //Delete Button Handller
     const deleteHandeler = (id, name) => {
-        debugger
+
         dispatch(AlertState({
             Type: 5, Status: true,
             Message: `Are you sure you want to delete this item : "${name}"`,
             RedirectPath: false,
-            PermissionAction: deleteCompanyID,
+            PermissionAction: deleteCompany_ID,
             ID: id
         }));
     }
@@ -166,7 +196,7 @@ const CompanyList = () => {
                                         IsButtonVissible={true}
                                         SearchProps={toolkitProps.searchProps}
                                         breadcrumbCount={companyList.length}
-                                        RedirctPath={"/company"}
+                                        RedirctPath={"/companysMaster"}
                                     />
                                     <Row>
                                         <Col xl="12">
