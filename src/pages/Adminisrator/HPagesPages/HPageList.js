@@ -85,13 +85,11 @@ export default function HPageList() {
             text: "Description",
             dataField: "Description",
             sort: true,
-
         },
         {
-            text: "Module ID",
-            dataField: "ModuleID",
+            text: "Module Name",
+            dataField: "ModuleName",
             sort: true,
-
         },
         // {
         //     text: "Sub ModuleID",
