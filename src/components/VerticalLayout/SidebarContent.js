@@ -128,7 +128,7 @@ const SidebarContent = (props) => {
                     {item.ModuleData.map((i, j) => {
                       return (
                         <li>
-                          <Link id={j} to={i.ActualPagePath}>{props.t(i.Name)}</Link>
+                          <Link to={i.ActualPagePath}>{props.t(i.Name)}</Link>
                         </li>
                       )
                     })}
@@ -136,87 +136,20 @@ const SidebarContent = (props) => {
                 </li>
               )
             })}
+            <li>
+              <Link to={"/RolesMaster"}>{props.t('Roles Master')}</Link>
+            </li>
+            <li>
+              <Link to={'/RolesList'}>{props.t('Roles List')}</Link>
+            </li>
+            <li>
+              <Link to={'/validationTest'}>{props.t('validationTest')}</Link>
+            </li>
           </ul>
         </div>
       </SimpleBar>
     </React.Fragment>
   );
-  // return (
-  //   <React.Fragment>
-  //     <SimpleBar style={{ maxHeight: "100%" }} ref={ref}>
-  //       <div id="sidebar-menu">
-  //         <ul className="metismenu list-unstyled" id="side-menu">
-  //           <li className="menu-title">{props.t("Menu")} </li>
-  //           <li>
-  //             <Link to="/dashboard" className="">
-  //               <FeatherIcon icon="home" />
-  //               <span>{props.t("Dashboard")}</span>
-  //             </Link>
-  //           </li>
-  //           <li>
-  //             <Link to="/#" className="has-arrow">
-  //               <FeatherIcon icon="grid" />
-  //               <span>{props.t("Apps")}</span>
-  //             </Link>
-  //             <ul className="sub-menu">
-  //               <li>
-  //                 <Link to="/modulesMaster">{props.t("ModulesMaster")}</Link>
-  //               </li>
-  //               <li>
-  //                 <Link to="/modulesList">{props.t("Modules List")}</Link>
-  //               </li>
-  //               <li>
-  //                 <Link to="/companysMaster">{props.t("Company")}</Link>
-  //               </li>
-  //               <li>
-  //                 <Link to="/companyList">{props.t("CompanyList")}</Link>
-  //               </li>
-  //               <li>
-  //                 <Link to="/SubModulesMaster">{props.t("SubModules")}</Link>
-  //               </li>
-  //               <li>
-  //                 <Link to="/SubModulesList">{props.t("SubModulesList")}</Link>
-  //               </li>
-  //               <li>
-  //                 <Link to="/pagesMaster">{props.t("Hpage")}</Link>
-  //               </li>
-  //               <li>
-  //                 <Link to="/HpageList">{props.t("Hpage List")}</Link>
-  //               </li>
-
-  //               <li>
-  //                 <Link to="/ordersMaster">{props.t("Orders")}</Link>
-  //               </li>
-  //               <li>
-  //                 <Link to="/UsersMaster">{props.t("AddUser")}</Link>
-  //               </li>
-
-  //               <li>
-  //                 <Link to="/UsersList">{props.t("UserList")}</Link>
-  //               </li>
-
-  //               <li>
-  //                 <Link to="/EmployeesMaster">{props.t("AddEmployee")}</Link>
-  //               </li>
-
-  //               <li>
-  //                 <Link to="/EmployeesList">{props.t("Employee_List")}</Link>
-  //               </li>
-
-  //               <li>
-  //                 <Link to="/RolesMaster">{props.t("Role Master")}</Link>
-  //               </li>
-
-  //               <li>
-  //                 <Link to="/RolesList">{props.t("RoleList")}</Link>
-  //               </li>
-  //             </ul>
-  //           </li>
-  //         </ul>
-  //       </div>
-  //     </SimpleBar>
-  //   </React.Fragment>
-  // );
 };
 
 SidebarContent.propTypes = {

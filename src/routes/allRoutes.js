@@ -28,6 +28,7 @@ import RoleMaster from "../pages/Adminisrator/RoleMasterPages/RoleMaster";
 import RoleList from "../pages/Adminisrator/RoleMasterPages/RoleList"
 import Error404 from "../pages/Utility/Error404";
 import Error500 from "../pages/Utility/Error500";
+import ValidationTest from "../pages/Purchase/Orders/ValidationTest";
 
 const userRoutes = [
 
@@ -59,6 +60,9 @@ const userRoutes = [
 
   { path: "/rolesMaster", component: RoleMaster },
   { path: "/rolesList", component: RoleList },
+
+  { path: "/validationTest", component: ValidationTest },
+
 
   // this route should be at the end of all other routes
   { path: "/", exact: true, component: () => <Redirect to="/dashboard" /> },
