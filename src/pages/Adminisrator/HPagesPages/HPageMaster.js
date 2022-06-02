@@ -42,8 +42,8 @@ const HPageMaster = (props) => {
     // const [selectSubModule, setSelectSubModule] = useState('');
     const [IsEdit, setIsEdit] = useState(false);
     const [EditData, setEditData] = useState([]);
- var ModuleData=[]
-    const { ModuleData1, SubModuleData, SaveMessage, PageList } = useSelector((state) => ({
+
+    const { ModuleData, SubModuleData, SaveMessage, PageList } = useSelector((state) => ({
         ModuleData: state.Modules.modulesList,
         SubModuleData: state.H_Pages.SubModulesData,
         SaveMessage: state.H_Pages.saveMessage,

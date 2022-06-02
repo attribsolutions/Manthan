@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import Breadcrumbs from "../../../components/Common/Breadcrumb";
-import { Col, Modal,Row} from "reactstrap";
+import { Col, Modal, Row } from "reactstrap";
 import {
     getRole,
     deleteRole,
@@ -11,7 +11,8 @@ import {
 
 import paginationFactory, {
     PaginationListStandalone,
-    PaginationProvider,} from "react-bootstrap-table2-paginator";
+    PaginationProvider,
+} from "react-bootstrap-table2-paginator";
 import ToolkitProvider, { Search } from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 import { useSelector, useDispatch } from "react-redux";
@@ -24,14 +25,14 @@ const RoleList = () => {
     const [modal_center, setmodal_center] = useState(false);
 
     // get Access redux data
-    const { TableListData, editData, updateMessage,deleteMessage } = useSelector((state) => ({
+    const { TableListData, editData, updateMessage, deleteMessage } = useSelector((state) => ({
         TableListData: state.RoleMaster_Reducer.pages,
         editData: state.RoleMaster_Reducer.editData,
         updateMessage: state.RoleMaster_Reducer.updateMessage,
-        deleteMessage:state.RoleMaster_Reducer.deleteMessage,
+        deleteMessage: state.RoleMaster_Reducer.deleteMessage,
     }));
 
- //  This UseEffect => Featch Modules List data  First Rendering
+    //  This UseEffect => Featch Modules List data  First Rendering
     useEffect(() => {
         dispatch(getRole());
     }, []);
@@ -46,8 +47,9 @@ const RoleList = () => {
                 AfterResponseAction: getRole,
             }))
             tog_center()
-        } 
+        }
         else if (deleteMessage.Status === true) {
+            dispatch(updateSuccess({ Status: false }))
             dispatch(AlertState({
                 Type: 3, Status: true,
                 Message: deleteMessage.Message,
@@ -64,6 +66,7 @@ const RoleList = () => {
                 AfterResponseAction: getRole,
             }))
         } else if (deleteMessage.Status === true) {
+            dispatch(deleteSuccess({ Status: false }))
             dispatch(AlertState({
                 Type: 3,
                 Status: true,
@@ -83,8 +86,8 @@ const RoleList = () => {
         setmodal_center(!modal_center)
     }
 
-     //select id for delete row
-     const deleteHandeler = (id, name) => {
+    //select id for delete row
+    const deleteHandeler = (id, name) => {
         dispatch(AlertState({
             Type: 5, Status: true,
             Message: `Are you sure you want to delete this item : "${name}"`,

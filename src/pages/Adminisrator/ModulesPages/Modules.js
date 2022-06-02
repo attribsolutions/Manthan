@@ -48,7 +48,7 @@ const Modules = (props) => {
     useEffect(() => {
         document.getElementById("txtName").focus();
         if (!(editDataGatingFromList === undefined)) {
-            setEditData(editDataGatingFromList);
+            setEditData(editDataGatingFromList[0]);
             setIsEdit(true);
             dispatch(editModuleIDSuccess({ Status: false }))
             return
@@ -81,10 +81,11 @@ const Modules = (props) => {
                 }))
             }
         } else if (APIResponse.Status === true) {
+            dispatch(PostModelsSubmitSuccess({ Status: false }))
             dispatch(AlertState({
                 Type: 4,
                 Status: true,
-                Message: "error Message",
+                Message: JSON.stringify(APIResponse.Message),
                 RedirectPath: false,
                 AfterResponseAction: false
             }));
@@ -138,7 +139,6 @@ const Modules = (props) => {
                                                 <Col sm={4}>
                                                     <AvField name="Name" id="txtName" value={EditData.Name}
                                                         type="text"
-                                                        // ref={emailInputRef}
                                                         placeholder="Please Enter Name"
                                                         autoComplete='off' validate={{
                                                             required: { value: true, errorMessage: 'Please enter a Name' },

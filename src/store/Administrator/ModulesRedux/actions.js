@@ -30,9 +30,8 @@ export const PostModelsSubmitError = (modulesSubmitError) => ({
 });
 
 // Fetch Modules get Data Actions 
-export const fetchModelsList = (data) => ({
+export const fetchModelsList = () => ({
   type: FETCH_MODULES_LIST,
-  data,
 });
 export const fetchModelsListSuccess = (modulesList) => ({
   type: FETCH_MODULES_LIST_SUCCESS,

@@ -48,6 +48,7 @@ const ModulesList = () => {
             }))
             tog_center()
         } else if (deleteAPIResponse.Status === true) {
+            dispatch(updateModuleIDSuccess({ Status: false }))
             dispatch(AlertState({
                 Type: 3, Status: true,
                 Message: deleteAPIResponse.Message,
@@ -65,6 +66,7 @@ const ModulesList = () => {
                 AfterResponseAction: fetchModelsList,
             }))
         } else if (deleteAPIResponse.Status === true) {
+            dispatch(deleteModuleIDSuccess({ Status: false }))
             dispatch(AlertState({
                 Type: 3,
                 Status: true,
