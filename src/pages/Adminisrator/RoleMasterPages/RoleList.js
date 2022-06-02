@@ -98,7 +98,7 @@ const RoleList = () => {
     }
     // edit Buutton Handller 
     const EditPageHandler = (id) => {
-        dispatch(editRoleId(id));
+     dispatch(editRoleId(id));
     }
 
     const pageOptions = {
