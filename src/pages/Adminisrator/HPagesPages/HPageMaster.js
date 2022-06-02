@@ -22,7 +22,10 @@ import {
     saveHPages,
     saveHPagesSuccess,
     updateHPages
-} from "../../../store/Administrator/HPagesRedux/actions";
+} from "../../../store/Administrator/HPagesRedux/actions"; 
+import {
+    getEmployee
+} from "../../../store/Administrator/UserRegistrationRedux/actions";
 import { fetchModelsList } from "../../../store/Administrator/ModulesRedux/actions";
 import { MetaTags } from "react-meta-tags";
 
@@ -39,8 +42,8 @@ const HPageMaster = (props) => {
     // const [selectSubModule, setSelectSubModule] = useState('');
     const [IsEdit, setIsEdit] = useState(false);
     const [EditData, setEditData] = useState([]);
-
-    const { ModuleData, SubModuleData, SaveMessage, PageList } = useSelector((state) => ({
+ var ModuleData=[]
+    const { ModuleData1, SubModuleData, SaveMessage, PageList } = useSelector((state) => ({
         ModuleData: state.Modules.modulesList,
         SubModuleData: state.H_Pages.SubModulesData,
         SaveMessage: state.H_Pages.saveMessage,
@@ -50,7 +53,8 @@ const HPageMaster = (props) => {
     console.log("PageList FROM H PAGES", PageList)
 
     useEffect(() => {
-        dispatch(fetchModelsList())
+        dispatch(fetchModelsList())   
+        //  dispatch(getEmployee());
         document.getElementById("txtName").focus();
 
         if (!(editDataGatingFromList === undefined)) {

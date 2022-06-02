@@ -8,6 +8,7 @@ import { getEmployee, getRoles, addUser, updateID }
 import Breadcrumbs from "../../../components/Common/Breadcrumb";
 import AvField from "availity-reactstrap-validation/lib/AvField";
 import { AlertState } from "../../../store/Utilites/CostumeAlert/actions";
+import { fetchModelsList } from "../../../store/Administrator/ModulesRedux/actions";
 
 
 const AddUser = (props) => {
@@ -66,7 +67,7 @@ const AddUser = (props) => {
   }
 
   useEffect(() => {
-    dispatch(getRoles());
+    dispatch(fetchModelsList());
   }, [dispatch]);
 
   const { Roles } = useSelector((state) => ({
