@@ -48,8 +48,6 @@ const HPageMaster = (props) => {
         SubModuleData: state.H_Pages.SubModulesData,
         SaveMessage: state.H_Pages.saveMessage,
         PageList: state.H_Pages.PageList,
-
-        
     }));
     console.log("PageList FROM H PAGES", PageList)
 

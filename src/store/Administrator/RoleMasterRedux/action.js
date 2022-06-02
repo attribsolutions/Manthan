@@ -44,9 +44,9 @@ export const postRole = (Data,id) => ({
   });
   
   // edit api
-  export const editRoleId =(id)=>({
+  export const editRoleId =(ID)=>({
     type:EDIT_ROLE,
-  id,
+    ID,
   })
   export const editSuccess =(editData)=>({
     type:EDIT_SUCCESS,
