@@ -65,7 +65,6 @@ const CompanyList = () => {
 
     useEffect(() => {
         if ((deleteCompanyID.Status === true) && (deleteCompanyID.StatusCode === 200)) {
-            dispatch(deleteCompanyIDSuccess({ Status: false }))
             dispatch(AlertState({
                 Type: 1, Status: true,
                 Message: deleteCompanyID.Message,
@@ -86,17 +85,14 @@ const CompanyList = () => {
             tog_center()
         }
     }, [editData]);
-    console.log("editData", editData)
 
     // Edit button Handller
     const EditPageHandler = (id) => {
-
         dispatch(editCompanyID(id));
     }
 
     //Delete Button Handller
     const deleteHandeler = (id, name) => {
-
         dispatch(AlertState({
             Type: 5, Status: true,
             Message: `Are you sure you want to delete this item : "${name}"`,
@@ -172,6 +168,7 @@ const CompanyList = () => {
             ),
         },
     ];
+
     return (
         <React.Fragment>
             <div className="page-content">

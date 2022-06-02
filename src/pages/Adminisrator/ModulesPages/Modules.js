@@ -77,7 +77,7 @@ const Modules = (props) => {
                     Status: true,
                     Message: APIResponse.Message,
                     RedirectPath: '/modulesList',
-                    AfterResponseAction: false
+                   
                 }))
             }
         } else if (APIResponse.Status === true) {
@@ -85,8 +85,7 @@ const Modules = (props) => {
                 Type: 4,
                 Status: true,
                 Message: "error Message",
-                RedirectPath: false,
-                AfterResponseAction: false
+            
             }));
         }
     }, [APIResponse.Status])
