@@ -122,7 +122,7 @@ const SidebarContent = (props) => {
                 <li >
                   <Link to="/#" className="has-arrow">
                     <FeatherIcon icon="grid" />
-                    <span>{props.t("Apps")}</span>    {/* change Module Name */}
+                    <span>{props.t(item.ModuleName)}</span>    {/* change Module Name */}
                   </Link>
                   <ul className="sub-menu">
                     {item.ModuleData.map((i, j) => {
