@@ -33,6 +33,7 @@ const CompanyList = () => {
         updateMessage: state.Company.updateMessage,
         deleteCompanyID: state.Company.deleteCompanyID,
     }));
+    console.log("editData in useselector",editData)
 
     // tag_center -- Control the Edit Modal show and close
     function tog_center() {

@@ -1,8 +1,10 @@
 import { call, put, takeEvery } from "redux-saga/effects";
 import {
+  deleteModuleIDSuccess,
   editHPagesIDSuccess,
   GetHpageListData,
   GetHpageListDataSuccess,
+  getH_ModulesSuccess,
   getH_SubModulesSuccess,
   getPageListSuccess,
   getPageTypeSuccess,
@@ -16,6 +18,7 @@ import {
   edit_HPageID,
   Fetch_HPagesListApi,
   get_H_SubModule_HPages,
+  get_Module_HPages,
   saveHPagesAPI,
   updateHPages
 } from "../../../helpers/backend_helper";
@@ -31,123 +34,95 @@ import {
 import PageListDropdownData from "./PageListData";
 
 
+// function* fetchHPagesList_GneratorFunction() {
+//   // yield put(SpinnerState(true))
+//   try {
+//     const response = yield call(Fetch_HPagesListApi,put);
+//     yield put(SpinnerState(false))
+//     yield put(GetHpageListDataSuccess(response.Data));
+//   } catch (error) {
+//     // yield put(SpinnerState(false))
+//     yield put(AlertState({ Type: 3, Status: true, Message: "Network error Message", RedirectPath: false, AfterResponseAction: false }));
+//   }
+// }
+
 function* fetchHPagesList_GneratorFunction() {
-  // yield put(SpinnerState(true))
+  yield put(SpinnerState(true))
   try {
-    const response = yield call(Fetch_HPagesListApi,put);
-    console.log(response, "fetchHPagesList_GneratorFunction")
-    yield put(SpinnerState(false))
+    const response = yield call(Fetch_HPagesListApi);
     yield put(GetHpageListDataSuccess(response.Data));
+    yield put(SpinnerState(false))
   } catch (error) {
-    console.log(" error fetchHPagesList_GneratorFunction", error)
-    // yield put(SpinnerState(false))
-    yield put(AlertState({ Type: 3, Status: true, Message: "Network error Message", RedirectPath: false, AfterResponseAction: false }));
+    yield put(SpinnerState(false))
+    yield put(AlertState({ Type: 4, 
+      Status: true, Message: "500 Error Message",
+    }));
   }
 }
+
 function* GetH_Sub_Modules({ id }) {
   try {
-    const response = yield call(get_H_SubModule_HPages, id);
-    yield put(getH_SubModulesSuccess(response.Data))
+    const response = yield call(get_Module_HPages, id);
+    yield put(getH_ModulesSuccess(response.Data))
   } catch (error) {
     yield put(AlertState({ Type: 3, Status: true, Message: " GetH_Sub_Modules Network error Message", RedirectPath: false, AfterResponseAction: false }));
   }
 }
 
 function* saveHPageSaga_GneratorFunction({ data }) {
-  debugger
   yield put(SpinnerState(true))
   try {
     const response = yield call(saveHPagesAPI, data);
-    yield put(SpinnerState(false));
-    if (response.StatusCode === 200) {
-      // yield put(saveHPagesSuccess({ Status: true }));
-      debugger
-      yield put(AlertState({ Type: 1, Status: true, Message: response.Message, RedirectPath: '/HpageList', AfterResponseAction: false }));
-    } else {
-      yield put(AlertState({ Type: 3, Status: true, Message: " save HPageSaga error ", RedirectPath: false, AfterResponseAction: false }));
-    }
+    yield put(SpinnerState(false))
+    yield put(saveHPagesSuccess(response));
+    console.log("response",response)
   } catch (error) {
     yield put(SpinnerState(false))
-    yield put(AlertState({ Type: 3, Status: true, Message: "Network error Message", RedirectPath: false, AfterResponseAction: false }));
-
+    yield put(AlertState({ Type: 4, 
+      Status: true, Message: "500 Error Message",
+    }));
   }
 }
+
 function* editHpages_ID({ id }) {
   try {
     const response = yield call(edit_HPageID, id);
     yield put(editHPagesIDSuccess(response));
-    yield put(editHPagesIDSuccess({ status: 'false' }));
   } catch (error) {
-    yield console.log("editHpages_ID  saga page error ***  :", error);
+    yield put(AlertState({ Type: 4, 
+      Status: true, Message: "500 Error Message",
+    }));
   }
 }
+
 function* update_HPagesUsingID_GenratorFunction({ data, id }) {
-
-  yield put(SpinnerState(true))
-
   try {
+    yield put(SpinnerState(true))
     const response = yield call(updateHPages, data, id);
     yield put(SpinnerState(false))
-    console.log("response", response)
-    if (response.StatusCode === 200) {
-      yield put(updateHPagesSuccess({ Status: true }));
-      yield put(AlertState({
-        Type: 1, Status: true,
-        Message: response.Message,
-        RedirectPath: false,
-        AfterResponseAction: GetHpageListData,
-      }))
-    }
-    else {
-      yield put(AlertState({
-        Type: 3, Status: true,
-        Message: response.Message,
-        RedirectPath: false,
-        AfterResponseAction: false
-      }));
-    }
-
-  } catch (error) {
+    yield put(updateHPagesSuccess(response))
+  }
+    catch (error) {
     yield put(SpinnerState(false))
-    yield put(AlertState({
-      Type: 3, Status: true,
-      Message: "network Error",
-      RedirectPath: false,
-      AfterResponseAction: false
+    yield put(AlertState({ Type: 4, 
+      Status: true, Message: "500 Error Message",
     }));
-    console.log("update_Company  saga page error ***  :", error);
   }
 }
 
 function* deleteHpagesUsingID_GenratorFunction({ id }) {
-  debugger
-  yield put(SpinnerState(true))
   try {
+    yield put(SpinnerState(true))
     const response = yield call(deletHPagesUsingID_API, id);
     yield put(SpinnerState(false))
-
-    if (response.StatusCode === 200) {
-      yield put(AlertState({
-        Type: 1, Status: true,
-        Message: response.Message,
-        RedirectPath: false,
-        AfterResponseAction: GetHpageListData,
-      }))
-    }
-    else {
-      yield put(AlertState({
-        Type: 3, Status: true,
-        Message: " save HPageSaga error ",
-        RedirectPath: false,
-        AfterResponseAction: false
-      }));
-    }
+    yield put(deleteModuleIDSuccess(response))
   } catch (error) {
     yield put(SpinnerState(false))
-    console.log("deleteCompany_ID  saga page error ***  :", error);
+    yield put(AlertState({ Type: 4, 
+      Status: true, Message: "500 Error Message",
+    }));
   }
 }
-
 //  PageType dropdown list
 function* PageList_DropDown_GenratorFunction() {
   try {

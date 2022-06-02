@@ -1,5 +1,10 @@
+import { DELETE_MODULE_ID_SUCCESS } from "../ModulesRedux/actionType";
 import {
-  DELETE_HPAGES_USING_ID, EDIT_H_PAGES_ID, EDIT_H_PAGES_ID_SUCCESS, EDIT_SUBMODULE_ID, EDIT_SUBMODULE_ID_SUCCESS, GET_HPAGES_LIST_DATA, GET_HPAGES_LIST_DATA_SUCCESS, GET_H_MODULES,
+  DELETE_HPAGES_USING_ID,
+  DELETE_H_MODULE_ID_SUCCESS,
+  EDIT_H_PAGES_ID, EDIT_H_PAGES_ID_SUCCESS,
+  GET_HPAGES_LIST_DATA,
+  GET_HPAGES_LIST_DATA_SUCCESS, GET_H_MODULES,
   GET_H_MODULES_SUCCESS,
   GET_H_SUB_MODULES,
   GET_H_SUB_MODULES_SUCCESS,
@@ -7,8 +12,6 @@ import {
   SAVE_HPAGES_SUCCESS,
   UPDATE_H_PAGES,
   UPDATE_H_PAGES_SUCCESS,
-  GET_PAGETYPE,
-  GET_PAGETYPE_SUCCESS,
   GET_PAGELIST,
   GET_PAGELIST_SUCCESS
 } from "./actionType";
@@ -21,6 +24,7 @@ export const getH_ModulesSuccess = (data) => ({
   type: GET_H_MODULES_SUCCESS,
   payload: data,
 });
+
 export const getH_SubModules = (id) => ({
   type: GET_H_SUB_MODULES,
   id,
@@ -59,10 +63,10 @@ export const deleteHpagesUsingID = (id) => ({
   type: DELETE_HPAGES_USING_ID,
   id,
 });
-// export const deleteModuleIDError = (deleteModuleIDError) => ({
-//   type: DELETE_MODULE_ID_ERROR,
-//   payload: deleteModuleIDError,
-// });
+export const deleteModuleIDSuccess = (deleteModuleID) => ({
+  type: DELETE_H_MODULE_ID_SUCCESS  ,
+  payload: deleteModuleID,
+});
 
 
 //Edit Modules Using Id
@@ -70,9 +74,9 @@ export const editHPagesID = (id) => ({
   type: EDIT_H_PAGES_ID,
   id,
 });
-export const editHPagesIDSuccess = (data) => ({
+export const editHPagesIDSuccess = (editData) => ({
   type: EDIT_H_PAGES_ID_SUCCESS,
-  payload: data,
+  payload: editData,
 });
 
 export const updateHPages = (data, id) => ({
@@ -89,9 +93,9 @@ export const updateHPagesSuccess = (data) => ({
 // PageList dropdown api 
 export const getPageList = (id) => ({
   type: GET_PAGELIST,
- id,
+  id,
 });
 export const getPageListSuccess = (data) => ({
   type: GET_PAGELIST_SUCCESS,
-  payload:data,
+  payload: data,
 });

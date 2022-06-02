@@ -16,35 +16,62 @@ export default function HPageList() {
     const [modal_center, setmodal_center] = useState(false);
 
     // var HPageListData = [];
-    const { HPageListData, editData, updateMessage } = useSelector((state) => ({
+    const { HPageListData, editData, updateMessage, deleteModuleID } = useSelector((state) => ({
         HPageListData: state.H_Pages.HPagesListData,
         editData: state.H_Pages.editData,
         updateMessage: state.H_Pages.updateMessage,
+        deleteModuleID: state.H_Pages.deleteModuleID,
     }));
-    console.log("editData", editData)
+   
     useEffect(() => {
         dispatch(dispatch(GetHpageListData()))
     }, []);
 
+    function tog_center() {
+        setmodal_center(!modal_center)
+    }
+
+    useEffect(() => {
+        if ((updateMessage.Status === true) && (updateMessage.StatusCode === 200)) {
+            dispatch(updateHPagesSuccess({ Status: false }))
+            dispatch(AlertState({
+                Type: 1, Status: true,
+                Message: updateMessage.Message,
+                AfterResponseAction: GetHpageListData,
+            }))
+            tog_center()
+        }
+        else if (deleteModuleID.Status === true) {
+            dispatch(AlertState({
+                Type: 3, Status: true,
+                Message: deleteModuleID.Message,
+            }));
+        }
+    }, [updateMessage.Status, dispatch]);
+
+
+    useEffect(() => {
+        if ((deleteModuleID.Status === true) && (deleteModuleID.StatusCode === 200)) {
+            dispatch(AlertState({
+                Type: 1, Status: true,
+                Message: deleteModuleID.Message,
+                AfterResponseAction: GetHpageListData,
+            }))
+        } else if (deleteModuleID.Status === true) {
+            dispatch(AlertState({
+                Type: 3,
+                Status: true,
+                Message: "error Message",
+            }));
+        }
+    }, [deleteModuleID.Status])
+
     useEffect(() => {
         if (editData.Status === true) {
-            setmodal_center(true)
+            tog_center()
         };
-
     }, [editData]);
 
-    useEffect(() => {
-        if (updateMessage.Status === true) {
-            setmodal_center(false)
-            dispatch(updateHPagesSuccess({ Status: false }))
-        }
-    }, [updateMessage]);
-
-
-    function tog_center() {
-        setmodal_center(false)
-        dispatch(updateHPagesSuccess({ Status: false }))
-    }
     const EditPageHandler = (id) => {
         dispatch(editHPagesID(id));
     }

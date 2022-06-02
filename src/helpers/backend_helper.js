@@ -161,7 +161,7 @@ export const getSubModulesEditDataUsingID_ApiCall = (id) => get(`${url.H_SUB_MOD
 export const putUpdateSubModule = (Data, id) => put(`${url.H_SUB_MODULES_API_URL}/${id}`, Data)/// update api
 
 //H_pages
-export const get_H_SubModule_HPages = (id) => get(`${url.H_SUB_MODULES_FROM_HPAGES}/${id}`)// Get subModule For H_pages
+export const get_Module_HPages = (id) => get(`${url.H_MODULES_API_URL}/${id}`)// Get subModule For H_pages
 export const Fetch_HPagesListApi = () => get(url.H_PAGES_API_URL)//get H_Pages List 
 export const edit_HPageID = (id) => get(`${url.H_PAGES_API_URL}/${id}`)// get edit H_Pages ID Data 
 export const updateHPages = (Data, id) => put(`${url.H_PAGES_API_URL}/${id}`, Data) // Upadate H_Page api
