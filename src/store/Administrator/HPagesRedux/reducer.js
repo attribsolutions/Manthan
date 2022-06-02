@@ -1,4 +1,5 @@
 import {
+  DELETE_H_MODULE_ID_SUCCESS,
   EDIT_H_PAGES_ID_SUCCESS,
   GET_HPAGES_LIST_DATA_SUCCESS,
   GET_H_MODULES_SUCCESS,
@@ -12,9 +13,9 @@ const INIT_STATE = {
   modulesData: [],
   SubModulesData: [],
   HPagesListData: [],
-  saveMessage: [],
+  saveMessage: { Status: false },
   // modulesListError: {},
-  // deleteModuleIDSuccess: { Status: 'false' },
+  deleteModuleID: { Status: false },
   // deleteModuleIDError: {},
   editData: { Status: false },
   updateMessage: { Status: false },
@@ -55,11 +56,11 @@ const H_Pages = (state = INIT_STATE, action) => {
         ...state,
         saveMessage: action.payload,
       }
-    // case DELETE_MODULE_ID_SUCCESS:
-    //   return {
-    //     ...state,
-    //     deleteModuleIDSuccess: action.payload,
-    //   }
+    case DELETE_H_MODULE_ID_SUCCESS:
+      return {
+        ...state,
+        deleteModuleID: action.payload,
+      }
     // case DELETE_MODULE_ID_ERROR:
     //   return {
     //     ...state,

@@ -17,65 +17,89 @@ import { useDispatch, useSelector } from "react-redux";
 import AvField from "availity-reactstrap-validation/lib/AvField";
 import ReactSelect from "react-select";
 import {
+    editHPagesIDSuccess,
     getH_SubModules,
     getPageList,
     saveHPages,
     saveHPagesSuccess,
     updateHPages
-} from "../../../store/Administrator/HPagesRedux/actions"; 
+} from "../../../store/Administrator/HPagesRedux/actions";
 import {
     getEmployee
 } from "../../../store/Administrator/UserRegistrationRedux/actions";
 import { fetchModelsList } from "../../../store/Administrator/ModulesRedux/actions";
 import { MetaTags } from "react-meta-tags";
+import { AlertState } from "../../../store/Utilites/CostumeAlert/actions";
 
 const HPageMaster = (props) => {
     var editDataGatingFromList = props.state;
-
+    console.log("editDataGatingFromList", editDataGatingFromList)
+    
     const formRef = useRef(null);
     const dispatch = useDispatch();
-
-    const [selectModule, setSelectModule] = useState('');
-    const [selectPageType, setPageType] = useState('');
-    const [selectPageList, setPageList] = useState('');
-    const [selectShowMenu, setShowMenu] = useState();
-    // const [selectSubModule, setSelectSubModule] = useState('');
     const [IsEdit, setIsEdit] = useState(false);
     const [EditData, setEditData] = useState([]);
+    const [selectModule, setSelectModule] = useState('');
+    const [PageMode, setPageMode] = useState(false);
 
-    const { ModuleData, SubModuleData, SaveMessage, PageList } = useSelector((state) => ({
+    // const [selectPageType, setPageType] = useState('');
+    // const [selectPageList, setPageList] = useState('');
+    // const [selectShowMenu, setShowMenu] = useState();
+    // const [selectSubModule, setSelectSubModule] = useState('');
+
+
+    const { ModuleData, SaveMessage, } = useSelector((state) => ({
         ModuleData: state.Modules.modulesList,
-        SubModuleData: state.H_Pages.SubModulesData,
         SaveMessage: state.H_Pages.saveMessage,
-        PageList: state.H_Pages.PageList,
+        // PageList: state.H_Pages.PageList,
     }));
-    console.log("PageList FROM H PAGES", PageList)
 
+    // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
     useEffect(() => {
-        dispatch(fetchModelsList())   
-        //  dispatch(getEmployee());
         document.getElementById("txtName").focus();
-
         if (!(editDataGatingFromList === undefined)) {
             setEditData(editDataGatingFromList[0]);
-            // setSelectSubModule({
-            //     label: editDataGatingFromList.SubModuleName,
-            //     value: editDataGatingFromList.SubModuleID
-            // })
+            setIsEdit(true);
             setSelectModule({
                 label: editDataGatingFromList[0].ModuleName,
                 value: editDataGatingFromList[0].ModuleID
             })
-            setIsEdit(true);
+            dispatch(editHPagesIDSuccess({ Status: false }))
         }
-    }, [])
+    }, [editDataGatingFromList]);
+
     useEffect(() => {
-        if ((SaveMessage.Status === true)) {
+        if ((SaveMessage.Status === true) && (SaveMessage.StatusCode === 200)) {
             dispatch(saveHPagesSuccess({ Status: false }))
-            setSelectModule('')
             formRef.current.reset();
+            if (PageMode === true) {
+                dispatch(AlertState({
+                    Type: 1,
+                    Status: true,
+                    Message: SaveMessage.Message,
+                }))
+            }
+            else {
+                dispatch(AlertState({
+                    Type: 1,
+                    Status: true,
+                    Message: SaveMessage.Message,
+                    RedirectPath: '/pagesList',
+                    AfterResponseAction: false
+                }))
+            }
         }
-    }, [SaveMessage])
+        else if (SaveMessage.Status === true) {
+
+            dispatch(AlertState({
+                Type: 4,
+                Status: true,
+                Message: "error Message",
+                RedirectPath: false,
+                AfterResponseAction: false
+            }));
+        }
+    }, [SaveMessage.Status])
 
     const handleValidSubmit = (event, values) => {
         const requestOptions = {
@@ -83,7 +107,7 @@ const HPageMaster = (props) => {
                 Name: values.Name,
                 Description: values.Discription,
                 Module: selectModule.value,
-                isActive: values.isActive,
+                isActive: values.IsActive,
                 DisplayIndex: values.DisplayIndex,
                 Icon: values.Icon,
                 ActualPagePath: values.ActualPagePath,
@@ -93,10 +117,11 @@ const HPageMaster = (props) => {
         };
         if (IsEdit) {
             dispatch(updateHPages(requestOptions.body, EditData.ID));
-            formRef.current.reset();
+            // formRef.current.reset();
         }
         else {
             dispatch(saveHPages(requestOptions.body));
+            // console.log("requestOptions", requestOptions.body)
         }
     };
     const HModuleSelectOnChangeHandller = (e) => {
@@ -113,25 +138,23 @@ const HPageMaster = (props) => {
         label: d.Name,
     }));
 
-    //  for PageType deropDown
-    const PageType_SelectOnChangeHandller = (e) => {
-        if (selectShowMenu===true && PageList.value===2) {
-            dispatch(getPageList(e.value))
-        }
-        setPageType(e);
-    }
+    // //  for PageType deropDown
+    // const PageType_SelectOnChangeHandller = (e) => {
+    //     if (selectShowMenu===true && PageList.value===2) {
+    //         dispatch(getPageList(e.value))
+    //     }
+    //     setPageType(e);
+    // }
 
-    // PageList Dropdown
-    const optionPageList = PageList.map((d) => ({
-        value: d.value,
-        label: d.label,
-    }));
-    console.log("optionPageList", optionPageList)
+    // // PageList Dropdown
+    // const optionPageList = PageList.map((d) => ({
+    //     value: d.value,
+    //     label: d.label,
+    // }));
 
-    const PageList_SelectOnChangeHandller = (e) => {
-        console.log("PageListSelectOnChangeHandller", e)
-        setPageList(getPageList(e.value));
-    }
+    // const PageList_SelectOnChangeHandller = (e) => {
+    //     setPageList(getPageList(e.value));
+    // }
 
     return (
         <React.Fragment>
@@ -157,7 +180,7 @@ const HPageMaster = (props) => {
                                                 <Col sm={4}>
                                                     <AvField name="Name" id="txtName" value={EditData.Name} type="text"
                                                         placeholder=" Please Enter Name "
-                                                        autoComplete='off'
+                                                        // autoComplete='off'
                                                         validate={{
                                                             required: { value: true, errorMessage: 'Please Enter a Name' },
                                                         }}
@@ -173,7 +196,7 @@ const HPageMaster = (props) => {
                                                 <Col sm={4}>
                                                     <AvField name="Discription" value={EditData.Description} type="text"
                                                         placeholder=" Please Enter Discription "
-                                                        autoComplete='off'
+                                                    // autoComplete='off'
                                                     />
                                                 </Col>
                                             </Row>
@@ -187,7 +210,7 @@ const HPageMaster = (props) => {
                                                 <Select
                                                     value={selectModule}
                                                     options={optionModule}
-                                                    autoComplete='off'
+                                                    // autoComplete='off'
                                                     onChange={(e) => { HModuleSelectOnChangeHandller(e) }}
                                                 />
 
@@ -216,7 +239,8 @@ const HPageMaster = (props) => {
                                                 </Label>
                                                 <Col sm={4}>
                                                     <AvField name="DisplayIndex" value={EditData.DisplayIndex} type="text"
-                                                        autoComplete='off' placeholder=" Please Enter DisplayIndex" validate={{
+                                                        // autoComplete='off' 
+                                                        placeholder=" Please Enter DisplayIndex" validate={{
                                                             number: true,
                                                             required: { value: true, errorMessage: 'Please enter a Display Index ' },
                                                         }} />
@@ -235,7 +259,7 @@ const HPageMaster = (props) => {
                                                         validate={{
                                                             required: { value: true, errorMessage: 'Please Enter Icon' },
                                                         }}
-                                                        autoComplete='off'
+                                                    // autoComplete='off'
                                                     />
                                                 </Col>
                                             </Row>
@@ -251,11 +275,12 @@ const HPageMaster = (props) => {
                                                         validate={{
                                                             required: { value: true, errorMessage: 'Please Enter Actual Page Path' },
                                                         }}
-                                                        autoComplete='off' />
+                                                    // autoComplete='off'
+                                                    />
                                                 </Col>
                                             </Row>
                                         </AvGroup>
-
+                                        {/* 
                                         <AvGroup>
                                             <Row className="mb-4">
                                                 <Label className="col-sm-3 col-form-label">
@@ -268,8 +293,8 @@ const HPageMaster = (props) => {
                                                         }} />
                                                 </Col>
                                             </Row>
-                                        </AvGroup>
-                                        <Row className="mb-4">
+                                        </AvGroup> */}
+                                        {/* <Row className="mb-4">
                                             <Label className="col-sm-3 col-form-label">
                                                 PageType
                                             </Label>
@@ -305,7 +330,7 @@ const HPageMaster = (props) => {
                                                 />
 
                                             </Col>
-                                        </Row>
+                                        </Row> */}
                                         <AvGroup>
                                             <Row className="mb-4">
                                                 <Label className="col-sm-3 col-form-label">
@@ -313,7 +338,7 @@ const HPageMaster = (props) => {
                                                 </Label>
                                                 <Col sm={4}>
                                                     <AvField name="IsActive"
-                                                        checked={EditData.isActive}
+                                                        checked={EditData.IsActive}
                                                         type="checkbox" validate={{
                                                         }} />
                                                 </Col>

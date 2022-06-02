@@ -36,7 +36,7 @@ const CompanyModule = (props) => {
   const [PageMode, setPageMode] = useState(false);
   //*** "isEditdata get all data from ModuleID for Binding  Form controls
   var editDataGatingFromList = props.state;
-  // console.log("editDataGatingFromList",editDataGatingFromList)
+  console.log("editDataGatingFromList",editDataGatingFromList)
 
   //Access redux store Data /  'save_ModuleSuccess' action data
   const { SubmitSuccesss, } = useSelector((state) => ({
