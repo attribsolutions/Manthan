@@ -69,7 +69,6 @@ function* GetH_Sub_Modules({ id }) {
   }
 }
 
-
 function* saveHPageSaga_GneratorFunction({ data }) {
   yield put(SpinnerState(true))
   try {
@@ -87,10 +86,8 @@ function* saveHPageSaga_GneratorFunction({ data }) {
 
 function* editHpages_ID({ id }) {
   try {
-    // console.log("saga file is",id)
     const response = yield call(edit_HPageID, id);
     yield put(editHPagesIDSuccess(response));
-    // console.log("saga file response",response)
   } catch (error) {
     yield put(AlertState({ Type: 4, 
       Status: true, Message: "500 Error Message",

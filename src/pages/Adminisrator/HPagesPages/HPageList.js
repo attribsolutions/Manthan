@@ -22,7 +22,7 @@ export default function HPageList() {
         updateMessage: state.H_Pages.updateMessage,
         deleteModuleID: state.H_Pages.deleteModuleID,
     }));
-    // console.log("editData in useselector", editData)
+   
     useEffect(() => {
         dispatch(dispatch(GetHpageListData()))
     }, []);
@@ -71,10 +71,8 @@ export default function HPageList() {
             tog_center()
         };
     }, [editData]);
-    // console.log("editdata in list page", editData)
 
     const EditPageHandler = (id) => {
-        // console.log("id", id)
         dispatch(editHPagesID(id));
     }
 

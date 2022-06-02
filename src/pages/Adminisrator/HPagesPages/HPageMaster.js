@@ -33,7 +33,6 @@ import { AlertState } from "../../../store/Utilites/CostumeAlert/actions";
 
 const HPageMaster = (props) => {
     var editDataGatingFromList = props.state;
-    console.log("editDataGatingFromList", editDataGatingFromList)
     
     const formRef = useRef(null);
     const dispatch = useDispatch();
@@ -117,11 +116,9 @@ const HPageMaster = (props) => {
         };
         if (IsEdit) {
             dispatch(updateHPages(requestOptions.body, EditData.ID));
-            // formRef.current.reset();
         }
         else {
             dispatch(saveHPages(requestOptions.body));
-            // console.log("requestOptions", requestOptions.body)
         }
     };
     const HModuleSelectOnChangeHandller = (e) => {
