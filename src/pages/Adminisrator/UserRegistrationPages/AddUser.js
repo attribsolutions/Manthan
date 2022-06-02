@@ -132,7 +132,6 @@ const AddUser = (props) => {
       dispatch(updateID(requestOptions.body, EditData.ID));
       setEditData([]);
     }
-
     else {
       dispatch(addUser(requestOptions.body));
     }

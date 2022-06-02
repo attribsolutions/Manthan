@@ -62,7 +62,8 @@ const RoleMaster = (props) => {
         }
     } 
     else if (AddUserMessage.Status === true) {
-        dispatch(AlertState({
+      dispatch(PostSuccess({ Status: false }))
+      dispatch(AlertState({
             Type: 4,
             Status: true,
             Message: "error Message",
