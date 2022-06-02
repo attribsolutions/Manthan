@@ -58,9 +58,9 @@ export const deleteCompanyIDSuccess = (deleteCompanyID) => ({
   payload: deleteCompanyID,
 });
 
-export const updateCompanyID = (data,id) => ({
+export const updateCompanyID = (data,ID) => ({
   type: UPDATE_COMPANY_ID,
-  data,id,
+  data,ID
 });
 export const updateCompanyIDSuccess = (updateMessage) => ({
   type: UPDATE_COMPANY_ID_SUCCESS,

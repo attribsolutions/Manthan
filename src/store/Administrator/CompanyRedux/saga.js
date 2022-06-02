@@ -67,13 +67,14 @@ function* editCompany_ID({ id }) {
   }
 }
 
-function* update_Company({ updateMessage, ID }) {
+function* update_Company({ data, ID }) {
   try {
     yield put(SpinnerState(true))
-    const response = yield call(updateCompany_ID, updateMessage, ID);
+    const response = yield call(updateCompany_ID, data, ID);
     yield put(SpinnerState(false))
     yield put(updateCompanyIDSuccess(response))
   }
+  
   catch (error) {
     yield put(SpinnerState(false))
     yield put(AlertState({ Type: 4, 

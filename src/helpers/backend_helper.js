@@ -144,7 +144,8 @@ export const edit_CompanyID = (id) => get(`${url.COMPANY_API_URL}/${id}`)// Edit
 export const delete_CompanyID = (id) => del(`${url.COMPANY_API_URL}/${id}`)// Delete_Company_By-ID
 export const postSubmit_Company = (data) => post(url.COMPANY_API_URL, data)// Company_Modules submit 
 export const updateCompany_ID = (data, id) => put(`${url.COMPANY_API_URL}/${id}`, data)// Update_Company- by_ID
-export const getCompanyGroup = () => get(url.GET_COMPANYGROUP)
+export const getCompanyGroup = () => get(url.GET_COMPANYGROUP)// CompanyGroup DropDown API
+
 //PageList And PageMaster
 export const getDefaultModule = () => get(url.GET_DEFAULT_MODULE)
 export const postDefaultMogeuleId = (id) => get(url.POST_MODULE_ID, id)

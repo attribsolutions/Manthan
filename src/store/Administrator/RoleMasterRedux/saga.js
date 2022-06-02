@@ -47,9 +47,9 @@ function* Submit_Roles_GenratorFunction({ Data }) {
     }
   }
 
-function* Edit_Roles_GenratorFunction({ id }) {
+function* Edit_Roles_GenratorFunction({ ID }) {
   try {
-    const response = yield call(Role_Master_Edit_API, id);
+    const response = yield call(Role_Master_Edit_API, ID);
     yield put(editSuccess(response));
   } catch (error) {
     yield put(AlertState({ Type: 4, 

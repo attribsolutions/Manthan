@@ -36,7 +36,7 @@ const CompanyModule = (props) => {
   const [PageMode, setPageMode] = useState(false);
   //*** "isEditdata get all data from ModuleID for Binding  Form controls
   var editDataGatingFromList = props.state;
-  console.log("editDataGatingFromList from list page", editDataGatingFromList)
+  // console.log("editDataGatingFromList",editDataGatingFromList)
 
   //Access redux store Data /  'save_ModuleSuccess' action data
   const { SubmitSuccesss, } = useSelector((state) => ({
@@ -54,10 +54,8 @@ const CompanyModule = (props) => {
         label: editDataGatingFromList.CompanyGroup.Name
       })
       dispatch(editCompanyIDSuccess({ Status: false }))
-
     }
   }, [editDataGatingFromList]);
-
 
   useEffect(() => {
     if ((SubmitSuccesss.Status === true) && (SubmitSuccesss.StatusCode === 200)) {
@@ -91,7 +89,6 @@ const CompanyModule = (props) => {
       }));
     }
   }, [SubmitSuccesss.Status])
-
 
   /// CompanyGroupDropDown
   useEffect(() => {
@@ -128,12 +125,12 @@ const CompanyModule = (props) => {
     if (IsEdit) {
       dispatch(updateCompanyID(requestOptions.body, EditData.ID));
     }
+    
     else {
       dispatch(PostCompanySubmit(requestOptions.body));
     }
   };
- 
-
+  
   var IsEditModeSaSS = ''
   if (IsEdit === true) { IsEditModeSaSS = "-3.5%" };
 
