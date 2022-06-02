@@ -49,6 +49,7 @@ const HPageMaster = (props) => {
         SaveMessage: state.H_Pages.saveMessage,
         PageList: state.H_Pages.PageList,
 
+        
     }));
     console.log("PageList FROM H PAGES", PageList)
 
