@@ -33,7 +33,7 @@ import { AlertState } from "../../../store/Utilites/CostumeAlert/actions";
 
 const HPageMaster = (props) => {
     var editDataGatingFromList = props.state;
-    
+
     const formRef = useRef(null);
     const dispatch = useDispatch();
     const [IsEdit, setIsEdit] = useState(false);
@@ -47,7 +47,7 @@ const HPageMaster = (props) => {
     const [selectSubModule, setSelectSubModule] = useState('');
 
 
-    const { ModuleData, SaveMessage,PageList } = useSelector((state) => ({
+    const { ModuleData, SaveMessage, PageList } = useSelector((state) => ({
         ModuleData: state.Modules.modulesList,
         SaveMessage: state.H_Pages.saveMessage,
         PageList: state.H_Pages.PageList,
@@ -71,7 +71,9 @@ const HPageMaster = (props) => {
     useEffect(() => {
         if ((SaveMessage.Status === true) && (SaveMessage.StatusCode === 200)) {
             dispatch(saveHPagesSuccess({ Status: false }))
+            setSelectModule('')
             formRef.current.reset();
+
             if (PageMode === true) {
                 dispatch(AlertState({
                     Type: 1,
@@ -90,7 +92,7 @@ const HPageMaster = (props) => {
             }
         }
         else if (SaveMessage.Status === true) {
-
+            dispatch(saveHPagesSuccess({ Status: false }))
             dispatch(AlertState({
                 Type: 4,
                 Status: true,
@@ -138,7 +140,7 @@ const HPageMaster = (props) => {
 
     //  for PageType deropDown
     const PageType_SelectOnChangeHandller = (e) => {
-        if (selectShowMenu===true && e.value===2) {
+        if (selectShowMenu === true && e.value === 2) {
             dispatch(getPageList(e.value))
         }
         setPageType(e);
@@ -278,7 +280,7 @@ const HPageMaster = (props) => {
                                                 </Col>
                                             </Row>
                                         </AvGroup>
-                                         
+
                                         <AvGroup>
                                             <Row className="mb-4">
                                                 <Label className="col-sm-3 col-form-label">
@@ -291,8 +293,8 @@ const HPageMaster = (props) => {
                                                         }} />
                                                 </Col>
                                             </Row>
-                                        </AvGroup> 
-                                         <Row className="mb-4">
+                                        </AvGroup>
+                                        <Row className="mb-4">
                                             <Label className="col-sm-3 col-form-label">
                                                 PageType
                                             </Label>
@@ -328,7 +330,7 @@ const HPageMaster = (props) => {
                                                 />
 
                                             </Col>
-                                        </Row> 
+                                        </Row>
                                         <AvGroup>
                                             <Row className="mb-4">
                                                 <Label className="col-sm-3 col-form-label">

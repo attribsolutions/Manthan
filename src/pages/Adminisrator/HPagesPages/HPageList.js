@@ -5,7 +5,7 @@ import ToolkitProvider from 'react-bootstrap-table2-toolkit'
 import { MetaTags } from 'react-meta-tags';
 import { useDispatch, useSelector } from 'react-redux';
 import { Col, Modal, Row } from 'reactstrap';
-import { deleteHpagesUsingID, editHPagesID, GetHpageListData, updateHPagesSuccess } from '../../../store/Administrator/HPagesRedux/actions';
+import { deleteHpagesUsingID, deleteModuleIDSuccess, editHPagesID, GetHpageListData, updateHPagesSuccess } from '../../../store/Administrator/HPagesRedux/actions';
 import Breadcrumbs from '../../../components/Common/Breadcrumb'
 import HPageMaster from './HPageMaster';
 import { AlertState } from '../../../store/Utilites/CostumeAlert/actions';
@@ -42,6 +42,7 @@ export default function HPageList() {
             tog_center()
         }
         else if (deleteModuleID.Status === true) {
+            dispatch(updateHPagesSuccess({ Status: false }))
             dispatch(AlertState({
                 Type: 3, Status: true,
                 Message: deleteModuleID.Message,
@@ -49,15 +50,16 @@ export default function HPageList() {
         }
     }, [updateMessage.Status, dispatch]);
 
-
     useEffect(() => {
         if ((deleteModuleID.Status === true) && (deleteModuleID.StatusCode === 200)) {
+            dispatch(deleteModuleIDSuccess({Status:false}))
             dispatch(AlertState({
                 Type: 1, Status: true,
                 Message: deleteModuleID.Message,
                 AfterResponseAction: GetHpageListData,
             }))
         } else if (deleteModuleID.Status === true) {
+            dispatch(deleteModuleIDSuccess({Status:false}))
             dispatch(AlertState({
                 Type: 3,
                 Status: true,
