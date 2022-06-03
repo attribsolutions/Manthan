@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import {
     Row,
     Col,
@@ -11,7 +11,9 @@ import {
 } from "reactstrap";
 export default function ValidationTest() {
 
-
+    useEffect(() => {
+        document.getElementById("valInp1").focus();
+    },[]);
 
     const [validation, setValidation] = useState({
         valInp1: null,
@@ -128,6 +130,7 @@ export default function ValidationTest() {
                                         className="form-control"
                                         id="valInp1"
                                         placeholder="First name"
+                                        autoComplete='off'
                                         onChange={event => {
                                             onChangeValidation("valInp1", event.target.value, "text")
                                         }}
@@ -150,6 +153,7 @@ export default function ValidationTest() {
                                         className="form-control"
                                         id="valInp2"
                                         placeholder="City name"
+                                        autoComplete='off'
                                         onChange={event => {
                                             onChangeValidation("valInp2", event.target.value, "Number")
                                         }}
@@ -174,6 +178,7 @@ export default function ValidationTest() {
                                         className="form-control"
                                         id="valInp3"
                                         placeholder="lastName"
+                                        autoComplete='off'
                                         onChange={event => {
                                             onChangeValidation("valInp3", event.target.value, "email")
                                         }}
