@@ -114,22 +114,6 @@ const HPageMaster = (props) => {
                 CreatedBy: 1,
                 UpdatedBy: 1,
             }),
-
-
-// lkvznvknb;knbnb;n
-// lkvznvknb;knbnb;n
-// lkvznvknb;knbnb;n
-// lkvznvknb;knbnb;n
-// lkvznvknb;knbnb;n
-// lkvznvknb;knbnb;n
-// lkvznvknb;knbnb;n
-// lkvznvknb;knbnb;n
-// lkvznvknb;knbnb;n
-// lkvznvknb;knbnb;n
-// lkvznvknb;knbnb;n
-// lkvznvknb;knbnb;n
-// lkvznvknb;knbnb;n
-// lkvznvknb;knbnb;n
         };
         if (IsEdit) {
             dispatch(updateHPages(requestOptions.body, EditData.ID));
