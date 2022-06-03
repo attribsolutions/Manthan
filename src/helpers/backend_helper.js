@@ -111,7 +111,7 @@ export const update_EmployeeAPI = (data, id) => put(`${url.EMPLOYEE_API_URL}/${i
 //User Registration  All APIs 
 export const getEmployee_Dropdown_For_UserRegistration_API = () => get(url.EMPLOYEE_API_URL)//get api for Dropdown_list data 
 export const RolesListDropdown_For_UserRegistration_API = () => get(url.ROLE_API_URL)
-export const User_Component_PostMethod_API = (data) => post(url.USER_API_URL, data)//post for (save and update) User_Component
+export const User_Component_PostMethod_API = (data) => post(url.REGISTRATION_API_URL, data)//post for (save and update) User_Component
 export const User_Component_GetMethod_API = () => get(url.USER_API_URL) //Get User_Component
 export const User_Component_Delete_Method_API = (id) => del(`${url.USER_API_URL}/${id}`) // delete api
 export const User_Component_EditById_API = (id) => get(`${url.USER_API_URL}/${id}`) // edit api
