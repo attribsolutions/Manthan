@@ -56,6 +56,7 @@ const HPageMaster = (props) => {
     // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
     useEffect(() => {
         document.getElementById("txtName").focus();
+        dispatch(fetchModelsList())
         if (!(editDataGatingFromList === undefined)) {
             setEditData(editDataGatingFromList[0]);
             setIsEdit(true);
