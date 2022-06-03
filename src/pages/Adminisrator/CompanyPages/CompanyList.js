@@ -33,7 +33,7 @@ const CompanyList = () => {
         updateMessage: state.Company.updateMessage,
         deleteCompanyID: state.Company.deleteCompanyID,
     }));
-    console.log("editData in useselector",editData)
+    console.log("editData in useselector", editData)
 
     // tag_center -- Control the Edit Modal show and close
     function tog_center() {
@@ -57,6 +57,7 @@ const CompanyList = () => {
             tog_center()
         }
         else if (deleteCompanyID.Status === true) {
+            dispatch(deleteCompanyIDSuccess({ Status: false }))
             dispatch(AlertState({
                 Type: 3, Status: true,
                 Message: deleteCompanyID.Message,
@@ -66,12 +67,14 @@ const CompanyList = () => {
 
     useEffect(() => {
         if ((deleteCompanyID.Status === true) && (deleteCompanyID.StatusCode === 200)) {
+            dispatch(deleteCompanyIDSuccess({ Status: false }))
             dispatch(AlertState({
                 Type: 1, Status: true,
                 Message: deleteCompanyID.Message,
                 AfterResponseAction: fetchCompanyList,
             }))
         } else if (deleteCompanyID.Status === true) {
+            dispatch(deleteCompanyIDSuccess({ Status: false }))
             dispatch(AlertState({
                 Type: 3,
                 Status: true,
