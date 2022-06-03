@@ -28,7 +28,7 @@ const AddUser = (props) => {
   useEffect(() => {
     document.getElementById("txtName").focus();
     if (!(isEditData === undefined)) {
-      setEditData(isEditData);
+      setEditData(isEditData[0]);
       setIsEdit(true);
       setEmployeeSelect({
         value: isEditData.EmployeeID,
@@ -73,7 +73,7 @@ const AddUser = (props) => {
   const { Roles } = useSelector((state) => ({
     Roles: state.User_Registration_Reducer.Roles
   }));
-
+console.log("Roles",Roles)
   const RolesValues = Roles.map((Data) => ({
     value: Data.ID,
     label: Data.Name
@@ -294,7 +294,6 @@ const AddUser = (props) => {
                       </Col>
                     </Row>
 
-
                     <Row className="mb-4">
                       <Label
                         className="col-sm-2 col-form-label"
@@ -347,7 +346,6 @@ const AddUser = (props) => {
                             >
                               Save
                             </Button>}
-
                         </div>
                       </Col>{" "}
                       <Col sm={10}></Col>

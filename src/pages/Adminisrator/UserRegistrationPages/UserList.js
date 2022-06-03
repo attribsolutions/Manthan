@@ -223,7 +223,7 @@ useEffect(() => {
                             toggle={() => { tog_center() }}
                             size="xl"
                         >
-                            <AddUser state={editData.data} />
+                            <AddUser state={editData.Data} />
                         </Modal>
                               </div>
                       </React.Fragment>

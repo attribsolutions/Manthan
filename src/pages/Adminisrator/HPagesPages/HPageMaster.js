@@ -41,21 +41,22 @@ const HPageMaster = (props) => {
     const [selectModule, setSelectModule] = useState('');
     const [PageMode, setPageMode] = useState(false);
 
-    // const [selectPageType, setPageType] = useState('');
-    // const [selectPageList, setPageList] = useState('');
-    // const [selectShowMenu, setShowMenu] = useState();
-    // const [selectSubModule, setSelectSubModule] = useState('');
+    const [selectPageType, setPageType] = useState('');
+    const [selectPageList, setPageList] = useState('');
+    const [selectShowMenu, setShowMenu] = useState();
+    const [selectSubModule, setSelectSubModule] = useState('');
 
 
-    const { ModuleData, SaveMessage, } = useSelector((state) => ({
+    const { ModuleData, SaveMessage,PageList } = useSelector((state) => ({
         ModuleData: state.Modules.modulesList,
         SaveMessage: state.H_Pages.saveMessage,
-        // PageList: state.H_Pages.PageList,
+        PageList: state.H_Pages.PageList,
     }));
 
     // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
     useEffect(() => {
         document.getElementById("txtName").focus();
+        dispatch(fetchModelsList())
         if (!(editDataGatingFromList === undefined)) {
             setEditData(editDataGatingFromList[0]);
             setIsEdit(true);
@@ -135,23 +136,23 @@ const HPageMaster = (props) => {
         label: d.Name,
     }));
 
-    // //  for PageType deropDown
-    // const PageType_SelectOnChangeHandller = (e) => {
-    //     if (selectShowMenu===true && PageList.value===2) {
-    //         dispatch(getPageList(e.value))
-    //     }
-    //     setPageType(e);
-    // }
+    //  for PageType deropDown
+    const PageType_SelectOnChangeHandller = (e) => {
+        if (selectShowMenu===true && e.value===2) {
+            dispatch(getPageList(e.value))
+        }
+        setPageType(e);
+    }
 
-    // // PageList Dropdown
-    // const optionPageList = PageList.map((d) => ({
-    //     value: d.value,
-    //     label: d.label,
-    // }));
+    // PageList Dropdown
+    const optionPageList = PageList.map((d) => ({
+        value: d.value,
+        label: d.label,
+    }));
 
-    // const PageList_SelectOnChangeHandller = (e) => {
-    //     setPageList(getPageList(e.value));
-    // }
+    const PageList_SelectOnChangeHandller = (e) => {
+        setPageList(getPageList(e.value));
+    }
 
     return (
         <React.Fragment>
@@ -277,7 +278,7 @@ const HPageMaster = (props) => {
                                                 </Col>
                                             </Row>
                                         </AvGroup>
-                                        {/* 
+                                         
                                         <AvGroup>
                                             <Row className="mb-4">
                                                 <Label className="col-sm-3 col-form-label">
@@ -290,8 +291,8 @@ const HPageMaster = (props) => {
                                                         }} />
                                                 </Col>
                                             </Row>
-                                        </AvGroup> */}
-                                        {/* <Row className="mb-4">
+                                        </AvGroup> 
+                                         <Row className="mb-4">
                                             <Label className="col-sm-3 col-form-label">
                                                 PageType
                                             </Label>
@@ -327,7 +328,7 @@ const HPageMaster = (props) => {
                                                 />
 
                                             </Col>
-                                        </Row> */}
+                                        </Row> 
                                         <AvGroup>
                                             <Row className="mb-4">
                                                 <Label className="col-sm-3 col-form-label">
