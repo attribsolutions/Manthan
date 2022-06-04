@@ -28,14 +28,14 @@ export const getOrderPage = () => ({
     type: SUBMIT_ORDER_PAGE_SUCCESS,
     payload:submitOrderSuccess
   });
-  export const getOrderList = (listData) => ({
+  export const getOrderList = (data) => ({
     type: GET_ORDER_LIST,
-    listData,
+    data,
   });
 
-  export const getOrderListSuccess = (ordersList) => ({
+  export const getOrderListSuccess = (data) => ({
     type: GET_ORDER_LIST_SUCCESS,
-    payload:ordersList,
+    payload:data,
   });
   
   export const getOrderListMessage = (ordersListMessage) => ({

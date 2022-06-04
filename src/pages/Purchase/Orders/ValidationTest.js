@@ -53,29 +53,52 @@ export default function ValidationTest() {
         }
     }
 
-    const onKeyPress = (e) => {
-        var cont = e.target.id;
-        var abc = cont.split("p");
-        cont = abc[1];
+    const handleEnter = (event) => {
+        const form = event.target.form;
+        const index = [...form].indexOf(event.target);
+        const ID =event.target.id;
+        debugger
+          if ((event.keyCode === 40)&&(form.length-2>index)) {
+            form.elements[index + 1].focus();
+            event.preventDefault();
+          }
 
-        if ((e.keyCode === 40 || e.keyCode === 13) && (cont < 4)) {
-            cont = ++cont;
-            document.getElementById("valInp" + cont).focus();
-            return
-        }
-        if (e.keyCode === 38 && cont > 1) {
-            cont = cont - 1;
-            document.getElementById("valInp" + cont).focus();
-            return
-        }
-        if (e.keyCode === 13 && cont == 4) {
-            document.getElementById("saveKye").click();
-            return
-        }
+          if ((event.keyCode === 38)&&(!(index===0))) {
+            form.elements[index - 1].focus();
+            event.preventDefault();
+          }
+          if (event.keyCode === 13) {
+            const index = [...form].indexOf(event.target);
+            form.elements[index + 1].focus();
+            event.preventDefault();
+          }
+        
     }
-    let a = document.getElementById("react-select-2-input")
-    console.log('event', a)
-    debugger
+ 
+    const handleEnter1 = (event) => {
+        const form= (event.target.form)
+        if (event.key.toLowerCase() === "enter") {
+            const index = [...form].indexOf(event.target);
+            form.elements[index + 1].focus();
+            event.preventDefault();
+          }
+          debugger
+        // if (event.key.toLowerCase() === "enter") {
+        //   const form = event.target.form;
+        //   const index = [...form].indexOf(event.target);
+        //   form.elements[index + 1].focus();
+        //   debugger
+        //   event.preventDefault();
+        // }
+      };
+
+
+
+
+
+
+
+
     return (
         <React.Fragment>
             <div className="page-content">
@@ -101,7 +124,7 @@ export default function ValidationTest() {
                                         onChange={event => {
                                             setValidation({ ...validation, valInp1: Custom_ValidationFun(event.target) })
                                         }}
-                                        onKeyDown={(event) => { onKeyPress(event) }}
+                                        onKeyDown={(event) => { handleEnter(event) }}
                                         valid={validation["valInp1"] === true}
                                         invalid={
                                             validation["valInp1"] !== true &&
@@ -125,7 +148,7 @@ export default function ValidationTest() {
                                         onChange={event => {
                                             setValidation({ ...validation, valInp2: Custom_ValidationFun(event.target) })
                                         }}
-                                        onKeyDown={event => onKeyPress(event)}
+                                        onKeyDown={event => handleEnter(event)}
                                         on
                                         valid={validation["valInp2"] === true}
                                         invalid={
@@ -150,7 +173,7 @@ export default function ValidationTest() {
                                         onChange={event => {
                                             setValidation({ ...validation, valInp3: Custom_ValidationFun(event.target) })
                                         }}
-                                        onKeyDown={event => onKeyPress(event)}
+                                        onKeyDown={event => handleEnter(event)}
                                         valid={validation["valInp3"] === true}
                                         invalid={
                                             validation["valInp3"] !== true &&
@@ -171,6 +194,7 @@ export default function ValidationTest() {
                                         options={optionModule}
                                         // autoComplete='off'
                                         onChange={(e) => { setSelectModule(e); }}
+                                        onKeyDown={event => handleEnter(event)}
 
                                     />
                                 </Col>
@@ -187,6 +211,7 @@ export default function ValidationTest() {
                                         options={optionModule}
                                         // autoComplete='off'
                                         onChange={(e) => { setSelectModule(e); }}
+                                        // onKeyDown={event => handleEnter(event)}
 
                                     />
                                 </Col>
@@ -204,3 +229,135 @@ export default function ValidationTest() {
         </React.Fragment>
     )
 }
+
+
+
+
+
+// return (
+//     <React.Fragment>
+//         <div className="page-content">
+//             <Card>
+//                 <CardBody>
+//                     <form
+//                         className="needs-validation"
+//                         method="post"
+//                         id="tooltipForm"
+//                     >
+//                         <Row className="row mt-4">
+//                             <Label htmlFor="valInp" className="col-sm-3 col-form-label">
+//                                 Not null
+//                             </Label>
+//                             <Col sm={4}>
+//                                 <Input
+//                                     type="text"
+//                                     name="text"
+//                                     className="form-control"
+//                                     id="valInp1"
+//                                     placeholder="First name"
+//                                     autoComplete='off'
+//                                     onChange={event => {
+//                                         setValidation({ ...validation, valInp1: Custom_ValidationFun(event.target) })
+//                                     }}
+//                                     onKeyDown={(event) => { onKeyPress(event) }}
+//                                     valid={validation["valInp1"] === true}
+//                                     invalid={
+//                                         validation["valInp1"] !== true &&
+//                                         validation["valInp1"] !== null
+//                                     }
+//                                 />
+//                             </Col>
+//                         </Row>
+//                         <Row className="row mt-4">
+//                             <Label htmlFor="validationTooltip02" className="col-sm-3 col-form-label">
+//                                 Number
+//                             </Label>
+//                             <Col sm={4}>
+//                                 <Input
+//                                     type="text"
+//                                     name="textNum"
+//                                     className="form-control"
+//                                     id="valInp2"
+//                                     placeholder="City name"
+//                                     autoComplete='off'
+//                                     onChange={event => {
+//                                         setValidation({ ...validation, valInp2: Custom_ValidationFun(event.target) })
+//                                     }}
+//                                     onKeyDown={event => onKeyPress(event)}
+//                                     on
+//                                     valid={validation["valInp2"] === true}
+//                                     invalid={
+//                                         validation["valInp2"] !== true &&
+//                                         validation["valInp2"] !== null
+//                                     }
+//                                 />
+//                             </Col>
+//                         </Row>
+//                         <Row className="row mt-4">
+
+//                             <Label htmlFor="valInp3" className="col-sm-3 col-form-label">
+//                                 Email
+//                             </Label>
+//                             <Col sm={4}>
+//                                 <Input
+//                                     type="text"
+//                                     className="form-control"
+//                                     id="valInp3"
+//                                     placeholder="lastName"
+//                                     autoComplete='off'
+//                                     onChange={event => {
+//                                         setValidation({ ...validation, valInp3: Custom_ValidationFun(event.target) })
+//                                     }}
+//                                     onKeyDown={event => onKeyPress(event)}
+//                                     valid={validation["valInp3"] === true}
+//                                     invalid={
+//                                         validation["valInp3"] !== true &&
+//                                         validation["valInp3"] !== null
+//                                     }
+//                                 />
+//                             </Col>
+//                         </Row>
+//                         <Row className="row mt-4">
+//                             <Label htmlFor="valInpSelect" className="col-sm-3 col-form-label">
+//                                 select Input
+//                             </Label>
+//                             <Col sm={4}>
+//                                 <Select
+//                                     id="valInp4"
+//                                     title="select"
+//                                     value={selectModule}
+//                                     options={optionModule}
+//                                     // autoComplete='off'
+//                                     onChange={(e) => { setSelectModule(e); }}
+
+//                                 />
+//                             </Col>
+//                         </Row>
+//                         <Row className="row mt-4">
+//                             <Label htmlFor="valInpSelect" className="col-sm-3 col-form-label">
+//                                 select Input
+//                             </Label>
+//                             <Col sm={4}>
+//                                 <Select
+//                                     id="valInp4"
+//                                     title="select"
+//                                     value={selectModule}
+//                                     options={optionModule}
+//                                     // autoComplete='off'
+//                                     onChange={(e) => { setSelectModule(e); }}
+
+//                                 />
+//                             </Col>
+//                         </Row>
+
+//                         <Button id='saveKye' color="primary" type="button" onClick={e => {
+//                             handleSubmit(e)
+//                         }}>
+//                             Submit form
+//                         </Button>
+//                     </form>
+//                 </CardBody>
+//             </Card>
+//         </div>
+//     </React.Fragment>
+// )

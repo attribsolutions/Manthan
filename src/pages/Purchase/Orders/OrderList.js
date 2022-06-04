@@ -67,8 +67,9 @@ const OrderList = (props) => {
 
   const { editOrderData, TableListData } = useSelector((state) => ({
     editOrderData: state.OrdersReducers.orderItemInfo,
-    TableListData: state.OrdersReducers.orderList
+    TableListData: state.OrdersReducers.ordersList
   }));
+
   function goHandeller() {
     const orderlistInitial = {
       FromDate: !fromDate ? fromDateIn : fromDate,
@@ -100,13 +101,13 @@ const OrderList = (props) => {
 
   const TableListColumns = [
     {
-      text: "Oder Date",
-      dataField: "OrderDate",
+      text: "Customer",
+      dataField: "CustomerID",
       sort: true,
     },
     {
-      text: "Order No",
-      dataField: "OrderNO",
+      text:"Order Amount",
+      dataField: "OrderAmount",
       sort: true,
     },
     {

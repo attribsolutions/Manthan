@@ -9,6 +9,7 @@ import {
   submitOrderPage,
   getDivisionOrders,
   editOrderID,
+  getOrderList,
 } from "../../../helpers/backend_helper";
 import {
   GET_ORDER_LIST,
@@ -20,6 +21,8 @@ import {
 import  ItemUnits  from "./DemoData";
 // import FakeItemListData from "../../Administrator/HPages/DemoData";
 import orders from "./DemoData";
+import { SpinnerState } from "../../Utilites/Spinner/actions";
+import { AlertState } from "../../Utilites/CostumeAlert/actions";
 function* fetchOrder_GenratorFunction() {
   try {
     // const response = yield call(getOrderPage);
@@ -41,26 +44,20 @@ function* submitOrder({ data }) {
   }
 }
 
-function* fetchOrderList({ listData }) {
+function* fetchOrderList(data) {
+  yield put(SpinnerState(true))
   try {
-    // yield console.log('$$fetchOrderList  before response$',listData)
-    // const response = yield call(getOrderList, listData);
-    // const response = FakeItemListData;
-    const response = [];
-   
-    if (response.Msg) {
-      // arr.push(response);
-      // yield   console.log('$$fetchOrderList Ifloop  after response$',response);
-      console.log(response)
-      yield put(getOrderListSuccess(response));
-    } else {
-      yield put(getOrderListSuccess(response));
-      // yield   console.log('$$fetchOrderList lseloop  after response$',response);
-    }
+    const response = yield call(getOrderList,data);
+    yield put(getOrderListSuccess(response.Data));
+    yield put(SpinnerState(false))
   } catch (error) {
-    console.log("$$fetchOrderList_saga  #@ error$", error);
+    yield put(SpinnerState(false))
+    yield put(AlertState({ Type: 4, 
+      Status: true, Message: "500 Error Message",
+    }));
   }
 }
+
 function* EditOrder({ orderId }) {
   try {
      yield console.log('$$EditOrder page  before response$',orderId)

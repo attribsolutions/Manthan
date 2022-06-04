@@ -128,7 +128,7 @@ export const Role_Master_Update_API = (data,id) => put(`${url.ROLE_MASTER_API}/$
 export const getOrderPage = () => get(url.GET_ORDER)
 export const submitOrderPage = (data) => post(url.SUBMIT_ORDER_PAGE, data)
 export const editOrderID = (id) => get(url.EDIT_ORDER_ID)//Edit Order
-export const getOrderList = (data) => get(`${url.GET_ORDER_LIST}?FromDate=${data['FromDate']}&ToDate=${data['ToDate']}&CustomerID=${data['CustomerID']}&DivisionID=${data['DivisionID']}`)
+export const getOrderList = (data) => get(url.GET_ORDER_LIST)
 export const getDivisionOrders = () => get(`${url.GET_ORDER_LIST}?FromDate=2022-01-25&ToDate=2022-01-25&CustomerID=0&DivisionID=3`)
 
 //Administrator   Modules submit  

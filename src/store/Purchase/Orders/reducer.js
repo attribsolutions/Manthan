@@ -10,7 +10,7 @@ import {
 const INIT_STATE = {
     orders:[],
     submitOrderSuccess:{},
-    orderList:[],
+    ordersList:[],
     orderListMessage:[],
     editOrderData:{Items:[]},
 
@@ -32,7 +32,7 @@ const INIT_STATE = {
         case GET_ORDER_LIST_SUCCESS:
         return {
           ...state,
-          orderList: action.payload,
+          ordersList: action.payload,
         }
         case GET_ORDER_LIST_MESSAGE:
           return {
