@@ -53,6 +53,7 @@ const HPageMaster = (props) => {
         PageList: state.H_Pages.PageList,
     }));
 
+    console.log("PageList",PageList)
     // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
     useEffect(() => {
         document.getElementById("txtName").focus();
@@ -140,10 +141,11 @@ const HPageMaster = (props) => {
 
     //  for PageType deropDown
     const PageType_SelectOnChangeHandller = (e) => {
-        if (selectShowMenu === true && e.value === 2) {
-            dispatch(getPageList(e.value))
-        }
+        // if (selectShowMenu === true && e.value === 2) {
+        //     dispatch(getPageList(e.value))
+        // }
         setPageType(e);
+        dispatch(getPageList(e.value))
     }
 
     // PageList Dropdown
@@ -151,7 +153,7 @@ const HPageMaster = (props) => {
         value: d.value,
         label: d.label,
     }));
-
+        
     const PageList_SelectOnChangeHandller = (e) => {
         setPageList(getPageList(e.value));
     }
