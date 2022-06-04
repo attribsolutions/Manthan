@@ -26,9 +26,9 @@ const ItemsMaster = (props) => {
   const { PostData, } = useSelector((state) => ({
     PostData: state.ItemMastersReducer.PostData,
   }));
-  
-    // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
-    useEffect(() => {
+
+  // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
+  useEffect(() => {
     document.getElementById("txtName").focus();
     if (!(editDataGatingFromList === undefined)) {
       setEditData(editDataGatingFromList);
@@ -40,49 +40,49 @@ const ItemsMaster = (props) => {
 
   useEffect(() => {
     if ((PostData.Status === true) && (PostData.StatusCode === 200)) {
-        dispatch(PostItemDataSuccess({ Status: false }))
-        formRef.current.reset();
-        if (PageMode === true) {
-            dispatch(AlertState({
-                Type: 1,
-                Status: true,
-                Message: PostData.Message,
-            }))
-        }
-        else {
-            dispatch(AlertState({
-                Type: 1,
-                Status: true,
-                Message: PostData.Message,
-                RedirectPath: '/Item_List',
-                AfterResponseAction: false
-            }))
-        }
-    } 
+      dispatch(PostItemDataSuccess({ Status: false }))
+      formRef.current.reset();
+      if (PageMode === true) {
+        dispatch(AlertState({
+          Type: 1,
+          Status: true,
+          Message: PostData.Message,
+        }))
+      }
+      else {
+        dispatch(AlertState({
+          Type: 1,
+          Status: true,
+          Message: PostData.Message,
+          RedirectPath: '/Item_List',
+          AfterResponseAction: false
+        }))
+      }
+    }
     else if (PostData.Status === true) {
       dispatch(PostItemDataSuccess({ Status: false }))
       dispatch(AlertState({
-            Type: 4,
-            Status: true,
-            Message: "error Message",
-            RedirectPath: false,
-            AfterResponseAction: false
-        }));
+        Type: 4,
+        Status: true,
+        Message: "error Message",
+        RedirectPath: false,
+        AfterResponseAction: false
+      }));
     }
-}, [PostData.Status])
+  }, [PostData.Status])
 
-    //'Save' And 'Update' Button Handller
+  //'Save' And 'Update' Button Handller
   const handleValidUpdate = (event, values) => {
     const requestOptions = {
       body: JSON.stringify({
         Name: values.Name,
-        Description: values.Description,
+        GSTPercentage: values.GSTPercentage,
+        MRP: values.MRP,
         isActive: values.isActive,
-        Dashboard: values.Dashboard,
         CreatedBy: 1,
-        CreatedOn: "2022-05-20T11:22:55.711483Z",
+        CreatedOn: "2003-06-20T22:00:00Z",
         UpdatedBy: 1,
-        UpdatedOn: "2022-05-20T11:22:55.711483Z"
+        UpdatedOn: "2003-06-20T22:00:00Z"
       }),
     };
     if (IsEdit) {
@@ -90,11 +90,11 @@ const ItemsMaster = (props) => {
     }
     else {
       dispatch(postItemData(requestOptions.body));
-      console.log("requestOptions",requestOptions.body)
+      console.log("requestOptions", requestOptions.body)
     }
   };
 
- // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
+  // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
   var IsEditMode_Css = ''
   if (IsEdit === true) { IsEditMode_Css = "-3.5%" };
 
@@ -123,7 +123,7 @@ const ItemsMaster = (props) => {
                             value={EditData.Name}
                             type="text"
                             placeholder="Please Enter Name"
-                            autoComplete='off'
+                            // autoComplete='off'
                             validate={{
                               required: { value: true, errorMessage: 'Please enter a Name...!' },
                             }} />
@@ -133,14 +133,14 @@ const ItemsMaster = (props) => {
                     <AvGroup>
                       <Row className="mb-4">
                         <Label className="col-sm-2 col-form-label">
-                        GSTPercentage
+                          GSTPercentage
                         </Label>
                         <Col sm={4}>
                           <AvField name="GSTPercentage" id="txtName"
                             value={EditData.GSTPercentage}
                             type="text"
                             placeholder="Please Enter Discription"
-                            autoComplete='off'
+                            // autoComplete='off'
                             validate={{
                               required: { value: true, errorMessage: 'Please enter a GSTPercentage...!' },
                             }} />
@@ -151,14 +151,14 @@ const ItemsMaster = (props) => {
                     <AvGroup>
                       <Row className="mb-4">
                         <Label className="col-sm-2 col-form-label">
-                        MRP
+                          MRP
                         </Label>
                         <Col sm={4}>
-                          <AvField name="Dashboard" id="txtName"
+                          <AvField name="MRP" id="txtName"
                             value={EditData.MRP}
                             type="text"
                             placeholder="Please Enter Dashboard"
-                            autoComplete='off'
+                            // autoComplete='off'
                             validate={{
                               required: { value: true, errorMessage: 'Please enter a MRP...!' },
                             }} />
