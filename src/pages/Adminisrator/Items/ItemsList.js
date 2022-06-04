@@ -1,14 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import Breadcrumbs from "../../../components/Common/Breadcrumb";
 import { Col, Modal, Row } from "reactstrap";
-import {
-    getRole,
-    deleteRole,
-    editRoleId,
-    updateSuccess,
-    deleteSuccess,
-} from "../../../store/Administrator/RoleMasterRedux/action";
-
 import paginationFactory, {
     PaginationListStandalone,
     PaginationProvider,
@@ -18,7 +10,8 @@ import BootstrapTable from "react-bootstrap-table-next";
 import { useSelector, useDispatch } from "react-redux";
 import { AlertState } from '../../../store/Utilites/CostumeAlert/actions';
 import "../../../assets/scss/CustomeTable/datatables.scss"
-import Item_Master from './ItemsMaster';
+import ItemsMaster from './ItemsMaster';
+import { deleteItemID, deleteItemIdSuccess, editItemId, getItemList, updateItemSuccess } from '../../../store/Administrator/ItemsRedux/action';
 
 const ItemsList = () => {
     const dispatch = useDispatch();
@@ -26,30 +19,30 @@ const ItemsList = () => {
 
     // get Access redux data
     const { TableListData, editData, updateMessage, deleteMessage } = useSelector((state) => ({
-        TableListData: state.RoleMaster_Reducer.pages,
-        editData: state.RoleMaster_Reducer.editData,
-        updateMessage: state.RoleMaster_Reducer.updateMessage,
-        deleteMessage: state.RoleMaster_Reducer.deleteMessage,
+        TableListData: state.ItemMastersReducer.pages,
+        editData: state.ItemMastersReducer.editData,
+        updateMessage: state.ItemMastersReducer.updateMessage,
+        deleteMessage: state.ItemMastersReducer.deleteMessage,
     }));
 
     //  This UseEffect => Featch Modules List data  First Rendering
     useEffect(() => {
-        dispatch(getRole());
+        dispatch(getItemList());
     }, []);
 
     // This UseEffect => UpadateModal Success/Unsucces  Show and Hide Control Alert_modal 
     useEffect(() => {
         if ((updateMessage.Status === true) && (updateMessage.StatusCode === 200)) {
-            dispatch(updateSuccess({ Status: false }))
+            dispatch(updateItemSuccess({ Status: false }))
             dispatch(AlertState({
                 Type: 1, Status: true,
                 Message: updateMessage.Message,
-                AfterResponseAction: getRole,
+                AfterResponseAction: getItemList,
             }))
             tog_center()
         }
         else if (deleteMessage.Status === true) {
-            dispatch(updateSuccess({ Status: false }))
+            dispatch(deleteItemIdSuccess({ Status: false }))
             dispatch(AlertState({
                 Type: 3, Status: true,
                 Message: deleteMessage.Message,
@@ -59,14 +52,14 @@ const ItemsList = () => {
 
     useEffect(() => {
         if ((deleteMessage.Status === true) && (deleteMessage.StatusCode === 200)) {
-            dispatch(deleteSuccess({ Status: false }))
+            dispatch(deleteItemIdSuccess({ Status: false }))
             dispatch(AlertState({
                 Type: 1, Status: true,
                 Message: deleteMessage.Message,
-                AfterResponseAction: getRole,
+                AfterResponseAction: getItemList,
             }))
         } else if (deleteMessage.Status === true) {
-            dispatch(deleteSuccess({ Status: false }))
+            dispatch(deleteItemIdSuccess({ Status: false }))
             dispatch(AlertState({
                 Type: 3,
                 Status: true,
@@ -92,13 +85,13 @@ const ItemsList = () => {
             Type: 5, Status: true,
             Message: `Are you sure you want to delete this item : "${name}"`,
             RedirectPath: false,
-            PermissionAction: deleteRole,
+            PermissionAction: deleteItemID,
             ID: id
         }));
     }
     // edit Buutton Handller 
     const EditPageHandler = (id) => {
-     dispatch(editRoleId(id));
+        dispatch(editItemId(id));
     }
 
     const pageOptions = {
@@ -114,18 +107,18 @@ const ItemsList = () => {
             sort: true,
         },
         {
-            text: "Description",
-            dataField: "Description",
+            text: "GSTPercentage",
+            dataField: "GSTPercentage",
+            sort: true,
+        },
+        {
+            text: "MRP",
+            dataField: "MRP",
             sort: true,
         },
         {
             text: "IsActive",
             dataField: "isActive",
-            sort: true,
-        },
-        {
-            text: "Dashboard",
-            dataField: "Dashboard",
             sort: true,
         },
         {
@@ -175,11 +168,11 @@ const ItemsList = () => {
                                 <React.Fragment>
                                     <Breadcrumbs
                                         title={"Count :"}
-                                        breadcrumbItem={"Role List Page"}
+                                        breadcrumbItem={"Items List"}
                                         IsButtonVissible={true}
                                         SearchProps={toolkitProps.searchProps}
                                         breadcrumbCount={TableListData.length}
-                                        RedirctPath={"/RolesMaster"}
+                                        RedirctPath={"/itemsMaster"}
                                     />
                                     <Row>
                                         <Col xl="12">
@@ -215,7 +208,7 @@ const ItemsList = () => {
                     toggle={() => { tog_center() }}
                     size="xl"
                 >
-                    <Item_Master state={editData.Data} />
+                    <ItemsMaster state={editData.Data} />
                 </Modal>
             </div>
         </React.Fragment>

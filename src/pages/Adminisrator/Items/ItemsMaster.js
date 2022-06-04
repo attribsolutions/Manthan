@@ -54,7 +54,7 @@ const ItemsMaster = (props) => {
           Type: 1,
           Status: true,
           Message: PostData.Message,
-          RedirectPath: '/Item_List',
+          RedirectPath: '/itemsList',
           AfterResponseAction: false
         }))
       }
@@ -90,7 +90,6 @@ const ItemsMaster = (props) => {
     }
     else {
       dispatch(postItemData(requestOptions.body));
-      console.log("requestOptions", requestOptions.body)
     }
   };
 
@@ -142,6 +141,7 @@ const ItemsMaster = (props) => {
                             placeholder="Please Enter Discription"
                             // autoComplete='off'
                             validate={{
+                              number: true,
                               required: { value: true, errorMessage: 'Please enter a GSTPercentage...!' },
                             }} />
                         </Col>
@@ -160,6 +160,7 @@ const ItemsMaster = (props) => {
                             placeholder="Please Enter Dashboard"
                             // autoComplete='off'
                             validate={{
+                              number: true,
                               required: { value: true, errorMessage: 'Please enter a MRP...!' },
                             }} />
                         </Col>
