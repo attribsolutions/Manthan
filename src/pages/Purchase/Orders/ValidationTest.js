@@ -7,94 +7,58 @@ import {
     Button,
     Label,
     Input,
-    CardHeader,
 } from "reactstrap";
+import Select from "react-select";
+import { Custom_ValidationFun } from '../ValidationFunctions';
+
 export default function ValidationTest() {
 
     useEffect(() => {
         document.getElementById("valInp1").focus();
-    },[]);
+        // document.getElementById("valInp1").target.next.focus();
+
+        // document.getElementById("react-select-2-input").focus();
+    }, []);
+
+    const [selectModule, setSelectModule] = useState('');
 
     const [validation, setValidation] = useState({
         valInp1: null,
         valInp2: null,
         valInp3: null,
-
     })
 
+    const optionModule = [{
+        value: 1,
+        label: "Test1",
+    }, {
+        value: 2,
+        label: "Test2",
+    }];
+
     function handleSubmit(e) {
+
         e.preventDefault()
         const modifiedV = { ...validation }
-        var fnm = document.getElementById("valInp1")
-        var lnm = document.getElementById("valInp2")
-        var unm = document.getElementById("valInp3")
+        var fnm = document.getElementById("valInp1");
+        var lnm = document.getElementById("valInp2");
+        var unm = document.getElementById("valInp3");
 
-        if (fnm.id === "valInp1") {
-            if ((fnm.value !== "")) {
-                modifiedV[fnm.id] = true
-            } else {
-                modifiedV[fnm.id] = false
-            }
-        }
-
-        if (lnm.id === "valInp2") {
-            if (/^[0-9]+$/.test(lnm.value)) { modifiedV[lnm.id] = true }
-            else {
-                modifiedV[lnm.id] = false
-            }
-        }
-
-        if (unm.id === "valInp3") {
-            var Emailvalidation = /^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/
-            if ((Emailvalidation.test(unm.value))) {
-                modifiedV[unm.id] = true
-            }
-            else {
-                modifiedV[unm.id] = false
-            }
-        }
-        setValidation(modifiedV)
+        setValidation({ ...validation }[fnm.id] = Custom_ValidationFun(fnm));
+        setValidation({ ...validation }[lnm.id] = Custom_ValidationFun(lnm));
+        setValidation({ ...validation }[fnm.id] = Custom_ValidationFun(unm));
 
         if ((modifiedV["valInp1"]) && (modifiedV["valInp2"]) && (modifiedV["valInp3"])) {
             alert("submit scuccess")
         }
     }
 
-    //for change tooltip display propery
-    const onChangeValidation = (fieldName, value, catagory) => {
-
-        const modifiedV = { ...validation }
-        if ((value !== "") && (catagory === "text")) {
-            modifiedV[fieldName] = true
-        }
-        else if (catagory === "Number") {
-            if (/^[0-9]+$/.test(value)) { modifiedV[fieldName] = true }
-            else {
-                modifiedV[fieldName] = false
-            }
-        }
-        else if (catagory === "email") {
-            var Emailvalidation = /^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/
-            if ((Emailvalidation.test(value))) {
-                modifiedV[fieldName] = true
-            }
-            else {
-                modifiedV[fieldName] = false
-            }
-        }
-        else {
-            modifiedV[fieldName] = false
-        }
-        setValidation(modifiedV)
-    }
-
     const onKeyPress = (e) => {
-
         var cont = e.target.id;
         var abc = cont.split("p");
         cont = abc[1];
 
-        if ((e.keyCode === 40 || e.keyCode === 13) && (cont < 3)) {
+        if ((e.keyCode === 40 || e.keyCode === 13) && (cont < 4)) {
             cont = ++cont;
             document.getElementById("valInp" + cont).focus();
             return
@@ -104,12 +68,14 @@ export default function ValidationTest() {
             document.getElementById("valInp" + cont).focus();
             return
         }
-        if (e.keyCode === 13 && cont == 3) {
+        if (e.keyCode === 13 && cont == 4) {
             document.getElementById("saveKye").click();
             return
         }
     }
-
+    let a = document.getElementById("react-select-2-input")
+    console.log('event', a)
+    debugger
     return (
         <React.Fragment>
             <div className="page-content">
@@ -122,17 +88,18 @@ export default function ValidationTest() {
                         >
                             <Row className="row mt-4">
                                 <Label htmlFor="valInp" className="col-sm-3 col-form-label">
-                                    First name
+                                    Not null
                                 </Label>
                                 <Col sm={4}>
                                     <Input
                                         type="text"
+                                        name="text"
                                         className="form-control"
                                         id="valInp1"
                                         placeholder="First name"
                                         autoComplete='off'
                                         onChange={event => {
-                                            onChangeValidation("valInp1", event.target.value, "text")
+                                            setValidation({ ...validation, valInp1: Custom_ValidationFun(event.target) })
                                         }}
                                         onKeyDown={(event) => { onKeyPress(event) }}
                                         valid={validation["valInp1"] === true}
@@ -145,17 +112,18 @@ export default function ValidationTest() {
                             </Row>
                             <Row className="row mt-4">
                                 <Label htmlFor="validationTooltip02" className="col-sm-3 col-form-label">
-                                    City name
+                                    Number
                                 </Label>
                                 <Col sm={4}>
                                     <Input
                                         type="text"
+                                        name="textNum"
                                         className="form-control"
                                         id="valInp2"
                                         placeholder="City name"
                                         autoComplete='off'
                                         onChange={event => {
-                                            onChangeValidation("valInp2", event.target.value, "Number")
+                                            setValidation({ ...validation, valInp2: Custom_ValidationFun(event.target) })
                                         }}
                                         onKeyDown={event => onKeyPress(event)}
                                         on
@@ -170,7 +138,7 @@ export default function ValidationTest() {
                             <Row className="row mt-4">
 
                                 <Label htmlFor="valInp3" className="col-sm-3 col-form-label">
-                                    last name
+                                    Email
                                 </Label>
                                 <Col sm={4}>
                                     <Input
@@ -180,7 +148,7 @@ export default function ValidationTest() {
                                         placeholder="lastName"
                                         autoComplete='off'
                                         onChange={event => {
-                                            onChangeValidation("valInp3", event.target.value, "email")
+                                            setValidation({ ...validation, valInp3: Custom_ValidationFun(event.target) })
                                         }}
                                         onKeyDown={event => onKeyPress(event)}
                                         valid={validation["valInp3"] === true}
@@ -191,6 +159,39 @@ export default function ValidationTest() {
                                     />
                                 </Col>
                             </Row>
+                            <Row className="row mt-4">
+                                <Label htmlFor="valInpSelect" className="col-sm-3 col-form-label">
+                                    select Input
+                                </Label>
+                                <Col sm={4}>
+                                    <Select
+                                        id="valInp4"
+                                        title="select"
+                                        value={selectModule}
+                                        options={optionModule}
+                                        // autoComplete='off'
+                                        onChange={(e) => { setSelectModule(e); }}
+
+                                    />
+                                </Col>
+                            </Row>
+                            <Row className="row mt-4">
+                                <Label htmlFor="valInpSelect" className="col-sm-3 col-form-label">
+                                    select Input
+                                </Label>
+                                <Col sm={4}>
+                                    <Select
+                                        id="valInp4"
+                                        title="select"
+                                        value={selectModule}
+                                        options={optionModule}
+                                        // autoComplete='off'
+                                        onChange={(e) => { setSelectModule(e); }}
+
+                                    />
+                                </Col>
+                            </Row>
+
                             <Button id='saveKye' color="primary" type="button" onClick={e => {
                                 handleSubmit(e)
                             }}>
