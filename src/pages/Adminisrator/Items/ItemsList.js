@@ -1,87 +1,79 @@
-import React, { useEffect, useState } from "react";
-import MetaTags from "react-meta-tags";
-import {
-    Col,
-    Modal,
-    Row,
-} from "reactstrap";
-import { deleteCompany_ID, editCompanyID, fetchCompanyList, updateCompanyIDSuccess, deleteCompanyIDSuccess, editCompanyIDSuccess } from "../../../store/Administrator/CompanyRedux/actions";
+import React, { useEffect, useState } from 'react'
 import Breadcrumbs from "../../../components/Common/Breadcrumb";
+import { Col, Modal, Row } from "reactstrap";
+import {
+    getRole,
+    deleteRole,
+    editRoleId,
+    updateSuccess,
+    deleteSuccess,
+} from "../../../store/Administrator/RoleMasterRedux/action";
 
 import paginationFactory, {
     PaginationListStandalone,
-    PaginationProvider
+    PaginationProvider,
 } from "react-bootstrap-table2-paginator";
-import ToolkitProvider from "react-bootstrap-table2-toolkit";
+import ToolkitProvider, { Search } from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
-
-//redux
 import { useSelector, useDispatch } from "react-redux";
-import CompanyModule from "./CompanyModule";
+import { AlertState } from '../../../store/Utilites/CostumeAlert/actions';
 import "../../../assets/scss/CustomeTable/datatables.scss"
-import { AlertState } from "../../../store/Utilites/CostumeAlert/actions";
+import Item_Master from './ItemsMaster';
 
-const CompanyList = () => {
-
+const ItemsList = () => {
     const dispatch = useDispatch();
     const [modal_center, setmodal_center] = useState(false);
 
     // get Access redux data
-    const { companyList, editData, updateMessage, deleteCompanyID } = useSelector((state) => ({
-        companyList: state.Company.companyList,
-        editData: state.Company.editData,
-        updateMessage: state.Company.updateMessage,
-        deleteCompanyID: state.Company.deleteCompanyID,
+    const { TableListData, editData, updateMessage, deleteMessage } = useSelector((state) => ({
+        TableListData: state.RoleMaster_Reducer.pages,
+        editData: state.RoleMaster_Reducer.editData,
+        updateMessage: state.RoleMaster_Reducer.updateMessage,
+        deleteMessage: state.RoleMaster_Reducer.deleteMessage,
     }));
-    console.log("editData in useselector", editData)
 
-    // tag_center -- Control the Edit Modal show and close
-    function tog_center() {
-        setmodal_center(!modal_center)
-    }
-
-    // Featch Modules List data  First Rendering
+    //  This UseEffect => Featch Modules List data  First Rendering
     useEffect(() => {
-        dispatch(fetchCompanyList());
+        dispatch(getRole());
     }, []);
 
     // This UseEffect => UpadateModal Success/Unsucces  Show and Hide Control Alert_modal 
     useEffect(() => {
         if ((updateMessage.Status === true) && (updateMessage.StatusCode === 200)) {
-            dispatch(updateCompanyIDSuccess({ Status: false }))
+            dispatch(updateSuccess({ Status: false }))
             dispatch(AlertState({
                 Type: 1, Status: true,
                 Message: updateMessage.Message,
-                AfterResponseAction: fetchCompanyList,
+                AfterResponseAction: getRole,
             }))
             tog_center()
         }
-        else if (deleteCompanyID.Status === true) {
-            dispatch(deleteCompanyIDSuccess({ Status: false }))
+        else if (deleteMessage.Status === true) {
+            dispatch(updateSuccess({ Status: false }))
             dispatch(AlertState({
                 Type: 3, Status: true,
-                Message: deleteCompanyID.Message,
+                Message: deleteMessage.Message,
             }));
         }
     }, [updateMessage.Status, dispatch]);
 
     useEffect(() => {
-        if ((deleteCompanyID.Status === true) && (deleteCompanyID.StatusCode === 200)) {
-            dispatch(deleteCompanyIDSuccess({ Status: false }))
+        if ((deleteMessage.Status === true) && (deleteMessage.StatusCode === 200)) {
+            dispatch(deleteSuccess({ Status: false }))
             dispatch(AlertState({
                 Type: 1, Status: true,
-                Message: deleteCompanyID.Message,
-                AfterResponseAction: fetchCompanyList,
+                Message: deleteMessage.Message,
+                AfterResponseAction: getRole,
             }))
-        } else if (deleteCompanyID.Status === true) {
-            dispatch(deleteCompanyIDSuccess({ Status: false }))
+        } else if (deleteMessage.Status === true) {
+            dispatch(deleteSuccess({ Status: false }))
             dispatch(AlertState({
                 Type: 3,
                 Status: true,
                 Message: "error Message",
             }));
         }
-    }, [deleteCompanyID.Status])
+    }, [deleteMessage.Status])
 
     // Edit Modal Show When Edit Data is true
     useEffect(() => {
@@ -90,33 +82,30 @@ const CompanyList = () => {
         }
     }, [editData]);
 
-    // Edit button Handller
-    const EditPageHandler = (id) => {
-        dispatch(editCompanyID(id));
+    function tog_center() {
+        setmodal_center(!modal_center)
     }
 
-    //Delete Button Handller
+    //select id for delete row
     const deleteHandeler = (id, name) => {
         dispatch(AlertState({
             Type: 5, Status: true,
             Message: `Are you sure you want to delete this item : "${name}"`,
             RedirectPath: false,
-            PermissionAction: deleteCompany_ID,
+            PermissionAction: deleteRole,
             ID: id
         }));
     }
+    // edit Buutton Handller 
+    const EditPageHandler = (id) => {
+     dispatch(editRoleId(id));
+    }
 
     const pageOptions = {
-        sizePerPage: 15,
-        totalSize: companyList.length, // replace later with size(users),
+        sizePerPage: 10,
+        totalSize: TableListData.length,
         custom: true,
     };
-    const defaultSorted = [
-        {
-            dataField: "Name", // if dataField is not match to any column you defined, it will be ignored.
-            order: "asc", // desc or asc
-        },
-    ];
 
     const pagesListColumns = [
         {
@@ -125,67 +114,60 @@ const CompanyList = () => {
             sort: true,
         },
         {
-            text: "Address",
-            dataField: "Address",
+            text: "Description",
+            dataField: "Description",
             sort: true,
         },
         {
-            text: "GSTIN",
-            dataField: "GSTIN",
+            text: "IsActive",
+            dataField: "isActive",
             sort: true,
         },
         {
-            text: "Phone No",
-            dataField: "PhoneNo",
-            sort: true,
-        },
-        {
-            text: "Company Abbreviation",
-            dataField: "CompanyAbbreviation",
-            sort: true,
-        },
-        {
-            text: "Email",
-            dataField: "EmailID",
+            text: "Dashboard",
+            dataField: "Dashboard",
             sort: true,
         },
         {
             text: "Action",
-            formatter: (cellContent, module) => (
-
-                <div class="d-flex gap-3" style={{ display: 'flex', justifyContent: 'center' }} >
-                    <buton
-                        type="button"
-                        onClick={() => { EditPageHandler(module.ID); }}
-                        className="badge badge-soft-primary font-size-12"
-                    >
-                        <i class="mdi mdi-pencil font-size-18" id="edittooltip"></i>
-                    </buton>
-
-                    <buton
-                        className="badge badge-soft-danger font-size-12"
-                        onClick={() => { deleteHandeler(module.ID, module.Name); }}
-                    >
-                        <i class="mdi mdi-delete font-size-18" ></i>
-                    </buton>
-                </div>
+            formatter: (cellContent, Role) => (
+                <>
+                    <div className="d-flex gap-3" style={{ display: 'flex', justifyContent: 'center' }} >
+                        <buton
+                            type="button"
+                            data-mdb-toggle="tooltip" data-mdb-placement="top" title="Edit Modules ID"
+                            onClick={() => {
+                                EditPageHandler(Role.ID);
+                            }}
+                            className="badge badge-soft-primary font-size-12"
+                        >
+                            <i className="mdi mdi-pencil font-size-18" id="edittooltip"></i>
+                        </buton>
+                        <buton
+                            className="badge badge-soft-danger font-size-12"
+                            data-mdb-toggle="tooltip" data-mdb-placement="top" title="Delete Modules ID"
+                            onClick={() => {
+                                deleteHandeler(Role.ID, Role.Name);
+                            }}
+                        >
+                            <i className="mdi mdi-delete font-size-18" ></i>
+                        </buton>
+                    </div>
+                </>
             ),
         },
-    ];
+    ]
 
     return (
         <React.Fragment>
             <div className="page-content">
-                <MetaTags>
-                    <title>Company List| FoodERP-React FrontEnd</title>
-                </MetaTags>
                 <PaginationProvider
                     pagination={paginationFactory(pageOptions)}
                 >
                     {({ paginationProps, paginationTableProps }) => (
                         <ToolkitProvider
                             keyField="id"
-                            data={companyList}
+                            data={TableListData}
                             columns={pagesListColumns}
                             search
                         >
@@ -193,11 +175,11 @@ const CompanyList = () => {
                                 <React.Fragment>
                                     <Breadcrumbs
                                         title={"Count :"}
-                                        breadcrumbItem={"Company List"}
+                                        breadcrumbItem={"Role List Page"}
                                         IsButtonVissible={true}
                                         SearchProps={toolkitProps.searchProps}
-                                        breadcrumbCount={companyList.length}
-                                        RedirctPath={"/companysMaster"}
+                                        breadcrumbCount={TableListData.length}
+                                        RedirctPath={"/RolesMaster"}
                                     />
                                     <Row>
                                         <Col xl="12">
@@ -207,8 +189,9 @@ const CompanyList = () => {
                                                     responsive
                                                     bordered={false}
                                                     striped={false}
-                                                    defaultSorted={defaultSorted}
-                                                    classes={"table  table-bordered"}
+                                                    classes={
+                                                        "table  table-bordered"
+                                                    }
                                                     {...toolkitProps.baseProps}
                                                     {...paginationTableProps}
                                                 />
@@ -227,19 +210,17 @@ const CompanyList = () => {
                         </ToolkitProvider>
                     )}
                 </PaginationProvider>
-            </div >
-            <Modal
-                isOpen={modal_center}
-                toggle={() => { tog_center() }}
-                size="xl"
-            >
-                <CompanyModule state={editData.Data} />
-            </Modal>
-        </React.Fragment >
+                <Modal
+                    isOpen={modal_center}
+                    toggle={() => { tog_center() }}
+                    size="xl"
+                >
+                    <Item_Master state={editData.Data} />
+                </Modal>
+            </div>
+        </React.Fragment>
     );
 };
 
-export default CompanyList;
 
-
-
+export default ItemsList;

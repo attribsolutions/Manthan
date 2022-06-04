@@ -20,6 +20,7 @@ import {
   get_H_SubModule_HPages,
   get_Module_HPages,
   saveHPagesAPI,
+  showPagesListOnPageType_DropDown_List,
   updateHPages
 } from "../../../helpers/backend_helper";
 import {
@@ -126,9 +127,10 @@ function* deleteHpagesUsingID_GenratorFunction({ id }) {
 //  PageType dropdown list
 function* PageList_DropDown_GenratorFunction() {
   try {
-    // const response = yield call("");
-    console.log("PageList Data saga file",PageListDropdownData.Data)
-    yield put(getPageListSuccess(PageListDropdownData.Data));
+    const response = yield call(showPagesListOnPageType_DropDown_List);
+    yield put(getPageListSuccess(response.Data));
+    console.log("PageList Data saga file",response.Data)
+
   } catch (error) {
     console.log("PageList_saga page error", error);
   }

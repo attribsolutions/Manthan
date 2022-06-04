@@ -60,6 +60,7 @@ const CompanyModule = (props) => {
   useEffect(() => {
     if ((SubmitSuccesss.Status === true) && (SubmitSuccesss.StatusCode === 200)) {
       dispatch(PostCompanySubmitSuccess({ Status: false }))
+      setCompanyGroup('')
       formRef.current.reset();
       if (PageMode === true) {
         dispatch(AlertState({
@@ -79,7 +80,7 @@ const CompanyModule = (props) => {
       }
     }
     else if (SubmitSuccesss.Status === true) {
-
+      dispatch(PostCompanySubmitSuccess({ Status: false }))
       dispatch(AlertState({
         Type: 4,
         Status: true,

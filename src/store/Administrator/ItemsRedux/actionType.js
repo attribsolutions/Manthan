@@ -1,0 +1,19 @@
+// get api
+export const GET_ITEM_LIST_API="GET_ITEM_LIST_API"
+export const GET_ITEM_LIST_API_SUCCESS="GET_ITEM_LIST_API_SUCCESS"
+
+// post api
+export const POST_ITEM_DATA = "POST_ITEM_DATA"
+export const POST_ITEM_DATA_SUCCESS = "POST_ITEM_DATA_SUCCESS"
+
+// delete api
+export const DELETE_ITEM_ID="DELETE_ITEM_ID"
+export const DELETE_ITEM_ID_SUCCESS="DELETE_ITEM_ID_SUCCESS"
+
+// edit api
+export const EDIT_ITEM_ID="EDIT_ITEM_ID"
+export const EDIT_ITEM_ID_SUCCESS="EDIT_ITEM_ID_SUCCESS"
+
+// update api
+export const UPDATE_ITEM_ID="UPDATE_ITEM_ID"
+export const UPDATE_ITEM_ID_SUCCESS="UPDATE_ITEM_ID_SUCCESS"

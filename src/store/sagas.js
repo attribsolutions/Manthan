@@ -20,6 +20,7 @@ import OrdersSaga from "./Purchase/Orders/saga"
 import UserRegistrationSaga from "./Administrator/UserRegistrationRedux/saga"
 import M_EmployeeSaga from "./Administrator/M_EmployeeRedux/saga"
 import RoleMaster_Saga from "./Administrator/RoleMasterRedux/saga"
+import ItemsMastersSaga from "./Administrator/ItemsRedux/saga"
 export default function* rootSaga() {
   yield all([
     fork(AccountSaga),
@@ -38,5 +39,6 @@ export default function* rootSaga() {
     fork(UserRegistrationSaga),
     fork(M_EmployeeSaga),
     fork(RoleMaster_Saga),
+    fork(ItemsMastersSaga),
   ])
 }

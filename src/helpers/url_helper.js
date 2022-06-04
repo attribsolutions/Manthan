@@ -25,6 +25,7 @@ export const POST_JWT_LOGIN = "/Login"
 //PAGE Master
 export const GET_DEFAULT_MODULE="/HModules"
 export const POST_MODULE_ID="/HModules"
+export const showPagesListOnPageType_DropDown="/showPagesListOnPageType/2"
 
 // Moduls Submit  Method URL
 export const H_MODULES_API_URL ="/H_Modules"
@@ -59,3 +60,6 @@ export const EMPLOYEE_API_URL="/M_Employees"
 
 // Role Master
 export const ROLE_MASTER_API="/M_Roles"////  role get api
+
+// M_Items Api
+export const Items_MASTER_API="/M_Items"
