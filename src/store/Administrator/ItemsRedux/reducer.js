@@ -18,7 +18,7 @@ const INIT_STATE = {
     updateMessage: { Status: false },
 };
 
-const ItemMastesReducer = (state = INIT_STATE, action) => {
+const ItemMastersReducer = (state = INIT_STATE, action) => {
     switch (action.type) {
         // get api
         case GET_ITEM_LIST_API_SUCCESS:
@@ -64,4 +64,4 @@ const ItemMastesReducer = (state = INIT_STATE, action) => {
             return state;
     }
 };
-export default ItemMastesReducer;
+export default ItemMastersReducer;

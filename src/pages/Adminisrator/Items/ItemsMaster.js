@@ -24,7 +24,7 @@ const ItemsMaster = (props) => {
 
   //Access redux store Data /  'save_ModuleSuccess' action data
   const { PostData, } = useSelector((state) => ({
-    PostData: state.ItemMaster_Reducer.PostData,
+    PostData: state.ItemMastersReducer.PostData,
   }));
   
     // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
@@ -214,4 +214,4 @@ const ItemsMaster = (props) => {
     </React.Fragment>
   );
 }
-export default ItemsMaster
+export default ItemsMaster;
