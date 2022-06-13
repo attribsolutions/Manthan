@@ -13,11 +13,13 @@ import { Table, Thead, Tbody, Tr, Th, Td } from "react-super-responsive-table";
 import "react-super-responsive-table/dist/SuperResponsiveTableStyle.css";
 
 // store action import
-import {  submitOrderPage, editOrder, getOrderItems_ForOrderPage } from "../../../store/Purchase/OrderPageRedux/actions";
+import { submitOrder_fromOrderPage,  getOrderItems_ForOrderPage } from "../../../store/Purchase/OrderPageRedux/actions";
 import { useSelector, useDispatch } from "react-redux";
 import '../../Purchase/Orders/div.css'
+
 import generate from "../../../Reports/InvioceReport/Page";
 import { InvoiceFakeData } from "./InvioceFakedata";
+
 const OrderPage = (props) => {
   var itemgroups = "";
 
@@ -30,17 +32,16 @@ const OrderPage = (props) => {
   const [orderDate, setOrderDate] = useState("");
   const Order_Id = props.location.state;
   useEffect(() => {
-    if (Order_Id === undefined) {
-    } else {
-      dispatch(editOrder(Order_Id.orderId));
-    }
+    // if (Order_Id === undefined) {
+    // } else {
+    //   dispatch(editOrder(Order_Id.orderId));
+    // }
     dispatch(getOrderItems_ForOrderPage());
   }, [dispatch, Order_Id]);
 
   const { OrderItems, editOrderData, } = useSelector((state) => ({
     OrderItems: state.OrderPageReducer.OrderItems,
-     
-    editOrderData: state.OrderPageReducer.editOrderData.Items,
+    // editOrderData: state.OrderPageReducer.editOrderData.Items,
   }));
 
   const saveHandeller = () => {
@@ -76,8 +77,8 @@ const OrderPage = (props) => {
         OrderitemInfo: abc,
       }),
     };
-    generate(InvoiceFakeData)
-    // dispatch(submitOrderPage(requestOptions.body));
+    // generate(InvoiceFakeData)
+    // dispatch(submitOrder_fromOrderPage(requestOptions.body));
   };
 
   function handleKeyDown(e) {

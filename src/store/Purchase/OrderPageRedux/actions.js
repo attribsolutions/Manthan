@@ -8,8 +8,8 @@ import{
     GET_ORDER_LIST_SUCCESS,
     GET_ORDER_ITEMS_FOR_ORDER_PAGE,
     GET_ORDER_ITEMS_FOR_ORDER_PAGE_SUCCESS,
-    SUBMIT_ORDER_PAGE,
-    SUBMIT_ORDER_PAGE_SUCCESS
+    SUBMIT_ORDER_FROM_ORDER_PAGE,
+    SUBMIT_ORDER_FROM_ORDER_PAGE_SUCCESS
 }from './actionType'
 
 export const getOrderItems_ForOrderPage = () => ({
@@ -20,13 +20,13 @@ export const getOrderItems_ForOrderPage = () => ({
     type: GET_ORDER_ITEMS_FOR_ORDER_PAGE_SUCCESS,
     payload:data,
   });
-  export const submitOrderPage = (data) => ({
-    type: SUBMIT_ORDER_PAGE,
+  export const submitOrder_fromOrderPage = (data) => ({
+    type: SUBMIT_ORDER_FROM_ORDER_PAGE,
    data,
   });
-  export const submitOrderPageSuccess = (submitOrderSuccess) => ({
-    type: SUBMIT_ORDER_PAGE_SUCCESS,
-    payload:submitOrderSuccess
+  export const submitOrder_fromOrderPage_Success = (data) => ({
+    type: SUBMIT_ORDER_FROM_ORDER_PAGE_SUCCESS,
+    payload:data
   });
   export const getOrderList = (data) => ({
     type: GET_ORDER_LIST,

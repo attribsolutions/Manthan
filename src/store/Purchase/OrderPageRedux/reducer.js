@@ -1,7 +1,7 @@
 import { 
   GET_ORDER_LIST_SUCCESS,
   GET_ORDER_ITEMS_FOR_ORDER_PAGE_SUCCESS, 
-     SUBMIT_ORDER_PAGE_SUCCESS,
+  SUBMIT_ORDER_FROM_ORDER_PAGE_SUCCESS,
      GET_DIVISIONORDER_LIST_SUCCESS,
      GET_ORDER_LIST_MESSAGE,
      EDIT_ORDER_SUCCESS,
@@ -24,7 +24,7 @@ const INIT_STATE = {
           ...state,
           OrderItems: action.payload,
         }
-        case SUBMIT_ORDER_PAGE_SUCCESS:
+        case SUBMIT_ORDER_FROM_ORDER_PAGE_SUCCESS:
         return {
           ...state,
           submitOrderSuccess: action.payload,

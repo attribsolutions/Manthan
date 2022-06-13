@@ -126,10 +126,10 @@ export const Role_Master_Update_API = (data,id) => put(`${url.ROLE_MASTER_API}/$
 
 
 export const getOrderItems_forOrderPage_ApiCall = () => get(url.GET_ORDER_ITEM)
-export const submitOrderPage = (data) => post(url.SUBMIT_ORDER_PAGE, data)
-export const editOrderID = (id) => get(url.EDIT_ORDER_ID)//Edit Order
-export const getOrderList = (data) => get(url.GET_ORDER_LIST)
-export const getDivisionOrders = () => get(`${url.GET_ORDER_LIST}?FromDate=2022-01-25&ToDate=2022-01-25&CustomerID=0&DivisionID=3`)
+export const submitOrder_From_OrderPage_apiCall = (data) => post(url.ORDER_PAGE_API, data)
+export const editOrderID_forOrderPage_ApiCall = (id) => get(url.ORDER_PAGE_API)//Edit Order
+export const getOrderList_forOrderPage_ApiCall = (data) => get(url.ORDER_PAGE_API)
+export const getDivisionOrders = () => get(`${url.ORDER_PAGE_API}?FromDate=2022-01-25&ToDate=2022-01-25&CustomerID=0&DivisionID=3`)
 
 //Administrator   Modules submit  
 export const postSubmitModules = (data) => post(url.H_MODULES_API_URL, data)
