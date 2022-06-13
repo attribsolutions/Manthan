@@ -40,14 +40,14 @@ const HPageMaster = (props) => {
     const [selectPageType, setPageType] = useState('');
     const [selectPageList, setPageList] = useState('');
     const [selectShowMenu, setShowMenu] = useState();
-
+    
+  
     const { ModuleData, SaveMessage, PageList } = useSelector((state) => ({
         ModuleData: state.Modules.modulesList,
         SaveMessage: state.H_Pages.saveMessage,
         PageList: state.H_Pages.PageList,
     }));
 
-    console.log("PageList", PageList)
     // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
     useEffect(() => {
         document.getElementById("txtName").focus();
@@ -131,21 +131,27 @@ const HPageMaster = (props) => {
 
     //  for PageType deropDown
     const PageType_SelectOnChangeHandller = (e) => {
-        // if (selectShowMenu === true && e.value === 2) {
-        //     dispatch(getPageList(e.value))
+        if (e.label==="ListPage") {
+            // document.getElementById("inputPage").focus();
+            dispatch(getPageList(e.value))
+        }
+        // else 
+        // {
+        //     dispatch(getPageList([]));
         // }
-        setPageType(e);
-        dispatch(getPageList(e.value))
+        setPageType(e)
+        // dispatch(getPageList(e.value))
     }
 
     // PageList Dropdown
     const optionPageList = PageList.map((d) => ({
-        value: d.value,
-        label: d.label,
+        value: d.ID,
+        label: d.Name,
     }));
 
     const PageList_SelectOnChangeHandller = (e) => {
-        setPageList(getPageList(e.value));
+        setPageList(e);
+        // dispatch(getPageList(e.value));
     }
 
     return (
@@ -265,6 +271,7 @@ const HPageMaster = (props) => {
                                             <Col sm={4}>
                                                 <Select
                                                     value={selectPageType}
+                                                  
                                                     options={[{
                                                         value: 1,
                                                         label: "AddPage",
@@ -274,7 +281,7 @@ const HPageMaster = (props) => {
                                                         label: "ListPage",
                                                     }]}
                                                     autoComplete='off'
-                                                    onChange={(e) => { PageType_SelectOnChangeHandller(e) }}
+                                                    onChange={(e) => { PageType_SelectOnChangeHandller(e); }}
                                                 />
 
                                             </Col>
@@ -287,6 +294,7 @@ const HPageMaster = (props) => {
                                                 <Col sm={4}>
                                                     <AvField name="Show Menu"
                                                         checked={selectShowMenu}
+                                                       
                                                         type="checkbox" validate={{
                                                         }} />
                                                 </Col>

@@ -22,7 +22,7 @@ export default function HPageList() {
         updateMessage: state.H_Pages.updateMessage,
         deleteModuleID: state.H_Pages.deleteModuleID,
     }));
-   
+
     useEffect(() => {
         dispatch(dispatch(GetHpageListData()))
     }, []);
@@ -52,14 +52,14 @@ export default function HPageList() {
 
     useEffect(() => {
         if ((deleteModuleID.Status === true) && (deleteModuleID.StatusCode === 200)) {
-            dispatch(deleteModuleIDSuccess({Status:false}))
+            dispatch(deleteModuleIDSuccess({ Status: false }))
             dispatch(AlertState({
                 Type: 1, Status: true,
                 Message: deleteModuleID.Message,
                 AfterResponseAction: GetHpageListData,
             }))
         } else if (deleteModuleID.Status === true) {
-            dispatch(deleteModuleIDSuccess({Status:false}))
+            dispatch(deleteModuleIDSuccess({ Status: false }))
             dispatch(AlertState({
                 Type: 3,
                 Status: true,
@@ -120,11 +120,6 @@ export default function HPageList() {
             dataField: "ModuleName",
             sort: true,
         },
-        // {
-        //     text: "Sub ModuleID",
-        //     dataField: "SubModuleID",
-        //     sort: true,
-        // },
         {
             text: "DisplayIndex",
             dataField: "DisplayIndex",

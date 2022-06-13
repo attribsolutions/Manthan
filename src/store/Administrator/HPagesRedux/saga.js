@@ -44,7 +44,8 @@ function* fetchHPagesList_GneratorFunction() {
     yield put(SpinnerState(false))
   } catch (error) {
     yield put(SpinnerState(false))
-    yield put(AlertState({ Type: 4, 
+    yield put(AlertState({
+      Type: 4,
       Status: true, Message: "500 Error Message",
     }));
   }
@@ -65,10 +66,11 @@ function* saveHPageSaga_GneratorFunction({ data }) {
     const response = yield call(saveHPagesAPI, data);
     yield put(SpinnerState(false))
     yield put(saveHPagesSuccess(response));
-    console.log("response",response)
+    console.log("response", response)
   } catch (error) {
     yield put(SpinnerState(false))
-    yield put(AlertState({ Type: 4, 
+    yield put(AlertState({
+      Type: 4,
       Status: true, Message: "500 Error Message",
     }));
   }
@@ -79,7 +81,8 @@ function* editHpages_ID({ id }) {
     const response = yield call(edit_HPageID, id);
     yield put(editHPagesIDSuccess(response));
   } catch (error) {
-    yield put(AlertState({ Type: 4, 
+    yield put(AlertState({
+      Type: 4,
       Status: true, Message: "500 Error Message",
     }));
   }
@@ -92,9 +95,10 @@ function* update_HPagesUsingID_GenratorFunction({ data, id }) {
     yield put(SpinnerState(false))
     yield put(updateHPagesSuccess(response))
   }
-    catch (error) {
+  catch (error) {
     yield put(SpinnerState(false))
-    yield put(AlertState({ Type: 4, 
+    yield put(AlertState({
+      Type: 4,
       Status: true, Message: "500 Error Message",
     }));
   }
@@ -108,7 +112,8 @@ function* deleteHpagesUsingID_GenratorFunction({ id }) {
     yield put(deleteModuleIDSuccess(response))
   } catch (error) {
     yield put(SpinnerState(false))
-    yield put(AlertState({ Type: 4, 
+    yield put(AlertState({
+      Type: 4,
       Status: true, Message: "500 Error Message",
     }));
   }
@@ -118,8 +123,6 @@ function* PageList_DropDown_GenratorFunction() {
   try {
     const response = yield call(showPagesListOnPageType_DropDown_List);
     yield put(getPageListSuccess(response.Data));
-    console.log("PageList Data saga file",response.Data)
-
   } catch (error) {
     console.log("PageList_saga page error", error);
   }
