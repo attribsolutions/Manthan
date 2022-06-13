@@ -175,11 +175,11 @@ const ItemsList = () => {
                                 <React.Fragment>
                                     <Breadcrumbs
                                         title={"Count :"}
-                                        breadcrumbItem={"Role List Page"}
+                                        breadcrumbItem={"Item Master"}
                                         IsButtonVissible={true}
                                         SearchProps={toolkitProps.searchProps}
                                         breadcrumbCount={TableListData.length}
-                                        RedirctPath={"/RolesMaster"}
+                                        RedirctPath={"/itemsMaster"}
                                     />
                                     <Row>
                                         <Col xl="12">
