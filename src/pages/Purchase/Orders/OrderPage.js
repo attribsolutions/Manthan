@@ -72,7 +72,7 @@ const OrderPage = (props) => {
 
   // This UseEffect clear Form Data and when modules Save Successfully.
   useEffect(() => {
-    if ((APIResponse.Status === true) && (APIResponse.StatusCode === 200)) {
+    if ((APIResponse.Status === "true") && (APIResponse.StatusCode === 200)) {
       dispatch(submitOrder_fromOrderPage_Success({ Status: false }))
       // formRef.current.reset();
       if (PageMode === true) {
@@ -102,23 +102,29 @@ const OrderPage = (props) => {
       }));
     }
   }, [APIResponse.Status])
-
+debugger
   const saveHandeller = () => {
     var abc = [];
     for (var i = 0; i < OrderItems.length - 1; i++) {
       let qty = document.getElementById("inptxtqty" + i).value;
       if (qty > 0) {
-        // var itemid = document.getElementById("lblItemID" + i).value;
+        var itemID = document.getElementById("lblItemID" + i).value;
+        var itemMRP = document.getElementById("lblItemMRP" + i).value;
+        var itemGST = document.getElementById("lblItemGST" + i).value;
         var UnitID = document.getElementById("ddlUnit" + i).value;
-        console.log("a", UnitID)
+        var rate = document.getElementById("rate" + i).value;
+
         var comments = document.getElementById("comment" + i).value;
         var abc1 = {
           OrderId: 0,
-          // ItemID: itemid,
+          ItemID: itemID,
           Quantity: qty,
           UnitID: UnitID,
+          MRP: itemMRP,
+          BaseUnitQuantity: "1.00",
           Comments: comments,
-          IsOrderItem: false,
+          GST: itemGST,
+          Rate:rate
         };
         abc.push(abc1);
       }
@@ -144,25 +150,26 @@ const OrderPage = (props) => {
 
 
 
-//     {
-        
-//       "CustomerID": 2,
-//       "PartyID": 2,
-//       "OrderAmount": "33.00",
-//       "Discreption": "bb",
-//       "CreatedBy": 11,
-//       "OrderItem": [
-//           {
-//               "ItemID": 1,
-//               "Quantity": "1.00",
-//               "MRP": "1.00",
-//               "Rate": "10.00",
-//               "UnitID": 1,
-//               "BaseUnitQuantity": "1.00",
-//               "GST": "5.00"
-//           }]
-// }
-debugger
+    //     {
+
+    //       "CustomerID": 2,
+    //       "PartyID": 2,
+    //       "OrderAmount": "33.00",
+    //       "Discreption": "bb",
+    //       "CreatedBy": 11,
+    //       "OrderItem": [
+    //           {
+    //               "ItemID": 1,
+    //               "Quantity": "1.00",
+    //               "MRP": "1.00",
+    //               "Rate": "10.00",
+    //               "UnitID": 1,
+    //               "BaseUnitQuantity": "1.00",
+    //               "GST": "5.00"
+    //           }]
+    // }
+    var a = requestOptions.body
+
     if (IsEdit) {
       // dispatch(updateModuleID(requestOptions.body, EditData.ID));
     }
@@ -170,7 +177,7 @@ debugger
       // dispatch(submitOrder_fromOrderPage(requestOptions.body));
     }
     // generate(InvoiceFakeData)
-    // dispatch(submitOrder_fromOrderPage(requestOptions.body));
+    dispatch(submitOrder_fromOrderPage(requestOptions.body));
   };
 
   function handleKeyDown(e) {
@@ -222,6 +229,7 @@ debugger
                       <Th data-priority="1">Item Name</Th>
                       <Th data-priority="1">GSTPercentage</Th>
                       <Th data-priority="1">MRP</Th>
+                      <Th data-priority="1">Rate</Th>
                       <Th data-priority="3">Quantity</Th>
                       <Th data-priority="1">UOM</Th>
                       <Th data-priority="3">Comments</Th>
@@ -254,23 +262,46 @@ debugger
                             >
                               {item.Name}
                             </label>
+                            <input
+                              type="hidden"
+                              id={"lblItemID" + key}
+                              name={"lblItemID" + key}
+                              value={item.ID}
+                              />
                           </Td>
                           <Td>
                             <label
-                              id={"lblItemGSTPercentage" + key}
-                              name={"lblItemGSTPercentage" + key}
                             >
                               {item.GSTPercentage}
                             </label>
+                            <input
+                              type="hidden"
+                              id={"lblItemGST" + key}
+                              name={"lblItemGST" + key}
+                              value={item.GSTPercentage}
+                            />
+
                           </Td>
                           <Td>
-                            <label
+                            <label > {item.MRP} </label>
+                            <input
+                              type="hidden"
                               id={"lblItemMRP" + key}
                               name={"lblItemMRP" + key}
-                            >
-                              {item.MRP}
-                            </label>
+                              value={item.MRP}
+                            />
                           </Td>
+                          <Td>
+                          <input
+                              type="text"
+                              defaultvalue={com}
+                              // value={ComValueHandeller(item.ItemID)}
+                              id={"rate" + key}
+                              className="form-control form-control-sm"
+                              autoComplete="false"
+                            />
+                          </Td>
+                          
                           {/* <Td>
                             <label
                               id={"lblItemName" + key}

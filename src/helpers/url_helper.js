@@ -13,7 +13,7 @@ export const POST_EDIT_PROFILE = "/post-fake-profile"
 
 //ORDERS
 export const GET_ORDER_ITEM = "M_Items"
-export const ORDER_PAGE_API = "/Order/AddOrder"
+export const ORDER_PAGE_API = "T_Orders"
 
 
 //Python Logic 

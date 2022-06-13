@@ -44,11 +44,12 @@ function* fetchOrderItems_GenratorFunction() {
   }
 }
 
-function* submitOrder_GenratorFunction() {
+function* submitOrder_GenratorFunction({data}) {
   yield put(SpinnerState(true))
   try {
-    const response = yield call(submitOrder_From_OrderPage_apiCall);
-    yield put(submitOrder_fromOrderPage_Success(response.Data));
+    const response = yield call(submitOrder_From_OrderPage_apiCall,data);
+    debugger
+    yield put(submitOrder_fromOrderPage_Success(response));
     yield put(SpinnerState(false))
   } catch (error) {
     yield put(SpinnerState(false))
