@@ -124,12 +124,13 @@ export const Role_Master_Delete_API=(id)=> del(`${url.ROLE_MASTER_API}/${id}` )/
 export const Role_Master_Edit_API=(id)=> get(`${url.ROLE_MASTER_API}/${id}` )// edit api
 export const Role_Master_Update_API = (data,id) => put(`${url.ROLE_MASTER_API}/${id}`,data )// update api
 
-
-export const getOrderItems_forOrderPage_ApiCall = () => get(url.GET_ORDER_ITEM)
-export const submitOrderPage = (data) => post(url.SUBMIT_ORDER_PAGE, data)
-export const editOrderID = (id) => get(url.EDIT_ORDER_ID)//Edit Order
-export const getOrderList = (data) => get(url.GET_ORDER_LIST)
-export const getDivisionOrders = () => get(`${url.GET_ORDER_LIST}?FromDate=2022-01-25&ToDate=2022-01-25&CustomerID=0&DivisionID=3`)
+//Purchase  Order Page api  
+export const getOrderItems_forOrderPage_ApiCall = () => get(url.GET_ORDER_ITEM)//get api
+export const submitOrder_From_OrderPage_apiCall = (data) => post(url.ORDER_PAGE_API, data)// post api
+export const editOrderID_forOrderPage_ApiCall = (id) => get(`${url.ORDER_PAGE_API}/${id}`)//Edit Order
+export const UpdateOrder_ID_ApiCall = (data,id) => put(`${url.ORDER_PAGE_API}/${id}`, data)// update api
+export const getOrderList_forOrderPage_ApiCall = (data) => get(url.ORDER_PAGE_API)
+export const getDivisionOrders = () => get(`${url.ORDER_PAGE_API}?FromDate=2022-01-25&ToDate=2022-01-25&CustomerID=0&DivisionID=3`)
 
 //Administrator   Modules submit  
 export const postSubmitModules = (data) => post(url.H_MODULES_API_URL, data)

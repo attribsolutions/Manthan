@@ -13,9 +13,8 @@ export const POST_EDIT_PROFILE = "/post-fake-profile"
 
 //ORDERS
 export const GET_ORDER_ITEM = "M_Items"
-export const SUBMIT_ORDER_PAGE = "/Order/AddOrder"
-export const GET_ORDER_LIST = "/T_Orders"
-export const EDIT_ORDER_ID ="/Order/GetItemListByDivisionID?DivisionID=3"
+export const ORDER_PAGE_API = "/Order/AddOrder"
+
 
 //Python Logic 
 export const POST_JWT_LOGIN = "/Login"

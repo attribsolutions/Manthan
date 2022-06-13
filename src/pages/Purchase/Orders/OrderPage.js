@@ -13,13 +13,17 @@ import { Table, Thead, Tbody, Tr, Th, Td } from "react-super-responsive-table";
 import "react-super-responsive-table/dist/SuperResponsiveTableStyle.css";
 
 // store action import
-import {  submitOrderPage, editOrder, getOrderItems_ForOrderPage } from "../../../store/Purchase/OrderPageRedux/actions";
+import { submitOrder_fromOrderPage, getOrderItems_ForOrderPage, submitOrder_fromOrderPage_Success } from "../../../store/Purchase/OrderPageRedux/actions";
 import { useSelector, useDispatch } from "react-redux";
 import '../../Purchase/Orders/div.css'
+
 import generate from "../../../Reports/InvioceReport/Page";
 import { InvoiceFakeData } from "./InvioceFakedata";
+import { AlertState } from "../../../store/Utilites/CostumeAlert/actions";
+
 const OrderPage = (props) => {
   var itemgroups = "";
+  const Order_Id = props.location.state;
 
   const dispatch = useDispatch();
   const current = new Date();
@@ -28,20 +32,76 @@ const OrderPage = (props) => {
     }-${current.getDate()}`;
 
   const [orderDate, setOrderDate] = useState("");
-  const Order_Id = props.location.state;
-  useEffect(() => {
-    if (Order_Id === undefined) {
-    } else {
-      dispatch(editOrder(Order_Id.orderId));
-    }
-    dispatch(getOrderItems_ForOrderPage());
-  }, [dispatch, Order_Id]);
 
-  const { OrderItems, editOrderData, } = useSelector((state) => ({
+  //'IsEdit'--if true then update data otherwise it will perfrom save operation
+  const [IsEdit, setIsEdit] = useState(false);
+  const [PageMode, setPageMode] = useState(false);
+
+  //SetState  Edit data Geting From Modules List component
+  const [EditData, setEditData] = useState([]);
+
+  //*** "isEditdata get all data from ModuleID for Binding  Form controls
+  let editDataGatingFromList = props.state;
+  let CheckPageMode = props.IsComponentMode;
+
+
+
+  useEffect(() => {
+    // document.getElementById("txtName").focus();
+
+    dispatch(getOrderItems_ForOrderPage());
+
+    if (!(editDataGatingFromList === undefined)) {
+      setEditData(editDataGatingFromList[0]);
+      setIsEdit(true);
+      // dispatch(editModuleIDSuccess({ Status: false }))
+      return
+    }
+    if (!(CheckPageMode === undefined)) {
+      setPageMode(true)
+      return
+    }
+
+  }, [editDataGatingFromList, CheckPageMode])
+
+
+  const { OrderItems, APIResponse, } = useSelector((state) => ({
     OrderItems: state.OrderPageReducer.OrderItems,
-     
-    editOrderData: state.OrderPageReducer.editOrderData.Items,
+    APIResponse: state.OrderPageReducer.submitOrderSuccess,
   }));
+
+  // This UseEffect clear Form Data and when modules Save Successfully.
+  useEffect(() => {
+    if ((APIResponse.Status === true) && (APIResponse.StatusCode === 200)) {
+      dispatch(submitOrder_fromOrderPage_Success({ Status: false }))
+      // formRef.current.reset();
+      if (PageMode === true) {
+        dispatch(AlertState({
+          Type: 1,
+          Status: true,
+          Message: APIResponse.Message,
+        }))
+      }
+      else {
+        dispatch(AlertState({
+          Type: 1,
+          Status: true,
+          Message: APIResponse.Message,
+          RedirectPath: '/Orders',
+
+        }))
+      }
+    } else if (APIResponse.Status === true) {
+      dispatch(submitOrder_fromOrderPage_Success({ Status: false }))
+      dispatch(AlertState({
+        Type: 4,
+        Status: true,
+        Message: "error Message",
+        RedirectPath: false,
+        AfterResponseAction: false
+      }));
+    }
+  }, [APIResponse.Status])
 
   const saveHandeller = () => {
     var abc = [];
@@ -76,8 +136,15 @@ const OrderPage = (props) => {
         OrderitemInfo: abc,
       }),
     };
-    generate(InvoiceFakeData)
-    // dispatch(submitOrderPage(requestOptions.body));
+
+    if (IsEdit) {
+      // dispatch(updateModuleID(requestOptions.body, EditData.ID));
+    }
+    else {
+      dispatch(submitOrder_fromOrderPage(requestOptions.body));
+    }
+    // generate(InvoiceFakeData)
+    // dispatch(submitOrder_fromOrderPage(requestOptions.body));
   };
 
   function handleKeyDown(e) {
@@ -137,7 +204,7 @@ const OrderPage = (props) => {
                     {OrderItems.map((item, key) => {
                       var com = "";
                       var qat = '';
-                      editOrderData.map((i, k) => {
+                      EditData.map((i, k) => {
                         if (item.ItemID === i.ItemID) { com = i.Comment; qat = i.Qauntity }
                         return ''
                       })
@@ -158,20 +225,20 @@ const OrderPage = (props) => {
                               id={"lblItemName" + key}
                               name={"lblItemName" + key}
                             >
-                              {item.ItemName}
+                              {item.Name}
                             </label>
                             <input
                               type="hidden"
                               id={"lblItemID" + key}
                               name={"lblItemID" + key}
-                              value={item.ItemID}
+                              value={item.ID}
                             />
                           </Td>
                           <Td>
                             <input
                               type="text"
                               id={"txtqty" + key}
-                              key={item.ItemID}
+                              key={item.ID}
                               // value={QtValueHandller(item.ItemID)}
                               defaultvalue={qat}
                               onKeyDown={(e) => {
@@ -186,14 +253,19 @@ const OrderPage = (props) => {
                               classNamePrefix="select2-selection"
                               id={"ddlUnit" + key}
                             >
-                              {item.Units.map((units, key) => {
+                              {/* {item.Units.map((units, key) => {
                                 return (
                                   <option value={units.UnitsID}
                                   >
                                     {units.label}
                                   </option>
                                 );
-                              })}
+                              })} */}
+
+                              <option value={1}
+                              >
+                                {"No"}
+                              </option>
                             </select>
                           </Td>
                           <Td>
