@@ -35,17 +35,6 @@ import {
 import PageListDropdownData from "./PageListData";
 
 
-// function* fetchHPagesList_GneratorFunction() {
-//   // yield put(SpinnerState(true))
-//   try {
-//     const response = yield call(Fetch_HPagesListApi,put);
-//     yield put(SpinnerState(false))
-//     yield put(GetHpageListDataSuccess(response.Data));
-//   } catch (error) {
-//     // yield put(SpinnerState(false))
-//     yield put(AlertState({ Type: 3, Status: true, Message: "Network error Message", RedirectPath: false, AfterResponseAction: false }));
-//   }
-// }
 
 function* fetchHPagesList_GneratorFunction() {
   yield put(SpinnerState(true))
@@ -61,7 +50,7 @@ function* fetchHPagesList_GneratorFunction() {
   }
 }
 
-function* GetH_Sub_Modules({ id }) {
+function* GetH_Modules({ id }) {
   try {
     const response = yield call(get_Module_HPages, id);
     yield put(getH_ModulesSuccess(response.Data))
@@ -139,7 +128,7 @@ function* HPageSaga() {
   yield takeEvery(SAVE_HPAGES, saveHPageSaga_GneratorFunction)
   yield takeEvery(GET_HPAGES_LIST_DATA, fetchHPagesList_GneratorFunction);
   yield takeEvery(EDIT_H_PAGES_ID, editHpages_ID);
-  yield takeEvery(GET_H_SUB_MODULES, GetH_Sub_Modules);
+  yield takeEvery(GET_H_SUB_MODULES, GetH_Modules);
   yield takeEvery(UPDATE_H_PAGES, update_HPagesUsingID_GenratorFunction);
   yield takeEvery(DELETE_HPAGES_USING_ID, deleteHpagesUsingID_GenratorFunction)
   yield takeEvery(GET_PAGELIST, PageList_DropDown_GenratorFunction)

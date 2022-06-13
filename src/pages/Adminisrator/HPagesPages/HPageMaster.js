@@ -18,15 +18,11 @@ import AvField from "availity-reactstrap-validation/lib/AvField";
 import ReactSelect from "react-select";
 import {
     editHPagesIDSuccess,
-    getH_SubModules,
     getPageList,
     saveHPages,
     saveHPagesSuccess,
     updateHPages
 } from "../../../store/Administrator/HPagesRedux/actions";
-import {
-    getEmployee
-} from "../../../store/Administrator/UserRegistrationRedux/actions";
 import { fetchModelsList } from "../../../store/Administrator/ModulesRedux/actions";
 import { MetaTags } from "react-meta-tags";
 import { AlertState } from "../../../store/Utilites/CostumeAlert/actions";
@@ -44,8 +40,6 @@ const HPageMaster = (props) => {
     const [selectPageType, setPageType] = useState('');
     const [selectPageList, setPageList] = useState('');
     const [selectShowMenu, setShowMenu] = useState();
-    const [selectSubModule, setSelectSubModule] = useState('');
-
 
     const { ModuleData, SaveMessage, PageList } = useSelector((state) => ({
         ModuleData: state.Modules.modulesList,
@@ -53,7 +47,7 @@ const HPageMaster = (props) => {
         PageList: state.H_Pages.PageList,
     }));
 
-    console.log("PageList",PageList)
+    console.log("PageList", PageList)
     // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
     useEffect(() => {
         document.getElementById("txtName").focus();
@@ -129,10 +123,6 @@ const HPageMaster = (props) => {
         setSelectModule(e);
         // dispatch(getH_SubModules(e.value))
     }
-    // const optionSubModule = SubModuleData.map((d) => ({
-    //     value: d.ID,
-    //     label: d.Name,
-    // }));
 
     const optionModule = ModuleData.map((d) => ({
         value: d.ID,
@@ -153,7 +143,7 @@ const HPageMaster = (props) => {
         value: d.value,
         label: d.label,
     }));
-        
+
     const PageList_SelectOnChangeHandller = (e) => {
         setPageList(getPageList(e.value));
     }
@@ -219,21 +209,6 @@ const HPageMaster = (props) => {
                                             </Col>
                                         </Row>
 
-                                        {/* <Row className="mb-4">
-                                            <Label className="col-sm-3 col-form-label">
-                                                Sub Module
-                                            </Label>
-                                            <Col sm={4}>
-                                                <ReactSelect
-                                                    value={selectSubModule}
-                                                    autoComplete='off'
-                                                    options={optionSubModule}
-                                                    onChange={(e) => {
-                                                        setSelectSubModule(e);
-                                                    }}
-                                                />
-                                            </Col>
-                                        </Row> */}
                                         <AvGroup>
                                             <Row className="mb-4">
                                                 <Label className="col-sm-3 col-form-label">
@@ -283,19 +258,6 @@ const HPageMaster = (props) => {
                                             </Row>
                                         </AvGroup>
 
-                                        <AvGroup>
-                                            <Row className="mb-4">
-                                                <Label className="col-sm-3 col-form-label">
-                                                    Show Menu
-                                                </Label>
-                                                <Col sm={4}>
-                                                    <AvField name="Show Menu"
-                                                        checked={selectShowMenu}
-                                                        type="checkbox" validate={{
-                                                        }} />
-                                                </Col>
-                                            </Row>
-                                        </AvGroup>
                                         <Row className="mb-4">
                                             <Label className="col-sm-3 col-form-label">
                                                 PageType
@@ -317,7 +279,19 @@ const HPageMaster = (props) => {
 
                                             </Col>
                                         </Row>
-
+                                        <AvGroup>
+                                            <Row className="mb-4">
+                                                <Label className="col-sm-3 col-form-label">
+                                                    Show Menu
+                                                </Label>
+                                                <Col sm={4}>
+                                                    <AvField name="Show Menu"
+                                                        checked={selectShowMenu}
+                                                        type="checkbox" validate={{
+                                                        }} />
+                                                </Col>
+                                            </Row>
+                                        </AvGroup>
                                         <Row className="mb-4">
                                             <Label className="col-sm-3 col-form-label">
                                                 PageList
