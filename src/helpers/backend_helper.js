@@ -124,10 +124,11 @@ export const Role_Master_Delete_API=(id)=> del(`${url.ROLE_MASTER_API}/${id}` )/
 export const Role_Master_Edit_API=(id)=> get(`${url.ROLE_MASTER_API}/${id}` )// edit api
 export const Role_Master_Update_API = (data,id) => put(`${url.ROLE_MASTER_API}/${id}`,data )// update api
 
-
-export const getOrderItems_forOrderPage_ApiCall = () => get(url.GET_ORDER_ITEM)
-export const submitOrder_From_OrderPage_apiCall = (data) => post(url.ORDER_PAGE_API, data)
-export const editOrderID_forOrderPage_ApiCall = (id) => get(url.ORDER_PAGE_API)//Edit Order
+//Purchase  Order Page api  
+export const getOrderItems_forOrderPage_ApiCall = () => get(url.GET_ORDER_ITEM)//get api
+export const submitOrder_From_OrderPage_apiCall = (data) => post(url.ORDER_PAGE_API, data)// post api
+export const editOrderID_forOrderPage_ApiCall = (id) => get(`${url.ORDER_PAGE_API}/${id}`)//Edit Order
+export const UpdateOrder_ID_ApiCall = (data,id) => put(`${url.ORDER_PAGE_API}/${id}`, data)// update api
 export const getOrderList_forOrderPage_ApiCall = (data) => get(url.ORDER_PAGE_API)
 export const getDivisionOrders = () => get(`${url.ORDER_PAGE_API}?FromDate=2022-01-25&ToDate=2022-01-25&CustomerID=0&DivisionID=3`)
 
