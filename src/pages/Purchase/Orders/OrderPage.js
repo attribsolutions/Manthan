@@ -13,7 +13,7 @@ import { Table, Thead, Tbody, Tr, Th, Td } from "react-super-responsive-table";
 import "react-super-responsive-table/dist/SuperResponsiveTableStyle.css";
 
 // store action import
-import { getOrderPage, submitOrderPage, editOrder } from "../../../store/Purchase/Orders/actions";
+import {  submitOrderPage, editOrder, getOrderItems_ForOrderPage } from "../../../store/Purchase/OrderPageRedux/actions";
 import { useSelector, useDispatch } from "react-redux";
 import '../../Purchase/Orders/div.css'
 import generate from "../../../Reports/InvioceReport/Page";
@@ -34,17 +34,18 @@ const OrderPage = (props) => {
     } else {
       dispatch(editOrder(Order_Id.orderId));
     }
-    dispatch(getOrderPage());
+    dispatch(getOrderItems_ForOrderPage());
   }, [dispatch, Order_Id]);
 
-  const { orders, editOrderData, } = useSelector((state) => ({
-    orders: state.OrdersReducers.orders,
-    editOrderData: state.OrdersReducers.editOrderData.Items,
+  const { OrderItems, editOrderData, } = useSelector((state) => ({
+    OrderItems: state.OrderPageReducer.OrderItems,
+     
+    editOrderData: state.OrderPageReducer.editOrderData.Items,
   }));
 
   const saveHandeller = () => {
     var abc = [];
-    for (var i = 0; i < orders.length - 1; i++) {
+    for (var i = 0; i < OrderItems.length - 1; i++) {
       let qty = document.getElementById("txtqty" + i).value;
       if (qty > 0) {
         var itemid = document.getElementById("lblItemID" + i).value;
@@ -133,7 +134,7 @@ const OrderPage = (props) => {
                     </Tr>
                   </Thead>
                   <Tbody>
-                    {orders.map((item, key) => {
+                    {OrderItems.map((item, key) => {
                       var com = "";
                       var qat = '';
                       editOrderData.map((i, k) => {

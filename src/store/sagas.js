@@ -16,7 +16,7 @@ import CompanySaga from "./Administrator/CompanyRedux/saga"
 import SubModuleSaga from "./Administrator/SubModulesRedux/saga"
 import PageListSaga from "./Administrator/PageMasterRedux/saga"
 import HPageSaga from "./Administrator/HPagesRedux/saga"
-import OrdersSaga from "./Purchase/Orders/saga"
+import OrderPageSaga from "./Purchase/OrderPageRedux/saga"
 import UserRegistrationSaga from "./Administrator/UserRegistrationRedux/saga"
 import M_EmployeeSaga from "./Administrator/M_EmployeeRedux/saga"
 import RoleMaster_Saga from "./Administrator/RoleMasterRedux/saga"
@@ -35,7 +35,7 @@ export default function* rootSaga() {
     fork(SubModuleSaga),
     fork(PageListSaga),
     fork(HPageSaga),
-    fork(OrdersSaga),
+    fork(OrderPageSaga),
     fork(UserRegistrationSaga),
     fork(M_EmployeeSaga),
     fork(RoleMaster_Saga),

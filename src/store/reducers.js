@@ -17,7 +17,7 @@ import Company from './Administrator/CompanyRedux/reducer'
 import SubModules from "./Administrator/SubModulesRedux/reducer"
 import PageList from "./Administrator/PageMasterRedux/reducer"
 import H_Pages from './Administrator/HPagesRedux/reducer'
-import OrdersReducers from './Purchase/Orders/reducer'
+import OrderPageReducer from "./Purchase/OrderPageRedux/reducer"
 
 import User_Registration_Reducer from "./Administrator/UserRegistrationRedux/reducer"
 import M_EmployeesReducer from "./Administrator/M_EmployeeRedux/reducer"
@@ -40,7 +40,7 @@ const rootReducer = combineReducers({
   User_Registration_Reducer,
   M_EmployeesReducer,
   // Purchase
-  OrdersReducers,
+  OrderPageReducer,
   RoleMaster_Reducer,
   ItemMastersReducer,
 })

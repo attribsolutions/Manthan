@@ -6,19 +6,19 @@ import{
   GET_ORDER_LIST,
     GET_ORDER_LIST_MESSAGE,
     GET_ORDER_LIST_SUCCESS,
-    GET_ORDER_PAGE,
-    GET_ORDER_PAGE_SUCCESS,
+    GET_ORDER_ITEMS_FOR_ORDER_PAGE,
+    GET_ORDER_ITEMS_FOR_ORDER_PAGE_SUCCESS,
     SUBMIT_ORDER_PAGE,
     SUBMIT_ORDER_PAGE_SUCCESS
 }from './actionType'
 
-export const getOrderPage = () => ({
-    type: GET_ORDER_PAGE,
+export const getOrderItems_ForOrderPage = () => ({
+    type: GET_ORDER_ITEMS_FOR_ORDER_PAGE,
   });
 
-  export const getOrderPageSuccess = (orders) => ({
-    type: GET_ORDER_PAGE_SUCCESS,
-    payload:orders,
+  export const getOrderItems_ForOrderPageSuccess = (data) => ({
+    type: GET_ORDER_ITEMS_FOR_ORDER_PAGE_SUCCESS,
+    payload:data,
   });
   export const submitOrderPage = (data) => ({
     type: SUBMIT_ORDER_PAGE,

@@ -4,16 +4,18 @@ import {
   getOrderPageSuccess,
   getDivisionOrdersSuccess,
   editOrderSuccess,
+  getOrderItems_ForOrderPageSuccess,
 } from "./actions";
 import {
   submitOrderPage,
   getDivisionOrders,
   editOrderID,
   getOrderList,
+  getOrderItems_forOrderPage_ApiCall,
 } from "../../../helpers/backend_helper";
 import {
   GET_ORDER_LIST,
-  GET_ORDER_PAGE,
+  GET_ORDER_ITEMS_FOR_ORDER_PAGE,
   SUBMIT_ORDER_PAGE,
   GET_DIVISIONORDER_LIST,
   EDIT_ORDER,
@@ -23,11 +25,12 @@ import  ItemUnits  from "./DemoData";
 import orders from "./DemoData";
 import { SpinnerState } from "../../Utilites/Spinner/actions";
 import { AlertState } from "../../Utilites/CostumeAlert/actions";
-function* fetchOrder_GenratorFunction() {
+
+function* fetchOrderItems_GenratorFunction() {
   try {
-    // const response = yield call(getOrderPage);
-    const response=orders;
-    yield put(getOrderPageSuccess(response.Data));
+    const response = yield call(getOrderItems_forOrderPage_ApiCall);
+    // const response=orders;
+    yield put(getOrderItems_ForOrderPageSuccess(response.Data));
     //  console.log('$$fetchorder page response$',response)
   } catch (error) {
     console.log("$$fetchorder  saga page error$", error);
@@ -81,8 +84,8 @@ function* fetchDisvisionOrder() {
   }
 }
 
-function* OrdersSaga() {
-  yield takeEvery(GET_ORDER_PAGE, fetchOrder_GenratorFunction);
+function* OrderPageSaga() {
+  yield takeEvery(GET_ORDER_ITEMS_FOR_ORDER_PAGE, fetchOrderItems_GenratorFunction);
   yield takeEvery(SUBMIT_ORDER_PAGE, submitOrder);
   yield takeEvery(GET_ORDER_LIST, fetchOrderList);
   yield takeEvery(EDIT_ORDER, EditOrder);
@@ -92,4 +95,4 @@ function* OrdersSaga() {
   yield takeEvery(GET_DIVISIONORDER_LIST, fetchDisvisionOrder);
 }
 
-export default OrdersSaga;
+export default OrderPageSaga;

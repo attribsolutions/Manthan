@@ -12,7 +12,7 @@ export const POST_EDIT_JWT_PROFILE = "/post-jwt-profile"
 export const POST_EDIT_PROFILE = "/post-fake-profile"
 
 //ORDERS
-export const GET_ORDER = "/Order/GetItemListByDivisionID?DivisionID=3"
+export const GET_ORDER_ITEM = "M_Items"
 export const SUBMIT_ORDER_PAGE = "/Order/AddOrder"
 export const GET_ORDER_LIST = "/T_Orders"
 export const EDIT_ORDER_ID ="/Order/GetItemListByDivisionID?DivisionID=3"

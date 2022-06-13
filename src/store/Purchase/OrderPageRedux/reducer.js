@@ -1,6 +1,6 @@
 import { 
   GET_ORDER_LIST_SUCCESS,
-     GET_ORDER_PAGE_SUCCESS, 
+  GET_ORDER_ITEMS_FOR_ORDER_PAGE_SUCCESS, 
      SUBMIT_ORDER_PAGE_SUCCESS,
      GET_DIVISIONORDER_LIST_SUCCESS,
      GET_ORDER_LIST_MESSAGE,
@@ -8,7 +8,7 @@ import {
     } from "./actionType"
 
 const INIT_STATE = {
-    orders:[],
+    OrderItems:[],
     submitOrderSuccess:{},
     ordersList:[],
     orderListMessage:[],
@@ -16,13 +16,13 @@ const INIT_STATE = {
 
   }
   
-  const OrdersReducers = (state = INIT_STATE, action) => {
+  const OrderPageReducer = (state = INIT_STATE, action) => {
     switch (action.type) {
      
-      case GET_ORDER_PAGE_SUCCESS:
+      case GET_ORDER_ITEMS_FOR_ORDER_PAGE_SUCCESS:
         return {
           ...state,
-          orders: action.payload,
+          OrderItems: action.payload,
         }
         case SUBMIT_ORDER_PAGE_SUCCESS:
         return {
@@ -55,4 +55,4 @@ const INIT_STATE = {
         
       }
       
-      export default OrdersReducers
+      export default OrderPageReducer

@@ -125,7 +125,7 @@ export const Role_Master_Edit_API=(id)=> get(`${url.ROLE_MASTER_API}/${id}` )// 
 export const Role_Master_Update_API = (data,id) => put(`${url.ROLE_MASTER_API}/${id}`,data )// update api
 
 
-export const getOrderPage = () => get(url.GET_ORDER)
+export const getOrderItems_forOrderPage_ApiCall = () => get(url.GET_ORDER_ITEM)
 export const submitOrderPage = (data) => post(url.SUBMIT_ORDER_PAGE, data)
 export const editOrderID = (id) => get(url.EDIT_ORDER_ID)//Edit Order
 export const getOrderList = (data) => get(url.GET_ORDER_LIST)

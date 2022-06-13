@@ -14,7 +14,7 @@ import {
 } from "reactstrap";
 import { Table, Thead, Tbody, Tr, Th, Td } from "react-super-responsive-table";
 import "react-super-responsive-table/dist/SuperResponsiveTableStyle.css";
-import { editOrder, getOrderList } from "../../../store/Purchase/Orders/actions";
+import { editOrder, getOrderList } from "../../../store/Purchase/OrderPageRedux/actions";
 import { MetaTags } from "react-meta-tags";
 import BootstrapTable from "react-bootstrap-table-next";
 import paginationFactory, { PaginationListStandalone, PaginationProvider } from "react-bootstrap-table2-paginator";
@@ -66,8 +66,8 @@ const OrderList = (props) => {
   const customerNameOption = props.orderList;
 
   const { editOrderData, TableListData } = useSelector((state) => ({
-    editOrderData: state.OrdersReducers.orderItemInfo,
-    TableListData: state.OrdersReducers.ordersList
+    editOrderData: state.OrderPageReducer.orderItemInfo,
+    TableListData: state.OrderPageReducer.ordersList
   }));
 
   function goHandeller() {
