@@ -106,15 +106,15 @@ const OrderPage = (props) => {
   const saveHandeller = () => {
     var abc = [];
     for (var i = 0; i < OrderItems.length - 1; i++) {
-      let qty = document.getElementById("txtqty" + i).value;
+      let qty = document.getElementById("inptxtqty" + i).value;
       if (qty > 0) {
-        var itemid = document.getElementById("lblItemID" + i).value;
+        // var itemid = document.getElementById("lblItemID" + i).value;
         var UnitID = document.getElementById("ddlUnit" + i).value;
         console.log("a", UnitID)
         var comments = document.getElementById("comment" + i).value;
         var abc1 = {
           OrderId: 0,
-          ItemID: itemid,
+          // ItemID: itemid,
           Quantity: qty,
           UnitID: UnitID,
           Comments: comments,
@@ -125,7 +125,11 @@ const OrderPage = (props) => {
     }
     const requestOptions = {
       body: JSON.stringify({
-        CustomerID: 13,
+        CustomerID: 2,
+        PartyID: 2,
+        OrderAmount: "33.00",
+        Discreption: "bb",
+        "CreatedBy": 11,
         OrderDate: !orderDate ? currentDate : orderDate,
         CompanyID: 1,
         DivisionID: 3,
@@ -133,15 +137,37 @@ const OrderPage = (props) => {
         CreatedOn: !orderDate ? currentDate : orderDate,
         UpdatedBy: 1,
         UpdatedOn: !orderDate ? currentDate : orderDate,
-        OrderitemInfo: abc,
+        OrderItem: abc,
       }),
     };
 
+
+
+
+//     {
+        
+//       "CustomerID": 2,
+//       "PartyID": 2,
+//       "OrderAmount": "33.00",
+//       "Discreption": "bb",
+//       "CreatedBy": 11,
+//       "OrderItem": [
+//           {
+//               "ItemID": 1,
+//               "Quantity": "1.00",
+//               "MRP": "1.00",
+//               "Rate": "10.00",
+//               "UnitID": 1,
+//               "BaseUnitQuantity": "1.00",
+//               "GST": "5.00"
+//           }]
+// }
+debugger
     if (IsEdit) {
       // dispatch(updateModuleID(requestOptions.body, EditData.ID));
     }
     else {
-      dispatch(submitOrder_fromOrderPage(requestOptions.body));
+      // dispatch(submitOrder_fromOrderPage(requestOptions.body));
     }
     // generate(InvoiceFakeData)
     // dispatch(submitOrder_fromOrderPage(requestOptions.body));
@@ -149,16 +175,16 @@ const OrderPage = (props) => {
 
   function handleKeyDown(e) {
     var cont = e.target.id;
-
     var abc = cont.split("y");
     cont = abc[1];
-    if (e.keyCode === 40) {
+
+    if (e.keyCode === 40 && (OrderItems.length - 1 > parseInt(cont))) {
       cont = ++cont;
-      document.getElementById("txtqty" + cont).focus();
+      document.getElementById("inptxtqty" + cont).focus();
     }
     if (e.keyCode === 38 && cont > 0) {
       cont = cont - 1;
-      document.getElementById("txtqty" + cont).focus();
+      document.getElementById("inptxtqty" + cont).focus();
     }
   }
 
@@ -193,8 +219,9 @@ const OrderPage = (props) => {
                 >
                   <Thead>
                     <Tr>
-                      <Th data-priority="1">Itemgroup Name</Th>
                       <Th data-priority="1">Item Name</Th>
+                      <Th data-priority="1">GSTPercentage</Th>
+                      <Th data-priority="1">MRP</Th>
                       <Th data-priority="3">Quantity</Th>
                       <Th data-priority="1">UOM</Th>
                       <Th data-priority="3">Comments</Th>
@@ -210,7 +237,7 @@ const OrderPage = (props) => {
                       })
                       return (
                         <Tr>
-                          <Td>
+                          {/* <Td>
                             {item.ItemGroup === itemgroups ? (
                               ""
                             ) : (
@@ -219,8 +246,32 @@ const OrderPage = (props) => {
                                 {(itemgroups = item.ItemGroup)}
                               </label>
                             )}
+                          </Td> */}
+                          <Td>
+                            <label
+                              id={"lblItemName" + key}
+                              name={"lblItemName" + key}
+                            >
+                              {item.Name}
+                            </label>
                           </Td>
                           <Td>
+                            <label
+                              id={"lblItemGSTPercentage" + key}
+                              name={"lblItemGSTPercentage" + key}
+                            >
+                              {item.GSTPercentage}
+                            </label>
+                          </Td>
+                          <Td>
+                            <label
+                              id={"lblItemMRP" + key}
+                              name={"lblItemMRP" + key}
+                            >
+                              {item.MRP}
+                            </label>
+                          </Td>
+                          {/* <Td>
                             <label
                               id={"lblItemName" + key}
                               name={"lblItemName" + key}
@@ -233,19 +284,34 @@ const OrderPage = (props) => {
                               name={"lblItemID" + key}
                               value={item.ID}
                             />
-                          </Td>
-                          <Td>
+                          </Td> */}
+
+                          {/* <Td>
+                            {" "}
                             <input
                               type="text"
-                              id={"txtqty" + key}
+                              defaultvalue={com}
+                              // value={ComValueHandeller(item.ItemID)}
+                              id={"inptxtqty" + key}
+                              class="form-control form-control-sm"
+                              autoComplete="false"
+                            />
+                          </Td> */}
+
+                          <Td>
+
+                            <input
+                              type="text"
+                              id={"inptxtqty" + key}
                               key={item.ID}
                               // value={QtValueHandller(item.ItemID)}
                               defaultvalue={qat}
                               onKeyDown={(e) => {
                                 handleKeyDown(e);
                               }}
-                              class="form-control form-control-sm"
+                              className="form-control form-control-sm"
                               autoComplete="false"
+                              ng-required="true"
                             />
                           </Td>
                           <Td>
