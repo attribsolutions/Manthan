@@ -19,6 +19,7 @@ import ReactSelect from "react-select";
 import {
     editHPagesIDSuccess,
     getPageList,
+    getPageListSuccess,
     saveHPages,
     saveHPagesSuccess,
     updateHPages
@@ -39,9 +40,8 @@ const HPageMaster = (props) => {
 
     const [selectPageType, setPageType] = useState('');
     const [selectPageList, setPageList] = useState('');
-    const [selectShowMenu, setShowMenu] = useState();
-    
-  
+    let showmenu = false;
+
     const { ModuleData, SaveMessage, PageList } = useSelector((state) => ({
         ModuleData: state.Modules.modulesList,
         SaveMessage: state.H_Pages.saveMessage,
@@ -51,6 +51,8 @@ const HPageMaster = (props) => {
     // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
     useEffect(() => {
         document.getElementById("txtName").focus();
+        // document.getElementById("inp-show-menu" ).checked=true;
+
         dispatch(fetchModelsList())
         if (!(editDataGatingFromList === undefined)) {
             setEditData(editDataGatingFromList[0]);
@@ -61,6 +63,7 @@ const HPageMaster = (props) => {
             })
             dispatch(editHPagesIDSuccess({ Status: false }))
         }
+
     }, [editDataGatingFromList]);
 
     useEffect(() => {
@@ -129,16 +132,22 @@ const HPageMaster = (props) => {
         label: d.Name,
     }));
 
+
+
     //  for PageType deropDown
     const PageType_SelectOnChangeHandller = (e) => {
-        if (e.label==="ListPage") {
-            // document.getElementById("inputPage").focus();
+
+        if (e.label === "ListPage") {
             dispatch(getPageList(e.value))
+            // showmenu = true;
+            document.getElementById("abc").checked = true;
+
         }
-        // else 
-        // {
-        //     dispatch(getPageList([]));
-        // }
+        else if (e.label === "AddPage") {
+            document.getElementById("abc").checked = false;
+            dispatch(getPageListSuccess([]))
+         
+        }
         setPageType(e)
         // dispatch(getPageList(e.value))
     }
@@ -271,7 +280,7 @@ const HPageMaster = (props) => {
                                             <Col sm={4}>
                                                 <Select
                                                     value={selectPageType}
-                                                  
+                                                    id="first_name"
                                                     options={[{
                                                         value: 1,
                                                         label: "AddPage",
@@ -292,11 +301,17 @@ const HPageMaster = (props) => {
                                                     Show Menu
                                                 </Label>
                                                 <Col sm={4}>
-                                                    <AvField name="Show Menu"
-                                                        checked={selectShowMenu}
-                                                       
-                                                        type="checkbox" validate={{
-                                                        }} />
+
+                                                    {/* <AvField name="Show Menu"
+                                                        id="chkShowMenu"
+                                                        value={showmenu}
+                                                        type="checkbox"
+                                                    /> */}
+                                                    <input
+                                                    
+                                                        type="checkbox"
+                                                        id="abc"
+                                                    />
                                                 </Col>
                                             </Row>
                                         </AvGroup>
@@ -323,8 +338,9 @@ const HPageMaster = (props) => {
                                                 <Col sm={4}>
                                                     <AvField name="IsActive"
                                                         checked={EditData.IsActive}
-                                                        type="checkbox" validate={{
-                                                        }} />
+                                                        type="checkbox"
+
+                                                    />
                                                 </Col>
                                             </Row>
                                         </AvGroup>
