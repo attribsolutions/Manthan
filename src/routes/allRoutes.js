@@ -51,8 +51,8 @@ const userRoutes = [
   { path: "/pagesList", component: HPageList },
   { path: "/pagesMaster", component: HPageMaster },
 
-  { path: "/ordersMaster", component: OrderPage },
-  { path: "/ordersList", component: OrderList },
+  { path: "/order", component: OrderPage },
+  { path: "/orderList", component: OrderList },
 
   { path: "/usersMaster", component: AddUser },
   { path: "/usersList", component: UserList },
