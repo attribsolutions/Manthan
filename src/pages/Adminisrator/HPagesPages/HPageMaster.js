@@ -8,11 +8,13 @@ import {
     Row,
     Label,
     Input,
+    Button
 } from "reactstrap";
 import Breadcrumbs from '../../../components/Common/Breadcrumb'
 import {
     AvForm,
     AvGroup,
+    AvInput,
 } from "availity-reactstrap-validation";
 import { useDispatch, useSelector } from "react-redux";
 import AvField from "availity-reactstrap-validation/lib/AvField";
@@ -39,29 +41,30 @@ const HPageMaster = (props) => {
     const [EditData, setEditData] = useState([]);
     const [selectModule, setSelectModule] = useState('');
     const [PageMode, setPageMode] = useState(false);
-
+    const [isShowPageChecked, setisShowPageChecked] = useState(false);
+    const [PageAccessData, setPageAccessData] = useState([]);
     const [selectPageType, setPageType] = useState('');
     const [selectPageList, setPageList] = useState('');
     const [selectPageAccessDropDown, setselectPageAccessDropDown] = useState('');
-   
-    const { ModuleData, SaveMessage, PageList ,PageAccess} = useSelector((state) => ({
+
+    const { ModuleData, SaveMessage, PageList, PageAccess } = useSelector((state) => ({
         ModuleData: state.Modules.modulesList,
         SaveMessage: state.H_Pages.saveMessage,
         PageList: state.H_Pages.PageList,
-        PageAccess:state.H_Pages.PageAccess,
+        PageAccess: state.H_Pages.PageAccess,
     }));
     useEffect(() => {
         dispatch(getPageAccess_DropDown_API());
-      }, [dispatch]);
-    
-      const PageAccessValues = PageAccess.map((Data) => ({
+    }, [dispatch]);
+
+    const PageAccessValues = PageAccess.map((Data) => ({
         value: Data.ID,
         label: Data.Name
-      }));
-    
-      function handllerPageAccess(e) {
+    }));
+
+    function handllerPageAccess(e) {
         setselectPageAccessDropDown(e)
-      }
+    }
     // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
     useEffect(() => {
         document.getElementById("txtName").focus();
@@ -149,16 +152,20 @@ const HPageMaster = (props) => {
     //  for PageType deropDown
     const PageType_SelectOnChangeHandller = (e) => {
 
+        let showCheckBox = document.getElementById("abc")
         if (e.label === "ListPage") {
             dispatch(getPageList(e.value))
-            document.getElementById("abc").checked = true;
-            document.getElementById("abc").disabled = true
+            // showCheckBox.value= true;
+            showCheckBox.disabled = true
+            setisShowPageChecked(true)
 
         }
+
         else if (e.label === "AddPage") {
-            document.getElementById("abc").disabled = false
+            showCheckBox.disabled = false
             dispatch(getPageListSuccess([]))
             setPageList([])
+
 
         }
         setPageType(e)
@@ -174,6 +181,27 @@ const HPageMaster = (props) => {
     const PageList_SelectOnChangeHandller = (e) => {
         setPageList(e);
 
+    }
+    function AddRoleHandler() {
+        const find = PageAccessData.find((element) => {
+            return element.value === selectPageAccessDropDown.value
+        });
+        if (selectPageAccessDropDown.length <= 0) {
+            dispatch(AlertState({
+                Type: 3, Status: true,
+                Message: "Select One DropDown Value",
+            }));
+        }
+        else if (find === undefined) {
+            setPageAccessData([...PageAccessData, selectPageAccessDropDown]);
+        }
+        else {
+            dispatch(AlertState({
+                Type: 4, Status: true,
+                Message: "PageAccess Data already Exists ",
+            }));
+
+        }
     }
 
     return (
@@ -308,26 +336,7 @@ const HPageMaster = (props) => {
 
                                             </Col>
                                         </Row>
-                                        <AvGroup>
-                                            <Row className="mb-4">
-                                                <Label className="col-sm-3 col-form-label">
-                                                    Show Menu
-                                                </Label>
-                                                <Col sm={4}>
 
-                                                    {/* <Input name="Show Menu"
-                                                        id="chkShowMenu"
-                                                        value={showmenu}
-                                                        type="checkbox"
-                                                    /> */}
-                                                    <input
-
-                                                        type="checkbox"
-                                                        id="abc"
-                                                    />
-                                                </Col>
-                                            </Row>
-                                        </AvGroup>
                                         <Row className="mb-4">
                                             <Label className="col-sm-3 col-form-label">
                                                 PageList
@@ -341,7 +350,105 @@ const HPageMaster = (props) => {
                                                 />
                                             </Col>
                                         </Row>
-                                        
+                                        <Row className="mb-4">
+                                            <Label className="col-sm-3 col-form-label">
+                                                PageAccess
+                                            </Label>
+                                            <Col sm={4}>
+                                                <Select
+                                                    value={selectPageAccessDropDown}
+                                                    options={PageAccessValues}
+                                                    autoComplete='off'
+                                                    onChange={(e) => { handllerPageAccess(e) }}
+                                                />
+                                            </Col>
+                                            <Col sm={1}>
+                                                {" "}
+                                                <Button
+                                                    type="button"
+                                                    color="primary"
+                                                    onClick={() =>
+                                                        AddRoleHandler()
+                                                    }
+                                                >
+                                                    Add
+                                                </Button>
+                                            </Col>
+                                            <Col sm={3}>
+                                                {PageAccessData.length > 0 ? (
+                                                    <div>
+                                                        <div className="table-responsive">
+                                                            <table className="table table-bordered mb-0 table">
+                                                                <thead >
+                                                                    <tr>
+                                                                        <th>Name</th>
+                                                                        <th>Action</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody >
+                                                                    {PageAccessData.map((TableValue) => (
+                                                                        <tr key={TableValue.ID}>
+                                                                            <td>
+                                                                                <h5 className="my-0 text-primary">
+                                                                                    {TableValue.label}
+                                                                                </h5>
+                                                                            </td>
+                                                                            <td>
+                                                                                <button
+                                                                                    type="button"
+                                                                                    className="btn btn-danger btn-sm waves-effect waves-light"
+                                                                                    onClick={() =>
+                                                                                        setPageAccessData(
+                                                                                            PageAccessData.filter(
+                                                                                                (item) =>
+                                                                                                    item.ID !== TableValue.ID
+                                                                                            )
+                                                                                        )
+                                                                                    }
+                                                                                >
+                                                                                    <i class="mdi mdi-trash-can d-block font-size-10"></i>
+                                                                                </button>
+                                                                            </td>
+                                                                        </tr>
+                                                                    ))}
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                ) :
+                                                    // (
+                                                    //   <>
+                                                    //     <div className="border border-warning card">
+                                                    //       <div className="card-header bg-transparent border-warning">
+                                                    //         <h5 className="my-0 text-warning">
+                                                    //           <i className="mdi mdi-bullseye-arrow me-3"></i>
+                                                    //           R Data Not Found...!
+                                                    //         </h5>
+                                                    //       </div>
+                                                    //     </div>
+                                                    //   </>
+                                                    // )
+                                                    null
+                                                }
+                                            </Col>
+                                        </Row>
+
+                                        <Row className="mb-4">
+                                            <Label className="col-sm-3 col-form-label">
+                                                Show Menu
+                                            </Label>
+                                            <Col sm={4}>
+                                                {/* <input
+                                                        type="checkbox"
+                                                        id="abc"
+                                                    /> */}
+                                                <AvInput
+                                                    type="checkbox" id="abc"
+                                                    name="Show Menu"
+                                                    checked={isShowPageChecked}
+                                                ></AvInput>
+                                            </Col>
+                                        </Row>
                                         <AvGroup>
                                             <Row className="mb-4">
                                                 <Label className="col-sm-3 col-form-label">
@@ -356,19 +463,6 @@ const HPageMaster = (props) => {
                                                 </Col>
                                             </Row>
                                         </AvGroup>
-                                        <Row className="mb-4">
-                                            <Label className="col-sm-3 col-form-label">
-                                                PageAccess
-                                            </Label>
-                                            <Col sm={4}>
-                                                <Select
-                                                    value={selectPageAccessDropDown}
-                                                    options={PageAccessValues}
-                                                    autoComplete='off'
-                                                    onChange={(e) => { handllerPageAccess(e) }}
-                                                />
-                                            </Col>
-                                        </Row>
 
                                         <Row className="justify-content-end">
                                             <Col sm={10}></Col>
