@@ -21,10 +21,12 @@ export const POST_JWT_LOGIN = "/Login"
 
 //role Aceess url
  export const ROLE_ACCESS="/RoleAccess"
+
 //PAGE Master
 export const GET_DEFAULT_MODULE="/HModules"
 export const POST_MODULE_ID="/HModules"
-export const showPagesListOnPageType_DropDown="/showPagesListOnPageType/2"
+export const SHOW_PAGESLIST_ON_PAGE_TYPE_FOR_DROPDOWN="/showPagesListOnPageType/2"
+export const SHOW_PAGESLIST_ON_PAGEACCESS_FOR_DROPDOWN="/PageAccess"
 
 // Moduls Submit  Method URL
 export const H_MODULES_API_URL ="/H_Modules"

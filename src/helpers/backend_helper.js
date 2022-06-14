@@ -153,8 +153,8 @@ export const postDefaultMogeuleId = (id) => get(url.POST_MODULE_ID, id)
 export const postSubModule = (id) => get(`${url.H_SUB_MODULES_API_URL}/${id}`)
 export const postAddPage = (data) => post(url.H_SUB_MODULES_API_URL, data)
 export const getPageAcess = () => get(url.GET_PAGE_ACCESS)
-export const showPagesListOnPageType_DropDown_List = () => get(url.showPagesListOnPageType_DropDown)
-export const showPagesListOnPageAccess_DropDown_List = () => get(url.showPagesListOnPageAccess_DropDown)
+export const showPagesListOnPageType_DropDown_List = () => get(url.SHOW_PAGESLIST_ON_PAGE_TYPE_FOR_DROPDOWN)
+export const showPagesListOnPageAccess_DropDown_List = () => get(url.SHOW_PAGESLIST_ON_PAGEACCESS_FOR_DROPDOWN )
 
 // H_subModule Api
 export const saveH_SubModules = (data) => post(url.H_SUB_MODULES_API_URL, data)

@@ -2,13 +2,10 @@ import { call, put, takeEvery } from "redux-saga/effects";
 import {
   deleteModuleIDSuccess,
   editHPagesIDSuccess,
-  GetHpageListData,
   GetHpageListDataSuccess,
   getH_ModulesSuccess,
-  getH_SubModulesSuccess,
   getPageAccess_DropDown_API_Success,
   getPageListSuccess,
-  getPageTypeSuccess,
   saveHPagesSuccess,
   updateHPagesSuccess,
 } from "./actions";
@@ -18,7 +15,6 @@ import {
   deletHPagesUsingID_API,
   edit_HPageID,
   Fetch_HPagesListApi,
-  get_H_SubModule_HPages,
   get_Module_HPages,
   saveHPagesAPI,
   showPagesListOnPageAccess_DropDown_List,
@@ -35,9 +31,6 @@ import {
   SAVE_HPAGES,
   UPDATE_H_PAGES,
 } from "./actionType";
-import PageListDropdownData from "./PageListData";
-
-
 
 function* fetchHPagesList_GneratorFunction() {
   yield put(SpinnerState(true))
@@ -59,7 +52,13 @@ function* GetH_Modules({ id }) {
     const response = yield call(get_Module_HPages, id);
     yield put(getH_ModulesSuccess(response.Data))
   } catch (error) {
-    yield put(AlertState({ Type: 3, Status: true, Message: " GetH_Sub_Modules Network error Message", RedirectPath: false, AfterResponseAction: false }));
+    yield put(AlertState({
+      Type: 3,
+      Status: true,
+      Message: " GetH_Sub_Modules Network error Message",
+      RedirectPath: false,
+      AfterResponseAction: false
+    }));
   }
 }
 
@@ -148,7 +147,7 @@ function* HPageSaga() {
   yield takeEvery(UPDATE_H_PAGES, update_HPagesUsingID_GenratorFunction);
   yield takeEvery(DELETE_HPAGES_USING_ID, deleteHpagesUsingID_GenratorFunction)
   yield takeEvery(GET_PAGELIST, PageList_DropDown_GenratorFunction)
-  yield takeEvery(GET_PAGEACCESS_DROPDOWN_API_DROPDOWN_API, PageAccess_DropDown_GenratorFunction)
+  yield takeEvery(GET_PAGEACCESS_DROPDOWN_API, PageAccess_DropDown_GenratorFunction)
 
 
 }
