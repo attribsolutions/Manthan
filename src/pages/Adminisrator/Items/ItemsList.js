@@ -108,8 +108,13 @@ const ItemsList = () => {
             sort: true,
         },
         {
-            text: "Description",
-            dataField: "Description",
+            text: "GSTPercentage",
+            dataField: "GSTPercentage",
+            sort: true,
+        },
+        {
+            text: "MRP",
+            dataField: "MRP",
             sort: true,
         },
         {
@@ -117,11 +122,7 @@ const ItemsList = () => {
             dataField: "isActive",
             sort: true,
         },
-        {
-            text: "Dashboard",
-            dataField: "Dashboard",
-            sort: true,
-        },
+        
         {
             text: "Action",
             formatter: (cellContent, Item) => (

@@ -1,3 +1,4 @@
+import { GET_PAGE_ACCESS } from "../../../helpers/url_helper";
 import { DELETE_MODULE_ID_SUCCESS } from "../ModulesRedux/actionType";
 import {
   DELETE_HPAGES_USING_ID,
@@ -13,7 +14,9 @@ import {
   UPDATE_H_PAGES,
   UPDATE_H_PAGES_SUCCESS,
   GET_PAGELIST,
-  GET_PAGELIST_SUCCESS
+  GET_PAGELIST_SUCCESS,
+  GET_PAGEACCESS_DROPDOWN_API_SUCCESS,
+  GET_PAGEACCESS_DROPDOWN_API
 } from "./actionType";
 
 export const getH_Modules = () => ({
@@ -88,8 +91,6 @@ export const updateHPagesSuccess = (data) => ({
   payload: data,
 });
 
-
-
 // PageList dropdown api 
 export const getPageList = (id) => ({
   type: GET_PAGELIST,
@@ -97,5 +98,15 @@ export const getPageList = (id) => ({
 });
 export const getPageListSuccess = (data) => ({
   type: GET_PAGELIST_SUCCESS,
+  payload: data,
+});
+
+// PageAccess dropdown api 
+export const getPageAccess_DropDown_API = (id) => ({
+  type: GET_PAGEACCESS_DROPDOWN_API,
+  id,
+});
+export const getPageAccess_DropDown_API_Success = (data) => ({
+  type: GET_PAGEACCESS_DROPDOWN_API_SUCCESS,
   payload: data,
 });

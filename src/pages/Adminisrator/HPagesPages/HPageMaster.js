@@ -7,6 +7,7 @@ import {
     Container,
     Row,
     Label,
+    Input,
 } from "reactstrap";
 import Breadcrumbs from '../../../components/Common/Breadcrumb'
 import {
@@ -18,6 +19,7 @@ import AvField from "availity-reactstrap-validation/lib/AvField";
 import ReactSelect from "react-select";
 import {
     editHPagesIDSuccess,
+    getPageAccess_DropDown_API,
     getPageList,
     getPageListSuccess,
     saveHPages,
@@ -40,19 +42,29 @@ const HPageMaster = (props) => {
 
     const [selectPageType, setPageType] = useState('');
     const [selectPageList, setPageList] = useState('');
-    let showmenu = false;
-
-    const { ModuleData, SaveMessage, PageList } = useSelector((state) => ({
+    const [selectPageAccessDropDown, setselectPageAccessDropDown] = useState('');
+   
+    const { ModuleData, SaveMessage, PageList ,PageAccess} = useSelector((state) => ({
         ModuleData: state.Modules.modulesList,
         SaveMessage: state.H_Pages.saveMessage,
         PageList: state.H_Pages.PageList,
+        PageAccess:state.H_Pages.PageAccess,
     }));
-
+    useEffect(() => {
+        dispatch(getPageAccess_DropDown_API());
+      }, [dispatch]);
+    
+      const PageAccessValues = PageAccess.map((Data) => ({
+        value: Data.ID,
+        label: Data.Name
+      }));
+    
+      function handllerPageAccess(e) {
+        setselectPageAccessDropDown(e)
+      }
     // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
     useEffect(() => {
         document.getElementById("txtName").focus();
-        // document.getElementById("inp-show-menu" ).checked=true;
-
         dispatch(fetchModelsList())
         if (!(editDataGatingFromList === undefined)) {
             setEditData(editDataGatingFromList[0]);
@@ -139,17 +151,18 @@ const HPageMaster = (props) => {
 
         if (e.label === "ListPage") {
             dispatch(getPageList(e.value))
-            // showmenu = true;
             document.getElementById("abc").checked = true;
+            document.getElementById("abc").disabled = true
 
         }
         else if (e.label === "AddPage") {
-            document.getElementById("abc").checked = false;
+            document.getElementById("abc").disabled = false
             dispatch(getPageListSuccess([]))
-         
+            setPageList([])
+
         }
         setPageType(e)
-        // dispatch(getPageList(e.value))
+
     }
 
     // PageList Dropdown
@@ -160,7 +173,7 @@ const HPageMaster = (props) => {
 
     const PageList_SelectOnChangeHandller = (e) => {
         setPageList(e);
-        // dispatch(getPageList(e.value));
+
     }
 
     return (
@@ -302,13 +315,13 @@ const HPageMaster = (props) => {
                                                 </Label>
                                                 <Col sm={4}>
 
-                                                    {/* <AvField name="Show Menu"
+                                                    {/* <Input name="Show Menu"
                                                         id="chkShowMenu"
                                                         value={showmenu}
                                                         type="checkbox"
                                                     /> */}
                                                     <input
-                                                    
+
                                                         type="checkbox"
                                                         id="abc"
                                                     />
@@ -325,11 +338,10 @@ const HPageMaster = (props) => {
                                                     options={optionPageList}
                                                     autoComplete='off'
                                                     onChange={(e) => { PageList_SelectOnChangeHandller(e) }}
-
                                                 />
-
                                             </Col>
                                         </Row>
+                                        
                                         <AvGroup>
                                             <Row className="mb-4">
                                                 <Label className="col-sm-3 col-form-label">
@@ -344,6 +356,19 @@ const HPageMaster = (props) => {
                                                 </Col>
                                             </Row>
                                         </AvGroup>
+                                        <Row className="mb-4">
+                                            <Label className="col-sm-3 col-form-label">
+                                                PageAccess
+                                            </Label>
+                                            <Col sm={4}>
+                                                <Select
+                                                    value={selectPageAccessDropDown}
+                                                    options={PageAccessValues}
+                                                    autoComplete='off'
+                                                    onChange={(e) => { handllerPageAccess(e) }}
+                                                />
+                                            </Col>
+                                        </Row>
 
                                         <Row className="justify-content-end">
                                             <Col sm={10}></Col>

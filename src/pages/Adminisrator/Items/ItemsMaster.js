@@ -87,6 +87,8 @@ const ItemsMaster = (props) => {
     };
     if (IsEdit) {
       dispatch(updateItemID(requestOptions.body, EditData.ID));
+      console.log("requestOptions",requestOptions.body)
+      console.log("requestOptionsqqq",EditData.ID)
     }
     else {
       dispatch(postItemData(requestOptions.body));
@@ -160,7 +162,8 @@ const ItemsMaster = (props) => {
                             placeholder="Please Enter Dashboard"
                             autoComplete='off'
                             validate={{
-                              required: { value: true, errorMessage: 'Please enter a MRP...!' },
+                              required: { value: true,  errorMessage: 'Please enter a MRP...!' },
+                              
                             }} />
                         </Col>
                       </Row>

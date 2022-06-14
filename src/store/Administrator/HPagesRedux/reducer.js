@@ -19,7 +19,8 @@ const INIT_STATE = {
   // deleteModuleIDError: {},
   editData: { Status: false },
   updateMessage: { Status: false },
-  PageList:[],
+  PageList: [],
+  PageAccess:[],
 
 }
 
@@ -36,11 +37,6 @@ const H_Pages = (state = INIT_STATE, action) => {
         ...state,
         SubModulesData: action.payload,
       }
-    // case POST_MODULES_SUBMIT_ERROR:
-    //   return {
-    //     ...state,
-    //     modulesSubmitError: action.payload,
-    //   }
     case GET_HPAGES_LIST_DATA_SUCCESS:
       return {
         ...state,
@@ -61,18 +57,12 @@ const H_Pages = (state = INIT_STATE, action) => {
         ...state,
         deleteModuleID: action.payload,
       }
-    // case DELETE_MODULE_ID_ERROR:
-    //   return {
-    //     ...state,
-    //     deleteModuleIDError: action.payload,
-    //   }
     case UPDATE_H_PAGES_SUCCESS:
       return {
         ...state,
         updateMessage: action.payload,
       }
 
-    
     // PageList Dropdown api
     case GET_PAGELIST_SUCCESS:
       return {
@@ -80,6 +70,12 @@ const H_Pages = (state = INIT_STATE, action) => {
         PageList: action.payload,
       };
 
+      // PageAccess Dropdown api
+    case GET_PAGEACCESS_DROPDOWN_API_SUCCESS:
+      return {
+        ...state,
+        PageAccess: action.payload,
+      };
     default:
       return state
   }
