@@ -65,11 +65,9 @@ const OrderPage = (props) => {
   }, [editDataGatingFromList, CheckPageMode])
 
 
-  const { OrderItems, APIResponse, CustomSearchInput, } = useSelector((state) => ({
+  const { OrderItems, APIResponse, } = useSelector((state) => ({
     OrderItems: state.OrderPageReducer.OrderItems,
     APIResponse: state.OrderPageReducer.submitOrderSuccess,
-    CustomSearchInput: state.CustomSearchReducer.CustomSearchInput,
-
   }));
 
   // This UseEffect clear Form Data and when modules Save Successfully.
@@ -104,25 +102,20 @@ const OrderPage = (props) => {
       }));
     }
   }, [APIResponse.Status])
-
+debugger
   const saveHandeller = () => {
-
-    const selectedItemArray = [];
-
+    var abc = [];
     for (var i = 0; i < OrderItems.length - 1; i++) {
-
-      let qty = document.getElementById("inp-txtqty" + i).value;
-
+      let qty = document.getElementById("inptxtqty" + i).value;
       if (qty > 0) {
-
         var itemID = document.getElementById("lblItemID" + i).value;
         var itemMRP = document.getElementById("lblItemMRP" + i).value;
         var itemGST = document.getElementById("lblItemGST" + i).value;
         var UnitID = document.getElementById("ddlUnit" + i).value;
         var rate = document.getElementById("rate" + i).value;
-        var comments = document.getElementById("inp-comment" + i).value;
 
-        let arrayElement = {
+        var comments = document.getElementById("comment" + i).value;
+        var abc1 = {
           OrderId: 0,
           ItemID: itemID,
           Quantity: qty,
@@ -131,9 +124,9 @@ const OrderPage = (props) => {
           BaseUnitQuantity: "1.00",
           Comments: comments,
           GST: itemGST,
-          Rate: rate
+          Rate:rate
         };
-        selectedItemArray.push(arrayElement);
+        abc.push(abc1);
       }
     }
     const requestOptions = {
@@ -150,82 +143,65 @@ const OrderPage = (props) => {
         CreatedOn: !orderDate ? currentDate : orderDate,
         UpdatedBy: 1,
         UpdatedOn: !orderDate ? currentDate : orderDate,
-        OrderItem: selectedItemArray,
+        OrderItem: abc,
       }),
     };
 
-    if (IsEdit && selectedItemArray.length > 0) {
+
+
+
+    //     {
+
+    //       "CustomerID": 2,
+    //       "PartyID": 2,
+    //       "OrderAmount": "33.00",
+    //       "Discreption": "bb",
+    //       "CreatedBy": 11,
+    //       "OrderItem": [
+    //           {
+    //               "ItemID": 1,
+    //               "Quantity": "1.00",
+    //               "MRP": "1.00",
+    //               "Rate": "10.00",
+    //               "UnitID": 1,
+    //               "BaseUnitQuantity": "1.00",
+    //               "GST": "5.00"
+    //           }]
+    // }
+    var a = requestOptions.body
+
+    if (IsEdit) {
       // dispatch(updateModuleID(requestOptions.body, EditData.ID));
     }
-    else if (selectedItemArray.length > 0) {
-      dispatch(submitOrder_fromOrderPage(requestOptions.body));
-    }
-    else{
-      dispatch(AlertState({
-        Type: 4,
-        Status: true, Message: "Please Select At List one Item",
-      }))
+    else {
+      // dispatch(submitOrder_fromOrderPage(requestOptions.body));
     }
     // generate(InvoiceFakeData)
-
+    dispatch(submitOrder_fromOrderPage(requestOptions.body));
   };
 
   function handleKeyDown(e) {
-    var count = e.target.id;
-    var split = count.split("y");
-    count = split[1];
+    var cont = e.target.id;
+    var abc = cont.split("y");
+    cont = abc[1];
 
-    if (e.keyCode === 40 && (OrderItems.length - 1 > parseInt(count))) {
-      count = ++count;
-      document.getElementById("inp-txtqty" + count).focus();
+    if (e.keyCode === 40 && (OrderItems.length - 1 > parseInt(cont))) {
+      cont = ++cont;
+      document.getElementById("inptxtqty" + cont).focus();
     }
-    if (e.keyCode === 38 && count > 0) {
-      count = count - 1;
-      document.getElementById("inp-txtqty" + count).focus();
+    if (e.keyCode === 38 && cont > 0) {
+      cont = cont - 1;
+      document.getElementById("inptxtqty" + cont).focus();
     }
   }
-
-
-  useEffect(() => {
-    if (!(CustomSearchInput === "")) { CustomSearchHandller() }
-  }, [CustomSearchInput])
-
-
-
-  function CustomSearchHandller() {
-
-    var input, filter, table, tr, td, i, txtValue;
-    // input = document.getElementById("table_search_Input");
-    filter = CustomSearchInput.toUpperCase();
-    table = document.getElementById("myTable");
-    tr = table.getElementsByTagName("tr");
-    for (i = 0; i < tr.length; i++) {
-      td = tr[i].getElementsByTagName("td")[0];
-      if (td) {
-        txtValue = td.textContent || td.innerText;
-        if (txtValue.toUpperCase().indexOf(filter) > -1) {
-          tr[i].style.display = "";
-        } else {
-          tr[i].style.display = "none";
-        }
-      }
-    }
-
-  }
-
-
-
-
 
 
   return (
     <React.Fragment>
       <div className="page-content">
-
-
         <Container fluid>
-          <Row className="mb-1 ">
-            <div className="col-lg-2 ">
+          <Row className="mb-1">
+            <div class="col-lg-2">
               <Input
                 className="form-control"
                 type="date"
@@ -237,7 +213,6 @@ const OrderPage = (props) => {
                 id="example-date-input"
               />
             </div>
-
           </Row>
           <Row>
             <div className="table-rep-plugin">
@@ -246,12 +221,13 @@ const OrderPage = (props) => {
                 data-pattern="priority-columns"
               >
                 <Table
-                  id="myTable"
+                  id="tech-companies-1"
                   className="table  table-bordered"
                 >
                   <Thead>
                     <Tr>
                       <Th data-priority="1">Item Name</Th>
+                      {/* <Th data-priority="1">GSTPercentage</Th> */}
                       <Th data-priority="1">MRP</Th>
                       <Th data-priority="1">Rate</Th>
                       <Th data-priority="3">Quantity</Th>
@@ -269,7 +245,16 @@ const OrderPage = (props) => {
                       })
                       return (
                         <Tr>
-
+                          {/* <Td>
+                            {item.ItemGroup === itemgroups ? (
+                              ""
+                            ) : (
+                              <label className="btn btn-secondary btn-sm waves-effect waves-light">
+                                {item.ItemGroup}
+                                {(itemgroups = item.ItemGroup)}
+                              </label>
+                            )}
+                          </Td> */}
                           <Td>
                             <label
                               id={"lblItemName" + key}
@@ -282,13 +267,17 @@ const OrderPage = (props) => {
                               id={"lblItemID" + key}
                               name={"lblItemID" + key}
                               value={item.ID}
-                            />
+                              />
+                          </Td>
+                          <Td>
+                   
                             <input
                               type="hidden"
                               id={"lblItemGST" + key}
                               name={"lblItemGST" + key}
                               value={item.GSTPercentage}
                             />
+
                           </Td>
                           <Td>
                             <label > {item.MRP} </label>
@@ -300,21 +289,51 @@ const OrderPage = (props) => {
                             />
                           </Td>
                           <Td>
-                            <input
+                          <input
                               type="text"
                               defaultvalue={com}
+                              // value={ComValueHandeller(item.ItemID)}
                               id={"rate" + key}
                               className="form-control form-control-sm"
                               autoComplete="false"
                             />
                           </Td>
+                          
+                          {/* <Td>
+                            <label
+                              id={"lblItemName" + key}
+                              name={"lblItemName" + key}
+                            >
+                              {item.Name}
+                            </label>
+                            <input
+                              type="hidden"
+                              id={"lblItemID" + key}
+                              name={"lblItemID" + key}
+                              value={item.ID}
+                            />
+                          </Td> */}
+
+                          {/* <Td>
+                            {" "}
+                            <input
+                              type="text"
+                              defaultvalue={com}
+                              // value={ComValueHandeller(item.ItemID)}
+                              id={"inptxtqty" + key}
+                              class="form-control form-control-sm"
+                              autoComplete="false"
+                            />
+                          </Td> */}
+
                           <Td>
 
                             <input
                               type="text"
-                              id={"inp-txtqty" + key}
+                              id={"inptxtqty" + key}
                               key={item.ID}
-                              disabled={item.MRP > 0 ? false : true}
+                              disabled={item.MRP>0?false:true}
+                              // value={QtValueHandller(item.ItemID)}
                               defaultvalue={qat}
                               onKeyDown={(e) => {
                                 handleKeyDown(e);
@@ -329,6 +348,15 @@ const OrderPage = (props) => {
                               classNamePrefix="select2-selection"
                               id={"ddlUnit" + key}
                             >
+                              {/* {item.Units.map((units, key) => {
+                                return (
+                                  <option value={units.UnitsID}
+                                  >
+                                    {units.label}
+                                  </option>
+                                );
+                              })} */}
+
                               <option value={1}
                               >
                                 {"No"}
@@ -340,7 +368,8 @@ const OrderPage = (props) => {
                             <input
                               type="text"
                               defaultvalue={com}
-                              id={"inp-comment" + key}
+                              // value={ComValueHandeller(item.ItemID)}
+                              id={"comment" + key}
                               class="form-control form-control-sm"
                               autoComplete="false"
                             />
@@ -362,7 +391,6 @@ const OrderPage = (props) => {
                 </div>
               </div>
             </div>
-
           </Row>
         </Container>
       </div>

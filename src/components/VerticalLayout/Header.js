@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types'
 import React, { useState } from "react"
-import { connect } from "react-redux"
+import { connect, useDispatch } from "react-redux"
 import { Link } from "react-router-dom"
 
 //import drawer
@@ -39,8 +39,10 @@ import {
   changeSidebarType,
   changelayoutMode
 } from "../../store/actions"
+import { CustomSearchInput } from '../../store/Utilites/CustomSearchRedux/actions';
 
 const Header = props => {
+  const dispatch = useDispatch();
   const { onChangeLayoutMode } = props;
   const [search, setsearch] = useState(false)
   const [socialDrp, setsocialDrp] = useState(false)
@@ -48,6 +50,10 @@ const Header = props => {
   const [position, setPosition] = useState();
   const [open, setOpen] = useState(false);
 
+
+  function searchFunctionHandller(e) {
+    dispatch(CustomSearchInput(e.target.value))
+  }
   /**
    * Rightsidebar drawer
    */
@@ -108,7 +114,7 @@ const Header = props => {
 
             <form className="app-search d-none d-lg-block">
               <div className="position-relative">
-                <input type="text" className="form-control" placeholder="Search..." />
+                <input type="text" className="form-control" placeholder="Search..." onChange={(e) => {searchFunctionHandller(e)}} />
                 <button className="btn btn-primary" type="button"><i className="bx bx-search-alt align-middle"></i></button>
               </div>
             </form>

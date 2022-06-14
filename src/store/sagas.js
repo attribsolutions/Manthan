@@ -10,6 +10,8 @@ import LayoutSaga from "./layout/saga"
 import Spinner_Saga from "./Utilites/Spinner/saga"
 //import AlertSagas 
 import Alert_Saga from "./Utilites/CostumeAlert/saga"
+import CustomSearch_Saga from "./Utilites/CustomSearchRedux/saga"
+
 // import  Module saga
 import ModulesSaga from "./Administrator/ModulesRedux/saga"
 import CompanySaga from "./Administrator/CompanyRedux/saga"
@@ -21,6 +23,7 @@ import UserRegistrationSaga from "./Administrator/UserRegistrationRedux/saga"
 import M_EmployeeSaga from "./Administrator/M_EmployeeRedux/saga"
 import RoleMaster_Saga from "./Administrator/RoleMasterRedux/saga"
 import ItemsMastersSaga from "./Administrator/ItemsRedux/saga"
+
 export default function* rootSaga() {
   yield all([
     fork(AccountSaga),
@@ -29,6 +32,7 @@ export default function* rootSaga() {
     fork(ProfileSaga),
     fork(LayoutSaga),
     fork(Spinner_Saga),
+    fork(CustomSearch_Saga),
     fork(Alert_Saga),
     fork(ModulesSaga),
     fork(CompanySaga),

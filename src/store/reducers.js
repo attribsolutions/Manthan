@@ -12,6 +12,8 @@ import Profile from "./auth/profile/reducer"
 //Administrator
 import SpinnerReducer from './Utilites/Spinner/reducer'
 import AlertReducer from './Utilites/CostumeAlert/reducer'
+import CustomSearchReducer from './Utilites/CustomSearchRedux/reducer'
+
 import Modules from './Administrator/ModulesRedux/reducer'
 import Company from './Administrator/CompanyRedux/reducer'
 import SubModules from "./Administrator/SubModulesRedux/reducer"
@@ -31,6 +33,7 @@ const rootReducer = combineReducers({
   Profile,
   SpinnerReducer,
   AlertReducer,
+  CustomSearchReducer,
   // Administator
   Modules,
   Company,
