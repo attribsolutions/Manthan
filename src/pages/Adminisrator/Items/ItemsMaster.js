@@ -54,7 +54,7 @@ const ItemsMaster = (props) => {
                 Type: 1,
                 Status: true,
                 Message: PostData.Message,
-                RedirectPath: '/Item_List',
+                RedirectPath: '/itemsList',
                 AfterResponseAction: false
             }))
         }
@@ -76,9 +76,9 @@ const ItemsMaster = (props) => {
     const requestOptions = {
       body: JSON.stringify({
         Name: values.Name,
-        Description: values.Description,
+        GSTPercentage: values.GSTPercentage,
+        MRP: values.MRP,
         isActive: values.isActive,
-        Dashboard: values.Dashboard,
         CreatedBy: 1,
         CreatedOn: "2022-05-20T11:22:55.711483Z",
         UpdatedBy: 1,
@@ -144,6 +144,7 @@ const ItemsMaster = (props) => {
                             placeholder="Please Enter Discription"
                             autoComplete='off'
                             validate={{
+                               number:true,
                               required: { value: true, errorMessage: 'Please enter a GSTPercentage...!' },
                             }} />
                         </Col>
@@ -156,12 +157,13 @@ const ItemsMaster = (props) => {
                         MRP
                         </Label>
                         <Col sm={4}>
-                          <AvField name="Dashboard" id="txtName"
+                          <AvField name="MRP" id="txtName"
                             value={EditData.MRP}
                             type="text"
                             placeholder="Please Enter Dashboard"
                             autoComplete='off'
                             validate={{
+                              number:true,
                               required: { value: true,  errorMessage: 'Please enter a MRP...!' },
                               
                             }} />
