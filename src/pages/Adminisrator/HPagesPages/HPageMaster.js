@@ -67,6 +67,7 @@ const HPageMaster = (props) => {
     }
     // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
     useEffect(() => {
+
         document.getElementById("txtName").focus();
         dispatch(fetchModelsList())
         if (!(editDataGatingFromList === undefined)) {
@@ -74,7 +75,7 @@ const HPageMaster = (props) => {
             setIsEdit(true);
             setSelectModule({
                 label: editDataGatingFromList[0].ModuleName,
-                value: editDataGatingFromList[0].ModuleID
+                value: editDataGatingFromList[0].Module
             })
             setPageList({
                 value: editDataGatingFromList[0].RelatedPageID,
@@ -85,14 +86,15 @@ const HPageMaster = (props) => {
 
             let showCheckBox = editDataGatingFromList[0].PageType
             if (showCheckBox === 2) {
-
+                document.getElementById("abc").disabled = true
                 setisShowPageChecked(true)
                 dispatch(getPageList(showCheckBox))
                 // document.getElementById("abc").disabled = true
-                setPageType({ value: 2, label: 'PageList' })
+                setPageType({ value: 2, label: 'ListPage' })
 
             }
             else if (showCheckBox === 1) {
+
                 setisShowPageChecked(showCheckBox.isShowOnMenu);
                 document.getElementById("abc").disabled = false
                 dispatch(getPageListSuccess([]))
@@ -110,6 +112,9 @@ const HPageMaster = (props) => {
         if ((SaveMessage.Status === true) && (SaveMessage.StatusCode === 200)) {
             dispatch(saveHPagesSuccess({ Status: false }))
             setSelectModule('')
+            setselectPageAccessDropDown('')
+            setPageType('')
+            setPageList('')
             formRef.current.reset();
 
             if (PageMode === true) {
@@ -161,6 +166,7 @@ const HPageMaster = (props) => {
                 })),
             }),
         };
+        debugger
         if (IsEdit) {
             dispatch(updateHPages(requestOptions.body, EditData.ID));
             console.log("requestOptions", requestOptions.body)
@@ -180,7 +186,6 @@ const HPageMaster = (props) => {
         value: d.ID,
         label: d.Name,
     }));
-
 
     //  for PageType deropDown
     const PageType_SelectOnChangeHandller = (e) => {
@@ -235,7 +240,7 @@ const HPageMaster = (props) => {
     }
     function PageAccess_DeleteButton_Handller(tableValue) {
         setPageAccessData(PageAccessData.filter(
-            (item) => !(item.value === tableValue)
+            (item) => !(item.AccessID === tableValue)
         )
         )
     }
@@ -464,8 +469,8 @@ const HPageMaster = (props) => {
                                                     /> */}
                                                 <AvInput
                                                     type="checkbox" id="abc"
-                                                    name="Show Menu"
-                                                    checked={isShowPageChecked}
+                                                    name="isShowOnMenu"
+                                                    checked={EditData.isShowOnMenu}
                                                 ></AvInput>
                                             </Col>
                                         </Row>
@@ -475,7 +480,7 @@ const HPageMaster = (props) => {
                                                     IsActive
                                                 </Label>
                                                 <Col sm={4}>
-                                                    <AvField name="IsActive"
+                                                    <AvField name="isActive"
                                                         checked={EditData.isActive}
                                                         type="checkbox"
                                                     />
