@@ -41,7 +41,7 @@ export default function HPageList() {
             }))
             tog_center()
         }
-        else if (deleteModuleID.Status === true) {
+        else if (updateMessage.Status === true) {
             dispatch(updateHPagesSuccess({ Status: false }))
             dispatch(AlertState({
                 Type: 3, Status: true,
@@ -75,6 +75,7 @@ export default function HPageList() {
     }, [editData]);
 
     const EditPageHandler = (id) => {
+        console.log("selected id",id)
         dispatch(editHPagesID(id));
     }
 
@@ -137,7 +138,7 @@ export default function HPageList() {
         },
         {
             text: "Is Active",
-            dataField: "IsActive",
+            dataField: "isActive",
             sort: true,
         },
         {

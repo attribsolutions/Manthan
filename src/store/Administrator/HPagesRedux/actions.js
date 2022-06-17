@@ -48,13 +48,13 @@ export const GetHpageListDataSuccess = (data) => ({
   type: GET_HPAGES_LIST_DATA_SUCCESS,
   payload: data,
 });
-export const saveHPages = (data) => ({
+export const saveHPages = (Data) => ({
   type: SAVE_HPAGES,
-  data,
+  Data,
 });
-export const saveHPagesSuccess = (data) => ({
+export const saveHPagesSuccess = (Data) => ({
   type: SAVE_HPAGES_SUCCESS,
-  payload: data,
+  payload: Data,
 });
 // export const fetchModelsListError = (modulesListError) => ({
 //   type: FETCH_MODULES_LIST_ERROR,

@@ -76,9 +76,34 @@ const HPageMaster = (props) => {
                 label: editDataGatingFromList[0].ModuleName,
                 value: editDataGatingFromList[0].ModuleID
             })
-            dispatch(editHPagesIDSuccess({ Status: false }))
-        }
+            setPageList({
+                value: editDataGatingFromList[0].RelatedPageID,
+                label: editDataGatingFromList[0].RelatedPageName,
+            })
 
+            setPageAccessData(editDataGatingFromList[0].PagePageAccess)
+
+            let showCheckBox = editDataGatingFromList[0].PageType
+            if (showCheckBox === 2) {
+
+                setisShowPageChecked(true)
+                dispatch(getPageList(showCheckBox))
+                // document.getElementById("abc").disabled = true
+                setPageType({ value: 2, label: 'PageList' })
+
+            }
+            else if (showCheckBox === 1) {
+                setisShowPageChecked(showCheckBox.isShowOnMenu);
+                document.getElementById("abc").disabled = false
+                dispatch(getPageListSuccess([]))
+                setPageList({ value: 0 })
+                setPageType({ value: 1, label: 'AddPage' })
+
+            }
+
+            dispatch(editHPagesIDSuccess({ Status: false }))
+
+        }
     }, [editDataGatingFromList]);
 
     useEffect(() => {
@@ -122,21 +147,30 @@ const HPageMaster = (props) => {
                 Name: values.Name,
                 Description: values.Discription,
                 Module: selectModule.value,
-                isActive: values.IsActive,
+                isActive: values.isActive,
                 DisplayIndex: values.DisplayIndex,
                 Icon: values.Icon,
                 ActualPagePath: values.ActualPagePath,
+                isShowOnMenu: values.isShowOnMenu,
+                PageType: selectPageType.value,
+                RelatedPageID: selectPageList.value,
                 CreatedBy: 1,
                 UpdatedBy: 1,
+                PagePageAccess: PageAccessData.map((d) => ({
+                    AccessID: d.AccessID,
+                })),
             }),
         };
         if (IsEdit) {
             dispatch(updateHPages(requestOptions.body, EditData.ID));
+            console.log("requestOptions", requestOptions.body)
+            console.log("PageAccessData", PageAccessData)
         }
         else {
             dispatch(saveHPages(requestOptions.body));
         }
     };
+
     const HModuleSelectOnChangeHandller = (e) => {
         setSelectModule(e);
         // dispatch(getH_SubModules(e.value))
@@ -148,28 +182,22 @@ const HPageMaster = (props) => {
     }));
 
 
-
     //  for PageType deropDown
     const PageType_SelectOnChangeHandller = (e) => {
-
+        console.log('PageType_SelectOnChangeHandller', e)
         let showCheckBox = document.getElementById("abc")
         if (e.label === "ListPage") {
             dispatch(getPageList(e.value))
+            setisShowPageChecked(true)
             // showCheckBox.value= true;
             showCheckBox.disabled = true
-            setisShowPageChecked(true)
-
         }
-
         else if (e.label === "AddPage") {
             showCheckBox.disabled = false
             dispatch(getPageListSuccess([]))
-            setPageList([])
-
-
+            setPageList({ value: 0 })
         }
         setPageType(e)
-
     }
 
     // PageList Dropdown
@@ -180,11 +208,10 @@ const HPageMaster = (props) => {
 
     const PageList_SelectOnChangeHandller = (e) => {
         setPageList(e);
-
     }
     function AddRoleHandler() {
         const find = PageAccessData.find((element) => {
-            return element.value === selectPageAccessDropDown.value
+            return element.AccessID === selectPageAccessDropDown.value
         });
         if (selectPageAccessDropDown.length <= 0) {
             dispatch(AlertState({
@@ -193,17 +220,28 @@ const HPageMaster = (props) => {
             }));
         }
         else if (find === undefined) {
-            setPageAccessData([...PageAccessData, selectPageAccessDropDown]);
+            setPageAccessData([...PageAccessData, {
+                AccessID: selectPageAccessDropDown.value,
+                AccessName: selectPageAccessDropDown.label
+            }
+            ]);
         }
         else {
             dispatch(AlertState({
                 Type: 4, Status: true,
                 Message: "PageAccess Data already Exists ",
             }));
-
         }
     }
+    function PageAccess_DeleteButton_Handller(tableValue) {
+        setPageAccessData(PageAccessData.filter(
+            (item) => !(item.value === tableValue)
+        )
+        )
+    }
 
+    // console.log(PageAccess, "page")
+    // console.log(PageAccessData, "PageAccessData")
     return (
         <React.Fragment>
             <div className="page-content">
@@ -261,7 +299,6 @@ const HPageMaster = (props) => {
                                                     // autoComplete='off'
                                                     onChange={(e) => { HModuleSelectOnChangeHandller(e) }}
                                                 />
-
                                             </Col>
                                         </Row>
 
@@ -280,7 +317,6 @@ const HPageMaster = (props) => {
                                                 </Col>
                                             </Row>
                                         </AvGroup>
-
                                         <AvGroup>
                                             <Row className="mb-4">
                                                 <Label className="col-sm-3 col-form-label">
@@ -333,7 +369,6 @@ const HPageMaster = (props) => {
                                                     autoComplete='off'
                                                     onChange={(e) => { PageType_SelectOnChangeHandller(e); }}
                                                 />
-
                                             </Col>
                                         </Row>
 
@@ -350,6 +385,7 @@ const HPageMaster = (props) => {
                                                 />
                                             </Col>
                                         </Row>
+
                                         <Row className="mb-4">
                                             <Label className="col-sm-3 col-form-label">
                                                 PageAccess
@@ -387,23 +423,19 @@ const HPageMaster = (props) => {
                                                                 </thead>
                                                                 <tbody >
                                                                     {PageAccessData.map((TableValue) => (
-                                                                        <tr key={TableValue.ID}>
+                                                                        <tr key={TableValue.AccessID}>
                                                                             <td>
                                                                                 <h5 className="my-0 text-primary">
-                                                                                    {TableValue.label}
+                                                                                    {TableValue.AccessName}
                                                                                 </h5>
                                                                             </td>
                                                                             <td>
                                                                                 <button
                                                                                     type="button"
                                                                                     className="btn btn-danger btn-sm waves-effect waves-light"
-                                                                                    onClick={() =>
-                                                                                        setPageAccessData(
-                                                                                            PageAccessData.filter(
-                                                                                                (item) =>
-                                                                                                    item.ID !== TableValue.ID
-                                                                                            )
-                                                                                        )
+                                                                                    onClick={() => {
+                                                                                        PageAccess_DeleteButton_Handller(TableValue.AccessID)
+                                                                                    }
                                                                                     }
                                                                                 >
                                                                                     <i class="mdi mdi-trash-can d-block font-size-10"></i>
@@ -416,18 +448,6 @@ const HPageMaster = (props) => {
                                                         </div>
                                                     </div>
                                                 ) :
-                                                    // (
-                                                    //   <>
-                                                    //     <div className="border border-warning card">
-                                                    //       <div className="card-header bg-transparent border-warning">
-                                                    //         <h5 className="my-0 text-warning">
-                                                    //           <i className="mdi mdi-bullseye-arrow me-3"></i>
-                                                    //           R Data Not Found...!
-                                                    //         </h5>
-                                                    //       </div>
-                                                    //     </div>
-                                                    //   </>
-                                                    // )
                                                     null
                                                 }
                                             </Col>
@@ -456,9 +476,8 @@ const HPageMaster = (props) => {
                                                 </Label>
                                                 <Col sm={4}>
                                                     <AvField name="IsActive"
-                                                        checked={EditData.IsActive}
+                                                        checked={EditData.isActive}
                                                         type="checkbox"
-
                                                     />
                                                 </Col>
                                             </Row>
@@ -499,11 +518,3 @@ const HPageMaster = (props) => {
 };
 
 export default HPageMaster;
-
-
-
-
-
-
-
-// version1 day mar4

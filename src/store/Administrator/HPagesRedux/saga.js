@@ -31,6 +31,7 @@ import {
   SAVE_HPAGES,
   UPDATE_H_PAGES,
 } from "./actionType";
+import PageListDropdownData from "./PageListData";
 
 function* fetchHPagesList_GneratorFunction() {
   yield put(SpinnerState(true))
@@ -49,8 +50,10 @@ function* fetchHPagesList_GneratorFunction() {
 
 function* GetH_Modules({ id }) {
   try {
+    
     const response = yield call(get_Module_HPages, id);
     yield put(getH_ModulesSuccess(response.Data))
+    console.log("response", response)
   } catch (error) {
     yield put(AlertState({
       Type: 3,
@@ -62,10 +65,11 @@ function* GetH_Modules({ id }) {
   }
 }
 
-function* saveHPageSaga_GneratorFunction({ data }) {
+function* saveHPageSaga_GneratorFunction({ Data }) {
   yield put(SpinnerState(true))
   try {
-    const response = yield call(saveHPagesAPI, data);
+    console.log("response111", Data)
+    const response = yield call(saveHPagesAPI, Data);
     yield put(SpinnerState(false))
     yield put(saveHPagesSuccess(response));
     console.log("response", response)
@@ -79,6 +83,8 @@ function* saveHPageSaga_GneratorFunction({ data }) {
 }
 
 function* editHpages_ID({ id }) {
+
+  
   try {
     const response = yield call(edit_HPageID, id);
     yield put(editHPagesIDSuccess(response));
@@ -96,6 +102,7 @@ function* update_HPagesUsingID_GenratorFunction({ data, id }) {
     const response = yield call(updateHPages, data, id);
     yield put(SpinnerState(false))
     yield put(updateHPagesSuccess(response))
+    console.log("update response in saga ",response)
   }
   catch (error) {
     yield put(SpinnerState(false))

@@ -4,16 +4,16 @@ const PageListDropdownData =
         Status: true,
         Data:[
             {
-                value:1,
-                label:"EmployeeList"
+                ID:1,
+                Name:"EmployeeList"
             },
             {
-                value:2,
-                label:"UserList"
+                ID:2,
+                Name:"UserList"
             },
             {
-                value:3,
-                label:"RoleList"
+                ID:3,
+                Name:"RoleList"
             }
         ]
     }
