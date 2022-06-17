@@ -53,14 +53,14 @@ const AddUser = (props) => {
     dispatch(getEmployee());
   }, [dispatch]);
 
-  const { employee } = useSelector((state) => ({
-    employee: state.User_Registration_Reducer.employee
-  }));
+  // const { employee } = useSelector((state) => ({
+  //   employee: state.User_Registration_Reducer.employee
+  // }));
 
-  const EmployeeValues = employee.map((Data) => ({
-    value: Data.ID,
-    label: Data.Name
-  }));
+  // const EmployeeValues = employee.map((Data) => ({
+  //   value: Data.ID,
+  //   label: Data.Name
+  // }));
 
   function handllerEmployeeID(e) {
     setEmployeeSelect(e)
@@ -200,7 +200,7 @@ console.log("Roles",Roles)
                       <Col sm={4}>
                         <Select
                           value={EmployeeSelect}
-                          options={EmployeeValues}
+                          options={""}
                           onChange={(e) => { handllerEmployeeID(e) }}
                         />
                       </Col>
@@ -214,7 +214,14 @@ console.log("Roles",Roles)
                         {" "}
                         <Select
                           value={RoleDropDown}
-                          options={RolesValues}
+                          options={[{
+                            value: 1,
+                            label: "AddPage",
+                        },
+                        {
+                            value: 2,
+                            label: "ListPage",
+                        }]}
                           onChange={(e) => { setRoleDropDown(e) }}
                           classNamePrefix="select2-selection"
                           required=""
