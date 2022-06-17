@@ -81,14 +81,15 @@ const OrderPage = (props) => {
         dispatch(AlertState({
           Type: 1,
           Status: true,
-          Message: APIResponse.Message,
+          Message: "Error"
+          // APIResponse.Message,
         }))
       }
       else {
         dispatch(AlertState({
           Type: 1,
           Status: true,
-          Message: APIResponse.Message,
+          Message: "Error",//APIResponse.Message,
           RedirectPath: '/orderList',
 
         }))
@@ -106,7 +107,7 @@ const OrderPage = (props) => {
   }, [APIResponse.Status])
 
   const saveHandeller = () => {
-
+debugger
     const selectedItemArray = [];
 
     for (var i = 0; i < OrderItems.length - 1; i++) {
@@ -160,7 +161,7 @@ const OrderPage = (props) => {
     else if (selectedItemArray.length > 0) {
       dispatch(submitOrder_fromOrderPage(requestOptions.body));
     }
-    else{
+    else {
       dispatch(AlertState({
         Type: 4,
         Status: true, Message: "Please Select At List one Item",
@@ -269,7 +270,16 @@ const OrderPage = (props) => {
                       })
                       return (
                         <Tr>
-
+                          <Td>
+                            {item.ItemGroup === itemgroups ? (
+                              ""
+                            ) : (
+                              <label className="btn btn-secondary btn-sm waves-effect waves-light">
+                                {item.ItemGroup}
+                                {(itemgroups = item.ItemGroup)}
+                              </label>
+                            )}
+                          </Td>
                           <Td>
                             <label
                               id={"lblItemName" + key}
@@ -300,8 +310,9 @@ const OrderPage = (props) => {
                             />
                           </Td>
                           <Td>
+                            <label > {"121.21"} </label>
                             <input
-                              type="text"
+                              type="hidden"
                               defaultvalue={com}
                               id={"rate" + key}
                               className="form-control form-control-sm"
@@ -309,12 +320,11 @@ const OrderPage = (props) => {
                             />
                           </Td>
                           <Td>
-
                             <input
                               type="text"
                               id={"inp-txtqty" + key}
                               key={item.ID}
-                              disabled={item.MRP > 0 ? false : true}
+                              // disabled={item.MRP > 0 ? false : true}
                               defaultvalue={qat}
                               onKeyDown={(e) => {
                                 handleKeyDown(e);
