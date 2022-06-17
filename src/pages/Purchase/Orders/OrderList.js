@@ -106,7 +106,7 @@ const OrderList = (props) => {
       sort: true,
     },
     {
-      text:"Order Amount",
+      text: "Order Amount",
       dataField: "OrderAmount",
       sort: true,
     },
@@ -158,13 +158,13 @@ const OrderList = (props) => {
   ];
 
 
-  window.onscroll = function() {scrollFunction()};
+  window.onscroll = function () { scrollFunction() };
 
   function scrollFunction() {
     if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
-      document.getElementById("myBtn").style.display = "block";
+      // document.getElementById("myBtn").style.display = "block";
     } else {
-      document.getElementById("myBtn").style.display = "none";
+      // document.getElementById("myBtn").style.display = "none";
     }
   }
 
@@ -177,9 +177,9 @@ const OrderList = (props) => {
           <title>Order List| FoodERP-React FrontEnd</title>
         </MetaTags>
 
-        <div class="footer-tools">
-          <button onClick={()=>topFunction() } id="myBtn" data-toggle="tooltip" title="Back To Top"><i className="dripicons-arrow-up"></i></button>
-        </div>
+        {/* <div class="footer-tools">
+          <button onClick={() => topFunction()} id="myBtn" data-toggle="tooltip" title="Back To Top"><i className="dripicons-arrow-up"></i></button>
+        </div> */}
         <PaginationProvider
           pagination={paginationFactory(pageOptions)}
         >
@@ -200,56 +200,114 @@ const OrderList = (props) => {
                     breadcrumbCount={TableListData.length}
                     RedirctPath={"/company"}
                   />
-                  <CardBody>
+{
+  console.log("toolkitProps.searchProps",toolkitProps.searchProps)
+}
+                  <Row>
+                    <Col>
+                      <Input
+                        // className="form-control"
+                        type="date"
+                        defaultValue={fromDateIn}
+                        onChange={(e) => {
+                          setFromDate(e.target.value);
+                        }}
+                        id="example-date-input1"
+                      />
+                    </Col>
+                    <Col>
+                      <Input
+                        // className="form-control"
+                        type="date"
+                        defaultValue={currentDate}
+                        onChange={(e) => {
+                          setToDate(e.target.value);
+                        }}
+                        id="example-date-input2"
+                      />
+                    </Col>
+                    <Col >
+                      <Select options={customerNameOption} />
+                    </Col>
+                    <Col>
+                      <Button
+                        className="btn btn-success "
+                        onClick={() => {
+                          goHandeller();
+                        }}
+                      >
+                        Go{" "}
+                      </Button>
 
-                    <div className="row " >
-                      <Label>
-                        From Date:
-                      </Label>
-                      <div className="col-lg-2">
-                        <Input
-                          className="form-control"
-                          type="date"
-                          defaultValue={fromDateIn}
-                          onChange={(e) => {
-                            setFromDate(e.target.value);
-                          }}
-                          id="example-date-input"
-                        />
+                    </Col>
+
+                  </Row>
+
+
+
+
+
+
+
+                  {/* <div className="row " >
+                    <div className="col " >
+                      <label class="col-sm-1 col-form-label">Name</label>
+                      <div class="col-sm-1">
+                        <div class=" form-group">
+                          <input name="Name" placeholder=" Please Enter Name "
+                            required="" id="txtName" type="text"
+                            class="is-touched is-pristine av-invalid is-invalid form-control" value="" />
+                          <div class="invalid-feedback">Please Enter a Name
+                          </div>
+                        </div>
                       </div>
-                      <div className="col-lg-1">
-                        <h5 className="card-title me-2"> To Date:</h5>
-                      </div>
-                      <div className="col-lg-2">
-                        <Input
-                          className="form-control"
-                          type="date"
-                          defaultValue={currentDate}
-                          onChange={(e) => {
-                            setToDate(e.target.value);
-                          }}
-                          id="example-date-input"
-                        />
-                      </div>
-                      <div className="col-lg-1 ">
-                        <h5 className="card-title me-2">Party Name:</h5>
-                      </div>
-                      <div className="col-lg-2">
-                        <Select options={customerNameOption} />
-                      </div>
-                      <div className="col-lg-3 text-center">
-                        <Button
-                          className="btn btn-success "
-                          onClick={() => {
-                            goHandeller();
-                          }}
-                        >
-                          Go{" "}
-                        </Button>
+
+                      <div className="col " >
+                        <label class="col-sm-1 col-form-label">Name</label>
+                        <div class="col-sm-1">
+                          <div class=" form-group">
+                            <input name="Name" placeholder=" Please Enter Name "
+                              required="" id="txtName" type="text"
+                              class="is-touched is-pristine av-invalid is-invalid form-control" value="" />
+                            <div class="invalid-feedback">Please Enter a Name
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className="col-lg-1">
+                          <h5 className="card-title me-2"> To Date:</h5>
+                        </div>
+                        <div className="col-lg-2">
+                          <Input
+                            className="form-control"
+                            type="date"
+                            defaultValue={currentDate}
+                            onChange={(e) => {
+                              setToDate(e.target.value);
+                            }}
+                            id="example-date-input"
+                          />
+                        </div>
+                        <div className="col-lg-1 ">
+                          <h5 className="card-title me-2">Party Name:</h5>
+                        </div>
+                        <div className="col-lg-2">
+                          <Select options={customerNameOption} />
+                        </div>
+                        <div className="col-lg-3 text-center">
+                          <Button
+                            className="btn btn-success "
+                            onClick={() => {
+                              goHandeller();
+                            }}
+                          >
+                            Go{" "}
+                          </Button>
+                        </div>
                       </div>
                     </div>
+                  </div> */}
 
-                  </CardBody>
                   <Row>
                     <Col xl="12">
                       <div className="table-responsive">
@@ -278,7 +336,7 @@ const OrderList = (props) => {
             </ToolkitProvider>
           )}
         </PaginationProvider>
-     
+
 
       </div >
       <Modal
