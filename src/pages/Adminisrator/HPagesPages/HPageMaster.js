@@ -53,6 +53,8 @@ const HPageMaster = (props) => {
         PageList: state.H_Pages.PageList,
         PageAccess: state.H_Pages.PageAccess,
     }));
+
+    // For PageAccess DropDown
     useEffect(() => {
         dispatch(getPageAccess_DropDown_API());
     }, [dispatch]);
@@ -65,6 +67,7 @@ const HPageMaster = (props) => {
     function handllerPageAccess(e) {
         setselectPageAccessDropDown(e)
     }
+
     // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
     useEffect(() => {
 
@@ -84,14 +87,13 @@ const HPageMaster = (props) => {
 
             setPageAccessData(editDataGatingFromList[0].PagePageAccess)
 
+    // When value 2 is get then DropDown lable is "ListPage" and ShowMenu is disabled Otherwise DropDown lable is "AddPage" and ShowMenu is enabled
             let showCheckBox = editDataGatingFromList[0].PageType
             if (showCheckBox === 2) {
                 document.getElementById("abc").disabled = true
                 setisShowPageChecked(true)
                 dispatch(getPageList(showCheckBox))
-                // document.getElementById("abc").disabled = true
                 setPageType({ value: 2, label: 'ListPage' })
-
             }
             else if (showCheckBox === 1) {
 
@@ -108,6 +110,7 @@ const HPageMaster = (props) => {
         }
     }, [editDataGatingFromList]);
 
+    // This UseEffect clear Form Data and when modules Save Successfully.
     useEffect(() => {
         if ((SaveMessage.Status === true) && (SaveMessage.StatusCode === 200)) {
             dispatch(saveHPagesSuccess({ Status: false }))
@@ -146,6 +149,7 @@ const HPageMaster = (props) => {
         }
     }, [SaveMessage.Status])
 
+     //'Save' And 'Update' Button Handller
     const handleValidSubmit = (event, values) => {
         const requestOptions = {
             body: JSON.stringify({
@@ -166,7 +170,7 @@ const HPageMaster = (props) => {
                 })),
             }),
         };
-        debugger
+      
         if (IsEdit) {
             dispatch(updateHPages(requestOptions.body, EditData.ID));
             console.log("requestOptions", requestOptions.body)
@@ -177,9 +181,9 @@ const HPageMaster = (props) => {
         }
     };
 
+    // for module dropdown
     const HModuleSelectOnChangeHandller = (e) => {
         setSelectModule(e);
-        // dispatch(getH_SubModules(e.value))
     }
 
     const optionModule = ModuleData.map((d) => ({
@@ -194,7 +198,6 @@ const HPageMaster = (props) => {
         if (e.label === "ListPage") {
             dispatch(getPageList(e.value))
             setisShowPageChecked(true)
-            // showCheckBox.value= true;
             showCheckBox.disabled = true
         }
         else if (e.label === "AddPage") {
@@ -214,6 +217,7 @@ const HPageMaster = (props) => {
     const PageList_SelectOnChangeHandller = (e) => {
         setPageList(e);
     }
+    // ADD Button handler
     function AddRoleHandler() {
         const find = PageAccessData.find((element) => {
             return element.AccessID === selectPageAccessDropDown.value
@@ -238,6 +242,8 @@ const HPageMaster = (props) => {
             }));
         }
     }
+
+    // For Delete Button in table
     function PageAccess_DeleteButton_Handller(tableValue) {
         setPageAccessData(PageAccessData.filter(
             (item) => !(item.AccessID === tableValue)
@@ -245,9 +251,7 @@ const HPageMaster = (props) => {
         )
     }
 
-    // console.log(PageAccess, "page")
-    // console.log(PageAccessData, "PageAccessData")
-    return (
+       return (
         <React.Fragment>
             <div className="page-content">
                 <MetaTags>
@@ -271,7 +275,7 @@ const HPageMaster = (props) => {
                                                 <Col sm={4}>
                                                     <AvField name="Name" id="txtName" value={EditData.Name} type="text"
                                                         placeholder=" Please Enter Name "
-                                                        // autoComplete='off'
+                                                        autoComplete='off'
                                                         validate={{
                                                             required: { value: true, errorMessage: 'Please Enter a Name' },
                                                         }}
@@ -287,7 +291,7 @@ const HPageMaster = (props) => {
                                                 <Col sm={4}>
                                                     <AvField name="Discription" value={EditData.Description} type="text"
                                                         placeholder=" Please Enter Discription "
-                                                    // autoComplete='off'
+                                                    autoComplete='off'
                                                     />
                                                 </Col>
                                             </Row>
@@ -301,12 +305,11 @@ const HPageMaster = (props) => {
                                                 <Select
                                                     value={selectModule}
                                                     options={optionModule}
-                                                    // autoComplete='off'
+                                                    autoComplete='off'
                                                     onChange={(e) => { HModuleSelectOnChangeHandller(e) }}
                                                 />
                                             </Col>
                                         </Row>
-
                                         <AvGroup>
                                             <Row className="mb-4">
                                                 <Label className="col-sm-3 col-form-label">
@@ -314,7 +317,7 @@ const HPageMaster = (props) => {
                                                 </Label>
                                                 <Col sm={4}>
                                                     <AvField name="DisplayIndex" value={EditData.DisplayIndex} type="text"
-                                                        // autoComplete='off' 
+                                                        autoComplete='off' 
                                                         placeholder=" Please Enter DisplayIndex" validate={{
                                                             number: true,
                                                             required: { value: true, errorMessage: 'Please enter a Display Index ' },
@@ -333,7 +336,7 @@ const HPageMaster = (props) => {
                                                         validate={{
                                                             required: { value: true, errorMessage: 'Please Enter Icon' },
                                                         }}
-                                                    // autoComplete='off'
+                                                    autoComplete='off'
                                                     />
                                                 </Col>
                                             </Row>
@@ -349,7 +352,7 @@ const HPageMaster = (props) => {
                                                         validate={{
                                                             required: { value: true, errorMessage: 'Please Enter Actual Page Path' },
                                                         }}
-                                                    // autoComplete='off'
+                                                    autoComplete='off'
                                                     />
                                                 </Col>
                                             </Row>
