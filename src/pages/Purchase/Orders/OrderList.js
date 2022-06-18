@@ -23,13 +23,13 @@ import Breadcrumbs from "../../../components/Common/Breadcrumb";
 // import generate from "../../Reports/Page"
 import './div.css'
 
+export const topFunction = () => {
+  debugger
+  document.body.scrollTop = 0;
+  document.documentElement.scrollTop = 0;
+}
 const OrderList = (props) => {
 
-
-  function topFunction() {
-    document.body.scrollTop = 0;
-    document.documentElement.scrollTop = 0;
-  }
   const [modal_center, setmodal_center] = useState(false);
   const dispatch = useDispatch();
   const history = useHistory();
@@ -94,15 +94,15 @@ const OrderList = (props) => {
   };
   const defaultSorted = [
     {
-      dataField: "Name", // if dataField is not match to any column you defined, it will be ignored.
-      order: "asc", // desc or asc
+      dataField: "OrderDate", // if dataField is not match to any column you defined, it will be ignored.
+      order: "desc", // desc or asc
     },
   ];
 
   const TableListColumns = [
     {
       text: "Customer",
-      dataField: "CustomerID",
+      dataField: "customerName",
       sort: true,
     },
     {
@@ -111,15 +111,11 @@ const OrderList = (props) => {
       sort: true,
     },
     {
-      text: "Order Type",
-      dataField: "OrderType",
+      text: "OrderDate",
+      dataField: "OrderDate",
       sort: true,
     },
-    {
-      text: "Customer Name",
-      dataField: "CustomerName",
-      sort: true,
-    },
+    
     {
       text: "Action",
       formatter: (cellContent, module) => (
@@ -176,8 +172,8 @@ const OrderList = (props) => {
         <MetaTags>
           <title>Order List| FoodERP-React FrontEnd</title>
         </MetaTags>
-
-        {/* <div class="footer-tools">
+        {/* 
+        <div class="footer-tools">
           <button onClick={() => topFunction()} id="myBtn" data-toggle="tooltip" title="Back To Top"><i className="dripicons-arrow-up"></i></button>
         </div> */}
         <PaginationProvider
@@ -198,11 +194,8 @@ const OrderList = (props) => {
                     IsButtonVissible={true}
                     SearchProps={toolkitProps.searchProps}
                     breadcrumbCount={TableListData.length}
-                    RedirctPath={"/company"}
+                    RedirctPath={"/order"}
                   />
-{
-  console.log("toolkitProps.searchProps",toolkitProps.searchProps)
-}
                   <Row>
                     <Col>
                       <Input
@@ -238,75 +231,8 @@ const OrderList = (props) => {
                       >
                         Go{" "}
                       </Button>
-
                     </Col>
-
                   </Row>
-
-
-
-
-
-
-
-                  {/* <div className="row " >
-                    <div className="col " >
-                      <label class="col-sm-1 col-form-label">Name</label>
-                      <div class="col-sm-1">
-                        <div class=" form-group">
-                          <input name="Name" placeholder=" Please Enter Name "
-                            required="" id="txtName" type="text"
-                            class="is-touched is-pristine av-invalid is-invalid form-control" value="" />
-                          <div class="invalid-feedback">Please Enter a Name
-                          </div>
-                        </div>
-                      </div>
-
-                      <div className="col " >
-                        <label class="col-sm-1 col-form-label">Name</label>
-                        <div class="col-sm-1">
-                          <div class=" form-group">
-                            <input name="Name" placeholder=" Please Enter Name "
-                              required="" id="txtName" type="text"
-                              class="is-touched is-pristine av-invalid is-invalid form-control" value="" />
-                            <div class="invalid-feedback">Please Enter a Name
-                            </div>
-                          </div>
-                        </div>
-
-                        <div className="col-lg-1">
-                          <h5 className="card-title me-2"> To Date:</h5>
-                        </div>
-                        <div className="col-lg-2">
-                          <Input
-                            className="form-control"
-                            type="date"
-                            defaultValue={currentDate}
-                            onChange={(e) => {
-                              setToDate(e.target.value);
-                            }}
-                            id="example-date-input"
-                          />
-                        </div>
-                        <div className="col-lg-1 ">
-                          <h5 className="card-title me-2">Party Name:</h5>
-                        </div>
-                        <div className="col-lg-2">
-                          <Select options={customerNameOption} />
-                        </div>
-                        <div className="col-lg-3 text-center">
-                          <Button
-                            className="btn btn-success "
-                            onClick={() => {
-                              goHandeller();
-                            }}
-                          >
-                            Go{" "}
-                          </Button>
-                        </div>
-                      </div>
-                    </div>
-                  </div> */}
 
                   <Row>
                     <Col xl="12">
@@ -324,6 +250,7 @@ const OrderList = (props) => {
                       </div>
                     </Col>
                   </Row>
+
                   <Row className="align-items-md-center mt-30">
                     <Col className="pagination pagination-rounded justify-content-end mb-2">
                       <PaginationListStandalone

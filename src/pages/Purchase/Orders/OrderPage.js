@@ -21,6 +21,8 @@ import Breadcrumbs3 from "../../../components/Common/Breadcrumb3"
 import generate from "../../../Reports/InvioceReport/Page";
 import { InvoiceFakeData } from "./InvioceFakedata";
 import { AlertState } from "../../../store/Utilites/CostumeAlert/actions";
+import { topFunction } from "./OrderList";
+import { MetaTags } from "react-meta-tags";
 
 const OrderPage = (props) => {
   let itemgroups = "";
@@ -155,7 +157,7 @@ const OrderPage = (props) => {
         OrderItem: selectedItemArray,
       }),
     };
-
+ debugger
     if (IsEdit && selectedItemArray.length > 0) {
       // dispatch(updateModuleID(requestOptions.body, EditData.ID));
     }
@@ -173,7 +175,6 @@ const OrderPage = (props) => {
   };
 
   function handleKeyDown(e) {
-    debugger
     let inpTarget = e.target.id
     let split = inpTarget.split("y");
     let inp_ID = parseInt(split[1])
@@ -233,23 +234,18 @@ const OrderPage = (props) => {
   }
 
 
-
-
-
-
   return (
     <React.Fragment>
       <div className="page-content">
-       
+        <MetaTags>
+          <title>Order | FoodERP-React FrontEnd</title>
+        </MetaTags>
         <Breadcrumbs3
           title={"Count :"}
           breadcrumbItem={"Order"}
           IsSearch={true}
-          // SearchProps={toolkitProps.searchProps}
           breadcrumbCount={OrderItems.length}
-        // RedirctPath={"/modulesMaster"}
         />
-
         <Container fluid>
           <Row className="mb-1 ">
             <div className="col-lg-2 ">
@@ -320,9 +316,7 @@ const OrderPage = (props) => {
                               </>
 
                             ) : (
-
-                              <>
-
+                              <React.Fragment>
                                 <label className="btn btn-secondary btn-sm waves-effect waves-light">
                                   {item.ItemGroup.Name}
                                   {(itemgroups = item.ItemGroup.Name)}
@@ -345,7 +339,8 @@ const OrderPage = (props) => {
                                   id={"lblItemGST" + key}
                                   name={"lblItemGST" + key}
                                   value={item.GSTPercentage}
-                                /></>
+                                />
+                              </React.Fragment>
                             )}
                           </Td>
 
@@ -359,10 +354,10 @@ const OrderPage = (props) => {
                             />
                           </Td>
                           <Td>
-                            <label > {"121.21"} </label>
+                            <label > {item.MRP} </label>
                             <input
                               type="hidden"
-                              defaultvalue={com}
+                              value={item.MRP}
                               id={"rate" + key}
                               className="form-control form-control-sm"
                               autoComplete="false"
@@ -424,7 +419,7 @@ const OrderPage = (props) => {
 
           </Row>
         </Container>
-       
+
       </div>
     </React.Fragment>
   );
