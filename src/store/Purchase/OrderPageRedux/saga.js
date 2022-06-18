@@ -33,7 +33,8 @@ function* fetchOrderItems_GenratorFunction() {
   yield put(SpinnerState(true))
   try {
     const response = yield call(getOrderItems_forOrderPage_ApiCall);
-    yield put(getOrderItems_ForOrderPageSuccess(response.Data));
+    if(response.StatusCode===200)   yield put(getOrderItems_ForOrderPageSuccess(response.Data));
+    else alert(" response error")
     yield put(SpinnerState(false))
   } catch (error) {
     yield put(SpinnerState(false))
@@ -64,7 +65,8 @@ function* fetchOrderList(data) {
   yield put(SpinnerState(true))
   try {
     const response = yield call(getOrderList_forOrderPage_ApiCall, data);
-    yield put(getOrderListSuccess(response.Data));
+    if(response.statusCode===200)   yield put(getOrderListSuccess(response.Data));
+    else alert(" response error")
     yield put(SpinnerState(false))
   } catch (error) {
     yield put(SpinnerState(false))

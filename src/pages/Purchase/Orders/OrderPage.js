@@ -17,12 +17,13 @@ import { submitOrder_fromOrderPage, getOrderItems_ForOrderPage, submitOrder_from
 import { useSelector, useDispatch } from "react-redux";
 import '../../Purchase/Orders/div.css'
 
+import Breadcrumbs3 from "../../../components/Common/Breadcrumb3"
 import generate from "../../../Reports/InvioceReport/Page";
 import { InvoiceFakeData } from "./InvioceFakedata";
 import { AlertState } from "../../../store/Utilites/CostumeAlert/actions";
 
 const OrderPage = (props) => {
-  var itemgroups = "";
+  let itemgroups = "";
   const Order_Id = props.location.state;
 
   const dispatch = useDispatch();
@@ -107,7 +108,7 @@ const OrderPage = (props) => {
   }, [APIResponse.Status])
 
   const saveHandeller = () => {
-debugger
+    debugger
     const selectedItemArray = [];
 
     for (var i = 0; i < OrderItems.length - 1; i++) {
@@ -172,17 +173,34 @@ debugger
   };
 
   function handleKeyDown(e) {
-    var count = e.target.id;
-    var split = count.split("y");
-    count = split[1];
+    debugger
+    let inpTarget = e.target.id
+    let split = inpTarget.split("y");
+    let inp_ID = parseInt(split[1])
+    let count = inp_ID;
+    let inp_lable = split[0] + 'y';
 
-    if (e.keyCode === 40 && (OrderItems.length - 1 > parseInt(count))) {
-      count = ++count;
-      document.getElementById("inp-txtqty" + count).focus();
+    if (e.keyCode === 40 && (OrderItems.length - 1 > count)) {
+
+      let next_inpDoun = document.getElementById(inp_lable + (count + 1)).disabled;
+      while (next_inpDoun && (OrderItems.length - 1 > count)) {
+        count = ++count;
+        next_inpDoun = document.getElementById(inp_lable + (count)).disabled;
+      }
+      if (count === inp_ID) { count = ++count; }
+      document.getElementById(inp_lable + count).focus();
+      return
     }
+
     if (e.keyCode === 38 && count > 0) {
-      count = count - 1;
-      document.getElementById("inp-txtqty" + count).focus();
+
+      let next_inp_UP = document.getElementById(inp_lable + (count - 1)).disabled;
+      while (next_inp_UP && count > 0) {
+        count = count - 1;
+        next_inp_UP = document.getElementById(inp_lable + (count)).disabled;
+      }
+      if (count === inp_ID) { count = count - 1; }
+      document.getElementById(inp_lable + count).focus();
     }
   }
 
@@ -222,7 +240,14 @@ debugger
   return (
     <React.Fragment>
       <div className="page-content">
-
+        <Breadcrumbs3
+          title={"Count :"}
+          breadcrumbItem={"Order"}
+          IsSearch={true}
+          // SearchProps={toolkitProps.searchProps}
+          breadcrumbCount={OrderItems.length}
+        // RedirctPath={"/modulesMaster"}
+        />
 
         <Container fluid>
           <Row className="mb-1 ">
@@ -243,7 +268,7 @@ debugger
           <Row>
             <div className="table-rep-plugin">
               <div
-                className="table-responsive mb-0"
+                className="table-responsive mb-0 custom_scroll_div"
                 data-pattern="priority-columns"
               >
                 <Table
@@ -271,35 +296,58 @@ debugger
                       return (
                         <Tr>
                           <Td>
-                            {item.ItemGroup === itemgroups ? (
-                              ""
+                            {item.ItemGroup.Name === itemgroups ? (
+                              <>
+                                <label
+                                  id={"lblItemName" + key}
+                                  name={"lblItemName" + key}
+                                >
+                                  {item.Name}
+                                </label>
+                                <input
+                                  type="hidden"
+                                  id={"lblItemID" + key}
+                                  name={"lblItemID" + key}
+                                  value={item.ID}
+                                />
+                                <input
+                                  type="hidden"
+                                  id={"lblItemGST" + key}
+                                  name={"lblItemGST" + key}
+                                  value={item.GSTPercentage}
+                                />
+                              </>
+
                             ) : (
-                              <label className="btn btn-secondary btn-sm waves-effect waves-light">
-                                {item.ItemGroup}
-                                {(itemgroups = item.ItemGroup)}
-                              </label>
+
+                              <>
+
+                                <label className="btn btn-secondary btn-sm waves-effect waves-light">
+                                  {item.ItemGroup.Name}
+                                  {(itemgroups = item.ItemGroup.Name)}
+                                </label>
+                                <br></br>
+                                <label
+                                  id={"lblItemName" + key}
+                                  name={"lblItemName" + key}
+                                >
+                                  {item.Name}
+                                </label>
+                                <input
+                                  type="hidden"
+                                  id={"lblItemID" + key}
+                                  name={"lblItemID" + key}
+                                  value={item.ID}
+                                />
+                                <input
+                                  type="hidden"
+                                  id={"lblItemGST" + key}
+                                  name={"lblItemGST" + key}
+                                  value={item.GSTPercentage}
+                                /></>
                             )}
                           </Td>
-                          <Td>
-                            <label
-                              id={"lblItemName" + key}
-                              name={"lblItemName" + key}
-                            >
-                              {item.Name}
-                            </label>
-                            <input
-                              type="hidden"
-                              id={"lblItemID" + key}
-                              name={"lblItemID" + key}
-                              value={item.ID}
-                            />
-                            <input
-                              type="hidden"
-                              id={"lblItemGST" + key}
-                              name={"lblItemGST" + key}
-                              value={item.GSTPercentage}
-                            />
-                          </Td>
+
                           <Td>
                             <label > {item.MRP} </label>
                             <input
@@ -324,13 +372,13 @@ debugger
                               type="text"
                               id={"inp-txtqty" + key}
                               key={item.ID}
-                              // disabled={item.MRP > 0 ? false : true}
+                              disabled={item.MRP > 0 ? false : true}
                               defaultvalue={qat}
                               onKeyDown={(e) => {
                                 handleKeyDown(e);
                               }}
                               className="form-control form-control-sm"
-                              autoComplete="false"
+                              autoComplete="off"
                               ng-required="true"
                             />
                           </Td>
@@ -352,7 +400,7 @@ debugger
                               defaultvalue={com}
                               id={"inp-comment" + key}
                               class="form-control form-control-sm"
-                              autoComplete="false"
+                              autoComplete="off"
                             />
                           </Td>
                         </Tr>
