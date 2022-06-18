@@ -22,7 +22,7 @@ import { InvoiceFakeData } from "./InvioceFakedata";
 import { AlertState } from "../../../store/Utilites/CostumeAlert/actions";
 
 const OrderPage = (props) => {
-  var itemgroups = "";
+  let itemgroups = "";
   const Order_Id = props.location.state;
 
   const dispatch = useDispatch();
@@ -271,17 +271,9 @@ debugger
                       return (
                         <Tr>
                           <Td>
-                            {item.ItemGroup === itemgroups ? (
-                              ""
-                            ) : (
-                              <label className="btn btn-secondary btn-sm waves-effect waves-light">
-                                {item.ItemGroup}
-                                {(itemgroups = item.ItemGroup)}
-                              </label>
-                            )}
-                          </Td>
-                          <Td>
-                            <label
+                            {item.ItemsGroup.Name === itemgroups ? (
+                             <>
+                              <label
                               id={"lblItemName" + key}
                               name={"lblItemName" + key}
                             >
@@ -299,7 +291,38 @@ debugger
                               name={"lblItemGST" + key}
                               value={item.GSTPercentage}
                             />
+                            </>
+
+                            ) : (
+
+                              <>
+                          
+                              <label className="btn btn-secondary btn-sm waves-effect waves-light">
+                                {item.ItemsGroup.Name}
+                                {(itemgroups = item.ItemsGroup.Name)}
+                              </label>
+                              <br></br>
+                              <label
+                              id={"lblItemName" + key}
+                              name={"lblItemName" + key}
+                            >
+                              {item.Name}
+                            </label>
+                            <input
+                              type="hidden"
+                              id={"lblItemID" + key}
+                              name={"lblItemID" + key}
+                              value={item.ID}
+                            />
+                            <input
+                              type="hidden"
+                              id={"lblItemGST" + key}
+                              name={"lblItemGST" + key}
+                              value={item.GSTPercentage}
+                            /></>
+                            )}
                           </Td>
+                 
                           <Td>
                             <label > {item.MRP} </label>
                             <input
@@ -324,13 +347,13 @@ debugger
                               type="text"
                               id={"inp-txtqty" + key}
                               key={item.ID}
-                              // disabled={item.MRP > 0 ? false : true}
+                              disabled={item.MRP > 0 ? false : true}
                               defaultvalue={qat}
                               onKeyDown={(e) => {
                                 handleKeyDown(e);
                               }}
                               className="form-control form-control-sm"
-                              autoComplete="false"
+                              autoComplete="off"
                               ng-required="true"
                             />
                           </Td>
@@ -352,7 +375,7 @@ debugger
                               defaultvalue={com}
                               id={"inp-comment" + key}
                               class="form-control form-control-sm"
-                              autoComplete="false"
+                              autoComplete="off"
                             />
                           </Td>
                         </Tr>
