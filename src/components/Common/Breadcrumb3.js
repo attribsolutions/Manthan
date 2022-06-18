@@ -46,7 +46,7 @@ const Breadcrumb3 = props => {
                 </Row>
               :
               <React.Fragment>
-                <h4 className="font-size-18  col-ls-6 col-form-label">{props.breadcrumbItem}</h4>
+                <h4 className="font-size-18  col-ls-6 col-form-label" style={{marginLeft:"6px"}}>{props.breadcrumbItem}</h4>
               </React.Fragment>
           }
          
