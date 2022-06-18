@@ -107,7 +107,7 @@ const OrderPage = (props) => {
   }, [APIResponse.Status])
 
   const saveHandeller = () => {
-debugger
+    debugger
     const selectedItemArray = [];
 
     for (var i = 0; i < OrderItems.length - 1; i++) {
@@ -172,17 +172,31 @@ debugger
   };
 
   function handleKeyDown(e) {
-    var count = e.target.id;
-    var split = count.split("y");
-    count = split[1];
+    let inpTarget = e.target.id
+    let split = inpTarget.split("y");
+    let inp_ID = parseInt(split[1])
+    let count = inp_ID;
+    let inp_lable = split[0] + 'y';
 
-    if (e.keyCode === 40 && (OrderItems.length - 1 > parseInt(count))) {
-      count = ++count;
-      document.getElementById("inp-txtqty" + count).focus();
+    if (e.keyCode === 40 && (OrderItems.length - 1 > count)) {
+
+      let next_inpDoun = document.getElementById(inp_lable + (count + 1)).disabled;
+      while (next_inpDoun && (OrderItems.length - 1 > count)) {
+        count = ++count;
+      }
+      if (next_inpDoun === inp_ID) { count = ++count; }
+      document.getElementById(inp_lable + count).focus();
+      return
     }
+
     if (e.keyCode === 38 && count > 0) {
-      count = count - 1;
-      document.getElementById("inp-txtqty" + count).focus();
+      
+      let next_inpUP = document.getElementById(inp_lable + (count - 1)).disabled;
+      while (next_inpUP && count > 0) {
+        count = count - 1;
+      }
+      if (next_inpUP === inp_ID) { count = count - 1; }
+      document.getElementById(inp_lable + count).focus();
     }
   }
 
@@ -243,7 +257,7 @@ debugger
           <Row>
             <div className="table-rep-plugin">
               <div
-                className="table-responsive mb-0"
+                className="table-responsive mb-0 custom_scroll_div"
                 data-pattern="priority-columns"
               >
                 <Table
@@ -272,57 +286,57 @@ debugger
                         <Tr>
                           <Td>
                             {item.ItemsGroup.Name === itemgroups ? (
-                             <>
-                              <label
-                              id={"lblItemName" + key}
-                              name={"lblItemName" + key}
-                            >
-                              {item.Name}
-                            </label>
-                            <input
-                              type="hidden"
-                              id={"lblItemID" + key}
-                              name={"lblItemID" + key}
-                              value={item.ID}
-                            />
-                            <input
-                              type="hidden"
-                              id={"lblItemGST" + key}
-                              name={"lblItemGST" + key}
-                              value={item.GSTPercentage}
-                            />
-                            </>
+                              <>
+                                <label
+                                  id={"lblItemName" + key}
+                                  name={"lblItemName" + key}
+                                >
+                                  {item.Name}
+                                </label>
+                                <input
+                                  type="hidden"
+                                  id={"lblItemID" + key}
+                                  name={"lblItemID" + key}
+                                  value={item.ID}
+                                />
+                                <input
+                                  type="hidden"
+                                  id={"lblItemGST" + key}
+                                  name={"lblItemGST" + key}
+                                  value={item.GSTPercentage}
+                                />
+                              </>
 
                             ) : (
 
                               <>
-                          
-                              <label className="btn btn-secondary btn-sm waves-effect waves-light">
-                                {item.ItemsGroup.Name}
-                                {(itemgroups = item.ItemsGroup.Name)}
-                              </label>
-                              <br></br>
-                              <label
-                              id={"lblItemName" + key}
-                              name={"lblItemName" + key}
-                            >
-                              {item.Name}
-                            </label>
-                            <input
-                              type="hidden"
-                              id={"lblItemID" + key}
-                              name={"lblItemID" + key}
-                              value={item.ID}
-                            />
-                            <input
-                              type="hidden"
-                              id={"lblItemGST" + key}
-                              name={"lblItemGST" + key}
-                              value={item.GSTPercentage}
-                            /></>
+
+                                <label className="btn btn-secondary btn-sm waves-effect waves-light">
+                                  {item.ItemsGroup.Name}
+                                  {(itemgroups = item.ItemsGroup.Name)}
+                                </label>
+                                <br></br>
+                                <label
+                                  id={"lblItemName" + key}
+                                  name={"lblItemName" + key}
+                                >
+                                  {item.Name}
+                                </label>
+                                <input
+                                  type="hidden"
+                                  id={"lblItemID" + key}
+                                  name={"lblItemID" + key}
+                                  value={item.ID}
+                                />
+                                <input
+                                  type="hidden"
+                                  id={"lblItemGST" + key}
+                                  name={"lblItemGST" + key}
+                                  value={item.GSTPercentage}
+                                /></>
                             )}
                           </Td>
-                 
+
                           <Td>
                             <label > {item.MRP} </label>
                             <input
