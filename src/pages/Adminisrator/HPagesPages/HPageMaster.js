@@ -47,6 +47,7 @@ const HPageMaster = (props) => {
     const [selectPageList, setPageList] = useState('');
     const [selectPageAccessDropDown, setselectPageAccessDropDown] = useState('');
 
+    //Access redux store Data
     const { ModuleData, SaveMessage, PageList, PageAccess } = useSelector((state) => ({
         ModuleData: state.Modules.modulesList,
         SaveMessage: state.H_Pages.saveMessage,
@@ -87,7 +88,7 @@ const HPageMaster = (props) => {
 
             setPageAccessData(editDataGatingFromList[0].PagePageAccess)
 
-    // When value 2 is get then DropDown lable is "ListPage" and ShowMenu is disabled Otherwise DropDown lable is "AddPage" and ShowMenu is enabled
+            // When value 2 is get then DropDown lable is "ListPage" and ShowMenu is disabled Otherwise DropDown lable is "AddPage" and ShowMenu is enabled
             let showCheckBox = editDataGatingFromList[0].PageType
             if (showCheckBox === 2) {
                 document.getElementById("abc").disabled = true
@@ -149,7 +150,7 @@ const HPageMaster = (props) => {
         }
     }, [SaveMessage.Status])
 
-     //'Save' And 'Update' Button Handller
+    //'Save' And 'Update' Button Handller
     const handleValidSubmit = (event, values) => {
         const requestOptions = {
             body: JSON.stringify({
@@ -170,7 +171,7 @@ const HPageMaster = (props) => {
                 })),
             }),
         };
-      
+
         if (IsEdit) {
             dispatch(updateHPages(requestOptions.body, EditData.ID));
             console.log("requestOptions", requestOptions.body)
@@ -196,8 +197,8 @@ const HPageMaster = (props) => {
         console.log('PageType_SelectOnChangeHandller', e)
         let showCheckBox = document.getElementById("abc")
         if (e.label === "ListPage") {
-            dispatch(getPageList(e.value))
             setisShowPageChecked(true)
+            dispatch(getPageList(e.value))
             showCheckBox.disabled = true
         }
         else if (e.label === "AddPage") {
@@ -251,7 +252,7 @@ const HPageMaster = (props) => {
         )
     }
 
-       return (
+    return (
         <React.Fragment>
             <div className="page-content">
                 <MetaTags>
@@ -291,12 +292,11 @@ const HPageMaster = (props) => {
                                                 <Col sm={4}>
                                                     <AvField name="Discription" value={EditData.Description} type="text"
                                                         placeholder=" Please Enter Discription "
-                                                    autoComplete='off'
+                                                        autoComplete='off'
                                                     />
                                                 </Col>
                                             </Row>
                                         </AvGroup>
-
                                         <Row className="mb-4">
                                             <Label className="col-sm-3 col-form-label">
                                                 Module
@@ -317,7 +317,7 @@ const HPageMaster = (props) => {
                                                 </Label>
                                                 <Col sm={4}>
                                                     <AvField name="DisplayIndex" value={EditData.DisplayIndex} type="text"
-                                                        autoComplete='off' 
+                                                        autoComplete='off'
                                                         placeholder=" Please Enter DisplayIndex" validate={{
                                                             number: true,
                                                             required: { value: true, errorMessage: 'Please enter a Display Index ' },
@@ -336,7 +336,7 @@ const HPageMaster = (props) => {
                                                         validate={{
                                                             required: { value: true, errorMessage: 'Please Enter Icon' },
                                                         }}
-                                                    autoComplete='off'
+                                                        autoComplete='off'
                                                     />
                                                 </Col>
                                             </Row>
@@ -352,7 +352,7 @@ const HPageMaster = (props) => {
                                                         validate={{
                                                             required: { value: true, errorMessage: 'Please Enter Actual Page Path' },
                                                         }}
-                                                    autoComplete='off'
+                                                        autoComplete='off'
                                                     />
                                                 </Col>
                                             </Row>
