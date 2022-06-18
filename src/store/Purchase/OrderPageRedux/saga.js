@@ -33,7 +33,7 @@ function* fetchOrderItems_GenratorFunction() {
   yield put(SpinnerState(true))
   try {
     const response = yield call(getOrderItems_forOrderPage_ApiCall);
-    if(response.statusCode===200)   yield put(getOrderItems_ForOrderPageSuccess(response.Data));
+    if(response.StatusCode===200)   yield put(getOrderItems_ForOrderPageSuccess(response.Data));
     else alert(" response error")
     yield put(SpinnerState(false))
   } catch (error) {

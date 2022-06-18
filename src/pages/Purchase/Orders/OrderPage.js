@@ -17,6 +17,7 @@ import { submitOrder_fromOrderPage, getOrderItems_ForOrderPage, submitOrder_from
 import { useSelector, useDispatch } from "react-redux";
 import '../../Purchase/Orders/div.css'
 
+import Breadcrumbs3 from "../../../components/Common/Breadcrumb3"
 import generate from "../../../Reports/InvioceReport/Page";
 import { InvoiceFakeData } from "./InvioceFakedata";
 import { AlertState } from "../../../store/Utilites/CostumeAlert/actions";
@@ -172,6 +173,7 @@ const OrderPage = (props) => {
   };
 
   function handleKeyDown(e) {
+    debugger
     let inpTarget = e.target.id
     let split = inpTarget.split("y");
     let inp_ID = parseInt(split[1])
@@ -183,19 +185,21 @@ const OrderPage = (props) => {
       let next_inpDoun = document.getElementById(inp_lable + (count + 1)).disabled;
       while (next_inpDoun && (OrderItems.length - 1 > count)) {
         count = ++count;
+        next_inpDoun = document.getElementById(inp_lable + (count)).disabled;
       }
-      if (next_inpDoun === inp_ID) { count = ++count; }
+      if (count === inp_ID) { count = ++count; }
       document.getElementById(inp_lable + count).focus();
       return
     }
 
     if (e.keyCode === 38 && count > 0) {
-      
-      let next_inpUP = document.getElementById(inp_lable + (count - 1)).disabled;
-      while (next_inpUP && count > 0) {
+
+      let next_inp_UP = document.getElementById(inp_lable + (count - 1)).disabled;
+      while (next_inp_UP && count > 0) {
         count = count - 1;
+        next_inp_UP = document.getElementById(inp_lable + (count)).disabled;
       }
-      if (next_inpUP === inp_ID) { count = count - 1; }
+      if (count === inp_ID) { count = count - 1; }
       document.getElementById(inp_lable + count).focus();
     }
   }
@@ -236,7 +240,14 @@ const OrderPage = (props) => {
   return (
     <React.Fragment>
       <div className="page-content">
-
+        <Breadcrumbs3
+          title={"Count :"}
+          breadcrumbItem={"Order"}
+          IsSearch={true}
+          // SearchProps={toolkitProps.searchProps}
+          breadcrumbCount={OrderItems.length}
+        // RedirctPath={"/modulesMaster"}
+        />
 
         <Container fluid>
           <Row className="mb-1 ">
@@ -285,7 +296,7 @@ const OrderPage = (props) => {
                       return (
                         <Tr>
                           <Td>
-                            {item.ItemsGroup.Name === itemgroups ? (
+                            {item.ItemGroup.Name === itemgroups ? (
                               <>
                                 <label
                                   id={"lblItemName" + key}
@@ -312,8 +323,8 @@ const OrderPage = (props) => {
                               <>
 
                                 <label className="btn btn-secondary btn-sm waves-effect waves-light">
-                                  {item.ItemsGroup.Name}
-                                  {(itemgroups = item.ItemsGroup.Name)}
+                                  {item.ItemGroup.Name}
+                                  {(itemgroups = item.ItemGroup.Name)}
                                 </label>
                                 <br></br>
                                 <label
