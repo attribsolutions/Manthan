@@ -33,7 +33,7 @@ function* fetchOrderItems_GenratorFunction() {
   yield put(SpinnerState(true))
   try {
     const response = yield call(getOrderItems_forOrderPage_ApiCall);
-    if(response.StatusCode===200)   yield put(getOrderItems_ForOrderPageSuccess(response.Data));
+    if(response.StatusCode===200) { yield put(getOrderItems_ForOrderPageSuccess(response.Data));}
     else alert(" response error")
     yield put(SpinnerState(false))
   } catch (error) {
@@ -49,7 +49,7 @@ function* submitOrder_GenratorFunction({data}) {
   yield put(SpinnerState(true))
   try {
     const response = yield call(submitOrder_From_OrderPage_apiCall,data);
-    debugger
+   
     yield put(submitOrder_fromOrderPage_Success(response));
     yield put(SpinnerState(false))
   } catch (error) {
@@ -65,7 +65,7 @@ function* fetchOrderList(data) {
   yield put(SpinnerState(true))
   try {
     const response = yield call(getOrderList_forOrderPage_ApiCall, data);
-    if(response.statusCode===200)   yield put(getOrderListSuccess(response.Data));
+    if(response.StatusCode===200)   yield put(getOrderListSuccess(response.Data));
     else alert(" response error")
     yield put(SpinnerState(false))
   } catch (error) {

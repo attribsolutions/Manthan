@@ -24,44 +24,61 @@ const Breadcrumb = props => {
 
   return (
     <Row style={{ Color: "F7F8F4" }}>
-      <Col xs="3">
-        <table>
-          <tr>
-            <td>
-              {props.IsButtonVissible ? <button type="button" className="btn btn-success"
-                data-mdb-toggle="tooltip" data-mdb-placement="top" title="Create New"
-                onClick={() => { NewButtonHandeller() }} >
-                New
-              </button> :
-                <></>}
-            </td>
-            <td>
-              <h4 className="mb-2 font-size-18 " style={{ marginTop: "5%", paddingLeft: "5px" }}>{props.breadcrumbItem}</h4>
-            </td>
-          </tr>
-        </table>
+      <Col md={4}>
+        <div className="mb-1 text-left">
+          {
+            props.IsButtonVissible ?
+          
+                <Row>
+                <Col md={2}>
+                  <button type="button" className="btn btn-success"
+                    data-mdb-toggle="tooltip" data-mdb-placement="top" title="Create New"
+                    onClick={() => { NewButtonHandeller() }} >
+                    New
+                  </button>
+               </Col>
+                <Col md={10}>
+                <h4 className="font-size-18 form-label" style={{marginTop:"6px"}}>{props.breadcrumbItem}</h4>
+                </Col>
+                </Row>
+               
+            
+              :
+              <React.Fragment>
+                <h4 className="font-size-18  col-ls-6 col-form-label">{props.breadcrumbItem}</h4>
+              </React.Fragment>
+          }
+         
+        </div>
       </Col>
-      <Col sm="7">
+
+      <Col md={5}>  </Col>
+
+      <Col sm={2}>
         <div className="search-box d-inline-block">
           <div className="position-relative">
-            {(props.IsButtonVissible) ? <><SearchBar {...props.SearchProps} />
-              <i className="bx bx-search-alt search-icon-search" />
-            </> : <></>
+            {
+              (props.IsButtonVissible)
+                ?
+                <React.Fragment><SearchBar {...props.SearchProps} />
+                  <i className="bx bx-search-alt search-icon-search" />
+                </React.Fragment>
+                :
+                <React.Fragment></React.Fragment>
             }
 
           </div>
         </div>
       </Col>
-      <Col xs="2">
+      <Col md={1} className="text-right">
         {
-          !(props.breadcrumbCount === undefined) ?
-            <div className="bg-soft-success text-center text-danger external-event "
-              style={{ marginTop: "5%", marginLeft: "20%", marginRight: "20%" }}
-            >
+          !(props.breadcrumbCount === undefined)
+            ?
+            <div className="bg-soft-success text-center text-danger external-event col-ls-6 col-form-label">
               Count : &nbsp;(&nbsp; {props.breadcrumbCount}&nbsp;)
             </div>
             :
-            <></>
+            <React.Fragment></React.Fragment>
         }
       </Col>
       {/* Redirct To master Component  */}

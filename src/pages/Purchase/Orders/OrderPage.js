@@ -240,6 +240,7 @@ const OrderPage = (props) => {
   return (
     <React.Fragment>
       <div className="page-content">
+       
         <Breadcrumbs3
           title={"Count :"}
           breadcrumbItem={"Order"}
@@ -423,6 +424,7 @@ const OrderPage = (props) => {
 
           </Row>
         </Container>
+       
       </div>
     </React.Fragment>
   );

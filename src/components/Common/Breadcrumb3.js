@@ -29,16 +29,30 @@ const Breadcrumb3 = props => {
     return (
         <Row xs="12">
             <Col md={4}>
-                <div className="mb-1 text-left">
-                    {props.IsButtonVissible ? <button type="button" className="btn btn-success"
-                        data-mdb-toggle="tooltip" data-mdb-placement="top" title="Create New"
-                        onClick={() => { NewButtonHandeller() }} >
-                        New
-                    </button> :
-                        <></>}
-                    <h4 className="font-size-18  col-ls-6 col-form-label">{props.breadcrumbItem}</h4>
-                </div>
-            </Col>
+        <div className="mb-1 text-left">
+          {
+            props.IsButtonVissible ?
+                <Row>
+                <Col md={2}>
+                  <button type="button" className="btn btn-success"
+                    data-mdb-toggle="tooltip" data-mdb-placement="top" title="Create New"
+                    onClick={() => { NewButtonHandeller() }} >
+                    New
+                  </button>
+               </Col>
+                <Col md={10}>
+                <h4 className="font-size-18 form-label" style={{marginTop:"6px"}}>{props.breadcrumbItem}</h4>
+                </Col>
+                </Row>
+              :
+              <React.Fragment>
+                <h4 className="font-size-18  col-ls-6 col-form-label">{props.breadcrumbItem}</h4>
+              </React.Fragment>
+          }
+         
+        </div>
+      </Col>
+            
             <Col md={5}>
             </Col>
             <Col md={2} className="text-right">
@@ -58,6 +72,7 @@ const Breadcrumb3 = props => {
                                                         placeholder="Search"
                                                         onChange={(e) => { searchFunctionHandller(e) }}
                                                     />
+                                                    <i class="bx bx-search-alt search-icon-search"></i>
                                             </div>
                                         </div>
                                     </>
