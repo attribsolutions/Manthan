@@ -171,8 +171,16 @@ const HPageMaster = (props) => {
                 })),
             }),
         };
+        if (PageAccessData.length <= 0) {
+            dispatch(AlertState({
+              Type: 4, Status: true,
+              Message: "At Least One PageAccess is Select",
+              RedirectPath: false,
+              PermissionAction: false,
+            }));
+          }
 
-        if (IsEdit) {
+        else if (IsEdit) {
             dispatch(updateHPages(requestOptions.body, EditData.ID));
             console.log("requestOptions", requestOptions.body)
             console.log("PageAccessData", PageAccessData)
