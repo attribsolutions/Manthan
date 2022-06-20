@@ -28,14 +28,14 @@ const AddEmployee = (props) => {
   const [DesignationIDselect, setDesignationID] = useState("");
   const [EmployeeTypeselect, setEmployeeType] = useState("");
   const [Stateselect, setState] = useState("");
-  const [Regionselect, setRegion] = useState("");
+  // const [Regionselect, setRegion] = useState("");
   const [Companyselect, setCompany] = useState("");
 
   useEffect(() => {
     dispatch(getDesignationID());
     dispatch(getEmployeeType());
     dispatch(getState());
-    dispatch(getRegion());
+    // dispatch(getRegion());
     dispatch(getCompany());
   }, [dispatch]);
 
@@ -43,14 +43,13 @@ const AddEmployee = (props) => {
     DesignationID: state.M_EmployeesReducer.DesignationID,
     EmployeeType: state.M_EmployeesReducer.EmployeeType,
     State: state.M_EmployeesReducer.State,
-    Region: state.M_EmployeesReducer.Region,
+    // Region: state.M_EmployeesReducer.Region,
     Company: state.M_EmployeesReducer.Company,
     AddUserMessage: state.M_EmployeesReducer.AddUserMessage,
-
-  }));
+}));
 
   const DesignationIDValues = DesignationID.map((Data) => ({
-    value: Data.ID,
+    value: Data.id,
     label: Data.Name
   }));
   function handllerDesignationID(e) {
@@ -58,28 +57,29 @@ const AddEmployee = (props) => {
   }
 
   const EmployeeTypeValues = EmployeeType.map((Data) => ({
-    value: Data.ID,
+    value: Data.id,
     label: Data.Name
   }));
+ 
   function handllerEmployeeType(e) {
     setEmployeeType(e)
   }
 
   const StateValues = State.map((Data) => ({
-    value: Data.ID,
+    value: Data.id,
     label: Data.Name
   }));
   function handllerState(e) {
     setState(e)
   }
 
-  const RegionValues = Region.map((Data) => ({
-    value: Data.ID,
-    label: Data.Name
-  }));
-  function handllerRegion(e) {
-    setRegion(e)
-  }
+  // const RegionValues = Region.map((Data) => ({
+  //   value: Data.ID,
+  //   label: Data.Name
+  // }));
+  // function handllerRegion(e) {
+  //   setRegion(e)
+  // }
 
   const CompanyValues = Company.map((Data) => ({
     value: Data.ID,
@@ -107,10 +107,10 @@ const AddEmployee = (props) => {
         value: editDataGatingFromList.State.ID,
         label: editDataGatingFromList.State.Name
       })
-      setRegion({
-        value: editDataGatingFromList.Region.ID,
-        label: editDataGatingFromList.Region.Name
-      })
+      // setRegion({
+      //   value: editDataGatingFromList.Region.ID,
+      //   label: editDataGatingFromList.Region.Name
+      // })
       setCompany({
         value: editDataGatingFromList.Companie.ID,
         label: editDataGatingFromList.Companie.Name
@@ -124,7 +124,7 @@ const AddEmployee = (props) => {
    useEffect(() => {
     if ((AddUserMessage.Status === true) && (AddUserMessage.StatusCode === 200)) {
         dispatch(PostEmployeeSuccess({ Status: false }))
-        formRef.current.reset();
+        // formRef.current.reset();
         if (PageMode === true) {
             dispatch(AlertState({
                 Type: 1,
@@ -160,30 +160,33 @@ const AddEmployee = (props) => {
     let DateInput1 = document.getElementById("dateInput1").value;
     const requestOptions = {
       body: JSON.stringify({
-        Name: values.LoginName,
+        Name: values.Name,
         Address: values.Address,
-        Mobile: values.PhoneNo,
-        EmailID: values.Email,
-        BOD: DateInput,
-        PAN: values.pan,
+        Mobile: values.Mobile,
+        email: values.email,
+        DOB: DateInput,
+        PAN: values.PAN,
         AadharNo: values.AadharNo,
         WorkingHours: values.WorkingHours,
-        DesignationID: DesignationIDselect.value,
+        Designations: DesignationIDselect.value,
         EmployeeType: EmployeeTypeselect.value,
         JoiningDate: DateInput1,
         State: Stateselect.value,
-        Region: Regionselect.value,
-        Companie: Companyselect.value,
+        // Region: Regionselect.value,
+        Companies: Companyselect.value,
 
       }),
-    }
+        }
+
     if (IsEdit) {
       dispatch(updateEmployeeID(requestOptions.body, EditData.ID));
     }
     else {
       dispatch(postEmployee(requestOptions.body));
+     
     }
   };
+
 
  // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
   var IsEditModeSaSS=''
@@ -210,7 +213,7 @@ const AddEmployee = (props) => {
                           Name
                         </Label>
                         <Col sm={4}>
-                          <AvField name="LoginName" id="txtName" value={EditData.Name}
+                          <AvField name="Name" id="txtName" value={EditData.Name}
                             type="text"
                             placeholder="Please Enter Name"
                             // autoComplete='off'
@@ -242,14 +245,14 @@ const AddEmployee = (props) => {
                           Mobile No.
                         </Label>
                         <Col sm={4}>
-                          <AvField name="PhoneNo" type="tel"
+                          <AvField name="Mobile" type="tel"
                             value={EditData.Mobile}
                             placeholder="+91 "
-                            validate={{
-                              required: { value: true, errorMessage: 'Please Enter your Mobile NO' },
-                              tel: {
-                                pattern: /^(\+\d{1,3}[- ]?)?\d{10}$/
-                              } }}
+                            // validate={{
+                            //   required: { value: true, errorMessage: 'Please Enter your Mobile NO' },
+                            //   tel: {
+                            //     pattern: /^(\+\d{1,3}[- ]?)?\d{10}$/
+                            //   } }}
 
                           />
                         </Col>
@@ -262,8 +265,8 @@ const AddEmployee = (props) => {
                           EmailID
                         </Label>
                         <Col sm={4}>
-                          <AvField name="Email" type="email"
-                            value={EditData.EmailID}
+                          <AvField name="email" type="email"
+                            value={EditData.email}
                             placeholder="Enter your EmailID "
                             // validate={{
                             //   required: { value: true, errorMessage: 'Please Enter your EmailID' },
@@ -289,9 +292,9 @@ const AddEmployee = (props) => {
                           className="form-control"
                           id="dateInput"
                           type="date"
-                         Value={EditData.BOD}
+                         Value={EditData.DOB}
                           on
-                        //    id="example-date-input"
+                     
                         />
                       </div>
                     </Row>
@@ -302,7 +305,7 @@ const AddEmployee = (props) => {
                           PAN
                         </Label>
                         <Col sm={4}>
-                          <AvField name="pan" type="text"
+                          <AvField name="PAN" type="text"
                             value={EditData.PAN}
                             placeholder="Enter your PAN No. "
                             // validate={{
@@ -411,7 +414,7 @@ const AddEmployee = (props) => {
                       </Col>
                     </Row>
 
-                    <Row className="mb-4">
+                    {/* <Row className="mb-4">
                       <Label className="col-sm-2 col-form-label">
                         Region
                       </Label>
@@ -422,7 +425,7 @@ const AddEmployee = (props) => {
                           onChange={(e) => { handllerRegion(e) }}
                         />
                       </Col>
-                    </Row>
+                    </Row> */}
 
                     <Row className="mb-4">
                       <Label className="col-sm-2 col-form-label">

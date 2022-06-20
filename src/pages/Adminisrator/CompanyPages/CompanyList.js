@@ -180,7 +180,7 @@ const CompanyList = () => {
                     <title>Company List| FoodERP-React FrontEnd</title>
                 </MetaTags>
                 <PaginationProvider
-                    // pagination={paginationFactory(pageOptions)}
+                    pagination={paginationFactory(pageOptions)}
                 >
                     {({ paginationProps, paginationTableProps }) => (
                         <ToolkitProvider

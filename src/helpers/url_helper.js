@@ -54,9 +54,9 @@ export const REGISTRATION_API_URL="/Registration"
 
 // M_Employees api
 export const GET_DESIGNATIONID="/Designations"
-export const GET_EMPLOYEE_TYPE="/EmployeeTypeByID"
-export const GET_STATE="/State"
-export const GET_REGION="/Region"
+export const GET_EMPLOYEE_TYPE="/M_EmployeeType"
+export const GET_STATE="/M_State"
+// export const GET_REGION="/Region"
 export const EMPLOYEE_API_URL="/M_Employees"   
 
 // Role Master
