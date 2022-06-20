@@ -29,7 +29,7 @@ const Breadcrumb3 = props => {
     return (
         <Row xs="12">
             <Col md={4}>
-        <div className="mb-1 text-left">
+        <div className=" text-left">
           {
             props.IsButtonVissible ?
                 <Row>
@@ -56,12 +56,11 @@ const Breadcrumb3 = props => {
             <Col md={5}>
             </Col>
             <Col md={2} className="text-right">
-                <div className="mb-1">
                     <div className="search-box d-inline-block">
                         <div className="position-relative">
                             {
                                 (props.IsButtonVissible || props.IsSearch === true) ?
-                                    <>
+                                <React.Fragment>
                                         <div clclassNameass="search-box d-inline-block">
                                             <div class="position-relative">
                                                     <span id="search-bar-0-label" className="sr-only">Search this table</span>
@@ -73,14 +72,14 @@ const Breadcrumb3 = props => {
                                                         onChange={(e) => { searchFunctionHandller(e) }}
                                                     />
                                                     <i class="bx bx-search-alt search-icon-search"></i>
-                                            </div>
+                                           </div>
                                         </div>
-                                    </>
+                                    </React.Fragment>
                                     :
-                                    <></>
+                                    <React.Fragment></React.Fragment>
                             }
                         </div>
-                    </div>
+                   
                 </div>
             </Col>
             <Col md={1} className="text-right">
@@ -91,7 +90,7 @@ const Breadcrumb3 = props => {
                             Count : &nbsp;(&nbsp; {props.breadcrumbCount}&nbsp;)
                         </div>
                         :
-                        <></>
+                        <React.Fragment></React.Fragment>
                 }
             </Col>
             {/* Redirct To master Component  */}

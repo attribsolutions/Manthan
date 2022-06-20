@@ -6,6 +6,7 @@ import {
      GET_ORDER_LIST_MESSAGE,
      EDIT_ORDER_SUCCESS,
      UPDATE_ORDER_ID_FROM_ORDER_PAGE_SUCCESS,
+     EDIT_ORDER_FOR_ORDER_PAGE_SUCCESS,
     } from "./actionType"
 
 const INIT_STATE = {
@@ -41,7 +42,7 @@ const INIT_STATE = {
             ...state,
             orderListMessage: action.payload,
           }
-          case EDIT_ORDER_SUCCESS:
+          case EDIT_ORDER_FOR_ORDER_PAGE_SUCCESS  :
           return {
             ...state,
             editOrderData: action.payload,

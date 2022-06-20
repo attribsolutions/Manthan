@@ -14,7 +14,7 @@ import {
 } from "reactstrap";
 import { Table, Thead, Tbody, Tr, Th, Td } from "react-super-responsive-table";
 import "react-super-responsive-table/dist/SuperResponsiveTableStyle.css";
-import { editOrder, getOrderList } from "../../../store/Purchase/OrderPageRedux/actions";
+import { deleteOrderID_From_OrderPage, editOrder, editOrder_forOrderPage, getOrderList } from "../../../store/Purchase/OrderPageRedux/actions";
 import { MetaTags } from "react-meta-tags";
 import BootstrapTable from "react-bootstrap-table-next";
 import paginationFactory, { PaginationListStandalone, PaginationProvider } from "react-bootstrap-table2-paginator";
@@ -22,6 +22,8 @@ import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import Breadcrumbs from "../../../components/Common/Breadcrumb";
 // import generate from "../../Reports/Page"
 import './div.css'
+import OrderPage from "./OrderPage";
+import { AlertState } from "../../../store/Utilites/CostumeAlert/actions";
 
 export const topFunction = () => {
   debugger
@@ -66,7 +68,7 @@ const OrderList = (props) => {
   const customerNameOption = props.orderList;
 
   const { editOrderData, TableListData } = useSelector((state) => ({
-    editOrderData: state.OrderPageReducer.orderItemInfo,
+    editOrderData: state.OrderPageReducer.editOrderData,
     TableListData: state.OrderPageReducer.ordersList
   }));
 
@@ -79,13 +81,73 @@ const OrderList = (props) => {
     };
     dispatch(getOrderList(orderlistInitial));
   }
+
+//   useEffect(() => {
+//     if ((updateMessage.Status === true) && (updateMessage.StatusCode === 200)) {
+//         dispatch(updateCompanyIDSuccess({ Status: false }))
+//         dispatch(AlertState({
+//             Type: 1, Status: true,
+//             Message: updateMessage.Message,
+//             AfterResponseAction: fetchCompanyList,
+//         }))
+//         tog_center()
+//     }
+//     else if (deleteCompanyID.Status === true) {
+//         dispatch(deleteCompanyIDSuccess({ Status: false }))
+//         dispatch(AlertState({
+//             Type: 3, Status: true,
+//             Message: deleteCompanyID.Message,
+//         }));
+//     }
+// }, [updateMessage.Status, dispatch]);
+
+// useEffect(() => {
+//     if ((deleteCompanyID.Status === true) && (deleteCompanyID.StatusCode === 200)) {
+//         dispatch(deleteCompanyIDSuccess({ Status: false }))
+//         dispatch(AlertState({
+//             Type: 1, Status: true,
+//             Message: deleteCompanyID.Message,
+//             AfterResponseAction: fetchCompanyList,
+//         }))
+//     } else if (deleteCompanyID.Status === true) {
+//         dispatch(deleteCompanyIDSuccess({ Status: false }))
+//         dispatch(AlertState({
+//             Type: 3,
+//             Status: true,
+//             Message: "error Message",
+//         }));
+//     }
+// }, [deleteCompanyID.Status])
+
+// Edit Modal Show When Edit Data is true
+useEffect(() => {
+    if (editOrderData.Status === true) {
+        tog_center()
+    }
+}, [editOrderData]);
+
+
   function OnPritHandeller(id) {
-    dispatch(editOrder(id));
+    dispatch(editOrder_forOrderPage(id));
     if (!(editOrderData.length === 0)) {
       console.log("datataat", editOrderData)
       // generate(editOrderData)
     }
   }
+  function EditPageHandler(id) {
+    dispatch(editOrder_forOrderPage(id));
+  }
+
+  //  Delete Button Handller
+   const deleteHandeler = (id, name) => {
+    dispatch(AlertState({
+        Type: 5, Status: true,
+        Message: `Are you sure you want to delete this item : "${name}"`,
+        RedirectPath: false,
+        PermissionAction: deleteOrderID_From_OrderPage,
+        ID: id
+    }));
+}
 
   const pageOptions = {
     sizePerPage: 15,
@@ -115,16 +177,16 @@ const OrderList = (props) => {
       dataField: "OrderDate",
       sort: true,
     },
-    
+
     {
       text: "Action",
-      formatter: (cellContent, module) => (
+      formatter: (cellContent, order) => (
 
         <div class="d-flex gap-3" style={{ display: 'flex', justifyContent: 'center' }} >
           <buton
             type="button"
             onClick={() => {
-              //  EditPageHandler(module.ID);
+              EditPageHandler(order.id);
             }}
             className="badge badge-soft-primary font-size-12"
           >
@@ -134,7 +196,7 @@ const OrderList = (props) => {
           <buton
             className="badge badge-soft-danger font-size-12"
             onClick={() => {
-              //  deleteHandeler(module.ID, module.Name);
+               deleteHandeler(module.id, module.customerName);
             }}
           >
             <i class="mdi mdi-delete font-size-18" ></i>
@@ -270,8 +332,9 @@ const OrderList = (props) => {
         isOpen={modal_center}
         toggle={() => { tog_center() }}
         size="xl"
+        scrollable='off'
       >
-        {/* <CompanyModule state={editData.Data} /> */}
+     <OrderPage state={editOrderData.Data}/>
       </Modal>
     </React.Fragment >
   );
