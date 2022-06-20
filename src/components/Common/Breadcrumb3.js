@@ -29,25 +29,38 @@ const Breadcrumb3 = props => {
     return (
         <Row xs="12">
             <Col md={4}>
-                <div className="mb-1 text-left">
-                    {props.IsButtonVissible ? <button type="button" className="btn btn-success"
-                        data-mdb-toggle="tooltip" data-mdb-placement="top" title="Create New"
-                        onClick={() => { NewButtonHandeller() }} >
-                        New
-                    </button> :
-                        <></>}
-                    <h4 className="font-size-18  col-ls-6 col-form-label">{props.breadcrumbItem}</h4>
-                </div>
-            </Col>
+        <div className=" text-left">
+          {
+            props.IsButtonVissible ?
+                <Row>
+                <Col md={2}>
+                  <button type="button" className="btn btn-success"
+                    data-mdb-toggle="tooltip" data-mdb-placement="top" title="Create New"
+                    onClick={() => { NewButtonHandeller() }} >
+                    New
+                  </button>
+               </Col>
+                <Col md={10}>
+                <h4 className="font-size-18 form-label" style={{marginTop:"6px"}}>{props.breadcrumbItem}</h4>
+                </Col>
+                </Row>
+              :
+              <React.Fragment>
+                <h4 className="font-size-18  col-ls-6 col-form-label" style={{marginLeft:"6px"}}>{props.breadcrumbItem}</h4>
+              </React.Fragment>
+          }
+         
+        </div>
+      </Col>
+            
             <Col md={5}>
             </Col>
             <Col md={2} className="text-right">
-                <div className="mb-1">
                     <div className="search-box d-inline-block">
                         <div className="position-relative">
                             {
                                 (props.IsButtonVissible || props.IsSearch === true) ?
-                                    <>
+                                <React.Fragment>
                                         <div clclassNameass="search-box d-inline-block">
                                             <div class="position-relative">
                                                     <span id="search-bar-0-label" className="sr-only">Search this table</span>
@@ -58,14 +71,15 @@ const Breadcrumb3 = props => {
                                                         placeholder="Search"
                                                         onChange={(e) => { searchFunctionHandller(e) }}
                                                     />
-                                            </div>
+                                                    <i class="bx bx-search-alt search-icon-search"></i>
+                                           </div>
                                         </div>
-                                    </>
+                                    </React.Fragment>
                                     :
-                                    <></>
+                                    <React.Fragment></React.Fragment>
                             }
                         </div>
-                    </div>
+                   
                 </div>
             </Col>
             <Col md={1} className="text-right">
@@ -76,7 +90,7 @@ const Breadcrumb3 = props => {
                             Count : &nbsp;(&nbsp; {props.breadcrumbCount}&nbsp;)
                         </div>
                         :
-                        <></>
+                        <React.Fragment></React.Fragment>
                 }
             </Col>
             {/* Redirct To master Component  */}

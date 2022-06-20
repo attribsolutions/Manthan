@@ -21,10 +21,18 @@ import Breadcrumbs3 from "../../../components/Common/Breadcrumb3"
 import generate from "../../../Reports/InvioceReport/Page";
 import { InvoiceFakeData } from "./InvioceFakedata";
 import { AlertState } from "../../../store/Utilites/CostumeAlert/actions";
+import { topFunction } from "./OrderList";
+import { MetaTags } from "react-meta-tags";
 
 const OrderPage = (props) => {
+
+  // For table items  for-loop constatnt  
   let itemgroups = "";
-  const Order_Id = props.location.state;
+
+  //*** "isEditdata get all data from ModuleID for Binding  Form controls
+  let editDataGatingFromList = props.state;
+  let CheckPageMode = props.IsComponentMode;
+
 
   const dispatch = useDispatch();
   const current = new Date();
@@ -39,11 +47,9 @@ const OrderPage = (props) => {
   const [PageMode, setPageMode] = useState(false);
 
   //SetState  Edit data Geting From Modules List component
-  const [EditData, setEditData] = useState([]);
+  const [EditData, setEditData] =  useState({OrderItem:[]});
+  // useState({OrderItem:[]});
 
-  //*** "isEditdata get all data from ModuleID for Binding  Form controls
-  let editDataGatingFromList = props.state;
-  let CheckPageMode = props.IsComponentMode;
 
 
 
@@ -52,6 +58,7 @@ const OrderPage = (props) => {
 
     dispatch(getOrderItems_ForOrderPage());
 
+    debugger
     if (!(editDataGatingFromList === undefined)) {
       setEditData(editDataGatingFromList[0]);
       setIsEdit(true);
@@ -75,6 +82,7 @@ const OrderPage = (props) => {
 
   // This UseEffect clear Form Data and when modules Save Successfully.
   useEffect(() => {
+   
     if ((APIResponse.Status === true) && (APIResponse.StatusCode === 200)) {
       dispatch(submitOrder_fromOrderPage_Success({ Status: false }))
       // formRef.current.reset();
@@ -138,6 +146,7 @@ const OrderPage = (props) => {
         selectedItemArray.push(arrayElement);
       }
     }
+    
     const requestOptions = {
       body: JSON.stringify({
         CustomerID: 2,
@@ -155,7 +164,7 @@ const OrderPage = (props) => {
         OrderItem: selectedItemArray,
       }),
     };
-
+ debugger
     if (IsEdit && selectedItemArray.length > 0) {
       // dispatch(updateModuleID(requestOptions.body, EditData.ID));
     }
@@ -173,7 +182,6 @@ const OrderPage = (props) => {
   };
 
   function handleKeyDown(e) {
-    debugger
     let inpTarget = e.target.id
     let split = inpTarget.split("y");
     let inp_ID = parseInt(split[1])
@@ -233,22 +241,18 @@ const OrderPage = (props) => {
   }
 
 
-
-
-
-
   return (
     <React.Fragment>
       <div className="page-content">
+        <MetaTags>
+          <title>Order | FoodERP-React FrontEnd</title>
+        </MetaTags>
         <Breadcrumbs3
           title={"Count :"}
           breadcrumbItem={"Order"}
           IsSearch={true}
-          // SearchProps={toolkitProps.searchProps}
           breadcrumbCount={OrderItems.length}
-        // RedirctPath={"/modulesMaster"}
         />
-
         <Container fluid>
           <Row className="mb-1 ">
             <div className="col-lg-2 ">
@@ -289,8 +293,8 @@ const OrderPage = (props) => {
                     {OrderItems.map((item, key) => {
                       var com = "";
                       var qat = '';
-                      EditData.map((i, k) => {
-                        if (item.ItemID === i.ItemID) { com = i.Comment; qat = i.Qauntity }
+                      EditData.OrderItem.map((i, k) => {
+                        if (item.ItemID === i.ItemID) { com = i.Comment; qat = i.Quantity }
                         return ''
                       })
                       return (
@@ -319,9 +323,7 @@ const OrderPage = (props) => {
                               </>
 
                             ) : (
-
-                              <>
-
+                              <React.Fragment>
                                 <label className="btn btn-secondary btn-sm waves-effect waves-light">
                                   {item.ItemGroup.Name}
                                   {(itemgroups = item.ItemGroup.Name)}
@@ -344,7 +346,8 @@ const OrderPage = (props) => {
                                   id={"lblItemGST" + key}
                                   name={"lblItemGST" + key}
                                   value={item.GSTPercentage}
-                                /></>
+                                />
+                              </React.Fragment>
                             )}
                           </Td>
 
@@ -358,10 +361,10 @@ const OrderPage = (props) => {
                             />
                           </Td>
                           <Td>
-                            <label > {"121.21"} </label>
+                            <label > {item.MRP} </label>
                             <input
                               type="hidden"
-                              defaultvalue={com}
+                              value={item.MRP}
                               id={"rate" + key}
                               className="form-control form-control-sm"
                               autoComplete="false"
@@ -423,6 +426,7 @@ const OrderPage = (props) => {
 
           </Row>
         </Container>
+
       </div>
     </React.Fragment>
   );
