@@ -143,9 +143,9 @@ const pagesListColumns = [
     },
     {
         text: "EmailID",
-        dataField: "EmailID",
+        dataField: "email",
         sort: true,
-        formatter: (cellContent, TableListData) => <>{TableListData.EmailID}</>,
+        formatter: (cellContent, TableListData) => <>{TableListData.email}</>,
     },
     
     {

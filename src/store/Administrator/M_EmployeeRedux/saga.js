@@ -14,12 +14,13 @@ import {
 import { SpinnerState } from "../../Utilites/Spinner/actions";
 import { AlertState } from "../../Utilites/CostumeAlert/actions";
 import PageListDropdownData from "../HPagesRedux/PageListData";
+import PageTypeDropdownData from "../HPagesRedux/PageTypeData";
 
 ///  DesignationID dropdown list
 function* DesignationID_saga() {
   try {
-    // const response = yield call(getDesignationID_For_Dropdown);
-    yield put(getDesignationIDSuccess(PageListDropdownData.Data));
+    const response = yield call(getDesignationID_For_Dropdown);
+    yield put(getDesignationIDSuccess(response.Data));
   } catch (error) {
     console.log("DesignationID_saga page error", error);
   }
@@ -28,8 +29,8 @@ function* DesignationID_saga() {
 //// EmployeeType drop down api
 function* EmployeeType_saga() {
   try {
-    // const response = yield call(getEmployeeType_For_Dropdown);
-    yield put(getEmployeeTypeESuccess(PageListDropdownData.Data));
+    const response = yield call(getEmployeeType_For_Dropdown);
+    yield put(getEmployeeTypeESuccess(response.Data));
   } catch (error) {
     console.log("EmployeeType_saga  page error", error);
   }
@@ -38,28 +39,28 @@ function* EmployeeType_saga() {
 ///State  dropdown api
 function* State_saga() {
   try {
-    // const response = yield call(getState_For_Dropdown);
-    yield put(getStateESuccess(PageListDropdownData.Data));
+    const response = yield call(getState_For_Dropdown);
+    yield put(getStateESuccess(response.Data));
   } catch (error) {
     console.log("State_saga page error", error);
   }
 }
 
-///Region  dropdown api
-function* Region_saga() {
-  try {
-    // const response = yield call(getRegion_For_Dropdown);
-    yield put(getRegionSuccess(PageListDropdownData.Data));
-  } catch (error) {
-    console.log("Region_saga page error", error);
-  }
-}
+// ///Region  dropdown api
+// function* Region_saga() {
+//   try {
+//     const response = yield call(getRegion_For_Dropdown);
+//     yield put(getRegionSuccess(response.Data));
+//   } catch (error) {
+//     console.log("Region_saga page error", error);
+//   }
+// }
 
-///Region  dropdown api
+///Company  dropdown api
 function* Company_saga() {
   try {
-    // const response = yield call(getComapny_For_Dropdown);
-    yield put(getCompanySuccess(PageListDropdownData.Data));
+    const response = yield call(getComapny_For_Dropdown);
+    yield put(getCompanySuccess(response.Data));
   } catch (error) {
     console.log("Employeelist  saga page error", error);
   }
@@ -71,6 +72,7 @@ function* Submit_Employee_GenratorFunction({ Data }) {
   yield put(SpinnerState(true))
   try {
     const response = yield call(post_EmployeeData, Data);
+    console.log("post response in saga file",response)
     yield put(SpinnerState(false))
     yield put(PostEmployeeSuccess(response));
   } catch (error) {
@@ -86,9 +88,8 @@ function* Submit_Employee_GenratorFunction({ Data }) {
 function* Get_EmployeeList_GenratorFunction() {
   yield put(SpinnerState(true))
   try {
-    // const response = yield call(get_EmployeelistApi);
-    yield put(getEmployeelistSuccess(PageListDropdownData.Data));
-    console.log("PageListDropdownData",PageListDropdownData)
+    const response = yield call(get_EmployeelistApi);
+    yield put(getEmployeelistSuccess(response.Data));
     yield put(SpinnerState(false))
   } catch (error) {
     yield put(SpinnerState(false))
@@ -142,7 +143,7 @@ function* M_EmployeeSaga() {
   yield takeEvery(GET_DESIGNATIONID, DesignationID_saga);
   yield takeEvery(GET_EMPLOYEETYPE, EmployeeType_saga);
   yield takeEvery(GET_STATE, State_saga);
-  yield takeEvery(GET_REGION, Region_saga)
+  // yield takeEvery(GET_REGION, Region_saga)
   yield takeEvery(GET_COMPANY, Company_saga)
   yield takeEvery(GET_EMPLOYEE_LIST, Get_EmployeeList_GenratorFunction)
   yield takeEvery(POST_EMPLOYEE, Submit_Employee_GenratorFunction)

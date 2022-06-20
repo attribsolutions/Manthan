@@ -100,7 +100,7 @@ export const RoleAccessApi_url=()=>get(url.ROLE_ACCESS)
 export const getDesignationID_For_Dropdown = () => get(url.GET_DESIGNATIONID)
 export const getEmployeeType_For_Dropdown = () => get(url.GET_EMPLOYEE_TYPE)
 export const getState_For_Dropdown = () => get(url.GET_STATE)
-export const getRegion_For_Dropdown = () => get(url.GET_REGION)
+// export const getRegion_For_Dropdown = () => get(url.GET_REGION)
 export const getComapny_For_Dropdown = () => get(url.COMPANY_API_URL)
 export const post_EmployeeData = (data) => post(url.EMPLOYEE_API_URL, data) //save And Update
 export const get_EmployeelistApi = () => get(url.EMPLOYEE_API_URL) // get api
