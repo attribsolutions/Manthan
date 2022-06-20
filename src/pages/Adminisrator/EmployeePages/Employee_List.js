@@ -1,21 +1,17 @@
 import React, { useEffect, useState } from 'react'
 // import { useHistory } from "react-router-dom";
 import Breadcrumbs from "../../../components/Common/Breadcrumb";
-import {
-    Modal,
-    Col,
-    Row,
-} from "reactstrap";
+import {Modal,Col,Row,} from "reactstrap";
 // import { useAlert } from "react-alert";
 import "../../../assets/scss/CustomeTable/datatables.scss"
 import { AlertState } from "../../../store/Utilites/CostumeAlert/actions";
 import { SpinnerON } from "../../../store/Utilites/Spinner/actions";
 import {
-    getEmployeelist,editEmployeeeId,delete_Employee_ID,updateEmployeeIDSuccess
+    getEmployeelist,editEmployeeeId,deleteEmployeeIDSuccess,updateEmployeeIDSuccess, delete_Employee_ID
 } from "../../../store/Administrator/M_EmployeeRedux/action";
 import paginationFactory, {
     PaginationListStandalone,
-    PaginationProvider, SizePerPageDropdownStandalone,
+    PaginationProvider, 
 } from "react-bootstrap-table2-paginator";
 import ToolkitProvider, { Search } from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
@@ -23,26 +19,62 @@ import { useSelector, useDispatch } from "react-redux";
 import AddEmployee from './AddEmployee';
 
 const Employee_List = () => {
-    // const [EditId, setId] = useState('')
-    // const alert1 = useAlert();
+    
     const dispatch = useDispatch();
-    // const [deleteIn, setDeleteIn] = useState('');
-    // const history = useHistory();
-    const { SearchBar } = Search;
     const [modal_center, setmodal_center] = useState(false);
-
-    const { pages,editData,updateMessage} = useSelector((state) => ({
-        pages:state.M_EmployeesReducer.pages, 
+  
+    // get Access redux data
+   const { TableListData,editData,updateMessage,deleteMessage} = useSelector((state) => ({
+        TableListData:state.M_EmployeesReducer.pages, 
         editData:state.M_EmployeesReducer.editData,
         updateMessage:state.M_EmployeesReducer.updateMessage,
+        deleteMessage: state.M_EmployeesReducer.deleteMessage,
         
     }));
-// console.log("Data",pages)
+// console.log("Data",TableListData)
 
+//  This UseEffect => Featch Modules List data  First Rendering
 useEffect(()=>{
-    dispatch(SpinnerON(true))
-    dispatch(getEmployeelist());
-},[dispatch]);
+      dispatch(getEmployeelist());
+},[]);
+
+// This UseEffect => UpadateModal Success/Unsucces  Show and Hide Control Alert_modal 
+useEffect(() => {
+    if ((updateMessage.Status === true) && (updateMessage.StatusCode === 200)) {
+        dispatch(updateEmployeeIDSuccess({ Status: false }))
+        dispatch(AlertState({
+            Type: 1, Status: true,
+            Message: updateMessage.Message,
+            AfterResponseAction: getEmployeelist,
+        }))
+        tog_center()
+    }
+    else if (deleteMessage.Status === true) {
+        dispatch(deleteEmployeeIDSuccess({ Status: false }))
+        dispatch(AlertState({
+            Type: 3, Status: true,
+            Message: deleteMessage.Message,
+        }));
+    }
+}, [updateMessage.Status, dispatch]);
+
+useEffect(() => {
+    if ((deleteMessage.Status === true) && (deleteMessage.StatusCode === 200)) {
+        dispatch(deleteEmployeeIDSuccess({ Status: false }))
+        dispatch(AlertState({
+            Type: 1, Status: true,
+            Message: deleteMessage.Message,
+            AfterResponseAction: getEmployeelist,
+        }))
+    } else if (deleteMessage.Status === true) {
+        dispatch(deleteEmployeeIDSuccess({ Status: false }))
+        dispatch(AlertState({
+            Type: 3,
+            Status: true,
+            Message: "error Message",
+        }));
+    }
+}, [deleteMessage.Status])
 
 //Delete Button Handller
 const deleteHandeler = (id, name) => {
@@ -55,21 +87,17 @@ const deleteHandeler = (id, name) => {
     }));
 }
 
-
-useEffect(() => {
-    if (updateMessage.Status === true) {
-        dispatch(updateEmployeeIDSuccess(''));
-        tog_center()
-        dispatch(getEmployeelist());
-    }
-}, [updateMessage.Status]);
-
 // Edit Modal Show When Edit Data is true
 useEffect(() => {
-    if (editData.Status === 'true') {
+    if (editData.Status === true) {
         tog_center()
     }
 }, [editData]);
+
+// tag_center -- Control the Edit Modal show and close
+function tog_center() {
+    setmodal_center(!modal_center)
+}
 
 // Edit Button Handler
 const EditPageHandler = (id) => {
@@ -77,14 +105,9 @@ const EditPageHandler = (id) => {
     console.log("selected id",id)
 }
 
- // tag_center -- Control the Edit Modal show and close
-function tog_center() {
-    setmodal_center(!modal_center)
-}
-
 const pageOptions = {
-    sizePerPage: 15,
-    totalSize: pages.length,
+    sizePerPage: 10,
+    totalSize: TableListData.length,
     custom:true,
 };
 
@@ -95,47 +118,47 @@ const pagesListColumns = [
         dataField: "ID",
         sort: true,
         hidden: true,
-        formatter: (cellContent, pages) => <>{pages.ID}</>,
+        formatter: (cellContent, TableListData) => <>{TableListData.ID}</>,
     },
 
     {
         text: "Name",
         dataField: "Name",
         sort: true,
-        formatter: (cellContent, pages) => <>{pages.Name}</>,
+        formatter: (cellContent, TableListData) => <>{TableListData.Name}</>,
     },
 
     {
         text: "Address",
         dataField: "Address",
         sort: true,
-        formatter: (cellContent, pages) => <>{pages.Address}</>,
+        formatter: (cellContent, TableListData) => <>{TableListData.Address}</>,
     },
 
     {
         text: "Mobile",
         dataField: "Mobile",
         sort: true,
-        formatter: (cellContent, pages) => <>{pages.Mobile}</>,
+        formatter: (cellContent, TableListData) => <>{TableListData.Mobile}</>,
     },
     {
         text: "EmailID",
         dataField: "EmailID",
         sort: true,
-        formatter: (cellContent, pages) => <>{pages.EmailID}</>,
+        formatter: (cellContent, TableListData) => <>{TableListData.EmailID}</>,
     },
     
     {
         text: "Actions",
        
-        formatter: (cellContent, pages) => (
+        formatter: (cellContent, TableListData) => (
             <>
               <div className="d-flex gap-3" style={{ display: 'flex', justifyContent: 'center' }} >
                     <buton
                         type="button"
                         data-mdb-toggle="tooltip" data-mdb-placement="top" title="Edit Modules ID"
                         onClick={() => {
-                            EditPageHandler(pages.ID);
+                            EditPageHandler(TableListData.ID);
                         }}
                         className="badge badge-soft-primary font-size-12"
                     >
@@ -145,7 +168,7 @@ const pagesListColumns = [
                         className="badge badge-soft-danger font-size-12"
                         data-mdb-toggle="tooltip" data-mdb-placement="top" title="Delete Modules ID"
                         onClick={() => {
-                            deleteHandeler(pages.ID, pages.Name);
+                            deleteHandeler(TableListData.ID, TableListData.Name);
                         }}
                     >
                         <i className="mdi mdi-delete font-size-18" ></i>
@@ -166,7 +189,7 @@ return (
                                     {({ paginationProps, paginationTableProps }) => (
                                         <ToolkitProvider
                                             keyField="id"
-                                            data={pages}
+                                            data={TableListData}
                                             columns={pagesListColumns}
                                             // bootstrap4
                                             search
@@ -179,7 +202,7 @@ return (
                                         breadcrumbItem={"Employee List"}
                                         IsButtonVissible={true}
                                         a={toolkitProps.searchProps}
-                                        breadcrumbCount={pages.length}
+                                        breadcrumbCount={TableListData.length}
                                         RedirctPath={"/employeesMaster"}
                                     />
                                     <Row>

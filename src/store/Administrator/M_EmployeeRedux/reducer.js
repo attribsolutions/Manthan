@@ -19,15 +19,15 @@ import {
     EmployeeType:[],
     State:[],
     Region:[],
-    PostPage:[],
-    AddUserMessage:[],
+    PostPage: { Status: false },
+    AddUserMessage: { Status: false },
     Company:[],
     pages:[],
     deleteID: [],
-    deleteSuccess: [],
+    deleteMessage: { Status: false },
     editId: [],
-    editData: { Status: 'false' },
-    updateMessage:  { Status: 'false' },
+    editData:  { Status: false },
+    updateMessage:  { Status: false },
   };
   
   const M_EmployeesReducer  = (state = INIT_STATE, action) => {
@@ -96,7 +96,7 @@ import {
       case DELETE_EMPLOYEE_ID_SUCCESS:
         return {
           ...state,
-          deleteSuccess: action.payload,
+          deleteMessage: action.payload,
         };
   
         //// edit api

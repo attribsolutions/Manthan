@@ -3,67 +3,33 @@ import Select from "react-select";
 import { Card, CardBody, Col, Container, Row, Label, Button, Input } from "reactstrap";
 import { AvForm, AvGroup, } from "availity-reactstrap-validation";
 import { useDispatch, useSelector } from "react-redux";
-import { getDesignationID, getEmployeeType, getState, getRegion, postEmployee, getCompany, updateEmployeeID }
+import { getDesignationID, getEmployeeType, getState, getRegion, 
+  postEmployee, getCompany, updateEmployeeID, editEmployeeSuccess, PostEmployeeSuccess }
   from "../../../store/Administrator/M_EmployeeRedux/action";
 import Breadcrumbs from "../../../components/Common/Breadcrumb";
 import AvField from "availity-reactstrap-validation/lib/AvField";
+import { AlertState } from "../../../store/Utilites/CostumeAlert/actions";
 
 const AddEmployee = (props) => {
-  const dispatch = useDispatch();
-  const [EditData, setEditData] = useState([]);
-  const [IsEdit, setIsEdit] = useState(false);
-  const formRef = useRef(null);
-  var isEditData = props.state;
-  console.log("isEditData in AddList Page", isEditData)
 
+  const formRef = useRef(null);
+  const dispatch = useDispatch();
+ 
+  //SetState  Edit data Geting From Modules List component
+  const [EditData, setEditData] = useState([]);
+
+   //'IsEdit'--if true then update data otherwise it will perfrom save operation
+  const [IsEdit, setIsEdit] = useState(false);
+  const [PageMode, setPageMode] = useState(false);
+  
+  //*** "isEditdata get all data from ModuleID for Binding  Form controls
+  var editDataGatingFromList = props.state;
+ 
   const [DesignationIDselect, setDesignationID] = useState("");
   const [EmployeeTypeselect, setEmployeeType] = useState("");
   const [Stateselect, setState] = useState("");
   const [Regionselect, setRegion] = useState("");
   const [Companyselect, setCompany] = useState("");
-
-  useEffect(() => {
-    document.getElementById("txtName").focus();
-
-    if (!(isEditData === undefined)) {
-      setEditData(isEditData);
-      setIsEdit(true);
-      setDesignationID({
-        value: isEditData.DesignationID.ID,
-        label: isEditData.DesignationID.Name
-      })
-      setEmployeeType({
-        value: isEditData.EmployeeType.ID,
-        label: isEditData.EmployeeType.Name
-      })
-      setState({
-        value: isEditData.State.ID,
-        label: isEditData.State.Name
-      })
-      setRegion({
-        value: isEditData.Region.ID,
-        label: isEditData.Region.Name
-      })
-      setCompany({
-        value: isEditData.Companie.ID,
-        label: isEditData.Companie.Name
-      })
-     
-    }
-  }, [IsEdit])
-  console.log("data", EditData)
-  const { AddUserMessage, } = useSelector((state) => ({
-    AddUserMessage: state.M_EmployeesReducer.AddUserMessage,
-  }));
-  console.log("AddUserMessage", AddUserMessage)
-
-  useEffect(() => {
-    if ((AddUserMessage.Status === true)) {
-      // dispatch(postEmployee(undefined))
-      dispatch(postEmployee({ Status: false }))
-      formRef.current.reset();
-    }
-  }, [AddUserMessage.Status])
 
   useEffect(() => {
     dispatch(getDesignationID());
@@ -73,19 +39,20 @@ const AddEmployee = (props) => {
     dispatch(getCompany());
   }, [dispatch]);
 
-  const { DesignationID, EmployeeType, State, Region, Company } = useSelector((state) => ({
+    const { DesignationID, EmployeeType, State, Region, Company,AddUserMessage } = useSelector((state) => ({
     DesignationID: state.M_EmployeesReducer.DesignationID,
     EmployeeType: state.M_EmployeesReducer.EmployeeType,
     State: state.M_EmployeesReducer.State,
     Region: state.M_EmployeesReducer.Region,
     Company: state.M_EmployeesReducer.Company,
+    AddUserMessage: state.M_EmployeesReducer.AddUserMessage,
+
   }));
 
   const DesignationIDValues = DesignationID.map((Data) => ({
     value: Data.ID,
     label: Data.Name
   }));
-
   function handllerDesignationID(e) {
     setDesignationID(e)
   }
@@ -94,7 +61,6 @@ const AddEmployee = (props) => {
     value: Data.ID,
     label: Data.Name
   }));
-
   function handllerEmployeeType(e) {
     setEmployeeType(e)
   }
@@ -103,7 +69,6 @@ const AddEmployee = (props) => {
     value: Data.ID,
     label: Data.Name
   }));
-
   function handllerState(e) {
     setState(e)
   }
@@ -112,7 +77,6 @@ const AddEmployee = (props) => {
     value: Data.ID,
     label: Data.Name
   }));
-
   function handllerRegion(e) {
     setRegion(e)
   }
@@ -121,11 +85,76 @@ const AddEmployee = (props) => {
     value: Data.ID,
     label: Data.Name
   }));
-
   function handllerCompany(e) {
     setCompany(e)
   }
 
+  // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
+  useEffect(() => {
+    document.getElementById("txtName").focus();
+    if (!(editDataGatingFromList === undefined)) {
+      setEditData(editDataGatingFromList);
+      setIsEdit(true);
+      setDesignationID({
+        value: editDataGatingFromList.DesignationID.ID,
+        label: editDataGatingFromList.DesignationID.Name
+      })
+      setEmployeeType({
+        value: editDataGatingFromList.EmployeeType.ID,
+        label: editDataGatingFromList.EmployeeType.Name
+      })
+      setState({
+        value: editDataGatingFromList.State.ID,
+        label: editDataGatingFromList.State.Name
+      })
+      setRegion({
+        value: editDataGatingFromList.Region.ID,
+        label: editDataGatingFromList.Region.Name
+      })
+      setCompany({
+        value: editDataGatingFromList.Companie.ID,
+        label: editDataGatingFromList.Companie.Name
+      })
+     
+      dispatch(editEmployeeSuccess({ Status: false }))
+      return
+    }
+  }, [editDataGatingFromList])
+
+   useEffect(() => {
+    if ((AddUserMessage.Status === true) && (AddUserMessage.StatusCode === 200)) {
+        dispatch(PostEmployeeSuccess({ Status: false }))
+        formRef.current.reset();
+        if (PageMode === true) {
+            dispatch(AlertState({
+                Type: 1,
+                Status: true,
+                Message: AddUserMessage.Message,
+            }))
+        }
+        else {
+            dispatch(AlertState({
+                Type: 1,
+                Status: true,
+                Message: AddUserMessage.Message,
+                RedirectPath: '/employeesList',
+                AfterResponseAction: false
+            }))
+        }
+    } 
+    else if (AddUserMessage.Status === true) {
+      dispatch(PostEmployeeSuccess({ Status: false }))
+      dispatch(AlertState({
+            Type: 4,
+            Status: true,
+            Message: "error Message",
+            RedirectPath: false,
+            AfterResponseAction: false
+        }));
+    }
+}, [AddUserMessage.Status])
+
+    //'Save' And 'Update' Button Handller
   const handleValidSubmit = (event, values) => {
     let DateInput = document.getElementById("dateInput","").value;
     let DateInput1 = document.getElementById("dateInput1").value;
@@ -148,18 +177,15 @@ const AddEmployee = (props) => {
 
       }),
     }
-
     if (IsEdit) {
       dispatch(updateEmployeeID(requestOptions.body, EditData.ID));
     }
-
     else {
       dispatch(postEmployee(requestOptions.body));
-
     }
-
   };
 
+ // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
   var IsEditModeSaSS=''
   if(IsEdit===true){IsEditModeSaSS= "-3.5%"};
 
