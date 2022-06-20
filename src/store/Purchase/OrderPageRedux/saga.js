@@ -6,6 +6,7 @@ import {
   updateOrderID_From_OrderPageSuccess,
   submitOrder_fromOrderPage_Success,
   editOrder_forOrderPage_Success,
+  deleteOrderID_From_OrderPageSuccess,
 } from "./actions";
 import {
   getDivisionOrders,
@@ -14,6 +15,7 @@ import {
   editOrderID_forOrderPage_ApiCall,
   submitOrder_From_OrderPage_apiCall,
   UpdateOrder_ID_ApiCall,
+  deleteOrderID_forOrderPage_ApiCall,
 } from "../../../helpers/backend_helper";
 import {
   GET_ORDER_LIST,
@@ -23,6 +25,7 @@ import {
   SUBMIT_ORDER_FROM_ORDER_PAGE,
   UPDATE_ORDER_ID_FROM_ORDER_PAGE,
   EDIT_ORDER_FOR_ORDER_PAGE,
+  DELETE_ORDER_FOR_ORDER_PAGE,
 } from "./actionType";
 import ItemUnits from "./DemoData";
 
@@ -95,7 +98,23 @@ function* EditOrder_GenratorFunction({ id }) {
   }
 }
 
+function* DeleteOrder_GenratorFunction({ id }) {
+  yield put(SpinnerState(true))
+  try {
+    const response = yield call(deleteOrderID_forOrderPage_ApiCall, id);
+    yield put(SpinnerState(false))
+    yield put(deleteOrderID_From_OrderPageSuccess(response));
+  } catch (error) {
+    yield put(SpinnerState(false))
+    yield put(AlertState({
+      Type: 4,
+      Status: true, Message: "500 Error Message",
+    }));
+  }
+}
+
 function* UpdateOrder_ID_GenratorFunction({ data, id }) {
+  debugger
   try {
     yield put(SpinnerState(true))
     const response = yield call(UpdateOrder_ID_ApiCall, data, id);
@@ -129,7 +148,7 @@ function* OrderPageSaga() {
   yield takeEvery(EDIT_ORDER_FOR_ORDER_PAGE, EditOrder_GenratorFunction);
   yield takeEvery(UPDATE_ORDER_ID_FROM_ORDER_PAGE, UpdateOrder_ID_GenratorFunction)
 
-  yield takeEvery(GET_DIVISIONORDER_LIST, fetchDisvisionOrder);
+  yield takeEvery(DELETE_ORDER_FOR_ORDER_PAGE, DeleteOrder_GenratorFunction);
 }
 
 export default OrderPageSaga;

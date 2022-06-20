@@ -25,9 +25,9 @@ export const getOrderItems_ForOrderPageSuccess = (data) => ({
   type: GET_ORDER_ITEMS_FOR_ORDER_PAGE_SUCCESS,
   payload: data,
 });
-export const submitOrder_fromOrderPage = (data) => ({
+export const submitOrder_fromOrderPage = (data,id) => ({
   type: SUBMIT_ORDER_FROM_ORDER_PAGE,
-  data,
+  data,id,
 });
 export const submitOrder_fromOrderPage_Success = (data) => ({
   type: SUBMIT_ORDER_FROM_ORDER_PAGE_SUCCESS,

@@ -13,7 +13,7 @@ import { Table, Thead, Tbody, Tr, Th, Td } from "react-super-responsive-table";
 import "react-super-responsive-table/dist/SuperResponsiveTableStyle.css";
 
 // store action import
-import { submitOrder_fromOrderPage, getOrderItems_ForOrderPage, submitOrder_fromOrderPage_Success } from "../../../store/Purchase/OrderPageRedux/actions";
+import { submitOrder_fromOrderPage, getOrderItems_ForOrderPage, submitOrder_fromOrderPage_Success, updateOrderID_From_OrderPage } from "../../../store/Purchase/OrderPageRedux/actions";
 import { useSelector, useDispatch } from "react-redux";
 import '../../Purchase/Orders/div.css'
 
@@ -47,7 +47,7 @@ const OrderPage = (props) => {
   const [PageMode, setPageMode] = useState(false);
 
   //SetState  Edit data Geting From Modules List component
-  const [EditData, setEditData] =  useState({OrderItem:[]});
+  const [EditData, setEditData] = useState({ OrderItem: [] });
   // useState({OrderItem:[]});
 
 
@@ -82,7 +82,7 @@ const OrderPage = (props) => {
 
   // This UseEffect clear Form Data and when modules Save Successfully.
   useEffect(() => {
-   
+
     if ((APIResponse.Status === true) && (APIResponse.StatusCode === 200)) {
       dispatch(submitOrder_fromOrderPage_Success({ Status: false }))
       // formRef.current.reset();
@@ -98,7 +98,7 @@ const OrderPage = (props) => {
         dispatch(AlertState({
           Type: 1,
           Status: true,
-          Message: "Error",//APIResponse.Message,
+          Message: APIResponse.Message,
           RedirectPath: '/orderList',
 
         }))
@@ -146,7 +146,7 @@ const OrderPage = (props) => {
         selectedItemArray.push(arrayElement);
       }
     }
-    
+
     const requestOptions = {
       body: JSON.stringify({
         CustomerID: 2,
@@ -164,9 +164,9 @@ const OrderPage = (props) => {
         OrderItem: selectedItemArray,
       }),
     };
- debugger
+    debugger
     if (IsEdit && selectedItemArray.length > 0) {
-      // dispatch(updateModuleID(requestOptions.body, EditData.ID));
+      dispatch(updateOrderID_From_OrderPage(requestOptions.body, EditData.id));
     }
     else if (selectedItemArray.length > 0) {
       dispatch(submitOrder_fromOrderPage(requestOptions.body));
@@ -294,7 +294,7 @@ const OrderPage = (props) => {
                       var com = "";
                       var qat = '';
                       EditData.OrderItem.map((i, k) => {
-                        if (item.ItemID === i.ItemID) { com = i.Comment; qat = i.Quantity }
+                        if (item.ID === i.ItemID) { com = i.Comment; qat = i.Quantity }
                         return ''
                       })
                       return (
@@ -376,7 +376,7 @@ const OrderPage = (props) => {
                               id={"inp-txtqty" + key}
                               key={item.ID}
                               disabled={item.MRP > 0 ? false : true}
-                              defaultvalue={qat}
+                              defaultValue={qat}
                               onKeyDown={(e) => {
                                 handleKeyDown(e);
                               }}
@@ -400,7 +400,7 @@ const OrderPage = (props) => {
                             {" "}
                             <input
                               type="text"
-                              defaultvalue={com}
+                              defaultValue={com}
                               id={"inp-comment" + key}
                               class="form-control form-control-sm"
                               autoComplete="off"
@@ -411,7 +411,7 @@ const OrderPage = (props) => {
                     })}
                   </Tbody>
                 </Table>
-                <div class="row table1" style={{ paddingBottom: 'center' }}>
+                {/* <div class="row table1" style={{ paddingBottom: 'center' }}>
                   <button type="button" className="btn btn-success text-center"
                     data-mdb-toggle="tooltip" data-mdb-placement="top" title="Create New"
                     onClick={() => {
@@ -420,7 +420,40 @@ const OrderPage = (props) => {
                   >
                     Save
                   </button> :
-                </div>
+                </div> */}
+
+               {
+                  IsEdit ?
+                    (
+                      <div className="row update1" style={{ paddingBottom: 'center' }}>
+                        <button
+                          type="submit"
+                          data-mdb-toggle="tooltip" data-mdb-placement="top" title="Update-order-ID"
+                          className="btn btn-success w-md"
+                          onClick={() => {
+                            saveHandeller();
+                          }}
+                        >
+                          <i className="fas fa-edit me-2"></i>Update
+                        </button>
+                      </div>
+                    )
+                    :
+                    (
+                      <div className="row save1" style={{ paddingBottom: 'center' }}>
+                        <button
+                          type="submit"
+                          data-mdb-toggle="tooltip" data-mdb-placement="top" title="Save-order-ID"
+                          className="btn btn-success w-md"
+                          onClick={() => {
+                            saveHandeller();
+                          }}
+                        > <i className="fas fa-save me-2"></i> Save
+                        </button>
+                      </div>
+                    )
+                }
+
               </div>
             </div>
 

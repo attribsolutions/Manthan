@@ -14,7 +14,7 @@ import {
 } from "reactstrap";
 import { Table, Thead, Tbody, Tr, Th, Td } from "react-super-responsive-table";
 import "react-super-responsive-table/dist/SuperResponsiveTableStyle.css";
-import { deleteOrderID_From_OrderPage, editOrder, editOrder_forOrderPage, getOrderList } from "../../../store/Purchase/OrderPageRedux/actions";
+import { deleteOrderID_From_OrderPage, deleteOrderID_From_OrderPageSuccess, editOrder, editOrder_forOrderPage, getOrderList, updateOrderID_From_OrderPageSuccess } from "../../../store/Purchase/OrderPageRedux/actions";
 import { MetaTags } from "react-meta-tags";
 import BootstrapTable from "react-bootstrap-table-next";
 import paginationFactory, { PaginationListStandalone, PaginationProvider } from "react-bootstrap-table2-paginator";
@@ -52,9 +52,8 @@ const OrderList = (props) => {
   function tog_center() {
     setmodal_center(!modal_center)
   }
-
-  // console.log('date',fromDateIn)
-  useEffect(() => {
+  //fetch list Page Function 
+   function fetchOrderList_dispatch_function (){
     const orderlistInitial = {
       FromDate: fromDateIn,// !fromDate ? fromDateIn : fromDate,
       ToDate: currentDate, //!toDate ? currentDate : toDate,
@@ -62,14 +61,22 @@ const OrderList = (props) => {
       DivisionID: 3,
     };
     dispatch(getOrderList(orderlistInitial));
+    return getOrderList(orderlistInitial)
+  }
+ 
+  useEffect(() => {
+    fetchOrderList_dispatch_function()
   }, [dispatch, currentDate, fromDateIn, orderDelete]);
 
 
   const customerNameOption = props.orderList;
 
-  const { editOrderData, TableListData } = useSelector((state) => ({
+  const { editOrderData, TableListData,deleteMessage,updateMessage } = useSelector((state) => ({
     editOrderData: state.OrderPageReducer.editOrderData,
-    TableListData: state.OrderPageReducer.ordersList
+    TableListData: state.OrderPageReducer.ordersList,
+    deleteMessage: state.OrderPageReducer.deleteMessage,
+    updateMessage: state.OrderPageReducer.updateMessage,
+    
   }));
 
   function goHandeller() {
@@ -82,42 +89,43 @@ const OrderList = (props) => {
     dispatch(getOrderList(orderlistInitial));
   }
 
-//   useEffect(() => {
-//     if ((updateMessage.Status === true) && (updateMessage.StatusCode === 200)) {
-//         dispatch(updateCompanyIDSuccess({ Status: false }))
-//         dispatch(AlertState({
-//             Type: 1, Status: true,
-//             Message: updateMessage.Message,
-//             AfterResponseAction: fetchCompanyList,
-//         }))
-//         tog_center()
-//     }
-//     else if (deleteCompanyID.Status === true) {
-//         dispatch(deleteCompanyIDSuccess({ Status: false }))
-//         dispatch(AlertState({
-//             Type: 3, Status: true,
-//             Message: deleteCompanyID.Message,
-//         }));
-//     }
-// }, [updateMessage.Status, dispatch]);
+  useEffect(() => {
+    debugger
+    if ((updateMessage.Status === true) && (updateMessage.StatusCode === 200)) {
+        dispatch(updateOrderID_From_OrderPageSuccess({ Status: false }))
+        dispatch(AlertState({
+            Type: 1, Status: true,
+            Message: updateMessage.Message,
+            AfterResponseAction: fetchOrderList_dispatch_function,
+        }))
+        tog_center()
+    }
+    else if (updateMessage.Status === true) {
+        dispatch(updateOrderID_From_OrderPageSuccess({ Status: false }))
+        dispatch(AlertState({
+            Type: 3, Status: true,
+            Message: updateMessage.Message,
+        }));
+    }
+}, [updateMessage.Status, dispatch]);
 
-// useEffect(() => {
-//     if ((deleteCompanyID.Status === true) && (deleteCompanyID.StatusCode === 200)) {
-//         dispatch(deleteCompanyIDSuccess({ Status: false }))
-//         dispatch(AlertState({
-//             Type: 1, Status: true,
-//             Message: deleteCompanyID.Message,
-//             AfterResponseAction: fetchCompanyList,
-//         }))
-//     } else if (deleteCompanyID.Status === true) {
-//         dispatch(deleteCompanyIDSuccess({ Status: false }))
-//         dispatch(AlertState({
-//             Type: 3,
-//             Status: true,
-//             Message: "error Message",
-//         }));
-//     }
-// }, [deleteCompanyID.Status])
+useEffect(() => {
+    if ((deleteMessage.Status === true) && (deleteMessage.StatusCode === 200)) {
+        dispatch(deleteOrderID_From_OrderPageSuccess({ Status: false }))
+        dispatch(AlertState({
+            Type: 1, Status: true,
+            Message: deleteMessage.Message,
+            AfterResponseAction: fetchOrderList_dispatch_function,
+        }))
+    } else if (deleteMessage.Status === true) {
+        dispatch(deleteOrderID_From_OrderPageSuccess({ Status: false }))
+        dispatch(AlertState({
+            Type: 3,
+            Status: true,
+            Message: "error Message",
+        }));
+    }
+}, [deleteMessage.Status])
 
 // Edit Modal Show When Edit Data is true
 useEffect(() => {
@@ -140,6 +148,7 @@ useEffect(() => {
 
   //  Delete Button Handller
    const deleteHandeler = (id, name) => {
+    debugger
     dispatch(AlertState({
         Type: 5, Status: true,
         Message: `Are you sure you want to delete this item : "${name}"`,
@@ -196,7 +205,7 @@ useEffect(() => {
           <buton
             className="badge badge-soft-danger font-size-12"
             onClick={() => {
-               deleteHandeler(module.id, module.customerName);
+               deleteHandeler(order.id, order.customerName);
             }}
           >
             <i class="mdi mdi-delete font-size-18" ></i>

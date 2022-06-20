@@ -45,8 +45,8 @@ const userRoutes = [
   { path: "/subModulesList", component: SubModulesList },
 
   // Administrator : Company Path and List
-  { path: "/companysMaster", component: CompanyModule },
-  { path: "/companysList", component: CompanyList },
+  { path: "/companyMaster", component: CompanyModule },
+  { path: "/companyList", component: CompanyList },
 
   { path: "/pagesList", component: HPageList },
   { path: "/pagesMaster", component: HPageMaster },
