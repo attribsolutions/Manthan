@@ -24,6 +24,8 @@ import Breadcrumbs from "../../../components/Common/Breadcrumb";
 import './div.css'
 import OrderPage from "./OrderPage";
 import { AlertState } from "../../../store/Utilites/CostumeAlert/actions";
+import generate from "../../../Reports/InvioceReport/Page";
+import { InvoiceFakeData } from "./InvioceFakedata";
 
 export const topFunction = () => {
   debugger
@@ -136,12 +138,12 @@ useEffect(() => {
 
 
   function OnPritHandeller(id) {
-    dispatch(editOrder_forOrderPage(id));
-    if (!(editOrderData.length === 0)) {
-      console.log("datataat", editOrderData)
-      // generate(editOrderData)
+    // dispatch(editOrder_forOrderPage(id));
+    // if (!(editOrderData.length === 0)) {
+    //   console.log("datataat", editOrderData)
+      generate(InvoiceFakeData)
     }
-  }
+ 
   function EditPageHandler(id) {
     dispatch(editOrder_forOrderPage(id));
   }
@@ -214,7 +216,7 @@ useEffect(() => {
           <buton
             className="badge badge-soft-info font-size-12"
             onClick={() => {
-              //  deleteHandeler(module.ID, module.Name);
+              OnPritHandeller()
             }}
           >
             <i class="mdi mdi-shredder font-size-18"></i>

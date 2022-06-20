@@ -152,6 +152,17 @@ const HPageMaster = (props) => {
 
     //'Save' And 'Update' Button Handller
     const handleValidSubmit = (event, values) => {
+
+        if (PageAccessData.length <= 0) {
+            dispatch(AlertState({
+                Type: 4, Status: true,
+                Message: "At Least One PageAccess is Select",
+                RedirectPath: false,
+                PermissionAction: false,
+            }));
+            return
+        }
+
         const requestOptions = {
             body: JSON.stringify({
                 Name: values.Name,
@@ -171,19 +182,9 @@ const HPageMaster = (props) => {
                 })),
             }),
         };
-        if (PageAccessData.length <= 0) {
-            dispatch(AlertState({
-              Type: 4, Status: true,
-              Message: "At Least One PageAccess is Select",
-              RedirectPath: false,
-              PermissionAction: false,
-            }));
-          }
-
-        else if (IsEdit) {
+        
+        if (IsEdit) {
             dispatch(updateHPages(requestOptions.body, EditData.ID));
-            console.log("requestOptions", requestOptions.body)
-            console.log("PageAccessData", PageAccessData)
         }
         else {
             dispatch(saveHPages(requestOptions.body));
@@ -202,7 +203,6 @@ const HPageMaster = (props) => {
 
     //  for PageType deropDown
     const PageType_SelectOnChangeHandller = (e) => {
-        console.log('PageType_SelectOnChangeHandller', e)
         let showCheckBox = document.getElementById("abc")
         if (e.label === "ListPage") {
             setisShowPageChecked(true)
@@ -402,6 +402,37 @@ const HPageMaster = (props) => {
                                             </Col>
                                         </Row>
 
+
+                                        <Row className="mb-4">
+                                            <Label className="col-sm-3 col-form-label">
+                                                Show Menu
+                                            </Label>
+                                            <Col sm={4}>
+                                                {/* <input
+                                                        type="checkbox"
+                                                        id="abc"
+                                                    /> */}
+                                                <AvInput
+                                                    type="checkbox" id="abc"
+                                                    name="isShowOnMenu"
+                                                    checked={EditData.isShowOnMenu}
+                                                ></AvInput>
+                                            </Col>
+                                        </Row>
+                                        <AvGroup>
+                                            <Row className="mb-4">
+                                                <Label className="col-sm-3 col-form-label">
+                                                    IsActive
+                                                </Label>
+                                                <Col sm={4}>
+                                                    <AvField name="isActive"
+                                                        checked={EditData.isActive}
+                                                        type="checkbox"
+                                                    />
+                                                </Col>
+                                            </Row>
+                                        </AvGroup>
+                                        
                                         <Row className="mb-4">
                                             <Label className="col-sm-3 col-form-label">
                                                 PageAccess
@@ -469,36 +500,6 @@ const HPageMaster = (props) => {
                                             </Col>
                                         </Row>
 
-                                        <Row className="mb-4">
-                                            <Label className="col-sm-3 col-form-label">
-                                                Show Menu
-                                            </Label>
-                                            <Col sm={4}>
-                                                {/* <input
-                                                        type="checkbox"
-                                                        id="abc"
-                                                    /> */}
-                                                <AvInput
-                                                    type="checkbox" id="abc"
-                                                    name="isShowOnMenu"
-                                                    checked={EditData.isShowOnMenu}
-                                                ></AvInput>
-                                            </Col>
-                                        </Row>
-                                        <AvGroup>
-                                            <Row className="mb-4">
-                                                <Label className="col-sm-3 col-form-label">
-                                                    IsActive
-                                                </Label>
-                                                <Col sm={4}>
-                                                    <AvField name="isActive"
-                                                        checked={EditData.isActive}
-                                                        type="checkbox"
-                                                    />
-                                                </Col>
-                                            </Row>
-                                        </AvGroup>
-
                                         <Row className="justify-content-end">
                                             <Col sm={10}></Col>
                                             <Col sm={2}>
@@ -523,6 +524,7 @@ const HPageMaster = (props) => {
                                             </Col>{" "}
                                         </Row>
                                     </AvForm>
+                                    <br></br>
                                 </CardBody>
                             </Card>
                         </Col>

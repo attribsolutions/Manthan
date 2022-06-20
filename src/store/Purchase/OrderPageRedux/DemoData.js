@@ -1,5 +1,5 @@
 
-const orders = {
+ export const demoOrder = {
     Status: true,
     StatusCode: 200,
     Data: [{
@@ -641,4 +641,3 @@ const orders = {
 
 }
 
-export default orders
