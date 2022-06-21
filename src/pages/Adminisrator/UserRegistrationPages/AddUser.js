@@ -73,7 +73,7 @@ const AddUser = (props) => {
   const { Roles } = useSelector((state) => ({
     Roles: state.User_Registration_Reducer.Roles
   }));
-console.log("Roles",Roles)
+  console.log("Roles", Roles)
   const RolesValues = Roles.map((Data) => ({
     value: Data.ID,
     label: Data.Name
@@ -206,6 +206,41 @@ console.log("Roles",Roles)
                       </Col>
                     </Row>
 
+               
+                    <Row className="mb-4">
+                      <Label
+                        className="col-sm-2 col-form-label"
+                        htmlFor="horizontal-password-inputk"
+                      >
+                        isActive
+                      </Label>
+                      <Col sm={4}>
+                        <AvField name="isActive"
+                          checked={EditData.isActive}
+                          type="checkbox"
+                        />
+                      </Col>
+                    </Row>
+
+                    <Row className="mb-4">
+                      <Label
+                        className="col-sm-2 col-form-label"
+                        htmlFor="horizontal-password-inputk"
+                      >
+                        Is SendOTP
+                      </Label>
+                      <Col sm={4}>
+                        <AvField
+                          type="checkbox"
+                          checked={EditData.isSendOTP}
+                          name="isSendOTP"
+                          
+                          id="horizontal-customCheck"
+
+                        />
+                      </Col>
+                    </Row>
+
                     <Row className="mb-2">
                       <Label className="col-sm-2 col-form-label">
                         Roles
@@ -217,11 +252,11 @@ console.log("Roles",Roles)
                           options={[{
                             value: 1,
                             label: "AddPage",
-                        },
-                        {
+                          },
+                          {
                             value: 2,
                             label: "ListPage",
-                        }]}
+                          }]}
                           onChange={(e) => { setRoleDropDown(e) }}
                           classNamePrefix="select2-selection"
                           required=""
@@ -298,43 +333,6 @@ console.log("Roles",Roles)
                             </div>
                           </>
                         )}
-                      </Col>
-                    </Row>
-
-                    <Row className="mb-4">
-                      <Label
-                        className="col-sm-2 col-form-label"
-                        htmlFor="horizontal-password-inputk"
-                      >
-                        isActive
-                      </Label>
-                      <Col sm={4}>
-                        <AvInput
-                          type="checkbox"
-                          checked={EditData.isActive}
-                          name="isActive"
-                          className="form-control"
-                          id="horizontal-customCheck"
-                        />
-                      </Col>
-                    </Row>
-
-                    <Row className="mb-4">
-                      <Label
-                        className="col-sm-2 col-form-label"
-                        htmlFor="horizontal-password-inputk"
-                      >
-                        Is SendOTP
-                      </Label>
-                      <Col sm={4}>
-                        <AvInput
-                          type="checkbox"
-                          checked={EditData.isSendOTP}
-                          name="isSendOTP"
-                          className="form-control"
-                          id="horizontal-customCheck"
-
-                        />
                       </Col>
                     </Row>
 
