@@ -49,7 +49,7 @@ const RoleList = () => {
             tog_center()
         }
         else if (deleteMessage.Status === true) {
-            dispatch(deleteSuccess({ Status: false }))
+            dispatch(updateSuccess({ Status: false }))
             dispatch(AlertState({
                 Type: 3, Status: true,
                 Message: deleteMessage.Message,

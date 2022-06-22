@@ -103,9 +103,9 @@ export const delete_Employee_ID = (id) => ({
   })
 
   /// update api
-  export const updateEmployeeID=(data,id)=>({
+  export const updateEmployeeID=(updateData,ID)=>({
     type:UPDATE_EMPLOYEE_ID,
-    data,id,
+    updateData,ID,
   })
   export const updateEmployeeIDSuccess =(updateMessage)=>({
     type:UPDATE_EMPLOYEE_ID_SUCCESS,
