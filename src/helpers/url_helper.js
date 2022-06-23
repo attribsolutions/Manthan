@@ -64,3 +64,6 @@ export const ROLE_MASTER_API="/M_Roles"////  role get api
 
 // M_Items Api
 export const Items_MASTER_API="/M_Items"
+
+// M_Items_group Api
+export const ITEMS_GROUP_API="/ItemGroup"

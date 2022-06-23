@@ -1,8 +1,21 @@
 import { DELETE_ITEM_ID, DELETE_ITEM_ID_SUCCESS,
      EDIT_ITEM_ID, EDIT_ITEM_ID_SUCCESS, 
+     GET_ITEM_GROUP_FOR_DROPDOWN, 
+     GET_ITEM_GROUP_FOR_DROPDOWN_SUCCESS, 
      GET_ITEM_LIST_API, GET_ITEM_LIST_API_SUCCESS, 
      POST_ITEM_DATA, POST_ITEM_DATA_SUCCESS, 
      UPDATE_ITEM_ID, UPDATE_ITEM_ID_SUCCESS } from "./actionType";
+
+     
+// get ItemGroups  for dropdown api
+export const getItemGroup_ForDropDown = () => ({
+  type: GET_ITEM_GROUP_FOR_DROPDOWN,
+});
+
+export const getItemGroup_ForDropDownSuccess = (data) => ({
+  type: GET_ITEM_GROUP_FOR_DROPDOWN_SUCCESS,
+  payload:data,
+});
 
 // get api
 export const getItemList = () => ({

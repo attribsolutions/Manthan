@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import React, { useEffect, useRef, useCallback } from "react";
+import React, { useEffect, useRef, useCallback, useState } from "react";
 
 //Import Icons
 import FeatherIcon from "feather-icons-react";
@@ -18,6 +18,7 @@ import { withRouter } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { roleAceessAction } from "../../store/auth/login/actions";
+import { demoRolleAcess } from "./aaaa";
 // import { RoleAccessData } from "./APIDEMO";
 
 const SidebarContent = (props) => {
@@ -102,9 +103,18 @@ const SidebarContent = (props) => {
       }
     }
   }
-  const { RoleAccessData, } = useSelector((state) => ({
+  const  RoleAccessData=demoRolleAcess
+  const { RoleAccessData1, } = useSelector((state) => ({
     RoleAccessData: state.Login.RoleData,
   }));
+
+const [isActive, setisActive] = useState('')
+
+    // Use ComponentDidMount and ComponentDidUpdate method symultaniously
+    useEffect(() => {
+      setisActive("active")
+    }, [pathName])
+    
   return (
     <React.Fragment>
       <SimpleBar style={{ maxHeight: "100%" }} ref={ref}>
@@ -128,7 +138,7 @@ const SidebarContent = (props) => {
                     {item.ModuleData.map((i, j) => {
                       return (
                         <li>
-                          <Link to={i.ActualPagePath}>{props.t(i.Name)}</Link>
+                          <Link to={i.ActualPagePath} class={pathName===i.SelectIcon? "active":""}>{props.t(i.Name)}</Link>
                         </li>
                       )
                     })}
@@ -137,7 +147,8 @@ const SidebarContent = (props) => {
               )
             })}
             <li>
-              <Link to={"/RolesMaster"}>{props.t('Roles Master')}</Link>
+              {/* <link href={"/RolesMaster"}>{props.t('Roles Master')}</link> */}
+              <a href="/RolesList">Visit Pluralsight</a>
             </li>
             <li>
               <Link to={'/RolesList'}>{props.t('Roles List')}</Link>

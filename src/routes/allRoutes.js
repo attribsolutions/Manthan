@@ -31,6 +31,8 @@ import Error500 from "../pages/Utility/Error500";
 import ValidationTest from "../pages/Purchase/Orders/ValidationTest";
 import ItemsList from "../pages/Adminisrator/Items/ItemsList";
 import ItemsMaster from "../pages/Adminisrator/Items/ItemsMaster";
+import SearchBox from "../pages/Purchase/Orders/SearchBox/SearchBox";
+import SearchBoxSecond from "../pages/Purchase/Orders/SearchBox/SearchBoxSecond";
 
 const userRoutes = [
 
@@ -65,8 +67,13 @@ const userRoutes = [
 
   { path: "/validationTest", component: ValidationTest },
 
-  { path: "/itemsMaster", component: ItemsMaster },
-  { path:"/itemsList", component:ItemsList },
+  { path: "/itemMaster", component: ItemsMaster },
+  { path:"/itemList", component:ItemsList },
+
+
+
+  { path:"/search", component:SearchBox },
+  { path:"/search2", component:SearchBoxSecond },
 
   // this route should be at the end of all other routes
   { path: "/", exact: true, component: () => <Redirect to="/dashboard" /> },

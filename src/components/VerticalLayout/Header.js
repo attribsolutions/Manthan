@@ -40,6 +40,8 @@ import {
   changelayoutMode
 } from "../../store/actions"
 import { CustomSearchInput } from '../../store/Utilites/CustomSearchRedux/actions';
+import SearchBox from '../../pages/Purchase/Orders/SearchBox/SearchBox';
+import SearchBoxSecond from '../../pages/Purchase/Orders/SearchBox/SearchBoxSecond';
 
 const Header = props => {
   const dispatch = useDispatch();
@@ -111,13 +113,13 @@ const Header = props => {
               type="button" className="btn btn-sm px-2 font-size-16 header-item" id="vertical-menu-btn">
               <i className="fa fa-fw fa-bars"></i>
             </button>
-
-            <form className="app-search d-none d-lg-block">
+<SearchBoxSecond></SearchBoxSecond>
+            {/* <form className="app-search d-none d-lg-block">
               <div className="position-relative">
                 <input type="text" className="form-control" placeholder="Search..." onChange={(e) => {searchFunctionHandller(e)}} />
                 <button className="btn btn-primary" type="button"><i className="bx bx-search-alt align-middle"></i></button>
               </div>
-            </form>
+            </form> */}
           </div>
 
           <div className="d-flex">

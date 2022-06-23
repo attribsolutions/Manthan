@@ -173,6 +173,7 @@ export const saveHPagesAPI = (Data) => post(url.H_PAGES_API_URL, Data)
 export const deletHPagesUsingID_API = (id) => del(`${url.H_PAGES_API_URL}/${id}`)
 
 // M_Items
+export const Items_Group_Get_API=()=> get(url.ITEMS_GROUP_API)//get api
 export const Items_Master_Get_API=()=> get(url.Items_MASTER_API)//get api
 export const Items_Master_Post_API = (data) => post(url.Items_MASTER_API,data )// post api
 export const Items_Master_Delete_API=(id)=> del(`${url.Items_MASTER_API}/${id}` )// delete api

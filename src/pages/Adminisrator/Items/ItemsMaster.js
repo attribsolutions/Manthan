@@ -5,7 +5,8 @@ import { AvForm, AvGroup, AvField } from "availity-reactstrap-validation";
 import { useDispatch, useSelector } from "react-redux";
 
 import { AlertState } from "../../../store/Utilites/CostumeAlert/actions";
-import { editItemSuccess, postItemData, PostItemDataSuccess, updateItemID } from "../../../store/Administrator/ItemsRedux/action";
+import { editItemSuccess, getItemGroup_ForDropDown, postItemData, PostItemDataSuccess, updateItemID } from "../../../store/Administrator/ItemsRedux/action";
+import Select from "react-select";
 
 const ItemsMaster = (props) => {
 
@@ -18,21 +19,30 @@ const ItemsMaster = (props) => {
   //'IsEdit'--if true then update data otherwise it will perfrom save operation
   const [IsEdit, setIsEdit] = useState(false);
   const [PageMode, setPageMode] = useState(false);
+  const [itemGroupSelect, setItemGroupSelect] = useState("");
+
 
   //*** "isEditdata get all data from ModuleID for Binding  Form controls
   let editDataGatingFromList = props.state;
 
   //Access redux store Data /  'save_ModuleSuccess' action data
-  const { PostData, } = useSelector((state) => ({
+  const { PostData, ItemGroupList } = useSelector((state) => ({
     PostData: state.ItemMastersReducer.PostData,
+    ItemGroupList: state.ItemMastersReducer.ItemGroupList,
   }));
 
   // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
   useEffect(() => {
     document.getElementById("txtName").focus();
+    dispatch(getItemGroup_ForDropDown())
     if (!(editDataGatingFromList === undefined)) {
       setEditData(editDataGatingFromList);
+      setItemGroupSelect({
+        value: editDataGatingFromList,
+        label: editDataGatingFromList
+      });
       setIsEdit(true);
+      dispatch(editItemSuccess({ Status: false }))
       dispatch(editItemSuccess({ Status: false }))
       return
     }
@@ -78,23 +88,34 @@ const ItemsMaster = (props) => {
         Name: values.Name,
         GSTPercentage: values.GSTPercentage,
         MRP: values.MRP,
+        ItemGroup: itemGroupSelect.value,
         isActive: values.isActive,
+        Sequence: values.Sequence,
+        BaseunitID: values.BaseUnit,
+        Rate: values.Rate,
         CreatedBy: 1,
         CreatedOn: "2022-05-20T11:22:55.711483Z",
         UpdatedBy: 1,
         UpdatedOn: "2022-05-20T11:22:55.711483Z"
-      }),
+      })
     };
+    debugger
     if (IsEdit) {
       dispatch(updateItemID(requestOptions.body, EditData.ID));
-      console.log("requestOptions", requestOptions.body)
-      console.log("requestOptionsqqq", EditData.ID)
     }
     else {
       dispatch(postItemData(requestOptions.body));
-      console.log("requestOptions", requestOptions.body)
     }
   };
+
+  const ItemGroup_Options = ItemGroupList.map((Data) => ({
+    value: Data.ID,
+    label: Data.Name,
+  }));
+
+  function handllerItemGroupID(e) {
+    setItemGroupSelect(e)
+  }
 
   // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
   var IsEditMode_Css = ''
@@ -115,61 +136,130 @@ const ItemsMaster = (props) => {
                     }}
                     ref={formRef}
                   >
-                    <AvGroup>
-                      <Row className="mb-4">
-                        <Label className="col-sm-2 col-form-label">
-                          Name
-                        </Label>
-                        <Col sm={4}>
-                          <AvField name="Name" id="txtName"
-                            value={EditData.Name}
-                            type="text"
-                            placeholder="Please Enter Name"
-                            autoComplete='off'
-                            validate={{
+                    <Row className="mb-4">
+                      <Label className="col-sm-2 col-form-label">
+                        Name
+                      </Label>
+                      <Col sm={4}>
+                        <AvField name="Name" id="txtName"
+                          value={EditData.Name}
+                          type="text"
+                          placeholder="Please Enter Name"
+                          autoComplete='off'
+                          validate={{
                             required: { value: true, errorMessage: 'Please enter a Name...!' },
-                            }} />
-                        </Col>
-                      </Row>
-                    </AvGroup>
-                    <AvGroup>
-                      <Row className="mb-4">
-                        <Label className="col-sm-2 col-form-label">
-                          GSTPercentage
-                        </Label>
-                        <Col sm={4}>
-                          <AvField name="GSTPercentage" id="txtName"
-                            value={EditData.GSTPercentage}
-                            type="text"
-                            placeholder="Please Enter Discription"
-                            autoComplete='off'
-                            validate={{
-                              number: true,
-                              required: { value: true, errorMessage: 'Please enter a GSTPercentage...!' },
-                            }} />
-                        </Col>
-                      </Row>
-                    </AvGroup>
+                          }}
+                        />
+                      </Col>
+                    </Row>
 
-                    <AvGroup>
-                      <Row className="mb-4">
-                        <Label className="col-sm-2 col-form-label">
-                          MRP
-                        </Label>
-                        <Col sm={4}>
-                          <AvField name="MRP" id="txtName"
-                            value={EditData.MRP}
-                            type="text"
-                            placeholder="Please Enter Dashboard"
-                            autoComplete='off'
-                            validate={{
-                              number: true,
-                              required: { value: true, errorMessage: 'Please enter a MRP...!' },
+                    <Row className="mb-4">
+                      <Label className="col-sm-2 col-form-label">
+                        Item Group
+                      </Label>
+                      <Col sm={4}>
+                        <Select
+                          name='ItemGroup'
+                          id="txtItemGroup"
+                          value={
+                            itemGroupSelect
+                          }
+                          options={ItemGroup_Options}
+                          onChange={(e) => { handllerItemGroupID(e) }}
+                          autocomplete="off"
+                        />
+                      </Col>
+                    </Row>
 
-                            }} />
-                        </Col>
-                      </Row>
-                    </AvGroup>
+                    <Row className="mb-4">
+                      <Label className="col-sm-2 col-form-label">
+                        GSTPercentage
+                      </Label>
+                      <Col sm={4}>
+                        <AvField name="GSTPercentage"
+                          value={EditData.GSTPercentage}
+                          id="txtGST"
+                          type="text"
+                          placeholder="Please Enter GSTPercentage"
+                          autoComplete='off'
+                          validate={{
+                            number: true,
+                            required: { value: true, errorMessage: 'Please enter a GSTPercentage...!' },
+                          }} />
+                      </Col>
+                    </Row>
+
+                    <Row className="mb-4">
+                      <Label className="col-sm-2 col-form-label">
+                        Base Unit
+                      </Label>
+                      <Col sm={4}>
+                        <AvField name="BaseUnit"
+                          value={EditData.BaseunitID}
+                          id="txtBaseUnit"
+                          type="text"
+                          placeholder="Please Enter BaseUnit"
+                          autoComplete='off'
+                          validate={{
+                            number: true,
+                            required: { value: true, errorMessage: 'Please enter a BaseUnit...!' },
+                          }} />
+                      </Col>
+                    </Row>
+
+                    <Row className="mb-4">
+                      <Label className="col-sm-2 col-form-label">
+                        Rate
+                      </Label>
+                      <Col sm={4}>
+                        <AvField name="Rate"
+                          value={EditData.Rate}
+                          id="txtRate"
+                          type="text"
+                          placeholder="Please Enter Rate"
+                          autoComplete='off'
+                          validate={{
+                            number: true,
+                            required: { value: true, errorMessage: 'Please enter a Rate...!' },
+                          }} />
+                      </Col>
+                    </Row>
+
+                    <Row className="mb-4">
+                      <Label className="col-sm-2 col-form-label">
+                        MRP
+                      </Label>
+                      <Col sm={4}>
+                        <AvField name="MRP" id="txtMRP"
+                          value={EditData.MRP}
+                          type="text"
+                          placeholder="Please Enter MRP"
+                          autoComplete='off'
+                          validate={{
+                            number: true,
+                            required: { value: true, errorMessage: 'Please enter a MRP...!' },
+
+                          }} />
+                      </Col>
+                    </Row>
+
+                    <Row className="mb-4">
+                      <Label className="col-sm-2 col-form-label">
+                        Sequence
+                      </Label>
+                      <Col sm={4}>
+                        <AvField name="Sequence"
+                          value={EditData.Sequence}
+                          id="txtSequence"
+                          type="text"
+                          placeholder="Please Enter Sequence"
+                          autoComplete='off'
+                          validate={{
+                            number: true,
+                            required: { value: true, errorMessage: 'Please enter a Sequence...!' },
+                          }} />
+                      </Col>
+                    </Row>
                     <AvGroup>
                       <Row className="mb-4">
                         <Label className="col-sm-2 col-form-label">
@@ -220,3 +310,4 @@ const ItemsMaster = (props) => {
   );
 }
 export default ItemsMaster;
+
