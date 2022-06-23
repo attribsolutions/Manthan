@@ -72,19 +72,20 @@ function* Submit_Employee_GenratorFunction({ Data }) {
   yield put(SpinnerState(true))
   try {
     const response = yield call(post_EmployeeData, Data);
-    console.log("post response in saga file",response)
+    console.log("post response in saga file", response)
     yield put(SpinnerState(false))
     yield put(PostEmployeeSuccess(response));
   } catch (error) {
     yield put(SpinnerState(false))
-    yield put(AlertState({ Type: 4, 
+    yield put(AlertState({
+      Type: 4,
       Status: true, Message: "500 Error Message",
     }));
   }
 }
 
 /// get api
-  
+
 function* Get_EmployeeList_GenratorFunction() {
   yield put(SpinnerState(true))
   try {
@@ -93,7 +94,8 @@ function* Get_EmployeeList_GenratorFunction() {
     yield put(SpinnerState(false))
   } catch (error) {
     yield put(SpinnerState(false))
-    yield put(AlertState({ Type: 4, 
+    yield put(AlertState({
+      Type: 4,
       Status: true, Message: "500 Error Message",
     }));
   }
@@ -108,7 +110,8 @@ function* Delete_EmployeeID_GenratorFunction({ id }) {
     yield put(deleteEmployeeIDSuccess(response))
   } catch (error) {
     yield put(SpinnerState(false))
-    yield put(AlertState({ Type: 4, 
+    yield put(AlertState({
+      Type: 4,
       Status: true, Message: "500 Error Message",
     }));
   }
@@ -118,23 +121,30 @@ function* Edit_EmployeeID_GenratorFunction({ id }) {
   try {
     const response = yield call(edit_EmployeeAPI, id);
     yield put(editEmployeeSuccess(response));
+    console.log("response in saga", response)
+
   } catch (error) {
-    yield put(AlertState({ Type: 4, 
+    yield put(AlertState({
+      Type: 4,
       Status: true, Message: "500 Error Message",
     }));
   }
 }
 
 function* Update_EmployeeID_GenratorFunction({ updateData, ID }) {
+  console.log("updateData", updateData)
   try {
     yield put(SpinnerState(true))
     const response = yield call(update_EmployeeAPI, updateData, ID);
+    console.log("updateData response", response)
+
     yield put(SpinnerState(false))
     yield put(updateEmployeeIDSuccess(response))
   }
   catch (error) {
     yield put(SpinnerState(false))
-    yield put(AlertState({ Type: 4, 
+    yield put(AlertState({
+      Type: 4,
       Status: true, Message: "500 Error Message",
     }));
   }

@@ -31,7 +31,7 @@ const Employee_List = () => {
         deleteMessage: state.M_EmployeesReducer.deleteMessage,
         
     }));
-// console.log("Data",TableListData)
+console.log("editData",editData)
 
 //  This UseEffect => Featch Modules List data  First Rendering
 useEffect(()=>{
@@ -158,7 +158,7 @@ const pagesListColumns = [
                         type="button"
                         data-mdb-toggle="tooltip" data-mdb-placement="top" title="Edit Modules ID"
                         onClick={() => {
-                            EditPageHandler(TableListData.ID);
+                            EditPageHandler(TableListData.id);
                         }}
                         className="badge badge-soft-primary font-size-12"
                     >

@@ -24,7 +24,7 @@ const AddEmployee = (props) => {
   
   //*** "isEditdata get all data from ModuleID for Binding  Form controls
   var editDataGatingFromList = props.state;
- 
+ console.log("editDataGatingFromList",editDataGatingFromList)
   const [DesignationIDselect, setDesignationID] = useState("");
   const [EmployeeTypeselect, setEmployeeType] = useState("");
   const [Stateselect, setState] = useState("");
@@ -92,28 +92,29 @@ const AddEmployee = (props) => {
   // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
   useEffect(() => {
     document.getElementById("txtName").focus();
+  
     if (!(editDataGatingFromList === undefined)) {
-      setEditData(editDataGatingFromList);
+      setEditData(editDataGatingFromList[0]);
       setIsEdit(true);
       setDesignationID({
-        value: editDataGatingFromList.DesignationID.ID,
-        label: editDataGatingFromList.DesignationID.Name
+        value: editDataGatingFromList[0].Designations.id,
+        label: editDataGatingFromList[0].Designations.Name
       })
       setEmployeeType({
-        value: editDataGatingFromList.EmployeeType.ID,
-        label: editDataGatingFromList.EmployeeType.Name
+        value: editDataGatingFromList[0].EmployeeType.id,
+        label: editDataGatingFromList[0].EmployeeType.Name
       })
       setState({
-        value: editDataGatingFromList.State.ID,
-        label: editDataGatingFromList.State.Name
+        value: editDataGatingFromList[0].State.id,
+        label: editDataGatingFromList[0].State.Name
       })
       // setRegion({
-      //   value: editDataGatingFromList.Region.ID,
-      //   label: editDataGatingFromList.Region.Name
+      //   value: editDataGatingFromList[0].Region.ID,
+      //   label: editDataGatingFromList[0].Region.Name
       // })
       setCompany({
-        value: editDataGatingFromList.Companie.ID,
-        label: editDataGatingFromList.Companie.Name
+        value: editDataGatingFromList[0].Companies.ID,
+        label: editDataGatingFromList[0].Companies.Name
       })
      
       dispatch(editEmployeeSuccess({ Status: false }))
@@ -167,7 +168,7 @@ const AddEmployee = (props) => {
         DOB: DateInput,
         PAN: values.PAN,
         AadharNo: values.AadharNo,
-        WorkingHours: values.WorkingHours,
+        working_hours: values.working_hours,
         Designations: DesignationIDselect.value,
         EmployeeType: EmployeeTypeselect.value,
         JoiningDate: DateInput1,
@@ -180,13 +181,14 @@ const AddEmployee = (props) => {
 
     if (IsEdit) {
       dispatch(updateEmployeeID(requestOptions.body, EditData.ID));
+      console.log("requestOptions",requestOptions.body)
     }
     else {
       dispatch(postEmployee(requestOptions.body));
      
     }
   };
-
+debugger
 
  // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
   var IsEditModeSaSS=''
@@ -205,6 +207,7 @@ const AddEmployee = (props) => {
                     onValidSubmit={(e, v) => {
                       handleValidSubmit(e, v);
                     }}
+                    ref={formRef}
                   >
 
                     <AvGroup>
@@ -348,7 +351,7 @@ const AddEmployee = (props) => {
                           WorkingHours
                         </Label>
                         <Col sm={4}>
-                          <AvField name="WorkingHours" id="text" value={EditData.WorkingHours}
+                          <AvField name="working_hours" id="text" value={EditData.working_hours}
                             type="text"
                             placeholder="Please Enter WorkingHours"
                             // autoComplete='off' 
