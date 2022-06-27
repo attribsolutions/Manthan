@@ -34,7 +34,7 @@ const CompanyModule = (props) => {
   const [IsEdit, setIsEdit] = useState(false);
   const [CompanyGroupselect, setCompanyGroup] = useState("");
   const [PageMode, setPageMode] = useState(false);
-  
+
   //*** "isEditdata get all data from ModuleID for Binding  Form controls
   var editDataGatingFromList = props.state;
 
@@ -126,12 +126,12 @@ const CompanyModule = (props) => {
     if (IsEdit) {
       dispatch(updateCompanyID(requestOptions.body, EditData.ID));
     }
-    
+
     else {
       dispatch(PostCompanySubmit(requestOptions.body));
     }
   };
-  
+
   var IsEditModeSaSS = ''
   if (IsEdit === true) { IsEditModeSaSS = "-3.5%" };
 
@@ -157,7 +157,7 @@ const CompanyModule = (props) => {
                         </Label>
                         <Col sm={4}>
                           <AvField name="Name" value={EditData.Name} type="text" id='txtName'
-                            placeholder=" Please Enter Name " 
+                            placeholder=" Please Enter Name "
                             autoComplete="off"
                             validate={{
                               required: { value: true, errorMessage: 'Please Enter a Name' },
@@ -172,7 +172,7 @@ const CompanyModule = (props) => {
                         </Label>
                         <Col sm={4}>
                           <AvField name="Address" value={EditData.Address} type="text"
-                           autoComplete="off"
+                            autoComplete="off"
                             placeholder=" Please Enter Address "
                             validate={{
                               required: { value: true, errorMessage: 'Please Enter a  Address' },
@@ -187,11 +187,14 @@ const CompanyModule = (props) => {
                         </Label>
                         <Col sm={4}>
                           <AvField name="GSTIN"
-                           autoComplete="off"
+                            autoComplete="off"
                             value={EditData.GSTIN} type="text"
                             placeholder="GSTIN "
                             validate={{
                               required: { value: true, errorMessage: 'Please Enter a  GSTIN' },
+                              tel: {
+                                pattern: /[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}/
+                              }
                             }}
                           />
                         </Col>
@@ -204,11 +207,11 @@ const CompanyModule = (props) => {
                         </Label>
                         <Col sm={4}>
                           <AvField name="PhoneNo" type="tel"
-                           autoComplete="off"
+                            autoComplete="off"
                             value={EditData.PhoneNo}
                             placeholder="+91 "
                             validate={{
-                              required: { value: true, errorMessage: 'Please Enter a  Phone NO' },
+                              required: { value: true, errorMessage: 'Please Enter a  Phone N' },
                               tel: {
                                 pattern: /^(\+\d{1,3}[- ]?)?\d{10}$/
                               }
@@ -261,6 +264,8 @@ const CompanyModule = (props) => {
                         />
                       </Col>
                     </Row>
+
+
                     <Row className="justify-content-end">
                       <Col sm={10}></Col>
                       <Col sm={2}>
@@ -285,6 +290,7 @@ const CompanyModule = (props) => {
                       </Col>{" "}
                     </Row>
                   </AvForm>
+                  <br></br><br></br><br></br> <br></br> <br></br>
                 </CardBody>
               </Card>
             </Col>

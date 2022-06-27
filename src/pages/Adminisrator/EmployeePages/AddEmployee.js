@@ -219,10 +219,10 @@ debugger
                           <AvField name="Name" id="txtName" value={EditData.Name}
                             type="text"
                             placeholder="Please Enter Name"
-                            // autoComplete='off'
-                            // validate={{
-                            //   required: { value: true, errorMessage: 'Please enter your Name...!' },
-                            // }}
+                            autoComplete='off'
+                            validate={{
+                              required: { value: true, errorMessage: 'Please enter your Name...!' },
+                            }}
                              />
                         </Col>
                       </Row>
@@ -235,9 +235,9 @@ debugger
                         <Col sm={4}>
                           <AvField name="Address" value={EditData.Address} type="text"
                             placeholder=" Please Enter Address "
-                            // validate={{
-                            //   required: { value: true, errorMessage: 'Please Enter your Address' },
-                            // }}
+                            validate={{
+                              required: { value: true, errorMessage: 'Please Enter your Address' },
+                            }}
                           />
                         </Col>
                       </Row>
@@ -251,11 +251,11 @@ debugger
                           <AvField name="Mobile" type="tel"
                             value={EditData.Mobile}
                             placeholder="+91 "
-                            // validate={{
-                            //   required: { value: true, errorMessage: 'Please Enter your Mobile NO' },
-                            //   tel: {
-                            //     pattern: /^(\+\d{1,3}[- ]?)?\d{10}$/
-                            //   } }}
+                            validate={{
+                              required: { value: true, errorMessage: 'Please Enter your Mobile NO' },
+                              tel: {
+                                pattern: /^(\+\d{1,3}[- ]?)?\d{10}$/
+                              } }}
 
                           />
                         </Col>
@@ -271,13 +271,13 @@ debugger
                           <AvField name="email" type="email"
                             value={EditData.email}
                             placeholder="Enter your EmailID "
-                            // validate={{
-                            //   required: { value: true, errorMessage: 'Please Enter your EmailID' },
-                            //   tel: {
-                            //     pattern: /\S+@\S+\.\S+/
-                            //   }
-                            // }
-                            // }
+                            validate={{
+                              required: { value: true, errorMessage: 'Please Enter your EmailID' },
+                              tel: {
+                                pattern: /\S+@\S+\.\S+/
+                              }
+                            }
+                            }
 
                           />
                         </Col>
@@ -311,13 +311,13 @@ debugger
                           <AvField name="PAN" type="text"
                             value={EditData.PAN}
                             placeholder="Enter your PAN No. "
-                            // validate={{
-                            //   required: { value: true, errorMessage: 'Please Enter your PAN No.' },
-                            //   tel: {
-                            //     pattern: /[A-Z]{5}[0-9]{4}[A-Z]{1}$/
-                            //   }
-                            // }
-                            // }
+                            validate={{
+                              required: { value: true, errorMessage: 'Please Enter your PAN No.' },
+                              tel: {
+                                pattern: /[A-Z]{5}[0-9]{4}[A-Z]{1}$/
+                              }
+                            }
+                            }
 
                           />
                         </Col>
@@ -333,13 +333,13 @@ debugger
                           <AvField name="AadharNo" type="text"
                             value={EditData.AadharNo}
                             placeholder="Enter your AadharNo. "
-                            // validate={{
-                            //   required: { value: true, errorMessage: 'Please Enter your AadharNo' },
-                            //   tel: {
-                            //     pattern: /^[2-9]{1}[0-9]{3}\s[0-9]{4}\s[0-9]{4}$/
-                            //   }
-                            // }
-                            // }
+                            validate={{
+                              required: { value: true, errorMessage: 'Please Enter your AadharNo' },
+                              tel: {
+                                pattern: /^[2-9]{1}[0-9]{3}\s[0-9]{4}\s[0-9]{4}$/
+                              }
+                            }
+                            }
                           />
                         </Col>
                       </Row>
@@ -354,10 +354,10 @@ debugger
                           <AvField name="working_hours" id="text" value={EditData.working_hours}
                             type="text"
                             placeholder="Please Enter WorkingHours"
-                            // autoComplete='off' 
-                            // validate={{
-                            //   required: { value: true, errorMessage: 'Please enter your WorkingHours ...!' },
-                            // }} 
+                            autoComplete='off' 
+                            validate={{
+                              required: { value: true, errorMessage: 'Please enter your WorkingHours ...!' },
+                            }} 
                             />
                         </Col>
                       </Row>

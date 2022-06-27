@@ -329,7 +329,10 @@ const HPageMaster = (props) => {
                                                         autoComplete='off'
                                                         placeholder=" Please Enter DisplayIndex" validate={{
                                                             number: true,
-                                                            required: { value: true, errorMessage: 'Please enter a Display Index ' },
+                                                            required: { value: true, errorMessage: 'Please enter a Display Index only 2 digit ' },
+                                                            tel: {
+                                                                pattern: /^\d{1,2}$/
+                                                              }
                                                         }} />
                                                 </Col>
                                             </Row>
