@@ -56,7 +56,7 @@ const RoleMaster = (props) => {
                 Type: 1,
                 Status: true,
                 Message: AddUserMessage.Message,
-                RedirectPath: '/RoleList',
+                RedirectPath: '/rolesList',
                 AfterResponseAction: false
             }))
         }
