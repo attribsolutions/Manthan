@@ -18,9 +18,9 @@ import{GET_EMPLOYEE,
     type: GET_EMPLOYEE,
    
   });
-  export const getEmployeeSuccess = (employee) => ({
+  export const getEmployeeSuccess = (data) => ({
     type: GET_EMPLOYEE_SUCCESS,
-    payload:employee,
+    payload:data,
   });
   
   /// M_Roles

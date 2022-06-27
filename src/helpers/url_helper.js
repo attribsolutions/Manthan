@@ -25,7 +25,7 @@ export const POST_JWT_LOGIN = "/Login"
 //PAGE Master
 export const GET_DEFAULT_MODULE="/HModules"
 export const POST_MODULE_ID="/HModules"
-export const SHOW_PAGESLIST_ON_PAGE_TYPE_FOR_DROPDOWN="/showPagesListOnPageType/2"
+export const SHOW_PAGESLIST_ON_PAGE_TYPE_FOR_DROPDOWN="/showPagesListOnPageType"
 export const SHOW_PAGESLIST_ON_PAGEACCESS_FOR_DROPDOWN="/PageAccess"
 
 // Moduls Submit  Method URL
