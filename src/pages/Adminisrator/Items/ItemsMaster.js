@@ -64,7 +64,7 @@ const ItemsMaster = (props) => {
           Type: 1,
           Status: true,
           Message: PostData.Message,
-          RedirectPath: '/itemsList',
+          RedirectPath: '/itemList',
           AfterResponseAction: false
         }))
       }
