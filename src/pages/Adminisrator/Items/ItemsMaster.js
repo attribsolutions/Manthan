@@ -36,10 +36,10 @@ const ItemsMaster = (props) => {
     document.getElementById("txtName").focus();
     dispatch(getItemGroup_ForDropDown())
     if (!(editDataGatingFromList === undefined)) {
-      setEditData(editDataGatingFromList);
+      setEditData(editDataGatingFromList[0]);
       setItemGroupSelect({
-        value: editDataGatingFromList,
-        label: editDataGatingFromList
+        value: editDataGatingFromList[0].ItemGroupID,
+        label: editDataGatingFromList[0].ItemGroupName
       });
       setIsEdit(true);
       dispatch(editItemSuccess({ Status: false }))
@@ -99,7 +99,7 @@ const ItemsMaster = (props) => {
         UpdatedOn: "2022-05-20T11:22:55.711483Z"
       })
     };
-    debugger
+
     if (IsEdit) {
       dispatch(updateItemID(requestOptions.body, EditData.ID));
     }

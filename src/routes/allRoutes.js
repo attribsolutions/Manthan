@@ -28,7 +28,6 @@ import RoleMaster from "../pages/Adminisrator/RoleMasterPages/RoleMaster";
 import RoleList from "../pages/Adminisrator/RoleMasterPages/RoleList"
 import Error404 from "../pages/Utility/Error404";
 import Error500 from "../pages/Utility/Error500";
-import ValidationTest from "../pages/Purchase/Orders/ValidationTest";
 import ItemsList from "../pages/Adminisrator/Items/ItemsList";
 import ItemsMaster from "../pages/Adminisrator/Items/ItemsMaster";
 import SearchBox from "../pages/Purchase/Orders/SearchBox/SearchBox";
@@ -65,8 +64,6 @@ const userRoutes = [
 
   { path: "/roleMaster", component: RoleMaster },
   { path: "/roleList", component: RoleList },
-
-  { path: "/validationTest", component: ValidationTest },
 
   { path: "/itemMaster", component: ItemsMaster },
   { path:"/itemList", component:ItemsList },

@@ -1,18 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { useDispatch, connect, useSelector } from "react-redux";
-import { Button, CardSubtitle, CardTitle, Input, Label, Modal } from "reactstrap";
+import { useDispatch,  useSelector } from "react-redux";
+import { Button,  Input,  Modal } from "reactstrap";
 import Select from "react-select";
 import { useHistory } from "react-router-dom";
 import {
   Row,
   Col,
-  Card,
-  CardBody,
-  cardTitle,
-  CardHeader,
-  Container,
 } from "reactstrap";
-import { Table, Thead, Tbody, Tr, Th, Td } from "react-super-responsive-table";
 import "react-super-responsive-table/dist/SuperResponsiveTableStyle.css";
 import { deleteOrderID_From_OrderPage, deleteOrderID_From_OrderPageSuccess, editOrder, editOrder_forOrderPage, getOrderList, updateOrderID_From_OrderPageSuccess } from "../../../store/Purchase/OrderPageRedux/actions";
 import { MetaTags } from "react-meta-tags";

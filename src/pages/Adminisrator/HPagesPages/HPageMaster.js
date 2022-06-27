@@ -182,7 +182,7 @@ const HPageMaster = (props) => {
                 })),
             }),
         };
-        
+
         if (IsEdit) {
             dispatch(updateHPages(requestOptions.body, EditData.ID));
         }
@@ -201,8 +201,8 @@ const HPageMaster = (props) => {
         label: d.Name,
     }));
 
-       // PageList Dropdown
-       const optionPageList = PageList.map((d) => ({
+    // PageList Dropdown
+    const optionPageList = PageList.map((d) => ({
         value: d.ID,
         label: d.Name,
     }));
@@ -224,7 +224,7 @@ const HPageMaster = (props) => {
         setPageType(e)
     }
 
- 
+
     const PageList_SelectOnChangeHandller = (e) => {
         setPageList(e);
     }
@@ -262,9 +262,13 @@ const HPageMaster = (props) => {
         )
     }
 
+    // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
+    var IsEditMode_Css = ''
+    if (IsEdit === true || PageMode == true) { IsEditMode_Css = "-3.5%" };
+
     return (
         <React.Fragment>
-            <div className="page-content">
+            <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
                 <MetaTags>
                     <title>Page Master| FoodERP-React FrontEnd</title>
                 </MetaTags>
@@ -301,7 +305,7 @@ const HPageMaster = (props) => {
                                                 </Label>
                                                 <Col sm={4}>
                                                     <AvField name="Discription" value={EditData.Description} type="text"
-                                                    defaultValue=''
+                                                        defaultValue=''
                                                         placeholder=" Please Enter Discription "
                                                         autoComplete='off'
                                                     />
@@ -327,14 +331,14 @@ const HPageMaster = (props) => {
                                                     DisplayIndex
                                                 </Label>
                                                 <Col sm={4}>
-                                                    <AvField name="DisplayIndex" value={EditData.DisplayIndex} type="text"
+                                                    <AvField name="DisplayIndex" value={EditData.DisplayIndex} type="number"
                                                         autoComplete='off'
                                                         placeholder=" Please Enter DisplayIndex" validate={{
                                                             number: true,
                                                             required: { value: true, errorMessage: 'Please enter a Display Index only 2 digit ' },
                                                             tel: {
                                                                 pattern: /^\d{1,2}$/
-                                                              }
+                                                            }
                                                         }} />
                                                 </Col>
                                             </Row>
@@ -411,7 +415,7 @@ const HPageMaster = (props) => {
 
                                         <Row className="mb-4">
                                             <Label className="col-sm-3 col-form-label">
-                                                Show Menu
+                                                Is Show on Menu
                                             </Label>
                                             <Col sm={4}>
                                                 {/* <input
@@ -439,7 +443,7 @@ const HPageMaster = (props) => {
                                                 </Col>
                                             </Row>
                                         </AvGroup>
-                                        
+
                                         <Row className="mb-4">
                                             <Label className="col-sm-3 col-form-label">
                                                 PageAccess
@@ -514,14 +518,14 @@ const HPageMaster = (props) => {
                                                     {
                                                         IsEdit ? (<button
                                                             type="submit"
-                                                            data-mdb-toggle="tooltip" data-mdb-placement="top" title="Update Modules ID"
+                                                            data-mdb-toggle="tooltip" data-mdb-placement="top" title="Update Page"
                                                             className="btn btn-success w-md"
                                                         >
                                                             <i class="fas fa-edit me-2"></i>Update
                                                         </button>) : (
                                                             <button
                                                                 type="submit"
-                                                                data-mdb-toggle="tooltip" data-mdb-placement="top" title="Save Modules ID"
+                                                                data-mdb-toggle="tooltip" data-mdb-placement="top" title="Save Page"
                                                                 className="btn btn-success w-md"
                                                             > <i className="fas fa-save me-2"></i> Save
                                                             </button>
