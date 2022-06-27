@@ -295,10 +295,11 @@ const HPageMaster = (props) => {
                                         <AvGroup>
                                             <Row className="mb-4">
                                                 <Label className="col-sm-3 col-form-label">
-                                                    Discription
+                                                    Description
                                                 </Label>
                                                 <Col sm={4}>
                                                     <AvField name="Discription" value={EditData.Description} type="text"
+                                                    defaultValue=''
                                                         placeholder=" Please Enter Discription "
                                                         autoComplete='off'
                                                     />

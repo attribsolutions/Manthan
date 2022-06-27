@@ -132,7 +132,7 @@ const people =
   //   ModuleData: [
       {
         ID: 2,
-        Name: "Module List name",
+        Name: "module list name",
         DisplayIndex: 2,
         Icon: "Module List",
         ActualPagePath: "ModulesList"
@@ -153,35 +153,35 @@ const people =
       },
       {
         ID: 5,
-        Name: "Company List name",
+        Name: "company list name",
         DisplayIndex: 3,
         Icon: "CompanyList",
         ActualPagePath: "companyList"
       },
       {
         ID: 6,
-        Name: "Pages Master name",
+        Name: "pages master name",
         DisplayIndex: 5,
         Icon: "pagesMaster",
         ActualPagePath: "pagesMaster"
       },
       {
         ID: 7,
-        Name: "Pages List name",
+        Name: "pages list name",
         DisplayIndex: 3,
         Icon: "Pages List",
         ActualPagePath: "PagesList"
       },
       {
         ID: 8,
-        Name: "Users List name",
+        Name: "users list name",
         DisplayIndex: 8,
         Icon: "Users List",
         ActualPagePath: "usersList"
       },
       {
         ID: 9,
-        Name: "Users Master",
+        Name: "users master",
         DisplayIndex: 7,
         Icon: "Users Master",
         ActualPagePath: "usersMaster"

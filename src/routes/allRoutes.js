@@ -33,6 +33,7 @@ import ItemsList from "../pages/Adminisrator/Items/ItemsList";
 import ItemsMaster from "../pages/Adminisrator/Items/ItemsMaster";
 import SearchBox from "../pages/Purchase/Orders/SearchBox/SearchBox";
 import SearchBoxSecond from "../pages/Purchase/Orders/SearchBox/SearchBoxSecond";
+import SerachBox3 from "../pages/Purchase/Orders/SearchBox/SerachBox3";
 
 const userRoutes = [
 
@@ -72,8 +73,9 @@ const userRoutes = [
 
 
 
-  { path:"/search", component:SearchBox },
-  { path:"/search2", component:SearchBoxSecond },
+  { path:"/SearchBox1", component:SearchBox },
+  { path:"/SearchBox2", component:SearchBoxSecond },
+  { path:"/SearchBox3", component:SerachBox3 },
 
   // this route should be at the end of all other routes
   { path: "/", exact: true, component: () => <Redirect to="/dashboard" /> },

@@ -3,7 +3,7 @@
   }
   
   body {
-    font: 16px Arial;  
+    /* font: 16px Arial;   */
   }
   
   /*the container must be positioned relative:*/
@@ -20,7 +20,7 @@
   }
   
   input[type=text] {
-    background-color: #f1f1f1;
+    /* background-color: #250909; */
     width: 100%;
   }
   

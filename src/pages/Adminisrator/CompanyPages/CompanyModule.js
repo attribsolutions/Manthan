@@ -74,7 +74,7 @@ const CompanyModule = (props) => {
           Type: 1,
           Status: true,
           Message: SubmitSuccesss.Message,
-          RedirectPath: '/companysList',
+          RedirectPath: '/companyList',
           AfterResponseAction: false
         }))
       }
@@ -158,7 +158,7 @@ const CompanyModule = (props) => {
                         <Col sm={4}>
                           <AvField name="Name" value={EditData.Name} type="text" id='txtName'
                             placeholder=" Please Enter Name " 
-                            // autoComplete="off"
+                            autoComplete="off"
                             validate={{
                               required: { value: true, errorMessage: 'Please Enter a Name' },
                             }}
@@ -172,7 +172,7 @@ const CompanyModule = (props) => {
                         </Label>
                         <Col sm={4}>
                           <AvField name="Address" value={EditData.Address} type="text"
-                          //  autoComplete="off"
+                           autoComplete="off"
                             placeholder=" Please Enter Address "
                             validate={{
                               required: { value: true, errorMessage: 'Please Enter a  Address' },
@@ -187,7 +187,7 @@ const CompanyModule = (props) => {
                         </Label>
                         <Col sm={4}>
                           <AvField name="GSTIN"
-                          //  autoComplete="off"
+                           autoComplete="off"
                             value={EditData.GSTIN} type="text"
                             placeholder="GSTIN "
                             validate={{
@@ -204,7 +204,7 @@ const CompanyModule = (props) => {
                         </Label>
                         <Col sm={4}>
                           <AvField name="PhoneNo" type="tel"
-                          //  autoComplete="off"
+                           autoComplete="off"
                             value={EditData.PhoneNo}
                             placeholder="+91 "
                             validate={{
@@ -225,7 +225,7 @@ const CompanyModule = (props) => {
                         </Label>
                         <Col sm={4}>
                           <AvField name="CompanyAbbreviation" value={EditData.CompanyAbbreviation} type="text"
-                            // autoComplete="off"
+                            autoComplete="off"
                             placeholder=" Please Enter Company Abbreviation"
                             validate={{
                               required: { value: true, errorMessage: 'Please Enter a Company Abbreviation' },
@@ -241,7 +241,7 @@ const CompanyModule = (props) => {
                         </Label>
                         <Col sm={4}>
                           <AvField name="EmailID" value={EditData.EmailID} type="email"
-                            // autoComplete="off"
+                            autoComplete="off"
                             placeholder="example@example.com" validate={{
                               required: { value: true, errorMessage: 'Please Enter a Email ID' },
                             }} />

@@ -300,7 +300,7 @@ const OrderPage = (props) => {
                       return (
                         <Tr>
                           <Td>
-                            {item.ItemGroup.Name === itemgroups ? (
+                            {item.ItemGroupName === itemgroups ? (
                               <>
                                 <label
                                   id={"lblItemName" + key}
@@ -325,8 +325,8 @@ const OrderPage = (props) => {
                             ) : (
                               <React.Fragment>
                                 <label className="btn btn-secondary btn-sm waves-effect waves-light">
-                                  {item.ItemGroup.Name}
-                                  {(itemgroups = item.ItemGroup.Name)}
+                                  {/* {item.ItemGroupName} */}
+                                  {(itemgroups =item.ItemGroupName)}
                                 </label>
                                 <br></br>
                                 <label

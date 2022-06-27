@@ -197,7 +197,7 @@ const CompanyList = () => {
                                         IsButtonVissible={true}
                                         SearchProps={toolkitProps.searchProps}
                                         breadcrumbCount={companyList.length}
-                                        RedirctPath={"/companysMaster"}
+                                        RedirctPath={"/companyMaster"}
                                     />
                                     <Row>
                                         <Col xl="12">
