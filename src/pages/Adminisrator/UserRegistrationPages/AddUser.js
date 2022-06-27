@@ -50,16 +50,18 @@ const AddUser = (props) => {
   /// Employee DropDown
   useEffect(() => {
     dispatch(getEmployee());
+    dispatch(getRoles());
+    
   }, [dispatch]);
 
-  // const { employee } = useSelector((state) => ({
-  //   employee: state.User_Registration_Reducer.employee
-  // }));
+  const { employee } = useSelector((state) => ({
+    employee: state.User_Registration_Reducer.employee
+  }));
 
-  // const EmployeeValues = employee.map((Data) => ({
-  //   value: Data.ID,
-  //   label: Data.Name
-  // }));
+  const EmployeeValues = employee.map((Data) => ({
+    value: Data.ID,
+    label: Data.Name
+  }));
 
   function handllerEmployeeID(e) {
     setEmployeeSelect(e)
@@ -72,8 +74,7 @@ const AddUser = (props) => {
   const { Roles } = useSelector((state) => ({
     Roles: state.User_Registration_Reducer.Roles
   }));
-  console.log("Roles",Roles)
-  console.log("Roles", Roles)
+
   const RolesValues = Roles.map((Data) => ({
     value: Data.ID,
     label: Data.Name
@@ -119,7 +120,7 @@ const AddUser = (props) => {
         })),
       }),
     };
-
+    console.log("post data",requestOptions)
     if (RoleData.length <= 0) {
       dispatch(AlertState({
         Type: 4, Status: true,
@@ -134,6 +135,7 @@ const AddUser = (props) => {
     }
     else {
       dispatch(addUser(requestOptions.body));
+      console.log("post data",requestOptions.body)
     }
   };
 
@@ -176,7 +178,7 @@ const AddUser = (props) => {
                           EmailID
                         </Label>
                         <Col sm={4}>
-                          <AvField name="Email" type="email"
+                          <AvField name="email" type="email"
                             value={EditData.email}
                             placeholder="Enter your EmailID "
                             // autoComplete='off'
@@ -200,7 +202,7 @@ const AddUser = (props) => {
                       <Col sm={4}>
                         <Select
                           value={EmployeeSelect}
-                          options={""}
+                          options={EmployeeValues}
                           onChange={(e) => { handllerEmployeeID(e) }}
                         />
                       </Col>

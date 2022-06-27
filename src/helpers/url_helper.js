@@ -45,7 +45,7 @@ export const H_SUB_MODULES_FROM_HPAGES="/GetSubModuleFromModuleID"/// post api
 
 export const H_PAGES_API_URL="/PagesMaster"/// post api
 
-export const ROLE_API_URL="/M_Roles"///get api
+export const ROLE_API_URL="/Roles"///get api
 
 /// User Registration
 
