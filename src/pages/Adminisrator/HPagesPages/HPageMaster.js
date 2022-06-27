@@ -41,7 +41,7 @@ const HPageMaster = (props) => {
     const [EditData, setEditData] = useState([]);
     const [selectModule, setSelectModule] = useState('');
     const [PageMode, setPageMode] = useState(false);
-    const [isShowPageChecked, setisShowPageChecked] = useState(false);
+    const [isShowPageChecked, setisShowPageChecked] = useState();
     const [PageAccessData, setPageAccessData] = useState([]);
     const [selectPageType, setPageType] = useState('');
     const [selectPageList, setPageList] = useState('');
@@ -201,6 +201,13 @@ const HPageMaster = (props) => {
         label: d.Name,
     }));
 
+       // PageList Dropdown
+       const optionPageList = PageList.map((d) => ({
+        value: d.ID,
+        label: d.Name,
+    }));
+
+
     //  for PageType deropDown
     const PageType_SelectOnChangeHandller = (e) => {
         let showCheckBox = document.getElementById("abc")
@@ -217,12 +224,7 @@ const HPageMaster = (props) => {
         setPageType(e)
     }
 
-    // PageList Dropdown
-    const optionPageList = PageList.map((d) => ({
-        value: d.ID,
-        label: d.Name,
-    }));
-
+ 
     const PageList_SelectOnChangeHandller = (e) => {
         setPageList(e);
     }
@@ -419,7 +421,8 @@ const HPageMaster = (props) => {
                                                 <AvInput
                                                     type="checkbox" id="abc"
                                                     name="isShowOnMenu"
-                                                    checked={EditData.isShowOnMenu}
+                                                    checked={isShowPageChecked}
+                                                    disabled=''
                                                 ></AvInput>
                                             </Col>
                                         </Row>

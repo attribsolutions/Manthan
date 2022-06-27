@@ -63,8 +63,8 @@ const userRoutes = [
   { path: "/employeesMaster", component: AddEmployee },
   { path: "/employeesList", component: Employee_List },
 
-  { path: "/rolesMaster", component: RoleMaster },
-  { path: "/rolesList", component: RoleList },
+  { path: "/roleMaster", component: RoleMaster },
+  { path: "/roleList", component: RoleList },
 
   { path: "/validationTest", component: ValidationTest },
 
