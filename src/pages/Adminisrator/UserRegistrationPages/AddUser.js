@@ -23,7 +23,6 @@ const AddUser = (props) => {
   const [RoleDropDown, setRoleDropDown] = useState("");
 
   var isEditData = props.state;
-  console.log("UserListAPI", isEditData)
 
   useEffect(() => {
     document.getElementById("txtName").focus();
@@ -73,6 +72,7 @@ const AddUser = (props) => {
   const { Roles } = useSelector((state) => ({
     Roles: state.User_Registration_Reducer.Roles
   }));
+  console.log("Roles",Roles)
   console.log("Roles", Roles)
   const RolesValues = Roles.map((Data) => ({
     value: Data.ID,
@@ -249,14 +249,7 @@ const AddUser = (props) => {
                         {" "}
                         <Select
                           value={RoleDropDown}
-                          options={[{
-                            value: 1,
-                            label: "AddPage",
-                          },
-                          {
-                            value: 2,
-                            label: "ListPage",
-                          }]}
+                          options={RolesValues}
                           onChange={(e) => { setRoleDropDown(e) }}
                           classNamePrefix="select2-selection"
                           required=""
