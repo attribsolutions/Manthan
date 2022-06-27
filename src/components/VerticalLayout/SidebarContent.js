@@ -103,8 +103,8 @@ const SidebarContent = (props) => {
       }
     }
   }
-  const  RoleAccessData=demoRolleAcess
-  const { RoleAccessData1, } = useSelector((state) => ({
+  // const  RoleAccessData=demoRolleAcess
+  const { RoleAccessData, } = useSelector((state) => ({
     RoleAccessData: state.Login.RoleData,
   }));
 
@@ -136,6 +136,7 @@ const [isActive, setisActive] = useState('')
                   </Link>
                   <ul className="sub-menu">
                     {item.ModuleData.map((i, j) => {
+                      console.log(item)
                       return (
                         <li>
                           <Link to={i.ActualPagePath} class={pathName===i.SelectIcon? "active":""}>{props.t(i.Name)}</Link>

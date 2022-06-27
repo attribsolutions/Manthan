@@ -154,12 +154,12 @@ const Modules = (props) => {
                                                 <Col sm={4}>
                                                     <AvField name="DisplayIndex" autoComplete='off'
                                                         placeholder="Please Enter DisplayIndex"
-                                                        value={EditData.DisplayIndex} type="text"
+                                                        value={EditData.DisplayIndex} type="number"
                                                         validate={{
                                                             number: true,
                                                             required: { value: true, errorMessage: 'Display Index is Required' },
                                                             tel: {
-                                                                pattern: /^\d{1,2}$/,
+                                                                pattern: /^\d{1,4}$/,
                                                                 errorMessage: 'Display Index is Required (Only Two Digit) '
                                                             }
                                                         }}
