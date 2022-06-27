@@ -91,7 +91,7 @@ const ModulesList = () => {
     const deleteHandeler = (id, name) => {
         dispatch(AlertState({
             Type: 5, Status: true,
-            Message: `Are you sure you want to delete this item : "${name}"`,
+            Message: `Are you sure you want to delete this Module : "${name}"`,
             RedirectPath: false,
             PermissionAction: deleteModuleID,
             ID: id
