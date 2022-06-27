@@ -146,8 +146,8 @@ const [isActive, setisActive] = useState('')
                 </li>
               )
             })}
-            <li>
-              {/* <link href={"/RolesMaster"}>{props.t('Roles Master')}</link> */}
+            {/* <li>
+              <link href={"/RolesMaster"}>{props.t('Roles Master')}</link>
               <a href="/RolesList">Visit Pluralsight</a>
             </li>
             <li>
@@ -155,7 +155,7 @@ const [isActive, setisActive] = useState('')
             </li>
             <li>
               <Link to={'/validationTest'}>{props.t('validationTest')}</Link>
-            </li>
+            </li> */}
           </ul>
         </div>
       </SimpleBar>

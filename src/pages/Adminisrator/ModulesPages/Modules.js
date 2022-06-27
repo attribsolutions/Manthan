@@ -48,7 +48,7 @@ const Modules = (props) => {
     useEffect(() => {
         document.getElementById("txtName").focus();
         if (!(editDataGatingFromList === undefined)) {
-            setEditData(editDataGatingFromList[0]);
+            setEditData(editDataGatingFromList);
             setIsEdit(true);
             dispatch(editModuleIDSuccess({ Status: false }))
             return
@@ -77,7 +77,7 @@ const Modules = (props) => {
                     Status: true,
                     Message: APIResponse.Message,
                     RedirectPath: '/modulesList',
-                   
+
                 }))
             }
         } else if (APIResponse.Status === true) {
@@ -114,7 +114,7 @@ const Modules = (props) => {
 
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
     var IsEditMode_Css = ''
-    if (IsEdit === true||PageMode==true) { IsEditMode_Css = "-3.5%" };
+    if (IsEdit === true || PageMode == true) { IsEditMode_Css = "-3.5%" };
 
     return (
         <React.Fragment>
@@ -157,8 +157,14 @@ const Modules = (props) => {
                                                         value={EditData.DisplayIndex} type="text"
                                                         validate={{
                                                             number: true,
-                                                            required: { value: true, errorMessage: 'Please enter a Display Index ' },
-                                                        }} />
+                                                            required: { value: true, errorMessage: 'Display Index is Required' },
+                                                            tel: {
+                                                                pattern: /^\d{1,2}$/,
+                                                                errorMessage: 'Display Index is Required (Only Two Digit) '
+                                                            }
+                                                        }}
+                                                    />
+
                                                 </Col>
                                             </Row>
                                         </AvGroup>
