@@ -123,8 +123,8 @@ const PartyList = () => {
             sort: true,
         },
         {
-            text: "CompanyName",
-            dataField: "CompanyName",
+            text: "Address",
+            dataField: "Address",
             sort: true,
         },
         {
