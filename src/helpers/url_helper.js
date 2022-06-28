@@ -67,3 +67,7 @@ export const Items_MASTER_API="/M_Items"
 
 // M_Items_group Api
 export const ITEMS_GROUP_API="/ItemGroup"
+
+// Party Master 
+export const PARTY_MASTER_API="/M_Parties"
+

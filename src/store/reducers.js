@@ -25,6 +25,7 @@ import User_Registration_Reducer from "./Administrator/UserRegistrationRedux/red
 import M_EmployeesReducer from "./Administrator/M_EmployeeRedux/reducer"
 import RoleMaster_Reducer from "./Administrator/RoleMasterRedux/reducer"
 import ItemMastersReducer from "./Administrator/ItemsRedux/reducer"
+import PartyMasterReducer from "./Administrator/PartyRedux/reducer"
 const rootReducer = combineReducers({
   Layout,
   Login,
@@ -46,6 +47,7 @@ const rootReducer = combineReducers({
   OrderPageReducer,
   RoleMaster_Reducer,
   ItemMastersReducer,
+  PartyMasterReducer,
 })
 
 export default rootReducer

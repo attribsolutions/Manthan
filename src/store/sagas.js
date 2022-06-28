@@ -23,7 +23,7 @@ import UserRegistrationSaga from "./Administrator/UserRegistrationRedux/saga"
 import M_EmployeeSaga from "./Administrator/M_EmployeeRedux/saga"
 import RoleMaster_Saga from "./Administrator/RoleMasterRedux/saga"
 import ItemsMastersSaga from "./Administrator/ItemsRedux/saga"
-
+import PartyMasterSaga from "./Administrator/PartyRedux/saga"
 export default function* rootSaga() {
   yield all([
     fork(AccountSaga),
@@ -44,5 +44,6 @@ export default function* rootSaga() {
     fork(M_EmployeeSaga),
     fork(RoleMaster_Saga),
     fork(ItemsMastersSaga),
+    fork(PartyMasterSaga),
   ])
 }
