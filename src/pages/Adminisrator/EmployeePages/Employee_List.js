@@ -49,7 +49,7 @@ useEffect(() => {
         }))
         tog_center()
     }
-    else if (deleteMessage.Status === true) {
+    else if (updateMessage.Status === true) {
         dispatch(deleteEmployeeIDSuccess({ Status: false }))
         dispatch(AlertState({
             Type: 3, Status: true,
@@ -168,7 +168,7 @@ const pagesListColumns = [
                         className="badge badge-soft-danger font-size-12"
                         data-mdb-toggle="tooltip" data-mdb-placement="top" title="Delete Employee"
                         onClick={() => {
-                            deleteHandeler(TableListData.ID, TableListData.Name);
+                            deleteHandeler(TableListData.id, TableListData.Name);
                         }}
                     >
                         <i className="mdi mdi-delete font-size-18" ></i>
@@ -201,7 +201,7 @@ return (
                                         title={"Count :"}
                                         breadcrumbItem={"Employee List"}
                                         IsButtonVissible={true}
-                                        a={toolkitProps.searchProps}
+                                        SearchProps={toolkitProps.searchProps}
                                         breadcrumbCount={TableListData.length}
                                         RedirctPath={"/employeesMaster"}
                                     />

@@ -54,8 +54,8 @@ export const REGISTRATION_API_URL="/Registration"
 
 // M_Employees api
 export const GET_DESIGNATIONID="/Designations"
-export const GET_EMPLOYEE_TYPE="/EmployeeType"
-export const GET_STATE="/State"
+export const GET_EMPLOYEE_TYPE="/EmployeeTypes"
+export const GET_STATE="/States"
 // export const GET_REGION="/Region"
 export const EMPLOYEE_API_URL="/Employees"   
 
