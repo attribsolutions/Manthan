@@ -1,18 +1,18 @@
 import React, { useState, useEffect } from "react";
 import Select from "react-select";
 import { useHistory } from "react-router-dom";
-import Breadcrumbs from "../../components/Common/Breadcrumb";
+import Breadcrumbs from "../../../components/Common/Breadcrumb";
 
 import { Card, CardBody, Col, Container, Row, Label, Input } from "reactstrap";
 
 import { AvForm, AvInput, AvGroup } from "availity-reactstrap-validation";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  getItemCategory,
-  getItemSubCategory,
-  postBaseUnit,
-} from "../../store/actions";
-import OrderList from "../Sale/OrderList";
+// import {
+//   getItemCategory,
+//   getItemSubCategory,
+//   postBaseUnit,
+// } from "../../store/actions";
+// import OrderList from "../Sale/OrderList";
 import UnitTable from "./UnitTable";
 
 const AddItemMaster = (props) => {
@@ -20,21 +20,24 @@ const AddItemMaster = (props) => {
   const history = useHistory();
 
   useEffect(() => {
-    dispatch(postBaseUnit());
-    dispatch(getItemCategory());
+    // dispatch(postBaseUnit());
+    // dispatch(getItemCategory());
   }, [dispatch]);
 
   const [baseUN, setbaseUN] = useState("");
   const [category, setCategory] = useState("qq");
   const [subCategory, setSubCategory] = useState("qq");
 
-  const { baseUnit, itemCategoryData, itemSubCategory } = useSelector(
-    (state) => ({
-      baseUnit: state.addMaster.baseUnit,
-      itemCategoryData: state.addMaster.itemCategoryData,
-      itemSubCategory: state.addMaster.itemSubCategory,
-    })
-  );
+  const  baseUnit=[]
+    const  itemSubCategory=[]
+      const  itemCategoryData=[]
+  // const { baseUnit, itemCategoryData, itemSubCategory } = useSelector(
+  //   (state) => ({
+  //     baseUnit: state.addMaster.baseUnit,
+  //     itemCategoryData: state.addMaster.itemCategoryData,
+  //     itemSubCategory: state.addMaster.itemSubCategory,
+  //   })
+  // );
   const [data, setdata] = useState([]);
   // console.log("itemSubCategory", itemSubCategory);
   const [unittables, setSubCategory1] = useState(<></>);
@@ -58,7 +61,7 @@ const AddItemMaster = (props) => {
   function handllerItemcategory(e) {
     setCategory(e);
     console.log("handllerItemcategory", e.value);
-    dispatch(getItemSubCategory(e.value));
+    // dispatch(getItemSubCategory(e.value));
   }
   var unittables1 = <></>;
 

@@ -23,6 +23,7 @@ import { useSelector, useDispatch } from "react-redux";
 // import { useAlert } from "react-alert";
 
 import AddUser from "./AddUser";
+import { AlertState } from "../../../store/Utilites/CostumeAlert/actions";
 const UserList = () => {
     // const alert = useAlert();
     const dispatch = useDispatch();
@@ -35,14 +36,7 @@ const UserList = () => {
         updateMessage:state.User_Registration_Reducer.updateMessage,
       }));
 
-// console.log("updateMessage",updateMessage)
 
-    const deleteHandeler = (id) => { 
-        console.log("id",id)
-        setDeleteIn(id);
-        dispatch(deleteUser(id));
-        dispatch(getUser());  
-    };
     function tog_center() {
         setmodal_center(!modal_center)
     }
@@ -64,15 +58,22 @@ useEffect(() => {
         if (editData.Status === true) {
             // dispatch(editUserId(0));
             tog_center()
-            console.log("editData after useEffecteee",editData)
-
         }
     }, [editData]);
-    console.log("editData after useEffect888",editData)
 
     const EditPageHandler = (id) => {
         dispatch(editUserId(id));
-        console.log("selected edit id",id)
+    }
+    
+    //Delete Button Handller
+    const deleteHandeler = (id, name) => {
+        dispatch(AlertState({
+            Type: 5, Status: true,
+            Message: `Are you sure you want to delete this Company : "${name}"`,
+            RedirectPath: false,
+            PermissionAction: deleteUser,
+            ID: id
+        }));
     }
 
     const pageOptions = {
@@ -155,6 +156,13 @@ useEffect(() => {
                                     }
                                  
                                 }}>
+                        <i class="mdi mdi-delete font-size-18" ></i>
+                    </buton>
+                    <buton
+                        className="badge badge-soft-danger font-size-12"
+                        data-mdb-toggle="tooltip" data-mdb-placement="top" title="Delete Company"
+                        onClick={() => { deleteHandeler(user.ID, user.LoginName); }}
+                    >
                         <i class="mdi mdi-delete font-size-18" ></i>
                     </buton>
                     </div>

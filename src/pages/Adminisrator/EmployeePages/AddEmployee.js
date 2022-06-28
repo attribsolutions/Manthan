@@ -451,14 +451,14 @@ debugger
                             IsEdit ? (
                               <button
                                 type="submit"
-                                data-mdb-toggle="tooltip" data-mdb-placement="top" title="Update Modules ID"
+                                data-mdb-toggle="tooltip" data-mdb-placement="top" title="Update Employee"
                                 className="btn btn-success w-md"
                               >
                                 <i class="fas fa-edit me-2"></i>Update
                               </button>) : (
                               <button
                                 type="submit"
-                                data-mdb-toggle="tooltip" data-mdb-placement="top" title="Save Modules ID"
+                                data-mdb-toggle="tooltip" data-mdb-placement="top" title="Save Employee"
                                 className="btn btn-success w-md"
                               > <i className="fas fa-save me-2"></i> Save
                               </button>

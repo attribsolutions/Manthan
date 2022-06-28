@@ -80,7 +80,7 @@ useEffect(() => {
 const deleteHandeler = (id, name) => {
     dispatch(AlertState({
         Type: 5, Status: true,
-        Message: `Are you sure you want to delete this item : "${name}"`,
+        Message: `Are you sure you want to delete this Employee : "${name}"`,
         RedirectPath: false,
         PermissionAction: delete_Employee_ID,
         ID: id
@@ -156,7 +156,7 @@ const pagesListColumns = [
               <div className="d-flex gap-3" style={{ display: 'flex', justifyContent: 'center' }} >
                     <buton
                         type="button"
-                        data-mdb-toggle="tooltip" data-mdb-placement="top" title="Edit Modules ID"
+                        data-mdb-toggle="tooltip" data-mdb-placement="top" title="Edit Employee"
                         onClick={() => {
                             EditPageHandler(TableListData.id);
                         }}
@@ -166,7 +166,7 @@ const pagesListColumns = [
                     </buton>
                     <buton
                         className="badge badge-soft-danger font-size-12"
-                        data-mdb-toggle="tooltip" data-mdb-placement="top" title="Delete Modules ID"
+                        data-mdb-toggle="tooltip" data-mdb-placement="top" title="Delete Employee"
                         onClick={() => {
                             deleteHandeler(TableListData.ID, TableListData.Name);
                         }}

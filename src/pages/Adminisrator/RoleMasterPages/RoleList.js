@@ -90,7 +90,7 @@ const RoleList = () => {
     const deleteHandeler = (id, name) => {
         dispatch(AlertState({
             Type: 5, Status: true,
-            Message: `Are you sure you want to delete this item : "${name}"`,
+            Message: `Are you sure you want to delete this Role : "${name}"`,
             RedirectPath: false,
             PermissionAction: deleteRole,
             ID: id
@@ -135,7 +135,7 @@ const RoleList = () => {
                     <div className="d-flex gap-3" style={{ display: 'flex', justifyContent: 'center' }} >
                         <buton
                             type="button"
-                            data-mdb-toggle="tooltip" data-mdb-placement="top" title="Edit Modules ID"
+                            data-mdb-toggle="tooltip" data-mdb-placement="top" title="Edit Role"
                             onClick={() => {
                                 EditPageHandler(Role.ID);
                             }}
@@ -145,7 +145,7 @@ const RoleList = () => {
                         </buton>
                         <buton
                             className="badge badge-soft-danger font-size-12"
-                            data-mdb-toggle="tooltip" data-mdb-placement="top" title="Delete Modules ID"
+                            data-mdb-toggle="tooltip" data-mdb-placement="top" title="Delete Role"
                             onClick={() => {
                                 deleteHandeler(Role.ID, Role.Name);
                             }}

@@ -156,6 +156,7 @@ const CompanyList = () => {
                 <div class="d-flex gap-3" style={{ display: 'flex', justifyContent: 'center' }} >
                     <buton
                         type="button"
+                        data-mdb-toggle="tooltip" data-mdb-placement="top" title="Edit Company"
                         onClick={() => { EditPageHandler(module.ID); }}
                         className="badge badge-soft-primary font-size-12"
                     >
@@ -164,6 +165,7 @@ const CompanyList = () => {
 
                     <buton
                         className="badge badge-soft-danger font-size-12"
+                        data-mdb-toggle="tooltip" data-mdb-placement="top" title="Delete Company"
                         onClick={() => { deleteHandeler(module.ID, module.Name); }}
                     >
                         <i class="mdi mdi-delete font-size-18" ></i>
