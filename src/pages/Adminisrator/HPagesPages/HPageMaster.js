@@ -75,18 +75,18 @@ const HPageMaster = (props) => {
         document.getElementById("txtName").focus();
         dispatch(fetchModelsList())
         if (!(editDataGatingFromList === undefined)) {
-            setEditData(editDataGatingFromList[0]);
+            setEditData(editDataGatingFromList);
             setIsEdit(true);
             setSelectModule({
-                label: editDataGatingFromList[0].ModuleName,
-                value: editDataGatingFromList[0].Module
+                label: editDataGatingFromList.ModuleName,
+                value: editDataGatingFromList.Module
             })
             setPageList({
-                value: editDataGatingFromList[0].RelatedPageID,
-                label: editDataGatingFromList[0].RelatedPageName,
+                value: editDataGatingFromList.RelatedPageID,
+                label: editDataGatingFromList.RelatedPageName,
             })
 
-            setPageAccessData(editDataGatingFromList[0].PagePageAccess)
+            setPageAccessData(editDataGatingFromList.PagePageAccess)
 
             // When value 2 is get then DropDown lable is "ListPage" and ShowMenu is disabled Otherwise DropDown lable is "AddPage" and ShowMenu is enabled
             let showCheckBox = editDataGatingFromList[0].PageType

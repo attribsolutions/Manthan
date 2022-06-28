@@ -173,7 +173,7 @@ const AddEmployee = (props) => {
         working_hours: values.working_hours,
         Designation: DesignationIDselect.value,
         EmployeeType: EmployeeTypeselect.value,
-        JoiningDate:values. JoiningDate,
+        // JoiningDate:values. JoiningDate,
         State: Stateselect.value,
         // Region: Regionselect.value,
         Companies: Companyselect.value,
@@ -396,7 +396,7 @@ console.log(EditData)
                       </Col>
                     </Row>
 
-                    <Row className="mb-3">
+                    {/* <Row className="mb-3">
                       <Label className="col-sm-2 col-form-label">
                         JoiningDate
                       </Label>
@@ -411,7 +411,7 @@ console.log(EditData)
                           }
                         />
                       </div>
-                    </Row>
+                    </Row> */}
 
                     <Row className="mb-4">
                       <Label className="col-sm-2 col-form-label">
