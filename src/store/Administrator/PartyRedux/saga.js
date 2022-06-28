@@ -23,6 +23,7 @@ function* Get_Party_GenratorFunction() {
     yield put(SpinnerState(true))
     try {
       const response = yield call(Party_Master_Post_API, Data);
+      console.log("response",response)
       yield put(SpinnerState(false))
       yield put(postPartyDataSuccess(response));
     } catch (error) {
