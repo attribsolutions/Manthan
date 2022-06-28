@@ -120,7 +120,7 @@ const ModulesList = () => {
                 <div className="d-flex gap-3" style={{ display: 'flex', justifyContent: 'center' }} >
                     <buton
                         type="button"
-                        data-mdb-toggle="tooltip" data-mdb-placement="top" title="Edit Modules ID"
+                        data-mdb-toggle="tooltip" data-mdb-placement="top" title="Edit Module"
                         onClick={() => {
                             EditPageHandler(module.ID);
                         }}
@@ -130,7 +130,7 @@ const ModulesList = () => {
                     </buton>
                     <buton
                         className="badge badge-soft-danger font-size-12"
-                        data-mdb-toggle="tooltip" data-mdb-placement="top" title="Delete Modules ID"
+                        data-mdb-toggle="tooltip" data-mdb-placement="top" title="Delete Module"
                         onClick={() => {
                             deleteHandeler(module.ID, module.Name);
                         }}

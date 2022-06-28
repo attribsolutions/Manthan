@@ -33,6 +33,9 @@ import ItemsMaster from "../pages/Adminisrator/Items/ItemsMaster";
 import SearchBox from "../pages/Purchase/Orders/SearchBox/SearchBox";
 import SearchBoxSecond from "../pages/Purchase/Orders/SearchBox/SearchBoxSecond";
 import SerachBox3 from "../pages/Purchase/Orders/SearchBox/SerachBox3";
+import PartyList from "../pages/Adminisrator/PartiesPages/PartyList";
+import PartyMaster from "../pages/Adminisrator/PartiesPages/PartyMaster";
+// import AddItemMaster from "../pages/Adminisrator/MasterPages/AddItemMaster";
 
 const userRoutes = [
 
@@ -54,7 +57,7 @@ const userRoutes = [
   { path: "/pagesMaster", component: HPageMaster },
 
   { path: "/order", component: OrderPage },
-  { path: "/orderList", component: OrderList },
+  { path: "/orders", component: OrderList },
 
   { path: "/usersMaster", component: AddUser },
   { path: "/usersList", component: UserList },
@@ -66,13 +69,17 @@ const userRoutes = [
   { path: "/roleList", component: RoleList },
 
   { path: "/itemMaster", component: ItemsMaster },
-  { path:"/itemList", component:ItemsList },
+  { path: "/itemList", component: ItemsList },
+
+  { path: "/partyList",component:PartyList},
+  {path : "/partyMaster",component:PartyMaster},
 
 
-
-  { path:"/SearchBox1", component:SearchBox },
-  { path:"/SearchBox2", component:SearchBoxSecond },
-  { path:"/SearchBox3", component:SerachBox3 },
+  
+  // { path: "/AddItemMaster", component: AddItemMaster },
+  { path: "/SearchBox1", component: SearchBox },
+  { path: "/SearchBox2", component: SearchBoxSecond },
+  { path: "/SearchBox3", component: SerachBox3 },
 
   // this route should be at the end of all other routes
   { path: "/", exact: true, component: () => <Redirect to="/dashboard" /> },

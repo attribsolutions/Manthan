@@ -147,12 +147,14 @@ export default function HPageList() {
                 <div class="d-flex gap-3" style={{ display: 'flex', justifyContent: 'center' }} >
                     <buton
                         type="button"
+                        data-mdb-toggle="tooltip" data-mdb-placement="top" title="Edit Page"
                         onClick={() => { EditPageHandler(module.ID); }}
                         className="badge badge-soft-primary font-size-12" >
                         <i class="mdi mdi-pencil font-size-18" id="edittooltip"></i>
                     </buton>
                     <buton
                         className="badge badge-soft-danger font-size-12"
+                        data-mdb-toggle="tooltip" data-mdb-placement="top" title="Edit Page"
                         onClick={() => {
                             deleteHandeler(module.ID, module.Name);
                         }}

@@ -94,8 +94,8 @@ const postJwtForgetPwd = data => post(url.POST_FAKE_JWT_PASSWORD_FORGET, data)
 
 // postSocialLogin
 export const postSocialLogin = data => post(url.SOCIAL_LOGIN, data)
-   
-export const RoleAccessApi_url=()=>get(url.ROLE_ACCESS)
+
+export const RoleAccessApi_url = () => get(url.ROLE_ACCESS)
 /// Employees  Component All Apis 
 export const getDesignationID_For_Dropdown = () => get(url.GET_DESIGNATIONID)
 export const getEmployeeType_For_Dropdown = () => get(url.GET_EMPLOYEE_TYPE)
@@ -118,18 +118,18 @@ export const User_Component_EditById_API = (id) => get(`${url.USER_API_URL}/${id
 export const User_Component_Update_API = (data, id) => put(`${url.USER_API_URL}/${id}`, data) // update api
 
 // Role Master
-export const Role_Master_Get_API=()=> get(url.ROLE_MASTER_API)//get api
-export const Role_Master_Post_API = (data) => post(url.ROLE_MASTER_API,data )// post api
-export const Role_Master_Delete_API=(id)=> del(`${url.ROLE_MASTER_API}/${id}` )// delete api
-export const Role_Master_Edit_API=(id)=> get(`${url.ROLE_MASTER_API}/${id}` )// edit api
-export const Role_Master_Update_API = (data,id) => put(`${url.ROLE_MASTER_API}/${id}`,data )// update api
+export const Role_Master_Get_API = () => get(url.ROLE_MASTER_API)//get api
+export const Role_Master_Post_API = (data) => post(url.ROLE_MASTER_API, data)// post api
+export const Role_Master_Delete_API = (id) => del(`${url.ROLE_MASTER_API}/${id}`)// delete api
+export const Role_Master_Edit_API = (id) => get(`${url.ROLE_MASTER_API}/${id}`)// edit api
+export const Role_Master_Update_API = (data, id) => put(`${url.ROLE_MASTER_API}/${id}`, data)// update api
 
 //Purchase  Order Page api  
 export const getOrderItems_forOrderPage_ApiCall = () => get(url.GET_ORDER_ITEM)//get api
 export const submitOrder_From_OrderPage_apiCall = (data) => post(url.ORDER_PAGE_API, data)// post api
 export const deleteOrderID_forOrderPage_ApiCall = (id) => del(`${url.ORDER_PAGE_API}/${id}`)//Delete Order
 export const editOrderID_forOrderPage_ApiCall = (id) => get(`${url.ORDER_PAGE_API}/${id}`)//Edit Order
-export const UpdateOrder_ID_ApiCall = (data,id) => put(`${url.ORDER_PAGE_API}/${id}`, data)// update api
+export const UpdateOrder_ID_ApiCall = (data, id) => put(`${url.ORDER_PAGE_API}/${id}`, data)// update api
 export const getOrderList_forOrderPage_ApiCall = (data) => get(url.ORDER_PAGE_API)
 export const getDivisionOrders = () => get(`${url.ORDER_PAGE_API}?FromDate=2022-01-25&ToDate=2022-01-25&CustomerID=0&DivisionID=3`)
 
@@ -155,7 +155,7 @@ export const postSubModule = (id) => get(`${url.H_SUB_MODULES_API_URL}/${id}`)
 export const postAddPage = (data) => post(url.H_SUB_MODULES_API_URL, data)
 export const getPageAcess = () => get(url.GET_PAGE_ACCESS)
 export const showPagesListOnPageType_DropDown_List = () => get(url.SHOW_PAGESLIST_ON_PAGE_TYPE_FOR_DROPDOWN)
-export const showPagesListOnPageAccess_DropDown_List = () => get(url.SHOW_PAGESLIST_ON_PAGEACCESS_FOR_DROPDOWN )
+export const showPagesListOnPageAccess_DropDown_List = () => get(url.SHOW_PAGESLIST_ON_PAGEACCESS_FOR_DROPDOWN)
 
 // H_subModule Api
 export const saveH_SubModules = (data) => post(url.H_SUB_MODULES_API_URL, data)
@@ -173,12 +173,21 @@ export const saveHPagesAPI = (Data) => post(url.H_PAGES_API_URL, Data)
 export const deletHPagesUsingID_API = (id) => del(`${url.H_PAGES_API_URL}/${id}`)
 
 // M_Items
-export const Items_Group_Get_API=()=> get(url.ITEMS_GROUP_API)//get api
-export const Items_Master_Get_API=()=> get(url.Items_MASTER_API)//get api
-export const Items_Master_Post_API = (data) => post(url.Items_MASTER_API,data )// post api
-export const Items_Master_Delete_API=(id)=> del(`${url.Items_MASTER_API}/${id}` )// delete api
-export const Items_Master_Edit_API=(id)=> get(`${url.Items_MASTER_API}/${id}` )// edit api
-export const Items_Master_Update_API = (data,id) => put(`${url.Items_MASTER_API}/${id}`,data )// update api
+export const Items_Group_Get_API = () => get(url.ITEMS_GROUP_API)//get api
+export const Items_Master_Get_API = () => get(url.Items_MASTER_API)//get api
+export const Items_Master_Post_API = (data) => post(url.Items_MASTER_API, data)// post api
+export const Items_Master_Delete_API = (id) => del(`${url.Items_MASTER_API}/${id}`)// delete api
+export const Items_Master_Edit_API = (id) => get(`${url.Items_MASTER_API}/${id}`)// edit api
+export const Items_Master_Update_API = (data, id) => put(`${url.Items_MASTER_API}/${id}`, data)// update api
+
+
+// Role Master
+export const Party_Master_Get_API = () => get(url.PARTY_MASTER_API)//get api
+export const Party_Master_Post_API = (data) => post(url.PARTY_MASTER_API, data)// post api
+export const Party_Master_Delete_API = (id) => del(`${url.PARTY_MASTER_API}/${id}`)// delete api
+export const Party_Master_Edit_API = (id) => get(`${url.PARTY_MASTER_API}/${id}`)// edit api
+export const Party_Master_Update_API = (data, id) => put(`${url.PARTY_MASTER_API}/${id}`, data)// update api
+
 
 export {
   getLoggedInUser,

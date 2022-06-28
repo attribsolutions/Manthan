@@ -1,14 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import Breadcrumbs from "../../../components/Common/Breadcrumb";
 import { Col, Modal, Row } from "reactstrap";
-import {
-    getRole,
-    deleteRole,
-    editRoleId,
-    updateSuccess,
-    deleteSuccess,
-} from "../../../store/Administrator/RoleMasterRedux/action";
-
 import paginationFactory, {
     PaginationListStandalone,
     PaginationProvider,
@@ -17,39 +9,46 @@ import ToolkitProvider, { Search } from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 import { useSelector, useDispatch } from "react-redux";
 import { AlertState } from '../../../store/Utilites/CostumeAlert/actions';
-import AddRole from './RoleMaster';
-import "../../../assets/scss/CustomeTable/datatables.scss"
 
-const RoleList = () => {
+import "../../../assets/scss/CustomeTable/datatables.scss"
+import {
+    deletePartyID,
+    deletePartyIDSuccess,
+    editPartyID,
+    getPartyListAPI,
+    updatePartyIDSuccess
+}  from '../../../store/Administrator/PartyRedux/action';
+
+const PartyList = () => {
     const dispatch = useDispatch();
     const [modal_center, setmodal_center] = useState(false);
 
     // get Access redux data
     const { TableListData, editData, updateMessage, deleteMessage } = useSelector((state) => ({
-        TableListData: state.RoleMaster_Reducer.pages,
-        editData: state.RoleMaster_Reducer.editData,
-        updateMessage: state.RoleMaster_Reducer.updateMessage,
-        deleteMessage: state.RoleMaster_Reducer.deleteMessage,
+        TableListData: state.PartyMasterReducer.pages,
+        editData: state.PartyMasterReducer.editData,
+        updateMessage: state.PartyMasterReducer.updateMessage,
+        deleteMessage: state.PartyMasterReducer.deleteMessage,
     }));
 
     //  This UseEffect => Featch Modules List data  First Rendering
     useEffect(() => {
-        dispatch(getRole());
+        dispatch(getPartyListAPI());
     }, []);
 
     // This UseEffect => UpadateModal Success/Unsucces  Show and Hide Control Alert_modal 
     useEffect(() => {
         if ((updateMessage.Status === true) && (updateMessage.StatusCode === 200)) {
-            dispatch(updateSuccess({ Status: false }))
+            dispatch(updatePartyIDSuccess({ Status: false }))
             dispatch(AlertState({
                 Type: 1, Status: true,
                 Message: updateMessage.Message,
-                AfterResponseAction: getRole,
+                AfterResponseAction: getPartyListAPI,
             }))
             tog_center()
         }
         else if (deleteMessage.Status === true) {
-            dispatch(updateSuccess({ Status: false }))
+            dispatch(deletePartyIDSuccess({ Status: false }))
             dispatch(AlertState({
                 Type: 3, Status: true,
                 Message: deleteMessage.Message,
@@ -59,14 +58,14 @@ const RoleList = () => {
 
     useEffect(() => {
         if ((deleteMessage.Status === true) && (deleteMessage.StatusCode === 200)) {
-            dispatch(deleteSuccess({ Status: false }))
+            dispatch(deletePartyIDSuccess({ Status: false }))
             dispatch(AlertState({
                 Type: 1, Status: true,
                 Message: deleteMessage.Message,
-                AfterResponseAction: getRole,
+                AfterResponseAction: getPartyListAPI,
             }))
         } else if (deleteMessage.Status === true) {
-            dispatch(deleteSuccess({ Status: false }))
+            dispatch(deletePartyIDSuccess({ Status: false }))
             dispatch(AlertState({
                 Type: 3,
                 Status: true,
@@ -90,15 +89,15 @@ const RoleList = () => {
     const deleteHandeler = (id, name) => {
         dispatch(AlertState({
             Type: 5, Status: true,
-            Message: `Are you sure you want to delete this Role : "${name}"`,
+            Message: `Are you sure you want to delete this Party : "${name}"`,
             RedirectPath: false,
-            PermissionAction: deleteRole,
+            PermissionAction: deletePartyID,
             ID: id
         }));
     }
     // edit Buutton Handller 
     const EditPageHandler = (id) => {
-     dispatch(editRoleId(id));
+        dispatch(editPartyID(id));
     }
 
     const pageOptions = {
@@ -114,18 +113,18 @@ const RoleList = () => {
             sort: true,
         },
         {
-            text: "Description",
-            dataField: "Description",
+            text: "PartyType",
+            dataField: "PartyType",
             sort: true,
         },
         {
-            text: "IsActive",
-            dataField: "isActive",
+            text: "DivisionType",
+            dataField: "DivisionType",
             sort: true,
         },
         {
-            text: "Dashboard",
-            dataField: "Dashboard",
+            text: "Address",
+            dataField: "Address",
             sort: true,
         },
         {
@@ -135,7 +134,7 @@ const RoleList = () => {
                     <div className="d-flex gap-3" style={{ display: 'flex', justifyContent: 'center' }} >
                         <buton
                             type="button"
-                            data-mdb-toggle="tooltip" data-mdb-placement="top" title="Edit Role"
+                            data-mdb-toggle="tooltip" data-mdb-placement="top" title="Edit Party "
                             onClick={() => {
                                 EditPageHandler(Role.ID);
                             }}
@@ -145,7 +144,7 @@ const RoleList = () => {
                         </buton>
                         <buton
                             className="badge badge-soft-danger font-size-12"
-                            data-mdb-toggle="tooltip" data-mdb-placement="top" title="Delete Role"
+                            data-mdb-toggle="tooltip" data-mdb-placement="top" title="Delete Party"
                             onClick={() => {
                                 deleteHandeler(Role.ID, Role.Name);
                             }}
@@ -175,7 +174,7 @@ const RoleList = () => {
                                 <React.Fragment>
                                     <Breadcrumbs
                                         title={"Count :"}
-                                        breadcrumbItem={"Role List Page"}
+                                        breadcrumbItem={"Party List"}
                                         IsButtonVissible={true}
                                         SearchProps={toolkitProps.searchProps}
                                         breadcrumbCount={TableListData.length}
@@ -215,7 +214,7 @@ const RoleList = () => {
                     toggle={() => { tog_center() }}
                     size="xl"
                 >
-                    <AddRole state={editData.Data} />
+                    {/* <AddRole state={editData.Data} /> */}
                 </Modal>
             </div>
         </React.Fragment>
@@ -223,4 +222,4 @@ const RoleList = () => {
 };
 
 
-export default RoleList;
+export default PartyList;

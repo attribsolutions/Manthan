@@ -113,7 +113,7 @@ const Header = props => {
               type="button" className="btn btn-sm px-2 font-size-16 header-item" id="vertical-menu-btn">
               <i className="fa fa-fw fa-bars"></i>
             </button>
-<SearchBoxSecond></SearchBoxSecond>
+            <SearchBoxSecond></SearchBoxSecond>
             {/* <form className="app-search d-none d-lg-block">
               <div className="position-relative">
                 <input type="text" className="form-control" placeholder="Search..." onChange={(e) => {searchFunctionHandller(e)}} />

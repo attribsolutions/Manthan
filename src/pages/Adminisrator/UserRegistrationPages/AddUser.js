@@ -333,20 +333,25 @@ const AddUser = (props) => {
 
                     <Row className="justify-content-end">
                       <Col sm={2}>
-                        <div>
-                          {IsEdit ? <Button
-                            type="submit"
-                            className="btn btn-success w-md"
-                          >
-                            Update
-                          </Button>
-                            : <Button
-                              type="submit"
-                              className="btn btn-success w-md"
-                            >
-                              Save
-                            </Button>}
-                        </div>
+                      <div>
+                                                    {
+                                                        IsEdit ? (
+                                                            <button
+                                                                type="submit"
+                                                                data-mdb-toggle="tooltip" data-mdb-placement="top" title="Update User"
+                                                                className="btn btn-success w-md"
+                                                            >
+                                                                <i class="fas fa-edit me-2"></i>Update
+                                                            </button>) : (
+                                                            <button
+                                                                type="submit"
+                                                                data-mdb-toggle="tooltip" data-mdb-placement="top" title="Save User"
+                                                                className="btn btn-success w-md"
+                                                            > <i className="fas fa-save me-2"></i> Save
+                                                            </button>
+                                                        )
+                                                    }
+                                                </div>
                       </Col>{" "}
                       <Col sm={10}></Col>
                     </Row>

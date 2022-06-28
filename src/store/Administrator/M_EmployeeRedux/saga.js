@@ -132,12 +132,9 @@ function* Edit_EmployeeID_GenratorFunction({ id }) {
 }
 
 function* Update_EmployeeID_GenratorFunction({ updateData, ID }) {
-  console.log("updateData", updateData)
   try {
     yield put(SpinnerState(true))
     const response = yield call(update_EmployeeAPI, updateData, ID);
-    console.log("updateData response", response)
-
     yield put(SpinnerState(false))
     yield put(updateEmployeeIDSuccess(response))
   }
