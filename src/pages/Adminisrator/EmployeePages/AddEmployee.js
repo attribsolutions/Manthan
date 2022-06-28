@@ -295,7 +295,7 @@ console.log(EditData)
                       <div class="col-lg-2">
                         <AvField name="DOB" type="date"
                           id="dateInput"
-                          defaultValue={EditData.DOB}
+                          value={EditData.DOB}
                           validate={{
                             required: { value: true, errorMessage: '*Birth of Date is Required' },
                           }
@@ -399,7 +399,7 @@ console.log(EditData)
                    
                          <AvField name="JoiningDate" type="date"
                           id="JoiningDate"
-                          defaultValue={EditData.JoiningDate}
+                          value={EditData.DOB}
                           validate={{
                             required: { value: true, errorMessage: '*Joining Date is Required' },
                           }
