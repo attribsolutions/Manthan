@@ -73,25 +73,26 @@ const PartyMaster = (props) => {
 
     //'Save' And 'Update' Button Handller
     const handleValidUpdate = (event, values) => {
-    let DateInput = document.getElementById("dateInput","").value;
+        let DateInput = document.getElementById("dateInput", "").value;
         const requestOptions = {
             body: JSON.stringify({
                 Name: values.Name,
-                PartyType:0,
-                DivisionType:0,
-                companyID:0,
-                CustomerDivision:values.CustomerDivision,
+                PartyTypeID: 0,
+                DividionTypeID: 0,
+                companyID: 0,
+                CustomerDivision: values.CustomerDivision,
                 Email: values.Email,
                 Address: values.Address,
                 PIN: values.PIN,
-                State:0,
-                District:0,
-                Taluka:0,
-                City:0,
-                GSTN:0,
-                FSSAINo:0,
-                FSSAIExipry:DateInput,
-                IsActive:values.IsActive,
+                MobileNo:9088999080,
+                State: 0,
+                District: 0,
+                Taluka: 0,
+                City: 0,
+                GSTIN: 0,
+                FSSAINo: 0,
+                FSSAIExipry: DateInput,
+                IsActive: 1,
                 CreatedBy: 1,
                 CreatedOn: "2022-06-24T11:16:53.165483Z",
                 UpdatedBy: 1,
@@ -103,6 +104,7 @@ const PartyMaster = (props) => {
         }
         else {
             dispatch(postPartyData(requestOptions.body));
+            console.log("requestOptions", requestOptions.body)
         }
     };
 
@@ -135,7 +137,7 @@ const PartyMaster = (props) => {
                                                         value={EditData.Name}
                                                         type="text"
                                                         placeholder="Please Enter Name"
-                                                        autoComplete='off'
+                                                        // autoComplete='off'
                                                         validate={{
                                                             required: { value: true, errorMessage: 'Please enter a Name...!' },
                                                         }} />
@@ -190,7 +192,7 @@ const PartyMaster = (props) => {
                                                         value={EditData.CustomerDivision}
                                                         type="text"
                                                         placeholder="Please Enter CustomerDivision"
-                                                        autoComplete='off'
+                                                        // autoComplete='off'
                                                         validate={{
                                                             required: { value: true, errorMessage: 'Please enter a CustomerDivision...!' },
                                                         }} />
@@ -204,8 +206,8 @@ const PartyMaster = (props) => {
                                                     EmailID
                                                 </Label>
                                                 <Col sm={4}>
-                                                    <AvField name="email" type="email"
-                                                        value={EditData.email}
+                                                    <AvField name="Email" type="email"
+                                                        value={EditData.Email}
                                                         placeholder="Enter your EmailID "
                                                         validate={{
                                                             required: { value: true, errorMessage: 'Please Enter your EmailID' },
@@ -222,16 +224,16 @@ const PartyMaster = (props) => {
                                         <AvGroup>
                                             <Row className="mb-4">
                                                 <Label className="col-sm-2 col-form-label">
-                                                PIN
+                                                    PIN
                                                 </Label>
                                                 <Col sm={4}>
-                                                    <AvField name="PAN" type="text"
+                                                    <AvField name="PIN" type="text"
                                                         value={EditData.PIN}
                                                         placeholder="Enter your PAN No. "
                                                         validate={{
                                                             required: { value: true, errorMessage: 'Please Enter your PIN No.' },
                                                             tel: {
-                                                                pattern:"^[1-9][0-9]{5}$",
+                                                                pattern: "^[1-9][0-9]{5}$",
                                                                 errorMessage: 'PIN Should be Six Digit Only.'
                                                             }
                                                         }
@@ -252,6 +254,26 @@ const PartyMaster = (props) => {
                                                         validate={{
                                                             required: { value: true, errorMessage: 'Please Enter your Address' },
                                                         }}
+                                                    />
+                                                </Col>
+                                            </Row>
+                                        </AvGroup>
+                                        <AvGroup>
+                                            <Row className="mb-4">
+                                                <Label className="col-sm-2 col-form-label">
+                                                    Mobile No.
+                                                </Label>
+                                                <Col sm={4}>
+                                                    <AvField name="MobileNo" type="tel"
+                                                        value={EditData.MobileNo}
+                                                        placeholder="+91 "
+                                                        validate={{
+                                                            required: { value: true, errorMessage: 'Please Enter your Mobile NO' },
+                                                            tel: {
+                                                                pattern: /^(\+\d{1,3}[- ]?)?\d{10}$/
+                                                            }
+                                                        }}
+
                                                     />
                                                 </Col>
                                             </Row>
@@ -299,8 +321,8 @@ const PartyMaster = (props) => {
                                                     GSTIN
                                                 </Label>
                                                 <Col sm={4}>
-                                                    <AvField name="GSTN" id="txtName"
-                                                        value={EditData.GSTN}
+                                                    <AvField name="GSTIN" id="txtName"
+                                                        value={EditData.GSTIN}
                                                         type="text"
                                                         placeholder="Please Enter GSTIN"
                                                         autoComplete='off'
@@ -360,8 +382,9 @@ const PartyMaster = (props) => {
                                                     IsActive
                                                 </Label>
                                                 <Col sm={4}>
-                                                    <AvField name="isActive"
-                                                        checked={(EditData.ID === 0) ? false : EditData.isActive}
+                                                    <AvField name="IsActive"
+                                                    value=""
+                                                        checked={(EditData.ID === 0) ? false : EditData.IsActive}
                                                         type="checkbox" validate={{
                                                         }} />
                                                 </Col>
