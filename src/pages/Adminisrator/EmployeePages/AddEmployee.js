@@ -354,12 +354,17 @@ console.log(EditData)
                         </Label>
                         <Col sm={4}>
                           <AvField name="working_hours"  value={EditData.working_hours}
-                            type="text"
+                            type="number"
                             placeholder="Please Enter WorkingHours"
                             autoComplete='off'
                             validate={{
-                              required: { value: true, errorMessage: 'Please enter your WorkingHours ...!' },
-                            }}
+                              number: true,
+                              required: { value: true, errorMessage: '*WorkingHours is Required' },
+                              tel: {
+                                  pattern: /^\d{1,4}$/,
+                                  errorMessage: '*WorkingHours is Required'
+                              }
+                          }}
                           />
                         </Col>
                       </Row>
