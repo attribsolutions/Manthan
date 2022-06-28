@@ -491,6 +491,7 @@ const HPageMaster = (props) => {
                                                                                 <button
                                                                                     type="button"
                                                                                     className="btn btn-danger btn-sm waves-effect waves-light"
+                                                                                    data-mdb-toggle="tooltip" data-mdb-placement="top" title="Add PageAccess"
                                                                                     onClick={() => {
                                                                                         PageAccess_DeleteButton_Handller(TableValue.AccessID)
                                                                                     }
