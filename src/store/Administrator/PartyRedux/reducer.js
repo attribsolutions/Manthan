@@ -17,7 +17,7 @@ const INIT_STATE = {
     updateMessage: { Status: false },
 };
 
-const PartyMaster_Reducer = (state = INIT_STATE, action) => {
+const PartyMasterReducer = (state = INIT_STATE, action) => {
     switch (action.type) {
         // get api
         case GET_PARTY_LIST_API_SUCCESS:
@@ -63,4 +63,4 @@ const PartyMaster_Reducer = (state = INIT_STATE, action) => {
             return state;
     }
 };
-export default PartyMaster_Reducer;
+export default PartyMasterReducer;
