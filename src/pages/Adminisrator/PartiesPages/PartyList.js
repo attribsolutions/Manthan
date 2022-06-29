@@ -18,6 +18,7 @@ import {
     getPartyListAPI,
     updatePartyIDSuccess
 }  from '../../../store/Administrator/PartyRedux/action';
+import PartyMaster from './PartyMaster';
 
 const PartyList = () => {
     const dispatch = useDispatch();
@@ -178,7 +179,7 @@ const PartyList = () => {
                                         IsButtonVissible={true}
                                         SearchProps={toolkitProps.searchProps}
                                         breadcrumbCount={TableListData.length}
-                                        RedirctPath={"/RolesMaster"}
+                                        RedirctPath={"/PartyMaster"}
                                     />
                                     <Row>
                                         <Col xl="12">
@@ -214,7 +215,7 @@ const PartyList = () => {
                     toggle={() => { tog_center() }}
                     size="xl"
                 >
-                    {/* <AddRole state={editData.Data} /> */}
+                    <PartyMaster state={editData.Data} />
                 </Modal>
             </div>
         </React.Fragment>
