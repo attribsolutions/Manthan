@@ -35,6 +35,7 @@ import SearchBoxSecond from "../pages/Purchase/Orders/SearchBox/SearchBoxSecond"
 import SerachBox3 from "../pages/Purchase/Orders/SearchBox/SerachBox3";
 import PartyList from "../pages/Adminisrator/PartiesPages/PartyList";
 import PartyMaster from "../pages/Adminisrator/PartiesPages/PartyMaster";
+import PartyUIDemo from "../pages/Adminisrator/PartiesPages/PartyUIDemo";
 // import AddItemMaster from "../pages/Adminisrator/MasterPages/AddItemMaster";
 
 const userRoutes = [
@@ -71,11 +72,11 @@ const userRoutes = [
   { path: "/itemMaster", component: ItemsMaster },
   { path: "/itemList", component: ItemsList },
 
-  { path: "/partyList",component:PartyList},
-  {path : "/partyMaster",component:PartyMaster},
+  { path: "/partyList", component: PartyList },
+  { path: "/partyMaster", component: PartyMaster },
+  { path:"/partyUIDemo",component:PartyUIDemo},
 
 
-  
   // { path: "/AddItemMaster", component: AddItemMaster },
   { path: "/SearchBox1", component: SearchBox },
   { path: "/SearchBox2", component: SearchBoxSecond },

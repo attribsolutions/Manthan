@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import Breadcrumbs from "../../../components/Common/Breadcrumb";
-import { Card, CardBody, Col, Container, Row, Label, Input, FormGroup } from "reactstrap";
+import { Card, CardBody, Col, Container, Row, Label, Input } from "reactstrap";
 import { AvForm, AvGroup, AvField } from "availity-reactstrap-validation";
 import { useDispatch, useSelector } from "react-redux";
 import { AlertState } from "../../../store/Utilites/CostumeAlert/actions";
@@ -84,13 +84,13 @@ const PartyMaster = (props) => {
                 Email: values.Email,
                 Address: values.Address,
                 PIN: values.PIN,
-                MobileNo: values.MobileNo,
+                MobileNo:values.MobileNo,
                 State: 0,
                 District: 0,
                 Taluka: 0,
                 City: 0,
-                GSTIN: values.GSTIN,
-                FSSAINo: values.FSSAINo,
+                GSTIN:values.GSTIN,
+                FSSAINo:values.FSSAINo,
                 FSSAIExipry: DateInput,
                 IsActive: 1,
                 CreatedBy: 1,
@@ -126,8 +126,8 @@ const PartyMaster = (props) => {
                                             handleValidUpdate(e, v);
                                         }}
                                         ref={formRef}
-                                    > 
-                                            {/* <AvGroup>
+                                    >
+                                        <AvGroup>
                                             <Row className="mb-4">
                                                 <Label className="col-sm-2 col-form-label">
                                                     Name
@@ -143,144 +143,46 @@ const PartyMaster = (props) => {
                                                         }} />
                                                 </Col>
                                             </Row>
-                                        </AvGroup> */}
-                                       
-                                        <Row>
-                                            <Col md="3">
-                                                <FormGroup className="mb-3">
-                                                    <Label htmlFor="validationCustom01">Name </Label>
-                                                    <AvField
-                                                        name="Name"
-                                                        placeholder="Please Enter Name"
-                                                        type="text"
-                                                        errorMessage="Enter First Name"
-                                                        className="form-control"
-                                                        validate={{ required: { value: true } }}
-                                                        id="validationCustom01"
-                                                    />
-                                                </FormGroup>
-                                            </Col>
-                                            <Col md="1"></Col>
-                                            <Col md="3">
-                                                <FormGroup className="mb-3">
-                                                    <Label htmlFor="validationCustom01">EmailID </Label>
-                                                    <AvField
-                                                        name="Email"
-                                                        placeholder="Enter your EmailID"
-                                                        type="text"
-                                                        errorMessage="Please Enter your EmailID"
-                                                        className="form-control"
-                                                        validate={{ required: { value: true } }}
-                                                        id="validationCustom01"
-                                                    />
-                                                </FormGroup>
-                                            </Col>
-                                           < Col md="1"></Col>
-                                            <Col md="3">
-                                                <FormGroup className="mb-3">
-                                                    <Label htmlFor="validationCustom01">Mobile </Label>
-                                                    <AvField
-                                                        name="MobileNo"
-                                                        placeholder="Enter your Mobile Number"
-                                                        type="text"
-                                                        errorMessage="Please Enter your Mobile NO"
-                                                        className="form-control"
-                                                        validate={{ required: { value: true } }}
-                                                        id="validationCustom01"
-                                                    />
-                                                </FormGroup>
-                                            </Col>
-                                        </Row>
-                                       
-                                        <Row>
-                                            
-                                            <Col md="3">
-                                                <FormGroup className="mb-3">
-                                                    <Label htmlFor="validationCustom01">PartyType </Label>
-                                                    <Col sm={12}>
+                                        </AvGroup>
+
+                                        <Row className="mb-4">
+                                            <Label className="col-sm-2 col-form-label">
+                                                PartyType
+                                            </Label>
+                                            <Col sm={4}>
                                                 <Select
                                                     value={""}
                                                     options={""}
                                                 // onChange={(e) => { handllerDesignationID(e) }}
                                                 />
                                             </Col>
-                                                </FormGroup>
-                                            </Col>
-                                            <Col md="1"></Col>
-                                            <Col md="3">
-                                                <FormGroup className="mb-3">
-                                                    <Label htmlFor="validationCustom01">DivisionType </Label>
-                                                    <Col sm={12}>
+                                        </Row>
+                                        <Row className="mb-4">
+                                            <Label className="col-sm-2 col-form-label">
+                                                DivisionType
+                                            </Label>
+                                            <Col sm={4}>
                                                 <Select
                                                     value={""}
                                                     options={""}
                                                 // onChange={(e) => { handllerDesignationID(e) }}
                                                 />
                                             </Col>
-                                                </FormGroup>
-                                            </Col>
-                                           < Col md="1"></Col>
-                                           <Col md="3">
-                                                <FormGroup className="mb-3">
-                                                    <Label htmlFor="validationCustom01">CompanyName </Label>
-                                                    <Col sm={12}>
+                                        </Row>
+                                        <Row className="mb-4">
+                                            <Label className="col-sm-2 col-form-label">
+                                                CompanyName
+                                            </Label>
+                                            <Col sm={4}>
                                                 <Select
                                                     value={""}
                                                     options={""}
                                                 // onChange={(e) => { handllerDesignationID(e) }}
                                                 />
                                             </Col>
-                                                </FormGroup>
-                                            </Col>
                                         </Row>
-                                      
-                                        <Row>
-                                            <Col md="3">
-                                                <FormGroup className="mb-3">
-                                                    <Label htmlFor="validationCustom01">Name </Label>
-                                                    <AvField
-                                                        name="Name"
-                                                        placeholder="Please Enter Name"
-                                                        type="text"
-                                                        errorMessage="Enter First Name"
-                                                        className="form-control"
-                                                        validate={{ required: { value: true } }}
-                                                        id="validationCustom01"
-                                                    />
-                                                </FormGroup>
-                                            </Col>
-                                            <Col md="1"></Col>
-                                            <Col md="3">
-                                                <FormGroup className="mb-3">
-                                                    <Label htmlFor="validationCustom01">EmailID </Label>
-                                                    <AvField
-                                                        name="Email"
-                                                        placeholder="Enter your EmailID"
-                                                        type="text"
-                                                        errorMessage="Please Enter your EmailID"
-                                                        className="form-control"
-                                                        validate={{ required: { value: true } }}
-                                                        id="validationCustom01"
-                                                    />
-                                                </FormGroup>
-                                            </Col>
-                                           < Col md="1"></Col>
-                                            <Col md="3">
-                                                <FormGroup className="mb-3">
-                                                    <Label htmlFor="validationCustom01">Mobile </Label>
-                                                    <AvField
-                                                        name="MobileNo"
-                                                        placeholder="Enter your Mobile Number"
-                                                        type="text"
-                                                        errorMessage="Please Enter your Mobile NO"
-                                                        className="form-control"
-                                                        validate={{ required: { value: true } }}
-                                                        id="validationCustom01"
-                                                    />
-                                                </FormGroup>
-                                            </Col>
-                                        </Row>
-                                        {/* <AvGroup>
+
+                                        <AvGroup>
                                             <Row className="mb-4">
                                                 <Label className="col-sm-2 col-form-label">
                                                     CustomerDivision
@@ -296,9 +198,9 @@ const PartyMaster = (props) => {
                                                         }} />
                                                 </Col>
                                             </Row>
-                                        </AvGroup> */}
+                                        </AvGroup>
 
-                                        {/* <AvGroup>
+                                        <AvGroup>
                                             <Row className="mb-4">
                                                 <Label className="col-sm-2 col-form-label">
                                                     EmailID
@@ -318,8 +220,8 @@ const PartyMaster = (props) => {
                                                     />
                                                 </Col>
                                             </Row>
-                                        </AvGroup> */}
-                                        {/* <AvGroup>
+                                        </AvGroup>
+                                        <AvGroup>
                                             <Row className="mb-4">
                                                 <Label className="col-sm-2 col-form-label">
                                                     PIN
@@ -355,8 +257,27 @@ const PartyMaster = (props) => {
                                                     />
                                                 </Col>
                                             </Row>
-                                        </AvGroup> */}
-                                       
+                                        </AvGroup>
+                                        <AvGroup>
+                                            <Row className="mb-4">
+                                                <Label className="col-sm-2 col-form-label">
+                                                    Mobile No.
+                                                </Label>
+                                                <Col sm={4}>
+                                                    <AvField name="MobileNo" type="tel"
+                                                        value={EditData.MobileNo}
+                                                        placeholder="+91 "
+                                                        validate={{
+                                                            required: { value: true, errorMessage: 'Please Enter your Mobile NO' },
+                                                            tel: {
+                                                                pattern: /^(\+\d{1,3}[- ]?)?\d{10}$/
+                                                            }
+                                                        }}
+
+                                                    />
+                                                </Col>
+                                            </Row>
+                                        </AvGroup>
                                         <Row className="mb-4">
                                             <Label className="col-sm-2 col-form-label">
                                                 State
@@ -462,7 +383,7 @@ const PartyMaster = (props) => {
                                                 </Label>
                                                 <Col sm={4}>
                                                     <AvField name="IsActive"
-                                                        value=""
+                                                    value=""
                                                         checked={(EditData.ID === 0) ? false : EditData.IsActive}
                                                         type="checkbox" validate={{
                                                         }} />

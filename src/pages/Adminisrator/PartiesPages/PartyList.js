@@ -19,6 +19,7 @@ import {
     updatePartyIDSuccess
 }  from '../../../store/Administrator/PartyRedux/action';
 import PartyMaster from './PartyMaster';
+import PartyUIDemo from './PartyUIDemo';
 
 const PartyList = () => {
     const dispatch = useDispatch();
@@ -215,7 +216,7 @@ const PartyList = () => {
                     toggle={() => { tog_center() }}
                     size="xl"
                 >
-                    <PartyMaster state={editData.Data} />
+                    <PartyUIDemo state={editData.Data} />
                 </Modal>
             </div>
         </React.Fragment>
