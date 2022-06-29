@@ -120,7 +120,7 @@ const [isActive, setisActive] = useState('')
       <SimpleBar style={{ maxHeight: "100%" }} ref={ref}>
         <div id="sidebar-menu">
           <ul className="metismenu list-unstyled" id="side-menu">
-            <li className="menu-title">{props.t("Menu")} </li>
+            
             <li>
               <Link to="/dashboard" className="">
                 <FeatherIcon icon="home" />
