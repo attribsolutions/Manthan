@@ -54,7 +54,7 @@ const PartyMaster = (props) => {
                     Type: 1,
                     Status: true,
                     Message: PartySaveSuccess.Message,
-                    RedirectPath: '/partyMaster',
+                    RedirectPath: '/partyList',
                     AfterResponseAction: false
                 }))
             }
@@ -84,13 +84,13 @@ const PartyMaster = (props) => {
                 Email: values.Email,
                 Address: values.Address,
                 PIN: values.PIN,
-                MobileNo:9088999080,
+                MobileNo:values.MobileNo,
                 State: 0,
                 District: 0,
                 Taluka: 0,
                 City: 0,
-                GSTIN: 0,
-                FSSAINo: 0,
+                GSTIN:values.GSTIN,
+                FSSAINo:values.FSSAINo,
                 FSSAIExipry: DateInput,
                 IsActive: 1,
                 CreatedBy: 1,
