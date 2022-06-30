@@ -1,6 +1,22 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
+import { useSelector } from 'react-redux';
 import './style.css'
 export default function SearchBoxSecond() {
+    const [searchRoleData, setSearchRoleData] = useState([])
+     // const  RoleAccessData=demoRolleAcess
+  const { RoleAccessData, } = useSelector((state) => ({
+    RoleAccessData: state.Login.RoleData,
+  }));
+   useEffect(()=>{
+    let SearchRoleData_initial =[]
+    RoleAccessData.map((i)=>{
+        i.ModuleData.map((index)=>{
+            SearchRoleData_initial.push(index)
+        })
+    })
+    setSearchRoleData(SearchRoleData_initial)
+   },[RoleAccessData])
+ console.log("searchRoleData",searchRoleData)
 
     useEffect(() => {
 
@@ -199,9 +215,9 @@ export default function SearchBoxSecond() {
 
 
         /*initiate the autocomplete function on the "myInput" element, and pass along the countries array as possible autocomplete values:*/
-        autocomplete(document.getElementById("myInput"), countries);
+        autocomplete(document.getElementById("myInput"), searchRoleData);
 
-    }, [])
+    }, [searchRoleData])
 
 
     return (

@@ -71,7 +71,7 @@ const Breadcrumb = props => {
         {
           !(props.breadcrumbCount === undefined)
             ?
-            <div className="bg-soft-success text-center text-danger external-event col-ls-6 col-form-label">
+            <div className="bg-soft-success text-center text-danger external-event col-ls-6 col-form-label  border border-Success rounded-2">
               Count : &nbsp;(&nbsp; {props.breadcrumbCount}&nbsp;)
             </div>
             :

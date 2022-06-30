@@ -382,10 +382,11 @@ debugger
                       <Th data-priority="1">GST</Th>
                       <Th data-priority="3">
                         <Row>
-                        <Col md={6}>Quantity&nbsp;&nbsp;&nbsp;</Col>
+                        <Col md={3}>Quantity&nbsp;&nbsp;&nbsp;</Col>
                       <Col  ms={3}className="bg-soft-warning text-center text-secondary external-event rounded-2  ">
                 ItemCount : &nbsp;(&nbsp; {itemCount}&nbsp;)
               </Col>
+              <Col md={3}></Col>
               </Row>    
               </Th>
                       <Th data-priority="1">UOM</Th>
