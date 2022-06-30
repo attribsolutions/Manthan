@@ -621,7 +621,7 @@ const PartyUIDemo = (props) => {
                 <Container fluid>
                     <Row>
                         <Col lg={12}>
-                            <Card>
+                            <Card >
                                 <CardHeader>
                                     <h4 className="card-title">React Validation - Normal</h4>
                                     <p className="card-title-desc">Provide valuable, actionable feedback to your users with HTML5 form validation–available in all our supported browsers.</p>
@@ -629,7 +629,7 @@ const PartyUIDemo = (props) => {
                                 <CardBody>
                                     <AvForm>
                                         <Row>
-                                            <Card>
+                                            <Card >
                                                 <CardBody style={{ backgroundColor: "whitesmoke" }}>
                                                     <Row>
 
@@ -808,7 +808,7 @@ const PartyUIDemo = (props) => {
                                                         <Col md="1"></Col>
                                                         <Col md="3">
                                                             <FormGroup className="mb-3">
-                                                                <Label htmlFor="validationCustom01">IsActive</Label>
+                                                            {/* <Label htmlFor="validationCustom01">IsActive</Label>
                                                                 <AvField
                                                                     name="Name"
                                                                     placeholder="Please Enter Name"
@@ -817,7 +817,24 @@ const PartyUIDemo = (props) => {
                                                                     className="form-control"
                                                                     validate={{ required: { value: true } }}
                                                                     id="validationCustom01"
-                                                                />
+                                                                /> */}
+                                                            <Row style={{marginTop:'25px'}}>
+                                                                <Label
+                                                                    htmlFor="horizontal-firstname-input"
+                                                                    className="col-sm-3 col-form-label"
+                                                                >
+                                                                    IsActive
+                                                                </Label>
+                                                                <Col md={4}  style={{marginTop:'7px'}}  className="form-check form-switch form-switch-lg ">
+                                                                    <Input
+                                                                        type="checkbox"
+                                                                        className="form-control"
+                                                                        id="horizontal-firstname-input"
+                                                                        placeholder="Enter Your First Name"
+                                                                    />
+                                                                </Col>
+                                                            </Row>
+                                                            
                                                             </FormGroup>
                                                         </Col>
 
