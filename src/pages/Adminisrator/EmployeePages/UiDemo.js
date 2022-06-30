@@ -119,7 +119,8 @@ export default function UiDemo() {
                                                     placeholder="Enter Your First Name"
                                                 />
                                             </Col>
-                                        </Row> <Row className="mb-2">
+                                        </Row> 
+                                        <Row className="mb-2">
                                             <Label
                                                 htmlFor="horizontal-firstname-input"
                                                 className="col-sm-1 col-form-label"

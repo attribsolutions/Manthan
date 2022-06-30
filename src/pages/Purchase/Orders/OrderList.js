@@ -169,7 +169,7 @@ useEffect(() => {
   const TableListColumns = [
     {
       text: "Customer",
-      dataField: "customerName",
+      dataField: "CustomerName",
       sort: true,
     },
     {
@@ -191,7 +191,7 @@ useEffect(() => {
           <buton
             type="button"
             onClick={() => {
-              EditPageHandler(order.id);
+              EditPageHandler(order.ID);
             }}
             className="badge badge-soft-primary font-size-12"
           >

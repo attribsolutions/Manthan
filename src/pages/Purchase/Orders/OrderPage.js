@@ -23,6 +23,7 @@ import { InvoiceFakeData } from "./InvioceFakedata";
 import { AlertState } from "../../../store/Utilites/CostumeAlert/actions";
 import { topFunction } from "./OrderList";
 import { MetaTags } from "react-meta-tags";
+import ReactSelect from "react-select";
 
 const OrderPage = (props) => {
 
@@ -58,7 +59,7 @@ const OrderPage = (props) => {
 
     dispatch(getOrderItems_ForOrderPage());
 
-    debugger
+
     if (!(editDataGatingFromList === undefined)) {
       setEditData(editDataGatingFromList[0]);
       setIsEdit(true);
@@ -241,6 +242,94 @@ const OrderPage = (props) => {
   }
 
 
+  const [itemArray, setitemArray] = useState([])
+  const [itemCount, setItemCount] = useState(0)
+  const [totalAmountCount, setTotalAmountCount] = useState(0)
+
+  function InputHandelar(e, i) {
+    // debugger
+    const quantity = parseFloat(e.target.value)
+    const rate = parseFloat(i.Rate)
+    const Gst = parseFloat(i.GSTPercentage)
+    const basicAmount = rate * quantity;
+    const GstAmount = basicAmount * (Gst / 100)
+    const totalAmount = GstAmount + basicAmount
+    // console.log(e)
+    // console.log(i)
+    debugger
+    let test = []
+    let TotalAmountCount_initial = 0
+    let ItemCount_initial = 0
+    const find = itemArray.find((element) => {
+      return element.ItemID === i.ID
+    });
+
+
+    var dataa = {
+      ItemID: i.ID,
+      Quantity: quantity,
+      MRP: i.MRP,
+      Rate: rate,
+      UnitID: 1,
+      BaseUnitQuantity: 1,
+      GST: Gst,
+      BasicAmount: basicAmount,
+      GSTAmount: GstAmount,
+      CGST: 1,
+      SGST: 1,
+      IGST: 1,
+      CGSTPercentage: 1,
+      SGSTPercentage: 1,
+      IGSTPercentage: 1,
+      Amount: totalAmount
+    }
+debugger
+    if (quantity > 0) {
+      // if (itemArray.length <= 0) {
+      //   setitemArray([...itemArray, dataa])
+      //   test=[...itemArray, dataa]
+      // } else 
+      if (find === undefined) {
+        setitemArray([...itemArray, dataa])
+        test=[...itemArray, dataa]
+      } else {
+
+        test = itemArray.filter((ele) => !(ele.ItemID === i.ID))
+        test.push(dataa);
+        // const isLargeNumber = (element) => element.ItemID === i.ID;
+        // const a = itemArray.findIndex(isLargeNumber);
+        setitemArray(test)
+      }
+
+    }
+    else {
+      test = itemArray.filter((ele) => !(ele.ItemID === i.ID))
+      setitemArray(test)
+
+    }
+
+    test.map((count) => {
+      TotalAmountCount_initial=TotalAmountCount_initial + count.Amount
+      ItemCount_initial= ItemCount_initial + 1
+    })
+    if((test.length>0)){
+    setTotalAmountCount(TotalAmountCount_initial)
+    setItemCount(ItemCount_initial)
+  }
+  else{
+    setTotalAmountCount(0)
+    setItemCount(0)
+  }
+}
+
+
+
+
+  console.log("itemArray", itemArray)
+  console.log("setItemCount", itemCount)
+  console.log("setTotalAmountCount", totalAmountCount)
+
+
   return (
     <React.Fragment>
       <div className="page-content">
@@ -267,6 +356,12 @@ const OrderPage = (props) => {
                 id="example-date-input"
               />
             </div>
+            <Col md={8}></Col>
+            <Col md={2}>
+              <div className="bg-soft-primary text-center text-primary external-event col-ls-6 col-form-label border border-danger rounded-2">
+                 Order Amount : &nbsp;(&nbsp; {totalAmountCount.toFixed(2)}&nbsp;)
+              </div>
+            </Col>
 
           </Row>
           <Row>
@@ -284,7 +379,15 @@ const OrderPage = (props) => {
                       <Th data-priority="1">Item Name</Th>
                       <Th data-priority="1">MRP</Th>
                       <Th data-priority="1">Rate</Th>
-                      <Th data-priority="3">Quantity</Th>
+                      <Th data-priority="1">GST</Th>
+                      <Th data-priority="3">
+                        <Row>
+                        <Col md={6}>Quantity&nbsp;&nbsp;&nbsp;</Col>
+                      <Col  ms={3}className="bg-soft-warning text-center text-secondary external-event rounded-2  ">
+                ItemCount : &nbsp;(&nbsp; {itemCount}&nbsp;)
+              </Col>
+              </Row>    
+              </Th>
                       <Th data-priority="1">UOM</Th>
                       <Th data-priority="3">Comments</Th>
                     </Tr>
@@ -326,7 +429,7 @@ const OrderPage = (props) => {
                               <React.Fragment>
                                 <label className="btn btn-secondary btn-sm waves-effect waves-light">
                                   {/* {item.ItemGroupName} */}
-                                  {(itemgroups =item.ItemGroupName)}
+                                  {(itemgroups = item.ItemGroupName)}
                                 </label>
                                 <br></br>
                                 <label
@@ -352,49 +455,65 @@ const OrderPage = (props) => {
                           </Td>
 
                           <Td>
-                            <label > {item.MRP} </label>
                             <input
                               type="hidden"
                               id={"lblItemMRP" + key}
                               name={"lblItemMRP" + key}
                               value={item.MRP}
                             />
+                            <label style={{ a: "end" }}> {item.MRP} </label>
+
                           </Td>
                           <Td>
-                            <label > {item.MRP} </label>
+                            <label > {item.Rate} </label>
                             <input
                               type="hidden"
-                              value={item.MRP}
+                              value={item.Rate}
                               id={"rate" + key}
                               className="form-control form-control-sm"
                               autoComplete="false"
                             />
                           </Td>
                           <Td>
+                            <label > {item.GSTPercentage} </label>
+                            <input
+                              type="hidden"
+                              value={item.GSTPercentage}
+                              id={"rate" + key}
+                              className="form-control form-control-sm"
+                              autoComplete="false"
+                            />
+                          </Td>
+                          <Td>
+                            <Row style={{marginTop:"5px",textAlign:"right"}}>
+                            <Col md={1}></Col><Col md={8}>
                             <input
                               type="text"
                               id={"inp-txtqty" + key}
                               key={item.ID}
-                              disabled={item.MRP > 0 ? false : true}
+                              disabled={item.Rate > 0 ? false : true}
                               defaultValue={qat}
                               onKeyDown={(e) => {
                                 handleKeyDown(e);
+                              }}
+                              onChange={(e) => {
+                                InputHandelar(e, item)
                               }}
                               className="form-control form-control-sm"
                               autoComplete="off"
                               ng-required="true"
                             />
+                            </Col>
+                            </Row>
                           </Td>
                           <Td>
-                            <select
+                            <ReactSelect
                               classNamePrefix="select2-selection"
                               id={"ddlUnit" + key}
                             >
-                              <option value={1}
-                              >
-                                {"No"}
-                              </option>
-                            </select>
+                             
+                             
+                            </ReactSelect>
                           </Td>
                           <Td>
                             {" "}
@@ -422,7 +541,7 @@ const OrderPage = (props) => {
                   </button> :
                 </div> */}
 
-               {
+                {
                   IsEdit ?
                     (
                       <div className="row update1" style={{ paddingBottom: 'center' }}>

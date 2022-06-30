@@ -201,8 +201,7 @@ console.log(EditData)
       <div className="page-content" style={{ marginTop: IsEditModeSaSS }}>
         <Breadcrumbs breadcrumbItem={"Employee Master "} />
         <Container fluid>
-          <Row>
-            <Col lg={12}>
+        
               <Card>
                 <CardBody>
                   <AvForm
@@ -483,8 +482,7 @@ console.log(EditData)
                   </div>
                 </CardBody>
               </Card>
-            </Col>
-          </Row>
+          
         </Container>
       </div>
     </React.Fragment >
