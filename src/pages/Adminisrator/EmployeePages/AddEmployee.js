@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import Select from "react-select";
-import { Card, CardBody, Col, Container, Row, Label, Button, Input } from "reactstrap";
+import { Card, CardBody, Col, Container, Row, Label, Button, Input, CardHeader, FormGroup } from "reactstrap";
 import { AvForm, AvGroup, } from "availity-reactstrap-validation";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -93,30 +93,30 @@ const AddEmployee = (props) => {
 
   // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
   useEffect(() => {
-    document.getElementById("txtName").focus();
+    // document.getElementById("txtName").focus();
 
     if (!(editDataGatingFromList === undefined)) {
-      setEditData(editDataGatingFromList[0]);
+      setEditData(editDataGatingFromList);
       setIsEdit(true);
       setDesignationID({
-        value: editDataGatingFromList[0].Designation_id,
-        label: editDataGatingFromList[0].DesignationName
+        value: editDataGatingFromList.Designation_id,
+        label: editDataGatingFromList.DesignationName
       })
       setEmployeeType({
-        value: editDataGatingFromList[0].EmployeeType_id,
-        label: editDataGatingFromList[0].EmployeeTypeName
+        value: editDataGatingFromList.EmployeeType_id,
+        label: editDataGatingFromList.EmployeeTypeName
       })
       setState({
-        value: editDataGatingFromList[0].State_id,
-        label: editDataGatingFromList[0].StateName
+        value: editDataGatingFromList.State_id,
+        label: editDataGatingFromList.StateName
       })
       // setRegion({
       //   value: editDataGatingFromList[0].Region.ID,
       //   label: editDataGatingFromList[0].Region.Name
       // })
       setCompany({
-        value: editDataGatingFromList[0].Companies_id,
-        label: editDataGatingFromList[0].CompanyName
+        value: editDataGatingFromList.Companies_id,
+        label: editDataGatingFromList.CompanyName
       })
 
       dispatch(editEmployeeSuccess({ Status: false }))
@@ -195,14 +195,24 @@ const AddEmployee = (props) => {
   // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
   var IsEditModeSaSS = ''
   if (IsEdit === true) { IsEditModeSaSS = "-3.5%" };
-console.log(EditData)
+  console.log(EditData)
   return (
     <React.Fragment>
       <div className="page-content" style={{ marginTop: IsEditModeSaSS }}>
         <Breadcrumbs breadcrumbItem={"Employee Master "} />
         <Container fluid>
+
         
-              <Card>
+             
+<Card>
+          <Row>
+            <Col lg={12}>
+              <Card >
+                <CardHeader>
+                  <h4 className="card-title">React Validation - Normal</h4>
+                  <p className="card-title-desc">Provide valuable, actionable feedback to your users with HTML5 form validation–available in all our supported browsers.</p>
+                </CardHeader>
+
                 <CardBody>
                   <AvForm
                     onValidSubmit={(e, v) => {
@@ -210,272 +220,237 @@ console.log(EditData)
                     }}
                     ref={formRef}
                   >
+                    <Row>
+                      <Card >
+                        <CardBody style={{ backgroundColor: "whitesmoke" }}>
+                          <Row className="mb-4">
 
-                    <AvGroup>
-                      <Row className="mb-4">
-                        <Label className="col-sm-2 col-form-label">
-                          Name
-                        </Label>
-                        <Col sm={4}>
-                          <AvField name="Name" id="txtName" value={EditData.Name}
-                            type="text"
-                            placeholder="Please Enter Name"
-                            autoComplete='off'
-                            validate={{
-                              required: { value: true, errorMessage: 'Please enter your Name...!' },
-                            }}
-                          />
-                        </Col>
-                      </Row>
-                    </AvGroup>
-                    <AvGroup>
-                      <Row className="mb-4">
-                        <Label className="col-sm-2 col-form-label">
-                          Address
-                        </Label>
-                        <Col sm={4}>
-                          <AvField name="Address" value={EditData.Address} type="text"
-                            placeholder=" Please Enter Address "
-                            validate={{
-                              required: { value: true, errorMessage: 'Please Enter your Address' },
-                            }}
-                          />
-                        </Col>
-                      </Row>
-                    </AvGroup>
-                    <AvGroup>
-                      <Row className="mb-4">
-                        <Label className="col-sm-2 col-form-label">
-                          Mobile No.
-                        </Label>
-                        <Col sm={4}>
-                          <AvField name="Mobile" type="tel"
-                            value={EditData.Mobile}
-                            placeholder="+91 "
-                            validate={{
-                              required: { value: true, errorMessage: 'Please Enter your Mobile NO' },
-                              tel: {
-                                pattern: /^(\+\d{1,3}[- ]?)?\d{10}$/
-                              }
-                            }}
+                            <Col md="3">
+                              <FormGroup className="mb-3">
+                                <Label htmlFor="validationCustom01">Name </Label>
+                                <AvField name="Name" id="txtName" value={EditData.Name}
+                                  type="text"
+                                  placeholder="Please Enter Name"
+                                  autoComplete='off'
+                                  validate={{
+                                    required: { value: true, errorMessage: 'Please enter your Name...!' },
+                                  }}
+                                />
+                              </FormGroup>
+                            </Col>
 
-                          />
-                        </Col>
-                      </Row>
-                    </AvGroup>
+                            <Col md="1">  </Col>
+                            <Col md="3">
+                              <FormGroup className="mb-3">
+                                <Label htmlFor="validationCustom01">Email </Label>
+                                <AvField name="email" 
+                                 id="email"
+                                 type="email"
+                                  value={EditData.email}
+                                  placeholder="Enter your EmailID "
+                                  validate={{
+                                    required: { value: true, errorMessage: 'Please Enter your EmailID' },
+                                    tel: {
+                                      pattern: /\S+@\S+\.\S+/
+                                    }
+                                  }}
 
-                    <AvGroup>
-                      <Row className="mb-4">
-                        <Label className="col-sm-2 col-form-label">
-                          EmailID
-                        </Label>
-                        <Col sm={4}>
-                          <AvField name="email" type="email"
-                            value={EditData.email}
-                            placeholder="Enter your EmailID "
-                            validate={{
-                              required: { value: true, errorMessage: 'Please Enter your EmailID' },
-                              tel: {
-                                pattern: /\S+@\S+\.\S+/
-                              }
-                            }
-                            }
+                                />
 
-                          />
-                        </Col>
-                      </Row>
-                    </AvGroup>
+                              </FormGroup>
+                            </Col>
+                            <Col md="1">  </Col>
 
-                    <Row className="mb-4">
+                            <Col md="3">
+                              <FormGroup className="mb-3">
+                                <Label htmlFor="validationCustom01">MobileNo </Label>
+                                <AvField name="Mobile" type="tel"
+                                  value={EditData.Mobile}
+                                  placeholder="+91 "
+                                  validate={{
+                                    required: { value: true, errorMessage: 'Please Enter your Mobile NO' },
+                                    tel: {
+                                      pattern: /^(\+\d{1,3}[- ]?)?\d{10}$/
+                                    }
+                                  }}
 
-                      <Label className="col-sm-2 col-form-label">
-                      DOB
-                      </Label>
-                      <div class="col-lg-2">
-                        <AvField name="DOB" type="date"
-                          id="dateInput"
-                          value={EditData.DOB}
-                          validate={{
-                            required: { value: true, errorMessage: '*Birth of Date is Required' },
-                          }
-                          }
-                        />
-                      </div>
+                                />
+                              </FormGroup>
+                            </Col>
+                          </Row>
+                     
+                          <Row>
+                            <Col md="3">
+                              <FormGroup className="mb-3">
+                                <Label htmlFor="validationCustom01">
+                                  DOB </Label>
+                                <div class="col-lg-12">
+                                  <AvField name="DOB" type="date"
+                                    id="dateInput"
+                                    value={EditData.DOB}
+                                    validate={{
+                                      required: { value: true, errorMessage: '*Birth of Date is Required' },
+                                    }
+                                    }
+                                  />
+                                </div>
+                              </FormGroup>
+                            </Col>
+
+                            <Col md="1">  </Col>
+                            <Col md="3">
+                              <FormGroup className="mb-3">
+                                <Label htmlFor="validationCustom01"> AadharNo </Label>
+                                <AvField name="AadharNo" type="text"
+                                  value={EditData.AadharNo}
+                                  placeholder="Enter your AadharNo. "
+                                  validate={{
+                                    required: { value: true, errorMessage: 'Please Enter your AadharNo' },
+                                    tel: {
+                                      pattern: /^[2-9]{1}[0-9]{3}\s[0-9]{4}\s[0-9]{4}$/
+                                    }
+                                  }
+                                  }
+                                />
+                              </FormGroup>
+                            </Col>
+                            <Col md="1">  </Col>
+                            <Col md="3">
+                              <FormGroup className="mb-3">
+                                <Label htmlFor="validationCustom01"> PAN No. </Label>
+                                <AvField name="PAN" type="text"
+                                  value={EditData.PAN}
+                                  placeholder="Enter your PAN No. "
+                                  validate={{
+                                    required: { value: true, errorMessage: 'Please Enter your PAN No.' },
+                                    tel: {
+                                      pattern: /[A-Z]{5}[0-9]{4}[A-Z]{1}$/
+                                    }
+                                  }
+                                  }
+                                />
+                              </FormGroup>
+                            </Col>
+                          </Row>
+
+
+                          <Row>
+                            <Col md="3">
+                              <FormGroup className="mb-3">
+                                <Label htmlFor="validationCustom01">Address </Label>
+                                <AvField name="Address" value={EditData.Address} type="text"
+                                  placeholder=" Please Enter Address "
+                                  validate={{
+                                    required: { value: true, errorMessage: 'Please Enter your Address' },
+                                  }}
+                                />
+                              </FormGroup>
+                            </Col>
+                            <Col md="1"></Col>
+                            <Col md="3">
+                              <FormGroup className="mb-3">
+                                <Label htmlFor="validationCustom01">State </Label>
+                                <Select
+                                  value={Stateselect}
+                                  options={StateValues}
+                                  onChange={(e) => { handllerState(e) }}
+                                />
+                              </FormGroup>
+                            </Col>
+                          </Row>
+                        </CardBody>
+                      </Card>
                     </Row>
 
-                    <AvGroup>
-                      <Row className="mb-4">
-                        <Label className="col-sm-2 col-form-label">
-                          PAN
-                        </Label>
-                        <Col sm={4}>
-                          <AvField name="PAN" type="text"
-                            value={EditData.PAN}
-                            placeholder="Enter your PAN No. "
-                            validate={{
-                              required: { value: true, errorMessage: 'Please Enter your PAN No.' },
-                              tel: {
-                                pattern: /[A-Z]{5}[0-9]{4}[A-Z]{1}$/
-                              }
-                            }
-                            }
+                    <Row>
+                      <Card >
+                        <CardBody style={{ backgroundColor: "whitesmoke" }}>
+                          <Row className="mb-4">
+                         
+                            <Col md="3">
+                              <FormGroup className="mb-3">
+                                <Label htmlFor="validationCustom01">Company Name </Label>
+                                <Select
+                                  value={Companyselect}
+                                  options={CompanyValues}
+                                  onChange={(e) => { handllerCompany(e) }}
+                                />
+                              </FormGroup>
+                            </Col>
 
-                          />
-                        </Col>
-                      </Row>
-                    </AvGroup>
+                            <Col md="1">  </Col>
+                            <Col md="3">
+                              <FormGroup className="mb-3">
+                                <Label htmlFor="validationCustom01">Employee Type </Label>
+                                <Select
+                                  value={EmployeeTypeselect}
+                                  options={EmployeeTypeValues}
+                                  onChange={(e) => { handllerEmployeeType(e) }}
+                                />
 
-                    <AvGroup>
-                      <Row className="mb-4">
-                        <Label className="col-sm-2 col-form-label">
-                          AadharNo
-                        </Label>
-                        <Col sm={4}>
-                          <AvField name="AadharNo" type="text"
-                            value={EditData.AadharNo}
-                            placeholder="Enter your AadharNo. "
-                            validate={{
-                              required: { value: true, errorMessage: 'Please Enter your AadharNo' },
-                              tel: {
-                                pattern: /^[2-9]{1}[0-9]{3}\s[0-9]{4}\s[0-9]{4}$/
-                              }
-                            }
-                            }
-                          />
-                        </Col>
-                      </Row>
-                    </AvGroup>
+                              </FormGroup>
+                            </Col>
+                            </Row>
 
-                    <AvGroup>
-                      <Row className="mb-4">
-                        <Label className="col-sm-2 col-form-label">
-                          Working Hours
-                        </Label>
-                        <Col sm={4}>
-                          <AvField name="working_hours"  value={EditData.working_hours}
-                            type="number"
-                            placeholder="Please Enter WorkingHours"
-                            autoComplete='off'
-                            validate={{
-                              number: true,
-                              required: { value: true, errorMessage: '*WorkingHours is Required' },
-                              tel: {
-                                  pattern: /^\d{1,4}$/,
-                                  errorMessage: '*WorkingHours is Required'
-                              }
-                          }}
-                          />
-                        </Col>
-                      </Row>
-                    </AvGroup>
 
-                    <Row className="mb-4">
-                      <Label className="col-sm-2 col-form-label">
-                        DesignationID
-                      </Label>
-                      <Col sm={4}>
-                        <Select
-                          value={DesignationIDselect}
-                          options={DesignationIDValues}
-                          onChange={(e) => { handllerDesignationID(e) }}
-                        />
-                      </Col>
+                            <Row>
+                          
+                            <Col md="3">
+                              <FormGroup className="mb-3">
+                                <Label htmlFor="validationCustom01">DesignationID </Label>
+                                <Select
+                                  value={DesignationIDselect}
+                                  options={DesignationIDValues}
+                                  onChange={(e) => { handllerDesignationID(e) }}
+                                />
+                              </FormGroup>
+                            </Col>
+                            <Col md="1">  </Col>
+
+                            <Col md="3">
+                              <FormGroup className="mb-3">
+                                <Label htmlFor="validationCustom01">working_hours </Label>
+                                <AvField name="working_hours" value={EditData.working_hours}
+                                  type="number"
+                                  placeholder="Please Enter WorkingHours"
+                                  autoComplete='off'
+                                  validate={{
+                                    number: true,
+                                    required: { value: true, errorMessage: '*WorkingHours is Required' },
+                                   
+                                  }}
+                                />
+                              </FormGroup>
+                            </Col>
+                          </Row>
+                          <Row className="justify-content-end">
+                            <Col sm={10}></Col>
+                            <Col sm={2}>
+                              <div>
+                                {
+                                  IsEdit ? (
+                                    <button
+                                      type="submit"
+                                      data-mdb-toggle="tooltip" data-mdb-placement="top" title="Update Modules ID"
+                                      className="btn btn-success w-md"
+                                    >
+                                      <i class="fas fa-edit me-2"></i>Update
+                                    </button>) : (
+                                    <button
+                                      type="submit"
+                                      data-mdb-toggle="tooltip" data-mdb-placement="top" title="Save Modules ID"
+                                      className="btn btn-success w-md"
+                                    > <i className="fas fa-save me-2"></i> Save
+                                    </button>
+                                  )
+                                }
+                              </div>
+                            </Col>
+                          </Row>
+                        </CardBody>
+                      </Card>
                     </Row>
 
-                    <Row className="mb-4">
-                      <Label className="col-sm-2 col-form-label">
-                        EmployeeType
-                      </Label>
-                      <Col sm={4}>
-                        <Select
-                          value={EmployeeTypeselect}
-                          options={EmployeeTypeValues}
-                          onChange={(e) => { handllerEmployeeType(e) }}
-                        />
-                      </Col>
-                    </Row>
-
-                    {/* <Row className="mb-3">
-                      <Label className="col-sm-2 col-form-label">
-                        JoiningDate
-                      </Label>
-                      <div class="col-lg-2">
-                   
-                         <AvField name="JoiningDate" type="date"
-                          id="JoiningDate"
-                          value={EditData.DOB}
-                          validate={{
-                            required: { value: true, errorMessage: '*Joining Date is Required' },
-                          }
-                          }
-                        />
-                      </div>
-                    </Row> */}
-
-                    <Row className="mb-4">
-                      <Label className="col-sm-2 col-form-label">
-                        State
-                      </Label>
-                      <Col sm={4}>
-                        <Select
-                          value={Stateselect}
-                          options={StateValues}
-                          onChange={(e) => { handllerState(e) }}
-                        />
-                      </Col>
-                    </Row>
-
-                    {/* <Row className="mb-4">
-                      <Label className="col-sm-2 col-form-label">
-                        Region
-                      </Label>
-                      <Col sm={4}>
-                        <Select
-                          value={Regionselect}
-                          options={RegionValues}
-                          onChange={(e) => { handllerRegion(e) }}
-                        />
-                      </Col>
-                    </Row> */}
-
-                    <Row className="mb-4">
-                      <Label className="col-sm-2 col-form-label">
-                        CompanyName
-                      </Label>
-                      <Col sm={4}>
-                        <Select
-                          value={Companyselect}
-                          options={CompanyValues}
-                          onChange={(e) => { handllerCompany(e) }}
-                        />
-                      </Col>
-                    </Row>
-
-                    <Row className="justify-content-end">
-                      <Col sm={10}></Col>
-                      <Col sm={2}>
-                        <div>
-                          {
-                            IsEdit ? (
-                              <button
-                                type="submit"
-                                data-mdb-toggle="tooltip" data-mdb-placement="top" title="Update Employee"
-                                className="btn btn-success w-md"
-                              >
-                                <i class="fas fa-edit me-2"></i>Update
-                              </button>) : (
-                              <button
-                                type="submit"
-                                data-mdb-toggle="tooltip" data-mdb-placement="top" title="Save Employee"
-                                className="btn btn-success w-md"
-                              > <i className="fas fa-save me-2"></i> Save
-                              </button>
-                            )
-                          }
-                        </div>
-                      </Col>
-
-                    </Row>
 
                   </AvForm>
                   <div>
@@ -483,6 +458,9 @@ console.log(EditData)
                 </CardBody>
               </Card>
           
+        </Col>
+        </Row>
+        </Card>
         </Container>
       </div>
     </React.Fragment >

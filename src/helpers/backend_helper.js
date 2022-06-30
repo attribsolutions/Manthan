@@ -181,12 +181,13 @@ export const Items_Master_Edit_API = (id) => get(`${url.Items_MASTER_API}/${id}`
 export const Items_Master_Update_API = (data, id) => put(`${url.Items_MASTER_API}/${id}`, data)// update api
 
 
-// Role Master
+// Party Master
 export const Party_Master_Get_API = () => get(url.PARTY_MASTER_API)//get api
 export const Party_Master_Post_API = (data) => post(url.PARTY_MASTER_API, data)// post api
 export const Party_Master_Delete_API = (id) => del(`${url.PARTY_MASTER_API}/${id}`)// delete api
 export const Party_Master_Edit_API = (id) => get(`${url.PARTY_MASTER_API}/${id}`)// edit api
 export const Party_Master_Update_API = (data, id) => put(`${url.PARTY_MASTER_API}/${id}`, data)// update api
+export const GetDistrictOnState_For_Dropdown = () => get(url.GetDistrictOnState)
 
 
 export {

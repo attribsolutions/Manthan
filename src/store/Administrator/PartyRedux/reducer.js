@@ -1,6 +1,7 @@
 import {
     DELETE_PARTY_ID_SUCCESS,
     EDIT_PARTY_ID_SUCCESS,
+    GET_DISTRICT_ON_STATE_SUCCESS,
     GET_PARTY_LIST_API_SUCCESS,
     POST_PARTY_DATA,
     POST_PARTY_DATA_SUCCESS,
@@ -15,6 +16,7 @@ const INIT_STATE = {
     deleteMessage: { Status: false },
     editData: { Status: false },
     updateMessage: { Status: false },
+    DistrictOnState:[]
 };
 
 const PartyMasterReducer = (state = INIT_STATE, action) => {
@@ -58,6 +60,14 @@ const PartyMasterReducer = (state = INIT_STATE, action) => {
                 ...state,
                 updateMessage: action.payload,
             };
+
+       // GetDistrictOnState API
+        case GET_DISTRICT_ON_STATE_SUCCESS:
+            return {
+              ...state,
+              DistrictOnState: action.payload,
+            };
+  
 
         default:
             return state;

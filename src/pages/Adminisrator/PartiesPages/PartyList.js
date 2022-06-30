@@ -19,7 +19,7 @@ import {
     updatePartyIDSuccess
 }  from '../../../store/Administrator/PartyRedux/action';
 import PartyMaster from './PartyMaster';
-import PartyUIDemo from './PartyUIDemo';
+// import PartyUIDemo from './PartyUIDemo';
 
 const PartyList = () => {
     const dispatch = useDispatch();
@@ -49,11 +49,11 @@ const PartyList = () => {
             }))
             tog_center()
         }
-        else if (deleteMessage.Status === true) {
+        else if (updateMessage.Status === true) {
             dispatch(deletePartyIDSuccess({ Status: false }))
             dispatch(AlertState({
                 Type: 3, Status: true,
-                Message: deleteMessage.Message,
+                Message: updateMessage.Message,
             }));
         }
     }, [updateMessage.Status, dispatch]);
@@ -216,7 +216,7 @@ const PartyList = () => {
                     toggle={() => { tog_center() }}
                     size="xl"
                 >
-                    <PartyUIDemo state={editData.Data} />
+                    <PartyMaster state={editData.Data} />
                 </Modal>
             </div>
         </React.Fragment>
