@@ -64,6 +64,7 @@ function* Get_Party_GenratorFunction() {
     try {
       yield put(SpinnerState(true))
       const response = yield call(Party_Master_Update_API, updateData, ID);
+      console.log("saga file response", response)
       yield put(SpinnerState(false))
       yield put(updatePartyIDSuccess(response))
     }
