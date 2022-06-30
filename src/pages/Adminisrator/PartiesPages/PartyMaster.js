@@ -5,7 +5,8 @@ import { AvForm, AvGroup, AvField } from "availity-reactstrap-validation";
 import { useDispatch, useSelector } from "react-redux";
 import { AlertState } from "../../../store/Utilites/CostumeAlert/actions";
 import Select from "react-select";
-import { editPartyIDSuccess, postPartyData, postPartyDataSuccess, updatePartyID } from "../../../store/Administrator/PartyRedux/action";
+import { editPartyIDSuccess, getDistrictOnState, getDistrictOnStateSuccess, postPartyData, postPartyDataSuccess, updatePartyID } from "../../../store/Administrator/PartyRedux/action";
+import { getState } from "../../../store/Administrator/M_EmployeeRedux/action";
 
 const PartyMaster = (props) => {
 
@@ -21,11 +22,39 @@ const PartyMaster = (props) => {
 
     //*** "isEditdata get all data from ModuleID for Binding  Form controls
     let editDataGatingFromList = props.state;
+    const [Stateselect, setState] = useState("");
+    const [DistrictOnStateselect, setDistrictOnState] = useState("");
+
 
     //Access redux store Data /  'save_ModuleSuccess' action data
-    const { PartySaveSuccess, } = useSelector((state) => ({
+    const { PartySaveSuccess, State,DistrictOnState } = useSelector((state) => ({
         PartySaveSuccess: state.PartyMasterReducer.PartySaveSuccess,
+        State: state.M_EmployeesReducer.State,
+        DistrictOnState: state.PartyMasterReducer.DistrictOnState,
     }));
+
+    useEffect(() => {
+        dispatch(getState());
+        dispatch(getDistrictOnState());
+    }, [dispatch]);
+
+
+    const StateValues = State.map((Data) => ({
+        value: Data.id,
+        label: Data.Name
+    }));
+    function handllerState(e) {
+        setState(e)
+    }
+
+    const DistrictOnStateValues = DistrictOnState.map((Data) => ({
+        value: Data.id,
+        label: Data.Name
+    }));
+    
+    function handllerDistrictOnState(e) {
+        setDistrictOnState(e)
+    }
 
     // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
     useEffect(() => {
@@ -405,9 +434,9 @@ const PartyMaster = (props) => {
                                                                 <Label htmlFor="validationCustom01">State </Label>
                                                                 <Col sm={12}>
                                                                     <Select
-                                                                        value={""}
-                                                                        options={""}
-                                                                    // onChange={(e) => { handllerDesignationID(e) }}
+                                                                        value={Stateselect}
+                                                                        options={StateValues}
+                                                                    onChange={(e) => { handllerState(e) }}
                                                                     />
                                                                 </Col>
                                                             </FormGroup>
@@ -419,9 +448,9 @@ const PartyMaster = (props) => {
                                                                 <Label htmlFor="validationCustom01">District </Label>
                                                                 <Col sm={12}>
                                                                     <Select
-                                                                        value={""}
-                                                                        options={""}
-                                                                    // onChange={(e) => { handllerDesignationID(e) }}
+                                                                        value={DistrictOnStateselect}
+                                                                        options={DistrictOnStateValues}
+                                                                    onChange={(e) => { handllerDistrictOnState(e) }}
                                                                     />
                                                                 </Col>
                                                             </FormGroup>

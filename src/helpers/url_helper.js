@@ -70,4 +70,5 @@ export const ITEMS_GROUP_API="/ItemGroup"
 
 // Party Master 
 export const PARTY_MASTER_API="/M_Parties"
+export const GetDistrictOnState="/GetDistrictOnState"
 

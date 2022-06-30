@@ -1,6 +1,8 @@
 import {
     DELETE_PARTY_ID, DELETE_PARTY_ID_SUCCESS,
     EDIT_PARTY_ID, EDIT_PARTY_ID_SUCCESS,
+    GET_DISTRICT_ON_STATE,
+    GET_DISTRICT_ON_STATE_SUCCESS,
     GET_PARTY_LIST_API, GET_PARTY_LIST_API_SUCCESS,
     POST_PARTY_DATA, POST_PARTY_DATA_SUCCESS,
     UPDATE_PARTY_ID, UPDATE_PARTY_ID_SUCCESS
@@ -58,3 +60,12 @@ export const updatePartyIDSuccess = (updateMessage) => ({
     payload: updateMessage,
 })
 
+// GetDistrictOnState API
+export const getDistrictOnState = () => ({
+    type: GET_DISTRICT_ON_STATE,
+   
+  });
+  export const getDistrictOnStateSuccess = (DistrictOnState) => ({
+    type: GET_DISTRICT_ON_STATE_SUCCESS,
+    payload:DistrictOnState,
+  });
