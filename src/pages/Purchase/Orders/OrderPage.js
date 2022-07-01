@@ -188,10 +188,10 @@ const OrderPage = (props) => {
       }),
     };
     debugger
-    if (IsEdit && selectedItemArray.length > 0) {
+    if (IsEdit && itemArray.length > 0) {
       dispatch(updateOrderID_From_OrderPage(requestOptions.body, EditData.id));
     }
-    else if (selectedItemArray.length > 0) {
+    else if (itemArray.length > 0) {
       dispatch(submitOrder_fromOrderPage(requestOptions.body));
     }
     else {
@@ -366,7 +366,7 @@ const OrderPage = (props) => {
                     dateFormat: "Y-m-d"
                   }}
                   onChange={(e) => {
-                    setOrderDate(e.target.value);
+                    // setOrderDate(e.target.value);
                   }}
                 />
               </FormGroup>
