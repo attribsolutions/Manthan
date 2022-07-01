@@ -2,13 +2,18 @@ import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux';
 import './style.css'
 export default function SearchBoxSecond() {
+
     const [searchRoleData, setSearchRoleData] = useState([])
      // const  RoleAccessData=demoRolleAcess
+
   const { RoleAccessData, } = useSelector((state) => ({
     RoleAccessData: state.Login.RoleData,
   }));
+
    useEffect(()=>{
+
     let SearchRoleData_initial =[]
+
     RoleAccessData.map((i)=>{
         i.ModuleData.map((index)=>{
             SearchRoleData_initial.push(index)
@@ -16,7 +21,7 @@ export default function SearchBoxSecond() {
     })
     setSearchRoleData(SearchRoleData_initial)
    },[RoleAccessData])
- console.log("searchRoleData",searchRoleData)
+
 
     useEffect(() => {
 

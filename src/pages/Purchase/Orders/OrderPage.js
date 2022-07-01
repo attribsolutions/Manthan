@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Button, Input } from "reactstrap";
+import { Button, FormGroup, Input, Label } from "reactstrap";
 import {
   Row,
   Col,
@@ -23,7 +23,14 @@ import { InvoiceFakeData } from "./InvioceFakedata";
 import { AlertState } from "../../../store/Utilites/CostumeAlert/actions";
 import { topFunction } from "./OrderList";
 import { MetaTags } from "react-meta-tags";
+import Select from "react-select";
+import "@vtaits/react-color-picker/dist/index.css"
+import "react-datepicker/dist/react-datepicker.css"
+//Import Flatepicker
+import "flatpickr/dist/themes/material_blue.css"
+import Flatpickr from "react-flatpickr"
 import ReactSelect from "react-select";
+import { getPartyListAPI } from "../../../store/Administrator/PartyRedux/action";
 
 const OrderPage = (props) => {
 
@@ -53,12 +60,20 @@ const OrderPage = (props) => {
 
 
 
+  const [itemArray, setitemArray] = useState([])
+  const [itemCount, setItemCount] = useState(0)
+  const [selectedCustomerState, setSelectedCustomerState] = useState({})
+  const [totalAmountCount, setTotalAmountCount] = useState(0)
+
 
   useEffect(() => {
     // document.getElementById("txtName").focus();
-
     dispatch(getOrderItems_ForOrderPage());
+    dispatch(getPartyListAPI())
+  }, [dispatch])
 
+
+  useEffect(() => {
 
     if (!(editDataGatingFromList === undefined)) {
       setEditData(editDataGatingFromList[0]);
@@ -74,12 +89,18 @@ const OrderPage = (props) => {
   }, [editDataGatingFromList, CheckPageMode])
 
 
-  const { OrderItems, APIResponse, CustomSearchInput, } = useSelector((state) => ({
+  const { OrderItems, APIResponse, CustomSearchInput, customerNameList } = useSelector((state) => ({
     OrderItems: state.OrderPageReducer.OrderItems,
     APIResponse: state.OrderPageReducer.submitOrderSuccess,
     CustomSearchInput: state.CustomSearchReducer.CustomSearchInput,
-
+    // **customerNameList ==> this is  party list data geting from party list API
+    customerNameList: state.PartyMasterReducer.pages
   }));
+
+  useEffect(() => {
+    CustomSearchHandller()
+  }, [CustomSearchInput])
+
 
   // This UseEffect clear Form Data and when modules Save Successfully.
   useEffect(() => {
@@ -117,51 +138,52 @@ const OrderPage = (props) => {
   }, [APIResponse.Status])
 
   const saveHandeller = () => {
-    debugger
+
+    const disc = document.getElementById("inp-description").value
     const selectedItemArray = [];
 
-    for (var i = 0; i < OrderItems.length - 1; i++) {
+    // for (var i = 0; i < OrderItems.length - 1; i++) {
 
-      let qty = document.getElementById("inp-txtqty" + i).value;
+    //   let qty = document.getElementById("inp-txtqty" + i).value;
 
-      if (qty > 0) {
+    //   if (qty > 0) {
 
-        var itemID = document.getElementById("lblItemID" + i).value;
-        var itemMRP = document.getElementById("lblItemMRP" + i).value;
-        var itemGST = document.getElementById("lblItemGST" + i).value;
-        var UnitID = document.getElementById("ddlUnit" + i).value;
-        var rate = document.getElementById("rate" + i).value;
-        var comments = document.getElementById("inp-comment" + i).value;
+    //     var itemID = document.getElementById("lblItemID" + i).value;
+    //     var itemMRP = document.getElementById("lblItemMRP" + i).value;
+    //     var itemGST = document.getElementById("lblItemGST" + i).value;
+    //     var UnitID = document.getElementById("ddlUnit" + i).value;
+    //     var rate = document.getElementById("rate" + i).value;
+    //     var comments = document.getElementById("inp-comment" + i).value;
 
-        let arrayElement = {
-          OrderId: 0,
-          ItemID: itemID,
-          Quantity: qty,
-          UnitID: UnitID,
-          MRP: itemMRP,
-          BaseUnitQuantity: "1.00",
-          Comments: comments,
-          GST: itemGST,
-          Rate: rate
-        };
-        selectedItemArray.push(arrayElement);
-      }
-    }
+    //     let arrayElement = {
+    //       OrderId: 0,
+    //       ItemID: itemID,
+    //       Quantity: qty,
+    //       UnitID: UnitID,
+    //       MRP: itemMRP,
+    //       BaseUnitQuantity: "1.00",
+    //       Comments: comments,
+    //       GST: itemGST,
+    //       Rate: rate
+    //     };
+    //     selectedItemArray.push(arrayElement);
+    //   }
+    // }
 
     const requestOptions = {
       body: JSON.stringify({
         CustomerID: 2,
         PartyID: 2,
         OrderAmount: totalAmountCount,
-        Descreption: "bb",
+        Descreption: disc,
         CreatedBy: 11,
-        OrderDate: !orderDate ? currentDate : orderDate,
+        OrderDate: orderDate,
         CompanyID: 1,
         DivisionID: 3,
-        ExpectedDeliveryDate: !orderDate ? currentDate : orderDate,
-        CreatedOn: !orderDate ? currentDate : orderDate,
+        ExpectedDeliveryDate: orderDate,
+        CreatedOn: orderDate,
         UpdatedBy: 1,
-        UpdatedOn: !orderDate ? currentDate : orderDate,
+        UpdatedOn: orderDate,
         OrderItem: itemArray,// selectedItemArray,
       }),
     };
@@ -213,13 +235,6 @@ const OrderPage = (props) => {
     }
   }
 
-
-  useEffect(() => {
-    if (!(CustomSearchInput === "")) { CustomSearchHandller() }
-  }, [CustomSearchInput])
-
-
-
   function CustomSearchHandller() {
 
     var input, filter, table, tr, td, i, txtValue;
@@ -240,11 +255,6 @@ const OrderPage = (props) => {
     }
 
   }
-
-
-  const [itemArray, setitemArray] = useState([])
-  const [itemCount, setItemCount] = useState(0)
-  const [totalAmountCount, setTotalAmountCount] = useState(0)
 
   function InputHandelar(e, i) {
 
@@ -322,13 +332,11 @@ const OrderPage = (props) => {
     }
   }
 
-
-
-
-  console.log("itemArray", itemArray)
-  console.log("setItemCount", itemCount)
-  console.log("setTotalAmountCount", totalAmountCount)
-
+  //  select customer  options ==> gating data  from party master 
+  const CustomerDropdownOptions = customerNameList.map((index) => ({
+    value: index.ID,
+    label: index.Name
+  }));
 
   return (
     <React.Fragment>
@@ -343,21 +351,59 @@ const OrderPage = (props) => {
           breadcrumbCount={OrderItems.length}
         />
         <Container fluid>
-          <Row className="mb-1 ">
-            <div className="col-lg-2 ">
-              <Input
-                className="form-control"
-                type="date"
-                defaultValue={currentDate}
-                onChange={(e) => {
-                  setOrderDate(e.target.value);
-                }}
-                on
-                id="example-date-input"
-              />
-            </div>
-            <Col md={8}></Col>
+          <Row className="mb-1 border border-black ">
+
+            <Col md="2" className="">
+              <FormGroup className="mb-4">
+                <Label htmlFor="validationCustom01">Order Date </Label>
+                <Flatpickr
+                  className="form-control d-block"
+                  defaultValue={currentDate}
+                  placeholder="dd Mm,yyyy"
+                  options={{
+                    altInput: true,
+                    altFormat: "F j, Y",
+                    dateFormat: "Y-m-d"
+                  }}
+                  onChange={(e) => {
+                    setOrderDate(e.target.value);
+                  }}
+                />
+              </FormGroup>
+            </Col>
+
+            <Col md="2">
+              <FormGroup className="mb-4">
+                <Label htmlFor="validationCustom01">Customer Name </Label>
+                <Col>
+                  <ReactSelect
+                    Value={selectedCustomerState}
+                    classNamePrefix="select2-Customer"
+                    id={"inp-customerName"}
+                    options={CustomerDropdownOptions}
+                    onchange={(e) => { setSelectedCustomerState(e) }}
+                  />
+                </Col>
+              </FormGroup>
+            </Col >
+
+
+            <Col md="2">
+              <FormGroup className="mb-4">
+                <Label htmlFor="validationCustom01">Order Description </Label>
+                <Col>
+                  <Input
+                    placeholder="Enter Description"
+                    id='inp-description'
+                  />
+                </Col>
+              </FormGroup>
+            </Col >
+
+            <Col md={3}></Col>
+
             <Col md={2}>
+              <Label htmlFor="validationCustom01"> </Label>
               <div className="bg-soft-primary text-center text-primary external-event col-ls-6 col-form-label border border-danger rounded-2">
                 Order Amount : &nbsp;(&nbsp; {totalAmountCount.toFixed(2)}&nbsp;)
               </div>
@@ -376,21 +422,22 @@ const OrderPage = (props) => {
                 >
                   <Thead>
                     <Tr>
-                      <Th data-priority="15">Item Name</Th>
-                      <Th data-priority="1">MRP</Th>
-                      <Th data-priority="1">Rate</Th>
-                      <Th data-priority="1">GST</Th>
-                      <Th data-priority="1">
+                      <Th data-priority="15">
                         <Row>
-                          <Col md={3}>Quantity&nbsp;&nbsp;&nbsp;</Col>
+                          <Col md={3}>Item Name&nbsp;&nbsp;&nbsp;</Col>
+                          <Col md={3}></Col>
                           <Col ms={3} className="bg-soft-warning text-center text-secondary external-event rounded-2  ">
-                            ItemCount : &nbsp;(&nbsp; {itemCount}&nbsp;)
+                            Count : &nbsp;(&nbsp; {itemCount}&nbsp;)
                           </Col>
                           <Col md={3}></Col>
                         </Row>
                       </Th>
-                      <Th data-priority="1">UOM</Th>
-                      {/* <Th data-priority="3">Comments</Th> */}
+                      <Th data-priority="1">MRP</Th>
+                      <Th data-priority="1">Rate</Th>
+                      <Th data-priority="1" className="col-sm-1">GST %</Th>
+                      <Th data-priority="1" className="col-sm-1">Quantity
+                      </Th>
+                      <Th data-priority="1" className="col-sm-2" >UOM</Th>
                     </Tr>
                   </Thead>
                   <Tbody>
@@ -455,7 +502,7 @@ const OrderPage = (props) => {
                             )}
                           </Td>
 
-                          <Td>
+                          <Td className="align-bottom">
                             <input
                               type="hidden"
                               id={"lblItemMRP" + key}
@@ -465,7 +512,7 @@ const OrderPage = (props) => {
                             <label style={{ a: "end" }}> {item.MRP} </label>
 
                           </Td>
-                          <Td>
+                          <Td className="align-bottom">
                             <label > {item.Rate} </label>
                             <input
                               type="hidden"
@@ -475,8 +522,8 @@ const OrderPage = (props) => {
                               autoComplete="false"
                             />
                           </Td>
-                          <Td>
-                            <label > {item.GSTPercentage} </label>
+                          <Td className="align-bottom">
+                            <label > {item.GSTPercentage} % </label>
                             <input
                               type="hidden"
                               value={item.GSTPercentage}
@@ -485,29 +532,31 @@ const OrderPage = (props) => {
                               autoComplete="false"
                             />
                           </Td>
-                          <Td>
-                            <Row style={{ marginTop: "5px", textAlign: "right" }}>
-                              <Col md={1}></Col><Col md={8}>
-                                <input
-                                  type="text"
-                                  id={"inp-txtqty" + key}
-                                  key={item.ID}
-                                  disabled={item.Rate > 0 ? false : true}
-                                  defaultValue={qat}
-                                  onKeyDown={(e) => {
-                                    handleKeyDown(e);
-                                  }}
-                                  onChange={(e) => {
-                                    InputHandelar(e, item)
-                                  }}
-                                  className="form-control form-control-sm"
-                                  autoComplete="off"
-                                  ng-required="true"
-                                />
-                              </Col>
+                          <Td className="align-bottom">
+                            <Row style={{ marginTop: "5px", }}>
+
+                              <input
+                                type="text"
+                                id={"inp-txtqty" + key}
+                                placeholder={"0.0"}
+                                className="form-control float-end text-end"
+                                key={item.ID}
+                                disabled={item.Rate > 0 ? false : true}
+                                defaultValue={qat}
+                                onKeyDown={(e) => {
+                                  handleKeyDown(e);
+                                }}
+                                onChange={(e) => {
+                                  InputHandelar(e, item)
+                                }}
+                                // className="form-control form-control-sm"
+                                autoComplete="off"
+                                ng-required="true"
+                              />
+
                             </Row>
                           </Td>
-                          <Td>
+                          <Td className="align-bottom">
                             <ReactSelect
                               classNamePrefix="select2-selection"
                               id={"ddlUnit" + key}
@@ -547,7 +596,7 @@ const OrderPage = (props) => {
                       <div className="row update1" style={{ paddingBottom: 'center' }}>
                         <button
                           type="submit"
-                          data-mdb-toggle="tooltip" data-mdb-placement="top" title="Update-order-ID"
+                          data-mdb-toggle="tooltip" data-mdb-placement="top" title="Update Order"
                           className="btn btn-success w-md"
                           onClick={() => {
                             saveHandeller();
@@ -562,7 +611,7 @@ const OrderPage = (props) => {
                       <div className="row save1" style={{ paddingBottom: 'center' }}>
                         <button
                           type="submit"
-                          data-mdb-toggle="tooltip" data-mdb-placement="top" title="Save-order-ID"
+                          data-mdb-toggle="tooltip" data-mdb-placement="top" title="Save Order"
                           className="btn btn-success w-md"
                           onClick={() => {
                             saveHandeller();
