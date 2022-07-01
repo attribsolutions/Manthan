@@ -228,6 +228,7 @@ const HPageMaster = (props) => {
     const PageList_SelectOnChangeHandller = (e) => {
         setPageList(e);
     }
+    
     // ADD Button handler
     function AddRoleHandler() {
         const find = PageAccessData.find((element) => {

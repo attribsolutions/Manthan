@@ -27,7 +27,7 @@ const CompanyList = () => {
     const [modal_center, setmodal_center] = useState(false);
 
     // get Access redux data
-    const { companyList, editData, updateMessage, deleteCompanyID } = useSelector((state) => ({
+    const { companyList, editData, updateMessage, deleteCompanyID ,} = useSelector((state) => ({
         companyList: state.Company.companyList,
         editData: state.Company.editData,
         updateMessage: state.Company.updateMessage,

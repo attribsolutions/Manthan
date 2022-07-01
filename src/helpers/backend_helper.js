@@ -187,7 +187,9 @@ export const Party_Master_Post_API = (data) => post(url.PARTY_MASTER_API, data)/
 export const Party_Master_Delete_API = (id) => del(`${url.PARTY_MASTER_API}/${id}`)// delete api
 export const Party_Master_Edit_API = (id) => get(`${url.PARTY_MASTER_API}/${id}`)// edit api
 export const Party_Master_Update_API = (data, id) => put(`${url.PARTY_MASTER_API}/${id}`, data)// update api
-export const GetDistrictOnState_For_Dropdown = (id) => get(`${url.GetDistrictOnState}/${id}`)
+export const GetDistrictOnState_For_Dropdown = (id) => get(`${url.GetDistrictOnState}/${id}`)//  GetDistrictOnState DropDown API
+export const DivisionTypes_For_Dropdown = () => get(url.GET_DIVISION_TYPES_ID)
+export const GetPartyTypeByDivisionTypeID_For_Dropdown = (id) => get(`${url.GET_PARTYTYPE_BY_DIVISIONTYPES_ID}/${id}`)//  GetDistrictOnState DropDown API
 
 
 export {

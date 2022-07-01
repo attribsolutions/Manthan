@@ -5,9 +5,13 @@ import { AvForm, AvGroup, AvField } from "availity-reactstrap-validation";
 import { useDispatch, useSelector } from "react-redux";
 import { AlertState } from "../../../store/Utilites/CostumeAlert/actions";
 import Select from "react-select";
-import { editPartyIDSuccess, getDistrictOnState, getDistrictOnStateSuccess, postPartyData, postPartyDataSuccess, updatePartyID } from "../../../store/Administrator/PartyRedux/action";
+import {
+    editPartyIDSuccess, getDistrictOnState, getDistrictOnStateSuccess, getDivisionTypesID,
+    GetPartyTypeByDivisionTypeID, postPartyData, postPartyDataSuccess, updatePartyID
+} from "../../../store/Administrator/PartyRedux/action";
 import { getState } from "../../../store/Administrator/M_EmployeeRedux/action";
-
+import Flatpickr from "react-flatpickr"
+import { fetchCompanyList } from "../../../store/Administrator/CompanyRedux/actions";
 const PartyMaster = (props) => {
 
     const formRef = useRef(null);
@@ -24,18 +28,28 @@ const PartyMaster = (props) => {
     let editDataGatingFromList = props.state;
     const [Stateselect, setState] = useState("");
     const [DistrictOnStateselect, setDistrictOnState] = useState("");
+    const [companyListStateselect, setcompanyList] = useState("");
+    const [DivisionTypesStateselect, setDivisionTypes] = useState("");
+    const [PartyTypeByDivisionTypeIDselect, setPartyTypeByDivisionTypeID] = useState("");
 
 
     //Access redux store Data /  'save_ModuleSuccess' action data
-    const { PartySaveSuccess, State,DistrictOnState } = useSelector((state) => ({
+    const { PartySaveSuccess, State, DistrictOnState, companyList, DivisionTypes, PartyTypes } = useSelector((state) => ({
         PartySaveSuccess: state.PartyMasterReducer.PartySaveSuccess,
         State: state.M_EmployeesReducer.State,
         DistrictOnState: state.PartyMasterReducer.DistrictOnState,
+        companyList: state.Company.companyList,
+        DivisionTypes: state.PartyMasterReducer.DivisionTypes,
+        PartyTypes: state.PartyMasterReducer.PartyTypes,
+
     }));
 
     useEffect(() => {
         dispatch(getState());
         dispatch(getDistrictOnState());
+        dispatch(fetchCompanyList());
+        dispatch(getDivisionTypesID());
+        dispatch(GetPartyTypeByDivisionTypeID());
     }, [dispatch]);
 
 
@@ -46,7 +60,7 @@ const PartyMaster = (props) => {
     function handllerState(e) {
         setState(e)
         dispatch(getDistrictOnState(e.value))
-        debugger
+
 
     }
 
@@ -54,10 +68,40 @@ const PartyMaster = (props) => {
         value: Data.id,
         label: Data.Name
     }));
-    
+
     function handllerDistrictOnState(e) {
         setDistrictOnState(e)
-     
+
+    }
+
+    const companyListValues = companyList.map((Data) => ({
+        value: Data.id,
+        label: Data.Name
+    }));
+
+    function handllercompanyList(e) {
+        setcompanyList(e)
+
+    }
+
+    const DivisionTypesValues = DivisionTypes.map((Data) => ({
+        value: Data.id,
+        label: Data.Name
+    }));
+
+    function handllerDivisionTypes(e) {
+        setDivisionTypes(e)
+        dispatch(GetPartyTypeByDivisionTypeID(e.value))
+    }
+
+    const PartyTypeByDivisionTypeIDValues = PartyTypes.map((Data) => ({
+        value: Data.id,
+        label: Data.Name
+    }));
+
+    function handllerPartyTypeByDivisionTypeID(e) {
+        setPartyTypeByDivisionTypeID(e)
+
     }
 
     // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
@@ -110,16 +154,16 @@ const PartyMaster = (props) => {
         const requestOptions = {
             body: JSON.stringify({
                 Name: values.Name,
-                PartyTypeID: 0,
-                DividionTypeID: 0,
+                PartyTypeID: PartyTypeByDivisionTypeIDselect.value,
+                DividionTypeID: DivisionTypesStateselect.value,
                 companyID: 0,
                 CustomerDivision: values.CustomerDivision,
                 Email: values.Email,
                 Address: values.Address,
                 PIN: values.PIN,
                 MobileNo: values.MobileNo,
-                State: 0,
-                District: 0,
+                State: Stateselect.value,
+                District: DistrictOnStateselect.value,
                 Taluka: 0,
                 City: 0,
                 CustomerDivision: 1,
@@ -140,10 +184,10 @@ const PartyMaster = (props) => {
         }
         else {
             dispatch(postPartyData(requestOptions.body));
-            // console.log("requestOptions", requestOptions.body)
+            console.log("requestOptions in handler", requestOptions.body)
         }
     };
-
+   debugger
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
     var IsEditMode_Css = ''
     if (IsEdit === true) { IsEditMode_Css = "-3.5%" };
@@ -199,7 +243,8 @@ const PartyMaster = (props) => {
                                                                     validate={{
                                                                         required: { value: true, errorMessage: 'Please Enter your EmailID' },
                                                                         tel: {
-                                                                            pattern: /\S+@\S+\.\S+/
+                                                                            pattern: "/^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/",
+                                                                            errorMessage: ""
                                                                         }
                                                                     }
                                                                     }
@@ -213,7 +258,7 @@ const PartyMaster = (props) => {
                                                         <Col md="3">
                                                             <FormGroup className="mb-3">
                                                                 <Label htmlFor="validationCustom01">MobileNo </Label>
-                                                                <AvField name="MobileNo" type="tel"
+                                                                <AvField name="MobileNo" type="text"
                                                                     value={EditData.MobileNo}
                                                                     id="mobileNo"
                                                                     placeholder="+91 "
@@ -232,9 +277,6 @@ const PartyMaster = (props) => {
                                         </Row>
 
 
-
-
-
                                         <Row>
                                             <Card>
                                                 <CardBody style={{ backgroundColor: "whitesmoke" }}>
@@ -242,12 +284,12 @@ const PartyMaster = (props) => {
 
                                                         <Col md="3">
                                                             <FormGroup className="mb-3">
-                                                                <Label htmlFor="validationCustom01">PartyType </Label>
+                                                                <Label htmlFor="validationCustom01"> DivisionType </Label>
                                                                 <Col sm={12}>
                                                                     <Select
-                                                                        value={""}
-                                                                        options={""}
-                                                                    // onChange={(e) => { handllerDesignationID(e) }}
+                                                                        value={DivisionTypesStateselect}
+                                                                        options={DivisionTypesValues}
+                                                                        onChange={(e) => { handllerDivisionTypes(e) }}
                                                                     />
                                                                 </Col>
                                                             </FormGroup>
@@ -255,12 +297,12 @@ const PartyMaster = (props) => {
                                                         <Col md="1">  </Col>
                                                         <Col md="3">
                                                             <FormGroup className="mb-3">
-                                                                <Label htmlFor="validationCustom01"> DivisionType </Label>
+                                                                <Label htmlFor="validationCustom01">PartyType </Label>
                                                                 <Col sm={12}>
                                                                     <Select
-                                                                        value={""}
-                                                                        options={""}
-                                                                    // onChange={(e) => { handllerDesignationID(e) }}
+                                                                        value={PartyTypeByDivisionTypeIDselect}
+                                                                        options={PartyTypeByDivisionTypeIDValues}
+                                                                        onChange={(e) => { handllerPartyTypeByDivisionTypeID(e) }}
                                                                     />
                                                                 </Col>
                                                             </FormGroup>
@@ -272,9 +314,9 @@ const PartyMaster = (props) => {
                                                                 <Label htmlFor="validationCustom01">CompanyName </Label>
                                                                 <Col sm={12}>
                                                                     <Select
-                                                                        value={""}
-                                                                        options={""}
-                                                                    // onChange={(e) => { handllerDesignationID(e) }}
+                                                                        value={companyListStateselect}
+                                                                        options={companyListValues}
+                                                                        onChange={(e) => { handllercompanyList(e) }}
                                                                     />
                                                                 </Col>
                                                             </FormGroup>
@@ -305,7 +347,13 @@ const PartyMaster = (props) => {
                                                                     type="text"
                                                                     errorMessage="Enter First GSTIN"
                                                                     className="form-control"
-                                                                    validate={{ required: { value: true } }}
+                                                                    validate={{
+                                                                        required: { value: true },
+                                                                        tel: {
+                                                                            pattern: /^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$/,
+                                                                            errorMessage: 'Please specify a valid GSTTIN Number.'
+                                                                        }
+                                                                    }}
                                                                     id="validationCustom01"
                                                                 />
                                                             </FormGroup>
@@ -323,8 +371,16 @@ const PartyMaster = (props) => {
                                                                     type="text"
                                                                     errorMessage="Enter First FSSAINo"
                                                                     className="form-control"
-                                                                    validate={{ required: { value: true } }}
+                                                                    validate={{
+                                                                        required: { value: true },
+                                                                        tel: {
+                                                                            pattern: /^[0-3][0-9]{13}$/,
+                                                                            errorMessage: 'Please specify a valid FSSAI Number.'
+                                                                        }
+                                                                    }}
                                                                     id="FSSAINo"
+
+
                                                                 />
                                                             </FormGroup>
                                                         </Col>
@@ -336,15 +392,19 @@ const PartyMaster = (props) => {
                                                         <Col md="3">
                                                             <FormGroup className="mb-3">
                                                                 <Label htmlFor="validationCustom01">FSSAIExipry </Label>
-                                                                <AvField
+                                                                <Flatpickr
+                                                                    id="FSSAIExipry"
                                                                     name="FSSAIExipry"
                                                                     value={EditData.FSSAIExipry}
-                                                                    type="date"
-                                                                    errorMessage="Enter First FSSAIExipry"
-                                                                    className="form-control"
-                                                                    validate={{ required: { value: true } }}
-                                                                    id="FSSAIExipry"
+                                                                    className="form-control d-block p-2 bg-white text-dark"
+                                                                    placeholder="MM/DD/YYYY"
+                                                                    options={{
+                                                                        altInput: true,
+                                                                        altFormat: "F j, Y",
+                                                                        dateFormat: "Y-m-d"
+                                                                    }}
                                                                 />
+
                                                             </FormGroup>
                                                         </Col>
                                                         <Col md="1"></Col>
@@ -412,7 +472,7 @@ const PartyMaster = (props) => {
                                                                 <Label htmlFor="validationCustom01"> PIN </Label>
                                                                 <AvField name="PIN" type="text"
                                                                     value={EditData.PIN}
-                                                                    placeholder="Enter your PIN No. "
+                                                                    placeholder=" PIN No. "
                                                                     validate={{
                                                                         required: { value: true, errorMessage: 'Please Enter your PIN No.' },
                                                                         tel: {
@@ -440,7 +500,7 @@ const PartyMaster = (props) => {
                                                                     <Select
                                                                         value={Stateselect}
                                                                         options={StateValues}
-                                                                    onChange={(e) => { handllerState(e) }}
+                                                                        onChange={(e) => { handllerState(e) }}
                                                                     />
                                                                 </Col>
                                                             </FormGroup>
@@ -454,7 +514,7 @@ const PartyMaster = (props) => {
                                                                     <Select
                                                                         value={DistrictOnStateselect}
                                                                         options={DistrictOnStateValues}
-                                                                    onChange={(e) => { handllerDistrictOnState(e) }}
+                                                                        onChange={(e) => { handllerDistrictOnState(e) }}
                                                                     />
                                                                 </Col>
                                                             </FormGroup>
@@ -482,14 +542,14 @@ const PartyMaster = (props) => {
                                                                     IsEdit ? (
                                                                         <button
                                                                             type="submit"
-                                                                            data-mdb-toggle="tooltip" data-mdb-placement="top" title="Update Modules ID"
+                                                                            data-mdb-toggle="tooltip" data-mdb-placement="top" title="Update Party ID"
                                                                             className="btn btn-success w-md"
                                                                         >
                                                                             <i class="fas fa-edit me-2"></i>Update
                                                                         </button>) : (
                                                                         <button
                                                                             type="submit"
-                                                                            data-mdb-toggle="tooltip" data-mdb-placement="top" title="Save Modules ID"
+                                                                            data-mdb-toggle="tooltip" data-mdb-placement="top" title="Save Party ID"
                                                                             className="btn btn-success w-md"
                                                                         > <i className="fas fa-save me-2"></i> Save
                                                                         </button>

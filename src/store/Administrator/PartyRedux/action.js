@@ -3,6 +3,10 @@ import {
     EDIT_PARTY_ID, EDIT_PARTY_ID_SUCCESS,
     GET_DISTRICT_ON_STATE,
     GET_DISTRICT_ON_STATE_SUCCESS,
+    GET_DIVISION_TYPES_ID,
+    GET_DIVISION_TYPES_ID_SUCCESS,
+    GET_PARTTYPE_BY_DIVISIONTYPES_ID,
+    GET_PARTTYPE_BY_DIVISIONTYPES_ID_SUCCESS,
     GET_PARTY_LIST_API, GET_PARTY_LIST_API_SUCCESS,
     POST_PARTY_DATA, POST_PARTY_DATA_SUCCESS,
     UPDATE_PARTY_ID, UPDATE_PARTY_ID_SUCCESS
@@ -60,7 +64,7 @@ export const updatePartyIDSuccess = (updateMessage) => ({
     payload: updateMessage,
 })
 
-// GetDistrictOnState API
+// GetDistrictOnState API dependent on state api
 export const getDistrictOnState = (id) => ({
     type: GET_DISTRICT_ON_STATE,
     id,
@@ -68,5 +72,26 @@ export const getDistrictOnState = (id) => ({
   });
   export const getDistrictOnStateSuccess = (data) => ({
     type: GET_DISTRICT_ON_STATE_SUCCESS,
+    payload:data,
+  });
+
+  //DivisionTypes  dropdown api
+export const getDivisionTypesID = () => ({
+    type: GET_DIVISION_TYPES_ID,
+   
+  });
+  export const getDivisionTypesSuccess = (DivisionTypes) => ({
+    type:GET_DIVISION_TYPES_ID_SUCCESS,
+    payload:DivisionTypes,
+  });
+
+  // GetPartyTypeByDivisionTypeID API dependent on DivisionTypes api
+export const GetPartyTypeByDivisionTypeID = (id) => ({
+    type: GET_PARTTYPE_BY_DIVISIONTYPES_ID,
+    id,
+   
+  });
+  export const GetPartyTypeByDivisionTypeIDSuccess = (data) => ({
+    type: GET_PARTTYPE_BY_DIVISIONTYPES_ID_SUCCESS,
     payload:data,
   });
