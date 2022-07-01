@@ -26,11 +26,12 @@ const PartyMaster = (props) => {
 
     //*** "isEditdata get all data from ModuleID for Binding  Form controls
     let editDataGatingFromList = props.state;
-    const [Stateselect, setState] = useState("");
-    const [DistrictOnStateselect, setDistrictOnState] = useState("");
-    const [companyListStateselect, setcompanyList] = useState("");
-    const [DivisionTypesStateselect, setDivisionTypes] = useState("");
-    const [PartyTypeByDivisionTypeIDselect, setPartyTypeByDivisionTypeID] = useState("");
+    const [state_DropDown_select, setState_DropDown_select] = useState("");
+    const [FSSAIExipry_Date_Select, setFSSAIExipry_Date_Select] = useState("");
+    const [district_dropdown_Select, setDistrict_dropdown_Select] = useState("");
+    const [companyList_dropdown_Select, setCompanyList_dropdown_Select] = useState("");
+    const [division_dropdown_Select, setDivision_dropdown_Select] = useState("");
+    const [partyType_dropdown_Select, setPartyType_dropdown_Select] = useState("");
 
 
     //Access redux store Data /  'save_ModuleSuccess' action data
@@ -58,9 +59,9 @@ const PartyMaster = (props) => {
         label: Data.Name
     }));
     function handllerState(e) {
-        setState(e)
+        setState_DropDown_select(e)
         dispatch(getDistrictOnState(e.value))
-
+        setDistrict_dropdown_Select('')
 
     }
 
@@ -70,7 +71,7 @@ const PartyMaster = (props) => {
     }));
 
     function handllerDistrictOnState(e) {
-        setDistrictOnState(e)
+        setDistrict_dropdown_Select(e)
 
     }
 
@@ -80,7 +81,7 @@ const PartyMaster = (props) => {
     }));
 
     function handllercompanyList(e) {
-        setcompanyList(e)
+        setCompanyList_dropdown_Select(e)
 
     }
 
@@ -90,7 +91,7 @@ const PartyMaster = (props) => {
     }));
 
     function handllerDivisionTypes(e) {
-        setDivisionTypes(e)
+        setDivision_dropdown_Select(e)
         dispatch(GetPartyTypeByDivisionTypeID(e.value))
     }
 
@@ -100,7 +101,7 @@ const PartyMaster = (props) => {
     }));
 
     function handllerPartyTypeByDivisionTypeID(e) {
-        setPartyTypeByDivisionTypeID(e)
+        setPartyType_dropdown_Select(e)
 
     }
 
@@ -108,8 +109,32 @@ const PartyMaster = (props) => {
     useEffect(() => {
         document.getElementById("txtName").focus();
         if (!(editDataGatingFromList === undefined)) {
+            
             setEditData(editDataGatingFromList);
             setIsEdit(true);
+            setFSSAIExipry_Date_Select(editDataGatingFromList.FSSAIExipry)
+
+            setDistrict_dropdown_Select({
+        value: editDataGatingFromList.District,
+        label: editDataGatingFromList.DistrictName
+    })
+            setCompanyList_dropdown_Select({
+                value: editDataGatingFromList.Company,
+                label: editDataGatingFromList.CompanyNa
+            })
+            setDivision_dropdown_Select({
+                value: editDataGatingFromList.DividionTypeID,
+                label: editDataGatingFromList.DivisionType
+            })
+            setPartyType_dropdown_Select({
+                value: editDataGatingFromList.PartyTypeID,
+                label: editDataGatingFromList.PartyType
+            })
+            setState_DropDown_select({
+                value: editDataGatingFromList.State,
+                label: editDataGatingFromList.StateName
+            })
+
             dispatch(editPartyIDSuccess({ Status: false }))
             return
         }
@@ -150,26 +175,26 @@ const PartyMaster = (props) => {
 
     //'Save' And 'Update' Button Handller
     const handleValidUpdate = (event, values) => {
-        let DateInput = document.getElementById("FSSAIExipry").value;
+        debugger
         const requestOptions = {
             body: JSON.stringify({
                 Name: values.Name,
-                PartyTypeID: PartyTypeByDivisionTypeIDselect.value,
-                DividionTypeID: DivisionTypesStateselect.value,
+                PartyTypeID: partyType_dropdown_Select.value,
+                DividionTypeID: division_dropdown_Select.value,
                 companyID: 0,
                 CustomerDivision: values.CustomerDivision,
                 Email: values.Email,
                 Address: values.Address,
                 PIN: values.PIN,
                 MobileNo: values.MobileNo,
-                State: Stateselect.value,
-                District: DistrictOnStateselect.value,
+                State: state_DropDown_select.value,
+                District: district_dropdown_Select.value,
                 Taluka: 0,
                 City: 0,
                 CustomerDivision: 1,
                 GSTIN: values.GSTIN,
                 FSSAINo: values.FSSAINo,
-                FSSAIExipry: DateInput,
+                FSSAIExipry: FSSAIExipry_Date_Select,
                 IsActive: 1,
                 CreatedBy: 1,
                 CreatedOn: "2022-06-24T11:16:53.165483Z",
@@ -180,14 +205,12 @@ const PartyMaster = (props) => {
 
         if (IsEdit) {
             dispatch(updatePartyID(requestOptions.body, EditData.ID));
-            console.log("update requestOptions", requestOptions.body)
         }
         else {
             dispatch(postPartyData(requestOptions.body));
-            console.log("requestOptions in handler", requestOptions.body)
         }
     };
-   debugger
+   
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
     var IsEditMode_Css = ''
     if (IsEdit === true) { IsEditMode_Css = "-3.5%" };
@@ -287,7 +310,7 @@ const PartyMaster = (props) => {
                                                                 <Label htmlFor="validationCustom01"> DivisionType </Label>
                                                                 <Col sm={12}>
                                                                     <Select
-                                                                        value={DivisionTypesStateselect}
+                                                                        value={division_dropdown_Select}
                                                                         options={DivisionTypesValues}
                                                                         onChange={(e) => { handllerDivisionTypes(e) }}
                                                                     />
@@ -300,7 +323,7 @@ const PartyMaster = (props) => {
                                                                 <Label htmlFor="validationCustom01">PartyType </Label>
                                                                 <Col sm={12}>
                                                                     <Select
-                                                                        value={PartyTypeByDivisionTypeIDselect}
+                                                                        value={partyType_dropdown_Select}
                                                                         options={PartyTypeByDivisionTypeIDValues}
                                                                         onChange={(e) => { handllerPartyTypeByDivisionTypeID(e) }}
                                                                     />
@@ -314,7 +337,7 @@ const PartyMaster = (props) => {
                                                                 <Label htmlFor="validationCustom01">CompanyName </Label>
                                                                 <Col sm={12}>
                                                                     <Select
-                                                                        value={companyListStateselect}
+                                                                        value={companyList_dropdown_Select}
                                                                         options={companyListValues}
                                                                         onChange={(e) => { handllercompanyList(e) }}
                                                                     />
@@ -395,14 +418,13 @@ const PartyMaster = (props) => {
                                                                 <Flatpickr
                                                                     id="FSSAIExipry"
                                                                     name="FSSAIExipry"
-                                                                    value={EditData.FSSAIExipry}
+                                                                    value={FSSAIExipry_Date_Select}
                                                                     className="form-control d-block p-2 bg-white text-dark"
-                                                                    placeholder="MM/DD/YYYY"
-                                                                    options={{
-                                                                        altInput: true,
-                                                                        altFormat: "F j, Y",
-                                                                        dateFormat: "Y-m-d"
+                                                                    placeholder="YYYY-MM-DD"
+                                                                    onChange={ (selectedDates, dateStr, instance) => {
+                                                                       setFSSAIExipry_Date_Select(dateStr)
                                                                     }}
+                                                                  
                                                                 />
 
                                                             </FormGroup>
@@ -498,7 +520,7 @@ const PartyMaster = (props) => {
                                                                 <Label htmlFor="validationCustom01">State </Label>
                                                                 <Col sm={12}>
                                                                     <Select
-                                                                        value={Stateselect}
+                                                                        value={state_DropDown_select}
                                                                         options={StateValues}
                                                                         onChange={(e) => { handllerState(e) }}
                                                                     />
@@ -512,7 +534,7 @@ const PartyMaster = (props) => {
                                                                 <Label htmlFor="validationCustom01">District </Label>
                                                                 <Col sm={12}>
                                                                     <Select
-                                                                        value={DistrictOnStateselect}
+                                                                        value={district_dropdown_Select}
                                                                         options={DistrictOnStateValues}
                                                                         onChange={(e) => { handllerDistrictOnState(e) }}
                                                                     />

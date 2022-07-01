@@ -61,6 +61,7 @@ function* Get_Party_GenratorFunction() {
   
   
   function* Update_Party_GenratorFunction({ updateData, ID }) {
+    debugger
     try {
       yield put(SpinnerState(true))
       const response = yield call(Party_Master_Update_API, updateData, ID);
@@ -78,7 +79,6 @@ function* Get_Party_GenratorFunction() {
 
 // GetDistrictOnState API
 function* GetDistrictOnState_saga({id}) {
-  debugger
   try {
     const response = yield call(GetDistrictOnState_For_Dropdown,id);
     yield put(getDistrictOnStateSuccess(response.Data));
