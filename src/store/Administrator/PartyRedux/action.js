@@ -61,11 +61,12 @@ export const updatePartyIDSuccess = (updateMessage) => ({
 })
 
 // GetDistrictOnState API
-export const getDistrictOnState = () => ({
+export const getDistrictOnState = (id) => ({
     type: GET_DISTRICT_ON_STATE,
+    id,
    
   });
-  export const getDistrictOnStateSuccess = (DistrictOnState) => ({
+  export const getDistrictOnStateSuccess = (data) => ({
     type: GET_DISTRICT_ON_STATE_SUCCESS,
-    payload:DistrictOnState,
+    payload:data,
   });

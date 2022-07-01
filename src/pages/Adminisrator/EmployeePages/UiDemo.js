@@ -395,7 +395,7 @@ export default function UiDemo() {
                                                     <Label htmlFor="validationCustom01">FSSAIExipry </Label>
                                                     <Flatpickr
                                                         className="form-control d-block"
-                                                        placeholder="dd M,yyyy"
+                                                        placeholder="dd Mm,yyyy"
                                                         options={{
                                                             altInput: true,
                                                             altFormat: "F j, Y",

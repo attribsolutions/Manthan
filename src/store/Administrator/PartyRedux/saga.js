@@ -77,9 +77,10 @@ function* Get_Party_GenratorFunction() {
   }
 
 // GetDistrictOnState API
-function* GetDistrictOnState_saga() {
+function* GetDistrictOnState_saga({id}) {
+  debugger
   try {
-    const response = yield call(GetDistrictOnState_For_Dropdown);
+    const response = yield call(GetDistrictOnState_For_Dropdown,id);
     yield put(getDistrictOnStateSuccess(response.Data));
   } catch (error) {
     console.log("GetDistrictOnState_saga page error", error);

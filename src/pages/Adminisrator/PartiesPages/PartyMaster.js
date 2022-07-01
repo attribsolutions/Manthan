@@ -45,6 +45,9 @@ const PartyMaster = (props) => {
     }));
     function handllerState(e) {
         setState(e)
+        dispatch(getDistrictOnState(e.value))
+        debugger
+
     }
 
     const DistrictOnStateValues = DistrictOnState.map((Data) => ({
@@ -54,6 +57,7 @@ const PartyMaster = (props) => {
     
     function handllerDistrictOnState(e) {
         setDistrictOnState(e)
+     
     }
 
     // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.

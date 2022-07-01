@@ -152,9 +152,9 @@ const OrderPage = (props) => {
       body: JSON.stringify({
         CustomerID: 2,
         PartyID: 2,
-        OrderAmount: "33.00",
-        Discreption: "bb",
-        "CreatedBy": 11,
+        OrderAmount: totalAmountCount,
+        Descreption: "bb",
+        CreatedBy: 11,
         OrderDate: !orderDate ? currentDate : orderDate,
         CompanyID: 1,
         DivisionID: 3,
@@ -162,7 +162,7 @@ const OrderPage = (props) => {
         CreatedOn: !orderDate ? currentDate : orderDate,
         UpdatedBy: 1,
         UpdatedOn: !orderDate ? currentDate : orderDate,
-        OrderItem: selectedItemArray,
+        OrderItem: itemArray,// selectedItemArray,
       }),
     };
     debugger
@@ -247,19 +247,19 @@ const OrderPage = (props) => {
   const [totalAmountCount, setTotalAmountCount] = useState(0)
 
   function InputHandelar(e, i) {
-    // debugger
+
     const quantity = parseFloat(e.target.value)
     const rate = parseFloat(i.Rate)
     const Gst = parseFloat(i.GSTPercentage)
     const basicAmount = rate * quantity;
     const GstAmount = basicAmount * (Gst / 100)
     const totalAmount = GstAmount + basicAmount
-    // console.log(e)
-    // console.log(i)
-    debugger
+
+
     let test = []
     let TotalAmountCount_initial = 0
     let ItemCount_initial = 0
+
     const find = itemArray.find((element) => {
       return element.ItemID === i.ID
     });
@@ -272,18 +272,18 @@ const OrderPage = (props) => {
       Rate: rate,
       UnitID: 1,
       BaseUnitQuantity: 1,
-      GST: Gst,
+      GST: parseInt(Gst.toFixed(2)),
       BasicAmount: basicAmount,
-      GSTAmount: GstAmount,
+      GSTAmount: parseInt(GstAmount.toFixed(2)),
       CGST: 1,
       SGST: 1,
       IGST: 1,
       CGSTPercentage: 1,
       SGSTPercentage: 1,
       IGSTPercentage: 1,
-      Amount: totalAmount
+      Amount: parseInt(totalAmount.toFixed(2))
     }
-debugger
+
     if (quantity > 0) {
       // if (itemArray.length <= 0) {
       //   setitemArray([...itemArray, dataa])
@@ -291,7 +291,7 @@ debugger
       // } else 
       if (find === undefined) {
         setitemArray([...itemArray, dataa])
-        test=[...itemArray, dataa]
+        test = [...itemArray, dataa]
       } else {
 
         test = itemArray.filter((ele) => !(ele.ItemID === i.ID))
@@ -309,18 +309,18 @@ debugger
     }
 
     test.map((count) => {
-      TotalAmountCount_initial=TotalAmountCount_initial + count.Amount
-      ItemCount_initial= ItemCount_initial + 1
+      TotalAmountCount_initial = TotalAmountCount_initial + count.Amount
+      ItemCount_initial = ItemCount_initial + 1
     })
-    if((test.length>0)){
-    setTotalAmountCount(TotalAmountCount_initial)
-    setItemCount(ItemCount_initial)
+    if ((test.length > 0)) {
+      setTotalAmountCount(TotalAmountCount_initial)
+      setItemCount(ItemCount_initial)
+    }
+    else {
+      setTotalAmountCount(0)
+      setItemCount(0)
+    }
   }
-  else{
-    setTotalAmountCount(0)
-    setItemCount(0)
-  }
-}
 
 
 
@@ -359,7 +359,7 @@ debugger
             <Col md={8}></Col>
             <Col md={2}>
               <div className="bg-soft-primary text-center text-primary external-event col-ls-6 col-form-label border border-danger rounded-2">
-                 Order Amount : &nbsp;(&nbsp; {totalAmountCount.toFixed(2)}&nbsp;)
+                Order Amount : &nbsp;(&nbsp; {totalAmountCount.toFixed(2)}&nbsp;)
               </div>
             </Col>
 
@@ -376,21 +376,21 @@ debugger
                 >
                   <Thead>
                     <Tr>
-                      <Th data-priority="1">Item Name</Th>
+                      <Th data-priority="15">Item Name</Th>
                       <Th data-priority="1">MRP</Th>
                       <Th data-priority="1">Rate</Th>
                       <Th data-priority="1">GST</Th>
-                      <Th data-priority="3">
+                      <Th data-priority="1">
                         <Row>
-                        <Col md={3}>Quantity&nbsp;&nbsp;&nbsp;</Col>
-                      <Col  ms={3}className="bg-soft-warning text-center text-secondary external-event rounded-2  ">
-                ItemCount : &nbsp;(&nbsp; {itemCount}&nbsp;)
-              </Col>
-              <Col md={3}></Col>
-              </Row>    
-              </Th>
+                          <Col md={3}>Quantity&nbsp;&nbsp;&nbsp;</Col>
+                          <Col ms={3} className="bg-soft-warning text-center text-secondary external-event rounded-2  ">
+                            ItemCount : &nbsp;(&nbsp; {itemCount}&nbsp;)
+                          </Col>
+                          <Col md={3}></Col>
+                        </Row>
+                      </Th>
                       <Th data-priority="1">UOM</Th>
-                      <Th data-priority="3">Comments</Th>
+                      {/* <Th data-priority="3">Comments</Th> */}
                     </Tr>
                   </Thead>
                   <Tbody>
@@ -486,37 +486,36 @@ debugger
                             />
                           </Td>
                           <Td>
-                            <Row style={{marginTop:"5px",textAlign:"right"}}>
-                            <Col md={1}></Col><Col md={8}>
-                            <input
-                              type="text"
-                              id={"inp-txtqty" + key}
-                              key={item.ID}
-                              disabled={item.Rate > 0 ? false : true}
-                              defaultValue={qat}
-                              onKeyDown={(e) => {
-                                handleKeyDown(e);
-                              }}
-                              onChange={(e) => {
-                                InputHandelar(e, item)
-                              }}
-                              className="form-control form-control-sm"
-                              autoComplete="off"
-                              ng-required="true"
-                            />
-                            </Col>
+                            <Row style={{ marginTop: "5px", textAlign: "right" }}>
+                              <Col md={1}></Col><Col md={8}>
+                                <input
+                                  type="text"
+                                  id={"inp-txtqty" + key}
+                                  key={item.ID}
+                                  disabled={item.Rate > 0 ? false : true}
+                                  defaultValue={qat}
+                                  onKeyDown={(e) => {
+                                    handleKeyDown(e);
+                                  }}
+                                  onChange={(e) => {
+                                    InputHandelar(e, item)
+                                  }}
+                                  className="form-control form-control-sm"
+                                  autoComplete="off"
+                                  ng-required="true"
+                                />
+                              </Col>
                             </Row>
                           </Td>
                           <Td>
                             <ReactSelect
                               classNamePrefix="select2-selection"
                               id={"ddlUnit" + key}
+                              options={[{ value: 1, label: "NO", }, { value: 2, label: "Box", }]}
                             >
-                             
-                             
                             </ReactSelect>
                           </Td>
-                          <Td>
+                          {/* <Td>
                             {" "}
                             <input
                               type="text"
@@ -525,7 +524,7 @@ debugger
                               class="form-control form-control-sm"
                               autoComplete="off"
                             />
-                          </Td>
+                          </Td> */}
                         </Tr>
                       );
                     })}
