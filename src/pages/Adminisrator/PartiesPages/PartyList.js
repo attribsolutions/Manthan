@@ -102,13 +102,17 @@ const PartyList = () => {
     const EditPageHandler = (id) => {
         dispatch(editPartyID(id));
     }
-
     const pageOptions = {
-        sizePerPage: 10,
-        totalSize: TableListData.length,
+        sizePerPage: 20,
+        totalSize: TableListData.length, // replace later with size(users),
         custom: true,
     };
-
+    const defaultSorted = [
+        {
+            dataField: "Name", // if dataField is not match to any column you defined, it will be ignored.
+            order: "asc", // desc or asc
+        },
+    ];
     const pagesListColumns = [
         {
             text: "Name",
@@ -180,6 +184,7 @@ const PartyList = () => {
                                         breadcrumbItem={"Party List"}
                                         IsButtonVissible={true}
                                         SearchProps={toolkitProps.searchProps}
+                                        defaultSorted={defaultSorted}
                                         breadcrumbCount={TableListData.length}
                                         RedirctPath={"/PartyMaster"}
                                     />
@@ -217,7 +222,7 @@ const PartyList = () => {
                     toggle={() => { tog_center() }}
                     size="xl"
                 >
-                    <PartyUIDemo state={editData.Data} />
+                    <PartyMaster state={editData.Data} />
                 </Modal>
             </div>
         </React.Fragment>

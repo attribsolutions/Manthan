@@ -217,15 +217,15 @@ const PartyMaster = (props) => {
 
     return (
         <React.Fragment>
-            <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
+            <div className="page-content text-black" style={{ marginTop: IsEditMode_Css }}>
                 <Breadcrumbs breadcrumbItem={"Party Master "} />
                 <Container fluid>
                     <Row>
                         <Col lg={12}>
-                            <Card>
+                            <Card >
                                 <CardHeader>
-                                    <h4 className="card-title">React Validation - Normal</h4>
-                                    <p className="card-title-desc">Provide valuable, actionable feedback to your users with HTML5 form validation–available in all our supported browsers.</p>
+                                    <h4 className="card-title text-black">React Validation - Normal</h4>
+                                    <p className="card-title-desc  text-black">Provide valuable, actionable feedback to your users with HTML5 form validation–available in all our supported browsers.</p>
                                 </CardHeader>
                                 <CardBody>
                                     <AvForm
@@ -421,6 +421,11 @@ const PartyMaster = (props) => {
                                                                     value={FSSAIExipry_Date_Select}
                                                                     className="form-control d-block p-2 bg-white text-dark"
                                                                     placeholder="YYYY-MM-DD"
+                                                                    options={{
+                                                                        altInput: true,
+                                                                        altFormat: "F j, Y",
+                                                                        dateFormat: "Y-m-d"
+                                                                      }}
                                                                     onChange={(selectedDates, dateStr, instance) => {
                                                                         setFSSAIExipry_Date_Select(dateStr)
                                                                     }}
