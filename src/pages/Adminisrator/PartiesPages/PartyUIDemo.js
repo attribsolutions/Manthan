@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import Breadcrumbs from "../../../components/Common/Breadcrumb";
-import { Card, CardBody, Col, Container, Row, Label, Input, FormGroup, CardHeader, InputGroup } from "reactstrap";
+import { Card, CardBody, Col, Container, Row, Label, Input, FormGroup, CardHeader, InputGroup, Button } from "reactstrap";
 import { AvForm, AvGroup, AvField, AvInput } from "availity-reactstrap-validation";
 
 import Flatpickr from "react-flatpickr"
@@ -617,362 +617,153 @@ const PartyUIDemo = (props) => {
     return (
         <React.Fragment>
             <div className="page-content">
-                <Breadcrumbs breadcrumbItem={"Party Master "} />
+                <Breadcrumbs  breadcrumbItem={"Party UI DEMO "} />
                 <Container fluid>
-                    <Row>
-                        <Col lg={12}>
-                            <Card >
-                                <CardHeader>
-                                    <h4 className="card-title">React Validation - Normal</h4>
-                                    <p className="card-title-desc">Provide valuable, actionable feedback to your users with HTML5 form validation–available in all our supported browsers.</p>
-                                </CardHeader>
-                                <CardBody>
-                                    <AvForm>
-                                        <Row>
-                                            <Card >
-                                                <CardBody style={{ backgroundColor: "whitesmoke" }}>
-                                                    <Row>
 
-                                                        <Col md="3">
-                                                            <FormGroup className="mb-3">
-                                                                <Label htmlFor="validationCustom01">Name </Label>
-                                                                <AvField
-                                                                    name="Name"
-                                                                    placeholder="Please Enter Name"
-                                                                    type="text"
-                                                                    errorMessage="Enter First Name"
-                                                                    className="form-control"
-                                                                    validate={{ required: { value: true } }}
-                                                                    id="validationCustom01"
-                                                                />
-                                                            </FormGroup>
-                                                        </Col>
-                                                        <Col md="1">  </Col>
-                                                        <Col md="3">
-                                                            <FormGroup className="mb-3">
-                                                                <Label htmlFor="validationCustom01"> Email </Label>
-                                                                <AvField
-                                                                    name="Name"
-                                                                    placeholder="Please Enter Email"
-                                                                    type="text"
-                                                                    errorMessage="Enter First Email"
-                                                                    className="form-control"
-                                                                    validate={{ required: { value: true } }}
-                                                                    id="validationCustom01"
-                                                                />
-                                                            </FormGroup>
-                                                        </Col>
-                                                        <Col md="1">  </Col>
+                    <Card >
+                        <CardHeader className="card-header text-center bg-white text-white">
+                            <h4 className="card-title">React Validation - Normal</h4>
+                            <p className="card-title-desc">Provide valuable, actionable feedback to your users with HTML5 form validation–available in all our supported browsers.</p>
+                        </CardHeader>
+                        <CardBody>
+                            <AvForm>
+                                <Row>
 
-                                                        <Col md="3">
-                                                            <FormGroup className="mb-3">
-                                                                <Label htmlFor="validationCustom01">Mobile </Label>
-                                                                <AvField
-                                                                    name="Name"
-                                                                    placeholder="Please Enter Mobile"
-                                                                    type="text"
-                                                                    errorMessage="Enter First Mobile"
-                                                                    className="form-control"
-                                                                    validate={{ required: { value: true } }}
-                                                                    id="validationCustom01"
-                                                                />
-                                                            </FormGroup>
-                                                        </Col>
+                                    <Col lg={12} >
+                                        <Card >
 
+                                            <CardBody style={{ backgroundColor: "whitesmoke" }}>
 
-                                                    </Row>
-
-                                                </CardBody>
-                                            </Card>
-                                        </Row>
-
-
-                                        <Row>
-                                            <Card>
-                                                <CardBody style={{ backgroundColor: "whitesmoke" }}>
-                                                    <Row>
-
-                                                        <Col md="3">
-                                                            <FormGroup className="mb-3">
-                                                                <Label htmlFor="validationCustom01">PartyType </Label>
-                                                                <AvField
-                                                                    name="Name"
-                                                                    placeholder="Please Enter Name"
-                                                                    type="text"
-                                                                    errorMessage="Enter First Name"
-                                                                    className="form-control"
-                                                                    validate={{ required: { value: true } }}
-                                                                    id="validationCustom01"
-                                                                />
-                                                            </FormGroup>
-                                                        </Col>
-                                                        <Col md="1">  </Col>
-                                                        <Col md="3">
-                                                            <FormGroup className="mb-3">
-                                                                <Label htmlFor="validationCustom01"> DivisionType </Label>
-                                                                <AvField
-                                                                    name="Name"
-                                                                    placeholder="Please Enter Email"
-                                                                    type="text"
-                                                                    errorMessage="Enter First Email"
-                                                                    className="form-control"
-                                                                    validate={{ required: { value: true } }}
-                                                                    id="validationCustom01"
-                                                                />
-                                                            </FormGroup>
-                                                        </Col>
-                                                        <Col md="1">  </Col>
-
-                                                        <Col md="3">
-                                                            <FormGroup className="mb-3">
-                                                                <Label htmlFor="validationCustom01">CompanyName </Label>
-                                                                <AvField
-                                                                    name="Name"
-                                                                    placeholder="Please Enter Mobile"
-                                                                    type="text"
-                                                                    errorMessage="Enter First Mobile"
-                                                                    className="form-control"
-                                                                    validate={{ required: { value: true } }}
-                                                                    id="validationCustom01"
-                                                                />
-                                                            </FormGroup>
+                                                <FormGroup className="mb-3 ">
+                                                    <Row className="justify-content-md-center">
+                                                        <Label htmlFor="horizontal-firstname-input" className="col-sm-1 col-form-label">Name </Label>
+                                                        <Col sm={3}>
+                                                            <AvField
+                                                                name="Name"
+                                                                placeholder="Please Enter Name"
+                                                                type="text"
+                                                                errorMessage="Enter First Name"
+                                                                className="form-control"
+                                                                validate={{ required: { value: true } }}
+                                                                id="horizontal-firstname-input"
+                                                            />
                                                         </Col>
                                                     </Row>
 
-                                                    <Row>
-                                                        <Col md="3">
-                                                            <FormGroup className="mb-3">
-                                                                <Label htmlFor="validationCustom01">CustomerDivision </Label>
-                                                                <AvField
-                                                                    name="Name"
-                                                                    placeholder="Please Enter Name"
-                                                                    type="text"
-                                                                    errorMessage="Enter First Name"
-                                                                    className="form-control"
-                                                                    validate={{ required: { value: true } }}
-                                                                    id="validationCustom01"
-                                                                />
-                                                            </FormGroup>
+                                                </FormGroup>
+                                                <FormGroup className="mb-3 ">
+                                                    <Row className="justify-content-md-center">
+                                                        <Label htmlFor="horizontal-firstname-input" className="col-sm-1 col-form-label">Description </Label>
+                                                        <Col sm={3}>
+                                                            <AvField
+                                                                name="Description"
+                                                                placeholder="Please Enter Name"
+                                                                type="text"
+                                                                errorMessage="Enter First Name"
+                                                                className="form-control"
+                                                                validate={{ required: { value: true } }}
+                                                                id="horizontal-firstname-input"
+                                                            />
                                                         </Col>
-                                                        <Col md="1">  </Col>
-                                                        <Col md="3">
-                                                            <FormGroup className="mb-3">
-                                                                <Label htmlFor="validationCustom01"> GSTIN </Label>
-                                                                <AvField
-                                                                    name="Name"
-                                                                    placeholder="Please Enter Email"
-                                                                    type="text"
-                                                                    errorMessage="Enter First Email"
-                                                                    className="form-control"
-                                                                    validate={{ required: { value: true } }}
-                                                                    id="validationCustom01"
-                                                                />
-                                                            </FormGroup>
-                                                        </Col>
-                                                        <Col md="1">  </Col>
-
-                                                        <Col md="3">
-                                                            <FormGroup className="mb-3">
-                                                                <Label htmlFor="validationCustom01">
-                                                                    FSSAI No </Label>
-                                                                <AvField
-                                                                    name="Name"
-                                                                    placeholder="Please Enter Mobile"
-                                                                    type="text"
-                                                                    errorMessage="Enter First Mobile"
-                                                                    className="form-control"
-                                                                    validate={{ required: { value: true } }}
-                                                                    id="validationCustom01"
-                                                                />
-                                                            </FormGroup>
-                                                        </Col>
-
-
                                                     </Row>
-                                                    <Row>
-                                                        {/* <Col md="4"></Col> */}
-                                                        <Col md="3">
-                                                            <FormGroup className="mb-3">
-                                                                <Label htmlFor="validationCustom01">FSSAIExipry </Label>
-                                                                <AvField
-                                                                    name="Name"
-                                                                    placeholder="Please Enter Name"
-                                                                    type="text"
-                                                                    errorMessage="Enter First Name"
-                                                                    className="form-control"
-                                                                    validate={{ required: { value: true } }}
-                                                                    id="validationCustom01"
-                                                                />
-                                                            </FormGroup>
+
+                                                </FormGroup><FormGroup className="mb-3 ">
+                                                    <Row className="justify-content-md-center">
+                                                        <Label htmlFor="horizontal-firstname-input" className="col-sm-1 col-form-label">Module </Label>
+                                                        <Col sm={3}>
+                                                            <AvField
+                                                                name="Name"
+                                                                placeholder="Please Enter Name"
+                                                                type="text"
+                                                                errorMessage="Enter First Name"
+                                                                className="form-control"
+                                                                validate={{ required: { value: true } }}
+                                                                id="horizontal-firstname-input"
+                                                            />
                                                         </Col>
-                                                        <Col md="1"></Col>
-                                                        <Col md="3">
-                                                            <FormGroup className="mb-3">
-                                                            {/* <Label htmlFor="validationCustom01">IsActive</Label>
-                                                                <AvField
-                                                                    name="Name"
-                                                                    placeholder="Please Enter Name"
-                                                                    type="checkbox"
-                                                                    errorMessage="Enter First Name"
-                                                                    className="form-control"
-                                                                    validate={{ required: { value: true } }}
-                                                                    id="validationCustom01"
-                                                                /> */}
-                                                            <Row style={{marginTop:'25px'}}>
-                                                                <Label
-                                                                    htmlFor="horizontal-firstname-input"
-                                                                    className="col-sm-3 col-form-label"
-                                                                >
-                                                                    IsActive
-                                                                </Label>
-                                                                <Col md={4}  style={{marginTop:'7px'}}  className="form-check form-switch form-switch-lg ">
-                                                                    <Input
-                                                                        type="checkbox"
-                                                                        className="form-control"
-                                                                        id="horizontal-firstname-input"
-                                                                        placeholder="Enter Your First Name"
-                                                                    />
-                                                                </Col>
-                                                            </Row>
+                                                    </Row>
+
+                                                </FormGroup><FormGroup className="mb-3 ">
+                                                    <Row className="justify-content-md-center">
+                                                        <Label htmlFor="horizontal-firstname-input" className="col-sm-1 col-form-label">Company </Label>
+                                                        <Col sm={3}>
+                                                            <AvField
+                                                                name="Name"
+                                                                placeholder="Please Enter Name"
+                                                                type="text"
+                                                                errorMessage="Enter First Name"
+                                                                className="form-control"
+                                                                validate={{ required: { value: true } }}
+                                                                id="horizontal-firstname-input"
+                                                            />
+                                                        </Col>
+                                                    </Row>
+
+                                                </FormGroup>
+                                                
+                                                <FormGroup className="mb-3 ">
+                                                    <Row className="justify-content-md-center">
+                                                        <Label htmlFor="horizontal-firstname-input" className="col-sm-1 col-form-label">Party </Label>
+                                                        <Col sm={3}>
+                                                            <AvField
+                                                                name="Name"
+                                                                placeholder="Please Enter Name"
+                                                                type="text"
+                                                                errorMessage="Enter First Name"
+                                                                className="form-control"
+                                                                validate={{ required: { value: true } }}
+                                                                id="horizontal-firstname-input"
+                                                            />
+                                                        </Col>
+                                                        
+                                                    </Row>
+
+                                                </FormGroup>
+                                          
                                                             
-                                                            </FormGroup>
+                                                <FormGroup className="mb-3 ">
+                                                    <Row className="justify-content-md-center">
+                                                        <Label htmlFor="horizontal-firstname-input" className="col-sm-1 col-form-label">Party </Label>
+                                                        <Col sm={3}  className="form-check form-switch form-switch-md ">
+                                                            <AvField
+                                                                name="Name"
+                                                              
+                                                                type="checkbox"
+                                                             
+                                                            
+                                                            />
                                                         </Col>
-
-
-
-                                                    </Row>
-                                                </CardBody>
-                                            </Card>
-                                        </Row>
-
-
-                                        <Row>
-                                            <Card>
-                                                <CardBody style={{ backgroundColor: "whitesmoke" }}>
-                                                    <Row>
-
-                                                        <Col md="3">
-                                                            <FormGroup className="mb-3">
-                                                                <Label htmlFor="validationCustom01">Address </Label>
-                                                                <AvField
-                                                                    name="Name"
-                                                                    placeholder="Please Enter Name"
-                                                                    type="text"
-                                                                    errorMessage="Enter First Name"
-                                                                    className="form-control"
-                                                                    validate={{ required: { value: true } }}
-                                                                    id="validationCustom01"
-                                                                />
-                                                            </FormGroup>
-                                                        </Col>
-                                                        <Col md="1">  </Col>
-                                                        <Col md="3">
-                                                            <FormGroup className="mb-2">
-                                                                <Label htmlFor="validationCustom01"> City </Label>
-                                                                <AvField
-                                                                    name="Name"
-                                                                    placeholder="Please Enter Email"
-                                                                    type="text"
-                                                                    errorMessage="Enter First Email"
-                                                                    className="form-control"
-                                                                    validate={{ required: { value: true } }}
-                                                                    id="validationCustom01"
-                                                                />
-                                                            </FormGroup>
-                                                        </Col>
-                                                        <Col md="1">  </Col>
-                                                        <Col md="1">
-                                                            <FormGroup className="mb-2">
-                                                                <Label htmlFor="validationCustom01"> PIN </Label>
-                                                                <AvField
-                                                                    name="Name"
-                                                                    placeholder="Please Enter Email"
-                                                                    type="text"
-                                                                    errorMessage="Enter First Email"
-                                                                    className="form-control"
-                                                                    validate={{ required: { value: true } }}
-                                                                    id="validationCustom01"
-                                                                />
-                                                            </FormGroup>
-                                                        </Col>
-
-
-
-
-
-                                                    </Row>
-                                                    <Row>
-
-                                                        <Col md="3">
-                                                            <FormGroup className="mb-3">
-                                                                <Label htmlFor="validationCustom01">State </Label>
-                                                                <AvField
-                                                                    name="Name"
-                                                                    placeholder="Please Enter Name"
-                                                                    type="text"
-                                                                    errorMessage="Enter First Name"
-                                                                    className="form-control"
-                                                                    validate={{ required: { value: true } }}
-                                                                    id="validationCustom01"
-                                                                />
-                                                            </FormGroup>
-                                                        </Col>
-                                                        <Col md="1">  </Col>
-                                                        <Col md="3">
-                                                            <FormGroup className="mb-3">
-                                                                <Label htmlFor="validationCustom01">District </Label>
-                                                                <AvField
-                                                                    name="Name"
-                                                                    placeholder="Please Enter Email"
-                                                                    type="text"
-                                                                    errorMessage="Enter First Email"
-                                                                    className="form-control"
-                                                                    validate={{ required: { value: true } }}
-                                                                    id="validationCustom01"
-                                                                />
-                                                            </FormGroup>
-                                                        </Col>
-                                                        <Col md="1">  </Col>
-                                                        <Col md="3">
-                                                            <FormGroup className="mb-5">
-                                                                <Label htmlFor="validationCustom01">Taluka </Label>
-                                                                <AvField
-                                                                    name="Name"
-                                                                    placeholder="Please Enter Mobile"
-                                                                    type="text"
-                                                                    errorMessage="Enter First Mobile"
-                                                                    className="form-control"
-                                                                    validate={{ required: { value: true } }}
-                                                                    id="validationCustom01"
-                                                                />
-                                                            </FormGroup>
-                                                        </Col>
+                                                        
                                                     </Row>
 
-                                                    <Row>
-                                                        <Col md={10}>
-                                                        </Col>
-                                                        <Col>
-                                                            <button
-                                                                type="submit"
-                                                                data-mdb-toggle="tooltip" data-mdb-placement="top" title="Save Page"
-                                                                className="btn btn-success w-md"
-                                                            > <i className="fas fa-save me-2"></i> Save
-                                                            </button>
-                                                        </Col>
+                                                </FormGroup>
+                                          
+                                                <Row className="justify-content-center">
+                                                    <Col sm={2}></Col>
+                                                    <Col sm={2}>
+                                                        <button
+                                                            type="submit"
+                                                            data-mdb-toggle="tooltip" data-mdb-placement="top" title="Save Page"
+                                                            className="btn btn-success w-md"
+                                                        > <i className="fas fa-save me-2"></i> Save
+                                                        </button>
+                                                    </Col>
 
-                                                    </Row>
-                                                </CardBody>
-                                            </Card>
-                                        </Row>
 
-                                    </AvForm>
-                                    <div>
-                                    </div>
-                                </CardBody>
-                            </Card>
-                        </Col>
-                    </Row>
+                                                </Row>
+                                            </CardBody>
+
+                                        </Card>
+                                    </Col>
+                                </Row>
+
+
+
+
+                            </AvForm>
+                        </CardBody>
+                    </Card>
+
                 </Container>
             </div>
         </React.Fragment>
