@@ -377,9 +377,9 @@ const OrderPage = (props) => {
 
 
 
-            <Col className={'md-2'}>
+            <Col md="3">
               <FormGroup className="mb-3 row mt-3 " >
-                <Label className="col-sm-5 mt-2 text-end">Customer Name :</Label>
+                <Label className="col-sm-4 mt-2 text-end">Customer Name :</Label>
                 <Col className="md-auto ">
                   <ReactSelect
                     Value={customerName_dropdownSelect}
@@ -553,11 +553,17 @@ const OrderPage = (props) => {
                                 key={item.ID}
                                 disabled={item.Rate > 0 ? false : true}
                                 defaultValue={qat}
-                                onKeyDown={(e) => {
-                                  handleKeyDown(e);
+                                onKeyDown={(event) => {
+                                  // handleKeyDown(event);
+                                  if (event.charCode >= 48 && event.charCode <= 57 || event.charCode >= 96 && event.charCode <= 105) {
+                                    return true;
+                                } else {
+                                    return false;
+                                }
+
                                 }}
-                                onChange={(e) => {
-                                  InputHandelar(e, item)
+                                onChange={(event) => {
+                                  InputHandelar(event, item);
                                 }}
                                 // className="form-control form-control-sm"
                                 autoComplete="off"
