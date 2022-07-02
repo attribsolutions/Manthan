@@ -636,7 +636,7 @@ const PartyUIDemo = (props) => {
 
                                                 <FormGroup className="mb-3 ">
                                                     <Row className="justify-content-md-center">
-                                                        <Label htmlFor="horizontal-firstname-input" className="col-sm-2 col-form-label">Name </Label>
+                                                        <Label htmlFor="horizontal-firstname-input" className="col-sm-2 col-form-label  text-black">Name </Label>
                                                         <Col sm={5}>
                                                             <AvField
                                                                 name="Name"
@@ -654,26 +654,7 @@ const PartyUIDemo = (props) => {
                                                 </FormGroup>
                                                 <FormGroup className="mb-3 ">
                                                     <Row className="justify-content-md-center">
-                                                        <Label htmlFor="horizontal-firstname-input" className="col-sm-2 col-form-label">Description </Label>
-                                                        <Col sm={5}>
-                                                            <AvField
-                                                                name="Name"
-                                                                placeholder="Please Enter Name"
-                                                                type="text"
-                                                                errorMessage="Enter First Name"
-                                                                className="form-control"
-                                                                validate={{ required: { value: true } }}
-                                                                id="horizontal-firstname-input"
-                                                            />
-                                                        </Col>
-
-                                                    </Row>
-
-                                                </FormGroup>
-
-                                                <FormGroup className="mb-3 ">
-                                                    <Row className="justify-content-md-center">
-                                                        <Label htmlFor="horizontal-firstname-input" className="col-sm-2 col-form-label">Modules </Label>
+                                                        <Label htmlFor="horizontal-firstname-input" className="col-sm-2 col-form-label  text-black">Description </Label>
                                                         <Col sm={5}>
                                                             <AvField
                                                                 name="Name"
@@ -692,7 +673,7 @@ const PartyUIDemo = (props) => {
 
                                                 <FormGroup className="mb-3 ">
                                                     <Row className="justify-content-md-center">
-                                                        <Label htmlFor="horizontal-firstname-input" className="col-sm-2 col-form-label">Mobile </Label>
+                                                        <Label htmlFor="horizontal-firstname-input" className="col-sm-2 col-form-label  text-black">Modules </Label>
                                                         <Col sm={5}>
                                                             <AvField
                                                                 name="Name"
@@ -711,7 +692,26 @@ const PartyUIDemo = (props) => {
 
                                                 <FormGroup className="mb-3 ">
                                                     <Row className="justify-content-md-center">
-                                                        <Label htmlFor="horizontal-firstname-input" className="col-sm-2 col-form-label">Company </Label>
+                                                        <Label htmlFor="horizontal-firstname-input" className="col-sm-2 col-form-label  text-black">Mobile </Label>
+                                                        <Col sm={5}>
+                                                            <AvField
+                                                                name="Name"
+                                                                placeholder="Please Enter Name"
+                                                                type="text"
+                                                                errorMessage="Enter First Name"
+                                                                className="form-control"
+                                                                validate={{ required: { value: true } }}
+                                                                id="horizontal-firstname-input"
+                                                            />
+                                                        </Col>
+
+                                                    </Row>
+
+                                                </FormGroup>
+
+                                                <FormGroup className="mb-3 ">
+                                                    <Row className="justify-content-md-center">
+                                                        <Label htmlFor="horizontal-firstname-input" className="col-sm-2 col-form-label  text-black">Company </Label>
                                                         <Col sm={5}>
                                                             <AvField
                                                                 name="Name"
@@ -750,7 +750,7 @@ const PartyUIDemo = (props) => {
 
                                                 <FormGroup className="mb-3 ">
                                                     <Row className="justify-content-md-center">
-                                                        <Label htmlFor="horizontal-firstname-input" className="col-sm-2 col-form-label">isActive </Label>
+                                                        <Label htmlFor="horizontal-firstname-input" className="col-sm-2 col-form-label  text-black">isActive </Label>
                                                         <Col md={5} style={{ marginTop: '7px' }} >
                                                             <AvInput
                                                                name="isActive" type="checkbox" id="switch1" switch="none" defaultChecked  />

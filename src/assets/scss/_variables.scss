@@ -105,7 +105,7 @@ $gray-600: #74788d;
 $gray-700: #495057;
 $gray-800: #343a40;
 $gray-900: #212529;
-$black:    #000;
+$black:    #000000;
 
 // fusv-disable
 $grays: (
@@ -336,7 +336,7 @@ $gradient: linear-gradient(180deg, rgba($white, .15), rgba($white, 0));
 
 // scss-docs-start spacer-variables-maps
 $spacer: 1rem;
-$spacers: (
+$sp00acers: (
     0: 0,
     1: ($spacer * .25),
     2: ($spacer * .5),
