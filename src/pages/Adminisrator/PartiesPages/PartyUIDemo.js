@@ -728,7 +728,7 @@ const PartyUIDemo = (props) => {
 
                                                 </FormGroup>
 
-                                                <FormGroup className="mb-3 ">
+                                                {/* <FormGroup className="mb-3 ">
                                                     <Row className="justify-content-md-center">
                                                         <Col className="col-sm-2 "></Col>
                                                         <Col sm={5} >
@@ -746,7 +746,24 @@ const PartyUIDemo = (props) => {
                                                             </Row>
                                                         </Col>
                                                     </Row>
+                                                </FormGroup> */}
+
+                                                <FormGroup className="mb-3 ">
+                                                    <Row className="justify-content-md-center">
+                                                        <Label htmlFor="horizontal-firstname-input" className="col-sm-2 col-form-label">isActive </Label>
+                                                        <Col md={5} style={{ marginTop: '7px' }} >
+                                                            <AvInput
+                                                               name="isActive" type="checkbox" id="switch1" switch="none" defaultChecked  />
+                                                               <Label className="me-1" htmlFor="switch1" data-on-label="Yes" data-off-label="No"></Label>
+                                                               
+                                                                
+                                                          
+                                                        </Col>
+
+                                                    </Row>
+
                                                 </FormGroup>
+
 
                                                 <FormGroup className="mb-3 ">
                                                     <Row className="justify-content-center">

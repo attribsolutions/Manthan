@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import Breadcrumbs from "../../../components/Common/Breadcrumb";
 import { Card, CardBody, Col, Container, Row, Label, Input, CardHeader, FormGroup } from "reactstrap";
-import { AvForm, AvGroup, AvField } from "availity-reactstrap-validation";
+import { AvForm, AvGroup, AvField, AvInput } from "availity-reactstrap-validation";
 import { useDispatch, useSelector } from "react-redux";
 import { AlertState } from "../../../store/Utilites/CostumeAlert/actions";
 import Select from "react-select";
@@ -109,19 +109,19 @@ const PartyMaster = (props) => {
     useEffect(() => {
         document.getElementById("txtName").focus();
         if (!(editDataGatingFromList === undefined)) {
-            
+
             setEditData(editDataGatingFromList);
             setIsEdit(true);
             setFSSAIExipry_Date_Select(editDataGatingFromList.FSSAIExipry)
 
             setDistrict_dropdown_Select({
-        value: editDataGatingFromList.District,
-        label: editDataGatingFromList.DistrictName
-    })
-            setCompanyList_dropdown_Select({
-                value: editDataGatingFromList.Company,
-                label: editDataGatingFromList.CompanyNa
+                value: editDataGatingFromList.District,
+                label: editDataGatingFromList.DistrictName
             })
+            // setCompanyList_dropdown_Select({
+            //     value: editDataGatingFromList.Company,
+            //     label: editDataGatingFromList.CompanyNa
+            // })
             setDivision_dropdown_Select({
                 value: editDataGatingFromList.DividionTypeID,
                 label: editDataGatingFromList.DivisionType
@@ -210,7 +210,7 @@ const PartyMaster = (props) => {
             dispatch(postPartyData(requestOptions.body));
         }
     };
-   
+
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
     var IsEditMode_Css = ''
     if (IsEdit === true) { IsEditMode_Css = "-3.5%" };
@@ -421,10 +421,10 @@ const PartyMaster = (props) => {
                                                                     value={FSSAIExipry_Date_Select}
                                                                     className="form-control d-block p-2 bg-white text-dark"
                                                                     placeholder="YYYY-MM-DD"
-                                                                    onChange={ (selectedDates, dateStr, instance) => {
-                                                                       setFSSAIExipry_Date_Select(dateStr)
+                                                                    onChange={(selectedDates, dateStr, instance) => {
+                                                                        setFSSAIExipry_Date_Select(dateStr)
                                                                     }}
-                                                                  
+
                                                                 />
 
                                                             </FormGroup>
@@ -439,14 +439,9 @@ const PartyMaster = (props) => {
                                                                     >
                                                                         IsActive
                                                                     </Label>
-                                                                    <Col md={4} style={{ marginTop: '7px' }} className="form-check form-switch form-switch-lg ">
-                                                                        <Input
-                                                                            value={EditData.IsActive}
-                                                                            type="checkbox"
-                                                                            className="form-control"
-                                                                            id="horizontal-firstname-input"
-                                                                            placeholder="Enter Your First Name"
-                                                                        />
+                                                                    <Col md={4} style={{ marginTop: '7px' }} className="form-check form-switch form-switch-sm ">
+                                                                        <AvInput name="isActive" type="checkbox" id="switch1" switch="none" defaultChecked Value={EditData.IsActive} />
+                                                                        <Label className="me-1" htmlFor="switch1" data-on-label="Yes" data-off-label="No"></Label>
                                                                     </Col>
                                                                 </Row>
 
