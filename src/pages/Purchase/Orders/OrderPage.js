@@ -323,8 +323,8 @@ const OrderPage = (props) => {
       ItemCount_initial = ItemCount_initial + 1
     })
     if ((test.length > 0)) {
-      setTotalAmountCount(TotalAmountCount_initial)
-      setItemCount(ItemCount_initial)
+      setTotalAmountCount(TotalAmountCount_initial);
+      setItemCount(ItemCount_initial);
     }
     else {
       setTotalAmountCount(0)
@@ -355,8 +355,8 @@ const OrderPage = (props) => {
 
             <Col md="2" className="">
               <FormGroup className="mb-3 row mt-3 " >
-                <Label className="col-sm-5 mt-2 text-end">Order Date :</Label>
-                <Col className="md-8">
+                <Label className="col-sm-5 p-2">Order Date</Label>
+                <Col md="7">
                   <Flatpickr
                     className="form-control d-block"
                     value={orderDate}
@@ -366,7 +366,7 @@ const OrderPage = (props) => {
                       altFormat: "F j, Y",
                       dateFormat: "Y-m-d"
                     }}
-                    onChange={(y,e) => {
+                    onChange={(y, e) => {
                       setOrderDate(e);
                     }}
                   />
@@ -379,8 +379,8 @@ const OrderPage = (props) => {
 
             <Col md="3">
               <FormGroup className="mb-3 row mt-3 " >
-                <Label className="col-sm-4 mt-2 text-end">Customer Name :</Label>
-                <Col className="md-auto ">
+                <Label className="col-sm-4 p-2">Customer Name</Label>
+                <Col md="8">
                   <ReactSelect
                     Value={customerName_dropdownSelect}
                     classNamePrefix="select2-Customer"
@@ -395,8 +395,8 @@ const OrderPage = (props) => {
             <Col md="3">
 
               <FormGroup className="mb-3 row mt-3 " >
-                <Label className="col-sm-3  md-6 mt-2 text-end">Descreption :</Label>
-                <Col className="md-6 ">
+                <Label className="col-sm-3 p-2 ">Descreption</Label>
+                <Col md="9">
                   <Input
                     placeholder="Enter Description"
                     id='inp-description'
@@ -407,11 +407,11 @@ const OrderPage = (props) => {
 
 
 
-            <Col className={'justify-content-md-auto'}></Col>
+            <Col md="2"></Col>
 
-            <Col className={'justify-content-md-auto'}>
+            <Col md="2">
               <Label htmlFor="validationCustom01"> </Label>
-              <div className="bg-soft-primary text-center text-primary  external-event  col-ls-6 col-form-label rounded-2 align-right">
+              <div className="bg-soft-primary text-center text-primary  external-event  col-form-label rounded-2 align-right">
                 Order Amount : &nbsp;&nbsp; {totalAmountCount.toFixed(2)}&nbsp;
               </div>
               {/* <h5 className=" text-left text-danger  align-left">
@@ -557,9 +557,9 @@ const OrderPage = (props) => {
                                   // handleKeyDown(event);
                                   if (event.charCode >= 48 && event.charCode <= 57 || event.charCode >= 96 && event.charCode <= 105) {
                                     return true;
-                                } else {
+                                  } else {
                                     return false;
-                                }
+                                  }
 
                                 }}
                                 onChange={(event) => {
