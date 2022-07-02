@@ -355,7 +355,7 @@ const OrderPage = (props) => {
 
             <Col md="2" className="">
               <FormGroup className="mb-3 row mt-3 " >
-                <Label className="col-sm-4 mt-2 text-end">Order Date :</Label>
+                <Label className="col-sm-5 mt-2 text-end">Order Date :</Label>
                 <Col className="md-8">
                   <Flatpickr
                     className="form-control d-block"
