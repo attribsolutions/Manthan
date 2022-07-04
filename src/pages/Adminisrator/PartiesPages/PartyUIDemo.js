@@ -623,7 +623,7 @@ const PartyUIDemo = (props) => {
                                   <Container fluid>
 
                     <Card  >
-                        <CardHeader className="card-header text-center  text-black" style={{ backgroundColor: "grey" }}>
+                        <CardHeader className="card-header text-center  text-black" style={{ backgroundColor: "#dddddd" }}>
                             <h4 className=" text-center text-black" >React Validation - Normal</h4>
                             <p className="text-center text-black">Provide valuable, actionable feedback to your users with HTML5 form validation–available in all our supported browsers.</p>
                         </CardHeader>
@@ -646,6 +646,7 @@ const PartyUIDemo = (props) => {
                                                                 type="text"
                                                                 errorMessage="Enter First Name"
                                                                 className="form-control"
+                                                                pattern="[0-9]" 
                                                                 validate={{ required: { value: true } }}
                                                                 id="horizontal-firstname-input"
                                                             />
