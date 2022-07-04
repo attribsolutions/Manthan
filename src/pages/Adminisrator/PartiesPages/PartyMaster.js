@@ -392,12 +392,13 @@ const PartyMaster = (props) => {
                                                                     value={EditData.FSSAINo}
                                                                     placeholder="Please Enter FSSAINo"
                                                                     type="text"
+                                                                   
                                                                     errorMessage="Enter First FSSAINo"
                                                                     className="form-control"
                                                                     validate={{
                                                                         required: { value: true },
                                                                         tel: {
-                                                                            pattern: /^[0-3][0-9]{13}$/,
+                                                                            pattern: /^[0-9]*$/,
                                                                             errorMessage: 'Please specify a valid FSSAI Number.'
                                                                         }
                                                                     }}
