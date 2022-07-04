@@ -187,7 +187,7 @@ const Header = props => {
               </div>
             </div>
 
-            <LanguageDropdown />
+            {/* <LanguageDropdown /> */}
 
             {/* light / dark mode */}
             <LightDark layoutMode={props['layoutMode']} onChangeLayoutMode={onChangeLayoutMode} />

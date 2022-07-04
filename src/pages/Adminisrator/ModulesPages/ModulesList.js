@@ -19,6 +19,7 @@ import {
 } from "../../../store/actions";
 import { AlertState } from "../../../store/Utilites/CostumeAlert/actions";
 import Modules from "./Modules";
+import PartyUIDemo from "../PartiesPages/PartyUIDemo";
 
 const ModulesList = () => {
     const dispatch = useDispatch();
@@ -226,7 +227,8 @@ const ModulesList = () => {
                         toggle={() => { tog_center() }}
                         size="xl"
                     >
-                        <Modules state={editData.Data} />
+                        <PartyUIDemo state={editData.Data} />
+                        {/* <Modules state={editData.Data} /> */}
                     </Modal>
                 </div>
             </div>

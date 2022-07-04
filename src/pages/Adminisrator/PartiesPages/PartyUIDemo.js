@@ -616,18 +616,18 @@ const PartyUIDemo = (props) => {
     // );
     return (
         <React.Fragment>
-              <div className="page-content container-fluid vh-100 text-black" >
+              <div className="page-content " >
                   <div className=" text-black" style={{backgroundColor:"#ffffff"}} >
                        <Breadcrumbs breadcrumbItem={"Party UI DEMO "} />
                        </div>
                                   <Container fluid>
 
-                    <Card style={{ backgroundColor: "#add8ff" }} >
+                    <Card style={{ backgroundColor: "#add8ff" }}  >
                         <CardHeader className="card-header text-center  text-black" style={{ backgroundColor: "#dddddd" }}>
                             <h4 className=" text-center text-black" >React Validation - Normal</h4>
                             <p className="text-center text-black">Provide valuable, actionable feedback to your users with HTML5 form validation–available in all our supported browsers.</p>
                         </CardHeader>
-                        <CardBody >
+                        <CardBody  className=" vh-100 text-black">
                             <AvForm>
                                 <Row className="d-flex justify-content-center" >
 
