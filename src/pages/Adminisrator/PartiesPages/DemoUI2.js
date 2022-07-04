@@ -6,7 +6,7 @@ import { AvForm, AvGroup, AvField, AvInput } from "availity-reactstrap-validatio
 import Flatpickr from "react-flatpickr"
 import Select from "react-select";
 
-const DemoUi_2 = (props) => {
+const DemoUI2 = (props) => {
     return (
         <React.Fragment>
             <div className="page-content">
@@ -188,4 +188,4 @@ const DemoUi_2 = (props) => {
     );
 }
 
-export default DemoUi_2
+export default DemoUI2
