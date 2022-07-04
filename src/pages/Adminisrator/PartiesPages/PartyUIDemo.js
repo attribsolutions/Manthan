@@ -627,12 +627,12 @@ const PartyUIDemo = (props) => {
                             <h4 className=" text-center text-black" >React Validation - Normal</h4>
                             <p className="text-center text-black">Provide valuable, actionable feedback to your users with HTML5 form validation–available in all our supported browsers.</p>
                         </CardHeader>
-                        <CardBody  className=" vh-10 0 text-black"  >
+                        <CardBody  className=" vh-10 0 text-black" style={{ backgroundColor: "#dde9f57a" }} >
                             <AvForm>
                                 <Row className="d-flex justify-content-center" >
 
                                     <Col md={6}  >
-                                        <Card >
+                                        <Card  >
 
                                             <CardBody  style={{ backgroundColor: "whitesmoke" }} >
 
@@ -768,7 +768,7 @@ const PartyUIDemo = (props) => {
                                                 </FormGroup> */}
 
 
-                                                <FormGroup className="mb-3 ">
+                                                <FormGroup >
                                                     <Row className="justify-content-right">
                                                         {/* <Col sm={1}></Col> */}
                                                         <Col sm={2}>
