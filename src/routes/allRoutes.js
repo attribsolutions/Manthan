@@ -37,6 +37,7 @@ import PartyList from "../pages/Adminisrator/PartiesPages/PartyList";
 import PartyMaster from "../pages/Adminisrator/PartiesPages/PartyMaster";
 import PartyUIDemo from "../pages/Adminisrator/PartiesPages/PartyUIDemo";
 import UiDemo from "../pages/Adminisrator/EmployeePages/UiDemo";
+import DemoUi_2 from "../pages/Adminisrator/PartiesPages/DemoUI_2";
 // import AddItemMaster from "../pages/Adminisrator/MasterPages/AddItemMaster";
 
 const userRoutes = [
@@ -77,6 +78,7 @@ const userRoutes = [
   { path: "/partyMaster", component: PartyMaster },
   { path:"/partyUIDemo",component:PartyUIDemo},
   { path:"/UiDemo",component:UiDemo},
+  { path:"/DemoUi2",component:DemoUi_2},
 
 
   // { path: "/AddItemMaster", component: AddItemMaster },

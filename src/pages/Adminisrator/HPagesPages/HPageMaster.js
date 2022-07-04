@@ -89,7 +89,7 @@ const HPageMaster = (props) => {
             setPageAccessData(editDataGatingFromList.PagePageAccess)
 
             // When value 2 is get then DropDown lable is "ListPage" and ShowMenu is disabled Otherwise DropDown lable is "AddPage" and ShowMenu is enabled
-            let showCheckBox = editDataGatingFromList[0].PageType
+            let showCheckBox = editDataGatingFromList.PageType
             if (showCheckBox === 2) {
                 document.getElementById("abc").disabled = true
                 setisShowPageChecked(true)

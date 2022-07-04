@@ -209,39 +209,7 @@ const AddUser = (props) => {
                     </Row>
 
                
-                    <Row className="mb-4">
-                      <Label
-                        className="col-sm-2 col-form-label"
-                        htmlFor="horizontal-password-inputk"
-                      >
-                        isActive
-                      </Label>
-                      <Col sm={4}>
-                        <AvField name="isActive"
-                          checked={EditData.isActive}
-                          type="checkbox"
-                        />
-                      </Col>
-                    </Row>
-
-                    <Row className="mb-4">
-                      <Label
-                        className="col-sm-2 col-form-label"
-                        htmlFor="horizontal-password-inputk"
-                      >
-                        Is SendOTP
-                      </Label>
-                      <Col sm={4}>
-                        <AvField
-                          type="checkbox"
-                          checked={EditData.isSendOTP}
-                          name="isSendOTP"
-                          
-                          id="horizontal-customCheck"
-
-                        />
-                      </Col>
-                    </Row>
+                   
 
                     <Row className="mb-2">
                       <Label className="col-sm-2 col-form-label">
@@ -331,6 +299,39 @@ const AddUser = (props) => {
                       </Col>
                     </Row>
 
+                    <Row className="mb-4">
+                      <Label
+                        className="col-sm-2 col-form-label"
+                        htmlFor="horizontal-password-inputk"
+                      >
+                        isActive
+                      </Label>
+                      <Col sm={4}>
+                        <AvField name="isActive"
+                          checked={EditData.isActive}
+                          type="checkbox"
+                        />
+                      </Col>
+                    </Row>
+
+                    <Row className="mb-4">
+                      <Label
+                        className="col-sm-2 col-form-label"
+                        htmlFor="horizontal-password-inputk"
+                      >
+                        Is SendOTP
+                      </Label>
+                      <Col sm={4}>
+                        <AvField
+                          type="checkbox"
+                          checked={EditData.isSendOTP}
+                          name="isSendOTP"
+                          
+                          id="horizontal-customCheck"
+
+                        />
+                      </Col>
+                    </Row>
                     <Row className="justify-content-end">
                       <Col sm={2}>
                       <div>
