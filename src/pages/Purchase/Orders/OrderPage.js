@@ -256,11 +256,11 @@ const OrderPage = (props) => {
 
   }
 
-  function InputHandelar(e, i) {
+  function InputHandelar(e, itemIndex, key) {
 
     const quantity = parseFloat(e.target.value)
-    const rate = parseFloat(i.Rate)
-    const Gst = parseFloat(i.GSTPercentage)
+    const rate = parseFloat(itemIndex.Rate)
+    const Gst = parseFloat(itemIndex.GSTPercentage)
     const basicAmount = rate * quantity;
     const GstAmount = basicAmount * (Gst / 100)
     const totalAmount = GstAmount + basicAmount
@@ -271,41 +271,41 @@ const OrderPage = (props) => {
     let ItemCount_initial = 0
 
     const find = itemArray.find((element) => {
-      return element.ItemID === i.ID
+      return element.ItemID === itemIndex.ID
     });
 
 
-    var dataa = {
-      ItemID: i.ID,
-      Quantity: quantity,
-      MRP: i.MRP,
-      Rate: rate,
-      UnitID: 1,
-      BaseUnitQuantity: 1,
-      GST: parseInt(Gst.toFixed(2)),
-      BasicAmount: basicAmount,
-      GSTAmount: parseInt(GstAmount.toFixed(2)),
-      CGST: 1,
-      SGST: 1,
-      IGST: 1,
-      CGSTPercentage: 1,
-      SGSTPercentage: 1,
-      IGSTPercentage: 1,
-      Amount: parseInt(totalAmount.toFixed(2))
+    var dataa = (index1) => {
+
+      return {
+        ItemID: itemIndex.ID,
+        Quantity: quantity,
+        MRP: itemIndex.MRP,
+        Rate: rate,
+        UnitID: 1,
+        BaseUnitQuantity: index1 ? index1 : 1,
+        GST: parseInt(Gst.toFixed(2)),
+        BasicAmount: basicAmount, // change
+        GSTAmount: parseInt(GstAmount.toFixed(2)),// change
+        CGST: 1,
+        SGST: 1,
+        IGST: 1,
+        CGSTPercentage: 1,// change
+        SGSTPercentage: 1,// change
+        IGSTPercentage: 1,// change
+        Amount: parseInt(totalAmount.toFixed(2)) // change
+      }
     }
 
     if (quantity > 0) {
-      // if (itemArray.length <= 0) {
-      //   setitemArray([...itemArray, dataa])
-      //   test=[...itemArray, dataa]
-      // } else 
+
       if (find === undefined) {
-        setitemArray([...itemArray, dataa])
-        test = [...itemArray, dataa]
+        setitemArray([...itemArray, dataa()])
+        test = [...itemArray, dataa()]
       } else {
 
-        test = itemArray.filter((ele) => !(ele.ItemID === i.ID))
-        test.push(dataa);
+        test = itemArray.filter((ele) => !(ele.ItemID === itemIndex.ID))
+        test.push(dataa(find.BaseUnitQuantity));
         // const isLargeNumber = (element) => element.ItemID === i.ID;
         // const a = itemArray.findIndex(isLargeNumber);
         setitemArray(test)
@@ -313,7 +313,7 @@ const OrderPage = (props) => {
 
     }
     else {
-      test = itemArray.filter((ele) => !(ele.ItemID === i.ID))
+      test = itemArray.filter((ele) => !(ele.ItemID === itemIndex.ID))
       setitemArray(test)
 
     }
@@ -338,21 +338,25 @@ const OrderPage = (props) => {
     label: index.Name
   }));
 
-  
-  function handllerBaseUnit(e,i) {
+
+  function handllerBaseUnit(e, i) {
     //unittables1=<UnitTable baseUnit={baseUnit} />
     // setbaseUN(e);
     debugger
-    itemArray.forEach(element => {
-      if (i.ID === element.ItemID) {
-        element.BaseUnitQuantity = e.value;
-      }
-      else {
-        
-      }
+    const find = itemArray.find((element) => {
+      return element.ItemID === i.ID
     });
-    
-    setitemArray(itemArray);
+    if (find) {
+      itemArray.forEach(element => {
+        if (i.ID === element.ItemID) {
+          element.BaseUnitQuantity = e.value;
+        }
+      });
+      setitemArray(itemArray);
+    } else {
+      alert("Please Enter Quantity First")
+    }
+
   }
   console.log(itemArray)
   return (
@@ -374,7 +378,7 @@ const OrderPage = (props) => {
               <p className=" text-black">Provide valuable, actionable feedback to your users with HTML5 form validation–available in all our supported browsers.</p>
             </CardHeader> */}
             <CardBody>
-              <Row className="mb-1 border border-black text-black "style={{ backgroundColor: "#dddddd" }} >
+              <Row className="mb-1 border border-black text-black " style={{ backgroundColor: "#dddddd" }} >
 
                 <Col md="2" className="">
                   <FormGroup className="mb-3 row mt-3 " >
@@ -396,9 +400,6 @@ const OrderPage = (props) => {
                     </Col>
                   </FormGroup>
                 </Col>
-
-
-
 
                 <Col md="3">
                   <FormGroup className="mb-3 row mt-3 " >
@@ -474,35 +475,35 @@ const OrderPage = (props) => {
                         </Tr>
                       </Thead>
                       <Tbody>
-                        {OrderItems.map((item, key) => {
+                        {OrderItems.map((mapIndex, key) => {
                           var com = "";
                           var qat = '';
                           EditData.OrderItem.map((i, k) => {
-                            if (item.ID === i.ItemID) { com = i.Comment; qat = i.Quantity }
+                            if (mapIndex.ID === i.ItemID) { com = i.Comment; qat = i.Quantity }
                             return ''
                           })
                           return (
                             <Tr>
                               <Td>
-                                {item.ItemGroupName === itemgroups ? (
+                                {mapIndex.ItemGroupName === itemgroups ? (
                                   <>
                                     <label
                                       id={"lblItemName" + key}
                                       name={"lblItemName" + key}
                                     >
-                                      {item.Name}
+                                      {mapIndex.Name}
                                     </label>
                                     <input
                                       type="hidden"
                                       id={"lblItemID" + key}
                                       name={"lblItemID" + key}
-                                      value={item.ID}
+                                      value={mapIndex.ID}
                                     />
                                     <input
                                       type="hidden"
                                       id={"lblItemGST" + key}
                                       name={"lblItemGST" + key}
-                                      value={item.GSTPercentage}
+                                      value={mapIndex.GSTPercentage}
                                     />
                                   </>
 
@@ -510,26 +511,26 @@ const OrderPage = (props) => {
                                   <React.Fragment>
                                     <label className="btn btn-secondary btn-sm waves-effect waves-light">
                                       {/* {item.ItemGroupName} */}
-                                      {(itemgroups = item.ItemGroupName)}
+                                      {(itemgroups = mapIndex.ItemGroupName)}
                                     </label>
                                     <br></br>
                                     <label
                                       id={"lblItemName" + key}
                                       name={"lblItemName" + key}
                                     >
-                                      {item.Name}
+                                      {mapIndex.Name}
                                     </label>
                                     <input
                                       type="hidden"
                                       id={"lblItemID" + key}
                                       name={"lblItemID" + key}
-                                      value={item.ID}
+                                      value={mapIndex.ID}
                                     />
                                     <input
                                       type="hidden"
                                       id={"lblItemGST" + key}
                                       name={"lblItemGST" + key}
-                                      value={item.GSTPercentage}
+                                      value={mapIndex.GSTPercentage}
                                     />
                                   </React.Fragment>
                                 )}
@@ -540,26 +541,26 @@ const OrderPage = (props) => {
                                   type="hidden"
                                   id={"lblItemMRP" + key}
                                   name={"lblItemMRP" + key}
-                                  value={item.MRP}
+                                  value={mapIndex.MRP}
                                 />
-                                <label style={{ a: "end" }}> {item.MRP} </label>
+                                <label style={{ a: "end" }}> {mapIndex.MRP} </label>
 
                               </Td>
                               <Td className="align-bottom text-end">
-                                <label > {item.Rate} </label>
+                                <label > {mapIndex.Rate} </label>
                                 <input
                                   type="hidden"
-                                  value={item.Rate}
+                                  value={mapIndex.Rate}
                                   id={"rate" + key}
                                   className="form-control form-control-sm"
                                   autoComplete="false"
                                 />
                               </Td>
                               <Td className="align-bottom text-end">
-                                <label > {item.GSTPercentage} % </label>
+                                <label > {mapIndex.GSTPercentage} % </label>
                                 <input
                                   type="hidden"
-                                  value={item.GSTPercentage}
+                                  value={mapIndex.GSTPercentage}
                                   id={"rate" + key}
                                   className="form-control form-control-sm"
                                   autoComplete="false"
@@ -573,8 +574,8 @@ const OrderPage = (props) => {
                                     id={"inp-txtqty" + key}
                                     placeholder={"0.0"}
                                     className="form-control float-end text-end"
-                                    key={item.ID}
-                                    disabled={item.Rate > 0 ? false : true}
+                                    key={mapIndex.ID}
+                                    disabled={mapIndex.Rate > 0 ? false : true}
                                     defaultValue={qat}
                                     onKeyDown={(event) => {
                                       handleKeyDown(event);
@@ -586,7 +587,7 @@ const OrderPage = (props) => {
 
                                     }}
                                     onChange={(event) => {
-                                      InputHandelar(event, item);
+                                      InputHandelar(event, mapIndex, key);
                                     }}
                                     // className="form-control form-control-sm"
                                     autoComplete="off"
@@ -599,8 +600,15 @@ const OrderPage = (props) => {
                                 <ReactSelect
                                   classNamePrefix="select2-selection"
                                   id={"ddlUnit" + key}
-                                  options={[{ value: 1, label: "NO", }, { value: 2, label: "Box", }]}
-                                  onChange={(e)=>{handllerBaseUnit(e,item)}}
+                                  defaultValue={{ value: 1, label: "NO", }}
+                                  options={
+                                    [
+                                      { value: 1, label: "NO" },
+                                      { value: 2, label: "Box" },
+                                      { value: 3, label: "Kg" }
+                                    ]
+                                  }
+                                  onChange={(e) => { handllerBaseUnit(e, mapIndex) }}
                                 >
                                 </ReactSelect>
                               </Td>

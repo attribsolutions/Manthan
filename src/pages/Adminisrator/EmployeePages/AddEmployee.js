@@ -221,9 +221,9 @@ const AddEmployee = (props) => {
                       ref={formRef}
                     >
                       <Row>
-                        <Card >
-                          <CardBody style={{ backgroundColor: "whitesmoke" }}>
-                            <Row className="mb-4">
+                        <Card style={{ backgroundColor: "whitesmoke" }} >
+                        
+                            <Row  className="mt-2">
 
                               <Col md="3">
                                 <FormGroup className="mb-3">
@@ -358,17 +358,16 @@ const AddEmployee = (props) => {
                                 </FormGroup>
                               </Col>
                             </Row>
-                          </CardBody>
+                         
                         </Card>
                       </Row>
 
                       <Row>
-                        <Card >
-                          <CardBody style={{ backgroundColor: "whitesmoke" }}>
-                            <Row className="mb-4">
+                        <Card style={{ backgroundColor: "whitesmoke" }}>
+                            <Row className="mb-2 mt-2">
 
                               <Col md="3">
-                                <FormGroup className="mb-3">
+                                <FormGroup className="mb-2">
                                   <Label htmlFor="validationCustom01">Company Name </Label>
                                   <Select
                                     value={Companyselect}
@@ -380,7 +379,7 @@ const AddEmployee = (props) => {
 
                               <Col md="1">  </Col>
                               <Col md="3">
-                                <FormGroup className="mb-3">
+                                <FormGroup className="mb-2">
                                   <Label htmlFor="validationCustom01">Employee Type </Label>
                                   <Select
                                     value={EmployeeTypeselect}
@@ -396,7 +395,7 @@ const AddEmployee = (props) => {
                             <Row>
 
                               <Col md="3">
-                                <FormGroup className="mb-3">
+                                <FormGroup className="mb-2">
                                   <Label htmlFor="validationCustom01">DesignationID </Label>
                                   <Select
                                     value={DesignationIDselect}
@@ -408,7 +407,7 @@ const AddEmployee = (props) => {
                               <Col md="1">  </Col>
 
                               <Col md="3">
-                                <FormGroup className="mb-3">
+                                <FormGroup className="mb-2">
                                   <Label htmlFor="validationCustom01">working_hours </Label>
                                   <AvField name="working_hours" value={EditData.working_hours}
                                     type="number"
@@ -447,7 +446,6 @@ const AddEmployee = (props) => {
                                 </div>
                               </Col>
                             </Row>
-                          </CardBody>
                         </Card>
                       </Row>
 

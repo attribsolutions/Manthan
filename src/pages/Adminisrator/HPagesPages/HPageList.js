@@ -75,6 +75,7 @@ export default function HPageList() {
     }, [editData]);
 
     const EditPageHandler = (id) => {
+        debugger
         dispatch(editHPagesID(id));
     }
 
@@ -148,7 +149,7 @@ export default function HPageList() {
                     <buton
                         type="button"
                         data-mdb-toggle="tooltip" data-mdb-placement="top" title="Edit Page"
-                        onClick={() => { EditPageHandler(module.ID); }}
+                        onClick={() => { EditPageHandler(module.id); }}
                         className="badge badge-soft-primary font-size-12" >
                         <i class="mdi mdi-pencil font-size-18" id="edittooltip"></i>
                     </buton>
@@ -156,7 +157,7 @@ export default function HPageList() {
                         className="badge badge-soft-danger font-size-12"
                         data-mdb-toggle="tooltip" data-mdb-placement="top" title="Edit Page"
                         onClick={() => {
-                            deleteHandeler(module.ID, module.Name);
+                            deleteHandeler(module.id, module.Name);
                         }}
                     ><i class="mdi mdi-delete font-size-18" ></i>
                     </buton>
