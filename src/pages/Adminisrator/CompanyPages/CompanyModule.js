@@ -285,29 +285,7 @@ const CompanyModule = (props) => {
                       </Col>
                     </Row>
 
-                    <Row className="justify-content-end">
-                      <Col sm={10}></Col>
-                      <Col sm={2}>
-                        <div>
-                          {
-                            IsEdit ? (<button
-                              type="submit"
-                              data-mdb-toggle="tooltip" data-mdb-placement="top" title="Update Company"
-                              className="btn btn-success w-md"
-                            >
-                              <i class="fas fa-edit me-2"></i>Update
-                            </button>) : (
-                              <button
-                                type="submit"
-                                data-mdb-toggle="tooltip" data-mdb-placement="top" title="Save Company"
-                                className="btn btn-success w-md"
-                              > <i className="fas fa-save me-2"></i> Save
-                              </button>
-                            )
-                          }
-                        </div>
-                      </Col>{" "}
-                    </Row>
+                    
                   </AvForm>
                   <br></br><br></br><br></br> <br></br> <br></br>
                 </CardBody>
