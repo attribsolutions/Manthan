@@ -86,6 +86,7 @@ function* editModule_ID_GenratorFunction({ id }) {
 }
 
 function* update_Module_GenratorFunction({ data, id }) {
+  console.log("data",data)
   try {
     yield put(SpinnerState(true))
     const response = yield call(updateModule_ID, data, id);

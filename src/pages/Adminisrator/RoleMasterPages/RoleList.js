@@ -17,8 +17,8 @@ import ToolkitProvider, { Search } from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 import { useSelector, useDispatch } from "react-redux";
 import { AlertState } from '../../../store/Utilites/CostumeAlert/actions';
-import AddRole from './RoleMaster';
 import "../../../assets/scss/CustomeTable/datatables.scss"
+import RoleMaster from './RoleMaster';
 
 const RoleList = () => {
     const dispatch = useDispatch();
@@ -137,7 +137,7 @@ const RoleList = () => {
                             type="button"
                             data-mdb-toggle="tooltip" data-mdb-placement="top" title="Edit Role"
                             onClick={() => {
-                                EditPageHandler(Role.ID);
+                                EditPageHandler(Role.id);
                             }}
                             className="badge badge-soft-primary font-size-12"
                         >
@@ -147,7 +147,7 @@ const RoleList = () => {
                             className="badge badge-soft-danger font-size-12"
                             data-mdb-toggle="tooltip" data-mdb-placement="top" title="Delete Role"
                             onClick={() => {
-                                deleteHandeler(Role.ID, Role.Name);
+                                deleteHandeler(Role.id, Role.Name);
                             }}
                         >
                             <i className="mdi mdi-delete font-size-18" ></i>
@@ -179,7 +179,7 @@ const RoleList = () => {
                                         IsButtonVissible={true}
                                         SearchProps={toolkitProps.searchProps}
                                         breadcrumbCount={TableListData.length}
-                                        RedirctPath={"/RolesMaster"}
+                                        RedirctPath={"/RoleMaster"}
                                     />
                                     <Row>
                                         <Col xl="12">
@@ -215,7 +215,7 @@ const RoleList = () => {
                     toggle={() => { tog_center() }}
                     size="xl"
                 >
-                    <AddRole state={editData.Data} />
+                    <RoleMaster state={editData.Data} />
                 </Modal>
             </div>
         </React.Fragment>

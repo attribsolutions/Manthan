@@ -50,8 +50,8 @@ const CompanyModule = (props) => {
       setEditData(editDataGatingFromList);
       setIsEdit(true);
       setCompanyGroup({
-        value: editDataGatingFromList.CompanyGroup.ID,
-        label: editDataGatingFromList.CompanyGroup.Name
+        value: editDataGatingFromList.CompanyGroup_id,
+        label: editDataGatingFromList.CompanyGroupName
       })
       dispatch(editCompanyIDSuccess({ Status: false }))
     }
@@ -124,7 +124,7 @@ const CompanyModule = (props) => {
       }),
     };
     if (IsEdit) {
-      dispatch(updateCompanyID(requestOptions.body, EditData.ID));
+      dispatch(updateCompanyID(requestOptions.body, EditData.id));
     }
 
     else {

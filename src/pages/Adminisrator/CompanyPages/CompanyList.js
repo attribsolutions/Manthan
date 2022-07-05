@@ -33,7 +33,7 @@ const CompanyList = () => {
         updateMessage: state.Company.updateMessage,
         deleteCompanyID: state.Company.deleteCompanyID,
     }));
-    console.log("editData in useselector", editData)
+   
 
     // tag_center -- Control the Edit Modal show and close
     function tog_center() {
@@ -157,7 +157,7 @@ const CompanyList = () => {
                     <buton
                         type="button"
                         data-mdb-toggle="tooltip" data-mdb-placement="top" title="Edit Company"
-                        onClick={() => { EditPageHandler(module.ID); }}
+                        onClick={() => { EditPageHandler(module.id); }}
                         className="badge badge-soft-primary font-size-12"
                     >
                         <i class="mdi mdi-pencil font-size-18" id="edittooltip"></i>
@@ -166,7 +166,7 @@ const CompanyList = () => {
                     <buton
                         className="badge badge-soft-danger font-size-12"
                         data-mdb-toggle="tooltip" data-mdb-placement="top" title="Delete Company"
-                        onClick={() => { deleteHandeler(module.ID, module.Name); }}
+                        onClick={() => { deleteHandeler(module.id, module.Name); }}
                     >
                         <i class="mdi mdi-delete font-size-18" ></i>
                     </buton>

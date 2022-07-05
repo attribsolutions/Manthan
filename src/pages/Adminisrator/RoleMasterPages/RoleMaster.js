@@ -1,11 +1,11 @@
 import React, { useEffect, useRef, useState } from "react";
 import Breadcrumbs from "../../../components/Common/Breadcrumb";
-import { Card, CardBody, Col, Container, Row, Label, } from "reactstrap";
-import { AvForm, AvGroup, AvField } from "availity-reactstrap-validation";
+import { Card, CardBody, Col, Container, Row, Label, CardHeader, FormGroup, } from "reactstrap";
+import { AvForm, AvGroup, AvField, AvInput } from "availity-reactstrap-validation";
 import { useDispatch, useSelector } from "react-redux";
 import {
   editSuccess,
-  postRole, updateID,PostSuccess
+  postRole, updateID, PostSuccess
 } from "../../../store/Administrator/RoleMasterRedux/action";
 import { AlertState } from "../../../store/Utilites/CostumeAlert/actions";
 
@@ -28,10 +28,10 @@ const RoleMaster = (props) => {
   const { AddUserMessage, } = useSelector((state) => ({
     AddUserMessage: state.RoleMaster_Reducer.AddUserMessage,
   }));
-  
-    // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
-    useEffect(() => {
-    document.getElementById("txtName").focus();
+
+  // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
+  useEffect(() => {
+    // document.getElementById("txtName").focus();
     if (!(editDataGatingFromList === undefined)) {
       setEditData(editDataGatingFromList);
       setIsEdit(true);
@@ -42,38 +42,38 @@ const RoleMaster = (props) => {
 
   useEffect(() => {
     if ((AddUserMessage.Status === true) && (AddUserMessage.StatusCode === 200)) {
-        dispatch(PostSuccess({ Status: false }))
-        formRef.current.reset();
-        if (PageMode === true) {
-            dispatch(AlertState({
-                Type: 1,
-                Status: true,
-                Message: AddUserMessage.Message,
-            }))
-        }
-        else {
-            dispatch(AlertState({
-                Type: 1,
-                Status: true,
-                Message: AddUserMessage.Message,
-                RedirectPath: '/rolesList',
-                AfterResponseAction: false
-            }))
-        }
-    } 
+      dispatch(PostSuccess({ Status: false }))
+      formRef.current.reset();
+      if (PageMode === true) {
+        dispatch(AlertState({
+          Type: 1,
+          Status: true,
+          Message: AddUserMessage.Message,
+        }))
+      }
+      else {
+        dispatch(AlertState({
+          Type: 1,
+          Status: true,
+          Message: AddUserMessage.Message,
+          RedirectPath: '/roleList',
+          AfterResponseAction: false
+        }))
+      }
+    }
     else if (AddUserMessage.Status === true) {
       dispatch(PostSuccess({ Status: false }))
       dispatch(AlertState({
-            Type: 4,
-            Status: true,
-            Message: "error Message",
-            RedirectPath: false,
-            AfterResponseAction: false
-        }));
+        Type: 4,
+        Status: true,
+        Message: "error Message",
+        RedirectPath: false,
+        AfterResponseAction: false
+      }));
     }
-}, [AddUserMessage.Status])
+  }, [AddUserMessage.Status])
 
-    //'Save' And 'Update' Button Handller
+  //'Save' And 'Update' Button Handller
   const handleValidUpdate = (event, values) => {
     const requestOptions = {
       body: JSON.stringify({
@@ -88,14 +88,15 @@ const RoleMaster = (props) => {
       }),
     };
     if (IsEdit) {
-      dispatch(updateID(requestOptions.body, EditData.ID));
+      dispatch(updateID(requestOptions.body, EditData.id));
     }
     else {
       dispatch(postRole(requestOptions.body));
+      
     }
   };
 
- // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
+  // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
   var IsEditMode_Css = ''
   if (IsEdit === true) { IsEditMode_Css = "-3.5%" };
 
@@ -104,112 +105,119 @@ const RoleMaster = (props) => {
       <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
         <Breadcrumbs breadcrumbItem={"Role Master "} />
         <Container fluid>
-          <Row>
-            <Col lg={12}>
-              <Card>
-                <CardBody>
-                  <AvForm
-                    onValidSubmit={(e, v) => {
-                      handleValidUpdate(e, v);
-                    }}
-                    ref={formRef}
-                  >
-                    <AvGroup>
-                      <Row className="mb-4">
-                        <Label className="col-sm-2 col-form-label">
-                          Name
-                        </Label>
-                        <Col sm={4}>
-                          <AvField name="Name" id="txtName"
-                            value={EditData.Name}
-                            type="text"
-                            placeholder="Please Enter Name"
-                            autoComplete='off'
-                            validate={{
-                              required: { value: true, errorMessage: 'Please enter a Name...!' },
-                            }} />
-                        </Col>
-                      </Row>
-                    </AvGroup>
-                    <AvGroup>
-                      <Row className="mb-4">
-                        <Label className="col-sm-2 col-form-label">
-                          Description
-                        </Label>
-                        <Col sm={4}>
-                          <AvField name="Description" id="txtName"
-                            value={EditData.Description}
-                            type="text"
-                            placeholder="Please Enter Discription"
-                            autoComplete='off'
-                            validate={{
-                              required: { value: true, errorMessage: 'Please enter a Discription...!' },
-                            }} />
-                        </Col>
-                      </Row>
-                    </AvGroup>
 
-                    <AvGroup>
-                      <Row className="mb-4">
-                        <Label className="col-sm-2 col-form-label">
-                          Dashboard
-                        </Label>
-                        <Col sm={4}>
-                          <AvField name="Dashboard" id="txtName"
-                            value={EditData.Dashboard}
-                            type="text"
-                            placeholder="Please Enter Dashboard"
-                            autoComplete='off'
-                            validate={{
-                              required: { value: true, errorMessage: 'Please enter a Dashboard...!' },
-                            }} />
-                        </Col>
-                      </Row>
-                    </AvGroup>
-                    <AvGroup>
-                      <Row className="mb-4">
-                        <Label className="col-sm-2 col-form-label">
-                          IsActive
-                        </Label>
-                        <Col sm={4}>
-                          <AvField name="isActive"
-                            checked={(EditData.ID === 0) ? false : EditData.isActive}
-                            type="checkbox" validate={{
-                            }} />
-                        </Col>
-                      </Row>
-                    </AvGroup>
-                    <Row className="justify-content-end">
-                      <Col sm={10}></Col>
-                      <Col sm={2}>
-                        <div>
-                          {
-                            IsEdit ? (
-                              <button
-                                type="submit"
-                                data-mdb-toggle="tooltip" data-mdb-placement="top" title="Update Role"
-                                className="btn btn-success w-md"
-                              >
-                                <i class="fas fa-edit me-2"></i>Update
-                              </button>) : (
-                              <button
-                                type="submit"
-                                data-mdb-toggle="tooltip" data-mdb-placement="top" title="Save Role"
-                                className="btn btn-success w-md"
-                              > <i className="fas fa-save me-2"></i> Save
-                              </button>
-                            )
-                          }
-                        </div>
-                      </Col>
-                    </Row>
-                  </AvForm>
-                  <div>
-                  </div>
-                </CardBody>
-              </Card>
-            </Col>
-          </Row>
+          <Card>
+            <CardHeader className="card-header   text-dark" style={{ backgroundColor: "#dddddd" }}>
+              <h4 className="  text-black" >React Validation - Normal</h4>
+              <p className=" text-black">Provide valuable, actionable feedback to your users with HTML5 form validation–available in all our supported browsers.</p>
+            </CardHeader>
+            <CardBody className=" vh-10 0 text-black" style={{ backgroundColor: "#whitesmoke" }} >
+              <AvForm onValidSubmit={(e, v) => { handleValidUpdate(e, v) }}
+                ref={formRef}
+              >
+                <Row>
+                  <Col md={12}  >
+                    <Card >
+                      <CardBody style={{ backgroundColor: "whitesmoke" }}>
+                        <Row>
+                          <FormGroup className="mb-2 col col-sm-4 " >
+                            <Label htmlFor="validationCustom01">Name </Label>
+                            <AvField name="Name" id="txtName"
+                              value={EditData.Name}
+                              type="text"
+                              placeholder="Please Enter Name"
+                              autoComplete='off'
+                              validate={{
+                                required: { value: true, errorMessage: 'Please enter a Name...!' },
+                              }} />
+                          </FormGroup>
+                        </Row>
+
+                        <Row>
+                          <FormGroup className="mb-2 col col-sm-4 " >
+                            <Label htmlFor="validationCustom01">Description </Label>
+                            <AvField name="Description" id="txtName"
+                              value={EditData.Description}
+                              type="text"
+                              placeholder="Please Enter Discription"
+                              autoComplete='off'
+                              validate={{
+                                required: { value: true, errorMessage: 'Please enter a Discription...!' },
+                              }} />
+                          </FormGroup>
+                        </Row>
+
+                        <Row>
+                          <FormGroup className="mb-2 col col-sm-4 " >
+                            <Label htmlFor="validationCustom01">Dashboard </Label>
+                            <AvField name="Dashboard" id="txtName"
+                              value={EditData.Dashboard}
+                              type="text"
+                              placeholder="Please Enter Dashboard"
+                              autoComplete='off'
+                              validate={{
+                                required: { value: true, errorMessage: 'Please enter a Dashboard...!' },
+                              }} />
+                          </FormGroup>
+                        </Row>
+
+                        <FormGroup className="mb-2 col col-sm-5">
+                          <Row className="justify-content-md-left">
+                            <Label htmlFor="horizontal-firstname-input" className="col-sm-2 col-form-label" >IsActive </Label>
+                            <Col md={2} style={{ marginTop: '9px' }} >
+                              <AvInput
+                                checked={(EditData.ID === 0) ? false : EditData.IsActive}
+                                name="IsActive"
+                                type="checkbox"
+                                id="switch1"
+                                switch="none"
+                                defaultChecked />
+                              <Label className="me-1" htmlFor="switch1" data-on-label="Yes" data-off-label="No"></Label>
+
+
+                            </Col>
+                          </Row>
+                        </FormGroup>
+
+                        <FormGroup >
+                          <Row >
+
+                            <Col sm={2}>
+                              <div>
+                                {
+                                  IsEdit ? (
+                                    <button
+                                      type="submit"
+                                      data-mdb-toggle="tooltip" data-mdb-placement="top" title="Update Module"
+                                      className="btn btn-success w-md"
+                                    >
+                                      <i class="fas fa-edit me-2"></i>Update
+                                    </button>) : (
+                                    <button
+                                      type="submit"
+                                      data-mdb-toggle="tooltip" data-mdb-placement="top" title="Save Page"
+                                      className="btn btn-primary w-md"
+                                    > <i className="fas fa-save me-2"></i> Save
+                                    </button>
+                                  )
+                                }
+                              </div>
+                            </Col>
+
+                          </Row>
+                        </FormGroup >
+
+                      </CardBody>
+                    </Card>
+                  </Col>
+                </Row>
+
+
+              </AvForm>
+
+            </CardBody>
+          </Card>
+
         </Container>
       </div>
     </React.Fragment>

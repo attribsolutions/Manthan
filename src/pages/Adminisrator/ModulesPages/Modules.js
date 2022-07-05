@@ -6,10 +6,13 @@ import {
     Container,
     Row,
     Label,
+    CardHeader,
+    FormGroup,
 } from "reactstrap";
 import {
     AvForm,
     AvGroup,
+    AvInput,
 } from "availity-reactstrap-validation";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -105,7 +108,7 @@ const Modules = (props) => {
             }),
         };
         if (IsEdit) {
-            dispatch(updateModuleID(requestOptions.body, EditData.ID));
+            dispatch(updateModuleID(requestOptions.body, EditData.id));
         }
         else {
             dispatch(PostModelsSubmit(requestOptions.body));
@@ -118,113 +121,160 @@ const Modules = (props) => {
 
     return (
         <React.Fragment>
-            <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
+            <div className="page-content"   style={{ marginTop: IsEditMode_Css }}>
                 <MetaTags>
                     <title>Modules| FoodERP-React FrontEnd</title>
                 </MetaTags>
-                <Breadcrumbs breadcrumbItem={"Module Page "} />
+                <Breadcrumbs  breadcrumbItem={"Module Page "} />
                 <Container fluid  >
-                    <Row>
-                        <Col lg={12}>
-                            <Card>
-                                <CardBody >
-                                    <AvForm onValidSubmit={(e, v) => { handleValidSubmit(e, v) }}
-                                        ref={formRef}
-                                    >
-                                        <AvGroup>
-                                            <Row className="mb-4">
-                                                <Label className="col-sm-3 col-form-label">
-                                                    Name
-                                                </Label>
-                                                <Col sm={4}>
-                                                    <AvField name="Name" id="txtName" value={EditData.Name}
-                                                        type="text"
-                                                        placeholder="Please Enter Name"
-                                                        autoComplete='off' validate={{
-                                                            required: { value: true, errorMessage: 'Please enter a Name' },
-                                                        }} />
-                                                </Col>
-                                            </Row>
-                                        </AvGroup>
-                                        <AvGroup>
-                                            <Row className="mb-4">
-                                                <Label className="col-sm-3 col-form-label">
-                                                    Display Index
-                                                </Label>
-                                                <Col sm={4}>
-                                                    <AvField name="DisplayIndex" autoComplete='off'
-                                                        placeholder="Please Enter DisplayIndex"
-                                                        value={EditData.DisplayIndex} type="number"
-                                                        validate={{
-                                                            number: true,
-                                                            required: { value: true, errorMessage: 'Display Index is Required' },
-                                                            tel: {
-                                                                pattern: /^\d{1,4}$/,
-                                                                errorMessage: 'Display Index is Required (Only Two Digit) '
-                                                            }
-                                                        }}
-                                                    />
 
-                                                </Col>
-                                            </Row>
-                                        </AvGroup>
-                                        <AvGroup>
-                                            <Row className="mb-4">
-                                                <Label className="col-sm-3 col-form-label">
-                                                    IconPath
-                                                </Label>
-                                                <Col sm={4}>
-                                                    <AvField name="Icon"
-                                                        autoComplete='off'
-                                                        placeholder="Please Enter IconPath"
-                                                        value={EditData.Icon} type="text" validate={{
-                                                            required: { value: true, errorMessage: 'Please enter a Icon' },
-                                                        }} />
-                                                </Col>
-                                            </Row>
-                                        </AvGroup>
-                                        <AvGroup>
-                                            <Row className="mb-4">
-                                                <Label className="col-sm-3 col-form-label">
-                                                    IsActive
-                                                </Label>
-                                                <Col sm={4}>
-                                                    <AvField name="IsActive"
-                                                        checked={(EditData.ID === 0) ? false : EditData.IsActive}
-                                                        type="checkbox" validate={{
-                                                        }} />
-                                                </Col>
-                                            </Row>
-                                        </AvGroup>
-                                        <Row className="justify-content-end">
-                                            <Col sm={10}></Col>
-                                            <Col sm={2}>
-                                                <div>
-                                                    {
-                                                        IsEdit ? (
-                                                            <button
-                                                                type="submit"
-                                                                data-mdb-toggle="tooltip" data-mdb-placement="top" title="Update Module"
-                                                                className="btn btn-success w-md"
-                                                            >
-                                                                <i class="fas fa-edit me-2"></i>Update
-                                                            </button>) : (
-                                                            <button
-                                                                type="submit"
-                                                                data-mdb-toggle="tooltip" data-mdb-placement="top" title="Save Module"
-                                                                className="btn btn-success w-md"
-                                                            > <i className="fas fa-save me-2"></i> Save
-                                                            </button>
-                                                        )
-                                                    }
-                                                </div>
-                                            </Col>
-                                        </Row>
-                                    </AvForm>
-                                </CardBody>
-                            </Card>
-                        </Col>
-                    </Row>
+                    <Card>
+                        <CardHeader className="card-header   text-dark" style={{ backgroundColor: "#dddddd" }}>
+                            <h4 className="  text-black" >React Validation - Normal</h4>
+                            <p className=" text-black">Provide valuable, actionable feedback to your users with HTML5 form validation–available in all our supported browsers.</p>
+                        </CardHeader>
+
+                        <CardBody className=" vh-10 0 text-black" style={{ backgroundColor: "#whitesmoke" }} >
+                            <AvForm onValidSubmit={(e, v) => { handleValidSubmit(e, v) }}
+                                ref={formRef}
+                            >
+
+                                <Row className="">
+                                    <Col md={12}  >
+                                        <Card >
+                                            <CardBody style={{ backgroundColor: "whitesmoke" }}>
+                                                <Row>
+                                                    <FormGroup className="mb-2 col col-sm-4 " >
+                                                        <Label htmlFor="validationCustom01">Name </Label>
+                                                        <AvField
+                                                            name="Name"
+                                                            id="txtName"
+                                                            value={EditData.Name}
+                                                            type="text"
+                                                            placeholder="Please Enter Name"
+                                                            autoComplete='off'
+                                                            validate={{
+                                                                required: { value: true, errorMessage: 'Please enter a Name' },
+                                                            }}
+                                                        />
+                                                    </FormGroup>
+
+                                                </Row>
+
+                                                <Row>
+                                                    <FormGroup className="mb-2 col col-sm-4 " >
+                                                        <Label htmlFor="validationCustom01">Name </Label>
+                                                        <AvField name="DisplayIndex" autoComplete='off'
+                                                            placeholder="Please Enter DisplayIndex"
+                                                            value={EditData.DisplayIndex} type="number"
+                                                            validate={{
+                                                                number: true,
+                                                                required: { value: true, errorMessage: 'Display Index is Required' },
+                                                                tel: {
+                                                                    pattern: /^\d{1,4}$/,
+                                                                    errorMessage: 'Display Index is Required (Only Two Digit) '
+                                                                }
+                                                            }}
+                                                        />
+                                                    </FormGroup>
+                                                </Row>
+
+                                                <Row>
+                                                    <FormGroup className="mb-2 col col-sm-4 " >
+                                                        <Label htmlFor="validationCustom01">DisplayIndex </Label>
+                                                        <AvField name="DisplayIndex" autoComplete='off'
+                                                            placeholder="Please Enter DisplayIndex"
+                                                            value={EditData.DisplayIndex} type="number"
+                                                            validate={{
+                                                                number: true,
+                                                                required: { value: true, errorMessage: 'Display Index is Required' },
+                                                                tel: {
+                                                                    pattern: /^\d{1,4}$/,
+                                                                    errorMessage: 'Display Index is Required (Only Two Digit) '
+                                                                }
+                                                            }}
+                                                        />
+                                                    </FormGroup>
+                                                </Row>
+
+                                                <Row>
+                                                    <FormGroup className="mb-2 col col-sm-4 " >
+                                                        <Label htmlFor="validationCustom01">Icon </Label>
+                                                        <AvField name="Icon"
+                                                            autoComplete='off'
+                                                            placeholder="Please Enter IconPath"
+                                                            value={EditData.Icon} type="text" validate={{
+                                                                required: { value: true, errorMessage: 'Please enter a Icon' },
+                                                            }}
+                                                        />
+                                                    </FormGroup>
+                                                </Row>
+
+                                              
+
+
+                                                <FormGroup className="mb-2 col col-sm-5">
+                                                    <Row className="justify-content-md-left">
+                                                        <Label htmlFor="horizontal-firstname-input" className="col-sm-2 col-form-label" >IsActive </Label>
+                                                        <Col md={2} style={{ marginTop: '9px' }} >
+                                                            <AvInput
+                                                                checked={(EditData.ID === 0) ? false : EditData.IsActive}
+                                                                name="IsActive"
+                                                                type="checkbox"
+                                                                id="switch1"
+                                                                switch="none"
+                                                                defaultChecked />
+                                                            <Label className="me-1" htmlFor="switch1" data-on-label="Yes" data-off-label="No"></Label>
+
+
+
+                                                        </Col>
+
+                                                    </Row>
+
+                                                </FormGroup>
+
+
+                                               
+                                                <FormGroup >
+                                                    <Row >
+
+                                                        <Col sm={2}>
+                                                            <div>
+                                                                {
+                                                                    IsEdit ? (
+                                                                        <button
+                                                                            type="submit"
+                                                                            data-mdb-toggle="tooltip" data-mdb-placement="top" title="Update Module"
+                                                                            className="btn btn-success w-md"
+                                                                        >
+                                                                            <i class="fas fa-edit me-2"></i>Update
+                                                                        </button>) : (
+                                                                        <button
+                                                                            type="submit"
+                                                                            data-mdb-toggle="tooltip" data-mdb-placement="top" title="Save Page"
+                                                                            className="btn btn-primary w-md"
+                                                                        > <i className="fas fa-save me-2"></i> Save
+                                                                        </button>
+                                                                    )
+                                                                }
+                                                            </div>
+                                                        </Col>
+
+                                                    </Row>
+                                                </FormGroup >
+                                            </CardBody>
+                                        </Card>
+                                    </Col>
+                                </Row>
+
+
+
+                                
+                            </AvForm>
+                        </CardBody>
+                    </Card>
+
                 </Container>
             </div>
         </React.Fragment>
