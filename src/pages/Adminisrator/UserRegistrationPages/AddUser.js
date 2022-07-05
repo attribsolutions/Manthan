@@ -208,9 +208,6 @@ const AddUser = (props) => {
                       </Col>
                     </Row>
 
-               
-                   
-
                     <Row className="mb-2">
                       <Label className="col-sm-2 col-form-label">
                         Roles

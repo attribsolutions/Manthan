@@ -132,7 +132,7 @@ const ItemsList = () => {
                             type="button"
                             data-mdb-toggle="tooltip" data-mdb-placement="top" title="Edit Modules ID"
                             onClick={() => {
-                                EditPageHandler(Item.ID);
+                                EditPageHandler(Item.id);
                             }}
                             className="badge badge-soft-primary font-size-12"
                         >
@@ -142,7 +142,7 @@ const ItemsList = () => {
                             className="badge badge-soft-danger font-size-12"
                             data-mdb-toggle="tooltip" data-mdb-placement="top" title="Delete Modules ID"
                             onClick={() => {
-                                deleteHandeler(Item.ID, Item.Name);
+                                deleteHandeler(Item.id, Item.Name);
                             }}
                         >
                             <i className="mdi mdi-delete font-size-18" ></i>

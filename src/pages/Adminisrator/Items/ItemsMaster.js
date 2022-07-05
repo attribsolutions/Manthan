@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import Breadcrumbs from "../../../components/Common/Breadcrumb";
-import { Card, CardBody, Col, Container, Row, Label, } from "reactstrap";
+import { Card, CardBody, Col, Container, Row, Label, CardHeader, FormGroup, } from "reactstrap";
 import { AvForm, AvGroup, AvField } from "availity-reactstrap-validation";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -129,6 +129,10 @@ const ItemsMaster = (props) => {
           <Row>
             <Col lg={12}>
               <Card>
+                <CardHeader className="card-header   text-dark" style={{ backgroundColor: "#dddddd" }}>
+                  <h4 className="  text-black" >React Validation - Normal</h4>
+                  <p className=" text-black">Provide valuable, actionable feedback to your users with HTML5 form validation–available in all our supported browsers.</p>
+                </CardHeader>
                 <CardBody>
                   <AvForm
                     onValidSubmit={(e, v) => {
@@ -136,7 +140,137 @@ const ItemsMaster = (props) => {
                     }}
                     ref={formRef}
                   >
-                    <Row className="mb-4">
+
+                    <Row>
+                      <Col md={12}  >
+                        <Card >
+                          <CardBody style={{ backgroundColor: "whitesmoke" }}>
+                            <Row>
+                              <FormGroup className="mb-2 col col-sm-4 " >
+                                <Label htmlFor="validationCustom01">Name </Label>
+                                <AvField name="Name" id="txtName"
+                                  value={EditData.Name}
+                                  type="text"
+                                  placeholder="Please Enter Name"
+                                  autoComplete='off'
+                                  validate={{
+                                    required: { value: true, errorMessage: 'Please enter a Name...!' },
+                                  }}
+                                />
+                              </FormGroup>
+                            </Row>
+
+                            <Row>
+                              <FormGroup className="mb-2 col col-sm-4 " >
+                                <Label htmlFor="validationCustom01"> Item Group </Label>
+                                <Select
+                                  name='ItemGroup'
+                                  id="txtItemGroup"
+                                  value={
+                                    itemGroupSelect
+                                  }
+                                  options={ItemGroup_Options}
+                                  onChange={(e) => { handllerItemGroupID(e) }}
+                                  autocomplete="off"
+                                />
+                              </FormGroup>
+                            </Row>
+
+                            <Row>
+                              <FormGroup className="mb-2 col col-sm-4 " >
+                                <Label htmlFor="validationCustom01">GSTPercentage </Label>
+                                <AvField name="GSTPercentage"
+                                  value={EditData.GSTPercentage}
+                                  id="txtGST"
+                                  type="text"
+                                  placeholder="Please Enter GSTPercentage"
+                                  autoComplete='off'
+                                  validate={{
+                                    number: true,
+                                    required: { value: true, errorMessage: 'Please enter a GSTPercentage...!' },
+                                  }} />
+                              </FormGroup>
+                            </Row>
+
+                            <Row>
+                              <FormGroup className="mb-2 col col-sm-4 " >
+                                <Label htmlFor="validationCustom01">BaseunitID </Label>
+                                <AvField name="BaseUnit"
+                                  value={EditData.BaseunitID}
+                                  id="txtBaseUnit"
+                                  type="text"
+                                  placeholder="Please Enter BaseUnit"
+                                  autoComplete='off'
+                                  validate={{
+                                    number: true,
+                                    required: { value: true, errorMessage: 'Please enter a BaseUnit...!' },
+                                  }} />
+                              </FormGroup>
+                            </Row>
+
+                            <Row>
+                              <FormGroup className="mb-2 col col-sm-4 " >
+                                <Label htmlFor="validationCustom01">Rate </Label>
+                                <AvField name="Rate"
+                                  value={EditData.Rate}
+                                  id="txtRate"
+                                  type="text"
+                                  placeholder="Please Enter Rate"
+                                  autoComplete='off'
+                                  validate={{
+                                    number: true,
+                                    required: { value: true, errorMessage: 'Please enter a Rate...!' },
+                                  }} />
+                              </FormGroup>
+                            </Row>
+
+                            <Row>
+                              <FormGroup className="mb-2 col col-sm-4 " >
+                                <Label htmlFor="validationCustom01">MRP </Label>
+                                <AvField name="MRP" id="txtMRP"
+                                  value={EditData.MRP}
+                                  type="text"
+                                  placeholder="Please Enter MRP"
+                                  autoComplete='off'
+                                  validate={{
+                                    number: true,
+                                    required: { value: true, errorMessage: 'Please enter a MRP...!' },
+
+                                  }} />
+                              </FormGroup>
+                            </Row>
+
+                            <Row>
+                              <FormGroup className="mb-2 col col-sm-4 " >
+                                <Label htmlFor="validationCustom01">Sequence </Label>
+                                <AvField name="Sequence"
+                                  value={EditData.Sequence}
+                                  id="txtSequence"
+                                  type="text"
+                                  placeholder="Please Enter Sequence"
+                                  autoComplete='off'
+                                  validate={{
+                                    number: true,
+                                    required: { value: true, errorMessage: 'Please enter a Sequence...!' },
+                                  }} />
+                              </FormGroup>
+                            </Row>
+                          </CardBody>
+                        </Card>
+                      </Col>
+                    </Row>
+                    <AvField name="Sequence"
+                      value={EditData.Sequence}
+                      id="txtSequence"
+                      type="text"
+                      placeholder="Please Enter Sequence"
+                      autoComplete='off'
+                      validate={{
+                        number: true,
+                        required: { value: true, errorMessage: 'Please enter a Sequence...!' },
+                      }} />
+
+                    {/* <Row className="mb-4">
                       <Label className="col-sm-2 col-form-label">
                         Name
                       </Label>
@@ -271,8 +405,8 @@ const ItemsMaster = (props) => {
                             type="checkbox" validate={{
                             }} />
                         </Col>
-                      </Row>
-                    </AvGroup>
+                      </Row> */}
+                    {/* </AvGroup> */}
                     <Row className="justify-content-end">
                       <Col sm={10}></Col>
                       <Col sm={2}>
