@@ -23,33 +23,35 @@ const Breadcrumb = props => {
   }, [])
 
   return (
-    <Row style={{ Color: "F7F8F4" }}>
+    <Row style={{ Color: "F7F8F4", marginTop: "-5px", marginBottom: "7px" }}>
       <Col md={4}>
         <div className="mb-1 text-left">
           {
             props.IsButtonVissible ?
-                <Row>
-                <Col md={2}>
+              <Row>
+                <Col md={12}  >
                   <button type="button" className="btn btn-success"
                     data-mdb-toggle="tooltip" data-mdb-placement="top" title="Create New"
                     onClick={() => { NewButtonHandeller() }} >
                     New
                   </button>
-               </Col>
-                <Col md={10}>
-                <h4 className="font-size-18 form-label" style={{marginTop:"6px"}}>{props.breadcrumbItem}</h4>
+
+                  <label className="font-size-18 form-label " style={{ paddingLeft: "7px" }} >{props.breadcrumbItem}</label>
                 </Col>
-                </Row>
+              </Row>
               :
-              <React.Fragment>
-                <h4 className="font-size-18  col-ls-6 col-form-label" style={{marginLeft:"6px"}}>{props.breadcrumbItem}</h4>
-              </React.Fragment>
+              <Row>
+                <Col md={12}>
+                  <label className="font-size-18  col-ls-6 col-form-label" style={{ marginLeft: "6px" }}>{props.breadcrumbItem}</label>
+
+                </Col>
+              </Row>
           }
-         
+
         </div>
       </Col>
-
-      <Col md={5}>  </Col>
+      
+      <Col md={props.breadcrumbCount.length < 10 ? 5 : props.breadcrumbCount.length < 25 ? 4 : 3}>  </Col>
 
       <Col sm={2}>
         <div className="search-box d-inline-block">
@@ -67,12 +69,12 @@ const Breadcrumb = props => {
           </div>
         </div>
       </Col>
-      <Col md={1} className="text-right">
+      <Col md={props.breadcrumbCount.length < 10 ? 1 : props.breadcrumbCount.length < 25 ? 2 : 3} className="text-right" >
         {
           !(props.breadcrumbCount === undefined)
             ?
-            <div className="bg-soft-success text-center text-danger external-event col-ls-6 col-form-label  border border-Success rounded-2">
-              Count : &nbsp;(&nbsp; {props.breadcrumbCount}&nbsp;)
+            <div className="bg-dark text-center text-light external-event  col-form-label  border border-Success rounded-2" style={{ width: "100%" }}>
+              {props.breadcrumbCount}
             </div>
             :
             <React.Fragment></React.Fragment>

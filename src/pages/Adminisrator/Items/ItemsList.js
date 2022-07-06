@@ -173,7 +173,7 @@ const ItemsList = () => {
                                         breadcrumbItem={"Item Master"}
                                         IsButtonVissible={true}
                                         SearchProps={toolkitProps.searchProps}
-                                        breadcrumbCount={pages.length}
+                                        breadcrumbCount={`${pages.length}`}
                                         RedirctPath={"/itemMaster"}
                                     />
                                     <Row>
