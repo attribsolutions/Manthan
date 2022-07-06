@@ -46,24 +46,24 @@ const userRoutes = [
   { path: "/dashboard", component: Dashboard },
 
   // Administrator : Modules Path and List
-  { path: "/modulesMaster", component: Modules },
-  { path: "/modulesList", component: ModulesList },
+  { path: "/moduleMaster", component: Modules },
+  { path: "/moduleList", component: ModulesList },
 
-  { path: "/subModulesMaster", component: SubModules },
-  { path: "/subModulesList", component: SubModulesList },
+  { path: "/subModuleMaster", component: SubModules },
+  { path: "/subModuleList", component: SubModulesList },
 
   // Administrator : Company Path and List
   { path: "/companyMaster", component: CompanyModule },
   { path: "/companyList", component: CompanyList },
 
-  { path: "/pagesList", component: HPageList },
-  { path: "/pagesMaster", component: HPageMaster },
+  { path: "/pageList", component: HPageList },
+  { path: "/pageMaster", component: HPageMaster },
 
   { path: "/order", component: OrderPage },
   { path: "/orders", component: OrderList },
 
-  { path: "/usersMaster", component: AddUser },
-  { path: "/usersList", component: UserList },
+  { path: "/userMaster", component: AddUser },
+  { path: "/userList", component: UserList },
 
   { path: "/employeesMaster", component: AddEmployee },
   { path: "/employeesList", component: Employee_List },
