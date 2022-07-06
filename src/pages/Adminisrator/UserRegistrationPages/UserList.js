@@ -1,62 +1,81 @@
 import React, { useEffect, useState } from "react";
-import {
-    Col,
-    Modal,
-    Row,
-} from "reactstrap";
+import { Col, Modal, Row } from "reactstrap";
 import "../../../assets/scss/CustomeTable/datatables.scss"
 import {
     getUser, deleteUser, editUserId, updateSuccess
 } from "../../../store/Administrator/UserRegistrationRedux/actions";
 import Breadcrumbs from "../../../components/Common/Breadcrumb";
-import paginationFactory,
-{
+import paginationFactory, {
     PaginationListStandalone,
-    PaginationProvider
+    PaginationProvider,
 } from "react-bootstrap-table2-paginator";
 import ToolkitProvider, { Search } from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
-
 //redux
 import { useSelector, useDispatch } from "react-redux";
-
-// import { useAlert } from "react-alert";
-
+import "../../../assets/scss/CustomeTable/datatables.scss"
 import AddUser from "./AddUser";
+import { deleteSuccess } from "../../../store/Administrator/RoleMasterRedux/action";
 import { AlertState } from "../../../store/Utilites/CostumeAlert/actions";
+
 const UserList = () => {
-    // const alert = useAlert();
+
     const dispatch = useDispatch();
-    const [deleteIn, setDeleteIn] = useState('');
     const [modal_center, setmodal_center] = useState(false);
 
-    const { pages, editData, updateMessage } = useSelector((state) => ({
+    const { pages, editData, updateMessage, deleteMessage } = useSelector((state) => ({
         pages: state.User_Registration_Reducer.pages,
         editData: state.User_Registration_Reducer.editData,
         updateMessage: state.User_Registration_Reducer.updateMessage,
+        deleteMessage: state.User_Registration_Reducer.deleteSuccessRole,
     }));
 
-
-    function tog_center() {
-        setmodal_center(!modal_center)
-    }
-
+    //  This UseEffect => Featch Modules List data  First Rendering
     useEffect(() => {
         dispatch(getUser());
     }, []);
 
+    // This UseEffect => UpadateModal Success/Unsucces Show and Hide Control Alert_modal 
     useEffect(() => {
-        if (updateMessage.Status === true) {
+        if ((updateMessage.Status === true) && (updateMessage.StatusCode === 200)) {
             dispatch(updateSuccess({ Status: false }))
-            dispatch(getUser());
+            dispatch(AlertState({
+                Type: 1, Status: true,
+                Message: updateMessage.Message,
+                AfterResponseAction: getUser,
+            }))
             tog_center()
         }
-    }, [updateMessage.Status]);
-    console.log("updateMessage", updateMessage)
+        else if (deleteMessage.Status === true) {
+            dispatch(deleteSuccess({ Status: false }))
+            dispatch(AlertState({
+                Type: 3, Status: true,
+                Message: deleteMessage.Message,
+            }));
+        }
+    }, [updateMessage.Status, dispatch]);
+
+    useEffect(() => {
+        if ((deleteMessage.Status === true) && (deleteMessage.StatusCode === 200)) {
+            debugger
+            dispatch(deleteSuccess({ Status: false }))
+            dispatch(AlertState({
+                Type: 1, Status: true,
+                Message: deleteMessage.Message,
+                AfterResponseAction: getUser,
+            }))
+        } else if (deleteMessage.Status === true) {
+            dispatch(deleteSuccess({ Status: false }))
+            dispatch(AlertState({
+                Type: 3,
+                Status: true,
+                Message: "error Message",
+            }));
+        }
+    }, [deleteMessage.Status])
 
     useEffect(() => {
         if (editData.Status === true) {
-            // dispatch(editUserId(0));
             tog_center()
         }
     }, [editData]);
@@ -65,11 +84,14 @@ const UserList = () => {
         dispatch(editUserId(id));
     }
 
+    function tog_center() {
+        setmodal_center(!modal_center)
+    }
     //Delete Button Handller
     const deleteHandeler = (id, name) => {
         dispatch(AlertState({
             Type: 5, Status: true,
-            Message: `Are you sure you want to delete this Company : "${name}"`,
+            Message: `Are you sure you want to delete this User : "${name}"`,
             RedirectPath: false,
             PermissionAction: deleteUser,
             ID: id
@@ -95,12 +117,6 @@ const UserList = () => {
             dataField: "LoginName",
             sort: true,
             formatter: (cellContent, user) => <>{user.LoginName}</>,
-        },
-        {
-            text: "Email",
-            dataField: "email",
-            sort: true,
-            formatter: (cellContent, user) => <>{user.email}</>,
         },
         {
             text: "EmployeeID",
@@ -135,8 +151,9 @@ const UserList = () => {
 
                         <buton
                             type="button"
+                            data-mdb-toggle="tooltip" data-mdb-placement="top" title="Edit User"
                             onClick={() => {
-                                EditPageHandler(user.ID);
+                                EditPageHandler(user.id);
                             }}
                             className="badge badge-soft-primary font-size-12"
                         >
@@ -145,8 +162,8 @@ const UserList = () => {
 
                         <buton
                             className="badge badge-soft-danger font-size-12"
-                            data-mdb-toggle="tooltip" data-mdb-placement="top" title="Delete Company"
-                            onClick={() => { deleteHandeler(user.ID, user.LoginName); }}
+                            data-mdb-toggle="tooltip" data-mdb-placement="top" title="Delete User"
+                            onClick={() => { deleteHandeler(user.id, user.LoginName); }}
                         >
                             <i class="mdi mdi-delete font-size-18" ></i>
                         </buton>
@@ -180,7 +197,7 @@ const UserList = () => {
                                         IsButtonVissible={true}
                                         a={toolkitProps.searchProps}
                                         breadcrumbCount={pages.length}
-                                        RedirctPath={"/usersMaster"}
+                                        RedirctPath={"/userMaster"}
                                     />
                                     <Row>
                                         <Col xl="12">

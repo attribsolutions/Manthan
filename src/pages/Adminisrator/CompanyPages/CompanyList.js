@@ -27,13 +27,13 @@ const CompanyList = () => {
     const [modal_center, setmodal_center] = useState(false);
 
     // get Access redux data
-    const { companyList, editData, updateMessage, deleteCompanyID } = useSelector((state) => ({
-        companyList: state.Company.companyList,
+    const { TableListData, editData, updateMessage, deleteCompanyID ,} = useSelector((state) => ({
+        TableListData: state.Company.companyList,
         editData: state.Company.editData,
         updateMessage: state.Company.updateMessage,
         deleteCompanyID: state.Company.deleteCompanyID,
     }));
-    console.log("editData in useselector", editData)
+   
 
     // tag_center -- Control the Edit Modal show and close
     function tog_center() {
@@ -108,7 +108,7 @@ const CompanyList = () => {
 
     const pageOptions = {
         sizePerPage: 15,
-        totalSize: companyList.length, // replace later with size(users),
+        totalSize: TableListData.length, // replace later with size(users),
         custom: true,
     };
     const defaultSorted = [
@@ -157,7 +157,7 @@ const CompanyList = () => {
                     <buton
                         type="button"
                         data-mdb-toggle="tooltip" data-mdb-placement="top" title="Edit Company"
-                        onClick={() => { EditPageHandler(module.ID); }}
+                        onClick={() => { EditPageHandler(module.id); }}
                         className="badge badge-soft-primary font-size-12"
                     >
                         <i class="mdi mdi-pencil font-size-18" id="edittooltip"></i>
@@ -166,7 +166,7 @@ const CompanyList = () => {
                     <buton
                         className="badge badge-soft-danger font-size-12"
                         data-mdb-toggle="tooltip" data-mdb-placement="top" title="Delete Company"
-                        onClick={() => { deleteHandeler(module.ID, module.Name); }}
+                        onClick={() => { deleteHandeler(module.id, module.Name); }}
                     >
                         <i class="mdi mdi-delete font-size-18" ></i>
                     </buton>
@@ -187,7 +187,7 @@ const CompanyList = () => {
                     {({ paginationProps, paginationTableProps }) => (
                         <ToolkitProvider
                             keyField="id"
-                            data={companyList}
+                            data={TableListData}
                             columns={pagesListColumns}
                             search
                         >
@@ -198,7 +198,7 @@ const CompanyList = () => {
                                         breadcrumbItem={"Company List"}
                                         IsButtonVissible={true}
                                         SearchProps={toolkitProps.searchProps}
-                                        breadcrumbCount={companyList.length}
+                                        breadcrumbCount={`Company Count: ${TableListData.length}`}
                                         RedirctPath={"/companyMaster"}
                                     />
                                     <Row>

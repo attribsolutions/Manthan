@@ -6,6 +6,8 @@ import {
   Container,
   Row,
   Label,
+  CardHeader,
+  FormGroup,
 } from "reactstrap";
 import Select from "react-select";
 import {
@@ -50,8 +52,8 @@ const CompanyModule = (props) => {
       setEditData(editDataGatingFromList);
       setIsEdit(true);
       setCompanyGroup({
-        value: editDataGatingFromList.CompanyGroup.ID,
-        label: editDataGatingFromList.CompanyGroup.Name
+        value: editDataGatingFromList.CompanyGroup_id,
+        label: editDataGatingFromList.CompanyGroupName
       })
       dispatch(editCompanyIDSuccess({ Status: false }))
     }
@@ -124,7 +126,7 @@ const CompanyModule = (props) => {
       }),
     };
     if (IsEdit) {
-      dispatch(updateCompanyID(requestOptions.body, EditData.ID));
+      dispatch(updateCompanyID(requestOptions.body, EditData.id));
     }
 
     else {
@@ -146,158 +148,158 @@ const CompanyModule = (props) => {
           <Row>
             <Col lg={12}>
               <Card>
+                <CardHeader className="card-header   text-dark" style={{ backgroundColor: "#dddddd" }}>
+                  <h4 className="  text-black" >React Validation - Normal</h4>
+                  <p className=" text-black">Provide valuable, actionable feedback to your users with HTML5 form validation–available in all our supported browsers.</p>
+                </CardHeader>
                 <CardBody>
                   <AvForm onValidSubmit={(e, v) => { handleValidSubmit(e, v) }}
                     ref={formRef}
                   >
-                    <AvGroup>
-                      <Row className="mb-4">
-                        <Label className="col-sm-3 col-form-label">
-                          Name
-                        </Label>
-                        <Col sm={4}>
-                          <AvField name="Name" value={EditData.Name} type="text" id='txtName'
-                            placeholder=" Please Enter Name "
-                            autoComplete="off"
-                            validate={{
-                              required: { value: true, errorMessage: 'Please Enter a Name' },
-                            }}
-                          />
-                        </Col>
-                      </Row>
-                    </AvGroup>  <AvGroup>
-                      <Row className="mb-4">
-                        <Label className="col-sm-3 col-form-label">
-                          Address
-                        </Label>
-                        <Col sm={4}>
-                          <AvField name="Address" value={EditData.Address} type="text"
-                            autoComplete="off"
-                            placeholder=" Please Enter Address "
-                            validate={{
-                              required: { value: true, errorMessage: 'Please Enter a  Address' },
-                            }}
-                          />
-                        </Col>
-                      </Row>
-                    </AvGroup>  <AvGroup>
-                      <Row className="mb-4">
-                        <Label className="col-sm-3 col-form-label">
-                          GSTIN
-                        </Label>
-                        <Col sm={4}>
-                          <AvField name="GSTIN"
-                            autoComplete="off"
-                            value={EditData.GSTIN} type="text"
-                            placeholder="GSTIN "
-                            validate={{
-                              required: { value: true, errorMessage: 'Please Enter a  GSTIN' },
-                              tel: {
-                                pattern: /[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}/
-                              }
-                            }}
-                          />
-                        </Col>
-                      </Row>
-                    </AvGroup>
-                    <AvGroup>
-                      <Row className="mb-4">
-                        <Label className="col-sm-3 col-form-label">
-                          Phone NO
-                        </Label>
-                        <Col sm={4}>
-                          <AvField name="PhoneNo" type="tel"
-                            autoComplete="off"
-                            value={EditData.PhoneNo}
-                            placeholder="+91 "
-                            validate={{
-                              required: { value: true, errorMessage: 'Please Enter a  Phone N' },
-                              tel: {
-                                pattern: /^(\+\d{1,3}[- ]?)?\d{10}$/
-                              }
-                            }
-                            }
-                          />
-                        </Col>
-                      </Row>
-                    </AvGroup>
-                    <AvGroup>
-                      <Row className="mb-4">
-                        <Label className="col-sm-3 col-form-label">
-                          Company Abbreviation
-                        </Label>
-                        <Col sm={4}>
-                          <AvField name="CompanyAbbreviation" value={EditData.CompanyAbbreviation} type="text"
-                            autoComplete="off"
-                            placeholder=" Please Enter Company Abbreviation"
-                            validate={{
-                              required: { value: true, errorMessage: 'Please Enter a Company Abbreviation' },
-                            }} />
-                        </Col>
-                      </Row>
-                    </AvGroup>
 
-                    <AvGroup>
-                      <Row className="mb-4">
-                        <Label className="col-sm-3 col-form-label">
-                          Email ID
-                        </Label>
-                        <Col sm={4}>
-                          <AvField name="EmailID" value={EditData.EmailID} type="email"
-                            autoComplete="off"
-                            placeholder="example@example.com" validate={{
-                              required: { value: true, errorMessage: 'Please Enter a Email ID' },
-                            }} />
-                        </Col>
-                      </Row>
-                    </AvGroup>
+                    <Row>
+                      <Col md={12}  >
+                        <Card >
+                          <CardBody style={{ backgroundColor: "whitesmoke" }}>
+                            <Row>
+                              <FormGroup className="mb-2 col col-sm-4 " >
+                                <Label htmlFor="validationCustom01">Name </Label>
+                                <AvField name="Name" value={EditData.Name} type="text" id='txtName'
+                                  placeholder=" Please Enter Name "
+                                  autoComplete="off"
+                                  validate={{
+                                    required: { value: true, errorMessage: 'Please Enter a Name' },
+                                  }}
+                                />
+                              </FormGroup>
+                              <Col md="1">  </Col>
+                              <FormGroup className="mb-2 col col-sm-4 " >
+                                <Label htmlFor="validationCustom01">Address </Label>
+                                <AvField name="Address" value={EditData.Address} type="text"
+                                  autoComplete="off"
+                                  placeholder=" Please Enter Address "
+                                  validate={{
+                                    required: { value: true, errorMessage: 'Please Enter a  Address' },
+                                  }}
+                                />
+                              </FormGroup>
+                            </Row>
 
-                    <Row className="mb-4">
-                      <Label className="col-sm-3 col-form-label">
-                        CompanyGroup
-                      </Label>
-                      <Col sm={4}>
-                        <Select
-                          value={CompanyGroupselect}
-                          options={CompanyGroupValues}
-                          onChange={(e) => { handllerCompanyGroupID(e) }}
-                        />
+                            <Row>
+                              <FormGroup className="mb-2 col col-sm-4 " >
+                                <Label htmlFor="validationCustom01">PhoneNo </Label>
+                                <AvField name="PhoneNo" type="tel"
+                                  autoComplete="off"
+                                  value={EditData.PhoneNo}
+                                  placeholder="+91 "
+                                  validate={{
+                                    required: { value: true, errorMessage: 'Please Enter a  Phone' },
+                                    tel: {
+                                      pattern: /^(\+\d{1,3}[- ]?)?\d{10}$/
+                                    }
+                                  }}
+                                />
+                              </FormGroup>
+
+                              <Col md="1">  </Col>
+                              <FormGroup className="mb-2 col col-sm-4 " >
+                                <Label htmlFor="validationCustom01">EmailID </Label>
+                                <AvField name="EmailID" value={EditData.EmailID} type="email"
+                                  autoComplete="off"
+                                  placeholder="example@example.com" validate={{
+                                    required: { value: true, errorMessage: 'Please Enter a Email ID' },
+                                  }} />
+                              </FormGroup>
+                            </Row>
+                          </CardBody>
+                        </Card>
                       </Col>
                     </Row>
 
 
-                    <Row className="justify-content-end">
-                      <Col sm={10}></Col>
-                      <Col sm={2}>
-                        <div>
-                          {
-                            IsEdit ? (<button
-                              type="submit"
-                              data-mdb-toggle="tooltip" data-mdb-placement="top" title="Update Company"
-                              className="btn btn-success w-md"
-                            >
-                              <i class="fas fa-edit me-2"></i>Update
-                            </button>) : (
-                              <button
-                                type="submit"
-                                data-mdb-toggle="tooltip" data-mdb-placement="top" title="Save Company"
-                                className="btn btn-success w-md"
-                              > <i className="fas fa-save me-2"></i> Save
-                              </button>
-                            )
-                          }
-                        </div>
-                      </Col>{" "}
+                    <Row>
+                      <Col md={12}  >
+                        <Card >
+                          <CardBody style={{ backgroundColor: "whitesmoke" }}>
+
+                            <Row>
+                              <FormGroup className="mb-2 col col-sm-4 " >
+                                <Label htmlFor="validationCustom01">GSTIN </Label>
+                                <AvField name="GSTIN"
+                                  autoComplete="off"
+                                  value={EditData.GSTIN} type="text"
+                                  placeholder="GSTIN "
+                                  validate={{
+                                    required: { value: true, errorMessage: 'Please Enter a  GSTIN' },
+                                    tel: {
+                                      pattern: /[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}/
+                                    }
+                                  }}
+                                />
+                              </FormGroup>
+                              <Col md="1">  </Col>
+                              <FormGroup className="mb-2 col col-sm-4 " >
+                                <Label htmlFor="validationCustom01">CompanyAbbreviation </Label>
+                                <AvField name="CompanyAbbreviation" value={EditData.CompanyAbbreviation} type="text"
+                                  autoComplete="off"
+                                  placeholder=" Please Enter Company Abbreviation"
+                                  validate={{
+                                    required: { value: true, errorMessage: 'Please Enter a Company Abbreviation' },
+                                  }} />
+                              </FormGroup>
+                            </Row>
+
+                            <Row>
+                              <FormGroup className="mb-2 col col-sm-4 " >
+                                <Label htmlFor="validationCustom01">CompanyGroup </Label>
+                                <Select
+                                  value={CompanyGroupselect}
+                                  options={CompanyGroupValues}
+                                  onChange={(e) => { handllerCompanyGroupID(e) }}
+                                />
+                              </FormGroup>
+                            </Row>
+
+                           
+                              <Row  >
+                                <Col sm={2} >
+                                  <div>
+                                    {
+                                      IsEdit ? (
+                                        <button
+                                          type="submit"
+                                          data-mdb-toggle="tooltip" data-mdb-placement="top" title="Update Company"
+                                          className="btn btn-success w-md"
+                                        >
+                                          <i class="fas fa-edit me-2"></i>Update
+                                        </button>) : (
+                                        <button
+                                          type="submit"
+                                          data-mdb-toggle="tooltip" data-mdb-placement="top" title="Save Company"
+                                          className="btn btn-primary w-md"
+                                        > <i className="fas fa-save me-2"></i> Save
+                                        </button>
+                                      )
+                                    }
+                                  </div>
+                                </Col>
+                              </Row>
+                            
+                          </CardBody>
+                        </Card>
+                      </Col>
                     </Row>
+
+
                   </AvForm>
                   <br></br><br></br><br></br> <br></br> <br></br>
                 </CardBody>
               </Card>
-            </Col>
-          </Row>
-        </Container>
-      </div>
-    </React.Fragment>
+            </Col >
+          </Row >
+        </Container >
+      </div >
+    </React.Fragment >
   );
 };
 

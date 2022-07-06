@@ -24,6 +24,7 @@
     "echarts-for-react": "^2.0.16",
     "feather-icons-react": "^0.4.3",
     "firebase": "^8.6.7",
+    "flatpickr": "^4.6.13",
     "google-maps-react": "^2.0.6",
     "i18next": "^20.4.0",
     "i18next-browser-languagedetector": "^6.1.2",

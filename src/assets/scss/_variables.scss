@@ -5,19 +5,19 @@
 //
 
 // Vertical Sidebar  Light
-$sidebar-bg: #fbfaff;
-$sidebar-menu-item-color: #545a6d;
-$sidebar-menu-sub-item-color: #545a6d;
-$sidebar-menu-item-icon-color: #545a6d;
-$sidebar-menu-item-hover-color: #5156be;
-$sidebar-menu-item-active-color: #5156be;
-$sidebar-border-color: #e9e9ef;
+$sidebar-bg: #2a3042;
+$sidebar-menu-item-color: #a6b0cf;
+$sidebar-menu-sub-item-color: #a6b0cf;;
+$sidebar-menu-item-icon-color:  #564ab1;
+$sidebar-menu-item-hover-color: #ffffff;
+$sidebar-menu-item-active-color: #ffffff;
+$sidebar-border-color: #2a3042;
 $sidebar-width:  250px;
 $sidebar-collapsed-width:  70px;
 $sidebar-width-sm:  160px;
 
 // Vertical Sidebar - Dark
-$sidebar-dark-bg: #2C302E; //2c313a
+$sidebar-dark-bg: #1e2220; //2c313a
 $sidebar-dark-menu-item-color: #99a4b1;
 $sidebar-dark-menu-sub-item-color: #858d98;
 $sidebar-dark-menu-item-icon-color: #858d98;
@@ -25,9 +25,9 @@ $sidebar-dark-menu-item-hover-color: #ffffff;
 $sidebar-dark-menu-item-active-color: #ffffff;
 
 // Topbar - Deafult Light
-$header-height: 45px;
-$header-bg: #ffffff;
-$header-item-color: #555b6d;
+$header-height: 55px;
+$header-bg: #2a3042;;
+$header-item-color: #eaedf7;
 
 // Topbar - Dark
 $header-dark-bg: #313533;
@@ -95,6 +95,7 @@ $gray-dark-900: #f8f9fa;
 
 // Color system
 
+// scss-docs-start gray-color-variables
 $white:    #fff;
 $gray-100: #f8f9fa;
 $gray-200: #e9e9ef;
@@ -106,8 +107,10 @@ $gray-700: #495057;
 $gray-800: #343a40;
 $gray-900: #212529;
 $black:    #000;
+// scss-docs-end gray-color-variables
 
 // fusv-disable
+// scss-docs-start gray-colors-map
 $grays: (
     "100": $gray-100,
     "200": $gray-200,
@@ -119,10 +122,11 @@ $grays: (
     "800": $gray-800,
     "900": $gray-900
 );
-
+// scss-docs-end gray-colors-map
 // fusv-enable
 
-$blue:    #7A7FDC;
+// scss-docs-start color-variables
+$blue:    #5156be;
 $indigo:  #564ab1;
 $purple:  #6f42c1;
 $pink:    #e83e8c;
@@ -132,6 +136,7 @@ $yellow:  #ffbf53;
 $green:   #2ab57d;
 $teal:    #050505;
 $cyan:    #4ba6ef;
+// scss-docs-end color-variables
 
 // scss-docs-start colors-map
 $colors: (
@@ -151,6 +156,7 @@ $colors: (
 );
 // scss-docs-end colors-map
 
+// scss-docs-start theme-color-variables
 $primary:       $blue;
 $secondary:     $gray-600;
 $success:       $green;
@@ -159,6 +165,7 @@ $warning:       $yellow;
 $danger:        $red;
 $light:         $gray-200;
 $dark:          $gray-800;
+// scss-docs-end theme-color-variables
 
 // scss-docs-start theme-colors-map
 $theme-colors: (
@@ -173,6 +180,10 @@ $theme-colors: (
     "dark":       $dark
 );
 // scss-docs-end theme-colors-map
+
+// scss-docs-start theme-colors-rgb
+$theme-colors-rgb: map-loop($theme-colors, to-rgb, "$value");
+// scss-docs-end theme-colors-rgb
 
 // The contrast ratio to reach against white, to determine if color changes from "light" to "dark". Acceptable values for WCAG 2.0 are 3, 4.5 and 7.
 // See https://www.w3.org/TR/WCAG20/#visual-audio-contrast-contrast
@@ -284,6 +295,126 @@ $cyan-600: shade-color($cyan, 20%);
 $cyan-700: shade-color($cyan, 40%);
 $cyan-800: shade-color($cyan, 60%);
 $cyan-900: shade-color($cyan, 80%);
+
+$blues: (
+  "blue-100": $blue-100,
+  "blue-200": $blue-200,
+  "blue-300": $blue-300,
+  "blue-400": $blue-400,
+  "blue-500": $blue-500,
+  "blue-600": $blue-600,
+  "blue-700": $blue-700,
+  "blue-800": $blue-800,
+  "blue-900": $blue-900
+);
+
+$indigos: (
+  "indigo-100": $indigo-100,
+  "indigo-200": $indigo-200,
+  "indigo-300": $indigo-300,
+  "indigo-400": $indigo-400,
+  "indigo-500": $indigo-500,
+  "indigo-600": $indigo-600,
+  "indigo-700": $indigo-700,
+  "indigo-800": $indigo-800,
+  "indigo-900": $indigo-900
+);
+
+$purples: (
+  "purple-100": $purple-200,
+  "purple-200": $purple-100,
+  "purple-300": $purple-300,
+  "purple-400": $purple-400,
+  "purple-500": $purple-500,
+  "purple-600": $purple-600,
+  "purple-700": $purple-700,
+  "purple-800": $purple-800,
+  "purple-900": $purple-900
+);
+
+$pinks: (
+  "pink-100": $pink-100,
+  "pink-200": $pink-200,
+  "pink-300": $pink-300,
+  "pink-400": $pink-400,
+  "pink-500": $pink-500,
+  "pink-600": $pink-600,
+  "pink-700": $pink-700,
+  "pink-800": $pink-800,
+  "pink-900": $pink-900
+);
+
+$reds: (
+  "red-100": $red-100,
+  "red-200": $red-200,
+  "red-300": $red-300,
+  "red-400": $red-400,
+  "red-500": $red-500,
+  "red-600": $red-600,
+  "red-700": $red-700,
+  "red-800": $red-800,
+  "red-900": $red-900
+);
+
+$oranges: (
+  "orange-100": $orange-100,
+  "orange-200": $orange-200,
+  "orange-300": $orange-300,
+  "orange-400": $orange-400,
+  "orange-500": $orange-500,
+  "orange-600": $orange-600,
+  "orange-700": $orange-700,
+  "orange-800": $orange-800,
+  "orange-900": $orange-900
+);
+
+$yellows: (
+  "yellow-100": $yellow-100,
+  "yellow-200": $yellow-200,
+  "yellow-300": $yellow-300,
+  "yellow-400": $yellow-400,
+  "yellow-500": $yellow-500,
+  "yellow-600": $yellow-600,
+  "yellow-700": $yellow-700,
+  "yellow-800": $yellow-800,
+  "yellow-900": $yellow-900
+);
+
+$greens: (
+  "green-100": $green-100,
+  "green-200": $green-200,
+  "green-300": $green-300,
+  "green-400": $green-400,
+  "green-500": $green-500,
+  "green-600": $green-600,
+  "green-700": $green-700,
+  "green-800": $green-800,
+  "green-900": $green-900
+);
+
+$teals: (
+  "teal-100": $teal-100,
+  "teal-200": $teal-200,
+  "teal-300": $teal-300,
+  "teal-400": $teal-400,
+  "teal-500": $teal-500,
+  "teal-600": $teal-600,
+  "teal-700": $teal-700,
+  "teal-800": $teal-800,
+  "teal-900": $teal-900
+);
+
+$cyans: (
+  "cyan-100": $cyan-100,
+  "cyan-200": $cyan-200,
+  "cyan-300": $cyan-300,
+  "cyan-400": $cyan-400,
+  "cyan-500": $cyan-500,
+  "cyan-600": $cyan-600,
+  "cyan-700": $cyan-700,
+  "cyan-800": $cyan-800,
+  "cyan-900": $cyan-900
+);
 // fusv-enable
 
 // Characters which are escaped by the escape-svg function
@@ -307,13 +438,13 @@ $enable-transitions:          true;
 $enable-reduced-motion:       true;
 $enable-smooth-scroll:        true;
 $enable-grid-classes:         true;
+$enable-cssgrid:              false;
 $enable-button-pointers:      true;
 $enable-rfs:                  true;
 $enable-validation-icons:     true;
 $enable-negative-margins:     true;
 $enable-deprecation-messages: true;
 $enable-important-utilities:  true;
-
 
 // Prefix for :root CSS variables
 
@@ -337,12 +468,12 @@ $gradient: linear-gradient(180deg, rgba($white, .15), rgba($white, 0));
 // scss-docs-start spacer-variables-maps
 $spacer: 1rem;
 $spacers: (
-    0: 0,
-    1: ($spacer * .25),
-    2: ($spacer * .5),
-    3: $spacer,
-    4: ($spacer * 1.5),
-    5: ($spacer * 3)
+  0: 0,
+  1: $spacer * .25,
+  2: $spacer * .5,
+  3: $spacer,
+  4: $spacer * 1.5,
+  5: $spacer * 3,
 );
 
 $negative-spacers: if($enable-negative-margins, negativify-map($spacers), null);
@@ -369,6 +500,38 @@ $body-bg:                   #ffffff;
 $body-color:                $gray-700;
 $body-text-align:           null;
 
+// Utilities maps
+//
+// Extends the default `$theme-colors` maps to help create our utilities.
+
+// Come v6, we'll de-dupe these variables. Until then, for backward compatibility, we keep them to reassign.
+// scss-docs-start utilities-colors
+$utilities-colors: $theme-colors-rgb;
+// scss-docs-end utilities-colors
+
+// scss-docs-start utilities-text-colors
+$utilities-text: map-merge(
+  $utilities-colors,
+  (
+    "black": to-rgb($black),
+    "white": to-rgb($white),
+    "body": to-rgb($body-color)
+  )
+);
+$utilities-text-colors: map-loop($utilities-text, rgba-css-var, "$key", "text");
+// scss-docs-end utilities-text-colors
+
+// scss-docs-start utilities-bg-colors
+$utilities-bg: map-merge(
+  $utilities-colors,
+  (
+    "black": to-rgb($black),
+    "white": to-rgb($white),
+    "body": to-rgb($body-bg)
+  )
+);
+$utilities-bg-colors: map-loop($utilities-bg, rgba-css-var, "$key", "bg");
+// scss-docs-end utilities-bg-colors
 
 // Links
 //
@@ -382,8 +545,6 @@ $link-hover-decoration:                   underline;
 
 $stretched-link-pseudo-element:           after;
 $stretched-link-z-index:                  1;
-
-
 
 // Paragraphs
 //
@@ -407,7 +568,6 @@ $grid-breakpoints: (
   xxl: 1400px
 );
 // scss-docs-end grid-breakpoints
-
 
 @include _assert-ascending($grid-breakpoints, "$grid-breakpoints");
 @include _assert-starts-at-zero($grid-breakpoints, "$grid-breakpoints");
@@ -435,7 +595,7 @@ $container-max-widths: (
 // Set the number of columns and specify the width of the gutters.
 
 $grid-columns:                12;
-$grid-gutter-width:           5px;
+$grid-gutter-width:           20px;
 $grid-row-columns:            6;
 
 $gutters: $spacers;
@@ -443,6 +603,8 @@ $gutters: $spacers;
 // Container padding
 
 $container-padding-x: $grid-gutter-width / 2;
+
+
 // Components
 //
 // Define common padding and border radius sizes and more.
@@ -450,7 +612,6 @@ $container-padding-x: $grid-gutter-width / 2;
 // scss-docs-start border-variables
 $border-width:                1px;
 $border-widths: (
-  0: 0,
   1: 1px,
   2: 2px,
   3: 3px,
@@ -488,6 +649,7 @@ $transition-base:             all .2s ease-in-out;
 $transition-fade:             opacity .15s linear;
 // scss-docs-start collapse-transition
 $transition-collapse:         height .35s ease;
+$transition-collapse-width:   width .35s ease;
 // scss-docs-end collapse-transition
 
 // stylelint-disable function-disallowed-list
@@ -514,10 +676,10 @@ $font-family-monospace:       SFMono-Regular, Menlo, Monaco, Consolas, "Liberati
 $font-family-base:            var(--#{$variable-prefix}font-sans-serif);
 $font-family-code:            var(--#{$variable-prefix}font-monospace);
 
-// $font-size-root effects the value of `rem`, which is used for as well font sizes, paddings and margins
-// $font-size-base effects the font size of the body text
+// $font-size-root affects the value of `rem`, which is used for as well font sizes, paddings, and margins
+// $font-size-base affects the font size of the body text
 $font-size-root:              null;
-$font-size-base:              0.75rem;
+$font-size-base:              0.875rem;
 $font-size-sm:                $font-size-base * .875;
 $font-size-lg:                $font-size-base * 1.25;
 
@@ -619,15 +781,16 @@ $mark-bg:                     #fcf8e3;
 // Customizes the `.table` component with basic values, each used across all table variations.
 
 // scss-docs-start table-variables
-$table-cell-padding-y:        .50rem;
-$table-cell-padding-x:        .50rem;
-$table-cell-padding-y-sm:     .2rem;
-$table-cell-padding-x-sm:     .2rem;
+$table-cell-padding-y:        .75rem;
+$table-cell-padding-x:        .75rem;
+$table-cell-padding-y-sm:     .3rem;
+$table-cell-padding-x-sm:     .3rem;
 
 $table-cell-vertical-align:   top;
 
 $table-color:                 $body-color;
 $table-bg:                    null;
+$table-accent-bg:             transparent;
 
 $table-th-font-weight:        null;
 
@@ -817,6 +980,7 @@ $input-height-sm:                       add($input-line-height * 1em, add($input
 $input-height-lg:                       add($input-line-height * 1em, add($input-padding-y-lg * 2, $input-height-border, false));
 
 $input-transition:                      border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+$form-color-width:                      3rem;
 // scss-docs-end form-input-variables
 
 // scss-docs-start form-check-variables
@@ -871,7 +1035,7 @@ $form-switch-checked-color:       $component-active-color;
 $form-switch-checked-bg-image:    url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'><circle r='3' fill='#{$form-switch-checked-color}'/></svg>");
 $form-switch-checked-bg-position: right center;
 // scss-docs-end form-switch-variables
-$form-check-inline-margin-end:    1rem;
+
 // scss-docs-start input-group-variables
 $input-group-addon-padding-y:           $input-padding-y;
 $input-group-addon-padding-x:           $input-padding-x;
@@ -915,10 +1079,14 @@ $form-select-focus-box-shadow:    0 0 0 $form-select-focus-width $input-btn-focu
 $form-select-padding-y-sm:        $input-padding-y-sm;
 $form-select-padding-x-sm:        $input-padding-x-sm;
 $form-select-font-size-sm:        $input-font-size-sm;
+$form-select-border-radius-sm:    $input-border-radius-sm;
 
 $form-select-padding-y-lg:        $input-padding-y-lg;
 $form-select-padding-x-lg:        $input-padding-x-lg;
 $form-select-font-size-lg:        $input-font-size-lg;
+$form-select-border-radius-lg:    $input-border-radius-lg;
+
+$form-select-transition:          $input-transition;
 // scss-docs-end form-select-variables
 
 // scss-docs-start form-range-variables
@@ -950,6 +1118,7 @@ $form-file-button-hover-bg:       shade-color($form-file-button-bg, 5%);
 
 // scss-docs-start form-floating-variables
 $form-floating-height:            add(3.5rem, $input-height-border);
+$form-floating-line-height:       1.25;
 $form-floating-padding-x:         $input-padding-x;
 $form-floating-padding-y:         1rem;
 $form-floating-input-padding-t:   1.625rem;
@@ -996,9 +1165,10 @@ $form-validation-states: (
 $zindex-dropdown:                   1000;
 $zindex-sticky:                     1020;
 $zindex-fixed:                      1030;
-$zindex-modal-backdrop:             1040;
-$zindex-offcanvas:                  1050;
-$zindex-modal:                      1060;
+$zindex-offcanvas-backdrop:         1040;
+$zindex-offcanvas:                  1045;
+$zindex-modal-backdrop:             1050;
+$zindex-modal:                      1055;
 $zindex-popover:                    1070;
 $zindex-tooltip:                    1080;
 // scss-docs-end zindex-stack
@@ -1168,6 +1338,13 @@ $pagination-border-radius-lg:       $border-radius-lg;
 // scss-docs-end pagination-variables
 
 
+// Placeholders
+
+// scss-docs-start placeholders
+$placeholder-opacity-max:           .5;
+$placeholder-opacity-min:           .2;
+// scss-docs-end placeholders
+
 // Cards
 
 // scss-docs-start card-variables
@@ -1175,8 +1352,9 @@ $card-spacer-y:                     1.25rem;
 $card-spacer-x:                     1.25rem;
 $card-title-spacer-y:               $spacer / 2;
 $card-border-width:                 1px;
-$card-border-radius:                $border-radius;
 $card-border-color:                 $gray-200;
+$card-border-radius:                $border-radius;
+$card-box-shadow:                   null;
 $card-inner-border-radius:          calc(#{$card-border-radius} - #{$card-border-width});
 $card-cap-padding-y:                $card-spacer-y;
 $card-cap-padding-x:                $card-spacer-x;
@@ -1185,7 +1363,7 @@ $card-cap-color:                    null;
 $card-height:                       null;
 $card-color:                        null;
 $card-bg:                           $white;
-
+$card-img-overlay-padding:          $spacer;
 
 $card-title-desc:                   $gray-600;
 
@@ -1254,7 +1432,7 @@ $form-feedback-tooltip-font-size:     $tooltip-font-size;
 $form-feedback-tooltip-line-height:   $line-height-base;
 $form-feedback-tooltip-opacity:       $tooltip-opacity;
 $form-feedback-tooltip-border-radius: $tooltip-border-radius;
-// scss-docs-start tooltip-feedback-variables
+// scss-docs-end tooltip-feedback-variables
 
 
 // Popovers
@@ -1324,7 +1502,6 @@ $badge-border-radius:               $border-radius;
 // scss-docs-start modal-variables
 $modal-inner-padding:               1rem;
 
-// Margin between elements in footer, must be lower than or equal to 2 * $modal-inner-padding
 $modal-footer-margin-between:       .5rem;
 $modal-dialog-margin:               .5rem;
 $modal-dialog-margin-y-sm-up:       1.75rem;
@@ -1339,7 +1516,6 @@ $modal-content-border-radius:       $border-radius;
 $modal-content-inner-border-radius: subtract($modal-content-border-radius, $modal-content-border-width);
 $modal-content-box-shadow-xs:       $box-shadow-sm;
 $modal-content-box-shadow-sm-up:    $box-shadow;
-
 
 $modal-backdrop-bg:                 $black;
 $modal-backdrop-opacity:            .5;
@@ -1454,10 +1630,8 @@ $figure-caption-color:              $gray-600;
 $breadcrumb-font-size:              null;
 $breadcrumb-padding-y:              .75rem;
 $breadcrumb-padding-x:              1rem;
-$breadcrumb-item-padding:           .5rem;
-
+$breadcrumb-item-padding-x:         .5rem;
 $breadcrumb-margin-bottom:          1rem;
-
 $breadcrumb-bg:                     null;
 $breadcrumb-divider-color:          $gray-600;
 $breadcrumb-active-color:           $gray-600;
@@ -1509,6 +1683,7 @@ $carousel-dark-control-icon-filter:  invert(1) grayscale(100);
 // scss-docs-start spinner-variables
 $spinner-width:           2rem;
 $spinner-height:          $spinner-width;
+$spinner-vertical-align:  -.125em;
 $spinner-border-width:    .25em;
 $spinner-animation-speed: .75s;
 
@@ -1550,8 +1725,9 @@ $offcanvas-border-width:            $modal-content-border-width;
 $offcanvas-title-line-height:       $modal-title-line-height;
 $offcanvas-bg-color:                $modal-content-bg;
 $offcanvas-color:                   $modal-content-color;
-$offcanvas-body-backdrop-color:     rgba($modal-backdrop-bg, $modal-backdrop-opacity);
 $offcanvas-box-shadow:              $modal-content-box-shadow-xs;
+$offcanvas-backdrop-bg:             $modal-backdrop-bg;
+$offcanvas-backdrop-opacity:        $modal-backdrop-opacity;
 // scss-docs-end offcanvas-variables
 
 // Code
@@ -1566,5 +1742,3 @@ $kbd-color:                         $white;
 $kbd-bg:                            $gray-900;
 
 $pre-color:                         $gray-900;
-
-

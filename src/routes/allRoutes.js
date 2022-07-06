@@ -35,6 +35,9 @@ import SearchBoxSecond from "../pages/Purchase/Orders/SearchBox/SearchBoxSecond"
 import SerachBox3 from "../pages/Purchase/Orders/SearchBox/SerachBox3";
 import PartyList from "../pages/Adminisrator/PartiesPages/PartyList";
 import PartyMaster from "../pages/Adminisrator/PartiesPages/PartyMaster";
+import PartyUIDemo from "../pages/Adminisrator/PartiesPages/PartyUIDemo";
+import DemoUi2 from "../pages/Adminisrator/PartiesPages/DemoUI2";
+import DemoUI3 from "../pages/Adminisrator/PartiesPages/DemoUI3";
 // import AddItemMaster from "../pages/Adminisrator/MasterPages/AddItemMaster";
 
 const userRoutes = [
@@ -43,24 +46,24 @@ const userRoutes = [
   { path: "/dashboard", component: Dashboard },
 
   // Administrator : Modules Path and List
-  { path: "/modulesMaster", component: Modules },
-  { path: "/modulesList", component: ModulesList },
+  { path: "/moduleMaster", component: Modules },
+  { path: "/moduleList", component: ModulesList },
 
-  { path: "/subModulesMaster", component: SubModules },
-  { path: "/subModulesList", component: SubModulesList },
+  { path: "/subModuleMaster", component: SubModules },
+  { path: "/subModuleList", component: SubModulesList },
 
   // Administrator : Company Path and List
   { path: "/companyMaster", component: CompanyModule },
   { path: "/companyList", component: CompanyList },
 
-  { path: "/pagesList", component: HPageList },
-  { path: "/pagesMaster", component: HPageMaster },
+  { path: "/pageList", component: HPageList },
+  { path: "/pageMaster", component: HPageMaster },
 
   { path: "/order", component: OrderPage },
   { path: "/orders", component: OrderList },
 
-  { path: "/usersMaster", component: AddUser },
-  { path: "/usersList", component: UserList },
+  { path: "/userMaster", component: AddUser },
+  { path: "/userList", component: UserList },
 
   { path: "/employeesMaster", component: AddEmployee },
   { path: "/employeesList", component: Employee_List },
@@ -71,11 +74,13 @@ const userRoutes = [
   { path: "/itemMaster", component: ItemsMaster },
   { path: "/itemList", component: ItemsList },
 
-  { path: "/partyList",component:PartyList},
-  {path : "/partyMaster",component:PartyMaster},
+  { path: "/partyList", component: PartyList },
+  { path: "/partyMaster", component: PartyMaster },
+  { path:"/partyUIDemo",component:PartyUIDemo},
+  { path:"/demoUi3",component:DemoUI3},
+  { path:"/demoUi2",component:DemoUi2},
 
 
-  
   // { path: "/AddItemMaster", component: AddItemMaster },
   { path: "/SearchBox1", component: SearchBox },
   { path: "/SearchBox2", component: SearchBoxSecond },

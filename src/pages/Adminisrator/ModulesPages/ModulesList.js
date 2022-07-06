@@ -19,6 +19,7 @@ import {
 } from "../../../store/actions";
 import { AlertState } from "../../../store/Utilites/CostumeAlert/actions";
 import Modules from "./Modules";
+import PartyUIDemo from "../PartiesPages/PartyUIDemo";
 
 const ModulesList = () => {
     const dispatch = useDispatch();
@@ -109,7 +110,7 @@ const ModulesList = () => {
             text: 'Display Index',
             sort: true
         }, {
-            dataField: 'IsActive',
+            dataField: 'isActive',
             text: 'IsActive',
             sort: true
         },
@@ -122,7 +123,7 @@ const ModulesList = () => {
                         type="button"
                         data-mdb-toggle="tooltip" data-mdb-placement="top" title="Edit Module"
                         onClick={() => {
-                            EditPageHandler(module.ID);
+                            EditPageHandler(module.id);
                         }}
                         className="badge badge-soft-primary font-size-12"
                     >
@@ -132,7 +133,7 @@ const ModulesList = () => {
                         className="badge badge-soft-danger font-size-12"
                         data-mdb-toggle="tooltip" data-mdb-placement="top" title="Delete Module"
                         onClick={() => {
-                            deleteHandeler(module.ID, module.Name);
+                            deleteHandeler(module.id, module.Name);
                         }}
                     >
                         <i className="mdi mdi-delete font-size-18" ></i>
@@ -184,8 +185,8 @@ const ModulesList = () => {
                                             breadcrumbItem={"Modules List"}
                                             IsButtonVissible={true}
                                             SearchProps={toolkitProps.searchProps}
-                                            breadcrumbCount={TableListData.length}
-                                            RedirctPath={"/modulesMaster"}
+                                            breadcrumbCount={`Module Count: ${TableListData.length}`}
+                                            RedirctPath={"/moduleMaster"}
                                         />
                                         <Row>
                                             <Col xl="12">
@@ -226,6 +227,7 @@ const ModulesList = () => {
                         toggle={() => { tog_center() }}
                         size="xl"
                     >
+                        {/* <PartyUIDemo state={editData.Data} /> */}
                         <Modules state={editData.Data} />
                     </Modal>
                 </div>

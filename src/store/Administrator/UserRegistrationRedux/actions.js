@@ -13,6 +13,7 @@ import{GET_EMPLOYEE,
     UPDATE_USER,
     UPDATE_SUCCESS,
   }from './actionType'
+
   /// M_Employee
   export const getEmployee = () => ({
     type: GET_EMPLOYEE,
@@ -28,20 +29,20 @@ import{GET_EMPLOYEE,
     type: GET_ROLE,
    
   });
-  export const getRolesSuccess = (Roles) => ({
+  export const getRolesSuccess = (data) => ({
     type: GET_ROLE_SUCCESS,
-    payload:Roles,
+    payload:data,
   });
    
   /// Registration Post api
-  export const addUser = (Data) => ({
+  export const addUser = (data) => ({
     type: ADD_USER,
-    Data,
+    data,
   });
   
-  export const addUserSuccess = (AddUserMessage) => ({
+  export const addUserSuccess = (data) => ({
     type: ADD_USER_SUCCESS,
-    payload: AddUserMessage,
+    payload: data,
   });
   
   //get Registration api
@@ -49,9 +50,9 @@ import{GET_EMPLOYEE,
     type: GET_USER,
   });
   
-  export const getUserSuccess = (pages) => ({
+  export const getUserSuccess = (data) => ({
     type: GET_USER_SUCCESS,
-    payload:pages,
+    payload:data,
   });
   
    ////delete api
@@ -60,9 +61,9 @@ import{GET_EMPLOYEE,
     id ,
     
   });
-  export const deleteSuccess = (deleteMessage) => ({
+  export const deleteSuccess = (data) => ({
     type: DELETE_SUCCESS,
-    payload:deleteMessage
+    payload:data
   });
   
   ///// edit api
@@ -70,9 +71,9 @@ import{GET_EMPLOYEE,
     type:EDIT_USER,
   id,
   })
-  export const editSuccess =(editData)=>({
+  export const editSuccess =(data)=>({
     type:EDIT_SUCCESS,
-   payload:editData,
+   payload:data,
   });
   
    /// update api
@@ -81,7 +82,7 @@ import{GET_EMPLOYEE,
     type: UPDATE_USER,
     data,id
   });
-  export const updateSuccess = (updateMessage) => ({
+  export const updateSuccess = (data) => ({
     type: UPDATE_SUCCESS,
-    payload: updateMessage,
+    payload: data,
   });

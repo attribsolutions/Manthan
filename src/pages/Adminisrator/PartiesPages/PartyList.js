@@ -18,6 +18,9 @@ import {
     getPartyListAPI,
     updatePartyIDSuccess
 }  from '../../../store/Administrator/PartyRedux/action';
+import PartyMaster from './PartyMaster';
+import PartyUIDemo from './PartyUIDemo';
+// import PartyUIDemo from './PartyUIDemo';
 
 const PartyList = () => {
     const dispatch = useDispatch();
@@ -47,11 +50,11 @@ const PartyList = () => {
             }))
             tog_center()
         }
-        else if (deleteMessage.Status === true) {
+        else if (updateMessage.Status === true) {
             dispatch(deletePartyIDSuccess({ Status: false }))
             dispatch(AlertState({
                 Type: 3, Status: true,
-                Message: deleteMessage.Message,
+                Message: updateMessage.Message,
             }));
         }
     }, [updateMessage.Status, dispatch]);
@@ -99,13 +102,17 @@ const PartyList = () => {
     const EditPageHandler = (id) => {
         dispatch(editPartyID(id));
     }
-
     const pageOptions = {
-        sizePerPage: 10,
-        totalSize: TableListData.length,
+        sizePerPage: 20,
+        totalSize: TableListData.length, // replace later with size(users),
         custom: true,
     };
-
+    const defaultSorted = [
+        {
+            dataField: "Name", // if dataField is not match to any column you defined, it will be ignored.
+            order: "asc", // desc or asc
+        },
+    ];
     const pagesListColumns = [
         {
             text: "Name",
@@ -177,8 +184,9 @@ const PartyList = () => {
                                         breadcrumbItem={"Party List"}
                                         IsButtonVissible={true}
                                         SearchProps={toolkitProps.searchProps}
+                                        defaultSorted={defaultSorted}
                                         breadcrumbCount={TableListData.length}
-                                        RedirctPath={"/RolesMaster"}
+                                        RedirctPath={"/PartyMaster"}
                                     />
                                     <Row>
                                         <Col xl="12">
@@ -214,7 +222,7 @@ const PartyList = () => {
                     toggle={() => { tog_center() }}
                     size="xl"
                 >
-                    {/* <AddRole state={editData.Data} /> */}
+                    <PartyMaster state={editData.Data} />
                 </Modal>
             </div>
         </React.Fragment>

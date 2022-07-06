@@ -66,6 +66,7 @@ function* GetH_Modules({ id }) {
 }
 
 function* saveHPageSaga_GneratorFunction({ Data }) {
+  debugger
   yield put(SpinnerState(true))
   try {
     console.log("response111", Data)
@@ -97,6 +98,7 @@ function* editHpages_ID({ id }) {
 }
 
 function* update_HPagesUsingID_GenratorFunction({ data, id }) {
+  debugger
   try {
     yield put(SpinnerState(true))
     const response = yield call(updateHPages, data, id);
