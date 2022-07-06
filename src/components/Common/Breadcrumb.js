@@ -7,7 +7,8 @@ import { Search } from "react-bootstrap-table2-toolkit";
 const Breadcrumb = props => {
 
   const { SearchBar } = Search;
-
+ let Countsize='' 
+ if(props.breadcrumbCount){ Countsize=props.breadcrumbCount;}
   const [IsRedirectNewButton, setIsRedirectNewButton] = useState(false);
 
   // New Button Handller
@@ -51,7 +52,7 @@ const Breadcrumb = props => {
         </div>
       </Col>
       
-      <Col md={props.breadcrumbCount.length < 10 ? 5 : props.breadcrumbCount.length < 25 ? 4 : 3}>  </Col>
+      <Col md={Countsize.length < 10 ? 5 : Countsize.length < 25 ? 4 : 3}>  </Col>
 
       <Col sm={2}>
         <div className="search-box d-inline-block">
@@ -69,7 +70,7 @@ const Breadcrumb = props => {
           </div>
         </div>
       </Col>
-      <Col md={props.breadcrumbCount.length < 10 ? 1 : props.breadcrumbCount.length < 25 ? 2 : 3} className="text-right" >
+      <Col md={Countsize.length < 10 ? 1 : Countsize.length < 25 ? 2 : 3} className="text-right" >
         {
           !(props.breadcrumbCount === undefined)
             ?
