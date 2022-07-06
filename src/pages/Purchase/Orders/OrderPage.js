@@ -378,10 +378,10 @@ const OrderPage = (props) => {
               <p className=" text-black">Provide valuable, actionable feedback to your users with HTML5 form validation–available in all our supported browsers.</p>
             </CardHeader> */}
             <CardBody>
-              <Row className="mb-1 border border-black text-black " style={{ backgroundColor: "#dddddd" }} >
+              <Row className="mb-1 border border-black text-black mt-n3" style={{ backgroundColor: "#dddddd" }} >
 
                 <Col md="2" className="">
-                  <FormGroup className="mb-3 row mt-3 " >
+                  <FormGroup className="mb- row mt-3 " >
                     <Label className="col-sm-5 p-2">Order Date</Label>
                     <Col md="7">
                       <Flatpickr
@@ -401,8 +401,8 @@ const OrderPage = (props) => {
                   </FormGroup>
                 </Col>
 
-                <Col md="3">
-                  <FormGroup className="mb-3 row mt-3 " >
+                <Col md="4">
+                  <FormGroup className="mb-2 row mt-3 " >
                     <Label className="col-sm-4 p-2">Customer Name</Label>
                     <Col md="8">
                       <ReactSelect
@@ -418,9 +418,9 @@ const OrderPage = (props) => {
 
                 <Col md="3">
 
-                  <FormGroup className="mb-3 row mt-3 " >
-                    <Label className="col-sm-3 p-2 ">Descreption</Label>
-                    <Col md="9">
+                  <FormGroup className="mb-2 row mt-3 " >
+                    <Label className="col-sm-4 p-2 ml-n4 ">Descreption</Label>
+                    <Col md="8">
                       <Input
                         placeholder="Enter Description"
                         id='inp-description'
@@ -431,11 +431,11 @@ const OrderPage = (props) => {
 
 
 
-                <Col md="2"></Col>
+                <Col md="1"></Col>
 
-                <Col md="2">
+                <Col md="2" className="mt-n1 ">
                   <Label htmlFor="validationCustom01"> </Label>
-                  <div className="bg-soft-info text-center text-black  external-event  col-form-label rounded-2 align-right">
+                  <div className=" bg-soft-info text-center text-black  external-event  col-form-label rounded-2 align-right">
                     Order Amount : &nbsp;&nbsp; {totalAmountCount.toFixed(2)}&nbsp;
                   </div>
                   {/* <h5 className=" text-left text-danger  align-left">
@@ -452,7 +452,7 @@ const OrderPage = (props) => {
                   >
                     <Table
                       id="myTable"
-                      className="table  table-bordered text-black"
+                      className="table table-bordered text-black "
                     >
                       <Thead>
                         <Tr>
