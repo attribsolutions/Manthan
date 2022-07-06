@@ -79,7 +79,7 @@ const Modules = (props) => {
                     Type: 1,
                     Status: true,
                     Message: APIResponse.Message,
-                    RedirectPath: '/modulesList',
+                    RedirectPath: '/moduleList',
 
                 }))
             }
@@ -117,7 +117,7 @@ const Modules = (props) => {
 
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
     var IsEditMode_Css = ''
-    if (IsEdit === true || PageMode == true) { IsEditMode_Css = "-3.5%" };
+    if (IsEdit === true || PageMode == true) { IsEditMode_Css = "-5.5%" };
 
     return (
         <React.Fragment>
@@ -161,24 +161,7 @@ const Modules = (props) => {
 
                                                 </Row>
 
-                                                <Row>
-                                                    <FormGroup className="mb-2 col col-sm-4 " >
-                                                        <Label htmlFor="validationCustom01">Name </Label>
-                                                        <AvField name="DisplayIndex" autoComplete='off'
-                                                            placeholder="Please Enter DisplayIndex"
-                                                            value={EditData.DisplayIndex} type="number"
-                                                            validate={{
-                                                                number: true,
-                                                                required: { value: true, errorMessage: 'Display Index is Required' },
-                                                                tel: {
-                                                                    pattern: /^\d{1,4}$/,
-                                                                    errorMessage: 'Display Index is Required (Only Two Digit) '
-                                                                }
-                                                            }}
-                                                        />
-                                                    </FormGroup>
-                                                </Row>
-
+                                               
                                                 <Row>
                                                     <FormGroup className="mb-2 col col-sm-4 " >
                                                         <Label htmlFor="validationCustom01">DisplayIndex </Label>

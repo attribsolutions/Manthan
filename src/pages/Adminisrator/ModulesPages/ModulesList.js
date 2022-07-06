@@ -110,7 +110,7 @@ const ModulesList = () => {
             text: 'Display Index',
             sort: true
         }, {
-            dataField: 'IsActive',
+            dataField: 'isActive',
             text: 'IsActive',
             sort: true
         },
@@ -185,8 +185,8 @@ const ModulesList = () => {
                                             breadcrumbItem={"Modules List"}
                                             IsButtonVissible={true}
                                             SearchProps={toolkitProps.searchProps}
-                                            breadcrumbCount={TableListData.length}
-                                            RedirctPath={"/modulesMaster"}
+                                            breadcrumbCount={`Module Count: ${TableListData.length}`}
+                                            RedirctPath={"/moduleMaster"}
                                         />
                                         <Row>
                                             <Col xl="12">
