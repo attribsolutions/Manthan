@@ -1,65 +1,100 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import Select from "react-select";
 import { Card, CardBody, Col, Container, Row, CardHeader, Label, Button } from "reactstrap";
 import { AvForm, AvInput, AvGroup, AvFeedback } from "availity-reactstrap-validation";
 import { useDispatch, useSelector } from "react-redux";
-import { getEmployee, getRoles, addUser, updateID }
+import { getEmployee, getRoles, addUser, updateID, addUserSuccess }
   from "../../../store/Administrator/UserRegistrationRedux/actions";
 import Breadcrumbs from "../../../components/Common/Breadcrumb";
 import AvField from "availity-reactstrap-validation/lib/AvField";
 import { AlertState } from "../../../store/Utilites/CostumeAlert/actions";
-import { fetchModelsList } from "../../../store/Administrator/ModulesRedux/actions";
-
+import { editSuccess } from "../../../store/Administrator/RoleMasterRedux/action";
 
 const AddUser = (props) => {
 
+  const formRef = useRef(null);
   const dispatch = useDispatch();
+
+  //SetState  Edit data Geting From Modules List component
   const [EditData, setEditData] = useState([]);
+
+  //'IsEdit'--if true then update data otherwise it will perfrom save operation
   const [IsEdit, setIsEdit] = useState(false);
+  const [PageMode, setPageMode] = useState(false);
+
   const [RoleData, setRoleData] = useState([]);
   const [EmployeeSelect, setEmployeeSelect] = useState("");
 
   // M_Roles DropDown
   const [RoleDropDown, setRoleDropDown] = useState("");
 
-  var isEditData = props.state;
+  //*** "isEditdata get all data from ModuleID for Binding  Form controls
+  let editDataGatingFromList = props.state;
 
-  useEffect(() => {
-    document.getElementById("txtName").focus();
-    if (!(isEditData === undefined)) {
-      setEditData(isEditData[0]);
-      setIsEdit(true);
-      setEmployeeSelect({
-        value: isEditData.EmployeeID,
-        label: isEditData.EmployeeID
-      })
-      setRoleData(isEditData.RoleID)
-    }
-  }, [IsEdit])
-
+  //Access redux store Data /  'save_ModuleSuccess' action data
   const { AddUserMessage, } = useSelector((state) => ({
     AddUserMessage: state.User_Registration_Reducer.AddUserMessage,
   }));
 
+  // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
   useEffect(() => {
-    if ((AddUserMessage.Status === true)) {
-      dispatch(addUser(undefined))
+    document.getElementById("txtName").focus();
+    if (!(editDataGatingFromList === undefined)) {
+      setEditData(editDataGatingFromList);
+      setIsEdit(true);
+      dispatch(editSuccess({ Status: false }))
+      // setEmployeeSelect({
+      //   value: editDataGatingFromList.Employee,
+      //   label: editDataGatingFromList.EmployeeID
+      // })
+      // setRoleData(editDataGatingFromList.UserRole[0].Role)
+      return
+    }
+  }, [editDataGatingFromList])
+
+  useEffect(() => {
+    if ((AddUserMessage.Status === true) && (AddUserMessage.StatusCode === 201)) {
+      dispatch(addUserSuccess({ Status: false }))
+      formRef.current.reset();
+      if (PageMode === true) {
+        dispatch(AlertState({
+          Type: 1,
+          Status: true,
+          Message: AddUserMessage.Message,
+        }))
+      }
+      else {
+        dispatch(AlertState({
+          Type: 1,
+          Status: true,
+          Message: AddUserMessage.Message,
+          RedirectPath: '/usersList',
+          AfterResponseAction: false
+        }))
+      }
+    }
+    else if (AddUserMessage.Status === true) {
+      dispatch(addUserSuccess({ Status: false }))
+      dispatch(AlertState({
+        Type: 4,
+        Status: true,
+        Message: "error Message",
+        RedirectPath: false,
+        AfterResponseAction: false
+      }));
     }
   }, [AddUserMessage.Status])
 
-  /// Employee DropDown
   useEffect(() => {
     dispatch(getEmployee());
     dispatch(getRoles());
-    
   }, [dispatch]);
-
   const { employee } = useSelector((state) => ({
     employee: state.User_Registration_Reducer.employee
   }));
 
   const EmployeeValues = employee.map((Data) => ({
-    value: Data.ID,
+    value: Data.id,
     label: Data.Name
   }));
 
@@ -67,16 +102,12 @@ const AddUser = (props) => {
     setEmployeeSelect(e)
   }
 
-  useEffect(() => {
-    dispatch(fetchModelsList());
-  }, [dispatch]);
-
   const { Roles } = useSelector((state) => ({
     Roles: state.User_Registration_Reducer.Roles
   }));
 
   const RolesValues = Roles.map((Data) => ({
-    value: Data.ID,
+    value: Data.id,
     label: Data.Name
   }));
 
@@ -85,6 +116,7 @@ const AddUser = (props) => {
     const find = RoleData.find((element) => {
       return element.value === RoleDropDown.value
     });
+
     if (RoleDropDown.length <= 0) {
       dispatch(AlertState({
         Type: 3, Status: true,
@@ -99,7 +131,6 @@ const AddUser = (props) => {
         Type: 4, Status: true,
         Message: "RoleData already Exists ",
       }));
-      // window.alert("RoleData already Exists");
     }
   }
 
@@ -110,17 +141,18 @@ const AddUser = (props) => {
         email: values.email,
         LoginName: values.LoginName,
         password: "1234",
-        EmployeeID: EmployeeSelect.value,
+        Employee: EmployeeSelect.value,
         isActive: values.isActive,
         AdminPassword: "1234",
         isSendOTP: values.isSendOTP,
-        RoleID: RoleData.map((d) => ({
-          // RoleName: d.label,
-          RoleID: d.value,
+        CreatedBy: 1,
+        UpdatedBy: 1,
+        UserRole: RoleData.map((d) => ({
+          Role: d.value,
         })),
       }),
     };
-    console.log("post data",requestOptions)
+
     if (RoleData.length <= 0) {
       dispatch(AlertState({
         Type: 4, Status: true,
@@ -130,18 +162,29 @@ const AddUser = (props) => {
       }));
     }
     else if (IsEdit) {
-      dispatch(updateID(requestOptions.body, EditData.ID));
+      dispatch(updateID(requestOptions.body, EditData.id));
       setEditData([]);
     }
     else {
       dispatch(addUser(requestOptions.body));
-      console.log("post data",requestOptions.body)
     }
   };
 
+  // For Delete Button in table
+  function UserRoles_DeleteButton_Handller(tableValue) {
+    setRoleData(RoleData.filter(
+      (item) => !(item.value === tableValue)
+    )
+    )
+  }
+
+  // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
+  var IsEditMode_Css = ''
+  if (IsEdit === true || PageMode == true) { IsEditMode_Css = "-3.5%" };
+
   return (
     <React.Fragment>
-      <div className="page-content">
+      <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
         <Breadcrumbs breadcrumbItem={"User Registration "} />
         <Container fluid>
           <Row>
@@ -153,6 +196,7 @@ const AddUser = (props) => {
                     onValidSubmit={(e, v) => {
                       handleValidSubmit(e, v);
                     }}
+                    ref={formRef}
                   >
 
                     <AvGroup>
@@ -168,29 +212,6 @@ const AddUser = (props) => {
                             validate={{
                               required: { value: true, errorMessage: 'Please enter a LoginName...!' },
                             }} />
-                        </Col>
-                      </Row>
-                    </AvGroup>
-
-                    <AvGroup>
-                      <Row className="mb-4">
-                        <Label className="col-sm-2 col-form-label">
-                          EmailID
-                        </Label>
-                        <Col sm={4}>
-                          <AvField name="email" type="email"
-                            value={EditData.email}
-                            placeholder="Enter your EmailID "
-                            // autoComplete='off'
-                            validate={{
-                              required: { value: true, errorMessage: 'Please Enter your EmailID' },
-                              tel: {
-                                pattern: /\S+@\S+\.\S+/
-                              }
-                            }
-                            }
-
-                          />
                         </Col>
                       </Row>
                     </AvGroup>
@@ -219,7 +240,6 @@ const AddUser = (props) => {
                           options={RolesValues}
                           onChange={(e) => { setRoleDropDown(e) }}
                           classNamePrefix="select2-selection"
-                          required=""
                         />
                       </Col>
                       <Col sm={1}>
@@ -248,7 +268,8 @@ const AddUser = (props) => {
                                 </thead>
                                 <tbody >
                                   {RoleData.map((TableValue) => (
-                                    <tr key={TableValue.ID}>
+                                    
+                                    <tr key={TableValue.Role}>
                                       <td>
                                         <h5 className="my-0 text-primary">
                                           {TableValue.label}
@@ -263,13 +284,10 @@ const AddUser = (props) => {
                                         <button
                                           type="button"
                                           className="btn btn-danger btn-sm waves-effect waves-light"
-                                          onClick={() =>
-                                            setRoleData(
-                                              RoleData.filter(
-                                                (item) =>
-                                                  item.ID !== TableValue.ID
-                                              )
-                                            )
+                                          data-mdb-toggle="tooltip" data-mdb-placement="top" title="Delete Roles"
+                                          onClick={() => {
+                                            UserRoles_DeleteButton_Handller(TableValue.value)
+                                          }
                                           }
                                         >
                                           <i class="mdi mdi-trash-can d-block font-size-10"></i>
@@ -323,7 +341,7 @@ const AddUser = (props) => {
                           type="checkbox"
                           checked={EditData.isSendOTP}
                           name="isSendOTP"
-                          
+
                           id="horizontal-customCheck"
 
                         />
@@ -331,25 +349,25 @@ const AddUser = (props) => {
                     </Row>
                     <Row className="justify-content-end">
                       <Col sm={2}>
-                      <div>
-                                                    {
-                                                        IsEdit ? (
-                                                            <button
-                                                                type="submit"
-                                                                data-mdb-toggle="tooltip" data-mdb-placement="top" title="Update User"
-                                                                className="btn btn-success w-md"
-                                                            >
-                                                                <i class="fas fa-edit me-2"></i>Update
-                                                            </button>) : (
-                                                            <button
-                                                                type="submit"
-                                                                data-mdb-toggle="tooltip" data-mdb-placement="top" title="Save User"
-                                                                className="btn btn-success w-md"
-                                                            > <i className="fas fa-save me-2"></i> Save
-                                                            </button>
-                                                        )
-                                                    }
-                                                </div>
+                        <div>
+                          {
+                            IsEdit ? (
+                              <button
+                                type="submit"
+                                data-mdb-toggle="tooltip" data-mdb-placement="top" title="Update User"
+                                className="btn btn-success w-md"
+                              >
+                                <i class="fas fa-edit me-2"></i>Update
+                              </button>) : (
+                              <button
+                                type="submit"
+                                data-mdb-toggle="tooltip" data-mdb-placement="top" title="Save User"
+                                className="btn btn-success w-md"
+                              > <i className="fas fa-save me-2"></i> Save
+                              </button>
+                            )
+                          }
+                        </div>
                       </Col>{" "}
                       <Col sm={10}></Col>
                     </Row>
