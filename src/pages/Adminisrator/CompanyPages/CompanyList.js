@@ -27,8 +27,8 @@ const CompanyList = () => {
     const [modal_center, setmodal_center] = useState(false);
 
     // get Access redux data
-    const { companyList, editData, updateMessage, deleteCompanyID ,} = useSelector((state) => ({
-        companyList: state.Company.companyList,
+    const { TableListData, editData, updateMessage, deleteCompanyID ,} = useSelector((state) => ({
+        TableListData: state.Company.companyList,
         editData: state.Company.editData,
         updateMessage: state.Company.updateMessage,
         deleteCompanyID: state.Company.deleteCompanyID,
@@ -108,7 +108,7 @@ const CompanyList = () => {
 
     const pageOptions = {
         sizePerPage: 15,
-        totalSize: companyList.length, // replace later with size(users),
+        totalSize: TableListData.length, // replace later with size(users),
         custom: true,
     };
     const defaultSorted = [
@@ -187,7 +187,7 @@ const CompanyList = () => {
                     {({ paginationProps, paginationTableProps }) => (
                         <ToolkitProvider
                             keyField="id"
-                            data={companyList}
+                            data={TableListData}
                             columns={pagesListColumns}
                             search
                         >
@@ -198,7 +198,7 @@ const CompanyList = () => {
                                         breadcrumbItem={"Company List"}
                                         IsButtonVissible={true}
                                         SearchProps={toolkitProps.searchProps}
-                                        breadcrumbCount={companyList.length}
+                                        breadcrumbCount={`Company Count: ${TableListData.length}`}
                                         RedirctPath={"/companyMaster"}
                                     />
                                     <Row>
