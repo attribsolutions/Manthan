@@ -21,9 +21,10 @@ import {
   editSuccess,
   updateSuccess
 } from "./actions";
-// import { UserListAPI } from "./UserListAPI";
+import { AlertState } from "../../Utilites/CostumeAlert/actions";
+import { SpinnerState } from "../../Utilites/Spinner/actions";
 
-/// employee dropdown list
+// employee dropdown list
 function* EmployeelistDropdown_GenratorFunction() {
   try {
     const response = yield call(getEmployee_Dropdown_For_UserRegistration_API);
@@ -33,75 +34,97 @@ function* EmployeelistDropdown_GenratorFunction() {
   }
 }
 
-/// roles dropdownlist
+// roles dropdownlist
 function* RolesListDropdoun_GenratorFunction() {
   try {
     const response = yield call(RolesListDropdown_For_UserRegistration_API);
     yield put(getRolesSuccess(response.Data));
+
   } catch (error) {
     console.log("Rolelist  saga page error", error);
   }
 }
 
-//// post api
+// post api
 function* user_save_GenratorFunction({ Data }) {
+  console.log("Data",Data)
+  yield put(SpinnerState(true))
   try {
-    yield console.log("AddUser saga : saga befor axios pass data", Data);
     const response = yield call(User_Component_PostMethod_API, Data);
+    console.log("response",response)
+    yield put(SpinnerState(false))
     yield put(addUserSuccess(response));
-    yield console.log(" AddUser saga : after axios Addapi response ", response); 
   } catch (error) {
-    yield console.log("postUser saga error :", error);
+    yield put(SpinnerState(false))
+    yield put(AlertState({
+      Type: 4,
+      Status: true, Message: "500 Error Message",
+    }));
   }
 }
 
-////  Get list api
+//  Get list api
 function* Fetch_UserList_GenratorFunction() {
+  yield put(SpinnerState(true))
   try {
     const response = yield call(User_Component_GetMethod_API);
     yield put(getUserSuccess(response.Data));
+    yield put(SpinnerState(false))
   } catch (error) {
-    console.log("RoleSaga error", error)
+    yield put(SpinnerState(false))
+    yield put(AlertState({
+      Type: 4,
+      Status: true, Message: "500 Error Message",
+    }));
   }
 }
 
-//// delete api 
+// delete api 
 function* Delete_UserList_GenratorFunction({ id }) {
   try {
+    yield put(SpinnerState(true))
     const response = yield call(User_Component_Delete_Method_API, id);
-    yield put(deleteSuccess(response.Data));
+    yield put(SpinnerState(false))
+    yield put(deleteSuccess(response))
   } catch (error) {
-    yield console.log("delete User Error : ", error);
+    yield put(SpinnerState(false))
+    yield put(AlertState({
+      Type: 4,
+      Status: true, Message: "500 Error Message",
+    }));
   }
 }
 
 // edit api
 function* Edit_UserList_GenratorFunction({ id }) {
   try {
-    if (!id <= 0) {
-      const response = yield call(User_Component_EditById_API, id);
-      yield put(editSuccess(response.Data));
-      console.log(" userlist api response", response)
-
-    } else {
-      yield put(editSuccess({ Status: 'false' }));
-    }
+    const response = yield call(User_Component_EditById_API, id);
+    yield put(editSuccess(response));
   } catch (error) {
-    yield console.log("edit_ID  saga page error  :", error);
+    yield put(AlertState({
+      Type: 4,
+      Status: true, Message: "500 Error Message",
+    }));
   }
 }
+
 function* Update_User_GenratorFunction({ data, id }) {
   try {
-    if (data) {
-      const response = yield call(User_Component_Update_API, data, id);
-      yield put(updateSuccess(response));
-    } else {
-      yield put(updateSuccess({ Status: "false" }))
-    }
-  } catch (error) {
-    yield console.log("update saga page error   :", error);
+    yield put(SpinnerState(true))
+    const response = yield call(User_Component_Update_API, data, id);
+    console.log("update response",response)
+    yield put(SpinnerState(false))
+    yield put(updateSuccess(response))
+  }
+  catch (error) {
+    yield put(SpinnerState(false))
+    yield put(AlertState({
+      Type: 4,
+      Status: true, Message: "500 Error Message",
+    }));
   }
 }
+
 
 function* UserRegistrationSaga() {
   yield takeEvery(GET_EMPLOYEE, EmployeelistDropdown_GenratorFunction);

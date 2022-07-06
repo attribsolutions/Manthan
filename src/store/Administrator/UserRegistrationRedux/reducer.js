@@ -14,13 +14,13 @@ import {
     employee: [],
     Roles:[],
     AddUser:[],
-    AddUserMessage:[],
+    AddUserMessage:{ Status: false },
     pages:[],
     deleteRoleID: [],
-    deleteSuccessRole: [],
+    deleteSuccessRole: { Status: false },
     editRoleId: [],
-    editData: { Status: 'false' },
-    updateMessage:  { Status: 'false' }
+    editData: { Status: false },
+    updateMessage: { Status: false },
   };
   const User_Registration_Reducer = (state = INIT_STATE, action) => {
     switch (action.type) {
