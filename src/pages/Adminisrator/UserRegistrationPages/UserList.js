@@ -197,7 +197,7 @@ const UserList = () => {
                                         IsButtonVissible={true}
                                         a={toolkitProps.searchProps}
                                         breadcrumbCount={pages.length}
-                                        RedirctPath={"/usersMaster"}
+                                        RedirctPath={"/userMaster"}
                                     />
                                     <Row>
                                         <Col xl="12">

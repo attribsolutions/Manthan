@@ -349,7 +349,7 @@ const PartyMaster = (props) => {
                                                 </Row>
 
                                                 <Row>
-                                                    <Col md="3">
+                                                    {/* <Col md="3">
                                                         <FormGroup className="mb-3">
                                                             <Label htmlFor="validationCustom01">CustomerDivision </Label>
                                                             <Col sm={12}>
@@ -360,8 +360,8 @@ const PartyMaster = (props) => {
                                                                 />
                                                             </Col>
                                                         </FormGroup>
-                                                    </Col>
-                                                    <Col md="1">  </Col>
+                                                    </Col> */}
+                                                    {/* <Col md="1">  </Col> */}
                                                     <Col md="3">
                                                         <FormGroup className="mb-3">
                                                             <Label htmlFor="validationCustom01"> GSTIN </Label>
