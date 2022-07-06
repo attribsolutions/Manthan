@@ -202,8 +202,6 @@ const AddEmployee = (props) => {
         <Breadcrumbs breadcrumbItem={"Employee Master "} />
         <Container fluid>
 
-
-
           <Card>
             <Row>
               <Col lg={12}>
@@ -395,7 +393,7 @@ const AddEmployee = (props) => {
                             <Row>
 
                               <Col md="3">
-                                <FormGroup className="mb-2">
+                                <FormGroup className="mb-3">
                                   <Label htmlFor="validationCustom01">DesignationID </Label>
                                   <Select
                                     value={DesignationIDselect}
@@ -421,38 +419,39 @@ const AddEmployee = (props) => {
                                   />
                                 </FormGroup>
                               </Col>
+
                             </Row>
-                            <Row className="justify-content-end">
-                              <Col sm={10}></Col>
-                              <Col sm={2}>
-                                <div>
-                                  {
-                                    IsEdit ? (
-                                      <button
-                                        type="submit"
-                                        data-mdb-toggle="tooltip" data-mdb-placement="top" title="Update Modules ID"
-                                        className="btn btn-success w-md"
-                                      >
-                                        <i class="fas fa-edit me-2"></i>Update
-                                      </button>) : (
-                                      <button
-                                        type="submit"
-                                        data-mdb-toggle="tooltip" data-mdb-placement="top" title="Save Modules ID"
-                                        className="btn btn-success w-md"
-                                      > <i className="fas fa-save me-2"></i> Save
-                                      </button>
-                                    )
-                                  }
-                                </div>
-                              </Col>
-                            </Row>
+
+                            <Row  >
+                            <FormGroup className="mb-3">
+                                <Col sm={2} >
+                                  <div>
+                                    {
+                                      IsEdit ? (
+                                        <button
+                                          type="submit"
+                                          data-mdb-toggle="tooltip" data-mdb-placement="top" title="Update Employee"
+                                          className="btn btn-success w-md"
+                                        >
+                                          <i class="fas fa-edit me-2"></i>Update
+                                        </button>) : (
+                                        <button
+                                          type="submit"
+                                          data-mdb-toggle="tooltip" data-mdb-placement="top" title="Save Employee"
+                                          className="btn btn-primary w-md"
+                                        > <i className="fas fa-save me-2"></i> Save
+                                        </button>
+                                      )
+                                    }
+                                  </div>
+                                </Col>
+                                </FormGroup>
+                              </Row>
                         </Card>
                       </Row>
 
 
                     </AvForm>
-                    <div>
-                    </div>
                   </CardBody>
                 </Card>
 

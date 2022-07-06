@@ -172,9 +172,7 @@ const CompanyModule = (props) => {
                                   }}
                                 />
                               </FormGroup>
-                            </Row>
-
-                            <Row>
+                              <Col md="1">  </Col>
                               <FormGroup className="mb-2 col col-sm-4 " >
                                 <Label htmlFor="validationCustom01">Address </Label>
                                 <AvField name="Address" value={EditData.Address} type="text"
@@ -182,23 +180,6 @@ const CompanyModule = (props) => {
                                   placeholder=" Please Enter Address "
                                   validate={{
                                     required: { value: true, errorMessage: 'Please Enter a  Address' },
-                                  }}
-                                />
-                              </FormGroup>
-                            </Row>
-
-                            <Row>
-                              <FormGroup className="mb-2 col col-sm-4 " >
-                                <Label htmlFor="validationCustom01">GSTIN </Label>
-                                <AvField name="GSTIN"
-                                  autoComplete="off"
-                                  value={EditData.GSTIN} type="text"
-                                  placeholder="GSTIN "
-                                  validate={{
-                                    required: { value: true, errorMessage: 'Please Enter a  GSTIN' },
-                                    tel: {
-                                      pattern: /[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}/
-                                    }
                                   }}
                                 />
                               </FormGroup>
@@ -219,9 +200,44 @@ const CompanyModule = (props) => {
                                   }}
                                 />
                               </FormGroup>
+
+                              <Col md="1">  </Col>
+                              <FormGroup className="mb-2 col col-sm-4 " >
+                                <Label htmlFor="validationCustom01">EmailID </Label>
+                                <AvField name="EmailID" value={EditData.EmailID} type="email"
+                                  autoComplete="off"
+                                  placeholder="example@example.com" validate={{
+                                    required: { value: true, errorMessage: 'Please Enter a Email ID' },
+                                  }} />
+                              </FormGroup>
                             </Row>
+                          </CardBody>
+                        </Card>
+                      </Col>
+                    </Row>
+
+
+                    <Row>
+                      <Col md={12}  >
+                        <Card >
+                          <CardBody style={{ backgroundColor: "whitesmoke" }}>
 
                             <Row>
+                              <FormGroup className="mb-2 col col-sm-4 " >
+                                <Label htmlFor="validationCustom01">GSTIN </Label>
+                                <AvField name="GSTIN"
+                                  autoComplete="off"
+                                  value={EditData.GSTIN} type="text"
+                                  placeholder="GSTIN "
+                                  validate={{
+                                    required: { value: true, errorMessage: 'Please Enter a  GSTIN' },
+                                    tel: {
+                                      pattern: /[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}/
+                                    }
+                                  }}
+                                />
+                              </FormGroup>
+                              <Col md="1">  </Col>
                               <FormGroup className="mb-2 col col-sm-4 " >
                                 <Label htmlFor="validationCustom01">CompanyAbbreviation </Label>
                                 <AvField name="CompanyAbbreviation" value={EditData.CompanyAbbreviation} type="text"
@@ -229,17 +245,6 @@ const CompanyModule = (props) => {
                                   placeholder=" Please Enter Company Abbreviation"
                                   validate={{
                                     required: { value: true, errorMessage: 'Please Enter a Company Abbreviation' },
-                                  }} />
-                              </FormGroup>
-                            </Row>
-
-                            <Row>
-                              <FormGroup className="mb-2 col col-sm-4 " >
-                                <Label htmlFor="validationCustom01">EmailID </Label>
-                                <AvField name="EmailID" value={EditData.EmailID} type="email"
-                                  autoComplete="off"
-                                  placeholder="example@example.com" validate={{
-                                    required: { value: true, errorMessage: 'Please Enter a Email ID' },
                                   }} />
                               </FormGroup>
                             </Row>
@@ -255,22 +260,22 @@ const CompanyModule = (props) => {
                               </FormGroup>
                             </Row>
 
-                            <FormGroup  >
-                              <Row >
-                                <Col sm={2}>
+                           
+                              <Row  >
+                                <Col sm={2} >
                                   <div>
                                     {
                                       IsEdit ? (
                                         <button
                                           type="submit"
-                                          data-mdb-toggle="tooltip" data-mdb-placement="top" title="Update Module"
+                                          data-mdb-toggle="tooltip" data-mdb-placement="top" title="Update Company"
                                           className="btn btn-success w-md"
                                         >
                                           <i class="fas fa-edit me-2"></i>Update
                                         </button>) : (
                                         <button
                                           type="submit"
-                                          data-mdb-toggle="tooltip" data-mdb-placement="top" title="Save Page"
+                                          data-mdb-toggle="tooltip" data-mdb-placement="top" title="Save Company"
                                           className="btn btn-primary w-md"
                                         > <i className="fas fa-save me-2"></i> Save
                                         </button>
@@ -279,22 +284,22 @@ const CompanyModule = (props) => {
                                   </div>
                                 </Col>
                               </Row>
-                            </FormGroup >
+                            
                           </CardBody>
                         </Card>
                       </Col>
                     </Row>
 
-                    
+
                   </AvForm>
                   <br></br><br></br><br></br> <br></br> <br></br>
                 </CardBody>
               </Card>
-            </Col>
-          </Row>
-        </Container>
-      </div>
-    </React.Fragment>
+            </Col >
+          </Row >
+        </Container >
+      </div >
+    </React.Fragment >
   );
 };
 
