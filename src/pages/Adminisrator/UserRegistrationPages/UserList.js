@@ -27,7 +27,7 @@ const UserList = () => {
         pages: state.User_Registration_Reducer.pages,
         editData: state.User_Registration_Reducer.editData,
         updateMessage: state.User_Registration_Reducer.updateMessage,
-        deleteMessage: state.User_Registration_Reducer.deleteMessage,
+        deleteMessage: state.User_Registration_Reducer.deleteSuccessRole,
     }));
 
     //  This UseEffect => Featch Modules List data  First Rendering
@@ -35,7 +35,7 @@ const UserList = () => {
         dispatch(getUser());
     }, []);
 
-    // This UseEffect => UpadateModal Success/Unsucces  Show and Hide Control Alert_modal 
+    // This UseEffect => UpadateModal Success/Unsucces Show and Hide Control Alert_modal 
     useEffect(() => {
         if ((updateMessage.Status === true) && (updateMessage.StatusCode === 200)) {
             dispatch(updateSuccess({ Status: false }))
@@ -46,32 +46,33 @@ const UserList = () => {
             }))
             tog_center()
         }
-        // else if (deleteMessage.Status === true) {
-        //     dispatch(updateSuccess({ Status: false }))
-        //     dispatch(AlertState({
-        //         Type: 3, Status: true,
-        //         Message: deleteMessage.Message,
-        //     }));
-        // }
+        else if (deleteMessage.Status === true) {
+            dispatch(deleteSuccess({ Status: false }))
+            dispatch(AlertState({
+                Type: 3, Status: true,
+                Message: deleteMessage.Message,
+            }));
+        }
     }, [updateMessage.Status, dispatch]);
 
-    // useEffect(() => {
-    //     if ((deleteMessage.Status === true) && (deleteMessage.StatusCode === 200)) {
-    //         dispatch(deleteSuccess({ Status: false }))
-    //         dispatch(AlertState({
-    //             Type: 1, Status: true,
-    //             Message: deleteMessage.Message,
-    //             AfterResponseAction: getUser,
-    //         }))
-    //     } else if (deleteMessage.Status === true) {
-    //         dispatch(deleteSuccess({ Status: false }))
-    //         dispatch(AlertState({
-    //             Type: 3,
-    //             Status: true,
-    //             Message: "error Message",
-    //         }));
-    //     }
-    // }, [deleteMessage.Status])
+    useEffect(() => {
+        if ((deleteMessage.Status === true) && (deleteMessage.StatusCode === 200)) {
+            debugger
+            dispatch(deleteSuccess({ Status: false }))
+            dispatch(AlertState({
+                Type: 1, Status: true,
+                Message: deleteMessage.Message,
+                AfterResponseAction: getUser,
+            }))
+        } else if (deleteMessage.Status === true) {
+            dispatch(deleteSuccess({ Status: false }))
+            dispatch(AlertState({
+                Type: 3,
+                Status: true,
+                Message: "error Message",
+            }));
+        }
+    }, [deleteMessage.Status])
 
     useEffect(() => {
         if (editData.Status === true) {

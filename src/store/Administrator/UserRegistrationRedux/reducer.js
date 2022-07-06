@@ -13,12 +13,9 @@ import {
   const INIT_STATE = {
     employee: [],
     Roles:[],
-    AddUser:[],
     AddUserMessage:{ Status: false },
     pages:[],
-    deleteRoleID: [],
     deleteSuccessRole: { Status: false },
-    editRoleId: [],
     editData: { Status: false },
     updateMessage: { Status: false },
   };
@@ -50,11 +47,6 @@ import {
             }
   
             //// delete api
-        case DELETE_USER:
-          return {
-            ...state,
-            deleteRoleID: action.id,
-          };
         case DELETE_SUCCESS:
           return {
             ...state,
@@ -62,11 +54,6 @@ import {
           };
     
           //// edit api
-        case EDIT_USER:
-          return {
-            ...state,
-            editRoleId: action.payload
-          };
         case EDIT_SUCCESS:
           return {
             ...state,
