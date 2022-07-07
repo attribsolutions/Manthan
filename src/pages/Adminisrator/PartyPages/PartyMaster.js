@@ -54,41 +54,41 @@ const PartyMaster = (props) => {
     }, [dispatch]);
 
 
-        // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
-        useEffect(() => {
-            document.getElementById("txtName").focus();
-            if (!(editDataGatingFromList === undefined)) {
-    
-                setEditData(editDataGatingFromList);
-                setIsEdit(true);
-                setFSSAIExipry_Date_Select(editDataGatingFromList.FSSAIExipry)
-    
-                setDistrict_dropdown_Select({
-                    value: editDataGatingFromList.District,
-                    label: editDataGatingFromList.DistrictName
-                })
-                // setCompanyList_dropdown_Select({
-                //     value: editDataGatingFromList.Company,
-                //     label: editDataGatingFromList.CompanyNa
-                // })
-                setDivision_dropdown_Select({
-                    value: editDataGatingFromList.DividionTypeID,
-                    label: editDataGatingFromList.DivisionType
-                })
-                setPartyType_dropdown_Select({
-                    value: editDataGatingFromList.PartyTypeID,
-                    label: editDataGatingFromList.PartyType
-                })
-                setState_DropDown_select({
-                    value: editDataGatingFromList.State,
-                    label: editDataGatingFromList.StateName
-                })
-    
-                dispatch(editPartyIDSuccess({ Status: false }))
-                return
-            }
-        }, [editDataGatingFromList])
-    
+    // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
+    useEffect(() => {
+        document.getElementById("txtName").focus();
+        if (!(editDataGatingFromList === undefined)) {
+
+            setEditData(editDataGatingFromList);
+            setIsEdit(true);
+            setFSSAIExipry_Date_Select(editDataGatingFromList.FSSAIExipry)
+
+            setDistrict_dropdown_Select({
+                value: editDataGatingFromList.District,
+                label: editDataGatingFromList.DistrictName
+            })
+            // setCompanyList_dropdown_Select({
+            //     value: editDataGatingFromList.Company,
+            //     label: editDataGatingFromList.CompanyNa
+            // })
+            setDivision_dropdown_Select({
+                value: editDataGatingFromList.DividionTypeID,
+                label: editDataGatingFromList.DivisionType
+            })
+            setPartyType_dropdown_Select({
+                value: editDataGatingFromList.PartyTypeID,
+                label: editDataGatingFromList.PartyType
+            })
+            setState_DropDown_select({
+                value: editDataGatingFromList.State,
+                label: editDataGatingFromList.StateName
+            })
+
+            dispatch(editPartyIDSuccess({ Status: false }))
+            return
+        }
+    }, [editDataGatingFromList])
+
     const StateValues = State.map((Data) => ({
         value: Data.id,
         label: Data.Name
@@ -223,11 +223,12 @@ const PartyMaster = (props) => {
                 <Container fluid>
                     <Row>
                         <Col lg={12}>
-                            <Card >
-                                <CardHeader>
+                            <Card className="text-black" >
+                                <CardHeader className="card-header   text-black" style={{ backgroundColor: "#dddddd" }} >
                                     <h4 className="card-title text-black">React Validation - Normal</h4>
-                                    <p className="card-title-desc  text-black">Provide valuable, actionable feedback to your users with HTML5 form validation–available in all our supported browsers.</p>
+                                    <p className="card-title-desc text-black">Provide valuable, actionable feedback to your users with HTML5 form validation–available in all our supported browsers.</p>
                                 </CardHeader>
+
                                 <CardBody>
                                     <AvForm
                                         onValidSubmit={(e, v) => {

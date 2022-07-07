@@ -129,11 +129,12 @@ const Modules = (props) => {
                 <Breadcrumbs breadcrumbItem={"Module Page "} />
                 <Container fluid  >
 
-                    <Card className="text-black">
-                        <CardHeader>
-                            <h4 className="card-title text-black ">React Validation - Normal</h4>
+                <Card className="text-black" >
+                        <CardHeader className="card-header   text-black" style={{ backgroundColor: "#dddddd" }} >
+                            <h4 className="card-title text-black">React Validation - Normal</h4>
                             <p className="card-title-desc text-black">Provide valuable, actionable feedback to your users with HTML5 form validation–available in all our supported browsers.</p>
                         </CardHeader>
+
 
                         <CardBody className=" vh-10 0 text-black" style={{ backgroundColor: "#whitesmoke" }} >
                             <AvForm onValidSubmit={(e, v) => { handleValidSubmit(e, v) }}

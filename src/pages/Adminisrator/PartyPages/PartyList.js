@@ -28,7 +28,7 @@ const PartyList = () => {
 
     // get Access redux data
     const { TableListData, editData, updateMessage, deleteMessage } = useSelector((state) => ({
-        TableListData: state.PartyMasterReducer.pages,
+        TableListData: state.PartyMasterReducer.partyList,
         editData: state.PartyMasterReducer.editData,
         updateMessage: state.PartyMasterReducer.updateMessage,
         deleteMessage: state.PartyMasterReducer.deleteMessage,
@@ -185,7 +185,7 @@ const PartyList = () => {
                                         IsButtonVissible={true}
                                         SearchProps={toolkitProps.searchProps}
                                         defaultSorted={defaultSorted}
-                                        breadcrumbCount={TableListData.length}
+                                        breadcrumbCount={`Party Count: ${TableListData.length}`}
                                         RedirctPath={"/PartyMaster"}
                                     />
                                     <Row>
