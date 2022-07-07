@@ -42,24 +42,6 @@ export const getState = () => ({
     payload:State,
   });
 
-   ///Region  dropdown
-export const getRegion = () => ({
-    type: GET_REGION,
-   
-  });
-  export const getRegionSuccess = (Region) => ({
-    type: GET_REGION_SUCCESS,
-    payload:Region,
-  });
-
-  export const getCompany = () => ({
-    type: GET_COMPANY
-   
-  });
-  export const getCompanySuccess = (Company) => ({
-    type: GET_COMPANY_SUCCESS,
-    payload:Company,
-  });
 
   ///post api
   export const postEmployee = (Data,id) => ({

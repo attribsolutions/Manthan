@@ -1,20 +1,18 @@
 import { call, put, takeEvery } from "redux-saga/effects";
 import { detelet_EmployeeID, edit_EmployeeAPI, getComapny_For_Dropdown, getDesignationID_For_Dropdown, getEmployeeType_For_Dropdown, getRegion_For_Dropdown, getState_For_Dropdown, get_EmployeelistApi, post_EmployeeData, update_EmployeeAPI } from "../../../helpers/backend_helper";
 import {
-  GET_DESIGNATIONID, GET_EMPLOYEETYPE, GET_REGION,
-  GET_STATE, POST_EMPLOYEE, GET_COMPANY, GET_EMPLOYEE_LIST, UPDATE_EMPLOYEE_ID,
+  GET_DESIGNATIONID, GET_EMPLOYEETYPE,
+  GET_STATE, POST_EMPLOYEE, GET_EMPLOYEE_LIST, UPDATE_EMPLOYEE_ID,
   DELETE_EMPLOYEE_ID, EDIT_EMPLOYEE_ID,
 } from './actionTypes'
 import {
   getDesignationIDSuccess, getEmployeeTypeESuccess,
-  getStateESuccess, getRegionSuccess, PostEmployeeSuccess,
-  getCompanySuccess, getEmployeelistSuccess,
-  deleteEmployeeIDSuccess, editEmployeeSuccess, updateEmployeeIDSuccess, getEmployeelist
+  getStateESuccess, PostEmployeeSuccess,
+  getEmployeelistSuccess,
+  deleteEmployeeIDSuccess, editEmployeeSuccess, updateEmployeeIDSuccess,
 } from "./action";
 import { SpinnerState } from "../../Utilites/Spinner/actions";
 import { AlertState } from "../../Utilites/CostumeAlert/actions";
-import PageListDropdownData from "../HPagesRedux/PageListData";
-import PageTypeDropdownData from "../HPagesRedux/PageTypeData";
 
 ///  DesignationID dropdown list
 function* DesignationID_saga() {
@@ -46,25 +44,6 @@ function* State_saga() {
   }
 }
 
-// ///Region  dropdown api
-// function* Region_saga() {
-//   try {
-//     const response = yield call(getRegion_For_Dropdown);
-//     yield put(getRegionSuccess(response.Data));
-//   } catch (error) {
-//     console.log("Region_saga page error", error);
-//   }
-// }
-
-///Company  dropdown api
-function* Company_saga() {
-  try {
-    const response = yield call(getComapny_For_Dropdown);
-    yield put(getCompanySuccess(response.Data));
-  } catch (error) {
-    console.log("Employeelist  saga page error", error);
-  }
-}
 
 ///post api
 
@@ -150,8 +129,6 @@ function* M_EmployeeSaga() {
   yield takeEvery(GET_DESIGNATIONID, DesignationID_saga);
   yield takeEvery(GET_EMPLOYEETYPE, EmployeeType_saga);
   yield takeEvery(GET_STATE, State_saga);
-  // yield takeEvery(GET_REGION, Region_saga)
-  yield takeEvery(GET_COMPANY, Company_saga)
   yield takeEvery(GET_EMPLOYEE_LIST, Get_EmployeeList_GenratorFunction)
   yield takeEvery(POST_EMPLOYEE, Submit_Employee_GenratorFunction)
   yield takeEvery(EDIT_EMPLOYEE_ID, Edit_EmployeeID_GenratorFunction)

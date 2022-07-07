@@ -84,7 +84,6 @@ const userRoutes = [
 
 
   // { path: "/AddItemMaster", component: AddItemMaster },
-  { path: "/SearchBox1", component: SearchBox },
   { path: "/SearchBox2", component: SearchBoxSecond },
   { path: "/SearchBox3", component: SerachBox3 },
 

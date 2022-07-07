@@ -1,16 +1,23 @@
 import React, { useState, useEffect, useRef } from "react";
 import Select from "react-select";
-import { Card, CardBody, Col, Container, Row, Label, Button, Input, CardHeader, FormGroup } from "reactstrap";
-import { AvForm, AvGroup, } from "availity-reactstrap-validation";
+import { Card, CardBody, Col, Container, Row, Label, CardHeader, FormGroup } from "reactstrap";
+import { AvForm } from "availity-reactstrap-validation";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  getDesignationID, getEmployeeType, getState, getRegion,
-  postEmployee, getCompany, updateEmployeeID, editEmployeeSuccess, PostEmployeeSuccess
-}
-  from "../../../store/Administrator/M_EmployeeRedux/action";
+  getDesignationID,
+  getEmployeeType,
+  getState,
+  postEmployee,
+  updateEmployeeID,
+  editEmployeeSuccess,
+  PostEmployeeSuccess
+} from "../../../store/Administrator/M_EmployeeRedux/action";
+import { AlertState } from "../../../store/Utilites/CostumeAlert/actions";
+import { fetchCompanyList } from "../../../store/Administrator/CompanyRedux/actions";
+import { getPartyListAPI } from "../../../store/Administrator/PartyRedux/action";
+
 import Breadcrumbs from "../../../components/Common/Breadcrumb";
 import AvField from "availity-reactstrap-validation/lib/AvField";
-import { AlertState } from "../../../store/Utilites/CostumeAlert/actions";
 
 const AddEmployee = (props) => {
 
@@ -33,23 +40,21 @@ const AddEmployee = (props) => {
   const [company_DropdownSelect, setCompany_DropdownSelect] = useState("");
   const [party_DropdownSelect, setParty_DropdownSelect] = useState("");
 
-
-const PartyList=[]
-  const { DesignationID, EmployeeType, State, PartyList1, Company, AddUserMessage } = useSelector((state) => ({
-    DesignationID: state.M_EmployeesReducer.DesignationID,
-    EmployeeType: state.M_EmployeesReducer.EmployeeType,
+  const { designation, employeeType, State, partyList, company, postMessage } = useSelector((state) => ({
+    designation: state.M_EmployeesReducer.designation,
+    employeeType: state.M_EmployeesReducer.employeeType,
     State: state.M_EmployeesReducer.State,
-    PartyList1: state.PartyMasterReducer,
-    Company: state.M_EmployeesReducer.Company,
-    AddUserMessage: state.M_EmployeesReducer.AddUserMessage,
+    partyList: state.PartyMasterReducer.partyList,
+    company: state.Company.companyList,
+    postMessage: state.M_EmployeesReducer.postMessage,
   }));
-console.log(PartyList1)
+
   useEffect(() => {
     dispatch(getDesignationID());
     dispatch(getEmployeeType());
     dispatch(getState());
-    // dispatch(getRegion());
-    dispatch(getCompany());
+    dispatch(getPartyListAPI());
+    dispatch(fetchCompanyList());
   }, [dispatch]);
 
 
@@ -59,6 +64,7 @@ console.log(PartyList1)
     // document.getElementById("txtName").focus();
 
     if (!(editDataGatingFromList === undefined)) {
+
       setEditData(editDataGatingFromList);
       setIsEdit(true);
       setDesignation_DropdownSelect({
@@ -81,34 +87,33 @@ console.log(PartyList1)
         value: editDataGatingFromList.Companies_id,
         label: editDataGatingFromList.CompanyName
       })
-
       dispatch(editEmployeeSuccess({ Status: false }))
       return
     }
   }, [editDataGatingFromList])
 
   useEffect(() => {
-    if ((AddUserMessage.Status === true) && (AddUserMessage.StatusCode === 200)) {
+    if ((postMessage.Status === true) && (postMessage.StatusCode === 200)) {
       dispatch(PostEmployeeSuccess({ Status: false }))
       // formRef.current.reset();
       if (PageMode === true) {
         dispatch(AlertState({
           Type: 1,
           Status: true,
-          Message: AddUserMessage.Message,
+          Message: postMessage.Message,
         }))
       }
       else {
         dispatch(AlertState({
           Type: 1,
           Status: true,
-          Message: AddUserMessage.Message,
+          Message: postMessage.Message,
           RedirectPath: '/employeesList',
           AfterResponseAction: false
         }))
       }
     }
-    else if (AddUserMessage.Status === true) {
+    else if (postMessage.Status === true) {
       dispatch(PostEmployeeSuccess({ Status: false }))
       dispatch(AlertState({
         Type: 4,
@@ -118,31 +123,29 @@ console.log(PartyList1)
         AfterResponseAction: false
       }));
     }
-  }, [AddUserMessage.Status])
+  }, [postMessage])
 
-
-  const Party_DropdownOptions = PartyList.map((data) => ({
+  const Party_DropdownOptions = partyList.map((data) => ({
     value: data.ID,
     label: data.Name
   }));
 
-  const Company_DropdownOptions = Company.map((data) => ({
+  const Company_DropdownOptions = company.map((data) => ({
     value: data.ID,
     label: data.Name
   }));
 
-  const EmployeeType_DropdownOptions = EmployeeType.map((data) => ({
+  const EmployeeType_DropdownOptions = employeeType.map((data) => ({
     value: data.id,
     label: data.Name
   }));
-
 
   const State_DropdownOptions = State.map((data) => ({
     value: data.id,
     label: data.Name
   }));
 
-  const Designation_DropdownOptions = DesignationID.map((data) => ({
+  const Designation_DropdownOptions = designation.map((data) => ({
     value: data.id,
     label: data.Name
   }));
@@ -158,11 +161,9 @@ console.log(PartyList1)
     setState_DropdownSelect(e)
   }
 
-
   function Party_Dropdown_Handler(e) {
     setParty_DropdownSelect(e)
   }
-
 
   function Company_Dropdown_Handler(e) {
     setCompany_DropdownSelect(e)
@@ -174,8 +175,7 @@ console.log(PartyList1)
 
   //'Save' And 'Update' Button Handller
   const handleValidSubmit = (event, values) => {
-    // let DateInput = document.getElementById("dateInput", "").value;
-    // let DateInput1 = document.getElementById("dateInput1").value;
+
     const requestOptions = {
       body: JSON.stringify({
         Name: values.Name,
@@ -188,7 +188,6 @@ console.log(PartyList1)
         working_hours: values.working_hours,
         Designation: designation_DropdownSelect.value,
         EmployeeType: employeeType_DropdownSelect.value,
-        // JoiningDate:values. JoiningDate,
         State: State_DropdownSelect.value,
         // Party: party_DropdownSelect.value,
         Companies: company_DropdownSelect.value,
@@ -200,7 +199,6 @@ console.log(PartyList1)
     }
     else {
       dispatch(postEmployee(requestOptions.body));
-
     }
 
   };
@@ -208,20 +206,17 @@ console.log(PartyList1)
   // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
   var IsEditModeSaSS = ''
   if (IsEdit === true) { IsEditModeSaSS = "-5.5%" };
-  
+
   return (
     <React.Fragment>
       <div className="page-content" style={{ marginTop: IsEditModeSaSS }}>
         <Breadcrumbs breadcrumbItem={"Employee Master "} />
         <Container fluid>
 
-          <Card>
-            <Row>
-              <Col lg={12}>
-                <Card >
+                <Card  className="text-black">
                   <CardHeader>
-                    <h4 className="card-title">React Validation - Normal</h4>
-                    <p className="card-title-desc">Provide valuable, actionable feedback to your users with HTML5 form validation–available in all our supported browsers.</p>
+                    <h4 className="card-title text-black">React Validation - Normal</h4>
+                    <p className="card-title-desc text-black">Provide valuable, actionable feedback to your users with HTML5 form validation–available in all our supported browsers.</p>
                   </CardHeader>
 
                   <CardBody>
@@ -231,9 +226,8 @@ console.log(PartyList1)
                       }}
                       ref={formRef}
                     >
-                      <Row>
-                        <Card style={{ backgroundColor: "whitesmoke" }} >
-
+                        <Card  >
+                        <CardBody style={{ backgroundColor: "whitesmoke" }}>
                           <Row className="mt-2">
 
                             <Col md="3">
@@ -265,7 +259,6 @@ console.log(PartyList1)
                                       pattern: /\S+@\S+\.\S+/
                                     }
                                   }}
-
                                 />
 
                               </FormGroup>
@@ -301,8 +294,7 @@ console.log(PartyList1)
                                     value={EditData.DOB}
                                     validate={{
                                       required: { value: true, errorMessage: '*Birth of Date is Required' },
-                                    }
-                                    }
+                                    }}
                                   />
                                 </div>
                               </FormGroup>
@@ -320,8 +312,7 @@ console.log(PartyList1)
                                     tel: {
                                       pattern: /^[2-9]{1}[0-9]{3}\s[0-9]{4}\s[0-9]{4}$/
                                     }
-                                  }
-                                  }
+                                  }}
                                 />
                               </FormGroup>
                             </Col>
@@ -337,8 +328,7 @@ console.log(PartyList1)
                                     tel: {
                                       pattern: /[A-Z]{5}[0-9]{4}[A-Z]{1}$/
                                     }
-                                  }
-                                  }
+                                  }}
                                 />
                               </FormGroup>
                             </Col>
@@ -369,12 +359,11 @@ console.log(PartyList1)
                               </FormGroup>
                             </Col>
                           </Row>
-
+                          </CardBody>
                         </Card>
-                      </Row>
-
-                      <Row>
-                        <Card style={{ backgroundColor: "whitesmoke" }}>
+           
+                        <Card >
+                        <CardBody style={{ backgroundColor: "whitesmoke" }}>
                           <Row className="mb-2 mt-2">
 
                             <Col md="3">
@@ -392,7 +381,6 @@ console.log(PartyList1)
                               <FormGroup className="mb-2">
                                 <Label htmlFor="validationCustom01">Company Name </Label>
                                 <Select
-
                                   value={company_DropdownSelect}
                                   options={Company_DropdownOptions}
                                   onChange={(e) => { Company_Dropdown_Handler(e) }}
@@ -414,12 +402,11 @@ console.log(PartyList1)
                             </Col>
                           </Row>
 
-
                           <Row>
 
                             <Col md="3">
-                              <FormGroup className="mb-3">
-                                <Label htmlFor="validationCustom01">DesignationID </Label>
+                              <FormGroup className="mb-4">
+                                <Label htmlFor="validationCustom01">Designation</Label>
                                 <Select
                                   value={designation_DropdownSelect}
                                   options={Designation_DropdownOptions}
@@ -427,10 +414,11 @@ console.log(PartyList1)
                                 />
                               </FormGroup>
                             </Col>
+
                             <Col md="1">  </Col>
 
                             <Col md="3">
-                              <FormGroup className="mb-2">
+                              <FormGroup className="mb-3">
                                 <Label htmlFor="validationCustom01">working_hours </Label>
                                 <AvField name="working_hours" value={EditData.working_hours}
                                   type="number"
@@ -439,16 +427,14 @@ console.log(PartyList1)
                                   validate={{
                                     number: true,
                                     required: { value: true, errorMessage: '*WorkingHours is Required' },
-
                                   }}
                                 />
                               </FormGroup>
                             </Col>
-
                           </Row>
 
                           <Row  >
-                            <FormGroup className="mb-3">
+                            <FormGroup >
                               <Col sm={2} >
                                 <div>
                                   {
@@ -472,17 +458,12 @@ console.log(PartyList1)
                               </Col>
                             </FormGroup>
                           </Row>
+                          </CardBody>
                         </Card>
-                      </Row>
-
 
                     </AvForm>
                   </CardBody>
                 </Card>
-
-              </Col>
-            </Row>
-          </Card>
         </Container>
       </div>
     </React.Fragment >

@@ -240,8 +240,6 @@ const PartyMaster = (props) => {
                                             <Card style={{ backgroundColor: "whitesmoke" }} >
 
                                                 <Row className="mt-2">
-
-
                                                     <Col md="3">
                                                         <FormGroup className="mb-3">
                                                             <Label htmlFor="validationCustom01">Name </Label>
@@ -253,7 +251,6 @@ const PartyMaster = (props) => {
                                                                 validate={{
                                                                     required: { value: true, errorMessage: 'Please enter a Name...!' },
                                                                 }} />
-
                                                         </FormGroup>
                                                     </Col>
                                                     <Col md="1">  </Col>
@@ -272,9 +269,7 @@ const PartyMaster = (props) => {
                                                                     }
                                                                 }
                                                                 }
-
                                                             />
-
                                                         </FormGroup>
                                                     </Col>
                                                     <Col md="1">  </Col>
@@ -296,7 +291,6 @@ const PartyMaster = (props) => {
                                                         </FormGroup>
                                                     </Col>
                                                 </Row>
-
                                             </Card>
                                         </Row>
 
@@ -305,8 +299,6 @@ const PartyMaster = (props) => {
                                             <Card style={{ backgroundColor: "whitesmoke" }} >
 
                                                 <Row className="mt-2">
-
-
                                                     <Col md="3">
                                                         <FormGroup className="mb-3">
                                                             <Label htmlFor="validationCustom01"> DivisionType </Label>
@@ -377,7 +369,6 @@ const PartyMaster = (props) => {
                                                                     tel: {
                                                                         pattern: /^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$/,
                                                                         errorMessage: 'Please enter valid GSTIN number.(Ex:22AAAAA0000A1Z5).'
-                                                                        
                                                                     }
                                                                 }}
                                                                 id="validationCustom01"
@@ -406,12 +397,9 @@ const PartyMaster = (props) => {
                                                                     }
                                                                 }}
                                                                 id="FSSAINo"
-
-
                                                             />
                                                         </FormGroup>
                                                     </Col>
-
 
                                                 </Row>
                                                 <Row>
@@ -433,9 +421,7 @@ const PartyMaster = (props) => {
                                                                 onChange={(selectedDates, dateStr, instance) => {
                                                                     setFSSAIExipry_Date_Select(dateStr)
                                                                 }}
-
                                                             />
-
                                                         </FormGroup>
                                                     </Col>
                                                     <Col md="1"></Col>
@@ -573,16 +559,16 @@ const PartyMaster = (props) => {
                                                         </div>
                                                     </Col>
                                                 </Row>
-                                        </Card>
-                                    </Row>
+                                            </Card>
+                                        </Row>
 
-                                </AvForm>
-                            </CardBody>
-                        </Card>
-                    </Col>
-                </Row>
-            </Container>
-        </div>
+                                    </AvForm>
+                                </CardBody>
+                            </Card>
+                        </Col>
+                    </Row>
+                </Container>
+            </div>
         </React.Fragment >
     );
 }
