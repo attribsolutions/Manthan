@@ -31,7 +31,7 @@ const RoleMaster = (props) => {
 
   // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
   useEffect(() => {
-    // document.getElementById("txtName").focus();
+    document.getElementById("txtName").focus();
     if (!(editDataGatingFromList === undefined)) {
       setEditData(editDataGatingFromList);
       setIsEdit(true);
@@ -92,7 +92,7 @@ const RoleMaster = (props) => {
     }
     else {
       dispatch(postRole(requestOptions.body));
-      
+
     }
   };
 
@@ -106,10 +106,10 @@ const RoleMaster = (props) => {
         <Breadcrumbs breadcrumbItem={"Role Master "} />
         <Container fluid>
 
-          <Card>
-            <CardHeader className="card-header   text-dark" style={{ backgroundColor: "#dddddd" }}>
-              <h4 className="  text-black" >React Validation - Normal</h4>
-              <p className=" text-black">Provide valuable, actionable feedback to your users with HTML5 form validation–available in all our supported browsers.</p>
+          <Card >
+            <CardHeader className="card-header   text-dark" style={{ backgroundColor: "#dddddd" }} >
+              <h4 className="card-title text-black">React Validation - Normal</h4>
+              <p className="card-title-desc text-black">Provide valuable, actionable feedback to your users with HTML5 form validation–available in all our supported browsers.</p>
             </CardHeader>
             <CardBody className=" vh-10 0 text-black" style={{ backgroundColor: "#whitesmoke" }} >
               <AvForm onValidSubmit={(e, v) => { handleValidUpdate(e, v) }}
@@ -165,16 +165,22 @@ const RoleMaster = (props) => {
                           <Row className="justify-content-md-left">
                             <Label htmlFor="horizontal-firstname-input" className="col-sm-2 col-form-label" >IsActive </Label>
                             <Col md={2} style={{ marginTop: '9px' }} >
-                              <AvInput
+                              {/* <AvInput
                                 checked={(EditData.ID === 0) ? false : EditData.IsActive}
                                 name="IsActive"
                                 type="checkbox"
                                 id="switch1"
                                 switch="none"
                                 defaultChecked />
-                              <Label className="me-1" htmlFor="switch1" data-on-label="Yes" data-off-label="No"></Label>
+                              <Label className="me-1" htmlFor="switch1" data-on-label="Yes" data-off-label="No"></Label> */}
 
-
+                              <div className="form-check form-switch form-switch-md mb-3" dir="ltr">
+                                <input type="checkbox" className="form-check-input" id="customSwitchsizemd"
+                                  checked={(EditData.ID === 0) ? false : EditData.IsActive}
+                                  name="IsActive"
+                                />
+                                <label className="form-check-label" htmlFor="customSwitchsizemd"></label>
+                              </div>
                             </Col>
                           </Row>
                         </FormGroup>
@@ -188,14 +194,14 @@ const RoleMaster = (props) => {
                                   IsEdit ? (
                                     <button
                                       type="submit"
-                                      data-mdb-toggle="tooltip" data-mdb-placement="top" title="Update Module"
+                                      data-mdb-toggle="tooltip" data-mdb-placement="top" title="Update Role"
                                       className="btn btn-success w-md"
                                     >
                                       <i class="fas fa-edit me-2"></i>Update
                                     </button>) : (
                                     <button
                                       type="submit"
-                                      data-mdb-toggle="tooltip" data-mdb-placement="top" title="Save Page"
+                                      data-mdb-toggle="tooltip" data-mdb-placement="top" title="Save Role"
                                       className="btn btn-primary w-md"
                                     > <i className="fas fa-save me-2"></i> Save
                                     </button>
