@@ -19,6 +19,7 @@ import { getDistrictOnState, getPartyListAPI } from "../../../store/Administrato
 import Breadcrumbs from "../../../components/Common/Breadcrumb";
 import AvField from "availity-reactstrap-validation/lib/AvField";
 import Flatpickr from "react-flatpickr"
+import { BreadcrumbShow } from "../../../store/Utilites/Breadcrumb/actions";
 
 
 const AddEmployee = (props) => {
@@ -261,6 +262,7 @@ const AddEmployee = (props) => {
                             validate={{
                               required: { value: true, errorMessage: 'Please enter your Name...!' },
                             }}
+                          onChange={(e) => { dispatch(BreadcrumbShow(e.target.value)) }}
                           />
                         </FormGroup>
                       </Col>
