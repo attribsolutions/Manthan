@@ -265,18 +265,18 @@ const ItemsMaster = (props) => {
                                       switch="none"
                                       defaultChecked />
                                     <Label className="me-1" htmlFor="switch1" data-on-label="Yes" data-off-label="No"></Label> */}
-                                   <div className="form-check form-switch form-switch-md mb-3" dir="ltr">
-                                            <input type="checkbox" className="form-check-input" id="customSwitchsizemd"
-                                             checked={(EditData.ID === 0) ? false : EditData.IsActive}
-                                             name="IsActive"
-                                            />
-                                            <label className="form-check-label" htmlFor="customSwitchsizemd"></label>
-                                        </div>
+                                    <div className="form-check form-switch form-switch-md mb-3" dir="ltr">
+                                      <input type="checkbox" className="form-check-input" id="customSwitchsizemd"
+                                        checked={(EditData.ID === 0) ? false : EditData.IsActive}
+                                        name="IsActive"
+                                      />
+                                      <label className="form-check-label" htmlFor="customSwitchsizemd"></label>
+                                    </div>
 
                                   </Col>
                                 </Row>
                               </FormGroup>
-                             
+
                             </Row>
                             <Row  >
                               <Col sm={2} >
