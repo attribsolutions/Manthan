@@ -207,7 +207,7 @@ const AddUser = (props) => {
                 <Card className=" text-black">
                   <CardBody style={{ backgroundColor: "whitesmoke" }}>
                     <Row>
-                      <FormGroup className="mb-2 col col-sm-4 " >
+                      <FormGroup className="mb-1 col col-sm-4 " >
                         <Label htmlFor="validationCustom01">Employee </Label>
                         <Select
                           value={EmployeeSelect}
@@ -228,7 +228,7 @@ const AddUser = (props) => {
                       </FormGroup>
                     </Row>
                     <Row>
-                      <FormGroup className="mb-0 mt-0 col col-sm-5">
+                      <FormGroup className=" col col-sm-5">
                       <Row className="justify-content-md-left">
                         <Label htmlFor="horizontal-firstname-input" className="col-sm-5 col-form-label mt-4 " >Enable Mobile Login </Label>
                           <Col md={2} style={{ marginTop: '30px' }} >
