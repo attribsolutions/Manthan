@@ -129,7 +129,7 @@ const Modules = (props) => {
                 <Breadcrumbs breadcrumbItem={"Module Page "} />
                 <Container fluid  >
 
-                <Card className="text-black" >
+                    <Card className="text-black" >
                         <CardHeader className="card-header   text-black" style={{ backgroundColor: "#dddddd" }} >
                             <h4 className="card-title text-black">React Validation - Normal</h4>
                             <p className="card-title-desc text-black">Provide valuable, actionable feedback to your users with HTML5 form validation–available in all our supported browsers.</p>
@@ -160,9 +160,7 @@ const Modules = (props) => {
                                                             }}
                                                         />
                                                     </FormGroup>
-
                                                 </Row>
-
 
                                                 <Row>
                                                     <FormGroup className="mb-2 col col-sm-4 " >
@@ -195,21 +193,10 @@ const Modules = (props) => {
                                                     </FormGroup>
                                                 </Row>
 
-
-
-
                                                 <FormGroup className="mb-2 col col-sm-5">
                                                     <Row className="justify-content-md-left">
                                                         <Label htmlFor="horizontal-firstname-input" className="col-sm-2 col-form-label" >IsActive </Label>
                                                         <Col md={2} style={{ marginTop: '9px' }} >
-                                                            {/* <AvInput
-                                                                checked={(EditData.ID === 0) ? false : EditData.IsActive}
-                                                                name="IsActive"
-                                                                type="checkbox"
-                                                                id="switch1"
-                                                                switch="none"
-                                                                defaultChecked /> */}
-                                                            {/* <Label className="me-1" htmlFor="switch1" data-on-label="Yes" data-off-label="No"></Label> */}
                                                             <div className="form-check form-switch form-switch-md mb-3" dir="ltr">
                                                                 <AvInput type="checkbox" className="form-check-input" id="customSwitchsizemd"
                                                                     checked={EditData.isActive}
@@ -218,19 +205,12 @@ const Modules = (props) => {
                                                                 />
                                                                 <label className="form-check-label" htmlFor="customSwitchsizemd"></label>
                                                             </div>
-
-
                                                         </Col>
-
                                                     </Row>
-
                                                 </FormGroup>
-
-
 
                                                 <FormGroup >
                                                     <Row >
-
                                                         <Col sm={2}>
                                                             <div>
                                                                 {
@@ -252,17 +232,12 @@ const Modules = (props) => {
                                                                 }
                                                             </div>
                                                         </Col>
-
                                                     </Row>
                                                 </FormGroup >
                                             </CardBody>
                                         </Card>
                                     </Col>
                                 </Row>
-
-
-
-
                             </AvForm>
                         </CardBody>
                     </Card>
