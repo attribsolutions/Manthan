@@ -101,12 +101,13 @@ const Modules = (props) => {
             body: JSON.stringify({
                 Name: values.Name,
                 DisplayIndex: values.DisplayIndex,
-                IsActive: values.IsActive,
+                isActive: values.IsActive,
                 Icon: values.Icon,
                 CreatedBy: 9,
                 UpdatedBy: 9
             }),
         };
+        debugger
         if (IsEdit) {
             dispatch(updateModuleID(requestOptions.body, EditData.id));
         }
@@ -121,17 +122,17 @@ const Modules = (props) => {
 
     return (
         <React.Fragment>
-            <div className="page-content"   style={{ marginTop: IsEditMode_Css }}>
+            <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
                 <MetaTags>
                     <title>Modules| FoodERP-React FrontEnd</title>
                 </MetaTags>
-                <Breadcrumbs  breadcrumbItem={"Module Page "} />
+                <Breadcrumbs breadcrumbItem={"Module Page "} />
                 <Container fluid  >
 
-                    <Card>
-                        <CardHeader className="card-header   text-dark" style={{ backgroundColor: "#dddddd" }}>
-                            <h4 className="  text-black" >React Validation - Normal</h4>
-                            <p className=" text-black">Provide valuable, actionable feedback to your users with HTML5 form validation–available in all our supported browsers.</p>
+                    <Card className="text-black">
+                        <CardHeader>
+                            <h4 className="card-title text-black ">React Validation - Normal</h4>
+                            <p className="card-title-desc text-black">Provide valuable, actionable feedback to your users with HTML5 form validation–available in all our supported browsers.</p>
                         </CardHeader>
 
                         <CardBody className=" vh-10 0 text-black" style={{ backgroundColor: "#whitesmoke" }} >
@@ -161,13 +162,13 @@ const Modules = (props) => {
 
                                                 </Row>
 
-                                               
+
                                                 <Row>
                                                     <FormGroup className="mb-2 col col-sm-4 " >
                                                         <Label htmlFor="validationCustom01">DisplayIndex </Label>
                                                         <AvField name="DisplayIndex" autoComplete='off'
                                                             placeholder="Please Enter DisplayIndex"
-                                                            value={EditData.DisplayIndex} type="number"
+                                                            value={EditData.DisplayIndex} type="text"
                                                             validate={{
                                                                 number: true,
                                                                 required: { value: true, errorMessage: 'Display Index is Required' },
@@ -193,22 +194,29 @@ const Modules = (props) => {
                                                     </FormGroup>
                                                 </Row>
 
-                                              
+
 
 
                                                 <FormGroup className="mb-2 col col-sm-5">
                                                     <Row className="justify-content-md-left">
                                                         <Label htmlFor="horizontal-firstname-input" className="col-sm-2 col-form-label" >IsActive </Label>
                                                         <Col md={2} style={{ marginTop: '9px' }} >
-                                                            <AvInput
+                                                            {/* <AvInput
                                                                 checked={(EditData.ID === 0) ? false : EditData.IsActive}
                                                                 name="IsActive"
                                                                 type="checkbox"
                                                                 id="switch1"
                                                                 switch="none"
-                                                                defaultChecked />
-                                                            <Label className="me-1" htmlFor="switch1" data-on-label="Yes" data-off-label="No"></Label>
-
+                                                                defaultChecked /> */}
+                                                            {/* <Label className="me-1" htmlFor="switch1" data-on-label="Yes" data-off-label="No"></Label> */}
+                                                            <div className="form-check form-switch form-switch-md mb-3" dir="ltr">
+                                                                <AvInput type="checkbox" className="form-check-input" id="customSwitchsizemd"
+                                                                    checked={EditData.isActive}
+                                                                    name="IsActive"
+                                                                    defaultChecked
+                                                                />
+                                                                <label className="form-check-label" htmlFor="customSwitchsizemd"></label>
+                                                            </div>
 
 
                                                         </Col>
@@ -218,7 +226,7 @@ const Modules = (props) => {
                                                 </FormGroup>
 
 
-                                               
+
                                                 <FormGroup >
                                                     <Row >
 
@@ -235,7 +243,7 @@ const Modules = (props) => {
                                                                         </button>) : (
                                                                         <button
                                                                             type="submit"
-                                                                            data-mdb-toggle="tooltip" data-mdb-placement="top" title="Save Page"
+                                                                            data-mdb-toggle="tooltip" data-mdb-placement="top" title="Save Module"
                                                                             className="btn btn-primary w-md"
                                                                         > <i className="fas fa-save me-2"></i> Save
                                                                         </button>
@@ -253,7 +261,7 @@ const Modules = (props) => {
 
 
 
-                                
+
                             </AvForm>
                         </CardBody>
                     </Card>
