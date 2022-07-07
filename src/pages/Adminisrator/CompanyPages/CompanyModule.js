@@ -103,7 +103,7 @@ const CompanyModule = (props) => {
   }));
 
   const CompanyGroupValues = CompanyGroup.map((Data) => ({
-    value: Data.ID,
+    value: Data.id,
     label: Data.Name
   }));
 
@@ -246,7 +246,7 @@ const CompanyModule = (props) => {
 
                             <Row>
                               <FormGroup className="mb-4 col col-sm-4 " >
-                                <Label htmlFor="validationCustom01">CompanyGroup </Label>
+                                <Label htmlFor="validationCustom21">CompanyGroup </Label>
                                 <Select
                                   value={CompanyGroupselect}
                                   options={CompanyGroupValues}
