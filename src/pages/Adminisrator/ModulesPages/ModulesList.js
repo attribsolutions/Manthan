@@ -19,7 +19,7 @@ import {
 } from "../../../store/actions";
 import { AlertState } from "../../../store/Utilites/CostumeAlert/actions";
 import Modules from "./Modules";
-import PartyUIDemo from "../PartiesPages/PartyUIDemo";
+import PartyUIDemo from "../PartyPages/PartyUIDemo";
 
 const ModulesList = () => {
     const dispatch = useDispatch();
