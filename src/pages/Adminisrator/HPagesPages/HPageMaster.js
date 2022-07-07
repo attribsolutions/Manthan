@@ -348,8 +348,6 @@ const HPageMaster = (props) => {
                                                 </FormGroup>
                                             </Col>
                                         </Row>
-
-
                                     </Card>
                                 </Row>
 
@@ -456,17 +454,6 @@ const HPageMaster = (props) => {
                                                             <label className="form-check-label" htmlFor="customSwitchsizemd"></label>
                                                         </div>
                                                     </Col>
-                                                    {/* <Label htmlFor="horizontal-firstname-input" className="col-sm-2 col-form-label" >Active </Label>
-                                                    <Col md={2} style={{ marginTop: '9px' }} >
-
-                                                        <div className="form-check form-switch form-switch-md mb-3" dir="ltr">
-                                                            <input type="checkbox" className="form-check-input" id="customSwitchsizemd"
-                                                                checked={(EditData.ID === 0) ? false : EditData.isActive}
-                                                                name="isActive"
-                                                            />
-                                                            <label className="form-check-label" htmlFor="customSwitchsizemd"></label>
-                                                        </div>
-                                                    </Col> */}
                                                     <Col md="3">  </Col>
                                                     <Label htmlFor="horizontal-firstname-input" className="col-sm-2 col-form-label" >Active </Label>
                                                     <Col md={2} style={{ marginTop: '9px' }} >
@@ -507,17 +494,11 @@ const HPageMaster = (props) => {
                                         </Row>
                                     </Card>
                                 </Row>
-
-
-
                             </AvForm>
                             <div>
                             </div>
                         </CardBody>
                     </Card>
-
-
-
                 </Container>
             </div>
         </React.Fragment >
