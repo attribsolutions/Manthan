@@ -185,9 +185,8 @@ export default function HPageList() {
                                         breadcrumbItem={"Pages List"}
                                         IsButtonVissible={true}
                                         SearchProps={toolkitProps.searchProps}
-                                        // breadcrumbCount={HPageListData.length}
-                                        breadcrumbCount={"abcdefghijklmnopqrstuvwxy"}
-                                        RedirctPath={"/pagesMaster"}
+                                        breadcrumbCount={`Pages Count: ${HPageListData.length}`}
+                                        RedirctPath={"/pageMaster"}
                                     />
                                     <Row>
                                         <Col xl="12">

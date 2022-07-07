@@ -196,7 +196,7 @@ const UserList = () => {
                                         breadcrumbItem={"User Registration List"}
                                         IsButtonVissible={true}
                                         a={toolkitProps.searchProps}
-                                        breadcrumbCount={pages.length}
+                                        breadcrumbCount={`Users Count: ${pages.length}`}
                                         RedirctPath={"/userMaster"}
                                     />
                                     <Row>

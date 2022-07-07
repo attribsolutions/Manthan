@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { AlertState } from "../../../store/Utilites/CostumeAlert/actions";
 import { editItemSuccess, getItemGroup_ForDropDown, postItemData, PostItemDataSuccess, updateItemID } from "../../../store/Administrator/ItemsRedux/action";
 import Select from "react-select";
+import { BreadcrumbShow } from "../../../store/Utilites/Breadcrumb/actions";
 
 const ItemsMaster = (props) => {
 
@@ -119,21 +120,19 @@ const ItemsMaster = (props) => {
 
   // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
   var IsEditMode_Css = ''
-  if (IsEdit === true) { IsEditMode_Css = "-3.5%" };
+  if (IsEdit === true) { IsEditMode_Css = "-5.5%" };
 
   return (
     <React.Fragment>
       <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
         <Breadcrumbs breadcrumbItem={"Item Master "} />
         <Container fluid>
-          <Row>
-            <Col lg={12}>
-              <Card className=" text-black">
-                <CardHeader className="card-header   text-dark" style={{ backgroundColor: "#dddddd" }}>
-                  <h4 className="  text-black" >React Validation - Normal</h4>
-                  <p className=" text-black">Provide valuable, actionable feedback to your users with HTML5 form validation–available in all our supported browsers.</p>
-                </CardHeader>
-                <CardBody>
+              <Card >
+              <CardHeader className="card-header   text-black" style={{ backgroundColor: "#dddddd" }} >
+              <h4 className="card-title text-black">React Validation - Normal</h4>
+              <p className="card-title-desc text-black">Provide valuable, actionable feedback to your users with HTML5 form validation–available in all our supported browsers.</p>
+            </CardHeader>
+                <CardBody className=" vh-10 0 text-black" style={{ backgroundColor: "#whitesmoke" }} >
                   <AvForm
                     onValidSubmit={(e, v) => {
                       handleValidUpdate(e, v);
@@ -156,6 +155,7 @@ const ItemsMaster = (props) => {
                                   validate={{
                                     required: { value: true, errorMessage: 'Please enter a Name...!' },
                                   }}
+                                  onChange={(e) => { dispatch(BreadcrumbShow(e.target.value)) }}
                                 />
                               </FormGroup>
                               <Col md="1">  </Col>
@@ -253,7 +253,7 @@ const ItemsMaster = (props) => {
                               </FormGroup>
 
                               <Col md="1">  </Col>
-                              <FormGroup className="mb-2 col col-sm-5">
+                              <FormGroup className="mb-2 col col-sm-6">
                                 <Row className="justify-content-md-left">
                                   <Label htmlFor="horizontal-firstname-input" className="col-sm-2 col-form-label mt-4" >IsActive </Label>
                                   <Col md={2} style={{ marginTop: '30px' }} >
@@ -265,18 +265,18 @@ const ItemsMaster = (props) => {
                                       switch="none"
                                       defaultChecked />
                                     <Label className="me-1" htmlFor="switch1" data-on-label="Yes" data-off-label="No"></Label> */}
-                                   <div className="form-check form-switch form-switch-md mb-3" dir="ltr">
-                                            <input type="checkbox" className="form-check-input" id="customSwitchsizemd"
-                                             checked={(EditData.ID === 0) ? false : EditData.IsActive}
-                                             name="IsActive"
-                                            />
-                                            <label className="form-check-label" htmlFor="customSwitchsizemd"></label>
-                                        </div>
+                                    <div className="form-check form-switch form-switch-md mb-3" dir="ltr">
+                                      <input type="checkbox" className="form-check-input" id="customSwitchsizemd"
+                                        checked={(EditData.ID === 0) ? false : EditData.IsActive}
+                                        name="IsActive"
+                                      />
+                                      <label className="form-check-label" htmlFor="customSwitchsizemd"></label>
+                                    </div>
 
                                   </Col>
                                 </Row>
                               </FormGroup>
-                             
+
                             </Row>
                             <Row  >
                               <Col sm={2} >
@@ -305,12 +305,9 @@ const ItemsMaster = (props) => {
                         </Card>
                       </Col>
                     </Row>
-
                   </AvForm>
                 </CardBody>
               </Card>
-            </Col>
-          </Row>
         </Container>
       </div >
     </React.Fragment >

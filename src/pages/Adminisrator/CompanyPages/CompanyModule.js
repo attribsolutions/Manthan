@@ -27,6 +27,7 @@ import {
 import { MetaTags } from "react-meta-tags";
 import Breadcrumbs from "../../../components/Common/Breadcrumb";
 import { AlertState } from "../../../store/Utilites/CostumeAlert/actions";
+import { BreadcrumbShow } from "../../../store/Utilites/Breadcrumb/actions";
 
 const CompanyModule = (props) => {
 
@@ -103,7 +104,7 @@ const CompanyModule = (props) => {
   }));
 
   const CompanyGroupValues = CompanyGroup.map((Data) => ({
-    value: Data.ID,
+    value: Data.id,
     label: Data.Name
   }));
 
@@ -147,18 +148,16 @@ const CompanyModule = (props) => {
         <Container fluid>
           <Row>
             <Col lg={12}>
-              <Card>
-                <CardHeader className="card-header   text-dark" style={{ backgroundColor: "#dddddd" }}>
-                  <h4 className="  text-black" >React Validation - Normal</h4>
-                  <p className=" text-black">Provide valuable, actionable feedback to your users with HTML5 form validation–available in all our supported browsers.</p>
-                </CardHeader>
+            <Card className="text-black" >
+                        <CardHeader className="card-header   text-black" style={{ backgroundColor: "#dddddd" }} >
+                            <h4 className="card-title text-black">React Validation - Normal</h4>
+                            <p className="card-title-desc text-black">Provide valuable, actionable feedback to your users with HTML5 form validation–available in all our supported browsers.</p>
+                        </CardHeader>
+
                 <CardBody>
                   <AvForm onValidSubmit={(e, v) => { handleValidSubmit(e, v) }}
                     ref={formRef}
                   >
-
-                    <Row>
-                      <Col md={12}  >
                         <Card >
                           <CardBody style={{ backgroundColor: "whitesmoke" }}>
                             <Row>
@@ -170,6 +169,7 @@ const CompanyModule = (props) => {
                                   validate={{
                                     required: { value: true, errorMessage: 'Please Enter a Name' },
                                   }}
+                                  onChange={(e)=>{ dispatch(BreadcrumbShow(e.target.value))}}
                                 />
                               </FormGroup>
                               <Col md="1">  </Col>
@@ -213,13 +213,8 @@ const CompanyModule = (props) => {
                             </Row>
                           </CardBody>
                         </Card>
-                      </Col>
-                    </Row>
-
-
-                    <Row>
-                      <Col md={12}  >
-                        <Card >
+                  
+                        <Card  className="mt-n2">
                           <CardBody style={{ backgroundColor: "whitesmoke" }}>
 
                             <Row>
@@ -250,8 +245,8 @@ const CompanyModule = (props) => {
                             </Row>
 
                             <Row>
-                              <FormGroup className="mb-2 col col-sm-4 " >
-                                <Label htmlFor="validationCustom01">CompanyGroup </Label>
+                              <FormGroup className="mb-4 col col-sm-4 " >
+                                <Label htmlFor="validationCustom21">CompanyGroup </Label>
                                 <Select
                                   value={CompanyGroupselect}
                                   options={CompanyGroupValues}
@@ -287,8 +282,7 @@ const CompanyModule = (props) => {
                             
                           </CardBody>
                         </Card>
-                      </Col>
-                    </Row>
+                      
 
 
                   </AvForm>

@@ -18,8 +18,8 @@ import SubModules from "../pages/Adminisrator/SubModulePages/SubModules";
 import SubModulesList from "../pages/Adminisrator/SubModulePages/SubModulesList";
 import HPageList from "../pages/Adminisrator/HPagesPages/HPageList";
 import HPageMaster from "../pages/Adminisrator/HPagesPages/HPageMaster";
-import OrderPage from "../pages/Purchase/Orders/OrderPage";
-import OrderList from "../pages/Purchase/Orders/OrderList"
+import OrderPage from "../pages/Order/OrderPage";
+import OrderList from "../pages/Order/OrderList"
 import AddUser from "../pages/Adminisrator/UserRegistrationPages/AddUser";
 import UserList from "../pages/Adminisrator/UserRegistrationPages/UserList";
 import AddEmployee from "../pages/Adminisrator/EmployeePages/AddEmployee";
@@ -30,14 +30,16 @@ import Error404 from "../pages/Utility/Error404";
 import Error500 from "../pages/Utility/Error500";
 import ItemsList from "../pages/Adminisrator/Items/ItemsList";
 import ItemsMaster from "../pages/Adminisrator/Items/ItemsMaster";
-import SearchBox from "../pages/Purchase/Orders/SearchBox/SearchBox";
-import SearchBoxSecond from "../pages/Purchase/Orders/SearchBox/SearchBoxSecond";
-import SerachBox3 from "../pages/Purchase/Orders/SearchBox/SerachBox3";
-import PartyList from "../pages/Adminisrator/PartiesPages/PartyList";
-import PartyMaster from "../pages/Adminisrator/PartiesPages/PartyMaster";
-import PartyUIDemo from "../pages/Adminisrator/PartiesPages/PartyUIDemo";
-import DemoUi2 from "../pages/Adminisrator/PartiesPages/DemoUI2";
-import DemoUI3 from "../pages/Adminisrator/PartiesPages/DemoUI3";
+import SearchBox from "../pages/Adminisrator/SearchBox/SearchBox";
+import SearchBoxSecond from "../pages/Adminisrator/SearchBox/SearchBoxSecond";
+import SerachBox3 from "../pages/Adminisrator/SearchBox/SerachBox3";
+import PartyList from "../pages/Adminisrator/PartyPages/PartyList";
+import PartyMaster from "../pages/Adminisrator/PartyPages/PartyMaster";
+import DemoUI3 from "../pages/Adminisrator/PartyPages/DemoUI3";
+import DemoUI2 from "../pages/Adminisrator/PartyPages/DemoUI2";
+import PartyUIDemo from "../pages/Adminisrator/PartyPages/PartyUIDemo";
+
+
 // import AddItemMaster from "../pages/Adminisrator/MasterPages/AddItemMaster";
 
 const userRoutes = [
@@ -78,11 +80,10 @@ const userRoutes = [
   { path: "/partyMaster", component: PartyMaster },
   { path:"/partyUIDemo",component:PartyUIDemo},
   { path:"/demoUi3",component:DemoUI3},
-  { path:"/demoUi2",component:DemoUi2},
+  { path:"/demoUi2",component:DemoUI2},
 
 
   // { path: "/AddItemMaster", component: AddItemMaster },
-  { path: "/SearchBox1", component: SearchBox },
   { path: "/SearchBox2", component: SearchBoxSecond },
   { path: "/SearchBox3", component: SerachBox3 },
 

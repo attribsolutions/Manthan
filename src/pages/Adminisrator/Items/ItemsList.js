@@ -130,7 +130,7 @@ const ItemsList = () => {
                     <div className="d-flex gap-3" style={{ display: 'flex', justifyContent: 'center' }} >
                         <buton
                             type="button"
-                            data-mdb-toggle="tooltip" data-mdb-placement="top" title="Edit Modules ID"
+                            data-mdb-toggle="tooltip" data-mdb-placement="top" title="Edit Item"
                             onClick={() => {
                                 EditPageHandler(Item.id);
                             }}
@@ -140,7 +140,7 @@ const ItemsList = () => {
                         </buton>
                         <buton
                             className="badge badge-soft-danger font-size-12"
-                            data-mdb-toggle="tooltip" data-mdb-placement="top" title="Delete Modules ID"
+                            data-mdb-toggle="tooltip" data-mdb-placement="top" title="Delete Item"
                             onClick={() => {
                                 deleteHandeler(Item.id, Item.Name);
                             }}
@@ -170,10 +170,10 @@ const ItemsList = () => {
                                 <React.Fragment>
                                     <Breadcrumbs
                                         title={"Count :"}
-                                        breadcrumbItem={"Item Master"}
+                                        breadcrumbItem={"Item List"}
                                         IsButtonVissible={true}
                                         SearchProps={toolkitProps.searchProps}
-                                        breadcrumbCount={`${pages.length}`}
+                                        breadcrumbCount={`Items Count: ${pages.length}`}
                                         RedirctPath={"/itemMaster"}
                                     />
                                     <Row>

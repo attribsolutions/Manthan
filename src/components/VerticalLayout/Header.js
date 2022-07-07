@@ -40,8 +40,7 @@ import {
   changelayoutMode
 } from "../../store/actions"
 import { CustomSearchInput } from '../../store/Utilites/CustomSearchRedux/actions';
-import SearchBox from '../../pages/Purchase/Orders/SearchBox/SearchBox';
-import SearchBoxSecond from '../../pages/Purchase/Orders/SearchBox/SearchBoxSecond';
+import SearchBoxSecond from '../../pages/Adminisrator/SearchBox/SearchBoxSecond';
 
 const Header = props => {
   const dispatch = useDispatch();

@@ -5,16 +5,13 @@ import {
     GET_DIVISION_TYPES_ID_SUCCESS,
     GET_PARTTYPE_BY_DIVISIONTYPES_ID_SUCCESS,
     GET_PARTY_LIST_API_SUCCESS,
-    POST_PARTY_DATA,
     POST_PARTY_DATA_SUCCESS,
     UPDATE_PARTY_ID_SUCCESS
 } from "./actionTypes";
 
 const INIT_STATE = {
-    pages: [],
+    partyList: [],
     PartySaveSuccess: { Status: false },
-    PostPage: { Status: false },
-    deleteRoleID: [],
     deleteMessage: { Status: false },
     editData: { Status: false },
     updateMessage: { Status: false },
@@ -29,15 +26,11 @@ const PartyMasterReducer = (state = INIT_STATE, action) => {
         case GET_PARTY_LIST_API_SUCCESS:
             return {
                 ...state,
-                pages: action.payload,
+                partyList: action.payload,
             }
 
         // post api
-        case POST_PARTY_DATA:
-            return {
-                ...state,
-                PostPage: action.Data,
-            };
+     
         case POST_PARTY_DATA_SUCCESS:
             return {
                 ...state,

@@ -12,6 +12,7 @@ import {
 import { getState } from "../../../store/Administrator/M_EmployeeRedux/action";
 import Flatpickr from "react-flatpickr"
 import { fetchCompanyList } from "../../../store/Administrator/CompanyRedux/actions";
+import { BreadcrumbShow } from "../../../store/Utilites/Breadcrumb/actions";
 const PartyMaster = (props) => {
 
     const formRef = useRef(null);
@@ -53,6 +54,41 @@ const PartyMaster = (props) => {
         dispatch(GetPartyTypeByDivisionTypeID());
     }, [dispatch]);
 
+
+    // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
+    useEffect(() => {
+        document.getElementById("txtName").focus();
+        if (!(editDataGatingFromList === undefined)) {
+
+            setEditData(editDataGatingFromList);
+            setIsEdit(true);
+            setFSSAIExipry_Date_Select(editDataGatingFromList.FSSAIExipry)
+
+            setDistrict_dropdown_Select({
+                value: editDataGatingFromList.District,
+                label: editDataGatingFromList.DistrictName
+            })
+            // setCompanyList_dropdown_Select({
+            //     value: editDataGatingFromList.Company,
+            //     label: editDataGatingFromList.CompanyNa
+            // })
+            setDivision_dropdown_Select({
+                value: editDataGatingFromList.DividionTypeID,
+                label: editDataGatingFromList.DivisionType
+            })
+            setPartyType_dropdown_Select({
+                value: editDataGatingFromList.PartyTypeID,
+                label: editDataGatingFromList.PartyType
+            })
+            setState_DropDown_select({
+                value: editDataGatingFromList.State,
+                label: editDataGatingFromList.StateName
+            })
+
+            dispatch(editPartyIDSuccess({ Status: false }))
+            return
+        }
+    }, [editDataGatingFromList])
 
     const StateValues = State.map((Data) => ({
         value: Data.id,
@@ -105,40 +141,6 @@ const PartyMaster = (props) => {
 
     }
 
-    // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
-    useEffect(() => {
-        document.getElementById("txtName").focus();
-        if (!(editDataGatingFromList === undefined)) {
-
-            setEditData(editDataGatingFromList);
-            setIsEdit(true);
-            setFSSAIExipry_Date_Select(editDataGatingFromList.FSSAIExipry)
-
-            setDistrict_dropdown_Select({
-                value: editDataGatingFromList.District,
-                label: editDataGatingFromList.DistrictName
-            })
-            // setCompanyList_dropdown_Select({
-            //     value: editDataGatingFromList.Company,
-            //     label: editDataGatingFromList.CompanyNa
-            // })
-            setDivision_dropdown_Select({
-                value: editDataGatingFromList.DividionTypeID,
-                label: editDataGatingFromList.DivisionType
-            })
-            setPartyType_dropdown_Select({
-                value: editDataGatingFromList.PartyTypeID,
-                label: editDataGatingFromList.PartyType
-            })
-            setState_DropDown_select({
-                value: editDataGatingFromList.State,
-                label: editDataGatingFromList.StateName
-            })
-
-            dispatch(editPartyIDSuccess({ Status: false }))
-            return
-        }
-    }, [editDataGatingFromList])
 
     useEffect(() => {
         if ((PartySaveSuccess.Status === true) && (PartySaveSuccess.StatusCode === 200)) {
@@ -222,11 +224,12 @@ const PartyMaster = (props) => {
                 <Container fluid>
                     <Row>
                         <Col lg={12}>
-                            <Card >
-                                <CardHeader>
+                            <Card className="text-black" >
+                                <CardHeader className="card-header   text-black" style={{ backgroundColor: "#dddddd" }} >
                                     <h4 className="card-title text-black">React Validation - Normal</h4>
-                                    <p className="card-title-desc  text-black">Provide valuable, actionable feedback to your users with HTML5 form validation–available in all our supported browsers.</p>
+                                    <p className="card-title-desc text-black">Provide valuable, actionable feedback to your users with HTML5 form validation–available in all our supported browsers.</p>
                                 </CardHeader>
+
                                 <CardBody>
                                     <AvForm
                                         onValidSubmit={(e, v) => {
@@ -234,14 +237,10 @@ const PartyMaster = (props) => {
                                         }}
                                         ref={formRef}
                                     >
-
-
                                         <Row>
                                             <Card style={{ backgroundColor: "whitesmoke" }} >
 
                                                 <Row className="mt-2">
-
-
                                                     <Col md="3">
                                                         <FormGroup className="mb-3">
                                                             <Label htmlFor="validationCustom01">Name </Label>
@@ -252,8 +251,9 @@ const PartyMaster = (props) => {
                                                                 // autoComplete='off'
                                                                 validate={{
                                                                     required: { value: true, errorMessage: 'Please enter a Name...!' },
-                                                                }} />
-
+                                                                }}
+                                                                onChange={(e) => { dispatch(BreadcrumbShow(e.target.value)) }}
+                                                            />
                                                         </FormGroup>
                                                     </Col>
                                                     <Col md="1">  </Col>
@@ -272,9 +272,7 @@ const PartyMaster = (props) => {
                                                                     }
                                                                 }
                                                                 }
-
                                                             />
-
                                                         </FormGroup>
                                                     </Col>
                                                     <Col md="1">  </Col>
@@ -296,7 +294,6 @@ const PartyMaster = (props) => {
                                                         </FormGroup>
                                                     </Col>
                                                 </Row>
-
                                             </Card>
                                         </Row>
 
@@ -305,8 +302,6 @@ const PartyMaster = (props) => {
                                             <Card style={{ backgroundColor: "whitesmoke" }} >
 
                                                 <Row className="mt-2">
-
-
                                                     <Col md="3">
                                                         <FormGroup className="mb-3">
                                                             <Label htmlFor="validationCustom01"> DivisionType </Label>
@@ -377,7 +372,6 @@ const PartyMaster = (props) => {
                                                                     tel: {
                                                                         pattern: /^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$/,
                                                                         errorMessage: 'Please enter valid GSTIN number.(Ex:22AAAAA0000A1Z5).'
-                                                                        
                                                                     }
                                                                 }}
                                                                 id="validationCustom01"
@@ -406,12 +400,9 @@ const PartyMaster = (props) => {
                                                                     }
                                                                 }}
                                                                 id="FSSAINo"
-
-
                                                             />
                                                         </FormGroup>
                                                     </Col>
-
 
                                                 </Row>
                                                 <Row>
@@ -433,9 +424,7 @@ const PartyMaster = (props) => {
                                                                 onChange={(selectedDates, dateStr, instance) => {
                                                                     setFSSAIExipry_Date_Select(dateStr)
                                                                 }}
-
                                                             />
-
                                                         </FormGroup>
                                                     </Col>
                                                     <Col md="1"></Col>
@@ -573,16 +562,16 @@ const PartyMaster = (props) => {
                                                         </div>
                                                     </Col>
                                                 </Row>
-                                        </Card>
-                                    </Row>
+                                            </Card>
+                                        </Row>
 
-                                </AvForm>
-                            </CardBody>
-                        </Card>
-                    </Col>
-                </Row>
-            </Container>
-        </div>
+                                    </AvForm>
+                                </CardBody>
+                            </Card>
+                        </Col>
+                    </Row>
+                </Container>
+            </div>
         </React.Fragment >
     );
 }

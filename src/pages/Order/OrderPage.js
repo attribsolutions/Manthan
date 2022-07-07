@@ -1,36 +1,35 @@
 import React, { useEffect, useState } from "react";
-import { Button, FormGroup, Input, Label } from "reactstrap";
+import { FormGroup, Input, Label } from "reactstrap";
 import {
   Row,
   Col,
   Card,
   CardBody,
-  CardSubtitle,
-  CardHeader,
   Container,
 } from "reactstrap";
 import { Table, Thead, Tbody, Tr, Th, Td } from "react-super-responsive-table";
 import "react-super-responsive-table/dist/SuperResponsiveTableStyle.css";
 
 // store action import
-import { submitOrder_fromOrderPage, getOrderItems_ForOrderPage, submitOrder_fromOrderPage_Success, updateOrderID_From_OrderPage } from "../../../store/Purchase/OrderPageRedux/actions";
+import {
+  submitOrder_fromOrderPage,
+  getOrderItems_ForOrderPage,
+  submitOrder_fromOrderPage_Success,
+  updateOrderID_From_OrderPage
+} from "../../store/Purchase/OrderPageRedux/actions";
 import { useSelector, useDispatch } from "react-redux";
-import '../../Purchase/Orders/div.css'
+import './div.css'
 
-import Breadcrumbs3 from "../../../components/Common/Breadcrumb3"
-import generate from "../../../Reports/InvioceReport/Page";
-import { InvoiceFakeData } from "./InvioceFakedata";
-import { AlertState } from "../../../store/Utilites/CostumeAlert/actions";
-import { topFunction } from "./OrderList";
+import Breadcrumbs3 from "../../components/Common/Breadcrumb3"
+import { AlertState } from "../../store/Utilites/CostumeAlert/actions";
 import { MetaTags } from "react-meta-tags";
-import Select from "react-select";
 import "@vtaits/react-color-picker/dist/index.css"
 import "react-datepicker/dist/react-datepicker.css"
 //Import Flatepicker
 import "flatpickr/dist/themes/material_blue.css"
 import Flatpickr from "react-flatpickr"
 import ReactSelect from "react-select";
-import { getPartyListAPI } from "../../../store/Administrator/PartyRedux/action";
+import { getPartyListAPI } from "../../store/Administrator/PartyRedux/action";
 
 const OrderPage = (props) => {
 

@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import Select from "react-select";
-import { Card, CardBody, Col, Container, Row, CardHeader, Label, Button, FormGroup } from "reactstrap";
+import { Card, CardBody, Col, Container, Row, CardHeader, Label, Button, FormGroup, Table } from "reactstrap";
 import { AvForm, AvInput, AvGroup, AvFeedback } from "availity-reactstrap-validation";
 import { useDispatch, useSelector } from "react-redux";
 import { getEmployee, getRoles, addUser, updateID, addUserSuccess }
@@ -9,6 +9,8 @@ import Breadcrumbs from "../../../components/Common/Breadcrumb";
 import AvField from "availity-reactstrap-validation/lib/AvField";
 import { AlertState } from "../../../store/Utilites/CostumeAlert/actions";
 import { editSuccess } from "../../../store/Administrator/RoleMasterRedux/action";
+import { Tbody, Thead } from "react-super-responsive-table";
+import { BreadcrumbShow } from "../../../store/Utilites/Breadcrumb/actions";
 
 const AddUser = (props) => {
 
@@ -38,7 +40,7 @@ const AddUser = (props) => {
 
   // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
   useEffect(() => {
-    document.getElementById("txtName").focus();
+    // document.getElementById("txtName").focus();
     if (!(editDataGatingFromList === undefined)) {
       setEditData(editDataGatingFromList);
       setIsEdit(true);
@@ -180,268 +182,260 @@ const AddUser = (props) => {
 
   // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
   var IsEditMode_Css = ''
-  if (IsEdit === true || PageMode == true) { IsEditMode_Css = "-3.5%" };
+  if (IsEdit === true || PageMode == true) { IsEditMode_Css = "-5.5%" };
 
   return (
     <React.Fragment>
       <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
         <Breadcrumbs breadcrumbItem={"User Registration "} />
         <Container fluid>
-          <Row>
-            <Col lg={12}>
-              <Card className=" text-black">
-                <CardHeader className="card-header   text-dark" style={{ backgroundColor: "#dddddd" }}>
-                  <h4 className="  text-black" >React Validation - Normal</h4>
-                  <p className=" text-black">Provide valuable, actionable feedback to your users with HTML5 form validation–available in all our supported browsers.</p>
-                </CardHeader>
-
-                <CardBody>
-                  <AvForm
-                    onValidSubmit={(e, v) => {
-                      handleValidSubmit(e, v);
-                    }}
-                    ref={formRef}
-                  >
-
-                    <Row>
-                      <Col md={12}  >
-                        <Card >
-                          <CardBody style={{ backgroundColor: "whitesmoke" }}>
-                            <Row>
-                              <FormGroup className="mb-2 col col-sm-4 " >
-                                <Label htmlFor="validationCustom01">Name </Label>
-                                <AvField name="LoginName" id="txtName" value={EditData.LoginName}
-                                  type="text"
-                                  placeholder="Please Enter LoginName"
-                                  // autoComplete='off'
-                                  validate={{
-                                    required: { value: true, errorMessage: 'Please enter a LoginName...!' },
-                                  }} />
-                              </FormGroup>
-                            </Row>
-                            <Row>
-                              <FormGroup className="mb-2 col col-sm-4 " >
-                                <Label htmlFor="validationCustom01">Employee </Label>
-                                <Select
-                                  value={EmployeeSelect}
-                                  options={EmployeeValues}
-                                  onChange={(e) => { handllerEmployeeID(e) }}
-                                />
-                              </FormGroup>
-
-                            </Row>
-
-                            <Row>
-                              <FormGroup className="mb-1 col col-sm-6">
-                                <Row className="justify-content-md-left">
-                                  <Label htmlFor="horizontal-firstname-input" className="col-sm-2 col-form-label mt-4 " >IsActive </Label>
-                                  <Col md={2} style={{ marginTop: '30px' }} >
-                                    <div className="form-check form-switch form-switch-md mb-3" dir="ltr">
-                                      <input type="checkbox" className="form-check-input" id="customSwitchsizemd"
-                                        checked={(EditData.ID === 0) ? false : EditData.isActive}
-                                        name="IsActive"
-                                      />
-                                      <label className="form-check-label" htmlFor="customSwitchsizemd"></label>
-                                    </div>
-
-                                  </Col>
-                                </Row>
-                              </FormGroup>
-                             
-                              <FormGroup className="mb-1 col col-sm-6">
-                                <Row className="justify-content-md-left">
-                                  <Label htmlFor="horizontal-firstname-input" className="col-sm-2 col-form-label mt-4" >isSendOTP </Label>
-                                  <Col md={2} style={{ marginTop: '30px' }} >
-                                    <div className="form-check form-switch form-switch-md mb-3" dir="ltr">
-                                      <input type="checkbox" className="form-check-input" id="customSwitchsizemd"
-                                        checked={(EditData.ID === 0) ? false : EditData.isSendOTP}
-                                        name="isSendOTP"
-                                      />
-                                      <label className="form-check-label" htmlFor="customSwitchsizemd"></label>
-                                    </div>
-
-                                  </Col>
-                                </Row>
-                              </FormGroup>
-                            </Row>
-                          </CardBody>
-                        </Card>
-                      </Col>
-                    </Row>
-
-                    <Row>
-                      <Card style={{ backgroundColor: "whitesmoke" }}>
-                        <Row className="mb-2">
-                          <FormGroup className="mt-3 mb-3 col col-sm-4 " >
-                            <Label htmlFor="validationCustom01">Roles </Label>
-                            <Select
-                              value={RoleDropDown}
-                              options={RolesValues}
-                              onChange={(e) => { setRoleDropDown(e) }}
-                              classNamePrefix="select2-selection"
-                            />
-                          </FormGroup>
-                         
-                          <Col sm={1} style={{ marginTop: '45px' }} >
-                            {" "}
-                            <Button
-                              type="button"
-                              color="primary"
-                              onClick={() =>
-                                AddRoleHandler()
-                              }
-                            >
-                              Add
-                            </Button>
-                          </Col>
-                          <Col sm={3} style={{ marginTop: '45px' }}>
-                            {RoleData.length > 0 ? (
-                              <div>
-                                <div className="table-responsive">
-                                  <table className="table table-bordered mb-0 table">
-                                    <thead >
-                                      <tr>
-                                        <th>RoleName</th>
-                                        <th>ID</th>
-                                        <th>Action</th>
-                                      </tr>
-                                    </thead>
-                                    <tbody >
-                                      {RoleData.map((TableValue) => (
-
-                                        <tr key={TableValue.Role}>
-                                          <td>
-                                            <h5 className="my-0 text-primary">
-                                              {TableValue.label}
-                                            </h5>
-                                          </td>
-                                          <td>
-                                            <h5 className="my-0 text-primary">
-                                              {TableValue.value}
-                                            </h5>
-                                          </td>
-                                          <td>
-                                            <button
-                                              type="button"
-                                              className="btn btn-danger btn-sm waves-effect waves-light"
-                                              data-mdb-toggle="tooltip" data-mdb-placement="top" title="Delete Roles"
-                                              onClick={() => {
-                                                UserRoles_DeleteButton_Handller(TableValue.value)
-                                              }
-                                              }
-                                            >
-                                              <i class="mdi mdi-trash-can d-block font-size-10"></i>
-                                            </button>
-                                          </td>
-                                        </tr>
-                                      ))}
-                                    </tbody>
-                                  </table>
-                                </div>
-                              </div>
-                            ) : (
-                              <>
-                                <div className="border border-warning card" >
-                                  <div className="card-header bg-transparent border-warning">
-                                    <h5 className="my-0 text-warning">
-                                      <i className="mdi mdi-bullseye-arrow me-3"></i>
-                                      Roles Data Not Found...!
-                                    </h5>
-                                  </div>
-                                </div>
-                              </>
-                            )}
-                          </Col>
-                        </Row>
-
-
-                      </Card>
-                    </Row>
-                    {/* <AvGroup>
-                      <Row className="mb-4">
-                        <Label className="col-sm-2 col-form-label">
-                          LoginName
-                        </Label>
-                        <Col sm={4}>
-                          <AvField name="LoginName" id="txtName" value={EditData.LoginName}
-                            type="text"
-                            placeholder="Please Enter LoginName"
-                            // autoComplete='off'
-                            validate={{
-                              required: { value: true, errorMessage: 'Please enter a LoginName...!' },
-                            }} />
-                        </Col>
-                      </Row>
-                    </AvGroup>
-
-                    <Row className="mb-4">
-                      <Label className="col-sm-2 col-form-label">
-                        Employee
-                      </Label>
-                      <Col sm={4}>
+        <Card className="text-black" >
+            <CardHeader className="card-header   text-black" style={{ backgroundColor: "#dddddd" }} >
+              <h4 className="card-title text-black">React Validation - Normal</h4>
+              <p className="card-title-desc text-black">Provide valuable, actionable feedback to your users with HTML5 form validation–available in all our supported browsers.</p>
+            </CardHeader>
+            <CardBody className="text-black">
+              <AvForm
+                onValidSubmit={(e, v) => {
+                  handleValidSubmit(e, v);
+                }}
+                ref={formRef}
+              >
+                <Card className=" text-black">
+                  <CardBody style={{ backgroundColor: "whitesmoke" }}>
+                  <Row className=" mt-1 ">
+                      <FormGroup className="mb-1 col col-sm-4 " >
+                        <Label htmlFor="validationCustom01">Employee </Label>
                         <Select
                           value={EmployeeSelect}
                           options={EmployeeValues}
                           onChange={(e) => { handllerEmployeeID(e) }}
                         />
-                      </Col>
+                      </FormGroup>
+                      <Col md="1">  </Col>
+                      <FormGroup className="mb-1 col col-sm-4 " >
+                        <Label htmlFor="validationCustom01">Name </Label>
+                        <AvField name="LoginName" id="txtName" value={EditData.LoginName}
+                          type="text"
+                          placeholder="Please Enter LoginName"
+                          // autoComplete='off'
+                          validate={{
+                            required: { value: true, errorMessage: 'Please enter a LoginName...!' },
+                          }}
+                          onChange={(e) => { dispatch(BreadcrumbShow(e.target.value)) }}
+                          />
+                      </FormGroup>
                     </Row>
 
-                    <Row className="mb-2">
-                      <Label className="col-sm-2 col-form-label">
-                        Roles
-                      </Label>
-                      <Col sm={4}>
-                        {" "}
+                    {/* <Row>
+                      <FormGroup className=" col col-sm-5">
+                      <Row className="justify-content-md-left">
+                        <Label htmlFor="horizontal-firstname-input" className="col-sm-5 col-form-label mt-4 " >Enable Mobile Login </Label>
+                          <Col md={2} style={{ marginTop: '30px' }} >
+                            <div className="form-check form-switch form-switch-md mb-3" dir="ltr">
+                              <input type="checkbox" className="form-check-input" id="customSwitchsizemd"
+                                checked={(EditData.ID === 0) ? false : EditData.isActive}
+                                name="IsActive"
+                              />
+                              <label className="form-check-label" htmlFor="customSwitchsizemd"></label>
+                            </div>
+                          </Col>
+                        {/* <Label htmlFor="horizontal-firstname-input" className="col-sm-5 col-form-label mt-4 " >Enable Mobile Login </Label> */}
+                    {/* </Row>
+                       </FormGroup>
+                       
+                       <FormGroup className="mb-0 mt-0 col col-sm-5">
+                            <Row className="justify-content-md-left">
+                              <Label htmlFor="horizontal-firstname-input" className="col-sm-3 col-form-label mt-4 " >Is Active </Label>
+                              <Col md={2} style={{ marginTop: '30px' }} >
+                                <div className="form-check form-switch form-switch-md mb-3" dir="ltr">
+                                  <input type="checkbox" className="form-check-input" id="customSwitchsizemd"
+                                    checked={(EditData.ID === 0) ? false : EditData.isActive}
+                                    name="IsActive"
+                                  />
+                                  <label className="form-check-label" htmlFor="customSwitchsizemd"></label>
+                                </div>
+                              </Col>
+                              {/* <Label htmlFor="horizontal-firstname-input" className="col-sm-3 col-form-label mt-4 " >Is Active </Label> */}
+                    {/* </Row>
+                          </FormGroup>
+                        </Row> */}
+                    <Row>
+                      <FormGroup className="mb-1 col col-sm-7 " >
+                        <Row className="justify-content-md-left">
+                          <Label htmlFor="horizontal-firstname-input" className="col-sm-3 col-form-label" >Enable Mobile Login</Label>
+                          <Col md={2} style={{ marginTop: '9px' }} >
+                            <div className="form-check form-switch form-switch-md mb-3" dir="ltr">
+                              <input type="checkbox" className="form-check-input" id="customSwitchsizemd"
+                                checked={ EditData.isActive}
+                                name="IsActive"
+                              />
+                              <label className="form-check-label" htmlFor="customSwitchsizemd"></label>
+                            </div>
+                          </Col>
+
+                          <Col md="3" >  </Col>
+                          <Label htmlFor="horizontal-firstname-input" className="col-sm-2 col-form-label " >Active </Label>
+                          <Col md={2} style={{ marginTop: '9px' }} >
+                            <div className="form-check form-switch form-switch-md mb-3" dir="ltr">
+                              <input type="checkbox" className="form-check-input" id="customSwitchsizemd"
+                                checked={ EditData.isActive}
+                                name="IsActive"
+                              />
+                              <label className="form-check-label" htmlFor="customSwitchsizemd"></label>
+                            </div>
+                          </Col>
+                        </Row>
+                      </FormGroup>
+                    </Row>
+
+                    <Row >
+                      <FormGroup className=" col col-sm-7  " >
+                        <Row className="justify-content-md-left">
+                          <Label htmlFor="horizontal-firstname-input" className="col-sm-3 col-form-label" >Enable Email Login</Label>
+                          <Col md={2} style={{ marginTop: '10px' }} >
+                            <div className="form-check form-switch form-switch-md mb-3" dir="ltr">
+                              <input type="checkbox" className="form-check-input" id="customSwitchsizemd"
+                                checked={(EditData.ID === 0) ? false : EditData.isSendOTP}
+                                name="isSendOTP"
+                              />
+                              <label className="form-check-label" htmlFor="customSwitchsizemd"></label>
+                            </div>
+                          </Col>
+
+                          <Col md="3" >  </Col>
+                          <Label htmlFor="horizontal-firstname-input" className="col-sm-2 col-form-label " >send OTP </Label>
+                          <Col md={2} style={{ marginTop: '10px' }} >
+                            <div className="form-check form-switch form-switch-md" dir="ltr">
+                              <input type="checkbox" className="form-check-input" id="customSwitchsizemd"
+                                checked={(EditData.ID === 0) ? false : EditData.isSendOTP}
+                                name="isSendOTP"
+                              />
+                              <label className="form-check-label" htmlFor="customSwitchsizemd"></label>
+                            </div>
+                          </Col>
+                        </Row>
+                      </FormGroup>
+                    </Row>
+
+                    {/* <Row>
+                      <FormGroup className=" mt-0 mb-0 col col-sm-5">
+                        <Row className="justify-content-md-left">
+                          <Label htmlFor="horizontal-firstname-input" className="col-sm-5 col-form-label mt-4" >Enable Email Login </Label>
+                          <Col md={2} style={{ marginTop: '30px' }} >
+                            <div className="form-check form-switch form-switch-md mb-3" dir="ltr">
+                              <input type="checkbox" className="form-check-input" id="customSwitchsizemd"
+                                checked={(EditData.ID === 0) ? false : EditData.isSendOTP}
+                                name="isSendOTP"
+                              />
+                              <label className="form-check-label" htmlFor="customSwitchsizemd"></label>
+                            </div>
+                          </Col>
+                          {/* <Label htmlFor="horizontal-firstname-input" className="col-sm-5 col-form-label mt-4" >Enable Email Login </Label> */}
+                    {/* </Row>
+                      </FormGroup>
+
+                      <FormGroup className=" mt-0 mb-0 col col-sm-5">
+                        <Row className="justify-content-md-left">
+                          <Label htmlFor="horizontal-firstname-input" className="col-sm-3 col-form-label mt-4" >SendOTP </Label>
+                          <Col md={2} style={{ marginTop: '30px' }} >
+                            <div className="form-check form-switch form-switch-md mb-3" dir="ltr">
+                              <input type="checkbox" className="form-check-input" id="customSwitchsizemd"
+                                checked={(EditData.ID === 0) ? false : EditData.isSendOTP}
+                                name="isSendOTP"
+                              />
+                              <label className="form-check-label" htmlFor="customSwitchsizemd"></label>
+                            </div>
+                          </Col>
+                          {/* <Label htmlFor="horizontal-firstname-input" className="col-sm-3 col-form-label mt-4" >SendOTP </Label> */}
+                    {/* </Row>
+                      </FormGroup>
+                    </Row>  */}
+                  </CardBody>
+                </Card>
+
+                <Card className=" text-black">
+                  <CardBody style={{ backgroundColor: "whitesmoke" }}>
+                    <Row >
+                      <FormGroup className="mt-1 ml-3 mb-3 col col-sm-4 " >
+                        <Label htmlFor="validationCustom01">Roles </Label>
                         <Select
                           value={RoleDropDown}
                           options={RolesValues}
                           onChange={(e) => { setRoleDropDown(e) }}
                           classNamePrefix="select2-selection"
                         />
-                      </Col>
-                      <Col sm={1}>
+                        <FormGroup className=" mt-4  col col-sm-6">
+                          <Row >
+
+                            <Col sm={2} >
+                              <div>
+                                {
+                                  IsEdit ? (
+                                    <button
+                                      type="submit"
+                                      data-mdb-toggle="tooltip" data-mdb-placement="top" title="Update User"
+                                      className="btn btn-success w-md"
+                                    >
+                                      <i class="fas fa-edit me-2"></i>Update
+                                    </button>) : (
+                                    <button
+                                      type="submit"
+                                      data-mdb-toggle="tooltip" data-mdb-placement="top" title="Save User"
+                                      className="btn btn-primary w-md"
+                                    > <i className="fas fa-save me-2"></i> Save
+                                    </button>
+                                  )
+                                }
+                              </div>
+                            </Col>
+
+                          </Row>
+                        </FormGroup >
+                      </FormGroup>
+
+                      <Col sm={1} style={{ marginTop: '33px' }} >
                         {" "}
                         <Button
                           type="button"
-                          color="primary"
+                          className="btn btn-sm mt-1 mb-0 btn-light   btn-outline-primary   "
+                          // color="light"
                           onClick={() =>
                             AddRoleHandler()
                           }
                         >
-                          Add
+                          <i className="dripicons-plus "></i>
                         </Button>
+
+
                       </Col>
-                      <Col sm={3}>
+                      <Col sm={3} style={{ marginTop: '33px' }}>
                         {RoleData.length > 0 ? (
-                          <div>
-                            <div className="table-responsive">
-                              <table className="table table-bordered mb-0 table">
-                                <thead >
-                                  <tr>
-                                    <th>RoleName</th>
-                                    <th>ID</th>
-                                    <th>Action</th>
-                                  </tr>
-                                </thead>
-                                <tbody >
-                                  {RoleData.map((TableValue) => (
-                                    
-                                    <tr key={TableValue.Role}>
-                                      <td>
-                                        <h5 className="my-0 text-primary">
-                                          {TableValue.label}
-                                        </h5>
-                                      </td>
-                                      <td>
-                                        <h5 className="my-0 text-primary">
-                                          {TableValue.value}
-                                        </h5>
-                                      </td>
-                                      <td>
-                                        <button
+
+                          <div className="table-responsive">
+                            <Table className="table table-bordered  text-center">
+                              <Thead >
+                                <tr>
+                                  <th>RoleName</th>
+
+                                  <th>Action</th>
+                                </tr>
+                              </Thead>
+                              <Tbody  >
+                                {RoleData.map((TableValue) => (
+
+                                  <tr key={TableValue.Role}>
+                                    <td>
+                                      {TableValue.label}
+                                    </td>
+                                    <td>
+                                      <i className="mdi mdi-trash-can d-block text-danger font-size-20" onClick={() => {
+                                        UserRoles_DeleteButton_Handller(TableValue.value)
+                                      }
+                                      }></i>
+                                      {/* <button
                                           type="button"
-                                          className="btn btn-danger btn-sm waves-effect waves-light"
+                                          className="btn btn-soft-white btn-sm waves-effect waves-light border-danger"
                                           data-mdb-toggle="tooltip" data-mdb-placement="top" title="Delete Roles"
                                           onClick={() => {
                                             UserRoles_DeleteButton_Handller(TableValue.value)
@@ -449,97 +443,34 @@ const AddUser = (props) => {
                                           }
                                         >
                                           <i class="mdi mdi-trash-can d-block font-size-10"></i>
-                                        </button>
-                                      </td>
-                                    </tr>
-                                  ))}
-                                </tbody>
-                              </table>
-                            </div>
+                                        </button> */}
+                                    </td>
+                                  </tr>
+                                ))}
+                              </Tbody>
+                            </Table>
                           </div>
+
                         ) : (
                           <>
-                            <div className="border border-warning card">
-                              <div className="card-header bg-transparent border-warning">
-                                <h5 className="my-0 text-warning">
-                                  <i className="mdi mdi-bullseye-arrow me-3"></i>
-                                  Roles Data Not Found...!
-                                </h5>
-                              </div>
-                            </div>
+
                           </>
                         )}
                       </Col>
                     </Row>
 
-                    <Row className="mb-4">
-                      <Label
-                        className="col-sm-2 col-form-label"
-                        htmlFor="horizontal-password-inputk"
-                      >
-                        isActive
-                      </Label>
-                      <Col sm={4}>
-                        <AvField name="isActive"
-                          checked={EditData.isActive}
-                          type="checkbox"
-                        />
-                      </Col>
-                    </Row>
+                  </CardBody>
 
-                    <Row className="mb-4">
-                      <Label
-                        className="col-sm-2 col-form-label"
-                        htmlFor="horizontal-password-inputk"
-                      >
-                        Is SendOTP
-                      </Label>
-                      <Col sm={4}>
-                        <AvField
-                          type="checkbox"
-                          checked={EditData.isSendOTP}
-                          name="isSendOTP"
+                </Card>
 
-                          id="horizontal-customCheck"
+              </AvForm>
+            </CardBody>
 
-                        />
-                      </Col>
-                    </Row>
-                    <Row className="justify-content-end">
-                      <Col sm={2}>
-                        <div>
-                          {
-                            IsEdit ? (
-                              <button
-                                type="submit"
-                                data-mdb-toggle="tooltip" data-mdb-placement="top" title="Update User"
-                                className="btn btn-success w-md"
-                              >
-                                <i class="fas fa-edit me-2"></i>Update
-                              </button>) : (
-                              <button
-                                type="submit"
-                                data-mdb-toggle="tooltip" data-mdb-placement="top" title="Save User"
-                                className="btn btn-success w-md"
-                              > <i className="fas fa-save me-2"></i> Save
-                              </button>
-                            )
-                          }
-                        </div>
-                      </Col>{" "}
-                      <Col sm={10}></Col>
-                    </Row> */}
+          </Card>
 
-                  </AvForm>
-                  <div>
-                  </div>
-                </CardBody>
-              </Card>
-            </Col>
-          </Row>
-        </Container>
-      </div>
-    </React.Fragment>
+        </Container >
+      </div >
+    </React.Fragment >
   );
 }
 export default AddUser

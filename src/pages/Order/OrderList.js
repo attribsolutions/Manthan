@@ -1,24 +1,27 @@
 import React, { useEffect, useState } from "react";
-import { useDispatch,  useSelector } from "react-redux";
-import { Button,  Input,  Modal } from "reactstrap";
+import { useDispatch, useSelector } from "react-redux";
+import { Button, Input, Modal, Row, Col } from "reactstrap";
 import Select from "react-select";
 import { useHistory } from "react-router-dom";
-import {
-  Row,
-  Col,
-} from "reactstrap";
 import "react-super-responsive-table/dist/SuperResponsiveTableStyle.css";
-import { deleteOrderID_From_OrderPage, deleteOrderID_From_OrderPageSuccess, editOrder, editOrder_forOrderPage, getOrderList, updateOrderID_From_OrderPageSuccess } from "../../../store/Purchase/OrderPageRedux/actions";
+
+import {
+  deleteOrderID_From_OrderPage,
+  deleteOrderID_From_OrderPageSuccess,
+  editOrder_forOrderPage, getOrderList,
+  updateOrderID_From_OrderPageSuccess
+} from "../../store/Purchase/OrderPageRedux/actions";
 import { MetaTags } from "react-meta-tags";
+
 import BootstrapTable from "react-bootstrap-table-next";
 import paginationFactory, { PaginationListStandalone, PaginationProvider } from "react-bootstrap-table2-paginator";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
-import Breadcrumbs from "../../../components/Common/Breadcrumb";
+import Breadcrumbs from "../../components/Common/Breadcrumb";
 // import generate from "../../Reports/Page"
 import './div.css'
 import OrderPage from "./OrderPage";
-import { AlertState } from "../../../store/Utilites/CostumeAlert/actions";
-import generate from "../../../Reports/InvioceReport/Page";
+import { AlertState } from "../../store/Utilites/CostumeAlert/actions";
+import generate from "../../Reports/InvioceReport/Page";
 import { InvoiceFakeData } from "./InvioceFakedata";
 
 export const topFunction = () => {
@@ -49,7 +52,7 @@ const OrderList = (props) => {
     setmodal_center(!modal_center)
   }
   //fetch list Page Function 
-   function fetchOrderList_dispatch_function (){
+  function fetchOrderList_dispatch_function() {
     const orderlistInitial = {
       FromDate: fromDateIn,// !fromDate ? fromDateIn : fromDate,
       ToDate: currentDate, //!toDate ? currentDate : toDate,
@@ -59,7 +62,7 @@ const OrderList = (props) => {
     dispatch(getOrderList(orderlistInitial));
     return getOrderList(orderlistInitial)
   }
- 
+
   useEffect(() => {
     fetchOrderList_dispatch_function()
   }, [dispatch, currentDate, fromDateIn, orderDelete]);
@@ -67,12 +70,12 @@ const OrderList = (props) => {
 
   const customerNameOption = props.orderList;
 
-  const { editOrderData, TableListData,deleteMessage,updateMessage } = useSelector((state) => ({
+  const { editOrderData, TableListData, deleteMessage, updateMessage } = useSelector((state) => ({
     editOrderData: state.OrderPageReducer.editOrderData,
     TableListData: state.OrderPageReducer.ordersList,
     deleteMessage: state.OrderPageReducer.deleteMessage,
     updateMessage: state.OrderPageReducer.updateMessage,
-    
+
   }));
 
   function goHandeller() {
@@ -88,71 +91,71 @@ const OrderList = (props) => {
   useEffect(() => {
     debugger
     if ((updateMessage.Status === true) && (updateMessage.StatusCode === 200)) {
-        dispatch(updateOrderID_From_OrderPageSuccess({ Status: false }))
-        dispatch(AlertState({
-            Type: 1, Status: true,
-            Message: updateMessage.Message,
-            AfterResponseAction: fetchOrderList_dispatch_function,
-        }))
-        tog_center()
+      dispatch(updateOrderID_From_OrderPageSuccess({ Status: false }))
+      dispatch(AlertState({
+        Type: 1, Status: true,
+        Message: updateMessage.Message,
+        AfterResponseAction: fetchOrderList_dispatch_function,
+      }))
+      tog_center()
     }
     else if (updateMessage.Status === true) {
-        dispatch(updateOrderID_From_OrderPageSuccess({ Status: false }))
-        dispatch(AlertState({
-            Type: 3, Status: true,
-            Message: updateMessage.Message,
-        }));
+      dispatch(updateOrderID_From_OrderPageSuccess({ Status: false }))
+      dispatch(AlertState({
+        Type: 3, Status: true,
+        Message: updateMessage.Message,
+      }));
     }
-}, [updateMessage.Status, dispatch]);
+  }, [updateMessage.Status, dispatch]);
 
-useEffect(() => {
+  useEffect(() => {
     if ((deleteMessage.Status === true) && (deleteMessage.StatusCode === 200)) {
-        dispatch(deleteOrderID_From_OrderPageSuccess({ Status: false }))
-        dispatch(AlertState({
-            Type: 1, Status: true,
-            Message: deleteMessage.Message,
-            AfterResponseAction: fetchOrderList_dispatch_function,
-        }))
+      dispatch(deleteOrderID_From_OrderPageSuccess({ Status: false }))
+      dispatch(AlertState({
+        Type: 1, Status: true,
+        Message: deleteMessage.Message,
+        AfterResponseAction: fetchOrderList_dispatch_function,
+      }))
     } else if (deleteMessage.Status === true) {
-        dispatch(deleteOrderID_From_OrderPageSuccess({ Status: false }))
-        dispatch(AlertState({
-            Type: 3,
-            Status: true,
-            Message: "error Message",
-        }));
+      dispatch(deleteOrderID_From_OrderPageSuccess({ Status: false }))
+      dispatch(AlertState({
+        Type: 3,
+        Status: true,
+        Message: "error Message",
+      }));
     }
-}, [deleteMessage.Status])
+  }, [deleteMessage.Status])
 
-// Edit Modal Show When Edit Data is true
-useEffect(() => {
+  // Edit Modal Show When Edit Data is true
+  useEffect(() => {
     if (editOrderData.Status === true) {
-        tog_center()
+      tog_center()
     }
-}, [editOrderData]);
+  }, [editOrderData]);
 
 
   function OnPritHandeller(id) {
     // dispatch(editOrder_forOrderPage(id));
     // if (!(editOrderData.length === 0)) {
     //   console.log("datataat", editOrderData)
-      generate(InvoiceFakeData)
-    }
- 
+    generate(InvoiceFakeData)
+  }
+
   function EditPageHandler(id) {
     dispatch(editOrder_forOrderPage(id));
   }
 
   //  Delete Button Handller
-   const deleteHandeler = (id, name) => {
+  const deleteHandeler = (id, name) => {
     debugger
     dispatch(AlertState({
-        Type: 5, Status: true,
-        Message: `Are you sure you want to delete this item : "${name}"`,
-        RedirectPath: false,
-        PermissionAction: deleteOrderID_From_OrderPage,
-        ID: id
+      Type: 5, Status: true,
+      Message: `Are you sure you want to delete this item : "${name}"`,
+      RedirectPath: false,
+      PermissionAction: deleteOrderID_From_OrderPage,
+      ID: id
     }));
-}
+  }
 
   const pageOptions = {
     sizePerPage: 15,
@@ -201,7 +204,7 @@ useEffect(() => {
           <buton
             className="badge badge-soft-danger font-size-12"
             onClick={() => {
-               deleteHandeler(order.id, order.customerName);
+              deleteHandeler(order.id, order.customerName);
             }}
           >
             <i class="mdi mdi-delete font-size-18" ></i>
@@ -339,7 +342,7 @@ useEffect(() => {
         size="xl"
         scrollable='off'
       >
-     <OrderPage state={editOrderData.Data}/>
+        <OrderPage state={editOrderData.Data} />
       </Modal>
     </React.Fragment >
   );
