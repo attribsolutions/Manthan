@@ -14,7 +14,7 @@ import {
 } from "../../../store/Administrator/M_EmployeeRedux/action";
 import { AlertState } from "../../../store/Utilites/CostumeAlert/actions";
 import { fetchCompanyList } from "../../../store/Administrator/CompanyRedux/actions";
-import { getPartyListAPI } from "../../../store/Administrator/PartyRedux/action";
+import { getDistrictOnState, getPartyListAPI } from "../../../store/Administrator/PartyRedux/action";
 
 import Breadcrumbs from "../../../components/Common/Breadcrumb";
 import AvField from "availity-reactstrap-validation/lib/AvField";
@@ -39,14 +39,16 @@ const AddEmployee = (props) => {
   const [designation_DropdownSelect, setDesignation_DropdownSelect] = useState("");
   const [employeeType_DropdownSelect, setEmployeeType_DropdownSelect] = useState("");
   const [State_DropdownSelect, setState_DropdownSelect] = useState("");
+  const [district_DropdownSelect, setDistrict_DropdownSelect] = useState("");
   const [company_DropdownSelect, setCompany_DropdownSelect] = useState("");
   const [party_DropdownSelect, setParty_DropdownSelect] = useState("");
   const [DOB_Date_Select, setDOB_Date_Select] = useState("");
 
-  const { designation, employeeType, State, partyList, company, postMessage } = useSelector((state) => ({
+  const { designation, employeeType, State,district, partyList, company, postMessage } = useSelector((state) => ({
     designation: state.M_EmployeesReducer.designation,
     employeeType: state.M_EmployeesReducer.employeeType,
     State: state.M_EmployeesReducer.State,
+    district: state.PartyMasterReducer.DistrictOnState,
     partyList: state.PartyMasterReducer.partyList,
     company: state.Company.companyList,
     postMessage: state.M_EmployeesReducer.postMessage,
@@ -82,12 +84,18 @@ const AddEmployee = (props) => {
         value: editDataGatingFromList.State_id,
         label: editDataGatingFromList.StateName
       })
+      setDOB_Date_Select(editDataGatingFromList.DOB)
+
+      setDistrict_DropdownSelect({
+        value: editDataGatingFromList.District_id,
+        label: editDataGatingFromList.DistrictName
+      })
       setParty_DropdownSelect({
         value: editDataGatingFromList.Party_id,
         label: editDataGatingFromList.PartyName
       })
       setCompany_DropdownSelect({
-        value: editDataGatingFromList.Companies_id,
+        value: editDataGatingFromList.Company_id,
         label: editDataGatingFromList.CompanyName
       })
       dispatch(editEmployeeSuccess({ Status: false }))
@@ -129,12 +137,12 @@ const AddEmployee = (props) => {
   }, [postMessage])
 
   const Party_DropdownOptions = partyList.map((data) => ({
-    value: data.ID,
+    value: data.id,
     label: data.Name
   }));
 
   const Company_DropdownOptions = company.map((data) => ({
-    value: data.ID,
+    value: data.id,
     label: data.Name
   }));
 
@@ -144,6 +152,10 @@ const AddEmployee = (props) => {
   }));
 
   const State_DropdownOptions = State.map((data) => ({
+    value: data.id,
+    label: data.Name
+  }));
+  const District_DropdownOptions = district.map((data) => ({
     value: data.id,
     label: data.Name
   }));
@@ -161,7 +173,11 @@ const AddEmployee = (props) => {
   }
 
   function State_Dropdown_Handler(e) {
+    dispatch(getDistrictOnState(e.value))
     setState_DropdownSelect(e)
+  }
+  function District_Dropdown_Handler(e) {
+    setDistrict_DropdownSelect(e)
   }
 
   function Party_Dropdown_Handler(e) {
@@ -171,9 +187,8 @@ const AddEmployee = (props) => {
   function Company_Dropdown_Handler(e) {
     setCompany_DropdownSelect(e)
   }
-  function Party_Dropdown_Handler(e) {
-    setParty_DropdownSelect(e)
-  }
+  
+  
 
 
   //'Save' And 'Update' Button Handller
@@ -192,11 +207,14 @@ const AddEmployee = (props) => {
         Designation: designation_DropdownSelect.value,
         EmployeeType: employeeType_DropdownSelect.value,
         State: State_DropdownSelect.value,
-        // Party: party_DropdownSelect.value,
-        Companies: company_DropdownSelect.value,
-
-      }),
+        District:district_DropdownSelect.value,
+        Party: party_DropdownSelect.value,
+        Company: company_DropdownSelect.value,
+        CreatedBy: 1,
+        UpdatedBy: 1,
+           }),
     }
+    debugger
     if (IsEdit) {
       dispatch(updateEmployeeID(requestOptions.body, EditData.id));
     }
@@ -329,7 +347,7 @@ const AddEmployee = (props) => {
                             value={EditData.AadharNo}
                             placeholder="Enter your AadharNo. "
                             validate={{
-                              required: { value: true, errorMessage: 'Please Enter your AadharNo' },
+                              required: { value: true, errorMessage: 'Please Enter your AadharNo (E.g. 1111 2222 3333)' },
                               tel: {
                                 pattern: /^[2-9]{1}[0-9]{3}\s[0-9]{4}\s[0-9]{4}$/
                               }
@@ -345,7 +363,7 @@ const AddEmployee = (props) => {
                             value={EditData.PAN}
                             placeholder="Enter your PAN No. "
                             validate={{
-                              required: { value: true, errorMessage: 'Please Enter your PAN No.' },
+                              required: { value: true, errorMessage: 'Please Enter your PAN No (E.g. NLXBC1905E).' },
                               tel: {
                                 pattern: /[A-Z]{5}[0-9]{4}[A-Z]{1}$/
                               }
@@ -376,6 +394,18 @@ const AddEmployee = (props) => {
                             value={State_DropdownSelect}
                             options={State_DropdownOptions}
                             onChange={(e) => { State_Dropdown_Handler(e) }}
+                          />
+                        </FormGroup>
+                      </Col>
+
+                      <Col md="1"></Col>
+                      <Col md="3">
+                        <FormGroup >
+                          <Label htmlFor="validationCustom01">District</Label>
+                          <Select
+                            value={district_DropdownSelect}
+                            options={District_DropdownOptions}
+                            onChange={(e) => { District_Dropdown_Handler(e) }}
                           />
                         </FormGroup>
                       </Col>
@@ -446,7 +476,7 @@ const AddEmployee = (props) => {
                             autoComplete='off'
                             validate={{
                               number: true,
-                              required: { value: true, errorMessage: '*WorkingHours is Required' },
+                              required: { value: true, errorMessage: '*Working Hours is Required' },
                             }}
                           />
                         </FormGroup>

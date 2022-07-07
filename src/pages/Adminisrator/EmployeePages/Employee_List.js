@@ -25,7 +25,7 @@ const Employee_List = () => {
   
     // get Access redux data
    const { TableListData,editData,updateMessage,deleteMessage} = useSelector((state) => ({
-        TableListData:state.M_EmployeesReducer.pages, 
+        TableListData:state.M_EmployeesReducer.employeeList, 
         editData:state.M_EmployeesReducer.editData,
         updateMessage:state.M_EmployeesReducer.updateMessage,
         deleteMessage: state.M_EmployeesReducer.deleteMessage,
