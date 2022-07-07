@@ -25,6 +25,7 @@ import Breadcrumbs from "../../../components/Common/Breadcrumb";
 import AvField from "availity-reactstrap-validation/lib/AvField";
 import { MetaTags } from "react-meta-tags";
 import { AlertState } from "../../../store/Utilites/CostumeAlert/actions";
+import { BreadcrumbShow } from "../../../store/Utilites/Breadcrumb/actions";
 
 const Modules = (props) => {
 
@@ -117,7 +118,7 @@ const Modules = (props) => {
     };
 
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
-    var IsEditMode_Css = ''
+    let IsEditMode_Css = ''
     if (IsEdit === true || PageMode == true) { IsEditMode_Css = "-5.5%" };
 
     return (
@@ -158,6 +159,7 @@ const Modules = (props) => {
                                                             validate={{
                                                                 required: { value: true, errorMessage: 'Please enter a Name' },
                                                             }}
+                                                            onChange={(e)=>{ dispatch(BreadcrumbShow(e.target.value))}}
                                                         />
                                                     </FormGroup>
                                                 </Row>

@@ -10,6 +10,7 @@ import AvField from "availity-reactstrap-validation/lib/AvField";
 import { AlertState } from "../../../store/Utilites/CostumeAlert/actions";
 import { editSuccess } from "../../../store/Administrator/RoleMasterRedux/action";
 import { Tbody, Thead } from "react-super-responsive-table";
+import { BreadcrumbShow } from "../../../store/Utilites/Breadcrumb/actions";
 
 const AddUser = (props) => {
 
@@ -220,7 +221,9 @@ const AddUser = (props) => {
                           // autoComplete='off'
                           validate={{
                             required: { value: true, errorMessage: 'Please enter a LoginName...!' },
-                          }} />
+                          }}
+                          onChange={(e) => { dispatch(BreadcrumbShow(e.target.value)) }}
+                          />
                       </FormGroup>
                     </Row>
 
@@ -264,7 +267,7 @@ const AddUser = (props) => {
                           <Col md={2} style={{ marginTop: '9px' }} >
                             <div className="form-check form-switch form-switch-md mb-3" dir="ltr">
                               <input type="checkbox" className="form-check-input" id="customSwitchsizemd"
-                                checked={(EditData.ID === 0) ? false : EditData.isActive}
+                                checked={ EditData.isActive}
                                 name="IsActive"
                               />
                               <label className="form-check-label" htmlFor="customSwitchsizemd"></label>
@@ -276,7 +279,7 @@ const AddUser = (props) => {
                           <Col md={2} style={{ marginTop: '9px' }} >
                             <div className="form-check form-switch form-switch-md mb-3" dir="ltr">
                               <input type="checkbox" className="form-check-input" id="customSwitchsizemd"
-                                checked={(EditData.ID === 0) ? false : EditData.isActive}
+                                checked={ EditData.isActive}
                                 name="IsActive"
                               />
                               <label className="form-check-label" htmlFor="customSwitchsizemd"></label>
@@ -362,7 +365,7 @@ const AddUser = (props) => {
                           onChange={(e) => { setRoleDropDown(e) }}
                           classNamePrefix="select2-selection"
                         />
-                        <FormGroup className=" mt-4 mb-1 col col-sm-6">
+                        <FormGroup className=" mt-4  col col-sm-6">
                           <Row >
 
                             <Col sm={2} >

@@ -8,6 +8,7 @@ import {
   postRole, updateID, PostSuccess
 } from "../../../store/Administrator/RoleMasterRedux/action";
 import { AlertState } from "../../../store/Utilites/CostumeAlert/actions";
+import { BreadcrumbShow } from "../../../store/Utilites/Breadcrumb/actions";
 
 const RoleMaster = (props) => {
 
@@ -129,7 +130,9 @@ const RoleMaster = (props) => {
                               autoComplete='off'
                               validate={{
                                 required: { value: true, errorMessage: 'Please enter a Name...!' },
-                              }} />
+                              }} 
+                              onChange={(e) => { dispatch(BreadcrumbShow(e.target.value)) }}
+                              />
                           </FormGroup>
                         </Row>
 

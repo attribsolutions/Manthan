@@ -27,6 +27,7 @@ import {
 import { MetaTags } from "react-meta-tags";
 import Breadcrumbs from "../../../components/Common/Breadcrumb";
 import { AlertState } from "../../../store/Utilites/CostumeAlert/actions";
+import { BreadcrumbShow } from "../../../store/Utilites/Breadcrumb/actions";
 
 const CompanyModule = (props) => {
 
@@ -157,8 +158,6 @@ const CompanyModule = (props) => {
                   <AvForm onValidSubmit={(e, v) => { handleValidSubmit(e, v) }}
                     ref={formRef}
                   >
-
-                 
                         <Card >
                           <CardBody style={{ backgroundColor: "whitesmoke" }}>
                             <Row>
@@ -170,6 +169,7 @@ const CompanyModule = (props) => {
                                   validate={{
                                     required: { value: true, errorMessage: 'Please Enter a Name' },
                                   }}
+                                  onChange={(e)=>{ dispatch(BreadcrumbShow(e.target.value))}}
                                 />
                               </FormGroup>
                               <Col md="1">  </Col>

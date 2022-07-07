@@ -13,6 +13,7 @@ import Profile from "./auth/profile/reducer"
 import SpinnerReducer from './Utilites/Spinner/reducer'
 import AlertReducer from './Utilites/CostumeAlert/reducer'
 import CustomSearchReducer from './Utilites/CustomSearchRedux/reducer'
+import BreadcrumbReducer from './Utilites/Breadcrumb/reducer'
 
 import Modules from './Administrator/ModulesRedux/reducer'
 import Company from './Administrator/CompanyRedux/reducer'
@@ -35,6 +36,7 @@ const rootReducer = combineReducers({
   SpinnerReducer,
   AlertReducer,
   CustomSearchReducer,
+  BreadcrumbReducer,
   // Administator
   Modules,
   Company,

@@ -33,6 +33,7 @@ import {
 import { fetchModelsList } from "../../../store/Administrator/ModulesRedux/actions";
 import { MetaTags } from "react-meta-tags";
 import { AlertState } from "../../../store/Utilites/CostumeAlert/actions";
+import { BreadcrumbShow } from "../../../store/Utilites/Breadcrumb/actions";
 
 const HPageMaster = (props) => {
     var editDataGatingFromList = props.state;
@@ -305,6 +306,7 @@ const HPageMaster = (props) => {
                                                         validate={{
                                                             required: { value: true, errorMessage: 'Please enter your Name...!' },
                                                         }}
+                                                        onChange={(e) => { dispatch(BreadcrumbShow(e.target.value)) }}
                                                     />
                                                 </FormGroup>
                                             </Col>
@@ -443,7 +445,7 @@ const HPageMaster = (props) => {
                                         <Row>
                                             <FormGroup className="mb-2 col col-sm-6">
                                                 <Row className="justify-content-md-left">
-                                                <Label htmlFor="horizontal-firstname-input" className="col-sm-3 col-form-label" >Show on Menu</Label>
+                                                    <Label htmlFor="horizontal-firstname-input" className="col-sm-3 col-form-label" >Show on Menu</Label>
                                                     <Col md={2} style={{ marginTop: '9px' }} >
 
                                                         <div className="form-check form-switch form-switch-md mb-3" dir="ltr">

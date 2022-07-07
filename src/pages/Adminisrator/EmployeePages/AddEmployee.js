@@ -417,7 +417,7 @@ const AddEmployee = (props) => {
                   <CardBody style={{ backgroundColor: "whitesmoke" }}>
                     <Row >
                       <Col md="3">
-                        <FormGroup className="mb-2">
+                        <FormGroup className="mb-3">
                           <Label htmlFor="validationCustom01">Party Name</Label>
                           <Select
                             value={party_DropdownSelect}
@@ -428,7 +428,7 @@ const AddEmployee = (props) => {
                       </Col>
                       <Col md="1">  </Col>
                       <Col md="3">
-                        <FormGroup className="mb-2">
+                        <FormGroup className="mb-3">
                           <Label htmlFor="validationCustom01">Company Name </Label>
                           <Select
                             value={company_DropdownSelect}
@@ -440,7 +440,7 @@ const AddEmployee = (props) => {
 
                       <Col md="1">  </Col>
                       <Col md="3">
-                        <FormGroup className="mb-2">
+                        <FormGroup className="mb-3">
                           <Label htmlFor="validationCustom01">Employee Type </Label>
                           <Select
                             value={employeeType_DropdownSelect}

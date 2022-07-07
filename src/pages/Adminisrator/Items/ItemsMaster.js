@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { AlertState } from "../../../store/Utilites/CostumeAlert/actions";
 import { editItemSuccess, getItemGroup_ForDropDown, postItemData, PostItemDataSuccess, updateItemID } from "../../../store/Administrator/ItemsRedux/action";
 import Select from "react-select";
+import { BreadcrumbShow } from "../../../store/Utilites/Breadcrumb/actions";
 
 const ItemsMaster = (props) => {
 
@@ -154,6 +155,7 @@ const ItemsMaster = (props) => {
                                   validate={{
                                     required: { value: true, errorMessage: 'Please enter a Name...!' },
                                   }}
+                                  onChange={(e) => { dispatch(BreadcrumbShow(e.target.value)) }}
                                 />
                               </FormGroup>
                               <Col md="1">  </Col>

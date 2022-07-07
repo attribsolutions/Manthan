@@ -12,6 +12,7 @@ import {
 import { getState } from "../../../store/Administrator/M_EmployeeRedux/action";
 import Flatpickr from "react-flatpickr"
 import { fetchCompanyList } from "../../../store/Administrator/CompanyRedux/actions";
+import { BreadcrumbShow } from "../../../store/Utilites/Breadcrumb/actions";
 const PartyMaster = (props) => {
 
     const formRef = useRef(null);
@@ -250,7 +251,9 @@ const PartyMaster = (props) => {
                                                                 // autoComplete='off'
                                                                 validate={{
                                                                     required: { value: true, errorMessage: 'Please enter a Name...!' },
-                                                                }} />
+                                                                }}
+                                                                onChange={(e) => { dispatch(BreadcrumbShow(e.target.value)) }}
+                                                            />
                                                         </FormGroup>
                                                     </Col>
                                                     <Col md="1">  </Col>
