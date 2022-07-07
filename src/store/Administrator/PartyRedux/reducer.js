@@ -4,14 +4,13 @@ import {
     GET_DISTRICT_ON_STATE_SUCCESS,
     GET_DIVISION_TYPES_ID_SUCCESS,
     GET_PARTTYPE_BY_DIVISIONTYPES_ID_SUCCESS,
-    GET_PARTY_LIST_API_SUCCESS,
     POST_PARTY_DATA,
     POST_PARTY_DATA_SUCCESS,
     UPDATE_PARTY_ID_SUCCESS
 } from "./actionTypes";
 
 const INIT_STATE = {
-    pages: [],
+    PartyList: [],
     PartySaveSuccess: { Status: false },
     PostPage: { Status: false },
     deleteRoleID: [],
@@ -29,7 +28,7 @@ const PartyMasterReducer = (state = INIT_STATE, action) => {
         case GET_PARTY_LIST_API_SUCCESS:
             return {
                 ...state,
-                pages: action.payload,
+                PartyList: action.payload,
             }
 
         // post api
