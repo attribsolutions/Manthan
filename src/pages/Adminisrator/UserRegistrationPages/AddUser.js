@@ -227,11 +227,10 @@ const AddUser = (props) => {
                           }} />
                       </FormGroup>
                     </Row>
-
                     <Row>
-                      <FormGroup className="mb-0 mt-0 col col-sm-6">
-                        <Row className="justify-content-md-left">
-                          <Label htmlFor="horizontal-firstname-input" className="col-sm-2 col-form-label mt-4 " >IsActive </Label>
+                      <FormGroup className="mb-0 mt-0 col col-sm-5">
+                      <Row className="justify-content-md-left">
+                        <Label htmlFor="horizontal-firstname-input" className="col-sm-5 col-form-label mt-4 " >Enable Mobile Login </Label>
                           <Col md={2} style={{ marginTop: '30px' }} >
                             <div className="form-check form-switch form-switch-md mb-3" dir="ltr">
                               <input type="checkbox" className="form-check-input" id="customSwitchsizemd"
@@ -240,25 +239,37 @@ const AddUser = (props) => {
                               />
                               <label className="form-check-label" htmlFor="customSwitchsizemd"></label>
                             </div>
-
                           </Col>
-                          <Label htmlFor="horizontal-firstname-input" className="col-sm-3 col-form-label mt-4 " >Mobile Login </Label>
-                          <Col md={2} style={{ marginTop: '30px' }} >
-                            <div className="form-check form-switch form-switch-md mb-3" dir="ltr">
-                              <input type="checkbox" className="form-check-input" id="customSwitchsizemd"
-                                checked={(EditData.ID === 0) ? false : EditData.isActive}
-                                name="IsActive"
-                              />
-                              <label className="form-check-label" htmlFor="customSwitchsizemd"></label>
-                            </div>
+                        {/* <Label htmlFor="horizontal-firstname-input" className="col-sm-5 col-form-label mt-4 " >Enable Mobile Login </Label> */}
 
-                          </Col>
+
                         </Row>
-                      </FormGroup>
-                      
-                      <FormGroup className=" mt-0 mb-0 col col-sm-6">
-                        <Row className="justify-content-md-left">
-                          <Label htmlFor="horizontal-firstname-input" className="col-sm-3 col-form-label mt-4" >IsSendOTP </Label>
+                       </FormGroup>
+                       
+                       <FormGroup className="mb-0 mt-0 col col-sm-5">
+                            <Row className="justify-content-md-left">
+                              <Label htmlFor="horizontal-firstname-input" className="col-sm-3 col-form-label mt-4 " >Is Active </Label>
+                              <Col md={2} style={{ marginTop: '30px' }} >
+                                <div className="form-check form-switch form-switch-md mb-3" dir="ltr">
+                                  <input type="checkbox" className="form-check-input" id="customSwitchsizemd"
+                                    checked={(EditData.ID === 0) ? false : EditData.isActive}
+                                    name="IsActive"
+                                  />
+                                  <label className="form-check-label" htmlFor="customSwitchsizemd"></label>
+                                </div>
+
+                              </Col>
+                              {/* <Label htmlFor="horizontal-firstname-input" className="col-sm-3 col-form-label mt-4 " >Is Active </Label> */}
+
+                            </Row>
+                          </FormGroup>
+                          
+                        </Row>
+                        <Row>
+                         
+                           <FormGroup className=" mt-0 mb-0 col col-sm-5">
+                            <Row className="justify-content-md-left">
+                              <Label htmlFor="horizontal-firstname-input" className="col-sm-5 col-form-label mt-4" >Enable Email Login </Label>
                           <Col md={2} style={{ marginTop: '30px' }} >
                             <div className="form-check form-switch form-switch-md mb-3" dir="ltr">
                               <input type="checkbox" className="form-check-input" id="customSwitchsizemd"
@@ -269,7 +280,27 @@ const AddUser = (props) => {
                             </div>
 
                           </Col>
-                          <Label htmlFor="horizontal-firstname-input" className="col-sm-3 col-form-label mt-4" >Email Login </Label>
+                          {/* <Label htmlFor="horizontal-firstname-input" className="col-sm-5 col-form-label mt-4" >Enable Email Login </Label> */}
+                       
+                            </Row>
+                          </FormGroup>
+
+                          <FormGroup className=" mt-0 mb-0 col col-sm-5">
+                            <Row className="justify-content-md-left">
+                              <Label htmlFor="horizontal-firstname-input" className="col-sm-3 col-form-label mt-4" >SendOTP </Label>
+                              <Col md={2} style={{ marginTop: '30px' }} >
+                                <div className="form-check form-switch form-switch-md mb-3" dir="ltr">
+                                  <input type="checkbox" className="form-check-input" id="customSwitchsizemd"
+                                    checked={(EditData.ID === 0) ? false : EditData.isSendOTP}
+                                    name="isSendOTP"
+                                  />
+                                  <label className="form-check-label" htmlFor="customSwitchsizemd"></label>
+                                </div>
+
+                              </Col>
+                              {/* <Label htmlFor="horizontal-firstname-input" className="col-sm-3 col-form-label mt-4" >SendOTP </Label> */}
+
+                              {/* <Label htmlFor="horizontal-firstname-input" className="col-sm-3 col-form-label mt-4" >Email Login </Label>
                           <Col md={2} style={{ marginTop: '30px' }} >
                             <div className="form-check form-switch form-switch-md mb-3" dir="ltr">
                               <input type="checkbox" className="form-check-input" id="customSwitchsizemd"
@@ -279,95 +310,96 @@ const AddUser = (props) => {
                               <label className="form-check-label" htmlFor="customSwitchsizemd"></label>
                             </div>
 
-                          </Col>
+                          </Col> */}
+                            </Row>
+                          </FormGroup>
+
                         </Row>
-                      </FormGroup>
+                      </CardBody>
+                    </Card>
 
-                    </Row>
-                  </CardBody>
-                </Card>
+                    <Card className=" text-black">
+                      <CardBody style={{ backgroundColor: "whitesmoke" }}>
+                        <Row >
+                          <FormGroup className="mt-1 ml-3 mb-3 col col-sm-4 " >
+                            <Label htmlFor="validationCustom01">Roles </Label>
+                            <Select
+                              value={RoleDropDown}
+                              options={RolesValues}
+                              onChange={(e) => { setRoleDropDown(e) }}
+                              classNamePrefix="select2-selection"
+                            />
+                            <FormGroup className=" mt-4 col col-sm-6">
+                              <Row >
 
-                <Card className=" text-black">
-                  <CardBody style={{ backgroundColor: "whitesmoke" }}>
-                    <Row >
-                      <FormGroup className="mt-1 ml-3 mb-3 col col-sm-4 " >
-                        <Label htmlFor="validationCustom01">Roles </Label>
-                        <Select
-                          value={RoleDropDown}
-                          options={RolesValues}
-                          onChange={(e) => { setRoleDropDown(e) }}
-                          classNamePrefix="select2-selection"
-                        />
-                        <FormGroup className=" mt-3 col col-sm-6">
-                          <Row >
-
-                            <Col sm={2} >
-                              <div>
-                                {
-                                  IsEdit ? (
-                                    <button
-                                      type="submit"
-                                      data-mdb-toggle="tooltip" data-mdb-placement="top" title="Update User"
-                                      className="btn btn-success w-md"
-                                    >
-                                      <i class="fas fa-edit me-2"></i>Update
-                                    </button>) : (
-                                    <button
-                                      type="submit"
-                                      data-mdb-toggle="tooltip" data-mdb-placement="top" title="Save User"
-                                      className="btn btn-primary w-md"
-                                    > <i className="fas fa-save me-2"></i> Save
-                                    </button>
-                                  )
-                                }
-                              </div>
-                            </Col>
-
-                          </Row>
-                        </FormGroup >
-                      </FormGroup>
-
-                      <Col sm={1} style={{ marginTop: '33px' }} >
-                        {" "}
-                        <Button
-                          type="button"
-                          className="btn btn-sm mt-1 mb-0 btn-light   btn-outline-primary   "
-                          // color="light"
-                          onClick={() =>
-                            AddRoleHandler()
-                          }
-                        >
-                          <i className="dripicons-plus "></i>
-                        </Button>
-                    
-                        
-                      </Col>
-                      <Col sm={3} style={{ marginTop: '33px' }}>
-                        {RoleData.length > 0 ? (
-                          <div>
-                            <div className="table-responsive">
-                              <Table className="table table-bordered mb-0 table">
-                                <Thead >
-                                  <tr>
-                                    <th>RoleName</th>
-                                    <th>ID</th>
-                                    <th>Action</th>
-                                  </tr>
-                                </Thead>
-                                <Tbody >
-                                  {RoleData.map((TableValue) => (
-
-                                    <tr key={TableValue.Role}>
-                                      <td>
-                                          {TableValue.label}
-                                      </td>
-                                      <td>
-                                          {TableValue.value}
-                                      </td>
-                                      <td>
+                                <Col sm={2} >
+                                  <div>
+                                    {
+                                      IsEdit ? (
                                         <button
+                                          type="submit"
+                                          data-mdb-toggle="tooltip" data-mdb-placement="top" title="Update User"
+                                          className="btn btn-success w-md"
+                                        >
+                                          <i class="fas fa-edit me-2"></i>Update
+                                        </button>) : (
+                                        <button
+                                          type="submit"
+                                          data-mdb-toggle="tooltip" data-mdb-placement="top" title="Save User"
+                                          className="btn btn-primary w-md"
+                                        > <i className="fas fa-save me-2"></i> Save
+                                        </button>
+                                      )
+                                    }
+                                  </div>
+                                </Col>
+
+                              </Row>
+                            </FormGroup >
+                          </FormGroup>
+
+                          <Col sm={1} style={{ marginTop: '33px' }} >
+                            {" "}
+                            <Button
+                              type="button"
+                              className="btn btn-sm mt-1 mb-0 btn-light   btn-outline-primary   "
+                              // color="light"
+                              onClick={() =>
+                                AddRoleHandler()
+                              }
+                            >
+                              <i className="dripicons-plus "></i>
+                            </Button>
+
+
+                          </Col>
+                          <Col sm={3} style={{ marginTop: '33px' }}>
+                            {RoleData.length > 0 ? (
+
+                              <div className="table-responsive">
+                                <Table className="table table-bordered  text-center">
+                                  <Thead >
+                                    <tr>
+                                      <th>RoleName</th>
+
+                                      <th>Action</th>
+                                    </tr>
+                                  </Thead>
+                                  <Tbody  >
+                                    {RoleData.map((TableValue) => (
+
+                                      <tr key={TableValue.Role}>
+                                        <td>
+                                          {TableValue.label}
+                                        </td>
+                                        <td>
+                                          <i className="mdi mdi-trash-can d-block text-danger font-size-20" onClick={() => {
+                                            UserRoles_DeleteButton_Handller(TableValue.value)
+                                          }
+                                          }></i>
+                                          {/* <button
                                           type="button"
-                                          className="btn btn-soft-danger btn-sm waves-effect waves-light border-danger"
+                                          className="btn btn-soft-white btn-sm waves-effect waves-light border-danger"
                                           data-mdb-toggle="tooltip" data-mdb-placement="top" title="Delete Roles"
                                           onClick={() => {
                                             UserRoles_DeleteButton_Handller(TableValue.value)
@@ -375,61 +407,34 @@ const AddUser = (props) => {
                                           }
                                         >
                                           <i class="mdi mdi-trash-can d-block font-size-10"></i>
-                                        </button>
-                                      </td>
-                                    </tr>
-                                  ))}
-                                </Tbody>
-                              </Table>
-                            </div>
-                          </div>
-                        ) : (
-                          <>
-                            
-                          </>
-                        )}
-                      </Col>
-                    </Row>
-
-                    {/* <FormGroup className=" mt-0 mb-0 col col-sm-6">
-                          <Row >
-
-                            <Col sm={2} >
-                              <div>
-                                {
-                                  IsEdit ? (
-                                    <button
-                                      type="submit"
-                                      data-mdb-toggle="tooltip" data-mdb-placement="top" title="Update User"
-                                      className="btn btn-success w-md"
-                                    >
-                                      <i class="fas fa-edit me-2"></i>Update
-                                    </button>) : (
-                                    <button
-                                      type="submit"
-                                      data-mdb-toggle="tooltip" data-mdb-placement="top" title="Save User"
-                                      className="btn btn-primary w-md"
-                                    > <i className="fas fa-save me-2"></i> Save
-                                    </button>
-                                  )
-                                }
+                                        </button> */}
+                                        </td>
+                                      </tr>
+                                    ))}
+                                  </Tbody>
+                                </Table>
                               </div>
-                            </Col>
 
-                          </Row>
-                        </FormGroup > */}
-                  </CardBody>
+                            ) : (
+                              <>
 
-                </Card>
+                              </>
+                            )}
+                          </Col>
+                        </Row>
 
-              </AvForm>
-            </CardBody>
+                      </CardBody>
 
-          </Card>
+                    </Card>
 
-        </Container >
-      </div >
-    </React.Fragment >
-  );
+                  </AvForm>
+                </CardBody>
+
+              </Card>
+
+            </Container >
+          </div >
+        </React.Fragment >
+        );
 }
-export default AddUser
+        export default AddUser
