@@ -40,7 +40,7 @@ const AddUser = (props) => {
 
   // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
   useEffect(() => {
-    // document.getElementById("txtName").focus();
+    document.getElementById("txtName").focus();
     if (!(editDataGatingFromList === undefined)) {
       setEditData(editDataGatingFromList);
       setIsEdit(true);
@@ -189,7 +189,9 @@ const AddUser = (props) => {
       <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
         <Breadcrumbs breadcrumbItem={"User Registration "} />
         <Container fluid>
-        <Card className="text-black" >
+        <Row>
+            <Col lg={12}>
+          <Card className="text-black" >
             <CardHeader className="card-header   text-black" style={{ backgroundColor: "#dddddd" }} >
               <h4 className="card-title text-black">React Validation - Normal</h4>
               <p className="card-title-desc text-black">Provide valuable, actionable feedback to your users with HTML5 form validation–available in all our supported browsers.</p>
@@ -203,7 +205,7 @@ const AddUser = (props) => {
               >
                 <Card className=" text-black">
                   <CardBody style={{ backgroundColor: "whitesmoke" }}>
-                  <Row className=" mt-1 ">
+                    <Row >
                       <FormGroup className="mb-1 col col-sm-4 " >
                         <Label htmlFor="validationCustom01">Employee </Label>
                         <Select
@@ -217,147 +219,82 @@ const AddUser = (props) => {
                         <Label htmlFor="validationCustom01">Name </Label>
                         <AvField name="LoginName" id="txtName" value={EditData.LoginName}
                           type="text"
-                          placeholder="Please Enter LoginName"
-                          // autoComplete='off'
+                          placeholder="Please Enter Name"
+                          autoComplete='off'
                           validate={{
-                            required: { value: true, errorMessage: 'Please enter a LoginName...!' },
+                            required: { value: true, errorMessage: 'Please enter a Name...!' },
                           }}
                           onChange={(e) => { dispatch(BreadcrumbShow(e.target.value)) }}
-                          />
+                        />
                       </FormGroup>
                     </Row>
 
-                    {/* <Row>
-                      <FormGroup className=" col col-sm-5">
-                      <Row className="justify-content-md-left">
-                        <Label htmlFor="horizontal-firstname-input" className="col-sm-5 col-form-label mt-4 " >Enable Mobile Login </Label>
-                          <Col md={2} style={{ marginTop: '30px' }} >
-                            <div className="form-check form-switch form-switch-md mb-3" dir="ltr">
-                              <input type="checkbox" className="form-check-input" id="customSwitchsizemd"
-                                checked={(EditData.ID === 0) ? false : EditData.isActive}
-                                name="IsActive"
-                              />
-                              <label className="form-check-label" htmlFor="customSwitchsizemd"></label>
-                            </div>
-                          </Col>
-                        {/* <Label htmlFor="horizontal-firstname-input" className="col-sm-5 col-form-label mt-4 " >Enable Mobile Login </Label> */}
-                    {/* </Row>
-                       </FormGroup>
-                       
-                       <FormGroup className="mb-0 mt-0 col col-sm-5">
-                            <Row className="justify-content-md-left">
-                              <Label htmlFor="horizontal-firstname-input" className="col-sm-3 col-form-label mt-4 " >Is Active </Label>
-                              <Col md={2} style={{ marginTop: '30px' }} >
-                                <div className="form-check form-switch form-switch-md mb-3" dir="ltr">
-                                  <input type="checkbox" className="form-check-input" id="customSwitchsizemd"
-                                    checked={(EditData.ID === 0) ? false : EditData.isActive}
-                                    name="IsActive"
-                                  />
-                                  <label className="form-check-label" htmlFor="customSwitchsizemd"></label>
-                                </div>
-                              </Col>
-                              {/* <Label htmlFor="horizontal-firstname-input" className="col-sm-3 col-form-label mt-4 " >Is Active </Label> */}
-                    {/* </Row>
-                          </FormGroup>
-                        </Row> */}
-                    <Row>
-                      <FormGroup className="mb-1 col col-sm-7 " >
+                    <Row className="mt-2">
+                      <FormGroup className="mb-1 col col-sm-12 " >
                         <Row className="justify-content-md-left">
-                          <Label htmlFor="horizontal-firstname-input" className="col-sm-3 col-form-label" >Enable Mobile Login</Label>
-                          <Col md={2} style={{ marginTop: '9px' }} >
-                            <div className="form-check form-switch form-switch-md mb-3" dir="ltr">
+                          <Label htmlFor="horizontal-firstname-input" className=" col-sm-2 col-form-label" >Enable Mobile Login</Label>
+                          <Col md="1" style={{ marginTop: '9px' }} >
+                            <div className="form-check form-switch form-switch-md ml-4 " dir="ltr">
                               <input type="checkbox" className="form-check-input" id="customSwitchsizemd"
-                                checked={ EditData.isActive}
+                                checked={EditData.isActive}
                                 name="IsActive"
                               />
                               <label className="form-check-label" htmlFor="customSwitchsizemd"></label>
                             </div>
                           </Col>
 
-                          <Col md="3" >  </Col>
-                          <Label htmlFor="horizontal-firstname-input" className="col-sm-2 col-form-label " >Active </Label>
-                          <Col md={2} style={{ marginTop: '9px' }} >
-                            <div className="form-check form-switch form-switch-md mb-3" dir="ltr">
+                          <Col md="2" >  </Col>
+                          <Label htmlFor="horizontal-firstname-input" className="col-sm-1 col-form-label " >Active </Label>
+                          <Col md="1" style={{ marginTop: '9px' }} >
+                            <div className="form-check form-switch form-switch-md " dir="ltr">
                               <input type="checkbox" className="form-check-input" id="customSwitchsizemd"
-                                checked={ EditData.isActive}
+                                checked={EditData.isActive}
                                 name="IsActive"
                               />
                               <label className="form-check-label" htmlFor="customSwitchsizemd"></label>
                             </div>
                           </Col>
+                          <Col md="5" >  </Col>
                         </Row>
                       </FormGroup>
                     </Row>
-
+                   
                     <Row >
-                      <FormGroup className=" col col-sm-7  " >
+                      <FormGroup className="col col-sm-12  " >
                         <Row className="justify-content-md-left">
-                          <Label htmlFor="horizontal-firstname-input" className="col-sm-3 col-form-label" >Enable Email Login</Label>
-                          <Col md={2} style={{ marginTop: '10px' }} >
-                            <div className="form-check form-switch form-switch-md mb-3" dir="ltr">
-                              <input type="checkbox" className="form-check-input" id="customSwitchsizemd"
-                                checked={(EditData.ID === 0) ? false : EditData.isSendOTP}
-                                name="isSendOTP"
-                              />
-                              <label className="form-check-label" htmlFor="customSwitchsizemd"></label>
-                            </div>
-                          </Col>
-
-                          <Col md="3" >  </Col>
-                          <Label htmlFor="horizontal-firstname-input" className="col-sm-2 col-form-label " >send OTP </Label>
-                          <Col md={2} style={{ marginTop: '10px' }} >
+                          <Label htmlFor="horizontal-firstname-input" className="col-sm-2 col-form-label" >Enable Email Login</Label>
+                          <Col md={1} style={{ marginTop: '10px' }} >
                             <div className="form-check form-switch form-switch-md" dir="ltr">
                               <input type="checkbox" className="form-check-input" id="customSwitchsizemd"
-                                checked={(EditData.ID === 0) ? false : EditData.isSendOTP}
+                                checked={EditData.isSendOTP}
                                 name="isSendOTP"
                               />
                               <label className="form-check-label" htmlFor="customSwitchsizemd"></label>
                             </div>
                           </Col>
+
+                          <Col md="2" >  </Col>
+                          <Label htmlFor="horizontal-firstname-input" className="col-sm-1 col-form-label " >Send OTP </Label>
+                          <Col md={1} style={{ marginTop: '10px' }} >
+                            <div className="form-check form-switch form-switch-md" dir="ltr">
+                              <input type="checkbox" className="form-check-input" id="customSwitchsizemd"
+                                checked={EditData.isSendOTP}
+                                name="isSendOTP"
+                              />
+                              <label className="form-check-label" htmlFor="customSwitchsizemd"></label>
+                            </div>
+                          </Col>
+                          <Col md="5" >  </Col>
                         </Row>
                       </FormGroup>
                     </Row>
-
-                    {/* <Row>
-                      <FormGroup className=" mt-0 mb-0 col col-sm-5">
-                        <Row className="justify-content-md-left">
-                          <Label htmlFor="horizontal-firstname-input" className="col-sm-5 col-form-label mt-4" >Enable Email Login </Label>
-                          <Col md={2} style={{ marginTop: '30px' }} >
-                            <div className="form-check form-switch form-switch-md mb-3" dir="ltr">
-                              <input type="checkbox" className="form-check-input" id="customSwitchsizemd"
-                                checked={(EditData.ID === 0) ? false : EditData.isSendOTP}
-                                name="isSendOTP"
-                              />
-                              <label className="form-check-label" htmlFor="customSwitchsizemd"></label>
-                            </div>
-                          </Col>
-                          {/* <Label htmlFor="horizontal-firstname-input" className="col-sm-5 col-form-label mt-4" >Enable Email Login </Label> */}
-                    {/* </Row>
-                      </FormGroup>
-
-                      <FormGroup className=" mt-0 mb-0 col col-sm-5">
-                        <Row className="justify-content-md-left">
-                          <Label htmlFor="horizontal-firstname-input" className="col-sm-3 col-form-label mt-4" >SendOTP </Label>
-                          <Col md={2} style={{ marginTop: '30px' }} >
-                            <div className="form-check form-switch form-switch-md mb-3" dir="ltr">
-                              <input type="checkbox" className="form-check-input" id="customSwitchsizemd"
-                                checked={(EditData.ID === 0) ? false : EditData.isSendOTP}
-                                name="isSendOTP"
-                              />
-                              <label className="form-check-label" htmlFor="customSwitchsizemd"></label>
-                            </div>
-                          </Col>
-                          {/* <Label htmlFor="horizontal-firstname-input" className="col-sm-3 col-form-label mt-4" >SendOTP </Label> */}
-                    {/* </Row>
-                      </FormGroup>
-                    </Row>  */}
                   </CardBody>
                 </Card>
 
-                <Card className=" text-black">
+                <Card className="mt-n2">
                   <CardBody style={{ backgroundColor: "whitesmoke" }}>
-                    <Row >
-                      <FormGroup className="mt-1 ml-3 mb-3 col col-sm-4 " >
+                    <Row className="">
+                      <FormGroup className=" ml-3 col col-sm-4 " >
                         <Label htmlFor="validationCustom01">Roles </Label>
                         <Select
                           value={RoleDropDown}
@@ -365,8 +302,8 @@ const AddUser = (props) => {
                           onChange={(e) => { setRoleDropDown(e) }}
                           classNamePrefix="select2-selection"
                         />
-                        <FormGroup className=" mt-4  col col-sm-6">
-                          <Row >
+                        {/* <FormGroup className=" mt-3 ">
+                          <Row className="mb-0">
 
                             <Col sm={2} >
                               <div>
@@ -389,27 +326,23 @@ const AddUser = (props) => {
                                 }
                               </div>
                             </Col>
-
                           </Row>
-                        </FormGroup >
+                        </FormGroup > */}
                       </FormGroup>
 
-                      <Col sm={1} style={{ marginTop: '33px' }} >
+                      <Col sm={1} style={{ marginTop: '28px' }} >
                         {" "}
                         <Button
                           type="button"
-                          className="btn btn-sm mt-1 mb-0 btn-light   btn-outline-primary   "
-                          // color="light"
+                          className="btn btn-sm mt-1 mb-0 btn-light  btn-outline-primary  "
                           onClick={() =>
                             AddRoleHandler()
                           }
                         >
                           <i className="dripicons-plus "></i>
                         </Button>
-
-
                       </Col>
-                      <Col sm={3} style={{ marginTop: '33px' }}>
+                      <Col sm={3} style={{ marginTop: '28px' }}>
                         {RoleData.length > 0 ? (
 
                           <div className="table-responsive">
@@ -423,7 +356,6 @@ const AddUser = (props) => {
                               </Thead>
                               <Tbody  >
                                 {RoleData.map((TableValue) => (
-
                                   <tr key={TableValue.Role}>
                                     <td>
                                       {TableValue.label}
@@ -431,43 +363,53 @@ const AddUser = (props) => {
                                     <td>
                                       <i className="mdi mdi-trash-can d-block text-danger font-size-20" onClick={() => {
                                         UserRoles_DeleteButton_Handller(TableValue.value)
-                                      }
-                                      }></i>
-                                      {/* <button
-                                          type="button"
-                                          className="btn btn-soft-white btn-sm waves-effect waves-light border-danger"
-                                          data-mdb-toggle="tooltip" data-mdb-placement="top" title="Delete Roles"
-                                          onClick={() => {
-                                            UserRoles_DeleteButton_Handller(TableValue.value)
-                                          }
-                                          }
-                                        >
-                                          <i class="mdi mdi-trash-can d-block font-size-10"></i>
-                                        </button> */}
+                                      }} >
+                                      </i>
                                     </td>
                                   </tr>
                                 ))}
                               </Tbody>
                             </Table>
                           </div>
-
                         ) : (
                           <>
-
                           </>
                         )}
                       </Col>
+                      <FormGroup className=" mt-3 ">
+                          <Row className="mb-0">
+
+                            <Col sm={2} >
+                              <div>
+                                {
+                                  IsEdit ? (
+                                    <button
+                                      type="submit"
+                                      data-mdb-toggle="tooltip" data-mdb-placement="top" title="Update User"
+                                      className="btn btn-success w-md"
+                                    >
+                                      <i class="fas fa-edit me-2"></i>Update
+                                    </button>) : (
+                                    <button
+                                      type="submit"
+                                      data-mdb-toggle="tooltip" data-mdb-placement="top" title="Save User"
+                                      className="btn btn-primary w-md"
+                                    > <i className="fas fa-save me-2"></i> Save
+                                    </button>
+                                  )
+                                }
+                              </div>
+                            </Col>
+                          </Row>
+                        </FormGroup >
                     </Row>
-
                   </CardBody>
-
                 </Card>
-
               </AvForm>
             </CardBody>
-
           </Card>
-
+          </Col>
+          </Row>
         </Container >
       </div >
     </React.Fragment >

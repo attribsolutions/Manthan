@@ -10,7 +10,8 @@ import {
     Input,
     Button,
     FormGroup,
-    CardHeader
+    CardHeader,
+
 } from "reactstrap";
 import Breadcrumbs from '../../../components/Common/Breadcrumb'
 import {
@@ -21,6 +22,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import AvField from "availity-reactstrap-validation/lib/AvField";
 import ReactSelect from "react-select";
+import { Tbody, Thead, Table } from "react-super-responsive-table";
 import {
     editHPagesIDSuccess,
     getPageAccess_DropDown_API,
@@ -42,13 +44,16 @@ const HPageMaster = (props) => {
     const dispatch = useDispatch();
     const [IsEdit, setIsEdit] = useState(false);
     const [EditData, setEditData] = useState([]);
-    const [selectModule, setSelectModule] = useState('');
+    const [module_DropdownSelect, setModule_DropdownSelect] = useState('');
+    const [pageType_DropdownSelect, setPageType_DropdownSelect] = useState('');
+    const [pageList_DropdownSelect, setPageList_DropdownSelect] = useState('');
+
     const [PageMode, setPageMode] = useState(false);
-    const [isShowPageChecked, setisShowPageChecked] = useState();
-    const [PageAccessData, setPageAccessData] = useState([]);
-    const [selectPageType, setPageType] = useState('');
-    const [selectPageList, setPageList] = useState('');
-    const [selectPageAccessDropDown, setselectPageAccessDropDown] = useState('');
+
+    const [isShowPageChecked, setisShowPageChecked] = useState(true);
+    const [pageAccessData, setPageAccessData] = useState([]);
+
+    const [pageAccess_DropDownSelect, setPageAccess_DropDownSelect] = useState('');
 
     //Access redux store Data
     const { ModuleData, SaveMessage, PageList, PageAccess } = useSelector((state) => ({
@@ -63,14 +68,7 @@ const HPageMaster = (props) => {
         dispatch(getPageAccess_DropDown_API());
     }, [dispatch]);
 
-    const PageAccessValues = PageAccess.map((Data) => ({
-        value: Data.ID,
-        label: Data.Name
-    }));
-
-    function handllerPageAccess(e) {
-        setselectPageAccessDropDown(e)
-    }
+  
 
     // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
     useEffect(() => {
@@ -80,32 +78,33 @@ const HPageMaster = (props) => {
         if (!(editDataGatingFromList === undefined)) {
             setEditData(editDataGatingFromList);
             setIsEdit(true);
-            setSelectModule({
+            setPageAccessData(editDataGatingFromList.PagePageAccess)
+
+            setModule_DropdownSelect({
                 label: editDataGatingFromList.ModuleName,
                 value: editDataGatingFromList.Module
             })
-            setPageList({
+            setPageList_DropdownSelect({
                 value: editDataGatingFromList.RelatedPageID,
                 label: editDataGatingFromList.RelatedPageName,
             })
 
-            setPageAccessData(editDataGatingFromList.PagePageAccess)
 
             // When value 2 is get then DropDown lable is "ListPage" and ShowMenu is disabled Otherwise DropDown lable is "AddPage" and ShowMenu is enabled
-            let showCheckBox = editDataGatingFromList.PageType
-            if (showCheckBox === 2) {
-                document.getElementById("abc").disabled = true
+            let showCheckBox_pageType = editDataGatingFromList.PageType
+            if (showCheckBox_pageType === 2) {
+                document.getElementById("inp-showOnMenu").disabled = true
                 setisShowPageChecked(true)
-                dispatch(getPageList(showCheckBox))
-                setPageType({ value: 2, label: 'ListPage' })
+                dispatch(getPageList(showCheckBox_pageType))
+                setPageType_DropdownSelect({ value: 2, label: 'ListPage' })
             }
-            else if (showCheckBox === 1) {
+            else if (showCheckBox_pageType === 1) {
 
-                setisShowPageChecked(showCheckBox.isShowOnMenu);
-                document.getElementById("abc").disabled = false
+                setisShowPageChecked(showCheckBox_pageType.isShowOnMenu);
+                document.getElementById("inp-showOnMenu").disabled = false
                 dispatch(getPageListSuccess([]))
-                setPageList({ value: 0 })
-                setPageType({ value: 1, label: 'AddPage' })
+                setPageList_DropdownSelect({ value: 0 })
+                setPageType_DropdownSelect({ value: 1, label: 'AddPage' })
 
             }
 
@@ -118,10 +117,10 @@ const HPageMaster = (props) => {
     useEffect(() => {
         if ((SaveMessage.Status === true) && (SaveMessage.StatusCode === 200)) {
             dispatch(saveHPagesSuccess({ Status: false }))
-            setSelectModule('')
-            setselectPageAccessDropDown('')
-            setPageType('')
-            setPageList('')
+            setModule_DropdownSelect('')
+            setPageAccess_DropDownSelect('')
+            setPageType_DropdownSelect('')
+            setPageList_DropdownSelect('')
             formRef.current.reset();
 
             if (PageMode === true) {
@@ -151,12 +150,41 @@ const HPageMaster = (props) => {
                 AfterResponseAction: false
             }));
         }
-    }, [SaveMessage.Status])
+    }, [SaveMessage])
 
-    //'Save' And 'Update' Button Handller
-    const handleValidSubmit = (event, values) => {
+ 
+    const PageAccessValues = PageAccess.map((Data) => ({
+        value: Data.id,
+        label: Data.Name
+    }));
 
-        if (PageAccessData.length <= 0) {
+    const Module_DropdownOption = ModuleData.map((d) => ({
+        value: d.ID,
+        label: d.Name,
+    }));
+
+    // PageList Dropdown
+    const PageList_DropdownOption = PageList.map((d) => ({
+        value: d.ID,
+        label: d.Name,
+    }));
+
+    // PageList Dropdown
+    const PageType_DropdownOption = [
+        {
+            value: 1,
+            label: "Add Page",
+        },
+        {
+            value: 2,
+            label: "Page List",
+        }
+    ];
+
+       //'Save' And 'Update' Button Handller
+       const handleValidSubmit = (event, values) => {
+
+        if (pageAccessData.length <= 0) {
             dispatch(AlertState({
                 Type: 4, Status: true,
                 Message: "At Least One PageAccess is Select",
@@ -170,24 +198,24 @@ const HPageMaster = (props) => {
             body: JSON.stringify({
                 Name: values.Name,
                 Description: values.Discription,
-                Module: selectModule.value,
+                Module: module_DropdownSelect.value,
                 isActive: values.isActive,
                 DisplayIndex: values.DisplayIndex,
                 Icon: values.Icon,
                 ActualPagePath: values.ActualPagePath,
                 isShowOnMenu: values.isShowOnMenu,
-                PageType: selectPageType.value,
-                RelatedPageID: selectPageList.value,
+                PageType: pageType_DropdownSelect.value,
+                RelatedPageID: pageList_DropdownSelect.value,
                 CreatedBy: 1,
                 UpdatedBy: 1,
-                PagePageAccess: PageAccessData.map((d) => ({
+                PagePageAccess: pageAccessData.map((d) => ({
                     AccessID: d.AccessID,
                 })),
             }),
         };
 
         if (IsEdit) {
-            dispatch(updateHPages(requestOptions.body, EditData.ID));
+            dispatch(updateHPages(requestOptions.body, EditData.id));
         }
         else {
             dispatch(saveHPages(requestOptions.body));
@@ -195,58 +223,53 @@ const HPageMaster = (props) => {
     };
 
     // for module dropdown
-    const HModuleSelectOnChangeHandller = (e) => {
-        setSelectModule(e);
+    const Module_DropdownSelectHandller = (e) => {
+        setModule_DropdownSelect(e);
     }
 
-    const optionModule = ModuleData.map((d) => ({
-        value: d.ID,
-        label: d.Name,
-    }));
+   
 
-    // PageList Dropdown
-    const optionPageList = PageList.map((d) => ({
-        value: d.ID,
-        label: d.Name,
-    }));
-
+    function PageAccess_DropdownSelect_Handler(e) {
+        setPageAccess_DropDownSelect(e)
+    }
+    
 
     //  for PageType deropDown
-    const PageType_SelectOnChangeHandller = (e) => {
-        let showCheckBox = document.getElementById("abc")
-        if (e.label === "ListPage") {
+    const PageType_DropdownSelectHandller = (e) => {
+
+        let showCheckBox = document.getElementById("inp-showOnMenu")
+        if (e.value === 2) {
             setisShowPageChecked(true)
             dispatch(getPageList(e.value))
-            showCheckBox.disabled = true
+            // showCheckBox.disabled = true
         }
-        else if (e.label === "AddPage") {
+        else if (e.value === 1) {
             showCheckBox.disabled = false
             dispatch(getPageListSuccess([]))
-            setPageList({ value: 0 })
+            setPageList_DropdownSelect({ value: 0 })
         }
-        setPageType(e)
+        setPageType_DropdownSelect(e)
     }
 
-
-    const PageList_SelectOnChangeHandller = (e) => {
-        setPageList(e);
+    const PageList_DropdownSelectHandller = (e) => {
+        setPageList_DropdownSelect(e);
     }
 
     // ADD Button handler
     function AddRoleHandler() {
-        const find = PageAccessData.find((element) => {
-            return element.AccessID === selectPageAccessDropDown.value
+        const find = pageAccessData.find((element) => {
+            return element.AccessID === pageAccess_DropDownSelect.value
         });
-        if (selectPageAccessDropDown.length <= 0) {
+        if (pageAccess_DropDownSelect.length <= 0) {
             dispatch(AlertState({
                 Type: 3, Status: true,
                 Message: "Select One DropDown Value",
             }));
         }
         else if (find === undefined) {
-            setPageAccessData([...PageAccessData, {
-                AccessID: selectPageAccessDropDown.value,
-                AccessName: selectPageAccessDropDown.label
+            setPageAccessData([...pageAccessData, {
+                AccessID: pageAccess_DropDownSelect.value,
+                AccessName: pageAccess_DropDownSelect.label
             }
             ]);
         }
@@ -260,7 +283,7 @@ const HPageMaster = (props) => {
 
     // For Delete Button in table
     function PageAccess_DeleteButton_Handller(tableValue) {
-        setPageAccessData(PageAccessData.filter(
+        setPageAccessData(pageAccessData.filter(
             (item) => !(item.AccessID === tableValue)
         )
         )
@@ -291,10 +314,9 @@ const HPageMaster = (props) => {
                                 }}
                                 ref={formRef}
                             >
-                                <Row>
-                                    <Card style={{ backgroundColor: "whitesmoke" }} >
-
-                                        <Row className=" mt-3 ">
+                                <Card >
+                                    <CardBody style={{ backgroundColor: "whitesmoke" }}>
+                                        <Row >
 
                                             <Col md="3">
                                                 <FormGroup className="mb-3 ">
@@ -314,57 +336,45 @@ const HPageMaster = (props) => {
                                             <Col md="1">  </Col>
                                             <Col md="3">
                                                 <FormGroup className="mb-3">
-                                                    <Label htmlFor="validationCustom01">Email </Label>
-                                                    <AvField name="email"
-                                                        id="email"
-                                                        type="email"
-                                                        value={EditData.email}
-                                                        placeholder="Enter your EmailID "
-                                                        validate={{
-                                                            required: { value: true, errorMessage: 'Please Enter your EmailID' },
-                                                            tel: {
-                                                                pattern: /\S+@\S+\.\S+/
-                                                            }
-                                                        }}
-
-                                                    />
-
-                                                </FormGroup>
-                                            </Col>
-                                            <Col md="1">  </Col>
-
-                                            <Col md="3">
-                                                <FormGroup className="mb-3">
-                                                    <Label htmlFor="validationCustom01">Mobile Number </Label>
-                                                    <AvField name="Mobile" type="tel"
-                                                        value={EditData.Mobile}
-                                                        placeholder="+91 "
-                                                        validate={{
-                                                            required: { value: true, errorMessage: 'Please Enter your Mobile NO' },
-                                                            tel: {
-                                                                pattern: /^(\+\d{1,3}[- ]?)?\d{10}$/
-                                                            }
-                                                        }}
-
+                                                    <Label htmlFor="validationCustom01">Description </Label>
+                                                    <AvField name="Description"
+                                                        type="text"
+                                                        value={EditData.Description}
+                                                        placeholder="Enter your Discription "
                                                     />
                                                 </FormGroup>
                                             </Col>
+
                                         </Row>
-                                    </Card>
-                                </Row>
+                                    </CardBody>
+                                </Card>
 
-                                <Row>
-                                    <Card style={{ backgroundColor: "whitesmoke" }} >
-                                        <Row className="mt-3 ">
+
+                                <Card  >
+                                    <CardBody style={{ backgroundColor: "whitesmoke" }}>
+
+                                        <Row >
 
                                             <Col md="3">
                                                 <FormGroup className="mb-3">
                                                     <Label htmlFor="validationCustom01">Module</Label>
                                                     <Select
-                                                        value={selectModule}
-                                                        options={optionModule}
+                                                        value={module_DropdownSelect}
+                                                        options={Module_DropdownOption}
                                                         autoComplete='off'
-                                                        onChange={(e) => { HModuleSelectOnChangeHandller(e) }}
+                                                        onChange={(e) => { Module_DropdownSelectHandller(e) }}
+                                                    />
+                                                </FormGroup>
+                                            </Col>
+                                            <Col md="1">  </Col>
+                                            <Col md="3">
+                                                <FormGroup className="mb-3">
+                                                    <Label htmlFor="validationCustom01">Page Type</Label>
+                                                    <Select
+                                                        value={pageType_DropdownSelect}
+                                                        options={PageType_DropdownOption}
+                                                        autoComplete='off'
+                                                        onChange={(e) => { PageType_DropdownSelectHandller(e) }}
                                                     />
                                                 </FormGroup>
                                             </Col>
@@ -372,30 +382,19 @@ const HPageMaster = (props) => {
                                             <Col md="1">  </Col>
                                             <Col md="3">
                                                 <FormGroup className="mb-3">
-                                                    <Label htmlFor="validationCustom01">Page Type </Label>
+                                                    <Label htmlFor="validationCustom01">Page List</Label>
                                                     <Select
-                                                        value={selectPageList}
-                                                        options={optionPageList}
+                                                        value={pageList_DropdownSelect}
+                                                        options={PageList_DropdownOption}
                                                         autoComplete='off'
-                                                        onChange={(e) => { PageList_SelectOnChangeHandller(e) }}
+                                                        onChange={(e) => { PageList_DropdownSelectHandller(e) }}
                                                     />
 
                                                 </FormGroup>
                                             </Col>
 
-                                            <Col md="1">  </Col>
-                                            <Col md="3">
-                                                <FormGroup className="mb-3">
-                                                    <Label htmlFor="validationCustom01">Page List </Label>
-                                                    <Select
-                                                        value={selectPageList}
-                                                        options={optionPageList}
-                                                        autoComplete='off'
-                                                        onChange={(e) => { PageList_SelectOnChangeHandller(e) }}
-                                                    />
-                                                </FormGroup>
-                                            </Col>
                                         </Row>
+
                                         <Row >
 
                                             <Col md="3">
@@ -443,15 +442,16 @@ const HPageMaster = (props) => {
                                         </Row>
 
                                         <Row>
-                                            <FormGroup className="mb-2 col col-sm-6">
+                                            <FormGroup className="mb-1 col col-sm-6">
                                                 <Row className="justify-content-md-left">
                                                     <Label htmlFor="horizontal-firstname-input" className="col-sm-3 col-form-label" >Show on Menu</Label>
                                                     <Col md={2} style={{ marginTop: '9px' }} >
 
-                                                        <div className="form-check form-switch form-switch-md mb-3" dir="ltr">
-                                                            <input type="checkbox" className="form-check-input " id="abc"
-                                                                checked={(EditData.ID === 0) ? false : EditData.isShowOnMenu}
+                                                        <div className="form-check form-switch form-switch-md mb-1" dir="ltr">
+                                                            <input type="checkbox" className="form-check-input " id="inp-showOnMenu"
+                                                                checked={isShowPageChecked}
                                                                 name="isShowOnMenu"
+                                                                onChange={()=>{setisShowPageChecked(!isShowPageChecked)}}
                                                             />
                                                             <label className="form-check-label" htmlFor="customSwitchsizemd"></label>
                                                         </div>
@@ -460,9 +460,9 @@ const HPageMaster = (props) => {
                                                     <Label htmlFor="horizontal-firstname-input" className="col-sm-2 col-form-label" >Active </Label>
                                                     <Col md={2} style={{ marginTop: '9px' }} >
 
-                                                        <div className="form-check form-switch form-switch-md mb-3" dir="ltr">
+                                                        <div className="form-check form-switch form-switch-md mb-1" dir="ltr">
                                                             <input type="checkbox" className="form-check-input" id="customSwitchsizemd"
-                                                                checked={(EditData.ID === 0) ? false : EditData.isActive}
+                                                                checked={EditData.isActive}
                                                                 name="isActive"
                                                             />
                                                             <label className="form-check-label" htmlFor="customSwitchsizemd"></label>
@@ -471,34 +471,105 @@ const HPageMaster = (props) => {
                                                 </Row>
                                             </FormGroup>
                                         </Row>
-                                        <Row className="mb-3 " >
-                                            <Col sm={2}  >
-                                                <div>
-                                                    {
-                                                        IsEdit ? (
-                                                            <button
-                                                                type="submit"
-                                                                data-mdb-toggle="tooltip" data-mdb-placement="top" title="Update Page"
-                                                                className="btn btn-success w-md"
-                                                            >
-                                                                <i class="fas fa-edit me-2"></i>Update
-                                                            </button>) : (
-                                                            <button
-                                                                type="submit"
-                                                                data-mdb-toggle="tooltip" data-mdb-placement="top" title="Save Page"
-                                                                className="btn btn-primary w-md"
-                                                            > <i className="fas fa-save me-2"></i> Save
-                                                            </button>
-                                                        )
+
+
+                                    </CardBody>
+                                </Card>
+
+                                <Card className=" text-black">
+                                    <CardBody style={{ backgroundColor: "whitesmoke" }}>
+                                        <Row className="">
+                                            <FormGroup className=" ml-3 col col-sm-4 " >
+                                                <Label htmlFor="validationCustom01">Page Access</Label>
+                                                <Select
+                                                    //   value={RoleDropDown}
+                                                      options={PageAccessValues}
+                                                      onChange={(e) => { PageAccess_DropdownSelect_Handler(e) }}
+                                                    classNamePrefix="select2-selection"
+                                                />
+                                               
+                                            </FormGroup>
+
+                                            <Col sm={1} style={{ marginTop: '28px' }} >
+                                                {" "}
+                                                <Button
+                                                    type="button"
+                                                    className="btn btn-sm mt-1 mb-0 btn-light  btn-outline-primary  "
+                                                    onClick={() => 
+                                                        AddRoleHandler()
                                                     }
-                                                </div>
+                                                >
+                                                    <i className="dripicons-plus "></i>
+                                                </Button>
+                                            </Col>
+                                            <Col sm={3} style={{ marginTop: '28px' }}>
+                                                {pageAccessData.length > 0 ? (
+
+                                                    <div className="table-responsive">
+                                                        <Table className="table table-bordered  text-center">
+                                                            <Thead >
+                                                                <tr>
+                                                                    <th>Page Access</th>
+
+                                                                    <th>Action</th>
+                                                                </tr>
+                                                            </Thead>
+                                                            <Tbody  >
+                                                                {pageAccessData.map((TableValue) => (
+                                                                    <tr >
+                                                                        <td>
+                                                                            {TableValue.AccessName}
+                                                                        </td>
+                                                                        <td>
+                                                                            <i className="mdi mdi-trash-can d-block text-danger font-size-20" onClick={() => {
+                                                                                PageAccess_DeleteButton_Handller(TableValue.AccessID)
+                                                                            }} >
+                                                                            </i>
+                                                                        </td>
+                                                                    </tr>
+                                                                ))}
+                                                            </Tbody>
+                                                        </Table>
+                                                    </div>
+                                                ) : (
+                                                    <>
+                                                    </>
+                                                )}
                                             </Col>
                                         </Row>
-                                    </Card>
-                                </Row>
+                                      
+                                        <FormGroup className=" mt-3 ">
+                                                    <Row className="mb-0">
+
+                                                        <Col sm={2} >
+                                                            <div>
+                                                                {
+                                                                    IsEdit ? (
+                                                                        <button
+                                                                            type="submit"
+                                                                            data-mdb-toggle="tooltip" data-mdb-placement="top" title="Update User"
+                                                                            className="btn btn-success w-md"
+                                                                        >
+                                                                            <i class="fas fa-edit me-2"></i>Update
+                                                                        </button>) : (
+                                                                        <button
+                                                                            type="submit"
+                                                                            data-mdb-toggle="tooltip" data-mdb-placement="top" title="Save User"
+                                                                            className="btn btn-primary w-md"
+                                                                        > <i className="fas fa-save me-2"></i> Save
+                                                                        </button>
+                                                                    )
+                                                                }
+                                                            </div>
+                                                        </Col>
+                                                    </Row>
+                                                </FormGroup >
+                                  
+                                    </CardBody>
+                                </Card>
+
                             </AvForm>
-                            <div>
-                            </div>
+                       
                         </CardBody>
                     </Card>
                 </Container>

@@ -48,7 +48,6 @@ function* Submit_Roles_GenratorFunction({ Data }) {
   }
 
 function* Edit_Roles_GenratorFunction({ id }) {
-  debugger
   try {
     const response = yield call(Role_Master_Edit_API, id);
     yield put(editSuccess(response));

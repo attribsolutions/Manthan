@@ -39,12 +39,13 @@ const ItemsMaster = (props) => {
     if (!(editDataGatingFromList === undefined)) {
       setEditData(editDataGatingFromList[0]);
       setItemGroupSelect({
-        value: editDataGatingFromList[0].ItemGroupID,
+        value: editDataGatingFromList[0].ItemGroup_id,
         label: editDataGatingFromList[0].ItemGroupName
       });
       setIsEdit(true);
       dispatch(editItemSuccess({ Status: false }))
       dispatch(editItemSuccess({ Status: false }))
+      dispatch(BreadcrumbShow(editDataGatingFromList[0].Name))
       return
     }
   }, [editDataGatingFromList])
@@ -92,7 +93,7 @@ const ItemsMaster = (props) => {
         ItemGroup: itemGroupSelect.value,
         isActive: values.isActive,
         Sequence: values.Sequence,
-        BaseunitID: values.BaseUnit,
+        BaseUnitID: values.BaseUnit,
         Rate: values.Rate,
         CreatedBy: 1,
         CreatedOn: "2022-05-20T11:22:55.711483Z",
@@ -100,9 +101,9 @@ const ItemsMaster = (props) => {
         UpdatedOn: "2022-05-20T11:22:55.711483Z"
       })
     };
-
+debugger
     if (IsEdit) {
-      dispatch(updateItemID(requestOptions.body, EditData.ID));
+      dispatch(updateItemID(requestOptions.body, EditData.id));
     }
     else {
       dispatch(postItemData(requestOptions.body));
@@ -193,7 +194,7 @@ const ItemsMaster = (props) => {
                               <FormGroup className="mb-2 col col-sm-4 " >
                                 <Label htmlFor="validationCustom01">BaseunitID </Label>
                                 <AvField name="BaseUnit"
-                                  value={EditData.BaseunitID}
+                                  value={EditData.BaseUnitID_id}
                                   id="txtBaseUnit"
                                   type="text"
                                   placeholder="Please Enter BaseUnit"
@@ -266,9 +267,9 @@ const ItemsMaster = (props) => {
                                       defaultChecked />
                                     <Label className="me-1" htmlFor="switch1" data-on-label="Yes" data-off-label="No"></Label> */}
                                     <div className="form-check form-switch form-switch-md mb-3" dir="ltr">
-                                      <input type="checkbox" className="form-check-input" id="customSwitchsizemd"
-                                        checked={(EditData.ID === 0) ? false : EditData.IsActive}
-                                        name="IsActive"
+                                      <AvInput type="checkbox" className="form-check-input" id="customSwitchsizemd"
+                                        checked={ EditData.isActive}
+                                        name="isActive"
                                       />
                                       <label className="form-check-label" htmlFor="customSwitchsizemd"></label>
                                     </div>
