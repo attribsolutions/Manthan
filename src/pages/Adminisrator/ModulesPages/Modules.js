@@ -158,7 +158,7 @@ const Modules = (props) => {
                                                             placeholder="Please Enter Name"
                                                             autoComplete='off'
                                                             validate={{
-                                                                required: { value: true, errorMessage: 'Please enter a Name' },
+                                                                required: { value: true, errorMessage: 'Please Enter a Name' },
                                                             }}
                                                             onChange={(e)=>{ dispatch(BreadcrumbShow(e.target.value))}}
                                                         />
@@ -176,7 +176,7 @@ const Modules = (props) => {
                                                                 required: { value: true, errorMessage: 'Display Index is Required' },
                                                                 tel: {
                                                                     pattern: /^\d{1,4}$/,
-                                                                    errorMessage: 'Display Index is Required (Only Two Digit) '
+                                                                    errorMessage: 'Only Number is Required (Only Two Digit) '
                                                                 }
                                                             }}
                                                         />
@@ -190,7 +190,7 @@ const Modules = (props) => {
                                                             autoComplete='off'
                                                             placeholder="Please Enter IconPath"
                                                             value={EditData.Icon} type="text" validate={{
-                                                                required: { value: true, errorMessage: 'Please enter a Icon' },
+                                                                required: { value: true, errorMessage: 'Please Enter a Icon' },
                                                             }}
                                                         />
                                                     </FormGroup>
