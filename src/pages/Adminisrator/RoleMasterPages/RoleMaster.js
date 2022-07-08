@@ -37,6 +37,7 @@ const RoleMaster = (props) => {
       setEditData(editDataGatingFromList);
       setIsEdit(true);
       dispatch(editSuccess({ Status: false }))
+      dispatch(BreadcrumbShow(editDataGatingFromList.Name))
       return
     }
   }, [editDataGatingFromList])
@@ -88,6 +89,7 @@ const RoleMaster = (props) => {
         UpdatedOn: "2022-05-20T11:22:55.711483Z"
       }),
     };
+
     if (IsEdit) {
       dispatch(updateID(requestOptions.body, EditData.id));
     }
@@ -168,19 +170,11 @@ const RoleMaster = (props) => {
                           <Row className="justify-content-md-left">
                             <Label htmlFor="horizontal-firstname-input" className="col-sm-2 col-form-label" >IsActive </Label>
                             <Col md={2} style={{ marginTop: '9px' }} >
-                              {/* <AvInput
-                                checked={(EditData.ID === 0) ? false : EditData.IsActive}
-                                name="IsActive"
-                                type="checkbox"
-                                id="switch1"
-                                switch="none"
-                                defaultChecked />
-                              <Label className="me-1" htmlFor="switch1" data-on-label="Yes" data-off-label="No"></Label> */}
 
                               <div className="form-check form-switch form-switch-md mb-3" dir="ltr">
-                                <input type="checkbox" className="form-check-input" id="customSwitchsizemd"
-                                  checked={(EditData.ID === 0) ? false : EditData.IsActive}
-                                  name="IsActive"
+                                <AvInput type="checkbox" className="form-check-input" id="customSwitchsizemd"
+                                  checked={ EditData.isActive}
+                                  name="isActive"
                                 />
                                 <label className="form-check-label" htmlFor="customSwitchsizemd"></label>
                               </div>

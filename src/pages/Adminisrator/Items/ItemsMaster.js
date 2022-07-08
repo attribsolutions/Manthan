@@ -45,6 +45,7 @@ const ItemsMaster = (props) => {
       setIsEdit(true);
       dispatch(editItemSuccess({ Status: false }))
       dispatch(editItemSuccess({ Status: false }))
+      dispatch(BreadcrumbShow(editDataGatingFromList.Name))
       return
     }
   }, [editDataGatingFromList])

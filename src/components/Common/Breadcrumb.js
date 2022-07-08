@@ -48,17 +48,17 @@ const Breadcrumb = props => {
                   </button>
 
                   <label className="font-size-18 form-label text-black " style={{ paddingLeft: "7px" }} >{props.breadcrumbItem}</label>
-                  {bredcrumbName.length > 0 ? <label className="font-size-24 form-label  text-secondary" style={{ paddingLeft: "7px" }} >&nbsp;/{bredcrumbName}</label>
-                    : <></>}
+                  {/* {bredcrumbName.length > 0 ? <label className="font-size-24 form-label  text-secondary" style={{ paddingLeft: "7px" }}>&nbsp;/&nbsp;{bredcrumbName}</label>
+                    : <></>} */}
                 </Col>
               </Row>
               :
               <Row>
                 <Col md={12}>
-                  <label className="font-size-18  col-ls-6 col-form-label text-black" style={{ marginLeft: "6px" }}>{props.breadcrumbItem}</label>
+                  <label className="font-size-20  col-ls-6 col-form-label text-black" style={{ marginLeft: "6px" }}>{props.breadcrumbItem}</label>
                   {/* {bredcrumbName.length > 0 ? <label className="font-size-24 form-label  text-nowrap bd-highlight text-secondary" style={{ paddingLeft: "7px" }} >&nbsp;/ <kbd className="bg-light text-secondary">{bredcrumbName}</kbd></label>
                     : <></>} */}
-                     {bredcrumbName.length > 0 ? <label className="font-size-22 form-label  text-nowrap bd-highlight text-Primary" style={{ paddingLeft: "7px" , }} >&nbsp;/ {bredcrumbName}</label>
+                     {bredcrumbName.length > 0 ? <label className="font-size-24 form-label  text-nowrap bd-highlight text-primary" style={{ paddingLeft: "7px" ,color:"#5156be" }} >&nbsp;/&nbsp;{bredcrumbName}</label>
                     : <></>}
                     {/* color:"#5156be" */}
                 </Col>

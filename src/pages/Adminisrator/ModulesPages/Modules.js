@@ -55,6 +55,7 @@ const Modules = (props) => {
             setEditData(editDataGatingFromList);
             setIsEdit(true);
             dispatch(editModuleIDSuccess({ Status: false }))
+            dispatch(BreadcrumbShow(editDataGatingFromList.Name))
             return
         }
         if (!(CheckPageMode === undefined)) {

@@ -45,7 +45,7 @@ const AddEmployee = (props) => {
   const [party_DropdownSelect, setParty_DropdownSelect] = useState("");
   const [DOB_Date_Select, setDOB_Date_Select] = useState("");
 
-  const { designation, employeeType, State,district, partyList, company, postMessage } = useSelector((state) => ({
+  const { designation, employeeType, State, district, partyList, company, postMessage } = useSelector((state) => ({
     designation: state.M_EmployeesReducer.designation,
     employeeType: state.M_EmployeesReducer.employeeType,
     State: state.M_EmployeesReducer.State,
@@ -100,6 +100,7 @@ const AddEmployee = (props) => {
         label: editDataGatingFromList.CompanyName
       })
       dispatch(editEmployeeSuccess({ Status: false }))
+      dispatch(BreadcrumbShow(editDataGatingFromList.Name))
       return
     }
   }, [editDataGatingFromList])
@@ -188,8 +189,8 @@ const AddEmployee = (props) => {
   function Company_Dropdown_Handler(e) {
     setCompany_DropdownSelect(e)
   }
-  
-  
+
+
 
 
   //'Save' And 'Update' Button Handller
@@ -208,12 +209,12 @@ const AddEmployee = (props) => {
         Designation: designation_DropdownSelect.value,
         EmployeeType: employeeType_DropdownSelect.value,
         State: State_DropdownSelect.value,
-        District:district_DropdownSelect.value,
+        District: district_DropdownSelect.value,
         Party: party_DropdownSelect.value,
         Company: company_DropdownSelect.value,
         CreatedBy: 1,
         UpdatedBy: 1,
-           }),
+      }),
     }
     debugger
     if (IsEdit) {
@@ -262,7 +263,7 @@ const AddEmployee = (props) => {
                             validate={{
                               required: { value: true, errorMessage: 'Please enter your Name...!' },
                             }}
-                          onChange={(e) => { dispatch(BreadcrumbShow(e.target.value)) }}
+                            onChange={(e) => { dispatch(BreadcrumbShow(e.target.value)) }}
                           />
                         </FormGroup>
                       </Col>

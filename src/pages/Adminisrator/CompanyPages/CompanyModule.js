@@ -57,6 +57,7 @@ const CompanyModule = (props) => {
         label: editDataGatingFromList.CompanyGroupName
       })
       dispatch(editCompanyIDSuccess({ Status: false }))
+      dispatch(BreadcrumbShow(editDataGatingFromList.Name))
     }
   }, [editDataGatingFromList]);
 
