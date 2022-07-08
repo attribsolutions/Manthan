@@ -42,12 +42,15 @@ const HPageMaster = (props) => {
     const dispatch = useDispatch();
     const [IsEdit, setIsEdit] = useState(false);
     const [EditData, setEditData] = useState([]);
-    const [selectModule, setSelectModule] = useState('');
+    const [module_DropdownSelect, setModule_DropdownSelect] = useState('');
+    const [pageType_DropdownSelect, setPageType_DropdownSelect] = useState('');
+    const [pageList_DropdownSelect, setPageList_DropdownSelect] = useState('');
+
     const [PageMode, setPageMode] = useState(false);
+
     const [isShowPageChecked, setisShowPageChecked] = useState();
     const [PageAccessData, setPageAccessData] = useState([]);
-    const [selectPageType, setPageType] = useState('');
-    const [selectPageList, setPageList] = useState('');
+
     const [selectPageAccessDropDown, setselectPageAccessDropDown] = useState('');
 
     //Access redux store Data
@@ -80,32 +83,45 @@ const HPageMaster = (props) => {
         if (!(editDataGatingFromList === undefined)) {
             setEditData(editDataGatingFromList);
             setIsEdit(true);
-            setSelectModule({
+            setModule_DropdownSelect({
                 label: editDataGatingFromList.ModuleName,
                 value: editDataGatingFromList.Module
             })
-            setPageList({
+            setPageList_DropdownSelect({
                 value: editDataGatingFromList.RelatedPageID,
                 label: editDataGatingFromList.RelatedPageName,
             })
 
+            // if (editDataGatingFromList.PageType === 1) {
+            //     setPageType_DropdownSelect({
+            //         value: 1,
+            //         label: "Add Page",
+            //     })
+            // }else if(editDataGatingFromList.PageType === 2){
+            //     setPageType_DropdownSelect({
+            //         value: 2,
+            //         label: "Page List",
+            //     }) 
+            // }
+
+
             setPageAccessData(editDataGatingFromList.PagePageAccess)
 
             // When value 2 is get then DropDown lable is "ListPage" and ShowMenu is disabled Otherwise DropDown lable is "AddPage" and ShowMenu is enabled
-            let showCheckBox = editDataGatingFromList.PageType
-            if (showCheckBox === 2) {
-                document.getElementById("abc").disabled = true
+            let showCheckBox_pageType = editDataGatingFromList.PageType
+            if (showCheckBox_pageType === 2) {
+                document.getElementById("inp-showOnMenu").disabled = true
                 setisShowPageChecked(true)
-                dispatch(getPageList(showCheckBox))
-                setPageType({ value: 2, label: 'ListPage' })
+                dispatch(getPageList(showCheckBox_pageType))
+                setPageType_DropdownSelect({ value: 2, label: 'ListPage' })
             }
-            else if (showCheckBox === 1) {
+            else if (showCheckBox_pageType === 1) {
 
-                setisShowPageChecked(showCheckBox.isShowOnMenu);
-                document.getElementById("abc").disabled = false
+                setisShowPageChecked(showCheckBox_pageType.isShowOnMenu);
+                document.getElementById("inp-showOnMenu").disabled = false
                 dispatch(getPageListSuccess([]))
-                setPageList({ value: 0 })
-                setPageType({ value: 1, label: 'AddPage' })
+                setPageList_DropdownSelect({ value: 0 })
+                setPageType_DropdownSelect({ value: 1, label: 'AddPage' })
 
             }
 
@@ -118,10 +134,10 @@ const HPageMaster = (props) => {
     useEffect(() => {
         if ((SaveMessage.Status === true) && (SaveMessage.StatusCode === 200)) {
             dispatch(saveHPagesSuccess({ Status: false }))
-            setSelectModule('')
+            setModule_DropdownSelect('')
             setselectPageAccessDropDown('')
-            setPageType('')
-            setPageList('')
+            setPageType_DropdownSelect('')
+            setPageList_DropdownSelect('')
             formRef.current.reset();
 
             if (PageMode === true) {
@@ -151,7 +167,7 @@ const HPageMaster = (props) => {
                 AfterResponseAction: false
             }));
         }
-    }, [SaveMessage.Status])
+    }, [SaveMessage])
 
     //'Save' And 'Update' Button Handller
     const handleValidSubmit = (event, values) => {
@@ -170,14 +186,14 @@ const HPageMaster = (props) => {
             body: JSON.stringify({
                 Name: values.Name,
                 Description: values.Discription,
-                Module: selectModule.value,
+                Module: module_DropdownSelect.value,
                 isActive: values.isActive,
                 DisplayIndex: values.DisplayIndex,
                 Icon: values.Icon,
                 ActualPagePath: values.ActualPagePath,
                 isShowOnMenu: values.isShowOnMenu,
-                PageType: selectPageType.value,
-                RelatedPageID: selectPageList.value,
+                PageType: pageType_DropdownSelect.value,
+                RelatedPageID: pageList_DropdownSelect.value,
                 CreatedBy: 1,
                 UpdatedBy: 1,
                 PagePageAccess: PageAccessData.map((d) => ({
@@ -195,24 +211,37 @@ const HPageMaster = (props) => {
     };
 
     // for module dropdown
-    const HModuleSelectOnChangeHandller = (e) => {
-        setSelectModule(e);
+    const Module_DropdownSelectHandller = (e) => {
+        setModule_DropdownSelect(e);
     }
 
-    const optionModule = ModuleData.map((d) => ({
+    const Module_DropdownOption = ModuleData.map((d) => ({
         value: d.ID,
         label: d.Name,
     }));
 
     // PageList Dropdown
-    const optionPageList = PageList.map((d) => ({
+    const PageList_DropdownOption = PageList.map((d) => ({
         value: d.ID,
         label: d.Name,
     }));
 
+    // PageList Dropdown
+    const PageType_DropdownOption = [
+        {
+            value: 1,
+            label: "Add Page",
+        },
+        {
+            value: 2,
+            label: "Page List",
+        }
+    ];
+
 
     //  for PageType deropDown
-    const PageType_SelectOnChangeHandller = (e) => {
+    const PageType_DropdownSelectHandller = (e) => {
+
         let showCheckBox = document.getElementById("abc")
         if (e.label === "ListPage") {
             setisShowPageChecked(true)
@@ -222,14 +251,13 @@ const HPageMaster = (props) => {
         else if (e.label === "AddPage") {
             showCheckBox.disabled = false
             dispatch(getPageListSuccess([]))
-            setPageList({ value: 0 })
+            setPageList_DropdownSelect({ value: 0 })
         }
-        setPageType(e)
+        setPageType_DropdownSelect(e)
     }
 
-
-    const PageList_SelectOnChangeHandller = (e) => {
-        setPageList(e);
+    const PageList_DropdownSelectHandller = (e) => {
+        setPageList_DropdownSelect(e);
     }
 
     // ADD Button handler
@@ -314,41 +342,15 @@ const HPageMaster = (props) => {
                                             <Col md="1">  </Col>
                                             <Col md="3">
                                                 <FormGroup className="mb-3">
-                                                    <Label htmlFor="validationCustom01">Email </Label>
-                                                    <AvField name="email"
-                                                        id="email"
-                                                        type="email"
-                                                        value={EditData.email}
-                                                        placeholder="Enter your EmailID "
-                                                        validate={{
-                                                            required: { value: true, errorMessage: 'Please Enter your EmailID' },
-                                                            tel: {
-                                                                pattern: /\S+@\S+\.\S+/
-                                                            }
-                                                        }}
-
-                                                    />
-
-                                                </FormGroup>
-                                            </Col>
-                                            <Col md="1">  </Col>
-
-                                            <Col md="3">
-                                                <FormGroup className="mb-3">
-                                                    <Label htmlFor="validationCustom01">Mobile Number </Label>
-                                                    <AvField name="Mobile" type="tel"
-                                                        value={EditData.Mobile}
-                                                        placeholder="+91 "
-                                                        validate={{
-                                                            required: { value: true, errorMessage: 'Please Enter your Mobile NO' },
-                                                            tel: {
-                                                                pattern: /^(\+\d{1,3}[- ]?)?\d{10}$/
-                                                            }
-                                                        }}
-
+                                                    <Label htmlFor="validationCustom01">Description </Label>
+                                                    <AvField name="Description"
+                                                        type="text"
+                                                        value={EditData.Description}
+                                                        placeholder="Enter your Discription "
                                                     />
                                                 </FormGroup>
                                             </Col>
+
                                         </Row>
                                     </Card>
                                 </Row>
@@ -361,10 +363,22 @@ const HPageMaster = (props) => {
                                                 <FormGroup className="mb-3">
                                                     <Label htmlFor="validationCustom01">Module</Label>
                                                     <Select
-                                                        value={selectModule}
-                                                        options={optionModule}
+                                                        value={module_DropdownSelect}
+                                                        options={Module_DropdownOption}
                                                         autoComplete='off'
-                                                        onChange={(e) => { HModuleSelectOnChangeHandller(e) }}
+                                                        onChange={(e) => { Module_DropdownSelectHandller(e) }}
+                                                    />
+                                                </FormGroup>
+                                            </Col>
+                                            <Col md="1">  </Col>
+                                            <Col md="3">
+                                                <FormGroup className="mb-3">
+                                                    <Label htmlFor="validationCustom01">Page Type</Label>
+                                                    <Select
+                                                        value={pageType_DropdownSelect}
+                                                        options={PageType_DropdownOption}
+                                                        autoComplete='off'
+                                                        onChange={(e) => { PageType_DropdownSelectHandller(e) }}
                                                     />
                                                 </FormGroup>
                                             </Col>
@@ -372,29 +386,18 @@ const HPageMaster = (props) => {
                                             <Col md="1">  </Col>
                                             <Col md="3">
                                                 <FormGroup className="mb-3">
-                                                    <Label htmlFor="validationCustom01">Page Type </Label>
+                                                    <Label htmlFor="validationCustom01">Page List</Label>
                                                     <Select
-                                                        value={selectPageList}
-                                                        options={optionPageList}
+                                                        value={pageList_DropdownSelect}
+                                                        options={PageList_DropdownOption}
                                                         autoComplete='off'
-                                                        onChange={(e) => { PageList_SelectOnChangeHandller(e) }}
+                                                        onChange={(e) => { PageList_DropdownSelectHandller(e) }}
                                                     />
 
                                                 </FormGroup>
                                             </Col>
 
-                                            <Col md="1">  </Col>
-                                            <Col md="3">
-                                                <FormGroup className="mb-3">
-                                                    <Label htmlFor="validationCustom01">Page List </Label>
-                                                    <Select
-                                                        value={selectPageList}
-                                                        options={optionPageList}
-                                                        autoComplete='off'
-                                                        onChange={(e) => { PageList_SelectOnChangeHandller(e) }}
-                                                    />
-                                                </FormGroup>
-                                            </Col>
+
                                         </Row>
                                         <Row >
 
@@ -449,8 +452,8 @@ const HPageMaster = (props) => {
                                                     <Col md={2} style={{ marginTop: '9px' }} >
 
                                                         <div className="form-check form-switch form-switch-md mb-3" dir="ltr">
-                                                            <input type="checkbox" className="form-check-input " id="abc"
-                                                                checked={(EditData.ID === 0) ? false : EditData.isShowOnMenu}
+                                                            <input type="checkbox" className="form-check-input " id="inp-showOnMenu"
+                                                                checked={EditData.isShowOnMenu}
                                                                 name="isShowOnMenu"
                                                             />
                                                             <label className="form-check-label" htmlFor="customSwitchsizemd"></label>
@@ -462,7 +465,7 @@ const HPageMaster = (props) => {
 
                                                         <div className="form-check form-switch form-switch-md mb-3" dir="ltr">
                                                             <input type="checkbox" className="form-check-input" id="customSwitchsizemd"
-                                                                checked={(EditData.ID === 0) ? false : EditData.isActive}
+                                                                checked={EditData.isActive}
                                                                 name="isActive"
                                                             />
                                                             <label className="form-check-label" htmlFor="customSwitchsizemd"></label>

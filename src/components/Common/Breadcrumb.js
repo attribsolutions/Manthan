@@ -58,8 +58,9 @@ const Breadcrumb = props => {
                   <label className="font-size-18  col-ls-6 col-form-label text-black" style={{ marginLeft: "6px" }}>{props.breadcrumbItem}</label>
                   {/* {bredcrumbName.length > 0 ? <label className="font-size-24 form-label  text-nowrap bd-highlight text-secondary" style={{ paddingLeft: "7px" }} >&nbsp;/ <kbd className="bg-light text-secondary">{bredcrumbName}</kbd></label>
                     : <></>} */}
-                     {bredcrumbName.length > 0 ? <label className="font-size-24 form-label  text-nowrap bd-highlight text-secondary" style={{ paddingLeft: "7px" }} >&nbsp;/ <u>{bredcrumbName}</u></label>
+                     {bredcrumbName.length > 0 ? <label className="font-size-22 form-label  text-nowrap bd-highlight text-Primary" style={{ paddingLeft: "7px" , }} >&nbsp;/ {bredcrumbName}</label>
                     : <></>}
+                    {/* color:"#5156be" */}
                 </Col>
               </Row>
           }
