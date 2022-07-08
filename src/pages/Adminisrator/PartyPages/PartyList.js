@@ -19,8 +19,6 @@ import {
     updatePartyIDSuccess
 }  from '../../../store/Administrator/PartyRedux/action';
 import PartyMaster from './PartyMaster';
-import PartyUIDemo from './PartyUIDemo';
-// import PartyUIDemo from './PartyUIDemo';
 
 const PartyList = () => {
     const dispatch = useDispatch();
@@ -136,14 +134,14 @@ const PartyList = () => {
         },
         {
             text: "Action",
-            formatter: (cellContent, Role) => (
+            formatter: (cellContent, party) => (
                 <>
                     <div className="d-flex gap-3" style={{ display: 'flex', justifyContent: 'center' }} >
                         <buton
                             type="button"
                             data-mdb-toggle="tooltip" data-mdb-placement="top" title="Edit Party "
                             onClick={() => {
-                                EditPageHandler(Role.ID);
+                                EditPageHandler(party.id);
                             }}
                             className="badge badge-soft-primary font-size-12"
                         >
@@ -153,7 +151,7 @@ const PartyList = () => {
                             className="badge badge-soft-danger font-size-12"
                             data-mdb-toggle="tooltip" data-mdb-placement="top" title="Delete Party"
                             onClick={() => {
-                                deleteHandeler(Role.ID, Role.Name);
+                                deleteHandeler(party.id, party.Name);
                             }}
                         >
                             <i className="mdi mdi-delete font-size-18" ></i>

@@ -240,7 +240,7 @@ const PartyMaster = (props) => {
                                         <Row>
                                             <Card style={{ backgroundColor: "whitesmoke" }} >
 
-                                                <Row className="mt-2">
+                                                <Row className="mt-3 ">
                                                     <Col md="3">
                                                         <FormGroup className="mb-3">
                                                             <Label htmlFor="validationCustom01">Name </Label>
@@ -280,7 +280,7 @@ const PartyMaster = (props) => {
                                                     <Col md="3">
                                                         <FormGroup className="mb-3">
                                                             <Label htmlFor="validationCustom01">MobileNo </Label>
-                                                            <AvField name="MobileNo" type="number"
+                                                            <AvField name="MobileNo" type="text"
                                                                 value={EditData.MobileNo}
                                                                 id="mobileNo"
                                                                 placeholder="+91 "
@@ -299,9 +299,8 @@ const PartyMaster = (props) => {
 
 
                                         <Row>
-                                            <Card style={{ backgroundColor: "whitesmoke" }} >
-
-                                                <Row className="mt-2">
+                                            <Card className="mt-n2" style={{ backgroundColor: "whitesmoke" }} >
+                                                <Row className="mt-3 ">
                                                     <Col md="3">
                                                         <FormGroup className="mb-3">
                                                             <Label htmlFor="validationCustom01"> DivisionType </Label>
@@ -359,6 +358,29 @@ const PartyMaster = (props) => {
                                                     {/* <Col md="1">  </Col> */}
                                                     <Col md="3">
                                                         <FormGroup className="mb-3">
+                                                            <Label htmlFor="validationCustom01"> PAN </Label>
+                                                            <AvField
+                                                                name="PAN"
+                                                                value={EditData.PAN}
+                                                                placeholder="Please Enter PAN"
+                                                                type="text"
+                                                                errorMessage="Enter First PAN"
+                                                                className="form-control"
+                                                                validate={{
+                                                                    required: { value: true },
+                                                                    tel: {
+                                                                        pattern: /[A-Z]{5}[0-9]{4}[A-Z]{1}/,
+                                                                        errorMessage: 'Please enter valid PAN number.(Ex:AAAAA1234A).'
+                                                                    }
+                                                                }}
+                                                                id="validationCustom01"
+                                                            />
+                                                        </FormGroup>
+                                                    </Col>
+
+                                                    <Col md="1">  </Col>
+                                                    <Col md="3">
+                                                        <FormGroup className="mb-3">
                                                             <Label htmlFor="validationCustom01"> GSTIN </Label>
                                                             <AvField
                                                                 name="GSTIN"
@@ -395,16 +417,15 @@ const PartyMaster = (props) => {
                                                                 validate={{
                                                                     required: { value: true },
                                                                     tel: {
-                                                                        pattern: /^[0-9]*$/,
+                                                                        pattern: /^(?:\d[- ]*){14}$/,
                                                                         errorMessage: 'FSSAINo Should be Fourteen Digit Only.'
                                                                     }
                                                                 }}
-                                                                id="FSSAINo"
                                                             />
                                                         </FormGroup>
                                                     </Col>
-
                                                 </Row>
+
                                                 <Row>
                                                     {/* <Col md="4"></Col> */}
                                                     <Col md="3">
@@ -433,13 +454,18 @@ const PartyMaster = (props) => {
                                                             <Row style={{ marginTop: '25px' }}>
                                                                 <Label
                                                                     htmlFor="horizontal-firstname-input"
-                                                                    className="col-sm-3 col-form-label"
+                                                                    className="col-sm-4 col-form-label"
                                                                 >
                                                                     IsActive
                                                                 </Label>
-                                                                <Col md={4} style={{ marginTop: '7px' }} className="form-check form-switch form-switch-sm ">
-                                                                    <AvInput name="isActive" type="checkbox" id="switch1" switch="none" defaultChecked Value={EditData.IsActive} />
-                                                                    <Label className="me-1" htmlFor="switch1" data-on-label="Yes" data-off-label="No"></Label>
+                                                                <Col md={4} style={{ marginTop: '7px' }} className=" form-check form-switch form-switch-sm ">
+                                                                <div className="form-check form-switch form-switch-md mb-3" dir="ltr">
+                                                            <input type="checkbox" className="form-check-input " id="inp-showOnMenu"
+                                                                checked={EditData.isShowOnMenu}
+                                                                name="isShowOnMenu"
+                                                            />
+                                                            <label className="form-check-label" htmlFor="customSwitchsizemd"></label>
+                                                        </div>
                                                                 </Col>
                                                             </Row>
 
@@ -450,11 +476,39 @@ const PartyMaster = (props) => {
                                             </Card>
                                         </Row>
 
+                                        {/* <Row>
+                                            <FormGroup className="mb-2 col col-sm-6">
+                                                <Row className="justify-content-md-left">
+                                                    <Label htmlFor="horizontal-firstname-input" className="col-sm-3 col-form-label" >Show on Menu</Label>
+                                                    <Col md={2} style={{ marginTop: '9px' }} >
 
-                                        <Row>
-                                            <Card style={{ backgroundColor: "whitesmoke" }} >
-                                                <Row className="mt-2">
-                                                    <Col md="3">
+                                                        <div className="form-check form-switch form-switch-md mb-3" dir="ltr">
+                                                            <input type="checkbox" className="form-check-input " id="inp-showOnMenu"
+                                                                checked={EditData.isShowOnMenu}
+                                                                name="isShowOnMenu"
+                                                            />
+                                                            <label className="form-check-label" htmlFor="customSwitchsizemd"></label>
+                                                        </div>
+                                                    </Col>
+                                                    <Col md="3">  </Col>
+                                                    <Label htmlFor="horizontal-firstname-input" className="col-sm-2 col-form-label" >Active </Label>
+                                                    <Col md={2} style={{ marginTop: '9px' }} >
+
+                                                        <div className="form-check form-switch form-switch-md mb-3" dir="ltr">
+                                                            <input type="checkbox" className="form-check-input" id="customSwitchsizemd"
+                                                                checked={EditData.isActive}
+                                                                name="isActive"
+                                                            />
+                                                            <label className="form-check-label" htmlFor="customSwitchsizemd"></label>
+                                                        </div>
+                                                    </Col>
+                                                </Row>
+                                            </FormGroup>
+                                        </Row> */}
+                                        <Row  >
+                                            <Card className="mt-n2" style={{ backgroundColor: "whitesmoke" }} >
+                                                <Row className="mt-3 ">
+                                                    <Col md="3" >
                                                         <FormGroup className="mb-3">
                                                             <Label htmlFor="validationCustom01">Address </Label>
                                                             <AvField name="Address" value={EditData.Address} type="text"
@@ -539,7 +593,7 @@ const PartyMaster = (props) => {
                                                         </Col> */}
                                                 </Row>
 
-                                                <Row  >
+                                                <Row className="mb-4" >
                                                     <Col sm={2} >
                                                         <div>
                                                             {

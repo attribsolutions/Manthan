@@ -189,6 +189,8 @@ const AddUser = (props) => {
       <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
         <Breadcrumbs breadcrumbItem={"User Registration "} />
         <Container fluid>
+        <Row>
+            <Col lg={12}>
           <Card className="text-black" >
             <CardHeader className="card-header   text-black" style={{ backgroundColor: "#dddddd" }} >
               <h4 className="card-title text-black">React Validation - Normal</h4>
@@ -218,7 +220,7 @@ const AddUser = (props) => {
                         <AvField name="LoginName" id="txtName" value={EditData.LoginName}
                           type="text"
                           placeholder="Please Enter Name"
-                          // autoComplete='off'
+                          autoComplete='off'
                           validate={{
                             required: { value: true, errorMessage: 'Please enter a Name...!' },
                           }}
@@ -289,7 +291,7 @@ const AddUser = (props) => {
                   </CardBody>
                 </Card>
 
-                <Card className=" text-black">
+                <Card className="mt-n2">
                   <CardBody style={{ backgroundColor: "whitesmoke" }}>
                     <Row className="">
                       <FormGroup className=" ml-3 col col-sm-4 " >
@@ -380,6 +382,8 @@ const AddUser = (props) => {
               </AvForm>
             </CardBody>
           </Card>
+          </Col>
+          </Row>
         </Container >
       </div >
     </React.Fragment >
