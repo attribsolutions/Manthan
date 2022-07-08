@@ -256,29 +256,7 @@ const AddUser = (props) => {
                         </Row>
                       </FormGroup>
                     </Row>
-                    <FormGroup className="mb-2 col col-sm-5">
-                          <Row className="justify-content-md-left">
-                            <Label htmlFor="horizontal-firstname-input" className="col-sm-2 col-form-label" >IsActive </Label>
-                            <Col md={2} style={{ marginTop: '9px' }} >
-                              {/* <AvInput
-                                checked={(EditData.ID === 0) ? false : EditData.IsActive}
-                                name="IsActive"
-                                type="checkbox"
-                                id="switch1"
-                                switch="none"
-                                defaultChecked />
-                              <Label className="me-1" htmlFor="switch1" data-on-label="Yes" data-off-label="No"></Label> */}
-
-                              <div className="form-check form-switch form-switch-md mb-3" dir="ltr">
-                                <input type="checkbox" className="form-check-input" id="customSwitchsizemd"
-                                  checked={(EditData.ID === 0) ? false : EditData.IsActive}
-                                  name="IsActive"
-                                />
-                                <label className="form-check-label" htmlFor="customSwitchsizemd"></label>
-                              </div>
-                            </Col>
-                          </Row>
-                        </FormGroup>
+                   
                     <Row >
                       <FormGroup className="col col-sm-12  " >
                         <Row className="justify-content-md-left">
@@ -286,7 +264,7 @@ const AddUser = (props) => {
                           <Col md={1} style={{ marginTop: '10px' }} >
                             <div className="form-check form-switch form-switch-md" dir="ltr">
                               <input type="checkbox" className="form-check-input" id="customSwitchsizemd"
-                                checked={(EditData.ID === 0) ? false : EditData.isSendOTP}
+                                checked={EditData.isSendOTP}
                                 name="isSendOTP"
                               />
                               <label className="form-check-label" htmlFor="customSwitchsizemd"></label>
@@ -298,7 +276,7 @@ const AddUser = (props) => {
                           <Col md={1} style={{ marginTop: '10px' }} >
                             <div className="form-check form-switch form-switch-md" dir="ltr">
                               <input type="checkbox" className="form-check-input" id="customSwitchsizemd"
-                                checked={(EditData.ID === 0) ? false : EditData.isSendOTP}
+                                checked={EditData.isSendOTP}
                                 name="isSendOTP"
                               />
                               <label className="form-check-label" htmlFor="customSwitchsizemd"></label>
