@@ -302,35 +302,10 @@ const AddUser = (props) => {
                           onChange={(e) => { setRoleDropDown(e) }}
                           classNamePrefix="select2-selection"
                         />
-                        {/* <FormGroup className=" mt-3 ">
-                          <Row className="mb-0">
-
-                            <Col sm={2} >
-                              <div>
-                                {
-                                  IsEdit ? (
-                                    <button
-                                      type="submit"
-                                      data-mdb-toggle="tooltip" data-mdb-placement="top" title="Update User"
-                                      className="btn btn-success w-md"
-                                    >
-                                      <i class="fas fa-edit me-2"></i>Update
-                                    </button>) : (
-                                    <button
-                                      type="submit"
-                                      data-mdb-toggle="tooltip" data-mdb-placement="top" title="Save User"
-                                      className="btn btn-primary w-md"
-                                    > <i className="fas fa-save me-2"></i> Save
-                                    </button>
-                                  )
-                                }
-                              </div>
-                            </Col>
-                          </Row>
-                        </FormGroup > */}
+                        
                       </FormGroup>
 
-                      <Col sm={1} style={{ marginTop: '28px' }} >
+                      <Col className="text-center" sm={1} style={{ marginTop: '28px' }} >
                         {" "}
                         <Button
                           type="button"
