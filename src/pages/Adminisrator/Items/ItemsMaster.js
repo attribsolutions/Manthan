@@ -27,8 +27,8 @@ const ItemsMaster = (props) => {
   let editDataGatingFromList = props.state;
 
   //Access redux store Data /  'save_ModuleSuccess' action data
-  const { PostData, ItemGroupList } = useSelector((state) => ({
-    PostData: state.ItemMastersReducer.PostData,
+  const { postMessage, ItemGroupList } = useSelector((state) => ({
+    postMessage: state.ItemMastersReducer.postMessage,
     ItemGroupList: state.ItemMastersReducer.ItemGroupList,
   }));
 
@@ -51,27 +51,27 @@ const ItemsMaster = (props) => {
   }, [editDataGatingFromList])
 
   useEffect(() => {
-    if ((PostData.Status === true) && (PostData.StatusCode === 200)) {
+    if ((postMessage.Status === true) && (postMessage.StatusCode === 200)) {
       dispatch(PostItemDataSuccess({ Status: false }))
       formRef.current.reset();
       if (PageMode === true) {
         dispatch(AlertState({
           Type: 1,
           Status: true,
-          Message: PostData.Message,
+          Message: postMessage.Message,
         }))
       }
       else {
         dispatch(AlertState({
           Type: 1,
           Status: true,
-          Message: PostData.Message,
+          Message: postMessage.Message,
           RedirectPath: '/itemList',
           AfterResponseAction: false
         }))
       }
     }
-    else if (PostData.Status === true) {
+    else if (postMessage.Status === true) {
       dispatch(PostItemDataSuccess({ Status: false }))
       dispatch(AlertState({
         Type: 4,
@@ -81,7 +81,7 @@ const ItemsMaster = (props) => {
         AfterResponseAction: false
       }));
     }
-  }, [PostData.Status])
+  }, [postMessage])
 
   //'Save' And 'Update' Button Handller
   const handleValidUpdate = (event, values) => {
@@ -110,9 +110,9 @@ debugger
     }
   };
 
-  const ItemGroup_Options = ItemGroupList.map((Data) => ({
-    value: Data.ID,
-    label: Data.Name,
+  const ItemGroup_Options = ItemGroupList.map((index) => ({
+    value: index.id,
+    label: index.Name,
   }));
 
   function handllerItemGroupID(e) {

@@ -3,7 +3,6 @@ import {
     EDIT_ITEM_ID_SUCCESS,
     GET_ITEM_GROUP_FOR_DROPDOWN_SUCCESS,
     GET_ITEM_LIST_API_SUCCESS,
-    POST_ITEM_DATA,
     POST_ITEM_DATA_SUCCESS,
     UPDATE_ITEM_ID_SUCCESS
 } from "./actionType";
@@ -11,8 +10,7 @@ import {
 
 const INIT_STATE = {
     pages: [],
-    PostData: { Status: false },
-    PostPage: { Status: false },
+    postMessage: { Status: false },
     deleteRoleID: [],
     deleteMessage: { Status: false },
     editData: { Status: false },
@@ -34,16 +32,11 @@ const ItemMastersReducer = (state = INIT_STATE, action) => {
                 ...state,
                 ItemGroupList: action.payload,
             }
-        // post api
-        case POST_ITEM_DATA:
-            return {
-                ...state,
-                PostPage: action.Data,
-            };
+
         case POST_ITEM_DATA_SUCCESS:
             return {
                 ...state,
-                PostData: action.payload,
+                postMessage: action.payload,
             };
 
         // delete api
