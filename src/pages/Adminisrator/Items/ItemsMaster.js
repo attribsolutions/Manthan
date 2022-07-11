@@ -37,15 +37,15 @@ const ItemsMaster = (props) => {
     document.getElementById("txtName").focus();
     dispatch(getItemGroup_ForDropDown())
     if (!(editDataGatingFromList === undefined)) {
-      setEditData(editDataGatingFromList[0]);
+      setEditData(editDataGatingFromList);
       setItemGroupSelect({
-        value: editDataGatingFromList[0].ItemGroup_id,
-        label: editDataGatingFromList[0].ItemGroupName
+        value: editDataGatingFromList.ItemGroup_id,
+        label: editDataGatingFromList.ItemGroupName
       });
       setIsEdit(true);
       dispatch(editItemSuccess({ Status: false }))
       dispatch(editItemSuccess({ Status: false }))
-      dispatch(BreadcrumbShow(editDataGatingFromList[0].Name))
+      dispatch(BreadcrumbShow(editDataGatingFromList.Name))
       return
     }
   }, [editDataGatingFromList])
@@ -209,7 +209,7 @@ debugger
 
                             <Row>
                               <FormGroup className="mb-2 col col-sm-4 " >
-                                <Label htmlFor="validationCustom01">Rate </Label>
+                                <Label htmlFor="validationCustom01">Rate</Label>
                                 <AvField name="Rate"
                                   value={EditData.Rate}
                                   id="txtRate"
@@ -224,7 +224,7 @@ debugger
 
                               <Col md="1">  </Col>
                               <FormGroup className="mb-2 col col-sm-4 " >
-                                <Label htmlFor="validationCustom01">MRP </Label>
+                                <Label htmlFor="validationCustom01">MRP</Label>
                                 <AvField name="MRP" id="txtMRP"
                                   value={EditData.MRP}
                                   type="text"
@@ -240,7 +240,7 @@ debugger
 
                             <Row>
                               <FormGroup className="mb-3 col col-sm-4 " >
-                                <Label htmlFor="validationCustom01">Sequence </Label>
+                                <Label htmlFor="validationCustom01">Sequence</Label>
                                 <AvField name="Sequence"
                                   value={EditData.Sequence}
                                   id="txtSequence"
@@ -286,14 +286,14 @@ debugger
                                     IsEdit ? (
                                       <button
                                         type="submit"
-                                        data-mdb-toggle="tooltip" data-mdb-placement="top" title="Update Item"
+                                        data-mdb-toggle="tooltip" data-mdb-placement="top" title="Update Employee"
                                         className="btn btn-success w-md"
                                       >
                                         <i class="fas fa-edit me-2"></i>Update
                                       </button>) : (
                                       <button
                                         type="submit"
-                                        data-mdb-toggle="tooltip" data-mdb-placement="top" title="Save Item"
+                                        data-mdb-toggle="tooltip" data-mdb-placement="top" title="Save Employee"
                                         className="btn btn-primary w-md"
                                       > <i className="fas fa-save me-2"></i> Save
                                       </button>

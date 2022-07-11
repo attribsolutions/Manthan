@@ -135,7 +135,7 @@ const HPageMaster = (props) => {
                     Type: 1,
                     Status: true,
                     Message: SaveMessage.Message,
-                    RedirectPath: '/pagesList',
+                    RedirectPath: '/pageList',
                     AfterResponseAction: false
                 }))
             }
@@ -159,13 +159,13 @@ const HPageMaster = (props) => {
     }));
 
     const Module_DropdownOption = ModuleData.map((d) => ({
-        value: d.ID,
+        value: d.id,
         label: d.Name,
     }));
 
     // PageList Dropdown
     const PageList_DropdownOption = PageList.map((d) => ({
-        value: d.ID,
+        value: d.id,
         label: d.Name,
     }));
 
@@ -197,13 +197,13 @@ const HPageMaster = (props) => {
         const requestOptions = {
             body: JSON.stringify({
                 Name: values.Name,
-                Description: values.Discription,
+                Description: values.Description,
                 Module: module_DropdownSelect.value,
                 isActive: values.isActive,
                 DisplayIndex: values.DisplayIndex,
                 Icon: values.Icon,
                 ActualPagePath: values.ActualPagePath,
-                isShowOnMenu: values.isShowOnMenu,
+                isShowOnMenu: isShowPageChecked,
                 PageType: pageType_DropdownSelect.value,
                 RelatedPageID: pageList_DropdownSelect.value,
                 CreatedBy: 1,
@@ -213,7 +213,7 @@ const HPageMaster = (props) => {
                 })),
             }),
         };
-
+debugger
         if (IsEdit) {
             dispatch(updateHPages(requestOptions.body, EditData.id));
         }
@@ -232,8 +232,7 @@ const HPageMaster = (props) => {
     function PageAccess_DropdownSelect_Handler(e) {
         setPageAccess_DropDownSelect(e)
     }
-    
-
+    console.log()
     //  for PageType deropDown
     const PageType_DropdownSelectHandller = (e) => {
 
@@ -339,6 +338,7 @@ const HPageMaster = (props) => {
                                                     <Label htmlFor="validationCustom01">Description </Label>
                                                     <AvField name="Description"
                                                         type="text"
+                                                        defaultValue=""
                                                         value={EditData.Description}
                                                         placeholder="Enter your Discription "
                                                     />
@@ -461,7 +461,7 @@ const HPageMaster = (props) => {
                                                     <Col md={2} style={{ marginTop: '9px' }} >
 
                                                         <div className="form-check form-switch form-switch-md mb-1" dir="ltr">
-                                                            <input type="checkbox" className="form-check-input" id="customSwitchsizemd"
+                                                            <AvInput type="checkbox" className="form-check-input" id="customSwitchsizemd"
                                                                 checked={EditData.isActive}
                                                                 name="isActive"
                                                             />

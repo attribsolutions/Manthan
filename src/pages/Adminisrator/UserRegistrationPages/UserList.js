@@ -46,18 +46,17 @@ const UserList = () => {
             }))
             tog_center()
         }
-        else if (deleteMessage.Status === true) {
-            dispatch(deleteSuccess({ Status: false }))
+        else if (updateMessage.Status === true) {
+            dispatch(updateSuccess({ Status: false }))
             dispatch(AlertState({
                 Type: 3, Status: true,
-                Message: deleteMessage.Message,
+                Message: updateMessage.Message,
             }));
         }
-    }, [updateMessage.Status, dispatch]);
+    }, [updateMessage]);
 
     useEffect(() => {
         if ((deleteMessage.Status === true) && (deleteMessage.StatusCode === 200)) {
-            debugger
             dispatch(deleteSuccess({ Status: false }))
             dispatch(AlertState({
                 Type: 1, Status: true,
@@ -72,7 +71,7 @@ const UserList = () => {
                 Message: "error Message",
             }));
         }
-    }, [deleteMessage.Status])
+    }, [deleteMessage])
 
     useEffect(() => {
         if (editData.Status === true) {

@@ -109,6 +109,7 @@ function* Edit_UserList_GenratorFunction({ id }) {
 }
 
 function* Update_User_GenratorFunction({ data, id }) {
+  debugger
   try {
     yield put(SpinnerState(true))
     const response = yield call(User_Component_Update_API, data, id);

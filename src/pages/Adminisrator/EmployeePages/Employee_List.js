@@ -102,9 +102,15 @@ function tog_center() {
 // Edit Button Handler
 const EditPageHandler = (id) => {
     dispatch(editEmployeeeId(id));
-    console.log("selected id",id)
 }
 
+
+const defaultSorted = [
+    {
+        dataField: "Name", // if dataField is not match to any column you defined, it will be ignored.
+        order: "asc", // desc or asc
+    },
+];
 const pageOptions = {
     sizePerPage: 10,
     totalSize: TableListData.length,
@@ -211,6 +217,7 @@ return (
                                                     keyField={"id"}
                                                     responsive
                                                     bordered={false}
+                                                    defaultSorted={defaultSorted}
                                                     striped={false}
                                                     classes={
                                                         "table  table-bordered"

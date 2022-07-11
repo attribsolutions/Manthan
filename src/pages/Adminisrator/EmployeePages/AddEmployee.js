@@ -108,7 +108,15 @@ const AddEmployee = (props) => {
   useEffect(() => {
     if ((postMessage.Status === true) && (postMessage.StatusCode === 200)) {
       dispatch(PostEmployeeSuccess({ Status: false }))
-      // formRef.current.reset();
+      formRef.current.reset();
+      setDesignation_DropdownSelect('')
+      setEmployeeType_DropdownSelect('')
+      setState_DropdownSelect('')
+      setDOB_Date_Select('')
+
+      setDistrict_DropdownSelect('')
+      setParty_DropdownSelect('')
+      setCompany_DropdownSelect('')
       if (PageMode === true) {
         dispatch(AlertState({
           Type: 1,
