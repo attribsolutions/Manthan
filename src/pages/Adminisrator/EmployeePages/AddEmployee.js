@@ -237,7 +237,7 @@ const AddEmployee = (props) => {
         <Container fluid>
 
           <Card className="text-black">
-            <CardHeader >
+          <CardHeader className="card-header   text-dark" style={{ backgroundColor: "#dddddd" }} >
               <h4 className="card-title text-black">React Validation - Normal</h4>
               <p className="card-title-desc text-black">Provide valuable, actionable feedback to your users with HTML5 form validation–available in all our supported browsers.</p>
             </CardHeader>
@@ -280,8 +280,9 @@ const AddEmployee = (props) => {
                             validate={{
                               required: { value: true, errorMessage: 'Please Enter your EmailID' },
                               tel: {
-                                pattern: /\S+@\S+\.\S+/
-                              }
+                                pattern: "/^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/",
+                                errorMessage: "Please Enter valid Email Address.(Ex:abc@gmail.com)"
+                            }
                             }}
                           />
 
@@ -416,7 +417,7 @@ const AddEmployee = (props) => {
                   </CardBody>
                 </Card>
 
-                <Card >
+                <Card className="mt-n2">
                   <CardBody style={{ backgroundColor: "whitesmoke" }}>
                     <Row >
                       <Col md="3">

@@ -241,7 +241,7 @@ const HPageMaster = (props) => {
         if (e.value === 2) {
             setisShowPageChecked(true)
             dispatch(getPageList(e.value))
-            // showCheckBox.disabled = true
+            showCheckBox.disabled = true
         }
         else if (e.value === 1) {
             showCheckBox.disabled = false
@@ -350,7 +350,7 @@ const HPageMaster = (props) => {
                                 </Card>
 
 
-                                <Card  >
+                                <Card className=" mt-n2 text-black">
                                     <CardBody style={{ backgroundColor: "whitesmoke" }}>
 
                                         <Row >
@@ -400,7 +400,7 @@ const HPageMaster = (props) => {
                                             <Col md="3">
                                                 <FormGroup >
                                                     <Label htmlFor="validationCustom01">Display Index</Label>
-                                                    <AvField name="DisplayIndex" value={EditData.DisplayIndex} type="number"
+                                                    <AvField name="DisplayIndex" value={EditData.DisplayIndex} type="text"
                                                         autoComplete='off'
                                                         placeholder=" Please Enter DisplayIndex" validate={{
                                                             number: true,
@@ -476,7 +476,7 @@ const HPageMaster = (props) => {
                                     </CardBody>
                                 </Card>
 
-                                <Card className=" text-black">
+                                <Card className=" mt-n2 text-black">
                                     <CardBody style={{ backgroundColor: "whitesmoke" }}>
                                         <Row className="">
                                             <FormGroup className=" ml-3 col col-sm-4 " >
@@ -547,14 +547,14 @@ const HPageMaster = (props) => {
                                                                     IsEdit ? (
                                                                         <button
                                                                             type="submit"
-                                                                            data-mdb-toggle="tooltip" data-mdb-placement="top" title="Update User"
+                                                                            data-mdb-toggle="tooltip" data-mdb-placement="top" title="Update Page"
                                                                             className="btn btn-success w-md"
                                                                         >
                                                                             <i class="fas fa-edit me-2"></i>Update
                                                                         </button>) : (
                                                                         <button
                                                                             type="submit"
-                                                                            data-mdb-toggle="tooltip" data-mdb-placement="top" title="Save User"
+                                                                            data-mdb-toggle="tooltip" data-mdb-placement="top" title="Save Page"
                                                                             className="btn btn-primary w-md"
                                                                         > <i className="fas fa-save me-2"></i> Save
                                                                         </button>
