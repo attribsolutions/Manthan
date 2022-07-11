@@ -46,10 +46,10 @@ const AddUser = (props) => {
       setIsEdit(true);
       dispatch(editSuccess({ Status: false }))
       // setEmployeeSelect({
-      //   value: editDataGatingFromList.Employee,
+      //   value: editDataGatingFromList.Employee.label,
       //   label: editDataGatingFromList.EmployeeID
       // })
-      // setRoleData(editDataGatingFromList.UserRole[0].Role)
+      setRoleData(editDataGatingFromList.UserRole.Name)
       return
     }
   }, [editDataGatingFromList])
@@ -154,7 +154,7 @@ const AddUser = (props) => {
         })),
       }),
     };
-
+debugger
     if (RoleData.length <= 0) {
       dispatch(AlertState({
         Type: 4, Status: true,

@@ -191,7 +191,6 @@ return (
                                             keyField="id"
                                             data={TableListData}
                                             columns={pagesListColumns}
-                                            // bootstrap4
                                             search
                                         >
                                             
@@ -202,7 +201,7 @@ return (
                                         breadcrumbItem={"Employee List"}
                                         IsButtonVissible={true}
                                         SearchProps={toolkitProps.searchProps}
-                                        breadcrumbCount={TableListData.length}
+                                        breadcrumbCount={`Employee Count: ${TableListData.length}`}
                                         RedirctPath={"/employeesMaster"}
                                     />
                                     <Row>

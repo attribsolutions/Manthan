@@ -286,14 +286,14 @@ debugger
                                     IsEdit ? (
                                       <button
                                         type="submit"
-                                        data-mdb-toggle="tooltip" data-mdb-placement="top" title="Update Employee"
+                                        data-mdb-toggle="tooltip" data-mdb-placement="top" title="Update Item"
                                         className="btn btn-success w-md"
                                       >
                                         <i class="fas fa-edit me-2"></i>Update
                                       </button>) : (
                                       <button
                                         type="submit"
-                                        data-mdb-toggle="tooltip" data-mdb-placement="top" title="Save Employee"
+                                        data-mdb-toggle="tooltip" data-mdb-placement="top" title="Save Item"
                                         className="btn btn-primary w-md"
                                       > <i className="fas fa-save me-2"></i> Save
                                       </button>
