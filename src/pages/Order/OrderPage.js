@@ -93,7 +93,7 @@ const OrderPage = (props) => {
     APIResponse: state.OrderPageReducer.submitOrderSuccess,
     CustomSearchInput: state.CustomSearchReducer.CustomSearchInput,
     // **customerNameList ==> this is  party list data geting from party list API
-    customerNameList: state.PartyMasterReducer.pages
+    customerNameList: state.PartyMasterReducer.partyList
   }));
 
   useEffect(() => {
