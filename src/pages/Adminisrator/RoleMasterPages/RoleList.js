@@ -70,7 +70,7 @@ const RoleList = () => {
             dispatch(AlertState({
                 Type: 3,
                 Status: true,
-                Message: "error Message",
+                Message: deleteMessage.Message,
             }));
         }
     }, [deleteMessage.Status])

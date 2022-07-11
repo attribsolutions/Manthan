@@ -147,7 +147,7 @@ const RoleMaster = (props) => {
                               placeholder="Please Enter Discription"
                               autoComplete='off'
                               validate={{
-                                required: { value: true, errorMessage: 'Please Enter a Discription...!' },
+                                required: { value: true, errorMessage: 'Please Enter a Description...!' },
                               }} />
                           </FormGroup>
                         </Row>
