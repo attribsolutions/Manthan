@@ -102,9 +102,15 @@ function tog_center() {
 // Edit Button Handler
 const EditPageHandler = (id) => {
     dispatch(editEmployeeeId(id));
-    console.log("selected id",id)
 }
 
+
+const defaultSorted = [
+    {
+        dataField: "Name", // if dataField is not match to any column you defined, it will be ignored.
+        order: "asc", // desc or asc
+    },
+];
 const pageOptions = {
     sizePerPage: 10,
     totalSize: TableListData.length,
@@ -191,7 +197,6 @@ return (
                                             keyField="id"
                                             data={TableListData}
                                             columns={pagesListColumns}
-                                            // bootstrap4
                                             search
                                         >
                                             
@@ -202,7 +207,7 @@ return (
                                         breadcrumbItem={"Employee List"}
                                         IsButtonVissible={true}
                                         SearchProps={toolkitProps.searchProps}
-                                        breadcrumbCount={TableListData.length}
+                                        breadcrumbCount={`Employee Count: ${TableListData.length}`}
                                         RedirctPath={"/employeesMaster"}
                                     />
                                     <Row>
@@ -212,6 +217,7 @@ return (
                                                     keyField={"id"}
                                                     responsive
                                                     bordered={false}
+                                                    defaultSorted={defaultSorted}
                                                     striped={false}
                                                     classes={
                                                         "table  table-bordered"

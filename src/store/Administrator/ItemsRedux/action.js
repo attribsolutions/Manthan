@@ -22,20 +22,20 @@ export const getItemList = () => ({
     type: GET_ITEM_LIST_API,
 });
 
-export const getItemListSuccess = (pages) => ({
+export const getItemListSuccess = (data) => ({
     type: GET_ITEM_LIST_API_SUCCESS,
-    payload:pages,
+    payload:data,
 });
 
 // post api
-export const postItemData = (Data,id) => ({
+export const postItemData = (data) => ({
     type: POST_ITEM_DATA,
-    Data,id
+    data,
   });
   
-  export const PostItemDataSuccess = (PostData) => ({
+  export const PostItemDataSuccess = (data) => ({
     type: POST_ITEM_DATA_SUCCESS,
-    payload: PostData,
+    payload: data,
   });
 
   // delete api
@@ -44,9 +44,9 @@ export const postItemData = (Data,id) => ({
     id ,
     
   } );
-  export const deleteItemIdSuccess = (deleteMessage) => ({
+  export const deleteItemIdSuccess = (data) => ({
     type: DELETE_ITEM_ID_SUCCESS,
-    payload:deleteMessage
+    payload:data
   });
   
   // edit api
@@ -54,9 +54,9 @@ export const postItemData = (Data,id) => ({
     type:EDIT_ITEM_ID,
     ID,
   })
-  export const editItemSuccess =(editData)=>({
+  export const editItemSuccess =(data)=>({
     type:EDIT_ITEM_ID_SUCCESS,
-   payload:editData,
+   payload:data,
   })
 
   // update api
@@ -64,9 +64,9 @@ export const postItemData = (Data,id) => ({
     type:UPDATE_ITEM_ID,
     updateData,ID,
   })
-  export const updateItemSuccess =(updateMessage)=>({
+  export const updateItemSuccess =(data)=>({
     type:UPDATE_ITEM_ID_SUCCESS,
-   payload:updateMessage,
+   payload:data,
   })
 
   

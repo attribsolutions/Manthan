@@ -191,15 +191,16 @@ const CompanyModule = (props) => {
 
                         <Row>
                           <FormGroup className="mb-2 col col-sm-4 " >
-                            <Label htmlFor="validationCustom01">PhoneNo </Label>
+                            <Label htmlFor="validationCustom01">Phone Number </Label>
                             <AvField name="PhoneNo" type="tel"
                               autoComplete="off"
                               value={EditData.PhoneNo}
                               placeholder="+91 "
                               validate={{
-                                required: { value: true, errorMessage: 'Please Enter a  Phone' },
+                                required: { value: true, errorMessage: 'Please Enter a Phone Number' },
                                 tel: {
-                                  pattern: /^(\+\d{1,3}[- ]?)?\d{10}$/
+                                  pattern: /^(\+\d{1,3}[- ]?)?\d{10}$/,
+                                  errorMessage: 'Please Enter a Phone Number'
                                 }
                               }}
                             />
@@ -212,6 +213,10 @@ const CompanyModule = (props) => {
                               autoComplete="off"
                               placeholder="example@example.com" validate={{
                                 required: { value: true, errorMessage: 'Please Enter a Email ID' },
+                                tel: {
+                                  pattern:  /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/,
+                                  errorMessage: "Please Enter valid Email Address.(Ex:abc@gmail.com)"
+                                }
                               }} />
                           </FormGroup>
                         </Row>

@@ -67,7 +67,7 @@ const AddEmployee = (props) => {
   // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
   useEffect(() => {
 
-    // document.getElementById("txtName").focus();
+    document.getElementById("txtName").focus();
 
     if (!(editDataGatingFromList === undefined)) {
 
@@ -108,7 +108,15 @@ const AddEmployee = (props) => {
   useEffect(() => {
     if ((postMessage.Status === true) && (postMessage.StatusCode === 200)) {
       dispatch(PostEmployeeSuccess({ Status: false }))
-      // formRef.current.reset();
+      formRef.current.reset();
+      setDesignation_DropdownSelect('')
+      setEmployeeType_DropdownSelect('')
+      setState_DropdownSelect('')
+      setDOB_Date_Select('')
+
+      setDistrict_DropdownSelect('')
+      setParty_DropdownSelect('')
+      setCompany_DropdownSelect('')
       if (PageMode === true) {
         dispatch(AlertState({
           Type: 1,
@@ -237,7 +245,7 @@ const AddEmployee = (props) => {
         <Container fluid>
 
           <Card className="text-black">
-            <CardHeader >
+            <CardHeader className="card-header   text-dark" style={{ backgroundColor: "#dddddd" }} >
               <h4 className="card-title text-black">React Validation - Normal</h4>
               <p className="card-title-desc text-black">Provide valuable, actionable feedback to your users with HTML5 form validation–available in all our supported browsers.</p>
             </CardHeader>
@@ -277,10 +285,13 @@ const AddEmployee = (props) => {
                             type="email"
                             value={EditData.email}
                             placeholder="Enter your EmailID "
+                            autoComplete='off'
                             validate={{
-                              required: { value: true, errorMessage: 'Please Enter your EmailID' },
+                              required: { value: true, errorMessage: "Please Enter valid Email Address.(Ex:abc@gmail.com)"
+                            },
                               tel: {
-                                pattern: /\S+@\S+\.\S+/
+                                pattern: "/^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/",
+                                errorMessage: "Please Enter valid Email Address.(Ex:abc@gmail.com)"
                               }
                             }}
                           />
@@ -291,12 +302,13 @@ const AddEmployee = (props) => {
 
                       <Col md="3">
                         <FormGroup className="mb-3">
-                          <Label htmlFor="validationCustom01">MobileNo </Label>
+                          <Label htmlFor="validationCustom01">Mobile Number </Label>
                           <AvField name="Mobile" type="tel"
                             value={EditData.Mobile}
                             placeholder="+91 "
+                            autoComplete='off'
                             validate={{
-                              required: { value: true, errorMessage: 'Please Enter your Mobile NO' },
+                              required: { value: true, errorMessage: 'Please Enter your Mobile Number' },
                               tel: {
                                 pattern: /^(\+\d{1,3}[- ]?)?\d{10}$/
                               }
@@ -317,6 +329,7 @@ const AddEmployee = (props) => {
                             value={DOB_Date_Select}
                             className="form-control d-block p-2 bg-white text-dark"
                             placeholder="YYYY-MM-DD"
+                            autoComplete='off'
                             options={{
                               altInput: true,
                               altFormat: "F j, Y",
@@ -327,19 +340,6 @@ const AddEmployee = (props) => {
                             }}
                           />
                         </FormGroup>
-                        {/* <FormGroup className="mb-3">
-                                <Label htmlFor="validationCustom01">
-                                  DOB </Label>
-                                <div class="col-lg-12">
-                                  <AvField name="DOB" type="date"
-                                    id="dateInput"
-                                    value={EditData.DOB}
-                                    validate={{
-                                      required: { value: true, errorMessage: '*Birth of Date is Required' },
-                                    }}
-                                  />
-                                </div>
-                              </FormGroup> */}
                       </Col>
 
                       <Col md="1">  </Col>
@@ -349,10 +349,12 @@ const AddEmployee = (props) => {
                           <AvField name="AadharNo" type="text"
                             value={EditData.AadharNo}
                             placeholder="Enter your AadharNo. "
+                            autoComplete='off'
                             validate={{
-                              required: { value: true, errorMessage: 'Please Enter your AadharNo (E.g. 1111 2222 3333)' },
+                              required: { value: true, errorMessage: 'Please Enter your AadharNo (Ex: 2222 2352 3549)' },
                               tel: {
-                                pattern: /^[2-9]{1}[0-9]{3}\s[0-9]{4}\s[0-9]{4}$/
+                                pattern: /^[2-9]{1}[0-9]{3}\s[0-9]{4}\s[0-9]{4}$/,
+                                errorMessage: 'Please Enter your AadharNo (Ex: 2222 2352 3549)'
                               }
                             }}
                           />
@@ -365,17 +367,18 @@ const AddEmployee = (props) => {
                           <AvField name="PAN" type="text"
                             value={EditData.PAN}
                             placeholder="Enter your PAN No. "
+                            autoComplete='off'
                             validate={{
-                              required: { value: true, errorMessage: 'Please Enter your PAN No (E.g. NLXBC1905E).' },
+                              required: { value: true, errorMessage: 'Please Enter your PAN No.(Ex:AAAAA1234A).'},
                               tel: {
-                                pattern: /[A-Z]{5}[0-9]{4}[A-Z]{1}$/
-                              }
+                                pattern: /[A-Z]{5}[0-9]{4}[A-Z]{1}/,
+                                errorMessage: 'Please enter valid PAN number.(Ex:AAAAA1234A).'
+                            }
                             }}
                           />
                         </FormGroup>
                       </Col>
                     </Row>
-
 
                     <Row>
                       <Col md="3">
@@ -383,6 +386,7 @@ const AddEmployee = (props) => {
                           <Label htmlFor="validationCustom01">Address</Label>
                           <AvField name="Address" value={EditData.Address} type="text"
                             placeholder=" Please Enter Address "
+                            autoComplete='off'
                             validate={{
                               required: { value: true, errorMessage: 'Please Enter your Address' },
                             }}
@@ -416,7 +420,7 @@ const AddEmployee = (props) => {
                   </CardBody>
                 </Card>
 
-                <Card >
+                <Card className="mt-n2">
                   <CardBody style={{ backgroundColor: "whitesmoke" }}>
                     <Row >
                       <Col md="3">
@@ -469,17 +473,16 @@ const AddEmployee = (props) => {
                       </Col>
 
                       <Col md="1">  </Col>
-
                       <Col md="3">
                         <FormGroup className="mb-3">
                           <Label htmlFor="validationCustom01">working_hours </Label>
                           <AvField name="working_hours" value={EditData.working_hours}
-                            type="number"
-                            placeholder="Please Enter WorkingHours"
+                            type="text"
+                            placeholder="Please Enter Working Hours"
                             autoComplete='off'
                             validate={{
                               number: true,
-                              required: { value: true, errorMessage: '*Working Hours is Required' },
+                              required: { value: true, errorMessage: 'Working Hours is Required' },
                             }}
                           />
                         </FormGroup>

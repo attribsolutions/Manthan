@@ -27,8 +27,8 @@ const ItemsMaster = (props) => {
   let editDataGatingFromList = props.state;
 
   //Access redux store Data /  'save_ModuleSuccess' action data
-  const { PostData, ItemGroupList } = useSelector((state) => ({
-    PostData: state.ItemMastersReducer.PostData,
+  const { postMessage, ItemGroupList } = useSelector((state) => ({
+    postMessage: state.ItemMastersReducer.postMessage,
     ItemGroupList: state.ItemMastersReducer.ItemGroupList,
   }));
 
@@ -37,41 +37,41 @@ const ItemsMaster = (props) => {
     document.getElementById("txtName").focus();
     dispatch(getItemGroup_ForDropDown())
     if (!(editDataGatingFromList === undefined)) {
-      setEditData(editDataGatingFromList[0]);
+      setEditData(editDataGatingFromList);
       setItemGroupSelect({
-        value: editDataGatingFromList[0].ItemGroup_id,
-        label: editDataGatingFromList[0].ItemGroupName
+        value: editDataGatingFromList.ItemGroup_id,
+        label: editDataGatingFromList.ItemGroupName
       });
       setIsEdit(true);
       dispatch(editItemSuccess({ Status: false }))
       dispatch(editItemSuccess({ Status: false }))
-      dispatch(BreadcrumbShow(editDataGatingFromList[0].Name))
+      dispatch(BreadcrumbShow(editDataGatingFromList.Name))
       return
     }
   }, [editDataGatingFromList])
 
   useEffect(() => {
-    if ((PostData.Status === true) && (PostData.StatusCode === 200)) {
+    if ((postMessage.Status === true) && (postMessage.StatusCode === 200)) {
       dispatch(PostItemDataSuccess({ Status: false }))
       formRef.current.reset();
       if (PageMode === true) {
         dispatch(AlertState({
           Type: 1,
           Status: true,
-          Message: PostData.Message,
+          Message: postMessage.Message,
         }))
       }
       else {
         dispatch(AlertState({
           Type: 1,
           Status: true,
-          Message: PostData.Message,
+          Message: postMessage.Message,
           RedirectPath: '/itemList',
           AfterResponseAction: false
         }))
       }
     }
-    else if (PostData.Status === true) {
+    else if (postMessage.Status === true) {
       dispatch(PostItemDataSuccess({ Status: false }))
       dispatch(AlertState({
         Type: 4,
@@ -81,7 +81,7 @@ const ItemsMaster = (props) => {
         AfterResponseAction: false
       }));
     }
-  }, [PostData.Status])
+  }, [postMessage])
 
   //'Save' And 'Update' Button Handller
   const handleValidUpdate = (event, values) => {
@@ -110,9 +110,9 @@ debugger
     }
   };
 
-  const ItemGroup_Options = ItemGroupList.map((Data) => ({
-    value: Data.ID,
-    label: Data.Name,
+  const ItemGroup_Options = ItemGroupList.map((index) => ({
+    value: index.id,
+    label: index.Name,
   }));
 
   function handllerItemGroupID(e) {
@@ -209,7 +209,7 @@ debugger
 
                             <Row>
                               <FormGroup className="mb-2 col col-sm-4 " >
-                                <Label htmlFor="validationCustom01">Rate </Label>
+                                <Label htmlFor="validationCustom01">Rate</Label>
                                 <AvField name="Rate"
                                   value={EditData.Rate}
                                   id="txtRate"
@@ -224,7 +224,7 @@ debugger
 
                               <Col md="1">  </Col>
                               <FormGroup className="mb-2 col col-sm-4 " >
-                                <Label htmlFor="validationCustom01">MRP </Label>
+                                <Label htmlFor="validationCustom01">MRP</Label>
                                 <AvField name="MRP" id="txtMRP"
                                   value={EditData.MRP}
                                   type="text"
@@ -240,7 +240,7 @@ debugger
 
                             <Row>
                               <FormGroup className="mb-3 col col-sm-4 " >
-                                <Label htmlFor="validationCustom01">Sequence </Label>
+                                <Label htmlFor="validationCustom01">Sequence</Label>
                                 <AvField name="Sequence"
                                   value={EditData.Sequence}
                                   id="txtSequence"
