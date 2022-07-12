@@ -279,13 +279,13 @@ const PartyMaster = (props) => {
 
                                                     <Col md="3">
                                                         <FormGroup className="mb-3">
-                                                            <Label htmlFor="validationCustom01">MobileNo </Label>
+                                                            <Label htmlFor="validationCustom01">Mobile Number </Label>
                                                             <AvField name="MobileNo" type="tel"
                                                                 value={EditData.MobileNo}
                                                                 id="mobileNo"
                                                                 placeholder="+91 "
                                                                 validate={{
-                                                                    required: { value: true, errorMessage: 'Please Enter your Mobile NO' },
+                                                                    required: { value: true, errorMessage: 'Please Enter your Mobile Number' },
                                                                     tel: {
                                                                         pattern: /^(\+\d{1,3}[- ]?)?\d{10}$/,
                                                                         errorMessage: "Please put 10 Digit Mobile Number."
@@ -365,7 +365,7 @@ const PartyMaster = (props) => {
                                                                 value={EditData.PAN}
                                                                 placeholder="Please Enter PAN"
                                                                 type="text"
-                                                                errorMessage="Enter First PAN"
+                                                                errorMessage="Please Enter PAN Number."
                                                                 className="form-control"
                                                                 validate={{
                                                                     required: { value: true },
@@ -388,7 +388,7 @@ const PartyMaster = (props) => {
                                                                 value={EditData.GSTIN}
                                                                 placeholder="Please Enter GSTIN"
                                                                 type="text"
-                                                                errorMessage="Enter First GSTIN"
+                                                                errorMessage="Please Enter GSTIN Number."
                                                                 className="form-control"
                                                                 validate={{
                                                                     required: { value: true },
@@ -416,7 +416,7 @@ const PartyMaster = (props) => {
                                                                 placeholder="Please Enter FSSAINo"
                                                                 type="text"
 
-                                                                errorMessage="Enter First FSSAINo"
+                                                                errorMessage="Please Enter FSSAI Number."
                                                                 className="form-control"
                                                                 validate={{
                                                                     required: { value: true },

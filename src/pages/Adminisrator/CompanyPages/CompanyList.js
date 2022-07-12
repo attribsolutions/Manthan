@@ -78,7 +78,7 @@ const CompanyList = () => {
             dispatch(AlertState({
                 Type: 3,
                 Status: true,
-                Message: "error Message",
+                Message: deleteCompanyID.Message,
             }));
         }
     }, [deleteCompanyID.Status])

@@ -126,9 +126,9 @@ const Modules = (props) => {
         <React.Fragment>
             <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
                 <MetaTags>
-                    <title>Modules| FoodERP-React FrontEnd</title>
+                    <title>Module| FoodERP-React FrontEnd</title>
                 </MetaTags>
-                <Breadcrumbs breadcrumbItem={"Module Page "} />
+                <Breadcrumbs breadcrumbItem={"Module Master "} />
                 <Container fluid  >
 
                     <Card className="text-black" >

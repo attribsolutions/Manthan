@@ -144,7 +144,7 @@ const RoleMaster = (props) => {
                             <AvField name="Description" id="txtName"
                               value={EditData.Description}
                               type="text"
-                              placeholder="Please Enter Discription"
+                              placeholder="Please Enter Description"
                               autoComplete='off'
                               validate={{
                                 required: { value: true, errorMessage: 'Please Enter a Description...!' },
