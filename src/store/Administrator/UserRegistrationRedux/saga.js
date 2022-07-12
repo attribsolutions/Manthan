@@ -47,7 +47,8 @@ function* RolesListDropdoun_GenratorFunction() {
 
 // post api
 function* user_save_GenratorFunction({ Data }) {
-  console.log("Data",Data)
+
+debugger
   yield put(SpinnerState(true))
   try {
     const response = yield call(User_Component_PostMethod_API, Data);
