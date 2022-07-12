@@ -1,191 +1,74 @@
-import React, { useEffect, useRef, useState } from "react";
-import Breadcrumbs from "../../../components/Common/Breadcrumb";
-import { Card, CardBody, Col, Container, Row, Label, Input, FormGroup, CardHeader, InputGroup, Button } from "reactstrap";
-import { AvForm, AvGroup, AvField, AvInput } from "availity-reactstrap-validation";
+import React from "react"
+import MetaTags from 'react-meta-tags';
 
-import Flatpickr from "react-flatpickr"
-import Select from "react-select";
+import { Row, Col, Card, CardBody, CardTitle } from "reactstrap"
+// Editable
+import BootstrapTable from "react-bootstrap-table-next"
+import cellEditFactory from "react-bootstrap-table2-editor"
 
-const DemoUI2 = (props) => {
-    return (
-        <React.Fragment>
-            <div className="page-content">
-                <Breadcrumbs breadcrumbItem={"Party UI DEMO "} />
-                <Container fluid>
+//Import Breadcrumb
+// import Breadcrumbs from "../../components/Common/Breadcrumb"
 
-                    <Card >
-                        <CardHeader className="card-header text-center  text-dark" style={{ backgroundColor: "#dddddd" }}>
-                            <h4 className=" text-center text-black" >React Validation - Normal</h4>
-                            <p className="text-center text-black">Provide valuable, actionable feedback to your users with HTML5 form validation–available in all our supported browsers.</p>
-                        </CardHeader>
-                        <CardBody>
-                            <AvForm>
-                                <Row className="d-flex justify-content-center">
+const products = [
+  { id: 1, age: 25, qty: 1500, cost: 1000 },
+  { id: 2, age: 34, qty: 1900, cost: 1300 },
+  { id: 3, age: 67, qty: 1300, cost: 1300 },
+  { id: 4, age: 23, qty: 1100, cost: 6400 },
+  { id: 5, age: 78, qty: 1400, cost: 4000 },
+]
 
-                                    <Col md={6}  >
-                                        <Card >
+const columns = [
+  {
+    dataField: "id",
+    text: "ID",
+  },
+  {
+    dataField: "age",
+    text: "Age(AutoFill)",
+  },
+  {
+    dataField: "qty",
+    text: "Qty(AutoFill and Editable)",
+  },
+  {
+    dataField: "cost",
+    text: "Cost(Editable)",
+  },
+]
 
-                                            <CardBody style={{ backgroundColor: "whitesmoke" }}>
+const DemoUI2 = () => {
+  return (
+    <React.Fragment>
+      <div className="page-content">
+        <MetaTags>
+          <title>Editable | Minia - React Admin & Dashboard Template</title>
+        </MetaTags>
+        <div className="container-fluid">
+          {/* <Breadcrumbs title="Tables" breadcrumbItem="Editable" /> */}
 
-                                                <FormGroup className="mb-3 ">
-                                                    <Row className="justify-content-md-center">
-                                                        <Label htmlFor="horizontal-firstname-input" className="col-sm-2 col-form-label  text-black">Name </Label>
-                                                        <Col sm={5}>
-                                                            <AvField
-                                                                name="Name"
-                                                                placeholder="Please Enter Name"
-                                                                type="text"
-                                                                errorMessage="Enter First Name"
-                                                                className="form-control"
-                                                                validate={{ required: { value: true } }}
-                                                                id="horizontal-firstname-input"
-                                                            />
-                                                        </Col>
+          <Row>
+            <Col>
+              <Card>
+                <CardBody>
+                  <CardTitle>Datatable Editable </CardTitle>
 
-                                                    </Row>
-
-                                                </FormGroup>
-                                                <FormGroup className="mb-3 ">
-                                                    <Row className="justify-content-md-center">
-                                                        <Label htmlFor="horizontal-firstname-input" className="col-sm-2 col-form-label  text-black">Description </Label>
-                                                        <Col sm={5}>
-                                                            <AvField
-                                                                name="Name"
-                                                                placeholder="Please Enter Name"
-                                                                type="text"
-                                                                errorMessage="Enter First Name"
-                                                                className="form-control"
-                                                                validate={{ required: { value: true } }}
-                                                                id="horizontal-firstname-input"
-                                                            />
-                                                        </Col>
-
-                                                    </Row>
-
-                                                </FormGroup>
-
-                                                <FormGroup className="mb-3 ">
-                                                    <Row className="justify-content-md-center">
-                                                        <Label htmlFor="horizontal-firstname-input" className="col-sm-2 col-form-label  text-black">Modules </Label>
-                                                        <Col sm={5}>
-                                                            <AvField
-                                                                name="Name"
-                                                                placeholder="Please Enter Name"
-                                                                type="text"
-                                                                errorMessage="Enter First Name"
-                                                                className="form-control"
-                                                                validate={{ required: { value: true } }}
-                                                                id="horizontal-firstname-input"
-                                                            />
-                                                        </Col>
-
-                                                    </Row>
-
-                                                </FormGroup>
-
-                                                <FormGroup className="mb-3 ">
-                                                    <Row className="justify-content-md-center">
-                                                        <Label htmlFor="horizontal-firstname-input" className="col-sm-2 col-form-label  text-black">Mobile </Label>
-                                                        <Col sm={5}>
-                                                            <AvField
-                                                                name="Name"
-                                                                placeholder="Please Enter Name"
-                                                                type="text"
-                                                                errorMessage="Enter First Name"
-                                                                className="form-control"
-                                                                validate={{ required: { value: true } }}
-                                                                id="horizontal-firstname-input"
-                                                            />
-                                                        </Col>
-
-                                                    </Row>
-
-                                                </FormGroup>
-
-                                                <FormGroup className="mb-3 ">
-                                                    <Row className="justify-content-md-center">
-                                                        <Label htmlFor="horizontal-firstname-input" className="col-sm-2 col-form-label  text-black">Company </Label>
-                                                        <Col sm={5}>
-                                                            <AvField
-                                                                name="Name"
-                                                                placeholder="Please Enter Name"
-                                                                type="text"
-                                                                errorMessage="Enter First Name"
-                                                                className="form-control"
-                                                                validate={{ required: { value: true } }}
-                                                                id="horizontal-firstname-input"
-                                                            />
-                                                        </Col>
-
-                                                    </Row>
-
-                                                </FormGroup>
-
-                                                {/* <FormGroup className="mb-3 ">
-                                                    <Row className="justify-content-md-center">
-                                                        <Col className="col-sm-2 "></Col>
-                                                        <Col sm={5} >
-                                                            <Row>
-                                                            <Label
-                                                                        htmlFor="horizontal-firstname-input"
-                                                                        className="col-sm-4 col-form-label"
-                                                                    >
-                                                                        IsActive
-                                                                    </Label>
-                                                                    <Col md={4} style={{ marginTop: '7px' }} className="form-check form-switch form-switch-sm ">
-                                                                        <AvInput name="isActive" type="checkbox" id="switch1" switch="none" defaultChecked  />
-                                                                        <Label className="me-1" htmlFor="switch1" data-on-label="Yes" data-off-label="No"></Label>
-                                                                    </Col>
-                                                            </Row>
-                                                        </Col>
-                                                    </Row>
-                                                </FormGroup> */}
-
-                                                <FormGroup className="mb-3 ">
-                                                    <Row className="justify-content-md-center">
-                                                        <Label htmlFor="horizontal-firstname-input" className="col-sm-2 col-form-label  text-black">isActive </Label>
-                                                        <Col md={5} style={{ marginTop: '7px' }} >
-                                                            <AvInput
-                                                               name="isActive" type="checkbox" id="switch1" switch="none" defaultChecked  />
-                                                               <Label className="me-1" htmlFor="switch1" data-on-label="Yes" data-off-label="No"></Label>
-                                                               
-                                                                
-                                                          
-                                                        </Col>
-
-                                                    </Row>
-
-                                                </FormGroup>
-
-
-                                                <FormGroup className="mb-3 ">
-                                                    <Row className="justify-content-center">
-                                                        <Col sm={1}></Col>
-                                                        <Col sm={2}>
-                                                            <button
-                                                                type="submit"
-                                                                data-mdb-toggle="tooltip" data-mdb-placement="top" title="Save Page"
-                                                                className="btn btn-success w-md"
-                                                            > <i className="fas fa-save me-2"></i> Save
-                                                            </button>
-                                                        </Col>
-
-                                                    </Row>
-                                                </FormGroup >
-                                            </CardBody>
-
-                                        </Card>
-                                    </Col>
-                                </Row>
-
-                            </AvForm>
-                        </CardBody>
-                    </Card>
-
-                </Container>
-            </div>
-        </React.Fragment>
-    );
+                  <div className="table-responsive">
+                    <BootstrapTable
+                      keyField="id"
+                      data={products}
+                      columns={columns}
+                      cellEdit={cellEditFactory({ mode: "click" })}
+                      
+                    />
+                  </div>
+                </CardBody>
+              </Card>
+            </Col>
+          </Row>
+        </div>
+      </div>
+    </React.Fragment>
+  )
 }
 
 export default DemoUI2

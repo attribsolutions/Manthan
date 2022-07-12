@@ -133,7 +133,7 @@ const AddUser = (props) => {
       }));
     }
     else if (find === undefined) {
-      setRoleData([...RoleData, {Role:RoleDropDown.value,Name:RoleDropDown.label}]);
+      setRoleData([...RoleData, { Role: RoleDropDown.value, Name: RoleDropDown.label }]);
     }
     else {
       dispatch(AlertState({
@@ -221,19 +221,39 @@ const AddUser = (props) => {
                               onChange={(e) => { handllerEmployeeID(e) }}
                             />
                           </FormGroup>
-                          <Col md="1">  </Col>
+
+                        </Row>
+                        <Row >
+
                           <FormGroup className="mb-1 col col-sm-4 " >
-                            <Label htmlFor="validationCustom01">Name </Label>
-                            <AvField name="LoginName" id="txtName" value={EditData.LoginName}
+                            <Label htmlFor="validationCustom01">Login Name</Label>
+                            <AvField name="Name" id="txtName" 
                               type="text"
                               placeholder="Please Enter Name"
+                              defaultvalue=''
                               autoComplete='off'
                               validate={{
-                                required: { value: true, errorMessage: 'Please enter a Name...!' },
+                                required: { value: true, errorMessage: 'Please Enter a Name...!' },
                               }}
                               onChange={(e) => { dispatch(BreadcrumbShow(e.target.value)) }}
                             />
                           </FormGroup>
+                        </Row>
+
+                        <Row>
+                          <FormGroup className="mb-1 col col-sm-4 " >
+                            <Label htmlFor="validationCustom01">Password</Label>
+                            <AvInput name="password" id="password" 
+                              type="password"
+                              placeholder="Please Enter Password"
+                              autoComplete="new-password"
+                              validate={{
+                                required: { value: true, errorMessage: 'Please Enter a Password...!' },
+                              }}
+                              onChange={(e) => { }}
+                            />
+                          </FormGroup>
+                          
                         </Row>
 
                         <Row className="mt-2">
