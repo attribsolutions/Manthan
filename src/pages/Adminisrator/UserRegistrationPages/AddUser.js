@@ -80,7 +80,7 @@ const AddUser = (props) => {
       dispatch(AlertState({
         Type: 4,
         Status: true,
-        Message: "error Message",
+        Message:JSON.stringify( AddUserMessage.Message),
         RedirectPath: false,
         AfterResponseAction: false
       }));
