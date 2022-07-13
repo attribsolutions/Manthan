@@ -59,13 +59,13 @@ const PartyMaster = (props) => {
     useEffect(() => {
         document.getElementById("txtName").focus();
         if (!(editDataGatingFromList === undefined)) {
-            editDataGatingFromList=editDataGatingFromList[0]
+            debugger
             setEditData(editDataGatingFromList);
             setIsEdit(true);
             setFSSAIExipry_Date_Select(editDataGatingFromList.FSSAIExipry)
 
             setDistrict_dropdown_Select({
-                value: editDataGatingFromList.District,
+                value: editDataGatingFromList.District_id,
                 label: editDataGatingFromList.DistrictName
             })
 
@@ -75,7 +75,7 @@ const PartyMaster = (props) => {
             })
 
             setDivision_dropdown_Select({
-                value: editDataGatingFromList.DividionType_id,
+                value: editDataGatingFromList.DivisionType_id,
                 label: editDataGatingFromList.DivisionTypeName
             })
             setPartyType_dropdown_Select({
@@ -83,7 +83,7 @@ const PartyMaster = (props) => {
                 label: editDataGatingFromList.PartyTypeName
             })
             setState_DropDown_select({
-                value: editDataGatingFromList.State,
+                value: editDataGatingFromList.State_id,
                 label: editDataGatingFromList.StateName
             })
 
@@ -170,7 +170,7 @@ const PartyMaster = (props) => {
             dispatch(AlertState({
                 Type: 4,
                 Status: true,
-                Message: "error Message",
+                Message: JSON.stringify(PartySaveSuccess.Message),
                 RedirectPath: false,
                 AfterResponseAction: false
             }));
@@ -183,9 +183,10 @@ const PartyMaster = (props) => {
         const requestOptions = {
             body: JSON.stringify({
                 Name: values.Name,
-                PartyTypeID: partyType_dropdown_Select.value,
-                DividionTypeID: division_dropdown_Select.value,
-                companyID: 0,
+                PartyType: partyType_dropdown_Select.value,
+                DivisionType: division_dropdown_Select.value,
+                Company: companyList_dropdown_Select.value,
+                PAN:values.PAN,
                 CustomerDivision: values.CustomerDivision,
                 Email: values.Email,
                 Address: values.Address,
@@ -199,7 +200,7 @@ const PartyMaster = (props) => {
                 GSTIN: values.GSTIN,
                 FSSAINo: values.FSSAINo,
                 FSSAIExipry: FSSAIExipry_Date_Select,
-                IsActive: 1,
+                isActive: values.isActive,
                 CreatedBy: 1,
                 CreatedOn: "2022-06-24T11:16:53.165483Z",
                 UpdatedBy: 1,
@@ -289,8 +290,8 @@ const PartyMaster = (props) => {
                                                                 validate={{
                                                                     required: { value: true, errorMessage: 'Please Enter your Mobile Number' },
                                                                     tel: {
-                                                                        pattern: /^(\+\d{1,3}[- ]?)?\d{10}$/,
-                                                                        errorMessage: "Please put 10 Digit Mobile Number."
+                                                                        pattern: /^(\+\d{1,3}[- ]?)?\d{12}$/,
+                                                                        errorMessage: "Please put 10 Digit Mobile Number with contry code."
                                                                     }
                                                                 }}
                                                             />
@@ -396,7 +397,7 @@ const PartyMaster = (props) => {
                                                                     required: { value: true },
                                                                     tel: {
                                                                         pattern: /^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$/,
-                                                                        errorMessage: 'Please enter valid GSTIN number.(Ex:22AAAAA0000A1Z5).'
+                                                                        errorMessage: 'Please enter valid GSTIN number.(Ex:27AAAAA0000A1Z5).'
                                                                     }
                                                                 }}
                                                                 id="validationCustom01"
@@ -463,9 +464,10 @@ const PartyMaster = (props) => {
                                                                 </Label>
                                                                 <Col md={4} style={{ marginTop: '7px' }} className=" form-check form-switch form-switch-sm ">
                                                                     <div className="form-check form-switch form-switch-md mb-3" dir="ltr">
-                                                                        <input type="checkbox" className="form-check-input " id="inp-showOnMenu"
-                                                                            checked={EditData.isShowOnMenu}
-                                                                            name="isShowOnMenu"
+                                                                        <AvInput type="checkbox" className="form-check-input " id="inp-isActive"
+                                                                            checked={EditData.isActive}
+                                                                            defaultChecked={true}
+                                                                            name="isActive"
                                                                         />
                                                                         <label className="form-check-label" htmlFor="customSwitchsizemd"></label>
                                                                     </div>

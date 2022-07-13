@@ -49,10 +49,10 @@ const PartyList = () => {
             tog_center()
         }
         else if (updateMessage.Status === true) {
-            dispatch(deletePartyIDSuccess({ Status: false }))
+            dispatch(updatePartyIDSuccess({ Status: false }))
             dispatch(AlertState({
                 Type: 3, Status: true,
-                Message: updateMessage.Message,
+                Message:JSON.stringify( updateMessage.Message),
             }));
         }
     }, [updateMessage.Status, dispatch]);
