@@ -286,12 +286,12 @@ const PartyMaster = (props) => {
                                                             <AvField name="MobileNo" type="tel"
                                                                 value={EditData.MobileNo}
                                                                 id="mobileNo"
-                                                                placeholder="+91 "
+                                                                placeholder="Enter Mobile No."
                                                                 validate={{
-                                                                    required: { value: true, errorMessage: 'Please Enter your Mobile Number' },
+                                                                    required: { value: true, errorMessage: 'Enter your Mobile Number' },
                                                                     tel: {
-                                                                        pattern: /^(\+\d{1,3}[- ]?)?\d{12}$/,
-                                                                        errorMessage: "Please put 10 Digit Mobile Number with contry code."
+                                                                        pattern: /^(\+\d{1,3}[- ]?)?\d{10}$/,
+                                                                        errorMessage: "Please put 10 Digit Mobile Number."
                                                                     }
                                                                 }}
                                                             />
