@@ -182,7 +182,7 @@ const ModulesList = () => {
                                     <React.Fragment>
                                         <Breadcrumbs
                                             title={"Count :"}
-                                            breadcrumbItem={"Modules List"}
+                                            breadcrumbItem={"Module List"}
                                             IsButtonVissible={true}
                                             SearchProps={toolkitProps.searchProps}
                                             breadcrumbCount={`Module Count: ${TableListData.length}`}

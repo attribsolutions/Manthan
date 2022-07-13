@@ -158,7 +158,7 @@ const Modules = (props) => {
                                                             placeholder="Please Enter Name"
                                                             autoComplete='off'
                                                             validate={{
-                                                                required: { value: true, errorMessage: 'Please Enter a Name' },
+                                                                required: { value: true, errorMessage: 'Please Enter Name' },
                                                             }}
                                                             onChange={(e)=>{ dispatch(BreadcrumbShow(e.target.value))}}
                                                         />
@@ -167,7 +167,7 @@ const Modules = (props) => {
 
                                                 <Row>
                                                     <FormGroup className="mb-2 col col-sm-4 " >
-                                                        <Label htmlFor="validationCustom01">DisplayIndex </Label>
+                                                        <Label htmlFor="validationCustom01">Display Index </Label>
                                                         <AvField name="DisplayIndex" autoComplete='off'
                                                             placeholder="Please Enter DisplayIndex"
                                                             value={EditData.DisplayIndex} type="text"
@@ -190,7 +190,7 @@ const Modules = (props) => {
                                                             autoComplete='off'
                                                             placeholder="Please Enter IconPath"
                                                             value={EditData.Icon} type="text" validate={{
-                                                                required: { value: true, errorMessage: 'Please Enter a Icon' },
+                                                                required: { value: true, errorMessage: 'Please Enter Icon' },
                                                             }}
                                                         />
                                                     </FormGroup>
@@ -198,7 +198,7 @@ const Modules = (props) => {
 
                                                 <FormGroup className="mb-2 col col-sm-5">
                                                     <Row className="justify-content-md-left">
-                                                        <Label htmlFor="horizontal-firstname-input" className="col-sm-2 col-form-label" >IsActive </Label>
+                                                        <Label htmlFor="horizontal-firstname-input" className="col-sm-3 col-form-label" >Active </Label>
                                                         <Col md={2} style={{ marginTop: '9px' }} >
                                                             <div className="form-check form-switch form-switch-md mb-3" dir="ltr">
                                                                 <AvInput type="checkbox" className="form-check-input" id="customSwitchsizemd"

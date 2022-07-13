@@ -19,6 +19,7 @@ import {
     updatePartyIDSuccess
 }  from '../../../store/Administrator/PartyRedux/action';
 import PartyMaster from './PartyMaster';
+import { MetaTags } from "react-meta-tags";
 
 const PartyList = () => {
     const dispatch = useDispatch();
@@ -165,6 +166,10 @@ const PartyList = () => {
     return (
         <React.Fragment>
             <div className="page-content">
+            <MetaTags>
+                    <title>Party List| FoodERP-React FrontEnd</title>
+                </MetaTags>
+
                 <PaginationProvider
                     pagination={paginationFactory(pageOptions)}
                 >
