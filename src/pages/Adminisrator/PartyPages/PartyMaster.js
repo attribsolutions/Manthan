@@ -59,7 +59,7 @@ const PartyMaster = (props) => {
     useEffect(() => {
         document.getElementById("txtName").focus();
         if (!(editDataGatingFromList === undefined)) {
-
+            editDataGatingFromList=editDataGatingFromList[0]
             setEditData(editDataGatingFromList);
             setIsEdit(true);
             setFSSAIExipry_Date_Select(editDataGatingFromList.FSSAIExipry)
@@ -68,17 +68,19 @@ const PartyMaster = (props) => {
                 value: editDataGatingFromList.District,
                 label: editDataGatingFromList.DistrictName
             })
-            // setCompanyList_dropdown_Select({
-            //     value: editDataGatingFromList.Company,
-            //     label: editDataGatingFromList.CompanyNa
-            // })
+
+            setCompanyList_dropdown_Select({
+                value: editDataGatingFromList.Company_id,
+                label: editDataGatingFromList.CompanyName
+            })
+
             setDivision_dropdown_Select({
-                value: editDataGatingFromList.DividionTypeID,
-                label: editDataGatingFromList.DivisionType
+                value: editDataGatingFromList.DividionType_id,
+                label: editDataGatingFromList.DivisionTypeName
             })
             setPartyType_dropdown_Select({
-                value: editDataGatingFromList.PartyTypeID,
-                label: editDataGatingFromList.PartyType
+                value: editDataGatingFromList.PartyType_id,
+                label: editDataGatingFromList.PartyTypeName
             })
             setState_DropDown_select({
                 value: editDataGatingFromList.State,
@@ -206,7 +208,7 @@ const PartyMaster = (props) => {
         };
 
         if (IsEdit) {
-            dispatch(updatePartyID(requestOptions.body, EditData.ID));
+            dispatch(updatePartyID(requestOptions.body, EditData.id));
         }
         else {
             dispatch(postPartyData(requestOptions.body));
@@ -460,13 +462,13 @@ const PartyMaster = (props) => {
                                                                     IsActive
                                                                 </Label>
                                                                 <Col md={4} style={{ marginTop: '7px' }} className=" form-check form-switch form-switch-sm ">
-                                                                <div className="form-check form-switch form-switch-md mb-3" dir="ltr">
-                                                            <input type="checkbox" className="form-check-input " id="inp-showOnMenu"
-                                                                checked={EditData.isShowOnMenu}
-                                                                name="isShowOnMenu"
-                                                            />
-                                                            <label className="form-check-label" htmlFor="customSwitchsizemd"></label>
-                                                        </div>
+                                                                    <div className="form-check form-switch form-switch-md mb-3" dir="ltr">
+                                                                        <input type="checkbox" className="form-check-input " id="inp-showOnMenu"
+                                                                            checked={EditData.isShowOnMenu}
+                                                                            name="isShowOnMenu"
+                                                                        />
+                                                                        <label className="form-check-label" htmlFor="customSwitchsizemd"></label>
+                                                                    </div>
                                                                 </Col>
                                                             </Row>
                                                         </FormGroup>
@@ -561,7 +563,7 @@ const PartyMaster = (props) => {
                                                                 </Col>
                                                             </FormGroup>
                                                         </Col> */}
-                                                         <Col md="1">  </Col>
+                                                    <Col md="1">  </Col>
                                                     <Col md="3">
                                                         <FormGroup className="mb-2">
                                                             <Label htmlFor="validationCustom01"> PIN </Label>

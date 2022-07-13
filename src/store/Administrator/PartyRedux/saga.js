@@ -48,10 +48,11 @@ function* Get_Party_GenratorFunction() {
       }
     }
   
-  function* Edit_Party_GenratorFunction({ ID }) {
+  function* Edit_Party_GenratorFunction({ id }) {
     try {
-      const response = yield call(Party_Master_Edit_API, ID);
+      const response = yield call(Party_Master_Edit_API, id);
       yield put(editPartyIDSuccess(response));
+ 
     } catch (error) {
       yield put(AlertState({ Type: 4, 
         Status: true, Message: "500 Error Message",
@@ -61,11 +62,9 @@ function* Get_Party_GenratorFunction() {
   
   
   function* Update_Party_GenratorFunction({ updateData, ID }) {
-    debugger
     try {
       yield put(SpinnerState(true))
       const response = yield call(Party_Master_Update_API, updateData, ID);
-      console.log("saga file response", response)
       yield put(SpinnerState(false))
       yield put(updatePartyIDSuccess(response))
     }

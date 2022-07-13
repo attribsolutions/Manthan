@@ -45,9 +45,9 @@ export const deletePartyIDSuccess = (deleteMessage) => ({
 });
 
 // edit api
-export const editPartyID = (ID) => ({
+export const editPartyID = (id) => ({
     type: EDIT_PARTY_ID,
-    ID,
+    id,
 })
 export const editPartyIDSuccess = (editData) => ({
     type: EDIT_PARTY_ID_SUCCESS,
@@ -59,9 +59,9 @@ export const updatePartyID = (updateData, ID) => ({
     type: UPDATE_PARTY_ID,
     updateData, ID,
 })
-export const updatePartyIDSuccess = (updateMessage) => ({
+export const updatePartyIDSuccess = (data) => ({
     type: UPDATE_PARTY_ID_SUCCESS,
-    payload: updateMessage,
+    payload: data,
 })
 
 // GetDistrictOnState API dependent on state api

@@ -119,12 +119,12 @@ const PartyList = () => {
         },
         {
             text: "PartyType",
-            dataField: "PartyType",
+            dataField: "PartyTypeName",
             sort: true,
         },
         {
             text: "DivisionType",
-            dataField: "DivisionType",
+            dataField: "DivisionTypeName",
             sort: true,
         },
         {
