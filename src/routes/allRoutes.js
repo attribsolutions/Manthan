@@ -20,10 +20,10 @@ import HPageList from "../pages/Adminisrator/HPagesPages/HPageList";
 import HPageMaster from "../pages/Adminisrator/HPagesPages/HPageMaster";
 import OrderPage from "../pages/Order/OrderPage";
 import OrderList from "../pages/Order/OrderList"
-import AddUser from "../pages/Adminisrator/UserRegistrationPages/AddUser";
+import AddUser from "../pages/Adminisrator/UserRegistrationPages/UserRegistration";
 import UserList from "../pages/Adminisrator/UserRegistrationPages/UserList";
-import AddEmployee from "../pages/Adminisrator/EmployeePages/AddEmployee";
-import Employee_List from "../pages/Adminisrator/EmployeePages/Employee_List";
+import AddEmployee from "../pages/Adminisrator/EmployeePages/EmployeeMaster";
+import Employee_List from "../pages/Adminisrator/EmployeePages/EmployeeList";
 import RoleMaster from "../pages/Adminisrator/RoleMasterPages/RoleMaster";
 import RoleList from "../pages/Adminisrator/RoleMasterPages/RoleList"
 import Error404 from "../pages/Utility/Error404";
