@@ -222,21 +222,25 @@ const Employee_List = () => {
                                         breadcrumbCount={`Employee Count: ${TableListData.length}`}
                                         RedirctPath={"/employeesMaster"}
                                     />
+                                    <Row>
+                                        <Col className='btn sm text-end '>
                                     <Button
                                         variant="contained"
                                         color="primary"
-                                        className='export-btn text-right mb-3'
+                                        className='export-btn text-right mb-2  align-end'
                                     >
                                         <CSVLink 
                                             headers={ExcelTableData}
                                             data={TableListData}
                                             filename="Employee Data"
-                                            style={{ "textDecoration": "none", "color": "#fff" }}
+                                            style={{ "textDecoration": "none", "color": "#fff"  }}
                                         >
                                             Download to Excel
                                         </CSVLink>
 
                                     </Button>
+                                    </Col>
+                                    </Row>
                                     <Row>
                                         <Col xl="12">
                                             <div className="table-responsive">
