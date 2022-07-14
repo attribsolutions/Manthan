@@ -13,6 +13,8 @@ import { getState } from "../../../store/Administrator/M_EmployeeRedux/action";
 import Flatpickr from "react-flatpickr"
 import { fetchCompanyList } from "../../../store/Administrator/CompanyRedux/actions";
 import { BreadcrumbShow } from "../../../store/Utilites/Breadcrumb/actions";
+import { MetaTags } from "react-meta-tags";
+
 const PartyMaster = (props) => {
 
     const formRef = useRef(null);
@@ -223,7 +225,10 @@ const PartyMaster = (props) => {
     return (
         <React.Fragment>
             <div className="page-content text-black" style={{ marginTop: IsEditMode_Css }}>
-                <Breadcrumbs breadcrumbItem={"Party Master "} />
+                <Breadcrumbs breadcrumbItem={"Party Master"} />
+                <MetaTags>
+                    <title>Party Master| FoodERP-React FrontEnd</title>
+                </MetaTags>
                 <Container fluid>
                     <Row>
                         <Col lg={12}>
@@ -253,7 +258,7 @@ const PartyMaster = (props) => {
                                                                 placeholder="Please Enter Name"
                                                                 // autoComplete='off'
                                                                 validate={{
-                                                                    required: { value: true, errorMessage: 'Please enter a Name...!' },
+                                                                    required: { value: true, errorMessage: 'Please Enter Name' },
                                                                 }}
                                                                 onChange={(e) => { dispatch(BreadcrumbShow(e.target.value)) }}
                                                             />
@@ -262,19 +267,18 @@ const PartyMaster = (props) => {
                                                     <Col md="1">  </Col>
                                                     <Col md="3">
                                                         <FormGroup className="mb-3">
-                                                            <Label htmlFor="validationCustom01">Email </Label>
-                                                            <AvField name="Email" type="email"
-                                                                id="email"
-                                                                value={EditData.Email}
-                                                                placeholder="Enter your EmailID "
+                                                            <Label htmlFor="validationCustom01">Mobile Number </Label>
+                                                            <AvField name="MobileNo" type="tel"
+                                                                value={EditData.MobileNo}
+                                                                id="mobileNo"
+                                                                placeholder="Enter Mobile No."
                                                                 validate={{
-                                                                    required: { value: true, errorMessage: 'Please Enter your EmailID' },
+                                                                    required: { value: true, errorMessage: 'Enter your Mobile Number' },
                                                                     tel: {
-                                                                        pattern: "/^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/",
-                                                                        errorMessage: "Please enter valid email address.(Ex:abc@gmail.com)"
+                                                                        pattern: /^(\+\d{1,3}[- ]?)?\d{10}$/,
+                                                                        errorMessage: "Please Enter 10 Digit Mobile Number."
                                                                     }
-                                                                }
-                                                                }
+                                                                }}
                                                             />
                                                         </FormGroup>
                                                     </Col>
@@ -282,18 +286,32 @@ const PartyMaster = (props) => {
 
                                                     <Col md="3">
                                                         <FormGroup className="mb-3">
-                                                            <Label htmlFor="validationCustom01">Mobile Number </Label>
-                                                            <AvField name="MobileNo" type="tel"
+                                                            <Label htmlFor="validationCustom01">Alternate Contact Number(s)</Label>
+                                                            <AvField name="alternateContact" type="tel"
                                                                 value={EditData.MobileNo}
                                                                 id="mobileNo"
-                                                                placeholder="+91 "
+                                                                defaultValue={''}
+                                                                placeholder="Alternate Contact Number(s)"
+                                                            />
+                                                        </FormGroup>
+                                                    </Col>
+                                                </Row>
+                                                <Row className="mt-3 ">
+                                                <Col md="3">
+                                                        <FormGroup className="mb-3">
+                                                            <Label htmlFor="validationCustom01">Email </Label>
+                                                            <AvField name="Email" type="email"
+                                                                id="email"
+                                                                value={EditData.Email}
+                                                                placeholder="Enter your Email"
                                                                 validate={{
-                                                                    required: { value: true, errorMessage: 'Please Enter your Mobile Number' },
+                                                                    required: { value: true, errorMessage: 'Please Enter your Email' },
                                                                     tel: {
-                                                                        pattern: /^(\+\d{1,3}[- ]?)?\d{12}$/,
-                                                                        errorMessage: "Please put 10 Digit Mobile Number with contry code."
+                                                                        pattern: "/^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/",
+                                                                        errorMessage: "Please Enter valid Email Address.(Ex:abc@gmail.com)"
                                                                     }
-                                                                }}
+                                                                }
+                                                                }
                                                             />
                                                         </FormGroup>
                                                     </Col>
@@ -307,7 +325,7 @@ const PartyMaster = (props) => {
                                                 <Row className="mt-3 ">
                                                     <Col md="3">
                                                         <FormGroup className="mb-3">
-                                                            <Label htmlFor="validationCustom01"> DivisionType </Label>
+                                                            <Label htmlFor="validationCustom01"> Division Type </Label>
                                                             <Col sm={12}>
                                                                 <Select
                                                                     value={division_dropdown_Select}
@@ -320,7 +338,7 @@ const PartyMaster = (props) => {
                                                     <Col md="1">  </Col>
                                                     <Col md="3">
                                                         <FormGroup className="mb-3">
-                                                            <Label htmlFor="validationCustom01">PartyType </Label>
+                                                            <Label htmlFor="validationCustom01">Party Type </Label>
                                                             <Col sm={12}>
                                                                 <Select
                                                                     value={partyType_dropdown_Select}
@@ -334,7 +352,7 @@ const PartyMaster = (props) => {
 
                                                     <Col md="3">
                                                         <FormGroup className="mb-3">
-                                                            <Label htmlFor="validationCustom01">CompanyName </Label>
+                                                            <Label htmlFor="validationCustom01">Company Name </Label>
                                                             <Col sm={12}>
                                                                 <Select
                                                                     value={companyList_dropdown_Select}
@@ -374,7 +392,7 @@ const PartyMaster = (props) => {
                                                                     required: { value: true },
                                                                     tel: {
                                                                         pattern: /[A-Z]{5}[0-9]{4}[A-Z]{1}/,
-                                                                        errorMessage: 'Please enter valid PAN number.(Ex:AAAAA1234A).'
+                                                                        errorMessage: 'Please Enter valid PAN Number.(Ex:AAAAA1234A).'
                                                                     }
                                                                 }}
                                                                 id="validationCustom01"
@@ -397,7 +415,7 @@ const PartyMaster = (props) => {
                                                                     required: { value: true },
                                                                     tel: {
                                                                         pattern: /^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$/,
-                                                                        errorMessage: 'Please enter valid GSTIN number.(Ex:27AAAAA0000A1Z5).'
+                                                                        errorMessage: 'Please Enter valid GSTIN number.(Ex:27AAAAA0000A1Z5).'
                                                                     }
                                                                 }}
                                                                 id="validationCustom01"
@@ -434,13 +452,13 @@ const PartyMaster = (props) => {
                                                     <Col md="1"></Col>
                                                     <Col md="3">
                                                         <FormGroup className="mb-3">
-                                                            <Label htmlFor="validationCustom01">FSSAIExipry </Label>
+                                                            <Label htmlFor="validationCustom01">FSSAI Exipry </Label>
                                                             <Flatpickr
                                                                 id="FSSAIExipry"
                                                                 name="FSSAIExipry"
                                                                 value={FSSAIExipry_Date_Select}
                                                                 className="form-control d-block p-2 bg-white text-dark"
-                                                                placeholder="YYYY-MM-DD"
+                                                                placeholder=" Please Enter FSSAI Exipry"
                                                                 options={{
                                                                     altInput: true,
                                                                     altFormat: "F j, Y",
@@ -460,7 +478,7 @@ const PartyMaster = (props) => {
                                                                     htmlFor="horizontal-firstname-input"
                                                                     className="col-sm-4 col-form-label"
                                                                 >
-                                                                    IsActive
+                                                                    Active
                                                                 </Label>
                                                                 <Col md={4} style={{ marginTop: '7px' }} className=" form-check form-switch form-switch-sm ">
                                                                     <div className="form-check form-switch form-switch-md mb-3" dir="ltr">

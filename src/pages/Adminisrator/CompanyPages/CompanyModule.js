@@ -146,7 +146,7 @@ const CompanyModule = (props) => {
     <React.Fragment>
       <div className={"page-content"} style={{ marginTop: IsEditModeSaSS }} >
         <MetaTags>
-          <title>Company_Master| FoodERP-React FrontEnd</title>
+          <title>Company Master| FoodERP-React FrontEnd</title>
         </MetaTags>
         <Breadcrumbs breadcrumbItem={"Company Master"} />
         <Container fluid>
@@ -166,58 +166,63 @@ const CompanyModule = (props) => {
                       <CardBody style={{ backgroundColor: "whitesmoke" }}>
                         <Row>
                           <FormGroup className="mb-2 col col-sm-4 " >
-                            <Label htmlFor="validationCustom01">Name </Label>
+                            <Label htmlFor="validationCustom01">Name</Label>
                             <AvField name="Name" value={EditData.Name} type="text" id='txtName'
                               placeholder=" Please Enter Name "
                               autoComplete="off"
                               validate={{
-                                required: { value: true, errorMessage: 'Please Enter a Name' },
+                                required: { value: true, errorMessage: 'Please Enter Name' },
                               }}
                               onChange={(e) => { dispatch(BreadcrumbShow(e.target.value)) }}
                             />
                           </FormGroup>
                           <Col md="1">  </Col>
                           <FormGroup className="mb-2 col col-sm-4 " >
-                            <Label htmlFor="validationCustom01">Address </Label>
+                            <Label htmlFor="validationCustom01">Address</Label>
                             <AvField name="Address" value={EditData.Address} type="text"
                               autoComplete="off"
                               placeholder=" Please Enter Address "
-                              validate={{
-                                required: { value: true, errorMessage: 'Please Enter a  Address' },
-                              }}
+                              defaultValue=''
+                              // validate={{
+                              //   required: { value: true, errorMessage: 'Please Enter Address' },
+                              // }}
                             />
                           </FormGroup>
                         </Row>
 
                         <Row>
                           <FormGroup className="mb-2 col col-sm-4 " >
-                            <Label htmlFor="validationCustom01">Phone Number </Label>
+                            <Label htmlFor="validationCustom01">Mobile Number</Label>
                             <AvField name="PhoneNo" type="tel"
                               autoComplete="off"
                               value={EditData.PhoneNo}
-                              placeholder="+91 "
-                              validate={{
-                                required: { value: true, errorMessage: 'Please Enter a Phone Number' },
-                                tel: {
-                                  pattern: /^(\+\d{1,3}[- ]?)?\d{10}$/,
-                                  errorMessage: 'Please Enter a Phone Number'
-                                }
-                              }}
+                              defaultValue=''
+                              placeholder="Enter Phone Number"
+                              // validate={{
+                              //   required: { value: true, errorMessage: 'Please Enter Phone Number' },
+                              //   tel: {
+                              //     pattern: /^(\+\d{1,3}[- ]?)?\d{10}$/,
+                              //     errorMessage: 'Please Enter Phone Number'
+                              //   }
+                              // }}
                             />
                           </FormGroup>
 
                           <Col md="1">  </Col>
                           <FormGroup className="mb-2 col col-sm-4 " >
-                            <Label htmlFor="validationCustom01">EmailID </Label>
+                            <Label htmlFor="validationCustom01">Email Address</Label>
                             <AvField name="EmailID" value={EditData.EmailID} type="email"
                               autoComplete="off"
-                              placeholder="example@example.com" validate={{
-                                required: { value: true, errorMessage: 'Please Enter a Email ID' },
-                                tel: {
-                                  pattern:  /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/,
-                                  errorMessage: "Please Enter valid Email Address.(Ex:abc@gmail.com)"
-                                }
-                              }} />
+                              defaultValue=''
+                              placeholder="example@example.com" 
+                              // validate={{
+                              //   required: { value: true, errorMessage: 'Please Enter Email' },
+                              //   tel: {
+                              //     pattern:  /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/,
+                              //     errorMessage: "Please Enter valid Email Address.(Ex:abc@gmail.com)"
+                              //   }
+                              // }}
+                               />
                           </FormGroup>
                         </Row>
                       </CardBody>
@@ -234,10 +239,10 @@ const CompanyModule = (props) => {
                               value={EditData.GSTIN} type="text"
                               placeholder="GSTIN "
                               validate={{
-                                required: { value: true, errorMessage: 'Please Enter a GSTIN (Eg.22AAAAA0000A1Z5)' },
+                                required: { value: true, errorMessage: 'Please Enter GSTIN' },
                                 tel: {
                                   pattern: /[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}/,
-                                  errorMessage: 'GSTIN is Required (Eg.22AAAAA0000A1Z5)'
+                                  errorMessage: 'GSTIN is Required (Eg.27AAAAA0000A1Z5)'
 
                                 }
                               }}
@@ -245,19 +250,19 @@ const CompanyModule = (props) => {
                           </FormGroup>
                           <Col md="1">  </Col>
                           <FormGroup className="mb-2 col col-sm-4 " >
-                            <Label htmlFor="validationCustom01">CompanyAbbreviation </Label>
+                            <Label htmlFor="validationCustom01">Company Abbreviation </Label>
                             <AvField name="CompanyAbbreviation" value={EditData.CompanyAbbreviation} type="text"
                               autoComplete="off"
                               placeholder=" Please Enter Company Abbreviation"
                               validate={{
-                                required: { value: true, errorMessage: 'Please Enter a Company Abbreviation' },
+                                required: { value: true, errorMessage: 'Please Enter Company Abbreviation' },
                               }} />
                           </FormGroup>
                         </Row>
 
                         <Row>
                           <FormGroup className="mb-4 col col-sm-4 " >
-                            <Label htmlFor="validationCustom21">CompanyGroup </Label>
+                            <Label htmlFor="validationCustom21">Company Group </Label>
                             <Select
                               value={CompanyGroupselect}
                               options={CompanyGroupValues}
