@@ -127,7 +127,7 @@ const RoleMaster = (props) => {
                     <Card >
                       <CardBody style={{ backgroundColor: "whitesmoke" }}>
                         <Row>
-                          <FormGroup className="mb-2 col col-sm-4 " >
+                          <FormGroup className="mb-3 col col-sm-4 " >
                             <Label htmlFor="validationCustom01">Name </Label>
                             <AvField name="Name" id="txtName"
                               value={EditData.Name}
@@ -143,7 +143,7 @@ const RoleMaster = (props) => {
                         </Row>
 
                         <Row>
-                          <FormGroup className="mb-2 col col-sm-4 " >
+                          <FormGroup className="mb-3 col col-sm-4 " >
                             <Label htmlFor="validationCustom01">Description </Label>
                             <AvField name="Description" id="txtName"
                               value={EditData.Description}
@@ -157,7 +157,7 @@ const RoleMaster = (props) => {
                         </Row>
 
                         <Row>
-                          <FormGroup className="mb-2 col col-sm-4 " >
+                          <FormGroup className="mb-3 col col-sm-4 " >
                             <Label htmlFor="validationCustom01">Dashboard </Label>
                             <AvField name="Dashboard" id="txtName"
                               value={EditData.Dashboard}
@@ -172,7 +172,7 @@ const RoleMaster = (props) => {
 
                         <FormGroup className="mb-2 col col-sm-5">
                           <Row className="justify-content-md-left">
-                            <Label htmlFor="horizontal-firstname-input" className="col-sm-3 col-form-label" >Active </Label>
+                            <Label htmlFor="horizontal-firstname-input" className="col-sm-2 col-form-label" >Active </Label>
                             <Col md={2} style={{ marginTop: '9px' }} >
 
                               <div className="form-check form-switch form-switch-md mb-3" dir="ltr">
