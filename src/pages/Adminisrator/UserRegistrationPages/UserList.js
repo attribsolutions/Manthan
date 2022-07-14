@@ -14,7 +14,7 @@ import BootstrapTable from "react-bootstrap-table-next";
 //redux
 import { useSelector, useDispatch } from "react-redux";
 import "../../../assets/scss/CustomeTable/datatables.scss"
-import AddUser from "./AddUser";
+import AddUser from "./UserRegistration";
 import { deleteSuccess } from "../../../store/Administrator/RoleMasterRedux/action";
 import { AlertState } from "../../../store/Utilites/CostumeAlert/actions";
 
@@ -194,7 +194,7 @@ const UserList = () => {
                                         title={"Count :"}
                                         breadcrumbItem={"User Registration List"}
                                         IsButtonVissible={true}
-                                        a={toolkitProps.searchProps}
+                                        SearchProps={toolkitProps.searchProps}
                                         breadcrumbCount={`Users Count: ${pages.length}`}
                                         RedirctPath={"/userMaster"}
                                     />
