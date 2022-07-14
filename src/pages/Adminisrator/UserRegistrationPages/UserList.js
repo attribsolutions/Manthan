@@ -50,7 +50,7 @@ const UserList = () => {
             dispatch(updateSuccess({ Status: false }))
             dispatch(AlertState({
                 Type: 3, Status: true,
-                Message: updateMessage.Message,
+                Message:JSON.stringify( updateMessage.Message),
             }));
         }
     }, [updateMessage]);
@@ -68,7 +68,7 @@ const UserList = () => {
             dispatch(AlertState({
                 Type: 3,
                 Status: true,
-                Message: deleteMessage.Message,
+                Message: JSON.stringify(deleteMessage.Message),
             }));
         }
     }, [deleteMessage])
