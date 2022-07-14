@@ -16,7 +16,7 @@ import paginationFactory, {
 import ToolkitProvider, { Search } from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 import { useSelector, useDispatch } from "react-redux";
-import AddEmployee from './AddEmployee';
+import AddEmployee from './EmployeeMaster';
 
 const Employee_List = () => {
     
