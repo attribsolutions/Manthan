@@ -53,17 +53,17 @@ const RoleList = () => {
         })
       );
       tog_center();
-    } else if (deleteMessage.Status === true) {
+    } else if (updateMessage.Status === true) {
       dispatch(updateSuccess({ Status: false }));
       dispatch(
         AlertState({
           Type: 3,
           Status: true,
-          Message: deleteMessage.Message,
+          Message: JSON.stringify(updateMessage.Message),
         })
       );
     }
-  }, [updateMessage.Status, dispatch]);
+  }, [updateMessage]);
 
   useEffect(() => {
     if (deleteMessage.Status === true && deleteMessage.StatusCode === 200) {
@@ -82,11 +82,11 @@ const RoleList = () => {
         AlertState({
           Type: 3,
           Status: true,
-          Message: deleteMessage.Message,
+          Message: JSON.stringify(deleteMessage.Message),
         })
       );
     }
-  }, [deleteMessage.Status]);
+  }, [deleteMessage]);
 
   // Edit Modal Show When Edit Data is true
   useEffect(() => {
