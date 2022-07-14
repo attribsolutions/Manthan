@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 // import { useHistory } from "react-router-dom";
 import Breadcrumbs from "../../../components/Common/Breadcrumb";
-import { Modal, Col, Row, Button, } from "reactstrap";
+import { Modal, Col, Row, Button, Input, } from "reactstrap";
 // import { useAlert } from "react-alert";
 import "../../../assets/scss/CustomeTable/datatables.scss"
 import { AlertState } from "../../../store/Utilites/CostumeAlert/actions";
@@ -135,23 +135,29 @@ const Employee_List = () => {
         },
 
         {
-            text: "Address",
+            text: "Is Show",
             dataField: "Address",
             sort: true,
-            formatter: (cellContent, TableListData) => <>{TableListData.Address}</>,
+            formatter: (cellContent, TableListData) => <>
+                <input type="checkbox"
+                /></>,
         },
 
         {
-            text: "Mobile",
+            text: "Is Delete",
             dataField: "Mobile",
             sort: true,
-            formatter: (cellContent, TableListData) => <>{TableListData.Mobile}</>,
+            formatter: (cellContent, TableListData) => <>
+                <input type="checkbox"
+                /></>,
         },
         {
-            text: "EmailID",
+            text: "Is Add",
             dataField: "email",
             sort: true,
-            formatter: (cellContent, TableListData) => <>{TableListData.email}</>,
+            formatter: (cellContent, TableListData) => <>
+                <input type="checkbox"
+                /></>,
         },
 
         {
@@ -194,10 +200,10 @@ const Employee_List = () => {
         { label: "Email", key: "email" },
         { label: " Date of Birth", key: "DOB" },
         { label: "Company Name ", key: "CompanyName" },
-        { label: "State", key: "StateName" },
-        
-    ];
+        // { label: "State", key: "StateName" },
 
+    ];
+  
     return (
         <React.Fragment>
             <div className="page-content">
@@ -221,25 +227,27 @@ const Employee_List = () => {
                                         SearchProps={toolkitProps.searchProps}
                                         breadcrumbCount={`Employee Count: ${TableListData.length}`}
                                         RedirctPath={"/employeesMaster"}
+                                        isExcelButtonVisible={true}
                                     />
                                     <Row>
                                         <Col className='btn sm text-end '>
-                                    <Button
-                                        variant="contained"
-                                        color="primary"
-                                        className='export-btn text-right mb-2  align-end'
-                                    >
-                                        <CSVLink 
-                                            headers={ExcelTableData}
-                                            data={TableListData}
-                                            filename="Employee Data"
-                                            style={{ "textDecoration": "none", "color": "#fff"  }}
-                                        >
-                                            Download to Excel
-                                        </CSVLink>
+                                      
+                                            {/* <Button
+                                                variant="contained"
+                                                color="primary"
+                                                className='export-btn text-right mb-2  align-end'
+                                            > */}
+                                                <CSVLink
+                                                    headers={ExcelTableData}
+                                                    data={TableListData}
+                                                    filename="Employee Data"
+                                                    style={{ "textDecoration": "none", "color": "#fff" }}
+                                                >
+                                                   Download
+                                                </CSVLink>
 
-                                    </Button>
-                                    </Col>
+                                            {/* </Button> */}
+                                        </Col>
                                     </Row>
                                     <Row>
                                         <Col xl="12">
