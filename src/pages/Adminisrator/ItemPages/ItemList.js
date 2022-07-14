@@ -1,18 +1,6 @@
 import React, { useEffect, useState } from "react";
-// import { useHistory } from "react-router-dom";
 import Breadcrumbs from "../../../components/Common/Breadcrumb";
-import { Modal, Col, Row } from "reactstrap";
-// import { useAlert } from "react-alert";
-import "../../../assets/scss/CustomeTable/datatables.scss";
-import { AlertState } from "../../../store/Utilites/CostumeAlert/actions";
-import { SpinnerON } from "../../../store/Utilites/Spinner/actions";
-import {
-  getEmployeelist,
-  editEmployeeeId,
-  deleteEmployeeIDSuccess,
-  updateEmployeeIDSuccess,
-  delete_Employee_ID,
-} from "../../../store/Administrator/M_EmployeeRedux/action";
+import { Col, Modal, Row } from "reactstrap";
 import paginationFactory, {
   PaginationListStandalone,
   PaginationProvider,
@@ -20,49 +8,57 @@ import paginationFactory, {
 import ToolkitProvider, { Search } from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 import { useSelector, useDispatch } from "react-redux";
-import AddEmployee from "./EmployeeMaster";
+import { AlertState } from "../../../store/Utilites/CostumeAlert/actions";
+import "../../../assets/scss/CustomeTable/datatables.scss";
+import {
+  deleteItemID,
+  deleteItemIdSuccess,
+  editItemId,
+  getItemList,
+  updateItemSuccess,
+} from "../../../store/Administrator/ItemsRedux/action";
+import ItemsMaster from "./ItemMaster";
 import { MetaTags } from "react-meta-tags";
 
-const Employee_List = () => {
+const ItemsList = () => {
   const dispatch = useDispatch();
   const [modal_center, setmodal_center] = useState(false);
 
   // get Access redux data
-  const { TableListData, editData, updateMessage, deleteMessage } = useSelector(
+  const { pages, editData, updateMessage, deleteMessage } = useSelector(
     (state) => ({
-      TableListData: state.M_EmployeesReducer.employeeList,
-      editData: state.M_EmployeesReducer.editData,
-      updateMessage: state.M_EmployeesReducer.updateMessage,
-      deleteMessage: state.M_EmployeesReducer.deleteMessage,
+      pages: state.ItemMastersReducer.pages,
+      editData: state.ItemMastersReducer.editData,
+      updateMessage: state.ItemMastersReducer.updateMessage,
+      deleteMessage: state.ItemMastersReducer.deleteMessage,
     })
   );
-  console.log("editData", editData);
 
   //  This UseEffect => Featch Modules List data  First Rendering
   useEffect(() => {
-    dispatch(getEmployeelist());
+    dispatch(getItemList());
   }, []);
 
   // This UseEffect => UpadateModal Success/Unsucces  Show and Hide Control Alert_modal
   useEffect(() => {
     if (updateMessage.Status === true && updateMessage.StatusCode === 200) {
-      dispatch(updateEmployeeIDSuccess({ Status: false }));
+      dispatch(updateItemSuccess({ Status: false }));
       dispatch(
         AlertState({
           Type: 1,
           Status: true,
           Message: updateMessage.Message,
-          AfterResponseAction: getEmployeelist,
+          AfterResponseAction: getItemList,
         })
       );
       tog_center();
     } else if (updateMessage.Status === true) {
-      dispatch(updateEmployeeIDSuccess({ Status: false }));
+      dispatch(updateItemSuccess({ Status: false }));
       dispatch(
         AlertState({
           Type: 3,
           Status: true,
-          Message: JSON.stringify(updateMessage.Message),
+          Message:  JSON.stringify(updateMessage.Message),
         })
       );
     }
@@ -70,40 +66,27 @@ const Employee_List = () => {
 
   useEffect(() => {
     if (deleteMessage.Status === true && deleteMessage.StatusCode === 200) {
-      dispatch(deleteEmployeeIDSuccess({ Status: false }));
+      dispatch(deleteItemIdSuccess({ Status: false }));
       dispatch(
         AlertState({
           Type: 1,
           Status: true,
           Message: deleteMessage.Message,
-          AfterResponseAction: getEmployeelist,
+          AfterResponseAction: getItemList,
         })
       );
     } else if (deleteMessage.Status === true) {
-      dispatch(deleteEmployeeIDSuccess({ Status: false }));
+      dispatch(deleteItemIdSuccess({ Status: false }));
       dispatch(
         AlertState({
           Type: 3,
           Status: true,
-          Message: JSON.stringify(deleteMessage.Message),
+          Message:  JSON.stringify(deleteMessage.Message),
+
         })
       );
     }
   }, [deleteMessage.Status]);
-
-  //Delete Button Handller
-  const deleteHandeler = (id, name) => {
-    dispatch(
-      AlertState({
-        Type: 5,
-        Status: true,
-        Message: `Are you sure you want to delete this Employee : "${name}"`,
-        RedirectPath: false,
-        PermissionAction: delete_Employee_ID,
-        ID: id,
-      })
-    );
-  };
 
   // Edit Modal Show When Edit Data is true
   useEffect(() => {
@@ -112,69 +95,59 @@ const Employee_List = () => {
     }
   }, [editData]);
 
-  // tag_center -- Control the Edit Modal show and close
   function tog_center() {
     setmodal_center(!modal_center);
   }
 
-  // Edit Button Handler
+  //select id for delete row
+  const deleteHandeler = (id, name) => {
+    dispatch(
+      AlertState({
+        Type: 5,
+        Status: true,
+        Message: `Are you sure you want to delete this item : "${name}"`,
+        RedirectPath: false,
+        PermissionAction: deleteItemID,
+        ID: id,
+      })
+    );
+  };
+  // edit Buutton Handller
   const EditPageHandler = (id) => {
-    dispatch(editEmployeeeId(id));
+    dispatch(editItemId(id));
   };
 
-  const defaultSorted = [
-    {
-      dataField: "Name", // if dataField is not match to any column you defined, it will be ignored.
-      order: "asc", // desc or asc
-    },
-  ];
   const pageOptions = {
     sizePerPage: 10,
-    totalSize: TableListData.length,
+    totalSize: pages.length,
     custom: true,
   };
 
-  // Employee List component table columns
   const pagesListColumns = [
     {
-      text: "PageID",
-      dataField: "ID",
-      sort: true,
-      hidden: true,
-      formatter: (cellContent, TableListData) => <>{TableListData.ID}</>,
-    },
-
-    {
-      text: "Employee Name",
+      text: "Item Name",
       dataField: "Name",
       sort: true,
-      formatter: (cellContent, TableListData) => <>{TableListData.Name}</>,
-    },
-
-    {
-      text: "Address",
-      dataField: "Address",
-      sort: true,
-      formatter: (cellContent, TableListData) => <>{TableListData.Address}</>,
-    },
-
-    {
-      text: "Mobile",
-      dataField: "Mobile",
-      sort: true,
-      formatter: (cellContent, TableListData) => <>{TableListData.Mobile}</>,
     },
     {
-      text: "Email",
-      dataField: "email",
+      text: "GST(%)",
+      dataField: "GSTPercentage",
       sort: true,
-      formatter: (cellContent, TableListData) => <>{TableListData.email}</>,
+    },
+    {
+      text: "MRP",
+      dataField: "MRP",
+      sort: true,
+    },
+    {
+      text: "Active",
+      dataField: "isActive",
+      sort: true,
     },
 
     {
       text: "Action",
-
-      formatter: (cellContent, TableListData) => (
+      formatter: (cellContent, Item) => (
         <>
           <div
             className="d-flex gap-3"
@@ -184,9 +157,9 @@ const Employee_List = () => {
               type="button"
               data-mdb-toggle="tooltip"
               data-mdb-placement="top"
-              title="Edit Employee"
+              title="Edit Item"
               onClick={() => {
-                EditPageHandler(TableListData.id);
+                EditPageHandler(Item.id);
               }}
               className="badge badge-soft-primary font-size-12"
             >
@@ -196,9 +169,9 @@ const Employee_List = () => {
               className="badge badge-soft-danger font-size-12"
               data-mdb-toggle="tooltip"
               data-mdb-placement="top"
-              title="Delete Employee"
+              title="Delete Item"
               onClick={() => {
-                deleteHandeler(TableListData.id, TableListData.Name);
+                deleteHandeler(Item.id, Item.Name);
               }}
             >
               <i className="mdi mdi-delete font-size-18"></i>
@@ -212,14 +185,14 @@ const Employee_List = () => {
   return (
     <React.Fragment>
       <MetaTags>
-        <title>Employee List| FoodERP-React FrontEnd</title>
+        <title>Item List| FoodERP-React FrontEnd</title>
       </MetaTags>
       <div className="page-content">
         <PaginationProvider pagination={paginationFactory(pageOptions)}>
           {({ paginationProps, paginationTableProps }) => (
             <ToolkitProvider
               keyField="id"
-              data={TableListData}
+              data={pages}
               columns={pagesListColumns}
               search
             >
@@ -227,11 +200,11 @@ const Employee_List = () => {
                 <React.Fragment>
                   <Breadcrumbs
                     title={"Count :"}
-                    breadcrumbItem={"Employee List"}
+                    breadcrumbItem={"Item List"}
                     IsButtonVissible={true}
                     SearchProps={toolkitProps.searchProps}
-                    breadcrumbCount={`Employee Count: ${TableListData.length}`}
-                    RedirctPath={"/employeesMaster"}
+                    breadcrumbCount={`Items Count: ${pages.length}`}
+                    RedirctPath={"/itemMaster"}
                   />
                   <Row>
                     <Col xl="12">
@@ -240,7 +213,6 @@ const Employee_List = () => {
                           keyField={"id"}
                           responsive
                           bordered={false}
-                          defaultSorted={defaultSorted}
                           striped={false}
                           classes={"table  table-bordered"}
                           {...toolkitProps.baseProps}
@@ -266,11 +238,11 @@ const Employee_List = () => {
           }}
           size="xl"
         >
-          <AddEmployee state={editData.Data} />
+          <ItemsMaster state={editData.Data} />
         </Modal>
       </div>
     </React.Fragment>
   );
 };
 
-export default Employee_List;
+export default ItemsList;

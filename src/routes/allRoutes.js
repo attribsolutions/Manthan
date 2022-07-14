@@ -28,8 +28,8 @@ import RoleMaster from "../pages/Adminisrator/RoleMasterPages/RoleMaster";
 import RoleList from "../pages/Adminisrator/RoleMasterPages/RoleList"
 import Error404 from "../pages/Utility/Error404";
 import Error500 from "../pages/Utility/Error500";
-import ItemsList from "../pages/Adminisrator/Items/ItemsList";
-import ItemsMaster from "../pages/Adminisrator/Items/ItemsMaster";
+import ItemsList from "../pages/Adminisrator/ItemPages/ItemList";
+import ItemsMaster from "../pages/Adminisrator/ItemPages/ItemMaster";
 import SearchBox from "../pages/Adminisrator/SearchBox/SearchBox";
 import SearchBoxSecond from "../pages/Adminisrator/SearchBox/SearchBoxSecond";
 import SerachBox3 from "../pages/Adminisrator/SearchBox/SerachBox3";

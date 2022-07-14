@@ -20,6 +20,7 @@ import Breadcrumbs from "../../../components/Common/Breadcrumb";
 import AvField from "availity-reactstrap-validation/lib/AvField";
 import Flatpickr from "react-flatpickr"
 import { BreadcrumbShow } from "../../../store/Utilites/Breadcrumb/actions";
+import { MetaTags } from "react-meta-tags";
 
 
 const AddEmployee = (props) => {
@@ -139,7 +140,7 @@ const AddEmployee = (props) => {
       dispatch(AlertState({
         Type: 4,
         Status: true,
-        Message: "error Message",
+        Message: JSON.stringify( postMessage.Message),
         RedirectPath: false,
         AfterResponseAction: false
       }));
@@ -240,6 +241,9 @@ const AddEmployee = (props) => {
 
   return (
     <React.Fragment>
+         <MetaTags>
+        <title>Employee Master| FoodERP-React FrontEnd</title>
+      </MetaTags>
       <div className="page-content" style={{ marginTop: IsEditModeSaSS }}>
         <Breadcrumbs breadcrumbItem={"Employee Master "} />
         <Container fluid>
@@ -269,7 +273,7 @@ const AddEmployee = (props) => {
                             placeholder="Please Enter Name"
                             autoComplete='off'
                             validate={{
-                              required: { value: true, errorMessage: 'Please enter your Name...!' },
+                              required: { value: true, errorMessage: 'Please Enter Name' },
                             }}
                             onChange={(e) => { dispatch(BreadcrumbShow(e.target.value)) }}
                           />
@@ -279,7 +283,7 @@ const AddEmployee = (props) => {
                       <Col md="1">  </Col>
                       <Col md="3">
                         <FormGroup className="mb-3">
-                          <Label htmlFor="validationCustom01">Email </Label>
+                          <Label htmlFor="validationCustom01">Email</Label>
                           <AvField name="email"
                             id="email"
                             type="email"
@@ -287,7 +291,7 @@ const AddEmployee = (props) => {
                             placeholder="Enter your EmailID "
                             autoComplete='off'
                             validate={{
-                              required: { value: true, errorMessage: "Please Enter valid Email Address.(Ex:abc@gmail.com)"
+                              required: { value: true, errorMessage: "Please Enter valid Email Address."
                             },
                               tel: {
                                 pattern: "/^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/",
@@ -302,7 +306,7 @@ const AddEmployee = (props) => {
 
                       <Col md="3">
                         <FormGroup className="mb-3">
-                          <Label htmlFor="validationCustom01">Mobile Number </Label>
+                          <Label htmlFor="validationCustom01">Mobile No.</Label>
                           <AvField name="Mobile" type="tel"
                             value={EditData.Mobile}
                             placeholder="+91 "
@@ -322,7 +326,7 @@ const AddEmployee = (props) => {
                     <Row>
                       <Col md="3">
                         <FormGroup className="mb-3">
-                          <Label htmlFor="validationCustom01">DOB</Label>
+                          <Label htmlFor="validationCustom01">Date of Birth</Label>
                           <Flatpickr
                             id="FSSAIExipry"
                             name="FSSAIExipry"
@@ -345,7 +349,7 @@ const AddEmployee = (props) => {
                       <Col md="1">  </Col>
                       <Col md="3">
                         <FormGroup className="mb-3">
-                          <Label htmlFor="validationCustom01"> Aadhar Number </Label>
+                          <Label htmlFor="validationCustom01"> Aadhar No.</Label>
                           <AvField name="AadharNo" type="text"
                             value={EditData.AadharNo}
                             placeholder="Enter your AadharNo. "
@@ -363,7 +367,7 @@ const AddEmployee = (props) => {
                       <Col md="1">  </Col>
                       <Col md="3">
                         <FormGroup className="mb-3">
-                          <Label htmlFor="validationCustom01"> PAN Number </Label>
+                          <Label htmlFor="validationCustom01"> PAN No.</Label>
                           <AvField name="PAN" type="text"
                             value={EditData.PAN}
                             placeholder="Enter your PAN No. "
@@ -372,7 +376,7 @@ const AddEmployee = (props) => {
                               required: { value: true, errorMessage: 'Please Enter your PAN No.(Ex:AAAAA1234A).'},
                               tel: {
                                 pattern: /[A-Z]{5}[0-9]{4}[A-Z]{1}/,
-                                errorMessage: 'Please enter valid PAN number.(Ex:AAAAA1234A).'
+                                errorMessage: 'Please Enter valid PAN number.(Ex:AAAAA1234A).'
                             }
                             }}
                           />
