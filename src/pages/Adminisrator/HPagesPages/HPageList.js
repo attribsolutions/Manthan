@@ -145,7 +145,7 @@ export default function HPageList() {
       sort: true,
     },
     {
-      text: "DisplayIndex",
+      text: "Display Index",
       dataField: "DisplayIndex",
       sort: true,
     },
@@ -160,7 +160,7 @@ export default function HPageList() {
       sort: true,
     },
     {
-      text: "Is Active",
+      text: "Active",
       dataField: "isActive",
       sort: true,
     },

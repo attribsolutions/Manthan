@@ -138,7 +138,7 @@ const UserList = () => {
       formatter: (cellContent, user) => <>{user.ID}</>,
     },
     {
-      text: "LoginName",
+      text: "Login Name",
       dataField: "LoginName",
       sort: true,
       formatter: (cellContent, user) => <>{user.LoginName}</>,

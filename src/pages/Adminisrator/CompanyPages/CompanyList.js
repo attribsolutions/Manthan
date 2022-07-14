@@ -60,7 +60,7 @@ const CompanyList = () => {
             dispatch(deleteCompanyIDSuccess({ Status: false }))
             dispatch(AlertState({
                 Type: 3, Status: true,
-                Message: deleteCompanyID.Message,
+                Message: JSON.stringify( deleteCompanyID.Message),
             }));
         }
     }, [updateMessage.Status, dispatch]);
@@ -78,7 +78,7 @@ const CompanyList = () => {
             dispatch(AlertState({
                 Type: 3,
                 Status: true,
-                Message: deleteCompanyID.Message,
+                Message: JSON.stringify( deleteCompanyID.Message),
             }));
         }
     }, [deleteCompanyID.Status])

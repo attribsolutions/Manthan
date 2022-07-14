@@ -208,7 +208,7 @@ const RoleList = () => {
                 <React.Fragment>
                   <Breadcrumbs
                     title={"Count :"}
-                    breadcrumbItem={"Roles List "}
+                    breadcrumbItem={"Role List "}
                     IsButtonVissible={true}
                     SearchProps={toolkitProps.searchProps}
                     breadcrumbCount={`Role Count: ${TableListData.length}`}
