@@ -374,7 +374,7 @@ const ItemsMaster = (props) => {
                                   type="submit"
                                   data-mdb-toggle="tooltip"
                                   data-mdb-placement="top"
-                                  title="Update Employee"
+                                  title="Update Item"
                                   className="btn btn-success w-md"
                                 >
                                   <i class="fas fa-edit me-2"></i>Update
@@ -384,7 +384,7 @@ const ItemsMaster = (props) => {
                                   type="submit"
                                   data-mdb-toggle="tooltip"
                                   data-mdb-placement="top"
-                                  title="Save Employee"
+                                  title="Save Item"
                                   className="btn btn-primary w-md"
                                 >
                                   {" "}

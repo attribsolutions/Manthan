@@ -123,6 +123,12 @@ const ItemsList = () => {
     custom: true,
   };
 
+  const defaultSorted = [
+    {
+      dataField: "Name", // if dataField is not match to any column you defined, it will be ignored.
+      order: "asc", // desc or asc
+    },
+  ];
   const pagesListColumns = [
     {
       text: "Item Name",
@@ -214,6 +220,7 @@ const ItemsList = () => {
                           responsive
                           bordered={false}
                           striped={false}
+                          defaultSorted={defaultSorted}
                           classes={"table  table-bordered"}
                           {...toolkitProps.baseProps}
                           {...paginationTableProps}
