@@ -140,7 +140,7 @@ const AddEmployee = (props) => {
       dispatch(AlertState({
         Type: 4,
         Status: true,
-        Message: JSON.stringify( postMessage.Message),
+        Message: JSON.stringify(postMessage.Message),
         RedirectPath: false,
         AfterResponseAction: false
       }));
@@ -241,7 +241,7 @@ const AddEmployee = (props) => {
 
   return (
     <React.Fragment>
-         <MetaTags>
+      <MetaTags>
         <title>Employee Master| FoodERP-React FrontEnd</title>
       </MetaTags>
       <div className="page-content" style={{ marginTop: IsEditModeSaSS }}>
@@ -291,8 +291,9 @@ const AddEmployee = (props) => {
                             placeholder="Enter your EmailID "
                             autoComplete='off'
                             validate={{
-                              required: { value: true, errorMessage: "Please Enter valid Email Address."
-                            },
+                              required: {
+                                value: true, errorMessage: "Please Enter valid Email Address."
+                              },
                               tel: {
                                 pattern: "/^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/",
                                 errorMessage: "Please Enter valid Email Address.(Ex:abc@gmail.com)"
@@ -373,11 +374,11 @@ const AddEmployee = (props) => {
                             placeholder="Enter your PAN No. "
                             autoComplete='off'
                             validate={{
-                              required: { value: true, errorMessage: 'Please Enter your PAN No.(Ex:AAAAA1234A).'},
+                              required: { value: true, errorMessage: 'Please Enter your PAN No.(Ex:AAAAA1234A).' },
                               tel: {
                                 pattern: /[A-Z]{5}[0-9]{4}[A-Z]{1}/,
                                 errorMessage: 'Please Enter valid PAN number.(Ex:AAAAA1234A).'
-                            }
+                              }
                             }}
                           />
                         </FormGroup>
@@ -429,14 +430,27 @@ const AddEmployee = (props) => {
                     <Row >
                       <Col md="3">
                         <FormGroup className="mb-3">
-                          <Label htmlFor="validationCustom01">Party Name</Label>
+                          {/* <Label htmlFor="validationCustom01">Party Name</Label>
                           <Select
                             value={party_DropdownSelect}
                             options={Party_DropdownOptions}
                             onChange={(e) => { Party_Dropdown_Handler(e) }}
-                          />
+                          /> */}
                         </FormGroup>
                       </Col>
+                      <div className="col-lg-4 col-md-6">
+                        <div className="mb-3">
+                          <label htmlFor="choices-multiple-remove-button" className="form-label font-size-13 text-muted">Party name</label>
+                          <Select
+                            defaultValue={[Party_DropdownOptions[1]]}
+                            isMulti={true}
+                            className="basic-multi-select"
+                            options={Party_DropdownOptions}
+                            classNamePrefix="select2-selection"
+                            // isLoading={true}
+                          />
+                        </div>
+                      </div>
                       <Col md="1">  </Col>
                       <Col md="3">
                         <FormGroup className="mb-3">

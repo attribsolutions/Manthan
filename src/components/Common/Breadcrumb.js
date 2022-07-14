@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react"
 import PropTypes from 'prop-types'
-import { Row, Col } from "reactstrap"
+import { Row, Col, Button } from "reactstrap"
 import { Redirect, useHistory } from "react-router-dom";
 import { Search } from "react-bootstrap-table2-toolkit";
 import { useDispatch, useSelector } from "react-redux";
 import { BreadcrumbShow } from "../../store/Utilites/Breadcrumb/actions";
+
 
 const Breadcrumb = props => {
 
@@ -64,12 +65,17 @@ const Breadcrumb = props => {
                 </Col>
               </Row>
           }
-
         </div>
       </Col>
 
-      <Col md={Countsize.length < 10 ? 3 : Countsize.length < 25 ? 2 : 1}>  </Col>
+      <Col md={Countsize.length < 10 ? 3 : Countsize.length < 25 ? 2 : 1}>  
 
+      {props.isExcelButtonVisible===true ? 
+    
+      <><Button variant="contained" 
+      color="primary"
+      className='export-btn mb-2 text-end'><i class="bx bx-download"></i></Button></>: null}</Col>
+  
       <Col sm={2}>
         <div className="search-box d-inline-block">
           <div className="position-relative">
