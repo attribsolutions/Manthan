@@ -17,7 +17,7 @@ import BootstrapTable from "react-bootstrap-table-next";
 //redux
 import { useSelector, useDispatch } from "react-redux";
 import "../../../assets/scss/CustomeTable/datatables.scss";
-import AddUser from "./AddUser";
+import AddUser from "./UserRegistration";
 import { deleteSuccess } from "../../../store/Administrator/RoleMasterRedux/action";
 import { AlertState } from "../../../store/Utilites/CostumeAlert/actions";
 import { MetaTags } from "react-meta-tags";
