@@ -165,7 +165,7 @@ const CompanyModule = (props) => {
                     <Card >
                       <CardBody style={{ backgroundColor: "whitesmoke" }}>
                         <Row>
-                          <FormGroup className="mb-2 col col-sm-4 " >
+                          <FormGroup className="mb-3 col col-sm-4 " >
                             <Label htmlFor="validationCustom01">Name</Label>
                             <AvField name="Name" value={EditData.Name} type="text" id='txtName'
                               placeholder=" Please Enter Name "
@@ -177,7 +177,7 @@ const CompanyModule = (props) => {
                             />
                           </FormGroup>
                           <Col md="1">  </Col>
-                          <FormGroup className="mb-2 col col-sm-4 " >
+                          <FormGroup className="mb-3 col col-sm-4 " >
                             <Label htmlFor="validationCustom01">Address</Label>
                             <AvField name="Address" value={EditData.Address} type="text"
                               autoComplete="off"
@@ -190,8 +190,8 @@ const CompanyModule = (props) => {
                           </FormGroup>
                         </Row>
 
-                        <Row>
-                          <FormGroup className="mb-2 col col-sm-4 " >
+                        <Row className="mb-1">
+                          <FormGroup className=" col col-sm-4 " >
                             <Label htmlFor="validationCustom01">Mobile Number</Label>
                             <AvField name="PhoneNo" type="tel"
                               autoComplete="off"
@@ -209,8 +209,8 @@ const CompanyModule = (props) => {
                           </FormGroup>
 
                           <Col md="1">  </Col>
-                          <FormGroup className="mb-2 col col-sm-4 " >
-                            <Label htmlFor="validationCustom01">Email Address</Label>
+                          <FormGroup className=" col col-sm-4 " >
+                            <Label htmlFor="validationCustom01">Email</Label>
                             <AvField name="EmailID" value={EditData.EmailID} type="email"
                               autoComplete="off"
                               defaultValue=''
@@ -232,7 +232,7 @@ const CompanyModule = (props) => {
                       <CardBody style={{ backgroundColor: "whitesmoke" }}>
 
                         <Row>
-                          <FormGroup className="mb-2 col col-sm-4 " >
+                          <FormGroup className="mb-3 col col-sm-4 " >
                             <Label htmlFor="validationCustom01">GSTIN </Label>
                             <AvField name="GSTIN"
                               autoComplete="off"
@@ -249,7 +249,7 @@ const CompanyModule = (props) => {
                             />
                           </FormGroup>
                           <Col md="1">  </Col>
-                          <FormGroup className="mb-2 col col-sm-4 " >
+                          <FormGroup className="mb-3 col col-sm-4 " >
                             <Label htmlFor="validationCustom01">Company Abbreviation </Label>
                             <AvField name="CompanyAbbreviation" value={EditData.CompanyAbbreviation} type="text"
                               autoComplete="off"
@@ -260,8 +260,8 @@ const CompanyModule = (props) => {
                           </FormGroup>
                         </Row>
 
-                        <Row>
-                          <FormGroup className="mb-4 col col-sm-4 " >
+                        <Row className=" mb-3">
+                          <FormGroup className=" col col-sm-4 " >
                             <Label htmlFor="validationCustom21">Company Group </Label>
                             <Select
                               value={CompanyGroupselect}

@@ -52,7 +52,7 @@ const ModulesList = () => {
             dispatch(updateModuleIDSuccess({ Status: false }))
             dispatch(AlertState({
                 Type: 3, Status: true,
-                Message: updateAPIResponse.Message,
+                Message: JSON.stringify( updateAPIResponse.Message),
             }));
         }
     }, [updateAPIResponse.Status, dispatch]);
@@ -71,7 +71,7 @@ const ModulesList = () => {
             dispatch(AlertState({
                 Type: 3,
                 Status: true,
-                Message: deleteAPIResponse.Message,
+                Message: JSON.stringify( deleteAPIResponse.Message),
             }));
         }
     }, [deleteAPIResponse.Status])
@@ -111,7 +111,7 @@ const ModulesList = () => {
             sort: true
         }, {
             dataField: 'isActive',
-            text: 'IsActive',
+            text: 'Active',
             sort: true
         },
         {
