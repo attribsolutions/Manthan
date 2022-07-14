@@ -82,7 +82,7 @@ const UserList = () => {
         AlertState({
           Type: 3,
           Status: true,
-          Message: "error Message",
+          Message: JSON.stringify( deleteMessage.Message)
         })
       );
     }

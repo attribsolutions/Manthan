@@ -193,16 +193,16 @@ const HPageMaster = (props) => {
             }));
             return
         }
-
+debugger
         const requestOptions = {
             body: JSON.stringify({
                 Name: values.Name,
-                Description: values.Description,
+                Description: values.description,
                 Module: module_DropdownSelect.value,
                 isActive: values.isActive,
-                DisplayIndex: values.DisplayIndex,
+                DisplayIndex: values.displayIndex,
                 Icon: values.Icon,
-                ActualPagePath: values.ActualPagePath,
+                ActualPagePath: values.pagePath,
                 isShowOnMenu: isShowPageChecked,
                 PageType: pageType_DropdownSelect.value,
                 RelatedPageID: pageList_DropdownSelect.value,
@@ -337,7 +337,7 @@ const HPageMaster = (props) => {
                                             <Col md="3">
                                                 <FormGroup className="mb-3">
                                                     <Label htmlFor="validationCustom01">Description</Label>
-                                                    <AvField name="Description"
+                                                    <AvField name="description"
                                                         type="text"
                                                         defaultValue=""
                                                         value={EditData.Description}
@@ -401,7 +401,7 @@ const HPageMaster = (props) => {
                                             <Col md="3">
                                                 <FormGroup >
                                                     <Label htmlFor="validationCustom01">Display Index</Label>
-                                                    <AvField name="DisplayIndex" value={EditData.DisplayIndex} type="text"
+                                                    <AvField name="displayIndex" value={EditData.DisplayIndex} type="text"
                                                         autoComplete='off'
                                                         placeholder=" Please Enter Display Index" validate={{
                                                             number: true,
@@ -417,7 +417,7 @@ const HPageMaster = (props) => {
                                             <Col md="3">
                                                 <FormGroup className="mb-3">
                                                     <Label htmlFor="validationCustom01">Page Path</Label>
-                                                    <AvField name="PagePath" value={EditData.ActualPagePath} type="text"
+                                                    <AvField name="pagePath" value={EditData.ActualPagePath} type="text"
                                                         placeholder="Please Enter Page Path"
                                                         validate={{
                                                             required: { value: true, errorMessage: 'Please Enter Page Path' },
