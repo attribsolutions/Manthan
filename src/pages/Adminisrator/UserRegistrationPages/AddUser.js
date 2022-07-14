@@ -11,6 +11,7 @@ import { AlertState } from "../../../store/Utilites/CostumeAlert/actions";
 import { editSuccess } from "../../../store/Administrator/RoleMasterRedux/action";
 import { Tbody, Thead } from "react-super-responsive-table";
 import { BreadcrumbShow } from "../../../store/Utilites/Breadcrumb/actions";
+import { MetaTags } from "react-meta-tags";
 
 const AddUser = (props) => {
 
@@ -138,17 +139,18 @@ const AddUser = (props) => {
     else {
       dispatch(AlertState({
         Type: 4, Status: true,
-        Message: "RoleData already Exists ",
+        Message: "RoleData Already Exists ",
       }));
     }
   }
 
   const handleValidSubmit = (event, values) => {
+    debugger
     const requestOptions = {
       body: JSON.stringify({
 
         email: values.email,
-        LoginName: values.LoginName,
+        LoginName: values.loginName,
         password: "1234",
         Employee: EmployeeSelect.value,
         isActive: values.isActive,
@@ -193,6 +195,9 @@ const AddUser = (props) => {
 
   return (
     <React.Fragment>
+       <MetaTags>
+          <title>User Registration| FoodERP-React FrontEnd</title>
+        </MetaTags>
       <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
         <Breadcrumbs breadcrumbItem={"User Registration "} />
         <Container fluid>
@@ -227,13 +232,14 @@ const AddUser = (props) => {
 
                           <FormGroup className="mb-1 col col-sm-4 " >
                             <Label htmlFor="validationCustom01">Login Name</Label>
-                            <AvField name="Name" id="txtName" 
+                            <AvField name="loginName" id="txtName" 
                               type="text"
                               placeholder="Please Enter Name"
                               defaultvalue=''
+                              value={EditData.LoginName}
                               autoComplete='off'
                               validate={{
-                                required: { value: true, errorMessage: 'Please Enter a Name...!' },
+                                required: { value: true, errorMessage: 'Please Enter Name' },
                               }}
                               onChange={(e) => { dispatch(BreadcrumbShow(e.target.value)) }}
                             />
@@ -243,12 +249,13 @@ const AddUser = (props) => {
                         <Row>
                           <FormGroup className="mb-1 col col-sm-4 " >
                             <Label htmlFor="validationCustom01">Password</Label>
-                            <AvInput name="password" id="password" 
+                            <AvField name="password" id="password" 
                               type="password"
+                              value={EditData.password}
                               placeholder="Please Enter Password"
                               autoComplete="new-password"
                               validate={{
-                                required: { value: true, errorMessage: 'Please Enter a Password...!' },
+                                required: { value: true, errorMessage: 'Please Enter Password' },
                               }}
                               onChange={(e) => { }}
                             />
@@ -262,9 +269,9 @@ const AddUser = (props) => {
                               <Label htmlFor="horizontal-firstname-input" className=" col-sm-2 col-form-label" >Enable Mobile Login</Label>
                               <Col md="1" style={{ marginTop: '9px' }} >
                                 <div className="form-check form-switch form-switch-md ml-4 " dir="ltr">
-                                  <input type="checkbox" className="form-check-input" id="customSwitchsizemd"
+                                  <AvInput type="checkbox" className="form-check-input" id="customSwitchsizemd"
                                     checked={EditData.isActive}
-                                    name="IsActive"
+                                    name="mobileLogin"
                                   />
                                   <label className="form-check-label" htmlFor="customSwitchsizemd"></label>
                                 </div>
@@ -274,9 +281,9 @@ const AddUser = (props) => {
                               <Label htmlFor="horizontal-firstname-input" className="col-sm-1 col-form-label " >Active </Label>
                               <Col md="1" style={{ marginTop: '9px' }} >
                                 <div className="form-check form-switch form-switch-md " dir="ltr">
-                                  <input type="checkbox" className="form-check-input" id="customSwitchsizemd"
+                                  <AvInput type="checkbox" className="form-check-input" id="customSwitchsizemd"
                                     checked={EditData.isActive}
-                                    name="IsActive"
+                                    name="isActive"
                                   />
                                   <label className="form-check-label" htmlFor="customSwitchsizemd"></label>
                                 </div>
@@ -292,9 +299,9 @@ const AddUser = (props) => {
                               <Label htmlFor="horizontal-firstname-input" className="col-sm-2 col-form-label" >Enable Email Login</Label>
                               <Col md={1} style={{ marginTop: '10px' }} >
                                 <div className="form-check form-switch form-switch-md" dir="ltr">
-                                  <input type="checkbox" className="form-check-input" id="customSwitchsizemd"
+                                  <AvInput type="checkbox" className="form-check-input" id="customSwitchsizemd"
                                     checked={EditData.isSendOTP}
-                                    name="isSendOTP"
+                                    name="emailLogin"
                                   />
                                   <label className="form-check-label" htmlFor="customSwitchsizemd"></label>
                                 </div>
@@ -304,7 +311,7 @@ const AddUser = (props) => {
                               <Label htmlFor="horizontal-firstname-input" className="col-sm-1 col-form-label " >Send OTP </Label>
                               <Col md={1} style={{ marginTop: '10px' }} >
                                 <div className="form-check form-switch form-switch-md" dir="ltr">
-                                  <input type="checkbox" className="form-check-input" id="customSwitchsizemd"
+                                  <AvInput type="checkbox" className="form-check-input" id="customSwitchsizemd"
                                     checked={EditData.isSendOTP}
                                     name="isSendOTP"
                                   />
@@ -396,7 +403,7 @@ const AddUser = (props) => {
                                         type="submit"
                                         data-mdb-toggle="tooltip" data-mdb-placement="top" title="Save User"
                                         className="btn btn-primary w-md"
-                                      > <i className="fas fa-save me-2"></i> Save
+                                      > <i className="fas fa-save me-2"></i> Create
                                       </button>
                                     )
                                   }

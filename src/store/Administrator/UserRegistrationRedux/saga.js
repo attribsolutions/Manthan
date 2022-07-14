@@ -46,12 +46,12 @@ function* RolesListDropdoun_GenratorFunction() {
 }
 
 // post api
-function* user_save_GenratorFunction({ Data }) {
+function* user_save_GenratorFunction({ data }) {
 
 debugger
   yield put(SpinnerState(true))
   try {
-    const response = yield call(User_Component_PostMethod_API, Data);
+    const response = yield call(User_Component_PostMethod_API, data);
     console.log("response",response)
     yield put(SpinnerState(false))
     yield put(addUserSuccess(response));

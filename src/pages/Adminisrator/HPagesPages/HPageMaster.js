@@ -50,7 +50,7 @@ const HPageMaster = (props) => {
 
     const [PageMode, setPageMode] = useState(false);
 
-    const [isShowPageChecked, setisShowPageChecked] = useState(true);
+    const [isShowPageChecked, setisShowPageChecked] = useState(false);
     const [pageAccessData, setPageAccessData] = useState([]);
 
     const [pageAccess_DropDownSelect, setPageAccess_DropDownSelect] = useState('');
@@ -213,7 +213,6 @@ const HPageMaster = (props) => {
                 })),
             }),
         };
-debugger
         if (IsEdit) {
             dispatch(updateHPages(requestOptions.body, EditData.id));
         }
@@ -297,7 +296,9 @@ debugger
             <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
                 <Breadcrumbs breadcrumbItem={"Page Master"} />
                 <Container fluid>
-
+                <MetaTags>
+                    <title>Page Master| FoodERP-React FrontEnd</title>
+                </MetaTags>
 
                     <Card className="text-black" >
                         <CardHeader className="card-header   text-black" style={{ backgroundColor: "#dddddd" }} >
@@ -325,7 +326,7 @@ debugger
                                                         placeholder="Please Enter Name"
                                                         autoComplete='off'
                                                         validate={{
-                                                            required: { value: true, errorMessage: 'Please enter your Name...!' },
+                                                            required: { value: true, errorMessage: 'Please Enter Name' },
                                                         }}
                                                         onChange={(e) => { dispatch(BreadcrumbShow(e.target.value)) }}
                                                     />
@@ -335,12 +336,12 @@ debugger
                                             <Col md="1">  </Col>
                                             <Col md="3">
                                                 <FormGroup className="mb-3">
-                                                    <Label htmlFor="validationCustom01">Description </Label>
+                                                    <Label htmlFor="validationCustom01">Description</Label>
                                                     <AvField name="Description"
                                                         type="text"
                                                         defaultValue=""
                                                         value={EditData.Description}
-                                                        placeholder="Enter your Discription "
+                                                        placeholder="Enter your Description "
                                                     />
                                                 </FormGroup>
                                             </Col>
@@ -382,7 +383,7 @@ debugger
                                             <Col md="1">  </Col>
                                             <Col md="3">
                                                 <FormGroup className="mb-3">
-                                                    <Label htmlFor="validationCustom01">Page List</Label>
+                                                    <Label htmlFor="validationCustom01">Related Page List</Label>
                                                     <Select
                                                         value={pageList_DropdownSelect}
                                                         options={PageList_DropdownOption}
@@ -402,9 +403,9 @@ debugger
                                                     <Label htmlFor="validationCustom01">Display Index</Label>
                                                     <AvField name="DisplayIndex" value={EditData.DisplayIndex} type="text"
                                                         autoComplete='off'
-                                                        placeholder=" Please Enter DisplayIndex" validate={{
+                                                        placeholder=" Please Enter Display Index" validate={{
                                                             number: true,
-                                                            required: { value: true, errorMessage: 'Please enter a Display Index only 2 digit ' },
+                                                            required: { value: true, errorMessage: 'Please Enter Display Index Only 2 Digit ' },
                                                             tel: {
                                                                 pattern: /^\d{1,2}$/
                                                             }
@@ -416,10 +417,10 @@ debugger
                                             <Col md="3">
                                                 <FormGroup className="mb-3">
                                                     <Label htmlFor="validationCustom01">Page Path</Label>
-                                                    <AvField name="ActualPagePath" value={EditData.ActualPagePath} type="text"
-                                                        placeholder="Please Enter Actual Page Path"
+                                                    <AvField name="PagePath" value={EditData.ActualPagePath} type="text"
+                                                        placeholder="Please Enter Page Path"
                                                         validate={{
-                                                            required: { value: true, errorMessage: 'Please Enter Actual Page Path' },
+                                                            required: { value: true, errorMessage: 'Please Enter Page Path' },
                                                         }}
                                                         autoComplete='off'
                                                     />
@@ -464,6 +465,7 @@ debugger
                                                             <AvInput type="checkbox" className="form-check-input" id="customSwitchsizemd"
                                                                 checked={EditData.isActive}
                                                                 name="isActive"
+                                                                defaultChecked={true}
                                                             />
                                                             <label className="form-check-label" htmlFor="customSwitchsizemd"></label>
                                                         </div>

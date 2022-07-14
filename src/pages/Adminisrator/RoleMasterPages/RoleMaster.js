@@ -9,6 +9,7 @@ import {
 } from "../../../store/Administrator/RoleMasterRedux/action";
 import { AlertState } from "../../../store/Utilites/CostumeAlert/actions";
 import { BreadcrumbShow } from "../../../store/Utilites/Breadcrumb/actions";
+import { MetaTags } from "react-meta-tags";
 
 const RoleMaster = (props) => {
 
@@ -68,7 +69,7 @@ const RoleMaster = (props) => {
       dispatch(AlertState({
         Type: 4,
         Status: true,
-        Message: "error Message",
+        Message:JSON.stringify( AddUserMessage.Message),
         RedirectPath: false,
         AfterResponseAction: false
       }));
@@ -105,6 +106,9 @@ const RoleMaster = (props) => {
 
   return (
     <React.Fragment>
+      <MetaTags>
+        <title>Role Master| FoodERP-React FrontEnd</title>
+      </MetaTags>
       <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
         <Breadcrumbs breadcrumbItem={"Role Master "} />
         <Container fluid>
@@ -131,7 +135,7 @@ const RoleMaster = (props) => {
                               placeholder="Please Enter Name"
                               autoComplete='off'
                               validate={{
-                                required: { value: true, errorMessage: 'Please Enter a Name...!' },
+                                required: { value: true, errorMessage: 'Please Enter Name' },
                               }} 
                               onChange={(e) => { dispatch(BreadcrumbShow(e.target.value)) }}
                               />
@@ -147,7 +151,7 @@ const RoleMaster = (props) => {
                               placeholder="Please Enter Description"
                               autoComplete='off'
                               validate={{
-                                required: { value: true, errorMessage: 'Please Enter a Description...!' },
+                                required: { value: true, errorMessage: 'Please Enter Description' },
                               }} />
                           </FormGroup>
                         </Row>
@@ -161,19 +165,20 @@ const RoleMaster = (props) => {
                               placeholder="Please Enter Dashboard"
                               autoComplete='off'
                               validate={{
-                                required: { value: true, errorMessage: 'Please Enter a Dashboard...!' },
+                                required: { value: true, errorMessage: 'Please Enter Dashboard' },
                               }} />
                           </FormGroup>
                         </Row>
 
                         <FormGroup className="mb-2 col col-sm-5">
                           <Row className="justify-content-md-left">
-                            <Label htmlFor="horizontal-firstname-input" className="col-sm-2 col-form-label" >IsActive </Label>
+                            <Label htmlFor="horizontal-firstname-input" className="col-sm-3 col-form-label" >Active </Label>
                             <Col md={2} style={{ marginTop: '9px' }} >
 
                               <div className="form-check form-switch form-switch-md mb-3" dir="ltr">
                                 <AvInput type="checkbox" className="form-check-input" id="customSwitchsizemd"
                                   checked={ EditData.isActive}
+                                  defaultChecked={true}
                                   name="isActive"
                                 />
                                 <label className="form-check-label" htmlFor="customSwitchsizemd"></label>
