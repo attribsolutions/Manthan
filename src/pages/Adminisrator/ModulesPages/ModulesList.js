@@ -52,10 +52,10 @@ const ModulesList = () => {
             dispatch(updateModuleIDSuccess({ Status: false }))
             dispatch(AlertState({
                 Type: 3, Status: true,
-                Message: JSON.stringify( updateAPIResponse.Message),
+                Message: updateAPIResponse.Message,
             }));
         }
-    }, [updateAPIResponse.Status, dispatch]);
+    }, [updateAPIResponse, dispatch]);
 
     // This UseEffect => delete Module Success/Unsucces  Show and Hide Control Alert_modal.
     useEffect(() => {
@@ -71,7 +71,7 @@ const ModulesList = () => {
             dispatch(AlertState({
                 Type: 3,
                 Status: true,
-                Message: JSON.stringify( deleteAPIResponse.Message),
+                Message: deleteAPIResponse.Message,
             }));
         }
     }, [deleteAPIResponse.Status])
@@ -111,7 +111,7 @@ const ModulesList = () => {
             sort: true
         }, {
             dataField: 'isActive',
-            text: 'Active',
+            text: 'IsActive',
             sort: true
         },
         {
@@ -182,7 +182,7 @@ const ModulesList = () => {
                                     <React.Fragment>
                                         <Breadcrumbs
                                             title={"Count :"}
-                                            breadcrumbItem={"Module List"}
+                                            breadcrumbItem={"Modules List"}
                                             IsButtonVissible={true}
                                             SearchProps={toolkitProps.searchProps}
                                             breadcrumbCount={`Module Count: ${TableListData.length}`}
