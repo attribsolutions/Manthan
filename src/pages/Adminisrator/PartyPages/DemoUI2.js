@@ -17,7 +17,7 @@ import ToolkitProvider, { Search } from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 import { useSelector, useDispatch } from "react-redux";
 import { CSVLink } from 'react-csv';
-
+import * as XLSX from 'xlsx';
 const Employee_List = () => {
 
     const dispatch = useDispatch();
@@ -192,18 +192,54 @@ const Employee_List = () => {
         },
     ]
 
-    const ExcelTableData = [
-        { label: "Id", key: "id" },
-        { label: "Name", key: "Name" },
-        { label: "Address", key: "Address" },
-        { label: "Mobile", key: "Mobile" },
-        { label: "Email", key: "email" },
-        { label: " Date of Birth", key: "DOB" },
-        { label: "Company Name ", key: "CompanyName" },
-        // { label: "State", key: "StateName" },
+    // const ExcelTableData = [
+    //     { label: "Id", key: "id" },
+    //     { label: "Name", key: "Name" },
+    //     { label: "Address", key: "Address" },
+    //     { label: "Mobile", key: "Mobile" },
+    //     { label: "Email", key: "email" },
+    //     { label: " Date of Birth", key: "DOB" },
+    //     { label: "Company Name ", key: "CompanyName" },
+    //     // { label: "State", key: "StateName" },
 
-    ];
-  
+    // ];
+    //     const tableListNew = {
+    //         name: 'Batman'
+    //       };
+    //       tableListNew.hasOwnProperty('name'); 
+    //    console.log("tableListNew",tableListNew) 
+    // const tableListNew = TableListData.Map([
+    //   ]);
+    //   console.log(tableListNew.hasOwnProperty('id'))
+    //   const obj = Object.fromEntries(tableListNew);
+    //   console.log("obj",tableListNew[0])
+    //   tableListNew.hasOwnProperty('Name'); 
+    //   console.log(tableListNew.hasOwnProperty('id'));
+
+    // const downloadExcel = (TableListData) => {
+
+    //     TableListData.map((index) => {
+    //         if (TableListData===list) {
+    //             tableListNew.push( index )
+    //         }
+
+    //     })
+
+    //     const worksheet = XLSX.utils.json_to_sheet(tableListNew);
+    //     const workbook = XLSX.utils.book_new();
+    //     XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
+    //     XLSX.writeFile(workbook, "DataSheet.xlsx");
+    // };
+
+    const map = new Map([
+        TableListData
+    ]);
+    const obj = Object.fromEntries(map);
+    console.log(obj);
+
+ let result = obj.hasOwnProperty('Address');
+ console.log(result);
+ 
     return (
         <React.Fragment>
             <div className="page-content">
@@ -230,7 +266,7 @@ const Employee_List = () => {
                                         isExcelButtonVisible={true}
                                         ExcelData={TableListData}
                                     />
-                                    <Row>
+                                    {/* <Row>
                                         <Col className='btn sm text-end '>
                                       
                                             {/* <Button
@@ -238,17 +274,20 @@ const Employee_List = () => {
                                                 color="primary"
                                                 className='export-btn text-right mb-2  align-end'
                                             > */}
-                                                <CSVLink
+                                    {/* <CSVLink
                                                     headers={ExcelTableData}
                                                     data={TableListData}
                                                     filename="Employee Data"
                                                     style={{ "textDecoration": "none", "color": "#fff" }}
                                                 >
-                                                </CSVLink>
+                                                </CSVLink> */}
 
-                                            {/* </Button> */}
-                                        </Col>
-                                    </Row>
+                                    {/* </Button> */}
+                                    {/* </Col> */}
+                                    {/* </Row> */}
+                                    {/* <button onClick={() => downloadExcel(TableListData)}>
+                                        Download As Excel
+                                    </button> */}
                                     <Row>
                                         <Col xl="12">
                                             <div className="table-responsive">
