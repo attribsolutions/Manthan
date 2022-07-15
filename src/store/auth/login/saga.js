@@ -55,7 +55,6 @@ function* logoutUser({ payload: { history } }) {
   }
 }
 function* RoleAccessGenratorFunction({id1,id2,id3}) {
-  debugger
   try {
     const RoleResponse = yield call(RoleAccessApi_url,id1,id2,id3);
     if(RoleResponse.Data.length>0) yield put(roleAceessActionSuccess(RoleResponse.Data))

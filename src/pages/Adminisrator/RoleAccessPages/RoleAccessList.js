@@ -254,33 +254,23 @@ const RoleAccessList = (props) => {
 
 
 
-    const [searchRoleData, setSearchRoleData] = useState([{
-        text: "Module",
-        dataField: "Name",
-        sort: true,
-        formatter: (cellContent, TableListData) => <>{TableListData.Name}</>,
-    }])
-
-    let pageOptions = searchRoleData
-
-    useEffect(() => {
-        var SearchRoleData_initial = []
-        PageAccess.map((i) => {
-            SearchRoleData_initial.push({
-                text: i.Name,
-                dataField: i.Name,
-                sort: true,
-                hidden: true,
-                formatter: (cellContent, TableListData) => <>{TableListData.ID}</>,
-            })
-        })
-        setSearchRoleData(SearchRoleData_initial)
-    }, [PageAccess])
+    const [searchRoleData, setSearchRoleData] = useState([
+        {
+            text: "PageID",
+            dataField: "ID",
+            sort: true,
+            hidden: true,
+            formatter: (cellContent, TableListData) => <></>,
+        }, {
+            text: "Module",
+            dataField: "Name",
+            sort: true,
+            formatter: (cellContent, TableListData) => <>{ }</>,
+        }])
 
 
 
-
-    const pageOptions1 = [
+    let pageOptions = [
         {
             text: "PageID",
             dataField: "ID",
@@ -300,34 +290,29 @@ const RoleAccessList = (props) => {
             sort: true,
             formatter: (cellContent, TableListData) => <>{TableListData.Name}</>,
         },
-        {
-            text: "Is Show",
-            dataField: "Address",
-            sort: true,
-            formatter: (cellContent, TableListData) => <>
-                <input type="checkbox"
-                /></>,
-        },
-
-        {
-            text: "Is Delete",
-            dataField: "Mobile",
-            sort: true,
-            formatter: (cellContent, TableListData) => <>
-                <input type="checkbox"
-                /></>,
-        },
-        {
-            text: "Is Add",
-            dataField: "email",
-            sort: true,
-            formatter: (cellContent, TableListData) => <>
-                <input type="checkbox"
-                /></>,
-        },
+        //dynamic
 
 
     ]
+
+
+    useEffect(() => {
+    debugger
+        PageAccess.map((i) => {
+            pageOptions.push({
+                text: i.Name,
+                dataField: i.Name,
+                sort: true,
+                hidden: true,
+                formatter: (cellContent, TableListData) => <>{TableListData.ID}</>,
+            })
+        })
+        
+        
+    }, [PageAccess])
+
+    console.log("pageOptions", pageOptions)
+
 
     return (
         <React.Fragment>

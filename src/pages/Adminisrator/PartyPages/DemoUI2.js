@@ -219,6 +219,7 @@ const Employee_List = () => {
     const downloadExcel = (TableListData) => {
 
         var demoList = ["Name", "Address", "email", "Mobile"]
+
         var li = []
         var obj = {}
 
@@ -230,10 +231,7 @@ const Employee_List = () => {
             })
             li.push(obj)
         })
-       
-
-
-
+        
         const worksheet = XLSX.utils.json_to_sheet(li);
         const workbook = XLSX.utils.book_new();
         XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");

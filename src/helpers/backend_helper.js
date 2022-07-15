@@ -95,7 +95,7 @@ const postJwtForgetPwd = data => post(url.POST_FAKE_JWT_PASSWORD_FORGET, data)
 // postSocialLogin
 export const postSocialLogin = data => post(url.SOCIAL_LOGIN, data)
 
-export const RoleAccessApi_url = (id1,id2,id3) => get(`${url.ROLE_ACCESS}/${id1}1/${id2}/${id3}`)
+export const RoleAccessApi_url = (id1,id2,id3) => get(`${url.ROLE_ACCESS}/${id1}/${id2}/${id3}`)
 /// Employees  Component All Apis 
 export const getDesignationID_For_Dropdown = () => get(url.GET_DESIGNATIONID)
 export const getEmployeeType_For_Dropdown = () => get(url.GET_EMPLOYEE_TYPE)

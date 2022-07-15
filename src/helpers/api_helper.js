@@ -20,6 +20,7 @@ axiosApi.interceptors.response.use(
   error => Promise.reject(error)
 )
 export async function get(url, config = {}) {
+  debugger
   AuthonticationFunction();
   return await axiosApi.get(url, { ...config }).then(response => response.data)
 }
