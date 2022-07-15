@@ -173,9 +173,6 @@ const DemoUI3 = (props) => {
                                                     </FormGroup>
                                                 </Row>
 
-
-
-
                                                 <FormGroup >
                                                     <Row >
                                                         

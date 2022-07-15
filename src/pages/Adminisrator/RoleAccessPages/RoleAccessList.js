@@ -15,7 +15,14 @@ import { fetchCompanyList } from "../../../store/Administrator/CompanyRedux/acti
 import { BreadcrumbShow } from "../../../store/Utilites/Breadcrumb/actions";
 import { MetaTags } from "react-meta-tags";
 import { getRoles } from "../../../store/Administrator/UserRegistrationRedux/actions";
-
+import { GetHpageListData, getH_Modules } from "../../../store/Administrator/HPagesRedux/actions";
+import { fetchModelsList } from "../../../store/actions";
+import paginationFactory, {
+    PaginationListStandalone,
+    PaginationProvider
+} from "react-bootstrap-table2-paginator";
+import ToolkitProvider from "react-bootstrap-table2-toolkit";
+import BootstrapTable from "react-bootstrap-table-next";
 const RoleAccessList = (props) => {
 
     const formRef = useRef(null);
@@ -37,25 +44,29 @@ const RoleAccessList = (props) => {
     const [division_dropdown_Select, setDivision_dropdown_Select] = useState("");
     const [partyType_dropdown_Select, setPartyType_dropdown_Select] = useState("");
     const [RoleDropDown, setRoleDropDown] = useState("");
-
+    const [module_DropdownSelect, setModule_DropdownSelect] = useState('');
+    const [Page_DropdownSelect, setPage_DropdownSelect] = useState('');
 
 
     //Access redux store Data /  'save_ModuleSuccess' action data
-    const { PartySaveSuccess, State, DistrictOnState, companyList, DivisionTypes, PartyTypes, Roles } = useSelector((state) => ({
+    const { ModuleData, HPagesListData, PartySaveSuccess, State, DistrictOnState, companyList, DivisionTypes, PartyTypes, Roles } = useSelector((state) => ({
         PartySaveSuccess: state.PartyMasterReducer.PartySaveSuccess,
         State: state.M_EmployeesReducer.State,
         DistrictOnState: state.PartyMasterReducer.DistrictOnState,
         companyList: state.Company.companyList,
         DivisionTypes: state.PartyMasterReducer.DivisionTypes,
         PartyTypes: state.PartyMasterReducer.PartyTypes,
-        Roles: state.User_Registration_Reducer.Roles
-
+        Roles: state.User_Registration_Reducer.Roles,
+        ModuleData: state.Modules.modulesList,
+        HPagesListData: state.H_Pages.HPagesListData,
     }));
 
     useEffect(() => {
         dispatch(fetchCompanyList());
         dispatch(getDivisionTypesID());
         dispatch(getRoles());
+        dispatch(fetchModelsList())
+        dispatch(GetHpageListData())
     }, [dispatch]);
 
 
@@ -71,8 +82,6 @@ const RoleAccessList = (props) => {
             return
         }
     }, [editDataGatingFromList])
-
-
 
     const companyListValues = companyList.map((Data) => ({
         value: Data.id,
@@ -105,8 +114,26 @@ const RoleAccessList = (props) => {
         dispatch(GetPartyTypeByDivisionTypeID(e.value))
     }
 
+    const Module_DropdownOption = ModuleData.map((d) => ({
+        value: d.id,
+        label: d.Name,
+    }));
 
+    // for module dropdown
+    const Module_DropdownSelectHandller = (e) => {
+        setModule_DropdownSelect(e);
+    }
 
+     // for Page dropdown
+    const Page_DropdownOption = HPagesListData.map((d) => ({
+        value: d.id,
+        label: d.Name,
+    }));
+
+    
+    const Page_DropdownSelectHandller = (e) => {
+        setPage_DropdownSelect(e);
+    }
 
     useEffect(() => {
         if ((PartySaveSuccess.Status === true) && (PartySaveSuccess.StatusCode === 200)) {
@@ -184,6 +211,57 @@ const RoleAccessList = (props) => {
     var IsEditMode_Css = ''
     if (IsEdit === true) { IsEditMode_Css = "-3.5%" };
 
+    const pageOptions = [
+        {
+            text: "PageID",
+            dataField: "ID",
+            sort: true,
+            hidden: true,
+            formatter: (cellContent, TableListData) => <>{TableListData.ID}</>,
+        },
+
+        {
+            text: "Module",
+            dataField: "Name",
+            sort: true,
+            formatter: (cellContent, TableListData) => <>{TableListData.Name}</>,
+        },
+        {
+            text: "Page",
+            dataField: "Name",
+            sort: true,
+            formatter: (cellContent, TableListData) => <>{TableListData.Name}</>,
+        },
+
+        {
+            text: "Is Show",
+            dataField: "Address",
+            sort: true,
+            formatter: (cellContent, TableListData) => <>
+                <input type="checkbox"
+                /></>,
+        },
+
+        {
+            text: "Is Delete",
+            dataField: "Mobile",
+            sort: true,
+            formatter: (cellContent, TableListData) => <>
+                <input type="checkbox"
+                /></>,
+        },
+        {
+            text: "Is Add",
+            dataField: "email",
+            sort: true,
+            formatter: (cellContent, TableListData) => <>
+                <input type="checkbox"
+                /></>,
+        },
+
+        
+    ]
+    
     return (
         <React.Fragment>
             <div className="page-content text-black" style={{ marginTop: IsEditMode_Css }}>
@@ -239,14 +317,10 @@ const RoleAccessList = (props) => {
                                     </FormGroup>
                                 </Col >
 
-
-
                                 <Col md="1"></Col>
-
                                 <Col md="2" className="mt-n1 ">
                                     <Button>Go</Button>
                                 </Col>
-
                             </Row>
 
                             <Row style={{ backgroundColor: "#dddddd" }} >
@@ -256,7 +330,12 @@ const RoleAccessList = (props) => {
                                         <Label className="col-sm-5 p-2">Module</Label>
                                         <Col md="7">
 
-
+                                            <Select
+                                                value={module_DropdownSelect}
+                                                options={Module_DropdownOption}
+                                                onChange={(e) => { Module_DropdownSelectHandller(e) }}
+                                                classNamePrefix="select2-selection"
+                                            />
 
                                         </Col>
                                     </FormGroup>
@@ -267,15 +346,18 @@ const RoleAccessList = (props) => {
                                         <Label className="col-sm-4 p-2">Page</Label>
                                         <Col md="8">
 
-
+                                            <Select
+                                                value={Page_DropdownSelect}
+                                                options={Page_DropdownOption}
+                                                onChange={(e) => { Page_DropdownSelectHandller(e) }}
+                                                classNamePrefix="select2-selection"
+                                            />
 
                                         </Col>
                                     </FormGroup>
                                 </Col >
 
-
                                 <Col md="1"></Col>
-
                                 <Col md="2" className="mt-n1 ">
                                     <Button>Go</Button>
                                 </Col>
@@ -284,7 +366,54 @@ const RoleAccessList = (props) => {
                         </CardHeader>
 
                         <CardBody>
-
+                        <PaginationProvider
+                    pagination={paginationFactory(pageOptions)}
+                >
+                    {({ paginationProps, paginationTableProps }) => (
+                        <ToolkitProvider
+                            keyField="id"
+                            data={ModuleData}
+                            columns={pageOptions}
+                            search
+                        >
+                            {toolkitProps => (
+                                <React.Fragment>
+                                    {/* <Breadcrumbs
+                                        title={"Count :"}
+                                        breadcrumbItem={"Company List"}
+                                        IsButtonVissible={true}
+                                        SearchProps={toolkitProps.searchProps}
+                                        breadcrumbCount={`Company Count: ${ModuleData.length}`}
+                                        RedirctPath={"/companyMaster"}
+                                    /> */}
+                                    <Row>
+                                        <Col xl="12">
+                                            <div className="table-responsive">
+                                                <BootstrapTable
+                                                    keyField={"id"}
+                                                    responsive
+                                                    bordered={false}
+                                                    striped={false}
+                                                    // defaultSorted={defaultSorted}
+                                                    classes={"table  table-bordered"}
+                                                    {...toolkitProps.baseProps}
+                                                    {...paginationTableProps}
+                                                />
+                                            </div>
+                                        </Col>
+                                    </Row>
+                                    <Row className="align-items-md-center mt-30">
+                                        <Col className="pagination pagination-rounded justify-content-end mb-2">
+                                            <PaginationListStandalone
+                                                {...paginationProps}
+                                            />
+                                        </Col>
+                                    </Row>
+                                </React.Fragment>
+                            )}
+                        </ToolkitProvider>
+                    )}
+                </PaginationProvider>
                         </CardBody>
                     </Card>
 
