@@ -35,11 +35,10 @@ const AddUser = (props) => {
   let editDataGatingFromList = props.state;
 
   //Access redux store Data /  'save_ModuleSuccess' action data
-  const { AddUserMessage,employee } = useSelector((state) => ({
+  const { AddUserMessage,employee ,Roles} = useSelector((state) => ({
     AddUserMessage: state.User_Registration_Reducer.AddUserMessage,
-    employee: state.User_Registration_Reducer.employee, 
+    employee: state.User_Registration_Reducer.employee,
     Roles: state.User_Registration_Reducer.Roles
-
   }));
 
   // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
@@ -106,9 +105,7 @@ const AddUser = (props) => {
     setEmployeeSelect(e)
   }
 
-  const { Roles } = useSelector((state) => ({
-    Roles: state.User_Registration_Reducer.Roles
-  }));
+
 
   const RolesValues = Roles.map((Data) => ({
     value: Data.id,
