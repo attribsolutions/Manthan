@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react"
 import PropTypes from 'prop-types'
-import { Row, Col, Button } from "reactstrap"
+import { Row, Col, Button, Label } from "reactstrap"
 import { Redirect, useHistory } from "react-router-dom";
 import { Search } from "react-bootstrap-table2-toolkit";
 import { useDispatch, useSelector } from "react-redux";
 import { BreadcrumbShow } from "../../store/Utilites/Breadcrumb/actions";
+import { CSVLink } from "react-csv";
 
 
 const Breadcrumb = props => {
@@ -34,8 +35,26 @@ const Breadcrumb = props => {
     history.listen(location => dispatch(BreadcrumbShow('')));
   }, [])
 
+  let ExcelTableData = [];
+
+
+  const ExcelButton_handeler = () => {
+  
+   ExcelTableData= [
+      { label: "Id", key: "id" },
+      { label: "Name", key: "Name" },
+      { label: "Address", key: "Address" },
+      { label: "Mobile", key: "Mobile" },
+      { label: "Email", key: "email" },
+      { label: " Date of Birth", key: "DOB" },
+      { label: "Company Name ", key: "CompanyName" },
+      // { label: "State", key: "StateName" },
+  
+  ]
+  }
   return (
     <Row style={{ Color: "F7F8F4", marginTop: "-5px", marginBottom: "7px" }}>
+
       <Col md={6}>
         <div className="mb-1 text-left">
           {
@@ -59,23 +78,37 @@ const Breadcrumb = props => {
                   <label className="font-size-20  col-ls-6 col-form-label text-black" style={{ marginLeft: "6px" }}>{props.breadcrumbItem}</label>
                   {/* {bredcrumbName.length > 0 ? <label className="font-size-24 form-label  text-nowrap bd-highlight text-secondary" style={{ paddingLeft: "7px" }} >&nbsp;/ <kbd className="bg-light text-secondary">{bredcrumbName}</kbd></label>
                     : <></>} */}
-                     {bredcrumbName.length > 0 ? <label className="font-size-24 form-label  text-nowrap bd-highlight text-primary" style={{ paddingLeft: "7px" ,color:"#5156be" }} >&nbsp;/&nbsp;{bredcrumbName}</label>
+                  {bredcrumbName.length > 0 ? <label className="font-size-24 form-label  text-nowrap bd-highlight text-primary" style={{ paddingLeft: "7px", color: "#5156be" }} >&nbsp;/&nbsp;{bredcrumbName}</label>
                     : <></>}
-                    {/* color:"#5156be" */}
+                  {/* color:"#5156be" */}
                 </Col>
               </Row>
           }
         </div>
       </Col>
 
-      <Col md={Countsize.length < 10 ? 3 : Countsize.length < 25 ? 2 : 1}>  
+      <Col md={Countsize.length < 10 ? 3 : Countsize.length < 25 ? 2 : 1}
+        className='text-end'>
 
-      {props.isExcelButtonVisible===true ? 
-    
-      <><Button variant="contained" 
-      color="primary"
-      className='export-btn mb-2 text-end'><i class="bx bx-download"></i></Button></>: null}</Col>
-  
+        {props.isExcelButtonVisible === true ?
+
+          <>
+            <Label
+              className='export-btn font-size-20  text-end mt-2'>
+              <CSVLink
+                headers={ExcelTableData}
+                data={props.ExcelData}
+                filename="Employee Data"
+                style={{ "textDecoration": "none", "color": "#fff" }}
+              >
+                <i className="bx bx-download text-warning" onClick={() => { ExcelButton_handeler() }}></i>
+              </CSVLink>
+              
+            </Label>
+          </> : <></>}
+
+      </Col>
+
       <Col sm={2}>
         <div className="search-box d-inline-block">
           <div className="position-relative">

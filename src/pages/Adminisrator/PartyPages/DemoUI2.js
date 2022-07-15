@@ -228,6 +228,7 @@ const Employee_List = () => {
                                         breadcrumbCount={`Employee Count: ${TableListData.length}`}
                                         RedirctPath={"/employeesMaster"}
                                         isExcelButtonVisible={true}
+                                        ExcelData={TableListData}
                                     />
                                     <Row>
                                         <Col className='btn sm text-end '>
@@ -243,7 +244,6 @@ const Employee_List = () => {
                                                     filename="Employee Data"
                                                     style={{ "textDecoration": "none", "color": "#fff" }}
                                                 >
-                                                   Download
                                                 </CSVLink>
 
                                             {/* </Button> */}
