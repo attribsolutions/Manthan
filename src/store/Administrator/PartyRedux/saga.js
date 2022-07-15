@@ -60,12 +60,10 @@ function* Get_Party_GenratorFunction() {
     }
   }
   
-  
-  function* Update_Party_GenratorFunction({ data, id }) {
-    debugger
+  function* Update_Party_GenratorFunction({ updateData, ID }) {
     try {
       yield put(SpinnerState(true))
-      const response = yield call(Party_Master_Update_API, data, id);
+      const response = yield call(Party_Master_Update_API, updateData, ID);
       yield put(SpinnerState(false))
       yield put(updatePartyIDSuccess(response))
     }
