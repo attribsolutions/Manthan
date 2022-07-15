@@ -50,9 +50,10 @@ export const socialLogin = (data, history, type) => {
     payload: { data, history, type },
   }
 }
-export  const roleAceessAction=()=>{
+export  const roleAceessAction=(id1,id2,id3)=>{
 return{
-  type:ROLE_ACCESS_API_CALL
+  type:ROLE_ACCESS_API_CALL,
+  id1,id2,id3,
 }
 }
 export  const roleAceessActionSuccess=(data)=>{

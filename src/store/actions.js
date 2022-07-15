@@ -1,3 +1,5 @@
+import { FormGroup } from "reactstrap"
+
 export * from "./layout/actions"
 
 // Authentication module
@@ -10,5 +12,10 @@ export * from "./auth/profile/actions"
 //administrator  ** modules and list
 export * from "./Administrator/ModulesRedux/actions"
 export *from "./Utilites/Breadcrumb/actions"
+
+export* from './Administrator/RoleAccessRedux/actions'
+export *from './Administrator/HPagesRedux/actions'
+export *from './Administrator/UserRegistrationRedux/actions'
+
 
 

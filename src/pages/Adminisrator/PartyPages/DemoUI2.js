@@ -216,30 +216,39 @@ const Employee_List = () => {
     //   tableListNew.hasOwnProperty('Name'); 
     //   console.log(tableListNew.hasOwnProperty('id'));
 
-    // const downloadExcel = (TableListData) => {
+    const downloadExcel = (TableListData) => {
 
-    //     TableListData.map((index) => {
-    //         if (TableListData===list) {
-    //             tableListNew.push( index )
-    //         }
+        var demoList = ["Name", "Address", "email", "Mobile"]
+        var li = []
+        var obj = {}
 
-    //     })
+        TableListData.map((index1) => {
+            demoList.map((index2) => {
+                if (index1.hasOwnProperty(index2)) {
+                    obj[index2] = index1[index2]
+                }
+            })
+            li.push(obj)
+        })
+       
 
-    //     const worksheet = XLSX.utils.json_to_sheet(tableListNew);
-    //     const workbook = XLSX.utils.book_new();
-    //     XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
-    //     XLSX.writeFile(workbook, "DataSheet.xlsx");
-    // };
 
-    const map = new Map([
-        TableListData
-    ]);
-    const obj = Object.fromEntries(map);
-    console.log(obj);
 
- let result = obj.hasOwnProperty('Address');
- console.log(result);
- 
+        const worksheet = XLSX.utils.json_to_sheet(li);
+        const workbook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
+        XLSX.writeFile(workbook, "DataSheet.xlsx");
+    };
+
+
+
+    useEffect(() => {
+       
+    }, [TableListData])
+
+   
+    console.log(TableListData);
+
     return (
         <React.Fragment>
             <div className="page-content">
@@ -285,9 +294,9 @@ const Employee_List = () => {
                                     {/* </Button> */}
                                     {/* </Col> */}
                                     {/* </Row> */}
-                                    {/* <button onClick={() => downloadExcel(TableListData)}>
+                                    <button onClick={() => downloadExcel(TableListData)}>
                                         Download As Excel
-                                    </button> */}
+                                    </button>
                                     <Row>
                                         <Col xl="12">
                                             <div className="table-responsive">

@@ -32,7 +32,7 @@ function* loginUser({ payload: { user, history } }) {
     }
     localStorage.setItem("token", (response.token))
     yield put(loginSuccess(response))
-    const RoleResponse = yield call(RoleAccessApi_url);
+    const RoleResponse = yield call(RoleAccessApi_url,1,1,1);
     if(RoleResponse.Data.length>0) yield put(roleAceessActionSuccess(RoleResponse.Data))
     // console.log('login response',RoleResponse.Data)
     history.push("/dashboard")
@@ -54,9 +54,10 @@ function* logoutUser({ payload: { history } }) {
     yield put(apiError(error))
   }
 }
-function* RoleAccessGenratorFunction() {
+function* RoleAccessGenratorFunction({id1,id2,id3}) {
+  debugger
   try {
-    const RoleResponse = yield call(RoleAccessApi_url);
+    const RoleResponse = yield call(RoleAccessApi_url,id1,id2,id3);
     if(RoleResponse.Data.length>0) yield put(roleAceessActionSuccess(RoleResponse.Data))
   } catch (error) {
     console.log("RoleAccessGenratorFunction",error)

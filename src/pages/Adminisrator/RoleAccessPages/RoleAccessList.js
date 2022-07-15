@@ -12,10 +12,9 @@ import {
 import { getState } from "../../../store/Administrator/M_EmployeeRedux/action";
 import Flatpickr from "react-flatpickr"
 import { fetchCompanyList } from "../../../store/Administrator/CompanyRedux/actions";
-import { BreadcrumbShow } from "../../../store/Utilites/Breadcrumb/actions";
 import { MetaTags } from "react-meta-tags";
-import { getRoles } from "../../../store/Administrator/UserRegistrationRedux/actions";
-import { GetHpageListData, getH_Modules } from "../../../store/Administrator/HPagesRedux/actions";
+// import { getRoles } from "../../../store/Administrator/UserRegistrationRedux/actions";
+import { GetHpageListData, getH_Modules, getPageAccess_DropDown_API, getRoles } from "../../../store/actions";
 import { fetchModelsList } from "../../../store/actions";
 import paginationFactory, {
     PaginationListStandalone,
@@ -49,7 +48,7 @@ const RoleAccessList = (props) => {
 
 
     //Access redux store Data /  'save_ModuleSuccess' action data
-    const { ModuleData, HPagesListData, PartySaveSuccess, State, DistrictOnState, companyList, DivisionTypes, PartyTypes, Roles } = useSelector((state) => ({
+    const { PageAccess, ModuleData, HPagesListData, PartySaveSuccess, State, DistrictOnState, companyList, DivisionTypes, PartyTypes, Roles } = useSelector((state) => ({
         PartySaveSuccess: state.PartyMasterReducer.PartySaveSuccess,
         State: state.M_EmployeesReducer.State,
         DistrictOnState: state.PartyMasterReducer.DistrictOnState,
@@ -59,6 +58,7 @@ const RoleAccessList = (props) => {
         Roles: state.User_Registration_Reducer.Roles,
         ModuleData: state.Modules.modulesList,
         HPagesListData: state.H_Pages.HPagesListData,
+        PageAccess: state.H_Pages.PageAccess,
     }));
 
     useEffect(() => {
@@ -67,21 +67,23 @@ const RoleAccessList = (props) => {
         dispatch(getRoles());
         dispatch(fetchModelsList())
         dispatch(GetHpageListData())
-    }, [dispatch]);
+        dispatch(getPageAccess_DropDown_API());
+
+    }, []);
 
 
     // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
-    useEffect(() => {
-        // document.getElementById("txtName").focus();
-        if (!(editDataGatingFromList === undefined)) {
-            debugger
-            setEditData(editDataGatingFromList);
-            setIsEdit(true);
+    // useEffect(() => {
+    //     // document.getElementById("txtName").focus();
+    //     if (!(editDataGatingFromList === undefined)) {
+    //         debugger
+    //         setEditData(editDataGatingFromList);
+    //         setIsEdit(true);
 
-            dispatch(editPartyIDSuccess({ Status: false }))
-            return
-        }
-    }, [editDataGatingFromList])
+    //         dispatch(editPartyIDSuccess({ Status: false }))
+    //         return
+    //     }
+    // }, [editDataGatingFromList])
 
     const companyListValues = companyList.map((Data) => ({
         value: Data.id,
@@ -124,13 +126,13 @@ const RoleAccessList = (props) => {
         setModule_DropdownSelect(e);
     }
 
-     // for Page dropdown
+    // for Page dropdown
     const Page_DropdownOption = HPagesListData.map((d) => ({
         value: d.id,
         label: d.Name,
     }));
 
-    
+
     const Page_DropdownSelectHandller = (e) => {
         setPage_DropdownSelect(e);
     }
@@ -211,7 +213,74 @@ const RoleAccessList = (props) => {
     var IsEditMode_Css = ''
     if (IsEdit === true) { IsEditMode_Css = "-3.5%" };
 
-    const pageOptions = [
+
+    const ModuleData1 = [
+        {
+            id: 2,
+            Name: "Module List",
+            DisplayIndex: 2,
+            Icon: "Module List",
+            ActualPagePath: "ModuleList",
+            isShowOnMenu: 1,
+
+
+            IsEditid: 1,
+            IsEdit: "IsEdit",
+            IsEditValue: true,
+
+            IsDeleteid: 2,
+            IsDelete: "IsDelete",
+            IsDeleteValue: true,
+
+            IsViewid: 3,
+            IsView: "IsView",
+            IsViewValue: true
+
+
+        }
+    ]
+    console.log()
+    // useEffect(()=>{
+
+    //     let SearchRoleData_initial =[]
+
+    //     RoleAccessData.map((i)=>{
+    //         i.ModuleData.map((index)=>{
+    //             SearchRoleData_initial.push(index)
+    //         })
+    //     })
+    //     setSearchRoleData(SearchRoleData_initial)
+    //    },[RoleAccessData])
+
+
+
+    const [searchRoleData, setSearchRoleData] = useState([{
+        text: "Module",
+        dataField: "Name",
+        sort: true,
+        formatter: (cellContent, TableListData) => <>{TableListData.Name}</>,
+    }])
+
+    let pageOptions = searchRoleData
+
+    useEffect(() => {
+        var SearchRoleData_initial = []
+        PageAccess.map((i) => {
+            SearchRoleData_initial.push({
+                text: i.Name,
+                dataField: i.Name,
+                sort: true,
+                hidden: true,
+                formatter: (cellContent, TableListData) => <>{TableListData.ID}</>,
+            })
+        })
+        setSearchRoleData(SearchRoleData_initial)
+    }, [PageAccess])
+
+
+
+
+    const pageOptions1 = [
         {
             text: "PageID",
             dataField: "ID",
@@ -219,7 +288,6 @@ const RoleAccessList = (props) => {
             hidden: true,
             formatter: (cellContent, TableListData) => <>{TableListData.ID}</>,
         },
-
         {
             text: "Module",
             dataField: "Name",
@@ -232,7 +300,6 @@ const RoleAccessList = (props) => {
             sort: true,
             formatter: (cellContent, TableListData) => <>{TableListData.Name}</>,
         },
-
         {
             text: "Is Show",
             dataField: "Address",
@@ -259,9 +326,9 @@ const RoleAccessList = (props) => {
                 /></>,
         },
 
-        
+
     ]
-    
+
     return (
         <React.Fragment>
             <div className="page-content text-black" style={{ marginTop: IsEditMode_Css }}>
@@ -275,7 +342,7 @@ const RoleAccessList = (props) => {
                         <CardHeader className="card-header   text-black" style={{ backgroundColor: "#dddddd" }} >
                             <Row style={{ backgroundColor: "#dddddd" }} >
 
-                                <Col md="2" className="">
+                                <Col md="3" className="">
                                     <FormGroup className="mb-1 row  " >
                                         <Label className="col-sm-5 p-2">Division</Label>
                                         <Col md="7">
@@ -317,15 +384,15 @@ const RoleAccessList = (props) => {
                                     </FormGroup>
                                 </Col >
 
-                                <Col md="1"></Col>
-                                <Col md="2" className="mt-n1 ">
+
+                                <Col md="2" className="mt- ">
                                     <Button>Go</Button>
                                 </Col>
                             </Row>
 
-                            <Row style={{ backgroundColor: "#dddddd" }} >
+                            <Row  >
 
-                                <Col md="2" className="">
+                                <Col md="3" className="">
                                     <FormGroup className="mb- row mt-3 " >
                                         <Label className="col-sm-5 p-2">Module</Label>
                                         <Col md="7">
@@ -358,27 +425,28 @@ const RoleAccessList = (props) => {
                                 </Col >
 
                                 <Col md="1"></Col>
-                                <Col md="2" className="mt-n1 ">
-                                    <Button>Go</Button>
+                                <Col md="2" className="mt-2 ">
+                                    <Button>Add Role</Button>
                                 </Col>
 
                             </Row>
                         </CardHeader>
 
                         <CardBody>
-                        <PaginationProvider
-                    pagination={paginationFactory(pageOptions)}
-                >
-                    {({ paginationProps, paginationTableProps }) => (
-                        <ToolkitProvider
-                            keyField="id"
-                            data={ModuleData}
-                            columns={pageOptions}
-                            search
-                        >
-                            {toolkitProps => (
-                                <React.Fragment>
-                                    {/* <Breadcrumbs
+
+                            <PaginationProvider
+                                pagination={paginationFactory(pageOptions)}
+                            >
+                                {({ paginationProps, paginationTableProps }) => (
+                                    <ToolkitProvider
+                                        keyField="id"
+                                        data={ModuleData}
+                                        columns={pageOptions}
+                                        search
+                                    >
+                                        {toolkitProps => (
+                                            <React.Fragment>
+                                                {/* <Breadcrumbs
                                         title={"Count :"}
                                         breadcrumbItem={"Company List"}
                                         IsButtonVissible={true}
@@ -386,34 +454,34 @@ const RoleAccessList = (props) => {
                                         breadcrumbCount={`Company Count: ${ModuleData.length}`}
                                         RedirctPath={"/companyMaster"}
                                     /> */}
-                                    <Row>
-                                        <Col xl="12">
-                                            <div className="table-responsive">
-                                                <BootstrapTable
-                                                    keyField={"id"}
-                                                    responsive
-                                                    bordered={false}
-                                                    striped={false}
-                                                    // defaultSorted={defaultSorted}
-                                                    classes={"table  table-bordered"}
-                                                    {...toolkitProps.baseProps}
-                                                    {...paginationTableProps}
-                                                />
-                                            </div>
-                                        </Col>
-                                    </Row>
-                                    <Row className="align-items-md-center mt-30">
-                                        <Col className="pagination pagination-rounded justify-content-end mb-2">
-                                            <PaginationListStandalone
-                                                {...paginationProps}
-                                            />
-                                        </Col>
-                                    </Row>
-                                </React.Fragment>
-                            )}
-                        </ToolkitProvider>
-                    )}
-                </PaginationProvider>
+                                                <Row>
+                                                    <Col xl="12">
+                                                        <div className="table-responsive">
+                                                            <BootstrapTable
+                                                                keyField={"id"}
+                                                                responsive
+                                                                bordered={false}
+                                                                striped={false}
+                                                                // defaultSorted={defaultSorted}
+                                                                classes={"table table-hover table-bordered"}
+                                                                {...toolkitProps.baseProps}
+                                                                {...paginationTableProps}
+                                                            />
+                                                        </div>
+                                                    </Col>
+                                                </Row>
+                                                <Row className="align-items-md-center mt-30">
+                                                    <Col className="pagination pagination-rounded justify-content-end mb-2">
+                                                        <PaginationListStandalone
+                                                            {...paginationProps}
+                                                        />
+                                                    </Col>
+                                                </Row>
+                                            </React.Fragment>
+                                        )}
+                                    </ToolkitProvider>
+                                )}
+                            </PaginationProvider>
                         </CardBody>
                     </Card>
 

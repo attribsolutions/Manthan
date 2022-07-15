@@ -27,7 +27,7 @@ const SidebarContent = (props) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(roleAceessAction())
+    dispatch(roleAceessAction(1,1,1))
     // console.log("test side bar use effect")
   }, [])
 

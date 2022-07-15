@@ -1,0 +1,3 @@
+// Submit Module  All Action type
+export const POST_MODULES_SUBMIT = "POST_MODULES_SUBMIT"
+export const  POST_MODULES_SUBMIT_SUCCESS='POST_MODULES_SUBMIT_SUCCESS'
