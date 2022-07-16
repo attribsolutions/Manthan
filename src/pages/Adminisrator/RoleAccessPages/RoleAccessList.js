@@ -22,6 +22,8 @@ import paginationFactory, {
 } from "react-bootstrap-table2-paginator";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
+
+import Table from 'react-bootstrap/Table'
 const RoleAccessList = (props) => {
 
     const formRef = useRef(null);
@@ -48,7 +50,7 @@ const RoleAccessList = (props) => {
 
 
     //Access redux store Data /  'save_ModuleSuccess' action data
-    const { PageAccess, ModuleData, HPagesListData, PartySaveSuccess, State, DistrictOnState, companyList, DivisionTypes, PartyTypes, Roles } = useSelector((state) => ({
+    const { PageAccess, ModuleData, HPagesListData, PartySaveSuccess, State, RoleAccessData, companyList, DivisionTypes, PartyTypes, Roles } = useSelector((state) => ({
         PartySaveSuccess: state.PartyMasterReducer.PartySaveSuccess,
         State: state.M_EmployeesReducer.State,
         DistrictOnState: state.PartyMasterReducer.DistrictOnState,
@@ -59,6 +61,7 @@ const RoleAccessList = (props) => {
         ModuleData: state.Modules.modulesList,
         HPagesListData: state.H_Pages.HPagesListData,
         PageAccess: state.H_Pages.PageAccess,
+        RoleAccessData: state.Login.RoleData,
     }));
 
     useEffect(() => {
@@ -214,32 +217,6 @@ const RoleAccessList = (props) => {
     if (IsEdit === true) { IsEditMode_Css = "-3.5%" };
 
 
-    const ModuleData1 = [
-        {
-            id: 2,
-            Name: "Module List",
-            DisplayIndex: 2,
-            Icon: "Module List",
-            ActualPagePath: "ModuleList",
-            isShowOnMenu: 1,
-
-
-            IsEditid: 1,
-            IsEdit: "IsEdit",
-            IsEditValue: true,
-
-            IsDeleteid: 2,
-            IsDelete: "IsDelete",
-            IsDeleteValue: true,
-
-            IsViewid: 3,
-            IsView: "IsView",
-            IsViewValue: true
-
-
-        }
-    ]
-    console.log()
     // useEffect(()=>{
 
     //     let SearchRoleData_initial =[]
@@ -249,7 +226,8 @@ const RoleAccessList = (props) => {
     //             SearchRoleData_initial.push(index)
     //         })
     //     })
-    //     setSearchRoleData(SearchRoleData_initial)
+    //     setSearchRoleData([...searchRoleData,SearchRoleData_initial])
+
     //    },[RoleAccessData])
 
 
@@ -260,58 +238,79 @@ const RoleAccessList = (props) => {
             dataField: "ID",
             sort: true,
             hidden: true,
-            formatter: (cellContent, TableListData) => <></>,
-        }, {
+            formatter: (cellContent, TableListData) => <>{ }</>,
+        },
+        {
             text: "Module",
             dataField: "Name",
             sort: true,
             formatter: (cellContent, TableListData) => <>{ }</>,
-        }])
-
-
-
-    let pageOptions = [
-        {
-            text: "PageID",
-            dataField: "ID",
-            sort: true,
-            hidden: true,
-            formatter: (cellContent, TableListData) => <>{TableListData.ID}</>,
         },
-        {
-            text: "Module",
-            dataField: "Name",
-            sort: true,
-            formatter: (cellContent, TableListData) => <>{TableListData.Name}</>,
-        },
-        {
-            text: "Page",
-            dataField: "Name",
-            sort: true,
-            formatter: (cellContent, TableListData) => <>{TableListData.Name}</>,
-        },
-        //dynamic
-
-
     ]
+    )
+
+
+
+    // var pageOptions = [
+    //     {
+    //         text: "PageID",
+    //         dataField: "ID",
+    //         sort: true,
+    //         hidden: true,
+    //         formatter: (cellContent, TableListData) => <>{TableListData.id}</>,
+    //     },
+    //     {
+    //         text: "Module",
+    //         dataField: "Name",
+    //         sort: true,
+    //         formatter: (cellContent, TableListData) => <>{TableListData.Name}</>,
+    //     },
+    //     {
+    //         text: "Page",
+    //         dataField: "Name",
+    //         sort: true,
+    //         formatter: (cellContent, TableListData) => <>{TableListData.Name}</>,
+    //     },
+    //     //dynamic
+
+
+    // ]
+
+
+
+    const [listData, setListData] = useState([])
+    // const  RoleAccessData=demoRolleAcess
 
 
     useEffect(() => {
-    debugger
-        PageAccess.map((i) => {
-            pageOptions.push({
-                text: i.Name,
-                dataField: i.Name,
-                sort: true,
-                hidden: true,
-                formatter: (cellContent, TableListData) => <>{TableListData.ID}</>,
+
+        let SearchRoleData_initial = []
+
+        RoleAccessData.map((i) => {
+            i.ModuleData.map((index) => {
+                SearchRoleData_initial.push(index)
             })
         })
-        
-        
+        setListData(SearchRoleData_initial)
+    }, [RoleAccessData])
+
+    useEffect(() => {
+        let SearchRoleData_initial = searchRoleData
+
+        PageAccess.map((i) => {
+            SearchRoleData_initial.push({
+                text: "name",
+                dataField: "name",
+                sort: true,
+                hidden: true,
+                formatter: (cellContent, TableListData) => <>{"name"}</>,
+            })
+        })
+        setSearchRoleData(SearchRoleData_initial)
+        console.log("SearchRoleData_initial", SearchRoleData_initial)
     }, [PageAccess])
 
-    console.log("pageOptions", pageOptions)
+    console.log("searchRoleData", searchRoleData)
 
 
     return (
@@ -418,55 +417,45 @@ const RoleAccessList = (props) => {
                         </CardHeader>
 
                         <CardBody>
+                            <Row>
+                                <Col xl="12">
+                                    <div className="table-responsive">
 
-                            <PaginationProvider
-                                pagination={paginationFactory(pageOptions)}
-                            >
-                                {({ paginationProps, paginationTableProps }) => (
-                                    <ToolkitProvider
-                                        keyField="id"
-                                        data={ModuleData}
-                                        columns={pageOptions}
-                                        search
-                                    >
-                                        {toolkitProps => (
-                                            <React.Fragment>
-                                                {/* <Breadcrumbs
-                                        title={"Count :"}
-                                        breadcrumbItem={"Company List"}
-                                        IsButtonVissible={true}
-                                        SearchProps={toolkitProps.searchProps}
-                                        breadcrumbCount={`Company Count: ${ModuleData.length}`}
-                                        RedirctPath={"/companyMaster"}
-                                    /> */}
-                                                <Row>
-                                                    <Col xl="12">
-                                                        <div className="table-responsive">
-                                                            <BootstrapTable
-                                                                keyField={"id"}
-                                                                responsive
-                                                                bordered={false}
-                                                                striped={false}
-                                                                // defaultSorted={defaultSorted}
-                                                                classes={"table table-hover table-bordered"}
-                                                                {...toolkitProps.baseProps}
-                                                                {...paginationTableProps}
-                                                            />
-                                                        </div>
-                                                    </Col>
-                                                </Row>
-                                                <Row className="align-items-md-center mt-30">
-                                                    <Col className="pagination pagination-rounded justify-content-end mb-2">
-                                                        <PaginationListStandalone
-                                                            {...paginationProps}
-                                                        />
-                                                    </Col>
-                                                </Row>
-                                            </React.Fragment>
-                                        )}
-                                    </ToolkitProvider>
-                                )}
-                            </PaginationProvider>
+                                        <Table striped bordered hover>
+                                            <thead>
+                                                <tr>
+                                                    <th>
+                                                        Name
+                                                    </th>
+                                                    <th>
+                                                        Module Name
+                                                    </th>
+                                                    {
+                                                        PageAccess.map((indexPage) => {
+                                                            return <th>
+                                                                {indexPage.Name}
+                                                            </th>
+                                                        })
+                                                    }
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    {
+                                                        listData.map((indexdata) => {
+                                                            return <td>
+                                                                {indexdata.Name}
+                                                            </td>
+                                                        })
+                                                    }
+                                                </tr>
+                                            </tbody>
+
+                                        </Table>
+                                    </div>
+                                </Col>
+                            </Row>
+
                         </CardBody>
                     </Card>
 
