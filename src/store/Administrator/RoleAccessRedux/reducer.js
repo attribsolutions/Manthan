@@ -1,18 +1,18 @@
 import {
-  POST_MODULES_SUBMIT_SUCCESS,
+  PAGE_MASTER_ACCESS_FOR_ROLE_ACCESS_lIST_SUCCESS,
 } from "./actionType"
 
 const INIT_STATE = {
-  demo: { Status: false },
+  PageMasterListForRoleAccess: [],
 }
 
 const RoleAccessReducer = (state = INIT_STATE, action) => {
   switch (action.type) {
 
-    case POST_MODULES_SUBMIT_SUCCESS:
+    case PAGE_MASTER_ACCESS_FOR_ROLE_ACCESS_lIST_SUCCESS:
       return {
         ...state,
-        demo: action.payload,
+        PageMasterListForRoleAccess: action.payload,
       }
     default:
       return state

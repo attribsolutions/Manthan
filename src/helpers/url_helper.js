@@ -74,4 +74,9 @@ export const GetDistrictOnState="/GetDistrictOnState"
 export const GET_DIVISION_TYPES_ID="/DivisionTypes"
 export const GET_PARTYTYPE_BY_DIVISIONTYPES_ID="/GetPartyTypeByDivisionTypeID"
 
+//Role Access
+export const PAGEMASTER_ROLE_ACCESS="/PageMasterForRoleAccess"
+
+
+
 

@@ -50,10 +50,9 @@ function* fetchHPagesList_GneratorFunction() {
 
 function* GetH_Modules({ id }) {
   try {
-    
+
     const response = yield call(get_Module_HPages, id);
     yield put(getH_ModulesSuccess(response.Data))
-    console.log("response", response)
   } catch (error) {
     yield put(AlertState({
       Type: 3,
@@ -66,10 +65,8 @@ function* GetH_Modules({ id }) {
 }
 
 function* saveHPageSaga_GneratorFunction({ Data }) {
-  debugger
   yield put(SpinnerState(true))
   try {
-    console.log("response111", Data)
     const response = yield call(saveHPagesAPI, Data);
     yield put(SpinnerState(false))
     yield put(saveHPagesSuccess(response));
@@ -85,7 +82,6 @@ function* saveHPageSaga_GneratorFunction({ Data }) {
 
 function* editHpages_ID({ id }) {
 
-  
   try {
     const response = yield call(edit_HPageID, id);
     yield put(editHPagesIDSuccess(response));
@@ -98,13 +94,12 @@ function* editHpages_ID({ id }) {
 }
 
 function* update_HPagesUsingID_GenratorFunction({ data, id }) {
-  debugger
   try {
     yield put(SpinnerState(true))
     const response = yield call(updateHPages, data, id);
     yield put(SpinnerState(false))
     yield put(updateHPagesSuccess(response))
-    console.log("update response in saga ",response)
+    console.log("update response in saga ", response)
   }
   catch (error) {
     yield put(SpinnerState(false))
@@ -141,6 +136,7 @@ function* PageList_DropDown_GenratorFunction() {
 
 //  PageAccess dropdown list
 function* PageAccess_DropDown_GenratorFunction() {
+  debugger
   try {
     const response = yield call(showPagesListOnPageAccess_DropDown_List);
     yield put(getPageAccess_DropDown_API_Success(response.Data));

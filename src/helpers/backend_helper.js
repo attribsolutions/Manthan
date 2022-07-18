@@ -191,6 +191,9 @@ export const GetDistrictOnState_For_Dropdown = (id) => get(`${url.GetDistrictOnS
 export const DivisionTypes_For_Dropdown = () => get(url.GET_DIVISION_TYPES_ID)
 export const GetPartyTypeByDivisionTypeID_For_Dropdown = (id) => get(`${url.GET_PARTYTYPE_BY_DIVISIONTYPES_ID}/${id}`)//  GetDistrictOnState DropDown API
 
+//RoleAccess
+
+export const PageMasterForRoleAccessLit_Api = (id) => get(`${url.PAGEMASTER_ROLE_ACCESS}/${id}`)//get api
 
 export {
   getLoggedInUser,

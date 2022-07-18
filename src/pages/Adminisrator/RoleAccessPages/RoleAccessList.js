@@ -14,7 +14,7 @@ import Flatpickr from "react-flatpickr"
 import { fetchCompanyList } from "../../../store/Administrator/CompanyRedux/actions";
 import { MetaTags } from "react-meta-tags";
 // import { getRoles } from "../../../store/Administrator/UserRegistrationRedux/actions";
-import { GetHpageListData, getH_Modules, getPageAccess_DropDown_API, getRoles } from "../../../store/actions";
+import { GetHpageListData, getH_Modules, getPageAccess_DropDown_API, getRoles, PageMasterForRoleAccessLit, roleAceessAction } from "../../../store/actions";
 import { fetchModelsList } from "../../../store/actions";
 import paginationFactory, {
     PaginationListStandalone,
@@ -50,7 +50,7 @@ const RoleAccessList = (props) => {
 
 
     //Access redux store Data /  'save_ModuleSuccess' action data
-    const { PageAccess, ModuleData, HPagesListData, PartySaveSuccess, State, RoleAccessData, companyList, DivisionTypes, PartyTypes, Roles } = useSelector((state) => ({
+    const { PageMasterListForRoleAccess, PageAccess, ModuleData, HPagesListData, PartySaveSuccess, State, RoleAccessData, companyList, DivisionTypes, PartyTypes, Roles } = useSelector((state) => ({
         PartySaveSuccess: state.PartyMasterReducer.PartySaveSuccess,
         State: state.M_EmployeesReducer.State,
         DistrictOnState: state.PartyMasterReducer.DistrictOnState,
@@ -62,6 +62,7 @@ const RoleAccessList = (props) => {
         HPagesListData: state.H_Pages.HPagesListData,
         PageAccess: state.H_Pages.PageAccess,
         RoleAccessData: state.Login.RoleData,
+        PageMasterListForRoleAccess: state.RoleAccessReducer.PageMasterListForRoleAccess,
     }));
 
     useEffect(() => {
@@ -71,22 +72,12 @@ const RoleAccessList = (props) => {
         dispatch(fetchModelsList())
         dispatch(GetHpageListData())
         dispatch(getPageAccess_DropDown_API());
+        dispatch(PageMasterForRoleAccessLit(1));
+        dispatch(roleAceessAction(1, 1, 1))
 
     }, []);
 
 
-    // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
-    // useEffect(() => {
-    //     // document.getElementById("txtName").focus();
-    //     if (!(editDataGatingFromList === undefined)) {
-    //         debugger
-    //         setEditData(editDataGatingFromList);
-    //         setIsEdit(true);
-
-    //         dispatch(editPartyIDSuccess({ Status: false }))
-    //         return
-    //     }
-    // }, [editDataGatingFromList])
 
     const companyListValues = companyList.map((Data) => ({
         value: Data.id,
@@ -100,7 +91,6 @@ const RoleAccessList = (props) => {
 
     /// Role dopdown
     function RoleDropDown_select_handler(e) {
-        debugger
         setRoleDropDown(e)
     };
 
@@ -171,7 +161,7 @@ const RoleAccessList = (props) => {
                 AfterResponseAction: false
             }));
         }
-    }, [PartySaveSuccess.Status])
+    }, [PartySaveSuccess])
 
     //'Save' And 'Update' Button Handller
     const handleValidUpdate = (event, values) => {
@@ -217,100 +207,116 @@ const RoleAccessList = (props) => {
     if (IsEdit === true) { IsEditMode_Css = "-3.5%" };
 
 
-    // useEffect(()=>{
-
-    //     let SearchRoleData_initial =[]
-
-    //     RoleAccessData.map((i)=>{
-    //         i.ModuleData.map((index)=>{
-    //             SearchRoleData_initial.push(index)
-    //         })
-    //     })
-    //     setSearchRoleData([...searchRoleData,SearchRoleData_initial])
-
-    //    },[RoleAccessData])
 
 
 
-    const [searchRoleData, setSearchRoleData] = useState([
+    console.log("PageMasterListForRoleAccess", PageMasterListForRoleAccess)
+    console.log("RoleAccessData", RoleAccessData)
+    console.log("pageAccess", PageAccess)
+
+
+    var pageOptions = [
         {
-            text: "PageID",
-            dataField: "ID",
-            sort: true,
-            hidden: true,
-            formatter: (cellContent, TableListData) => <>{ }</>,
+            ModuleID: 1,
+            ModuleName: "Administraction",
+            Page_id: 2,
+            PageName: "User List",
+            DisplayIndex: 1,
+            Icon: "fa-fa-paw",
+            ActualPagePath: "UserList",
+            isShowOnMenu: true,
+            IsEdit_id: 2,
+            IsEdit: "IsEdit",
+            IsDelete_id: 3,
+            IsDelete: "IsDelete",
+            IsEditSelf_id: 4,
+            IsEditSelf: "IsEditSelf",
+            IsDeleteSelf_id: 5,
+            IsDeleteSelf: "IsDeleteSelf",
+            IsShow_id: 6,
+            IsShow: "IsShow"
         },
         {
-            text: "Module",
-            dataField: "Name",
-            sort: true,
-            formatter: (cellContent, TableListData) => <>{ }</>,
+            ModuleID: 1,
+            ModuleName: "purchase",
+            Page_id: 2,
+            PageName: "User List",
+            DisplayIndex: 1,
+            Icon: "fa-fa-paw",
+            ActualPagePath: "UserList",
+            isShowOnMenu: true,
+            IsEdit_id: 2,
+            IsEdit: "IsEdit",
+            IsDelete_id: 3,
+            IsDelete: "IsDelete",
+            IsEditSelf_id: 4,
+            IsEditSelf: "IsEditSelf",
+            IsDeleteSelf_id: 5,
+            IsDeleteSelf: "IsDeleteSelf",
+            IsShow_id: 6,
+            IsShow: "IsShow"
         },
+        {
+            ModuleID: 1,
+            ModuleName: "sale",
+            Page_id: 2,
+            PageName: "User List",
+            DisplayIndex: 1,
+            Icon: "fa-fa-paw",
+            ActualPagePath: "UserList",
+            isShowOnMenu: true,
+            IsEdit_id: 2,
+            IsEdit: "IsEdit",
+            IsDelete_id: 3,
+            IsDelete: "IsDelete",
+            IsEditSelf_id: 4,
+            IsEditSelf: "IsEditSelf",
+            IsDeleteSelf_id: 5,
+            IsDeleteSelf: "IsDeleteSelf",
+            IsShow_id: 6,
+            IsShow: "IsShow"
+        },
+
     ]
-    )
 
 
 
-    // var pageOptions = [
-    //     {
-    //         text: "PageID",
-    //         dataField: "ID",
-    //         sort: true,
-    //         hidden: true,
-    //         formatter: (cellContent, TableListData) => <>{TableListData.id}</>,
-    //     },
-    //     {
-    //         text: "Module",
-    //         dataField: "Name",
-    //         sort: true,
-    //         formatter: (cellContent, TableListData) => <>{TableListData.Name}</>,
-    //     },
-    //     {
-    //         text: "Page",
-    //         dataField: "Name",
-    //         sort: true,
-    //         formatter: (cellContent, TableListData) => <>{TableListData.Name}</>,
-    //     },
-    //     //dynamic
-
-
-    // ]
-
-
+    const [searchRoleData, setSearchRoleData] = useState(pageOptions)
 
     const [listData, setListData] = useState([])
     // const  RoleAccessData=demoRolleAcess
 
 
-    useEffect(() => {
+    // useEffect(() => {
 
-        let SearchRoleData_initial = []
+    //     let SearchRoleData_initial = []
 
-        RoleAccessData.map((i) => {
-            i.ModuleData.map((index) => {
-                SearchRoleData_initial.push(index)
-            })
-        })
-        setListData(SearchRoleData_initial)
-    }, [RoleAccessData])
+    //     RoleAccessData.map((i) => {
+    //         i.ModuleData.map((index) => {
+    //             SearchRoleData_initial.push(index)
+    //         })
+    //     })
+    //     setListData(SearchRoleData_initial)
+    // }, [RoleAccessData])
 
-    useEffect(() => {
-        let SearchRoleData_initial = searchRoleData
+    // useEffect(() => {
+    //     let SearchRoleData_initial = searchRoleData
 
-        PageAccess.map((i) => {
-            SearchRoleData_initial.push({
-                text: "name",
-                dataField: "name",
-                sort: true,
-                hidden: true,
-                formatter: (cellContent, TableListData) => <>{"name"}</>,
-            })
-        })
-        setSearchRoleData(SearchRoleData_initial)
-        console.log("SearchRoleData_initial", SearchRoleData_initial)
-    }, [PageAccess])
+    //     PageAccess.map((i) => {
+    //         SearchRoleData_initial.push({
+    //             text: "name",
+    //             dataField: "name",
+    //             sort: true,
+    //             hidden: true,
+    //             formatter: (cellContent, TableListData) => <>{"name"}</>,
+    //         })
+    //     })
+    //     setSearchRoleData(SearchRoleData_initial)
+    //     console.log("SearchRoleData_initial", SearchRoleData_initial)
+    // }, [PageAccess]) 
 
-    console.log("searchRoleData", searchRoleData)
+
+
 
 
     return (
@@ -323,6 +329,7 @@ const RoleAccessList = (props) => {
                 <Container fluid>
 
                     <Card className="text-black" >
+
                         <CardHeader className="card-header   text-black" style={{ backgroundColor: "#dddddd" }} >
                             <Row style={{ backgroundColor: "#dddddd" }} >
 
@@ -387,8 +394,8 @@ const RoleAccessList = (props) => {
                                                 onChange={(e) => { Module_DropdownSelectHandller(e) }}
                                                 classNamePrefix="select2-selection"
                                             />
-
                                         </Col>
+
                                     </FormGroup>
                                 </Col>
 
@@ -410,7 +417,32 @@ const RoleAccessList = (props) => {
 
                                 <Col md="1"></Col>
                                 <Col md="2" className="mt-2 ">
-                                    <Button>Add Role</Button>
+                                    <Button onClick={() => {
+                                        var a = {
+                                            ModuleID: 1,
+                                            ModuleName: "test1",
+                                            Page_id: 2,
+                                            PageName: "User List",
+                                            DisplayIndex: 1,
+                                            Icon: "fa-fa-paw",
+                                            ActualPagePath: "UserList",
+                                            isShowOnMenu: true,
+                                            IsEdit_id: 2,
+                                            IsEdit: "IsEdit",
+                                            IsDelete_id: 3,
+                                            IsDelete: "IsDelete",
+                                            IsEditSelf_id: 4,
+                                            IsEditSelf: "IsEditSelf",
+                                            IsDeleteSelf_id: 5,
+                                            IsDeleteSelf: "IsDeleteSelf",
+                                            IsShow_id: 6,
+                                            IsShow: "IsShow"
+                                        }
+
+                                        setSearchRoleData([...searchRoleData, a])
+
+
+                                    }}>Add Role</Button>
                                 </Col>
 
                             </Row>
@@ -424,12 +456,9 @@ const RoleAccessList = (props) => {
                                         <Table striped bordered hover>
                                             <thead>
                                                 <tr>
-                                                    <th>
-                                                        Name
-                                                    </th>
-                                                    <th>
-                                                        Module Name
-                                                    </th>
+                                                    <th>Page ID</th>
+                                                    <th>Module Name</th>
+                                                    <th>Page Name</th>
                                                     {
                                                         PageAccess.map((indexPage) => {
                                                             return <th>
@@ -440,15 +469,60 @@ const RoleAccessList = (props) => {
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <tr>
-                                                    {
-                                                        listData.map((indexdata) => {
-                                                            return <td>
-                                                                {indexdata.Name}
-                                                            </td>
-                                                        })
-                                                    }
-                                                </tr>
+
+                                                {
+                                                    RoleAccessData.map((indexdata) => {
+
+                                                        return (
+
+                                                            <>
+
+                                                                {(indexdata.ModuleData).map((indexmodul) => {
+                                                                    return (
+                                                                        <tr>
+                                                                            <td>
+                                                                                {indexdata.ModuleID}
+                                                                            </td>
+
+                                                                            <td>
+                                                                                {indexdata.ModuleName}
+                                                                            </td>
+                                                                            <td>
+                                                                                {indexmodul.ActualPagePath}
+                                                                            </td>
+                                                                            {(indexmodul.RolePageAccess).map((indexRolePageAccess) => {
+                                                                                return (
+                                                                                    <>
+                                                                                        {PageAccess.map((indexPageAccess) => {
+                                                                                            return (
+                                                                                                <>
+                                                                                                    {((indexPageAccess.id) === (indexRolePageAccess.id))
+                                                                                                        ?
+                                                                                                        <td>
+                                                                                                            {indexPageAccess.Name}
+                                                                                                        </td>
+                                                                                                        : <>
+                                                                                                        {'null'}</>
+                                                                                                    }
+                                                                                                </>
+                                                                                            )
+                                                                                        }
+                                                                                        )}
+                                                                                    </>
+                                                                                )
+                                                                            })
+                                                                            }
+                                                                        </tr>
+
+                                                                    )
+                                                                })}
+
+
+                                                            </>
+                                                        )
+                                                    })
+                                                }
+
                                             </tbody>
 
                                         </Table>
