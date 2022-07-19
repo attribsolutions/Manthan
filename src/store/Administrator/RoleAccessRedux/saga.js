@@ -17,7 +17,6 @@ import { PageMasterForRoleAccessLit_Success } from "./actions";
 
 
 function* PageMasterForRoleAccessLit_GenratorFunction({ id }) {
-  debugger
   yield put(SpinnerState(true))
   try {
     const response = yield call(PageMasterForRoleAccessLit_Api, id);

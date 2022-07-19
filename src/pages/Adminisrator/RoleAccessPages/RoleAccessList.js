@@ -210,114 +210,72 @@ const RoleAccessList = (props) => {
 
 
 
-    console.log("PageMasterListForRoleAccess", PageMasterListForRoleAccess)
-    console.log("RoleAccessData", RoleAccessData)
-    console.log("pageAccess", PageAccess)
+    // console.log("PageMasterListForRoleAccess", PageMasterListForRoleAccess)
+    // console.log("RoleAccessData", RoleAccessData)
+    // console.log("pageAccess", PageAccess)
 
 
-    var pageOptions = [
-        {
-            ModuleID: 1,
-            ModuleName: "Administraction",
-            Page_id: 2,
-            PageName: "User List",
-            DisplayIndex: 1,
-            Icon: "fa-fa-paw",
-            ActualPagePath: "UserList",
-            isShowOnMenu: true,
-            IsEdit_id: 2,
-            IsEdit: "IsEdit",
-            IsDelete_id: 3,
-            IsDelete: "IsDelete",
-            IsEditSelf_id: 4,
-            IsEditSelf: "IsEditSelf",
-            IsDeleteSelf_id: 5,
-            IsDeleteSelf: "IsDeleteSelf",
-            IsShow_id: 6,
-            IsShow: "IsShow"
-        },
-        {
-            ModuleID: 1,
-            ModuleName: "purchase",
-            Page_id: 2,
-            PageName: "User List",
-            DisplayIndex: 1,
-            Icon: "fa-fa-paw",
-            ActualPagePath: "UserList",
-            isShowOnMenu: true,
-            IsEdit_id: 2,
-            IsEdit: "IsEdit",
-            IsDelete_id: 3,
-            IsDelete: "IsDelete",
-            IsEditSelf_id: 4,
-            IsEditSelf: "IsEditSelf",
-            IsDeleteSelf_id: 5,
-            IsDeleteSelf: "IsDeleteSelf",
-            IsShow_id: 6,
-            IsShow: "IsShow"
-        },
-        {
-            ModuleID: 1,
-            ModuleName: "sale",
-            Page_id: 2,
-            PageName: "User List",
-            DisplayIndex: 1,
-            Icon: "fa-fa-paw",
-            ActualPagePath: "UserList",
-            isShowOnMenu: true,
-            IsEdit_id: 2,
-            IsEdit: "IsEdit",
-            IsDelete_id: 3,
-            IsDelete: "IsDelete",
-            IsEditSelf_id: 4,
-            IsEditSelf: "IsEditSelf",
-            IsDeleteSelf_id: 5,
-            IsDeleteSelf: "IsDeleteSelf",
-            IsShow_id: 6,
-            IsShow: "IsShow"
-        },
-
-    ]
-
-
-
-    const [searchRoleData, setSearchRoleData] = useState(pageOptions)
 
     const [listData, setListData] = useState([])
-    // const  RoleAccessData=demoRolleAcess
 
 
-    // useEffect(() => {
+    var AccessListArray = ["PageID", "Module", "PageName", "IsSave", "IsEdit",
+        "IsDelete", "IsEditSelf", "IsDeleteSelf", "IsShow",
+        "IsView", "IsTopOfTheDivision"]
 
-    //     let SearchRoleData_initial = []
+    useEffect(() => {
 
-    //     RoleAccessData.map((i) => {
-    //         i.ModuleData.map((index) => {
-    //             SearchRoleData_initial.push(index)
-    //         })
-    //     })
-    //     setListData(SearchRoleData_initial)
-    // }, [RoleAccessData])
+        var Array = []
+        var Array2 = []
+        var eleList = {}
+        var eleList2 = {}
 
-    // useEffect(() => {
-    //     let SearchRoleData_initial = searchRoleData
+        RoleAccessData.map((indexdata) => {
 
-    //     PageAccess.map((i) => {
-    //         SearchRoleData_initial.push({
-    //             text: "name",
-    //             dataField: "name",
-    //             sort: true,
-    //             hidden: true,
-    //             formatter: (cellContent, TableListData) => <>{"name"}</>,
-    //         })
-    //     })
-    //     setSearchRoleData(SearchRoleData_initial)
-    //     console.log("SearchRoleData_initial", SearchRoleData_initial)
-    // }, [PageAccess]) 
+            indexdata.ModuleData.map((indexmodul) => {
+                eleList["ModuleID"] = indexdata.ModuleID;
+                eleList["ModuleName"] = indexdata.ModuleName;
+                eleList["ActualPagePath"] = indexmodul.ActualPagePath;
+              
+                PageAccess.map((indexPage) => {
+                    eleList2[`${indexPage.Name}`] = false
+                })
 
+                Array2.push(eleList2)
+                eleList2 = {}
+                eleList["PageRoleAccess"] = Array2
+                Array2 = []
+
+                indexmodul.RolePageAccess.map((indexRolePageAccess) => {
 
 
+                    // eleList.PageRoleAccess.map((i)=>{
+                    //     if ((i.hasOwnProperty(indexRolePageAccess.Name))) {
+                    //         i[`${indexRolePageAccess.Name}`] = true
+                    //     }
 
+                    // }) 
+
+                    // debugger
+                    // if ((eleList.hasOwnProperty(indexRolePageAccess.Name))) {
+                    //     eleList[`${indexRolePageAccess.Name}`] = true
+                    // }
+
+                })
+                Array.push(eleList)
+                eleList = {}
+            })
+
+        })
+
+
+
+        setListData(Array)
+
+
+    }, [RoleAccessData])
+
+    console.log('ListData', listData)
 
     return (
         <React.Fragment>
@@ -439,7 +397,7 @@ const RoleAccessList = (props) => {
                                             IsShow: "IsShow"
                                         }
 
-                                        setSearchRoleData([...searchRoleData, a])
+                                        // setSearchRoleData([...searchRoleData, a])
 
 
                                     }}>Add Role</Button>
@@ -471,54 +429,11 @@ const RoleAccessList = (props) => {
                                             <tbody>
 
                                                 {
-                                                    RoleAccessData.map((indexdata) => {
-
+                                                    listData.map((indexdata) => {
                                                         return (
+                                                            <tr>
 
-                                                            <>
-
-                                                                {(indexdata.ModuleData).map((indexmodul) => {
-                                                                    return (
-                                                                        <tr>
-                                                                            <td>
-                                                                                {indexdata.ModuleID}
-                                                                            </td>
-
-                                                                            <td>
-                                                                                {indexdata.ModuleName}
-                                                                            </td>
-                                                                            <td>
-                                                                                {indexmodul.ActualPagePath}
-                                                                            </td>
-                                                                            {(indexmodul.RolePageAccess).map((indexRolePageAccess) => {
-                                                                                return (
-                                                                                    <>
-                                                                                        {PageAccess.map((indexPageAccess) => {
-                                                                                            return (
-                                                                                                <>
-                                                                                                    {((indexPageAccess.id) === (indexRolePageAccess.id))
-                                                                                                        ?
-                                                                                                        <td>
-                                                                                                            {indexPageAccess.Name}
-                                                                                                        </td>
-                                                                                                        : <>
-                                                                                                        {'null'}</>
-                                                                                                    }
-                                                                                                </>
-                                                                                            )
-                                                                                        }
-                                                                                        )}
-                                                                                    </>
-                                                                                )
-                                                                            })
-                                                                            }
-                                                                        </tr>
-
-                                                                    )
-                                                                })}
-
-
-                                                            </>
+                                                            </tr>
                                                         )
                                                     })
                                                 }
