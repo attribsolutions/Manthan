@@ -71,8 +71,8 @@ const userRoutes = [
   { path: "/userMaster", component: AddUser },
   { path: "/userList", component: UserList },
 
-  { path: "/employeesMaster", component: AddEmployee },
-  { path: "/employeesList", component: Employee_List },
+  { path: "/employeeMaster", component: AddEmployee },
+  { path: "/employeeList", component: Employee_List },
 
   { path: "/roleMaster", component: RoleMaster },
   { path: "/roleList", component: RoleList },

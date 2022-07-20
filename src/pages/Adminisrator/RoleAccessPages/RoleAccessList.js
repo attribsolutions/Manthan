@@ -38,22 +38,18 @@ const RoleAccessList = (props) => {
 
     //*** "isEditdata get all data from ModuleID for Binding  Form controls
     let editDataGatingFromList = props.state;
-    const [state_DropDown_select, setState_DropDown_select] = useState("");
-    const [FSSAIExipry_Date_Select, setFSSAIExipry_Date_Select] = useState("");
-    const [district_dropdown_Select, setDistrict_dropdown_Select] = useState("");
+
     const [companyList_dropdown_Select, setCompanyList_dropdown_Select] = useState("");
     const [division_dropdown_Select, setDivision_dropdown_Select] = useState("");
     const [partyType_dropdown_Select, setPartyType_dropdown_Select] = useState("");
-    const [RoleDropDown, setRoleDropDown] = useState("");
+    const [role_dropdown_Select, setRoleDropDown] = useState("");
     const [module_DropdownSelect, setModule_DropdownSelect] = useState('');
-    const [Page_DropdownSelect, setPage_DropdownSelect] = useState('');
+    const [page_DropdownSelect, setPage_DropdownSelect] = useState('');
 
 
     //Access redux store Data /  'save_ModuleSuccess' action data
     const { PageMasterListForRoleAccess, PageAccess, ModuleData, HPagesListData, PartySaveSuccess, State, RoleAccessData, companyList, DivisionTypes, PartyTypes, Roles } = useSelector((state) => ({
         PartySaveSuccess: state.PartyMasterReducer.PartySaveSuccess,
-        State: state.M_EmployeesReducer.State,
-        DistrictOnState: state.PartyMasterReducer.DistrictOnState,
         companyList: state.Company.companyList,
         DivisionTypes: state.PartyMasterReducer.DivisionTypes,
         PartyTypes: state.PartyMasterReducer.PartyTypes,
@@ -65,6 +61,7 @@ const RoleAccessList = (props) => {
         PageMasterListForRoleAccess: state.RoleAccessReducer.PageMasterListForRoleAccess,
     }));
 
+
     useEffect(() => {
         dispatch(fetchCompanyList());
         dispatch(getDivisionTypesID());
@@ -72,63 +69,102 @@ const RoleAccessList = (props) => {
         dispatch(fetchModelsList())
         dispatch(GetHpageListData())
         dispatch(getPageAccess_DropDown_API());
-        dispatch(PageMasterForRoleAccessLit(1));
-        dispatch(roleAceessAction(1, 1, 1))
+        // dispatch(PageMasterForRoleAccessLit(1));
+        // dispatch(roleAceessAction(1, 1, 1))
 
     }, []);
 
+    useEffect(() => {
 
+        var Array = []
+        var eleList = {}
 
-    const companyListValues = companyList.map((Data) => ({
-        value: Data.id,
-        label: Data.Name
-    }));
+        let count1 = 0
+        RoleAccessData.map((indexdata) => {   //1st map function start
 
-    function handllercompanyList(e) {
-        setCompanyList_dropdown_Select(e)
+            indexdata.ModuleData.map((indexmodul) => {   //2nd mapfunction start
+                count1 = count1 + 1
+                eleList["ModuleName"] = indexdata.ModuleName;
+                eleList["ActualPagePath"] = indexmodul.ActualPagePath;
+                eleList["ID"] = count1;
 
-    }
+                // PageAccess.map((indexPage) => { eleList[`${indexPage.Name}`] = false})
 
-    /// Role dopdown
-    function RoleDropDown_select_handler(e) {
-        setRoleDropDown(e)
-    };
+                indexmodul.RolePageAccess.map((indexRolePageAccess) => {   //3 rd map function start
+                    eleList[`${indexRolePageAccess.Name}`] = true
 
-    const DivisionTypesValues = DivisionTypes.map((Data) => ({
-        value: Data.id,
-        label: Data.Name
-    }));
+                    // if ((eleList.hasOwnProperty(indexRolePageAccess.Name))) { }
+                })
+                Array.push(eleList)
+                eleList = {}
+            })
+        })
+        setListData(Array)
+    }, [RoleAccessData])
 
-    const RolesValues = Roles.map((Data) => ({
-        value: Data.id,
-        label: Data.Name
-    }));
+    useEffect(() => {
 
-    function handllerDivisionTypes(e) {
-        setDivision_dropdown_Select(e)
-        dispatch(GetPartyTypeByDivisionTypeID(e.value))
-    }
+        var Array = []
+        var eleList = {}
+        let NewID = listData.length + 1
+        let previousData = listData
 
-    const Module_DropdownOption = ModuleData.map((d) => ({
-        value: d.id,
-        label: d.Name,
-    }));
+        PageMasterListForRoleAccess.map((indexdata) => {   //1st mapfunction start
 
-    // for module dropdown
-    const Module_DropdownSelectHandller = (e) => {
-        setModule_DropdownSelect(e);
-    }
+            indexdata.ModuleData.map((indexmodul) => {//second map function start
+                eleList["ModuleName"] = indexdata.ModuleName;
+                eleList["ActualPagePath"] = indexmodul.ActualPagePath;
+                eleList["ID"] = NewID;
 
-    // for Page dropdown
-    const Page_DropdownOption = HPagesListData.map((d) => ({
-        value: d.id,
-        label: d.Name,
-    }));
+                indexmodul.RolePageAccess.map((indexRolePageAccess) => { //3 rd map function start
+                    eleList[`${indexRolePageAccess.Name}`] = true
+                    if ((eleList.hasOwnProperty(indexRolePageAccess.Name))) {
+                    }
+                })
+                Array.push(eleList)
+                eleList = {}
+            })
+        })
+        previousData = previousData.concat(Array)
+        setListData(previousData)
+        debugger
+    }, [PageMasterListForRoleAccess])
 
+    useEffect(() => {
 
-    const Page_DropdownSelectHandller = (e) => {
-        setPage_DropdownSelect(e);
-    }
+        var NewColoumList = PageAccess.map((i) => {
+            return ({
+                text: i.Name,
+                dataField: i.Name,
+                sort: true,
+                formatter: (cellContent, indx) => (
+                    <>
+                        {indx.hasOwnProperty(i.Name) === true ?
+                            <>
+                                <Input
+                                    type="checkbox"
+                                    name={i.Name}
+                                    // onClick={() => {
+                                    //   EditPageHandler(module.id);
+                                    // }}
+                                    defaultChecked={true}
+                                />
+                                <Label>{i.Name}</Label>
+                            </>
+                            :
+                            <Input
+                                type="checkbox"
+                                disabled={true}
+                            />
+                        }
+                    </>
+                ),
+            }
+            )
+        })
+        RoleAccessListColoums = RoleAccessListColoums.concat(NewColoumList)
+        setListData1(RoleAccessListColoums)
+    }, [PageAccess])
 
     useEffect(() => {
         if ((PartySaveSuccess.Status === true) && (PartySaveSuccess.StatusCode === 200)) {
@@ -163,30 +199,93 @@ const RoleAccessList = (props) => {
         }
     }, [PartySaveSuccess])
 
+    let RoleAccessListColoums = [
+        {
+            text: "Id",
+            dataField: "ID",
+            sort: true,
+            hidden: true
+        }
+        , {
+            text: "Module Name",
+            dataField: "ModuleName",
+            sort: true,
+        },
+        {
+            text: "PageName",
+            dataField: "ActualPagePath",
+            sort: true,
+        }
+    ]
+    const companyListValues = companyList.map((Data) => ({
+        value: Data.id,
+        label: Data.Name
+    }));
+
+    const DivisionTypesValues = DivisionTypes.map((Data) => ({
+        value: Data.id,
+        label: Data.Name
+    }));
+
+    const Role_DropdownOption = Roles.map((Data) => ({
+        value: Data.id,
+        label: Data.Name
+    }));
+
+
+    const Module_DropdownOption = ModuleData.map((d) => ({
+        value: d.id,
+        label: d.Name,
+    }));
+
+    // for Page dropdown
+    const Page_DropdownOption = HPagesListData.map((d) => ({
+        value: d.id,
+        label: d.Name,
+    }));
+
+
+    function handllercompanyList(e) {
+        setCompanyList_dropdown_Select(e)
+    }
+
+    /// Role dopdown
+    function RoleDropDown_select_handler(e) {
+        setRoleDropDown(e)
+    };
+
+
+    function handllerDivisionTypes(e) {
+        setDivision_dropdown_Select(e)
+        dispatch(GetPartyTypeByDivisionTypeID(e.value))
+    }
+
+    // for module dropdown
+    const Module_DropdownSelectHandller = (e) => {
+        setModule_DropdownSelect(e);
+    }
+
+    const Page_DropdownSelectHandller = (e) => {
+        setPage_DropdownSelect(e);
+    }
+
+    const GoButton_Handler = () => {
+        var division = division_dropdown_Select.value
+        var company = companyList_dropdown_Select.value
+        var role = role_dropdown_Select
+        dispatch(getRoles(division, company, role));
+    }
+
+    const AddPageButton_Handeler = () => {
+        dispatch(PageMasterForRoleAccessLit(page_DropdownSelect.value));
+    }
+
     //'Save' And 'Update' Button Handller
     const handleValidUpdate = (event, values) => {
         debugger
         const requestOptions = {
             body: JSON.stringify({
-                Name: values.Name,
-                PartyType: partyType_dropdown_Select.value,
-                DivisionType: division_dropdown_Select.value,
-                Company: companyList_dropdown_Select.value,
-                PAN: values.PAN,
-                CustomerDivision: values.CustomerDivision,
-                Email: values.Email,
-                Address: values.Address,
-                PIN: values.PIN,
-                MobileNo: values.MobileNo,
-                State: state_DropDown_select.value,
-                District: district_dropdown_Select.value,
-                Taluka: 0,
-                City: 0,
-                CustomerDivision: 1,
-                GSTIN: values.GSTIN,
-                FSSAINo: values.FSSAINo,
-                FSSAIExipry: FSSAIExipry_Date_Select,
-                isActive: values.isActive,
+
                 CreatedBy: 1,
                 CreatedOn: "2022-06-24T11:16:53.165483Z",
                 UpdatedBy: 1,
@@ -206,76 +305,33 @@ const RoleAccessList = (props) => {
     var IsEditMode_Css = ''
     if (IsEdit === true) { IsEditMode_Css = "-3.5%" };
 
-
-
-
-
-    // console.log("PageMasterListForRoleAccess", PageMasterListForRoleAccess)
-    // console.log("RoleAccessData", RoleAccessData)
-    // console.log("pageAccess", PageAccess)
-
-
-
     const [listData, setListData] = useState([])
-
-
-    var AccessListArray = ["PageID", "Module", "PageName", "IsSave", "IsEdit",
-        "IsDelete", "IsEditSelf", "IsDeleteSelf", "IsShow",
-        "IsView", "IsTopOfTheDivision"]
-
-    useEffect(() => {
-
-        var Array = []
-        var Array2 = []
-        var eleList = {}
-        var eleList2 = {}
-
-        RoleAccessData.map((indexdata) => {
-
-            indexdata.ModuleData.map((indexmodul) => {
-                eleList["ModuleID"] = indexdata.ModuleID;
-                eleList["ModuleName"] = indexdata.ModuleName;
-                eleList["ActualPagePath"] = indexmodul.ActualPagePath;
-              
-                PageAccess.map((indexPage) => {
-                    eleList2[`${indexPage.Name}`] = false
-                })
-
-                Array2.push(eleList2)
-                eleList2 = {}
-                eleList["PageRoleAccess"] = Array2
-                Array2 = []
-
-                indexmodul.RolePageAccess.map((indexRolePageAccess) => {
-
-
-                    // eleList.PageRoleAccess.map((i)=>{
-                    //     if ((i.hasOwnProperty(indexRolePageAccess.Name))) {
-                    //         i[`${indexRolePageAccess.Name}`] = true
-                    //     }
-
-                    // }) 
-
-                    // debugger
-                    // if ((eleList.hasOwnProperty(indexRolePageAccess.Name))) {
-                    //     eleList[`${indexRolePageAccess.Name}`] = true
-                    // }
-
-                })
-                Array.push(eleList)
-                eleList = {}
-            })
-
-        })
+    const [listData1, setListData1] = useState([])
 
 
 
-        setListData(Array)
 
 
-    }, [RoleAccessData])
+    const pageOptions = {
+        sizePerPage: 20,
+        totalSize: listData.length, // replace later with size(users),
+        custom: true,
+    };
 
-    console.log('ListData', listData)
+    const defaultSorted = [
+        {
+            dataField: "ID", // if dataField is not match to any column you defined, it will be ignored.
+            order: "desc", // desc or asc
+        },
+    ];
+
+    let myInlineStyle = {
+        marginTop: "-10px",
+    };
+
+
+
+
 
     return (
         <React.Fragment>
@@ -324,8 +380,8 @@ const RoleAccessList = (props) => {
                                         <Label className="col-sm-4 p-2 ml-n4 ">Role</Label>
                                         <Col md="8">
                                             <Select
-                                                value={RoleDropDown}
-                                                options={RolesValues}
+                                                value={role_dropdown_Select}
+                                                options={Role_DropdownOption}
                                                 onChange={(e) => { RoleDropDown_select_handler(e) }}
                                                 classNamePrefix="select2-selection"
                                             />
@@ -335,7 +391,8 @@ const RoleAccessList = (props) => {
 
 
                                 <Col md="2" className="mt- ">
-                                    <Button>Go</Button>
+                                    <Button
+                                        onClick={() => { GoButton_Handler() }}>Go</Button>
                                 </Col>
                             </Row>
 
@@ -363,7 +420,7 @@ const RoleAccessList = (props) => {
                                         <Col md="8">
 
                                             <Select
-                                                value={Page_DropdownSelect}
+                                                value={page_DropdownSelect}
                                                 options={Page_DropdownOption}
                                                 onChange={(e) => { Page_DropdownSelectHandller(e) }}
                                                 classNamePrefix="select2-selection"
@@ -375,75 +432,57 @@ const RoleAccessList = (props) => {
 
                                 <Col md="1"></Col>
                                 <Col md="2" className="mt-2 ">
-                                    <Button onClick={() => {
-                                        var a = {
-                                            ModuleID: 1,
-                                            ModuleName: "test1",
-                                            Page_id: 2,
-                                            PageName: "User List",
-                                            DisplayIndex: 1,
-                                            Icon: "fa-fa-paw",
-                                            ActualPagePath: "UserList",
-                                            isShowOnMenu: true,
-                                            IsEdit_id: 2,
-                                            IsEdit: "IsEdit",
-                                            IsDelete_id: 3,
-                                            IsDelete: "IsDelete",
-                                            IsEditSelf_id: 4,
-                                            IsEditSelf: "IsEditSelf",
-                                            IsDeleteSelf_id: 5,
-                                            IsDeleteSelf: "IsDeleteSelf",
-                                            IsShow_id: 6,
-                                            IsShow: "IsShow"
-                                        }
-
-                                        // setSearchRoleData([...searchRoleData, a])
-
-
-                                    }}>Add Role</Button>
+                                    <Button onClick={() => { AddPageButton_Handeler() }}>Add Page</Button>
                                 </Col>
 
                             </Row>
                         </CardHeader>
 
                         <CardBody>
-                            <Row>
-                                <Col xl="12">
-                                    <div className="table-responsive">
+                            {PageAccess.length > 0
+                                ?
+                                <PaginationProvider pagination={paginationFactory(pageOptions)}>
+                                    {({ paginationProps, paginationTableProps }) => (
+                                        <ToolkitProvider
+                                            keyField="id"
+                                            data={listData}
+                                            columns={listData1}
+                                            search
+                                        >
+                                            {(toolkitProps) => (
+                                                <React.Fragment>
 
-                                        <Table striped bordered hover>
-                                            <thead>
-                                                <tr>
-                                                    <th>Page ID</th>
-                                                    <th>Module Name</th>
-                                                    <th>Page Name</th>
-                                                    {
-                                                        PageAccess.map((indexPage) => {
-                                                            return <th>
-                                                                {indexPage.Name}
-                                                            </th>
-                                                        })
-                                                    }
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-
-                                                {
-                                                    listData.map((indexdata) => {
-                                                        return (
-                                                            <tr>
-
-                                                            </tr>
-                                                        )
-                                                    })
-                                                }
-
-                                            </tbody>
-
-                                        </Table>
-                                    </div>
-                                </Col>
-                            </Row>
+                                                    <Row>
+                                                        <Col xl="12">
+                                                            <div className="table-responsive">
+                                                                <BootstrapTable
+                                                                    keyField={"id"}
+                                                                    responsive
+                                                                    bordered={false}
+                                                                    striped={false}
+                                                                    hover={true}
+                                                                    defaultSorted={defaultSorted}
+                                                                    // selectRow={selectRow}
+                                                                    classes={"table  table-bordered"}
+                                                                    {...toolkitProps.baseProps}
+                                                                    {...paginationTableProps}
+                                                                />
+                                                            </div>
+                                                        </Col>
+                                                    </Row>
+                                                    <Row className="align-items-md-center mt-30">
+                                                        <Col className="pagination pagination-rounded justify-content-end mb-2">
+                                                            <PaginationListStandalone {...paginationProps} />
+                                                        </Col>
+                                                    </Row>
+                                                </React.Fragment>
+                                            )}
+                                        </ToolkitProvider>
+                                    )}
+                                </PaginationProvider>
+                                :
+                                <></>
+                            }
 
                         </CardBody>
                     </Card>

@@ -49,10 +49,12 @@ const Breadcrumb = props => {
 
 
   useEffect(() => {
-    if ((props.ExcelData.length > 0)) {
-      // object to array conversion
-      const propertyNames = Object.keys(props.ExcelData[0]);
-      setListData(propertyNames)
+    if (!(props.ExcelData===undefined)) {
+      if ((props.ExcelData.length >0)) {
+        // object to array conversion
+        const propertyNames = Object.keys(props.ExcelData[0]);
+        setListData(propertyNames)
+      }
     }
   }, [props.ExcelData])
 
