@@ -23,7 +23,6 @@ import paginationFactory, {
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 
-import Table from 'react-bootstrap/Table'
 const RoleAccessList = (props) => {
 
     const formRef = useRef(null);
