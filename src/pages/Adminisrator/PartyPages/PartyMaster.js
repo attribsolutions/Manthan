@@ -287,10 +287,10 @@ const PartyMaster = (props) => {
                                                     <Col md="3">
                                                         <FormGroup className="mb-3">
                                                             <Label htmlFor="validationCustom01">Alternate Contact Number(s)</Label>
-                                                            <AvField name="alternateContact" type="tel"
-                                                                value={EditData.MobileNo}
+                                                            <AvField name="AlternateContactNo" type="tel"
+                                                                value={EditData.AlternateContactNo}
                                                                 id="mobileNo"
-                                                                defaultValue={''}
+                                                                // defaultValue={''}
                                                                 placeholder="Alternate Contact Number(s)"
                                                             />
                                                         </FormGroup>

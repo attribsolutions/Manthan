@@ -230,6 +230,8 @@ const Employee_List = () => {
                 }
             })
             li.push(obj)
+            obj={}
+           
         })
         
         const worksheet = XLSX.utils.json_to_sheet(li);
@@ -292,9 +294,9 @@ const Employee_List = () => {
                                     {/* </Button> */}
                                     {/* </Col> */}
                                     {/* </Row> */}
-                                    <button onClick={() => downloadExcel(TableListData)}>
+                                    {/* <button onClick={() => downloadExcel(TableListData)}>
                                         Download As Excel
-                                    </button>
+                                    </button> */}
                                     <Row>
                                         <Col xl="12">
                                             <div className="table-responsive">

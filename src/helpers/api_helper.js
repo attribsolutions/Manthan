@@ -1,6 +1,6 @@
 import axios from "axios"
 
-const API_URL = "http://192.168.1.114:8002"
+const API_URL = "http://192.168.1.114:8009"
 
 const axiosApi = axios.create({
   baseURL: API_URL,
@@ -20,7 +20,6 @@ axiosApi.interceptors.response.use(
   error => Promise.reject(error)
 )
 export async function get(url, config = {}) {
-  debugger
   AuthonticationFunction();
   return await axiosApi.get(url, { ...config }).then(response => response.data)
 }

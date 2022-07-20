@@ -200,8 +200,6 @@ const AddEmployee = (props) => {
   }
 
 
-
-
   //'Save' And 'Update' Button Handller
   const handleValidSubmit = (event, values) => {
 
