@@ -99,6 +99,7 @@ const Modules = (props) => {
 
     //'Save' And 'Update' Button Handller
     const handleValidSubmit = (event, values) => {
+        
         const requestOptions = {
             body: JSON.stringify({
                 Name: values.Name,
@@ -202,9 +203,9 @@ const Modules = (props) => {
                                                         <Col md={2} style={{ marginTop: '9px' }} >
                                                             <div className="form-check form-switch form-switch-md mb-3" dir="ltr">
                                                                 <AvInput type="checkbox" className="form-check-input" id="customSwitchsizemd"
-                                                                    checked={EditData.isActive}
+                                                                    // checked={EditData.isActive}
                                                                     name="IsActive"
-                                                                    defaultChecked
+                                                                    // defaultChecked
                                                                 />
                                                                 <label className="form-check-label" htmlFor="customSwitchsizemd"></label>
                                                             </div>
