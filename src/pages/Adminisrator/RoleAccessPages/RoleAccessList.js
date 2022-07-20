@@ -344,7 +344,7 @@ const RoleAccessList = (props) => {
 
                     <Card className="text-black" >
 
-                        <CardHeader className="card-header   text-black" style={{ backgroundColor: "#dddddd" }} >
+                        {/* <CardHeader className="card-header   text-black" style={{ backgroundColor: "#dddddd" }} >
                             <Row style={{ backgroundColor: "#dddddd" }} >
 
                                 <Col md="3" className="">
@@ -436,12 +436,12 @@ const RoleAccessList = (props) => {
                                 </Col>
 
                             </Row>
-                        </CardHeader>
+                        </CardHeader> */}
 
                         <CardBody>
                             {PageAccess.length > 0
                                 ?
-                                <PaginationProvider pagination={paginationFactory(pageOptions)}>
+                                <PaginationProvider pagination={paginationFactory(listData)}>
                                     {({ paginationProps, paginationTableProps }) => (
                                         <ToolkitProvider
                                             keyField="id"

@@ -44,9 +44,24 @@ const Modules = (props) => {
     let CheckPageMode = props.IsComponentMode;
 
     //Access redux store Data /  'save_ModuleSuccess' action data
-    const { APIResponse, } = useSelector((state) => ({
+    const { APIResponse,ComponentDetais } = useSelector((state) => ({
+        ComponentDetais: state.Login.RoleData,
         APIResponse: state.Modules.modulesSubmitSuccesss,
     }));
+
+//     //Access redux store Data /  'save_ModuleSuccess' action data
+//     const { PageMasterListForRoleAccess, PageAccess, ModuleData, HPagesListData, PartySaveSuccess, State, RoleAccessData, companyList, DivisionTypes, PartyTypes, Roles } = useSelector((state) => ({
+//         PartySaveSuccess: state.PartyMasterReducer.PartySaveSuccess,
+//         companyList: state.Company.companyList,
+//         DivisionTypes: state.PartyMasterReducer.DivisionTypes,
+//         PartyTypes: state.PartyMasterReducer.PartyTypes,
+//         Roles: state.User_Registration_Reducer.Roles,
+//         ModuleData: state.Modules.modulesList,
+//         HPagesListData: state.H_Pages.HPagesListData,
+//         PageAccess: state.H_Pages.PageAccess,
+//         RoleAccessData: state.Login.RoleData,
+//         PageMasterListForRoleAccess: state.RoleAccessReducer.PageMasterListForRoleAccess,
+//     }));
 
     // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
     useEffect(() => {
@@ -97,6 +112,12 @@ const Modules = (props) => {
         }
     }, [APIResponse.Status])
 
+    useEffect(() => {
+      
+    
+
+    }, [])
+    
     //'Save' And 'Update' Button Handller
     const handleValidSubmit = (event, values) => {
         
@@ -129,7 +150,7 @@ const Modules = (props) => {
                 <MetaTags>
                     <title>Module| FoodERP-React FrontEnd</title>
                 </MetaTags>
-                <Breadcrumbs breadcrumbItem={"Module Master "} />
+                <Breadcrumbs breadcrumbItem={""} />
                 <Container fluid  >
 
                     <Card className="text-black" >
