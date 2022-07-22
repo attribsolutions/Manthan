@@ -27,7 +27,7 @@ const SidebarContent = (props) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(roleAceessAction(1,1,1))
+    dispatch(roleAceessAction(1, 1, 1))
     // console.log("test side bar use effect")
   }, [])
 
@@ -108,37 +108,48 @@ const SidebarContent = (props) => {
     RoleAccessData: state.Login.RoleData,
   }));
 
-const [isActive, setisActive] = useState('')
+  const [isActive, setisActive] = useState('')
 
-    // Use ComponentDidMount and ComponentDidUpdate method symultaniously
-    useEffect(() => {
-      setisActive("active")
-    }, [pathName])
-    
+  // Use ComponentDidMount and ComponentDidUpdate method symultaniously
+  useEffect(() => {
+    setisActive("active")
+  }, [pathName])
+
   return (
     <React.Fragment>
       <SimpleBar style={{ maxHeight: "100%" }} ref={ref}>
         <div id="sidebar-menu">
           <ul className="metismenu list-unstyled" id="side-menu">
-            
+
             <li>
               <Link to="/dashboard" className="">
                 <FeatherIcon icon="home" />
                 <span>{props.t("Dashboard")}</span>
               </Link>
             </li>
+            <li>
+              {/* <Link to={"roleAccess"} state={{ from: "occupation" }} >{props.t("roleAccess")}</Link> */}
+              <Link to= {`/${btoa("RoleAccess")}`} State={ "occupation" }>
+                Next Step
+              </Link>
+              <Link to={{pathname:`/${btoa("RoleAccess")}`, state: {fromDashboardAccess: true }}}>
+              Next Step2222
+              </Link>
+            </li>
+
             {RoleAccessData.map((item) => {
               return (
                 <li >
                   <Link to="/#" className="has-arrow">
                     <FeatherIcon icon="grid" />
                     <span>{props.t(item.ModuleName)}</span>    {/* change Module Name */}
+
                   </Link>
                   <ul className="sub-menu">
                     {item.ModuleData.map((i, j) => {
                       return (
                         <li>
-                          <Link to={i.ActualPagePath} class={pathName===i.SelectIcon? "active":""}>{props.t(i.Name)}</Link>
+                          <Link   to={{pathname:`/${btoa(i.ActualPagePath)}`, state: {fromDashboardAccess: true,}}} class={pathName === i.SelectIcon ? "active" : ""}>{props.t(i.Name)}</Link>
                         </li>
                       )
                     })}

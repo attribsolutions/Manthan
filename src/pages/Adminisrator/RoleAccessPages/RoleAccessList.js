@@ -22,8 +22,29 @@ import paginationFactory, {
 } from "react-bootstrap-table2-paginator";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
+import { useHistory, useLocation, useParams } from "react-router-dom";
 
 const RoleAccessList = (props) => {
+    const history = useHistory()
+
+    useEffect(() => {
+        console.log("testvalue,testvalue,testvalue,", props)
+        
+        const userPageAccess = history.location.state
+
+        console.log("acc", userPageAccess)
+
+        if ((userPageAccess === undefined)) {
+            
+            history.push("/Dashboard")
+        }
+        else{
+            if (!(userPageAccess.fromDashboardAccess)) {
+                history.push("/Dashboard")
+            }
+        };
+    }, [props])
+
 
     const formRef = useRef(null);
     const dispatch = useDispatch();
@@ -68,6 +89,7 @@ const RoleAccessList = (props) => {
         dispatch(fetchModelsList())
         dispatch(GetHpageListData())
         dispatch(getPageAccess_DropDown_API());
+
         // dispatch(PageMasterForRoleAccessLit(1));
         // dispatch(roleAceessAction(1, 1, 1))
 
@@ -126,7 +148,7 @@ const RoleAccessList = (props) => {
         })
         previousData = previousData.concat(Array)
         setListData(previousData)
-        debugger
+        // debugger
     }, [PageMasterListForRoleAccess])
 
     useEffect(() => {
@@ -281,7 +303,7 @@ const RoleAccessList = (props) => {
 
     //'Save' And 'Update' Button Handller
     const handleValidUpdate = (event, values) => {
-        debugger
+        // debugger
         const requestOptions = {
             body: JSON.stringify({
 
@@ -329,12 +351,12 @@ const RoleAccessList = (props) => {
     };
 
 
-
-
+    //   const { from } = location.state
+    // debugger
 
     return (
         <React.Fragment>
-            <div className="page-content text-black" style={{ marginTop: IsEditMode_Css }}>
+            <div className="page-content text-black" >
                 <Breadcrumbs breadcrumbItem={"Role Access List"} />
                 <MetaTags>
                     <title>Role Access| FoodERP-React FrontEnd</title>
@@ -343,7 +365,7 @@ const RoleAccessList = (props) => {
 
                     <Card className="text-black" >
 
-                        {/* <CardHeader className="card-header   text-black" style={{ backgroundColor: "#dddddd" }} >
+                         <CardHeader className="card-header   text-black" style={{ backgroundColor: "#dddddd" }} >
                             <Row style={{ backgroundColor: "#dddddd" }} >
 
                                 <Col md="3" className="">
@@ -435,7 +457,7 @@ const RoleAccessList = (props) => {
                                 </Col>
 
                             </Row>
-                        </CardHeader> */}
+                        </CardHeader> 
 
                         <CardBody>
                             {PageAccess.length > 0

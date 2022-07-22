@@ -61,6 +61,7 @@ const userRoutes = [
   // Administrator : Company Path and List
   { path: "/companyMaster", component: CompanyModule },
   { path: "/companyList", component: CompanyList },
+  { path: "/companyList2", component: CompanyList },
 
   { path: "/pageList", component: HPageList },
   { path: "/pageMaster", component: HPageMaster },
@@ -72,18 +73,19 @@ const userRoutes = [
   { path: "/userList", component: UserList },
 
   { path: "/employeeMaster", component: AddEmployee },
-  { path: "/employeeList", component: Employee_List },
+  { path: "/employeesList", component: Employee_List },
 
-  { path: "/roleMaster", component: RoleMaster },
-  { path: "/roleList", component: RoleList },
+  { path: `/${btoa("RoleMaster")}`, component: RoleMaster },
+  { path: `/${btoa("RoleList")}`, component: RoleList },
 
-  { path: "/itemMaster", component: ItemsMaster },
-  { path: "/itemList", component: ItemsList },
+  { path: `/${btoa("ItemMaster")}`, component: ItemsMaster },
+  { path: `/${btoa("ItemList")}`, component: ItemsList },
 
-  { path: "/partyList", component: PartyList },
-  { path: "/partyMaster", component: PartyMaster },
+  { path: `/${btoa("PartyList")}`, component: PartyList },
+  { path: `/${btoa("PartyMaster")}`, component: PartyMaster },
 
-  { path: "/roleAccess", component: RoleAccessList },
+  { path: `/${btoa("RoleAccess")}`, component: RoleAccessList },
+  // { path: "/RoleAccess", component: RoleAccessList },
 
 
   { path:"/partyUIDemo",component:PartyUIDemo},
