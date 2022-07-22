@@ -36,6 +36,7 @@ function* loginUser({ payload: { user, history } }) {
     if (RoleResponse.Data.length > 0) yield put(roleAceessActionSuccess(RoleResponse.Data))
     // console.log('login response',RoleResponse.Data)
     history.push("/dashboard")
+    
   } catch (error) {
     localStorage.setItem("token", ("response.token"))
     history.push("/dashboard")

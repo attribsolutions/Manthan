@@ -52,28 +52,27 @@ const userRoutes = [
   { path: "/dashboard", component: Dashboard },
 
   // Administrator : Modules Path and List
-  { path: "/moduleMaster", component: Modules },
-  { path: "/moduleList", component: ModulesList },
+  { path: `/${btoa("ModuleMaster")}`, component: Modules },
+  { path: `/${btoa("ModuleList")}`, component: ModulesList },
 
   { path: "/subModuleMaster", component: SubModules },
   { path: "/subModuleList", component: SubModulesList },
 
   // Administrator : Company Path and List
-  { path: "/companyMaster", component: CompanyModule },
-  { path: "/companyList", component: CompanyList },
-  { path: "/companyList2", component: CompanyList },
+  { path: `/${btoa("CompanyMaster")}`, component: CompanyModule },
+  { path: `/${btoa("CompanyList")}`, component: CompanyList },
 
-  { path: "/pageList", component: HPageList },
-  { path: "/pageMaster", component: HPageMaster },
+  { path: `/${btoa("PageList")}`, component: HPageList },
+  { path: `/${btoa("PageMatser")}`, component: HPageMaster },
 
-  { path: "/order", component: OrderPage },
-  { path: "/orders", component: OrderList },
+  { path: `/${btoa("Order")}`, component: OrderPage },
+  { path:`/${btoa("Orders")}`, component: OrderList },
 
-  { path: "/userMaster", component: AddUser },
-  { path: "/userList", component: UserList },
+  { path: `/${btoa("RoleMaster")}`, component: AddUser },
+  { path: `/${btoa("UserList")}`, component: UserList },
 
-  { path: "/employeeMaster", component: AddEmployee },
-  { path: "/employeesList", component: Employee_List },
+  { path: `/${btoa("EmployeeMaster")}`, component: AddEmployee },
+  { path: `/${btoa("EmployeeList")}`, component: Employee_List },
 
   { path: `/${btoa("RoleMaster")}`, component: RoleMaster },
   { path: `/${btoa("RoleList")}`, component: RoleList },

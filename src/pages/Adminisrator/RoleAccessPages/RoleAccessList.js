@@ -25,6 +25,7 @@ import BootstrapTable from "react-bootstrap-table-next";
 import { useHistory, useLocation, useParams } from "react-router-dom";
 
 const RoleAccessList = (props) => {
+    // const [EditData, setEditData] = useState([]);
     const history = useHistory()
 
     useEffect(() => {
@@ -32,7 +33,7 @@ const RoleAccessList = (props) => {
         
         const userPageAccess = history.location.state
 
-        console.log("acc", userPageAccess)
+        // console.log("acc", userPageAccess)
 
         if ((userPageAccess === undefined)) {
             
