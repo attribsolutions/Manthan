@@ -166,16 +166,16 @@ const Employee_List = () => {
             formatter: (cellContent, TableListData) => (
                 <>
                     <div className="d-flex gap-3" style={{ display: 'flex', justifyContent: 'center' }} >
-                        <buton
+                        <button
                             type="button"
                             data-mdb-toggle="tooltip" data-mdb-placement="top" title="Edit Employee"
                             onClick={() => {
                                 EditPageHandler(TableListData.id);
                             }}
-                            className="badge badge-soft-primary font-size-12"
+                            className="badge badge-soft-primary font-size-12 border border-light btn btn-outline-primary"
                         >
                             <i className="mdi mdi-pencil font-size-18" id="edittooltip"></i>
-                        </buton>
+                        </button>
                         <buton
                             className="badge badge-soft-danger font-size-12"
                             data-mdb-toggle="tooltip" data-mdb-placement="top" title="Delete Employee"
