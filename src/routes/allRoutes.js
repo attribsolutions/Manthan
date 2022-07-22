@@ -63,7 +63,7 @@ const userRoutes = [
   { path: `/${btoa("CompanyList")}`, component: CompanyList },
 
   { path: `/${btoa("PageList")}`, component: HPageList },
-  { path: `/${btoa("PageMatser")}`, component: HPageMaster },
+  { path: `/${btoa("PageMaster")}`, component: HPageMaster },
 
   { path: `/${btoa("Order")}`, component: OrderPage },
   { path:`/${btoa("Orders")}`, component: OrderList },
