@@ -37,8 +37,8 @@ function* loginUser({ payload: { user, history } }) {
     // console.log('login response',RoleResponse.Data)
     history.push("/dashboard")
   } catch (error) {
-    // localStorage.setItem("token", ("response.token"))
-    // history.push("/dashboard")
+    localStorage.setItem("token", ("response.token"))
+    history.push("/dashboard")
 
     console.log("login error", error);
 
