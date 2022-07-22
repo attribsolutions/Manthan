@@ -49,8 +49,8 @@ const Breadcrumb = props => {
 
 
   useEffect(() => {
-    if (!(props.ExcelData===undefined)) {
-      if ((props.ExcelData.length >0)) {
+    if (!(props.ExcelData === undefined)) {
+      if ((props.ExcelData.length > 0)) {
         // object to array conversion
         const propertyNames = Object.keys(props.ExcelData[0]);
         setListData(propertyNames)
@@ -111,10 +111,14 @@ const Breadcrumb = props => {
                 <div className="row">
                   <div className="col col-12">
                     <Row>
-                      <div className="col col-6 " >
-                        <AvInput className=" text-black checkbox-border-red" type="checkbox" name={index} />&nbsp;&nbsp;&nbsp;
+                      <div className="col col-6 col col-6" >
+                        <AvInput className=" text-black checkbox-border-red " type="checkbox" name={index} />&nbsp;&nbsp;&nbsp;
                         <label className="form-label text-black"> {index} </label>
                       </div>
+                      {/* <div className="col col-6 bg-info" >
+                        <AvInput className=" text-black checkbox-border-red" type="checkbox" name={index} />&nbsp;&nbsp;&nbsp;
+                        <label className="form-label text-black"> {index} </label>
+                      </div> */}
                     </Row>
                   </div>
                 </div>
@@ -138,7 +142,7 @@ const Breadcrumb = props => {
           </AvForm>
         </div>
       </Modal>
-      
+
       <Row style={{ Color: "F7F8F4", marginTop: "-5px", marginBottom: "7px" }}>
         <Col md={6}>
           <div className="mb-1 text-left">
@@ -180,13 +184,13 @@ const Breadcrumb = props => {
               <div>
                 <button
                   type="button"
-                  className="btn btn-primary"
+                  className="btn btn-outline-warning btn-sm mt-1 font-size-16  "
                   onClick={() => {
                     tog_scroll();
                   }}
                   data-toggle="modal"
                 >
-                  <i className="bx bx-download text-warning" ></i>
+                  Download   {/* <i className="bx bx-download text-danger font-size-14" ></i> */}
                 </button>
               </div>
             </> : <></>}
