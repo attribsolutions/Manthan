@@ -21,22 +21,22 @@ const RoleAccessList = (props) => {
     // const [EditData, setEditData] = useState([]);
     const history = useHistory()
 
-    useEffect(() => {
-        console.log("testvalue,testvalue,testvalue,", props)
+    // useEffect(() => {
+    //     console.log("testvalue,testvalue,testvalue,", props)
 
-        const userPageAccess = history.location.state
+    //     const userPageAccess = history.location.state
 
 
-        if ((userPageAccess === undefined)) {
+    //     if ((userPageAccess === undefined)) {
 
-            history.push("/Dashboard")
-        }
-        else {
-            if (!(userPageAccess.fromDashboardAccess)) {
-                history.push("/Dashboard")
-            }
-        };
-    }, [props])
+    //         history.push("/Dashboard")
+    //     }
+    //     else {
+    //         if (!(userPageAccess.fromDashboardAccess)) {
+    //             history.push("/Dashboard")
+    //         }
+    //     };
+    // }, [props])
 
 
     const formRef = useRef(null);
@@ -78,7 +78,8 @@ const RoleAccessList = (props) => {
     useEffect(() => {
         // dispatch(fetchCompanyList());
         dispatch(getDivisionTypesID());
-        dispatch(GetRoleListForRoleAccessListPage(1, 1));
+     
+        dispatch(getRoles());
         dispatch(fetchModelsList())
         dispatch(GetHpageListData())
         dispatch(getPageAccess_DropDown_API());
@@ -126,7 +127,7 @@ const RoleAccessList = (props) => {
         })
         previousData = previousData.concat(Array)
         setListData(previousData)
-
+debugger
     }, [AddPage_PageMasterListForRoleAccess])
 
     useEffect(() => {
@@ -254,7 +255,8 @@ const RoleAccessList = (props) => {
     const GoButton_Handler = () => {
         var division = division_dropdown_Select.value
         var role = role_dropdown_Select
-        dispatch(getRoles(division, role));
+        // dispatch(getRoles(division, role));
+        dispatch(GetRoleListForRoleAccessListPage(1, 1));
     }
 
     const AddPageButton_Handeler = () => {
@@ -274,10 +276,10 @@ const RoleAccessList = (props) => {
         let selectedItemArray = [];
         let pageAccessElement = {}
         let roleAccessArray = []
-
+        
+        debugger
         for (var i = 0; i < listData.length - 1; i++) {
 
-// debugger
             var moduleName = document.getElementById("moduleName" + i).value;
             var pageName = document.getElementById("pageName" + i).value;
             var relatedPage = document.getElementById("relatedPageID" + i).value;
@@ -335,7 +337,7 @@ const RoleAccessList = (props) => {
             roleAccessArray = []
             pageAccessElement = {}
         }
-
+        debugger
         const jsonBody = JSON.stringify(selectedItemArray)
 
         dispatch(PostMethodForRoleAccessListPage(jsonBody));

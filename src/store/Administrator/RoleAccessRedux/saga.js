@@ -72,6 +72,7 @@ function* GoButtonHandlerForRoleAccessList_GenratorFunction({ id }) {
 }
 
 function* AddPageHandlerForRoleAccessList_GenratorFunction({ id }) {
+  debugger
   yield put(SpinnerState(true))
   try {
     const response = yield call(AddPageHandlerForRoleAccessList_Api, id);

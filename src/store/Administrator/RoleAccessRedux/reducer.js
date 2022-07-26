@@ -34,6 +34,12 @@ const RoleAccessReducer = (state = INIT_STATE, action) => {
         GO_buttonPageMasterListForRoleAccess: action.payload,
       }
 
+      case ADD_PAGE_HANDLER_FOR_ROLE_ACCESS_lIST_PAGE_SUCCESS:
+        return {
+          ...state,
+          AddPage_PageMasterListForRoleAccess: action.payload,
+        }
+
       case POST_METHOD_HANDLER_FOR_ROLE_ACCESS_lIST_PAGE_SUCCESS:
         return {
           ...state,

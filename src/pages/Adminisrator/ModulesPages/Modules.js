@@ -26,11 +26,14 @@ import AvField from "availity-reactstrap-validation/lib/AvField";
 import { MetaTags } from "react-meta-tags";
 import { AlertState } from "../../../store/Utilites/CostumeAlert/actions";
 import { BreadcrumbShow } from "../../../store/Utilites/Breadcrumb/actions";
+import { useHistory } from "react-router-dom";
 
 const Modules = (props) => {
 
     const formRef = useRef(null);
     const dispatch = useDispatch();
+    const history = useHistory()
+
 
     //SetState  Edit data Geting From Modules List component
     const [EditData, setEditData] = useState([]);
@@ -38,32 +41,50 @@ const Modules = (props) => {
     //'IsEdit'--if true then update data otherwise it will perfrom save operation
     const [IsEdit, setIsEdit] = useState(false);
     const [PageMode, setPageMode] = useState(false);
+    const [pageHeading, setPageHeading] = useState({PageHeading:"",PageDescription:"",PageDescriptionDetails:""});
 
     //*** "isEditdata get all data from ModuleID for Binding  Form controls
     let editDataGatingFromList = props.state;
     let CheckPageMode = props.IsComponentMode;
 
     //Access redux store Data /  'save_ModuleSuccess' action data
-    const { APIResponse,ComponentDetais } = useSelector((state) => ({
+    const { APIResponse, ComponentDetais } = useSelector((state) => ({
         ComponentDetais: state.Login.RoleData,
         APIResponse: state.Modules.modulesSubmitSuccesss,
     }));
 
-//     //Access redux store Data /  'save_ModuleSuccess' action data
-//     const { PageMasterListForRoleAccess, PageAccess, ModuleData, HPagesListData, PartySaveSuccess, State, RoleAccessData, companyList, DivisionTypes, PartyTypes, Roles } = useSelector((state) => ({
-//         PartySaveSuccess: state.PartyMasterReducer.PartySaveSuccess,
-//         companyList: state.Company.companyList,
-//         DivisionTypes: state.PartyMasterReducer.DivisionTypes,
-//         PartyTypes: state.PartyMasterReducer.PartyTypes,
-//         Roles: state.User_Registration_Reducer.Roles,
-//         ModuleData: state.Modules.modulesList,
-//         HPagesListData: state.H_Pages.HPagesListData,
-//         PageAccess: state.H_Pages.PageAccess,
-//         RoleAccessData: state.Login.RoleData,
-//         PageMasterListForRoleAccess: state.RoleAccessReducer.PageMasterListForRoleAccess,
-//     }));
+    //     //Access redux store Data /  'save_ModuleSuccess' action data
+    //     const { PageMasterListForRoleAccess, PageAccess, ModuleData, HPagesListData, PartySaveSuccess, State, RoleAccessData, companyList, DivisionTypes, PartyTypes, Roles } = useSelector((state) => ({
+    //         PartySaveSuccess: state.PartyMasterReducer.PartySaveSuccess,
+    //         companyList: state.Company.companyList,
+    //         DivisionTypes: state.PartyMasterReducer.DivisionTypes,
+    //         PartyTypes: state.PartyMasterReducer.PartyTypes,
+    //         Roles: state.User_Registration_Reducer.Roles,
+    //         ModuleData: state.Modules.modulesList,
+    //         HPagesListData: state.H_Pages.HPagesListData,
+    //         PageAccess: state.H_Pages.PageAccess,
+    //         RoleAccessData: state.Login.RoleData,
+    //         PageMasterListForRoleAccess: state.RoleAccessReducer.PageMasterListForRoleAccess,
+    //     }));
 
     // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
+
+
+    const userPageAccess = history.location.state
+    useEffect(() => {
+
+        if ((userPageAccess === undefined)) {
+
+            history.push("/Dashboard")
+        }
+        else {
+            if (!(userPageAccess.fromDashboardAccess)) {
+                history.push("/Dashboard")
+
+            }
+            setPageHeading(userPageAccess.label)
+        };
+    }, [userPageAccess])
     useEffect(() => {
         document.getElementById("txtName").focus();
         if (!(editDataGatingFromList === undefined)) {
@@ -113,14 +134,14 @@ const Modules = (props) => {
     }, [APIResponse.Status])
 
     useEffect(() => {
-      
-    
+
+
 
     }, [])
-    
+
     //'Save' And 'Update' Button Handller
     const handleValidSubmit = (event, values) => {
-        
+
         const requestOptions = {
             body: JSON.stringify({
                 Name: values.Name,
@@ -150,16 +171,14 @@ const Modules = (props) => {
                 <MetaTags>
                     <title>Module| FoodERP-React FrontEnd</title>
                 </MetaTags>
-                <Breadcrumbs breadcrumbItem={"Module Master"} />
+                <Breadcrumbs breadcrumbItem={pageHeading.PageHeading} />
                 <Container fluid  >
 
                     <Card className="text-black" >
                         <CardHeader className="card-header   text-black" style={{ backgroundColor: "#dddddd" }} >
-                            <h4 className="card-title text-black">React Validation - Normal</h4>
-                            <p className="card-title-desc text-black">Provide valuable, actionable feedback to your users with HTML5 form validation–available in all our supported browsers.</p>
+                            <h4 className="card-title text-black">{pageHeading.PageDescription}</h4>
+                            <p className="card-title-desc text-black">{pageHeading.PageDescriptionDetails}</p>
                         </CardHeader>
-
-
                         <CardBody className=" vh-10 0 text-black" style={{ backgroundColor: "#whitesmoke" }} >
                             <AvForm onValidSubmit={(e, v) => { handleValidSubmit(e, v) }}
                                 ref={formRef}
@@ -182,7 +201,7 @@ const Modules = (props) => {
                                                             validate={{
                                                                 required: { value: true, errorMessage: 'Please Enter Name' },
                                                             }}
-                                                            onChange={(e)=>{ dispatch(BreadcrumbShow(e.target.value))}}
+                                                            onChange={(e) => { dispatch(BreadcrumbShow(e.target.value)) }}
                                                         />
                                                     </FormGroup>
                                                 </Row>
@@ -226,7 +245,7 @@ const Modules = (props) => {
                                                                 <AvInput type="checkbox" className="form-check-input" id="customSwitchsizemd"
                                                                     // checked={EditData.isActive}
                                                                     name="IsActive"
-                                                                    // defaultChecked
+                                                                // defaultChecked
                                                                 />
                                                                 <label className="form-check-label" htmlFor="customSwitchsizemd"></label>
                                                             </div>
