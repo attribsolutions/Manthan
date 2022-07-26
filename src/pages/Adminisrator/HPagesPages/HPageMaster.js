@@ -133,7 +133,7 @@ const HPageMaster = (props) => {
                     Type: 1,
                     Status: true,
                     Message: SaveMessage.Message,
-                    RedirectPath: `/${btoa("PageList")}`,
+                    RedirectPath: `/PageList`,
                     AfterResponseAction: false
                 }))
             }

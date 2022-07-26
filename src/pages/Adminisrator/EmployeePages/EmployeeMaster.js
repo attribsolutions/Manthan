@@ -130,7 +130,7 @@ const AddEmployee = (props) => {
           Type: 1,
           Status: true,
           Message: postMessage.Message,
-          RedirectPath: '/employeesList',
+          RedirectPath: '/employeeList',
           AfterResponseAction: false
         }))
       }

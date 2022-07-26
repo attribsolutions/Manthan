@@ -234,7 +234,8 @@ const ItemsList = (props) => {
                     SearchProps={toolkitProps.searchProps}
                     breadcrumbCount={`Items Count: ${pages.length}`}
                     userPageAccess={userPageAccess}
-                    RedirctPath={`/${btoa("ItemMaster")}`}
+                    // RedirctPath={`/${btoa("ItemMaster")}`}
+                    RedirctPath={`/ItemMaster`}
                   />
                   <Row>
                     <Col xl="12">

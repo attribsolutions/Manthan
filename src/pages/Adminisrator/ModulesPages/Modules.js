@@ -150,7 +150,7 @@ const Modules = (props) => {
                 <MetaTags>
                     <title>Module| FoodERP-React FrontEnd</title>
                 </MetaTags>
-                <Breadcrumbs breadcrumbItem={""} />
+                <Breadcrumbs breadcrumbItem={"Module Master"} />
                 <Container fluid  >
 
                     <Card className="text-black" >

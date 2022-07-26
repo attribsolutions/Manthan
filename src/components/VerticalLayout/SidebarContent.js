@@ -127,15 +127,14 @@ const SidebarContent = (props) => {
                 <span>{props.t("Dashboard")}</span>
               </Link>
             </li>
-            <li>
-              {/* <Link to={"roleAccess"} state={{ from: "occupation" }} >{props.t("roleAccess")}</Link> */}
+            {/* <li>
               <Link to= {`/${btoa("RoleAccess")}`} State={ "occupation" }>
                 Next Step
               </Link>
               <Link to={{pathname:`/${btoa("RoleAccess")}`, state: {fromDashboardAccess: true }}}>
               Next Step2222
               </Link>
-            </li>
+            </li> */}
             {RoleAccessData.map((item) => {
               return (
                 <li >
@@ -148,7 +147,7 @@ const SidebarContent = (props) => {
                     {item.ModuleData.map((i, j) => {
                       return (
                         <li>
-                          <Link to={{pathname:`/${btoa(i.ActualPagePath)}`, state: {fromDashboardAccess: true,label:i}}} class={pathName === i.SelectIcon ? "active" : ""}>{props.t(i.Name)}</Link>
+                          <Link to={{pathname:`/${i.ActualPagePath}`, state: {fromDashboardAccess: true,label:i}}} class={pathName === i.SelectIcon ? "active" : ""}>{props.t(i.Name)}</Link>
                         </li>
                       )
                     })}

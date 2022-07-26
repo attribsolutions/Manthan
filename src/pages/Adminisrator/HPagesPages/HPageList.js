@@ -220,7 +220,8 @@ export default function HPageList() {
                     IsButtonVissible={true}
                     SearchProps={toolkitProps.searchProps}
                     breadcrumbCount={`Page Count: ${HPageListData.length}`}
-                    RedirctPath={ `/${btoa("PageMaster")}`}
+                    // RedirctPath={ `/${btoa("PageMaster")}`}
+                    RedirctPath={ `/PageMaster`}
                   />
                   <Row>
                     <Col xl="12">

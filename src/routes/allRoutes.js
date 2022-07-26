@@ -52,39 +52,75 @@ const userRoutes = [
   { path: "/dashboard", component: Dashboard },
 
   // Administrator : Modules Path and List
-  { path: `/${btoa("ModuleMaster")}`, component: Modules },
-  { path: `/${btoa("ModuleList")}`, component: ModulesList },
+  // { path: `/${btoa("ModuleMaster")}`, component: Modules },
+  // { path: `/${btoa("ModuleList")}`, component: ModulesList },
+
+  // { path: "/subModuleMaster", component: SubModules },
+  // { path: "/subModuleList", component: SubModulesList },
+
+  // // Administrator : Company Path and List
+  // { path: `/${btoa("CompanyMaster")}`, component: CompanyModule },
+  // { path: `/${btoa("CompanyList")}`, component: CompanyList },
+
+  // { path: `/${btoa("PageList")}`, component: HPageList },
+  // { path: `/${btoa("PageMaster")}`, component: HPageMaster },
+
+  // { path: `/${btoa("Order")}`, component: OrderPage },
+  // { path:`/${btoa("Orders")}`, component: OrderList },
+
+  // { path: `/${btoa("UserMaster")}`, component: AddUser },
+  // { path: `/${btoa("UserList")}`, component: UserList },
+
+  // { path: `/${btoa("EmployeeMaster")}`, component: AddEmployee },
+  // { path: `/${btoa("EmployeeList")}`, component: Employee_List },
+
+  // { path: `/${btoa("RoleMaster")}`, component: RoleMaster },
+  // { path: `/${btoa("RoleList")}`, component: RoleList },
+
+  // { path: `/${btoa("ItemMaster")}`, component: ItemsMaster },
+  // { path: `/${btoa("ItemList")}`, component: ItemsList },
+
+  // { path: `/${btoa("PartyList")}`, component: PartyList },
+  // { path: `/${btoa("PartyMaster")}`, component: PartyMaster },
+
+  // { path: `/${btoa("RoleAccess")}`, component: RoleAccessList },
+  // { path: "/RoleAccess", component: RoleAccessList },
+
+  
+
+
+    { path: `/ModuleMaster`, component: Modules },
+  { path: `/ModuleList`, component: ModulesList },
 
   { path: "/subModuleMaster", component: SubModules },
   { path: "/subModuleList", component: SubModulesList },
 
   // Administrator : Company Path and List
-  { path: `/${btoa("CompanyMaster")}`, component: CompanyModule },
-  { path: `/${btoa("CompanyList")}`, component: CompanyList },
+  { path: `/CompanyMaster`, component: CompanyModule },
+  { path: `/CompanyList`, component: CompanyList },
 
-  { path: `/${btoa("PageList")}`, component: HPageList },
-  { path: `/${btoa("PageMaster")}`, component: HPageMaster },
+  { path: `/PageList`, component: HPageList },
+  { path: `/PageMaster`, component: HPageMaster },
 
-  { path: `/${btoa("Order")}`, component: OrderPage },
-  { path:`/${btoa("Orders")}`, component: OrderList },
+  { path: `/Order`, component: OrderPage },
+  { path:`/Orders`, component: OrderList },
 
-  { path: `/${btoa("UserMaster")}`, component: AddUser },
-  { path: `/${btoa("UserList")}`, component: UserList },
+  { path: `/UserMaster`, component: AddUser },
+  { path: `/UserList`, component: UserList },
 
-  { path: `/${btoa("EmployeeMaster")}`, component: AddEmployee },
-  { path: `/${btoa("EmployeeList")}`, component: Employee_List },
+  { path: `/EmployeeMaster`, component: AddEmployee },
+  { path: `/EmployeeList`, component: Employee_List },
 
-  { path: `/${btoa("RoleMaster")}`, component: RoleMaster },
-  { path: `/${btoa("RoleList")}`, component: RoleList },
+  { path: `/RoleMaster`, component: RoleMaster },
+  { path: `/RoleList`, component: RoleList },
 
-  { path: `/${btoa("ItemMaster")}`, component: ItemsMaster },
-  { path: `/${btoa("ItemList")}`, component: ItemsList },
+  { path: `/ItemMaste`, component: ItemsMaster },
+  { path: `/ItemList`, component: ItemsList },
 
-  { path: `/${btoa("PartyList")}`, component: PartyList },
-  { path: `/${btoa("PartyMaster")}`, component: PartyMaster },
+  { path: `/PartyList`, component: PartyList },
+  { path: `/PartyMaster`, component: PartyMaster },
 
-  { path: `/${btoa("RoleAccess")}`, component: RoleAccessList },
-  // { path: "/RoleAccess", component: RoleAccessList },
+  { path: `/RoleAccess`, component: RoleAccessList },
 
 
   { path:"/partyUIDemo",component:PartyUIDemo},
