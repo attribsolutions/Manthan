@@ -9,19 +9,12 @@ import {
     editPartyIDSuccess, getDistrictOnState, getDistrictOnStateSuccess, getDivisionTypesID,
     GetPartyTypeByDivisionTypeID, postPartyData, postPartyDataSuccess, updatePartyID
 } from "../../../store/Administrator/PartyRedux/action";
-import { getState } from "../../../store/Administrator/M_EmployeeRedux/action";
-import Flatpickr from "react-flatpickr"
-import { fetchCompanyList } from "../../../store/Administrator/CompanyRedux/actions";
+
 import { MetaTags } from "react-meta-tags";
 // import { getRoles } from "../../../store/Administrator/UserRegistrationRedux/actions";
-import { AddPageHandlerForRoleAccessListPage, GetHpageListData, getH_Modules, getPageAccess_DropDown_API, GetRoleListForRoleAccessListPage, getRoles, PageDropdownForRoleAccessList, PageMasterForRoleAccessLit, PostMethodForRoleAccessListPage, roleAceessAction } from "../../../store/actions";
+import { AddPageHandlerForRoleAccessListPage, GetHpageListData, getH_Modules, getPageAccess_DropDown_API, GetRoleListForRoleAccessListPage, getRoles, PageDropdownForRoleAccessList, PageMasterForRoleAccessLit, PostMethodForRoleAccessListPage, PostMethod_ForRoleAccessListPage_Success, roleAceessAction } from "../../../store/actions";
 import { fetchModelsList } from "../../../store/actions";
-import paginationFactory, {
-    PaginationListStandalone,
-    PaginationProvider
-} from "react-bootstrap-table2-paginator";
-import ToolkitProvider from "react-bootstrap-table2-toolkit";
-import BootstrapTable from "react-bootstrap-table-next";
+
 import { useHistory, useLocation, useParams } from "react-router-dom";
 
 const RoleAccessList = (props) => {
@@ -33,7 +26,6 @@ const RoleAccessList = (props) => {
 
         const userPageAccess = history.location.state
 
-        // console.log("acc", userPageAccess)
 
         if ((userPageAccess === undefined)) {
 
@@ -50,15 +42,10 @@ const RoleAccessList = (props) => {
     const formRef = useRef(null);
     const dispatch = useDispatch();
 
-    //SetState  Edit data Geting From Modules List component
-    const [EditData, setEditData] = useState([]);
 
-    //'IsEdit'--if true then update data otherwise it will perfrom save operation
-    const [IsEdit, setIsEdit] = useState(false);
+
     const [PageMode, setPageMode] = useState(false);
 
-    //*** "isEditdata get all data from ModuleID for Binding  Form controls
-    let editDataGatingFromList = props.state;
 
     const [division_dropdown_Select, setDivision_dropdown_Select] = useState("");
     const [role_dropdown_Select, setRoleDropDown] = useState("");
@@ -68,7 +55,7 @@ const RoleAccessList = (props) => {
 
     //Access redux store Data /  'save_ModuleSuccess' action data
     const { PageMasterListForRoleAccess, PageAccess, ModuleData, PageDropdownForRoleAccess, PartySaveSuccess,
-        AddPage_PageMasterListForRoleAccess, GO_buttonPageMasterListForRoleAccess,
+        AddPage_PageMasterListForRoleAccess, GO_buttonPageMasterListForRoleAccess,PostMessage_ForRoleAccessList,
         RoleListData_Reducer, companyList, DivisionTypes, Roles } = useSelector((state) => ({
             PartySaveSuccess: state.PartyMasterReducer.PartySaveSuccess,
             companyList: state.Company.companyList,
@@ -82,7 +69,8 @@ const RoleAccessList = (props) => {
             PageDropdownForRoleAccess: state.RoleAccessReducer.PageDropdownForRoleAccess,
             AddPage_PageMasterListForRoleAccess: state.RoleAccessReducer.AddPage_PageMasterListForRoleAccess,
             GO_buttonPageMasterListForRoleAccess: state.RoleAccessReducer.GO_buttonPageMasterListForRoleAccess,
-
+            PostMessage_ForRoleAccessList: state.RoleAccessReducer.PostMessage_ForRoleAccessList,
+            
 
         }));
 
@@ -106,28 +94,17 @@ const RoleAccessList = (props) => {
         var eleList = {}
 
         let count1 = 0
-        RoleListData_Reducer.map((indexdata) => {   //1st map function start
+        RoleListData_Reducer.map((indexdata) => {
 
-            //     indexdata.ModuleData.map((indexmodul) => {   //2nd mapfunction start
             count1 = count1 + 1
-            //         eleList["ModuleName"] = indexdata.ModuleName;
-            //         eleList["ActualPagePath"] = indexmodul.ActualPagePath;
+
             eleList = indexdata;
             eleList["ID"] = count1;
 
-            //         // PageAccess.map((indexPage) => { eleList[`${indexPage.Name}`] = false})
-
-            //         indexmodul.RolePageAccess.map((indexRolePageAccess) => {   //3 rd map function start
-            //             eleList[`${indexRolePageAccess.Name}`] = true
-
-            //             // if ((eleList.hasOwnProperty(indexRolePageAccess.Name))) { }
-            //         })
             Array.push(eleList)
             eleList = {}
-            //     })
-            // })
+
         })
-        // LList = previousData.concat(Array)
 
         setListData(Array)
 
@@ -141,27 +118,15 @@ const RoleAccessList = (props) => {
         let NewID = listData.length + 1
         let previousData = listData
 
-        AddPage_PageMasterListForRoleAccess.map((indexdata) => {   //1st mapfunction start
-
-            //     indexdata.ModuleData.map((indexmodul) => {//second map function start
-            //         eleList["ModuleName"] = indexdata.ModuleName;
-            //         eleList["ActualPagePath"] = indexmodul.ActualPagePath;
+        AddPage_PageMasterListForRoleAccess.map((indexdata) => {
             eleList = indexdata
             eleList["ID"] = NewID;
-
-            //         indexmodul.RolePageAccess.map((indexRolePageAccess) => { //3 rd map function start
-            //             eleList[`${indexRolePageAccess.Name}`] = true
-            //             if ((eleList.hasOwnProperty(indexRolePageAccess.Name))) {
-            //             }
-            //         })
             Array.push(eleList)
             eleList = {}
-            //     })
         })
         previousData = previousData.concat(Array)
         setListData(previousData)
-        // console.log("AddPage_PageMasterListForRoleAccess", AddPage_PageMasterListForRoleAccess)
-        // debugger
+
     }, [AddPage_PageMasterListForRoleAccess])
 
     useEffect(() => {
@@ -197,37 +162,27 @@ const RoleAccessList = (props) => {
     }, [PageAccess])
 
     useEffect(() => {
-        if ((PartySaveSuccess.Status === true) && (PartySaveSuccess.StatusCode === 200)) {
-            dispatch(postPartyDataSuccess({ Status: false }))
-            formRef.current.reset();
-            if (PageMode === true) {
+        if ((PostMessage_ForRoleAccessList.Status === true) && (PostMessage_ForRoleAccessList.StatusCode === 200)) {
+            dispatch(PostMethod_ForRoleAccessListPage_Success({ Status: false }))
+     
                 dispatch(AlertState({
                     Type: 1,
                     Status: true,
-                    Message: PartySaveSuccess.Message,
-                }))
-            }
-            else {
-                dispatch(AlertState({
-                    Type: 1,
-                    Status: true,
-                    Message: PartySaveSuccess.Message,
-                    RedirectPath: '/partyList',
+                    Message: PostMessage_ForRoleAccessList.Message,
                     AfterResponseAction: false
                 }))
-            }
         }
-        else if (PartySaveSuccess.Status === true) {
+        else if (PostMessage_ForRoleAccessList.Status === true) {
             dispatch(postPartyDataSuccess({ Status: false }))
             dispatch(AlertState({
                 Type: 4,
                 Status: true,
-                Message: JSON.stringify(PartySaveSuccess.Message),
+                Message: JSON.stringify(PostMessage_ForRoleAccessList.Message),
                 RedirectPath: false,
                 AfterResponseAction: false
             }));
         }
-    }, [PartySaveSuccess])
+    }, [PostMessage_ForRoleAccessList])
 
     let RoleAccessListColoums = [
         {
@@ -247,10 +202,7 @@ const RoleAccessList = (props) => {
             sort: true,
         }
     ]
-    const companyListValues = companyList.map((Data) => ({
-        value: Data.id,
-        label: Data.Name
-    }));
+
 
     const DivisionTypesValues = DivisionTypes.map((Data) => ({
         value: Data.id,
@@ -275,9 +227,7 @@ const RoleAccessList = (props) => {
     }));
     // console.log("PageDropdownForRoleAccess",PageDropdownForRoleAccess)
 
-    function handllercompanyList(e) {
-        // setCompanyList_dropdown_Select(e)
-    }
+
 
     /// Role dopdown
     function RoleDropDown_select_handler(e) {
@@ -311,65 +261,13 @@ const RoleAccessList = (props) => {
         dispatch(AddPageHandlerForRoleAccessListPage(page_DropdownSelect.value));
     }
 
-    //'Save' And 'Update' Button Handller
-    const handleValidUpdate = (event, values) => {
-        // debugger
-        const requestOptions = {
-            body: JSON.stringify({
 
-                CreatedBy: 1,
-                CreatedOn: "2022-06-24T11:16:53.165483Z",
-                UpdatedBy: 1,
-                UpdatedOn: "2022-06-24T11:16:53.330888Z"
-            }),
-        };
-
-        if (IsEdit) {
-            dispatch(updatePartyID(requestOptions.body, EditData.id));
-        }
-        else {
-            dispatch(postPartyData(requestOptions.body));
-        }
-    };
-
-    // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
-    var IsEditMode_Css = ''
-    if (IsEdit === true) { IsEditMode_Css = "-3.5%" };
 
     const [listData, setListData] = useState([])
     const [listData1, setListData1] = useState([])
 
 
 
-
-
-    const pageOptions = {
-        sizePerPage: 20,
-        totalSize: listData.length, // replace later with size(users),
-        custom: true,
-    };
-
-    const defaultSorted = [
-        {
-            dataField: "ID", // if dataField is not match to any column you defined, it will be ignored.
-            order: "desc", // desc or asc
-        },
-    ];
-
-    let myInlineStyle = {
-        marginTop: "-10px",
-    };
-    const selectRow = {
-        mode: 'checkbox',
-        clickToSelect: true,
-        style: { background: 'red' },
-        classes: (row, rowIndex) => {
-            console.log('rowIndex', row)
-            return
-        },
-        nonSelectableStyle: { backgroundColor: 'gray' }
-
-    }
 
     const saveHandeller = () => {
 
@@ -379,10 +277,14 @@ const RoleAccessList = (props) => {
 
         for (var i = 0; i < listData.length - 1; i++) {
 
-              var moduleName = document.getElementById("moduleName" + i).value;
+// debugger
+            var moduleName = document.getElementById("moduleName" + i).value;
             var pageName = document.getElementById("pageName" + i).value;
+            var relatedPage = document.getElementById("relatedPageID" + i).value;
             var pageId = parseInt(pageName)
             var moduleId = parseInt(moduleName)
+            var relatedPageID = parseInt(relatedPage)
+
             var isSave = document.getElementById("isSave" + i).checked
             var isEdit = document.getElementById("isEdit" + i).checked;
             var isDelete = document.getElementById("isDelete" + i).checked;
@@ -406,7 +308,7 @@ const RoleAccessList = (props) => {
 
             pageAccessElement["Role"] = 2
             pageAccessElement["Company"] = 2
-            pageAccessElement["Division"] = 2
+            pageAccessElement["Division"] = 1
             pageAccessElement["Modules"] = moduleId
             pageAccessElement["Pages"] = pageId
             pageAccessElement["CreatedBy"] = 1
@@ -416,17 +318,18 @@ const RoleAccessList = (props) => {
             if (roleAccessArray.length > 0) {
                 let pageAccessElement2 = {}
                 selectedItemArray.push(pageAccessElement)
-                // if(relatedpageid>0)
+                if(relatedPageID>0){
                 pageAccessElement2["Role"] = 2
                 pageAccessElement2["Company"] = 2
-                pageAccessElement2["Division"] = 2
+                pageAccessElement2["Division"] =1
                 pageAccessElement2["Modules"] = moduleId
-                pageAccessElement2["Pages"] = pageId + 100
+                pageAccessElement2["Pages"] =relatedPageID
                 pageAccessElement2["CreatedBy"] = 1
                 pageAccessElement2["UpdatedBy"] = 1
                 pageAccessElement2["RolePageAccess"] = roleAccessArray
                 selectedItemArray.push(pageAccessElement2)
                 pageAccessElement2 = {}
+                }
             }
             // debugger
             roleAccessArray = []
@@ -436,7 +339,7 @@ const RoleAccessList = (props) => {
         const jsonBody = JSON.stringify(selectedItemArray)
 
         dispatch(PostMethodForRoleAccessListPage(jsonBody));
-        debugger
+        // debugger
 
     };
     return (
@@ -449,22 +352,9 @@ const RoleAccessList = (props) => {
                 <Container fluid>
 
                     <Card className="text-black" >
-                        <Button onClick={() => { saveHandeller() }}>Save</Button>
+
                         <CardHeader className="card-header   text-black" style={{ backgroundColor: "#dddddd" }} >
                             <Row style={{ backgroundColor: "#dddddd" }} >
-
-                                <Col md="3" className="">
-                                    <FormGroup className="mb-1 row  " >
-                                        <Label className="col-sm-5 p-2">Division</Label>
-                                        <Col md="7">
-                                            <Select
-                                                value={division_dropdown_Select}
-                                                options={DivisionTypesValues}
-                                                onChange={(e) => { handllerDivisionTypes(e) }}
-                                            />
-                                        </Col>
-                                    </FormGroup>
-                                </Col>
 
 
 
@@ -482,11 +372,28 @@ const RoleAccessList = (props) => {
                                         </Col>
                                     </FormGroup>
                                 </Col >
+                                
+                                <Col md="3" className="">
+                                    <FormGroup className="mb-1 row  " >
+                                        <Label className="col-sm-5 p-2">Division</Label>
+                                        <Col md="7">
+                                            <Select
+                                                value={division_dropdown_Select}
+                                                options={DivisionTypesValues}
+                                                onChange={(e) => { handllerDivisionTypes(e) }}
+                                            />
+                                        </Col>
+                                    </FormGroup>
+                                </Col>
+
 
 
                                 <Col md="2" className="mt- ">
-                                    <Button
-                                        onClick={() => { GoButton_Handler() }}>Go</Button>
+                                    <Button  onClick={() => { GoButton_Handler() }}>Go</Button>
+                                </Col>
+
+                                <Col md="2" className="mt- ">
+                                    <Button  className='btn btn-succcess' onClick={() => { saveHandeller() }}>Save</Button>
                                 </Col>
                             </Row>
 
@@ -558,6 +465,11 @@ const RoleAccessList = (props) => {
                                                                 id={"ID" + key}
                                                                 name={"ID" + key}
                                                                 value={indx.ID}
+                                                            />
+                                                            <input
+                                                                type="hidden"
+                                                                id={"relatedPageID" + key}
+                                                                value={indx.RelatedPageID}
                                                             />
                                                         </td>
                                                         <td>
@@ -662,62 +574,7 @@ const RoleAccessList = (props) => {
 
                                         </tbody>
                                     </table>
-                                    <BootstrapTable
-                                        keyField={"id"}
-                                        responsive
-                                        data={listData}
-                                        columns={listData1}
-                                        bordered={false}
-                                        striped={false}
-                                        hover={true}
-                                        defaultSorted={defaultSorted}
-                                        selectRow={selectRow}
-                                        // selectRow={selectRow}
-                                        classes={"table  table-bordered"}
-                                    // {...toolkitProps.baseProps}
-                                    // {...paginationTableProps}
-                                    />
-                                    {/* // <PaginationProvider pagination={paginationFactory(listData)}>
-                                //     {({ paginationProps, paginationTableProps }) => (
-                                //         <ToolkitProvider
-                                //             keyField="id"
-                                //             data={listData}
-                                //             columns={listData1}
-                                //             search
-                                //         >
-                                //             {(toolkitProps) => (
-                                //                 <React.Fragment>
 
-                                //                     <Row>
-                                //                         <Col xl="12">
-                                //                             <div className="table-responsive">
-                                //                                 <BootstrapTable
-                                //                                     keyField={"id"}
-                                //                                     responsive
-                                //                                     data={listData}
-                                //             columns={listData1}
-                                //                                     bordered={false}
-                                //                                     striped={false}
-                                //                                     hover={true}
-                                //                                     defaultSorted={defaultSorted}
-                                //                                     // selectRow={selectRow}
-                                //                                     classes={"table  table-bordered"}
-                                //                                     // {...toolkitProps.baseProps}
-                                //                                     // {...paginationTableProps}
-                                //                                 />
-                                //                             </div>
-                                //                         </Col>
-                                //                     </Row>
-                                //                     <Row className="align-items-md-center mt-30">
-                                //                         <Col className="pagination pagination-rounded justify-content-end mb-2">
-                                //                             <PaginationListStandalone {...paginationProps} />
-                                //                         </Col>
-                                //                     </Row>
-                                //                 </React.Fragment>
-                                //             )}
-                                //         </ToolkitProvider>
-                                //     )}
-                                // </PaginationProvider> */}
                                 </> :
                                 <></>
                             }
