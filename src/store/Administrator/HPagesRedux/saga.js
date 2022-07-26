@@ -97,6 +97,7 @@ function* update_HPagesUsingID_GenratorFunction({ data, id }) {
   try {
     yield put(SpinnerState(true))
     const response = yield call(updateHPages, data, id);
+
     yield put(SpinnerState(false))
     yield put(updateHPagesSuccess(response))
     console.log("update response in saga ", response)

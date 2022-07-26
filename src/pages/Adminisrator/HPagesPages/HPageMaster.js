@@ -7,7 +7,6 @@ import {
     Container,
     Row,
     Label,
-    Input,
     Button,
     FormGroup,
     CardHeader,
@@ -16,7 +15,6 @@ import {
 import Breadcrumbs from '../../../components/Common/Breadcrumb'
 import {
     AvForm,
-    AvGroup,
     AvInput,
 } from "availity-reactstrap-validation";
 import { useDispatch, useSelector } from "react-redux";
@@ -135,7 +133,7 @@ const HPageMaster = (props) => {
                     Type: 1,
                     Status: true,
                     Message: SaveMessage.Message,
-                    RedirectPath: '/pageList',
+                    RedirectPath: `/${btoa("PageList")}`,
                     AfterResponseAction: false
                 }))
             }
@@ -193,11 +191,10 @@ const HPageMaster = (props) => {
             }));
             return
         }
-debugger
+
         const requestOptions = {
             body: JSON.stringify({
                 Name: values.Name,
-                Description: values.description,
                 Module: module_DropdownSelect.value,
                 isActive: values.isActive,
                 DisplayIndex: values.displayIndex,
@@ -205,11 +202,14 @@ debugger
                 ActualPagePath: values.pagePath,
                 isShowOnMenu: isShowPageChecked,
                 PageType: pageType_DropdownSelect.value,
+                PageHeading:values.pageheading,
+                PageDescription:values.pagedescription,
+                PageDescriptionDetails:values.pageheadingdescription,
                 RelatedPageID: pageList_DropdownSelect.value,
                 CreatedBy: 1,
                 UpdatedBy: 1,
                 PagePageAccess: pageAccessData.map((d) => ({
-                    AccessID: d.AccessID,
+                    Access: d.AccessID,
                 })),
             }),
         };
@@ -226,12 +226,11 @@ debugger
         setModule_DropdownSelect(e);
     }
 
-   
 
     function PageAccess_DropdownSelect_Handler(e) {
         setPageAccess_DropDownSelect(e)
     }
-    console.log()
+
     //  for PageType deropDown
     const PageType_DropdownSelectHandller = (e) => {
 
@@ -306,7 +305,6 @@ debugger
                             <p className="card-title-desc text-black">Provide valuable, actionable feedback to your users with HTML5 form validation–available in all our supported browsers.</p>
                         </CardHeader>
 
-
                         <CardBody>
                             <AvForm
                                 onValidSubmit={(e, v) => {
@@ -320,7 +318,7 @@ debugger
 
                                             <Col md="3">
                                                 <FormGroup className="mb-3 ">
-                                                    <Label htmlFor="validationCustom01">Name </Label>
+                                                    <Label >Name </Label>
                                                     <AvField name="Name" id="txtName" value={EditData.Name}
                                                         type="text"
                                                         placeholder="Please Enter Name"
@@ -334,14 +332,48 @@ debugger
                                             </Col>
 
                                             <Col md="1">  </Col>
+                                            
+                                            <Col md="7">
+                                                <FormGroup className="mb-3 ">
+                                                    <Label >Page Description </Label>
+                                                    <AvField name="pagedescription" 
+                                                    value={EditData.PageDescription}
+                                                        type="text"
+                                                        placeholder="Please Enter Page Description"
+                                                        autoComplete='off'
+                                                        validate={{
+                                                            required: { value: true, errorMessage: 'Please Enter Page Description' },
+                                                        }}
+                                                    />
+                                                </FormGroup>
+                                            </Col>
+                                        </Row>
+                                   
+                                        <Row >
                                             <Col md="3">
                                                 <FormGroup className="mb-3">
-                                                    <Label htmlFor="validationCustom01">Description</Label>
-                                                    <AvField name="description"
+                                                    <Label >Page Heading</Label>
+                                                    <AvField name="pageheading"
                                                         type="text"
                                                         defaultValue=""
-                                                        value={EditData.Description}
+                                                        value={EditData.PageHeading}
+                                                        placeholder="Enter your Page Heading "
+                                                    />
+                                                </FormGroup>
+                                            </Col>
+
+                                            <Col md="1">  </Col>
+                                            <Col md="7">
+                                                <FormGroup className="mb-3">
+                                                    <Label>Page Description Details</Label>
+                                                    <AvField name="pageheadingdescription"
+                                                        type="text"
+                                                        defaultValue=""
+                                                        value={EditData.PageDescriptionDetails}
                                                         placeholder="Enter your Description "
+                                                        validate={{
+                                                            required: { value: true, errorMessage: 'Please Enter Page Description Deails' },
+                                                        }}
                                                     />
                                                 </FormGroup>
                                             </Col>
@@ -350,12 +382,9 @@ debugger
                                     </CardBody>
                                 </Card>
 
-
                                 <Card className=" mt-n2 text-black">
                                     <CardBody style={{ backgroundColor: "whitesmoke" }}>
-
                                         <Row >
-
                                             <Col md="3">
                                                 <FormGroup className="mb-3">
                                                     <Label htmlFor="validationCustom01">Module</Label>

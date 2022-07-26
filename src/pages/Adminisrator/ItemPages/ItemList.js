@@ -19,10 +19,12 @@ import {
 } from "../../../store/Administrator/ItemsRedux/action";
 import ItemsMaster from "./ItemMaster";
 import { MetaTags } from "react-meta-tags";
+import { useHistory } from "react-router-dom";
 
-const ItemsList = () => {
+const ItemsList = (props) => {
   const dispatch = useDispatch();
   const [modal_center, setmodal_center] = useState(false);
+  const [pageHeading, setPageHeading] = useState();
 
   // get Access redux data
   const { pages, editData, updateMessage, deleteMessage } = useSelector(
@@ -33,6 +35,26 @@ const ItemsList = () => {
       deleteMessage: state.ItemMastersReducer.deleteMessage,
     })
   );
+
+  const history = useHistory()
+
+  const userPageAccess = history.location.state
+  debugger
+
+  useEffect(() => {
+
+    if ((userPageAccess === undefined)) {
+
+      history.push("/Dashboard")
+    }
+    else {
+      if (!(userPageAccess.fromDashboardAccess)) {
+        history.push("/Dashboard")
+
+      }
+      // setPageHeading( userPageAccess.label)
+    };
+  }, [props])
 
   //  This UseEffect => Featch Modules List data  First Rendering
   useEffect(() => {
@@ -58,7 +80,7 @@ const ItemsList = () => {
         AlertState({
           Type: 3,
           Status: true,
-          Message:  JSON.stringify(updateMessage.Message),
+          Message: JSON.stringify(updateMessage.Message),
         })
       );
     }
@@ -81,7 +103,7 @@ const ItemsList = () => {
         AlertState({
           Type: 3,
           Status: true,
-          Message:  JSON.stringify(deleteMessage.Message),
+          Message: JSON.stringify(deleteMessage.Message),
 
         })
       );
@@ -129,6 +151,7 @@ const ItemsList = () => {
       order: "asc", // desc or asc
     },
   ];
+
   const pagesListColumns = [
     {
       text: "Item Name",
@@ -210,7 +233,8 @@ const ItemsList = () => {
                     IsButtonVissible={true}
                     SearchProps={toolkitProps.searchProps}
                     breadcrumbCount={`Items Count: ${pages.length}`}
-                    RedirctPath={"/itemMaster"}
+                    userPageAccess={userPageAccess}
+                    RedirctPath={`/${btoa("ItemMaster")}`}
                   />
                   <Row>
                     <Col xl="12">

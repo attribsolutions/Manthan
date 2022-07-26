@@ -43,7 +43,7 @@ export const H_SUB_MODULES_API_URL="/H_SubModules"/// post api
 
 export const H_SUB_MODULES_FROM_HPAGES="/GetSubModuleFromModuleID"/// post api
 
-export const H_PAGES_API_URL="/PagesMaster"/// post api
+export const H_PAGES_API_URL="/PageMaster"/// post api
 
 export const ROLE_API_URL="/Roles"///get api
 

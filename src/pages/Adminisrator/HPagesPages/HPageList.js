@@ -95,7 +95,6 @@ export default function HPageList() {
   }, [editData]);
 
   const EditPageHandler = (id) => {
-    debugger;
     dispatch(editHPagesID(id));
   };
 
@@ -135,8 +134,8 @@ export default function HPageList() {
       sort: true,
     },
     {
-      text: "Description",
-      dataField: "Description",
+      text: "Page Heading",
+      dataField: "PageHeading",
       sort: true,
     },
     {
@@ -221,7 +220,7 @@ export default function HPageList() {
                     IsButtonVissible={true}
                     SearchProps={toolkitProps.searchProps}
                     breadcrumbCount={`Page Count: ${HPageListData.length}`}
-                    RedirctPath={"/pageMaster"}
+                    RedirctPath={ `/${btoa("PageMaster")}`}
                   />
                   <Row>
                     <Col xl="12">

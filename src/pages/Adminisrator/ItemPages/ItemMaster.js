@@ -29,11 +29,25 @@ import {
 import Select from "react-select";
 import { BreadcrumbShow } from "../../../store/Utilites/Breadcrumb/actions";
 import { MetaTags } from "react-meta-tags";
+import { useHistory } from "react-router-dom";
 
 const ItemsMaster = (props) => {
+
   const formRef = useRef(null);
   const dispatch = useDispatch();
 
+  const history = useHistory()
+
+  // console.log("history",history)
+  const userPageAccess = history.location.state
+
+// debugger
+
+
+
+
+
+ 
   //SetState  Edit data Geting From Modules List component
   const [EditData, setEditData] = useState([]);
 
@@ -41,9 +55,26 @@ const ItemsMaster = (props) => {
   const [IsEdit, setIsEdit] = useState(false);
   const [PageMode, setPageMode] = useState(false);
   const [itemGroupSelect, setItemGroupSelect] = useState("");
+  const [pageHeading, setPageHeading] = useState({PageHeading:"",PageDescription:"",PageDescriptionDetails:""});
 
   //*** "isEditdata get all data from ModuleID for Binding  Form controls
   let editDataGatingFromList = props.state;
+
+
+  useEffect(() => {
+
+    if ((userPageAccess === undefined)) {
+
+      history.push("/Dashboard")
+    }
+    else {
+      if (!(userPageAccess.fromDashboardAccess)) {
+        history.push("/Dashboard")
+      }
+      debugger
+      setPageHeading( userPageAccess.label)
+    };
+  }, [props])
 
   //Access redux store Data /  'save_ModuleSuccess' action data
   const { postMessage, ItemGroupList } = useSelector((state) => ({
@@ -98,7 +129,7 @@ const ItemsMaster = (props) => {
         AlertState({
           Type: 4,
           Status: true,
-          Message:  JSON.stringify(postMessage.Message),
+          Message: JSON.stringify(postMessage.Message),
           RedirectPath: false,
           AfterResponseAction: false,
         })
@@ -124,7 +155,7 @@ const ItemsMaster = (props) => {
         UpdatedOn: "2022-05-20T11:22:55.711483Z",
       }),
     };
-    debugger;
+
     if (IsEdit) {
       dispatch(updateItemID(requestOptions.body, EditData.id));
     } else {
@@ -153,20 +184,15 @@ const ItemsMaster = (props) => {
         <title>Item Master| FoodERP-React FrontEnd</title>
       </MetaTags>
       <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
-        <Breadcrumbs breadcrumbItem={"Item Master "} />
+        <Breadcrumbs breadcrumbItem={pageHeading.PageHeading} />
         <Container fluid>
           <Card>
             <CardHeader
               className="card-header   text-black"
               style={{ backgroundColor: "#dddddd" }}
             >
-              <h4 className="card-title text-black">
-                React Validation - Normal
-              </h4>
-              <p className="card-title-desc text-black">
-                Provide valuable, actionable feedback to your users with HTML5
-                form validation–available in all our supported browsers.
-              </p>
+              <h4 className="card-title text-black">{pageHeading.PageDescription}</h4>
+              <p className="card-title-desc text-black">{pageHeading.PageDescriptionDetails}</p>
             </CardHeader>
             <CardBody
               className=" vh-10 0 text-black"

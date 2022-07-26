@@ -110,7 +110,7 @@ const SidebarContent = (props) => {
 
   const [isActive, setisActive] = useState('')
 
-  // Use ComponentDidMount and ComponentDidUpdate method symultaniously
+  // Use ComponentDidMount and ComponentDidUpdate method simultaniously
   useEffect(() => {
     setisActive("active")
   }, [pathName])
@@ -136,7 +136,6 @@ const SidebarContent = (props) => {
               Next Step2222
               </Link>
             </li>
-
             {RoleAccessData.map((item) => {
               return (
                 <li >
@@ -149,7 +148,7 @@ const SidebarContent = (props) => {
                     {item.ModuleData.map((i, j) => {
                       return (
                         <li>
-                          <Link   to={{pathname:`/${btoa(i.ActualPagePath)}`, state: {fromDashboardAccess: true,}}} class={pathName === i.SelectIcon ? "active" : ""}>{props.t(i.Name)}</Link>
+                          <Link to={{pathname:`/${btoa(i.ActualPagePath)}`, state: {fromDashboardAccess: true,label:i}}} class={pathName === i.SelectIcon ? "active" : ""}>{props.t(i.Name)}</Link>
                         </li>
                       )
                     })}

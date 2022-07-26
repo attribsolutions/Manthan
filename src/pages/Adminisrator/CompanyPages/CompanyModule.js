@@ -28,6 +28,7 @@ import { MetaTags } from "react-meta-tags";
 import Breadcrumbs from "../../../components/Common/Breadcrumb";
 import { AlertState } from "../../../store/Utilites/CostumeAlert/actions";
 import { BreadcrumbShow } from "../../../store/Utilites/Breadcrumb/actions";
+import { useHistory } from "react-router-dom";
 
 const CompanyModule = (props) => {
 
@@ -37,9 +38,26 @@ const CompanyModule = (props) => {
   const [IsEdit, setIsEdit] = useState(false);
   const [CompanyGroupselect, setCompanyGroup] = useState("");
   const [PageMode, setPageMode] = useState(false);
+  const [pageHeading, setPageHeading] = useState({pageHeading:"",pageDescription:"",pageDescriptionDetails:""});
 
   //*** "isEditdata get all data from ModuleID for Binding  Form controls
   var editDataGatingFromList = props.state;
+
+  const history = useHistory()
+
+  const userPageAccess = history.location.state
+
+  // useEffect(() => {
+  //   if ((userPageAccess === undefined)) {
+  //     history.push("/Dashboard")
+  //   }
+  //      else {
+  //     if (!(userPageAccess.fromDashboardAccess)) {
+  //       history.push("/Dashboard")
+  //     }
+  //     setPageHeading({pageHeading:userPageAccess.label.PageHeading,pageDescription:userPageAccess.label.PageDescription,pageDescriptionDetails:userPageAccess.label.PageDescriptionDetails})
+  //   };
+  // }, [props])
 
   //Access redux store Data /  'save_ModuleSuccess' action data
   const { SubmitSuccesss, } = useSelector((state) => ({
@@ -129,7 +147,7 @@ const CompanyModule = (props) => {
         UpdatedBy: 1,
       }),
     };
-    debugger
+   
     if (IsEdit) {
       dispatch(updateCompanyID(requestOptions.body, EditData.id));
     }
@@ -148,14 +166,14 @@ const CompanyModule = (props) => {
         <MetaTags>
           <title>Company Master| FoodERP-React FrontEnd</title>
         </MetaTags>
-        <Breadcrumbs breadcrumbItem={"Company Master"} />
+        <Breadcrumbs breadcrumbItem={pageHeading.pageHeading} />
         <Container fluid>
           <Row>
             <Col lg={12}>
               <Card className="text-black" >
                 <CardHeader className="card-header   text-black" style={{ backgroundColor: "#dddddd" }} >
-                  <h4 className="card-title text-black">React Validation - Normal</h4>
-                  <p className="card-title-desc text-black">Provide valuable, actionable feedback to your users with HTML5 form validation–available in all our supported browsers.</p>
+                  <h4 className="card-title text-black">{pageHeading.pageDescription}</h4>
+                  <p className="card-title-desc text-black">{pageHeading.pageDescriptionDetails}</p>
                 </CardHeader>
 
                 <CardBody>
@@ -183,9 +201,9 @@ const CompanyModule = (props) => {
                               autoComplete="off"
                               placeholder=" Please Enter Address "
                               defaultValue=''
-                              // validate={{
-                              //   required: { value: true, errorMessage: 'Please Enter Address' },
-                              // }}
+                            // validate={{
+                            //   required: { value: true, errorMessage: 'Please Enter Address' },
+                            // }}
                             />
                           </FormGroup>
                         </Row>
@@ -198,13 +216,13 @@ const CompanyModule = (props) => {
                               value={EditData.PhoneNo}
                               defaultValue=''
                               placeholder="Enter Phone Number"
-                              // validate={{
-                              //   required: { value: true, errorMessage: 'Please Enter Phone Number' },
-                              //   tel: {
-                              //     pattern: /^(\+\d{1,3}[- ]?)?\d{10}$/,
-                              //     errorMessage: 'Please Enter Phone Number'
-                              //   }
-                              // }}
+                            // validate={{
+                            //   required: { value: true, errorMessage: 'Please Enter Phone Number' },
+                            //   tel: {
+                            //     pattern: /^(\+\d{1,3}[- ]?)?\d{10}$/,
+                            //     errorMessage: 'Please Enter Phone Number'
+                            //   }
+                            // }}
                             />
                           </FormGroup>
 
@@ -214,15 +232,15 @@ const CompanyModule = (props) => {
                             <AvField name="EmailID" value={EditData.EmailID} type="email"
                               autoComplete="off"
                               defaultValue=''
-                              placeholder="example@example.com" 
-                              // validate={{
-                              //   required: { value: true, errorMessage: 'Please Enter Email' },
-                              //   tel: {
-                              //     pattern:  /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/,
-                              //     errorMessage: "Please Enter valid Email Address.(Ex:abc@gmail.com)"
-                              //   }
-                              // }}
-                               />
+                              placeholder="example@example.com"
+                            // validate={{
+                            //   required: { value: true, errorMessage: 'Please Enter Email' },
+                            //   tel: {
+                            //     pattern:  /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/,
+                            //     errorMessage: "Please Enter valid Email Address.(Ex:abc@gmail.com)"
+                            //   }
+                            // }}
+                            />
                           </FormGroup>
                         </Row>
                       </CardBody>

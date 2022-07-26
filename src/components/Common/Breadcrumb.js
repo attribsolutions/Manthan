@@ -7,15 +7,25 @@ import { useDispatch, useSelector } from "react-redux";
 import { BreadcrumbShow } from "../../store/Utilites/Breadcrumb/actions";
 import { AvForm, AvInput } from "availity-reactstrap-validation";
 import * as XLSX from 'xlsx';
-
+import RoleAccessDemodata from "./RoleAccessDemoData";
 const Breadcrumb = props => {
+
 
   const { SearchBar } = Search;
   const history = useHistory();
-  const dispatch = useDispatch();
 
+
+const data=RoleAccessDemodata;
+
+console.log("data",data)
+
+
+
+  const dispatch = useDispatch();
+  
   const [modal_scroll, setmodal_scroll] = useState(false);
   const [ListData, setListData] = useState([]);
+  const [userAccessGetingFromListPage, setuserAccessGetingFromListPage] = useState([]);
 
   function tog_scroll() {
     setmodal_scroll(!modal_scroll);
@@ -32,7 +42,15 @@ const Breadcrumb = props => {
 
   // New Button Handller
   const NewButtonHandeller = () => {
-    setIsRedirectNewButton(true)
+    const userPageAccess = history.location.state
+    // setIsRedirectNewButton(true)
+    debugger
+    history.push({
+      pathname: props.RedirctPath,
+      search: '',
+      state: userPageAccess
+    })
+
   }
 
   const { bredcrumbName, } = useSelector((state) => ({
@@ -223,7 +241,7 @@ const Breadcrumb = props => {
           }
         </Col>
         {/* Redirct To master Component  */}
-        {(IsRedirectNewButton) ? <Redirect to={{ pathname: props.RedirctPath }} /> : null}
+        {(IsRedirectNewButton) ? <Redirect to={{ pathname: props.RedirctPath ,state: {fromDashboardAccess: true,label:props.userPageAccess}}}/> : null}
       </Row>
     </React.Fragment>
   )
