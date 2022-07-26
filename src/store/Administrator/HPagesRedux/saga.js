@@ -81,7 +81,6 @@ function* saveHPageSaga_GneratorFunction({ Data }) {
 }
 
 function* editHpages_ID({ id }) {
-
   try {
     const response = yield call(edit_HPageID, id);
     yield put(editHPagesIDSuccess(response));
@@ -137,6 +136,7 @@ function* PageList_DropDown_GenratorFunction() {
 
 //  PageAccess dropdown list
 function* PageAccess_DropDown_GenratorFunction() {
+  debugger
   try {
     const response = yield call(showPagesListOnPageAccess_DropDown_List);
     yield put(getPageAccess_DropDown_API_Success(response.Data));

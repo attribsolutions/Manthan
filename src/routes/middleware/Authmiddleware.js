@@ -34,7 +34,7 @@ const Authmiddleware = ({
         if (!(userPageAccess.fromDashboardAccess)) {
           console.log("userPageAccess props else", history)
 
-          history.push("/Dashboard")
+          // history.push("/Dashboard")
           // return (
           //   <Redirect
           //     to={{ pathname: "/Dashboard",  }}  />

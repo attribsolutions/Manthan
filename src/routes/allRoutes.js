@@ -68,7 +68,7 @@ const userRoutes = [
   { path: `/${btoa("Order")}`, component: OrderPage },
   { path:`/${btoa("Orders")}`, component: OrderList },
 
-  { path: `/${btoa("RoleMaster")}`, component: AddUser },
+  { path: `/${btoa("UserMaster")}`, component: AddUser },
   { path: `/${btoa("UserList")}`, component: UserList },
 
   { path: `/${btoa("EmployeeMaster")}`, component: AddEmployee },

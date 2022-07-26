@@ -155,7 +155,7 @@ export const postSubModule = (id) => get(`${url.H_SUB_MODULES_API_URL}/${id}`)
 export const postAddPage = (data) => post(url.H_SUB_MODULES_API_URL, data)
 export const getPageAcess = () => get(url.GET_PAGE_ACCESS)
 export const showPagesListOnPageType_DropDown_List = () => get(url.SHOW_PAGESLIST_ON_PAGE_TYPE_FOR_DROPDOWN)
-export const showPagesListOnPageAccess_DropDown_List = () => get(url.SHOW_PAGESLIST_ON_PAGEACCESS_FOR_DROPDOWN)
+export const showPagesListOnPageAccess_DropDown_List = (id) => get(url.SHOW_PAGESLIST_ON_PAGEACCESS_FOR_DROPDOWN)
 
 // H_subModule Api
 export const saveH_SubModules = (data) => post(url.H_SUB_MODULES_API_URL, data)
@@ -193,15 +193,21 @@ export const GetPartyTypeByDivisionTypeID_For_Dropdown = (id) => get(`${url.GET_
 
 //RoleAccess
 
-export const PageMasterForRoleAccessLit_Api = (id) => get(`${url.PAGEMASTER_ROLE_ACCESS}/${id}`)//get api
+export const PageDropdownForRoleAccessList_Api = (id) => get(`${url.PAGEMASTER_DROPDOWN_ROLE_ACCESS}/${id}`)//get api Pages
+export const GetRoleListForRoleAccessList_Page_Api=(id1,id2)=>get(`${url.GET_ROLE_ACCESS_LIST_FOR_ROLE_ACCESS_PAGE}/${id1}/${id2}`) //get api role List 
+export const GO_Button_HandlerForRoleAccessList_Api=(id1,id2)=>get(`${url.GO_BUTTON_HANDLER_FOR_ROLE_ACCESS_PAGE}/${id1}/${id2}`) //get api role List 
+export const AddPageHandlerForRoleAccessList_Api=(id1)=>get(`${url.ADD_PAGE_BUTTON_HANDLER_FOR_ROLE_ACCESS_PAGE}/${id1}`) //get api role List 
+export const PostMethod_HandlerForRoleAccessList_Api=(data)=>post(url.ROLE_ACCESS,data) //post api role Access List 
 
 export {
+  
   getLoggedInUser,
   isUserAuthenticated,
   postFakeRegister,
   postFakeLogin,
   postFakeProfile,
   postFakeForgetPwd,
+
   postJwtRegister,
   Python_postJwtLogin,
   postJwtForgetPwd,

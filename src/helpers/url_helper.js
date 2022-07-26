@@ -75,8 +75,10 @@ export const GET_DIVISION_TYPES_ID="/DivisionTypes"
 export const GET_PARTYTYPE_BY_DIVISIONTYPES_ID="/GetPartyTypeByDivisionTypeID"
 
 //Role Access
-export const PAGEMASTER_ROLE_ACCESS="/PageMasterForRoleAccess"
+export const PAGEMASTER_DROPDOWN_ROLE_ACCESS="/RoleAccessGetPages"
+export const GET_ROLE_ACCESS_LIST_FOR_ROLE_ACCESS_PAGE ='/RoleAccessNewUpdated'
 
-
+export const GO_BUTTON_HANDLER_FOR_ROLE_ACCESS_PAGE ='/RoleAccessNewUpdated'
+export const ADD_PAGE_BUTTON_HANDLER_FOR_ROLE_ACCESS_PAGE ='/RoleAccessAddPage'
 
 
