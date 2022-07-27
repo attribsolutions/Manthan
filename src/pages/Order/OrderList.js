@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Button, Input, Modal, Row, Col } from "reactstrap";
+import { Button, Input, Modal, Row, Col, Label, Container, Card, CardBody, FormGroup } from "reactstrap";
 import Select from "react-select";
 import { useHistory } from "react-router-dom";
 import "react-super-responsive-table/dist/SuperResponsiveTableStyle.css";
-
+import flatpickr from "flatpickr";
 import {
   deleteOrderID_From_OrderPage,
   deleteOrderID_From_OrderPageSuccess,
@@ -266,9 +266,20 @@ const OrderList = (props) => {
                     breadcrumbCount={TableListData.length}
                     RedirctPath={"/order"}
                   />
-                  <Row>
-                    <Col>
-                      <Input
+                  <Container fluid>
+          <Card >
+          {/* <CardHeader className="card-header   text-dark" style={{ backgroundColor: "#dddddd" }}>
+              <h4 className=" text-center text-black" >React Validation - Normal</h4>
+              <p className=" text-black">Provide valuable, actionable feedback to your users with HTML5 form validation–available in all our supported browsers.</p>
+            </CardHeader> */}
+         < CardBody>
+              <Row className="mb-1 border border-black text-black mt-n3" style={{ backgroundColor: "#dddddd" }} >
+
+                <Col md="4" className="">
+                  <FormGroup className="mb- row mt-3 " >
+                    <Label className="col-sm-3 p-2">To Date</Label>
+                    <Col md="7">
+                      <Input 
                         // className="form-control"
                         type="date"
                         defaultValue={fromDateIn}
@@ -276,9 +287,14 @@ const OrderList = (props) => {
                           setFromDate(e.target.value);
                         }}
                         id="example-date-input1"
-                      />
+                        />
                     </Col>
-                    <Col>
+                    </FormGroup>
+                    </Col>
+                    <Col md="4">
+                  <FormGroup className="mb-2 row mt-3 " >
+                    <Label className="col-sm-3 p-2">From Date</Label>
+                    <Col md="7">
                       <Input
                         // className="form-control"
                         type="date"
@@ -289,12 +305,20 @@ const OrderList = (props) => {
                         id="example-date-input2"
                       />
                     </Col>
-                    <Col >
+                  </FormGroup>
+                </Col >
+                
+                <Col md="3">
+                  <FormGroup className="mb-2 row mt-3" >
+                    <Label className="col-sm-6 p-2">Customer Name</Label>
+                    <Col md="6">
                       <Select options={customerNameOption} />
+                    </Col>
+                    </FormGroup>
                     </Col>
                     <Col>
                       <Button
-                        className="btn btn-success "
+                        className="btn btn-success align-right mt-3 "
                         onClick={() => {
                           goHandeller();
                         }}
@@ -328,14 +352,19 @@ const OrderList = (props) => {
                       />
                     </Col>
                   </Row>
+                  </CardBody>
+      </Card>
+
+    </Container>
                 </React.Fragment>
               )}
             </ToolkitProvider>
           )}
         </PaginationProvider>
 
-
+        
       </div >
+      
       <Modal
         isOpen={modal_center}
         toggle={() => { tog_center() }}
@@ -344,6 +373,7 @@ const OrderList = (props) => {
       >
         <OrderPage state={editOrderData.Data} />
       </Modal>
+      
     </React.Fragment >
   );
 };

@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Link, Router } from 'react-router-dom'
-import { Td, Thead, Tr } from 'react-super-responsive-table'
-import { Col, Input, Label, Row } from 'reactstrap'
+import { Tbody, Td, Thead, Tr } from 'react-super-responsive-table'
+import { Col, Input, Label, Row, Table } from 'reactstrap'
 
 export default function SerachBox3() {
 
@@ -22,16 +22,17 @@ export default function SerachBox3() {
 
         }
      }
+     
 
     return (
-        <div className="page-content">
+        <div className="page-content" >
             <body>
-                <Row className="mb-4">
-                    <Label className="col-sm-1 col-form-label">
+                <Row className="">
+                    <Label className="col-sm-1 col-form-label ">
                         search box
                     </Label>
-                    <Col sm={4}>
-                        <div className="mb-3">
+                    <Col sm={5}>
+                        <div className="mt-1 container col-sm-1 col-md-5 col-lg-7 col-xl-10" >
                             <Input
                                 name="seachBox3"
                                 type="text"
@@ -39,27 +40,36 @@ export default function SerachBox3() {
                                 placeholder="Search"
                                 onChange={(e)=>searchHandeler(e)}
                             />
-
-                        </div>
-                    </Col>
-                </Row>
-                <Row>
-                    <tbody>
+<Row class="rounded-circle">
+               
+               <Table 
+                      className="table table-bordered text-black w-100 p-3 table table-hover ml-1"
+                        >
+                    <Tbody>
+                        
                       {
                         list.map((index)=>{
                        return(
-                     
-                        <Tr>
+                        
+                    <Tr>
                           <Td>
                           <Link to={`/${index.ActualPagePath}`}>{index.Icon}</Link>
                           </Td>
                           </Tr>
-                          
+                        
                        )     
                         })
                       }
-                    </tbody>
+                      
+                    </Tbody>
+                    </Table>
+            
+                    </Row>
+
+                    </div>
+                    </Col>
                 </Row>
+               
             </body>
         </div>
     )
