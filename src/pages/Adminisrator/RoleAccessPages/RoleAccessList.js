@@ -388,11 +388,11 @@ const RoleAccessList = (props) => {
 
 
 
-                                <Col md="3">
+                                <Col md="4">
 
                                     <FormGroup className="mb-1 row " >
-                                        <Label className="col-sm-4 p-2 ml-n4 ">Role</Label>
-                                        <Col md="8">
+                                        <Label className="col-sm-2 p-2 ml-n4 ">Role</Label>
+                                        <Col md="9">
                                             <Select
                                                 value={role_dropdown_Select}
                                                 options={Role_DropdownOption}
@@ -403,10 +403,10 @@ const RoleAccessList = (props) => {
                                     </FormGroup>
                                 </Col >
 
-                                <Col md="3" className="">
+                                <Col md="4" className="">
                                     <FormGroup className="mb-1 row  " >
-                                        <Label className="col-sm-5 p-2">Division</Label>
-                                        <Col md="7">
+                                        <Label className="col-sm-3 p-2">Division</Label>
+                                        <Col md="8">
                                             <Select
                                                 value={division_dropdown_Select}
                                                 options={DivisionTypesValues}
