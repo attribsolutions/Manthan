@@ -6,7 +6,8 @@ import {
   API_ERROR,
   SOCIAL_LOGIN,
   ROLE_ACCESS_API_CALL,
-  ROLE_ACCESS_API_CALL_SUCCESS
+  ROLE_ACCESS_API_CALL_SUCCESS,
+  ROLE_ACCESS_API_UPDATE_SUCCESS
 } from "./actionTypes"
 
 export const loginUser = (user, history) => {
@@ -62,3 +63,10 @@ export  const roleAceessActionSuccess=(data)=>{
     payload: data,
   }
   }
+
+  export  const RoleAccessUpdateSuccess=(data)=>{
+    return{
+      type:ROLE_ACCESS_API_UPDATE_SUCCESS,
+      payload: data,
+    }
+    }

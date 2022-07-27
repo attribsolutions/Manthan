@@ -10,11 +10,15 @@ import {
 import { AlertState } from "../../../store/Utilites/CostumeAlert/actions";
 import { BreadcrumbShow } from "../../../store/Utilites/Breadcrumb/actions";
 import { MetaTags } from "react-meta-tags";
+import { useHistory } from "react-router-dom";
 
 const RoleMaster = (props) => {
 
   const formRef = useRef(null);
   const dispatch = useDispatch();
+  const history = useHistory()
+
+  const userPageAccess = history.location.state
 
   //SetState  Edit data Geting From Modules List component
   const [EditData, setEditData] = useState([]);
@@ -22,6 +26,7 @@ const RoleMaster = (props) => {
   //'IsEdit'--if true then update data otherwise it will perfrom save operation
   const [IsEdit, setIsEdit] = useState(false);
   const [PageMode, setPageMode] = useState(false);
+  const [pageHeading, setPageHeading] = useState({ PageHeading: "", PageDescription: "", PageDescriptionDetails: "" });
 
   //*** "isEditdata get all data from ModuleID for Binding  Form controls
   let editDataGatingFromList = props.state;
@@ -30,6 +35,21 @@ const RoleMaster = (props) => {
   const { AddUserMessage, } = useSelector((state) => ({
     AddUserMessage: state.RoleMaster_Reducer.AddUserMessage,
   }));
+
+  useEffect(() => {
+
+    if ((userPageAccess === undefined)) {
+
+      history.push("/Dashboard")
+    }
+    else {
+      if (!(userPageAccess.fromDashboardAccess)) {
+        history.push("/Dashboard")
+      }
+      debugger
+      setPageHeading(userPageAccess.label)
+    };
+  }, [props])
 
   // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
   useEffect(() => {
@@ -69,7 +89,7 @@ const RoleMaster = (props) => {
       dispatch(AlertState({
         Type: 4,
         Status: true,
-        Message:JSON.stringify( AddUserMessage.Message),
+        Message: JSON.stringify(AddUserMessage.Message),
         RedirectPath: false,
         AfterResponseAction: false
       }));
@@ -85,6 +105,7 @@ const RoleMaster = (props) => {
         Description: values.Description,
         isActive: values.isActive,
         Dashboard: values.Dashboard,
+        isSCMRole: values.isSCMRole,
         CreatedBy: 1,
         CreatedOn: "2022-05-20T11:22:55.711483Z",
         UpdatedBy: 1,
@@ -111,13 +132,15 @@ const RoleMaster = (props) => {
         <title>Role Master| FoodERP-React FrontEnd</title>
       </MetaTags>
       <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
-        <Breadcrumbs breadcrumbItem={"Role Master "} />
+      <Breadcrumbs breadcrumbItem={pageHeading.PageHeading} />
         <Container fluid>
-
-          <Card >
-            <CardHeader className="card-header   text-dark" style={{ backgroundColor: "#dddddd" }} >
-              <h4 className="card-title text-black">React Validation - Normal</h4>
-              <p className="card-title-desc text-black">Provide valuable, actionable feedback to your users with HTML5 form validation–available in all our supported browsers.</p>
+          <Card>
+            <CardHeader
+              className="card-header   text-black"
+              style={{ backgroundColor: "#dddddd" }}
+            >
+              <h4 className="card-title text-black">{pageHeading.PageDescription}</h4>
+              <p className="card-title-desc text-black">{pageHeading.PageDescriptionDetails}</p>
             </CardHeader>
             <CardBody className=" vh-10 0 text-black" style={{ backgroundColor: "#whitesmoke" }} >
               <AvForm onValidSubmit={(e, v) => { handleValidUpdate(e, v) }}
@@ -137,9 +160,9 @@ const RoleMaster = (props) => {
                               autoComplete='off'
                               validate={{
                                 required: { value: true, errorMessage: 'Please Enter Name' },
-                              }} 
+                              }}
                               onChange={(e) => { dispatch(BreadcrumbShow(e.target.value)) }}
-                              />
+                            />
                           </FormGroup>
                         </Row>
 
@@ -173,16 +196,30 @@ const RoleMaster = (props) => {
 
                         <FormGroup className="mb-2 col col-sm-5">
                           <Row className="justify-content-md-left">
+                            <Label className="col-sm-3 col-form-label" >Is SCM Role </Label>
+                            <Col md={2} style={{ marginTop: '9px' }} >
+
+                              <div className="form-check form-switch form-switch-md mb-3" dir="ltr">
+                                <AvInput type="checkbox" className="form-check-input"
+                                  checked={EditData.isSCMRole}
+                                  name="isSCMRole"
+                                />
+                              </div>
+                            </Col>
+                          </Row>
+                        </FormGroup>
+
+                        <FormGroup className="mb-2 col col-sm-5">
+                          <Row className="justify-content-md-left">
                             <Label htmlFor="horizontal-firstname-input" className="col-sm-2 col-form-label" >Active </Label>
                             <Col md={2} style={{ marginTop: '9px' }} >
 
                               <div className="form-check form-switch form-switch-md mb-3" dir="ltr">
                                 <AvInput type="checkbox" className="form-check-input" id="customSwitchsizemd"
-                                  checked={ EditData.isActive}
+                                  checked={EditData.isActive}
                                   defaultChecked={true}
                                   name="isActive"
                                 />
-                                <label className="form-check-label" htmlFor="customSwitchsizemd"></label>
                               </div>
                             </Col>
                           </Row>

@@ -1,31 +1,28 @@
 import React, { useEffect, useState } from "react"
 import PropTypes from 'prop-types'
-import { Row, Col, Button, Label, Modal, Card } from "reactstrap"
+import { Row, Col, Button, Label, Modal, Card, InputGroup } from "reactstrap"
 import { Redirect, useHistory } from "react-router-dom";
 import { Search } from "react-bootstrap-table2-toolkit";
 import { useDispatch, useSelector } from "react-redux";
 import { BreadcrumbShow } from "../../store/Utilites/Breadcrumb/actions";
 import { AvForm, AvInput } from "availity-reactstrap-validation";
 import * as XLSX from 'xlsx';
-import RoleAccessDemodata from "./RoleAccessDemoData";
-const Breadcrumb = props => {
 
+const Breadcrumb = props => {
 
   const { SearchBar } = Search;
   const history = useHistory();
-
-
-const data=RoleAccessDemodata;
-
-console.log("data",data)
-
-
 
   const dispatch = useDispatch();
   
   const [modal_scroll, setmodal_scroll] = useState(false);
   const [ListData, setListData] = useState([]);
-  const [userAccessGetingFromListPage, setuserAccessGetingFromListPage] = useState([]);
+  
+  const { bredcrumbName, RoleAccessModifiedinSingleArray} = useSelector((state) => ({
+    bredcrumbName: state.BreadcrumbReducer.bredcrumbName,
+    RoleAccessModifiedinSingleArray: state.Login.RoleAccessUpdateData,
+
+  }));
 
   function tog_scroll() {
     setmodal_scroll(!modal_scroll);
@@ -42,20 +39,26 @@ console.log("data",data)
 
   // New Button Handller
   const NewButtonHandeller = () => {
-    const userPageAccess = history.location.state
-    // setIsRedirectNewButton(true)
-    debugger
+
+    // let RelatedPageID=11
+    const userPageAccess = history.location.state.label.RelatedPageID
+
+  //  if (!(userPageAccess===undefined)) {
+  //   RelatedPageID=userPageAccess.label
+  //  }
+
+   const found=RoleAccessModifiedinSingleArray.find((element)=>{
+     return element.id===userPageAccess
+   })
+
+   console.log("found",found)
     history.push({
       pathname: props.RedirctPath,
       search: '',
-      state: userPageAccess
+      state: {fromDashboardAccess: true,label:found}
     })
 
   }
-
-  const { bredcrumbName, } = useSelector((state) => ({
-    bredcrumbName: state.BreadcrumbReducer.bredcrumbName,
-  }));
 
   // Onfocus Search Box
   useEffect(() => {

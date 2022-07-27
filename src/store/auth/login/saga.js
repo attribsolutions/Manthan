@@ -8,6 +8,7 @@ import {
 import {
   apiError, loginSuccess,
   logoutUserSuccess,
+  RoleAccessUpdateSuccess,
   roleAceessAction,
   roleAceessActionSuccess
 } from "./actions"
@@ -62,10 +63,22 @@ function* logoutUser({ payload: { history } }) {
   }
 }
 function* RoleAccessGenratorFunction({ id1, id2, id3 }) {
-  debugger
+
   try {
     const RoleResponse = yield call(RoleAccessApi_url, id1, id2, id3);
-    if (RoleResponse.Data.length > 0) yield put(roleAceessActionSuccess(RoleResponse.Data))
+    if (RoleResponse.Data.length > 0) 
+    {
+      yield put(roleAceessActionSuccess(RoleResponse.Data))
+
+      let AllDataIntoSinlgeArray =[]
+
+      RoleResponse.Data.map((i)=>{
+          i.ModuleData.map((index)=>{
+            AllDataIntoSinlgeArray.push(index)
+          })
+      })
+yield put(RoleAccessUpdateSuccess(AllDataIntoSinlgeArray))
+    }
   } catch (error) {
     console.log("RoleAccessGenratorFunction", error)
     yield put(apiError(error))
