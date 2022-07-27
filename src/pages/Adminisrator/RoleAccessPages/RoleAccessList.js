@@ -39,12 +39,16 @@ const RoleAccessList = (props) => {
     // }, [props])
 
 
-    const formRef = useRef(null);
     const dispatch = useDispatch();
 
 
 
-    const [PageMode, setPageMode] = useState(false);
+
+
+    const [tableListData, setTableListData] = useState([])
+    const [tableHederList, setTableHederList] = useState([])
+    const [showTableOnUI, setShowTableOnUI] = useState(false)
+
 
 
     const [division_dropdown_Select, setDivision_dropdown_Select] = useState("");
@@ -107,7 +111,7 @@ const RoleAccessList = (props) => {
 
         })
 
-        setListData(Array)
+        setTableListData(Array)
 
 
     }, [GO_buttonPageMasterListForRoleAccess])
@@ -116,8 +120,8 @@ const RoleAccessList = (props) => {
 
         var Array = []
         var eleList = {}
-        let NewID = listData.length + 1
-        let previousData = listData
+        let NewID = tableListData.length + 1
+        let previousData = tableListData
         debugger
 
         // AddPage_PageMasterListForRoleAccess.map((indexdata) => {
@@ -130,7 +134,7 @@ const RoleAccessList = (props) => {
             // eleList = {}
 
             previousData = previousData.concat(Array)
-            setListData(previousData)
+            setTableListData(previousData)
         }
 
     }, [AddPage_PageMasterListForRoleAccess])
@@ -141,30 +145,11 @@ const RoleAccessList = (props) => {
             return ({
                 text: i.Name,
                 dataField: i.Name,
-                sort: true,
-                formatter: (cellContent, indx) => (
-                    <>
-                        {indx[`PageAccess_${i.Name}`] > 0 ?
-                            <>
-                                <Input
-                                    type="checkbox"
-                                    name={i.Name}
-                                    // onClick={() => {
-                                    //   EditPageHandler(module.id);
-                                    // }}
-                                    defaultChecked={(indx[`RoleAccess_${i.Name}`] > 0)}
-                                />
-                            </>
-                            :
-                            <></>
-                        }
-                    </>
-                ),
             }
             )
         })
         RoleAccessListColoums = RoleAccessListColoums.concat(NewColoumList)
-        setListData1(RoleAccessListColoums)
+        setTableHederList(RoleAccessListColoums)
     }, [PageAccess])
 
     useEffect(() => {
@@ -194,18 +179,15 @@ const RoleAccessList = (props) => {
         {
             text: "Id",
             dataField: "ID",
-            sort: true,
-            // hidden: true
+
         }
         , {
             text: "Module Name",
             dataField: "ModuleName",
-            sort: true,
         },
         {
             text: "PageName",
             dataField: "PageName",
-            sort: true,
         }
     ]
 
@@ -261,13 +243,13 @@ const RoleAccessList = (props) => {
         debugger
         var division = division_dropdown_Select.value
         var role = role_dropdown_Select.value
-        // dispatch(getRoles(division, role));
         dispatch(GO_Button_HandlerForRoleAccessListPage(role, division));
+        setShowTableOnUI(true)
     }
 
     const AddPageButton_Handeler = () => {
         let selectePageID = page_DropdownSelect.value
-        let found = listData.find((inx) => { return inx.PageID === selectePageID })
+        let found = tableListData.find((inx) => { return inx.PageID === selectePageID })
 
         if ((found === undefined) && !(selectePageID === undefined)) {
             dispatch(AddPageHandlerForRoleAccessListPage(selectePageID));
@@ -293,12 +275,6 @@ const RoleAccessList = (props) => {
     }
 
 
-    const [listData, setListData] = useState([])
-    const [listData1, setListData1] = useState([])
-
-
-
-
     const saveHandeller = () => {
 
         let selectedItemArray = [];
@@ -306,7 +282,7 @@ const RoleAccessList = (props) => {
         let roleAccessArray = []
 
 
-        for (var i = 0; i < listData.length; i++) {
+        for (var i = 0; i < tableListData.length; i++) {
             debugger
             var moduleName = document.getElementById("moduleID" + i).value;
             var pageName = document.getElementById("pageID" + i).value;
@@ -337,7 +313,7 @@ const RoleAccessList = (props) => {
             // roleAccessArray.push(roleAccessElement)
 
             pageAccessElement["Role"] = 1
-            pageAccessElement["Company"] = 2
+            pageAccessElement["Company"] = 1
             pageAccessElement["Division"] = 1
             pageAccessElement["Modules"] = moduleId
             pageAccessElement["Pages"] = pageId
@@ -350,7 +326,7 @@ const RoleAccessList = (props) => {
                 selectedItemArray.push(pageAccessElement)
                 if (relatedPageID > 0) {
                     pageAccessElement2["Role"] = 1
-                    pageAccessElement2["Company"] = 2
+                    pageAccessElement2["Company"] = 1
                     pageAccessElement2["Division"] = 1
                     pageAccessElement2["Modules"] = moduleId
                     pageAccessElement2["Pages"] = relatedPageID
@@ -383,235 +359,258 @@ const RoleAccessList = (props) => {
 
                     <Card className="text-black" >
 
-                        <CardHeader className="card-header   text-black" style={{ backgroundColor: "#dddddd" }} >
-                            <Row style={{ backgroundColor: "#dddddd" }} >
+                        {
+                            !showTableOnUI ?
 
+                                <CardHeader className="card-header   text-black" style={{ backgroundColor: "#dddddd" }} >
+                                    <Row >
+                                        <Col md="4">
 
+                                            <FormGroup className="mb-1 row " >
+                                                <Label className="col-sm-2 p-2 ml-n4 ">Role</Label>
+                                                <Col md="9">
+                                                    <Select
+                                                        value={role_dropdown_Select}
+                                                        options={Role_DropdownOption}
+                                                        onChange={(e) => { RoleDropDown_select_handler(e) }}
+                                                        classNamePrefix="select2-selection"
+                                                    />
+                                                </Col>
+                                            </FormGroup>
+                                        </Col >
 
-                                <Col md="4">
-
-                                    <FormGroup className="mb-1 row " >
-                                        <Label className="col-sm-2 p-2 ml-n4 ">Role</Label>
-                                        <Col md="9">
-                                            <Select
-                                                value={role_dropdown_Select}
-                                                options={Role_DropdownOption}
-                                                onChange={(e) => { RoleDropDown_select_handler(e) }}
-                                                classNamePrefix="select2-selection"
-                                            />
-                                        </Col>
-                                    </FormGroup>
-                                </Col >
-
-                                <Col md="4" className="">
-                                    <FormGroup className="mb-1 row  " >
-                                        <Label className="col-sm-3 p-2">Division</Label>
-                                        <Col md="8">
-                                            <Select
-                                                value={division_dropdown_Select}
-                                                options={DivisionTypesValues}
-                                                onChange={(e) => { handllerDivisionTypes(e) }}
-                                            />
-                                        </Col>
-                                    </FormGroup>
-                                </Col>
-
-
-
-                                <Col md="2" className="mt- ">
-                                    <Button onClick={() => { GoButton_Handler() }}>Go</Button>
-                                </Col>
-
-                               
-                            </Row>
-
-                            <Row  >
-
-                                <Col md="3" className="">
-                                    <FormGroup className="mb- row " >
-                                        <Label className="col-sm-5 p-2">Module</Label>
-                                        <Col md="7">
-
-                                            <Select
-                                                value={module_DropdownSelect}
-                                                options={Module_DropdownOption}
-                                                onChange={(e) => { Module_DropdownSelectHandller(e) }}
-                                                classNamePrefix="select2-selection"
-                                            />
+                                        <Col md="4" className="">
+                                            <FormGroup className="mb-1 row  " >
+                                                <Label className="col-sm-3 p-2">Division</Label>
+                                                <Col md="8">
+                                                    <Select
+                                                        value={division_dropdown_Select}
+                                                        options={DivisionTypesValues}
+                                                        onChange={(e) => { handllerDivisionTypes(e) }}
+                                                    />
+                                                </Col>
+                                            </FormGroup>
                                         </Col>
 
-                                    </FormGroup>
-                                </Col>
-
-                                <Col md="4">
-                                    <FormGroup className="mb-2 row  " >
-                                        <Label className="col-sm-4 p-2">Page</Label>
-                                        <Col md="8">
-
-                                            <Select
-                                                value={page_DropdownSelect}
-                                                options={Page_DropdownOption}
-                                                onChange={(e) => { Page_DropdownSelectHandller(e) }}
-                                                classNamePrefix="select2-selection"
-                                            />
-
+                                        <Col md="2" className="mt- ">
+                                            <Button onClick={() => { GoButton_Handler() }}>Go</Button>
                                         </Col>
-                                    </FormGroup>
-                                </Col >
 
-                                <Col md="2" className=" ">
-                                    <Button onClick={() => { AddPageButton_Handeler() }}>Add Page</Button>
-                                </Col>
-                                <Col md="2"></Col>
-
-                                <Col md="1" className=" ">
-                                    <Button className='btn btn-succcess' onClick={() => { saveHandeller() }}>Save</Button>
-                                </Col>
-
-                            </Row>
-                        </CardHeader>
-
-                        <CardBody>
-                            {listData1.length > 0
-                                ?
+                                    </Row>
+                                </CardHeader>
+                                :
                                 <>
-                                    <table className="table table-bordered">
-                                        <thead>
-                                            <tr>
-                                                {listData1.map((indx) => {
-                                                    // console.log('indx', indx)
-                                                    return <th>{indx.text}</th>
-                                                })}
-                                            </tr>
-                                        </thead>
-                                        <tbody>
+                                    <CardHeader className="card-header   text-black" style={{ backgroundColor: "#dddddd" }} >
+                                        <Row >
+                                            <Col md="4">
+                                                <Label>Role &nbsp;&nbsp;&nbsp;</Label>
+                                                <Label>{role_dropdown_Select.label}</Label>
 
-                                            {listData.map((indx, key) => {
-                                                return (
-                                                    <tr>
-                                                        {/* <th scope="row">1</th> */}
-                                                        <td>
-                                                            {indx.ID}
-                                                            <input
-                                                                type="hidden"
-                                                                id={"ID" + key}
-                                                                name={"ID" + key}
-                                                                value={indx.ID}
-                                                            />
-                                                            <input
-                                                                type="hidden"
-                                                                id={"relatedPageID" + key}
-                                                                value={indx.RelatedPageID}
-                                                            />
-                                                        </td>
-                                                        <td>
-                                                            {indx.ModuleName}
-                                                            <input
-                                                                type="hidden"
-                                                                id={"moduleID" + key}
-                                                                name={"moduleID" + key}
-                                                                value={indx.ModuleID}
-                                                            />
-                                                        </td>
-                                                        <td>
-                                                            {indx.PageName}
-                                                            <input
-                                                                type="hidden"
-                                                                id={"pageID" + key}
-                                                                name={"pageID" + key}
-                                                                value={indx.PageID}
-                                                            />
+                                            </Col >
 
-                                                        </td>
-                                                        <td>
-                                                            {indx.PageAccess_IsSave ?
-                                                                <input type={"checkbox"} id={'isSave' + key}
-                                                                    defaultChecked={indx.RoleAccess_IsSave > 0 ? true : false} />
+                                            <Col md="4">
+                                                <Label>Division &nbsp;&nbsp;&nbsp;</Label>
+                                                <Label>{division_dropdown_Select.label}</Label>
 
-                                                                : <input type={"hidden"} id={'isSave' + key} />
-                                                            }
-                                                        </td>
-                                                        <td>
-                                                            {indx.PageAccess_IsEdit ?
-                                                                <input type={"checkbox"} id={'isEdit' + key}
-                                                                    defaultChecked={indx.RoleAccess_IsEdit > 0 ? true : false} />
-                                                                : <input type={"hidden"} id={'isEdit' + key} />
-                                                            }
-                                                        </td>
-                                                        <td>
-                                                            {/* {indx.PageAccess_IsDelete} */}
-                                                            {indx.PageAccess_IsDelete ?
-                                                                <input type={"checkbox"}
-                                                                    id={'isDelete' + key}
-                                                                    defaultChecked={indx.RoleAccess_IsDelete > 0 ? true : false} />
-                                                                :
-                                                                <input type={"hidden"} id={'isDelete' + key} />
-                                                            }
-                                                        </td>
-                                                        <td>
-                                                            {/* {indx.PageAccess_IsEditSelf} */}
-                                                            {indx.PageAccess_IsEditSelf ?
-                                                                <input type={"checkbox"}
-                                                                    id={'isEditSelf' + key}
-                                                                    defaultChecked={indx.RoleAccess_IsEditSelf > 0 ? true : false} />
-                                                                :
-                                                                <input type={"hidden"} id={'isEditSelf' + key} />
-                                                            }
-
-                                                        </td>
-                                                        <td>
-                                                            {/* {indx.PageAccess_IsDeleteSelf} */}
-                                                            {indx.PageAccess_IsDeleteSelf ?
-                                                                <input type={"checkbox"}
-                                                                    id={'isDeleteSelf' + key}
-                                                                    defaultChecked={indx.RoleAccess_IsDeleteSelf > 0 ? true : false} />
-                                                                :
-                                                                <input type={"hidden"} id={'isDeleteSelf' + key} />
-                                                            }
-                                                        </td>
-                                                        <td>
-                                                            {/* {indx.PageAccess_IsShow} */}
-                                                            {indx.PageAccess_IsShow ?
-                                                                <input type={"checkbox"}
-                                                                    id={'isShow' + key}
-                                                                    defaultChecked={indx.RoleAccess_IsShow > 0 ? true : false} />
-                                                                :
-                                                                <input type={"hidden"} id={'isShow' + key} />
-                                                            }
-                                                        </td>
-                                                        <td>
-                                                            {/* {indx.PageAccess_IsView} */}
-                                                            {indx.PageAccess_IsView ?
-                                                                <input type={"checkbox"}
-                                                                    id={'isView' + key}
-                                                                    defaultChecked={indx.RoleAccess_IsView > 0 ? true : false} />
-                                                                :
-                                                                <input type={"hidden"} id={'isView' + key} />}
-                                                        </td>
-                                                        <td>
-                                                            {/* {indx.PageAccess_IsTopOfTheDivision} */}
-                                                            {indx.PageAccess_IsTopOfTheDivision ?
-                                                                <input type={"checkbox"}
-                                                                    id={'isTopOfDivision' + key}
-                                                                    defaultChecked={indx.RoleAccess_IsTopOfTheDivision > 0 ? true : false} />
-                                                                :
-                                                                <input type={"hidden"} id={'isTopOfDivision' + key} />
-                                                            }
-                                                        </td>
-                                                    </tr>
-                                                )
-                                            })}
+                                            </Col >
 
 
+                                            <Col md="4" className="align-right">
+                                                <Button onClick={() => { setShowTableOnUI(false) }}>Change Role</Button>
 
-                                        </tbody>
-                                    </table>
+                                            </Col >
 
-                                </> :
-                                <></>
-                            }
 
-                        </CardBody>
+                                        </Row>
+                                        <Row  >
+
+                                            <Col md="3" className="">
+                                                <FormGroup className="mb- row " >
+                                                    <Label className="col-sm-5 p-2">Module</Label>
+                                                    <Col md="7">
+
+                                                        <Select
+                                                            value={module_DropdownSelect}
+                                                            options={Module_DropdownOption}
+                                                            onChange={(e) => { Module_DropdownSelectHandller(e) }}
+                                                            classNamePrefix="select2-selection"
+                                                        />
+                                                    </Col>
+
+                                                </FormGroup>
+                                            </Col>
+
+                                            <Col md="4">
+                                                <FormGroup className="mb-2 row  " >
+                                                    <Label className="col-sm-4 p-2">Page</Label>
+                                                    <Col md="8">
+
+                                                        <Select
+                                                            value={page_DropdownSelect}
+                                                            options={Page_DropdownOption}
+                                                            onChange={(e) => { Page_DropdownSelectHandller(e) }}
+                                                            classNamePrefix="select2-selection"
+                                                        />
+
+                                                    </Col>
+                                                </FormGroup>
+                                            </Col >
+
+                                            <Col md="2" className=" ">
+                                                <Button onClick={() => { AddPageButton_Handeler() }}>Add Page</Button>
+                                            </Col>
+                                            <Col md="2"></Col>
+
+                                            <Col md="1" className=" ">
+                                                <Button className='btn btn-succcess' onClick={() => { saveHandeller() }}>Save</Button>
+                                            </Col>
+
+                                        </Row>
+                                    </CardHeader>
+
+                                    <CardBody>
+                                        {tableListData.length > 0
+                                            ?
+                                            <>
+                                                <table className="table table-bordered">
+                                                    <thead>
+                                                        <tr>
+                                                            {tableHederList.map((indx) => {
+                                                                // console.log('indx', indx)
+                                                                return <th>{indx.text}</th>
+                                                            })}
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+
+                                                        {tableListData.map((indx, key) => {
+                                                            return (
+                                                                <tr>
+                                                                    {/* <th scope="row">1</th> */}
+                                                                    <td>
+                                                                        {indx.ID}
+                                                                        <input
+                                                                            type="hidden"
+                                                                            id={"ID" + key}
+                                                                            name={"ID" + key}
+                                                                            value={indx.ID}
+                                                                        />
+                                                                        <input
+                                                                            type="hidden"
+                                                                            id={"relatedPageID" + key}
+                                                                            value={indx.RelatedPageID}
+                                                                        />
+                                                                    </td>
+                                                                    <td>
+                                                                        {indx.ModuleName}
+                                                                        <input
+                                                                            type="hidden"
+                                                                            id={"moduleID" + key}
+                                                                            name={"moduleID" + key}
+                                                                            value={indx.ModuleID}
+                                                                        />
+                                                                    </td>
+                                                                    <td>
+                                                                        {indx.PageName}
+                                                                        <input
+                                                                            type="hidden"
+                                                                            id={"pageID" + key}
+                                                                            name={"pageID" + key}
+                                                                            value={indx.PageID}
+                                                                        />
+
+                                                                    </td>
+                                                                    <td>
+                                                                        {indx.PageAccess_IsSave ?
+                                                                            <input type={"checkbox"} id={'isSave' + key}
+                                                                                defaultChecked={indx.RoleAccess_IsSave > 0 ? true : false} />
+
+                                                                            : <input type={"hidden"} id={'isSave' + key} />
+                                                                        }
+                                                                    </td>
+                                                                    <td>
+                                                                        {indx.PageAccess_IsEdit ?
+                                                                            <input type={"checkbox"} id={'isEdit' + key}
+                                                                                defaultChecked={indx.RoleAccess_IsEdit > 0 ? true : false} />
+                                                                            : <input type={"hidden"} id={'isEdit' + key} />
+                                                                        }
+                                                                    </td>
+                                                                    <td>
+                                                                        {/* {indx.PageAccess_IsDelete} */}
+                                                                        {indx.PageAccess_IsDelete ?
+                                                                            <input type={"checkbox"}
+                                                                                id={'isDelete' + key}
+                                                                                defaultChecked={indx.RoleAccess_IsDelete > 0 ? true : false} />
+                                                                            :
+                                                                            <input type={"hidden"} id={'isDelete' + key} />
+                                                                        }
+                                                                    </td>
+                                                                    <td>
+                                                                        {/* {indx.PageAccess_IsEditSelf} */}
+                                                                        {indx.PageAccess_IsEditSelf ?
+                                                                            <input type={"checkbox"}
+                                                                                id={'isEditSelf' + key}
+                                                                                defaultChecked={indx.RoleAccess_IsEditSelf > 0 ? true : false} />
+                                                                            :
+                                                                            <input type={"hidden"} id={'isEditSelf' + key} />
+                                                                        }
+
+                                                                    </td>
+                                                                    <td>
+                                                                        {/* {indx.PageAccess_IsDeleteSelf} */}
+                                                                        {indx.PageAccess_IsDeleteSelf ?
+                                                                            <input type={"checkbox"}
+                                                                                id={'isDeleteSelf' + key}
+                                                                                defaultChecked={indx.RoleAccess_IsDeleteSelf > 0 ? true : false} />
+                                                                            :
+                                                                            <input type={"hidden"} id={'isDeleteSelf' + key} />
+                                                                        }
+                                                                    </td>
+                                                                    <td>
+                                                                        {/* {indx.PageAccess_IsShow} */}
+                                                                        {indx.PageAccess_IsShow ?
+                                                                            <input type={"checkbox"}
+                                                                                id={'isShow' + key}
+                                                                                defaultChecked={indx.RoleAccess_IsShow > 0 ? true : false} />
+                                                                            :
+                                                                            <input type={"hidden"} id={'isShow' + key} />
+                                                                        }
+                                                                    </td>
+                                                                    <td>
+                                                                        {/* {indx.PageAccess_IsView} */}
+                                                                        {indx.PageAccess_IsView ?
+                                                                            <input type={"checkbox"}
+                                                                                id={'isView' + key}
+                                                                                defaultChecked={indx.RoleAccess_IsView > 0 ? true : false} />
+                                                                            :
+                                                                            <input type={"hidden"} id={'isView' + key} />}
+                                                                    </td>
+                                                                    <td>
+                                                                        {/* {indx.PageAccess_IsTopOfTheDivision} */}
+                                                                        {indx.PageAccess_IsTopOfTheDivision ?
+                                                                            <input type={"checkbox"}
+                                                                                id={'isTopOfDivision' + key}
+                                                                                defaultChecked={indx.RoleAccess_IsTopOfTheDivision > 0 ? true : false} />
+                                                                            :
+                                                                            <input type={"hidden"} id={'isTopOfDivision' + key} />
+                                                                        }
+                                                                    </td>
+                                                                </tr>
+                                                            )
+                                                        })}
+
+
+
+                                                    </tbody>
+                                                </table>
+
+                                            </> :
+                                            <></>
+                                        }
+
+                                    </CardBody>
+                                </>
+                        }
                     </Card>
 
                 </Container>

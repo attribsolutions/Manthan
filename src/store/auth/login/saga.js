@@ -27,7 +27,7 @@ function* loginUser({ payload: { user, history } }) {
       password: user.Password
     })
     if (response.StatusCode === 200) {
-      yield put(roleAceessAction(1, 1, 2))
+      yield put(roleAceessAction(1, 1, 1))
 
       localStorage.setItem("token", (response.token))
       yield put(loginSuccess(response))
