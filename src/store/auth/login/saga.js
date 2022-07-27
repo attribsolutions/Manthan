@@ -8,6 +8,7 @@ import {
 import {
   apiError, loginSuccess,
   logoutUserSuccess,
+  roleAceessAction,
   roleAceessActionSuccess
 } from "./actions"
 
@@ -19,28 +20,29 @@ import {
 const fireBaseBackend = getFirebaseBackend()
 
 function* loginUser({ payload: { user, history } }) {
+  debugger
   try {
     const response = yield call(Python_postJwtLogin, {
       LoginName: user.UserName,
       password: user.Password
     })
     if (response.StatusCode === 200) {
+      yield put(roleAceessAction(1, 1, 2))
 
+      localStorage.setItem("token", (response.token))
+      yield put(loginSuccess(response))
+
+      history.push("/dashboard")
     }
     else {
-
+      alert("Login Error")
     }
-    localStorage.setItem("token", (response.token))
-    yield put(loginSuccess(response))
-    const RoleResponse = yield call(RoleAccessApi_url, 1, 1, 2);
-    if (RoleResponse.Data.length > 0) yield put(roleAceessActionSuccess(RoleResponse.Data))
-    // console.log('login response',RoleResponse.Data)
-    history.push("/dashboard")
-    
-  } catch (error) {
-    localStorage.setItem("token", ("response.token"))
-    history.push("/dashboard")
 
+  } catch (error) {
+
+    // localStorage.setItem("token", ("response.token"))
+    // history.push("/dashboard")
+    alert("Login Error")
     console.log("login error", error);
 
   }
@@ -60,6 +62,7 @@ function* logoutUser({ payload: { history } }) {
   }
 }
 function* RoleAccessGenratorFunction({ id1, id2, id3 }) {
+  debugger
   try {
     const RoleResponse = yield call(RoleAccessApi_url, id1, id2, id3);
     if (RoleResponse.Data.length > 0) yield put(roleAceessActionSuccess(RoleResponse.Data))
