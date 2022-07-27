@@ -34,9 +34,9 @@ export const PageDropdownForRoleAccessList_Success = (data) => ({
   payload:data,
 });
 
-export const GO_Button_HandlerForRoleAccessListPage = (id) => ({
+export const GO_Button_HandlerForRoleAccessListPage = (id1,id2) => ({
   type: GO_BUTTON_HANDLER_FOR_ROLE_ACCESS_lIST_PAGE,
-  id,
+  id1,id2,
 });
 
 export const GO_Button_HandlerForRoleAccessListPage_Success = (data) => ({

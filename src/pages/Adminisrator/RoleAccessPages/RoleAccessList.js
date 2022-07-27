@@ -12,7 +12,7 @@ import {
 
 import { MetaTags } from "react-meta-tags";
 // import { getRoles } from "../../../store/Administrator/UserRegistrationRedux/actions";
-import { AddPageHandlerForRoleAccessListPage, GetHpageListData, getH_Modules, getPageAccess_DropDown_API, GetRoleListForRoleAccessListPage, getRoles, PageDropdownForRoleAccessList, PageMasterForRoleAccessLit, PostMethodForRoleAccessListPage, PostMethod_ForRoleAccessListPage_Success, roleAceessAction } from "../../../store/actions";
+import { AddPageHandlerForRoleAccessListPage, GetHpageListData, getH_Modules, getPageAccess_DropDown_API, GetRoleListForRoleAccessListPage, getRoles, GO_Button_HandlerForRoleAccessListPage, PageDropdownForRoleAccessList, PageMasterForRoleAccessLit, PostMethodForRoleAccessListPage, PostMethod_ForRoleAccessListPage_Success, roleAceessAction } from "../../../store/actions";
 import { fetchModelsList } from "../../../store/actions";
 
 import { useHistory, useLocation, useParams } from "react-router-dom";
@@ -55,7 +55,7 @@ const RoleAccessList = (props) => {
 
     //Access redux store Data /  'save_ModuleSuccess' action data
     const { PageMasterListForRoleAccess, PageAccess, ModuleData, PageDropdownForRoleAccess, PartySaveSuccess,
-        AddPage_PageMasterListForRoleAccess, GO_buttonPageMasterListForRoleAccess,PostMessage_ForRoleAccessList,
+        AddPage_PageMasterListForRoleAccess, GO_buttonPageMasterListForRoleAccess, PostMessage_ForRoleAccessList,
         RoleListData_Reducer, companyList, DivisionTypes, Roles } = useSelector((state) => ({
             PartySaveSuccess: state.PartyMasterReducer.PartySaveSuccess,
             companyList: state.Company.companyList,
@@ -70,7 +70,7 @@ const RoleAccessList = (props) => {
             AddPage_PageMasterListForRoleAccess: state.RoleAccessReducer.AddPage_PageMasterListForRoleAccess,
             GO_buttonPageMasterListForRoleAccess: state.RoleAccessReducer.GO_buttonPageMasterListForRoleAccess,
             PostMessage_ForRoleAccessList: state.RoleAccessReducer.PostMessage_ForRoleAccessList,
-            
+
 
         }));
 
@@ -78,7 +78,7 @@ const RoleAccessList = (props) => {
     useEffect(() => {
         // dispatch(fetchCompanyList());
         dispatch(getDivisionTypesID());
-     
+
         dispatch(getRoles());
         dispatch(fetchModelsList())
         dispatch(GetHpageListData())
@@ -95,7 +95,7 @@ const RoleAccessList = (props) => {
         var eleList = {}
 
         let count1 = 0
-        RoleListData_Reducer.map((indexdata) => {
+        GO_buttonPageMasterListForRoleAccess.map((indexdata) => {
 
             count1 = count1 + 1
 
@@ -110,7 +110,7 @@ const RoleAccessList = (props) => {
         setListData(Array)
 
 
-    }, [RoleListData_Reducer])
+    }, [GO_buttonPageMasterListForRoleAccess])
 
     useEffect(() => {
 
@@ -118,16 +118,21 @@ const RoleAccessList = (props) => {
         var eleList = {}
         let NewID = listData.length + 1
         let previousData = listData
+        debugger
 
-        AddPage_PageMasterListForRoleAccess.map((indexdata) => {
+        // AddPage_PageMasterListForRoleAccess.map((indexdata) => {
+        let indexdata = AddPage_PageMasterListForRoleAccess[0]
+        // let found =previousData.find((inx)=>{return inx.PageID===indexdata.PageID})
+        if (!(indexdata === undefined)) {
             eleList = indexdata
             eleList["ID"] = NewID;
             Array.push(eleList)
-            eleList = {}
-        })
-        previousData = previousData.concat(Array)
-        setListData(previousData)
-debugger
+            // eleList = {}
+
+            previousData = previousData.concat(Array)
+            setListData(previousData)
+        }
+
     }, [AddPage_PageMasterListForRoleAccess])
 
     useEffect(() => {
@@ -165,13 +170,13 @@ debugger
     useEffect(() => {
         if ((PostMessage_ForRoleAccessList.Status === true) && (PostMessage_ForRoleAccessList.StatusCode === 200)) {
             dispatch(PostMethod_ForRoleAccessListPage_Success({ Status: false }))
-     
-                dispatch(AlertState({
-                    Type: 1,
-                    Status: true,
-                    Message: PostMessage_ForRoleAccessList.Message,
-                    AfterResponseAction: false
-                }))
+
+            dispatch(AlertState({
+                Type: 1,
+                Status: true,
+                Message: PostMessage_ForRoleAccessList.Message,
+                AfterResponseAction: false
+            }))
         }
         else if (PostMessage_ForRoleAccessList.Status === true) {
             dispatch(postPartyDataSuccess({ Status: false }))
@@ -253,16 +258,39 @@ debugger
     }
 
     const GoButton_Handler = () => {
+        debugger
         var division = division_dropdown_Select.value
-        var role = role_dropdown_Select
+        var role = role_dropdown_Select.value
         // dispatch(getRoles(division, role));
-        dispatch(GetRoleListForRoleAccessListPage(1, 1));
+        dispatch(GO_Button_HandlerForRoleAccessListPage(role, division));
     }
 
     const AddPageButton_Handeler = () => {
-        dispatch(AddPageHandlerForRoleAccessListPage(page_DropdownSelect.value));
-    }
+        let selectePageID = page_DropdownSelect.value
+        let found = listData.find((inx) => { return inx.PageID === selectePageID })
 
+        if ((found === undefined) && !(selectePageID === undefined)) {
+            dispatch(AddPageHandlerForRoleAccessListPage(selectePageID));
+        }
+        else if (found) {
+            dispatch(AlertState({
+                Type: 4, Status: true,
+                Message: "Page Alredy Exist",
+                RedirectPath: false,
+                PermissionAction: false,
+            }));
+
+        }
+        else {
+            dispatch(AlertState({
+                Type: 4, Status: true,
+                Message: "Page is Not Select",
+                RedirectPath: false,
+                PermissionAction: false,
+            }));
+
+        }
+    }
 
 
     const [listData, setListData] = useState([])
@@ -276,12 +304,12 @@ debugger
         let selectedItemArray = [];
         let pageAccessElement = {}
         let roleAccessArray = []
-        
-        debugger
-        for (var i = 0; i < listData.length - 1; i++) {
 
-            var moduleName = document.getElementById("moduleName" + i).value;
-            var pageName = document.getElementById("pageName" + i).value;
+
+        for (var i = 0; i < listData.length; i++) {
+            debugger
+            var moduleName = document.getElementById("moduleID" + i).value;
+            var pageName = document.getElementById("pageID" + i).value;
             var relatedPage = document.getElementById("relatedPageID" + i).value;
             var pageId = parseInt(pageName)
             var moduleId = parseInt(moduleName)
@@ -308,7 +336,7 @@ debugger
 
             // roleAccessArray.push(roleAccessElement)
 
-            pageAccessElement["Role"] = 2
+            pageAccessElement["Role"] = 1
             pageAccessElement["Company"] = 2
             pageAccessElement["Division"] = 1
             pageAccessElement["Modules"] = moduleId
@@ -320,17 +348,17 @@ debugger
             if (roleAccessArray.length > 0) {
                 let pageAccessElement2 = {}
                 selectedItemArray.push(pageAccessElement)
-                if(relatedPageID>0){
-                pageAccessElement2["Role"] = 2
-                pageAccessElement2["Company"] = 2
-                pageAccessElement2["Division"] =1
-                pageAccessElement2["Modules"] = moduleId
-                pageAccessElement2["Pages"] =relatedPageID
-                pageAccessElement2["CreatedBy"] = 1
-                pageAccessElement2["UpdatedBy"] = 1
-                pageAccessElement2["RolePageAccess"] = roleAccessArray
-                selectedItemArray.push(pageAccessElement2)
-                pageAccessElement2 = {}
+                if (relatedPageID > 0) {
+                    pageAccessElement2["Role"] = 1
+                    pageAccessElement2["Company"] = 2
+                    pageAccessElement2["Division"] = 1
+                    pageAccessElement2["Modules"] = moduleId
+                    pageAccessElement2["Pages"] = relatedPageID
+                    pageAccessElement2["CreatedBy"] = 1
+                    pageAccessElement2["UpdatedBy"] = 1
+                    pageAccessElement2["RolePageAccess"] = roleAccessArray
+                    selectedItemArray.push(pageAccessElement2)
+                    pageAccessElement2 = {}
                 }
             }
             // debugger
@@ -374,7 +402,7 @@ debugger
                                         </Col>
                                     </FormGroup>
                                 </Col >
-                                
+
                                 <Col md="3" className="">
                                     <FormGroup className="mb-1 row  " >
                                         <Label className="col-sm-5 p-2">Division</Label>
@@ -391,18 +419,16 @@ debugger
 
 
                                 <Col md="2" className="mt- ">
-                                    <Button  onClick={() => { GoButton_Handler() }}>Go</Button>
+                                    <Button onClick={() => { GoButton_Handler() }}>Go</Button>
                                 </Col>
 
-                                <Col md="2" className="mt- ">
-                                    <Button  className='btn btn-succcess' onClick={() => { saveHandeller() }}>Save</Button>
-                                </Col>
+                               
                             </Row>
 
                             <Row  >
 
                                 <Col md="3" className="">
-                                    <FormGroup className="mb- row mt-3 " >
+                                    <FormGroup className="mb- row " >
                                         <Label className="col-sm-5 p-2">Module</Label>
                                         <Col md="7">
 
@@ -418,7 +444,7 @@ debugger
                                 </Col>
 
                                 <Col md="4">
-                                    <FormGroup className="mb-2 row mt-3 " >
+                                    <FormGroup className="mb-2 row  " >
                                         <Label className="col-sm-4 p-2">Page</Label>
                                         <Col md="8">
 
@@ -433,9 +459,13 @@ debugger
                                     </FormGroup>
                                 </Col >
 
-                                <Col md="1"></Col>
-                                <Col md="2" className="mt-2 ">
+                                <Col md="2" className=" ">
                                     <Button onClick={() => { AddPageButton_Handeler() }}>Add Page</Button>
+                                </Col>
+                                <Col md="2"></Col>
+
+                                <Col md="1" className=" ">
+                                    <Button className='btn btn-succcess' onClick={() => { saveHandeller() }}>Save</Button>
                                 </Col>
 
                             </Row>
@@ -478,8 +508,8 @@ debugger
                                                             {indx.ModuleName}
                                                             <input
                                                                 type="hidden"
-                                                                id={"moduleName" + key}
-                                                                name={"moduleName" + key}
+                                                                id={"moduleID" + key}
+                                                                name={"moduleID" + key}
                                                                 value={indx.ModuleID}
                                                             />
                                                         </td>
@@ -487,8 +517,8 @@ debugger
                                                             {indx.PageName}
                                                             <input
                                                                 type="hidden"
-                                                                id={"pageName" + key}
-                                                                name={"pageName" + key}
+                                                                id={"pageID" + key}
+                                                                name={"pageID" + key}
                                                                 value={indx.PageID}
                                                             />
 

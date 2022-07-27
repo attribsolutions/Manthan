@@ -55,10 +55,11 @@ function* PageDropdownForRoleAccessList_GenratorFunction({ id }) {
   }
 }
 
-function* GoButtonHandlerForRoleAccessList_GenratorFunction({ id }) {
+function* GoButtonHandlerForRoleAccessList_GenratorFunction({ id1,id2}) {
+  debugger
   yield put(SpinnerState(true))
   try {
-    const response = yield call(GO_Button_HandlerForRoleAccessList_Api, id);
+    const response = yield call(GO_Button_HandlerForRoleAccessList_Api, id1,id2);
     yield put(SpinnerState(false))
     yield put(GO_Button_HandlerForRoleAccessListPage_Success(response.Data));
   }
