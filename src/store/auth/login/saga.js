@@ -32,7 +32,7 @@ function* loginUser({ payload: { user, history } }) {
     }
     localStorage.setItem("token", (response.token))
     yield put(loginSuccess(response))
-    const RoleResponse = yield call(RoleAccessApi_url, 1, 1, 1);
+    const RoleResponse = yield call(RoleAccessApi_url, 1, 1, 2);
     if (RoleResponse.Data.length > 0) yield put(roleAceessActionSuccess(RoleResponse.Data))
     // console.log('login response',RoleResponse.Data)
     history.push("/dashboard")
