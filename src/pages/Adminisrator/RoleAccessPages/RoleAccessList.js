@@ -289,21 +289,21 @@ const ChangeButtonHandeler=()=>{
 
         for (var i = 0; i < tableListData.length; i++) {
             debugger
-            var moduleName = document.getElementById("moduleID" + i).value;
-            var pageName = document.getElementById("pageID" + i).value;
-            var relatedPage = document.getElementById("relatedPageID" + i).value;
+            var moduleName = document.getElementById("ModuleID" + i).value;
+            var pageName = document.getElementById("PageID" + i).value;
+            var relatedPage = document.getElementById("RelatedPageID" + i).value;
             var pageId = parseInt(pageName)
             var moduleId = parseInt(moduleName)
             var relatedPageID = parseInt(relatedPage)
 
-            var isSave = document.getElementById("isSave" + i).checked
-            var isEdit = document.getElementById("isEdit" + i).checked;
-            var isDelete = document.getElementById("isDelete" + i).checked;
-            var isEditSelf = document.getElementById("isEditSelf" + i).checked;
-            var isDeleteSelf = document.getElementById("isDeleteSelf" + i).checked;
-            var isShow = document.getElementById("isShow" + i).checked;
-            var isTopOfTheDivision = document.getElementById("isTopOfDivision" + i).checked;
-            var isView = document.getElementById("isView" + i).checked;
+            var isSave = document.getElementById("IsSave" + i).checked
+            var isEdit = document.getElementById("IsEdit" + i).checked;
+            var isDelete = document.getElementById("IsDelete" + i).checked;
+            var isEditSelf = document.getElementById("IsEditSelf" + i).checked;
+            var isDeleteSelf = document.getElementById("IsDeleteSelf" + i).checked;
+            var isShow = document.getElementById("IsShowOnMenu" + i).checked;
+            var isTopOfTheDivision = document.getElementById("IsTopOfTheDivision" + i).checked;
+            var isView = document.getElementById("IsView" + i).checked;
 
 
             if (isSave) roleAccessArray.push({ "PageAccess": 1 });
@@ -502,7 +502,7 @@ const ChangeButtonHandeler=()=>{
                                                                         />
                                                                         <input
                                                                             type="hidden"
-                                                                            id={"relatedPageID" + key}
+                                                                            id={"RelatedPageID" + key}
                                                                             value={indx.RelatedPageID}
                                                                         />
                                                                     </td>
@@ -510,8 +510,8 @@ const ChangeButtonHandeler=()=>{
                                                                         {indx.ModuleName}
                                                                         <input
                                                                             type="hidden"
-                                                                            id={"moduleID" + key}
-                                                                            name={"moduleID" + key}
+                                                                            id={"ModuleID" + key}
+                                                                            name={"ModuleID" + key}
                                                                             value={indx.ModuleID}
                                                                         />
                                                                     </td>
@@ -519,87 +519,29 @@ const ChangeButtonHandeler=()=>{
                                                                         {indx.PageName}
                                                                         <input
                                                                             type="hidden"
-                                                                            id={"pageID" + key}
-                                                                            name={"pageID" + key}
+                                                                            id={"PageID" + key}
+                                                                            name={"PageID" + key}
                                                                             value={indx.PageID}
                                                                         />
 
                                                                     </td>
-                                                                    <td>
-                                                                        {indx.PageAccess_IsSave ?
-                                                                            <input type={"checkbox"} id={'isSave' + key}
-                                                                                defaultChecked={indx.RoleAccess_IsSave > 0 ? true : false} />
+                                                                    {
+                                                                        PageAccess.map((indexPage)=>{
 
-                                                                            : <input type={"hidden"} id={'isSave' + key} />
-                                                                        }
-                                                                    </td>
-                                                                    <td>
-                                                                        {indx.PageAccess_IsEdit ?
-                                                                            <input type={"checkbox"} id={'isEdit' + key}
-                                                                                defaultChecked={indx.RoleAccess_IsEdit > 0 ? true : false} />
-                                                                            : <input type={"hidden"} id={'isEdit' + key} />
-                                                                        }
-                                                                    </td>
-                                                                    <td>
-                                                                        {/* {indx.PageAccess_IsDelete} */}
-                                                                        {indx.PageAccess_IsDelete ?
-                                                                            <input type={"checkbox"}
-                                                                                id={'isDelete' + key}
-                                                                                defaultChecked={indx.RoleAccess_IsDelete > 0 ? true : false} />
-                                                                            :
-                                                                            <input type={"hidden"} id={'isDelete' + key} />
-                                                                        }
-                                                                    </td>
-                                                                    <td>
-                                                                        {/* {indx.PageAccess_IsEditSelf} */}
-                                                                        {indx.PageAccess_IsEditSelf ?
-                                                                            <input type={"checkbox"}
-                                                                                id={'isEditSelf' + key}
-                                                                                defaultChecked={indx.RoleAccess_IsEditSelf > 0 ? true : false} />
-                                                                            :
-                                                                            <input type={"hidden"} id={'isEditSelf' + key} />
-                                                                        }
-
-                                                                    </td>
-                                                                    <td>
-                                                                        {/* {indx.PageAccess_IsDeleteSelf} */}
-                                                                        {indx.PageAccess_IsDeleteSelf ?
-                                                                            <input type={"checkbox"}
-                                                                                id={'isDeleteSelf' + key}
-                                                                                defaultChecked={indx.RoleAccess_IsDeleteSelf > 0 ? true : false} />
-                                                                            :
-                                                                            <input type={"hidden"} id={'isDeleteSelf' + key} />
-                                                                        }
-                                                                    </td>
-                                                                    <td>
-                                                                        {/* {indx.PageAccess_IsShow} */}
-                                                                        {indx.PageAccess_IsShow ?
-                                                                            <input type={"checkbox"}
-                                                                                id={'isShow' + key}
-                                                                                defaultChecked={indx.RoleAccess_IsShow > 0 ? true : false} />
-                                                                            :
-                                                                            <input type={"hidden"} id={'isShow' + key} />
-                                                                        }
-                                                                    </td>
-                                                                    <td>
-                                                                        {/* {indx.PageAccess_IsView} */}
-                                                                        {indx.PageAccess_IsView ?
-                                                                            <input type={"checkbox"}
-                                                                                id={'isView' + key}
-                                                                                defaultChecked={indx.RoleAccess_IsView > 0 ? true : false} />
-                                                                            :
-                                                                            <input type={"hidden"} id={'isView' + key} />}
-                                                                    </td>
-                                                                    <td>
-                                                                        {/* {indx.PageAccess_IsTopOfTheDivision} */}
-                                                                        {indx.PageAccess_IsTopOfTheDivision ?
-                                                                            <input type={"checkbox"}
-                                                                                id={'isTopOfDivision' + key}
-                                                                                defaultChecked={indx.RoleAccess_IsTopOfTheDivision > 0 ? true : false} />
-                                                                            :
-                                                                            <input type={"hidden"} id={'isTopOfDivision' + key} />
-                                                                        }
-                                                                    </td>
+                                                                            return(
+                                                                            <td>
+                                                                            {indx[`PageAccess_${indexPage.Name}`] ?
+                                                                                <input type={"checkbox"} id={indexPage.Name + key}
+                                                                                    defaultChecked={indx[`RoleAccess_${indexPage.Name}`] > 0 ? true : false} />
+                                                                                    
+                                                                                : <input type={"hidden"} id={indexPage.Name + key} />
+                                                                            }
+                                                                        </td>
+                                                                            )
+                                                                        })
+                                                                    }
+                                                                    
+                                                                   
                                                                 </tr>
                                                             )
                                                         })}
