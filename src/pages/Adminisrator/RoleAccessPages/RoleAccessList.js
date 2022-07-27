@@ -274,7 +274,12 @@ const RoleAccessList = (props) => {
         }
     }
 
-
+const ChangeButtonHandeler=()=>{
+    setShowTableOnUI(false);
+    setModule_DropdownSelect('')
+    setPage_DropdownSelect('')
+    setTableListData([])
+}
     const saveHandeller = () => {
 
         let selectedItemArray = [];
@@ -416,7 +421,7 @@ const RoleAccessList = (props) => {
 
 
                                             <Col md="4" className="align-right">
-                                                <Button onClick={() => { setShowTableOnUI(false) }}>Change Role</Button>
+                                                <Button onClick={() => { ChangeButtonHandeler() }}>Change Role</Button>
 
                                             </Col >
 
