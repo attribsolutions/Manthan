@@ -274,12 +274,12 @@ const RoleAccessList = (props) => {
         }
     }
 
-const ChangeButtonHandeler=()=>{
-    setShowTableOnUI(false);
-    setModule_DropdownSelect('')
-    setPage_DropdownSelect('')
-    setTableListData([])
-}
+    const ChangeButtonHandeler = () => {
+        setShowTableOnUI(false);
+        setModule_DropdownSelect('')
+        setPage_DropdownSelect('')
+        setTableListData([])
+    }
     const saveHandeller = () => {
 
         let selectedItemArray = [];
@@ -387,7 +387,7 @@ const ChangeButtonHandeler=()=>{
                                         <Col md="4" className="">
                                             <FormGroup className="mb-1 row  " >
                                                 <Label className="col-sm-3 p-2">Division</Label>
-                                                <Col md="8">
+                                                <Col md="9">
                                                     <Select
                                                         value={division_dropdown_Select}
                                                         options={DivisionTypesValues}
@@ -397,8 +397,8 @@ const ChangeButtonHandeler=()=>{
                                             </FormGroup>
                                         </Col>
 
-                                        <Col md="2" className="mt- ">
-                                            <Button onClick={() => { GoButton_Handler() }}>Go</Button>
+                                        <Col md="3" className="mt- ">
+                                            <Button class="btn btn-success border border-dark"onClick={() => { GoButton_Handler() }}>Go</Button>
                                         </Col>
 
                                     </Row>
@@ -420,19 +420,20 @@ const ChangeButtonHandeler=()=>{
                                             </Col >
 
 
-                                            <Col md="4" className="align-right">
-                                                <Button onClick={() => { ChangeButtonHandeler() }}>Change Role</Button>
-
+                                            <Col md="4" className="align-right p-2">
+                                                
+                                                <Button class="btn btn-primary border border-dark"onClick={() => { ChangeButtonHandeler() }}>Change Role</Button>
+                                            
                                             </Col >
 
 
                                         </Row>
                                         <Row  >
 
-                                            <Col md="3" className="">
+                                            <Col md="4" className="">
                                                 <FormGroup className="mb- row " >
-                                                    <Label className="col-sm-5 p-2">Module</Label>
-                                                    <Col md="7">
+                                                    <Label className="col-sm-3 p-2">Module</Label>
+                                                    <Col md="9">
 
                                                         <Select
                                                             value={module_DropdownSelect}
@@ -447,8 +448,8 @@ const ChangeButtonHandeler=()=>{
 
                                             <Col md="4">
                                                 <FormGroup className="mb-2 row  " >
-                                                    <Label className="col-sm-4 p-2">Page</Label>
-                                                    <Col md="8">
+                                                    <Label className="col-sm-2 p-2">Page</Label>
+                                                    <Col md="9">
 
                                                         <Select
                                                             value={page_DropdownSelect}
@@ -462,12 +463,12 @@ const ChangeButtonHandeler=()=>{
                                             </Col >
 
                                             <Col md="2" className=" ">
-                                                <Button onClick={() => { AddPageButton_Handeler() }}>Add Page</Button>
+                                                <Button class="btn btn-primary border border-dark" onClick={() => { AddPageButton_Handeler() }}>Add Page</Button>
                                             </Col>
-                                            <Col md="2"></Col>
 
-                                            <Col md="1" className=" ">
-                                                <Button className='btn btn-succcess' onClick={() => { saveHandeller() }}>Save</Button>
+
+                                            <Col md="2" className=" ">
+                                                <Button class="btn btn-success border border-dark" onClick={() => { saveHandeller() }}>Save</Button>
                                             </Col>
 
                                         </Row>
@@ -526,22 +527,22 @@ const ChangeButtonHandeler=()=>{
 
                                                                     </td>
                                                                     {
-                                                                        PageAccess.map((indexPage)=>{
+                                                                        PageAccess.map((indexPage) => {
 
-                                                                            return(
-                                                                            <td>
-                                                                            {indx[`PageAccess_${indexPage.Name}`] ?
-                                                                                <input type={"checkbox"} id={indexPage.Name + key}
-                                                                                    defaultChecked={indx[`RoleAccess_${indexPage.Name}`] > 0 ? true : false} />
-                                                                                    
-                                                                                : <input type={"hidden"} id={indexPage.Name + key} />
-                                                                            }
-                                                                        </td>
+                                                                            return (
+                                                                                <td>
+                                                                                    {indx[`PageAccess_${indexPage.Name}`] ?
+                                                                                        <input type={"checkbox"} id={indexPage.Name + key}
+                                                                                            defaultChecked={indx[`RoleAccess_${indexPage.Name}`] > 0 ? true : false} />
+
+                                                                                        : <input type={"hidden"} id={indexPage.Name + key} />
+                                                                                    }
+                                                                                </td>
                                                                             )
                                                                         })
                                                                     }
-                                                                    
-                                                                   
+
+
                                                                 </tr>
                                                             )
                                                         })}
