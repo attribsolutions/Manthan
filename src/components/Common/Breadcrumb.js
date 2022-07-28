@@ -39,16 +39,16 @@ const Breadcrumb = props => {
 
   // New Button Handller
   const NewButtonHandeller = () => {
-
-    let RelatedPageID=0
+debugger
+    let RelatedPageid=0
     const userPageAccess = history.location.state
 
    if (!(userPageAccess===undefined)) {
-    RelatedPageID=userPageAccess.label.RelatedPageID
+    RelatedPageid=userPageAccess.UserDetails.RelatedPageID
    }
 
    const found=RoleAccessModifiedinSingleArray.find((element)=>{
-     return element.id===userPageAccess
+     return element.id===RelatedPageid
    })
    
     history.push({

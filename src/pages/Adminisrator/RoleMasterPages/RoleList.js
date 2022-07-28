@@ -28,15 +28,8 @@ const RoleList = (props) => {
   const history = useHistory()
   const userAccessGetingfromHistory = history.location.state;
 
-  const initialUserPageAccess = {
-    PageHeading: "",
-    PageDescription: "",
-    PageDescriptionDetails: "",
-    PageAccess_IsDelete: false,
-    PageAccess_IsView: false,
-    PageAccess_IsEdit: false,
-  }
-  const [userPageAccess, setUserPageAccess] = useState(initialUserPageAccess);
+ 
+  const [userPageAccess, setUserPageAccess] = useState('');
   const [modal_center, setmodal_center] = useState(false);
 
   // get Access redux data
@@ -49,18 +42,26 @@ const RoleList = (props) => {
     })
   );
 
-  useEffect(() => {
 
+  
+  useEffect(() => {
+    const userAccessGetingfromHistory = props.location.state
     if ((userAccessGetingfromHistory === undefined)) {
       // history.push("/Dashboard")
     }
     else {
-      if (!(userAccessGetingfromHistory.fromDashboardAccess)) {
+      const UserDetails = userAccessGetingfromHistory.UserDetails;
+      const fromDashboardAccess=userAccessGetingfromHistory.fromDashboardAccess
+
+      if (!fromDashboardAccess) {
         // history.push("/Dashboard")
+      } ;
+       if (!(UserDetails === undefined)) {
+        setUserPageAccess(UserDetails)
       }
-      setUserPageAccess(userAccessGetingfromHistory.UserDetails)
     };
-  }, [userAccessGetingfromHistory])
+  }, [props.location.state])
+console.log("userPageAccess",userPageAccess)
 
   //  This UseEffect => Featch Modules List data  First Rendering
   useEffect(() => {
@@ -228,7 +229,9 @@ const RoleList = (props) => {
       <MetaTags>
         <title>Role List| FoodERP-React FrontEnd</title>
       </MetaTags>
-      <div className="page-content">
+      {
+        !(userPageAccess==='') ?
+        <div className="page-content">
         <PaginationProvider pagination={paginationFactory(pageOptions)}>
           {({ paginationProps, paginationTableProps }) => (
             <ToolkitProvider
@@ -283,6 +286,10 @@ const RoleList = (props) => {
           <RoleMaster state={editData.Data} />
         </Modal>
       </div>
+        :
+        <></>
+      }
+     
     </React.Fragment>
   );
 };
