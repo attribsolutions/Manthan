@@ -48,8 +48,7 @@ const Modules = (props) => {
     let CheckPageMode = props.IsComponentMode;
 
     //Access redux store Data /  'save_ModuleSuccess' action data
-    const { APIResponse, ComponentDetais } = useSelector((state) => ({
-        ComponentDetais: state.Login.RoleData,
+    const { APIResponse} = useSelector((state) => ({
         APIResponse: state.Modules.modulesSubmitSuccesss,
     }));
 

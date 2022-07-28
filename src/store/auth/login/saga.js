@@ -65,19 +65,58 @@ function* logoutUser({ payload: { history } }) {
 function* RoleAccessGenratorFunction({ id1, id2, id3 }) {
 
   try {
+
     const RoleResponse = yield call(RoleAccessApi_url, id1, id2, id3);
-    if (RoleResponse.Data.length > 0) 
-    {
-      yield put(roleAceessActionSuccess(RoleResponse.Data))
 
-      let AllDataIntoSinlgeArray =[]
+    if (RoleResponse.Data.length > 0) {
 
-      RoleResponse.Data.map((i)=>{
-          i.ModuleData.map((index)=>{
-            AllDataIntoSinlgeArray.push(index)
+      let ArrayMain = []
+      let ElementMain = {}
+      let ArrayChieldSecond = []
+      let ElementChieldSecond = {}
+      let all_DataInSinlgeArray = []
+
+      RoleResponse.Data.map((index_main) => {
+        ElementMain = index_main;
+
+        index_main.ModuleData.map((index_secd) => {
+
+          ElementChieldSecond = index_secd;
+          ElementChieldSecond[`PageAccess_IsSave`] = false;
+          ElementChieldSecond[`PageAccess_IsEdit`] = false;
+          ElementChieldSecond[`PageAccess_IsDelete`] = false;
+          ElementChieldSecond[`PageAccess_IsEditSelf`] = false;
+          ElementChieldSecond[`PageAccess_IsDeleteSelf`] = false;
+          ElementChieldSecond[`PageAccess_IsShow`] = false;
+          ElementChieldSecond[`PageAccess_IsView`] = false;
+          ElementChieldSecond[`PageAccess_IsTopOfTheDivision`] = false;
+
+          index_secd.RolePageAccess.map((rolIndex) => {
+            ElementChieldSecond[`PageAccess_${rolIndex.Name}`] = true;
           })
+
+          ArrayChieldSecond.push(ElementChieldSecond)
+          delete ElementMain.ModuleData
+          ElementMain["ModuleData"] = ArrayChieldSecond
+          ElementChieldSecond = {};
+
+        })
+        ArrayMain.push(ElementMain)
+        ArrayChieldSecond = []
+        ElementMain={
+          
+        }      })
+      
+      ArrayMain.map((i) => {
+        i.ModuleData.map((index) => {
+          all_DataInSinlgeArray.push(index)
+        })
       })
-yield put(RoleAccessUpdateSuccess(AllDataIntoSinlgeArray))
+      console.log('ArrayMain',ArrayMain)
+      console.log('RoleResponse.Data',RoleResponse.Data)
+
+      yield put(roleAceessActionSuccess(ArrayMain))
+      yield put(RoleAccessUpdateSuccess(all_DataInSinlgeArray))
     }
   } catch (error) {
     console.log("RoleAccessGenratorFunction", error)
