@@ -16,7 +16,8 @@ const RoleMaster = (props) => {
 
   const formRef = useRef(null);
   const dispatch = useDispatch();
-  const history = useHistory();
+  const history = useHistory()
+  const userAccessGetingfromHistory = history.location.state
 
   //SetState  Edit data Geting From Modules List component
   const [EditData, setEditData] = useState([]);
@@ -48,35 +49,17 @@ const RoleMaster = (props) => {
   }));
 
   useEffect(() => {
-    const userAccessGetingfromHistory = props.location.state
+
     if ((userAccessGetingfromHistory === undefined)) {
       // history.push("/Dashboard")
     }
     else {
-      const UserDetails = userAccessGetingfromHistory.UserDetails;
-      const fromDashboardAccess=userAccessGetingfromHistory.fromDashboardAccess
-
-      if (!fromDashboardAccess) {
+      if (!(userAccessGetingfromHistory.fromDashboardAccess)) {
         // history.push("/Dashboard")
-      } ;
-       if (!(UserDetails === undefined)) {
-        setUserPageAccess(UserDetails)
       }
-      console.log("UserDetails", UserDetails)
-
+      setUserPageAccess(userAccessGetingfromHistory.UserDetails)
     };
-  }, [props.location.state])
-  console.log("userPageAccess", userPageAccess)
-  console.log("props", props)
-
-
-
-
-
-
-
-
-
+  }, [props])
 
 
   // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
@@ -150,7 +133,7 @@ const RoleMaster = (props) => {
 
   // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
   var IsEditMode_Css = ''
-  if (pageMode === "edit") { IsEditMode_Css = "-5.5%" };
+  if (pageMode==="edit") { IsEditMode_Css = "-5.5%" };
 
   return (
     <React.Fragment>
@@ -258,7 +241,7 @@ const RoleMaster = (props) => {
                               <div>
                                 {
                                   pageMode === "edit" ?
-                                    userPageAccess.PageAccess_IsEdit ?
+                                  userPageAccess.PageAccess_IsEdit ?
                                       <button
                                         type="submit"
                                         data-mdb-toggle="tooltip" data-mdb-placement="top" title="Update Role"
@@ -270,14 +253,14 @@ const RoleMaster = (props) => {
                                       <></>
                                     : (
                                       userPageAccess.PageAccess_IsSave ?
-                                        <button
-                                          type="submit"
-                                          data-mdb-toggle="tooltip" data-mdb-placement="top" title="Save Role"
-                                          className="btn btn-primary w-md"
-                                        > <i className="fas fa-save me-2"></i> Save
-                                        </button>
-                                        :
-                                        <></>
+                                      <button
+                                        type="submit"
+                                        data-mdb-toggle="tooltip" data-mdb-placement="top" title="Save Role"
+                                        className="btn btn-primary w-md"
+                                      > <i className="fas fa-save me-2"></i> Save
+                                      </button>
+                                      :
+                                      <></>
                                     )
                                 }
                               </div>

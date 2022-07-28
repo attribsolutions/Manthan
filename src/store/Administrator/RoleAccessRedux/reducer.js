@@ -1,6 +1,5 @@
 import {
   ADD_PAGE_HANDLER_FOR_ROLE_ACCESS_lIST_PAGE_SUCCESS,
-  GET_ROLEACCESS_LIST_PAGE_SUCCESS,
   GET_ROLE_ACCESS_LIST_FOR_ROLE_ACCESS_lIST_PAGE_SUCCESS,
   GO_BUTTON_HANDLER_FOR_ROLE_ACCESS_lIST_PAGE_SUCCESS,
   PAGE_DROPDOWN_FOR_ROLE_ACCESS_lIST_SUCCESS,
@@ -12,8 +11,7 @@ const INIT_STATE = {
   RoleListDataForRoleListPage: [],
   AddPage_PageMasterListForRoleAccess:[],
   GO_buttonPageMasterListForRoleAccess:[],
-  PostMessage_ForRoleAccessList:{Status:false},
-  RoleAccessListPageData:[]
+  PostMessage_ForRoleAccessList:{Status:false}
 }
 
 const RoleAccessReducer = (state = INIT_STATE, action) => {
@@ -48,12 +46,6 @@ const RoleAccessReducer = (state = INIT_STATE, action) => {
           ...state,
           PostMessage_ForRoleAccessList: action.payload,
         }
-
-        case GET_ROLEACCESS_LIST_PAGE_SUCCESS:
-          return {
-            ...state,
-            RoleAccessListPageData: action.payload,
-          }
     default:
       return state
   }
