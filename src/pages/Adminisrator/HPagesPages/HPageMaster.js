@@ -10,7 +10,6 @@ import {
     Button,
     FormGroup,
     CardHeader,
-
 } from "reactstrap";
 import Breadcrumbs from '../../../components/Common/Breadcrumb'
 import {
@@ -19,7 +18,6 @@ import {
 } from "availity-reactstrap-validation";
 import { useDispatch, useSelector } from "react-redux";
 import AvField from "availity-reactstrap-validation/lib/AvField";
-import ReactSelect from "react-select";
 import { Tbody, Thead, Table } from "react-super-responsive-table";
 import {
     editHPagesIDSuccess,
@@ -36,21 +34,23 @@ import { AlertState } from "../../../store/Utilites/CostumeAlert/actions";
 import { BreadcrumbShow } from "../../../store/Utilites/Breadcrumb/actions";
 
 const HPageMaster = (props) => {
+
     var editDataGatingFromList = props.state;
 
     const formRef = useRef(null);
     const dispatch = useDispatch();
+
     const [IsEdit, setIsEdit] = useState(false);
     const [EditData, setEditData] = useState([]);
+    const [PageMode, setPageMode] = useState(false);
+    const [pageAccessData, setPageAccessData] = useState([]);
+
     const [module_DropdownSelect, setModule_DropdownSelect] = useState('');
     const [pageType_DropdownSelect, setPageType_DropdownSelect] = useState('');
     const [pageList_DropdownSelect, setPageList_DropdownSelect] = useState('');
 
-    const [PageMode, setPageMode] = useState(false);
-
     const [isShowPageChecked, setisShowPageChecked] = useState(false);
-    const [pageAccessData, setPageAccessData] = useState([]);
-
+    const [pageAccessDropDownView, setPageAccessDropDownView] = useState(false);
     const [pageAccess_DropDownSelect, setPageAccess_DropDownSelect] = useState('');
 
     //Access redux store Data
@@ -65,8 +65,6 @@ const HPageMaster = (props) => {
     useEffect(() => {
         dispatch(getPageAccess_DropDown_API());
     }, [dispatch]);
-
-  
 
     // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
     useEffect(() => {
@@ -87,7 +85,6 @@ const HPageMaster = (props) => {
                 label: editDataGatingFromList.RelatedPageName,
             })
 
-
             // When value 2 is get then DropDown lable is "ListPage" and ShowMenu is disabled Otherwise DropDown lable is "AddPage" and ShowMenu is enabled
             let showCheckBox_pageType = editDataGatingFromList.PageType
             if (showCheckBox_pageType === 2) {
@@ -105,14 +102,13 @@ const HPageMaster = (props) => {
                 setPageType_DropdownSelect({ value: 1, label: 'AddPage' })
 
             }
-
             dispatch(editHPagesIDSuccess({ Status: false }))
-
         }
     }, [editDataGatingFromList]);
 
     // This UseEffect clear Form Data and when modules Save Successfully.
     useEffect(() => {
+
         if ((SaveMessage.Status === true) && (SaveMessage.StatusCode === 200)) {
             dispatch(saveHPagesSuccess({ Status: false }))
             setModule_DropdownSelect('')
@@ -150,7 +146,7 @@ const HPageMaster = (props) => {
         }
     }, [SaveMessage])
 
- 
+
     const PageAccessValues = PageAccess.map((Data) => ({
         value: Data.id,
         label: Data.Name
@@ -179,8 +175,8 @@ const HPageMaster = (props) => {
         }
     ];
 
-       //'Save' And 'Update' Button Handller
-       const handleValidSubmit = (event, values) => {
+    //'Save' And 'Update' Button Handller
+    const handleValidSubmit = (event, values) => {
 
         if (pageAccessData.length <= 0) {
             dispatch(AlertState({
@@ -192,8 +188,7 @@ const HPageMaster = (props) => {
             return
         }
 
-        const requestOptions = {
-            body: JSON.stringify({
+        const jsonBody = JSON.stringify({
                 Name: values.Name,
                 Module: module_DropdownSelect.value,
                 isActive: values.isActive,
@@ -202,22 +197,22 @@ const HPageMaster = (props) => {
                 ActualPagePath: values.pagePath,
                 isShowOnMenu: isShowPageChecked,
                 PageType: pageType_DropdownSelect.value,
-                PageHeading:values.pageheading,
-                PageDescription:values.pagedescription,
-                PageDescriptionDetails:values.pageheadingdescription,
+                PageHeading: values.pageheading,
+                PageDescription: values.pagedescription,
+                PageDescriptionDetails: values.pageheadingdescription,
                 RelatedPageID: pageList_DropdownSelect.value,
                 CreatedBy: 1,
                 UpdatedBy: 1,
                 PagePageAccess: pageAccessData.map((d) => ({
                     Access: d.AccessID,
                 })),
-            }),
-        };
+            });
+       
         if (IsEdit) {
-            dispatch(updateHPages(requestOptions.body, EditData.id));
+            dispatch(updateHPages(jsonBody, EditData.id));
         }
         else {
-            dispatch(saveHPages(requestOptions.body));
+            dispatch(saveHPages(jsonBody));
         }
     };
 
@@ -235,13 +230,17 @@ const HPageMaster = (props) => {
     const PageType_DropdownSelectHandller = (e) => {
 
         let showCheckBox = document.getElementById("inp-showOnMenu")
+
         if (e.value === 2) {
             setisShowPageChecked(true)
             dispatch(getPageList(e.value))
             showCheckBox.disabled = true
+            setPageAccessDropDownView(true)
+
         }
         else if (e.value === 1) {
             showCheckBox.disabled = false
+            setPageAccessDropDownView(false)
             dispatch(getPageListSuccess([]))
             setPageList_DropdownSelect({ value: 0 })
         }
@@ -295,9 +294,9 @@ const HPageMaster = (props) => {
             <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
                 <Breadcrumbs breadcrumbItem={"Page Master"} />
                 <Container fluid>
-                <MetaTags>
-                    <title>Page Master| FoodERP-React FrontEnd</title>
-                </MetaTags>
+                    <MetaTags>
+                        <title>Page Master| FoodERP-React FrontEnd</title>
+                    </MetaTags>
 
                     <Card className="text-black" >
                         <CardHeader className="card-header   text-black" style={{ backgroundColor: "#dddddd" }} >
@@ -315,7 +314,6 @@ const HPageMaster = (props) => {
                                 <Card >
                                     <CardBody style={{ backgroundColor: "whitesmoke" }}>
                                         <Row >
-
                                             <Col md="3">
                                                 <FormGroup className="mb-3 ">
                                                     <Label >Name </Label>
@@ -332,12 +330,12 @@ const HPageMaster = (props) => {
                                             </Col>
 
                                             <Col md="1">  </Col>
-                                            
+
                                             <Col md="7">
                                                 <FormGroup className="mb-3 ">
                                                     <Label >Page Description </Label>
-                                                    <AvField name="pagedescription" 
-                                                    value={EditData.PageDescription}
+                                                    <AvField name="pagedescription"
+                                                        value={EditData.PageDescription}
                                                         type="text"
                                                         placeholder="Please Enter Page Description"
                                                         autoComplete='off'
@@ -348,7 +346,7 @@ const HPageMaster = (props) => {
                                                 </FormGroup>
                                             </Col>
                                         </Row>
-                                   
+
                                         <Row >
                                             <Col md="3">
                                                 <FormGroup className="mb-3">
@@ -377,7 +375,6 @@ const HPageMaster = (props) => {
                                                     />
                                                 </FormGroup>
                                             </Col>
-
                                         </Row>
                                     </CardBody>
                                 </Card>
@@ -481,7 +478,7 @@ const HPageMaster = (props) => {
                                                             <input type="checkbox" className="form-check-input " id="inp-showOnMenu"
                                                                 checked={isShowPageChecked}
                                                                 name="isShowOnMenu"
-                                                                onChange={()=>{setisShowPageChecked(!isShowPageChecked)}}
+                                                                onChange={() => { setisShowPageChecked(!isShowPageChecked) }}
                                                             />
                                                             <label className="form-check-label" htmlFor="customSwitchsizemd"></label>
                                                         </div>
@@ -506,101 +503,99 @@ const HPageMaster = (props) => {
 
                                     </CardBody>
                                 </Card>
+                                {pageAccessDropDownView ?
+                                   ( <Card className=" mt-n2 text-black">
+                                        <CardBody style={{ backgroundColor: "whitesmoke" }}>
+                                            <Row className="">
+                                                <FormGroup className=" ml-3 col col-sm-4 " >
+                                                    <Label htmlFor="validationCustom01">Page Access</Label>
+                                                    <Select
+                                                        options={PageAccessValues}
+                                                        onChange={(e) => { PageAccess_DropdownSelect_Handler(e) }}
+                                                        classNamePrefix="select2-selection"
+                                                    />
+                                                </FormGroup>
 
-                                <Card className=" mt-n2 text-black">
-                                    <CardBody style={{ backgroundColor: "whitesmoke" }}>
-                                        <Row className="">
-                                            <FormGroup className=" ml-3 col col-sm-4 " >
-                                                <Label htmlFor="validationCustom01">Page Access</Label>
-                                                <Select
-                                                    //   value={RoleDropDown}
-                                                      options={PageAccessValues}
-                                                      onChange={(e) => { PageAccess_DropdownSelect_Handler(e) }}
-                                                    classNamePrefix="select2-selection"
-                                                />
-                                               
-                                            </FormGroup>
+                                                <Col sm={1} style={{ marginTop: '28px' }} >
+                                                    <Button
+                                                        type="button"
+                                                        className="btn btn-sm mt-1 mb-0 btn-light  btn-outline-primary  "
+                                                        onClick={() =>
+                                                            AddRoleHandler()
+                                                        }
+                                                    >
+                                                        <i className="dripicons-plus "></i>
+                                                    </Button>
+                                                </Col>
 
-                                            <Col sm={1} style={{ marginTop: '28px' }} >
-                                                {" "}
-                                                <Button
-                                                    type="button"
-                                                    className="btn btn-sm mt-1 mb-0 btn-light  btn-outline-primary  "
-                                                    onClick={() => 
-                                                        AddRoleHandler()
-                                                    }
-                                                >
-                                                    <i className="dripicons-plus "></i>
-                                                </Button>
-                                            </Col>
-                                            <Col sm={3} style={{ marginTop: '28px' }}>
-                                                {pageAccessData.length > 0 ? (
+                                                <Col sm={3} style={{ marginTop: '28px' }}>
+                                                    {pageAccessData.length > 0 ? (
 
-                                                    <div className="table-responsive">
-                                                        <Table className="table table-bordered  text-center">
-                                                            <Thead >
-                                                                <tr>
-                                                                    <th>Page Access</th>
+                                                        <div className="table-responsive">
+                                                            <Table className="table table-bordered  text-center">
+                                                                <Thead >
+                                                                    <tr>
+                                                                        <th>Page Access</th>
 
-                                                                    <th>Action</th>
-                                                                </tr>
-                                                            </Thead>
-                                                            <Tbody  >
-                                                                {pageAccessData.map((TableValue) => (
-                                                                    <tr >
-                                                                        <td>
-                                                                            {TableValue.AccessName}
-                                                                        </td>
-                                                                        <td>
-                                                                            <i className="mdi mdi-trash-can d-block text-danger font-size-20" onClick={() => {
-                                                                                PageAccess_DeleteButton_Handller(TableValue.AccessID)
-                                                                            }} >
-                                                                            </i>
-                                                                        </td>
+                                                                        <th>Action</th>
                                                                     </tr>
-                                                                ))}
-                                                            </Tbody>
-                                                        </Table>
-                                                    </div>
-                                                ) : (
-                                                    <>
-                                                    </>
-                                                )}
-                                            </Col>
-                                        </Row>
-                                      
-                                        <FormGroup className=" mt-3 ">
-                                                    <Row className="mb-0">
+                                                                </Thead>
 
-                                                        <Col sm={2} >
-                                                            <div>
-                                                                {
-                                                                    IsEdit ? (
-                                                                        <button
-                                                                            type="submit"
-                                                                            data-mdb-toggle="tooltip" data-mdb-placement="top" title="Update Page"
-                                                                            className="btn btn-success w-md"
-                                                                        >
-                                                                            <i class="fas fa-edit me-2"></i>Update
-                                                                        </button>) : (
-                                                                        <button
-                                                                            type="submit"
-                                                                            data-mdb-toggle="tooltip" data-mdb-placement="top" title="Save Page"
-                                                                            className="btn btn-primary w-md"
-                                                                        > <i className="fas fa-save me-2"></i> Save
-                                                                        </button>
-                                                                    )
-                                                                }
-                                                            </div>
-                                                        </Col>
-                                                    </Row>
-                                                </FormGroup >
-                                  
-                                    </CardBody>
-                                </Card>
+                                                                <Tbody  >
+                                                                    {pageAccessData.map((TableValue) => (
+                                                                        <tr >
+                                                                            <td>
+                                                                                {TableValue.AccessName}
+                                                                            </td>
+                                                                            <td>
+                                                                                <i className="mdi mdi-trash-can d-block text-danger font-size-20" onClick={() => {
+                                                                                    PageAccess_DeleteButton_Handller(TableValue.AccessID)
+                                                                                }} >
+                                                                                </i>
+                                                                            </td>
+                                                                        </tr>
+                                                                    ))}
+                                                                </Tbody>
+                                                            </Table>
+                                                        </div>
+                                                    ) 
+                                                    : 
+                                                    (<> </>)
+                                                    }
+                                                </Col>
+                                            </Row>
 
+                                            <FormGroup className=" mt-3 ">
+                                                <Row className="mb-0">
+                                                    <Col sm={2} >
+                                                        <div>
+                                                            {
+                                                                IsEdit ? (
+                                                                    <button
+                                                                        type="submit"
+                                                                        data-mdb-toggle="tooltip" data-mdb-placement="top" title="Update Page"
+                                                                        className="btn btn-success w-md"
+                                                                    >
+                                                                        <i class="fas fa-edit me-2"></i>Update
+                                                                    </button>) : (
+                                                                    <button
+                                                                        type="submit"
+                                                                        data-mdb-toggle="tooltip" data-mdb-placement="top" title="Save Page"
+                                                                        className="btn btn-primary w-md"
+                                                                    > <i className="fas fa-save me-2"></i> Save
+                                                                    </button>
+                                                                )
+                                                            }
+                                                        </div>
+                                                    </Col>
+                                                </Row>
+                                            </FormGroup >
+                                        </CardBody>
+                                    </Card>)
+                                    :
+                                  (  <></>)
+                                }
                             </AvForm>
-                       
                         </CardBody>
                     </Card>
                 </Container>
