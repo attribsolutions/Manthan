@@ -17,16 +17,28 @@ const RoleMaster = (props) => {
   const formRef = useRef(null);
   const dispatch = useDispatch();
   const history = useHistory()
-
-  const userPageAccess = history.location.state
+  const userAccessGetingfromHistory = history.location.state
 
   //SetState  Edit data Geting From Modules List component
   const [EditData, setEditData] = useState([]);
 
   //'IsEdit'--if true then update data otherwise it will perfrom save operation
-  const [IsEdit, setIsEdit] = useState(false);
-  const [PageMode, setPageMode] = useState(false);
-  const [pageHeading, setPageHeading] = useState({ PageHeading: "", PageDescription: "", PageDescriptionDetails: "" });
+  const [pageMode, setPageMode] = useState("save");
+
+
+
+
+  // const [PageMode, setpageMode] = useState(false);
+
+  const initialUserPageAccess = {
+    PageHeading: "",
+    PageDescription: "",
+    PageDescriptionDetails: "",
+    PageAccess_IsSave: false,
+    PageAccess_IsView: false,
+    PageAccess_IsEdit: false,
+  }
+  const [userPageAccess, setUserPageAccess] = useState(initialUserPageAccess);
 
   //*** "isEditdata get all data from ModuleID for Binding  Form controls
   let editDataGatingFromList = props.state;
@@ -38,25 +50,24 @@ const RoleMaster = (props) => {
 
   useEffect(() => {
 
-    if ((userPageAccess === undefined)) {
-
-      history.push("/Dashboard")
+    if ((userAccessGetingfromHistory === undefined)) {
+      // history.push("/Dashboard")
     }
     else {
-      if (!(userPageAccess.fromDashboardAccess)) {
-        history.push("/Dashboard")
+      if (!(userAccessGetingfromHistory.fromDashboardAccess)) {
+        // history.push("/Dashboard")
       }
-      debugger
-      setPageHeading(userPageAccess.label)
+      setUserPageAccess(userAccessGetingfromHistory.UserDetails)
     };
   }, [props])
+
 
   // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
   useEffect(() => {
     document.getElementById("txtName").focus();
     if (!(editDataGatingFromList === undefined)) {
       setEditData(editDataGatingFromList);
-      setIsEdit(true);
+      setPageMode("edit");
       dispatch(editSuccess({ Status: false }))
       dispatch(BreadcrumbShow(editDataGatingFromList.Name))
       return
@@ -67,7 +78,7 @@ const RoleMaster = (props) => {
     if ((AddUserMessage.Status === true) && (AddUserMessage.StatusCode === 200)) {
       dispatch(PostSuccess({ Status: false }))
       formRef.current.reset();
-      if (PageMode === true) {
+      if (pageMode === "true") {
         dispatch(AlertState({
           Type: 1,
           Status: true,
@@ -98,33 +109,31 @@ const RoleMaster = (props) => {
 
   //'Save' And 'Update' Button Handller
   const handleValidUpdate = (event, values) => {
-    debugger
-    const requestOptions = {
-      body: JSON.stringify({
-        Name: values.Name,
-        Description: values.Description,
-        isActive: values.isActive,
-        Dashboard: values.Dashboard,
-        isSCMRole: values.isSCMRole,
-        CreatedBy: 1,
-        CreatedOn: "2022-05-20T11:22:55.711483Z",
-        UpdatedBy: 1,
-        UpdatedOn: "2022-05-20T11:22:55.711483Z"
-      }),
-    };
 
-    if (IsEdit) {
-      dispatch(updateID(requestOptions.body, EditData.id));
+    const jsonBody = JSON.stringify({
+      Name: values.Name,
+      Description: values.Description,
+      isActive: values.isActive,
+      Dashboard: values.Dashboard,
+      isSCMRole: values.isSCMRole,
+      CreatedBy: 1,
+      CreatedOn: "2022-05-20T11:22:55.711483Z",
+      UpdatedBy: 1,
+      UpdatedOn: "2022-05-20T11:22:55.711483Z"
+    })
+
+    if (pageMode === "edit") {
+      dispatch(updateID(jsonBody, EditData.id));
     }
     else {
-      dispatch(postRole(requestOptions.body));
+      dispatch(postRole(jsonBody));
 
     }
   };
 
   // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
   var IsEditMode_Css = ''
-  if (IsEdit === true) { IsEditMode_Css = "-5.5%" };
+  if (pageMode==="edit") { IsEditMode_Css = "-5.5%" };
 
   return (
     <React.Fragment>
@@ -132,15 +141,15 @@ const RoleMaster = (props) => {
         <title>Role Master| FoodERP-React FrontEnd</title>
       </MetaTags>
       <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
-      <Breadcrumbs breadcrumbItem={pageHeading.PageHeading} />
+        <Breadcrumbs breadcrumbItem={userPageAccess.PageHeading} />
         <Container fluid>
           <Card>
             <CardHeader
               className="card-header   text-black"
               style={{ backgroundColor: "#dddddd" }}
             >
-              <h4 className="card-title text-black">{pageHeading.PageDescription}</h4>
-              <p className="card-title-desc text-black">{pageHeading.PageDescriptionDetails}</p>
+              <h4 className="card-title text-black">{userPageAccess.PageDescription}</h4>
+              <p className="card-title-desc text-black">{userPageAccess.PageDescriptionDetails}</p>
             </CardHeader>
             <CardBody className=" vh-10 0 text-black" style={{ backgroundColor: "#whitesmoke" }} >
               <AvForm onValidSubmit={(e, v) => { handleValidUpdate(e, v) }}
@@ -231,21 +240,28 @@ const RoleMaster = (props) => {
                             <Col sm={2}>
                               <div>
                                 {
-                                  IsEdit ? (
-                                    <button
-                                      type="submit"
-                                      data-mdb-toggle="tooltip" data-mdb-placement="top" title="Update Role"
-                                      className="btn btn-success w-md"
-                                    >
-                                      <i class="fas fa-edit me-2"></i>Update
-                                    </button>) : (
-                                    <button
-                                      type="submit"
-                                      data-mdb-toggle="tooltip" data-mdb-placement="top" title="Save Role"
-                                      className="btn btn-primary w-md"
-                                    > <i className="fas fa-save me-2"></i> Save
-                                    </button>
-                                  )
+                                  pageMode === "edit" ?
+                                  userPageAccess.PageAccess_IsEdit ?
+                                      <button
+                                        type="submit"
+                                        data-mdb-toggle="tooltip" data-mdb-placement="top" title="Update Role"
+                                        className="btn btn-success w-md"
+                                      >
+                                        <i class="fas fa-edit me-2"></i>Update
+                                      </button>
+                                      :
+                                      <></>
+                                    : (
+                                      userPageAccess.PageAccess_IsSave ?
+                                      <button
+                                        type="submit"
+                                        data-mdb-toggle="tooltip" data-mdb-placement="top" title="Save Role"
+                                        className="btn btn-primary w-md"
+                                      > <i className="fas fa-save me-2"></i> Save
+                                      </button>
+                                      :
+                                      <></>
+                                    )
                                 }
                               </div>
                             </Col>
