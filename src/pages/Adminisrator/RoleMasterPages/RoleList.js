@@ -20,9 +20,23 @@ import { AlertState } from "../../../store/Utilites/CostumeAlert/actions";
 import "../../../assets/scss/CustomeTable/datatables.scss";
 import RoleMaster from "./RoleMaster";
 import { MetaTags } from "react-meta-tags";
+import { useHistory } from "react-router-dom";
 
-const RoleList = () => {
+const RoleList = (props) => {
+
   const dispatch = useDispatch();
+  const history = useHistory()
+  const userAccessGetingfromHistory = history.location.state;
+
+  const initialUserPageAccess = {
+    PageHeading: "",
+    PageDescription: "",
+    PageDescriptionDetails: "",
+    PageAccess_IsDelete: false,
+    PageAccess_IsView: false,
+    PageAccess_IsEdit: false,
+  }
+  const [userPageAccess, setUserPageAccess] = useState(initialUserPageAccess);
   const [modal_center, setmodal_center] = useState(false);
 
   // get Access redux data
@@ -34,6 +48,19 @@ const RoleList = () => {
       deleteMessage: state.RoleMaster_Reducer.deleteMessage,
     })
   );
+
+  useEffect(() => {
+
+    if ((userAccessGetingfromHistory === undefined)) {
+      // history.push("/Dashboard")
+    }
+    else {
+      if (!(userAccessGetingfromHistory.fromDashboardAccess)) {
+        // history.push("/Dashboard")
+      }
+      setUserPageAccess(userAccessGetingfromHistory.UserDetails)
+    };
+  }, [userAccessGetingfromHistory])
 
   //  This UseEffect => Featch Modules List data  First Rendering
   useEffect(() => {
@@ -117,7 +144,7 @@ const RoleList = () => {
     dispatch(editRoleId(id));
   };
 
-  
+
   const defaultSorted = [
     {
       dataField: "Name", // if dataField is not match to any column you defined, it will be ignored.
@@ -160,29 +187,36 @@ const RoleList = () => {
             className="d-flex gap-3"
             style={{ display: "flex", justifyContent: "center" }}
           >
-            <buton
-              type="button"
-              data-mdb-toggle="tooltip"
-              data-mdb-placement="top"
-              title="Edit Role"
-              onClick={() => {
-                EditPageHandler(Role.id);
-              }}
-              className="badge badge-soft-primary font-size-12"
-            >
-              <i className="mdi mdi-pencil font-size-18" id="edittooltip"></i>
-            </buton>
-            <buton
-              className="badge badge-soft-danger font-size-12"
-              data-mdb-toggle="tooltip"
-              data-mdb-placement="top"
-              title="Delete Role"
-              onClick={() => {
-                deleteHandeler(Role.id, Role.Name);
-              }}
-            >
-              <i className="mdi mdi-delete font-size-18"></i>
-            </buton>
+            {userPageAccess.PageAccess_IsEdit ?
+              <buton
+                type="button"
+                title="Edit Role"
+                onClick={() => {
+                  EditPageHandler(Role.id);
+                }}
+                className="badge badge-soft-primary font-size-12"
+              >
+                <i className="mdi mdi-pencil font-size-18" id="edittooltip"></i>
+              </buton>
+              :
+              <></>
+            }
+            {userPageAccess.PageAccess_IsDelete ?
+              <buton
+                className="badge badge-soft-danger font-size-12"
+                data-mdb-toggle="tooltip"
+                data-mdb-placement="top"
+                title="Delete Role"
+                onClick={() => {
+                  deleteHandeler(Role.id, Role.Name);
+                }}
+              >
+                <i className="mdi mdi-delete font-size-18"></i>
+              </buton>
+              :
+              <></>
+            }
+
           </div>
         </>
       ),

@@ -566,3 +566,72 @@ const ChangeButtonHandeler=()=>{
     );
 }
 export default RoleAccessList
+{/* <td>
+{indx.PageAccess_IsSave ?
+    <input type={"checkbox"} id={'isSave' + key}
+        defaultChecked={indx.RoleAccess_IsSave > 0 ? true : false} />
+
+    : <input type={"hidden"} id={'isSave' + key} />
+}
+</td>
+<td>
+{indx.PageAccess_IsEdit ?
+    <input type={"checkbox"} id={'isEdit' + key}
+        defaultChecked={indx.RoleAccess_IsEdit > 0 ? true : false} />
+    : <input type={"hidden"} id={'isEdit' + key} />
+}
+</td>
+<td>
+{indx.PageAccess_IsDelete ?
+    <input type={"checkbox"}
+        id={'isDelete' + key}
+        defaultChecked={indx.RoleAccess_IsDelete > 0 ? true : false} />
+    :
+    <input type={"hidden"} id={'isDelete' + key} />
+}
+</td>
+<td>
+{indx.PageAccess_IsEditSelf ?
+    <input type={"checkbox"}
+        id={'isEditSelf' + key}
+        defaultChecked={indx.RoleAccess_IsEditSelf > 0 ? true : false} />
+    :
+    <input type={"hidden"} id={'isEditSelf' + key} />
+}
+
+</td>
+<td>
+{indx.PageAccess_IsDeleteSelf ?
+    <input type={"checkbox"}
+        id={'isDeleteSelf' + key}
+        defaultChecked={indx.RoleAccess_IsDeleteSelf > 0 ? true : false} />
+    :
+    <input type={"hidden"} id={'isDeleteSelf' + key} />
+}
+</td>
+<td>
+{indx.PageAccess_IsShow ?
+    <input type={"checkbox"}
+        id={'isShow' + key}
+        defaultChecked={indx.RoleAccess_IsShow > 0 ? true : false} />
+    :
+    <input type={"hidden"} id={'isShow' + key} />
+}
+</td>
+<td>
+{indx.PageAccess_IsView ?
+    <input type={"checkbox"}
+        id={'isView' + key}
+        defaultChecked={indx.RoleAccess_IsView > 0 ? true : false} />
+    :
+    <input type={"hidden"} id={'isView' + key} />}
+</td>
+<td>
+{indx.PageAccess_IsTopOfTheDivision ?
+    <input type={"checkbox"}
+        id={'isTopOfDivision' + key}
+        defaultChecked={indx.RoleAccess_IsTopOfTheDivision > 0 ? true : false} />
+    :
+    <input type={"hidden"} id={'isTopOfDivision' + key} />
+}
+</td> */}

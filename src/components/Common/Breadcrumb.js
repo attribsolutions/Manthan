@@ -40,22 +40,20 @@ const Breadcrumb = props => {
   // New Button Handller
   const NewButtonHandeller = () => {
 
-    // let RelatedPageID=11
-    const userPageAccess = history.location.state.label.RelatedPageID
+    let RelatedPageID=0
+    const userPageAccess = history.location.state
 
-  //  if (!(userPageAccess===undefined)) {
-  //   RelatedPageID=userPageAccess.label
-  //  }
+   if (!(userPageAccess===undefined)) {
+    RelatedPageID=userPageAccess.label.RelatedPageID
+   }
 
    const found=RoleAccessModifiedinSingleArray.find((element)=>{
      return element.id===userPageAccess
    })
-
-   console.log("found",found)
+   
     history.push({
       pathname: props.RedirctPath,
-      search: '',
-      state: {fromDashboardAccess: true,label:found}
+      state: {fromDashboardAccess: true,UserDetails:found}
     })
 
   }
