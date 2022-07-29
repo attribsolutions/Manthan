@@ -32,9 +32,9 @@ const RoleList = (props) => {
     PageHeading: "",
     PageDescription: "",
     PageDescriptionDetails: "",
-    PageAccess_IsDelete: false,
-    PageAccess_IsView: false,
-    PageAccess_IsEdit: false,
+    PageAccess_IsDelete: true,
+    PageAccess_IsView: true,
+    PageAccess_IsEdit: true,
   }
   const [userPageAccess, setUserPageAccess] = useState(initialUserPageAccess);
   const [modal_center, setmodal_center] = useState(false);

@@ -31,12 +31,12 @@ const RoleMaster = (props) => {
   // const [PageMode, setpageMode] = useState(false);
 
   const initialUserPageAccess = {
-    PageHeading: "",
-    PageDescription: "",
-    PageDescriptionDetails: "",
-    PageAccess_IsSave: false,
-    PageAccess_IsView: false,
-    PageAccess_IsEdit: false,
+    PageHeading: "Role Master ",
+    PageDescription: "Role Master PageDescription",
+    PageDescriptionDetails: "Role Master PageDescriptionDetails",
+    PageAccess_IsSave: true,
+    PageAccess_IsView: true,
+    PageAccess_IsEdit: true,
   }
   const [userPageAccess, setUserPageAccess] = useState(initialUserPageAccess);
 
@@ -57,7 +57,7 @@ const RoleMaster = (props) => {
       if (!(userAccessGetingfromHistory.fromDashboardAccess)) {
         // history.push("/Dashboard")
       }
-      setUserPageAccess(userAccessGetingfromHistory.UserDetails)
+      // setUserPageAccess(userAccessGetingfromHistory.UserDetails)
     };
   }, [props])
 
