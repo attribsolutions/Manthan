@@ -317,9 +317,9 @@ const RoleAccessList = (props) => {
 
             // roleAccessArray.push(roleAccessElement)
 
-            pageAccessElement["Role"] = 1
+            pageAccessElement["Role"] =role_dropdown_Select.value
             pageAccessElement["Company"] = 1
-            pageAccessElement["Division"] = 1
+            pageAccessElement["Division"] = division_dropdown_Select.value
             pageAccessElement["Modules"] = moduleId
             pageAccessElement["Pages"] = pageId
             pageAccessElement["CreatedBy"] = 1
