@@ -10,7 +10,7 @@ import paginationFactory, {
 import ToolkitProvider from 'react-bootstrap-table2-toolkit';
 
 //Import Breadcrumb
-import Breadcrumb4 from "../../../components/Common/Breadcrumb4"
+import Breadcrumb from "../../../components/Common/Breadcrumb"
 import "../../../assets/scss/CustomeTable/datatables.scss"
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -19,7 +19,6 @@ import {
 } from "../../../store/actions";
 import { AlertState } from "../../../store/Utilites/CostumeAlert/actions";
 import Modules from "./Modules";
-import PartyUIDemo from "../PartyPages/PartyUIDemo";
 import { useHistory } from "react-router-dom";
 
 const ModulesList = () => {
@@ -31,11 +30,11 @@ const ModulesList = () => {
   
       if ((userPageAccess === undefined)) {
   
-        history.push("/Dashboard")
+        // history.push("/Dashboard")
       }
       else {
         if (!(userPageAccess.fromDashboardAccess)) {
-          history.push("/Dashboard")
+        //   history.push("/Dashboard")
   
         }
         // setPageHeading( userPageAccess.label)
@@ -201,7 +200,7 @@ const ModulesList = () => {
                             >
                                 {toolkitProps => (
                                     <React.Fragment>
-                                        <Breadcrumb4
+                                        <Breadcrumb
                                             title={"Count :"}
                                             breadcrumbItem={"Modules List"}
                                             IsButtonVissible={true}

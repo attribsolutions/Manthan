@@ -41,8 +41,8 @@ function* loginUser({ payload: { user, history } }) {
 
   } catch (error) {
 
-    // localStorage.setItem("token", ("response.token"))
-    // history.push("/dashboard")
+    localStorage.setItem("token", ("response.token"))
+    history.push("/dashboard")
     alert("Login Error")
     console.log("login error", error);
 

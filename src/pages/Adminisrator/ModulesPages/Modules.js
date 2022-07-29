@@ -82,7 +82,7 @@ const Modules = (props) => {
                 // history.push("/Dashboard")
 
             }
-            setPageHeading(userPageAccess.label)
+            // setPageHeading(userPageAccess.label)
         };
     }, [userPageAccess])
     useEffect(() => {

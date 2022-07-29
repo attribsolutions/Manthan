@@ -426,7 +426,7 @@ const AddEmployee = (props) => {
                 <Card className="mt-n2">
                   <CardBody style={{ backgroundColor: "whitesmoke" }}>
                     <Row >
-                      <Col md="3">
+                      {/* <Col md="3"> */}
                         <FormGroup className="mb-3">
                           {/* <Label htmlFor="validationCustom01">Party Name</Label>
                           <Select
@@ -435,8 +435,8 @@ const AddEmployee = (props) => {
                             onChange={(e) => { Party_Dropdown_Handler(e) }}
                           /> */}
                         </FormGroup>
-                      </Col>
-                      <div className="col-lg-4 col-md-6">
+                      {/* </Col> */}
+                      <div className="col-lg-3 col-md-6">
                         <div className="mb-3">
                           <label htmlFor="choices-multiple-remove-button" className="form-label font-size-13 text-muted">Party name</label>
                           <Select

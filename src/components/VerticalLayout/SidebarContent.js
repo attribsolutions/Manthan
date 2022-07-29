@@ -145,12 +145,19 @@ const SidebarContent = (props) => {
                   </Link>
                   <ul className="sub-menu">
                     {item.ModuleData.map((index, j) => {
-                      return (
-                        <li>
-                          <Link to={{pathname:`/${index.ActualPagePath}`, state: {fromDashboardAccess: true,UserDetails:index}}} >{props.t(index.Name)}</Link>
-                        </li>
-                        // class={pathName === indx.SelectIcon ? "active" : ""}
-                      )
+                      if(index.isShowOnMenu===true)
+                      {
+                        return (
+                          <li>
+                            <Link to={{pathname:`/${index.ActualPagePath}`, state: {fromDashboardAccess: true,UserDetails:index}}} >{props.t(index.Name)}</Link>
+                          </li>
+                          // class={pathName === indx.SelectIcon ? "active" : ""}
+                        )
+                      }
+                      else{
+                        <></>
+                      }
+                     
                     })}
                   </ul>
                 </li>
