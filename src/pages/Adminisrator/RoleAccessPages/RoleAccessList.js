@@ -330,9 +330,9 @@ const RoleAccessList = (props) => {
                 let pageAccessElement2 = {}
                 selectedItemArray.push(pageAccessElement)
                 if (relatedPageID > 0) {
-                    pageAccessElement2["Role"] = 1
+                    pageAccessElement2["Role"] = role_dropdown_Select.value
                     pageAccessElement2["Company"] = 1
-                    pageAccessElement2["Division"] = 1
+                    pageAccessElement2["Division"] = division_dropdown_Select.value
                     pageAccessElement2["Modules"] = moduleId
                     pageAccessElement2["Pages"] = relatedPageID
                     pageAccessElement2["CreatedBy"] = 1
@@ -552,7 +552,16 @@ const RoleAccessList = (props) => {
                                                 </table>
 
                                             </> :
-                                            <></>
+                                            <>
+                                            <br></br>
+                                            <br></br>
+                                            <br></br>
+                                            <br></br>
+                                            <br></br>
+                                            <br></br>
+                                            <br></br>
+                                            <br></br>
+                                            </>
                                         }
 
                                     </CardBody>
