@@ -75,11 +75,11 @@ const Modules = (props) => {
 
         if ((userPageAccess === undefined)) {
 
-            history.push("/Dashboard")
+            // history.push("/Dashboard")
         }
         else {
             if (!(userPageAccess.fromDashboardAccess)) {
-                history.push("/Dashboard")
+                // history.push("/Dashboard")
 
             }
             setPageHeading(userPageAccess.label)
