@@ -112,11 +112,9 @@ const RoleAccessList = (props) => {
         })
 
         setTableListData(Array)
-        debugger
+
 
     }, [GO_buttonPageMasterListForRoleAccess])
-
-
 
     useEffect(() => {
 
@@ -124,7 +122,7 @@ const RoleAccessList = (props) => {
         var eleList = {}
         let NewID = tableListData.length + 1
         let previousData = tableListData
-    
+        debugger
 
         // AddPage_PageMasterListForRoleAccess.map((indexdata) => {
         let indexdata = AddPage_PageMasterListForRoleAccess[0]
@@ -138,7 +136,7 @@ const RoleAccessList = (props) => {
             previousData = previousData.concat(Array)
             setTableListData(previousData)
         }
-        debugger
+
     }, [AddPage_PageMasterListForRoleAccess])
 
     useEffect(() => {
@@ -290,7 +288,7 @@ const RoleAccessList = (props) => {
 
 
         for (var i = 0; i < tableListData.length; i++) {
-            // debugger
+            debugger
             var moduleName = document.getElementById("ModuleID" + i).value;
             var pageName = document.getElementById("PageID" + i).value;
             var relatedPage = document.getElementById("RelatedPageID" + i).value;
@@ -298,36 +296,24 @@ const RoleAccessList = (props) => {
             var moduleId = parseInt(moduleName)
             var relatedPageID = parseInt(relatedPage)
 
-            var isShowOnMenu= document.getElementById("IsShowOnMenu" + i).checked;
             var isSave = document.getElementById("IsSave" + i).checked
-            var isView = document.getElementById("IsView" + i).checked;
             var isEdit = document.getElementById("IsEdit" + i).checked;
             var isDelete = document.getElementById("IsDelete" + i).checked;
             var isEditSelf = document.getElementById("IsEditSelf" + i).checked;
             var isDeleteSelf = document.getElementById("IsDeleteSelf" + i).checked;
-            var isPrint = document.getElementById("IsPrint" + i).checked;
+            var isShow = document.getElementById("IsShowOnMenu" + i).checked;
             var isTopOfTheDivision = document.getElementById("IsTopOfTheDivision" + i).checked;
+            var isView = document.getElementById("IsView" + i).checked;
 
 
-            if (isShowOnMenu) roleAccessArray.push({ "PageAccess": 1 });
-            if (isSave) roleAccessArray.push({ "PageAccess": 2 });
-            if (isView) roleAccessArray.push({ "PageAccess": 3 });
-            if (isEdit) roleAccessArray.push({ "PageAccess": 4 });
-            if (isDelete) roleAccessArray.push({ "PageAccess": 5});
-            if (isEditSelf) roleAccessArray.push({ "PageAccess": 6 });
-            if (isDeleteSelf) roleAccessArray.push({ "PageAccess": 7 });
-            if (isPrint) roleAccessArray.push({ "PageAccess": 8 });
-            if (isTopOfTheDivision) roleAccessArray.push({ "PageAccess": 9 });
-
-            // 1        IsShowOnMenu
-            // 2        IsSave
-            // 3        IsView
-            // 4        IsEdit
-            // 5        IsDelete
-            // 6        IsEditSelf
-            // 7        IsDeleteSelf
-            // 8        IsPrint
-            // 9        IsTopOfTheDivision
+            if (isSave) roleAccessArray.push({ "PageAccess": 1 });
+            if (isEdit) roleAccessArray.push({ "PageAccess": 2 });
+            if (isDelete) roleAccessArray.push({ "PageAccess": 3 });
+            if (isEditSelf) roleAccessArray.push({ "PageAccess": 4 });
+            if (isDeleteSelf) roleAccessArray.push({ "PageAccess": 5 });
+            if (isShow) roleAccessArray.push({ "PageAccess": 6 });
+            if (isView) roleAccessArray.push({ "PageAccess": 7 });
+            if (isTopOfTheDivision) roleAccessArray.push({ "PageAccess": 8 });
 
             // roleAccessArray.push(roleAccessElement)
 
@@ -367,13 +353,6 @@ const RoleAccessList = (props) => {
         // debugger
 
     };
-
-    console.log("tableListdata",tableListData)
-    console.log("tableHederList",tableHederList)
-    console.log("PageAccess",PageAccess)
-    console.log("GO_buttonPageMasterListForRoleAccess",GO_buttonPageMasterListForRoleAccess)
-    console.log("AddPage_PageMasterListForRoleAccess",AddPage_PageMasterListForRoleAccess)
-
     return (
         <React.Fragment>
             <div className="page-content text-black" >
@@ -442,7 +421,7 @@ const RoleAccessList = (props) => {
 
 
                                             <Col md="4" className="align-right p-2">
-                                              <Row className="pull-right btn-sm px-4w-75">  
+                                              <Row className="pull-right btn-sm px-5 w-">  
                                           <Button className=" btn btn-default btn-ripple  border border-dark" onClick={() => { ChangeButtonHandeler() }}>Change Role</Button>
                                             </Row>
                                             </Col>
