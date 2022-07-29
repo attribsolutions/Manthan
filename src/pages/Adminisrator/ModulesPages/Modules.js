@@ -117,7 +117,7 @@ const Modules = (props) => {
                     Type: 1,
                     Status: true,
                     Message: APIResponse.Message,
-                    RedirectPath: '/moduleList',
+                    RedirectPath: '/ModuleList',
 
                 }))
             }
@@ -171,13 +171,13 @@ const Modules = (props) => {
                 <MetaTags>
                     <title>Module| FoodERP-React FrontEnd</title>
                 </MetaTags>
-                <Breadcrumbs breadcrumbItem={pageHeading.PageHeading} />
+                <Breadcrumbs breadcrumbItem={"Module Master"} />
                 <Container fluid  >
 
                     <Card className="text-black" >
                         <CardHeader className="card-header   text-black" style={{ backgroundColor: "#dddddd" }} >
-                            <h4 className="card-title text-black">{pageHeading.PageDescription}</h4>
-                            <p className="card-title-desc text-black">{pageHeading.PageDescriptionDetails}</p>
+                            <h4 className="card-title text-black">{"Module Master"}</h4>
+                            <p className="card-title-desc text-black">{ "Module Master PageDescriptionDetails"}</p>
                         </CardHeader>
                         <CardBody className=" vh-10 0 text-black" style={{ backgroundColor: "#whitesmoke" }} >
                             <AvForm onValidSubmit={(e, v) => { handleValidSubmit(e, v) }}
