@@ -421,7 +421,7 @@ const RoleAccessList = (props) => {
 
 
                                             <Col md="4" className="align-right p-2">
-                                              <Row className="pull-right btn-sm px-5 w-">  
+                                              <Row className="pull-right btn-sm px-4">  
                                           <Button className=" btn btn-default btn-ripple  border border-dark" onClick={() => { ChangeButtonHandeler() }}>Change Role</Button>
                                             </Row>
                                             </Col>
