@@ -55,9 +55,9 @@ export const editPartyIDSuccess = (editData) => ({
 })
 
 // update api
-export const updatePartyID = (data, id) => ({
+export const updatePartyID = (updateData, id) => ({
     type: UPDATE_PARTY_ID,
-    data, id,
+    updateData, id,
 })
 export const updatePartyIDSuccess = (data) => ({
     type: UPDATE_PARTY_ID_SUCCESS,

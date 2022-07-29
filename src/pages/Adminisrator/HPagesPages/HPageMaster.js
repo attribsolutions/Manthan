@@ -90,6 +90,7 @@ const HPageMaster = (props) => {
             if (showCheckBox_pageType === 2) {
                 document.getElementById("inp-showOnMenu").disabled = true
                 setisShowPageChecked(true)
+                setPageAccessDropDownView(true)
                 dispatch(getPageList(showCheckBox_pageType))
                 setPageType_DropdownSelect({ value: 2, label: 'ListPage' })
             }
@@ -97,6 +98,7 @@ const HPageMaster = (props) => {
 
                 setisShowPageChecked(showCheckBox_pageType.isShowOnMenu);
                 document.getElementById("inp-showOnMenu").disabled = false
+                setPageAccessDropDownView(false)
                 dispatch(getPageListSuccess([]))
                 setPageList_DropdownSelect({ value: 0 })
                 setPageType_DropdownSelect({ value: 1, label: 'AddPage' })

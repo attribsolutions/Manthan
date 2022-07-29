@@ -42,7 +42,6 @@ import RoleAccessList from "../pages/Adminisrator/RoleAccessPages/RoleAccessList
 import ResetPassword from "../pages/Authentication/ResetPassword";
 import SendOTP from "../pages/Authentication/SendOTP";
 import EnterOTP from "../pages/Authentication/EnterOTP";
-import RoleAccessListPage from "../pages/Adminisrator/RoleAccessPages/RoleAccessListPage";
 
 
 // import AddItemMaster from "../pages/Adminisrator/MasterPages/AddItemMaster";
@@ -87,10 +86,10 @@ const userRoutes = [
   // { path: `/${btoa("RoleAccess")}`, component: RoleAccessList },
   // { path: "/RoleAccess", component: RoleAccessList },
 
+  
 
 
-
-  { path: `/ModuleMaster`, component: Modules },
+    { path: `/ModuleMaster`, component: Modules },
   { path: `/ModuleList`, component: ModulesList },
 
   { path: "/subModuleMaster", component: SubModules },
@@ -104,7 +103,7 @@ const userRoutes = [
   { path: `/PageMaster`, component: HPageMaster },
 
   { path: `/Order`, component: OrderPage },
-  { path: `/Orders`, component: OrderList },
+  { path:`/Orders`, component: OrderList },
 
   { path: `/UserMaster`, component: AddUser },
   { path: `/UserList`, component: UserList },
@@ -115,18 +114,18 @@ const userRoutes = [
   { path: `/RoleMaster`, component: RoleMaster },
   { path: `/RoleList`, component: RoleList },
 
-  { path: `/ItemMaste`, component: ItemsMaster },
+  { path: `/ItemMaster`, component: ItemsMaster },
   { path: `/ItemList`, component: ItemsList },
 
   { path: `/PartyList`, component: PartyList },
   { path: `/PartyMaster`, component: PartyMaster },
 
   { path: `/RoleAccess`, component: RoleAccessList },
-  { path: '/RoleAccessListPage', component: RoleAccessListPage },
 
-  { path: "/partyUIDemo", component: PartyUIDemo },
-  { path: "/demoUi3", component: DemoUI3 },
-  { path: "/demoUi2", component: DemoUI2 },
+
+  { path:"/partyUIDemo",component:PartyUIDemo},
+  { path:"/demoUi3",component:DemoUI3},
+  { path:"/demoUi2",component:DemoUI2},
 
 
   // { path: "/AddItemMaster", component: AddItemMaster },
@@ -143,9 +142,9 @@ const authRoutes = [
   { path: "/logout", component: Logout },
   { path: "/login", component: Login },
   { path: "/forgot-password", component: ForgetPwd },
-  { path: "/ResetPassword", component: ResetPassword },
-  { path: "/SendOTP", component: SendOTP },
-  { path: "/EnterOTP", component: EnterOTP },
+  {path:"/ResetPassword",component:ResetPassword},
+  { path:"/SendOTP",component:SendOTP},
+  {path:"/EnterOTP",component:EnterOTP},
 
   { path: "/pages-404", component: Error404 },
   { path: "/pages-500", component: Error500 },

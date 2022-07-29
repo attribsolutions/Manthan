@@ -24,7 +24,6 @@ import {
 } from "./actionType";
 import { SpinnerState } from "../../Utilites/Spinner/actions";
 import { AlertState } from "../../Utilites/CostumeAlert/actions";
-import RoleAccessData from "../RoleAccessRedux/RoleAccessDemoData2"
 
 function* SubmitModules_GenratorFunction({ data }) {
   yield put(SpinnerState(true))
@@ -45,7 +44,7 @@ function* fetchModulesList_GenratorFunction() {
   try {
     const response = yield call(Fetch_ModulesList);
     if(response.StatusCode===200){
-      yield put(fetchModelsListSuccess(RoleAccessData));
+      yield put(fetchModelsListSuccess(response.Data));
     }
     else {
       yield put(AlertState({ Type: 4, 
