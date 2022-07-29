@@ -368,7 +368,7 @@ const RoleAccessList = (props) => {
                             !showTableOnUI ?
 
                                 <CardHeader className="card-header   text-black" style={{ backgroundColor: "#dddddd" }} >
-                                    <Row >
+                                    <Row>
                                         <Col md="4">
 
                                             <FormGroup className="mb-1 row " >
@@ -382,10 +382,10 @@ const RoleAccessList = (props) => {
                                                     />
                                                 </Col>
                                             </FormGroup>
-                                        </Col >
+                                        </Col>
 
                                         <Col md="4" className="">
-                                            <FormGroup className="mb-1 row  " >
+                                            <FormGroup className="mb-1 row" >
                                                 <Label className="col-sm-3 p-2">Division</Label>
                                                 <Col md="9">
                                                     <Select
@@ -398,7 +398,7 @@ const RoleAccessList = (props) => {
                                         </Col>
 
                                         <Col md="3" className="mt- ">
-                                            <Button class="btn btn-success border border-dark"onClick={() => { GoButton_Handler() }}>Go</Button>
+                                            <Button className=" btn btn-primary btn-ripple border border-dark"onClick={() => { GoButton_Handler() }}>Go</Button>
                                         </Col>
 
                                     </Row>
@@ -409,29 +409,29 @@ const RoleAccessList = (props) => {
                                         <Row >
                                             <Col md="4">
                                                 <Label>Role &nbsp;&nbsp;&nbsp;</Label>
-                                                <Label>{role_dropdown_Select.label}</Label>
+                                                <Label className="text-primary h5">{role_dropdown_Select.label}</Label>
 
-                                            </Col >
+                                            </Col>
 
                                             <Col md="4">
                                                 <Label>Division &nbsp;&nbsp;&nbsp;</Label>
-                                                <Label>{division_dropdown_Select.label}</Label>
+                                                <Label className="text-primary h5">{division_dropdown_Select.label}</Label>
 
-                                            </Col >
+                                            </Col>
 
 
                                             <Col md="4" className="align-right p-2">
-                                                
-                                                <Button class="btn btn-primary border border-dark"onClick={() => { ChangeButtonHandeler() }}>Change Role</Button>
+                                              <Row className="pull-right btn-sm px-4w-75">  
+                                          <Button className=" btn btn-default btn-ripple  border border-dark" onClick={() => { ChangeButtonHandeler() }}>Change Role</Button>
+                                            </Row>
+                                            </Col>
                                             
-                                            </Col >
-
 
                                         </Row>
-                                        <Row  >
 
+                                        <Row>
                                             <Col md="4" className="">
-                                                <FormGroup className="mb- row " >
+                                                <FormGroup className="mb- row">
                                                     <Label className="col-sm-3 p-2">Module</Label>
                                                     <Col md="9">
 
@@ -447,7 +447,7 @@ const RoleAccessList = (props) => {
                                             </Col>
 
                                             <Col md="4">
-                                                <FormGroup className="mb-2 row  " >
+                                                <FormGroup className="mb-2 row ">
                                                     <Label className="col-sm-2 p-2">Page</Label>
                                                     <Col md="9">
 
@@ -457,25 +457,24 @@ const RoleAccessList = (props) => {
                                                             onChange={(e) => { Page_DropdownSelectHandller(e) }}
                                                             classNamePrefix="select2-selection"
                                                         />
-
                                                     </Col>
                                                 </FormGroup>
                                             </Col >
 
                                             <Col md="2" className=" ">
-                                                <Button class="btn btn-primary border border-dark" onClick={() => { AddPageButton_Handeler() }}>Add Page</Button>
+                                                <Button className=" btn btn-warning btn-ripple border border-dark" onClick={() => { AddPageButton_Handeler() }}>Add Page</Button>
                                             </Col>
 
 
                                             <Col md="2" className=" ">
-                                                <Button class="btn btn-success border border-dark" onClick={() => { saveHandeller() }}>Save</Button>
+                                         <Button className=" btn btn-primary btn-ripple border border-dark" onClick={() => { saveHandeller() }}>Save</Button>
                                             </Col>
 
                                         </Row>
                                     </CardHeader>
 
                                     <CardBody>
-                                        {tableListData.length > 0
+                                        {tableListData.length> 0
                                             ?
                                             <>
                                                 <table className="table table-bordered">
