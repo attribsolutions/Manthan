@@ -65,13 +65,13 @@ const ItemsMaster = (props) => {
 
     if ((userPageAccess === undefined)) {
 
-      history.push("/Dashboard")
+      // history.push("/Dashboard")
     }
     else {
       if (!(userPageAccess.fromDashboardAccess)) {
-        history.push("/Dashboard")
+        // history.push("/Dashboard")
       }
-      debugger
+     
       setPageHeading( userPageAccess.label)
     };
   }, [props])
@@ -103,6 +103,7 @@ const ItemsMaster = (props) => {
   useEffect(() => {
     if (postMessage.Status === true && postMessage.StatusCode === 200) {
       dispatch(PostItemDataSuccess({ Status: false }));
+      setItemGroupSelect('')
       formRef.current.reset();
       if (PageMode === true) {
         dispatch(
@@ -118,7 +119,7 @@ const ItemsMaster = (props) => {
             Type: 1,
             Status: true,
             Message: postMessage.Message,
-            RedirectPath: "/itemList",
+            RedirectPath: "/ItemList",
             AfterResponseAction: false,
           })
         );
@@ -184,15 +185,15 @@ const ItemsMaster = (props) => {
         <title>Item Master| FoodERP-React FrontEnd</title>
       </MetaTags>
       <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
-        <Breadcrumbs breadcrumbItem={pageHeading.PageHeading} />
+        <Breadcrumbs breadcrumbItem={"Item Master"} />
         <Container fluid>
           <Card>
             <CardHeader
               className="card-header   text-black"
               style={{ backgroundColor: "#dddddd" }}
             >
-              <h4 className="card-title text-black">{pageHeading.PageDescription}</h4>
-              <p className="card-title-desc text-black">{pageHeading.PageDescriptionDetails}</p>
+              <h4 className="card-title text-black">Item Master</h4>
+              <p className="card-title-desc text-black">Provide valuable, actionable feedback to your users with HTML5 form validation–available in all our supported browsers.</p>
             </CardHeader>
             <CardBody
               className=" vh-10 0 text-black"

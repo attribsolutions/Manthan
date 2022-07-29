@@ -61,7 +61,7 @@ const PartyMaster = (props) => {
     useEffect(() => {
         document.getElementById("txtName").focus();
         if (!(editDataGatingFromList === undefined)) {
-            debugger
+          
             setEditData(editDataGatingFromList);
             setIsEdit(true);
             setFSSAIExipry_Date_Select(editDataGatingFromList.FSSAIExipry)
@@ -147,6 +147,7 @@ const PartyMaster = (props) => {
 
 
     useEffect(() => {
+
         if ((PartySaveSuccess.Status === true) && (PartySaveSuccess.StatusCode === 200)) {
             dispatch(postPartyDataSuccess({ Status: false }))
             formRef.current.reset();
@@ -181,7 +182,7 @@ const PartyMaster = (props) => {
 
     //'Save' And 'Update' Button Handller
     const handleValidUpdate = (event, values) => {
-        debugger
+      
         const requestOptions = {
             body: JSON.stringify({
                 Name: values.Name,
@@ -194,6 +195,7 @@ const PartyMaster = (props) => {
                 Address: values.Address,
                 PIN: values.PIN,
                 MobileNo: values.MobileNo,
+                AlternateContactNo:values.AlternateContactNo,
                 State: state_DropDown_select.value,
                 District: district_dropdown_Select.value,
                 Taluka: 0,
