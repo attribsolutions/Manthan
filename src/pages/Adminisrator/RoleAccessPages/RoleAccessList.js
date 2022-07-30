@@ -59,7 +59,7 @@ const RoleAccessList = (props) => {
 
     //Access redux store Data /  'save_ModuleSuccess' action data
     const { PageMasterListForRoleAccess, PageAccess, ModuleData, PageDropdownForRoleAccess, PartySaveSuccess,
-        AddPage_PageMasterListForRoleAccess, GO_buttonPageMasterListForRoleAccess, PostMessage_ForRoleAccessList,
+        AddPage_PageMasterListForRoleAccess_Redux, GO_buttonPageMasterListForRoleAccess_Redux, PostMessage_ForRoleAccessList,
         RoleListData_Reducer, companyList, DivisionTypes, Roles } = useSelector((state) => ({
             PartySaveSuccess: state.PartyMasterReducer.PartySaveSuccess,
             companyList: state.Company.companyList,
@@ -71,8 +71,8 @@ const RoleAccessList = (props) => {
             RoleListData_Reducer: state.RoleAccessReducer.RoleListDataForRoleListPage,
             PageMasterListForRoleAccess: state.RoleAccessReducer.PageMasterListForRoleAccess,
             PageDropdownForRoleAccess: state.RoleAccessReducer.PageDropdownForRoleAccess,
-            AddPage_PageMasterListForRoleAccess: state.RoleAccessReducer.AddPage_PageMasterListForRoleAccess,
-            GO_buttonPageMasterListForRoleAccess: state.RoleAccessReducer.GO_buttonPageMasterListForRoleAccess,
+            AddPage_PageMasterListForRoleAccess_Redux: state.RoleAccessReducer.AddPage_PageMasterListForRoleAccess,
+            GO_buttonPageMasterListForRoleAccess_Redux: state.RoleAccessReducer.GO_buttonPageMasterListForRoleAccess,
             PostMessage_ForRoleAccessList: state.RoleAccessReducer.PostMessage_ForRoleAccessList,
 
 
@@ -99,7 +99,7 @@ const RoleAccessList = (props) => {
         var eleList = {}
 
         let count1 = 0
-        GO_buttonPageMasterListForRoleAccess.map((indexdata) => {
+        GO_buttonPageMasterListForRoleAccess_Redux.map((indexdata) => {
 
             count1 = count1 + 1
 
@@ -112,9 +112,10 @@ const RoleAccessList = (props) => {
         })
 
         setTableListData(Array)
+        console.log("GO_buttonPageMasterListForRoleAccess",JSON.stringify(GO_buttonPageMasterListForRoleAccess_Redux))
 
 
-    }, [GO_buttonPageMasterListForRoleAccess])
+    }, [GO_buttonPageMasterListForRoleAccess_Redux])
 
     useEffect(() => {
 
@@ -122,10 +123,10 @@ const RoleAccessList = (props) => {
         var eleList = {}
         let NewID = tableListData.length + 1
         let previousData = tableListData
-        debugger
+        // debugger
 
         // AddPage_PageMasterListForRoleAccess.map((indexdata) => {
-        let indexdata = AddPage_PageMasterListForRoleAccess[0]
+        let indexdata = AddPage_PageMasterListForRoleAccess_Redux[0]
         // let found =previousData.find((inx)=>{return inx.PageID===indexdata.PageID})
         if (!(indexdata === undefined)) {
             eleList = indexdata
@@ -136,8 +137,9 @@ const RoleAccessList = (props) => {
             previousData = previousData.concat(Array)
             setTableListData(previousData)
         }
+        console.log("AddPage_PageMasterListForRoleAccess",JSON.stringify(AddPage_PageMasterListForRoleAccess_Redux))
 
-    }, [AddPage_PageMasterListForRoleAccess])
+    }, [AddPage_PageMasterListForRoleAccess_Redux])
 
     useEffect(() => {
 
@@ -240,7 +242,7 @@ const RoleAccessList = (props) => {
     }
 
     const GoButton_Handler = () => {
-        debugger
+        // debugger
         var division = division_dropdown_Select.value
         var role = role_dropdown_Select.value
         dispatch(GO_Button_HandlerForRoleAccessListPage(role, division));
@@ -288,7 +290,7 @@ const RoleAccessList = (props) => {
 
 
         for (var i = 0; i < tableListData.length; i++) {
-            debugger
+            // debugger
             var moduleName = document.getElementById("ModuleID" + i).value;
             var pageName = document.getElementById("PageID" + i).value;
             var relatedPage = document.getElementById("RelatedPageID" + i).value;
@@ -346,13 +348,15 @@ const RoleAccessList = (props) => {
             roleAccessArray = []
             pageAccessElement = {}
         }
-        debugger
+        // debugger
         const jsonBody = JSON.stringify(selectedItemArray)
 
         dispatch(PostMethodForRoleAccessListPage(jsonBody));
         // debugger
+        console.log("roleAccess Post data",jsonBody)
 
     };
+
     return (
         <React.Fragment>
             <div className="page-content text-black" >

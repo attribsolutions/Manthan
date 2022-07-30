@@ -179,8 +179,9 @@ const HPageMaster = (props) => {
 
     //'Save' And 'Update' Button Handller
     const handleValidSubmit = (event, values) => {
+        const pageType = pageType_DropdownSelect.value;
 
-        if (tablePageAccessDataState.length <= 0 && values===2) {
+        if ((tablePageAccessDataState.length <= 0) && !( pageType ===1)) {
             dispatch(AlertState({
                 Type: 4, Status: true,
                 Message: "At Least One PageAccess is Select",
@@ -189,7 +190,7 @@ const HPageMaster = (props) => {
             }));
             return
         }
-        
+
 
         const jsonBody = JSON.stringify({
             Name: values.Name,
@@ -199,7 +200,7 @@ const HPageMaster = (props) => {
             Icon: values.Icon,
             ActualPagePath: values.pagePath,
             isShowOnMenu: isShowPageChecked,
-            PageType: pageType_DropdownSelect.value,
+            PageType: pageType,
             PageHeading: values.pageheading,
             PageDescription: values.pagedescription,
             PageDescriptionDetails: values.pageheadingdescription,
@@ -239,7 +240,7 @@ const HPageMaster = (props) => {
             dispatch(getPageList(e.value))
             showCheckBox.disabled = true
             setPageAccessDropDownView(true)
-            AddRoleHandler(false)
+            // AddRoleHandler(false)
 
         }
         else if (e.value === 1) {
