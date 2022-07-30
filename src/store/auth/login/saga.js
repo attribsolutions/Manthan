@@ -112,8 +112,8 @@ function* RoleAccessGenratorFunction({ id1, id2, id3 }) {
           all_DataInSinlgeArray.push(index)
         })
       })
-      console.log('ArrayMain',ArrayMain)
-      console.log('RoleResponse.Data',RoleResponse.Data)
+      // console.log('ArrayMain',ArrayMain)
+      // console.log('RoleResponse.Data',RoleResponse.Data)
 
       yield put(roleAceessActionSuccess(ArrayMain))
       yield put(RoleAccessUpdateSuccess(all_DataInSinlgeArray))

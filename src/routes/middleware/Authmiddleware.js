@@ -22,7 +22,7 @@ const Authmiddleware = ({
       }
       
      else if ((userPageAccess === undefined)) {
-        console.log("userPageAccess props if ", history)
+        // console.log("userPageAccess props if ", history)
 
         // history.push("/Dashboard")
         // return (
@@ -32,7 +32,7 @@ const Authmiddleware = ({
       }
       else {
         if (!(userPageAccess.fromDashboardAccess)) {
-          console.log("userPageAccess props else", history)
+          // console.log("userPageAccess props else", history)
 
           // history.push("/Dashboard")
           // return (
