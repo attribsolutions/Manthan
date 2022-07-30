@@ -21,7 +21,7 @@ import {
     PostModelsSubmitSuccess,
     editModuleIDSuccess,
 } from "../../../store/Administrator/ModulesRedux/actions";
-import Breadcrumbs from "../../../components/Common/Breadcrumb";
+import Breadcrumb from "../../../components/Common/Breadcrumb";
 import AvField from "availity-reactstrap-validation/lib/AvField";
 import { MetaTags } from "react-meta-tags";
 import { AlertState } from "../../../store/Utilites/CostumeAlert/actions";
@@ -75,17 +75,20 @@ const Modules = (props) => {
 
         if ((userPageAccess === undefined)) {
 
-            // history.push("/Dashboard")
+            history.push("/Dashboard")
         }
         else {
             if (!(userPageAccess.fromDashboardAccess)) {
-                // history.push("/Dashboard")
-
+                history.push("/Dashboard")
             }
-            // setPageHeading(userPageAccess.label)
+            if(userPageAccess.UserDetails===undefined)
+            {  setPageHeading(userPageAccess.UserDetails)}
+          
         };
     }, [userPageAccess])
+
     useEffect(() => {
+
         document.getElementById("txtName").focus();
         if (!(editDataGatingFromList === undefined)) {
             setEditData(editDataGatingFromList);
@@ -102,6 +105,7 @@ const Modules = (props) => {
 
     // This UseEffect clear Form Data and when modules Save Successfully.
     useEffect(() => {
+
         if ((APIResponse.Status === true) && (APIResponse.StatusCode === 200)) {
             dispatch(PostModelsSubmitSuccess({ Status: false }))
             formRef.current.reset();
@@ -133,12 +137,7 @@ const Modules = (props) => {
         }
     }, [APIResponse.Status])
 
-    useEffect(() => {
-
-
-
-    }, [])
-
+   
     //'Save' And 'Update' Button Handller
     const handleValidSubmit = (event, values) => {
 
@@ -152,7 +151,7 @@ const Modules = (props) => {
                 UpdatedBy: 9
             }),
         };
-        debugger
+       
         if (IsEdit) {
             dispatch(updateModuleID(requestOptions.body, EditData.id));
         }
@@ -171,13 +170,13 @@ const Modules = (props) => {
                 <MetaTags>
                     <title>Module| FoodERP-React FrontEnd</title>
                 </MetaTags>
-                <Breadcrumbs breadcrumbItem={"Module Master"} />
+                <Breadcrumb breadcrumbItem={pageHeading} />
                 <Container fluid  >
 
                     <Card className="text-black" >
                         <CardHeader className="card-header   text-black" style={{ backgroundColor: "#dddddd" }} >
-                            <h4 className="card-title text-black">{"Module Master"}</h4>
-                            <p className="card-title-desc text-black">{ "Module Master PageDescriptionDetails"}</p>
+                            <h4 className="card-title text-black">{pageHeading.PageDescription}</h4>
+                            <p className="card-title-desc text-black">{pageHeading.PageDescriptionDetails}</p>
                         </CardHeader>
                         <CardBody className=" vh-10 0 text-black" style={{ backgroundColor: "#whitesmoke" }} >
                             <AvForm onValidSubmit={(e, v) => { handleValidSubmit(e, v) }}
