@@ -61,6 +61,7 @@ const HPageMaster = (props) => {
         PageAccess: state.H_Pages.PageAccess,
     }));
 
+    console.log('PageAccess',PageAccess)
     // For PageAccess DropDown
     useEffect(() => {
         dispatch(getPageAccess_DropDown_API());
