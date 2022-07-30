@@ -41,7 +41,7 @@ const Modules = (props) => {
     //'IsEdit'--if true then update data otherwise it will perfrom save operation
     const [IsEdit, setIsEdit] = useState(false);
     const [PageMode, setPageMode] = useState(false);
-    const [pageHeading, setPageHeading] = useState({PageHeading:"",PageDescription:"",PageDescriptionDetails:""});
+    const [pageHeading, setPageHeading] = useState({ PageHeading: "Module Master", PageDescription: "", PageDescriptionDetails: "Module Master :Description Details" });
 
     //*** "isEditdata get all data from ModuleID for Binding  Form controls
     let editDataGatingFromList = props.state;
@@ -56,18 +56,18 @@ const Modules = (props) => {
 
     const userPageAccess = history.location.state
     useEffect(() => {
-
+debugger
         if ((userPageAccess === undefined)) {
-
             // history.push("/Dashboard")
         }
         else {
             if (!(userPageAccess.fromDashboardAccess)) {
                 // history.push("/Dashboard")
             }
-            if(userPageAccess.UserDetails===undefined)
-            {  setPageHeading(userPageAccess.UserDetails)}
-          
+            if (!(userPageAccess.UserDetails === undefined)) {
+                 setPageHeading(userPageAccess.UserDetails) 
+                }
+
         };
     }, [userPageAccess])
 
@@ -122,7 +122,7 @@ const Modules = (props) => {
         }
     }, [APIResponse.Status])
 
-   
+
     //'Save' And 'Update' Button Handller
     const handleValidSubmit = (event, values) => {
 
@@ -136,7 +136,7 @@ const Modules = (props) => {
                 UpdatedBy: 9
             }),
         };
-       
+
         if (IsEdit) {
             dispatch(updateModuleID(requestOptions.body, EditData.id));
         }
