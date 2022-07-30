@@ -166,14 +166,14 @@ const CompanyModule = (props) => {
         <MetaTags>
           <title>Company Master| FoodERP-React FrontEnd</title>
         </MetaTags>
-        <Breadcrumbs breadcrumbItem={pageHeading.pageHeading} />
+        <Breadcrumbs breadcrumbItem={"Company Master"} />
         <Container fluid>
           <Row>
             <Col lg={12}>
               <Card className="text-black" >
                 <CardHeader className="card-header   text-black" style={{ backgroundColor: "#dddddd" }} >
-                  <h4 className="card-title text-black">{pageHeading.pageDescription}</h4>
-                  <p className="card-title-desc text-black">{pageHeading.pageDescriptionDetails}</p>
+                  <h4 className="card-title text-black">{"Page Description :Company Master"}</h4>
+                  <p className="card-title-desc text-black">{"Page Description Details : Company Master"}</p>
                 </CardHeader>
 
                 <CardBody>

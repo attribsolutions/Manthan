@@ -180,7 +180,7 @@ const HPageMaster = (props) => {
     //'Save' And 'Update' Button Handller
     const handleValidSubmit = (event, values) => {
 
-        if (tablePageAccessDataState.length <= 0 && values===2) {
+        if (tablePageAccessDataState.length <= 0 && !(pageType_DropdownSelect.value===1 )) {
             dispatch(AlertState({
                 Type: 4, Status: true,
                 Message: "At Least One PageAccess is Select",
@@ -189,8 +189,7 @@ const HPageMaster = (props) => {
             }));
             return
         }
-        
-
+       
         const jsonBody = JSON.stringify({
             Name: values.Name,
             Module: module_DropdownSelect.value,
@@ -239,7 +238,7 @@ const HPageMaster = (props) => {
             dispatch(getPageList(e.value))
             showCheckBox.disabled = true
             setPageAccessDropDownView(true)
-            AddRoleHandler(false)
+          
 
         }
         else if (e.value === 1) {
@@ -261,7 +260,7 @@ const HPageMaster = (props) => {
         const find = tablePageAccessDataState.find((element) => {
             return element.AccessID === pageAccess_DropDownSelect.value
         });
-        if (pageAccess_DropDownSelect.length <= 0) {
+        if (pageAccess_DropDownSelect.length <= 0 ) {
             dispatch(AlertState({
                 Type: 3, Status: true,
                 Message: "Select One DropDown Value",
@@ -515,17 +514,7 @@ const HPageMaster = (props) => {
                                                     <FormGroup className=" ml-3 col col-sm-4 " >
                                                         <Label htmlFor="validationCustom01">Page Access</Label>
                                                         <Select
-                                                            options={[{
-                                                                value: 1,
-                                                                label: "isEdit"
-                                                            }, {
-                                                                value: 2,
-                                                                label: "isView"
-                                                            },
-                                                            {
-                                                                value: 3,
-                                                                label: "isDelete"
-                                                            }]}
+                                                            options={PageAccessValues}
                                                             onChange={(e) => { PageAccess_DropdownSelect_Handler(e) }}
                                                             classNamePrefix="select2-selection"
                                                         />

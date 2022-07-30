@@ -127,7 +127,7 @@ const RoleMaster = (props) => {
     }
     else {
       dispatch(postRole(jsonBody));
-
+console.log("jsonBody",jsonBody)
     }
   };
 
