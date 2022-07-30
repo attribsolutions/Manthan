@@ -154,6 +154,8 @@ const AddUser = (props) => {
         isActive: values.isActive,
         AdminPassword: "1234",
         isSendOTP: values.isSendOTP,
+        isLoginUsingMobile:values.isLoginUsingMobile,
+        isLoginUsingEmail:values.isLoginUsingEmail,
         CreatedBy: 1,
         UpdatedBy: 1,
         UserRole: RoleData.map((d) => ({
@@ -268,8 +270,8 @@ const AddUser = (props) => {
                               <Col md="1" style={{ marginTop: '9px' }} >
                                 <div className="form-check form-switch form-switch-md ml-4 " dir="ltr">
                                   <AvInput type="checkbox" className="form-check-input" id="customSwitchsizemd"
-                                    checked={EditData.isActive}
-                                    name="mobileLogin"
+                                    checked={EditData.isLoginUsingMobile}
+                                    name="isLoginUsingMobile"
                                   />
                                   <label className="form-check-label" htmlFor="customSwitchsizemd"></label>
                                 </div>
@@ -298,8 +300,8 @@ const AddUser = (props) => {
                               <Col md={1} style={{ marginTop: '10px' }} >
                                 <div className="form-check form-switch form-switch-md" dir="ltr">
                                   <AvInput type="checkbox" className="form-check-input" id="customSwitchsizemd"
-                                    checked={EditData.isSendOTP}
-                                    name="emailLogin"
+                                    checked={EditData.isLoginUsingEmail}
+                                    name="isLoginUsingEmail"
                                   />
                                   <label className="form-check-label" htmlFor="customSwitchsizemd"></label>
                                 </div>
