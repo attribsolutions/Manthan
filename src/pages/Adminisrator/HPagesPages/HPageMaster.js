@@ -61,6 +61,7 @@ const HPageMaster = (props) => {
         PageAccess: state.H_Pages.PageAccess,
     }));
 
+    console.log('PageAccess',PageAccess)
     // For PageAccess DropDown
     useEffect(() => {
         dispatch(getPageAccess_DropDown_API());
@@ -516,17 +517,7 @@ const HPageMaster = (props) => {
                                                     <FormGroup className=" ml-3 col col-sm-4 " >
                                                         <Label htmlFor="validationCustom01">Page Access</Label>
                                                         <Select
-                                                            options={[{
-                                                                value: 1,
-                                                                label: "isEdit"
-                                                            }, {
-                                                                value: 2,
-                                                                label: "isView"
-                                                            },
-                                                            {
-                                                                value: 3,
-                                                                label: "isDelete"
-                                                            }]}
+                                                            options={PageAccessValues}
                                                             onChange={(e) => { PageAccess_DropdownSelect_Handler(e) }}
                                                             classNamePrefix="select2-selection"
                                                         />
