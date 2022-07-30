@@ -58,9 +58,13 @@ const AddUser = (props) => {
   }, [editDataGatingFromList])
 
   useEffect(() => {
+
     if ((AddUserMessage.Status === true) && (AddUserMessage.StatusCode === 201)) {
       dispatch(addUserSuccess({ Status: false }))
       formRef.current.reset();
+      setEmployeeSelect('')
+      setRoleDropDown('')
+      setRoleData('')
       if (PageMode === true) {
         dispatch(AlertState({
           Type: 1,

@@ -107,6 +107,7 @@ const AddEmployee = (props) => {
   }, [editDataGatingFromList])
 
   useEffect(() => {
+
     if ((postMessage.Status === true) && (postMessage.StatusCode === 200)) {
       dispatch(PostEmployeeSuccess({ Status: false }))
       formRef.current.reset();
@@ -114,10 +115,10 @@ const AddEmployee = (props) => {
       setEmployeeType_DropdownSelect('')
       setState_DropdownSelect('')
       setDOB_Date_Select('')
-
       setDistrict_DropdownSelect('')
       setParty_DropdownSelect('')
       setCompany_DropdownSelect('')
+
       if (PageMode === true) {
         dispatch(AlertState({
           Type: 1,
@@ -135,6 +136,7 @@ const AddEmployee = (props) => {
         }))
       }
     }
+
     else if (postMessage.Status === true) {
       dispatch(PostEmployeeSuccess({ Status: false }))
       dispatch(AlertState({
@@ -444,6 +446,7 @@ const AddEmployee = (props) => {
                             isMulti={true}
                             className="basic-multi-select"
                             options={Party_DropdownOptions}
+                            onChange={(e) => { Party_Dropdown_Handler(e) }}
                             classNamePrefix="select2-selection"
                             // isLoading={true}
                           />

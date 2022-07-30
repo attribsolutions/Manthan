@@ -87,24 +87,24 @@ const HPageMaster = (props) => {
             })
 
             // When value 2 is get then DropDown lable is "ListPage" and ShowMenu is disabled Otherwise DropDown lable is "AddPage" and ShowMenu is enabled
-            let showCheckBox_pageType = editDataGatingFromList.PageType
-            if (showCheckBox_pageType === 2) {
-                document.getElementById("inp-showOnMenu").disabled = true
-                setisShowPageChecked(true)
-                setPageAccessDropDownView(true)
-                dispatch(getPageList(showCheckBox_pageType))
-                setPageType_DropdownSelect({ value: 2, label: 'ListPage' })
-            }
-            else if (showCheckBox_pageType === 1) {
+            // let showCheckBox_pageType = editDataGatingFromList.PageType
+            // if (showCheckBox_pageType === 2) {
+            //     document.getElementById("inp-showOnMenu").disabled = true
+            //     setisShowPageChecked(true)
+            //     setPageAccessDropDownView(true)
+            //     dispatch(getPageList(showCheckBox_pageType))
+            //     setPageType_DropdownSelect({ value: 2, label: 'ListPage' })
+            // }
+            // else if (showCheckBox_pageType === 1) {
 
-                setisShowPageChecked(showCheckBox_pageType.isShowOnMenu);
-                document.getElementById("inp-showOnMenu").disabled = false
-                setPageAccessDropDownView(false)
-                dispatch(getPageListSuccess([]))
-                setPageList_DropdownSelect({ value: 0 })
-                setPageType_DropdownSelect({ value: 1, label: 'AddPage' })
+            //     setisShowPageChecked(showCheckBox_pageType.isShowOnMenu);
+            //     document.getElementById("inp-showOnMenu").disabled = false
+            //     setPageAccessDropDownView(false)
+            //     dispatch(getPageListSuccess([]))
+            //     setPageList_DropdownSelect({ value: 0 })
+            //     setPageType_DropdownSelect({ value: 1, label: 'AddPage' })
 
-            }
+            // }
             dispatch(editHPagesIDSuccess({ Status: false }))
         }
     }, [editDataGatingFromList]);
@@ -232,18 +232,18 @@ const HPageMaster = (props) => {
     //  for PageType deropDown
     const PageType_DropdownSelectHandller = (e) => {
 
-        let showCheckBox = document.getElementById("inp-showOnMenu")
+        // let showCheckBox = document.getElementById("inp-showOnMenu")
 
         if (e.value === 2) {
             setisShowPageChecked(true)
             dispatch(getPageList(e.value))
-            showCheckBox.disabled = true
+            // showCheckBox.disabled = true
             setPageAccessDropDownView(true)
           
 
         }
         else if (e.value === 1) {
-            showCheckBox.disabled = false
+            // showCheckBox.disabled = false
             setPageAccessDropDownView(false)
             dispatch(getPageListSuccess([]))
             setPageList_DropdownSelect({ value: 0 })
@@ -476,7 +476,7 @@ const HPageMaster = (props) => {
                                         <Row>
                                             <FormGroup className="mb-1 col col-sm-6">
                                                 <Row className="justify-content-md-left">
-                                                    <Label htmlFor="horizontal-firstname-input" className="col-sm-3 col-form-label" >Show on Menu</Label>
+                                                    {/* <Label htmlFor="horizontal-firstname-input" className="col-sm-3 col-form-label" >Show on Menu</Label>
                                                     <Col md={2} style={{ marginTop: '9px' }} >
 
                                                         <div className="form-check form-switch form-switch-md mb-1" dir="ltr">
@@ -487,8 +487,8 @@ const HPageMaster = (props) => {
                                                             />
                                                             <label className="form-check-label" htmlFor="customSwitchsizemd"></label>
                                                         </div>
-                                                    </Col>
-                                                    <Col md="3">  </Col>
+                                                    </Col> */}
+                                                    {/* <Col md="3">  </Col> */}
                                                     <Label htmlFor="horizontal-firstname-input" className="col-sm-2 col-form-label" >Active </Label>
                                                     <Col md={2} style={{ marginTop: '9px' }} >
 

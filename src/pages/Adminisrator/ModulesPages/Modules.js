@@ -53,33 +53,17 @@ const Modules = (props) => {
         APIResponse: state.Modules.modulesSubmitSuccesss,
     }));
 
-    //     //Access redux store Data /  'save_ModuleSuccess' action data
-    //     const { PageMasterListForRoleAccess, PageAccess, ModuleData, HPagesListData, PartySaveSuccess, State, RoleAccessData, companyList, DivisionTypes, PartyTypes, Roles } = useSelector((state) => ({
-    //         PartySaveSuccess: state.PartyMasterReducer.PartySaveSuccess,
-    //         companyList: state.Company.companyList,
-    //         DivisionTypes: state.PartyMasterReducer.DivisionTypes,
-    //         PartyTypes: state.PartyMasterReducer.PartyTypes,
-    //         Roles: state.User_Registration_Reducer.Roles,
-    //         ModuleData: state.Modules.modulesList,
-    //         HPagesListData: state.H_Pages.HPagesListData,
-    //         PageAccess: state.H_Pages.PageAccess,
-    //         RoleAccessData: state.Login.RoleData,
-    //         PageMasterListForRoleAccess: state.RoleAccessReducer.PageMasterListForRoleAccess,
-    //     }));
-
-    // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
-
 
     const userPageAccess = history.location.state
     useEffect(() => {
 
         if ((userPageAccess === undefined)) {
 
-            history.push("/Dashboard")
+            // history.push("/Dashboard")
         }
         else {
             if (!(userPageAccess.fromDashboardAccess)) {
-                history.push("/Dashboard")
+                // history.push("/Dashboard")
             }
             if(userPageAccess.UserDetails===undefined)
             {  setPageHeading(userPageAccess.UserDetails)}
@@ -87,6 +71,7 @@ const Modules = (props) => {
         };
     }, [userPageAccess])
 
+     // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
     useEffect(() => {
 
         document.getElementById("txtName").focus();
@@ -170,7 +155,7 @@ const Modules = (props) => {
                 <MetaTags>
                     <title>Module| FoodERP-React FrontEnd</title>
                 </MetaTags>
-                <Breadcrumb breadcrumbItem={pageHeading} />
+                <Breadcrumb breadcrumbItem={pageHeading.PageHeading} />
                 <Container fluid  >
 
                     <Card className="text-black" >

@@ -88,12 +88,52 @@ const PartyMaster = (props) => {
                 value: editDataGatingFromList.State_id,
                 label: editDataGatingFromList.StateName
             })
-
+            
             dispatch(editPartyIDSuccess({ Status: false }))
             return
         }
     }, [editDataGatingFromList])
 
+    useEffect(() => {
+
+        if ((PartySaveSuccess.Status === true) && (PartySaveSuccess.StatusCode === 200)) {
+            dispatch(postPartyDataSuccess({ Status: false }))
+            formRef.current.reset();
+            setCompanyList_dropdown_Select('')
+            setDivision_dropdown_Select('')
+            setPartyType_dropdown_Select('')
+            setDistrict_dropdown_Select('')
+            setState_DropDown_select('')
+            setFSSAIExipry_Date_Select('')
+            if (PageMode === true) {
+                dispatch(AlertState({
+                    Type: 1,
+                    Status: true,
+                    Message: PartySaveSuccess.Message,
+                }))
+            }
+            else {
+                dispatch(AlertState({
+                    Type: 1,
+                    Status: true,
+                    Message: PartySaveSuccess.Message,
+                    RedirectPath: '/partyList',
+                    AfterResponseAction: false
+                }))
+            }
+        }
+        else if (PartySaveSuccess.Status === true) {
+            dispatch(postPartyDataSuccess({ Status: false }))
+            dispatch(AlertState({
+                Type: 4,
+                Status: true,
+                Message: JSON.stringify(PartySaveSuccess.Message),
+                RedirectPath: false,
+                AfterResponseAction: false
+            }));
+        }
+    }, [PartySaveSuccess.Status])
+    
     const StateValues = State.map((Data) => ({
         value: Data.id,
         label: Data.Name
@@ -146,39 +186,6 @@ const PartyMaster = (props) => {
     }
 
 
-    useEffect(() => {
-
-        if ((PartySaveSuccess.Status === true) && (PartySaveSuccess.StatusCode === 200)) {
-            dispatch(postPartyDataSuccess({ Status: false }))
-            formRef.current.reset();
-            if (PageMode === true) {
-                dispatch(AlertState({
-                    Type: 1,
-                    Status: true,
-                    Message: PartySaveSuccess.Message,
-                }))
-            }
-            else {
-                dispatch(AlertState({
-                    Type: 1,
-                    Status: true,
-                    Message: PartySaveSuccess.Message,
-                    RedirectPath: '/partyList',
-                    AfterResponseAction: false
-                }))
-            }
-        }
-        else if (PartySaveSuccess.Status === true) {
-            dispatch(postPartyDataSuccess({ Status: false }))
-            dispatch(AlertState({
-                Type: 4,
-                Status: true,
-                Message: JSON.stringify(PartySaveSuccess.Message),
-                RedirectPath: false,
-                AfterResponseAction: false
-            }));
-        }
-    }, [PartySaveSuccess.Status])
 
     //'Save' And 'Update' Button Handller
     const handleValidUpdate = (event, values) => {
