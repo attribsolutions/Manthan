@@ -42,6 +42,7 @@ import RoleAccessList from "../pages/Adminisrator/RoleAccessPages/RoleAccessList
 import ResetPassword from "../pages/Authentication/ResetPassword";
 import SendOTP from "../pages/Authentication/SendOTP";
 import EnterOTP from "../pages/Authentication/EnterOTP";
+import RoleAccessListPage from "../pages/Adminisrator/RoleAccessPages/RoleAccessListPage";
 
 
 // import AddItemMaster from "../pages/Adminisrator/MasterPages/AddItemMaster";
@@ -121,6 +122,7 @@ const userRoutes = [
   { path: `/PartyMaster`, component: PartyMaster },
 
   { path: `/RoleAccess`, component: RoleAccessList },
+  { path: `/RoleAccessList`, component: RoleAccessListPage },
 
 
   { path:"/partyUIDemo",component:PartyUIDemo},

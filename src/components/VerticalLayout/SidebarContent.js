@@ -107,7 +107,7 @@ const SidebarContent = (props) => {
   const { RoleAccessData, } = useSelector((state) => ({
     RoleAccessData: state.Login.RoleData,
   }));
-
+console.log("RoleAccessData:",RoleAccessData)
   const [isActive, setisActive] = useState('')
 
   // Use ComponentDidMount and ComponentDidUpdate method simultaniously
@@ -145,7 +145,7 @@ const SidebarContent = (props) => {
                   </Link>
                   <ul className="sub-menu">
                     {item.ModuleData.map((index, j) => {
-                      if(index.isShowOnMenu===true)
+                      if(index.RoleAccess_IsShowOnMenu===true)
                       {
                         return (
                           <li>
