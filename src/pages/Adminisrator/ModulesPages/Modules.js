@@ -33,20 +33,20 @@ const Modules = (props) => {
     const formRef = useRef(null);
     const dispatch = useDispatch();
     const history = useHistory()
-    
+
     let editDataGatingFromList = props.state;
     let CheckPageMode = props.IsComponentMode;
-    
+
     const [EditData, setEditData] = useState([]);
     const [pageMode, setPageMode] = useState("save");
     const [userPageAccessState, setUserPageAccessState] = useState('');
-    
+
     //Access redux store Data /  'save_ModuleSuccess' action data
     const { PostAPIResponse, } = useSelector((state) => ({
         PostAPIResponse: state.Modules.modulesSubmitSuccesss,
     }));
 
-// userAccess useEffect
+    // userAccess useEffect
     useEffect(() => {
         const userAcc = CommonGetRoleAccessFunction(history)
         if (!(userAcc === undefined)) {
@@ -111,15 +111,15 @@ const Modules = (props) => {
     const FormSubmitButton_Handler = (event, values) => {
 
         const jsonBody = JSON.stringify({
-                Name: values.Name,
-                DisplayIndex: values.DisplayIndex,
-                isActive: values.IsActive,
-                Icon: values.Icon,
-                CreatedBy: 9,
-                UpdatedBy: 9
-            });
+            Name: values.Name,
+            DisplayIndex: values.DisplayIndex,
+            isActive: values.IsActive,
+            Icon: values.Icon,
+            CreatedBy: 9,
+            UpdatedBy: 9
+        });
 
-        if (pageMode==='edit') {
+        if (pageMode === 'edit') {
             dispatch(updateModuleID(jsonBody, EditData.id));
         }
         else {
