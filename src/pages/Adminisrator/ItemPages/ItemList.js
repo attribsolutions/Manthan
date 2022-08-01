@@ -20,11 +20,15 @@ import {
 import ItemsMaster from "./ItemMaster";
 import { MetaTags } from "react-meta-tags";
 import { useHistory } from "react-router-dom";
+import { CommonGetRoleAccessFunction } from "../../../components/Common/CommonGetRoleAccessFunction";
 
 const ItemsList = (props) => {
+
   const dispatch = useDispatch();
+  const history = useHistory();
+
+  const [userPageAccessState, setUserPageAccessState] = useState('');
   const [modal_center, setmodal_center] = useState(false);
-  const [pageHeading, setPageHeading] = useState();
 
   // get Access redux data
   const { pages, editData, updateMessage, deleteMessage } = useSelector(
@@ -36,25 +40,12 @@ const ItemsList = (props) => {
     })
   );
 
-  const history = useHistory()
-
-  const userPageAccess = history.location.state
-  debugger
-
   useEffect(() => {
-
-    if ((userPageAccess === undefined)) {
-
-      history.push("/Dashboard")
+    const userAcc = CommonGetRoleAccessFunction(history)
+    if (!(userAcc === undefined)) {
+      setUserPageAccessState(userAcc)
     }
-    else {
-      if (!(userPageAccess.fromDashboardAccess)) {
-        history.push("/Dashboard")
-
-      }
-      // setPageHeading( userPageAccess.label)
-    };
-  }, [props])
+  }, [history])
 
   //  This UseEffect => Featch Modules List data  First Rendering
   useEffect(() => {
@@ -86,6 +77,7 @@ const ItemsList = (props) => {
     }
   }, [updateMessage.Status, dispatch]);
 
+  // This UseEffect => delete Module Success/Unsucces  Show and Hide Control Alert_modal.
   useEffect(() => {
     if (deleteMessage.Status === true && deleteMessage.StatusCode === 200) {
       dispatch(deleteItemIdSuccess({ Status: false }));
@@ -110,7 +102,7 @@ const ItemsList = (props) => {
     }
   }, [deleteMessage.Status]);
 
-  // Edit Modal Show When Edit Data is true
+  // This UseEffect => Edit Modal Show When Edit Data is true
   useEffect(() => {
     if (editData.Status === true) {
       tog_center();
@@ -176,105 +168,124 @@ const ItemsList = (props) => {
 
     {
       text: "Action",
+      hidden: (
+        !(userPageAccessState.RoleAccess_IsEdit)
+        && !(userPageAccessState.RoleAccess_IsView)
+        && !(userPageAccessState.RoleAccess_IsDelete)) ? true : false,
+
       formatter: (cellContent, Item) => (
-        <>
-          <div
-            className="d-flex gap-3"
-            style={{ display: "flex", justifyContent: "center" }}
-          >
+        <div className="d-flex gap-3" style={{ display: 'flex', justifyContent: 'center' }} >
+          {(userPageAccessState.RoleAccess_IsEdit)
+            ?
             <buton
               type="button"
-              data-mdb-toggle="tooltip"
-              data-mdb-placement="top"
-              title="Edit Item"
-              onClick={() => {
-                EditPageHandler(Item.id);
-              }}
-              className="badge badge-soft-primary font-size-12"
+              data-mdb-toggle="tooltip" data-mdb-placement="top" title="Edit Item"
+              onClick={() => { EditPageHandler(Item.id); }}
+              className="badge badge-soft-success font-size-12"
             >
               <i className="mdi mdi-pencil font-size-18" id="edittooltip"></i>
             </buton>
+            : null
+          }
+          {(userPageAccessState.RoleAccess_IsView)
+            ?
+            <buton
+              type="button"
+              data-mdb-toggle="tooltip" data-mdb-placement="top" title="View Item"
+              onClick={() => { EditPageHandler(Item.id); }}
+              className="badge badge-soft-primary font-size-12"
+            >
+              <i className="bx bxs-show font-size-18 "></i>
+            </buton>
+            : null
+          }
+          {(userPageAccessState.RoleAccess_IsDelete)
+            ?
             <buton
               className="badge badge-soft-danger font-size-12"
-              data-mdb-toggle="tooltip"
-              data-mdb-placement="top"
-              title="Delete Item"
-              onClick={() => {
-                deleteHandeler(Item.id, Item.Name);
-              }}
+              data-mdb-toggle="tooltip" data-mdb-placement="top" title="Delete Item"
+              onClick={() => { deleteHandeler(Item.id, Item.Name); }}
             >
               <i className="mdi mdi-delete font-size-18"></i>
             </buton>
-          </div>
-        </>
+            : null
+          }
+
+        </div>
       ),
     },
   ];
 
-  return (
-    <React.Fragment>
-      <MetaTags>
-        <title>Item List| FoodERP-React FrontEnd</title>
-      </MetaTags>
-      <div className="page-content">
-        <PaginationProvider pagination={paginationFactory(pageOptions)}>
-          {({ paginationProps, paginationTableProps }) => (
-            <ToolkitProvider
-              keyField="id"
-              data={pages}
-              columns={pagesListColumns}
-              search
-            >
-              {(toolkitProps) => (
-                <React.Fragment>
-                  <Breadcrumbs
-                    title={"Count :"}
-                    breadcrumbItem={"Item List"}
-                    IsButtonVissible={true}
-                    SearchProps={toolkitProps.searchProps}
-                    breadcrumbCount={`Items Count: ${pages.length}`}
-                    userPageAccess={userPageAccess}
-                    // RedirctPath={`/${btoa("ItemMaster")}`}
-                    RedirctPath={`/ItemMaster`}
-                  />
-                  <Row>
-                    <Col xl="12">
-                      <div className="table-responsive">
-                        <BootstrapTable
-                          keyField={"id"}
-                          responsive
-                          bordered={false}
-                          striped={false}
-                          defaultSorted={defaultSorted}
-                          classes={"table  table-bordered"}
-                          {...toolkitProps.baseProps}
-                          {...paginationTableProps}
-                        />
-                      </div>
-                    </Col>
-                  </Row>
-                  <Row className="align-items-md-center mt-30">
-                    <Col className="pagination pagination-rounded justify-content-end mb-2">
-                      <PaginationListStandalone {...paginationProps} />
-                    </Col>
-                  </Row>
-                </React.Fragment>
-              )}
-            </ToolkitProvider>
-          )}
-        </PaginationProvider>
-        <Modal
-          isOpen={modal_center}
-          toggle={() => {
-            tog_center();
-          }}
-          size="xl"
-        >
-          <ItemsMaster state={editData.Data} />
-        </Modal>
-      </div>
-    </React.Fragment>
-  );
-};
+  if (!(userPageAccessState === '')) {
+    return (
+      <React.Fragment>
+        <MetaTags>
+          <title>Item List| FoodERP-React FrontEnd</title>
+        </MetaTags>
+        <div className="page-content">
+          <PaginationProvider pagination={paginationFactory(pageOptions)}>
+            {({ paginationProps, paginationTableProps }) => (
+              <ToolkitProvider
+                keyField="id"
+                data={pages}
+                columns={pagesListColumns}
+                search
+              >
+                {(toolkitProps) => (
+                  <React.Fragment>
+                    <Breadcrumbs
+                      title={"Count :"}
+                      breadcrumbItem={userPageAccessState.PageHeading}
+                      IsButtonVissible={(userPageAccessState.RoleAccess_IsSave) ? true : false}
+                      SearchProps={toolkitProps.searchProps}
+                      breadcrumbCount={`Items Count: ${pages.length}`}
+                      // RedirctPath={`/${btoa("ItemMaster")}`}
+                      // RedirctPath={`/ItemMaster`}
+                    />
+                    <Row>
+                      <Col xl="12">
+                        <div className="table-responsive">
+                          <BootstrapTable
+                            keyField={"id"}
+                            responsive
+                            bordered={false}
+                            striped={false}
+                            defaultSorted={defaultSorted}
+                            classes={"table  table-bordered"}
+                            {...toolkitProps.baseProps}
+                            {...paginationTableProps}
+                          />
+                        </div>
+                      </Col>
+                    </Row>
+                    <Row className="align-items-md-center mt-30">
+                      <Col className="pagination pagination-rounded justify-content-end mb-2">
+                        <PaginationListStandalone {...paginationProps} />
+                      </Col>
+                    </Row>
+                  </React.Fragment>
+                )}
+              </ToolkitProvider>
+            )}
+          </PaginationProvider>
+          <Modal
+            isOpen={modal_center}
+            toggle={() => {
+              tog_center();
+            }}
+            size="xl"
+          >
+            <ItemsMaster state={editData.Data} />
+          </Modal>
+        </div>
+      </React.Fragment>
+    );
+  }
+  else {
+    return (
+      <React.Fragment></React.Fragment>
+    )
+  }
+}
 
 export default ItemsList;
