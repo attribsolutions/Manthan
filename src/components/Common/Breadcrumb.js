@@ -226,8 +226,8 @@ const Breadcrumb = props => {
                 </div>
               </> : <></>}
           </Col>
-
-          <Col sm={2}>
+  
+          <Col sm={2 }>
             <div className="search-box d-inline-block">
               <div className="position-relative">
                 {
@@ -242,7 +242,7 @@ const Breadcrumb = props => {
               </div>
             </div>
           </Col>
-          <Col md={Countsize.length < 10 ? 1 : Countsize.length < 25 ? 2 : 3} className="text-right" >
+          <Col md={Countsize.length < 10 ? 1 : Countsize.length < 25 ? 2 : 3} className="text-right col-md-1">
             {
               !(props.breadcrumbCount === undefined)
                 ?
