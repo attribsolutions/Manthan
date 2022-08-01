@@ -19,6 +19,7 @@ import { deleteSuccess } from "../../../store/Administrator/RoleMasterRedux/acti
 import { AlertState } from "../../../store/Utilites/CostumeAlert/actions";
 import { CommonGetRoleAccessFunction } from "../../../components/Common/CommonGetRoleAccessFunction";
 import { useHistory } from "react-router-dom";
+import { MetaTags } from "react-meta-tags";
 
 const UserList = () => {
 
@@ -28,8 +29,8 @@ const UserList = () => {
     const [userPageAccessState, setUserPageAccessState] = useState('');
     const [modal_center, setmodal_center] = useState(false);
 
-    const { pages, editData, updateMessage, deleteMessage } = useSelector((state) => ({
-        pages: state.User_Registration_Reducer.pages,
+    const { TableListData, editData, updateMessage, deleteMessage } = useSelector((state) => ({
+        TableListData: state.User_Registration_Reducer.pages,
         editData: state.User_Registration_Reducer.editData,
         updateMessage: state.User_Registration_Reducer.updateMessage,
         deleteMessage: state.User_Registration_Reducer.deleteSuccessRole,
@@ -111,9 +112,15 @@ const UserList = () => {
 
     const pageOptions = {
         sizePerPage: 15,
-        totalSize: pages.length,
+        totalSize: TableListData.length,
         custom: true,
     };
+    const defaultSorted = [
+        {
+            dataField: "Name", // if dataField is not match to any column you defined, it will be ignored.
+            order: "asc", // desc or asc
+        },
+    ];
 
     const pagesListColumns = [
         {
@@ -207,6 +214,9 @@ const UserList = () => {
         return (
             <React.Fragment>
                 <div className="page-content">
+                    <MetaTags>
+                        <title>Party List| FoodERP-React FrontEnd</title>
+                    </MetaTags>
 
                     <PaginationProvider
                         pagination={paginationFactory(pageOptions)}
@@ -214,12 +224,10 @@ const UserList = () => {
                         {({ paginationProps, paginationTableProps }) => (
                             <ToolkitProvider
                                 keyField="id"
-                                data={pages}
-                                defaultSorted={defaultSorted}
+                                data={TableListData}
                                 columns={pagesListColumns}
                                 search
                             >
-
                                 {toolkitProps => (
                                     <React.Fragment>
                                         <Breadcrumbs
@@ -227,9 +235,9 @@ const UserList = () => {
                                             breadcrumbItem={userPageAccessState.PageHeading}
                                             IsButtonVissible={(userPageAccessState.RoleAccess_IsSave) ? true : false}
                                             SearchProps={toolkitProps.searchProps}
-                                            breadcrumbCount={`Users Count: ${pages.length}`}
-                                            // RedirctPath={"/userMaster"}
-                                         
+                                            defaultSorted={defaultSorted}
+                                            breadcrumbCount={`User Count: ${TableListData.length}`}
+                                            RedirctPath={"/UserMaster"}
                                         />
                                         <Row>
                                             <Col xl="12">
