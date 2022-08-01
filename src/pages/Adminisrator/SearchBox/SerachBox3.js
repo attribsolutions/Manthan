@@ -40,7 +40,7 @@ export default function SerachBox3() {
                                 placeholder="Search"
                                 onChange={(e)=>searchHandeler(e)}
                             />
-<Row class="rounded-circle">
+<Row class="rrounded-circle">
                
                <Table 
                       className="table table-bordered text-black w-100 p-3 table table-hover ml-1"
