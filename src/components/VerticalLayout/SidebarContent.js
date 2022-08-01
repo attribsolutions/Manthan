@@ -26,9 +26,16 @@ const SidebarContent = (props) => {
   const pathName = props.location.pathname;
   const dispatch = useDispatch();
 
+  // const  RoleAccessData=demoRolleAcess
+  const { RoleAccessData, } = useSelector((state) => ({
+    RoleAccessData: state.Login.RoleData,
+  }));
+
   useEffect(() => {
     dispatch(roleAceessAction(1, 1, 1))
     // console.log("test side bar use effect")
+    console.log("RoleAccessData useEffect:",RoleAccessData)
+    
   }, [])
 
   const activateParentDropdown = useCallback((item) => {
@@ -103,11 +110,8 @@ const SidebarContent = (props) => {
       }
     }
   }
-  // const  RoleAccessData=demoRolleAcess
-  const { RoleAccessData, } = useSelector((state) => ({
-    RoleAccessData: state.Login.RoleData,
-  }));
-console.log("RoleAccessData:",RoleAccessData)
+
+// console.log("RoleAccessData:",RoleAccessData)
   const [isActive, setisActive] = useState('')
 
   // Use ComponentDidMount and ComponentDidUpdate method simultaniously
