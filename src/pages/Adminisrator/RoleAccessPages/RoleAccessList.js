@@ -320,7 +320,8 @@ const RoleAccessList = (props) => {
             var isTopOfTheDivision = document.getElementById("IsTopOfTheDivision" + i).checked;
 
 
-            roleAccessArray.push({ "PageAccess": 1 });
+            // roleAccessArray.push({ "PageAccess": 1 });
+            if (isShowOnMenu) roleAccessArray.push({ "PageAccess": 1 });
             if (isSave) roleAccessArray.push({ "PageAccess": 2 });
             if (isView) roleAccessArray.push({ "PageAccess": 3 });
             if (isEdit) roleAccessArray.push({ "PageAccess": 4 });

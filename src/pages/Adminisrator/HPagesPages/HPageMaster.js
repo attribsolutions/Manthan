@@ -227,43 +227,16 @@ const HPageMaster = (props) => {
 
 
     function PageAccess_DropdownSelect_Handler(e) {
-
-
-        if (PageAccessValues.label === "IsEdit") {
-            setTablePageAccessDataState([tablePageAccessDataState, {
-                AccessID: PageAccessValues.value,
-                AccessName: PageAccessValues.label
-            }])
-        }
         setPageAccess_DropDownSelect(e)
+
     }
-
-
-
-
-    function PageAccess_DropdownSelect_Handler(e) {
-        debugger
-
-        if (PageAccessValues.label === "IsEdit") {
-            setTablePageAccessDataState([tablePageAccessDataState, {
-                AccessID: PageAccessValues.value,
-                AccessName: PageAccessValues.label
-            }])
-        }
-        setPageAccess_DropDownSelect(e)
-    }
-
-
-
-
-
 
 
 
     //  for PageType deropDown
     const PageType_DropdownSelectHandller = (e) => {
 
-        console.log("find", tablePageAccessDataState)
+    
 
         if (e.value === 2) {
 
@@ -278,10 +251,6 @@ const HPageMaster = (props) => {
                     AccessName: findShowOnMenu.label
                 }])
             }
-
-            const find = tablePageAccessDataState.find((element) => {
-                return element
-            });
 
 
 
@@ -318,8 +287,8 @@ const HPageMaster = (props) => {
         const find = tablePageAccessDataState.find((element) => {
             return element.AccessID === pageAccess_DropDownSelect.value
         });
-       
 
+debugger
         if (pageAccess_DropDownSelect.length <= 0) {
             dispatch(AlertState({
                 Type: 3, Status: true,
@@ -327,10 +296,34 @@ const HPageMaster = (props) => {
             }));
         }
         else if (find === undefined) {
-            
+           const label = pageAccess_DropDownSelect.label;
+            const value = pageAccess_DropDownSelect.value;
+
+            if (label === "IsEdit") {
+                const findIsView = tablePageAccessDataState.find((element) => {
+                    return element.AccessName === "IsView"
+                });
+                if (findIsView == undefined) {
+                    const ViewValues = PageAccessValues.find((element) => {
+                        return element.label === "IsView"
+                    });
+                    setTablePageAccessDataState([
+                        ...tablePageAccessDataState,
+                        {
+                            AccessID: ViewValues.value,
+                            AccessName: ViewValues.label
+                        },
+                        {
+                            AccessID: value,
+                            AccessName: label,
+                        }])
+                }
+                return
+            }
+
             setTablePageAccessDataState([...tablePageAccessDataState, {
-                AccessID: pageAccess_DropDownSelect.value,
-                AccessName: pageAccess_DropDownSelect.label
+                AccessID: label,
+                AccessName: value,
             }
             ]);
         }
@@ -577,7 +570,7 @@ const HPageMaster = (props) => {
                                                         <Select
                                                             options={PageAccessValues}
                                                             onChange={(e) => { PageAccess_DropdownSelect_Handler(e) }}
-                                                            defaultValue={{ label: "IsShowOnMenu", value: 1 }}
+                                                            // defaultValue={{ label: "IsShowOnMenu", value: 1 }}
                                                             classNamePrefix="select2-selection"
                                                         />
                                                     </FormGroup>
@@ -614,10 +607,11 @@ const HPageMaster = (props) => {
                                                                                     {TableValue.AccessName}
                                                                                 </td>
                                                                                 <td>
-                                                                                    <i className="mdi mdi-trash-can d-block text-danger font-size-20" onClick={() => {
+                                                                                   { !(TableValue.AccessName==="IsShowOnMenu") ? <i className="mdi mdi-trash-can d-block text-danger font-size-20" onClick={() => {
                                                                                         PageAccess_DeleteButton_Handller(TableValue.AccessID)
                                                                                     }} >
                                                                                     </i>
+                                                                                     :null}
                                                                                 </td>
                                                                             </tr>
                                                                         ))}
