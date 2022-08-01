@@ -215,8 +215,8 @@ const UserList = () => {
                             <ToolkitProvider
                                 keyField="id"
                                 data={pages}
+                                defaultSorted={defaultSorted}
                                 columns={pagesListColumns}
-                                bootstrap4
                                 search
                             >
 
@@ -229,6 +229,7 @@ const UserList = () => {
                                             SearchProps={toolkitProps.searchProps}
                                             breadcrumbCount={`Users Count: ${pages.length}`}
                                             // RedirctPath={"/userMaster"}
+                                         
                                         />
                                         <Row>
                                             <Col xl="12">
