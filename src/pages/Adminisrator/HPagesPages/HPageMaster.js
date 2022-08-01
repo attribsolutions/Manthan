@@ -61,7 +61,6 @@ const HPageMaster = (props) => {
         PageAccess: state.H_Pages.PageAccess,
     }));
 
-    console.log('PageAccess',PageAccess)
     // For PageAccess DropDown
     useEffect(() => {
         dispatch(getPageAccess_DropDown_API());
@@ -87,24 +86,25 @@ const HPageMaster = (props) => {
             })
 
             // When value 2 is get then DropDown lable is "ListPage" and ShowMenu is disabled Otherwise DropDown lable is "AddPage" and ShowMenu is enabled
-            // let showCheckBox_pageType = editDataGatingFromList.PageType
-            // if (showCheckBox_pageType === 2) {
-            //     document.getElementById("inp-showOnMenu").disabled = true
-            //     setisShowPageChecked(true)
-            //     setPageAccessDropDownView(true)
-            //     dispatch(getPageList(showCheckBox_pageType))
-            //     setPageType_DropdownSelect({ value: 2, label: 'ListPage' })
-            // }
-            // else if (showCheckBox_pageType === 1) {
+            let showCheckBox_pageType = editDataGatingFromList.PageType
+            debugger
+            if (showCheckBox_pageType === 2) {
+                // document.getElementById("inp-showOnMenu").disabled = true
+                // setisShowPageChecked(true)
+                setPageAccessDropDownView(true)
+                dispatch(getPageList(showCheckBox_pageType))
+                setPageType_DropdownSelect({ value: 2, label: 'ListPage' })
+            }
+            else if (showCheckBox_pageType === 1) {
 
-            //     setisShowPageChecked(showCheckBox_pageType.isShowOnMenu);
-            //     document.getElementById("inp-showOnMenu").disabled = false
-            //     setPageAccessDropDownView(false)
-            //     dispatch(getPageListSuccess([]))
-            //     setPageList_DropdownSelect({ value: 0 })
-            //     setPageType_DropdownSelect({ value: 1, label: 'AddPage' })
+                // setisShowPageChecked(showCheckBox_pageType.isShowOnMenu);
+                // document.getElementById("inp-showOnMenu").disabled = false
+                // setPageAccessDropDownView(false)
+                dispatch(getPageListSuccess([]))
+                setPageList_DropdownSelect({ value: 0 })
+                setPageType_DropdownSelect({ value: 1, label: 'AddPage' })
 
-            // }
+            }
             dispatch(editHPagesIDSuccess({ Status: false }))
         }
     }, [editDataGatingFromList]);
@@ -181,7 +181,7 @@ const HPageMaster = (props) => {
     //'Save' And 'Update' Button Handller
     const handleValidSubmit = (event, values) => {
 
-        if (tablePageAccessDataState.length <= 0 && !(pageType_DropdownSelect.value===1 )) {
+        if (tablePageAccessDataState.length <= 0 && !(pageType_DropdownSelect.value === 1)) {
             dispatch(AlertState({
                 Type: 4, Status: true,
                 Message: "At Least One PageAccess is Select",
@@ -190,7 +190,7 @@ const HPageMaster = (props) => {
             }));
             return
         }
-       
+
         const jsonBody = JSON.stringify({
             Name: values.Name,
             Module: module_DropdownSelect.value,
@@ -225,24 +225,74 @@ const HPageMaster = (props) => {
     }
 
 
+
     function PageAccess_DropdownSelect_Handler(e) {
+
+
+        if (PageAccessValues.label === "IsEdit") {
+            setTablePageAccessDataState([tablePageAccessDataState, {
+                AccessID: PageAccessValues.value,
+                AccessName: PageAccessValues.label
+            }])
+        }
         setPageAccess_DropDownSelect(e)
     }
+
+
+
+
+    function PageAccess_DropdownSelect_Handler(e) {
+        debugger
+
+        if (PageAccessValues.label === "IsEdit") {
+            setTablePageAccessDataState([tablePageAccessDataState, {
+                AccessID: PageAccessValues.value,
+                AccessName: PageAccessValues.label
+            }])
+        }
+        setPageAccess_DropDownSelect(e)
+    }
+
+
+
+
+
+
+
 
     //  for PageType deropDown
     const PageType_DropdownSelectHandller = (e) => {
 
-        // let showCheckBox = document.getElementById("inp-showOnMenu")
+        console.log("find", tablePageAccessDataState)
 
         if (e.value === 2) {
-            setisShowPageChecked(true)
+
+
+            // let showCheckBox = document.getElementById("inp-showOnMenu")
+            const findShowOnMenu = PageAccessValues.find((element) => {
+                return element.label === "IsShowOnMenu"
+            })
+            if (!(findShowOnMenu === undefined)) {
+                setTablePageAccessDataState([{
+                    AccessID: findShowOnMenu.value,
+                    AccessName: findShowOnMenu.label
+                }])
+            }
+
+            const find = tablePageAccessDataState.find((element) => {
+                return element
+            });
+
+
+
+            // setisShowPageChecked(true)
             dispatch(getPageList(e.value))
             // showCheckBox.disabled = true
             setPageAccessDropDownView(true)
-          
 
         }
         else if (e.value === 1) {
+            setTablePageAccessDataState([])
             // showCheckBox.disabled = false
             setPageAccessDropDownView(false)
             dispatch(getPageListSuccess([]))
@@ -250,6 +300,13 @@ const HPageMaster = (props) => {
         }
         setPageType_DropdownSelect(e)
     }
+
+
+
+
+
+
+
 
     const PageList_DropdownSelectHandller = (e) => {
         setPageList_DropdownSelect(e);
@@ -261,13 +318,16 @@ const HPageMaster = (props) => {
         const find = tablePageAccessDataState.find((element) => {
             return element.AccessID === pageAccess_DropDownSelect.value
         });
-        if (pageAccess_DropDownSelect.length <= 0 ) {
+       
+
+        if (pageAccess_DropDownSelect.length <= 0) {
             dispatch(AlertState({
                 Type: 3, Status: true,
                 Message: "Select One DropDown Value",
             }));
         }
         else if (find === undefined) {
+            
             setTablePageAccessDataState([...tablePageAccessDataState, {
                 AccessID: pageAccess_DropDownSelect.value,
                 AccessName: pageAccess_DropDownSelect.label
@@ -517,6 +577,7 @@ const HPageMaster = (props) => {
                                                         <Select
                                                             options={PageAccessValues}
                                                             onChange={(e) => { PageAccess_DropdownSelect_Handler(e) }}
+                                                            defaultValue={{ label: "IsShowOnMenu", value: 1 }}
                                                             classNamePrefix="select2-selection"
                                                         />
                                                     </FormGroup>

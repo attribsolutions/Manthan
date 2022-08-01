@@ -22,10 +22,16 @@ import BootstrapTable from "react-bootstrap-table-next";
 import { useSelector, useDispatch } from "react-redux";
 import AddEmployee from "./EmployeeMaster";
 import { MetaTags } from "react-meta-tags";
+import { useHistory } from "react-router-dom";
+import { CommonGetRoleAccessFunction } from "../../../components/Common/CommonGetRoleAccessFunction";
 
 const Employee_List = () => {
   const dispatch = useDispatch();
+  const history = useHistory();
+
+  const [userPageAccessState, setUserPageAccessState] = useState('');
   const [modal_center, setmodal_center] = useState(false);
+
 
   // get Access redux data
   const { TableListData, editData, updateMessage, deleteMessage } = useSelector(
@@ -37,6 +43,13 @@ const Employee_List = () => {
     })
   );
   console.log("editData", editData);
+
+  useEffect(() => {
+    const userAcc = CommonGetRoleAccessFunction(history)
+    if (!(userAcc === undefined)) {
+      setUserPageAccessState(userAcc)
+    }
+  }, [history])
 
   //  This UseEffect => Featch Modules List data  First Rendering
   useEffect(() => {
@@ -141,136 +154,153 @@ const Employee_List = () => {
       dataField: "ID",
       sort: true,
       hidden: true,
-      formatter: (cellContent, TableListData) => <>{TableListData.ID}</>,
     },
 
     {
       text: "Employee Name",
       dataField: "Name",
       sort: true,
-      formatter: (cellContent, TableListData) => <>{TableListData.Name}</>,
     },
 
     {
       text: "Address",
       dataField: "Address",
       sort: true,
-      formatter: (cellContent, TableListData) => <>{TableListData.Address}</>,
     },
 
     {
       text: "Mobile",
       dataField: "Mobile",
       sort: true,
-      formatter: (cellContent, TableListData) => <>{TableListData.Mobile}</>,
     },
     {
       text: "Email",
       dataField: "email",
       sort: true,
-      formatter: (cellContent, TableListData) => <>{TableListData.email}</>,
     },
 
     {
       text: "Action",
+      hidden: (
+        !(userPageAccessState.RoleAccess_IsEdit)
+        && !(userPageAccessState.RoleAccess_IsView)
+        && !(userPageAccessState.RoleAccess_IsDelete)) ? true : false,
 
       formatter: (cellContent, TableListData) => (
-        <>
-          <div
-            className="d-flex gap-3"
-            style={{ display: "flex", justifyContent: "center" }}
-          >
+        <div className="d-flex gap-3" style={{ display: 'flex', justifyContent: 'center' }} >
+          {(userPageAccessState.RoleAccess_IsEdit)
+            ?
             <buton
               type="button"
-              data-mdb-toggle="tooltip"
-              data-mdb-placement="top"
-              title="Edit Employee"
-              onClick={() => {
-                EditPageHandler(TableListData.id);
-              }}
-              className="badge badge-soft-primary font-size-12"
+              data-mdb-toggle="tooltip" data-mdb-placement="top" title="Edit Module"
+              onClick={() => { EditPageHandler(TableListData.id); }}
+              className="badge badge-soft-success font-size-12"
             >
               <i className="mdi mdi-pencil font-size-18" id="edittooltip"></i>
             </buton>
+            : null
+          }
+          {(userPageAccessState.RoleAccess_IsView)
+            ?
+            <buton
+              type="button"
+              data-mdb-toggle="tooltip" data-mdb-placement="top" title="View Module"
+              onClick={() => { EditPageHandler(TableListData.id); }}
+              className="badge badge-soft-primary font-size-12"
+            >
+              <i className="bx bxs-show font-size-18 "></i>
+            </buton>
+            : null
+          }
+          {(userPageAccessState.RoleAccess_IsDelete)
+            ?
             <buton
               className="badge badge-soft-danger font-size-12"
-              data-mdb-toggle="tooltip"
-              data-mdb-placement="top"
-              title="Delete Employee"
-              onClick={() => {
-                deleteHandeler(TableListData.id, TableListData.Name);
-              }}
+              data-mdb-toggle="tooltip" data-mdb-placement="top" title="Delete Module"
+              onClick={() => { deleteHandeler(TableListData.id, TableListData.Name); }}
             >
               <i className="mdi mdi-delete font-size-18"></i>
             </buton>
-          </div>
-        </>
+            : null
+          }
+
+        </div>
       ),
     },
   ];
+  //tag_center -- Control the Edit Modal show and close
+  function tog_center() {
+    setmodal_center(!modal_center)
+  }
+  if (!(userPageAccessState === '')) {
+    return (
+      <React.Fragment>
+        <MetaTags>
+          <title>Employee List| FoodERP-React FrontEnd</title>
+        </MetaTags>
+        <div className="page-content">
+          <PaginationProvider pagination={paginationFactory(pageOptions)}>
+            {({ paginationProps, paginationTableProps }) => (
+              <ToolkitProvider
+                keyField="id"
+                data={TableListData}
+                columns={pagesListColumns}
+                search
+              >
+                {(toolkitProps) => (
+                  <React.Fragment>
+                    <Breadcrumbs
+                      title={"Count :"}
+                      breadcrumbItem={userPageAccessState.PageHeading}
+                      IsButtonVissible={(userPageAccessState.RoleAccess_IsSave) ? true : false}
+                      SearchProps={toolkitProps.searchProps}
+                      breadcrumbCount={`Employee Count: ${TableListData.length}`}
+                      // RedirctPath={"/employeeMaster"}
+                    />
+                    <Row>
+                      <Col xl="12">
+                        <div className="table-responsive">
+                          <BootstrapTable
+                            keyField={"id"}
+                            responsive
+                            bordered={false}
+                            defaultSorted={defaultSorted}
+                            striped={false}
+                            classes={"table  table-bordered"}
+                            {...toolkitProps.baseProps}
+                            {...paginationTableProps}
+                          />
+                        </div>
+                      </Col>
+                    </Row>
+                    <Row className="align-items-md-center mt-30">
+                      <Col className="pagination pagination-rounded justify-content-end mb-2">
+                        <PaginationListStandalone {...paginationProps} />
+                      </Col>
+                    </Row>
+                  </React.Fragment>
+                )}
+              </ToolkitProvider>
+            )}
+          </PaginationProvider>
+          <Modal
+            isOpen={modal_center}
+            toggle={() => {
+              tog_center();
+            }}
+            size="xl"
+          >
+            <AddEmployee state={editData.Data} />
+          </Modal>
+        </div>
+      </React.Fragment>
+    );
+  }
+  else {
+    return (
+      <React.Fragment></React.Fragment>
+    )
+  }
 
-  return (
-    <React.Fragment>
-      <MetaTags>
-        <title>Employee List| FoodERP-React FrontEnd</title>
-      </MetaTags>
-      <div className="page-content">
-        <PaginationProvider pagination={paginationFactory(pageOptions)}>
-          {({ paginationProps, paginationTableProps }) => (
-            <ToolkitProvider
-              keyField="id"
-              data={TableListData}
-              columns={pagesListColumns}
-              search
-            >
-              {(toolkitProps) => (
-                <React.Fragment>
-                  <Breadcrumbs
-                    title={"Count :"}
-                    breadcrumbItem={"Employee List"}
-                    IsButtonVissible={true}
-                    SearchProps={toolkitProps.searchProps}
-                    breadcrumbCount={`Employee Count: ${TableListData.length}`}
-                    RedirctPath={"/employeeMaster"}
-                  />
-                  <Row>
-                    <Col xl="12">
-                      <div className="table-responsive">
-                        <BootstrapTable
-                          keyField={"id"}
-                          responsive
-                          bordered={false}
-                          defaultSorted={defaultSorted}
-                          striped={false}
-                          classes={"table  table-bordered"}
-                          {...toolkitProps.baseProps}
-                          {...paginationTableProps}
-                        />
-                      </div>
-                    </Col>
-                  </Row>
-                  <Row className="align-items-md-center mt-30">
-                    <Col className="pagination pagination-rounded justify-content-end mb-2">
-                      <PaginationListStandalone {...paginationProps} />
-                    </Col>
-                  </Row>
-                </React.Fragment>
-              )}
-            </ToolkitProvider>
-          )}
-        </PaginationProvider>
-        <Modal
-          isOpen={modal_center}
-          toggle={() => {
-            tog_center();
-          }}
-          size="xl"
-        >
-          <AddEmployee state={editData.Data} />
-        </Modal>
-      </div>
-    </React.Fragment>
-  );
-};
-
+}
 export default Employee_List;

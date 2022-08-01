@@ -90,8 +90,8 @@ const userRoutes = [
   
 
 
-    { path: `/ModuleMaster`, component: Modules },
-  { path: `/ModuleList`, component: ModulesList },
+    { path: '/ModuleMaster', component: Modules },
+  { path: '/ModuleList', component: ModulesList },
 
   { path: "/subModuleMaster", component: SubModules },
   { path: "/subModuleList", component: SubModulesList },
@@ -109,8 +109,8 @@ const userRoutes = [
   { path: `/UserMaster`, component: AddUser },
   { path: `/UserList`, component: UserList },
 
-  { path: `/EmployeeMaster`, component: AddEmployee },
-  { path: `/EmployeeList`, component: Employee_List },
+  { path: '/EmployeeMaster', component: AddEmployee },
+  { path: '/EmployeeList', component: Employee_List },
 
   { path: `/RoleMaster`, component: RoleMaster },
   { path: `/RoleList`, component: RoleList },

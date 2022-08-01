@@ -246,7 +246,7 @@ const RoleList = (props) => {
                     IsButtonVissible={true}
                     SearchProps={toolkitProps.searchProps}
                     breadcrumbCount={`Role Count: ${TableListData.length}`}
-                    RedirctPath={"/RoleMaster"}
+                    RedirctPath={`/RoleMaster`}
                   />
                   <Row>
                     <Col xl="12">
