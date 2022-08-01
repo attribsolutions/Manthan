@@ -12,7 +12,7 @@ import {
 
 import { MetaTags } from "react-meta-tags";
 // import { getRoles } from "../../../store/Administrator/UserRegistrationRedux/actions";
-import { AddPageHandlerForRoleAccessListPage, GetHpageListData, getH_Modules, getPageAccess_DropDown_API, GetRoleListForRoleAccessListPage, getRoles, GO_Button_HandlerForRoleAccessListPage, PageDropdownForRoleAccessList, PageMasterForRoleAccessLit, PostMethodForRoleAccessListPage, PostMethod_ForRoleAccessListPage_Success, roleAceessAction } from "../../../store/actions";
+import { AddPageHandlerForRoleAccessListPage, GetHpageListData, getH_Modules, getPageAccess_DropDown_API, GetRoleListForRoleAccessListPage, getRoles, GO_Button_HandlerForRoleAccessListPage, GO_Button_HandlerForRoleAccessListPage_Success, PageDropdownForRoleAccessList, PageMasterForRoleAccessLit, PostMethodForRoleAccessListPage, PostMethod_ForRoleAccessListPage_Success, roleAceessAction } from "../../../store/actions";
 import { fetchModelsList } from "../../../store/actions";
 
 import { useHistory, useLocation, useParams } from "react-router-dom";
@@ -80,6 +80,7 @@ const RoleAccessList = (props) => {
 
 
     useEffect(() => {
+        dispatch( GO_Button_HandlerForRoleAccessListPage_Success([]))
         // dispatch(fetchCompanyList());
         dispatch(getDivisionTypesID());
 
@@ -112,7 +113,7 @@ const RoleAccessList = (props) => {
         })
 
         setTableListData(Array)
-        console.log("GO_buttonPageMasterListForRoleAccess", JSON.stringify(GO_buttonPageMasterListForRoleAccess_Redux))
+        // console.log("GO_buttonPageMasterListForRoleAccess", JSON.stringify(GO_buttonPageMasterListForRoleAccess_Redux))
 
 
     }, [GO_buttonPageMasterListForRoleAccess_Redux])
@@ -157,7 +158,7 @@ const RoleAccessList = (props) => {
     useEffect(() => {
         if ((PostMessage_ForRoleAccessList.Status === true) && (PostMessage_ForRoleAccessList.StatusCode === 200)) {
             dispatch(PostMethod_ForRoleAccessListPage_Success({ Status: false }))
-
+            // GoButton_Handler()
             dispatch(AlertState({
                 Type: 1,
                 Status: true,
