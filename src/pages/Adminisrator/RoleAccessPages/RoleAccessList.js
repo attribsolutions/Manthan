@@ -112,7 +112,7 @@ const RoleAccessList = (props) => {
         })
 
         setTableListData(Array)
-        console.log("GO_buttonPageMasterListForRoleAccess",JSON.stringify(GO_buttonPageMasterListForRoleAccess_Redux))
+        console.log("GO_buttonPageMasterListForRoleAccess", JSON.stringify(GO_buttonPageMasterListForRoleAccess_Redux))
 
 
     }, [GO_buttonPageMasterListForRoleAccess_Redux])
@@ -137,7 +137,7 @@ const RoleAccessList = (props) => {
             previousData = previousData.concat(Array)
             setTableListData(previousData)
         }
-        console.log("AddPage_PageMasterListForRoleAccess",JSON.stringify(AddPage_PageMasterListForRoleAccess_Redux))
+        console.log("AddPage_PageMasterListForRoleAccess", JSON.stringify(AddPage_PageMasterListForRoleAccess_Redux))
 
     }, [AddPage_PageMasterListForRoleAccess_Redux])
 
@@ -245,8 +245,19 @@ const RoleAccessList = (props) => {
         // debugger
         var division = division_dropdown_Select.value
         var role = role_dropdown_Select.value
-        dispatch(GO_Button_HandlerForRoleAccessListPage(role, division));
-        setShowTableOnUI(true)
+        if (role > 0 && division > 0) {
+            dispatch(GO_Button_HandlerForRoleAccessListPage(role, division));
+            setShowTableOnUI(true)
+        }
+        else {
+            dispatch(AlertState({
+                Type: 4,
+                Status: true,
+                Message: role > 0 ? "Please Select Division" : "Please Select Role",
+                RedirectPath: false,
+                AfterResponseAction: false
+            }));
+        }
     }
 
     const AddPageButton_Handeler = () => {
@@ -287,7 +298,7 @@ const RoleAccessList = (props) => {
         let selectedItemArray = [];
         let pageAccessElement = {}
         let roleAccessArray = []
-
+        let roleAccessArray2 = []
 
         for (var i = 0; i < tableListData.length; i++) {
             // debugger
@@ -309,6 +320,7 @@ const RoleAccessList = (props) => {
             var isTopOfTheDivision = document.getElementById("IsTopOfTheDivision" + i).checked;
 
 
+            // roleAccessArray.push({ "PageAccess": 1 });
             if (isShowOnMenu) roleAccessArray.push({ "PageAccess": 1 });
             if (isSave) roleAccessArray.push({ "PageAccess": 2 });
             if (isView) roleAccessArray.push({ "PageAccess": 3 });
@@ -319,9 +331,18 @@ const RoleAccessList = (props) => {
             if (isPrint) roleAccessArray.push({ "PageAccess": 8 });
             if (isTopOfTheDivision) roleAccessArray.push({ "PageAccess": 9 });
 
+            if (isShowOnMenu) roleAccessArray2.push({ "PageAccess": 1 });
+            if (isSave) roleAccessArray2.push({ "PageAccess": 2 });
+            if (isView) roleAccessArray2.push({ "PageAccess": 3 });
+            if (isEdit) roleAccessArray2.push({ "PageAccess": 4 });
+            if (isDelete) roleAccessArray2.push({ "PageAccess": 5 });
+            if (isEditSelf) roleAccessArray2.push({ "PageAccess": 6 });
+            if (isDeleteSelf) roleAccessArray2.push({ "PageAccess": 7 });
+            if (isPrint) roleAccessArray2.push({ "PageAccess": 8 });
+            if (isTopOfTheDivision) roleAccessArray2.push({ "PageAccess": 9 });
             // roleAccessArray.push(roleAccessElement)
 
-            pageAccessElement["Role"] =role_dropdown_Select.value
+            pageAccessElement["Role"] = role_dropdown_Select.value
             pageAccessElement["Company"] = 1
             pageAccessElement["Division"] = division_dropdown_Select.value
             pageAccessElement["Modules"] = moduleId
@@ -341,12 +362,13 @@ const RoleAccessList = (props) => {
                     pageAccessElement2["Pages"] = relatedPageID
                     pageAccessElement2["CreatedBy"] = 1
                     pageAccessElement2["UpdatedBy"] = 1
-                    pageAccessElement2["RolePageAccess"] = roleAccessArray
+                    pageAccessElement2["RolePageAccess"] = roleAccessArray2
                     selectedItemArray.push(pageAccessElement2)
                     pageAccessElement2 = {}
                 }
             }
             // debugger
+            roleAccessArray2 = []
             roleAccessArray = []
             pageAccessElement = {}
         }
@@ -355,7 +377,7 @@ const RoleAccessList = (props) => {
 
         dispatch(PostMethodForRoleAccessListPage(jsonBody));
         // debugger
-        console.log("roleAccess Post data",jsonBody)
+        console.log("roleAccess Post data", jsonBody)
 
     };
 
@@ -404,7 +426,7 @@ const RoleAccessList = (props) => {
                                         </Col>
 
                                         <Col md="3" className="mt- ">
-                                            <Button className=" btn btn-primary btn-ripple border border-dark"onClick={() => { GoButton_Handler() }}>Go</Button>
+                                            <Button className=" btn btn-primary btn-ripple border border-dark" onClick={() => { GoButton_Handler() }}>Go</Button>
                                         </Col>
 
                                     </Row>
@@ -427,11 +449,11 @@ const RoleAccessList = (props) => {
 
 
                                             <Col md="4" className="align-right p-2">
-                                              <Row className="pull-right btn-sm px-4">  
-                                          <Button className=" btn btn-default btn-ripple  border border-dark" onClick={() => { ChangeButtonHandeler() }}>Change Role</Button>
-                                            </Row>
+                                                <Row className="pull-right btn-sm px-4">
+                                                    <Button className=" btn btn-default btn-ripple  border border-dark" onClick={() => { ChangeButtonHandeler() }}>Change Role</Button>
+                                                </Row>
                                             </Col>
-                                            
+
 
                                         </Row>
 
@@ -473,14 +495,14 @@ const RoleAccessList = (props) => {
 
 
                                             <Col md="2" className=" ">
-                                         <Button className=" btn btn-primary btn-ripple border border-dark" onClick={() => { saveHandeller() }}>Save</Button>
+                                                <Button className=" btn btn-primary btn-ripple border border-dark" onClick={() => { saveHandeller() }}>Save</Button>
                                             </Col>
 
                                         </Row>
                                     </CardHeader>
 
                                     <CardBody>
-                                        {tableListData.length> 0
+                                        {tableListData.length > 0
                                             ?
                                             <>
                                                 <table className="table table-bordered">
@@ -559,14 +581,14 @@ const RoleAccessList = (props) => {
 
                                             </> :
                                             <>
-                                            <br></br>
-                                            <br></br>
-                                            <br></br>
-                                            <br></br>
-                                            <br></br>
-                                            <br></br>
-                                            <br></br>
-                                            <br></br>
+                                                <br></br>
+                                                <br></br>
+                                                <br></br>
+                                                <br></br>
+                                                <br></br>
+                                                <br></br>
+                                                <br></br>
+                                                <br></br>
                                             </>
                                         }
 

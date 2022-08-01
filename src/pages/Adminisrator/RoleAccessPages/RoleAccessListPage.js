@@ -15,7 +15,7 @@ import "../../../assets/scss/CustomeTable/datatables.scss"
 import { useDispatch, useSelector } from "react-redux";
 import {
     deleteModuleID, deleteModuleIDSuccess, editModuleID, fetchModelsList,
-    GetRoleAccessListPage,
+    // GetRoleAccessListPage,
     updateModuleIDSuccess
 } from "../../../store/actions";
 import { AlertState } from "../../../store/Utilites/CostumeAlert/actions";
@@ -54,7 +54,7 @@ const RoleAccessListPage = () => {
 
     //  This UseEffect => Featch Modules List data  First Rendering
     useEffect(() => {
-        dispatch(GetRoleAccessListPage());
+        // dispatch(GetRoleAccessListPage());
     }, []);
 
     // Edit button Handller

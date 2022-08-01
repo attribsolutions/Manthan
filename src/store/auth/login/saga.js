@@ -15,7 +15,7 @@ import {
 
 import { getFirebaseBackend } from "../../../helpers/firebase_helper"
 import {
-  Python_postJwtLogin, RoleAccessApi_url
+  Python_postJwtLogin, RoleAccessApi_url, showPagesListOnPageAccess_DropDown_List
 } from "../../../helpers/backend_helper"
 
 const fireBaseBackend = getFirebaseBackend()
@@ -63,12 +63,13 @@ function* logoutUser({ payload: { history } }) {
   }
 }
 function* RoleAccessGenratorFunction({ id1, id2, id3 }) {
-
+debugger
   try {
-
+    const PageAccessApi = yield call(showPagesListOnPageAccess_DropDown_List)
+ 
     const RoleResponse = yield call(RoleAccessApi_url, id1, id2, id3);
 
-    if (RoleResponse.Data.length > 0) {
+    if ((RoleResponse.Data.length > 0)&&(PageAccessApi.Data.length>0)) {
 
       let ArrayMain = []
       let ElementMain = {}
@@ -82,17 +83,21 @@ function* RoleAccessGenratorFunction({ id1, id2, id3 }) {
         index_main.ModuleData.map((index_secd) => {
 
           ElementChieldSecond = index_secd;
-          ElementChieldSecond[`PageAccess_IsSave`] = false;
-          ElementChieldSecond[`PageAccess_IsEdit`] = false;
-          ElementChieldSecond[`PageAccess_IsDelete`] = false;
-          ElementChieldSecond[`PageAccess_IsEditSelf`] = false;
-          ElementChieldSecond[`PageAccess_IsDeleteSelf`] = false;
-          ElementChieldSecond[`PageAccess_IsShow`] = false;
-          ElementChieldSecond[`PageAccess_IsView`] = false;
-          ElementChieldSecond[`PageAccess_IsTopOfTheDivision`] = false;
+
+          PageAccessApi.Data.map((index_PageAccess) => {
+            ElementChieldSecond[`RoleAccess_${index_PageAccess.Name}`] = false;
+          })
+          // ElementChieldSecond[`PageAccess_IsSave`] = false;
+          // ElementChieldSecond[`PageAccess_IsEdit`] = false;
+          // ElementChieldSecond[`PageAccess_IsDelete`] = false;
+          // ElementChieldSecond[`PageAccess_IsEditSelf`] = false;
+          // ElementChieldSecond[`PageAccess_IsDeleteSelf`] = false;
+          // ElementChieldSecond[`PageAccess_IsShow`] = false;
+          // ElementChieldSecond[`PageAccess_IsView`] = false;
+          // ElementChieldSecond[`PageAccess_IsTopOfTheDivision`] = false;
 
           index_secd.RolePageAccess.map((rolIndex) => {
-            ElementChieldSecond[`PageAccess_${rolIndex.Name}`] = true;
+            ElementChieldSecond[`RoleAccess_${rolIndex.Name}`] = true;
           })
 
           ArrayChieldSecond.push(ElementChieldSecond)
@@ -103,10 +108,11 @@ function* RoleAccessGenratorFunction({ id1, id2, id3 }) {
         })
         ArrayMain.push(ElementMain)
         ArrayChieldSecond = []
-        ElementMain={
-          
-        }      })
-      
+        ElementMain = {
+
+        }
+      })
+
       ArrayMain.map((i) => {
         i.ModuleData.map((index) => {
           all_DataInSinlgeArray.push(index)
@@ -118,6 +124,7 @@ function* RoleAccessGenratorFunction({ id1, id2, id3 }) {
       yield put(roleAceessActionSuccess(ArrayMain))
       yield put(RoleAccessUpdateSuccess(all_DataInSinlgeArray))
     }
+  
   } catch (error) {
     console.log("RoleAccessGenratorFunction", error)
     yield put(apiError(error))

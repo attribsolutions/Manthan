@@ -61,7 +61,6 @@ const HPageMaster = (props) => {
         PageAccess: state.H_Pages.PageAccess,
     }));
 
-    console.log('PageAccess',PageAccess)
     // For PageAccess DropDown
     useEffect(() => {
         dispatch(getPageAccess_DropDown_API());
@@ -87,24 +86,25 @@ const HPageMaster = (props) => {
             })
 
             // When value 2 is get then DropDown lable is "ListPage" and ShowMenu is disabled Otherwise DropDown lable is "AddPage" and ShowMenu is enabled
-            // let showCheckBox_pageType = editDataGatingFromList.PageType
-            // if (showCheckBox_pageType === 2) {
-            //     document.getElementById("inp-showOnMenu").disabled = true
-            //     setisShowPageChecked(true)
-            //     setPageAccessDropDownView(true)
-            //     dispatch(getPageList(showCheckBox_pageType))
-            //     setPageType_DropdownSelect({ value: 2, label: 'ListPage' })
-            // }
-            // else if (showCheckBox_pageType === 1) {
+            let showCheckBox_pageType = editDataGatingFromList.PageType
+            debugger
+            if (showCheckBox_pageType === 2) {
+                // document.getElementById("inp-showOnMenu").disabled = true
+                // setisShowPageChecked(true)
+                setPageAccessDropDownView(true)
+                dispatch(getPageList(showCheckBox_pageType))
+                setPageType_DropdownSelect({ value: 2, label: 'ListPage' })
+            }
+            else if (showCheckBox_pageType === 1) {
 
-            //     setisShowPageChecked(showCheckBox_pageType.isShowOnMenu);
-            //     document.getElementById("inp-showOnMenu").disabled = false
-            //     setPageAccessDropDownView(false)
-            //     dispatch(getPageListSuccess([]))
-            //     setPageList_DropdownSelect({ value: 0 })
-            //     setPageType_DropdownSelect({ value: 1, label: 'AddPage' })
+                // setisShowPageChecked(showCheckBox_pageType.isShowOnMenu);
+                // document.getElementById("inp-showOnMenu").disabled = false
+                // setPageAccessDropDownView(false)
+                dispatch(getPageListSuccess([]))
+                setPageList_DropdownSelect({ value: 0 })
+                setPageType_DropdownSelect({ value: 1, label: 'AddPage' })
 
-            // }
+            }
             dispatch(editHPagesIDSuccess({ Status: false }))
         }
     }, [editDataGatingFromList]);
@@ -181,7 +181,7 @@ const HPageMaster = (props) => {
     //'Save' And 'Update' Button Handller
     const handleValidSubmit = (event, values) => {
 
-        if (tablePageAccessDataState.length <= 0 && !(pageType_DropdownSelect.value===1 )) {
+        if (tablePageAccessDataState.length <= 0 && !(pageType_DropdownSelect.value === 1)) {
             dispatch(AlertState({
                 Type: 4, Status: true,
                 Message: "At Least One PageAccess is Select",
@@ -190,7 +190,7 @@ const HPageMaster = (props) => {
             }));
             return
         }
-       
+
         const jsonBody = JSON.stringify({
             Name: values.Name,
             Module: module_DropdownSelect.value,
@@ -225,24 +225,43 @@ const HPageMaster = (props) => {
     }
 
 
+
     function PageAccess_DropdownSelect_Handler(e) {
         setPageAccess_DropDownSelect(e)
+
     }
+
+
 
     //  for PageType deropDown
     const PageType_DropdownSelectHandller = (e) => {
 
-        // let showCheckBox = document.getElementById("inp-showOnMenu")
+    
 
         if (e.value === 2) {
-            setisShowPageChecked(true)
+
+
+            // let showCheckBox = document.getElementById("inp-showOnMenu")
+            const findShowOnMenu = PageAccessValues.find((element) => {
+                return element.label === "IsShowOnMenu"
+            })
+            if (!(findShowOnMenu === undefined)) {
+                setTablePageAccessDataState([{
+                    AccessID: findShowOnMenu.value,
+                    AccessName: findShowOnMenu.label
+                }])
+            }
+
+
+
+            // setisShowPageChecked(true)
             dispatch(getPageList(e.value))
             // showCheckBox.disabled = true
             setPageAccessDropDownView(true)
-          
 
         }
         else if (e.value === 1) {
+            setTablePageAccessDataState([])
             // showCheckBox.disabled = false
             setPageAccessDropDownView(false)
             dispatch(getPageListSuccess([]))
@@ -250,6 +269,13 @@ const HPageMaster = (props) => {
         }
         setPageType_DropdownSelect(e)
     }
+
+
+
+
+
+
+
 
     const PageList_DropdownSelectHandller = (e) => {
         setPageList_DropdownSelect(e);
@@ -261,16 +287,43 @@ const HPageMaster = (props) => {
         const find = tablePageAccessDataState.find((element) => {
             return element.AccessID === pageAccess_DropDownSelect.value
         });
-        if (pageAccess_DropDownSelect.length <= 0 ) {
+
+debugger
+        if (pageAccess_DropDownSelect.length <= 0) {
             dispatch(AlertState({
                 Type: 3, Status: true,
                 Message: "Select One DropDown Value",
             }));
         }
         else if (find === undefined) {
+           const label = pageAccess_DropDownSelect.label;
+            const value = pageAccess_DropDownSelect.value;
+
+            if (label === "IsEdit") {
+                const findIsView = tablePageAccessDataState.find((element) => {
+                    return element.AccessName === "IsView"
+                });
+                if (findIsView == undefined) {
+                    const ViewValues = PageAccessValues.find((element) => {
+                        return element.label === "IsView"
+                    });
+                    setTablePageAccessDataState([
+                        ...tablePageAccessDataState,
+                        {
+                            AccessID: ViewValues.value,
+                            AccessName: ViewValues.label
+                        },
+                        {
+                            AccessID: value,
+                            AccessName: label,
+                        }])
+                }
+                return
+            }
+
             setTablePageAccessDataState([...tablePageAccessDataState, {
-                AccessID: pageAccess_DropDownSelect.value,
-                AccessName: pageAccess_DropDownSelect.label
+                AccessID: label,
+                AccessName: value,
             }
             ]);
         }
@@ -517,6 +570,7 @@ const HPageMaster = (props) => {
                                                         <Select
                                                             options={PageAccessValues}
                                                             onChange={(e) => { PageAccess_DropdownSelect_Handler(e) }}
+                                                            // defaultValue={{ label: "IsShowOnMenu", value: 1 }}
                                                             classNamePrefix="select2-selection"
                                                         />
                                                     </FormGroup>
@@ -553,10 +607,11 @@ const HPageMaster = (props) => {
                                                                                     {TableValue.AccessName}
                                                                                 </td>
                                                                                 <td>
-                                                                                    <i className="mdi mdi-trash-can d-block text-danger font-size-20" onClick={() => {
+                                                                                   { !(TableValue.AccessName==="IsShowOnMenu") ? <i className="mdi mdi-trash-can d-block text-danger font-size-20" onClick={() => {
                                                                                         PageAccess_DeleteButton_Handller(TableValue.AccessID)
                                                                                     }} >
                                                                                     </i>
+                                                                                     :null}
                                                                                 </td>
                                                                             </tr>
                                                                         ))}
