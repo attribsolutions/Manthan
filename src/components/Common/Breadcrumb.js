@@ -39,7 +39,7 @@ const Breadcrumb = props => {
 
   // New Button Handller
   const NewButtonHandeller = () => {
-    debugger
+    // debugger
     let RelatedPageID = 0
     const userPageAccess = history.location.state
 
@@ -89,9 +89,9 @@ const Breadcrumb = props => {
       }
     }, [props.ExcelData])
 
-    var list = []
-    var object1 = {}
     const DownloadInExcelButtonHanler = (event, values) => {
+      var list = []
+      var object1 = {}
       var selectedValues = Object.keys(values);
       var filteredValues = selectedValues.filter(function (selectedValues) {
         return values[selectedValues]

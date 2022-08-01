@@ -99,7 +99,7 @@ const Modules = (props) => {
             dispatch(AlertState({
                 Type: 4,
                 Status: true,
-                Message: "error Message",
+                Message: JSON.stringify(PostAPIResponse.Message),
                 RedirectPath: false,
                 AfterResponseAction: false
             }));
