@@ -242,7 +242,7 @@ const Breadcrumb = props => {
               </div>
             </div>
           </Col>
-          <Col md={Countsize.length < 10 ? 1 : Countsize.length < 25 ? 2 : 3} className="text-right col-md-1">
+          <Col md={Countsize.length < 10 ? 1 : Countsize.length < 25 ? 2 : 3} className="text-right col-md-2 px-0">
             {
               !(props.breadcrumbCount === undefined)
                 ?
