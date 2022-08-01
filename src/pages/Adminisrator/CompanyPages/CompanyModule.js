@@ -10,12 +10,9 @@ import {
   FormGroup,
 } from "reactstrap";
 import Select from "react-select";
-import {
-  AvForm,
-  AvGroup,
-} from "availity-reactstrap-validation";
+import { AvForm} from "availity-reactstrap-validation";
 import { useDispatch, useSelector } from "react-redux";
-
+import Breadcrumb from "../../../components/Common/Breadcrumb";
 import AvField from "availity-reactstrap-validation/lib/AvField";
 import {
   editCompanyIDSuccess,
@@ -25,10 +22,10 @@ import {
   getCompanyGroup
 } from "../../../store/Administrator/CompanyRedux/actions";
 import { MetaTags } from "react-meta-tags";
-import Breadcrumbs from "../../../components/Common/Breadcrumb";
 import { AlertState } from "../../../store/Utilites/CostumeAlert/actions";
 import { BreadcrumbShow } from "../../../store/Utilites/Breadcrumb/actions";
 import { useHistory } from "react-router-dom";
+import { CommonGetRoleAccessFunction } from "../../../components/Common/CommonGetRoleAccessFunction";
 
 const CompanyModule = (props) => {
 
@@ -49,6 +46,13 @@ const CompanyModule = (props) => {
   const { PostAPIResponse, } = useSelector((state) => ({
     PostAPIResponse: state.Company.companySubmitSuccesss,
   }));
+
+  useEffect(() => {
+    const userAcc = CommonGetRoleAccessFunction(history)
+    if (!(userAcc === undefined)) {
+      setUserPageAccessState(userAcc)
+    }
+  }, [history])
 
   // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
   useEffect(() => {
@@ -84,8 +88,7 @@ const CompanyModule = (props) => {
           Type: 1,
           Status: true,
           Message: PostAPIResponse.Message,
-          RedirectPath: '/companyList',
-          AfterResponseAction: false
+          RedirectPath: '/CompanyList',
         }))
       }
     }
@@ -153,14 +156,14 @@ const CompanyModule = (props) => {
           <MetaTags>
             <title>Company Master| FoodERP-React FrontEnd</title>
           </MetaTags>
-          <Breadcrumbs breadcrumbItem={"Company Master"} />
+          <Breadcrumb breadcrumbItem={userPageAccessState.PageHeading} />
           <Container fluid>
             <Row>
               <Col lg={12}>
                 <Card className="text-black" >
                   <CardHeader className="card-header   text-black" style={{ backgroundColor: "#dddddd" }} >
-                    <h4 className="card-title text-black">{"Page Description :Company Master"}</h4>
-                    <p className="card-title-desc text-black">{"Page Description Details : Company Master"}</p>
+                    <h4 className="card-title text-black">{userPageAccessState.PageDescription}</h4>
+                    <p className="card-title-desc text-black">{userPageAccessState.PageDescriptionDetails}</p>
                   </CardHeader>
 
                   <CardBody>
@@ -309,14 +312,9 @@ const CompanyModule = (props) => {
                               </Col>
                             </Row>
                           </FormGroup >
-
                         </CardBody>
                       </Card>
-
-
-
                     </AvForm>
-                    <br></br><br></br><br></br> <br></br> <br></br>
                   </CardBody>
                 </Card>
               </Col >

@@ -87,24 +87,24 @@ const userRoutes = [
   // { path: `/${btoa("RoleAccess")}`, component: RoleAccessList },
   // { path: "/RoleAccess", component: RoleAccessList },
 
-  
 
 
-    { path: '/ModuleMaster', component: Modules },
+
+  { path: '/ModuleMaster', component: Modules },
   { path: '/ModuleList', component: ModulesList },
 
   { path: "/subModuleMaster", component: SubModules },
   { path: "/subModuleList", component: SubModulesList },
 
   // Administrator : Company Path and List
-  { path: `/CompanyMaster`, component: CompanyModule },
-  { path: `/CompanyList`, component: CompanyList },
+  { path: '/CompanyMaster', component: CompanyModule },
+  { path: '/CompanyList', component: CompanyList },
 
   { path: `/PageList`, component: HPageList },
   { path: `/PageMaster`, component: HPageMaster },
 
   { path: `/Order`, component: OrderPage },
-  { path:`/Orders`, component: OrderList },
+  { path: `/Orders`, component: OrderList },
 
   { path: `/UserMaster`, component: AddUser },
   { path: `/UserList`, component: UserList },
@@ -125,9 +125,9 @@ const userRoutes = [
   { path: `/RoleAccessList`, component: RoleAccessListPage },
 
 
-  { path:"/partyUIDemo",component:PartyUIDemo},
-  { path:"/demoUi3",component:DemoUI3},
-  { path:"/demoUi2",component:DemoUI2},
+  { path: "/partyUIDemo", component: PartyUIDemo },
+  { path: "/demoUi3", component: DemoUI3 },
+  { path: "/demoUi2", component: DemoUI2 },
 
 
   // { path: "/AddItemMaster", component: AddItemMaster },
@@ -144,9 +144,9 @@ const authRoutes = [
   { path: "/logout", component: Logout },
   { path: "/login", component: Login },
   { path: "/forgot-password", component: ForgetPwd },
-  {path:"/ResetPassword",component:ResetPassword},
-  { path:"/SendOTP",component:SendOTP},
-  {path:"/EnterOTP",component:EnterOTP},
+  { path: "/ResetPassword", component: ResetPassword },
+  { path: "/SendOTP", component: SendOTP },
+  { path: "/EnterOTP", component: EnterOTP },
 
   { path: "/pages-404", component: Error404 },
   { path: "/pages-500", component: Error500 },

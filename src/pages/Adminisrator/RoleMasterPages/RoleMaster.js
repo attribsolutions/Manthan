@@ -25,7 +25,6 @@ const RoleMaster = (props) => {
   //'IsEdit'--if true then update data otherwise it will perfrom save operation
   const [pageMode, setPageMode] = useState("save");
 
-  const [userPageAccess, setUserPageAccess] = useState(initialUserPageAccess);
 
 
 
@@ -39,6 +38,7 @@ const RoleMaster = (props) => {
     PageAccess_IsView: true,
     PageAccess_IsEdit: true,
   }
+  const [userPageAccess, setUserPageAccess] = useState(initialUserPageAccess);
 
   //*** "isEditdata get all data from ModuleID for Binding  Form controls
   let editDataGatingFromList = props.state;
@@ -127,13 +127,12 @@ const RoleMaster = (props) => {
     }
     else {
       dispatch(postRole(jsonBody));
-      console.log("jsonBody", jsonBody)
     }
   };
 
   // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
   var IsEditMode_Css = ''
-  if (pageMode === "edit") { IsEditMode_Css = "-5.5%" };
+  if (pageMode==="edit") { IsEditMode_Css = "-5.5%" };
 
   return (
     <React.Fragment>
@@ -241,7 +240,7 @@ const RoleMaster = (props) => {
                               <div>
                                 {
                                   pageMode === "edit" ?
-                                    userPageAccess.PageAccess_IsEdit ?
+                                  userPageAccess.PageAccess_IsEdit ?
                                       <button
                                         type="submit"
                                         data-mdb-toggle="tooltip" data-mdb-placement="top" title="Update Role"
@@ -253,14 +252,14 @@ const RoleMaster = (props) => {
                                       <></>
                                     : (
                                       userPageAccess.PageAccess_IsSave ?
-                                        <button
-                                          type="submit"
-                                          data-mdb-toggle="tooltip" data-mdb-placement="top" title="Save Role"
-                                          className="btn btn-primary w-md"
-                                        > <i className="fas fa-save me-2"></i> Save
-                                        </button>
-                                        :
-                                        <></>
+                                      <button
+                                        type="submit"
+                                        data-mdb-toggle="tooltip" data-mdb-placement="top" title="Save Role"
+                                        className="btn btn-primary w-md"
+                                      > <i className="fas fa-save me-2"></i> Save
+                                      </button>
+                                      :
+                                      <></>
                                     )
                                 }
                               </div>
