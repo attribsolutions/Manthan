@@ -10,7 +10,7 @@ import {
   FormGroup,
 } from "reactstrap";
 import Select from "react-select";
-import { AvForm} from "availity-reactstrap-validation";
+import { AvForm, AvInput} from "availity-reactstrap-validation";
 import { useDispatch, useSelector } from "react-redux";
 import Breadcrumb from "../../../components/Common/Breadcrumb";
 import AvField from "availity-reactstrap-validation/lib/AvField";
@@ -201,13 +201,12 @@ const CompanyModule = (props) => {
                           <Row className="mb-1">
                             <FormGroup className=" col col-sm-4 " >
                               <Label htmlFor="validationCustom01">Mobile Number</Label>
-                              <AvField name="PhoneNo" type="tel"
+                              <AvInput name="PhoneNo" type="text"
                                 autoComplete="off"
                                 value={EditData.PhoneNo}
                                 defaultValue=''
                                 placeholder="Enter Phone Number"
                               // validate={{
-                              //   required: { value: true, errorMessage: 'Please Enter Phone Number' },
                               //   tel: {
                               //     pattern: /^(\+\d{1,3}[- ]?)?\d{10}$/,
                               //     errorMessage: 'Please Enter Phone Number'
