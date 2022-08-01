@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
-import Breadcrumbs from "../../../components/Common/Breadcrumb";
-import { Card, CardBody, Col, Container, Row, Label, Input, CardHeader, FormGroup } from "reactstrap";
-import { AvForm, AvGroup, AvField, AvInput } from "availity-reactstrap-validation";
+import Breadcrumb from "../../../components/Common/Breadcrumb";
+import { Card, CardBody, Col, Container, Row, Label, CardHeader, FormGroup } from "reactstrap";
+import { AvForm, AvField, AvInput } from "availity-reactstrap-validation";
 import { useDispatch, useSelector } from "react-redux";
 import { AlertState } from "../../../store/Utilites/CostumeAlert/actions";
 import Select from "react-select";
@@ -14,21 +14,23 @@ import Flatpickr from "react-flatpickr"
 import { fetchCompanyList } from "../../../store/Administrator/CompanyRedux/actions";
 import { BreadcrumbShow } from "../../../store/Utilites/Breadcrumb/actions";
 import { MetaTags } from "react-meta-tags";
+import { CommonGetRoleAccessFunction } from "../../../components/Common/CommonGetRoleAccessFunction";
+import { useHistory } from "react-router-dom";
 
 const PartyMaster = (props) => {
 
     const formRef = useRef(null);
     const dispatch = useDispatch();
-
-    //SetState  Edit data Geting From Modules List component
-    const [EditData, setEditData] = useState([]);
-
-    //'IsEdit'--if true then update data otherwise it will perfrom save operation
-    const [IsEdit, setIsEdit] = useState(false);
-    const [PageMode, setPageMode] = useState(false);
+    const history = useHistory()
 
     //*** "isEditdata get all data from ModuleID for Binding  Form controls
     let editDataGatingFromList = props.state;
+
+    //SetState  Edit data Geting From Modules List component
+    const [EditData, setEditData] = useState([]);
+    const [pageMode, setPageMode] = useState("save");
+    const [userPageAccessState, setUserPageAccessState] = useState('');
+
     const [state_DropDown_select, setState_DropDown_select] = useState("");
     const [FSSAIExipry_Date_Select, setFSSAIExipry_Date_Select] = useState("");
     const [district_dropdown_Select, setDistrict_dropdown_Select] = useState("");
@@ -38,8 +40,8 @@ const PartyMaster = (props) => {
 
 
     //Access redux store Data /  'save_ModuleSuccess' action data
-    const { PartySaveSuccess, State, DistrictOnState, companyList, DivisionTypes, PartyTypes } = useSelector((state) => ({
-        PartySaveSuccess: state.PartyMasterReducer.PartySaveSuccess,
+    const { PostAPIResponse, State, DistrictOnState, companyList, DivisionTypes, PartyTypes } = useSelector((state) => ({
+        PostAPIResponse: state.PartyMasterReducer.PartySaveSuccess,
         State: state.M_EmployeesReducer.State,
         DistrictOnState: state.PartyMasterReducer.DistrictOnState,
         companyList: state.Company.companyList,
@@ -47,6 +49,14 @@ const PartyMaster = (props) => {
         PartyTypes: state.PartyMasterReducer.PartyTypes,
 
     }));
+
+    // userAccess useEffect
+    useEffect(() => {
+        const userAcc = CommonGetRoleAccessFunction(history)
+        if (!(userAcc === undefined)) {
+            setUserPageAccessState(userAcc)
+        }
+    }, [history])
 
     useEffect(() => {
         dispatch(getState());
@@ -59,11 +69,11 @@ const PartyMaster = (props) => {
 
     // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
     useEffect(() => {
-        document.getElementById("txtName").focus();
+
+        if (!(userPageAccessState === '')) { document.getElementById("txtName").focus(); }
         if (!(editDataGatingFromList === undefined)) {
-          
             setEditData(editDataGatingFromList);
-            setIsEdit(true);
+            setPageMode("edit");
             setFSSAIExipry_Date_Select(editDataGatingFromList.FSSAIExipry)
 
             setDistrict_dropdown_Select({
@@ -88,7 +98,7 @@ const PartyMaster = (props) => {
                 value: editDataGatingFromList.State_id,
                 label: editDataGatingFromList.StateName
             })
-            
+
             dispatch(editPartyIDSuccess({ Status: false }))
             return
         }
@@ -96,7 +106,7 @@ const PartyMaster = (props) => {
 
     useEffect(() => {
 
-        if ((PartySaveSuccess.Status === true) && (PartySaveSuccess.StatusCode === 200)) {
+        if ((PostAPIResponse.Status === true) && (PostAPIResponse.StatusCode === 200)) {
             dispatch(postPartyDataSuccess({ Status: false }))
             formRef.current.reset();
             setCompanyList_dropdown_Select('')
@@ -105,35 +115,35 @@ const PartyMaster = (props) => {
             setDistrict_dropdown_Select('')
             setState_DropDown_select('')
             setFSSAIExipry_Date_Select('')
-            if (PageMode === true) {
+            if (pageMode === "other") {
                 dispatch(AlertState({
                     Type: 1,
                     Status: true,
-                    Message: PartySaveSuccess.Message,
+                    Message: PostAPIResponse.Message,
                 }))
             }
             else {
                 dispatch(AlertState({
                     Type: 1,
                     Status: true,
-                    Message: PartySaveSuccess.Message,
-                    RedirectPath: '/partyList',
+                    Message: PostAPIResponse.Message,
+                    RedirectPath: '/PartyList',
                     AfterResponseAction: false
                 }))
             }
         }
-        else if (PartySaveSuccess.Status === true) {
+        else if (PostAPIResponse.Status === true) {
             dispatch(postPartyDataSuccess({ Status: false }))
             dispatch(AlertState({
                 Type: 4,
                 Status: true,
-                Message: JSON.stringify(PartySaveSuccess.Message),
+                Message: JSON.stringify(PostAPIResponse.Message),
                 RedirectPath: false,
                 AfterResponseAction: false
             }));
         }
-    }, [PartySaveSuccess.Status])
-    
+    }, [PostAPIResponse.Status])
+
     const StateValues = State.map((Data) => ({
         value: Data.id,
         label: Data.Name
@@ -188,53 +198,51 @@ const PartyMaster = (props) => {
 
 
     //'Save' And 'Update' Button Handller
-    const handleValidUpdate = (event, values) => {
-      
-        const requestOptions = {
-            body: JSON.stringify({
-                Name: values.Name,
-                PartyType: partyType_dropdown_Select.value,
-                DivisionType: division_dropdown_Select.value,
-                Company: companyList_dropdown_Select.value,
-                PAN:values.PAN,
-                CustomerDivision: values.CustomerDivision,
-                Email: values.Email,
-                Address: values.Address,
-                PIN: values.PIN,
-                MobileNo: values.MobileNo,
-                AlternateContactNo:values.AlternateContactNo,
-                State: state_DropDown_select.value,
-                District: district_dropdown_Select.value,
-                Taluka: 0,
-                City: 0,
-                CustomerDivision: 1,
-                GSTIN: values.GSTIN,
-                FSSAINo: values.FSSAINo,
-                FSSAIExipry: FSSAIExipry_Date_Select,
-                isActive: values.isActive,
-                CreatedBy: 1,
-                CreatedOn: "2022-06-24T11:16:53.165483Z",
-                UpdatedBy: 1,
-                UpdatedOn: "2022-06-24T11:16:53.330888Z"
-            }),
-        };
+    const FormSubmitButton_Handler = (event, values) => {
 
-        if (IsEdit) {
-            dispatch(updatePartyID(requestOptions.body, EditData.id));
+        const jsonBody = JSON.stringify({
+            Name: values.Name,
+            PartyType: partyType_dropdown_Select.value,
+            DivisionType: division_dropdown_Select.value,
+            Company: companyList_dropdown_Select.value,
+            PAN: values.PAN,
+            CustomerDivision: values.CustomerDivision,
+            Email: values.Email,
+            Address: values.Address,
+            PIN: values.PIN,
+            MobileNo: values.MobileNo,
+            AlternateContactNo: values.AlternateContactNo,
+            State: state_DropDown_select.value,
+            District: district_dropdown_Select.value,
+            Taluka: 0,
+            City: 0,
+            CustomerDivision: 1,
+            GSTIN: values.GSTIN,
+            FSSAINo: values.FSSAINo,
+            FSSAIExipry: FSSAIExipry_Date_Select,
+            isActive: values.isActive,
+            CreatedBy: 1,
+            CreatedOn: "2022-06-24T11:16:53.165483Z",
+            UpdatedBy: 1,
+            UpdatedOn: "2022-06-24T11:16:53.330888Z"
+        });
+
+        if (pageMode === 'edit') {
+            dispatch(updatePartyID(jsonBody, EditData.id));
         }
         else {
-            dispatch(postPartyData(requestOptions.body));
+            dispatch(postPartyData(jsonBody));
         }
     };
 
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
     var IsEditMode_Css = ''
-    if (IsEdit === true) { IsEditMode_Css = "-3.5%" };
+    if (pageMode === "edit" || pageMode == "other") { IsEditMode_Css = "-5.5%" };
 
     return (
         <React.Fragment>
             <div className="page-content text-black" style={{ marginTop: IsEditMode_Css }}>
-                <Breadcrumbs breadcrumbItem={"Party Master"} />
+                <Breadcrumb breadcrumbItem={userPageAccessState.PageHeading} />
                 <MetaTags>
                     <title>Party Master| FoodERP-React FrontEnd</title>
                 </MetaTags>
@@ -243,14 +251,14 @@ const PartyMaster = (props) => {
                         <Col lg={12}>
                             <Card className="text-black" >
                                 <CardHeader className="card-header   text-black" style={{ backgroundColor: "#dddddd" }} >
-                                    <h4 className="card-title text-black">React Validation - Normal</h4>
-                                    <p className="card-title-desc text-black">Provide valuable, actionable feedback to your users with HTML5 form validation–available in all our supported browsers.</p>
+                                    <h4 className="card-title text-black">{userPageAccessState.PageDescription}</h4>
+                                    <p className="card-title-desc text-black">{userPageAccessState.PageDescriptionDetails}</p>
                                 </CardHeader>
 
                                 <CardBody>
                                     <AvForm
                                         onValidSubmit={(e, v) => {
-                                            handleValidUpdate(e, v);
+                                            FormSubmitButton_Handler(e, v);
                                         }}
                                         ref={formRef}
                                     >
@@ -306,7 +314,7 @@ const PartyMaster = (props) => {
                                                     </Col>
                                                 </Row>
                                                 <Row className="mt-3 ">
-                                                <Col md="3">
+                                                    <Col md="3">
                                                         <FormGroup className="mb-3">
                                                             <Label htmlFor="validationCustom01">Email </Label>
                                                             <AvField name="Email" type="email"
@@ -531,25 +539,7 @@ const PartyMaster = (props) => {
                                                                 />
                                                             </FormGroup>
                                                         </Col> */}
-                                                    {/* <Col md="1">  </Col>
-                                                    <Col md="3">
-                                                        <FormGroup className="mb-2">
-                                                            <Label htmlFor="validationCustom01"> PIN </Label>
-                                                            <AvField name="PIN" type="text"
-                                                                value={EditData.PIN}
-                                                                placeholder=" PIN No. "
-                                                                validate={{
-                                                                    required: { value: true, errorMessage: 'Please Enter your PIN No.' },
-                                                                    tel: {
-                                                                        pattern: "^[1-9][0-9]{5}$",
-                                                                        errorMessage: 'PIN Should be Six Digit Only.'
-                                                                    }
-                                                                }
-                                                                }
-
-                                                            />
-                                                        </FormGroup>
-                                                    </Col> */}
+                                                   
                                                 </Row>
                                                 <Row>
 
@@ -613,29 +603,38 @@ const PartyMaster = (props) => {
                                                     </Col>
                                                 </Row>
 
-                                                <Row className="mb-4" >
-                                                    <Col sm={2} >
-                                                        <div>
-                                                            {
-                                                                IsEdit ? (
-                                                                    <button
-                                                                        type="submit"
-                                                                        data-mdb-toggle="tooltip" data-mdb-placement="top" title="Update Party"
-                                                                        className="btn btn-success w-md"
-                                                                    >
-                                                                        <i class="fas fa-edit me-2"></i>Update
-                                                                    </button>) : (
-                                                                    <button
-                                                                        type="submit"
-                                                                        data-mdb-toggle="tooltip" data-mdb-placement="top" title="Save Party"
-                                                                        className="btn btn-primary w-md"
-                                                                    > <i className="fas fa-save me-2"></i> Save
-                                                                    </button>
-                                                                )
-                                                            }
-                                                        </div>
-                                                    </Col>
-                                                </Row>
+                                                <FormGroup >
+                                                    <Row >
+                                                        <Col sm={2}>
+                                                            <div>
+                                                                {
+                                                                    pageMode === "edit" ?
+                                                                        userPageAccessState.RoleAccess_IsEdit ?
+                                                                            <button
+                                                                                type="submit"
+                                                                                data-mdb-toggle="tooltip" data-mdb-placement="top" title="Update Party"
+                                                                                className="btn btn-success w-md"
+                                                                            >
+                                                                                <i class="fas fa-edit me-2"></i>Update
+                                                                            </button>
+                                                                            :
+                                                                            <></>
+                                                                        : (
+                                                                            userPageAccessState.RoleAccess_IsSave ?
+                                                                                <button
+                                                                                    type="submit"
+                                                                                    data-mdb-toggle="tooltip" data-mdb-placement="top" title="Save Party"
+                                                                                    className="btn btn-primary w-md"
+                                                                                > <i className="fas fa-save me-2"></i> Save
+                                                                                </button>
+                                                                                :
+                                                                                <></>
+                                                                        )
+                                                                }
+                                                            </div>
+                                                        </Col>
+                                                    </Row>
+                                                </FormGroup >
                                             </Card>
                                         </Row>
 
