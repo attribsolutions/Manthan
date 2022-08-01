@@ -322,8 +322,8 @@ debugger
             }
 
             setTablePageAccessDataState([...tablePageAccessDataState, {
-                AccessID: label,
-                AccessName: value,
+                AccessID: value,
+                AccessName: label,
             }
             ]);
         }
