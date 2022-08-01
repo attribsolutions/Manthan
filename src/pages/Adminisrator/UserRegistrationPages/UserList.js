@@ -17,10 +17,15 @@ import "../../../assets/scss/CustomeTable/datatables.scss"
 import AddUser from "./UserRegistration";
 import { deleteSuccess } from "../../../store/Administrator/RoleMasterRedux/action";
 import { AlertState } from "../../../store/Utilites/CostumeAlert/actions";
+import { CommonGetRoleAccessFunction } from "../../../components/Common/CommonGetRoleAccessFunction";
+import { useHistory } from "react-router-dom";
 
 const UserList = () => {
 
     const dispatch = useDispatch();
+    const history = useHistory();
+
+    const [userPageAccessState, setUserPageAccessState] = useState('');
     const [modal_center, setmodal_center] = useState(false);
 
     const { pages, editData, updateMessage, deleteMessage } = useSelector((state) => ({
@@ -29,6 +34,13 @@ const UserList = () => {
         updateMessage: state.User_Registration_Reducer.updateMessage,
         deleteMessage: state.User_Registration_Reducer.deleteSuccessRole,
     }));
+
+    useEffect(() => {
+        const userAcc = CommonGetRoleAccessFunction(history)
+        if (!(userAcc === undefined)) {
+            setUserPageAccessState(userAcc)
+        }
+    }, [history])
 
     //  This UseEffect => Featch Modules List data  First Rendering
     useEffect(() => {
@@ -50,7 +62,7 @@ const UserList = () => {
             dispatch(updateSuccess({ Status: false }))
             dispatch(AlertState({
                 Type: 3, Status: true,
-                Message:JSON.stringify( updateMessage.Message),
+                Message: JSON.stringify(updateMessage.Message),
             }));
         }
     }, [updateMessage]);
@@ -143,102 +155,127 @@ const UserList = () => {
         },
         {
             text: "Actions ",
+            hidden: (
+                !(userPageAccessState.RoleAccess_IsEdit)
+                && !(userPageAccessState.RoleAccess_IsView)
+                && !(userPageAccessState.RoleAccess_IsDelete)) ? true : false,
 
-            formatter: (cellContent, user) => (
-                <>
-                    <div class="d-flex gap-3" style={{ display: 'flex', justifyContent: 'center' }} >
-
+            formatter: (cellContent, User) => (
+                <div className="d-flex gap-3" style={{ display: 'flex', justifyContent: 'center' }} >
+                    {(userPageAccessState.RoleAccess_IsEdit)
+                        ?
                         <buton
                             type="button"
                             data-mdb-toggle="tooltip" data-mdb-placement="top" title="Edit User"
-                            onClick={() => {
-                                EditPageHandler(user.id);
-                            }}
+                            onClick={() => { EditPageHandler(User.id); }}
+                            className="badge badge-soft-success font-size-12"
+                        >
+                            <i className="mdi mdi-pencil font-size-18" id="edittooltip"></i>
+                        </buton>
+                        : null
+                    }
+                    {(userPageAccessState.RoleAccess_IsView)
+                        ?
+                        <buton
+                            type="button"
+                            data-mdb-toggle="tooltip" data-mdb-placement="top" title="View User"
+                            onClick={() => { EditPageHandler(User.id); }}
                             className="badge badge-soft-primary font-size-12"
                         >
-                            <i class="mdi mdi-pencil font-size-18" id="edittooltip"></i>
-                        </buton>{" "}
-
+                            <i className="bx bxs-show font-size-18 "></i>
+                        </buton>
+                        : null
+                    }
+                    {(userPageAccessState.RoleAccess_IsDelete)
+                        ?
                         <buton
                             className="badge badge-soft-danger font-size-12"
                             data-mdb-toggle="tooltip" data-mdb-placement="top" title="Delete User"
-                            onClick={() => { deleteHandeler(user.id, user.LoginName); }}
+                            onClick={() => { deleteHandeler(User.id, User.Name); }}
                         >
-                            <i class="mdi mdi-delete font-size-18" ></i>
+                            <i className="mdi mdi-delete font-size-18"></i>
                         </buton>
-                    </div>
-                </>
+                        : null
+                    }
+
+                </div>
             ),
         },
     ];
 
-    return (
-        <React.Fragment>
-            <div className="page-content">
+    if (!(userPageAccessState === '')) {
+        return (
+            <React.Fragment>
+                <div className="page-content">
 
-                <PaginationProvider
-                    pagination={paginationFactory(pageOptions)}
-                >
-                    {({ paginationProps, paginationTableProps }) => (
-                        <ToolkitProvider
-                            keyField="id"
-                            data={pages}
-                            columns={pagesListColumns}
-                            bootstrap4
-                            search
-                        >
+                    <PaginationProvider
+                        pagination={paginationFactory(pageOptions)}
+                    >
+                        {({ paginationProps, paginationTableProps }) => (
+                            <ToolkitProvider
+                                keyField="id"
+                                data={pages}
+                                columns={pagesListColumns}
+                                bootstrap4
+                                search
+                            >
 
-                            {toolkitProps => (
-                                <React.Fragment>
-                                    <Breadcrumbs
-                                        title={"Count :"}
-                                        breadcrumbItem={"User Registration List"}
-                                        IsButtonVissible={true}
-                                        SearchProps={toolkitProps.searchProps}
-                                        breadcrumbCount={`Users Count: ${pages.length}`}
-                                        RedirctPath={"/userMaster"}
-                                    />
-                                    <Row>
-                                        <Col xl="12">
-                                            <div className="table-responsive">
-                                                <BootstrapTable
-                                                    keyField={"id"}
-                                                    responsive
-                                                    bordered={false}
-                                                    striped={false}
-                                                    classes={
-                                                        "table  table-bordered"
-                                                    }
-                                                    {...toolkitProps.baseProps}
-                                                    {...paginationTableProps}
+                                {toolkitProps => (
+                                    <React.Fragment>
+                                        <Breadcrumbs
+                                            title={"Count :"}
+                                            breadcrumbItem={userPageAccessState.PageHeading}
+                                            IsButtonVissible={(userPageAccessState.RoleAccess_IsSave) ? true : false}
+                                            SearchProps={toolkitProps.searchProps}
+                                            breadcrumbCount={`Users Count: ${pages.length}`}
+                                            // RedirctPath={"/userMaster"}
+                                        />
+                                        <Row>
+                                            <Col xl="12">
+                                                <div className="table-responsive">
+                                                    <BootstrapTable
+                                                        keyField={"id"}
+                                                        responsive
+                                                        bordered={false}
+                                                        striped={false}
+                                                        classes={
+                                                            "table  table-bordered"
+                                                        }
+                                                        {...toolkitProps.baseProps}
+                                                        {...paginationTableProps}
+                                                    />
+                                                </div>
+                                            </Col>
+                                        </Row>
+                                        <Row className="align-items-md-center mt-30">
+                                            <Col className="pagination pagination-rounded justify-content-end mb-2">
+                                                <PaginationListStandalone
+                                                    {...paginationProps}
                                                 />
-                                            </div>
-                                        </Col>
-                                    </Row>
-                                    <Row className="align-items-md-center mt-30">
-                                        <Col className="pagination pagination-rounded justify-content-end mb-2">
-                                            <PaginationListStandalone
-                                                {...paginationProps}
-                                            />
-                                        </Col>
-                                    </Row>
-                                </React.Fragment>
-                            )}
-                        </ToolkitProvider>
-                    )}
-                </PaginationProvider>
-                <Modal
-                    isOpen={modal_center}
-                    toggle={() => { tog_center() }}
-                    size="xl"
-                >
-                    <AddUser state={editData.Data} />
-                </Modal>
-            </div>
-        </React.Fragment>
-    );
-};
-
+                                            </Col>
+                                        </Row>
+                                    </React.Fragment>
+                                )}
+                            </ToolkitProvider>
+                        )}
+                    </PaginationProvider>
+                    <Modal
+                        isOpen={modal_center}
+                        toggle={() => { tog_center() }}
+                        size="xl"
+                    >
+                        <AddUser state={editData.Data} />
+                    </Modal>
+                </div>
+            </React.Fragment>
+        );
+    }
+    else {
+        return (
+            <React.Fragment></React.Fragment>
+        )
+    }
+}
 export default UserList;
 
 

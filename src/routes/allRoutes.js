@@ -115,8 +115,8 @@ const userRoutes = [
   { path: `/RoleMaster`, component: RoleMaster },
   { path: `/RoleList`, component: RoleList },
 
-  { path: `/ItemMaster`, component: ItemsMaster },
-  { path: `/ItemList`, component: ItemsList },
+  { path: '/ItemMaster', component: ItemsMaster },
+  { path: '/ItemList', component: ItemsList },
 
   { path: `/PartyList`, component: PartyList },
   { path: `/PartyMaster`, component: PartyMaster },

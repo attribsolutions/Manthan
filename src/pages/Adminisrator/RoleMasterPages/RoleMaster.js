@@ -185,9 +185,9 @@ const RoleMaster = (props) => {
                               <Label className="col-sm-3 col-form-label" >Is SCM Role </Label>
                               <Col md={2} style={{ marginTop: '9px' }} >
 
-                                <div className="form-check form-switch form-switch-md mb-3" dir="ltr">
-                                  <AvInput type="checkbox" className="form-check-input"
-                                    checked={EditData.isSCMRole}
+                                <div className="form-check form-switch form-switch-md mb-3" >
+                                  <AvInput type="checkbox" className="form-check-input" 
+                                    defaultChecked={EditData.isSCMRole}
                                     name="isSCMRole"
                                   />
                                 </div>

@@ -17,12 +17,17 @@ import {
     editPartyID,
     getPartyListAPI,
     updatePartyIDSuccess
-}  from '../../../store/Administrator/PartyRedux/action';
+} from '../../../store/Administrator/PartyRedux/action';
 import PartyMaster from './PartyMaster';
 import { MetaTags } from "react-meta-tags";
+import { CommonGetRoleAccessFunction } from '../../../components/Common/CommonGetRoleAccessFunction';
+import { useHistory } from 'react-router-dom';
 
 const PartyList = () => {
     const dispatch = useDispatch();
+    const history = useHistory();
+
+    const [userPageAccessState, setUserPageAccessState] = useState('');
     const [modal_center, setmodal_center] = useState(false);
 
     // get Access redux data
@@ -32,6 +37,13 @@ const PartyList = () => {
         updateMessage: state.PartyMasterReducer.updateMessage,
         deleteMessage: state.PartyMasterReducer.deleteMessage,
     }));
+
+    useEffect(() => {
+        const userAcc = CommonGetRoleAccessFunction(history)
+        if (!(userAcc === undefined)) {
+            setUserPageAccessState(userAcc)
+        }
+    }, [history])
 
     //  This UseEffect => Featch Modules List data  First Rendering
     useEffect(() => {
@@ -53,7 +65,7 @@ const PartyList = () => {
             dispatch(updatePartyIDSuccess({ Status: false }))
             dispatch(AlertState({
                 Type: 3, Status: true,
-                Message:JSON.stringify( updateMessage.Message),
+                Message: JSON.stringify(updateMessage.Message),
             }));
         }
     }, [updateMessage.Status, dispatch]);
@@ -71,7 +83,7 @@ const PartyList = () => {
             dispatch(AlertState({
                 Type: 3,
                 Status: true,
-                Message: "error Message",
+                Message: deleteMessage.Message,
             }));
         }
     }, [deleteMessage.Status])
@@ -135,102 +147,128 @@ const PartyList = () => {
         },
         {
             text: "Action",
-            formatter: (cellContent, party) => (
-                <>
-                    <div className="d-flex gap-3" style={{ display: 'flex', justifyContent: 'center' }} >
+            hidden: (
+                !(userPageAccessState.RoleAccess_IsEdit)
+                && !(userPageAccessState.RoleAccess_IsView)
+                && !(userPageAccessState.RoleAccess_IsDelete)) ? true : false,
+
+            formatter: (cellContent, Party) => (
+                <div className="d-flex gap-3" style={{ display: 'flex', justifyContent: 'center' }} >
+                    {(userPageAccessState.RoleAccess_IsEdit)
+                        ?
                         <buton
                             type="button"
-                            data-mdb-toggle="tooltip" data-mdb-placement="top" title="Edit Party "
-                            onClick={() => {
-                                EditPageHandler(party.id);
-                            }}
-                            className="badge badge-soft-primary font-size-12"
+                            data-mdb-toggle="tooltip" data-mdb-placement="top" title="Edit Party"
+                            onClick={() => { EditPageHandler(Party.id); }}
+                            className="badge badge-soft-success font-size-12"
                         >
                             <i className="mdi mdi-pencil font-size-18" id="edittooltip"></i>
                         </buton>
+                        : null
+                    }
+                    {(userPageAccessState.RoleAccess_IsView)
+                        ?
+                        <buton
+                            type="button"
+                            data-mdb-toggle="tooltip" data-mdb-placement="top" title="View Party"
+                            onClick={() => { EditPageHandler(Party.id); }}
+                            className="badge badge-soft-primary font-size-12"
+                        >
+                            <i className="bx bxs-show font-size-18 "></i>
+                        </buton>
+                        : null
+                    }
+                    {(userPageAccessState.RoleAccess_IsDelete)
+                        ?
                         <buton
                             className="badge badge-soft-danger font-size-12"
                             data-mdb-toggle="tooltip" data-mdb-placement="top" title="Delete Party"
-                            onClick={() => {
-                                deleteHandeler(party.id, party.Name);
-                            }}
+                            onClick={() => { deleteHandeler(Party.id, Party.Name); }}
                         >
-                            <i className="mdi mdi-delete font-size-18" ></i>
+                            <i className="mdi mdi-delete font-size-18"></i>
                         </buton>
-                    </div>
-                </>
+                        : null
+                    }
+                </div>
             ),
         },
-    ]
+    ];
 
-    return (
-        <React.Fragment>
-            <div className="page-content">
-            <MetaTags>
-                    <title>Party List| FoodERP-React FrontEnd</title>
-                </MetaTags>
+    if (!(userPageAccessState === '')) {
+        return (
+            <React.Fragment>
+                <div className="page-content">
+                    <MetaTags>
+                        <title>Party List| FoodERP-React FrontEnd</title>
+                    </MetaTags>
 
-                <PaginationProvider
-                    pagination={paginationFactory(pageOptions)}
-                >
-                    {({ paginationProps, paginationTableProps }) => (
-                        <ToolkitProvider
-                            keyField="id"
-                            data={TableListData}
-                            columns={pagesListColumns}
-                            search
-                        >
-                            {toolkitProps => (
-                                <React.Fragment>
-                                    <Breadcrumbs
-                                        title={"Count :"}
-                                        breadcrumbItem={"Party List"}
-                                        IsButtonVissible={true}
-                                        SearchProps={toolkitProps.searchProps}
-                                        defaultSorted={defaultSorted}
-                                        breadcrumbCount={`Party Count: ${TableListData.length}`}
-                                        RedirctPath={"/PartyMaster"}
-                                    />
-                                    <Row>
-                                        <Col xl="12">
-                                            <div className="table-responsive">
-                                                <BootstrapTable
-                                                    keyField={"id"}
-                                                    responsive
-                                                    bordered={false}
-                                                    striped={false}
-                                                    classes={
-                                                        "table  table-bordered"
-                                                    }
-                                                    {...toolkitProps.baseProps}
-                                                    {...paginationTableProps}
+                    <PaginationProvider
+                        pagination={paginationFactory(pageOptions)}
+                    >
+                        {({ paginationProps, paginationTableProps }) => (
+                            <ToolkitProvider
+                                keyField="id"
+                                data={TableListData}
+                                columns={pagesListColumns}
+                                search
+                            >
+                                {toolkitProps => (
+                                    <React.Fragment>
+                                        <Breadcrumbs
+                                            title={"Count :"}
+                                            breadcrumbItem={userPageAccessState.PageHeading}
+                                            IsButtonVissible={(userPageAccessState.RoleAccess_IsSave) ? true : false}
+                                            SearchProps={toolkitProps.searchProps}
+                                            defaultSorted={defaultSorted}
+                                            breadcrumbCount={`Party Count: ${TableListData.length}`}
+                                            RedirctPath={"/PartyMaster"}
+                                        />
+                                        <Row>
+                                            <Col xl="12">
+                                                <div className="table-responsive">
+                                                    <BootstrapTable
+                                                        keyField={"id"}
+                                                        responsive
+                                                        bordered={false}
+                                                        striped={false}
+                                                        classes={
+                                                            "table  table-bordered"
+                                                        }
+                                                        {...toolkitProps.baseProps}
+                                                        {...paginationTableProps}
+                                                    />
+                                                </div>
+                                            </Col>
+                                        </Row>
+                                        <Row className="align-items-md-center mt-30">
+                                            <Col className="pagination pagination-rounded justify-content-end mb-2">
+                                                <PaginationListStandalone
+                                                    {...paginationProps}
                                                 />
-                                            </div>
-                                        </Col>
-                                    </Row>
-                                    <Row className="align-items-md-center mt-30">
-                                        <Col className="pagination pagination-rounded justify-content-end mb-2">
-                                            <PaginationListStandalone
-                                                {...paginationProps}
-                                            />
-                                        </Col>
-                                    </Row>
-                                </React.Fragment>
-                            )}
-                        </ToolkitProvider>
-                    )}
-                </PaginationProvider>
-                <Modal
-                    isOpen={modal_center}
-                    toggle={() => { tog_center() }}
-                    size="xl"
-                >
-                    <PartyMaster state={editData.Data} />
-                </Modal>
-            </div>
-        </React.Fragment>
-    );
-};
+                                            </Col>
+                                        </Row>
+                                    </React.Fragment>
+                                )}
+                            </ToolkitProvider>
+                        )}
+                    </PaginationProvider>
+                    <Modal
+                        isOpen={modal_center}
+                        toggle={() => { tog_center() }}
+                        size="xl"
+                    >
+                        <PartyMaster state={editData.Data} />
+                    </Modal>
+                </div>
+            </React.Fragment>
+        );
+    }
+    else {
+        return (
+            <React.Fragment></React.Fragment>
+        )
+    }
 
+}
 
 export default PartyList;
