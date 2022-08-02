@@ -236,7 +236,7 @@ const HPageMaster = (props) => {
     //  for PageType deropDown
     const PageType_DropdownSelectHandller = (e) => {
 
-
+    
 
         if (e.value === 2) {
 
@@ -271,26 +271,24 @@ const HPageMaster = (props) => {
     }
 
 
+
+
+
+
+
+
     const PageList_DropdownSelectHandller = (e) => {
         setPageList_DropdownSelect(e);
     }
 
     // ADD Button handler
-
-    function Common_Find_Function(arry, elementValue, findvalue) {
-        return (arry.find((index) => {
-            return index[elementValue] === findvalue
-        })
-        )
-    }
-
     function AddRoleHandler() {
-        const drop_value = pageAccess_DropDownSelect.value
-        const drop_label = pageAccess_DropDownSelect.label;
 
-        // find function pass Parameter (array,indexParameter,findvalue)
-        const find = Common_Find_Function(tablePageAccessDataState, "AccessID", drop_value)
+        const find = tablePageAccessDataState.find((element) => {
+            return element.AccessID === pageAccess_DropDownSelect.value
+        });
 
+debugger
         if (pageAccess_DropDownSelect.length <= 0) {
             dispatch(AlertState({
                 Type: 3, Status: true,
@@ -298,17 +296,17 @@ const HPageMaster = (props) => {
             }));
         }
         else if (find === undefined) {
+           const label = pageAccess_DropDownSelect.label;
+            const value = pageAccess_DropDownSelect.value;
 
-            if (drop_label === "IsEdit") {
-
-                // find function pass Parameter (array,indexParameter,findvalue)
-                const findIsView = Common_Find_Function(tablePageAccessDataState, "AccessName", "IsView");
-
+            if (label === "IsEdit") {
+                const findIsView = tablePageAccessDataState.find((element) => {
+                    return element.AccessName === "IsView"
+                });
                 if (findIsView == undefined) {
-
-                    // find function pass Parameter (array,indexParameter,findvalue)
-                    const ViewValues = Common_Find_Function(PageAccessValues, "label", "IsView");
-
+                    const ViewValues = PageAccessValues.find((element) => {
+                        return element.label === "IsView"
+                    });
                     setTablePageAccessDataState([
                         ...tablePageAccessDataState,
                         {
@@ -316,15 +314,15 @@ const HPageMaster = (props) => {
                             AccessName: ViewValues.label
                         },
                         {
-                            AccessID: drop_value,
-                            AccessName: drop_label,
+                            AccessID: value,
+                            AccessName: label,
                         }])
-                    return
                 }
+                return
             }
 
-            
             setTablePageAccessDataState([...tablePageAccessDataState, { AccessID: drop_value, AccessName: drop_label, }]);
+
         }
         else {
             dispatch(AlertState({
@@ -336,40 +334,12 @@ const HPageMaster = (props) => {
 
     // For Delete Button in table
     function PageAccess_DeleteButton_Handller(tableValue) {
-        setTablePageAccessDataState(tablePageAccessDataState.filter((item) => !(item.AccessID === tableValue)))
+        setTablePageAccessDataState(tablePageAccessDataState.filter(
+            (item) => !(item.AccessID === tableValue)
+        )
+        )
     }
 
-    function TableBodyFunction() {
-
-      return(  tablePageAccessDataState.map((TableValue) => {
-
-            let ViewValues = false
-
-            if (TableValue.AccessName === "IsView") {
-                            // find function pass Parameter (array,indexParameter,findvalue)
-                    // const ViewValues = Common_Find_Function(PageAccessValues, "label", "IsView");
-                const View = tablePageAccessDataState.find((element) => {
-                    return element.AccessName === "IsEdit"
-                });
-                if (!(View === undefined)) ViewValues = true;
-            }
-            return (
-                <tr >
-                    <td>
-                        {TableValue.AccessName}
-                    </td>
-                    <td>
-                        {((!(TableValue.AccessName === "IsShowOnMenu")) && (!(ViewValues))) ? <i className="mdi mdi-trash-can d-block text-danger font-size-20" onClick={() => {
-                            PageAccess_DeleteButton_Handller(TableValue.AccessID)
-                        }} >
-                        </i>
-                            : null}
-                    </td>
-                </tr>
-            )
-        })
-      )
-    }
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
     var IsEditMode_Css = ''
     if (IsEdit === true || PageMode == true) { IsEditMode_Css = "-5.5%" };
@@ -628,8 +598,20 @@ const HPageMaster = (props) => {
                                                                     </Thead>
 
                                                                     <Tbody  >
-
-                                                                        {TableBodyFunction()}
+                                                                        {tablePageAccessDataState.map((TableValue) => (
+                                                                            <tr >
+                                                                                <td>
+                                                                                    {TableValue.AccessName}
+                                                                                </td>
+                                                                                <td>
+                                                                                   { !(TableValue.AccessName==="IsShowOnMenu") ? <i className="mdi mdi-trash-can d-block text-danger font-size-20" onClick={() => {
+                                                                                        PageAccess_DeleteButton_Handller(TableValue.AccessID)
+                                                                                    }} >
+                                                                                    </i>
+                                                                                     :null}
+                                                                                </td>
+                                                                            </tr>
+                                                                        ))}
                                                                     </Tbody>
                                                                 </Table>
                                                             </div>
