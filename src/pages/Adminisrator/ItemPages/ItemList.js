@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Breadcrumbs from "../../../components/Common/Breadcrumb";
-import { Col, Modal, Row } from "reactstrap";
+import { Button, Col, Modal, Row } from "reactstrap";
 import paginationFactory, {
   PaginationListStandalone,
   PaginationProvider,
@@ -177,37 +177,37 @@ const ItemsList = (props) => {
         <div className="d-flex gap-3" style={{ display: 'flex', justifyContent: 'center' }} >
           {(userPageAccessState.RoleAccess_IsEdit)
             ?
-            <buton
+            <Button
               type="button"
               data-mdb-toggle="tooltip" data-mdb-placement="top" title="Edit Item"
               onClick={() => { EditPageHandler(Item.id); }}
               className="badge badge-soft-success font-size-12 btn btn-success waves-effect waves-light w-xxs border border-light"
             >
               <i className="mdi mdi-pencil font-size-18" id="edittooltip"></i>
-            </buton>
+            </Button>
             : null
           }
           {(userPageAccessState.RoleAccess_IsView)
             ?
-            <buton
+            <Button
               type="button"
               data-mdb-toggle="tooltip" data-mdb-placement="top" title="View Item"
               onClick={() => { EditPageHandler(Item.id); }}
               className="badge badge-soft-primary font-size-12 btn btn-primary waves-effect waves-light w-xxs border border-light"
             >
               <i className="bx bxs-show font-size-18 "></i>
-            </buton>
+            </Button>
             : null
           }
           {(userPageAccessState.RoleAccess_IsDelete)
             ?
-            <buton
+            <Button
               className="badge badge-soft-danger font-size-12 btn btn-danger waves-effect waves-light w-xxs border border-light"
               data-mdb-toggle="tooltip" data-mdb-placement="top" title="Delete Item"
               onClick={() => { deleteHandeler(Item.id, Item.Name); }}
             >
               <i className="mdi mdi-delete font-size-18"></i>
-            </buton>
+            </Button>
             : null
           }
 

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import MetaTags from "react-meta-tags";
 import {
+    Button,
     Col,
     Modal,
     Row,
@@ -169,7 +170,27 @@ const CompanyList = () => {
 
             formatter: (cellContent, module) => (
                 <div className="d-flex gap-3" style={{ display: 'flex', justifyContent: 'center' }} >
-                    {(userPageAccessState.RoleAccess_IsEdit)
+
+                    {(userPageAccessState.RoleAccess_IsEdit) || (userPageAccessState.RoleAccess_IsView) ?
+                    <Button
+                    type="button"
+                    data-mdb-toggle="tooltip" data-mdb-placement="top" title="Edit Company"
+                    onClick={() => { EditPageHandler(module.id); }}
+                    className="badge badge-soft-success font-size-12 btn btn-success waves-effect waves-light w-xxs border border-light"
+                >
+                    <i className="mdi mdi-pencil font-size-18" id="edittooltip"></i>
+                </Button>: null }
+
+                 {!(userPageAccessState.RoleAccess_IsEdit) && (userPageAccessState.RoleAccess_IsView) ?
+                    <Button
+                    type="button"
+                    data-mdb-toggle="tooltip" data-mdb-placement="top" title="View Company"
+                    onClick={() => { EditPageHandler(module.id); }}
+                    className="badge badge-soft-primary font-size-12 btn btn-primary waves-effect waves-light w-xxs border border-light"
+                >
+                    <i className="bx bxs-show font-size-18 "></i>
+                </Button>: null } 
+                    {/* {(userPageAccessState.RoleAccess_IsEdit)
                         ?
                         <buton
                             type="button"
@@ -192,7 +213,7 @@ const CompanyList = () => {
                             <i className="bx bxs-show font-size-18 "></i>
                         </buton>
                         : null
-                    }
+                    } */}
                     {(userPageAccessState.RoleAccess_IsDelete)
                         ?
                         <buton
