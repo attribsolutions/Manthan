@@ -143,7 +143,9 @@ debugger
                   <div className="row">
                     <div className="col col-12">
                       <Row>
-                        <div className="col col-6 col col-6" >
+                        <div className="container">
+                          <div className="row">
+                        <div className="col col-6 col col-6">
                           <AvInput className=" text-black checkbox-border-red " type="checkbox" name={index} />&nbsp;&nbsp;&nbsp;
                           <label className="form-label text-black"> {index} </label>
                         </div>
@@ -151,6 +153,8 @@ debugger
                         <AvInput className=" text-black checkbox-border-red" type="checkbox" name={index} />&nbsp;&nbsp;&nbsp;
                         <label className="form-label text-black"> {index} </label>
                       </div> */}
+                      </div>
+                      </div>
                       </Row>
                     </div>
                   </div>
@@ -181,10 +185,10 @@ debugger
               {
                 props.IsButtonVissible ?
                   <Row>
-                    <Col md={12}  >
+                    <Col md={12}>
                       <button type="button" className="btn btn-success"
                         data-mdb-toggle="tooltip" data-mdb-placement="top" title="Create New"
-                        onClick={() => { NewButtonHandeller() }} >
+                        onClick={() => { NewButtonHandeller() }}>
                         New
                       </button>
 
@@ -222,7 +226,7 @@ debugger
                     }}
                     data-toggle="modal"
                   >
-                    Download   {/* <i className="bx bx-download text-danger font-size-14" ></i> */}
+                      <i className="bx bx-download text-danger font-size-14" ></i> 
                   </button>
                 </div>
               </> : <></>}
