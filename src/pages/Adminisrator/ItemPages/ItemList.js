@@ -175,30 +175,27 @@ const ItemsList = (props) => {
 
       formatter: (cellContent, Item) => (
         <div className="d-flex gap-3" style={{ display: 'flex', justifyContent: 'center' }} >
-          {(userPageAccessState.RoleAccess_IsEdit)
-            ?
+          {(userPageAccessState.RoleAccess_IsEdit) && (userPageAccessState.RoleAccess_IsView) || (userPageAccessState.RoleAccess_IsEdit) ?
             <Button
               type="button"
               data-mdb-toggle="tooltip" data-mdb-placement="top" title="Edit Item"
-              onClick={() => { EditPageHandler(Item.id); }}
+              onClick={() => { EditPageHandler(module.id); }}
               className="badge badge-soft-success font-size-12 btn btn-success waves-effect waves-light w-xxs border border-light"
             >
               <i className="mdi mdi-pencil font-size-18" id="edittooltip"></i>
-            </Button>
-            : null
-          }
-          {(userPageAccessState.RoleAccess_IsView)
-            ?
+            </Button> : null}
+
+          {(!(userPageAccessState.RoleAccess_IsEdit) && (userPageAccessState.RoleAccess_IsView)) ?
             <Button
               type="button"
               data-mdb-toggle="tooltip" data-mdb-placement="top" title="View Item"
-              onClick={() => { EditPageHandler(Item.id); }}
+              onClick={() => { EditPageHandler(module.id); }}
               className="badge badge-soft-primary font-size-12 btn btn-primary waves-effect waves-light w-xxs border border-light"
+
             >
               <i className="bx bxs-show font-size-18 "></i>
-            </Button>
-            : null
-          }
+            </Button> : null}
+
           {(userPageAccessState.RoleAccess_IsDelete)
             ?
             <Button
@@ -239,8 +236,8 @@ const ItemsList = (props) => {
                       IsButtonVissible={(userPageAccessState.RoleAccess_IsSave) ? true : false}
                       SearchProps={toolkitProps.searchProps}
                       breadcrumbCount={`Items Count: ${pages.length}`}
-                      // RedirctPath={`/${btoa("ItemMaster")}`}
-                      // RedirctPath={`/ItemMaster`}
+                    // RedirctPath={`/${btoa("ItemMaster")}`}
+                    // RedirctPath={`/ItemMaster`}
                     />
                     <Row>
                       <Col xl="12">
