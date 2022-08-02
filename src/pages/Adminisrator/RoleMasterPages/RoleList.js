@@ -246,6 +246,7 @@ const RoleList = (props) => {
                       IsButtonVissible={(userPageAccessState.RoleAccess_IsSave) ? true : false}
                       SearchProps={toolkitProps.searchProps}
                       breadcrumbCount={`Role Count: ${TableListData.length}`}
+                      IsSearchVissible={true}
                       // RedirctPath={`/RoleMaster`}
                     />
                     <Row>

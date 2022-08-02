@@ -229,13 +229,23 @@ const CompanyList = () => {
                             >
                                 {toolkitProps => (
                                     <React.Fragment>
-                                        <Breadcrumbs
+                                        {/* <Breadcrumbs
                                             title={"Count :"}
                                             breadcrumbItem={userPageAccessState.PageHeading}
                                             IsButtonVissible={(userPageAccessState.RoleAccess_IsSave) ? true : false}
                                             SearchProps={toolkitProps.searchProps}
                                             breadcrumbCount={`Company Count: ${TableListData.length}`}
                                             RedirctPath={"/CompanyMaster"}
+                                        /> */}
+                                          <Breadcrumbs
+                                            title={"Count :"}
+                                            breadcrumbItem={userPageAccessState.PageHeading}
+                                            IsButtonVissible={(userPageAccessState.RoleAccess_IsSave) ? true : false}
+                                            SearchProps={toolkitProps.searchProps}
+                                            IsSearchVissible={true}
+                                            defaultSorted={defaultSorted}
+                                            breadcrumbCount={`User Count: ${TableListData.length}`}
+                                            RedirctPath={"/UserMaster"}
                                         />
                                         <Row>
                                             <Col xl="12">
