@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react"
 import PropTypes from 'prop-types'
-import { Row, Col, Button, Label, Modal, Card, InputGroup } from "reactstrap"
+import { Row, Col, Modal, } from "reactstrap"
 import { Redirect, useHistory } from "react-router-dom";
 import { Search } from "react-bootstrap-table2-toolkit";
 import { useDispatch, useSelector } from "react-redux";
@@ -11,10 +11,11 @@ import * as XLSX from 'xlsx';
 const Breadcrumb = props => {
 
   const { SearchBar } = Search;
+  const dispatch = useDispatch();
   const history = useHistory();
 
-  const dispatch = useDispatch();
 
+  // for Excel Download
   const [modal_scroll, setmodal_scroll] = useState(false);
   const [ListData, setListData] = useState([]);
 
@@ -111,7 +112,7 @@ const Breadcrumb = props => {
       XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
       XLSX.writeFile(workbook, "Excel File.xlsx");
     }
-
+debugger
     return (
       <React.Fragment>
         <Modal
@@ -215,7 +216,7 @@ const Breadcrumb = props => {
                 <div>
                   <button
                     type="button"
-                    className="btn btn-outline-warning btn-sm mt-1 font-size-16"
+                    className="btn btn-outline-warning btn-sm mt-1 font-size-16  "
                     onClick={() => {
                       tog_scroll();
                     }}
@@ -226,12 +227,13 @@ const Breadcrumb = props => {
                 </div>
               </> : <></>}
           </Col>
-  
+         
           <Col sm={2 }>
             <div className="search-box d-inline-block">
               <div className="position-relative">
                 {
-                  (props.IsButtonVissible)
+                
+                  (props.IsSearchVissible)
                     ?
                     <React.Fragment><SearchBar {...props.SearchProps} />
                       <i className="bx bx-search-alt search-icon-search" />
@@ -242,7 +244,10 @@ const Breadcrumb = props => {
               </div>
             </div>
           </Col>
+
+
           <Col md={Countsize.length < 10 ? 1 : Countsize.length < 25 ? 2 : 3} className="text-right col-md-2 px-0 justify-content-end">
+
             {
               !(props.breadcrumbCount === undefined)
                 ?

@@ -4,12 +4,11 @@ import "../../../assets/scss/CustomeTable/datatables.scss"
 import {
     getUser, deleteUser, editUserId, updateSuccess
 } from "../../../store/Administrator/UserRegistrationRedux/actions";
-import Breadcrumbs from "../../../components/Common/Breadcrumb";
 import paginationFactory, {
     PaginationListStandalone,
     PaginationProvider,
 } from "react-bootstrap-table2-paginator";
-import ToolkitProvider, { Search } from "react-bootstrap-table2-toolkit";
+import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 //redux
 import { useSelector, useDispatch } from "react-redux";
@@ -20,17 +19,17 @@ import { AlertState } from "../../../store/Utilites/CostumeAlert/actions";
 import { CommonGetRoleAccessFunction } from "../../../components/Common/CommonGetRoleAccessFunction";
 import { useHistory } from "react-router-dom";
 import { MetaTags } from "react-meta-tags";
+import Breadcrumbs from "../../../components/Common/Breadcrumb";
 
 const UserList = () => {
 
     const dispatch = useDispatch();
     const history = useHistory();
-
     const [userPageAccessState, setUserPageAccessState] = useState('');
     const [modal_center, setmodal_center] = useState(false);
 
-    const { TableListData, editData, updateMessage, deleteMessage } = useSelector((state) => ({
-        TableListData: state.User_Registration_Reducer.pages,
+    const { pages, editData, updateMessage, deleteMessage } = useSelector((state) => ({
+        pages: state.User_Registration_Reducer.pages,
         editData: state.User_Registration_Reducer.editData,
         updateMessage: state.User_Registration_Reducer.updateMessage,
         deleteMessage: state.User_Registration_Reducer.deleteSuccessRole,
@@ -112,9 +111,10 @@ const UserList = () => {
 
     const pageOptions = {
         sizePerPage: 15,
-        totalSize: TableListData.length,
+        totalSize: pages.length,
         custom: true,
     };
+
     const defaultSorted = [
         {
             dataField: "Name", // if dataField is not match to any column you defined, it will be ignored.
@@ -214,30 +214,31 @@ const UserList = () => {
         return (
             <React.Fragment>
                 <div className="page-content">
-                    <MetaTags>
-                        <title>Party List| FoodERP-React FrontEnd</title>
+                <MetaTags>
+                        <title>User List| FoodERP-React FrontEnd</title>
                     </MetaTags>
-
                     <PaginationProvider
                         pagination={paginationFactory(pageOptions)}
                     >
                         {({ paginationProps, paginationTableProps }) => (
                             <ToolkitProvider
                                 keyField="id"
-                                data={TableListData}
+                                data={pages}
                                 columns={pagesListColumns}
                                 search
                             >
+
                                 {toolkitProps => (
                                     <React.Fragment>
+                                  
                                         <Breadcrumbs
                                             title={"Count :"}
                                             breadcrumbItem={userPageAccessState.PageHeading}
                                             IsButtonVissible={(userPageAccessState.RoleAccess_IsSave) ? true : false}
+                                            IsSearchVissible={true}
                                             SearchProps={toolkitProps.searchProps}
-                                            defaultSorted={defaultSorted}
-                                            breadcrumbCount={`User Count: ${TableListData.length}`}
-                                            RedirctPath={"/UserMaster"}
+                                            breadcrumbCount={`Users Count: ${pages.length}`}
+                                            // RedirctPath={"/UserMaster"}
                                         />
                                         <Row>
                                             <Col xl="12">
@@ -247,6 +248,7 @@ const UserList = () => {
                                                         responsive
                                                         bordered={false}
                                                         striped={false}
+                                                        defaultSorted={defaultSorted}
                                                         classes={
                                                             "table  table-bordered"
                                                         }
