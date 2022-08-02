@@ -215,7 +215,7 @@ const Breadcrumb = props => {
                 <div>
                   <button
                     type="button"
-                    className="btn btn-outline-warning btn-sm mt-1 font-size-16  "
+                    className="btn btn-outline-warning btn-sm mt-1 font-size-16"
                     onClick={() => {
                       tog_scroll();
                     }}
@@ -242,7 +242,7 @@ const Breadcrumb = props => {
               </div>
             </div>
           </Col>
-          <Col md={Countsize.length < 10 ? 1 : Countsize.length < 25 ? 2 : 3} className="text-right col-md-2 px-0">
+          <Col md={Countsize.length < 10 ? 1 : Countsize.length < 25 ? 2 : 3} className="text-right col-md-2 px-0 justify-content-end">
             {
               !(props.breadcrumbCount === undefined)
                 ?
