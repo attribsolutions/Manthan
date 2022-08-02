@@ -255,6 +255,7 @@ const Employee_List = () => {
                       IsButtonVissible={(userPageAccessState.RoleAccess_IsSave) ? true : false}
                       SearchProps={toolkitProps.searchProps}
                       breadcrumbCount={`Employee Count: ${TableListData.length}`}
+                      IsSearchVissible={true}
                       // RedirctPath={"/employeeMaster"}
                     />
                     <Row>

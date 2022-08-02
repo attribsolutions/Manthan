@@ -219,8 +219,10 @@ const PartyList = () => {
                                             breadcrumbItem={userPageAccessState.PageHeading}
                                             IsButtonVissible={(userPageAccessState.RoleAccess_IsSave) ? true : false}
                                             SearchProps={toolkitProps.searchProps}
+                                            IsSearchVissible={true}
                                             defaultSorted={defaultSorted}
                                             breadcrumbCount={`Party Count: ${TableListData.length}`}
+                                            
                                             RedirctPath={"/PartyMaster"}
                                         />
                                         <Row>

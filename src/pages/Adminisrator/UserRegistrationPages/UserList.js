@@ -4,7 +4,6 @@ import "../../../assets/scss/CustomeTable/datatables.scss"
 import {
     getUser, deleteUser, editUserId, updateSuccess
 } from "../../../store/Administrator/UserRegistrationRedux/actions";
-import Breadcrumbs from "../../../components/Common/Breadcrumb";
 import paginationFactory, {
     PaginationListStandalone,
     PaginationProvider,
@@ -20,12 +19,12 @@ import { AlertState } from "../../../store/Utilites/CostumeAlert/actions";
 import { CommonGetRoleAccessFunction } from "../../../components/Common/CommonGetRoleAccessFunction";
 import { useHistory } from "react-router-dom";
 import { MetaTags } from "react-meta-tags";
+import Breadcrumbs from "../../../components/Common/Breadcrumb";
 
 const UserList = () => {
 
     const dispatch = useDispatch();
     const history = useHistory();
-
     const [userPageAccessState, setUserPageAccessState] = useState('');
     const [modal_center, setmodal_center] = useState(false);
 
@@ -231,10 +230,12 @@ const UserList = () => {
 
                                 {toolkitProps => (
                                     <React.Fragment>
+                                  
                                         <Breadcrumbs
                                             title={"Count :"}
                                             breadcrumbItem={userPageAccessState.PageHeading}
                                             IsButtonVissible={(userPageAccessState.RoleAccess_IsSave) ? true : false}
+                                            IsSearchVissible={true}
                                             SearchProps={toolkitProps.searchProps}
                                             breadcrumbCount={`Users Count: ${pages.length}`}
                                             // RedirctPath={"/UserMaster"}
