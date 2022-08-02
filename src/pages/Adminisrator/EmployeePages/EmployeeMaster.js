@@ -62,7 +62,6 @@ const AddEmployee = (props) => {
       setUserPageAccessState(userAcc)
     }
   }, [history])
-debugger
 
   useEffect(() => {
     dispatch(getDesignationID());
@@ -210,7 +209,7 @@ debugger
 
   //'Save' And 'Update' Button Handller
   const handleValidSubmit = (event, values) => {
-
+debugger
     const jsonBody = JSON.stringify({
       Name: values.Name,
       Address: values.Address,
