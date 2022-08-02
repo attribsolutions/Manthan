@@ -151,7 +151,7 @@ const ModulesList = () => {
                         ?
                         <buton
                             type="button"
-                            className="badge badge-soft-primary font-size-12 btn btn-success waves-effect waves-light w-xxs border border-light "
+                            className="badge badge-soft-primary font-size-12 btn btn-primary waves-effect waves-light w-xxs border border-light "
                             data-mdb-toggle="tooltip" data-mdb-placement="top" title="View Module"
                             onClick={() => { EditPageHandler(module.id); }}
                         >

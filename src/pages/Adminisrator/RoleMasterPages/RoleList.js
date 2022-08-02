@@ -187,7 +187,7 @@ const RoleList = (props) => {
               type="button"
               data-mdb-toggle="tooltip" data-mdb-placement="top" title="Edit Role"
               onClick={() => { EditPageHandler(Role.id); }}
-              className="badge badge-soft-success font-size-12"
+              className="badge badge-soft-success font-size-12 btn btn-success waves-effect waves-light w-xxs border border-light"
             >
               <i className="mdi mdi-pencil font-size-18" id="edittooltip"></i>
             </buton>
@@ -199,7 +199,7 @@ const RoleList = (props) => {
               type="button"
               data-mdb-toggle="tooltip" data-mdb-placement="top" title="View Role"
               onClick={() => { EditPageHandler(Role.id); }}
-              className="badge badge-soft-primary font-size-12"
+              className="badge badge-soft-primary font-size-12 btn btn-primary waves-effect waves-light w-xxs border border-light"
             >
               <i className="bx bxs-show font-size-18 "></i>
             </buton>
@@ -208,7 +208,7 @@ const RoleList = (props) => {
           {(userPageAccessState.RoleAccess_IsDelete)
             ?
             <buton
-              className="badge badge-soft-danger font-size-12"
+              className="badge badge-soft-danger font-size-12 btn btn-danger waves-effect waves-light w-xxs border border-light"
               data-mdb-toggle="tooltip" data-mdb-placement="top" title="Delete Role"
               onClick={() => { deleteHandeler(Role.id, Role.Name); }}
             >

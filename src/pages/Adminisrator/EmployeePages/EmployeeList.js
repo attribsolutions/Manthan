@@ -194,7 +194,7 @@ const Employee_List = () => {
               type="button"
               data-mdb-toggle="tooltip" data-mdb-placement="top" title="Edit Module"
               onClick={() => { EditPageHandler(TableListData.id); }}
-              className="badge badge-soft-success font-size-12"
+              className="badge badge-soft-success font-size-12 btn btn-success waves-effect waves-light w-xxs border border-light"
             >
               <i className="mdi mdi-pencil font-size-18" id="edittooltip"></i>
             </buton>
@@ -206,7 +206,7 @@ const Employee_List = () => {
               type="button"
               data-mdb-toggle="tooltip" data-mdb-placement="top" title="View Module"
               onClick={() => { EditPageHandler(TableListData.id); }}
-              className="badge badge-soft-primary font-size-12"
+              className="badge badge-soft-primary font-size-12 btn btn-primary waves-effect waves-light w-xxs border border-light"
             >
               <i className="bx bxs-show font-size-18 "></i>
             </buton>
@@ -215,7 +215,7 @@ const Employee_List = () => {
           {(userPageAccessState.RoleAccess_IsDelete)
             ?
             <buton
-              className="badge badge-soft-danger font-size-12"
+              className="badge badge-soft-danger font-size-12 btn btn-danger waves-effect waves-light w-xxs border border-light"
               data-mdb-toggle="tooltip" data-mdb-placement="top" title="Delete Module"
               onClick={() => { deleteHandeler(TableListData.id, TableListData.Name); }}
             >
