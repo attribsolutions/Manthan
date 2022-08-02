@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Col, Modal, Row } from "reactstrap";
+import { Button, Col, Modal, Row } from "reactstrap";
 import "../../../assets/scss/CustomeTable/datatables.scss"
 import {
     getUser, deleteUser, editUserId, updateSuccess
