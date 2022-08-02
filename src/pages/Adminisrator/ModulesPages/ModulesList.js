@@ -141,7 +141,7 @@ const ModulesList = () => {
                             type="button"
                             data-mdb-toggle="tooltip" data-mdb-placement="top" title="Edit Module"
                             onClick={() => { EditPageHandler(module.id); }}
-                            className="badge badge-soft-success font-size-12"
+                            className="badge badge-soft-success font-size-12 btn btn-success waves-effect waves-light w-xxs border border-light"
                         >
                             <i className="mdi mdi-pencil font-size-18" id="edittooltip"></i>
                         </buton>
@@ -151,18 +151,19 @@ const ModulesList = () => {
                         ?
                         <buton
                             type="button"
+                            className="badge badge-soft-primary font-size-12 btn btn-success waves-effect waves-light w-xxs border border-light "
                             data-mdb-toggle="tooltip" data-mdb-placement="top" title="View Module"
                             onClick={() => { EditPageHandler(module.id); }}
-                            className="badge badge-soft-primary font-size-12"
                         >
-                            <i className="bx bxs-show font-size-18 "></i>
+                            <i className="bx bxs-show font-size-18"></i>
                         </buton>
                         : null
                     }
                     {(userPageAccessState.RoleAccess_IsDelete)
                         ?
                         <buton
-                            className="badge badge-soft-danger font-size-12"
+                           type="button"
+                            className="badge badge-soft-danger font-size-12 btn btn-danger waves-effect waves-light w-xxs border border-light"
                             data-mdb-toggle="tooltip" data-mdb-placement="top" title="Delete Module"
                             onClick={() => { deleteHandeler(module.id, module.Name); }}
                         >
