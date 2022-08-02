@@ -321,11 +321,8 @@ debugger
                 return
             }
 
-            setTablePageAccessDataState([...tablePageAccessDataState, {
-                AccessID: value,
-                AccessName: label,
-            }
-            ]);
+            setTablePageAccessDataState([...tablePageAccessDataState, { AccessID: drop_value, AccessName: drop_label, }]);
+
         }
         else {
             dispatch(AlertState({
