@@ -90,17 +90,17 @@ function* AddPageHandlerForRoleAccessList_GenratorFunction({ id }) {
 }
 
 function* PostMethod_HandlerForRoleAccessList_GenratorFunction({ data }) {
-  debugger
+ 
   yield put(SpinnerState(true))
   try {
 
     const response = yield call(PostMethod_HandlerForRoleAccessList_Api, data);
     yield put(SpinnerState(false))
 
-    // yield put(PostMethod_ForRoleAccessListPage_Success(response));
+    yield put(PostMethod_ForRoleAccessListPage_Success(response));
   }
   catch (error) {
-    debugger
+ 
     yield put(SpinnerState(false))
     yield put(AlertState({
       Type: 4,
