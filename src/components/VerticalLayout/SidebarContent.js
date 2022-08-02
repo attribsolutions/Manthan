@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import React, { useEffect, useRef, useCallback } from "react";
+import React, { useEffect, useRef, useCallback, useState } from "react";
 
 //Import Icons
 import FeatherIcon from "feather-icons-react";
@@ -18,6 +18,7 @@ import { withRouter } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { roleAceessAction } from "../../store/auth/login/actions";
+import { demoRolleAcess } from "./aaaa";
 // import { RoleAccessData } from "./APIDEMO";
 
 const SidebarContent = (props) => {
@@ -25,9 +26,16 @@ const SidebarContent = (props) => {
   const pathName = props.location.pathname;
   const dispatch = useDispatch();
 
+  // const  RoleAccessData=demoRolleAcess
+  const { RoleAccessData, } = useSelector((state) => ({
+    RoleAccessData: state.Login.RoleData,
+  }));
+
   useEffect(() => {
-    dispatch(roleAceessAction())
+    dispatch(roleAceessAction(1, 1, 1))
     // console.log("test side bar use effect")
+    console.log("RoleAccessData useEffect:",RoleAccessData)
+    
   }, [])
 
   const activateParentDropdown = useCallback((item) => {
@@ -102,49 +110,73 @@ const SidebarContent = (props) => {
       }
     }
   }
-  const { RoleAccessData, } = useSelector((state) => ({
-    RoleAccessData: state.Login.RoleData,
-  }));
+
+// console.log("RoleAccessData:",RoleAccessData)
+  const [isActive, setisActive] = useState('')
+
+  // Use ComponentDidMount and ComponentDidUpdate method simultaniously
+  useEffect(() => {
+    setisActive("active")
+  }, [pathName])
+
   return (
     <React.Fragment>
       <SimpleBar style={{ maxHeight: "100%" }} ref={ref}>
         <div id="sidebar-menu">
           <ul className="metismenu list-unstyled" id="side-menu">
-            <li className="menu-title">{props.t("Menu")} </li>
+
             <li>
               <Link to="/dashboard" className="">
                 <FeatherIcon icon="home" />
                 <span>{props.t("Dashboard")}</span>
               </Link>
             </li>
+            {/* <li>
+              <Link to= {`/${btoa("RoleAccess")}`} State={ "occupation" }>
+                Next Step
+              </Link>
+              <Link to={{pathname:`/${btoa("RoleAccess")}`, state: {fromDashboardAccess: true }}}>
+              Next Step2222
+              </Link>
+            </li> */}
             {RoleAccessData.map((item) => {
               return (
                 <li >
                   <Link to="/#" className="has-arrow">
                     <FeatherIcon icon="grid" />
                     <span>{props.t(item.ModuleName)}</span>    {/* change Module Name */}
+
                   </Link>
                   <ul className="sub-menu">
-                    {item.ModuleData.map((i, j) => {
-                      return (
-                        <li>
-                          <Link to={i.ActualPagePath}>{props.t(i.Name)}</Link>
-                        </li>
-                      )
+                    {item.ModuleData.map((index, j) => {
+                      if(index.RoleAccess_IsShowOnMenu===true)
+                      {
+                        return (
+                          <li>
+                            <Link to={{pathname:`/${index.ActualPagePath}`, state: {fromDashboardAccess: true,UserDetails:index}}} >{props.t(index.Name)}</Link>
+                          </li>
+                          // class={pathName === indx.SelectIcon ? "active" : ""}
+                        )
+                      }
+                      else{
+                        <></>
+                      }
+                     
                     })}
                   </ul>
                 </li>
               )
             })}
-            <li>
-              <Link to={"/RolesMaster"}>{props.t('Roles Master')}</Link>
+            {/* <li>
+              <link href={"/RolesMaster"}>{props.t('Roles Master')}</link>
+              <a href="/RolesList">Visit Pluralsight</a>
             </li>
             <li>
               <Link to={'/RolesList'}>{props.t('Roles List')}</Link>
             </li>
             <li>
               <Link to={'/validationTest'}>{props.t('validationTest')}</Link>
-            </li>
+            </li> */}
           </ul>
         </div>
       </SimpleBar>

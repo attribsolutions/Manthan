@@ -40,8 +40,10 @@ const CostumeAlert = () => {
       dispatch(Action());
     };
     if (!AlertData.RedirectPath === false) {
+    
       history.push({
         pathname: AlertData.RedirectPath,
+        state: history.location.state
       });
     }
   }

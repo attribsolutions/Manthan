@@ -6,14 +6,13 @@ import {
   Container,
   Row,
   Label,
+  CardHeader,
+  FormGroup,
 } from "reactstrap";
 import Select from "react-select";
-import {
-  AvForm,
-  AvGroup,
-} from "availity-reactstrap-validation";
+import { AvForm, AvInput} from "availity-reactstrap-validation";
 import { useDispatch, useSelector } from "react-redux";
-
+import Breadcrumb from "../../../components/Common/Breadcrumb";
 import AvField from "availity-reactstrap-validation/lib/AvField";
 import {
   editCompanyIDSuccess,
@@ -23,73 +22,87 @@ import {
   getCompanyGroup
 } from "../../../store/Administrator/CompanyRedux/actions";
 import { MetaTags } from "react-meta-tags";
-import Breadcrumbs from "../../../components/Common/Breadcrumb";
 import { AlertState } from "../../../store/Utilites/CostumeAlert/actions";
+import { BreadcrumbShow } from "../../../store/Utilites/Breadcrumb/actions";
+import { useHistory } from "react-router-dom";
+import { CommonGetRoleAccessFunction } from "../../../components/Common/CommonGetRoleAccessFunction";
 
 const CompanyModule = (props) => {
 
   const formRef = useRef(null);
   const dispatch = useDispatch();
-  const [EditData, setEditData] = useState([]);
-  const [IsEdit, setIsEdit] = useState(false);
-  const [CompanyGroupselect, setCompanyGroup] = useState("");
-  const [PageMode, setPageMode] = useState(false);
+  const history = useHistory()
+
   //*** "isEditdata get all data from ModuleID for Binding  Form controls
   var editDataGatingFromList = props.state;
-  console.log("editDataGatingFromList",editDataGatingFromList)
+
+  const [EditData, setEditData] = useState([]);
+  const [pageMode, setPageMode] = useState("save");
+  const [userPageAccessState, setUserPageAccessState] = useState('');
+
+  const [CompanyGroupselect, setCompanyGroup] = useState("");
 
   //Access redux store Data /  'save_ModuleSuccess' action data
-  const { SubmitSuccesss, } = useSelector((state) => ({
-    SubmitSuccesss: state.Company.companySubmitSuccesss,
+  const { PostAPIResponse, } = useSelector((state) => ({
+    PostAPIResponse: state.Company.companySubmitSuccesss,
   }));
+
+  useEffect(() => {
+    const userAcc = CommonGetRoleAccessFunction(history)
+    if (!(userAcc === undefined)) {
+      setUserPageAccessState(userAcc)
+    }
+  }, [history])
 
   // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
   useEffect(() => {
-    document.getElementById("txtName").focus();
+
+    if (!(userPageAccessState === '')) { document.getElementById("txtName").focus(); }
     if (!(editDataGatingFromList === undefined)) {
       setEditData(editDataGatingFromList);
-      setIsEdit(true);
+      setPageMode("edit");
       setCompanyGroup({
-        value: editDataGatingFromList.CompanyGroup.ID,
-        label: editDataGatingFromList.CompanyGroup.Name
+        value: editDataGatingFromList.CompanyGroup_id,
+        label: editDataGatingFromList.CompanyGroupName
       })
       dispatch(editCompanyIDSuccess({ Status: false }))
+      dispatch(BreadcrumbShow(editDataGatingFromList.Name))
+      return
     }
   }, [editDataGatingFromList]);
 
   useEffect(() => {
-    if ((SubmitSuccesss.Status === true) && (SubmitSuccesss.StatusCode === 200)) {
+    if ((PostAPIResponse.Status === true) && (PostAPIResponse.StatusCode === 200)) {
       dispatch(PostCompanySubmitSuccess({ Status: false }))
       setCompanyGroup('')
       formRef.current.reset();
-      if (PageMode === true) {
+      if (pageMode === "other") {
         dispatch(AlertState({
           Type: 1,
           Status: true,
-          Message: SubmitSuccesss.Message,
+          Message: PostAPIResponse.Message,
         }))
       }
       else {
         dispatch(AlertState({
           Type: 1,
           Status: true,
-          Message: SubmitSuccesss.Message,
-          RedirectPath: '/companysList',
-          AfterResponseAction: false
+          Message: PostAPIResponse.Message,
+          RedirectPath: '/CompanyList',
         }))
       }
     }
-    else if (SubmitSuccesss.Status === true) {
+    else if (PostAPIResponse.Status === true) {
       dispatch(PostCompanySubmitSuccess({ Status: false }))
       dispatch(AlertState({
         Type: 4,
         Status: true,
-        Message: "error Message",
+        Message: JSON.stringify(postMessage.Message),
         RedirectPath: false,
         AfterResponseAction: false
       }));
     }
-  }, [SubmitSuccesss.Status])
+  }, [PostAPIResponse.Status])
 
   /// CompanyGroupDropDown
   useEffect(() => {
@@ -101,7 +114,7 @@ const CompanyModule = (props) => {
   }));
 
   const CompanyGroupValues = CompanyGroup.map((Data) => ({
-    value: Data.ID,
+    value: Data.id,
     label: Data.Name
   }));
 
@@ -112,187 +125,208 @@ const CompanyModule = (props) => {
   //'Save' And 'Update' Button Handller
   const handleValidSubmit = (event, values) => {
 
-    const requestOptions = {
-      body: JSON.stringify({
-        Name: values.Name,
-        Address: values.Address,
-        GSTIN: values.GSTIN,
-        PhoneNo: values.PhoneNo,
-        CompanyAbbreviation: values.CompanyAbbreviation,
-        EmailID: values.EmailID,
-        CompanyGroup: CompanyGroupselect.value,
-      }),
-    };
-    if (IsEdit) {
-      dispatch(updateCompanyID(requestOptions.body, EditData.ID));
+    const jsonBody = JSON.stringify({
+      Name: values.Name,
+      Address: values.Address,
+      GSTIN: values.GSTIN,
+      PhoneNo: values.PhoneNo,
+      CompanyAbbreviation: values.CompanyAbbreviation,
+      EmailID: values.EmailID,
+      CompanyGroup: CompanyGroupselect.value,
+      CreatedBy: 1,
+      UpdatedBy: 1,
+    });
+
+    if (pageMode === 'edit') {
+      dispatch(updateCompanyID(jsonBody, EditData.id));
     }
-    
+
     else {
-      dispatch(PostCompanySubmit(requestOptions.body));
+      dispatch(PostCompanySubmit(jsonBody));
     }
   };
-  
+
   var IsEditModeSaSS = ''
-  if (IsEdit === true) { IsEditModeSaSS = "-3.5%" };
+  if (pageMode === "edit" || pageMode == "other") { IsEditModeSaSS = "-5.5%" };
 
-  return (
-    <React.Fragment>
-      <div className={"page-content"} style={{ marginTop: IsEditModeSaSS }} >
-        <MetaTags>
-          <title>Company_Master| FoodERP-React FrontEnd</title>
-        </MetaTags>
-        <Breadcrumbs breadcrumbItem={"Company Master"} />
-        <Container fluid>
-          <Row>
-            <Col lg={12}>
-              <Card>
-                <CardBody>
-                  <AvForm onValidSubmit={(e, v) => { handleValidSubmit(e, v) }}
-                    ref={formRef}
-                  >
-                    <AvGroup>
-                      <Row className="mb-4">
-                        <Label className="col-sm-3 col-form-label">
-                          Name
-                        </Label>
-                        <Col sm={4}>
-                          <AvField name="Name" value={EditData.Name} type="text" id='txtName'
-                            placeholder=" Please Enter Name " 
-                            // autoComplete="off"
-                            validate={{
-                              required: { value: true, errorMessage: 'Please Enter a Name' },
-                            }}
-                          />
-                        </Col>
-                      </Row>
-                    </AvGroup>  <AvGroup>
-                      <Row className="mb-4">
-                        <Label className="col-sm-3 col-form-label">
-                          Address
-                        </Label>
-                        <Col sm={4}>
-                          <AvField name="Address" value={EditData.Address} type="text"
-                          //  autoComplete="off"
-                            placeholder=" Please Enter Address "
-                            validate={{
-                              required: { value: true, errorMessage: 'Please Enter a  Address' },
-                            }}
-                          />
-                        </Col>
-                      </Row>
-                    </AvGroup>  <AvGroup>
-                      <Row className="mb-4">
-                        <Label className="col-sm-3 col-form-label">
-                          GSTIN
-                        </Label>
-                        <Col sm={4}>
-                          <AvField name="GSTIN"
-                          //  autoComplete="off"
-                            value={EditData.GSTIN} type="text"
-                            placeholder="GSTIN "
-                            validate={{
-                              required: { value: true, errorMessage: 'Please Enter a  GSTIN' },
-                            }}
-                          />
-                        </Col>
-                      </Row>
-                    </AvGroup>
-                    <AvGroup>
-                      <Row className="mb-4">
-                        <Label className="col-sm-3 col-form-label">
-                          Phone NO
-                        </Label>
-                        <Col sm={4}>
-                          <AvField name="PhoneNo" type="tel"
-                          //  autoComplete="off"
-                            value={EditData.PhoneNo}
-                            placeholder="+91 "
-                            validate={{
-                              required: { value: true, errorMessage: 'Please Enter a  Phone NO' },
-                              tel: {
-                                pattern: /^(\+\d{1,3}[- ]?)?\d{10}$/
-                              }
-                            }
-                            }
-                          />
-                        </Col>
-                      </Row>
-                    </AvGroup>
-                    <AvGroup>
-                      <Row className="mb-4">
-                        <Label className="col-sm-3 col-form-label">
-                          Company Abbreviation
-                        </Label>
-                        <Col sm={4}>
-                          <AvField name="CompanyAbbreviation" value={EditData.CompanyAbbreviation} type="text"
-                            // autoComplete="off"
-                            placeholder=" Please Enter Company Abbreviation"
-                            validate={{
-                              required: { value: true, errorMessage: 'Please Enter a Company Abbreviation' },
-                            }} />
-                        </Col>
-                      </Row>
-                    </AvGroup>
+  if (!(userPageAccessState === '')) {
+    return (
+      <React.Fragment>
+        <div className={"page-content"} style={{ marginTop: IsEditModeSaSS }} >
+          <MetaTags>
+            <title>Company Master| FoodERP-React FrontEnd</title>
+          </MetaTags>
+          <Breadcrumb breadcrumbItem={userPageAccessState.PageHeading} />
+          <Container fluid>
+            <Row>
+              <Col lg={12}>
+                <Card className="text-black" >
+                  <CardHeader className="card-header   text-black" style={{ backgroundColor: "#dddddd" }} >
+                    <h4 className="card-title text-black">{userPageAccessState.PageDescription}</h4>
+                    <p className="card-title-desc text-black">{userPageAccessState.PageDescriptionDetails}</p>
+                  </CardHeader>
 
-                    <AvGroup>
-                      <Row className="mb-4">
-                        <Label className="col-sm-3 col-form-label">
-                          Email ID
-                        </Label>
-                        <Col sm={4}>
-                          <AvField name="EmailID" value={EditData.EmailID} type="email"
-                            // autoComplete="off"
-                            placeholder="example@example.com" validate={{
-                              required: { value: true, errorMessage: 'Please Enter a Email ID' },
-                            }} />
-                        </Col>
-                      </Row>
-                    </AvGroup>
+                  <CardBody>
+                    <AvForm onValidSubmit={(e, v) => { handleValidSubmit(e, v) }}
+                      ref={formRef}
+                    >
+                      <Card >
+                        <CardBody style={{ backgroundColor: "whitesmoke" }}>
+                          <Row>
+                            <FormGroup className="mb-3 col col-sm-4 " >
+                              <Label htmlFor="validationCustom01">Name</Label>
+                              <AvField name="Name" value={EditData.Name} type="text" id='txtName'
+                                placeholder=" Please Enter Name "
+                                autoComplete="off"
+                                validate={{
+                                  required: { value: true, errorMessage: 'Please Enter Name' },
+                                }}
+                                onChange={(e) => { dispatch(BreadcrumbShow(e.target.value)) }}
+                              />
+                            </FormGroup>
+                            <Col md="1">  </Col>
+                            <FormGroup className="mb-3 col col-sm-4 " >
+                              <Label htmlFor="validationCustom01">Address</Label>
+                              <AvField name="Address" value={EditData.Address} type="text"
+                                autoComplete="off"
+                                placeholder=" Please Enter Address "
+                                defaultValue=''
+                              // validate={{
+                              //   required: { value: true, errorMessage: 'Please Enter Address' },
+                              // }}
+                              />
+                            </FormGroup>
+                          </Row>
 
-                    <Row className="mb-4">
-                      <Label className="col-sm-3 col-form-label">
-                        CompanyGroup
-                      </Label>
-                      <Col sm={4}>
-                        <Select
-                          value={CompanyGroupselect}
-                          options={CompanyGroupValues}
-                          onChange={(e) => { handllerCompanyGroupID(e) }}
-                        />
-                      </Col>
-                    </Row>
-                    <Row className="justify-content-end">
-                      <Col sm={10}></Col>
-                      <Col sm={2}>
-                        <div>
-                          {
-                            IsEdit ? (<button
-                              type="submit"
-                              data-mdb-toggle="tooltip" data-mdb-placement="top" title="Update Modules ID"
-                              className="btn btn-success w-md"
-                            >
-                              <i class="fas fa-edit me-2"></i>Update
-                            </button>) : (
-                              <button
-                                type="submit"
-                                data-mdb-toggle="tooltip" data-mdb-placement="top" title="Save Modules ID"
-                                className="btn btn-success w-md"
-                              > <i className="fas fa-save me-2"></i> Save
-                              </button>
-                            )
-                          }
-                        </div>
-                      </Col>{" "}
-                    </Row>
-                  </AvForm>
-                </CardBody>
-              </Card>
-            </Col>
-          </Row>
-        </Container>
-      </div>
-    </React.Fragment>
-  );
+                          <Row className="mb-1">
+                            <FormGroup className=" col col-sm-4 " >
+                              <Label htmlFor="validationCustom01">Mobile Number</Label>
+                              <AvInput name="PhoneNo" type="text"
+                                autoComplete="off"
+                                value={EditData.PhoneNo}
+                                defaultValue=''
+                                placeholder="Enter Phone Number"
+                              // validate={{
+                              //   tel: {
+                              //     pattern: /^(\+\d{1,3}[- ]?)?\d{10}$/,
+                              //     errorMessage: 'Please Enter Phone Number'
+                              //   }
+                              // }}
+                              />
+                            </FormGroup>
+
+                            <Col md="1">  </Col>
+                            <FormGroup className=" col col-sm-4 " >
+                              <Label htmlFor="validationCustom01">Email</Label>
+                              <AvField name="EmailID" value={EditData.EmailID} type="email"
+                                autoComplete="off"
+                                defaultValue=''
+                                placeholder="example@example.com"
+                              // validate={{
+                              //   required: { value: true, errorMessage: 'Please Enter Email' },
+                              //   tel: {
+                              //     pattern:  /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/,
+                              //     errorMessage: "Please Enter valid Email Address.(Ex:abc@gmail.com)"
+                              //   }
+                              // }}
+                              />
+                            </FormGroup>
+                          </Row>
+                        </CardBody>
+                      </Card>
+
+                      <Card className="mt-n2">
+                        <CardBody style={{ backgroundColor: "whitesmoke" }}>
+
+                          <Row>
+                            <FormGroup className="mb-3 col col-sm-4 " >
+                              <Label htmlFor="validationCustom01">GSTIN </Label>
+                              <AvField name="GSTIN"
+                                autoComplete="off"
+                                value={EditData.GSTIN} type="text"
+                                placeholder="GSTIN "
+                                validate={{
+                                  required: { value: true, errorMessage: 'Please Enter GSTIN' },
+                                  tel: {
+                                    pattern: /[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}/,
+                                    errorMessage: 'GSTIN is Required (Eg.27AAAAA0000A1Z5)'
+
+                                  }
+                                }}
+                              />
+                            </FormGroup>
+                            <Col md="1">  </Col>
+                            <FormGroup className="mb-3 col col-sm-4 " >
+                              <Label htmlFor="validationCustom01">Company Abbreviation </Label>
+                              <AvField name="CompanyAbbreviation" value={EditData.CompanyAbbreviation} type="text"
+                                autoComplete="off"
+                                placeholder=" Please Enter Company Abbreviation"
+                                validate={{
+                                  required: { value: true, errorMessage: 'Please Enter Company Abbreviation' },
+                                }} />
+                            </FormGroup>
+                          </Row>
+
+                          <Row className=" mb-3">
+                            <FormGroup className=" col col-sm-4 " >
+                              <Label htmlFor="validationCustom21">Company Group </Label>
+                              <Select
+                                value={CompanyGroupselect}
+                                options={CompanyGroupValues}
+                                onChange={(e) => { handllerCompanyGroupID(e) }}
+                              />
+                            </FormGroup>
+                          </Row>
+
+
+                          <FormGroup >
+                            <Row >
+                              <Col sm={2}>
+                                <div>
+                                  {
+                                    pageMode === "edit" ?
+                                      userPageAccessState.RoleAccess_IsEdit ?
+                                        <button
+                                          type="submit"
+                                          data-mdb-toggle="tooltip" data-mdb-placement="top" title="Update Module"
+                                          className="btn btn-success w-md"
+                                        >
+                                          <i class="fas fa-edit me-2"></i>Update
+                                        </button>
+                                        :
+                                        <></>
+                                      : (
+                                        userPageAccessState.RoleAccess_IsSave ?
+                                          <button
+                                            type="submit"
+                                            data-mdb-toggle="tooltip" data-mdb-placement="top" title="Save Module"
+                                            className="btn btn-primary w-md"
+                                          > <i className="fas fa-save me-2"></i> Save
+                                          </button>
+                                          :
+                                          <></>
+                                      )
+                                  }
+                                </div>
+                              </Col>
+                            </Row>
+                          </FormGroup >
+                        </CardBody>
+                      </Card>
+                    </AvForm>
+                  </CardBody>
+                </Card>
+              </Col >
+            </Row >
+          </Container >
+        </div >
+      </React.Fragment >
+    );
+  }
+  else {
+    return (
+      <React.Fragment></React.Fragment>
+    )
+  }
 };
-
 export default CompanyModule;

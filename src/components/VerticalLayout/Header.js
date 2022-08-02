@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types'
 import React, { useState } from "react"
-import { connect } from "react-redux"
+import { connect, useDispatch } from "react-redux"
 import { Link } from "react-router-dom"
 
 //import drawer
@@ -39,8 +39,11 @@ import {
   changeSidebarType,
   changelayoutMode
 } from "../../store/actions"
+import { CustomSearchInput } from '../../store/Utilites/CustomSearchRedux/actions';
+import SearchBoxSecond from '../../pages/Adminisrator/SearchBox/SearchBoxSecond';
 
 const Header = props => {
+  const dispatch = useDispatch();
   const { onChangeLayoutMode } = props;
   const [search, setsearch] = useState(false)
   const [socialDrp, setsocialDrp] = useState(false)
@@ -48,6 +51,10 @@ const Header = props => {
   const [position, setPosition] = useState();
   const [open, setOpen] = useState(false);
 
+
+  function searchFunctionHandller(e) {
+    dispatch(CustomSearchInput(e.target.value))
+  }
   /**
    * Rightsidebar drawer
    */
@@ -105,13 +112,13 @@ const Header = props => {
               type="button" className="btn btn-sm px-2 font-size-16 header-item" id="vertical-menu-btn">
               <i className="fa fa-fw fa-bars"></i>
             </button>
-
-            <form className="app-search d-none d-lg-block">
+            <SearchBoxSecond></SearchBoxSecond>
+            {/* <form className="app-search d-none d-lg-block">
               <div className="position-relative">
-                <input type="text" className="form-control" placeholder="Search..." />
+                <input type="text" className="form-control" placeholder="Search..." onChange={(e) => {searchFunctionHandller(e)}} />
                 <button className="btn btn-primary" type="button"><i className="bx bx-search-alt align-middle"></i></button>
               </div>
-            </form>
+            </form> */}
           </div>
 
           <div className="d-flex">
@@ -179,7 +186,7 @@ const Header = props => {
               </div>
             </div>
 
-            <LanguageDropdown />
+            {/* <LanguageDropdown /> */}
 
             {/* light / dark mode */}
             <LightDark layoutMode={props['layoutMode']} onChangeLayoutMode={onChangeLayoutMode} />

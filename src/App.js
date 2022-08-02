@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types'
-import React from "react"
+import React, { useEffect } from "react"
 
-import { Switch, BrowserRouter as Router } from "react-router-dom"
+import { Switch, BrowserRouter as Router, useHistory } from "react-router-dom"
 import { connect, useSelector } from "react-redux"
 
 // Import Routes all
@@ -20,12 +20,8 @@ import "./assets/scss/theme.scss"
 import "./assets/scss/preloader.scss"
 
 const App = props => {
-
-//   const { SubmitSuccesss, } = useSelector((state) => ({
-//     SubmitSuccesss: state
-//   }));
-
-//  console.log("store daTA",SubmitSuccesss)
+  const history = useHistory();
+  const userPageAccess = history.location.state
 
   function getLayout() {
     let layoutCls = VerticalLayout
@@ -63,6 +59,8 @@ const App = props => {
               component={route.component}
               key={idx}
               isAuthProtected={true}
+              userPageAccess={userPageAccess}
+              history={history}
               exact
             />
           ))}

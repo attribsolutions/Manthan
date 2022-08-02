@@ -1,24 +1,58 @@
-const PageTypeDropdownData = [
+const PageTypeDropdownData = 
     {
         StatusCode: 200,
         Status: true,
-        Data:[
-            {
-                ID:1,
-                Name:"AddEmployee"
-            },
-            {
-                ID:2,
-                Name:"AddUser"
-            },
-            {
-                ID:3,
-                Name:"AddRole"
-            }
+        Message: "",
+        Data: [
+          {
+            Name: "ABCD",
+            Address: "pune",
+            Mobile: "9787767688",
+            EmailID: "punam@gmail.com",
+            BOD: "2022-06-21",
+            PAN: "AAAAA3344A",
+            AadharNo: "2222 3333 4444",
+            WorkingHours: "10",
+            DesignationID: 2,
+            EmployeeType: 1,
+            JoiningDate: "2022-06-13",
+            State: 3,
+            Region: 3,
+            Companie: 1
+          },
+          {
+            Name: "test",
+            Address: "pune",
+            Mobile: "9787767688",
+            EmailID: "punam@gmail.com",
+            BOD: "2022-06-21",
+            PAN: "AAAAA3344A",
+            AadharNo: "2222 3333 4444",
+            WorkingHours: "10",
+            DesignationID: 2,
+            EmployeeType: 1,
+            JoiningDate: "2022-06-13",
+            State: 3,
+            Region: 3,
+            Companie: 1
+          },
+          {
+            Name: "test2",
+            Address: "pune",
+            Mobile: "9787767688",
+            EmailID: "punam@gmail.com",
+            BOD: "2022-06-21",
+            PAN: "AAAAA3344A",
+            AadharNo: "2222 3333 4444",
+            WorkingHours: "10",
+            DesignationID: 2,
+            EmployeeType: 1,
+            JoiningDate: "2022-06-13",
+            State: 3,
+            Region: 3,
+            Companie: 1
+          }
         ]
-    }
-              
-                   
-    
-]
+      }       
+
 export default PageTypeDropdownData;

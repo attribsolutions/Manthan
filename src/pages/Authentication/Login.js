@@ -86,7 +86,7 @@ document.getElementById("UserName").focus();
                             </div>
                             <div className="flex-shrink-0">
                               <div className="">
-                                <Link to="/auth-recoverpw" className="text-muted">Forgot password?</Link>
+                                <Link to="/SendOTP" className="text-muted">Forgot password?</Link>
                               </div>
                             </div>
                           </div>

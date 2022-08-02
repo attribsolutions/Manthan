@@ -42,24 +42,6 @@ export const getState = () => ({
     payload:State,
   });
 
-   ///Region  dropdown
-export const getRegion = () => ({
-    type: GET_REGION,
-   
-  });
-  export const getRegionSuccess = (Region) => ({
-    type: GET_REGION_SUCCESS,
-    payload:Region,
-  });
-
-  export const getCompany = () => ({
-    type: GET_COMPANY
-   
-  });
-  export const getCompanySuccess = (Company) => ({
-    type: GET_COMPANY_SUCCESS,
-    payload:Company,
-  });
 
   ///post api
   export const postEmployee = (Data,id) => ({
@@ -103,9 +85,9 @@ export const delete_Employee_ID = (id) => ({
   })
 
   /// update api
-  export const updateEmployeeID=(data,id)=>({
+  export const updateEmployeeID=(updateData,ID)=>({
     type:UPDATE_EMPLOYEE_ID,
-    data,id,
+    updateData,ID,
   })
   export const updateEmployeeIDSuccess =(updateMessage)=>({
     type:UPDATE_EMPLOYEE_ID_SUCCESS,

@@ -12,17 +12,22 @@ import Profile from "./auth/profile/reducer"
 //Administrator
 import SpinnerReducer from './Utilites/Spinner/reducer'
 import AlertReducer from './Utilites/CostumeAlert/reducer'
+import CustomSearchReducer from './Utilites/CustomSearchRedux/reducer'
+import BreadcrumbReducer from './Utilites/Breadcrumb/reducer'
+
 import Modules from './Administrator/ModulesRedux/reducer'
 import Company from './Administrator/CompanyRedux/reducer'
 import SubModules from "./Administrator/SubModulesRedux/reducer"
 import PageList from "./Administrator/PageMasterRedux/reducer"
 import H_Pages from './Administrator/HPagesRedux/reducer'
-import OrdersReducers from './Purchase/Orders/reducer'
+import OrderPageReducer from "./Purchase/OrderPageRedux/reducer"
 
 import User_Registration_Reducer from "./Administrator/UserRegistrationRedux/reducer"
 import M_EmployeesReducer from "./Administrator/M_EmployeeRedux/reducer"
 import RoleMaster_Reducer from "./Administrator/RoleMasterRedux/reducer"
 import ItemMastersReducer from "./Administrator/ItemsRedux/reducer"
+import PartyMasterReducer from "./Administrator/PartyRedux/reducer"
+import RoleAccessReducer from "./Administrator/RoleAccessRedux/reducer"
 const rootReducer = combineReducers({
   Layout,
   Login,
@@ -31,6 +36,8 @@ const rootReducer = combineReducers({
   Profile,
   SpinnerReducer,
   AlertReducer,
+  CustomSearchReducer,
+  BreadcrumbReducer,
   // Administator
   Modules,
   Company,
@@ -40,9 +47,11 @@ const rootReducer = combineReducers({
   User_Registration_Reducer,
   M_EmployeesReducer,
   // Purchase
-  OrdersReducers,
+  OrderPageReducer,
   RoleMaster_Reducer,
   ItemMastersReducer,
+  PartyMasterReducer,
+  RoleAccessReducer
 })
 
 export default rootReducer

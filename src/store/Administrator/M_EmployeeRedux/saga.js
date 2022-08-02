@@ -1,15 +1,15 @@
 import { call, put, takeEvery } from "redux-saga/effects";
 import { detelet_EmployeeID, edit_EmployeeAPI, getComapny_For_Dropdown, getDesignationID_For_Dropdown, getEmployeeType_For_Dropdown, getRegion_For_Dropdown, getState_For_Dropdown, get_EmployeelistApi, post_EmployeeData, update_EmployeeAPI } from "../../../helpers/backend_helper";
 import {
-  GET_DESIGNATIONID, GET_EMPLOYEETYPE, GET_REGION,
-  GET_STATE, POST_EMPLOYEE, GET_COMPANY, GET_EMPLOYEE_LIST, UPDATE_EMPLOYEE_ID,
+  GET_DESIGNATIONID, GET_EMPLOYEETYPE,
+  GET_STATE, POST_EMPLOYEE, GET_EMPLOYEE_LIST, UPDATE_EMPLOYEE_ID,
   DELETE_EMPLOYEE_ID, EDIT_EMPLOYEE_ID,
 } from './actionTypes'
 import {
   getDesignationIDSuccess, getEmployeeTypeESuccess,
-  getStateESuccess, getRegionSuccess, PostEmployeeSuccess,
-  getCompanySuccess, getEmployeelistSuccess,
-  deleteEmployeeIDSuccess, editEmployeeSuccess, updateEmployeeIDSuccess, getEmployeelist
+  getStateESuccess, PostEmployeeSuccess,
+  getEmployeelistSuccess,
+  deleteEmployeeIDSuccess, editEmployeeSuccess, updateEmployeeIDSuccess,
 } from "./action";
 import { SpinnerState } from "../../Utilites/Spinner/actions";
 import { AlertState } from "../../Utilites/CostumeAlert/actions";
@@ -44,58 +44,28 @@ function* State_saga() {
   }
 }
 
-///Region  dropdown api
-function* Region_saga() {
-  try {
-    const response = yield call(getRegion_For_Dropdown);
-    yield put(getRegionSuccess(response.Data));
-  } catch (error) {
-    console.log("Region_saga page error", error);
-  }
-}
-
-///Region  dropdown api
-function* Company_saga() {
-  try {
-    const response = yield call(getComapny_For_Dropdown);
-    yield put(getCompanySuccess(response.Data));
-  } catch (error) {
-    console.log("Employeelist  saga page error", error);
-  }
-}
 
 ///post api
-function* Employee_saga({ Data }) {
+
+function* Submit_Employee_GenratorFunction({ Data }) {
+  yield put(SpinnerState(true))
   try {
     const response = yield call(post_EmployeeData, Data);
+    console.log("post response in saga file", response)
+    yield put(SpinnerState(false))
     yield put(PostEmployeeSuccess(response));
-    console.log("response", response)
   } catch (error) {
-    yield console.log("postCompany saga error :", error);
+    yield put(SpinnerState(false))
+    yield put(AlertState({
+      Type: 4,
+      Status: true, Message: "500 Error Message",
+    }));
   }
 }
-// function* Employee_saga({ data }) {
-//   yield put(SpinnerState(true))
-//   try {
-//     const response = yield call(post_EmployeeData, data);
 
-//     if (response.StatusCode === 200) {
-//       yield put(SpinnerState(false))
-//       yield put(PostEmployeeSuccess({ Status: true }));
-//       yield put(AlertState({ Type: 1, Status: true, Message: response.Message, RedirectPath: '/Employee_List', AfterResponseAction: false }));
-//     } else {
-//       yield put(SpinnerState(false))
-//       yield put(AlertState({ Type: 4, Status: true, Message: "error Message", RedirectPath: false, AfterResponseAction: false }));
-//     }
-//   } catch (error) {
-//     yield put(SpinnerState(false))
-//     yield put(AlertState({ Type: 3, Status: true, Message: "Network Error", RedirectPath: false, AfterResponseAction: false }));
-
-//     yield console.log("Post_Employee saga page error", error);
-//   }
-// }
 /// get api
-function* Employeelistsaga() {
+
+function* Get_EmployeeList_GenratorFunction() {
   yield put(SpinnerState(true))
   try {
     const response = yield call(get_EmployeelistApi);
@@ -103,95 +73,67 @@ function* Employeelistsaga() {
     yield put(SpinnerState(false))
   } catch (error) {
     yield put(SpinnerState(false))
-    yield console.log("fetchModulesList  saga page error ***  :", error);
+    yield put(AlertState({
+      Type: 4,
+      Status: true, Message: "500 Error Message",
+    }));
   }
 }
-
 //// delete api 
-function* DeleteEmployeeID({ id }) {
+
+function* Delete_EmployeeID_GenratorFunction({ id }) {
   try {
     yield put(SpinnerState(true))
     const response = yield call(detelet_EmployeeID, id);
     yield put(SpinnerState(false))
-
-    if (response.StatusCode === 200) {
-      yield put(AlertState({
-        Type: 1, Status: true,
-        Message: response.Message,
-        RedirectPath: false,
-        AfterResponseAction: getEmployeelist,
-      }))
-    }
-    else {
-      yield put(AlertState({
-        Type: 3, Status: true,
-        Message: response.Message,
-        RedirectPath: false,
-        AfterResponseAction: false
-      }));
-    }
+    yield put(deleteEmployeeIDSuccess(response))
   } catch (error) {
     yield put(SpinnerState(false))
-    yield console.log("deleteEmployeeID  saga page error ***  :", error);
+    yield put(AlertState({
+      Type: 4,
+      Status: true, Message: "500 Error Message",
+    }));
   }
 }
 
-function* editEmployeeID({ id }) {
+function* Edit_EmployeeID_GenratorFunction({ id }) {
   try {
-    if (!id <= 0) {
-      const response = yield call(edit_EmployeeAPI, id);
-      yield put(editEmployeeSuccess(response));
-      console.log("response in saga page", response)
-    } else {
-      yield put(editEmployeeSuccess({ Status: 'false' }));
-    }
+    const response = yield call(edit_EmployeeAPI, id);
+    yield put(editEmployeeSuccess(response));
+    console.log("response in saga", response)
 
   } catch (error) {
-    yield console.log("edit_ID  saga page error  :", error);
+    yield put(AlertState({
+      Type: 4,
+      Status: true, Message: "500 Error Message",
+    }));
   }
 }
 
-function* updateEmployeeID({ data, id }) {
+function* Update_EmployeeID_GenratorFunction({ updateData, ID }) {
   try {
     yield put(SpinnerState(true))
-    const response = yield call(update_EmployeeAPI, data, id);
+    const response = yield call(update_EmployeeAPI, updateData, ID);
     yield put(SpinnerState(false))
-
-    if (response.StatusCode === 200) {
-      yield put(updateEmployeeIDSuccess({ Status: true }));
-      yield put(AlertState({
-        Type: 1, Status: true,
-        Message: response.Message,
-        RedirectPath: false,
-        AfterResponseAction: getEmployeelist,
-      }))
-    }
-    else {
-      yield put(AlertState({
-        Type: 3, Status: true,
-        Message: response.Message,
-        RedirectPath: false,
-        AfterResponseAction: false
-      }));
-    }
+    yield put(updateEmployeeIDSuccess(response))
   }
   catch (error) {
     yield put(SpinnerState(false))
-    yield console.log("editModule_ID  saga page error ***  :", error);
+    yield put(AlertState({
+      Type: 4,
+      Status: true, Message: "500 Error Message",
+    }));
   }
 }
 function* M_EmployeeSaga() {
   yield takeEvery(GET_DESIGNATIONID, DesignationID_saga);
   yield takeEvery(GET_EMPLOYEETYPE, EmployeeType_saga);
   yield takeEvery(GET_STATE, State_saga);
-  yield takeEvery(GET_REGION, Region_saga)
-  yield takeEvery(POST_EMPLOYEE, Employee_saga)
-  yield takeEvery(GET_COMPANY, Company_saga)
-  yield takeEvery(GET_EMPLOYEE_LIST, Employeelistsaga)
-
-  yield takeEvery(EDIT_EMPLOYEE_ID, editEmployeeID)
-  yield takeEvery(DELETE_EMPLOYEE_ID, DeleteEmployeeID)
-  yield takeEvery(UPDATE_EMPLOYEE_ID, updateEmployeeID)
+  yield takeEvery(GET_EMPLOYEE_LIST, Get_EmployeeList_GenratorFunction)
+  yield takeEvery(POST_EMPLOYEE, Submit_Employee_GenratorFunction)
+  yield takeEvery(EDIT_EMPLOYEE_ID, Edit_EmployeeID_GenratorFunction)
+  yield takeEvery(DELETE_EMPLOYEE_ID, Delete_EmployeeID_GenratorFunction)
+  yield takeEvery(UPDATE_EMPLOYEE_ID, Update_EmployeeID_GenratorFunction)
 
 
 }

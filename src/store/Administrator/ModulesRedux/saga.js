@@ -43,7 +43,15 @@ function* fetchModulesList_GenratorFunction() {
   yield put(SpinnerState(true))
   try {
     const response = yield call(Fetch_ModulesList);
-    yield put(fetchModelsListSuccess(response.Data));
+    if(response.StatusCode===200){
+      yield put(fetchModelsListSuccess(response.Data));
+    }
+    else {
+      yield put(AlertState({ Type: 4, 
+        Status: true, Message:response.Message,
+      }));
+    }
+
     yield put(SpinnerState(false))
   } catch (error) {
     yield put(SpinnerState(false))
@@ -78,6 +86,7 @@ function* editModule_ID_GenratorFunction({ id }) {
 }
 
 function* update_Module_GenratorFunction({ data, id }) {
+  console.log("data",data)
   try {
     yield put(SpinnerState(true))
     const response = yield call(updateModule_ID, data, id);

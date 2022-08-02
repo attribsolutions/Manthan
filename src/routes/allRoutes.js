@@ -18,19 +18,34 @@ import SubModules from "../pages/Adminisrator/SubModulePages/SubModules";
 import SubModulesList from "../pages/Adminisrator/SubModulePages/SubModulesList";
 import HPageList from "../pages/Adminisrator/HPagesPages/HPageList";
 import HPageMaster from "../pages/Adminisrator/HPagesPages/HPageMaster";
-import OrderPage from "../pages/Purchase/Orders/OrderPage";
-import OrderList from "../pages/Purchase/Orders/OrderList"
-import AddUser from "../pages/Adminisrator/UserRegistrationPages/AddUser";
+import OrderPage from "../pages/Order/OrderPage";
+import OrderList from "../pages/Order/OrderList"
+import AddUser from "../pages/Adminisrator/UserRegistrationPages/UserRegistration";
 import UserList from "../pages/Adminisrator/UserRegistrationPages/UserList";
-import AddEmployee from "../pages/Adminisrator/EmployeePages/AddEmployee";
-import Employee_List from "../pages/Adminisrator/EmployeePages/Employee_List";
+import AddEmployee from "../pages/Adminisrator/EmployeePages/EmployeeMaster";
+import Employee_List from "../pages/Adminisrator/EmployeePages/EmployeeList";
 import RoleMaster from "../pages/Adminisrator/RoleMasterPages/RoleMaster";
 import RoleList from "../pages/Adminisrator/RoleMasterPages/RoleList"
 import Error404 from "../pages/Utility/Error404";
 import Error500 from "../pages/Utility/Error500";
-import ValidationTest from "../pages/Purchase/Orders/ValidationTest";
-import ItemsList from "../pages/Adminisrator/Items/ItemsList";
-import ItemsMaster from "../pages/Adminisrator/Items/ItemsMaster";
+import ItemsList from "../pages/Adminisrator/ItemPages/ItemList";
+import ItemsMaster from "../pages/Adminisrator/ItemPages/ItemMaster";
+import SearchBox from "../pages/Adminisrator/SearchBox/SearchBox";
+import SearchBoxSecond from "../pages/Adminisrator/SearchBox/SearchBoxSecond";
+import SerachBox3 from "../pages/Adminisrator/SearchBox/SerachBox3";
+import PartyList from "../pages/Adminisrator/PartyPages/PartyList";
+import PartyMaster from "../pages/Adminisrator/PartyPages/PartyMaster";
+import DemoUI3 from "../pages/Adminisrator/PartyPages/DemoUI3";
+import DemoUI2 from "../pages/Adminisrator/PartyPages/DemoUI2";
+import PartyUIDemo from "../pages/Adminisrator/PartyPages/PartyUIDemo";
+import RoleAccessList from "../pages/Adminisrator/RoleAccessPages/RoleAccessList";
+import ResetPassword from "../pages/Authentication/ResetPassword";
+import SendOTP from "../pages/Authentication/SendOTP";
+import EnterOTP from "../pages/Authentication/EnterOTP";
+import RoleAccessListPage from "../pages/Adminisrator/RoleAccessPages/RoleAccessListPage";
+
+
+// import AddItemMaster from "../pages/Adminisrator/MasterPages/AddItemMaster";
 
 const userRoutes = [
 
@@ -38,35 +53,86 @@ const userRoutes = [
   { path: "/dashboard", component: Dashboard },
 
   // Administrator : Modules Path and List
-  { path: "/modulesMaster", component: Modules },
-  { path: "/modulesList", component: ModulesList },
+  // { path: `/${btoa("ModuleMaster")}`, component: Modules },
+  // { path: `/${btoa("ModuleList")}`, component: ModulesList },
 
-  { path: "/subModulesMaster", component: SubModules },
-  { path: "/subModulesList", component: SubModulesList },
+  // { path: "/subModuleMaster", component: SubModules },
+  // { path: "/subModuleList", component: SubModulesList },
+
+  // // Administrator : Company Path and List
+  // { path: `/${btoa("CompanyMaster")}`, component: CompanyModule },
+  // { path: `/${btoa("CompanyList")}`, component: CompanyList },
+
+  // { path: `/${btoa("PageList")}`, component: HPageList },
+  // { path: `/${btoa("PageMaster")}`, component: HPageMaster },
+
+  // { path: `/${btoa("Order")}`, component: OrderPage },
+  // { path:`/${btoa("Orders")}`, component: OrderList },
+
+  // { path: `/${btoa("UserMaster")}`, component: AddUser },
+  // { path: `/${btoa("UserList")}`, component: UserList },
+
+  // { path: `/${btoa("EmployeeMaster")}`, component: AddEmployee },
+  // { path: `/${btoa("EmployeeList")}`, component: Employee_List },
+
+  // { path: `/${btoa("RoleMaster")}`, component: RoleMaster },
+  // { path: `/${btoa("RoleList")}`, component: RoleList },
+
+  // { path: `/${btoa("ItemMaster")}`, component: ItemsMaster },
+  // { path: `/${btoa("ItemList")}`, component: ItemsList },
+
+  // { path: `/${btoa("PartyList")}`, component: PartyList },
+  // { path: `/${btoa("PartyMaster")}`, component: PartyMaster },
+
+  // { path: `/${btoa("RoleAccess")}`, component: RoleAccessList },
+  // { path: "/RoleAccess", component: RoleAccessList },
+
+
+
+
+  { path: '/ModuleMaster', component: Modules },
+  { path: '/ModuleList', component: ModulesList },
+
+  { path: "/subModuleMaster", component: SubModules },
+  { path: "/subModuleList", component: SubModulesList },
 
   // Administrator : Company Path and List
-  { path: "/companysMaster", component: CompanyModule },
-  { path: "/companysList", component: CompanyList },
+  { path: '/CompanyMaster', component: CompanyModule },
+  { path: '/CompanyList', component: CompanyList },
 
-  { path: "/pagesList", component: HPageList },
-  { path: "/pagesMaster", component: HPageMaster },
+  { path: `/PageList`, component: HPageList },
+  { path: `/PageMaster`, component: HPageMaster },
 
-  { path: "/ordersMaster", component: OrderPage },
-  { path: "/ordersList", component: OrderList },
+  { path: `/Order`, component: OrderPage },
+  { path: `/Orders`, component: OrderList },
 
-  { path: "/usersMaster", component: AddUser },
-  { path: "/usersList", component: UserList },
+  { path: `/UserMaster`, component: AddUser },
+  { path: `/UserList`, component: UserList },
 
-  { path: "/employeesMaster", component: AddEmployee },
-  { path: "/employeesList", component: Employee_List },
+  { path: '/EmployeeMaster', component: AddEmployee },
+  { path: '/EmployeeList', component: Employee_List },
 
-  { path: "/rolesMaster", component: RoleMaster },
-  { path: "/rolesList", component: RoleList },
+  { path: `/RoleMaster`, component: RoleMaster },
+  { path: `/RoleList`, component: RoleList },
 
-  { path: "/validationTest", component: ValidationTest },
+  { path: '/ItemMaster', component: ItemsMaster },
+  { path: '/ItemList', component: ItemsList },
 
-  { path: "/itemsMaster", component: ItemsMaster },
-  { path:"/itemsList", component:ItemsList },
+  { path: `/PartyList`, component: PartyList },
+  { path: `/PartyMaster`, component: PartyMaster },
+
+  { path: `/RoleAccess`, component: RoleAccessList },
+  { path: `/RoleAccessList`, component: RoleAccessListPage },
+
+
+  { path: "/partyUIDemo", component: PartyUIDemo },
+  { path: "/demoUi3", component: DemoUI3 },
+  { path: "/demoUi2", component: DemoUI2 },
+
+
+  // { path: "/AddItemMaster", component: AddItemMaster },
+  { path: "/SearchBox2", component: SearchBoxSecond },
+  { path: "/SearchBox3", component: SerachBox3 },
 
   // this route should be at the end of all other routes
   { path: "/", exact: true, component: () => <Redirect to="/dashboard" /> },
@@ -78,7 +144,9 @@ const authRoutes = [
   { path: "/logout", component: Logout },
   { path: "/login", component: Login },
   { path: "/forgot-password", component: ForgetPwd },
-
+  { path: "/ResetPassword", component: ResetPassword },
+  { path: "/SendOTP", component: SendOTP },
+  { path: "/EnterOTP", component: EnterOTP },
 
   { path: "/pages-404", component: Error404 },
   { path: "/pages-500", component: Error500 },

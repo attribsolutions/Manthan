@@ -1,85 +1,126 @@
-    import React, { useEffect, useState } from "react";
-import {
-    Col,
-    Modal,
-    Row,
-} from "reactstrap";
+import React, { useEffect, useState } from "react";
+import { Col, Modal, Row } from "reactstrap";
 import "../../../assets/scss/CustomeTable/datatables.scss"
 import {
-    getUser,deleteUser,editUserId,updateSuccess
-} from  "../../../store/Administrator/UserRegistrationRedux/actions";
-import Breadcrumbs from "../../../components/Common/Breadcrumb";
-import paginationFactory,
-{
+    getUser, deleteUser, editUserId, updateSuccess
+} from "../../../store/Administrator/UserRegistrationRedux/actions";
+import paginationFactory, {
     PaginationListStandalone,
-    PaginationProvider
+    PaginationProvider,
 } from "react-bootstrap-table2-paginator";
-import ToolkitProvider, { Search } from "react-bootstrap-table2-toolkit";
+import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
-
 //redux
 import { useSelector, useDispatch } from "react-redux";
+import "../../../assets/scss/CustomeTable/datatables.scss"
+import AddUser from "./UserRegistration";
+import { deleteSuccess } from "../../../store/Administrator/RoleMasterRedux/action";
+import { AlertState } from "../../../store/Utilites/CostumeAlert/actions";
+import { CommonGetRoleAccessFunction } from "../../../components/Common/CommonGetRoleAccessFunction";
+import { useHistory } from "react-router-dom";
+import { MetaTags } from "react-meta-tags";
+import Breadcrumbs from "../../../components/Common/Breadcrumb";
 
-// import { useAlert } from "react-alert";
-
-import AddUser from "./AddUser";
 const UserList = () => {
-    // const alert = useAlert();
+
     const dispatch = useDispatch();
-    const [deleteIn, setDeleteIn] = useState('');
+    const history = useHistory();
+    const [userPageAccessState, setUserPageAccessState] = useState('');
     const [modal_center, setmodal_center] = useState(false);
 
-    const {pages,editData, updateMessage} = useSelector((state) => ({
+    const { pages, editData, updateMessage, deleteMessage } = useSelector((state) => ({
         pages: state.User_Registration_Reducer.pages,
-        editData:state.User_Registration_Reducer.editData,
-        updateMessage:state.User_Registration_Reducer.updateMessage,
-      }));
+        editData: state.User_Registration_Reducer.editData,
+        updateMessage: state.User_Registration_Reducer.updateMessage,
+        deleteMessage: state.User_Registration_Reducer.deleteSuccessRole,
+    }));
 
-// console.log("updateMessage",updateMessage)
+    useEffect(() => {
+        const userAcc = CommonGetRoleAccessFunction(history)
+        if (!(userAcc === undefined)) {
+            setUserPageAccessState(userAcc)
+        }
+    }, [history])
 
-    const deleteHandeler = (id) => { 
-        console.log("id",id)
-        setDeleteIn(id);
-        dispatch(deleteUser(id));
-        dispatch(getUser());  
-    };
-    function tog_center() {
-        setmodal_center(!modal_center)
-    }
-   
-useEffect(() => {
+    //  This UseEffect => Featch Modules List data  First Rendering
+    useEffect(() => {
         dispatch(getUser());
     }, []);
 
+    // This UseEffect => UpadateModal Success/Unsucces Show and Hide Control Alert_modal 
     useEffect(() => {
-        if (updateMessage.Status === true) {
+        if ((updateMessage.Status === true) && (updateMessage.StatusCode === 200)) {
             dispatch(updateSuccess({ Status: false }))
-            dispatch(getUser());
+            dispatch(AlertState({
+                Type: 1, Status: true,
+                Message: updateMessage.Message,
+                AfterResponseAction: getUser,
+            }))
             tog_center()
         }
-    }, [updateMessage.Status]);
-    console.log("updateMessage",updateMessage)
+        else if (updateMessage.Status === true) {
+            dispatch(updateSuccess({ Status: false }))
+            dispatch(AlertState({
+                Type: 3, Status: true,
+                Message: JSON.stringify(updateMessage.Message),
+            }));
+        }
+    }, [updateMessage]);
+
+    useEffect(() => {
+        if ((deleteMessage.Status === true) && (deleteMessage.StatusCode === 200)) {
+            dispatch(deleteSuccess({ Status: false }))
+            dispatch(AlertState({
+                Type: 1, Status: true,
+                Message: deleteMessage.Message,
+                AfterResponseAction: getUser,
+            }))
+        } else if (deleteMessage.Status === true) {
+            dispatch(deleteSuccess({ Status: false }))
+            dispatch(AlertState({
+                Type: 3,
+                Status: true,
+                Message: JSON.stringify(deleteMessage.Message),
+            }));
+        }
+    }, [deleteMessage])
 
     useEffect(() => {
         if (editData.Status === true) {
-            // dispatch(editUserId(0));
             tog_center()
-            console.log("editData after useEffecteee",editData)
-
         }
     }, [editData]);
-    console.log("editData after useEffect888",editData)
 
     const EditPageHandler = (id) => {
         dispatch(editUserId(id));
-        console.log("selected edit id",id)
+    }
+
+    function tog_center() {
+        setmodal_center(!modal_center)
+    }
+    //Delete Button Handller
+    const deleteHandeler = (id, name) => {
+        dispatch(AlertState({
+            Type: 5, Status: true,
+            Message: `Are you sure you want to delete this User : "${name}"`,
+            RedirectPath: false,
+            PermissionAction: deleteUser,
+            ID: id
+        }));
     }
 
     const pageOptions = {
         sizePerPage: 15,
         totalSize: pages.length,
-        custom:true,
+        custom: true,
     };
+
+    const defaultSorted = [
+        {
+            dataField: "Name", // if dataField is not match to any column you defined, it will be ignored.
+            order: "asc", // desc or asc
+        },
+    ];
 
     const pagesListColumns = [
         {
@@ -96,12 +137,6 @@ useEffect(() => {
             formatter: (cellContent, user) => <>{user.LoginName}</>,
         },
         {
-            text: "Email",
-            dataField: "email",
-            sort: true,
-            formatter: (cellContent, user) => <>{user.email}</>,
-        },
-        {
             text: "EmployeeID",
             dataField: "EmployeeID",
             sort: true,
@@ -113,7 +148,7 @@ useEffect(() => {
             sort: true,
             formatter: (cellContent, user) =>
                 <>
-                    {(user.isActive) ? 'true ':' false'}
+                    {(user.isActive) ? 'true ' : ' false'}
                 </>,
         },
         {
@@ -121,73 +156,89 @@ useEffect(() => {
             dataField: "isSendOTP",
             sort: true,
             formatter: (cellContent, user) =>
-             <>
-                {( user.isSendOTP)?"true" :"false"}
-            </>
+                <>
+                    {(user.isSendOTP) ? "true" : "false"}
+                </>
         },
         {
             text: "Actions ",
-          
-            formatter: (cellContent, user) => (
-                <>
-                   <div class="d-flex gap-3" style={{ display: 'flex', justifyContent: 'center' }} >
-    
+            hidden: (
+                !(userPageAccessState.RoleAccess_IsEdit)
+                && !(userPageAccessState.RoleAccess_IsView)
+                && !(userPageAccessState.RoleAccess_IsDelete)) ? true : false,
+
+            formatter: (cellContent, User) => (
+                <div className="d-flex gap-3" style={{ display: 'flex', justifyContent: 'center' }} >
+                    {(userPageAccessState.RoleAccess_IsEdit)
+                        ?
                         <buton
                             type="button"
-                            onClick={() => {
-                                EditPageHandler(user.ID);
-                            }}
-                            className="badge badge-soft-primary font-size-12"
-                            >
-                            <i class="mdi mdi-pencil font-size-18" id="edittooltip"></i>
-                        </buton>{" "}
-                       
-                        
-                       <buton
-                        className="badge badge-soft-danger font-size-12"
-                        
-                        onClick={() => {
-                            const deleteID= window.confirm(
-                              "Are you sure you want to Delete ?"
-                                    )
-                           if ( deleteID=== true) {
-                            deleteHandeler(user.ID );
-                                    }
-                                 
-                                }}>
-                        <i class="mdi mdi-delete font-size-18" ></i>
-                    </buton>
-                    </div>
-                </>
+                            data-mdb-toggle="tooltip" data-mdb-placement="top" title="Edit User"
+                            onClick={() => { EditPageHandler(User.id); }}
+                            className="badge badge-soft-success font-size-12 btn btn-success waves-effect waves-light w-xxs border border-light"
+                        >
+                            <i className="mdi mdi-pencil font-size-18" id="edittooltip"></i>
+                        </buton>
+                        : null
+                    }
+                    {(userPageAccessState.RoleAccess_IsView)
+                        ?
+                        <buton
+                            type="button"
+                            data-mdb-toggle="tooltip" data-mdb-placement="top" title="View User"
+                            onClick={() => { EditPageHandler(User.id); }}
+                            className="badge badge-soft-primary font-size-12 btn btn-primary waves-effect waves-light w-xxs border border-light"
+                        >
+                            <i className="bx bxs-show font-size-18 "></i>
+                        </buton>
+                        : null
+                    }
+                    {(userPageAccessState.RoleAccess_IsDelete)
+                        ?
+                        <buton
+                            className="badge badge-soft-danger font-size-12 btn btn-danger waves-effect waves-light w-xxs border border-light"
+                            data-mdb-toggle="tooltip" data-mdb-placement="top" title="Delete User"
+                            onClick={() => { deleteHandeler(User.id, User.Name); }}
+                        >
+                            <i className="mdi mdi-delete font-size-18"></i>
+                        </buton>
+                        : null
+                    }
+
+                </div>
             ),
         },
     ];
-    
-    return (
-        <React.Fragment>
-            <div className="page-content">
-               
-                                    <PaginationProvider
-                                        pagination={paginationFactory(pageOptions)}
-                                    >
-                                        {({ paginationProps, paginationTableProps }) => (
-                                            <ToolkitProvider
-                                                keyField="id"
-                                                data={pages}
-                                                columns={pagesListColumns}
-                                                bootstrap4
-                                                search
-                                            >
-                                                
-                                   {toolkitProps => (
+
+    if (!(userPageAccessState === '')) {
+        return (
+            <React.Fragment>
+                <div className="page-content">
+                <MetaTags>
+                        <title>User List| FoodERP-React FrontEnd</title>
+                    </MetaTags>
+                    <PaginationProvider
+                        pagination={paginationFactory(pageOptions)}
+                    >
+                        {({ paginationProps, paginationTableProps }) => (
+                            <ToolkitProvider
+                                keyField="id"
+                                data={pages}
+                                columns={pagesListColumns}
+                                search
+                            >
+
+                                {toolkitProps => (
                                     <React.Fragment>
+                                  
                                         <Breadcrumbs
                                             title={"Count :"}
-                                            breadcrumbItem={"User Registration List"}
-                                            IsButtonVissible={true}
-                                            a={toolkitProps.searchProps}
-                                            breadcrumbCount={pages.length}
-                                            RedirctPath={"/usersMaster"}
+                                            breadcrumbItem={userPageAccessState.PageHeading}
+                                            IsButtonVissible={(userPageAccessState.RoleAccess_IsSave) ? true : false}
+                                            IsSearchVissible={true}
+                                            SearchProps={toolkitProps.searchProps}
+                                            breadcrumbCount={`Users Count: ${pages.length}`}
+                                            // RedirctPath={"/UserMaster"}
                                         />
                                         <Row>
                                             <Col xl="12">
@@ -197,6 +248,7 @@ useEffect(() => {
                                                         responsive
                                                         bordered={false}
                                                         striped={false}
+                                                        defaultSorted={defaultSorted}
                                                         classes={
                                                             "table  table-bordered"
                                                         }
@@ -215,21 +267,26 @@ useEffect(() => {
                                         </Row>
                                     </React.Fragment>
                                 )}
-                                            </ToolkitProvider>
-                                        )}
-                                    </PaginationProvider>
-                                    <Modal
-                            isOpen={modal_center}
-                            toggle={() => { tog_center() }}
-                            size="xl"
-                        >
-                            <AddUser state={editData.Data} />
-                        </Modal>
-                              </div>
-                      </React.Fragment>
-                  );
-            };
-    
+                            </ToolkitProvider>
+                        )}
+                    </PaginationProvider>
+                    <Modal
+                        isOpen={modal_center}
+                        toggle={() => { tog_center() }}
+                        size="xl"
+                    >
+                        <AddUser state={editData.Data} />
+                    </Modal>
+                </div>
+            </React.Fragment>
+        );
+    }
+    else {
+        return (
+            <React.Fragment></React.Fragment>
+        )
+    }
+}
 export default UserList;
 
 

@@ -4,16 +4,18 @@ import {
   LOGOUT_USER,
   LOGOUT_USER_SUCCESS,
   API_ERROR,
-  ROLE_ACCESS_API_CALL_SUCCESS
+  ROLE_ACCESS_API_CALL_SUCCESS,
+  ROLE_ACCESS_API_UPDATE_SUCCESS
 } from "./actionTypes"
 
 const initialState = {
   error: "",
   loading: false,
-  RoleData:[]
+  RoleData:[],
+  RoleAccessUpdateData:[]
 }
 
-const login = (state = initialState, action) => {
+const Login = (state = initialState, action) => {
   switch (action.type) {
     case LOGIN_USER:
       state = {
@@ -42,6 +44,13 @@ const login = (state = initialState, action) => {
           ...state,
           RoleData: action.payload,
         }
+
+        case ROLE_ACCESS_API_UPDATE_SUCCESS:
+          return {
+            ...state,
+            RoleAccessUpdateData: action.payload,
+          }
+
     default:
       state = { ...state }
       break
@@ -49,4 +58,4 @@ const login = (state = initialState, action) => {
   return state
 }
 
-export default login
+export default Login

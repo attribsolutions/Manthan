@@ -155,3 +155,14 @@ span.flatpickr-weekday {
 .flatpickr-calendar.arrowTop:after {
   border-bottom-color: #5156be;
 }
+
+input:hover { 
+  outline: none !important;
+  border-color: #ce7171;
+  box-shadow: 0 0 10px #8a71ce;
+}
+textarea:focus { 
+  outline: none !important;
+  border-color: #ce7171;
+  box-shadow: 0 0 10px #ce7176;
+}

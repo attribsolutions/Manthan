@@ -20,20 +20,31 @@ import { useSelector, useDispatch } from "react-redux";
 import CompanyModule from "./CompanyModule";
 import "../../../assets/scss/CustomeTable/datatables.scss"
 import { AlertState } from "../../../store/Utilites/CostumeAlert/actions";
+import { useHistory } from "react-router-dom";
+import { CommonGetRoleAccessFunction } from "../../../components/Common/CommonGetRoleAccessFunction";
 
 const CompanyList = () => {
 
     const dispatch = useDispatch();
+    const history = useHistory();
+
+    const [userPageAccessState, setUserPageAccessState] = useState('');
     const [modal_center, setmodal_center] = useState(false);
 
     // get Access redux data
-    const { companyList, editData, updateMessage, deleteCompanyID } = useSelector((state) => ({
-        companyList: state.Company.companyList,
+    const { TableListData, editData, updateMessage, deleteCompanyID, } = useSelector((state) => ({
+        TableListData: state.Company.companyList,
         editData: state.Company.editData,
         updateMessage: state.Company.updateMessage,
         deleteCompanyID: state.Company.deleteCompanyID,
     }));
-    console.log("editData in useselector", editData)
+
+    useEffect(() => {
+        const userAcc = CommonGetRoleAccessFunction(history)
+        if (!(userAcc === undefined)) {
+            setUserPageAccessState(userAcc)
+        }
+    }, [history])
 
     // tag_center -- Control the Edit Modal show and close
     function tog_center() {
@@ -56,11 +67,11 @@ const CompanyList = () => {
             }))
             tog_center()
         }
-        else if (deleteCompanyID.Status === true) {
-            dispatch(deleteCompanyIDSuccess({ Status: false }))
+        else if (updateMessage.Status === true) {
+            dispatch(updateCompanyIDSuccess({ Status: false }))
             dispatch(AlertState({
                 Type: 3, Status: true,
-                Message: deleteCompanyID.Message,
+                Message: JSON.stringify(updateMessage.Message),
             }));
         }
     }, [updateMessage.Status, dispatch]);
@@ -78,7 +89,7 @@ const CompanyList = () => {
             dispatch(AlertState({
                 Type: 3,
                 Status: true,
-                Message: "error Message",
+                Message: JSON.stringify(deleteCompanyID.Message),
             }));
         }
     }, [deleteCompanyID.Status])
@@ -99,7 +110,7 @@ const CompanyList = () => {
     const deleteHandeler = (id, name) => {
         dispatch(AlertState({
             Type: 5, Status: true,
-            Message: `Are you sure you want to delete this item : "${name}"`,
+            Message: `Are you sure you want to delete this Company : "${name}"`,
             RedirectPath: false,
             PermissionAction: deleteCompany_ID,
             ID: id
@@ -107,8 +118,8 @@ const CompanyList = () => {
     }
 
     const pageOptions = {
-        sizePerPage: 15,
-        totalSize: companyList.length, // replace later with size(users),
+        sizePerPage: 10,
+        totalSize: TableListData.length, // replace later with size(users),
         custom: true,
     };
     const defaultSorted = [
@@ -151,95 +162,140 @@ const CompanyList = () => {
         },
         {
             text: "Action",
+            hidden: (
+                !(userPageAccessState.RoleAccess_IsEdit)
+                && !(userPageAccessState.RoleAccess_IsView)
+                && !(userPageAccessState.RoleAccess_IsDelete)) ? true : false,
+
             formatter: (cellContent, module) => (
+                <div className="d-flex gap-3" style={{ display: 'flex', justifyContent: 'center' }} >
+                    {(userPageAccessState.RoleAccess_IsEdit)
+                        ?
+                        <buton
+                            type="button"
+                            data-mdb-toggle="tooltip" data-mdb-placement="top" title="Edit Company"
+                            onClick={() => { EditPageHandler(module.id); }}
+                            className="badge badge-soft-success font-size-12 btn btn-success waves-effect waves-light w-xxs border border-light"
+                        >
+                            <i className="mdi mdi-pencil font-size-18" id="edittooltip"></i>
+                        </buton>
+                        : null
+                    }
+                    {(userPageAccessState.RoleAccess_IsView)
+                        ?
+                        <buton
+                            type="button"
+                            data-mdb-toggle="tooltip" data-mdb-placement="top" title="View Company"
+                            onClick={() => { EditPageHandler(module.id); }}
+                            className="badge badge-soft-primary font-size-12 btn btn-primary waves-effect waves-light w-xxs border border-light"
+                        >
+                            <i className="bx bxs-show font-size-18 "></i>
+                        </buton>
+                        : null
+                    }
+                    {(userPageAccessState.RoleAccess_IsDelete)
+                        ?
+                        <buton
+                            className="badge badge-soft-danger font-size-12 btn btn-danger waves-effect waves-light w-xxs border border-light"
+                            data-mdb-toggle="tooltip" data-mdb-placement="top" title="Delete Company"
+                            onClick={() => { deleteHandeler(module.id, module.Name); }}
+                        >
+                            <i className="mdi mdi-delete font-size-18"></i>
+                        </buton>
+                        : null
+                    }
 
-                <div class="d-flex gap-3" style={{ display: 'flex', justifyContent: 'center' }} >
-                    <buton
-                        type="button"
-                        onClick={() => { EditPageHandler(module.ID); }}
-                        className="badge badge-soft-primary font-size-12"
-                    >
-                        <i class="mdi mdi-pencil font-size-18" id="edittooltip"></i>
-                    </buton>
-
-                    <buton
-                        className="badge badge-soft-danger font-size-12"
-                        onClick={() => { deleteHandeler(module.ID, module.Name); }}
-                    >
-                        <i class="mdi mdi-delete font-size-18" ></i>
-                    </buton>
                 </div>
             ),
         },
     ];
 
-    return (
-        <React.Fragment>
-            <div className="page-content">
-                <MetaTags>
-                    <title>Company List| FoodERP-React FrontEnd</title>
-                </MetaTags>
-                <PaginationProvider
-                    pagination={paginationFactory(pageOptions)}
-                >
-                    {({ paginationProps, paginationTableProps }) => (
-                        <ToolkitProvider
-                            keyField="id"
-                            data={companyList}
-                            columns={pagesListColumns}
-                            search
-                        >
-                            {toolkitProps => (
-                                <React.Fragment>
-                                    <Breadcrumbs
-                                        title={"Count :"}
-                                        breadcrumbItem={"Company List"}
-                                        IsButtonVissible={true}
-                                        SearchProps={toolkitProps.searchProps}
-                                        breadcrumbCount={companyList.length}
-                                        RedirctPath={"/companysMaster"}
-                                    />
-                                    <Row>
-                                        <Col xl="12">
-                                            <div className="table-responsive">
-                                                <BootstrapTable
-                                                    keyField={"id"}
-                                                    responsive
-                                                    bordered={false}
-                                                    striped={false}
-                                                    defaultSorted={defaultSorted}
-                                                    classes={"table  table-bordered"}
-                                                    {...toolkitProps.baseProps}
-                                                    {...paginationTableProps}
+    if (!(userPageAccessState === '')) {
+        return (
+            <React.Fragment>
+                <div className="page-content">
+                    <MetaTags>
+                        <title>Company List| FoodERP-React FrontEnd</title>
+                    </MetaTags>
+                    <PaginationProvider
+                        pagination={paginationFactory(pageOptions)}
+                    >
+                        {({ paginationProps, paginationTableProps }) => (
+                            <ToolkitProvider
+                                keyField="id"
+                                data={TableListData}
+                                columns={pagesListColumns}
+                                search
+                            >
+                                {toolkitProps => (
+                                    <React.Fragment>
+                                        {/* <Breadcrumbs
+                                            title={"Count :"}
+                                            breadcrumbItem={userPageAccessState.PageHeading}
+                                            IsButtonVissible={(userPageAccessState.RoleAccess_IsSave) ? true : false}
+                                            SearchProps={toolkitProps.searchProps}
+                                            breadcrumbCount={`Company Count: ${TableListData.length}`}
+                                            RedirctPath={"/CompanyMaster"}
+                                        /> */}
+                                          <Breadcrumbs
+                                            title={"Count :"}
+                                            breadcrumbItem={userPageAccessState.PageHeading}
+                                            IsButtonVissible={(userPageAccessState.RoleAccess_IsSave) ? true : false}
+                                            SearchProps={toolkitProps.searchProps}
+                                            IsSearchVissible={true}
+                                            defaultSorted={defaultSorted}
+                                            breadcrumbCount={`User Count: ${TableListData.length}`}
+                                            RedirctPath={"/UserMaster"}
+                                        />
+                                        <Row>
+                                            <Col xl="12">
+                                                <div className="table-responsive">
+                                                    <BootstrapTable
+                                                        keyField={"id"}
+                                                        responsive
+                                                        bordered={false}
+                                                        striped={false}
+                                                        defaultSorted={defaultSorted}
+                                                        classes={"table  table-bordered"}
+                                                        {...toolkitProps.baseProps}
+                                                        {...paginationTableProps}
+                                                    />
+                                                </div>
+                                            </Col>
+                                        </Row>
+                                        <Row className="align-items-md-center mt-30">
+                                            <Col className="pagination pagination-rounded justify-content-end mb-2">
+                                                <PaginationListStandalone
+                                                    {...paginationProps}
                                                 />
-                                            </div>
-                                        </Col>
-                                    </Row>
-                                    <Row className="align-items-md-center mt-30">
-                                        <Col className="pagination pagination-rounded justify-content-end mb-2">
-                                            <PaginationListStandalone
-                                                {...paginationProps}
-                                            />
-                                        </Col>
-                                    </Row>
-                                </React.Fragment>
-                            )}
-                        </ToolkitProvider>
-                    )}
-                </PaginationProvider>
-            </div >
-            <Modal
-                isOpen={modal_center}
-                toggle={() => { tog_center() }}
-                size="xl"
-            >
-                <CompanyModule state={editData.Data} />
-            </Modal>
-        </React.Fragment >
-    );
-};
+                                            </Col>
+                                        </Row>
+                                    </React.Fragment>
+                                )}
+                            </ToolkitProvider>
+                        )}
+                    </PaginationProvider>
+                </div >
+                <Modal
+                    isOpen={modal_center}
+                    toggle={() => { tog_center() }}
+                    size="xl"
+                >
+                    <CompanyModule state={editData.Data} />
+                </Modal>
+            </React.Fragment >
+        );
+    }
+    else {
+        return (
+            <React.Fragment></React.Fragment>
+        )
+    }
+
+}
 
 export default CompanyList;
+
 
 
 

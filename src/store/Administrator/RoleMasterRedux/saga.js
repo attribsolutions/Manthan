@@ -47,9 +47,9 @@ function* Submit_Roles_GenratorFunction({ Data }) {
     }
   }
 
-function* Edit_Roles_GenratorFunction({ ID }) {
+function* Edit_Roles_GenratorFunction({ id }) {
   try {
-    const response = yield call(Role_Master_Edit_API, ID);
+    const response = yield call(Role_Master_Edit_API, id);
     yield put(editSuccess(response));
   } catch (error) {
     yield put(AlertState({ Type: 4, 
@@ -60,9 +60,11 @@ function* Edit_Roles_GenratorFunction({ ID }) {
 
 
 function* Update_Roles_GenratorFunction({ updateData, ID }) {
+  console.log("response in GenratorFunction ",updateData,ID)
   try {
     yield put(SpinnerState(true))
     const response = yield call(Role_Master_Update_API, updateData, ID);
+    console.log("response in saga file",response)
     yield put(SpinnerState(false))
     yield put(updateSuccess(response))
   }
