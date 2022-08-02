@@ -80,7 +80,7 @@ const RoleAccessList = (props) => {
 
 
     useEffect(() => {
-        dispatch( GO_Button_HandlerForRoleAccessListPage_Success([]))
+        dispatch(GO_Button_HandlerForRoleAccessListPage_Success([]))
         // dispatch(fetchCompanyList());
         dispatch(getDivisionTypesID());
 
@@ -138,7 +138,7 @@ const RoleAccessList = (props) => {
             previousData = previousData.concat(Array)
             setTableListData(previousData)
         }
-        console.log("AddPage_PageMasterListForRoleAccess", JSON.stringify(AddPage_PageMasterListForRoleAccess_Redux))
+        // console.log("AddPage_PageMasterListForRoleAccess", JSON.stringify(AddPage_PageMasterListForRoleAccess_Redux))
 
     }, [AddPage_PageMasterListForRoleAccess_Redux])
 
@@ -179,12 +179,8 @@ const RoleAccessList = (props) => {
     }, [PostMessage_ForRoleAccessList])
 
     let RoleAccessListColoums = [
-        {
-            text: "Id",
-            dataField: "ID",
 
-        }
-        , {
+        {
             text: "Module Name",
             dataField: "ModuleName",
         },
@@ -321,8 +317,8 @@ const RoleAccessList = (props) => {
             var isTopOfTheDivision = document.getElementById("IsTopOfTheDivision" + i).checked;
 
 
-            // roleAccessArray.push({ "PageAccess": 1 });
-            if (isShowOnMenu) roleAccessArray.push({ "PageAccess": 1 });
+            roleAccessArray.push({ "PageAccess": 1 });
+            // if (isShowOnMenu) roleAccessArray.push({ "PageAccess": 1 });
             if (isSave) roleAccessArray.push({ "PageAccess": 2 });
             if (isView) roleAccessArray.push({ "PageAccess": 3 });
             if (isEdit) roleAccessArray.push({ "PageAccess": 4 });
@@ -378,9 +374,16 @@ const RoleAccessList = (props) => {
 
         dispatch(PostMethodForRoleAccessListPage(jsonBody));
         // debugger
-        console.log("roleAccess Post data", jsonBody)
+        // console.log("roleAccess Post data", jsonBody)
 
     };
+
+    function DeleteRolePage_Handler(id) {
+        const newList = tableListData.filter((index) => {
+            return (!(index.ID === id))
+        })
+        setTableListData(newList)
+    }
 
     return (
         <React.Fragment>
@@ -510,7 +513,6 @@ const RoleAccessList = (props) => {
                                                     <thead>
                                                         <tr>
                                                             {tableHederList.map((indx) => {
-                                                                // console.log('indx', indx)
                                                                 return <th>{indx.text}</th>
                                                             })}
                                                         </tr>
@@ -520,9 +522,14 @@ const RoleAccessList = (props) => {
                                                         {tableListData.map((indx, key) => {
                                                             return (
                                                                 <tr>
-                                                                    {/* <th scope="row">1</th> */}
                                                                     <td>
-                                                                        {indx.ID}
+                                                                        {indx.ModuleName}
+                                                                        <input
+                                                                            type="hidden"
+                                                                            id={"ModuleID" + key}
+                                                                            name={"ModuleID" + key}
+                                                                            value={indx.ModuleID}
+                                                                        />
                                                                         <input
                                                                             type="hidden"
                                                                             id={"ID" + key}
@@ -536,33 +543,30 @@ const RoleAccessList = (props) => {
                                                                         />
                                                                     </td>
                                                                     <td>
-                                                                        {indx.ModuleName}
-                                                                        <input
-                                                                            type="hidden"
-                                                                            id={"ModuleID" + key}
-                                                                            name={"ModuleID" + key}
-                                                                            value={indx.ModuleID}
-                                                                        />
-                                                                    </td>
-                                                                    <td>
-                                                                        {indx.PageName}
-                                                                        <input
-                                                                            type="hidden"
-                                                                            id={"PageID" + key}
-                                                                            name={"PageID" + key}
-                                                                            value={indx.PageID}
-                                                                        />
+                                                                        <div className="row">
+                                                                            <div className="text-left col">
+                                                                                {indx.PageName}
+                                                                            </div>
 
+                                                                            <div className="text-right col col-3">
+                                                                                <input
+                                                                                    type="hidden"
+                                                                                    id={"PageID" + key}
+                                                                                    name={"PageID" + key}
+                                                                                    value={indx.PageID}
+                                                                                />
+                                                                                <i className="mdi mdi-delete font-size-18 text-danger text-right" onClick={() => { DeleteRolePage_Handler(indx.ID) }}></i>
+                                                                            </div>
+                                                                        </div>
                                                                     </td>
                                                                     {
                                                                         PageAccess.map((indexPage) => {
 
                                                                             return (
-                                                                                <td>
+                                                                                <td  className="text-center">
                                                                                     {indx[`PageAccess_${indexPage.Name}`] ?
                                                                                         <input type={"checkbox"} id={indexPage.Name + key}
                                                                                             defaultChecked={indx[`RoleAccess_${indexPage.Name}`] > 0 ? true : false} />
-
                                                                                         : <input type={"hidden"} id={indexPage.Name + key} />
                                                                                     }
                                                                                 </td>
