@@ -323,6 +323,7 @@ const HPageMaster = (props) => {
                 }
             }
 
+            
             setTablePageAccessDataState([...tablePageAccessDataState, { AccessID: drop_value, AccessName: drop_label, }]);
         }
         else {
