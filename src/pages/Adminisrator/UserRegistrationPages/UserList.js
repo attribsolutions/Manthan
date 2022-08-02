@@ -9,7 +9,7 @@ import paginationFactory, {
     PaginationListStandalone,
     PaginationProvider,
 } from "react-bootstrap-table2-paginator";
-import ToolkitProvider, { Search } from "react-bootstrap-table2-toolkit";
+import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 //redux
 import { useSelector, useDispatch } from "react-redux";
@@ -19,6 +19,7 @@ import { deleteSuccess } from "../../../store/Administrator/RoleMasterRedux/acti
 import { AlertState } from "../../../store/Utilites/CostumeAlert/actions";
 import { CommonGetRoleAccessFunction } from "../../../components/Common/CommonGetRoleAccessFunction";
 import { useHistory } from "react-router-dom";
+import { MetaTags } from "react-meta-tags";
 
 const UserList = () => {
 
@@ -115,6 +116,13 @@ const UserList = () => {
         custom: true,
     };
 
+    const defaultSorted = [
+        {
+            dataField: "Name", // if dataField is not match to any column you defined, it will be ignored.
+            order: "asc", // desc or asc
+        },
+    ];
+
     const pagesListColumns = [
         {
             text: "PageID",
@@ -207,7 +215,9 @@ const UserList = () => {
         return (
             <React.Fragment>
                 <div className="page-content">
-
+                <MetaTags>
+                        <title>User List| FoodERP-React FrontEnd</title>
+                    </MetaTags>
                     <PaginationProvider
                         pagination={paginationFactory(pageOptions)}
                     >
@@ -216,7 +226,6 @@ const UserList = () => {
                                 keyField="id"
                                 data={pages}
                                 columns={pagesListColumns}
-                                bootstrap4
                                 search
                             >
 
@@ -228,7 +237,7 @@ const UserList = () => {
                                             IsButtonVissible={(userPageAccessState.RoleAccess_IsSave) ? true : false}
                                             SearchProps={toolkitProps.searchProps}
                                             breadcrumbCount={`Users Count: ${pages.length}`}
-                                            // RedirctPath={"/userMaster"}
+                                            // RedirctPath={"/UserMaster"}
                                         />
                                         <Row>
                                             <Col xl="12">
@@ -238,6 +247,7 @@ const UserList = () => {
                                                         responsive
                                                         bordered={false}
                                                         striped={false}
+                                                        defaultSorted={defaultSorted}
                                                         classes={
                                                             "table  table-bordered"
                                                         }
