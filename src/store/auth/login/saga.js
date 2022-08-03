@@ -15,15 +15,16 @@ import {
 
 import { getFirebaseBackend } from "../../../helpers/firebase_helper"
 import {
-  Python_postJwtLogin, RoleAccessApi_url, showPagesListOnPageAccess_DropDown_List
+  Python_FoodERP_postJwtLogin, RoleAccessApi_url, showPagesListOnPageAccess_DropDown_List
 } from "../../../helpers/backend_helper"
 
 const fireBaseBackend = getFirebaseBackend()
 
 function* loginUser({ payload: { user, history } }) {
-  debugger
+  // debugger
   try {
-    const response = yield call(Python_postJwtLogin, {
+    const response =
+     yield call(Python_FoodERP_postJwtLogin, {
       LoginName: user.UserName,
       password: user.Password
     })
