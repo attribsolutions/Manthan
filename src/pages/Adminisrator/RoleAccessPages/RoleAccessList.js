@@ -442,16 +442,16 @@ const RoleAccessList = (props) => {
                                 <>
                                     <CardHeader className="card-header   text-black" style={{ backgroundColor: "#dddddd" }} >
                                         <Row  style={{ backgroundColor: "#f2f2f2"}} className='mb-3 mt-n1'>
-                                        <Col md="5" className="p-2 ">
-                                        <Label className="p-2">Role</Label>
+                                        <Col md="4" className="p-2 ">
+                                        <Label className="p-2 col-sm-3">Role</Label>
                                      <Button type="button" color="btn btn-outline-warning" className="btn-sm" ><h className="text-black">{role_dropdown_Select.label}</h></Button>
                                      </Col>
 
                                      <Col md="4" className="p-2 ">
-                                        <Label className="p-2">Division</Label>
+                                        <Label className=" p-2 col-sm-3 ">Division</Label>
                                      <Button type="button" color="btn btn-outline-warning" className="btn-sm" ><h className="text-black">{division_dropdown_Select.label}</h></Button>
                                        </Col>
-                                            <Col md="3" className="p-2 text-end">
+                                            <Col md="4" className="p-2 text-end">
                                                 <Button type="button" color="btn btn-outline-warning" className="btn-sm" onClick={() => { ChangeButtonHandeler() }}><h className="text-black">Change Role</h></Button>
                                             </Col>
 
