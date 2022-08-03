@@ -30,7 +30,7 @@ const ForgetPasswordPage = props => {
   function handleValidSubmit(event, values) {
     dispatch(userForgetPassword(values, props.history))
   }
-
+  console.log("asasss",forgetSuccessMsg,"_____",(forgetSuccessMsg===null))
   return (
     <React.Fragment>
       <MetaTags>
@@ -67,24 +67,57 @@ const ForgetPasswordPage = props => {
                         </Alert>
                       ) : null}
 
+                   { ((forgetSuccessMsg===null)) ?
                       <AvForm className="custom-form mt-4"
-                        onValidSubmit={(e, v) => handleValidSubmit(e, v)}
-                      >
-                        <div className="mb-3">
-                          <AvField
-                            name="email"
-                            label="Email"
-                            className="form-control"
-                            dissabled={true}
-                            placeholder="Enter email"
-                            type="email"
-                            required
-                          />
-                        </div>
-                        <div className="mb-3 mt-4">
-                          <button className="btn btn-primary w-100 waves-effect waves-light" type="submit">Reset</button>
-                        </div>
-                      </AvForm>
+                      onValidSubmit={(e, v) => handleValidSubmit(e, v)}
+                    >
+                      <div className="mb-3">
+                        <AvField
+                          name="email"
+                          label="Email"
+                          className="form-control"
+                          dissabled={true}
+                          placeholder="Enter email"
+                          type="email"
+                          required
+                        />
+                      </div>
+                      <div className="mb-3 mt-4">
+                        <button className="btn btn-primary w-100 waves-effect waves-light" type="submit">Reset</button>
+                      </div>
+                    </AvForm>
+                   :
+                   <AvForm className="custom-form mt-4"
+                  //  onValidSubmit={(e, v) =>}
+                 >
+                   <div className="mb-3">
+                     <AvField
+                       name="User"
+                       label="userfghgfhfhf"
+                       className="form-control"
+                       dissabled={true}
+                      //  placeholder="Enter email"
+                       type="text"
+                       required
+                     />
+                   </div>
+                   <div className="mb-3">
+                     <AvField
+                       name="otp"
+                       label="Enter OTP"
+                       className="form-control"
+                       dissabled={true}
+                      //  placeholder="Enter email"
+                       type="text"
+                       required
+                     />
+                   </div>
+                   <div className="mb-3 mt-4">
+                     <button className="btn btn-primary w-100 waves-effect waves-light" type="submit">submit</button>
+                   </div>
+                 </AvForm>}  
+                 
+
 
                       <div className="mt-5 text-center">
                         <p className="text-muted mb-0">Remember It ?  &nbsp

@@ -112,7 +112,7 @@ const Breadcrumb = props => {
       XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
       XLSX.writeFile(workbook, "Excel File.xlsx");
     }
-debugger
+
     return (
       <React.Fragment>
         <Modal
