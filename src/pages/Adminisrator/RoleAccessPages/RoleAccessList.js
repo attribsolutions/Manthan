@@ -7,6 +7,7 @@ import { AlertState } from "../../../store/Utilites/CostumeAlert/actions";
 import Select from "react-select";
 import {
     editPartyIDSuccess, getDistrictOnState, getDistrictOnStateSuccess, getDivisionTypesID,
+    getPartyListAPI,
     GetPartyTypeByDivisionTypeID, postPartyData, postPartyDataSuccess, updatePartyID
 } from "../../../store/Administrator/PartyRedux/action";
 
@@ -58,31 +59,28 @@ const RoleAccessList = (props) => {
 
 
     //Access redux store Data /  'save_ModuleSuccess' action data
-    const { PageMasterListForRoleAccess, PageAccess, ModuleData, PageDropdownForRoleAccess, PartySaveSuccess,
+    const { PageAccess, ModuleData, PageDropdownForRoleAccess,
         AddPage_PageMasterListForRoleAccess_Redux, GO_buttonPageMasterListForRoleAccess_Redux, PostMessage_ForRoleAccessList,
-        RoleListData_Reducer, companyList, DivisionTypes, Roles } = useSelector((state) => ({
+        DivisionTypes, Roles, PartyTypes } = useSelector((state) => ({
             PartySaveSuccess: state.PartyMasterReducer.PartySaveSuccess,
             companyList: state.Company.companyList,
-            DivisionTypes: state.PartyMasterReducer.DivisionTypes,
-            PartyTypes: state.PartyMasterReducer.PartyTypes,
+            // DivisionTypes: state.PartyMasterReducer.DivisionTypes,
+            PartyTypes: state.PartyMasterReducer.partyList,
             Roles: state.User_Registration_Reducer.Roles,
             ModuleData: state.Modules.modulesList,
             PageAccess: state.H_Pages.PageAccess,
-            RoleListData_Reducer: state.RoleAccessReducer.RoleListDataForRoleListPage,
-            PageMasterListForRoleAccess: state.RoleAccessReducer.PageMasterListForRoleAccess,
             PageDropdownForRoleAccess: state.RoleAccessReducer.PageDropdownForRoleAccess,
             AddPage_PageMasterListForRoleAccess_Redux: state.RoleAccessReducer.AddPage_PageMasterListForRoleAccess,
             GO_buttonPageMasterListForRoleAccess_Redux: state.RoleAccessReducer.GO_buttonPageMasterListForRoleAccess,
             PostMessage_ForRoleAccessList: state.RoleAccessReducer.PostMessage_ForRoleAccessList,
-
-
         }));
 
 
     useEffect(() => {
         dispatch(GO_Button_HandlerForRoleAccessListPage_Success([]))
         // dispatch(fetchCompanyList());
-        dispatch(getDivisionTypesID());
+        // dispatch(getDivisionTypesID());
+        dispatch(getPartyListAPI());
 
         dispatch(getRoles());
         dispatch(fetchModelsList())
@@ -191,7 +189,7 @@ const RoleAccessList = (props) => {
     ]
 
 
-    const DivisionTypesValues = DivisionTypes.map((Data) => ({
+    const DivisionTypesValues = PartyTypes.map((Data) => ({
         value: Data.id,
         label: Data.Name
     }));
@@ -398,59 +396,84 @@ const RoleAccessList = (props) => {
 
                         {
                             !showTableOnUI ?
+                                <>
+                                    <CardHeader className="card-header   text-black" style={{ backgroundColor: "#dddddd" }} >
+                                        <Row>
+                                            <Col md="4">
 
-                                <CardHeader className="card-header   text-black" style={{ backgroundColor: "#dddddd" }} >
-                                    <Row>
-                                        <Col md="4">
+                                                <FormGroup className="mb-3 row ">
+                                                    <Label className="col-sm-2 p-2 ml-n4 ">Role</Label>
+                                                    <Col md="9">
+                                                        <Select
+                                                            value={role_dropdown_Select}
+                                                            options={Role_DropdownOption}
+                                                            className="rounded-bottom"
+                                                            onChange={(e) => { RoleDropDown_select_handler(e) }}
+                                                            classNamePrefix="select2-selection"
 
-                                            <FormGroup className="mb-3 row ">
-                                                <Label className="col-sm-2 p-2 ml-n4 ">Role</Label>
-                                                <Col md="9">
-                                                    <Select
-                                                        value={role_dropdown_Select}
-                                                        options={Role_DropdownOption}
-                                                        className="rounded-bottom"
-                                                        onChange={(e) => { RoleDropDown_select_handler(e) }}
-                                                        classNamePrefix="select2-selection"
+                                                        />
+                                                    </Col>
+                                                </FormGroup>
+                                            </Col>
 
-                                                    />
-                                                </Col>
-                                            </FormGroup>
-                                        </Col>
+                                            <Col md="4" className="">
+                                                <FormGroup className="mb-3 row" >
+                                                    <Label className="col-sm-3 p-2">Division</Label>
+                                                    <Col md="9">
+                                                        <Select
+                                                            value={division_dropdown_Select}
+                                                            className="rounded-bottom"
+                                                            options={DivisionTypesValues}
+                                                            onChange={(e) => { handllerDivisionTypes(e) }}
+                                                        />
+                                                    </Col>
+                                                </FormGroup>
+                                            </Col>
 
-                                        <Col md="4" className="">
-                                            <FormGroup className="mb-3 row" >
-                                                <Label className="col-sm-3 p-2">Division</Label>
-                                                <Col md="9">
-                                                    <Select
-                                                        value={division_dropdown_Select}
-                                                        className="rounded-bottom"
-                                                        options={DivisionTypesValues}
-                                                        onChange={(e) => { handllerDivisionTypes(e) }}
-                                                    />
-                                                </Col>
-                                            </FormGroup>
-                                        </Col>
+                                            <Col md="3" className="mt- ">
+                                                <Button type="button" color="primary" onClick={() => { GoButton_Handler() }}>Go</Button>
+                                            </Col>
 
-                                        <Col md="3" className="mt- ">
-                                            <Button type="button" color="primary" onClick={() => { GoButton_Handler() }}>Go</Button>
-                                        </Col>
+                                        </Row>
+                                    </CardHeader>
 
-                                    </Row>
-                                </CardHeader>
+                                    <br></br>
+                                    <br></br>
+                                    <br></br>
+                                    <br></br>
+                                    <br></br>
+                                    <br></br>
+                                    <br></br>
+                                    <br></br><br></br>
+                                    <br></br>
+                                    <br></br>
+                                    <br></br>
+                                    <br></br>
+                                    <br></br>
+                                    <br></br>
+                                    <br></br><br></br>
+                                    <br></br>
+                                    <br></br>
+                                    <br></br>
+                                    <br></br>
+                                    <br></br>
+                                    <br></br>
+                                    <br></br>
+
+                                </>
                                 :
                                 <>
                                     <CardHeader className="card-header   text-black" style={{ backgroundColor: "#dddddd" }} >
-                                        <Row  style={{ backgroundColor: "#f2f2f2"}} className='mb-3 mt-n1'>
-                                        <Col md="5" className="p-2 ">
-                                        <Label className="p-2">Role</Label>
-                                     <Button type="button" color="btn btn-outline-warning" className="btn-sm" ><h className="text-black">{role_dropdown_Select.label}</h></Button>
-                                     </Col>
+                                        <Row style={{ backgroundColor: "#f2f2f2" }} className='mb-3 mt-n1'>
+                                            <Col md="5" className="p-2 ">
+                                                <Label className="p-2">Role</Label>
+                                                <Button type="button" color="btn btn-outline-warning" className="btn-sm" ><h className="text-black">{role_dropdown_Select.label}</h></Button>
+                                            </Col>
 
-                                     <Col md="4" className="p-2 ">
-                                        <Label className="p-2">Division</Label>
-                                     <Button type="button" color="btn btn-outline-warning" className="btn-sm" ><h className="text-black">{division_dropdown_Select.label}</h></Button>
-                                       </Col>
+                                            <Col md="4" className="p-2 ">
+                                                <Label className="p-2">Division</Label>
+                                                <Button type="button" color="btn btn-outline-warning" className="btn-sm" ><h className="text-black">{division_dropdown_Select.label}</h></Button>
+                                            </Col>
                                             <Col md="3" className="p-2 text-end">
                                                 <Button type="button" color="btn btn-outline-warning" className="btn-sm" onClick={() => { ChangeButtonHandeler() }}><h className="text-black">Change Role</h></Button>
                                             </Col>
