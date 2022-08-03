@@ -59,7 +59,7 @@ document.getElementById("UserName").focus();
                     <div className="auth-content my-auto">
                       <div className="text-center">
                         <h5 className="mb-0">Welcome !</h5>
-                        <p className="text-muted mt-2">Sign in to Continue to FoodERP.</p>
+                        <p className="text-muted mt-2">Sign in to Continue FoodERP.</p>
                       </div>
                       <AvForm
                         className="custom-form mt-4 pt-2"
@@ -84,11 +84,11 @@ document.getElementById("UserName").focus();
                             <div className="flex-grow-1">
                               <label className="form-label">Password</label>
                             </div>
-                            <div className="flex-shrink-0">
+                            {/* <div className="flex-shrink-0">
                               <div className="">
-                                <Link to="/SendOTP" className="text-muted">Forgot password?</Link>
+                                <Link to="/forgot-password" className="text-muted">Forgot password?</Link>
                               </div>
-                            </div>
+                            </div> */}
                           </div>
 
                           <div className="mb-3">
@@ -103,18 +103,19 @@ document.getElementById("UserName").focus();
                           </div>
                         </div>
                         <div className="row mb-4">
-                          <div className="col">
-                            <div className="form-check">
-                              <input className="form-check-input" type="checkbox" id="remember-check" />
+                          {/* <div className="col"> */}
+                            {/* <div className="form-check"> */}
+                              {/* <input className="form-check-input" type="checkbox" id="remember-check" />
                               <label className="form-check-label" htmlFor="remember-check">
                                 Remember me
-                              </label>
-                            </div>
-                          </div>
+                              </label> */}
+                              <Link to="/forgot-password" className="fw-semibold">Forgot password?</Link>
+                            {/* </div> */}
+                          {/* </div> */}
 
                         </div>
                         <div className="mb-3">
-                          <button className="btn btn-primary w-100 waves-effect waves-light" type="submit">Log In</button>
+                          <button className="btn btn-primary w-100 waves-effect waves-light" type="submit">Login</button>
                         </div>
                       </AvForm>
 

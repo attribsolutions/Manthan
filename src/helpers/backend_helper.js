@@ -87,10 +87,11 @@ const postJwtRegister = (url, data) => {
     })
 }
 
-const Python_postJwtLogin = data => post(url.POST_JWT_LOGIN, data)
+export const Python_FoodERP_postJwtLogin = data => post(url.FOOD_ERP_POST_JWT_LOGIN, data)
 
 // postForgetPwd
-const postJwtForgetPwd = data => post(url.POST_FAKE_JWT_PASSWORD_FORGET, data)
+export const Python_FoodERP_postJwtForgetPwd = data => post(url.FOOD_ERP_POST_JWT_PASSWORD_FORGET, data)
+export const Python_FoodERP_postJwtForgetPwd_SendOTP = data => post(url.FOOD_ERP_POST_JWT_PASSWORD_FORGET_SEND_OTP, data)
 
 // postSocialLogin
 export const postSocialLogin = data => post(url.SOCIAL_LOGIN, data)
@@ -210,7 +211,5 @@ export {
   postFakeForgetPwd,
 
   postJwtRegister,
-  Python_postJwtLogin,
-  postJwtForgetPwd,
   postJwtProfile,
 }

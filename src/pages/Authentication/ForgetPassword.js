@@ -17,6 +17,7 @@ import { userForgetPassword } from "../../store/actions"
 // import images
 import logo from "../../assets/images/logo-sm.svg"
 import CarouselPage from "./CarouselPage"
+import resetImage from "../../assets/images/resetpassword.png"
 
 const ForgetPasswordPage = props => {
   const dispatch = useDispatch()
@@ -34,7 +35,7 @@ const ForgetPasswordPage = props => {
     <React.Fragment>
       <MetaTags>
         <title>
-          Forget Password | Minia - React Admin & Dashboard Template
+          Forget Password | FoodERP - React Admin & FoodERP Template
         </title>
       </MetaTags>
       <div className="auth-page">
@@ -46,16 +47,16 @@ const ForgetPasswordPage = props => {
                   <div className="d-flex flex-column h-100">
                     <div className="mb-4 mb-md-5 text-center">
                       <Link to="/dashboard" className="d-block auth-logo">
-                        <img src={logo} alt="" height="28" /> <span className="logo-txt">Minia</span>
+                        <img src={logo} alt="" height="28" /> <span className="logo-txt">FoodERP</span>
                       </Link>
                     </div>
-                    <div className="auth-content my-auto">
+                    <div className="auth-content my-auto text-center">
+                      <img src={resetImage} alt="" height="100" />
                       <div className="text-center">
-                        <h5 className="mb-0">Reset Password</h5>
-                        <p className="text-muted mt-2">Reset Password with Minia.</p>
+                        <h5 className="mb-0">  Reset Password</h5>
                       </div>
 
-                      {forgetError && forgetError ? (
+                      {forgetError  ? (
                         <Alert color="danger" style={{ marginTop: "13px" }}>
                           {forgetError}
                         </Alert>
@@ -74,6 +75,7 @@ const ForgetPasswordPage = props => {
                             name="email"
                             label="Email"
                             className="form-control"
+                            dissabled={true}
                             placeholder="Enter email"
                             type="email"
                             required
@@ -85,8 +87,11 @@ const ForgetPasswordPage = props => {
                       </AvForm>
 
                       <div className="mt-5 text-center">
-                        <p className="text-muted mb-0">Remember It ?  <a href="auth-login.html"
-                          className="text-primary fw-semibold"> Sign In </a> </p>
+                        <p className="text-muted mb-0">Remember It ?  &nbsp
+                        <Link to="/Login" className="text-primary fw-semibold">Login</Link>
+                        {/* <a href="/login"
+                          className="text-primary fw-semibold"> Sign In </a> */}
+                           </p> 
                       </div>
                     </div>
                     <div className="mt-4 mt-md-5 text-center">
