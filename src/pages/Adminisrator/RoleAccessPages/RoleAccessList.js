@@ -441,26 +441,19 @@ const RoleAccessList = (props) => {
                                 :
                                 <>
                                     <CardHeader className="card-header   text-black" style={{ backgroundColor: "#dddddd" }} >
-                                        <Row>
-                                            <Col md="5">
-                                                <Label>Role &nbsp;&nbsp;&nbsp; </Label>
-                                                <Label className=" h6 border text-primary w-50 ">{role_dropdown_Select.label}</Label>
+                                        <Row  style={{ backgroundColor: "#f2f2f2"}} className='mb-3 mt-n1'>
+                                        <Col md="5" className="p-2 ">
+                                        <Label className="p-2">Role</Label>
+                                     <Button type="button" color="btn btn-outline-warning" className="btn-sm" ><h className="text-black">{role_dropdown_Select.label}</h></Button>
+                                     </Col>
 
+                                     <Col md="4" className="p-2 ">
+                                        <Label className="p-2">Division</Label>
+                                     <Button type="button" color="btn btn-outline-warning" className="btn-sm" ><h className="text-black">{division_dropdown_Select.label}</h></Button>
+                                       </Col>
+                                            <Col md="3" className="p-2 text-end">
+                                                <Button type="button" color="btn btn-outline-warning" className="btn-sm" onClick={() => { ChangeButtonHandeler() }}><h className="text-black">Change Role</h></Button>
                                             </Col>
-                                            <Col md="5">
-                                            <Label>Division &nbsp;&nbsp;&nbsp;</Label>
-                                                <Label className=" h6 border text-primary w-50 ">{division_dropdown_Select.label}</Label>
-
-                                            </Col>
-
-                  
-
-                                            <Col md="2" className="p-2">
-                                                <Col>
-                                                    <Button type="button" color="btn btn-outline-warning" className="btn-sm" onClick={() => { ChangeButtonHandeler() }}><h className="text-black">Change Role</h></Button>
-                                                </Col>
-                                            </Col>
-
 
                                         </Row>
 
@@ -497,12 +490,12 @@ const RoleAccessList = (props) => {
                                             </Col >
 
                                             <Col md="2" className=" ">
-                                                <Button type="button" color="light" className="btn btn-outline-success" onClick={() => { AddPageButton_Handeler() }}>Add Page</Button>
+                                                <Button type="button" color="btn btn-outline-success" className="" onClick={() => { AddPageButton_Handeler() }}>Add Page</Button>
                                             </Col>
 
 
-                                            <Col md="2" className="">
-                                                <Button type="button"  color="primary" onClick={() => { saveHandeller() }}>Save</Button>
+                                            <Col md="2" className="text-end">
+                                                <Button type="button" color="primary" onClick={() => { saveHandeller() }}>Save</Button>
                                             </Col>
 
                                         </Row>
