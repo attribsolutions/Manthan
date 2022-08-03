@@ -1,6 +1,7 @@
 import {
     DELETE_PARTY_ID_SUCCESS,
     EDIT_PARTY_ID_SUCCESS,
+    GET_COMPANY_BY_DIVISIONTYPES_ID_SUCCESS,
     GET_DISTRICT_ON_STATE_SUCCESS,
     GET_DIVISION_TYPES_ID_SUCCESS,
     GET_PARTTYPE_BY_DIVISIONTYPES_ID_SUCCESS,
@@ -17,7 +18,8 @@ const INIT_STATE = {
     updateMessage: { Status: false },
     DistrictOnState:[],
     DivisionTypes:[],
-    PartyTypes:[]
+    PartyTypes:[],
+    CompanyName:[]
 };
 
 const PartyMasterReducer = (state = INIT_STATE, action) => {
@@ -78,6 +80,13 @@ const PartyMasterReducer = (state = INIT_STATE, action) => {
             return {
               ...state,
               PartyTypes: action.payload,
+            };
+
+            // GetCompanyByDivisionTypeID/1 API dependent on DivisionTypes api
+        case GET_COMPANY_BY_DIVISIONTYPES_ID_SUCCESS:
+            return {
+              ...state,
+              CompanyName: action.payload,
             };
         default:
             return state;

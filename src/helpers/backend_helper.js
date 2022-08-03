@@ -191,6 +191,7 @@ export const Party_Master_Update_API = (data, id) => put(`${url.PARTY_MASTER_API
 export const GetDistrictOnState_For_Dropdown = (id) => get(`${url.GetDistrictOnState}/${id}`)//  GetDistrictOnState DropDown API
 export const DivisionTypes_For_Dropdown = () => get(url.GET_DIVISION_TYPES_ID)
 export const GetPartyTypeByDivisionTypeID_For_Dropdown = (id) => get(`${url.GET_PARTYTYPE_BY_DIVISIONTYPES_ID}/${id}`)//  GetDistrictOnState DropDown API
+export const GetCompanyByDivisionTypeID_For_Dropdown = (id) => get(`${url.GET_COMPANY_BY_DIVISIONTYPES_ID}/${id}`)//  GetCompanyByDivisionTypeID DropDown API
 
 //RoleAccess
 

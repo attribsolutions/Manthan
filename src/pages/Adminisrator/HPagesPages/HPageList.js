@@ -7,7 +7,7 @@ import paginationFactory, {
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import { MetaTags } from "react-meta-tags";
 import { useDispatch, useSelector } from "react-redux";
-import { Col, Modal, Row } from "reactstrap";
+import { Button, Col, Modal, Row } from "reactstrap";
 import {
   deleteHpagesUsingID,
   deleteModuleIDSuccess,
@@ -18,9 +18,15 @@ import {
 import Breadcrumbs from "../../../components/Common/Breadcrumb";
 import HPageMaster from "./HPageMaster";
 import { AlertState } from "../../../store/Utilites/CostumeAlert/actions";
+import { useHistory } from "react-router-dom";
+import { CommonGetRoleAccessFunction } from "../../../components/Common/CommonGetRoleAccessFunction";
 
 export default function HPageList() {
+
   const dispatch = useDispatch();
+  const history = useHistory()
+
+  const [userPageAccessState, setUserPageAccessState] = useState('');
   const [modal_center, setmodal_center] = useState(false);
 
   // var HPageListData = [];
@@ -31,6 +37,13 @@ export default function HPageList() {
       updateMessage: state.H_Pages.updateMessage,
       deleteModuleID: state.H_Pages.deleteModuleID,
     }));
+
+  useEffect(() => {
+    const userAcc = CommonGetRoleAccessFunction(history)
+    if (!(userAcc === undefined)) {
+      setUserPageAccessState(userAcc)
+    }
+  }, [history])
 
   useEffect(() => {
     dispatch(dispatch(GetHpageListData()));
@@ -58,7 +71,7 @@ export default function HPageList() {
         AlertState({
           Type: 3,
           Status: true,
-          Message: JSON.stringify( updateMessage.Message),
+          Message: JSON.stringify(updateMessage.Message),
 
         })
       );
@@ -82,7 +95,7 @@ export default function HPageList() {
         AlertState({
           Type: 3,
           Status: true,
-          Message: JSON.stringify( deleteModuleID.Message),
+          Message: JSON.stringify(deleteModuleID.Message),
         })
       );
     }
@@ -165,102 +178,123 @@ export default function HPageList() {
     },
     {
       text: "Action",
-      dataField: "pdf",
-      formatter: (cellContent, module) => (
-        <div
-          class="d-flex gap-3"
-          style={{ display: "flex", justifyContent: "center" }}
-        >
-          <buton
-            type="button"
-            data-mdb-toggle="tooltip"
-            data-mdb-placement="top"
-            title="Edit Page"
-            onClick={() => {
-              EditPageHandler(module.id);
-            }}
-            className="badge badge-soft-primary font-size-12"
-          >
-            <i class="mdi mdi-pencil font-size-18" id="edittooltip"></i>
-          </buton>
-          <buton
-            className="badge badge-soft-danger font-size-12"
-            data-mdb-toggle="tooltip"
-            data-mdb-placement="top"
-            title="Edit Page"
-            onClick={() => {
-              deleteHandeler(module.id, module.Name);
-            }}
-          >
-            <i class="mdi mdi-delete font-size-18"></i>
-          </buton>
+      hidden: (
+        !(userPageAccessState.RoleAccess_IsEdit)
+        && !(userPageAccessState.RoleAccess_IsView)
+        && !(userPageAccessState.RoleAccess_IsDelete)) ? true : false,
+
+      formatter: (cellContent, Pages) => (
+        <div className="d-flex gap-3" style={{ display: 'flex', justifyContent: 'center' }} >
+          {((userPageAccessState.RoleAccess_IsEdit)) ?
+            <Button
+              type="button"
+              data-mdb-toggle="tooltip" data-mdb-placement="top" title="Edit Page"
+              onClick={() => { EditPageHandler(Pages.id); }}
+              className="badge badge-soft-success font-size-12 btn btn-success waves-effect waves-light w-xxs border border-light"
+            >
+              <i className="mdi mdi-pencil font-size-18" id="edittooltip"></i>
+            </Button> : null}
+
+          {(!(userPageAccessState.RoleAccess_IsEdit) && (userPageAccessState.RoleAccess_IsView)) ?
+            <Button
+              type="button"
+              data-mdb-toggle="tooltip" data-mdb-placement="top" title="View Pages"
+              onClick={() => { EditPageHandler(Pages.id); }}
+              className="badge badge-soft-primary font-size-12 btn btn-primary waves-effect waves-light w-xxs border border-light"
+
+            >
+              <i className="bx bxs-show font-size-18 "></i>
+            </Button> : null}
+
+          {(userPageAccessState.RoleAccess_IsDelete)
+            ?
+            <Button
+              className="badge badge-soft-danger font-size-12 btn btn-danger waves-effect waves-light w-xxs border border-light"
+              data-mdb-toggle="tooltip" data-mdb-placement="top" title="Delete Page"
+              onClick={() => { deleteHandeler(Pages.id, Pages.Name); }}
+            >
+              <i className="mdi mdi-delete font-size-18"></i>
+            </Button>
+            : null
+          }
+
         </div>
       ),
     },
   ];
-  return (
-    <React.Fragment>
-      <div className="page-content">
-        <MetaTags>
-          <title>Page List| FoodERP-React FrontEnd</title>
-        </MetaTags>
-        <PaginationProvider pagination={paginationFactory(pageOptions)}>
-          {({ paginationProps, paginationTableProps }) => (
-            <ToolkitProvider
-              keyField="id"
-              data={HPageListData}
-              columns={HPageListColoumns}
-              search
-            >
-              {(toolkitProps) => (
-                <React.Fragment>
-                  <Breadcrumbs
-                    title={"Count :"}
-                    breadcrumbItem={"Page List"}
-                    IsButtonVissible={true}
-                    SearchProps={toolkitProps.searchProps}
-                    IsSearchVissible={true}
-                    breadcrumbCount={`Page Count: ${HPageListData.length}`}
-                    // RedirctPath={ `/${btoa("PageMaster")}`}
-                    RedirctPath={ `/PageMaster`}
-                  />
-                  <Row>
-                    <Col xl="12">
-                      <div className="table-responsive">
-                        <BootstrapTable
-                          keyField={"id"}
-                          responsive
-                          bordered={false}
-                          striped={false}
-                          defaultSorted={defaultSorted}
-                          // selectRow={selectRow}
-                          classes={"table  table-bordered"}
-                          {...toolkitProps.baseProps}
-                          {...paginationTableProps}
-                        />
-                      </div>
-                    </Col>
-                  </Row>
-                  <Row className="align-items-md-center mt-30">
-                    <Col className="pagination pagination-rounded justify-content-end mb-2">
-                      <PaginationListStandalone {...paginationProps} />
-                    </Col>
-                  </Row>
-                </React.Fragment>
-              )}
-            </ToolkitProvider>
-          )}
-        </PaginationProvider>
-      </div>
-      <Modal
-        isOpen={modal_center}
-        toggle={() => {
-          tog_center();
-        }}
-        size="xl"
-      >
-        <HPageMaster state={editData.Data} />
-      </Modal>
-    </React.Fragment>
-  );
+
+  if (!(userPageAccessState === '')) {
+    return (
+      <React.Fragment>
+        <div className="page-content">
+          <MetaTags>
+            <title>Page List| FoodERP-React FrontEnd</title>
+          </MetaTags>
+          <PaginationProvider pagination={paginationFactory(pageOptions)}>
+            {({ paginationProps, paginationTableProps }) => (
+              <ToolkitProvider
+                keyField="id"
+                data={HPageListData}
+                columns={HPageListColoumns}
+                search
+              >
+                {(toolkitProps) => (
+                  <React.Fragment>
+                    <Breadcrumbs
+                      title={"Count :"}
+                      breadcrumbItem={"Page List"}
+                      IsButtonVissible={true}
+                      SearchProps={toolkitProps.searchProps}
+                      IsSearchVissible={true}
+                      breadcrumbCount={`Page Count: ${HPageListData.length}`}
+                      // RedirctPath={ `/${btoa("PageMaster")}`}
+                      RedirctPath={`/PageMaster`}
+                    />
+                    <Row>
+                      <Col xl="12">
+                        <div className="table-responsive">
+                          <BootstrapTable
+                            keyField={"id"}
+                            responsive
+                            bordered={false}
+                            striped={false}
+                            defaultSorted={defaultSorted}
+                            // selectRow={selectRow}
+                            classes={"table  table-bordered"}
+                            {...toolkitProps.baseProps}
+                            {...paginationTableProps}
+                          />
+                        </div>
+                      </Col>
+                    </Row>
+                    <Row className="align-items-md-center mt-30">
+                      <Col className="pagination pagination-rounded justify-content-end mb-2">
+                        <PaginationListStandalone {...paginationProps} />
+                      </Col>
+                    </Row>
+                  </React.Fragment>
+                )}
+              </ToolkitProvider>
+            )}
+          </PaginationProvider>
+        </div>
+        <Modal
+          isOpen={modal_center}
+          toggle={() => {
+            tog_center();
+          }}
+          size="xl"
+        >
+          <HPageMaster state={editData.Data} />
+        </Modal>
+      </React.Fragment>
+    );
+  }
+  else {
+    return (
+      <React.Fragment></React.Fragment>
+    )
+  }
 }
+
+

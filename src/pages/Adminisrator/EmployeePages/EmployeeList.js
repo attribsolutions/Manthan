@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 // import { useHistory } from "react-router-dom";
 import Breadcrumbs from "../../../components/Common/Breadcrumb";
-import { Modal, Col, Row } from "reactstrap";
+import { Modal, Col, Row, Button } from "reactstrap";
 // import { useAlert } from "react-alert";
 import "../../../assets/scss/CustomeTable/datatables.scss";
 import { AlertState } from "../../../store/Utilites/CostumeAlert/actions";
@@ -188,35 +188,32 @@ const Employee_List = () => {
 
       formatter: (cellContent, TableListData) => (
         <div className="d-flex gap-3" style={{ display: 'flex', justifyContent: 'center' }} >
-          {(userPageAccessState.RoleAccess_IsEdit)
-            ?
-            <buton
+          {(userPageAccessState.RoleAccess_IsEdit) && (userPageAccessState.RoleAccess_IsView) || (userPageAccessState.RoleAccess_IsEdit) ?
+            <Button
               type="button"
-              data-mdb-toggle="tooltip" data-mdb-placement="top" title="Edit Module"
-              onClick={() => { EditPageHandler(TableListData.id); }}
+              data-mdb-toggle="tooltip" data-mdb-placement="top" title="Edit Employee"
+              onClick={() => { EditPageHandler(module.id); }}
               className="badge badge-soft-success font-size-12 btn btn-success waves-effect waves-light w-xxs border border-light"
             >
               <i className="mdi mdi-pencil font-size-18" id="edittooltip"></i>
-            </buton>
-            : null
-          }
-          {(userPageAccessState.RoleAccess_IsView)
-            ?
-            <buton
+            </Button> : null}
+
+          {(!(userPageAccessState.RoleAccess_IsEdit) && (userPageAccessState.RoleAccess_IsView)) ?
+            <Button
               type="button"
-              data-mdb-toggle="tooltip" data-mdb-placement="top" title="View Module"
-              onClick={() => { EditPageHandler(TableListData.id); }}
+              data-mdb-toggle="tooltip" data-mdb-placement="top" title="View Employee"
+              onClick={() => { EditPageHandler(module.id); }}
               className="badge badge-soft-primary font-size-12 btn btn-primary waves-effect waves-light w-xxs border border-light"
+
             >
               <i className="bx bxs-show font-size-18 "></i>
-            </buton>
-            : null
-          }
+            </Button> : null}
+
           {(userPageAccessState.RoleAccess_IsDelete)
             ?
             <buton
               className="badge badge-soft-danger font-size-12 btn btn-danger waves-effect waves-light w-xxs border border-light"
-              data-mdb-toggle="tooltip" data-mdb-placement="top" title="Delete Module"
+              data-mdb-toggle="tooltip" data-mdb-placement="top" title="Delete Employee"
               onClick={() => { deleteHandeler(TableListData.id, TableListData.Name); }}
             >
               <i className="mdi mdi-delete font-size-18"></i>
@@ -256,7 +253,7 @@ const Employee_List = () => {
                       SearchProps={toolkitProps.searchProps}
                       breadcrumbCount={`Employee Count: ${TableListData.length}`}
                       IsSearchVissible={true}
-                      // RedirctPath={"/employeeMaster"}
+                    // RedirctPath={"/employeeMaster"}
                     />
                     <Row>
                       <Col xl="12">

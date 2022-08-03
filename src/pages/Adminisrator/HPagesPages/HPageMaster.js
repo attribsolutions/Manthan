@@ -11,7 +11,7 @@ import {
   FormGroup,
   CardHeader,
 } from "reactstrap";
-import Breadcrumbs from "../../../components/Common/Breadcrumb";
+import Breadcrumb from "../../../components/Common/Breadcrumb";
 import { AvForm, AvInput } from "availity-reactstrap-validation";
 import { useDispatch, useSelector } from "react-redux";
 import AvField from "availity-reactstrap-validation/lib/AvField";
@@ -29,36 +29,48 @@ import { fetchModelsList } from "../../../store/Administrator/ModulesRedux/actio
 import { MetaTags } from "react-meta-tags";
 import { AlertState } from "../../../store/Utilites/CostumeAlert/actions";
 import { BreadcrumbShow } from "../../../store/Utilites/Breadcrumb/actions";
+import { useHistory } from "react-router-dom";
+import { CommonGetRoleAccessFunction } from "../../../components/Common/CommonGetRoleAccessFunction";
 
 const HPageMaster = (props) => {
-  var editDataGatingFromList = props.state;
 
   const formRef = useRef(null);
   const dispatch = useDispatch();
+  const history = useHistory()
 
-  const [IsEdit, setIsEdit] = useState(false);
+  //*** "isEditdata get all data from ModuleID for Binding  Form controls
+  let editDataGatingFromList = props.state;
+
+  //SetState  Edit data Geting From Modules List component
   const [EditData, setEditData] = useState([]);
-  const [PageMode, setPageMode] = useState(false);
-  const [tablePageAccessDataState, setTablePageAccessDataState] = useState([]);
+  const [pageMode, setPageMode] = useState("save");
+  const [userPageAccessState, setUserPageAccessState] = useState('');
 
+  const [tablePageAccessDataState, setTablePageAccessDataState] = useState([]);
   const [module_DropdownSelect, setModule_DropdownSelect] = useState("");
   const [pageType_DropdownSelect, setPageType_DropdownSelect] = useState("");
   const [pageList_DropdownSelect, setPageList_DropdownSelect] = useState("");
-
-  const [isShowPageChecked, setisShowPageChecked] = useState(false);
   const [pageAccessDropDownView, setPageAccessDropDownView] = useState(false);
   const [pageAccess_DropDownSelect, setPageAccess_DropDownSelect] =
     useState("");
 
   //Access redux store Data
-  const { ModuleData, SaveMessage, PageList, PageAccess } = useSelector(
+  const { ModuleData, PostAPIResponse, PageList, PageAccess } = useSelector(
     (state) => ({
       ModuleData: state.Modules.modulesList,
-      SaveMessage: state.H_Pages.saveMessage,
+      PostAPIResponse: state.H_Pages.saveMessage,
       PageList: state.H_Pages.PageList,
       PageAccess: state.H_Pages.PageAccess,
     })
   );
+
+  // userAccess useEffect
+  useEffect(() => {
+    const userAcc = CommonGetRoleAccessFunction(history)
+    if (!(userAcc === undefined)) {
+      setUserPageAccessState(userAcc)
+    }
+  }, [history])
 
   // For PageAccess DropDown
   useEffect(() => {
@@ -67,11 +79,12 @@ const HPageMaster = (props) => {
 
   // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
   useEffect(() => {
-    document.getElementById("txtName").focus();
+
+    if (!(userPageAccessState === '')) { document.getElementById("txtName").focus(); }
     dispatch(fetchModelsList());
     if (!(editDataGatingFromList === undefined)) {
       setEditData(editDataGatingFromList);
-      setIsEdit(true);
+      setPageMode("edit");
       setTablePageAccessDataState(editDataGatingFromList.PagePageAccess);
 
       setModule_DropdownSelect({
@@ -84,18 +97,13 @@ const HPageMaster = (props) => {
       });
 
       // When value 2 is get then DropDown lable is "ListPage" and ShowMenu is disabled Otherwise DropDown lable is "AddPage" and ShowMenu is enabled
-      let showCheckBox_pageType = editDataGatingFromList.PageType;
-      debugger;
-      if (showCheckBox_pageType === 2) {
-        // document.getElementById("inp-showOnMenu").disabled = true
-        // setisShowPageChecked(true)
+      let pageType_ID = editDataGatingFromList.PageType;
+
+      if (pageType_ID === 2) {
         setPageAccessDropDownView(true);
-        dispatch(getPageList(showCheckBox_pageType));
+        dispatch(getPageList(pageType_ID));
         setPageType_DropdownSelect({ value: 2, label: "ListPage" });
-      } else if (showCheckBox_pageType === 1) {
-        // setisShowPageChecked(showCheckBox_pageType.isShowOnMenu);
-        // document.getElementById("inp-showOnMenu").disabled = false
-        // setPageAccessDropDownView(false)
+      } else if (pageType_ID === 1) {
         dispatch(getPageListSuccess([]));
         setPageList_DropdownSelect({ value: 0 });
         setPageType_DropdownSelect({ value: 1, label: "AddPage" });
@@ -106,7 +114,7 @@ const HPageMaster = (props) => {
 
   // This UseEffect clear Form Data and when modules Save Successfully.
   useEffect(() => {
-    if (SaveMessage.Status === true && SaveMessage.StatusCode === 200) {
+    if (PostAPIResponse.Status === true && PostAPIResponse.StatusCode === 200) {
       dispatch(saveHPagesSuccess({ Status: false }));
       setModule_DropdownSelect("");
       setPageAccess_DropDownSelect("");
@@ -114,12 +122,12 @@ const HPageMaster = (props) => {
       setPageList_DropdownSelect("");
       formRef.current.reset();
 
-      if (PageMode === true) {
+      if (pageMode === "true") {
         dispatch(
           AlertState({
             Type: 1,
             Status: true,
-            Message: SaveMessage.Message,
+            Message: PostAPIResponse.Message,
           })
         );
       } else {
@@ -127,25 +135,25 @@ const HPageMaster = (props) => {
           AlertState({
             Type: 1,
             Status: true,
-            Message: SaveMessage.Message,
+            Message: PostAPIResponse.Message,
             RedirectPath: `/PageList`,
             AfterResponseAction: false,
           })
         );
       }
-    } else if (SaveMessage.Status === true) {
+    } else if (PostAPIResponse.Status === true) {
       dispatch(saveHPagesSuccess({ Status: false }));
       dispatch(
         AlertState({
           Type: 4,
           Status: true,
-          Message: "error Message",
+          Message: JSON.stringify(PostAPIResponse.Message),
           RedirectPath: false,
           AfterResponseAction: false,
         })
       );
     }
-  }, [SaveMessage]);
+  }, [PostAPIResponse]);
 
   const PageAccessValues = PageAccess.map((Data) => ({
     value: Data.id,
@@ -176,7 +184,7 @@ const HPageMaster = (props) => {
   ];
 
   //'Save' And 'Update' Button Handller
-  const handleValidSubmit = (event, values) => {
+  const FormSubmitButton_Handler = (event, values) => {
     if (
       tablePageAccessDataState.length <= 0 &&
       !(pageType_DropdownSelect.value === 1)
@@ -200,7 +208,6 @@ const HPageMaster = (props) => {
       DisplayIndex: values.displayIndex,
       Icon: values.Icon,
       ActualPagePath: values.pagePath,
-      isShowOnMenu: isShowPageChecked,
       PageType: pageType_DropdownSelect.value,
       PageHeading: values.pageheading,
       PageDescription: values.pagedescription,
@@ -213,7 +220,7 @@ const HPageMaster = (props) => {
       })),
     });
 
-    if (IsEdit) {
+    if (pageMode === "edit") {
       dispatch(updateHPages(jsonBody, EditData.id));
     } else {
       dispatch(saveHPages(jsonBody));
@@ -375,37 +382,28 @@ const HPageMaster = (props) => {
   }
   // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
   var IsEditMode_Css = "";
-  if (IsEdit === true || PageMode == true) {
-    IsEditMode_Css = "-5.5%";
-  }
+  if (pageMode === "edit") { IsEditMode_Css = "-5.5%" };
 
+  if (!(userPageAccessState === '')) {
   return (
     <React.Fragment>
       <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
-        <Breadcrumbs breadcrumbItem={"Page Master"} />
+      <Breadcrumb breadcrumbItem={userPageAccessState.PageHeading} />
         <Container fluid>
           <MetaTags>
             <title>Page Master| FoodERP-React FrontEnd</title>
           </MetaTags>
 
-          <Card className="text-black">
-            <CardHeader
-              className="card-header   text-black"
-              style={{ backgroundColor: "#dddddd" }}
-            >
-              <h4 className="card-title text-black">
-                React Validation - Normal
-              </h4>
-              <p className="card-title-desc text-black">
-                Provide valuable, actionable feedback to your users with HTML5
-                form validation–available in all our supported browsers.
-              </p>
-            </CardHeader>
+          <Card className="text-black" >
+              <CardHeader className="card-header   text-black" style={{ backgroundColor: "#dddddd" }} >
+                <h4 className="card-title text-black">{userPageAccessState.PageDescription}</h4>
+                <p className="card-title-desc text-black">{userPageAccessState.PageDescriptionDetails}</p>
+              </CardHeader>
 
             <CardBody>
               <AvForm
                 onValidSubmit={(e, v) => {
-                  handleValidSubmit(e, v);
+                  FormSubmitButton_Handler(e, v);
                 }}
                 ref={formRef}
               >
@@ -707,71 +705,75 @@ const HPageMaster = (props) => {
                         </Col>
                       </Row>
 
-                      <FormGroup className=" mt-3 ">
-                        <Row className="mb-0">
-                          <Col sm={2}>
-                            <div>
-                              {IsEdit ? (
-                                <button
-                                  type="submit"
-                                  data-mdb-toggle="tooltip"
-                                  data-mdb-placement="top"
-                                  title="Update Page"
-                                  className="btn btn-success w-md"
-                                >
-                                  <i class="fas fa-edit me-2"></i>Update
-                                </button>
-                              ) : (
-                                <button
-                                  type="submit"
-                                  data-mdb-toggle="tooltip"
-                                  data-mdb-placement="top"
-                                  title="Save Page"
-                                  className="btn btn-primary w-md"
-                                >
-                                  {" "}
-                                  <i className="fas fa-save me-2"></i> Save
-                                </button>
-                              )}
-                            </div>
-                          </Col>
-                        </Row>
-                      </FormGroup>
+                      <FormGroup >
+                            <Row >
+                              <Col sm={2}>
+                                <div>
+                                  {
+                                    pageMode === "edit" ?
+                                      userPageAccessState.RoleAccess_IsEdit ?
+                                        <button
+                                          type="submit"
+                                          data-mdb-toggle="tooltip" data-mdb-placement="top" title="Update Role"
+                                          className="btn btn-success w-md"
+                                        >
+                                          <i class="fas fa-edit me-2"></i>Update
+                                        </button>
+                                        :
+                                        <></>
+                                      : (
+                                        userPageAccessState.RoleAccess_IsSave ?
+                                          <button
+                                            type="submit"
+                                            data-mdb-toggle="tooltip" data-mdb-placement="top" title="Save Role"
+                                            className="btn btn-primary w-md"
+                                          > <i className="fas fa-save me-2"></i> Save
+                                          </button>
+                                          :
+                                          <></>
+                                      )
+                                  }
+                                </div>
+                              </Col>
+                            </Row>
+                          </FormGroup >
                     </CardBody>
                   </Card>
                 ) : (
                   <Card className=" mt-n2 text-black">
                     <CardBody style={{ backgroundColor: "whitesmoke" }}>
-                      <FormGroup className=" mt-3 ">
-                        <Row className="mb-0">
-                          <Col sm={2}>
-                            <div>
-                              {IsEdit ? (
-                                <button
-                                  type="submit"
-                                  data-mdb-toggle="tooltip"
-                                  data-mdb-placement="top"
-                                  title="Update Page"
-                                  className="btn btn-success w-md"
-                                >
-                                  <i class="fas fa-edit me-2"></i>Update
-                                </button>
-                              ) : (
-                                <button
-                                  type="submit"
-                                  data-mdb-toggle="tooltip"
-                                  data-mdb-placement="top"
-                                  title="Save Page"
-                                  className="btn btn-primary w-md"
-                                >
-                                  {" "}
-                                  <i className="fas fa-save me-2"></i> Save
-                                </button>
-                              )}
-                            </div>
-                          </Col>
-                        </Row>
-                      </FormGroup>
+                    <FormGroup >
+                            <Row >
+                              <Col sm={2}>
+                                <div>
+                                  {
+                                    pageMode === "edit" ?
+                                      userPageAccessState.RoleAccess_IsEdit ?
+                                        <button
+                                          type="submit"
+                                          data-mdb-toggle="tooltip" data-mdb-placement="top" title="Update Role"
+                                          className="btn btn-success w-md"
+                                        >
+                                          <i class="fas fa-edit me-2"></i>Update
+                                        </button>
+                                        :
+                                        <></>
+                                      : (
+                                        userPageAccessState.RoleAccess_IsSave ?
+                                          <button
+                                            type="submit"
+                                            data-mdb-toggle="tooltip" data-mdb-placement="top" title="Save Role"
+                                            className="btn btn-primary w-md"
+                                          > <i className="fas fa-save me-2"></i> Save
+                                          </button>
+                                          :
+                                          <></>
+                                      )
+                                  }
+                                </div>
+                              </Col>
+                            </Row>
+                          </FormGroup >
                     </CardBody>
                   </Card>
                 )}
@@ -782,6 +784,12 @@ const HPageMaster = (props) => {
       </div>
     </React.Fragment>
   );
+}
+else {
+  return (
+    <React.Fragment></React.Fragment>
+  )
+}
 };
 
 export default HPageMaster;

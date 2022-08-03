@@ -2,16 +2,14 @@ import {
   GET_DESIGNATIONID_SUCCESS,
   GET_EMPLOYEETYPE_SUCCESS,
   GET_STATE_SUCCESS,
-  GET_REGION_SUCCESS,
-  POST_EMPLOYEE,
   POST_EMPLOYEE_SUCCESS,
-  GET_COMPANY_SUCCESS,
   GET_EMPLOYEE_LIST_SUCCESS,
-  DELETE_EMPLOYEE_ID,
   DELETE_EMPLOYEE_ID_SUCCESS,
-  EDIT_EMPLOYEE_ID,
   EDIT_EMPLOYEE_ID_SUCCESS,
-  UPDATE_EMPLOYEE_ID_SUCCESS
+  UPDATE_EMPLOYEE_ID_SUCCESS,
+  GET_EMPLOYEE_TYPES_ID_SUCCESS,
+  GET_COMPANYNAME_BY_EMPLOYEETYPES_ID_SUCCESS,
+  GET_PARTYNAME_BY_DIVISIONTYPES_ID_SUCCESS
 } from "./actionTypes";
 
 const INIT_STATE = {
@@ -22,27 +20,30 @@ const INIT_STATE = {
   postMessage: { Status: false },
   deleteMessage: { Status: false },
   editData: { Status: false },
-  updateMessage:{ Status: false }
+  updateMessage: { Status: false },
+  EmployeeTypes:[],
+  CompanyNames:[],
+  PartyTypes:[]
 };
 
 const M_EmployeesReducer = (state = INIT_STATE, action) => {
   switch (action.type) {
 
-    /// DesignationID Dropdown api
+    // DesignationID Dropdown api
     case GET_DESIGNATIONID_SUCCESS:
       return {
         ...state,
         designation: action.payload,
       };
 
-    /// EmployeeType Dropdown api
+    // EmployeeType Dropdown api
     case GET_EMPLOYEETYPE_SUCCESS:
       return {
         ...state,
         employeeType: action.payload,
       };
 
-    /// State Dropdown api
+    // State Dropdown api
     case GET_STATE_SUCCESS:
       return {
         ...state,
@@ -55,7 +56,7 @@ const M_EmployeesReducer = (state = INIT_STATE, action) => {
         postMessage: action.payload,
       };
 
-    //// get api
+    // get api
     case GET_EMPLOYEE_LIST_SUCCESS:
       return {
         ...state,
@@ -75,12 +76,34 @@ const M_EmployeesReducer = (state = INIT_STATE, action) => {
         editData: action.payload,
       };
 
-    //// update api
+    // update api
     case UPDATE_EMPLOYEE_ID_SUCCESS:
       return {
         ...state,
         updateMessage: action.payload,
       };
+
+    //Employee Types  dropdown api
+    case GET_EMPLOYEE_TYPES_ID_SUCCESS:
+      return {
+        ...state,
+        EmployeeTypes: action.payload,
+      };
+
+    // Company Name API dependent on Employee Types api
+    case GET_COMPANYNAME_BY_EMPLOYEETYPES_ID_SUCCESS:
+      return {
+        ...state,
+        CompanyNames: action.payload,
+      };
+
+    // Party name API dependent on Employee Types api
+    case GET_PARTYNAME_BY_DIVISIONTYPES_ID_SUCCESS:
+      return {
+        ...state,
+        PartyTypes: action.payload,
+      };
+
     default:
       return state;
   }

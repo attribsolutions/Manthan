@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Breadcrumbs from "../../../components/Common/Breadcrumb";
-import { Col, Modal, Row } from "reactstrap";
+import { Button, Col, Modal, Row } from "reactstrap";
 import {
   getRole,
   deleteRole,
@@ -181,39 +181,36 @@ const RoleList = (props) => {
 
       formatter: (cellContent, Role) => (
         <div className="d-flex gap-3" style={{ display: 'flex', justifyContent: 'center' }} >
-          {(userPageAccessState.RoleAccess_IsEdit)
-            ?
-            <buton
+            {((userPageAccessState.RoleAccess_IsEdit))  ?
+            <Button
               type="button"
               data-mdb-toggle="tooltip" data-mdb-placement="top" title="Edit Role"
-              onClick={() => { EditPageHandler(Role.id); }}
+              onClick={() => { EditPageHandler(module.id); }}
               className="badge badge-soft-success font-size-12 btn btn-success waves-effect waves-light w-xxs border border-light"
             >
               <i className="mdi mdi-pencil font-size-18" id="edittooltip"></i>
-            </buton>
-            : null
-          }
-          {(userPageAccessState.RoleAccess_IsView)
-            ?
-            <buton
+            </Button> : null}
+
+          {(!(userPageAccessState.RoleAccess_IsEdit) && (userPageAccessState.RoleAccess_IsView)) ?
+            <Button
               type="button"
               data-mdb-toggle="tooltip" data-mdb-placement="top" title="View Role"
-              onClick={() => { EditPageHandler(Role.id); }}
+              onClick={() => { EditPageHandler(module.id); }}
               className="badge badge-soft-primary font-size-12 btn btn-primary waves-effect waves-light w-xxs border border-light"
+
             >
               <i className="bx bxs-show font-size-18 "></i>
-            </buton>
-            : null
-          }
+            </Button> : null}
+
           {(userPageAccessState.RoleAccess_IsDelete)
             ?
-            <buton
+            <Button
               className="badge badge-soft-danger font-size-12 btn btn-danger waves-effect waves-light w-xxs border border-light"
               data-mdb-toggle="tooltip" data-mdb-placement="top" title="Delete Role"
               onClick={() => { deleteHandeler(Role.id, Role.Name); }}
             >
               <i className="mdi mdi-delete font-size-18"></i>
-            </buton>
+            </Button>
             : null
           }
 
@@ -247,7 +244,7 @@ const RoleList = (props) => {
                       SearchProps={toolkitProps.searchProps}
                       breadcrumbCount={`Role Count: ${TableListData.length}`}
                       IsSearchVissible={true}
-                      // RedirctPath={`/RoleMaster`}
+                    // RedirctPath={`/RoleMaster`}
                     />
                     <Row>
                       <Col xl="12">

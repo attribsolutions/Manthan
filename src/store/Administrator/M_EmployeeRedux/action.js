@@ -8,7 +8,7 @@ import {
     GET_EMPLOYEE_LIST,GET_EMPLOYEE_LIST_SUCCESS,
     DELETE_EMPLOYEE_ID, DELETE_EMPLOYEE_ID_SUCCESS,
     EDIT_EMPLOYEE_ID, EDIT_EMPLOYEE_ID_SUCCESS,
-    UPDATE_EMPLOYEE_ID, UPDATE_EMPLOYEE_ID_SUCCESS
+    UPDATE_EMPLOYEE_ID, UPDATE_EMPLOYEE_ID_SUCCESS, GET_EMPLOYEE_TYPES_ID, GET_EMPLOYEE_TYPES_ID_SUCCESS, GET_COMPANYNAME_BY_EMPLOYEETYPES_ID, GET_COMPANYNAME_BY_EMPLOYEETYPES_ID_SUCCESS, GET_PARTYNAME_BY_DIVISIONTYPES_ID, GET_PARTYNAME_BY_DIVISIONTYPES_ID_SUCCESS
 } from "./actionTypes"
 
 
@@ -74,7 +74,7 @@ export const delete_Employee_ID = (id) => ({
     payload:deleteMessage
   });
   
-  ///// edit api
+  // edit api
   export const editEmployeeeId =(id)=>({
     type:EDIT_EMPLOYEE_ID,
   id,
@@ -84,7 +84,7 @@ export const delete_Employee_ID = (id) => ({
    payload:editData,
   })
 
-  /// update api
+  // update api
   export const updateEmployeeID=(updateData,ID)=>({
     type:UPDATE_EMPLOYEE_ID,
     updateData,ID,
@@ -93,3 +93,35 @@ export const delete_Employee_ID = (id) => ({
     type:UPDATE_EMPLOYEE_ID_SUCCESS,
    payload:updateMessage,
   })
+
+//Employee Types  dropdown api
+export const get_EmployeeTypesID = () => ({
+  type: GET_EMPLOYEE_TYPES_ID,
+ 
+});
+export const get_EmployeeTypesID_Success = (EmployeeTypes) => ({
+  type:GET_EMPLOYEE_TYPES_ID_SUCCESS,
+  payload:EmployeeTypes,
+});
+
+// Company Name API dependent on Employee Types api
+export const Get_CompanyName_By_EmployeeTypeID = (id) => ({
+  type: GET_COMPANYNAME_BY_EMPLOYEETYPES_ID,
+  id,
+ 
+});
+export const Get_CompanyName_By_EmployeeTypeID_Success = (data) => ({
+  type: GET_COMPANYNAME_BY_EMPLOYEETYPES_ID_SUCCESS,
+  payload:data,
+});
+
+ // Party name API dependent on Employee Types api
+export const Get_PartyName_By_EmployeeTypeID = (id) => ({
+  type: GET_PARTYNAME_BY_DIVISIONTYPES_ID,
+  id,
+ 
+});
+export const Get_PartyName_By_EmployeeTypeID_Success = (data) => ({
+  type: GET_PARTYNAME_BY_DIVISIONTYPES_ID_SUCCESS,
+  payload:data,
+});
