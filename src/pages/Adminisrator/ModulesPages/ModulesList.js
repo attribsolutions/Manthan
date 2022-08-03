@@ -135,7 +135,8 @@ const ModulesList = () => {
 
             formatter: (cellContent, module) => (
                 <div className="d-flex gap-3" style={{ display: 'flex', justifyContent: 'center' }} >
-                    {(userPageAccessState.RoleAccess_IsEdit) && (userPageAccessState.RoleAccess_IsView) || (userPageAccessState.RoleAccess_IsEdit) ?
+                    
+                     {((userPageAccessState.RoleAccess_IsEdit))  ?
                         <Button
                             type="button"
                             data-mdb-toggle="tooltip" data-mdb-placement="top" title="Edit Module"

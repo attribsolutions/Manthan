@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { AlertState } from "../../../store/Utilites/CostumeAlert/actions";
 import Select from "react-select";
 import {
-    editPartyIDSuccess, getDistrictOnState, getDistrictOnStateSuccess, getDivisionTypesID,
+    editPartyIDSuccess, GetCompanyByDivisionTypeID, getDistrictOnState, getDistrictOnStateSuccess, getDivisionTypesID,
     GetPartyTypeByDivisionTypeID, postPartyData, postPartyDataSuccess, updatePartyID
 } from "../../../store/Administrator/PartyRedux/action";
 import { getState } from "../../../store/Administrator/M_EmployeeRedux/action";
@@ -44,7 +44,7 @@ const PartyMaster = (props) => {
         PostAPIResponse: state.PartyMasterReducer.PartySaveSuccess,
         State: state.M_EmployeesReducer.State,
         DistrictOnState: state.PartyMasterReducer.DistrictOnState,
-        companyList: state.Company.companyList,
+        companyList: state.PartyMasterReducer.CompanyName,
         DivisionTypes: state.PartyMasterReducer.DivisionTypes,
         PartyTypes: state.PartyMasterReducer.PartyTypes,
 
@@ -61,7 +61,7 @@ const PartyMaster = (props) => {
     useEffect(() => {
         dispatch(getState());
         dispatch(getDistrictOnState());
-        dispatch(fetchCompanyList());
+        dispatch(GetCompanyByDivisionTypeID());
         dispatch(getDivisionTypesID());
         dispatch(GetPartyTypeByDivisionTypeID());
     }, [dispatch]);
@@ -148,6 +148,7 @@ const PartyMaster = (props) => {
         value: Data.id,
         label: Data.Name
     }));
+
     function handllerState(e) {
         setState_DropDown_select(e)
         dispatch(getDistrictOnState(e.value))
@@ -183,6 +184,7 @@ const PartyMaster = (props) => {
     function handllerDivisionTypes(e) {
         setDivision_dropdown_Select(e)
         dispatch(GetPartyTypeByDivisionTypeID(e.value))
+        dispatch(GetCompanyByDivisionTypeID(e.value))
     }
 
     const PartyTypeByDivisionTypeIDValues = PartyTypes.map((Data) => ({
@@ -517,7 +519,7 @@ const PartyMaster = (props) => {
                                         <Row  >
                                             <Card className="mt-n2" style={{ backgroundColor: "whitesmoke" }} >
                                                 <Row className="mt-3 ">
-                                                    <Col md="5" >
+                                                    <Col md="7" >
                                                         <FormGroup className="mb-3">
                                                             <Label htmlFor="validationCustom01">Address </Label>
                                                             <AvField name="Address" value={EditData.Address} type="text"

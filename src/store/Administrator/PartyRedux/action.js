@@ -1,6 +1,8 @@
 import {
     DELETE_PARTY_ID, DELETE_PARTY_ID_SUCCESS,
     EDIT_PARTY_ID, EDIT_PARTY_ID_SUCCESS,
+    GET_COMPANY_BY_DIVISIONTYPES_ID,
+    GET_COMPANY_BY_DIVISIONTYPES_ID_SUCCESS,
     GET_DISTRICT_ON_STATE,
     GET_DISTRICT_ON_STATE_SUCCESS,
     GET_DIVISION_TYPES_ID,
@@ -93,5 +95,16 @@ export const GetPartyTypeByDivisionTypeID = (id) => ({
   });
   export const GetPartyTypeByDivisionTypeIDSuccess = (data) => ({
     type: GET_PARTTYPE_BY_DIVISIONTYPES_ID_SUCCESS,
+    payload:data,
+  });
+
+   // GetCompanyByDivisionTypeID/1 API dependent on DivisionTypes api
+export const GetCompanyByDivisionTypeID = (id) => ({
+    type: GET_COMPANY_BY_DIVISIONTYPES_ID,
+    id,
+   
+  });
+  export const GetCompanyByDivisionTypeIDSuccess = (data) => ({
+    type: GET_COMPANY_BY_DIVISIONTYPES_ID_SUCCESS,
     payload:data,
   });
