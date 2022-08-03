@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react"
 import PropTypes from 'prop-types'
-import { Row, Col, Modal, } from "reactstrap"
+import { Row, Col, Modal, Table, } from "reactstrap"
 import { Redirect, useHistory } from "react-router-dom";
 import { Search } from "react-bootstrap-table2-toolkit";
 import { useDispatch, useSelector } from "react-redux";
@@ -143,18 +143,25 @@ debugger
                   <div className="row">
                     <div className="col col-12">
                       <Row>
+                        <Table>
+                          <tr>
                         <div className="container">
                           <div className="row">
-                        <div className="col col-6 col col-6">
+                        <div className="6col-md-5 col-sm-6">
+                        <td className="col-6 col-6">
                           <AvInput className=" text-black checkbox-border-red " type="checkbox" name={index} />&nbsp;&nbsp;&nbsp;
                           <label className="form-label text-black"> {index} </label>
+                          </td>
                         </div>
                         {/* <div className="col col-6 bg-info" >
                         <AvInput className=" text-black checkbox-border-red" type="checkbox" name={index} />&nbsp;&nbsp;&nbsp;
                         <label className="form-label text-black"> {index} </label>
                       </div> */}
+
                       </div>
                       </div>
+                      </tr>
+                      </Table>
                       </Row>
                     </div>
                   </div>

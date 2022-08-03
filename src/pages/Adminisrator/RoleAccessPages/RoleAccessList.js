@@ -403,25 +403,28 @@ const RoleAccessList = (props) => {
                                     <Row>
                                         <Col md="4">
 
-                                            <FormGroup className="mb-1 row " >
+                                            <FormGroup className="mb-3 row ">
                                                 <Label className="col-sm-2 p-2 ml-n4 ">Role</Label>
                                                 <Col md="9">
                                                     <Select
                                                         value={role_dropdown_Select}
                                                         options={Role_DropdownOption}
+                                                        className="rounded-bottom"
                                                         onChange={(e) => { RoleDropDown_select_handler(e) }}
                                                         classNamePrefix="select2-selection"
+
                                                     />
                                                 </Col>
                                             </FormGroup>
                                         </Col>
 
                                         <Col md="4" className="">
-                                            <FormGroup className="mb-1 row" >
+                                            <FormGroup className="mb-3 row" >
                                                 <Label className="col-sm-3 p-2">Division</Label>
                                                 <Col md="9">
                                                     <Select
                                                         value={division_dropdown_Select}
+                                                        className="rounded-bottom"
                                                         options={DivisionTypesValues}
                                                         onChange={(e) => { handllerDivisionTypes(e) }}
                                                     />
@@ -430,7 +433,7 @@ const RoleAccessList = (props) => {
                                         </Col>
 
                                         <Col md="3" className="mt- ">
-                                            <Button className=" btn btn-primary btn-ripple border border-dark" onClick={() => { GoButton_Handler() }}>Go</Button>
+                                            <Button type="button" color="primary" onClick={() => { GoButton_Handler() }}>Go</Button>
                                         </Col>
 
                                     </Row>
@@ -438,24 +441,24 @@ const RoleAccessList = (props) => {
                                 :
                                 <>
                                     <CardHeader className="card-header   text-black" style={{ backgroundColor: "#dddddd" }} >
-                                        <Row >
-                                            <Col md="4">
-                                                <Label>Role &nbsp;&nbsp;&nbsp;</Label>
-                                                <Label className="text-primary h5">{role_dropdown_Select.label}</Label>
+                                        <Row>
+                                            <Col md="5">
+                                                <Label>Role &nbsp;&nbsp;&nbsp; </Label>
+                                                <Label className=" h6 border text-primary w-50 ">{role_dropdown_Select.label}</Label>
+
+                                            </Col>
+                                            <Col md="5">
+                                            <Label>Division &nbsp;&nbsp;&nbsp;</Label>
+                                                <Label className=" h6 border text-primary w-50 ">{division_dropdown_Select.label}</Label>
 
                                             </Col>
 
-                                            <Col md="4">
-                                                <Label>Division &nbsp;&nbsp;&nbsp;</Label>
-                                                <Label className="text-primary h5">{division_dropdown_Select.label}</Label>
+                  
 
-                                            </Col>
-
-
-                                            <Col md="4" className="align-right p-2">
-                                                <Row className="pull-right btn-sm px-4">
-                                                    <Button className=" btn btn-default btn-ripple  border border-dark" onClick={() => { ChangeButtonHandeler() }}>Change Role</Button>
-                                                </Row>
+                                            <Col md="2" className="p-2">
+                                                <Col>
+                                                    <Button type="button" color="btn btn-outline-warning" className="btn-sm" onClick={() => { ChangeButtonHandeler() }}><h className="text-black">Change Role</h></Button>
+                                                </Col>
                                             </Col>
 
 
@@ -463,8 +466,8 @@ const RoleAccessList = (props) => {
 
                                         <Row>
                                             <Col md="4" className="">
-                                                <FormGroup className="mb- row">
-                                                    <Label className="col-sm-3 p-2">Module</Label>
+                                                <FormGroup className="mb-3  row">
+                                                    <Label className="col-sm-3 p-2 ml-n5">Module</Label>
                                                     <Col md="9">
 
                                                         <Select
@@ -479,8 +482,8 @@ const RoleAccessList = (props) => {
                                             </Col>
 
                                             <Col md="4">
-                                                <FormGroup className="mb-2 row ">
-                                                    <Label className="col-sm-2 p-2">Page</Label>
+                                                <FormGroup className="mb-3 row ">
+                                                    <Label className="col-sm-2 p-2 ml-n5">Page</Label>
                                                     <Col md="9">
 
                                                         <Select
@@ -494,12 +497,12 @@ const RoleAccessList = (props) => {
                                             </Col >
 
                                             <Col md="2" className=" ">
-                                                <Button className=" btn btn-warning btn-ripple border border-dark" onClick={() => { AddPageButton_Handeler() }}>Add Page</Button>
+                                                <Button type="button" color="light" className="btn btn-outline-success" onClick={() => { AddPageButton_Handeler() }}>Add Page</Button>
                                             </Col>
 
 
-                                            <Col md="2" className=" ">
-                                                <Button className=" btn btn-primary btn-ripple border border-dark" onClick={() => { saveHandeller() }}>Save</Button>
+                                            <Col md="2" className="">
+                                                <Button type="button"  color="primary" onClick={() => { saveHandeller() }}>Save</Button>
                                             </Col>
 
                                         </Row>
@@ -563,7 +566,7 @@ const RoleAccessList = (props) => {
                                                                         PageAccess.map((indexPage) => {
 
                                                                             return (
-                                                                                <td  className="text-center">
+                                                                                <td className="text-center">
                                                                                     {indx[`PageAccess_${indexPage.Name}`] ?
                                                                                         <input type={"checkbox"} id={indexPage.Name + key}
                                                                                             defaultChecked={indx[`RoleAccess_${indexPage.Name}`] > 0 ? true : false} />
