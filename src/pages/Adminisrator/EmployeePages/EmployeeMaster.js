@@ -10,7 +10,8 @@ import {
   postEmployee,
   updateEmployeeID,
   editEmployeeSuccess,
-  PostEmployeeSuccess
+  PostEmployeeSuccess,
+  Get_CompanyName_By_EmployeeTypeID
 } from "../../../store/Administrator/M_EmployeeRedux/action";
 import { AlertState } from "../../../store/Utilites/CostumeAlert/actions";
 import { fetchCompanyList } from "../../../store/Administrator/CompanyRedux/actions";
@@ -51,7 +52,7 @@ const AddEmployee = (props) => {
     State: state.M_EmployeesReducer.State,
     district: state.PartyMasterReducer.DistrictOnState,
     partyList: state.PartyMasterReducer.partyList,
-    company: state.Company.companyList,
+    company: state.M_EmployeesReducer.CompanyNames,
     postMessage: state.M_EmployeesReducer.postMessage,
   }));
 
@@ -68,7 +69,7 @@ const AddEmployee = (props) => {
     dispatch(getEmployeeType());
     dispatch(getState());
     dispatch(getPartyListAPI());
-    dispatch(fetchCompanyList());
+    dispatch(Get_CompanyName_By_EmployeeTypeID());
   }, [dispatch]);
 
 
@@ -155,6 +156,10 @@ const AddEmployee = (props) => {
     }
   }, [postMessage])
 
+
+
+
+
   const Party_DropdownOptions = partyList.map((data) => ({
     value: data.id,
     label: data.Name
@@ -170,10 +175,15 @@ const AddEmployee = (props) => {
     label: data.Name
   }));
 
+
+
+
+
   const State_DropdownOptions = State.map((data) => ({
     value: data.id,
     label: data.Name
   }));
+
   const District_DropdownOptions = district.map((data) => ({
     value: data.id,
     label: data.Name
@@ -187,9 +197,26 @@ const AddEmployee = (props) => {
   function Designation_Dropdown_Handler(e) {
     setDesignation_DropdownSelect(e)
   }
+
+  // const IsPartyConnection = employeeType.filter((element) => {
+  //   return element.IsPartyConnection
+  // });
+debugger
+
   function EmployeeType_Dropdown_Handler(e) {
     setEmployeeType_DropdownSelect(e)
+    dispatch(Get_CompanyName_By_EmployeeTypeID(e.value))
+    const IsPartyConnection = employeeType.filter((element) => {
+      return element.IsPartyConnection
+    });
+    if (IsPartyConnection===true) {
+      setParty_DropdownSelect(Party_Dropdown_Handler)
+      
+    }
+
+
   }
+
 
   function State_Dropdown_Handler(e) {
     dispatch(getDistrictOnState(e.value))
@@ -199,9 +226,11 @@ const AddEmployee = (props) => {
     setDistrict_DropdownSelect(e)
   }
 
+
   function Party_Dropdown_Handler(e) {
     setParty_DropdownSelect(e)
   }
+
 
   function Company_Dropdown_Handler(e) {
     setCompany_DropdownSelect(e)
@@ -235,7 +264,6 @@ const AddEmployee = (props) => {
     else {
       dispatch(postEmployee(jsonBody));
     }
-
   };
 
   // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)

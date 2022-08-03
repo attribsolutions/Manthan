@@ -59,7 +59,7 @@ export const GET_EMPLOYEE_TYPE="/EmployeeTypes"
 export const GET_STATE="/States"
 // export const GET_REGION="/Region"
 export const EMPLOYEE_API_URL="/Employees"   
-
+export const GET_COMPANY_BY_EMPLOYEETYPES_ID="/GetCompanyByDivisionTypeID" //CompanyByEmployeeType
 // Role Master
 export const ROLE_MASTER_API="/Roles"////  role get api
 
