@@ -209,7 +209,7 @@ const AddEmployee = (props) => {
 
   //'Save' And 'Update' Button Handller
   const handleValidSubmit = (event, values) => {
-debugger
+    debugger
     const jsonBody = JSON.stringify({
       Name: values.Name,
       Address: values.Address,
@@ -223,7 +223,7 @@ debugger
       EmployeeType: employeeType_DropdownSelect.value,
       State: State_DropdownSelect.value,
       District: district_DropdownSelect.value,
-      Party: party_DropdownSelect.value,
+      Party: party_DropdownSelect.map((i) => { return ({ Party: i.value }) }),
       Company: company_DropdownSelect.value,
       CreatedBy: 1,
       UpdatedBy: 1,
@@ -246,10 +246,10 @@ debugger
     return (
       <React.Fragment>
         <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
-        <MetaTags>
-          <title>Employee Master| FoodERP-React FrontEnd</title>
-        </MetaTags>
-        <Breadcrumb breadcrumbItem={userPageAccessState.PageHeading} />
+          <MetaTags>
+            <title>Employee Master| FoodERP-React FrontEnd</title>
+          </MetaTags>
+          <Breadcrumb breadcrumbItem={userPageAccessState.PageHeading} />
 
           <Container fluid>
 
@@ -433,30 +433,17 @@ debugger
                   <Card className="mt-n2">
                     <CardBody style={{ backgroundColor: "whitesmoke" }}>
                       <Row >
-                        {/* <Col md="3"> */}
-                        <FormGroup className="mb-3">
-                          {/* <Label htmlFor="validationCustom01">Party Name</Label>
-                          <Select
-                            value={party_DropdownSelect}
-                            options={Party_DropdownOptions}
-                            onChange={(e) => { Party_Dropdown_Handler(e) }}
-                          /> */}
-                        </FormGroup>
-                        {/* </Col> */}
-                        <div className="col-lg-3 col-md-6">
-                          <div className="mb-3">
-                            <label htmlFor="choices-multiple-remove-button" className="form-label font-size-13 text-muted">Party name</label>
+                        <Col md="3">
+                          <FormGroup className="mb-3">
+                            <Label htmlFor="validationCustom01">Employee Type </Label>
                             <Select
-                              defaultValue={[Party_DropdownOptions[1]]}
-                              isMulti={true}
-                              className="basic-multi-select"
-                              options={Party_DropdownOptions}
-                              onChange={(e) => { Party_Dropdown_Handler(e) }}
-                              classNamePrefix="select2-selection"
-                          
+                              value={employeeType_DropdownSelect}
+                              options={EmployeeType_DropdownOptions}
+                              onChange={(e) => { EmployeeType_Dropdown_Handler(e) }}
                             />
-                          </div>
-                        </div>
+                          </FormGroup>
+                        </Col>
+
                         <Col md="1">  </Col>
                         <Col md="3">
                           <FormGroup className="mb-3">
@@ -470,6 +457,22 @@ debugger
                         </Col>
 
                         <Col md="1">  </Col>
+                        <div className="col-lg-3 col-md-6">
+                          <div className="mb-3">
+                            <label htmlFor="choices-multiple-remove-button" className="form-label font-size-13 text-muted">Party name</label>
+                            <Select
+                              defaultValue={[Party_DropdownOptions[1]]}
+                              isMulti={true}
+                              className="basic-multi-select"
+                              options={Party_DropdownOptions}
+                              onChange={(e) => { Party_Dropdown_Handler(e) }}
+                              classNamePrefix="select2-selection"
+                            />
+                          </div>
+                        </div>
+
+                        {/* 
+                        <Col md="1">  </Col>
                         <Col md="3">
                           <FormGroup className="mb-3">
                             <Label htmlFor="validationCustom01">Employee Type </Label>
@@ -480,7 +483,7 @@ debugger
                             />
 
                           </FormGroup>
-                        </Col>
+                        </Col> */}
                       </Row>
 
                       <Row>

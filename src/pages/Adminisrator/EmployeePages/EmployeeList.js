@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 // import { useHistory } from "react-router-dom";
 import Breadcrumbs from "../../../components/Common/Breadcrumb";
-import { Modal, Col, Row } from "reactstrap";
+import { Modal, Col, Row, Button } from "reactstrap";
 // import { useAlert } from "react-alert";
 import "../../../assets/scss/CustomeTable/datatables.scss";
 import { AlertState } from "../../../store/Utilites/CostumeAlert/actions";

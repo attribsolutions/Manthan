@@ -98,7 +98,7 @@ export const GetPartyTypeByDivisionTypeID = (id) => ({
     payload:data,
   });
 
-   // GetCompanyByDivisionTypeID/1 API dependent on DivisionTypes api
+   // GetCompanyByDivisionTypeID API dependent on DivisionTypes api
 export const GetCompanyByDivisionTypeID = (id) => ({
     type: GET_COMPANY_BY_DIVISIONTYPES_ID,
     id,
