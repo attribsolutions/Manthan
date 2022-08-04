@@ -18,7 +18,7 @@ import { PostEmployeeTypeSubmit } from "../../../store/Administrator/EmployeeTyp
 import { useDispatch } from "react-redux";
 import { AlertState } from "../../../store/Utilites/CostumeAlert/actions";
 
-const EmployeeTypesMaster = (props) => {
+const DivisionType = (props) => {
     const dispatch = useDispatch();
     
     const [Name, setName] = useState("");
@@ -29,7 +29,6 @@ const EmployeeTypesMaster = (props) => {
 
         const jsonBody = JSON.stringify({
             Name: values.Name,
-            IsPartyConnection: values.IsPartyConnection,
             IsSCM: values.IsSCM,
             Description: "sfasfgasd",
             CreatedBy: 1,
@@ -83,28 +82,11 @@ const EmployeeTypesMaster = (props) => {
                                                         // onChange={(e) => { dispatch(BreadcrumbShow(e.target.value)) }}
                                                         />
                                                     </FormGroup>
+                                                    
                                                     <Row>
                                                         <FormGroup className="mb-2 col col-sm-5">
                                                             <Row className="justify-content-md-left">
-                                                                <Label htmlFor="horizontal-firstname-input" className="col-sm-5 col-form-label" >IsPartyConnection </Label>
-                                                                <Col md={2} style={{ marginTop: '9px' }} >
-                                                                    <div className="form-check form-switch form-switch-md mb-3" dir="ltr">
-                                                                        <AvInput type="checkbox" className="form-check-input" id="customSwitchsizemd"
-                                                                            defaultChecked={IsPartyConnection}
-                                                                            name="IsPartyConnection"
-                                                                        // defaultChecked
-                                                                        />
-                                                                        <label className="form-check-label" htmlFor="customSwitchsizemd"></label>
-                                                                    </div>
-                                                                </Col>
-                                                            </Row>
-                                                        </FormGroup>
-
-                                                    </Row>
-                                                    <Row>
-                                                        <FormGroup className="mb-2 col col-sm-5">
-                                                            <Row className="justify-content-md-left">
-                                                                <Label htmlFor="horizontal-firstname-input" className="col-sm-5 col-form-label" >IsSCM </Label>
+                                                                <Label htmlFor="horizontal-firstname-input" className="col-sm-2 col-form-label" >IsSCM </Label>
                                                                 <Col md={2} style={{ marginTop: '9px' }} >
                                                                     <div className="form-check form-switch form-switch-md mb-3" dir="ltr">
                                                                         <AvInput type="checkbox" className="form-check-input" id="customSwitchsizemd"
@@ -148,4 +130,4 @@ const EmployeeTypesMaster = (props) => {
     )
 }
 
-export default EmployeeTypesMaster
+export default DivisionType

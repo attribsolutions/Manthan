@@ -14,47 +14,34 @@ import Breadcrumb4 from "../../../components/Common/Breadcrumb4"
 import "../../../assets/scss/CustomeTable/datatables.scss"
 import { useDispatch, useSelector } from "react-redux";
 import {
-    deleteModuleID, deleteModuleIDSuccess, editModuleID, fetchModelsList,
+    editModuleID,
     getRoleAccessListPage,
-    // GetRoleAccessListPage,
-    updateModuleIDSuccess
+
 } from "../../../store/actions";
 import { AlertState } from "../../../store/Utilites/CostumeAlert/actions";
 import PartyUIDemo from "../PartyPages/PartyUIDemo";
 import { useHistory } from "react-router-dom";
+import { CommonGetRoleAccessFunction } from "../../../components/Common/CommonGetRoleAccessFunction";
 
 const RoleAccessListPage = () => {
 
     const dispatch = useDispatch();
-    const history = useHistory()
+    const history = useHistory();
+
+    const [userPageAccessState, setUserPageAccessState] = useState('');
+    const [modal_center, setmodal_center] = useState(false);
 
     const { TableListData } = useSelector((state) => ({
         TableListData: state.RoleAccessReducer.RoleAccessListPage,
 
     }));
 
-    console.log("TableListData", TableListData)
-
-    const userPageAccess = history.location.state
-
     useEffect(() => {
-
-        if ((userPageAccess === undefined)) {
-
-            // history.push("/Dashboard")
+        const userAcc = CommonGetRoleAccessFunction(history)
+        if (!(userAcc === undefined)) {
+            setUserPageAccessState(userAcc)
         }
-        else {
-            if (!(userPageAccess.fromDashboardAccess)) {
-                //   history.push("/Dashboard")
-
-            }
-            // setPageHeading( userPageAccess.label)
-        };
-    }, [userPageAccess])
-
-    const [modal_center, setmodal_center] = useState(false);
-
-    // get Access redux data
+    }, [history])
 
     //  This UseEffect => Featch Modules List data  First Rendering
     useEffect(() => {
@@ -65,6 +52,20 @@ const RoleAccessListPage = () => {
     const EditPageHandler = (id) => {
         dispatch(editModuleID(id));
     }
+
+    //select id for delete row
+    const deleteHandeler = (id, name) => {
+        dispatch(
+            AlertState({
+                Type: 5,
+                Status: true,
+                Message: `Are you sure you want to delete this item : "${name}"`,
+                RedirectPath: false,
+                // PermissionAction: deleteItemID,
+                ID: id,
+            })
+        );
+    };
 
     // Modules list component table columns 
     const columns = [
@@ -84,27 +85,46 @@ const RoleAccessListPage = () => {
         },
         {
             text: "Action",
-            dataField: "pdf",
-            formatter: (cellContent, module) => (
-                <div className="d-flex gap-3" style={{ display: 'flex', justifyContent: 'center' }} >
-                    <Button
-                        type="button"
-                        data-mdb-toggle="tooltip" data-mdb-placement="top" title="Edit RoleAccess"
-                        onClick={() => { EditPageHandler(module.id); }}
-                        className="badge badge-soft-success font-size-12 btn btn-success waves-effect waves-light w-xxs border border-light"
-                    >
-                        <i className="mdi mdi-pencil font-size-18" id="edittooltip"></i>
-                    </Button>
+            hidden: (
+                !(userPageAccessState.RoleAccess_IsEdit)
+                && !(userPageAccessState.RoleAccess_IsView)
+                && !(userPageAccessState.RoleAccess_IsDelete)) ? true : false,
 
-                    <Button
-                        type="button"
-                        data-mdb-toggle="tooltip" data-mdb-placement="top" title="View RoleAccess"
-                        onClick={() => { EditPageHandler(module.id); }}
-                        className="badge badge-soft-primary font-size-12 btn btn-primary waves-effect waves-light w-xxs border border-light"
-                    >
-                        <i className="bx bxs-show font-size-18 "></i>
-                    </Button>
-                   
+            formatter: (cellContent, RoleAccess) => (
+                <div className="d-flex gap-3" style={{ display: 'flex', justifyContent: 'center' }} >
+                    {((userPageAccessState.RoleAccess_IsEdit)) ?
+                        <Button
+                            type="button"
+                            data-mdb-toggle="tooltip" data-mdb-placement="top" title="Edit RoleAccess"
+                            onClick={() => { EditPageHandler(RoleAccess.id); }}
+                            className="badge badge-soft-success font-size-12 btn btn-success waves-effect waves-light w-xxs border border-light"
+                        >
+                            <i className="mdi mdi-pencil font-size-18" id="edittooltip"></i>
+                        </Button> : null}
+
+                    {(!(userPageAccessState.RoleAccess_IsEdit) && (userPageAccessState.RoleAccess_IsView)) ?
+                        <Button
+                            type="button"
+                            data-mdb-toggle="tooltip" data-mdb-placement="top" title="View RoleAccess"
+                            onClick={() => { EditPageHandler(RoleAccess.id); }}
+                            className="badge badge-soft-primary font-size-12 btn btn-primary waves-effect waves-light w-xxs border border-light"
+
+                        >
+                            <i className="bx bxs-show font-size-18 "></i>
+                        </Button> : null}
+
+                    {(userPageAccessState.RoleAccess_IsDelete)
+                        ?
+                        <Button
+                            className="badge badge-soft-danger font-size-12 btn btn-danger waves-effect waves-light w-xxs border border-light"
+                            data-mdb-toggle="tooltip" data-mdb-placement="top" title="Delete RoleAccess"
+                            onClick={() => { deleteHandeler(RoleAccess.id, RoleAccess.Name); }}
+                        >
+                            <i className="mdi mdi-delete font-size-18"></i>
+                        </Button>
+                        : null
+                    }
+
                 </div>
             ),
         },
@@ -125,6 +145,8 @@ const RoleAccessListPage = () => {
     function tog_center() {
         setmodal_center(!modal_center)
     }
+
+    if (!(userPageAccessState === '')) {
     return (
         <React.Fragment>
             <div className="page-content">
@@ -149,9 +171,11 @@ const RoleAccessListPage = () => {
                                     <React.Fragment>
                                         <Breadcrumb4
                                             title={"Count :"}
-                                            breadcrumbItem={"RoleAccess List Page"}
-                                            IsButtonVissible={true}
+                                            breadcrumbItem={userPageAccessState.PageHeading}
+                                            IsButtonVissible={(userPageAccessState.RoleAccess_IsSave) ? true : false}
                                             SearchProps={toolkitProps.searchProps}
+                                            IsSearchVissible={true}
+                                            defaultSorted={defaultSorted}
                                             breadcrumbCount={`RoleAccess Count: ${TableListData.length}`}
                                         // RedirctPath={"/moduleMaster"}
                                         />
@@ -192,5 +216,10 @@ const RoleAccessListPage = () => {
         </React.Fragment>
     )
 }
-
+else {
+    return (
+      <React.Fragment></React.Fragment>
+    )
+  }
+}
 export default RoleAccessListPage
