@@ -32,10 +32,9 @@ const SidebarContent = (props) => {
   }));
 
   useEffect(() => {
+    if(RoleAccessData.length>0){
     dispatch(roleAceessAction(1, 1, 1))
-    // console.log("test side bar use effect")
-    console.log("RoleAccessData useEffect:",RoleAccessData)
-    
+       }
   }, [])
 
   const activateParentDropdown = useCallback((item) => {
