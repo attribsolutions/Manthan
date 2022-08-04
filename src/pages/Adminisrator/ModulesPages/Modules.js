@@ -210,7 +210,7 @@ const Modules = (props) => {
                                                             <Col md={2} style={{ marginTop: '9px' }} >
                                                                 <div className="form-check form-switch form-switch-md mb-3" dir="ltr">
                                                                     <AvInput type="checkbox" className="form-check-input" id="customSwitchsizemd"
-                                                                        // checked={EditData.isActive}
+                                                                        defaultChecked={EditData.isActive}
                                                                         name="IsActive"
                                                                     // defaultChecked
                                                                     />

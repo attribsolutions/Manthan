@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import Breadcrumbs from "../../../components/Common/Breadcrumb";
+import Breadcrumbs3 from "../../../components/Common/Breadcrumb3";
 import { Card, CardBody, Col, Container, Row, Label, Input, CardHeader, FormGroup, Button } from "reactstrap";
 import { AvForm, AvGroup, AvField, AvInput } from "availity-reactstrap-validation";
 import { useDispatch, useSelector } from "react-redux";
@@ -7,6 +7,7 @@ import { AlertState } from "../../../store/Utilites/CostumeAlert/actions";
 import Select from "react-select";
 import {
     editPartyIDSuccess, getDistrictOnState, getDistrictOnStateSuccess, getDivisionTypesID,
+    getPartyListAPI,
     GetPartyTypeByDivisionTypeID, postPartyData, postPartyDataSuccess, updatePartyID
 } from "../../../store/Administrator/PartyRedux/action";
 
@@ -58,31 +59,28 @@ const RoleAccessList = (props) => {
 
 
     //Access redux store Data /  'save_ModuleSuccess' action data
-    const { PageMasterListForRoleAccess, PageAccess, ModuleData, PageDropdownForRoleAccess, PartySaveSuccess,
+    const { PageAccess, ModuleData, PageDropdownForRoleAccess,
         AddPage_PageMasterListForRoleAccess_Redux, GO_buttonPageMasterListForRoleAccess_Redux, PostMessage_ForRoleAccessList,
-        RoleListData_Reducer, companyList, DivisionTypes, Roles } = useSelector((state) => ({
+        DivisionTypes, Roles, PartyTypes } = useSelector((state) => ({
             PartySaveSuccess: state.PartyMasterReducer.PartySaveSuccess,
             companyList: state.Company.companyList,
-            DivisionTypes: state.PartyMasterReducer.DivisionTypes,
-            PartyTypes: state.PartyMasterReducer.PartyTypes,
+            // DivisionTypes: state.PartyMasterReducer.DivisionTypes,
+            PartyTypes: state.PartyMasterReducer.partyList,
             Roles: state.User_Registration_Reducer.Roles,
             ModuleData: state.Modules.modulesList,
             PageAccess: state.H_Pages.PageAccess,
-            RoleListData_Reducer: state.RoleAccessReducer.RoleListDataForRoleListPage,
-            PageMasterListForRoleAccess: state.RoleAccessReducer.PageMasterListForRoleAccess,
             PageDropdownForRoleAccess: state.RoleAccessReducer.PageDropdownForRoleAccess,
             AddPage_PageMasterListForRoleAccess_Redux: state.RoleAccessReducer.AddPage_PageMasterListForRoleAccess,
             GO_buttonPageMasterListForRoleAccess_Redux: state.RoleAccessReducer.GO_buttonPageMasterListForRoleAccess,
             PostMessage_ForRoleAccessList: state.RoleAccessReducer.PostMessage_ForRoleAccessList,
-
-
         }));
 
 
     useEffect(() => {
         dispatch(GO_Button_HandlerForRoleAccessListPage_Success([]))
         // dispatch(fetchCompanyList());
-        dispatch(getDivisionTypesID());
+        // dispatch(getDivisionTypesID());
+        dispatch(getPartyListAPI());
 
         dispatch(getRoles());
         dispatch(fetchModelsList())
@@ -191,7 +189,7 @@ const RoleAccessList = (props) => {
     ]
 
 
-    const DivisionTypesValues = DivisionTypes.map((Data) => ({
+    const DivisionTypesValues = PartyTypes.map((Data) => ({
         value: Data.id,
         label: Data.Name
     }));
@@ -306,6 +304,7 @@ const RoleAccessList = (props) => {
             var moduleId = parseInt(moduleName)
             var relatedPageID = parseInt(relatedPage)
 
+
             var isShowOnMenu = document.getElementById("IsShowOnMenu" + i).checked;
             var isSave = document.getElementById("IsSave" + i).checked
             var isView = document.getElementById("IsView" + i).checked;
@@ -315,6 +314,10 @@ const RoleAccessList = (props) => {
             var isDeleteSelf = document.getElementById("IsDeleteSelf" + i).checked;
             var isPrint = document.getElementById("IsPrint" + i).checked;
             var isTopOfTheDivision = document.getElementById("IsTopOfTheDivision" + i).checked;
+
+
+            if (isShowOnMenu) { isSave = true }
+            if (isEdit || isEditSelf) { isView = true }
 
 
             roleAccessArray.push({ "PageAccess": 1 });
@@ -388,7 +391,13 @@ const RoleAccessList = (props) => {
     return (
         <React.Fragment>
             <div className="page-content text-black" >
-                <Breadcrumbs breadcrumbItem={"Role Access List"} />
+                {/* <Breadcrumbs breadcrumbItem={"Role Access List"} /> */}
+                <Breadcrumbs3
+                    title={"Count :"}
+                    breadcrumbItem={"Role Access"}
+                    IsSearch={true}
+                    breadcrumbCount={tableListData.length}
+                />
                 <MetaTags>
                     <title>Role Access| FoodERP-React FrontEnd</title>
                 </MetaTags>
@@ -398,67 +407,94 @@ const RoleAccessList = (props) => {
 
                         {
                             !showTableOnUI ?
-
-                                <CardHeader className="card-header   text-black" style={{ backgroundColor: "#dddddd" }} >
-                                    <Row>
-                                        <Col md="4">
-
-                                            <FormGroup className="mb-3 row ">
-                                                <Label className="col-sm-2 p-2 ml-n4 ">Role</Label>
-                                                <Col md="9">
-                                                    <Select
-                                                        value={role_dropdown_Select}
-                                                        options={Role_DropdownOption}
-                                                        className="rounded-bottom"
-                                                        onChange={(e) => { RoleDropDown_select_handler(e) }}
-                                                        classNamePrefix="select2-selection"
-
-                                                    />
-                                                </Col>
-                                            </FormGroup>
-                                        </Col>
-
-                                        <Col md="4" className="">
-                                            <FormGroup className="mb-3 row" >
-                                                <Label className="col-sm-3 p-2">Division</Label>
-                                                <Col md="9">
-                                                    <Select
-                                                        value={division_dropdown_Select}
-                                                        className="rounded-bottom"
-                                                        options={DivisionTypesValues}
-                                                        onChange={(e) => { handllerDivisionTypes(e) }}
-                                                    />
-                                                </Col>
-                                            </FormGroup>
-                                        </Col>
-
-                                        <Col md="3" className="mt- ">
-                                            <Button type="button" color="primary" onClick={() => { GoButton_Handler() }}>Go</Button>
-                                        </Col>
-
-                                    </Row>
-                                </CardHeader>
-                                :
                                 <>
-                                    <CardHeader className="card-header   text-black" style={{ backgroundColor: "#dddddd" }} >
-                                        <Row  style={{ backgroundColor: "#f2f2f2"}} className='mb-3 mt-n1'>
-                                        <Col md="4" className="p-2 ">
-                                        <Label className="p-2 col-sm-3">Role</Label>
-                                     <Button type="button" color="btn btn-outline-warning" className="btn-sm" ><h className="text-black">{role_dropdown_Select.label}</h></Button>
-                                     </Col>
+                                    <CardHeader className="card-header   text-black " style={{ backgroundColor: "#dddddd" }} >
+                                        <Row className="mt-3">
+                                            <Col md="4">
 
-                                     <Col md="4" className="p-2 ">
-                                        <Label className=" p-2 col-sm-3 ">Division</Label>
-                                     <Button type="button" color="btn btn-outline-warning" className="btn-sm" ><h className="text-black">{division_dropdown_Select.label}</h></Button>
-                                       </Col>
-                                            <Col md="4" className="p-2 text-end">
-                                                <Button type="button" color="btn btn-outline-warning" className="btn-sm" onClick={() => { ChangeButtonHandeler() }}><h className="text-black">Change Role</h></Button>
+                                                <FormGroup className="mb-3 row ">
+                                                    <Label className="col-sm-2 p-2 ml-n4 ">Role</Label>
+                                                    <Col md="9">
+                                                        <Select
+                                                            value={role_dropdown_Select}
+                                                            options={Role_DropdownOption}
+                                                            className="rounded-bottom"
+                                                            onChange={(e) => { RoleDropDown_select_handler(e) }}
+                                                            classNamePrefix="select2-selection"
+
+                                                        />
+                                                    </Col>
+                                                </FormGroup>
+                                            </Col>
+
+                                            <Col md="4" className="">
+                                                <FormGroup className="mb-3 row" >
+                                                    <Label className="col-sm-3 p-2">Division</Label>
+                                                    <Col md="9">
+                                                        <Select
+                                                            value={division_dropdown_Select}
+                                                            className="rounded-bottom"
+                                                            options={DivisionTypesValues}
+                                                            onChange={(e) => { handllerDivisionTypes(e) }}
+                                                        />
+                                                    </Col>
+                                                </FormGroup>
+                                            </Col>
+
+                                            <Col md="3" className="mt- ">
+                                                <Button type="button" color="primary" onClick={() => { GoButton_Handler() }}>Go</Button>
                                             </Col>
 
                                         </Row>
+                                    </CardHeader>
 
-                                        <Row>
-                                            <Col md="4" className="">
+                                    <br></br>
+                                    <br></br>
+                                    <br></br>
+                                    <br></br>
+                                    <br></br>
+                                    <br></br>
+                                    <br></br>
+                                    <br></br><br></br>
+                                    <br></br>
+                                    <br></br>
+                                    <br></br>
+                                    <br></br>
+                                    <br></br>
+                                    <br></br>
+                                    <br></br><br></br>
+                                    <br></br>
+                                    <br></br>
+                                    <br></br>
+                                    <br></br>
+                                    <br></br>
+                                    <br></br>
+                                    <br></br>
+
+                                </>
+                                :
+                                <>
+                                    <CardHeader className="card-header   text-black" style={{ backgroundColor: "#dddddd" }} >
+                                     
+                                          <Row style={{ backgroundColor: "#f2f2f2" }} className='mb-3 mt-n1'>
+                                            <Col md="4" className="p-2 ">
+                                                <Label className="p-2 col-sm-3">Role</Label>
+                                                <Button type="button" color="btn btn-outline-warning" className="btn-sm" ><h className="text-black">{role_dropdown_Select.label}</h></Button>
+                                            </Col>
+
+                                            <Col md="4" className="p-2 ">
+                                                <Label className=" p-2 col-sm-3 ">Division</Label>
+                                                <Button type="button" color="btn btn-outline-warning" className="btn-sm" ><h className="text-black">{division_dropdown_Select.label}</h></Button>
+                                            </Col>
+                                            <Col md="4" className="p-2 text-end">
+                                                <Button type="button" color="btn btn-outline-secondary" className="btn-sm" onClick={() => { ChangeButtonHandeler() }}><h className="text-black">Change Role</h></Button>
+                                            </Col>
+
+                                        </Row>
+                                      
+                                  
+                                        <Row >
+                                            <Col  className="">
                                                 <FormGroup className="mb-3  row">
                                                     <Label className="col-sm-3 p-2 ml-n5">Module</Label>
                                                     <Col md="7">
@@ -500,7 +536,6 @@ const RoleAccessList = (props) => {
 
                                         </Row>
                                     </CardHeader>
-
                                     <CardBody>
                                         {tableListData.length > 0
                                             ?

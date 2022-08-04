@@ -97,7 +97,8 @@ export const Python_FoodERP_postJwtForgetPwd_SendOTP = data => post(url.FOOD_ERP
 export const postSocialLogin = data => post(url.SOCIAL_LOGIN, data)
 
 export const RoleAccessApi_url = (id1,id2,id3) => get(`${url.ROLE_ACCESS}/${id1}/${id2}/${id3}`)
-/// Employees  Component All Apis 
+
+// Employees  Component All Apis 
 export const getDesignationID_For_Dropdown = () => get(url.GET_DESIGNATIONID)
 export const getEmployeeType_For_Dropdown = () => get(url.GET_EMPLOYEE_TYPE)
 export const getState_For_Dropdown = () => get(url.GET_STATE)
@@ -108,6 +109,7 @@ export const get_EmployeelistApi = () => get(url.EMPLOYEE_API_URL) // get api
 export const detelet_EmployeeID = (id) => del(`${url.EMPLOYEE_API_URL}/${id}`) // delete api
 export const edit_EmployeeAPI = (id) => get(`${url.EMPLOYEE_API_URL}/${id}`) // edit api
 export const update_EmployeeAPI = (data, id) => put(`${url.EMPLOYEE_API_URL}/${id}`, data)// update 
+export const Get_CompanyBy_EmployeeType_For_Dropdown = (id) => get(`${url.GET_COMPANY_BY_EMPLOYEETYPES_ID}/${id}`)//  GetCompanyByDivisionTypeID DropDown API
 
 //User Registration  All APIs 
 export const getEmployee_Dropdown_For_UserRegistration_API = () => get(url.EMPLOYEE_API_URL)//get api for Dropdown_list data 

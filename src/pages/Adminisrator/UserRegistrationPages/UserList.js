@@ -173,7 +173,7 @@ const UserList = () => {
                         <Button
                             type="button"
                             data-mdb-toggle="tooltip" data-mdb-placement="top" title="Edit User"
-                            onClick={() => { EditPageHandler(module.id); }}
+                            onClick={() => { EditPageHandler(User.id); }}
                             className="badge badge-soft-success font-size-12 btn btn-success waves-effect waves-light w-xxs border border-light"
                         >
                             <i className="mdi mdi-pencil font-size-18" id="edittooltip"></i>
@@ -183,7 +183,7 @@ const UserList = () => {
                         <Button
                             type="button"
                             data-mdb-toggle="tooltip" data-mdb-placement="top" title="View User"
-                            onClick={() => { EditPageHandler(module.id); }}
+                            onClick={() => { EditPageHandler(User.id); }}
                             className="badge badge-soft-primary font-size-12 btn btn-primary waves-effect waves-light w-xxs border border-light"
 
                         >
