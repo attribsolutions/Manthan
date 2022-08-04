@@ -94,15 +94,6 @@ export const delete_Employee_ID = (id) => ({
    payload:updateMessage,
   })
 
-//Employee Types  dropdown api
-export const get_EmployeeTypesID = () => ({
-  type: GET_EMPLOYEE_TYPES_ID,
- 
-});
-export const get_EmployeeTypesID_Success = (EmployeeTypes) => ({
-  type:GET_EMPLOYEE_TYPES_ID_SUCCESS,
-  payload:EmployeeTypes,
-});
 
 // Company Name API dependent on Employee Types api
 export const Get_CompanyName_By_EmployeeTypeID = (id) => ({
@@ -115,13 +106,4 @@ export const Get_CompanyName_By_EmployeeTypeID_Success = (data) => ({
   payload:data,
 });
 
- // Party name API dependent on Employee Types api
-export const Get_PartyName_By_EmployeeTypeID = (id) => ({
-  type: GET_PARTYNAME_BY_DIVISIONTYPES_ID,
-  id,
  
-});
-export const Get_PartyName_By_EmployeeTypeID_Success = (data) => ({
-  type: GET_PARTYNAME_BY_DIVISIONTYPES_ID_SUCCESS,
-  payload:data,
-});

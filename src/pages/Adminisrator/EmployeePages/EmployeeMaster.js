@@ -201,19 +201,20 @@ const AddEmployee = (props) => {
   // const IsPartyConnection = employeeType.filter((element) => {
   //   return element.IsPartyConnection
   // });
-debugger
+
 
   function EmployeeType_Dropdown_Handler(e) {
     setEmployeeType_DropdownSelect(e)
     dispatch(Get_CompanyName_By_EmployeeTypeID(e.value))
-    const IsPartyConnection = employeeType.filter((element) => {
-      return element.IsPartyConnection
+
+    const IsPartyConnection = employeeType.find((element) => {
+      return element
     });
+
     if (IsPartyConnection===true) {
-      setParty_DropdownSelect(Party_Dropdown_Handler)
+    Party_Dropdown_Handler()
       
     }
-
 
   }
 
