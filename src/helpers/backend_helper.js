@@ -98,11 +98,11 @@ export const postSocialLogin = data => post(url.SOCIAL_LOGIN, data)
 
 export const RoleAccessApi_url = (id1,id2,id3) => get(`${url.ROLE_ACCESS}/${id1}/${id2}/${id3}`)
 
-// Employees  Component All Apis 
+// Employees  Component All Api 
+
 export const getDesignationID_For_Dropdown = () => get(url.GET_DESIGNATIONID)
 export const getEmployeeType_For_Dropdown = () => get(url.GET_EMPLOYEE_TYPE)
 export const getState_For_Dropdown = () => get(url.GET_STATE)
-// export const getRegion_For_Dropdown = () => get(url.GET_REGION)
 export const getComapny_For_Dropdown = () => get(url.COMPANY_API_URL)
 export const post_EmployeeData = (data) => post(url.EMPLOYEE_API_URL, data) //save And Update
 export const get_EmployeelistApi = () => get(url.EMPLOYEE_API_URL) // get api
@@ -202,6 +202,7 @@ export const GetRoleListForRoleAccessList_Page_Api=(id1,id2)=>get(`${url.GET_ROL
 export const GO_Button_HandlerForRoleAccessList_Api=(id1,id2)=>get(`${url.GO_BUTTON_HANDLER_FOR_ROLE_ACCESS_PAGE}/${id1}/${id2}`) //get api role List 
 export const AddPageHandlerForRoleAccessList_Api=(id1)=>get(`${url.ADD_PAGE_BUTTON_HANDLER_FOR_ROLE_ACCESS_PAGE}/${id1}`) //get api role List 
 export const PostMethod_HandlerForRoleAccessList_Api=(data)=>post(url.ROLE_ACCESS,data) //post api role Access List 
+export const Get_RoleAccess_List_Page_Api = () => get(url.GET_ROLEACCESS_LIST_PAGE_API)//get RoleAccess List Page API
 
 export {
   

@@ -59,9 +59,9 @@ export const GET_EMPLOYEE_TYPE="/EmployeeTypes"
 export const GET_STATE="/States"
 // export const GET_REGION="/Region"
 export const EMPLOYEE_API_URL="/Employees"   
-export const GET_COMPANY_BY_EMPLOYEETYPES_ID="/GetCompanyByDivisionTypeID" //CompanyByEmployeeType
+export const GET_COMPANY_BY_EMPLOYEETYPES_ID="/GetCompanyByEmployeeType" //CompanyByEmployeeType
 // Role Master
-export const ROLE_MASTER_API="/Roles"////  role get api
+export const ROLE_MASTER_API="/Roles" // role get api
 
 // M_Items Api
 export const Items_MASTER_API="/M_Items"
@@ -83,4 +83,4 @@ export const GET_ROLE_ACCESS_LIST_FOR_ROLE_ACCESS_PAGE ='/RoleAccessNewUpdated'
 export const GO_BUTTON_HANDLER_FOR_ROLE_ACCESS_PAGE ='/RoleAccessNewUpdated'
 export const ADD_PAGE_BUTTON_HANDLER_FOR_ROLE_ACCESS_PAGE ='/RoleAccessAddPage'
 
-
+export const GET_ROLEACCESS_LIST_PAGE_API ='/RoleAccessList'

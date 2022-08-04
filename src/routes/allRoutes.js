@@ -122,7 +122,7 @@ const userRoutes = [
   { path: `/PartyMaster`, component: PartyMaster },
 
   { path: `/RoleAccess`, component: RoleAccessList },
-  { path: `/RoleAccessList`, component: RoleAccessListPage },
+  { path: '/RoleAccessListPage', component: RoleAccessListPage },
 
 
   { path: "/partyUIDemo", component: PartyUIDemo },
