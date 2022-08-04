@@ -83,4 +83,10 @@ export const GET_ROLE_ACCESS_LIST_FOR_ROLE_ACCESS_PAGE ='/RoleAccessNewUpdated'
 export const GO_BUTTON_HANDLER_FOR_ROLE_ACCESS_PAGE ='/RoleAccessNewUpdated'
 export const ADD_PAGE_BUTTON_HANDLER_FOR_ROLE_ACCESS_PAGE ='/RoleAccessAddPage'
 
+// RoleAccess list page API
 export const GET_ROLEACCESS_LIST_PAGE_API ='/RoleAccessList'
+
+// EmployeeType API
+export const EMPLOYEEtYPE_API ='/EmployeeTypes'
+
+

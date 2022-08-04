@@ -204,6 +204,9 @@ export const AddPageHandlerForRoleAccessList_Api=(id1)=>get(`${url.ADD_PAGE_BUTT
 export const PostMethod_HandlerForRoleAccessList_Api=(data)=>post(url.ROLE_ACCESS,data) //post api role Access List 
 export const Get_RoleAccess_List_Page_Api = () => get(url.GET_ROLEACCESS_LIST_PAGE_API)//get RoleAccess List Page API
 
+// Employee Type API
+export const Employee_Type_API = (data) => post(url.EMPLOYEEtYPE_API, data)// post api
+
 export {
   
   getLoggedInUser,
