@@ -43,8 +43,9 @@ const AddEmployee = (props) => {
   const [State_DropdownSelect, setState_DropdownSelect] = useState("");
   const [district_DropdownSelect, setDistrict_DropdownSelect] = useState("");
   const [company_DropdownSelect, setCompany_DropdownSelect] = useState("");
-  const [party_DropdownSelect, setParty_DropdownSelect] = useState("");
+  const [party_DropdownSelect, setParty_DropdownSelect] = useState(null);
   const [DOB_Date_Select, setDOB_Date_Select] = useState("");
+  const [partyDropDownShow_UI, setPartyDropDownShow_UI] = useState(false);
 
   const { designation, employeeType, State, district, partyList, company, postMessage } = useSelector((state) => ({
     designation: state.M_EmployeesReducer.designation,
@@ -198,25 +199,28 @@ const AddEmployee = (props) => {
     setDesignation_DropdownSelect(e)
   }
 
-  // const IsPartyConnection = employeeType.filter((element) => {
-  //   return element.IsPartyConnection
-  // });
-
-
   function EmployeeType_Dropdown_Handler(e) {
     setEmployeeType_DropdownSelect(e)
     dispatch(Get_CompanyName_By_EmployeeTypeID(e.value))
 
+
     const IsPartyConnection = employeeType.find((element) => {
-      return element
+      return element.id === e.value
     });
 
-    if (IsPartyConnection===true) {
-    Party_Dropdown_Handler()
-      
-    }
+    console.log("IsPartyConnection", IsPartyConnection)
 
+    if (IsPartyConnection.IsPartyConnection) {
+      Party_Dropdown_Handler()
+      setPartyDropDownShow_UI(true)
+    }
+    else {
+      setPartyDropDownShow_UI(false)
+    }
   }
+
+
+
 
 
   function State_Dropdown_Handler(e) {
@@ -253,7 +257,7 @@ const AddEmployee = (props) => {
       EmployeeType: employeeType_DropdownSelect.value,
       State: State_DropdownSelect.value,
       District: district_DropdownSelect.value,
-      Party: party_DropdownSelect.map((i) => { return ({ Party: i.value }) }),
+      EmployeeParties: party_DropdownSelect.map((i) => { return ({ Party: i.value }) }),
       Company: company_DropdownSelect.value,
       CreatedBy: 1,
       UpdatedBy: 1,
@@ -264,6 +268,7 @@ const AddEmployee = (props) => {
     }
     else {
       dispatch(postEmployee(jsonBody));
+      console.log("jsonBody",jsonBody)
     }
   };
 
@@ -458,7 +463,7 @@ const AddEmployee = (props) => {
                       </Row>
                     </CardBody>
                   </Card>
-
+                 
                   <Card className="mt-n2">
                     <CardBody style={{ backgroundColor: "whitesmoke" }}>
                       <Row >
@@ -486,11 +491,12 @@ const AddEmployee = (props) => {
                         </Col>
 
                         <Col md="1">  </Col>
+                        {partyDropDownShow_UI ? 
                         <div className="col-lg-3 col-md-6">
                           <div className="mb-3">
                             <label htmlFor="choices-multiple-remove-button" className="form-label font-size-13 text-muted">Party name</label>
                             <Select
-                              defaultValue={[Party_DropdownOptions[1]]}
+                            Value={[Party_DropdownOptions]}
                               isMulti={true}
                               className="basic-multi-select"
                               options={Party_DropdownOptions}
@@ -498,22 +504,9 @@ const AddEmployee = (props) => {
                               classNamePrefix="select2-selection"
                             />
                           </div>
-                        </div>
-
-                        {/* 
-                        <Col md="1">  </Col>
-                        <Col md="3">
-                          <FormGroup className="mb-3">
-                            <Label htmlFor="validationCustom01">Employee Type </Label>
-                            <Select
-                              value={employeeType_DropdownSelect}
-                              options={EmployeeType_DropdownOptions}
-                              onChange={(e) => { EmployeeType_Dropdown_Handler(e) }}
-                            />
-
-                          </FormGroup>
-                        </Col> */}
+                        </div> : <></> } 
                       </Row>
+
 
                       <Row>
 
