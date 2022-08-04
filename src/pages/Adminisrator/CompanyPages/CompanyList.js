@@ -204,7 +204,6 @@ const CompanyList = () => {
                         </Button>
                         : null
                     }
-
                 </div>
             ),
         },
@@ -229,14 +228,6 @@ const CompanyList = () => {
                             >
                                 {toolkitProps => (
                                     <React.Fragment>
-                                        {/* <Breadcrumbs
-                                            title={"Count :"}
-                                            breadcrumbItem={userPageAccessState.PageHeading}
-                                            IsButtonVissible={(userPageAccessState.RoleAccess_IsSave) ? true : false}
-                                            SearchProps={toolkitProps.searchProps}
-                                            breadcrumbCount={`Company Count: ${TableListData.length}`}
-                                            RedirctPath={"/CompanyMaster"}
-                                        /> */}
                                         <Breadcrumbs
                                             title={"Count :"}
                                             breadcrumbItem={userPageAccessState.PageHeading}

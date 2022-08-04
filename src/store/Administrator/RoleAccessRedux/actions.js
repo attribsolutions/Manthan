@@ -2,6 +2,8 @@ import {
 
   ADD_PAGE_HANDLER_FOR_ROLE_ACCESS_lIST_PAGE,
   ADD_PAGE_HANDLER_FOR_ROLE_ACCESS_lIST_PAGE_SUCCESS,
+  GET_ROLEACCESS_LIST_PAGE,
+  GET_ROLEACCESS_LIST_PAGE_SUCCESS,
   GET_ROLE_ACCESS_LIST_FOR_ROLE_ACCESS_lIST_PAGE,
   GET_ROLE_ACCESS_LIST_FOR_ROLE_ACCESS_lIST_PAGE_SUCCESS,
   GO_BUTTON_HANDLER_FOR_ROLE_ACCESS_lIST_PAGE,
@@ -65,4 +67,12 @@ export const PostMethod_ForRoleAccessListPage_Success = (data) => ({
 });
 
 
+// For RoleAccess List Page
+export const getRoleAccessListPage = () => ({
+  type: GET_ROLEACCESS_LIST_PAGE,
+});
 
+export const getRoleAccessListPageSuccess = (data) => ({
+  type: GET_ROLEACCESS_LIST_PAGE_SUCCESS,
+  payload:data,
+});
