@@ -60,7 +60,7 @@ const AddUser = (props) => {
       dispatch(editSuccess({ Status: false }))
       setEmployeeSelect({
         value: editDataGatingFromList.Employee,
-        label: editDataGatingFromList.Employee
+        label: editDataGatingFromList.EmployeeName
       })
       setRoleData(editDataGatingFromList.UserRole)
       return

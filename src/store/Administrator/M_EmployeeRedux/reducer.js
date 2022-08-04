@@ -83,25 +83,11 @@ const M_EmployeesReducer = (state = INIT_STATE, action) => {
         updateMessage: action.payload,
       };
 
-    //Employee Types  dropdown api
-    case GET_EMPLOYEE_TYPES_ID_SUCCESS:
-      return {
-        ...state,
-        EmployeeTypes: action.payload,
-      };
-
     // Company Name API dependent on Employee Types api
     case GET_COMPANYNAME_BY_EMPLOYEETYPES_ID_SUCCESS:
       return {
         ...state,
         CompanyNames: action.payload,
-      };
-
-    // Party name API dependent on Employee Types api
-    case GET_PARTYNAME_BY_DIVISIONTYPES_ID_SUCCESS:
-      return {
-        ...state,
-        PartyTypes: action.payload,
       };
 
     default:
