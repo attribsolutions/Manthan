@@ -24,6 +24,7 @@ export const PostModelsSubmitSuccess = (modulesSubmitSuccesss) => ({
   type: POST_MODULES_SUBMIT_SUCCESS,
   payload: modulesSubmitSuccesss,
 });
+
 export const PostModelsSubmitError = (modulesSubmitError) => ({
   type: POST_MODULES_SUBMIT_ERROR,
   payload: modulesSubmitError,
