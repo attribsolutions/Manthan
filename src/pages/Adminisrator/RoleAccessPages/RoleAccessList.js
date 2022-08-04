@@ -461,7 +461,7 @@ const RoleAccessList = (props) => {
                                             <Col md="4" className="">
                                                 <FormGroup className="mb-3  row">
                                                     <Label className="col-sm-3 p-2 ml-n5">Module</Label>
-                                                    <Col md="9">
+                                                    <Col md="7">
 
                                                         <Select
                                                             value={module_DropdownSelect}
@@ -476,8 +476,8 @@ const RoleAccessList = (props) => {
 
                                             <Col md="4">
                                                 <FormGroup className="mb-3 row ">
-                                                    <Label className="col-sm-2 p-2 ml-n5">Page</Label>
-                                                    <Col md="9">
+                                                    <Label className="col-sm-3 p-2 ml-n5">Page</Label>
+                                                    <Col md="7">
 
                                                         <Select
                                                             value={page_DropdownSelect}
