@@ -32,7 +32,7 @@ const SidebarContent = (props) => {
   }));
 
   useEffect(() => {
-    if(RoleAccessData.length>0){
+    if(RoleAccessData.length<=0){
     dispatch(roleAceessAction(1, 1, 1))
        }
   }, [])
