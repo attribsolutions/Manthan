@@ -126,16 +126,6 @@ function* Update_EmployeeID_GenratorFunction({ updateData, ID }) {
   }
 }
 
-// //Employee Types  dropdown api
-// function* EmployeeTypes_GenratorFunction() {
-//   try {
-//     const response = yield call("");
-//     yield put(get_EmployeeTypesID_Success(response.Data));
-//   } catch (error) {
-//     console.log("Employee Types saga page error", error);
-//   }
-// }
-
 // Company Name API dependent on Employee Types api
 function* Get_CompanyName_By_EmployeeTypesID_GenratorFunction({ id }) {
   try {
@@ -146,15 +136,6 @@ function* Get_CompanyName_By_EmployeeTypesID_GenratorFunction({ id }) {
   }
 }
 
-// Party name API dependent on Employee Types api
-function* Get_PartyType_By_EmployeeTypesID_GenratorFunction({ id }) {
-  try {
-    const response = yield call("", id);
-    yield put(Get_PartyName_By_EmployeeTypeID_Success(response.Data));
-  } catch (error) {
-    console.log("Party Type By Employee Types ID page error", error);
-  }
-}
 function* M_EmployeeSaga() {
   yield takeEvery(GET_DESIGNATIONID, DesignationID_saga);
   yield takeEvery(GET_EMPLOYEETYPE, EmployeeType_saga);
@@ -164,8 +145,6 @@ function* M_EmployeeSaga() {
   yield takeEvery(EDIT_EMPLOYEE_ID, Edit_EmployeeID_GenratorFunction)
   yield takeEvery(DELETE_EMPLOYEE_ID, Delete_EmployeeID_GenratorFunction)
   yield takeEvery(UPDATE_EMPLOYEE_ID, Update_EmployeeID_GenratorFunction)
-  // yield takeEvery(GET_EMPLOYEE_TYPES_ID, EmployeeTypes_GenratorFunction)
   yield takeEvery(GET_COMPANYNAME_BY_EMPLOYEETYPES_ID, Get_CompanyName_By_EmployeeTypesID_GenratorFunction)
-  yield takeEvery(GET_PARTYNAME_BY_DIVISIONTYPES_ID, Get_PartyType_By_EmployeeTypesID_GenratorFunction)
 }
 export default M_EmployeeSaga;

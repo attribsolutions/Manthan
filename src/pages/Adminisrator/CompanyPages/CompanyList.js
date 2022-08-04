@@ -244,7 +244,7 @@ const CompanyList = () => {
                                             SearchProps={toolkitProps.searchProps}
                                             IsSearchVissible={true}
                                             defaultSorted={defaultSorted}
-                                            breadcrumbCount={`User Count: ${TableListData.length}`}
+                                            breadcrumbCount={`Company Count: ${TableListData.length}`}
                                             RedirctPath={"/UserMaster"}
                                         />
                                         <Row>

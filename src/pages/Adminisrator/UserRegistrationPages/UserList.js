@@ -137,10 +137,10 @@ const UserList = () => {
             formatter: (cellContent, user) => <>{user.LoginName}</>,
         },
         {
-            text: "EmployeeID",
-            dataField: "EmployeeID",
+            text: "Employee Name",
+            dataField: "EmployeeName",
             sort: true,
-            formatter: (cellContent, user) => <>{user.EmployeeID}</>,
+            formatter: (cellContent, user) => <>{user.EmployeeName}</>,
         },
         {
             text: "IsActive",
