@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react"
-import { Row, Col, Modal } from "reactstrap"
+import { Row, Col, Modal, Button } from "reactstrap"
 import MetaTags from 'react-meta-tags'
 
 // datatable related plugins
@@ -15,6 +15,7 @@ import "../../../assets/scss/CustomeTable/datatables.scss"
 import { useDispatch, useSelector } from "react-redux";
 import {
     deleteModuleID, deleteModuleIDSuccess, editModuleID, fetchModelsList,
+    getRoleAccessListPage,
     // GetRoleAccessListPage,
     updateModuleIDSuccess
 } from "../../../store/actions";
@@ -27,12 +28,15 @@ const RoleAccessListPage = () => {
     const dispatch = useDispatch();
     const history = useHistory()
 
-    const { TableListData, } = useSelector((state) => ({
-        TableListData: state.RoleAccessReducer.RoleAccessListPageData,
+    const { TableListData } = useSelector((state) => ({
+        TableListData: state.RoleAccessReducer.RoleAccessListPage,
 
     }));
-    
+
+    console.log("TableListData", TableListData)
+
     const userPageAccess = history.location.state
+
     useEffect(() => {
 
         if ((userPageAccess === undefined)) {
@@ -54,7 +58,7 @@ const RoleAccessListPage = () => {
 
     //  This UseEffect => Featch Modules List data  First Rendering
     useEffect(() => {
-        // dispatch(GetRoleAccessListPage());
+        dispatch(getRoleAccessListPage());
     }, []);
 
     // Edit button Handller
@@ -62,26 +66,20 @@ const RoleAccessListPage = () => {
         dispatch(editModuleID(id));
     }
 
-    //Delete Button Handller
-    const deleteHandeler = (id, name) => {
-        dispatch(AlertState({
-            Type: 5, Status: true,
-            Message: `Are you sure you want to delete this Module : "${name}"`,
-            RedirectPath: false,
-            PermissionAction: deleteModuleID,
-            ID: id
-        }));
-    }
-
-    //Modules list component table columns 
+    // Modules list component table columns 
     const columns = [
         {
-            dataField: 'Role',
-            text: 'Role',
+            dataField: 'RoleName',
+            text: 'Role Name',
             sort: true
         }, {
-            dataField: 'Division',
-            text: 'Division',
+            dataField: 'DivisionName',
+            text: 'Division Name',
+            sort: true
+        },
+        {
+            dataField: 'CompanyName',
+            text: 'Company Name',
             sort: true
         },
         {
@@ -89,25 +87,24 @@ const RoleAccessListPage = () => {
             dataField: "pdf",
             formatter: (cellContent, module) => (
                 <div className="d-flex gap-3" style={{ display: 'flex', justifyContent: 'center' }} >
-                    <buton
+                    <Button
                         type="button"
-                        data-mdb-toggle="tooltip" data-mdb-placement="top" title="Edit Module"
-                        onClick={() => {
-                            EditPageHandler(module.id);
-                        }}
-                        className="badge badge-soft-primary font-size-12"
+                        data-mdb-toggle="tooltip" data-mdb-placement="top" title="Edit RoleAccess"
+                        onClick={() => { EditPageHandler(module.id); }}
+                        className="badge badge-soft-success font-size-12 btn btn-success waves-effect waves-light w-xxs border border-light"
                     >
                         <i className="mdi mdi-pencil font-size-18" id="edittooltip"></i>
-                    </buton>
-                    <buton
-                        className="badge badge-soft-info font-size-12"
-                        data-mdb-toggle="tooltip" data-mdb-placement="top" title="Delete Module"
-                    // onClick={() => {
-                    //     deleteHandeler(module.id, module.Name);
-                    // }}
+                    </Button>
+
+                    <Button
+                        type="button"
+                        data-mdb-toggle="tooltip" data-mdb-placement="top" title="View RoleAccess"
+                        onClick={() => { EditPageHandler(module.id); }}
+                        className="badge badge-soft-primary font-size-12 btn btn-primary waves-effect waves-light w-xxs border border-light"
                     >
-                        <i className="bx bxs-show font-size-20 "></i>
-                    </buton>
+                        <i className="bx bxs-show font-size-18 "></i>
+                    </Button>
+                   
                 </div>
             ),
         },

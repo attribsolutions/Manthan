@@ -6,12 +6,14 @@ import { call, put, takeEvery } from "redux-saga/effects";
 import {
   AddPageHandlerForRoleAccessList_Api,
   GetRoleListForRoleAccessList_Page_Api,
+  Get_RoleAccess_List_Page_Api,
   GO_Button_HandlerForRoleAccessList_Api,
-i, PageDropdownForRoleAccessList_Api, PostMethod_HandlerForRoleAccessList_Api,
+ PageDropdownForRoleAccessList_Api, PostMethod_HandlerForRoleAccessList_Api,
 
 } from "../../../helpers/backend_helper";
 import {
   ADD_PAGE_HANDLER_FOR_ROLE_ACCESS_lIST_PAGE,
+  GET_ROLEACCESS_LIST_PAGE,
   GET_ROLE_ACCESS_LIST_FOR_ROLE_ACCESS_lIST_PAGE,
   GO_BUTTON_HANDLER_FOR_ROLE_ACCESS_lIST_PAGE,
   PAGE_DROPDOWN_FOR_ROLE_ACCESS_lIST,
@@ -21,11 +23,13 @@ import { SpinnerState } from "../../Utilites/Spinner/actions";
 import { AlertState } from "../../Utilites/CostumeAlert/actions";
 import {
   AddPageHandlerForRoleAccessListPage_Success,
+  getRoleAccessListPageSuccess,
   GetRoleListForRoleAccessListPage_Success,
   GO_Button_HandlerForRoleAccessListPage_Success,
   PageDropdownForRoleAccessList_Success,
   PostMethod_ForRoleAccessListPage_Success,
 } from "./actions";
+
 
 
 function* GetRoleAccessListForRoleAccessList_GenratorFunction({ id1, id2 }) {
@@ -56,7 +60,7 @@ function* PageDropdownForRoleAccessList_GenratorFunction({ id }) {
 }
 
 function* GoButtonHandlerForRoleAccessList_GenratorFunction({ id1,id2}) {
-  debugger
+
   yield put(SpinnerState(true))
   try {
     const response = yield call(GO_Button_HandlerForRoleAccessList_Api, id1,id2);
@@ -73,7 +77,7 @@ function* GoButtonHandlerForRoleAccessList_GenratorFunction({ id1,id2}) {
 }
 
 function* AddPageHandlerForRoleAccessList_GenratorFunction({ id }) {
-  debugger
+
   yield put(SpinnerState(true))
   try {
     const response = yield call(AddPageHandlerForRoleAccessList_Api, id);
@@ -109,7 +113,22 @@ function* PostMethod_HandlerForRoleAccessList_GenratorFunction({ data }) {
   }
 }
 
+/// get api
 
+function* Get_RoleAccessList_GenratorFunction() {
+  yield put(SpinnerState(true))
+  try {
+    const response = yield call(Get_RoleAccess_List_Page_Api);
+    yield put(getRoleAccessListPageSuccess(response.Data));
+    yield put(SpinnerState(false))
+  } catch (error) {
+    yield put(SpinnerState(false))
+    yield put(AlertState({
+      Type: 4,
+      Status: true, Message: "500 Error Message",
+    }));
+  }
+}
 
 function* RoleAccessSaga() {
   yield takeEvery(PAGE_DROPDOWN_FOR_ROLE_ACCESS_lIST,PageDropdownForRoleAccessList_GenratorFunction);
@@ -117,6 +136,8 @@ function* RoleAccessSaga() {
   yield takeEvery(GO_BUTTON_HANDLER_FOR_ROLE_ACCESS_lIST_PAGE, GoButtonHandlerForRoleAccessList_GenratorFunction);
   yield takeEvery(ADD_PAGE_HANDLER_FOR_ROLE_ACCESS_lIST_PAGE, AddPageHandlerForRoleAccessList_GenratorFunction);
   yield takeEvery(POST_METHOD_HANDLER_FOR_ROLE_ACCESS_lIST_PAGE, PostMethod_HandlerForRoleAccessList_GenratorFunction);
+  yield takeEvery(GET_ROLEACCESS_LIST_PAGE, Get_RoleAccessList_GenratorFunction);
+
 }
 
 export default RoleAccessSaga;

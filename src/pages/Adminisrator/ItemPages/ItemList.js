@@ -108,7 +108,7 @@ const ItemsList = (props) => {
       tog_center();
     }
   }, [editData]);
-debugger
+
   function tog_center() {
     setmodal_center(!modal_center);
   }

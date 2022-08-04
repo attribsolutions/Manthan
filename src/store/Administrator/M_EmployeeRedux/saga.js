@@ -129,7 +129,7 @@ function* Update_EmployeeID_GenratorFunction({ updateData, ID }) {
 // Company Name API dependent on Employee Types api
 function* Get_CompanyName_By_EmployeeTypesID_GenratorFunction({ id }) {
   try {
-    const response = yield call(Get_CompanyBy_EmployeeType_For_Dropdown, id);
+    const response = yield call(Get_CompanyBy_EmployeeType_For_Dropdown,id);
     yield put(Get_CompanyName_By_EmployeeTypeID_Success(response.Data));
   } catch (error) {
     console.log("Company Name By Employee Types ID page error", error);
