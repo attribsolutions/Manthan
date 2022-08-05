@@ -44,8 +44,11 @@ import SendOTP from "../pages/Authentication/SendOTP";
 import EnterOTP from "../pages/Authentication/EnterOTP";
 import RoleAccessListPage from "../pages/Adminisrator/RoleAccessPages/RoleAccessListPage";
 import EmployeeTypesMaster from "../pages/Adminisrator/EmployeeTypes/EmployeeTypesMaster";
+
 import DivisionType from "../pages/Adminisrator/DivisionType/DivisionType";
 import RoleAccessAdd from "../pages/Adminisrator/RoleAccessPages/RoleAccessAdd";
+
+import PartyTypesMaster    from "../pages/Adminisrator/PartyTypes/PartyTypesMasters";
 
 
 // import AddItemMaster from "../pages/Adminisrator/MasterPages/AddItemMaster";
@@ -133,7 +136,9 @@ const userRoutes = [
   { path: "/partyUIDemo", component: PartyUIDemo },
   { path: "/demoUi3", component: DemoUI3 },
   { path: "/demoUi2", component: DemoUI2 },
-  
+
+  { path: "/EmployeeTypesMaster",component:EmployeeTypesMaster },
+  { path: "/PartyTypesMaster",component:PartyTypesMaster },
 
   // { path: "/AddItemMaster", component: AddItemMaster },
   { path: "/SearchBox2", component: SearchBoxSecond },

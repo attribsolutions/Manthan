@@ -88,5 +88,6 @@ export const GET_ROLEACCESS_LIST_PAGE_API ='/RoleAccessList'
 
 // EmployeeType API
 export const EMPLOYEEtYPE_API ='/EmployeeTypes'
-
-
+ 
+// PartyType API
+export const PARTYTYPES_API  ='/PartyTypes'
