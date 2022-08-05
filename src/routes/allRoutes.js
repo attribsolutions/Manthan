@@ -38,7 +38,6 @@ import PartyMaster from "../pages/Adminisrator/PartyPages/PartyMaster";
 import DemoUI3 from "../pages/Adminisrator/PartyPages/DemoUI3";
 import DemoUI2 from "../pages/Adminisrator/PartyPages/DemoUI2";
 import PartyUIDemo from "../pages/Adminisrator/PartyPages/PartyUIDemo";
-import RoleAccessList from "../pages/Adminisrator/RoleAccessPages/RoleAccessAdd";
 import ResetPassword from "../pages/Authentication/ResetPassword";
 import SendOTP from "../pages/Authentication/SendOTP";
 import EnterOTP from "../pages/Authentication/EnterOTP";
