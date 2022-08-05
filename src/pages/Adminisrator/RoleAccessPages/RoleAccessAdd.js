@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
-import Breadcrumbs3 from "../../../components/Common/Breadcrumb3";
-import { Card, CardBody, Col, Container, Row, Label, Input, CardHeader, FormGroup, Button } from "reactstrap";
+import Breadcrumb from "../../../components/Common/Breadcrumb";
+import { Card, CardBody, Col, Container, Row, Label, Input, CardHeader, FormGroup, Button} from "reactstrap";
 import { AvForm, AvGroup, AvField, AvInput } from "availity-reactstrap-validation";
 import { useDispatch, useSelector } from "react-redux";
 import { AlertState } from "../../../store/Utilites/CostumeAlert/actions";
@@ -17,40 +17,21 @@ import { AddPageHandlerForRoleAccessListPage, GetHpageListData, getH_Modules, ge
 import { fetchModelsList } from "../../../store/actions";
 
 import { useHistory, useLocation, useParams } from "react-router-dom";
+import { CommonGetRoleAccessFunction } from "../../../components/Common/CommonGetRoleAccessFunction";
 
-const RoleAccessList = (props) => {
-    // const [EditData, setEditData] = useState([]);
+const RoleAccessAdd = (props) => {
+
+    const formRef = useRef(null);
+    const dispatch = useDispatch();
     const history = useHistory()
 
-    // useEffect(() => {
-    //     console.log("testvalue,testvalue,testvalue,", props)
-
-    //     const userPageAccess = history.location.state
-
-
-    //     if ((userPageAccess === undefined)) {
-
-    //         history.push("/Dashboard")
-    //     }
-    //     else {
-    //         if (!(userPageAccess.fromDashboardAccess)) {
-    //             history.push("/Dashboard")
-    //         }
-    //     };
-    // }, [props])
-
-
-    const dispatch = useDispatch();
-
-
-
-
+    const [EditData, setEditData] = useState([]);
+    const [pageMode, setPageMode] = useState("save");
+    const [userPageAccessState, setUserPageAccessState] = useState('');
 
     const [tableListData, setTableListData] = useState([])
     const [tableHederList, setTableHederList] = useState([])
     const [showTableOnUI, setShowTableOnUI] = useState(false)
-
-
 
     const [division_dropdown_Select, setDivision_dropdown_Select] = useState("");
     const [role_dropdown_Select, setRoleDropDown] = useState("");
@@ -75,6 +56,13 @@ const RoleAccessList = (props) => {
             PostMessage_ForRoleAccessList: state.RoleAccessReducer.PostMessage_ForRoleAccessList,
         }));
 
+    // userAccess useEffect
+    useEffect(() => {
+        const userAcc = CommonGetRoleAccessFunction(history)
+        if (!(userAcc === undefined)) {
+            setUserPageAccessState(userAcc)
+        }
+    }, [history])
 
     useEffect(() => {
         dispatch(GO_Button_HandlerForRoleAccessListPage_Success([]))
@@ -278,7 +266,6 @@ const RoleAccessList = (props) => {
                 RedirectPath: false,
                 PermissionAction: false,
             }));
-
         }
     }
 
@@ -387,16 +374,15 @@ const RoleAccessList = (props) => {
         })
         setTableListData(newList)
     }
-
+    if (!(userPageAccessState === '')) {
     return (
         <React.Fragment>
             <div className="page-content text-black" >
                 {/* <Breadcrumbs breadcrumbItem={"Role Access List"} /> */}
-                <Breadcrumbs3
+                <Breadcrumb
                     title={"Count :"}
-                    breadcrumbItem={"Role Access"}
                     IsSearch={true}
-                    breadcrumbCount={tableListData.length}
+                    breadcrumbItem={userPageAccessState.PageHeading}
                 />
                 <MetaTags>
                     <title>Role Access| FoodERP-React FrontEnd</title>
@@ -475,8 +461,8 @@ const RoleAccessList = (props) => {
                                 :
                                 <>
                                     <CardHeader className="card-header   text-black" style={{ backgroundColor: "#dddddd" }} >
-                                     
-                                          <Row style={{ backgroundColor: "#f2f2f2" }} className='mb-3 mt-n1'>
+
+                                        <Row style={{ backgroundColor: "#f2f2f2" }} className='mb-3 mt-n1'>
                                             <Col md="4" className="p-2 ">
                                                 <Label className="p-2 col-sm-3">Role</Label>
                                                 <Button type="button" color="btn btn-outline-warning" className="btn-sm" ><h className="text-black">{role_dropdown_Select.label}</h></Button>
@@ -491,10 +477,10 @@ const RoleAccessList = (props) => {
                                             </Col>
 
                                         </Row>
-                                      
-                                  
+
+
                                         <Row >
-                                            <Col  className="">
+                                            <Col className="">
                                                 <FormGroup className="mb-3  row">
                                                     <Label className="col-sm-3 p-2 ml-n5">Module</Label>
                                                     <Col md="7">
@@ -638,7 +624,13 @@ const RoleAccessList = (props) => {
         </React.Fragment >
     );
 }
-export default RoleAccessList
+else {
+    return (
+        <React.Fragment></React.Fragment>
+    )
+}
+};
+export default RoleAccessAdd
 {/* <td>
 {indx.PageAccess_IsSave ?
     <input type={"checkbox"} id={'isSave' + key}

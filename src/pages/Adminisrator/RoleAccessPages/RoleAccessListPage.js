@@ -10,7 +10,7 @@ import paginationFactory, {
 import ToolkitProvider from 'react-bootstrap-table2-toolkit';
 
 //Import Breadcrumb
-import Breadcrumb4 from "../../../components/Common/Breadcrumb4"
+import Breadcrumb from "../../../components/Common/Breadcrumb"
 import "../../../assets/scss/CustomeTable/datatables.scss"
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -99,7 +99,7 @@ const RoleAccessListPage = () => {
                             onClick={() => { EditPageHandler(RoleAccess.id); }}
                             className="badge badge-soft-success font-size-12 btn btn-success waves-effect waves-light w-xxs border border-light"
                         >
-                            <i className="mdi mdi-pencil font-size-18" id="edittooltip"></i>
+                           {console.log("id",RoleAccess)} <i className="mdi mdi-pencil font-size-18" id="edittooltip"></i>
                         </Button> : null}
 
                     {(!(userPageAccessState.RoleAccess_IsEdit) && (userPageAccessState.RoleAccess_IsView)) ?
@@ -169,7 +169,7 @@ const RoleAccessListPage = () => {
                             >
                                 {toolkitProps => (
                                     <React.Fragment>
-                                        <Breadcrumb4
+                                        <Breadcrumb
                                             title={"Count :"}
                                             breadcrumbItem={userPageAccessState.PageHeading}
                                             IsButtonVissible={(userPageAccessState.RoleAccess_IsSave) ? true : false}
@@ -177,7 +177,7 @@ const RoleAccessListPage = () => {
                                             IsSearchVissible={true}
                                             defaultSorted={defaultSorted}
                                             breadcrumbCount={`RoleAccess Count: ${TableListData.length}`}
-                                        // RedirctPath={"/moduleMaster"}
+                               
                                         />
                                         <Row>
                                             <Col xl="12">

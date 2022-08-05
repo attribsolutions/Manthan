@@ -185,6 +185,8 @@ const PartyMaster = (props) => {
         setDivision_dropdown_Select(e)
         dispatch(GetPartyTypeByDivisionTypeID(e.value))
         dispatch(GetCompanyByDivisionTypeID(e.value))
+        setPartyType_dropdown_Select('')
+        setCompanyList_dropdown_Select('')
     }
 
     const PartyTypeByDivisionTypeIDValues = PartyTypes.map((Data) => ({
