@@ -42,9 +42,9 @@ const CompanyList = () => {
     const { TableListData, editData, updateMessage, deleteCompanyID, } = useSelector((state) => ({
         TableListData: state.Company.companyList,
         
-        // editData: state.Company.editData,
-        // updateMessage: state.Company.updateMessage,
-        // deleteCompanyID: state.Company.deleteCompanyID,
+        editData: state.Company.editData,
+        updateMessage: state.Company.updateMessage,
+        deleteCompanyID: state.Company.deleteCompanyID,
     }));
 
     useEffect(() => {
@@ -82,7 +82,7 @@ const CompanyList = () => {
                 Message: JSON.stringify(updateMessage.Message),
             }));
         }
-    }, [updateMessage.Status, dispatch]);
+    }, [updateMessage]);
 
     useEffect(() => {
         if ((deleteCompanyID.Status === true) && (deleteCompanyID.StatusCode === 200)) {

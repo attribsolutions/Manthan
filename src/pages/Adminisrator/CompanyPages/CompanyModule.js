@@ -102,7 +102,7 @@ const CompanyModule = (props) => {
         AfterResponseAction: false
       }));
     }
-  }, [PostAPIResponse.Status])
+  }, [PostAPIResponse])
 
   /// CompanyGroupDropDown
   useEffect(() => {
