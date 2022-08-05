@@ -206,6 +206,9 @@ export const Get_RoleAccess_List_Page_Api = () => get(url.GET_ROLEACCESS_LIST_PA
 
 // Employee Type API
 export const Employee_Type_API = (data) => post(url.EMPLOYEEtYPE_API, data)// post api
+ 
+// Party Type API
+export const Party_Types_API  =(data)  => post(url.PARTYTYPES_API,data)//post api
 
 export {
   
