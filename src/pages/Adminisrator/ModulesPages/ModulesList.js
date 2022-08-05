@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react"
-import { Row, Col, Modal, Button } from "reactstrap"
+import { Row, Col, Modal,  } from "reactstrap"
 import MetaTags from 'react-meta-tags'
 
 // datatable related plugins
@@ -17,10 +17,10 @@ import {
     deleteModuleID, deleteModuleIDSuccess, editModuleID, fetchModelsList,
     updateModuleIDSuccess
 } from "../../../store/actions";
-import { AlertState } from "../../../store/Utilites/CostumeAlert/actions";
 import Modules from "./Modules";
 import { useHistory } from "react-router-dom";
 import { CommonGetRoleAccessFunction } from "../../../components/Common/CommonGetRoleAccessFunction";
+import { commonDefaultSorted,  commonListPageDelete_UpdateMsgFunction, commonPageOptions, listPageCommonButtonFunction } from "../../../components/Common/CmponentRelatedCommonFile/listPageCommonButtons";
 
 const ModulesList = () => {
     const dispatch = useDispatch();
@@ -49,43 +49,6 @@ const ModulesList = () => {
         dispatch(fetchModelsList());
     }, []);
 
-    // This UseEffect => UpadateModal Success/Unsucces  Show and Hide Control Alert_modal 
-    useEffect(() => {
-        if ((updateAPIResponse.Status === true) && (updateAPIResponse.StatusCode === 200)) {
-            dispatch(updateModuleIDSuccess({ Status: false }))
-            dispatch(AlertState({
-                Type: 1, Status: true,
-                Message: updateAPIResponse.Message,
-                AfterResponseAction: fetchModelsList,
-            }))
-            tog_center()
-        } else if (updateAPIResponse.Status === true) {
-            dispatch(updateModuleIDSuccess({ Status: false }))
-            dispatch(AlertState({
-                Type: 3, Status: true,
-                Message: updateAPIResponse.Message,
-            }));
-        }
-    }, [updateAPIResponse, dispatch]);
-
-    // This UseEffect => delete Module Success/Unsucces  Show and Hide Control Alert_modal.
-    useEffect(() => {
-        if ((deleteAPIResponse.Status === true) && (deleteAPIResponse.StatusCode === 200)) {
-            dispatch(deleteModuleIDSuccess({ Status: false }))
-            dispatch(AlertState({
-                Type: 1, Status: true,
-                Message: deleteAPIResponse.Message,
-                AfterResponseAction: fetchModelsList,
-            }))
-        } else if (deleteAPIResponse.Status === true) {
-            dispatch(deleteModuleIDSuccess({ Status: false }))
-            dispatch(AlertState({
-                Type: 3,
-                Status: true,
-                Message: deleteAPIResponse.Message,
-            }));
-        }
-    }, [deleteAPIResponse])
 
     // This UseEffect => Edit Modal Show When Edit Data is true
     useEffect(() => {
@@ -94,21 +57,41 @@ const ModulesList = () => {
         }
     }, [editData]);
 
-    // Edit button Handller
-    const EditPageHandler = (id) => {
-        dispatch(editModuleID(id));
+ 
+    function tog_center() {
+        setmodal_center(!modal_center)
     }
+    useEffect(() => {
+        if ((updateAPIResponse.Status === true)) {
+            
+            commonListPageDelete_UpdateMsgFunction(
+               // common function parameters ,data type=> object
+                {
+                    dispatch: dispatch,
+                    response: updateAPIResponse,
+                    resetAction: updateModuleIDSuccess,
+                    afterResponseAction: fetchModelsList
+                }
+            )
+            tog_center()
+        }
 
-    //Delete Button Handller
-    const deleteHandeler = (id, name) => {
-        dispatch(AlertState({
-            Type: 5, Status: true,
-            Message: `Are you sure you want to delete this Module : "${name}"`,
-            RedirectPath: false,
-            PermissionAction: deleteModuleID,
-            ID: id
-        }));
-    }
+    }, [updateAPIResponse])
+
+    useEffect(() => {
+
+        if ((deleteAPIResponse.Status === true)) {
+            commonListPageDelete_UpdateMsgFunction(
+                {
+                    dispatch: dispatch,
+                    response: deleteAPIResponse,
+                    resetAction: deleteModuleIDSuccess,
+                    afterResponseAction: fetchModelsList
+                }
+            )
+        }
+    }, [deleteAPIResponse])
+
 
     //Modules list component table columns 
     const TableColumns = [
@@ -125,71 +108,20 @@ const ModulesList = () => {
             text: 'IsActive',
             sort: true
         },
-        {
-            text: "Action",
-            dataField: "pdf",
-            hidden: (
-                !(userPageAccessState.RoleAccess_IsEdit)
-                && !(userPageAccessState.RoleAccess_IsView)
-                && !(userPageAccessState.RoleAccess_IsDelete)) ? true : false,
 
-            formatter: (cellContent, module) => (
-                <div className="d-flex gap-3" style={{ display: 'flex', justifyContent: 'center' }} >
-                    
-                     {((userPageAccessState.RoleAccess_IsEdit))  ?
-                        <Button
-                            type="button"
-                            data-mdb-toggle="tooltip" data-mdb-placement="top" title="Edit Module"
-                            onClick={() => { EditPageHandler(module.id); }}
-                            className="badge badge-soft-success font-size-12 btn btn-success waves-effect waves-light w-xxs border border-light"
-                        >
-                            <i className="mdi mdi-pencil font-size-18" id="edittooltip"></i>
-                        </Button> : null}
+        // For Edit, Delete ,and View Button Common Code function
+        listPageCommonButtonFunction({
+            dispatchHook: dispatch,
+            deletemsgLable: "Module",
+            userPageAccessState: userPageAccessState,
+            editActionFun: editModuleID,
+            deleteActionFun: deleteModuleID
+        })
 
-                    {(!(userPageAccessState.RoleAccess_IsEdit) && (userPageAccessState.RoleAccess_IsView)) ?
-                        <Button
-                            type="button"
-                            data-mdb-toggle="tooltip" data-mdb-placement="top" title="View Module"
-                            onClick={() => { EditPageHandler(module.id); }}
-                            className="badge badge-soft-primary font-size-12 btn btn-primary waves-effect waves-light w-xxs border border-light"
 
-                        >
-                            <i className="bx bxs-show font-size-18 "></i>
-                        </Button> : null}
-
-                    {(userPageAccessState.RoleAccess_IsDelete)
-                        ?
-                        <Button
-                            type="button"
-                            className="badge badge-soft-danger font-size-12 btn btn-danger waves-effect waves-light w-xxs border border-light"
-                            data-mdb-toggle="tooltip" data-mdb-placement="top" title="Delete Module"
-                            onClick={() => { deleteHandeler(module.id, module.Name); }}
-                        >
-                            <i className="mdi mdi-delete font-size-18"></i>
-                        </Button>
-                        : null
-                    }
-
-                </div>
-            ),
-        },
     ];
 
-    const defaultSorted = [{
-        dataField: 'Name',
-        order: 'asc'
-    }];
-
-    const pageOptions = {
-        sizePerPage: 10,
-        totalSize: TableListData.length, // replace later with size(customers),
-        custom: true,
-    }
-
     // tag_center -- Control the Edit Modal show and close
-    function tog_center() {
-        setmodal_center(!modal_center)
-    }
     if (!(userPageAccessState === '')) {
         return (
             <React.Fragment>
@@ -199,7 +131,7 @@ const ModulesList = () => {
                     </MetaTags>
                     <div className="container-fluid">
                         <PaginationProvider
-                            pagination={paginationFactory(pageOptions)}
+                            pagination={paginationFactory(commonPageOptions(TableListData))}
 
                         >
                             {({ paginationProps, paginationTableProps }) => (
@@ -228,7 +160,7 @@ const ModulesList = () => {
                                                             responsive
                                                             bordered={true}
                                                             striped={false}
-                                                            defaultSorted={defaultSorted}
+                                                            defaultSorted={commonDefaultSorted("Name")}
                                                             classes={"table align-middle table-nowrap table-hover"}
                                                             headerWrapperClasses={"thead-light"}
                                                             {...toolkitProps.baseProps}
