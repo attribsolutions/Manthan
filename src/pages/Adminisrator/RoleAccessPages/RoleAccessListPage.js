@@ -52,14 +52,8 @@ const RoleAccessListPage = () => {
 
 
     const EditPageHandler = (data) => {
-        const rowData = {
-            role: data.Role_id,
-            RoleName:data.RoleName,
-            division: data.Division_id,
-            DivisionName:data.DivisionName,
-            company: data.Company_id
-        }
-
+        const rowData =data
+     
         let RelatedPageID = 0
         const userPageAccess = history.location.state
 

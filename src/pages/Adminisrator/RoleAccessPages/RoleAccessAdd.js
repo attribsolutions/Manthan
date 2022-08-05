@@ -63,17 +63,16 @@ const RoleAccessAdd = (props) => {
     if (!(userAcc === undefined)) {
         setUserPageAccessState(userAcc)
     }
-   debugger
+
     if(!(editData===undefined)){
-        var divisionid = editData.division
+        var divisionid = editData.Division_id
         var companyid = editData.company
-        var roleid = editData.role
-        
-        if (roleid > 0 && divisionid > 0) {
+        var roleid = editData.Role_id
+       if (roleid > 0 && divisionid > 0) {
             dispatch(GO_Button_HandlerForRoleAccessListPage(roleid, divisionid));
             setShowTableOnUI(true)
-          setRoleDropDown({label:editData.RoleName,value:editData.Role_id})
-          setDivision_dropdown_Select({label:editData.DivisionName,value:editData.Division_id})
+          setRoleDropDown({label:editData.RoleName,value:roleid})
+          setDivision_dropdown_Select({label:editData.DivisionName,value:divisionid})
     }
 }
 }, [history]);
