@@ -54,8 +54,10 @@ const AddUser = (props) => {
   useEffect(() => {
 
     if (!(userPageAccessState === '')) { document.getElementById("txtName").focus(); }
+
     if (!(editDataGatingFromList === undefined)) {
       setEditData(editDataGatingFromList);
+      dispatch(BreadcrumbShow(editDataGatingFromList.LoginName))
       setPageMode("edit");
       dispatch(editSuccess({ Status: false }))
       setEmployeeSelect({

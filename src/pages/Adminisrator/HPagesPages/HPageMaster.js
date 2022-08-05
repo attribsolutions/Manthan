@@ -83,6 +83,7 @@ const HPageMaster = (props) => {
     if (!(userPageAccessState === '')) { document.getElementById("txtName").focus(); }
     dispatch(fetchModelsList());
     if (!(editDataGatingFromList === undefined)) {
+      dispatch(BreadcrumbShow(editDataGatingFromList.Name))
       setEditData(editDataGatingFromList);
       setPageMode("edit");
       setTablePageAccessDataState(editDataGatingFromList.PagePageAccess);

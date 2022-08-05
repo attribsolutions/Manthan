@@ -2,6 +2,8 @@ import {
 
   ADD_PAGE_HANDLER_FOR_ROLE_ACCESS_lIST_PAGE,
   ADD_PAGE_HANDLER_FOR_ROLE_ACCESS_lIST_PAGE_SUCCESS,
+  EDIT_ROLEACCESS_ID,
+  EDIT_ROLEACCESS_ID_SUCCESS,
   GET_ROLEACCESS_LIST_PAGE,
   GET_ROLEACCESS_LIST_PAGE_SUCCESS,
   GET_ROLE_ACCESS_LIST_FOR_ROLE_ACCESS_lIST_PAGE,
@@ -75,4 +77,14 @@ export const getRoleAccessListPage = () => ({
 export const getRoleAccessListPageSuccess = (data) => ({
   type: GET_ROLEACCESS_LIST_PAGE_SUCCESS,
   payload:data,
+});
+
+//Edit COMPANY Using Id
+export const editRoleAccessID = (id) => ({
+  type: EDIT_ROLEACCESS_ID,
+  id,
+});
+export const editRoleAccessIDSuccess = (editData) => ({
+  type: EDIT_ROLEACCESS_ID_SUCCESS,
+  payload: editData,
 });

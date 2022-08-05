@@ -10,10 +10,10 @@ import {
 const INIT_STATE = {
   PageDropdownForRoleAccess: [],
   RoleListDataForRoleListPage: [],
-  AddPage_PageMasterListForRoleAccess:[],
-  GO_buttonPageMasterListForRoleAccess:[],
-  PostMessage_ForRoleAccessList:{Status:false},
-  RoleAccessListPage:[]
+  AddPage_PageMasterListForRoleAccess: [],
+  GO_buttonPageMasterListForRoleAccess: [],
+  PostMessage_ForRoleAccessList: { Status: false },
+  RoleAccessListPage: []
 }
 
 const RoleAccessReducer = (state = INIT_STATE, action) => {
@@ -37,19 +37,19 @@ const RoleAccessReducer = (state = INIT_STATE, action) => {
         GO_buttonPageMasterListForRoleAccess: action.payload,
       }
 
-      case ADD_PAGE_HANDLER_FOR_ROLE_ACCESS_lIST_PAGE_SUCCESS:
-        return {
-          ...state,
-          AddPage_PageMasterListForRoleAccess: action.payload,
-        }
+    case ADD_PAGE_HANDLER_FOR_ROLE_ACCESS_lIST_PAGE_SUCCESS:
+      return {
+        ...state,
+        AddPage_PageMasterListForRoleAccess: action.payload,
+      }
 
-      case POST_METHOD_HANDLER_FOR_ROLE_ACCESS_lIST_PAGE_SUCCESS:
-        return {
-          ...state,
-          PostMessage_ForRoleAccessList: action.payload,
-        }
+    case POST_METHOD_HANDLER_FOR_ROLE_ACCESS_lIST_PAGE_SUCCESS:
+      return {
+        ...state,
+        PostMessage_ForRoleAccessList: action.payload,
+      }
 
-          // get RoleAccess List Page
+    // get RoleAccess List Page
     case GET_ROLEACCESS_LIST_PAGE_SUCCESS:
       return {
         ...state,

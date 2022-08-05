@@ -38,12 +38,14 @@ import PartyMaster from "../pages/Adminisrator/PartyPages/PartyMaster";
 import DemoUI3 from "../pages/Adminisrator/PartyPages/DemoUI3";
 import DemoUI2 from "../pages/Adminisrator/PartyPages/DemoUI2";
 import PartyUIDemo from "../pages/Adminisrator/PartyPages/PartyUIDemo";
-import RoleAccessList from "../pages/Adminisrator/RoleAccessPages/RoleAccessList";
+import RoleAccessList from "../pages/Adminisrator/RoleAccessPages/RoleAccessAdd";
 import ResetPassword from "../pages/Authentication/ResetPassword";
 import SendOTP from "../pages/Authentication/SendOTP";
 import EnterOTP from "../pages/Authentication/EnterOTP";
 import RoleAccessListPage from "../pages/Adminisrator/RoleAccessPages/RoleAccessListPage";
 import EmployeeTypesMaster from "../pages/Adminisrator/EmployeeTypes/EmployeeTypesMaster";
+import DivisionType from "../pages/Adminisrator/DivisionType/DivisionType";
+import RoleAccessAdd from "../pages/Adminisrator/RoleAccessPages/RoleAccessAdd";
 
 
 // import AddItemMaster from "../pages/Adminisrator/MasterPages/AddItemMaster";
@@ -122,14 +124,16 @@ const userRoutes = [
   { path: `/PartyList`, component: PartyList },
   { path: `/PartyMaster`, component: PartyMaster },
 
-  { path: `/RoleAccess`, component: RoleAccessList },
+  { path: `/RoleAccess`, component: RoleAccessAdd },
   { path: '/RoleAccessList', component: RoleAccessListPage },
+  { path: "/EmployeeTypesMaster",component:EmployeeTypesMaster },
+  {path:"/DivisionType",component:DivisionType},
 
 
   { path: "/partyUIDemo", component: PartyUIDemo },
   { path: "/demoUi3", component: DemoUI3 },
   { path: "/demoUi2", component: DemoUI2 },
-  { path: "/EmployeeTypesMaster",component:EmployeeTypesMaster },
+  
 
   // { path: "/AddItemMaster", component: AddItemMaster },
   { path: "/SearchBox2", component: SearchBoxSecond },

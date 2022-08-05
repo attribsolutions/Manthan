@@ -6,7 +6,13 @@ import {
     Modal,
     Row,
 } from "reactstrap";
-import { deleteCompany_ID, editCompanyID, fetchCompanyList, updateCompanyIDSuccess, deleteCompanyIDSuccess, editCompanyIDSuccess } from "../../../store/Administrator/CompanyRedux/actions";
+import {
+    deleteCompany_ID,
+    editCompanyID,
+    fetchCompanyList,
+    updateCompanyIDSuccess,
+    deleteCompanyIDSuccess,
+} from "../../../store/Administrator/CompanyRedux/actions";
 import Breadcrumbs from "../../../components/Common/Breadcrumb";
 
 import paginationFactory, {
@@ -35,9 +41,10 @@ const CompanyList = () => {
     // get Access redux data
     const { TableListData, editData, updateMessage, deleteCompanyID, } = useSelector((state) => ({
         TableListData: state.Company.companyList,
-        editData: state.Company.editData,
-        updateMessage: state.Company.updateMessage,
-        deleteCompanyID: state.Company.deleteCompanyID,
+        
+        // editData: state.Company.editData,
+        // updateMessage: state.Company.updateMessage,
+        // deleteCompanyID: state.Company.deleteCompanyID,
     }));
 
     useEffect(() => {
@@ -172,7 +179,7 @@ const CompanyList = () => {
                 <div className="d-flex gap-3" style={{ display: 'flex', justifyContent: 'center' }} >
 
 
-                    {((userPageAccessState.RoleAccess_IsEdit))  ?
+                    {((userPageAccessState.RoleAccess_IsEdit)) ?
                         <Button
                             type="button"
                             data-mdb-toggle="tooltip" data-mdb-placement="top" title="Edit Company"

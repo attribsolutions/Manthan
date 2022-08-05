@@ -43,7 +43,7 @@ const AddEmployee = (props) => {
   const [State_DropdownSelect, setState_DropdownSelect] = useState("");
   const [district_DropdownSelect, setDistrict_DropdownSelect] = useState("");
   const [company_DropdownSelect, setCompany_DropdownSelect] = useState("");
-  const [party_DropdownSelect, setParty_DropdownSelect] = useState(null);
+  const [party_DropdownSelect, setParty_DropdownSelect] = useState('');
   const [DOB_Date_Select, setDOB_Date_Select] = useState("");
   const [partyDropDownShow_UI, setPartyDropDownShow_UI] = useState(false);
 
@@ -202,14 +202,15 @@ const AddEmployee = (props) => {
   function EmployeeType_Dropdown_Handler(e) {
     setEmployeeType_DropdownSelect(e)
     dispatch(Get_CompanyName_By_EmployeeTypeID(e.value))
-
-
+    setCompany_DropdownSelect('')
+    setPartyDropDownShow_UI([])
+    
     const IsPartyConnection = employeeType.find((element) => {
       return element.id === e.value
     });
-
+    
     console.log("IsPartyConnection", IsPartyConnection)
-
+    
     if (IsPartyConnection.IsPartyConnection) {
       Party_Dropdown_Handler()
       setPartyDropDownShow_UI(true)
@@ -268,7 +269,7 @@ const AddEmployee = (props) => {
     }
     else {
       dispatch(postEmployee(jsonBody));
-      console.log("jsonBody",jsonBody)
+
     }
   };
 
@@ -494,9 +495,9 @@ const AddEmployee = (props) => {
                         {partyDropDownShow_UI ? 
                         <div className="col-lg-3 col-md-6">
                           <div className="mb-3">
-                            <label htmlFor="choices-multiple-remove-button" className="form-label font-size-13 text-muted">Party name</label>
+                            <Label className="form-label font-size-13 ">Party name</Label>
                             <Select
-                            Value={[Party_DropdownOptions]}
+                            Value={Party_DropdownOptions}
                               isMulti={true}
                               className="basic-multi-select"
                               options={Party_DropdownOptions}
