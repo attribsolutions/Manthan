@@ -43,7 +43,7 @@ const AddEmployee = (props) => {
   const [State_DropdownSelect, setState_DropdownSelect] = useState("");
   const [district_DropdownSelect, setDistrict_DropdownSelect] = useState("");
   const [company_DropdownSelect, setCompany_DropdownSelect] = useState("");
-  const [party_DropdownSelect, setParty_DropdownSelect] = useState(null);
+  const [party_DropdownSelect, setParty_DropdownSelect] = useState('');
   const [DOB_Date_Select, setDOB_Date_Select] = useState("");
   const [partyDropDownShow_UI, setPartyDropDownShow_UI] = useState(false);
 
