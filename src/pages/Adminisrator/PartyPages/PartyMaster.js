@@ -73,6 +73,7 @@ const PartyMaster = (props) => {
         if (!(userPageAccessState === '')) { document.getElementById("txtName").focus(); }
         if (!(editDataGatingFromList === undefined)) {
             setEditData(editDataGatingFromList);
+            dispatch(BreadcrumbShow(editDataGatingFromList.Name))
             setPageMode("edit");
             setFSSAIExipry_Date_Select(editDataGatingFromList.FSSAIExipry)
 

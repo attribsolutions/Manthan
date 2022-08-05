@@ -31,10 +31,12 @@ const RoleAccessListPage = () => {
     const [userPageAccessState, setUserPageAccessState] = useState('');
     const [modal_center, setmodal_center] = useState(false);
 
-    const { TableListData } = useSelector((state) => ({
+    const { TableListData, RoleAccessModifiedinSingleArray } = useSelector((state) => ({
         TableListData: state.RoleAccessReducer.RoleAccessListPage,
+        RoleAccessModifiedinSingleArray: state.Login.RoleAccessUpdateData,
 
     }));
+
 
     useEffect(() => {
         const userAcc = CommonGetRoleAccessFunction(history)
@@ -48,10 +50,36 @@ const RoleAccessListPage = () => {
         dispatch(getRoleAccessListPage());
     }, []);
 
-    // Edit button Handller
-    const EditPageHandler = (id) => {
-        dispatch(editModuleID(id));
+
+    const EditPageHandler = (data) => {
+        const rowData = {
+            role: data.Role_id,
+            RoleName:data.RoleName,
+            division: data.Division_id,
+            DivisionName:data.DivisionName,
+            company: data.Company_id
+        }
+
+        let RelatedPageID = 0
+        const userPageAccess = history.location.state
+
+        RelatedPageID = userPageAccess.UserDetails.RelatedPageID
+
+        const found = RoleAccessModifiedinSingleArray.find((element) => {
+            return element.id === RelatedPageID
+        })
+
+        if (!(found === undefined)) {
+            history.push({
+                pathname: `/${found.ActualPagePath}`,
+                state: { fromDashboardAccess: true, UserDetails: found, EditData: rowData }
+
+            })
+        }
     }
+
+
+
 
     //select id for delete row
     const deleteHandeler = (id, name) => {
@@ -91,15 +119,16 @@ const RoleAccessListPage = () => {
                 && !(userPageAccessState.RoleAccess_IsDelete)) ? true : false,
 
             formatter: (cellContent, RoleAccess) => (
+
                 <div className="d-flex gap-3" style={{ display: 'flex', justifyContent: 'center' }} >
                     {((userPageAccessState.RoleAccess_IsEdit)) ?
                         <Button
                             type="button"
                             data-mdb-toggle="tooltip" data-mdb-placement="top" title="Edit RoleAccess"
-                            onClick={() => { EditPageHandler(RoleAccess.id); }}
+                            onClick={() => { EditPageHandler(RoleAccess); }}
                             className="badge badge-soft-success font-size-12 btn btn-success waves-effect waves-light w-xxs border border-light"
                         >
-                           {console.log("id",RoleAccess)} <i className="mdi mdi-pencil font-size-18" id="edittooltip"></i>
+                            {console.log("id", RoleAccess)} <i className="mdi mdi-pencil font-size-18" id="edittooltip"></i>
                         </Button> : null}
 
                     {(!(userPageAccessState.RoleAccess_IsEdit) && (userPageAccessState.RoleAccess_IsView)) ?
@@ -147,79 +176,79 @@ const RoleAccessListPage = () => {
     }
 
     if (!(userPageAccessState === '')) {
-    return (
-        <React.Fragment>
-            <div className="page-content">
-                <MetaTags>
-                    <title>RoleAccess List Page| FoodERP-React FrontEnd</title>
-                </MetaTags>
-                <div className="container-fluid">
-                    <PaginationProvider
-                        pagination={paginationFactory(pageOptions)}
-                        keyField='id'
-                        columns={columns}
-                        data={TableListData}
-                    >
-                        {({ paginationProps, paginationTableProps }) => (
-                            <ToolkitProvider
-                                keyField='id'
-                                columns={columns}
-                                data={TableListData}
-                                search
-                            >
-                                {toolkitProps => (
-                                    <React.Fragment>
-                                        <Breadcrumb
-                                            title={"Count :"}
-                                            breadcrumbItem={userPageAccessState.PageHeading}
-                                            IsButtonVissible={(userPageAccessState.RoleAccess_IsSave) ? true : false}
-                                            SearchProps={toolkitProps.searchProps}
-                                            IsSearchVissible={true}
-                                            defaultSorted={defaultSorted}
-                                            breadcrumbCount={`RoleAccess Count: ${TableListData.length}`}
-                               
-                                        />
-                                        <Row>
-                                            <Col xl="12">
-                                                <div className="table-responsive">
-                                                    <BootstrapTable
-                                                        keyField={"id"}
-                                                        responsive
-                                                        bordered={true}
-                                                        striped={false}
-                                                        defaultSorted={defaultSorted}
-                                                        classes={"table align-middle table-nowrap table-hover"}
-                                                        headerWrapperClasses={"thead-light"}
-                                                        {...toolkitProps.baseProps}
-                                                        {...paginationTableProps}
-                                                    />
-                                                </div>
-                                            </Col>
-                                        </Row>
+        return (
+            <React.Fragment>
+                <div className="page-content">
+                    <MetaTags>
+                        <title>RoleAccess List Page| FoodERP-React FrontEnd</title>
+                    </MetaTags>
+                    <div className="container-fluid">
+                        <PaginationProvider
+                            pagination={paginationFactory(pageOptions)}
+                            keyField='id'
+                            columns={columns}
+                            data={TableListData}
+                        >
+                            {({ paginationProps, paginationTableProps }) => (
+                                <ToolkitProvider
+                                    keyField='id'
+                                    columns={columns}
+                                    data={TableListData}
+                                    search
+                                >
+                                    {toolkitProps => (
+                                        <React.Fragment>
+                                            <Breadcrumb
+                                                title={"Count :"}
+                                                breadcrumbItem={userPageAccessState.PageHeading}
+                                                IsButtonVissible={(userPageAccessState.RoleAccess_IsSave) ? true : false}
+                                                SearchProps={toolkitProps.searchProps}
+                                                IsSearchVissible={true}
+                                                defaultSorted={defaultSorted}
+                                                breadcrumbCount={`RoleAccess Count: ${TableListData.length}`}
+                                            // RedirctPath={"/moduleMaster"}
+                                            />
+                                            <Row>
+                                                <Col xl="12">
+                                                    <div className="table-responsive">
+                                                        <BootstrapTable
+                                                            keyField={"id"}
+                                                            responsive
+                                                            bordered={true}
+                                                            striped={false}
+                                                            defaultSorted={defaultSorted}
+                                                            classes={"table align-middle table-nowrap table-hover"}
+                                                            headerWrapperClasses={"thead-light"}
+                                                            {...toolkitProps.baseProps}
+                                                            {...paginationTableProps}
+                                                        />
+                                                    </div>
+                                                </Col>
+                                            </Row>
 
-                                        <Row className="align-items-md-center mt-30">
-                                            <Col className="pagination pagination-rounded justify-content-end mb-2">
-                                                <PaginationListStandalone
-                                                    {...paginationProps}
-                                                />
-                                            </Col>
-                                        </Row>
-                                    </React.Fragment>
-                                )
-                                }
-                            </ToolkitProvider>
-                        )
-                        }
-                    </PaginationProvider>
+                                            <Row className="align-items-md-center mt-30">
+                                                <Col className="pagination pagination-rounded justify-content-end mb-2">
+                                                    <PaginationListStandalone
+                                                        {...paginationProps}
+                                                    />
+                                                </Col>
+                                            </Row>
+                                        </React.Fragment>
+                                    )
+                                    }
+                                </ToolkitProvider>
+                            )
+                            }
+                        </PaginationProvider>
+                    </div>
                 </div>
-            </div>
-        </React.Fragment>
-    )
-}
-else {
-    return (
-      <React.Fragment></React.Fragment>
-    )
-  }
+            </React.Fragment>
+        )
+    }
+    else {
+        return (
+            <React.Fragment></React.Fragment>
+        )
+    }
 }
 export default RoleAccessListPage

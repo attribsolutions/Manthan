@@ -79,12 +79,3 @@ export const getRoleAccessListPageSuccess = (data) => ({
   payload:data,
 });
 
-//Edit COMPANY Using Id
-export const editRoleAccessID = (id) => ({
-  type: EDIT_ROLEACCESS_ID,
-  id,
-});
-export const editRoleAccessIDSuccess = (editData) => ({
-  type: EDIT_ROLEACCESS_ID_SUCCESS,
-  payload: editData,
-});
