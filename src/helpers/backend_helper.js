@@ -212,7 +212,11 @@ export const edit_EmployeeType_List_Api = (id) => get(`${url.EMPLOYEE_TYPE_API}/
 export const update_EmployeeType_List_Api = (data, id) => put(`${url.EMPLOYEE_TYPE_API}/${id}`, data)// update 
 
 // Party Type API
-export const Party_Types_API  =(data)  => post(url.PARTYTYPES_API,data)//post api
+export const Post_Party_Type_API = (data) => post(url.PARTYTYPES_API, data)// post api
+export const get_PartyType_List_Api = () => get(url.PARTYTYPES_API) // get api
+export const detelet_PartyType_List_Api = (id) => del(`${url.PARTYTYPES_API}/${id}`) // delete api
+export const edit_PartyType_List_Api = (id) => get(`${url.PARTYTYPES_API}/${id}`) // edit api
+export const update_PartyType_List_Api = (data, id) => put(`${url.PARTYTYPES_API}/${id}`, data)// update 
 
 // Division Types API
 export const Post_Division_Type_API = (data) => post(url.DIVISION_TYPES_API, data)// post api

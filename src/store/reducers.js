@@ -51,6 +51,7 @@ const rootReducer = combineReducers({
   M_EmployeesReducer,
   // Purchase
   OrderPageReducer,
+  // Master
   RoleMaster_Reducer,
   ItemMastersReducer,
   PartyMasterReducer,

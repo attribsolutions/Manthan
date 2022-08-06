@@ -26,8 +26,8 @@ import ItemsMastersSaga from "./Administrator/ItemsRedux/saga"
 import PartyMasterSaga from "./Administrator/PartyRedux/saga"
 import RoleAccessSaga from "./Administrator/RoleAccessRedux/saga"
 import EmployeeTypeSaga from "./Administrator/EmployeeTypeRedux/saga"
-import PartyTypesSaga from "./Administrator/PartyTypeRedux/saga"
 import DivisionTypeSaga from "./Administrator/DivisionTypeRedux/saga"
+import PartyTypeSaga from "./Administrator/PartyTypeRedux/saga"
 
 export default function* rootSaga() {
   yield all([
@@ -52,7 +52,7 @@ export default function* rootSaga() {
     fork(PartyMasterSaga),
     fork(RoleAccessSaga),
     fork(EmployeeTypeSaga),
-    fork(PartyTypesSaga),
+    fork(PartyTypeSaga),
     fork(DivisionTypeSaga),
   ])
 }
