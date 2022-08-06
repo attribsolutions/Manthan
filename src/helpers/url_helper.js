@@ -87,7 +87,7 @@ export const ADD_PAGE_BUTTON_HANDLER_FOR_ROLE_ACCESS_PAGE ='/RoleAccessAddPage'
 export const GET_ROLEACCESS_LIST_PAGE_API ='/RoleAccessList'
 
 // EmployeeType API
-export const EMPLOYEEtYPE_API ='/EmployeeTypes'
+export const EMPLOYEE_TYPE_API ='/EmployeeTypes'
  
 // PartyType API
 export const PARTYTYPES_API  ='/PartyTypes'

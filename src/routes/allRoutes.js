@@ -49,6 +49,7 @@ import DivisionType from "../pages/Adminisrator/DivisionType/DivisionType";
 import RoleAccessAdd from "../pages/Adminisrator/RoleAccessPages/RoleAccessAdd";
 
 import PartyTypesMaster from "../pages/Adminisrator/PartyTypes/PartyTypesMasters";
+import EmployeeTypeList from "../pages/Adminisrator/EmployeeTypes/EmployeeTypeList";
 
 
 // import AddItemMaster from "../pages/Adminisrator/MasterPages/AddItemMaster";
@@ -131,7 +132,7 @@ const userRoutes = [
   { path: '/RoleAccessList', component: RoleAccessListPage },
 
   { path: "/EmployeeType", component: EmployeeTypesMaster },
-
+  { path: "/EmployeeTypeList" ,component:EmployeeTypeList},
   { path: "/DivisionType", component: DivisionType },
 
   { path: "/PartyType", component: PartyTypesMaster },

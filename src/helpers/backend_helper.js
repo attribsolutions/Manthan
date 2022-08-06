@@ -205,8 +205,11 @@ export const PostMethod_HandlerForRoleAccessList_Api=(data)=>post(url.ROLE_ACCES
 export const Get_RoleAccess_List_Page_Api = () => get(url.GET_ROLEACCESS_LIST_PAGE_API)//get RoleAccess List Page API
 
 // Employee Type API
-export const Employee_Type_API = (data) => post(url.EMPLOYEEtYPE_API, data)// post api
- 
+export const Employee_Type_API = (data) => post(url.EMPLOYEE_TYPE_API, data)// post api
+export const get_EmployeeType_List_Api = () => get(url.EMPLOYEE_TYPE_API) // get api
+export const detelet_EmployeeType_List_Api = (id) => del(`${url.EMPLOYEE_TYPE_API}/${id}`) // delete api
+export const edit_EmployeeType_List_Api = (id) => get(`${url.EMPLOYEE_TYPE_API}/${id}`) // edit api
+export const update_EmployeeType_List_Api = (data, id) => put(`${url.EMPLOYEE_TYPE_API}/${id}`, data)// update 
 // Party Type API
 export const Party_Types_API  =(data)  => post(url.PARTYTYPES_API,data)//post api
 
