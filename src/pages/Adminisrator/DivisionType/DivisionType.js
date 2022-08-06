@@ -17,12 +17,12 @@ import { AvField, AvForm, AvInput } from "availity-reactstrap-validation";
 import { PostEmployeeTypeSubmit } from "../../../store/Administrator/EmployeeTypeRedux/action";
 import { useDispatch } from "react-redux";
 import { AlertState } from "../../../store/Utilites/CostumeAlert/actions";
+import { BreadcrumbShow } from "../../../store/actions";
 
 const DivisionType = (props) => {
     const dispatch = useDispatch();
     
     const [Name, setName] = useState("");
-    const [IsPartyConnection, setIsPartyConnection] = useState("");
     const [IsSCM, setIsSCM] = useState("");
 
     const FormSubmitButton_Handler = (event, values) => {
@@ -37,10 +37,9 @@ const DivisionType = (props) => {
             UpdatedOn: "2022-07-18T00:00:00"
         });
         dispatch(PostEmployeeTypeSubmit(jsonBody));
-        // console.log("jsonBody",jsonBody)
         dispatch(AlertState({
             Type: 1, Status: true,
-            Message: "Employee Type Save Successfully",
+            Message: "Division Type Save Successfully",
           }));
     };
 
@@ -50,12 +49,12 @@ const DivisionType = (props) => {
                 <MetaTags>
                     <title>Module| FoodERP-React FrontEnd</title>
                 </MetaTags>
-                <Breadcrumb breadcrumbItem={"Employee Type Master"} />
+                <Breadcrumb breadcrumbItem={"Division Type Master"} />
                 <Container fluid >
                     <Card className="text-black" >
                         <CardHeader className="card-header   text-black" style={{ backgroundColor: "#dddddd" }} >
-                            <h4 className="card-title text-black">{"Employee Type Master"}</h4>
-                            <p className="card-title-desc text-black">{"Employee Type Master"}</p>
+                            <h4 className="card-title text-black">{"Division Type Master"}</h4>
+                            <p className="card-title-desc text-black">{"Division Type Master"}</p>
                         </CardHeader>
                         <CardBody className=" vh-10 0 text-black" style={{ backgroundColor: "#whitesmoke" }} >
                             <AvForm onValidSubmit={(e, v) => { FormSubmitButton_Handler(e, v) }}
@@ -79,7 +78,7 @@ const DivisionType = (props) => {
                                                             validate={{
                                                                 required: { value: true, errorMessage: 'Please Enter Name' },
                                                             }}
-                                                        // onChange={(e) => { dispatch(BreadcrumbShow(e.target.value)) }}
+                                                        onChange={(e) => { dispatch(BreadcrumbShow(e.target.value)) }}
                                                         />
                                                     </FormGroup>
                                                     

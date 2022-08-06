@@ -64,7 +64,7 @@ function* logoutUser({ payload: { history } }) {
   }
 }
 function* RoleAccessGenratorFunction({ id1, id2, id3 }) {
-debugger
+
   try {
     const PageAccessApi = yield call(showPagesListOnPageAccess_DropDown_List)
  
