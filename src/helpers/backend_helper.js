@@ -210,6 +210,7 @@ export const Employee_Type_API = (data) => post(url.EMPLOYEEtYPE_API, data)// po
 // Party Type API
 export const Party_Types_API  =(data)  => post(url.PARTYTYPES_API,data)//post api
 
+
 export {
   
   getLoggedInUser,

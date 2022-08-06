@@ -1,7 +1,8 @@
-import { POST_PARTYTYPES_SUBMIT_SUCCESS } from "./actionTypes"
+import {  POST_PARTYTYPES_SUBMIT_SUCCESS } from "./actionTypes"
 
 const INIT_STATE = {
     PartyType: [],
+   
   }
   
   const PartyTypesReducer = (state = INIT_STATE, action) => {
@@ -12,7 +13,7 @@ const INIT_STATE = {
           ...state,
           PartyType: action.payload,
         }
-  
+       
       default:
         return state
     }
