@@ -9,3 +9,5 @@ export const PostEmployeeTypeSubmit= (data) => ({
     type: POST_EMPLOYEETYPE_SUBMIT_SUCCESS,
     payload: EmployeeType,
   });
+
+ 

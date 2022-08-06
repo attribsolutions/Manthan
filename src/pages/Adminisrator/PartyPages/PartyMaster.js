@@ -175,11 +175,17 @@ const PartyMaster = (props) => {
         setCompanyList_dropdown_Select(e)
 
     }
+    
 
+
+    
     const DivisionTypesValues = DivisionTypes.map((Data) => ({
         value: Data.id,
         label: Data.Name
     }));
+
+
+
 
     function handllerDivisionTypes(e) {
         setDivision_dropdown_Select(e)
@@ -341,6 +347,10 @@ const PartyMaster = (props) => {
                                         </Row>
 
 
+
+
+
+
                                         <Row>
                                             <Card className="mt-n2" style={{ backgroundColor: "whitesmoke" }} >
                                                 <Row className="mt-3 ">
@@ -356,6 +366,18 @@ const PartyMaster = (props) => {
                                                             </Col>
                                                         </FormGroup>
                                                     </Col>
+
+
+
+
+
+
+
+
+
+
+
+
                                                     <Col md="1">  </Col>
                                                     <Col md="3">
                                                         <FormGroup className="mb-3">
