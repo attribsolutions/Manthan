@@ -91,3 +91,6 @@ export const EMPLOYEE_TYPE_API ='/EmployeeTypes'
  
 // PartyType API
 export const PARTYTYPES_API  ='/PartyTypes'
+
+// Division Type API
+export const DIVISION_TYPES_API  ='/DivisionTypes'

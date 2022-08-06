@@ -30,7 +30,6 @@ import Error404 from "../pages/Utility/Error404";
 import Error500 from "../pages/Utility/Error500";
 import ItemsList from "../pages/Adminisrator/ItemPages/ItemList";
 import ItemsMaster from "../pages/Adminisrator/ItemPages/ItemMaster";
-import SearchBox from "../pages/Adminisrator/SearchBox/SearchBox";
 import SearchBoxSecond from "../pages/Adminisrator/SearchBox/SearchBoxSecond";
 import SerachBox3 from "../pages/Adminisrator/SearchBox/SerachBox3";
 import PartyList from "../pages/Adminisrator/PartyPages/PartyList";
@@ -38,7 +37,6 @@ import PartyMaster from "../pages/Adminisrator/PartyPages/PartyMaster";
 import DemoUI3 from "../pages/Adminisrator/PartyPages/DemoUI3";
 import DemoUI2 from "../pages/Adminisrator/PartyPages/DemoUI2";
 import PartyUIDemo from "../pages/Adminisrator/PartyPages/PartyUIDemo";
-import RoleAccessList from "../pages/Adminisrator/RoleAccessPages/RoleAccessAdd";
 import ResetPassword from "../pages/Authentication/ResetPassword";
 import SendOTP from "../pages/Authentication/SendOTP";
 import EnterOTP from "../pages/Authentication/EnterOTP";
@@ -50,6 +48,8 @@ import RoleAccessAdd from "../pages/Adminisrator/RoleAccessPages/RoleAccessAdd";
 
 import PartyTypesMaster from "../pages/Adminisrator/PartyTypes/PartyTypesMasters";
 import EmployeeTypeList from "../pages/Adminisrator/EmployeeTypes/EmployeeTypeList";
+import DivisionTypeList from "../pages/Adminisrator/DivisionType/DivisionTypeList";
+
 
 
 // import AddItemMaster from "../pages/Adminisrator/MasterPages/AddItemMaster";
@@ -133,7 +133,9 @@ const userRoutes = [
 
   { path: "/EmployeeType", component: EmployeeTypesMaster },
   { path: "/EmployeeTypeList" ,component:EmployeeTypeList},
+
   { path: "/DivisionType", component: DivisionType },
+ { path: "/DivisionTypeList", component: DivisionTypeList },
 
   { path: "/PartyType", component: PartyTypesMaster },
 
