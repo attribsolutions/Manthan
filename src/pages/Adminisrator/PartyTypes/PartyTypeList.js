@@ -148,7 +148,7 @@ const PartyTypeList = (props) => {
     
     {
       text: "Division Type Name ",
-      dataField: "DivisionType",
+      dataField: "DivisionTypeName",
       sort: true,
     },
    
