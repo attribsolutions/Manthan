@@ -33,7 +33,7 @@ const AddUser = (props) => {
   const [EmployeeSelect, setEmployeeSelect] = useState("");
 
   // M_Roles DropDown
-  const [RoleDropDown, setRoleDropDown] = useState("");
+  const [RoleDropDown, setRoleDropDown] = useState([]);
 
   //Access redux store Data /  'save_ModuleSuccess' action data
   const { PostAPIResponse, employee, Roles } = useSelector((state) => ({
@@ -129,11 +129,26 @@ const AddUser = (props) => {
   }));
 
   /// Role dopdown
-  function RoleDropDown_select_handler(e) {
-    debugger
-    setRoleDropDown(e)
-  };
+  function RoleDropDown_select_handler(e,role,key) {
 
+
+  
+    const find =  RoleDropDown.filter((index,key1) => {
+      return !(index.Role === role)
+    })
+     debugger
+    if (find===undefined){
+      setRoleDropDown([...RoleDropDown,{Party:e.value,Role:role}])
+    }else{
+      // RoleDropDown
+      // setRoleDropDown([...RoleDropDown[a].Party=e.value])
+
+    }
+
+
+    
+  };
+  debugger
   /// Role Table Validation
   function AddRoleHandler() {
     const find = RoleData.find((element) => {
@@ -202,6 +217,49 @@ const AddUser = (props) => {
     )
   }
 
+
+   const rolaTable=()=>{
+return(
+  <Table className="table table-bordered  text-center">
+  <Thead >
+    <tr>
+      <th>RoleName</th>
+
+      <th>Roles</th>
+    </tr>
+  </Thead>
+  <Tbody  >
+    {Data.map((TableValue,key) => (
+      <tr key={TableValue.Role}>
+        <td>
+          {TableValue.Name}
+        </td>
+        <td>
+          {/* <i className="mdi mdi-trash-can d-block text-danger font-size-20" onClick={() => {
+            UserRoles_DeleteButton_Handller(TableValue.value)
+          }} >
+          </i> */}
+          <FormGroup className="" >
+                             
+                              <Select
+                                defaultValue={{value:1,label:"text"}}
+                                options={RolesValues}
+                                onChange={(e) => { RoleDropDown_select_handler(e,TableValue.id,key) }}
+                                classNamePrefix="select2-selection"
+                              />
+
+                            </FormGroup>
+        </td>
+      </tr>
+    ))}
+  </Tbody>
+</Table>
+)
+  }
+  var a={test:1,test2:2}
+
+ const [test,setTEst]=useState([])
+  console.log("111",a["test"])
   // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
   var IsEditMode_Css = ''
   if (pageMode === "edit" || pageMode == "other") { IsEditMode_Css = "-5.5%" };
@@ -342,7 +400,7 @@ const AddUser = (props) => {
                       <Card className="mt-n2">
                         <CardBody style={{ backgroundColor: "whitesmoke" }}>
                           <Row className="">
-                            <FormGroup className=" ml-3 col col-sm-4 " >
+                            {/* <FormGroup className=" ml-3 col col-sm-4 " >
                               <Label htmlFor="validationCustom01">Roles </Label>
                               <Select
                                 value={RoleDropDown}
@@ -351,9 +409,9 @@ const AddUser = (props) => {
                                 classNamePrefix="select2-selection"
                               />
 
-                            </FormGroup>
+                            </FormGroup> */}
 
-                            <Col className="text-center" sm={1} style={{ marginTop: '28px' }} >
+                            {/* <Col className="text-center" sm={1} style={{ marginTop: '28px' }} >
                               {" "}
                               <Button
                                 type="button"
@@ -364,42 +422,20 @@ const AddUser = (props) => {
                               >
                                 <i className="dripicons-plus "></i>
                               </Button>
-                            </Col>
-                            <Col sm={3} style={{ marginTop: '28px' }}>
-                              {RoleData.length > 0 ? (
+                            </Col> */}
+                            <Col sm={6} style={{ marginTop: '28px' }}>
+                              {RoleData ? (
 
                                 <div className="table-responsive">
-                                  <Table className="table table-bordered  text-center">
-                                    <Thead >
-                                      <tr>
-                                        <th>RoleName</th>
-
-                                        <th>Action</th>
-                                      </tr>
-                                    </Thead>
-                                    <Tbody  >
-                                      {RoleData.map((TableValue) => (
-                                        <tr key={TableValue.Role}>
-                                          <td>
-                                            {TableValue.Name}
-                                          </td>
-                                          <td>
-                                            <i className="mdi mdi-trash-can d-block text-danger font-size-20" onClick={() => {
-                                              UserRoles_DeleteButton_Handller(TableValue.value)
-                                            }} >
-                                            </i>
-                                          </td>
-                                        </tr>
-                                      ))}
-                                    </Tbody>
-                                  </Table>
+                                 { rolaTable()}
                                 </div>
                               ) : (
                                 <>
                                 </>
                               )}
                             </Col>
-                            <FormGroup >
+                            {/* <FormGroup > */}
+                              
                               <Row >
                                 <Col sm={2}>
                                   <div>
@@ -430,7 +466,7 @@ const AddUser = (props) => {
                                   </div>
                                 </Col>
                               </Row>
-                            </FormGroup >
+                            {/* </FormGroup > */}
                           </Row>
                         </CardBody>
                       </Card>
@@ -451,3 +487,24 @@ const AddUser = (props) => {
   }
 };
 export default AddUser;
+
+const Data= [
+  {
+    "id": 60,
+    "Name": "Chiatle CSS Manufacturer",
+    "Party_id": 1,
+    "Role_id": null
+  },
+  {
+    "id": 53,
+    "Name": "Shivamrut Distributors",
+    "Party_id": 7,
+    "Role_id": 1
+  },
+  {
+    "id": 54,
+    "Name": "Avdhoot sales",
+    "Party_id": 8,
+    "Role_id": 3
+  }
+]

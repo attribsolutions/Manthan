@@ -79,6 +79,7 @@ const AddEmployee = (props) => {
 
     if (!(userPageAccessState === '')) { document.getElementById("txtName").focus(); }
     if (!(editDataGatingFromList === undefined)) {
+      debugger
       setPageMode("edit");
       dispatch(BreadcrumbShow(editDataGatingFromList.Name))
       setEditData(editDataGatingFromList);
@@ -101,10 +102,9 @@ const AddEmployee = (props) => {
         value: editDataGatingFromList.District_id,
         label: editDataGatingFromList.DistrictName
       })
-      setParty_DropdownSelect({
-        value: editDataGatingFromList.Party_id,
-        label: editDataGatingFromList.PartyName
-      })
+      setParty_DropdownSelect(editDataGatingFromList.EmployeeParties)
+      if ((editDataGatingFromList.EmployeeParties).length > 0) { setPartyDropDownShow_UI(true) };
+
       setCompany_DropdownSelect({
         value: editDataGatingFromList.Company_id,
         label: editDataGatingFromList.CompanyName
@@ -204,13 +204,13 @@ const AddEmployee = (props) => {
     dispatch(Get_CompanyName_By_EmployeeTypeID(e.value))
     setCompany_DropdownSelect('')
     setPartyDropDownShow_UI([])
-    
+
     const IsPartyConnection = employeeType.find((element) => {
       return element.id === e.value
     });
-    
+
     console.log("IsPartyConnection", IsPartyConnection)
-    
+
     if (IsPartyConnection.IsPartyConnection) {
       Party_Dropdown_Handler()
       setPartyDropDownShow_UI(true)
@@ -464,7 +464,7 @@ const AddEmployee = (props) => {
                       </Row>
                     </CardBody>
                   </Card>
-                 
+
                   <Card className="mt-n2">
                     <CardBody style={{ backgroundColor: "whitesmoke" }}>
                       <Row >
@@ -492,20 +492,20 @@ const AddEmployee = (props) => {
                         </Col>
 
                         <Col md="1">  </Col>
-                        {partyDropDownShow_UI ? 
-                        <div className="col-lg-3 col-md-6">
-                          <div className="mb-3">
-                            <Label className="form-label font-size-13 ">Party name</Label>
-                            <Select
-                            Value={Party_DropdownOptions}
-                              isMulti={true}
-                              className="basic-multi-select"
-                              options={Party_DropdownOptions}
-                              onChange={(e) => { Party_Dropdown_Handler(e) }}
-                              classNamePrefix="select2-selection"
-                            />
-                          </div>
-                        </div> : <></> } 
+                        {partyDropDownShow_UI ?
+                          <div className="col-lg-3 col-md-6">
+                            <div className="mb-3">
+                              <Label className="form-label font-size-13 ">Party name</Label>
+                              <Select
+                                Value={Party_DropdownOptions}
+                                isMulti={true}
+                                className="basic-multi-select"
+                                options={Party_DropdownOptions}
+                                onChange={(e) => { Party_Dropdown_Handler(e) }}
+                                classNamePrefix="select2-selection"
+                              />
+                            </div>
+                          </div> : <></>}
                       </Row>
 
 
