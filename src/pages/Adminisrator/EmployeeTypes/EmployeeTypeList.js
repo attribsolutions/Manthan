@@ -1,25 +1,15 @@
 import React, { useEffect, useState } from "react";
 import Breadcrumbs from "../../../components/Common/Breadcrumb";
 import { Button, Col, Modal, Row } from "reactstrap";
-import {
-  getRole,
-  deleteRole,
-  editRoleId,
-  updateSuccess,
-  deleteSuccess,
-} from "../../../store/Administrator/RoleMasterRedux/action";
-
 import paginationFactory, {
   PaginationListStandalone,
   PaginationProvider,
 } from "react-bootstrap-table2-paginator";
 import ToolkitProvider, { Search } from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
-import Breadcrumb from "../../../components/Common/Breadcrumb"
 import { useSelector, useDispatch } from "react-redux";
 import { AlertState } from "../../../store/Utilites/CostumeAlert/actions";
 import "../../../assets/scss/CustomeTable/datatables.scss";
-
 import { MetaTags } from "react-meta-tags";
 import { useHistory } from "react-router-dom";
 import { CommonGetRoleAccessFunction } from "../../../components/Common/CommonGetRoleAccessFunction";
@@ -122,7 +112,7 @@ const EmployeeTypeList = (props) => {
       AlertState({
         Type: 5,
         Status: true,
-        Message: `Are you sure you want to delete this Role : "${name}"`,
+        Message: `Are you sure you want to delete this Employee Type : "${name}"`,
         RedirectPath: false,
         PermissionAction: delete_EmployeeType_ID,
         ID: id,
@@ -236,9 +226,8 @@ const EmployeeTypeList = (props) => {
                       breadcrumbItem={userPageAccessState.PageHeading}
                       IsButtonVissible={(userPageAccessState.RoleAccess_IsSave) ? true : false}
                       SearchProps={toolkitProps.searchProps}
-                      breadcrumbCount={`Role Count: ${TableListData.length}`}
+                      breadcrumbCount={`EmployeeType Count: ${TableListData.length}`}
                       IsSearchVissible={true}
-                    // RedirctPath={`/RoleMaster`}
                     />
                     <Row>
                       <Col xl="12">
