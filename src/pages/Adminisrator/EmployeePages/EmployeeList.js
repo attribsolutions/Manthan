@@ -42,7 +42,7 @@ const Employee_List = () => {
       deleteMessage: state.M_EmployeesReducer.deleteMessage,
     })
   );
-  console.log("editData", editData);
+
 
   useEffect(() => {
     const userAcc = CommonGetRoleAccessFunction(history)

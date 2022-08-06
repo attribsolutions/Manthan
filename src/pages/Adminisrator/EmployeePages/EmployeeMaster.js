@@ -79,7 +79,7 @@ const AddEmployee = (props) => {
 
     if (!(userPageAccessState === '')) { document.getElementById("txtName").focus(); }
     if (!(editDataGatingFromList === undefined)) {
-      debugger
+
       setPageMode("edit");
       dispatch(BreadcrumbShow(editDataGatingFromList.Name))
       setEditData(editDataGatingFromList);
@@ -102,7 +102,14 @@ const AddEmployee = (props) => {
         value: editDataGatingFromList.District_id,
         label: editDataGatingFromList.DistrictName
       })
-      setParty_DropdownSelect(editDataGatingFromList.EmployeeParties)
+      
+      const listItems = editDataGatingFromList.EmployeeParties.map((data) => ({
+        value:data.id,
+        label:data.Name
+      }))
+      console.log("listItems",JSON.stringify(listItems))
+      setParty_DropdownSelect(listItems)
+    
       if ((editDataGatingFromList.EmployeeParties).length > 0) { setPartyDropDownShow_UI(true) };
 
       setCompany_DropdownSelect({
@@ -198,8 +205,8 @@ const AddEmployee = (props) => {
   function Designation_Dropdown_Handler(e) {
     setDesignation_DropdownSelect(e)
   }
-
   function EmployeeType_Dropdown_Handler(e) {
+    console.log(" data",JSON.stringify(e))
     setEmployeeType_DropdownSelect(e)
     dispatch(Get_CompanyName_By_EmployeeTypeID(e.value))
     setCompany_DropdownSelect('')
@@ -472,7 +479,21 @@ const AddEmployee = (props) => {
                           <FormGroup className="mb-3">
                             <Label htmlFor="validationCustom01">Employee Type </Label>
                             <Select
-                              value={employeeType_DropdownSelect}
+                              // value={employeeType_DropdownSelect}
+                              value={[
+                                {
+                                  value: 7,
+                                  label: "Shivamrut Distributors"
+                                },
+                                {
+                                  value: 8,
+                                  label: "Avdhoot sales"
+                                },
+                                {
+                                  value: 1,
+                                  label: "Chiatle CSS Manufacturer"
+                                }
+                              ]}
                               options={EmployeeType_DropdownOptions}
                               onChange={(e) => { EmployeeType_Dropdown_Handler(e) }}
                             />
