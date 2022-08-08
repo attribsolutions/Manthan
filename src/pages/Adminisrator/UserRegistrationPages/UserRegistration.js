@@ -36,31 +36,31 @@ const AddUser = (props) => {
   const [RoleDropDown, setRoleDropDown] = useState([]);
 
   //Access redux store Data /  'save_ModuleSuccess' action data
-  const { PostAPIResponse, employeelistForDropdown, Roles, userPartiesForUserMaster ,RoleAccessModifiedinSingleArray} = useSelector((state) => ({
+  const { PostAPIResponse, employeelistForDropdown, Roles, userPartiesForUserMaster, RoleAccessModifiedinSingleArray } = useSelector((state) => ({
     PostAPIResponse: state.User_Registration_Reducer.AddUserMessage,
     userPartiesForUserMaster: state.User_Registration_Reducer.userPartiesForUserMaster,
     employeelistForDropdown: state.User_Registration_Reducer.employeelistForDropdown,
     Roles: state.User_Registration_Reducer.Roles,
     RoleAccessModifiedinSingleArray: state.Login.RoleAccessUpdateData,
-}));
+  }));
 
-// userAccess useEffect
-useEffect(() => {
+  // userAccess useEffect
+  useEffect(() => {
 
-if ((editDataGatingFromList === undefined)) {
+    if ((editDataGatingFromList === undefined)) {
 
-    const userAcc = CommonGetRoleAccessFunction(history)
-    if (!(userAcc === undefined)) {
+      const userAcc = CommonGetRoleAccessFunction(history)
+      if (!(userAcc === undefined)) {
         setUserPageAccessState(userAcc)
-    }
-} else {
-    let RelatedPageID = history.location.state.UserDetails.RelatedPageID
-    const userfound = RoleAccessModifiedinSingleArray.find((element) => {
+      }
+    } else {
+      let RelatedPageID = history.location.state.UserDetails.RelatedPageID
+      const userfound = RoleAccessModifiedinSingleArray.find((element) => {
         return element.id === RelatedPageID
-    })
-    setUserPageAccessState(userfound)
-}
-}, [history])
+      })
+      setUserPageAccessState(userfound)
+    }
+  }, [history])
 
   // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
   useEffect(() => {
@@ -144,20 +144,16 @@ if ((editDataGatingFromList === undefined)) {
   /// Role dopdown
   function RoleDropDown_select_handler(e, party, key) {
 
-
-
     const find = RoleData.filter((index, key1) => {
       return !(index.Party === party.Party_id)
     })
-     debugger
+    debugger
     if ((find === undefined)) {
-      setRoleData([{Party: party.Party_id, Role: e.value  }])
+      setRoleData([{ Party: party.Party_id, Role: e.value }])
     } else {
       // RoleDropDown
       setRoleData([...find, { Party: party.Party_id, Role: e.value }])
     }
-
-
 
   };
 
@@ -337,9 +333,9 @@ if ((editDataGatingFromList === undefined)) {
                                 value={EditData.password}
                                 placeholder="Please Enter Password"
                                 autoComplete="new-password"
-                                validate={{
-                                  required: { value: true, errorMessage: 'Please Enter Password' },
-                                }}
+                                // validate={{
+                                //   required: { value: true, errorMessage: 'Please Enter Password' },
+                                // }}
                                 onChange={(e) => { }}
                               />
                             </FormGroup>
@@ -353,8 +349,9 @@ if ((editDataGatingFromList === undefined)) {
                                 <Col md="1" style={{ marginTop: '9px' }} >
                                   <div className="form-check form-switch form-switch-md ml-4 " dir="ltr">
                                     <AvInput type="checkbox" className="form-check-input" id="customSwitchsizemd"
-                                      defaultChecked={EditData.isLoginUsingMobile}
+                                      checked={EditData.isLoginUsingMobile}
                                       name="isLoginUsingMobile"
+                                      defaultChecked={true}
                                     />
                                     <label className="form-check-label" htmlFor="customSwitchsizemd"></label>
                                   </div>
@@ -383,8 +380,9 @@ if ((editDataGatingFromList === undefined)) {
                                 <Col md={1} style={{ marginTop: '10px' }} >
                                   <div className="form-check form-switch form-switch-md" dir="ltr">
                                     <AvInput type="checkbox" className="form-check-input" id="customSwitchsizemd"
-                                      defaultChecked={EditData.isLoginUsingEmail}
+                                     checked={EditData.isLoginUsingEmail}
                                       name="isLoginUsingEmail"
+                                      defaultChecked={true}
                                     />
                                     <label className="form-check-label" htmlFor="customSwitchsizemd"></label>
                                   </div>
