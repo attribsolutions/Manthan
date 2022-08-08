@@ -28,7 +28,7 @@ const ForgetPasswordPage = props => {
   }))
 
   function handleValidSubmit(event, values) {
-    dispatch(userForgetPassword(values, props.history))
+    // dispatch(userForgetPassword(values, props.history))
   }
   console.log("asasss",forgetSuccessMsg,"_____",(forgetSuccessMsg===null))
   return (

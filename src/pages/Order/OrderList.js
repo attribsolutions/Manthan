@@ -51,6 +51,7 @@ const OrderList = (props) => {
   function tog_center() {
     setmodal_center(!modal_center)
   }
+
   //fetch list Page Function 
   function fetchOrderList_dispatch_function() {
     const orderlistInitial = {
@@ -89,7 +90,7 @@ const OrderList = (props) => {
   }
 
   useEffect(() => {
-    debugger
+
     if ((updateMessage.Status === true) && (updateMessage.StatusCode === 200)) {
       dispatch(updateOrderID_From_OrderPageSuccess({ Status: false }))
       dispatch(AlertState({

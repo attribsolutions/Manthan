@@ -12,9 +12,10 @@ import { Python_FoodERP_postJwtForgetPwd } from "../../../helpers/backend_helper
 function* forgetUser({ user }) {
   try {
 
-    const response =  yield call(Python_FoodERP_postJwtForgetPwd,user)
+    const response = "send otp in user email addres"
+    //  yield call(Python_FoodERP_postJwtForgetPwd,user)
     if (response) {
-      yield put(userForgetPasswordSuccess())
+      yield put(userForgetPasswordSuccess(response))
     }
   } catch (error) {
     yield put(userForgetPasswordError(error))
@@ -24,9 +25,11 @@ function* forgetUser({ user }) {
 
 function* sendOTP_GnerFun({ user }) {
   try {
-  const response =  yield call(Python_FoodERP_postJwtForgetPwd,user)
+  // const response = 
+  const response = "lkdhlvihzxvckhzkxhn"
+  yield call(Python_FoodERP_postJwtForgetPwd,user)
   if (response) {
-    yield put(userForgetPasswordSuccess())
+    yield put(userForgetPasswordSuccess(response))
   }
   } catch (error) {
   yield put(userForgetPasswordError(error))

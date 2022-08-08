@@ -330,7 +330,7 @@ const AddUser = (props) => {
                               <Label htmlFor="validationCustom01">Password</Label>
                               <AvField name="password" id="password"
                                 type="password"
-                                value={EditData.password}
+                                // value={EditData.password}
                                 placeholder="Please Enter Password"
                                 autoComplete="new-password"
                                 // validate={{
@@ -341,6 +341,23 @@ const AddUser = (props) => {
                             </FormGroup>
 
                           </Row>
+                          <Row>
+                            <FormGroup className="mb-1 col col-sm-4 " >
+                              <Label htmlFor="validationCustom01">Confirm Password</Label>
+                              <AvField name="password" id="password"
+                                type="password"
+                                // value={EditData.password}
+                                placeholder="Please Enter Password"
+                                autoComplete="new-password"
+                                // validate={{
+                                //   required: { value: true, errorMessage: 'Please Enter Password' },
+                                // }}
+                                onChange={(e) => { }}
+                              />
+                            </FormGroup>
+
+                          </Row>
+
 
                           <Row className="mt-2">
                             <FormGroup className="mb-1 col col-sm-12 " >
