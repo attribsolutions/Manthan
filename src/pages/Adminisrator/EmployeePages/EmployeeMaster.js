@@ -42,7 +42,7 @@ const AddEmployee = (props) => {
   const [State_DropdownSelect, setState_DropdownSelect] = useState("");
   const [district_DropdownSelect, setDistrict_DropdownSelect] = useState("");
   const [company_DropdownSelect, setCompany_DropdownSelect] = useState("");
-  const [party_DropdownSelect, setParty_DropdownSelect] = useState([]);
+  const [party_DropdownSelect, setParty_DropdownSelect] = useState('');
   const [DOB_Date_Select, setDOB_Date_Select] = useState("");
   const [partyDropDownShow_UI, setPartyDropDownShow_UI] = useState(false);
 
@@ -221,7 +221,7 @@ const AddEmployee = (props) => {
     setEmployeeType_DropdownSelect(e)
     dispatch(Get_CompanyName_By_EmployeeTypeID(e.value))
     setCompany_DropdownSelect('')
-    setParty_DropdownSelect([])
+    setParty_DropdownSelect('')
 
     const IsPartyConnection = employeeType.find((element) => {
       return element.id === e.value
@@ -325,7 +325,7 @@ const AddEmployee = (props) => {
 
                         <Col md="3">
                           <FormGroup className="mb-3">
-                            <Label htmlFor="validationCustom01">Name </Label>
+                            <Label>Name </Label>
                             <AvField name="Name" id="txtName" value={EditData.Name}
                               type="text"
                               placeholder="Please Enter Name"
@@ -341,7 +341,7 @@ const AddEmployee = (props) => {
                         <Col md="1">  </Col>
                         <Col md="3">
                           <FormGroup className="mb-3">
-                            <Label htmlFor="validationCustom01">Email</Label>
+                            <Label>Email</Label>
                             <AvField name="email"
                               id="email"
                               type="email"
@@ -365,7 +365,7 @@ const AddEmployee = (props) => {
 
                         <Col md="3">
                           <FormGroup className="mb-3">
-                            <Label htmlFor="validationCustom01">Mobile No.</Label>
+                            <Label>Mobile No.</Label>
                             <AvField name="Mobile" type="tel"
                               value={EditData.Mobile}
                               placeholder="+91 "
@@ -385,7 +385,7 @@ const AddEmployee = (props) => {
                       <Row>
                         <Col md="3">
                           <FormGroup className="mb-3">
-                            <Label htmlFor="validationCustom01">Date of Birth</Label>
+                            <Label>Date of Birth</Label>
                             <Flatpickr
                               id="FSSAIExipry"
                               name="FSSAIExipry"
@@ -408,7 +408,7 @@ const AddEmployee = (props) => {
                         <Col md="1">  </Col>
                         <Col md="3">
                           <FormGroup className="mb-3">
-                            <Label htmlFor="validationCustom01"> Aadhar No.</Label>
+                            <Label> Aadhar No.</Label>
                             <AvField name="AadharNo" type="text"
                               value={EditData.AadharNo}
                               placeholder="Enter your AadharNo. "
@@ -426,7 +426,7 @@ const AddEmployee = (props) => {
                         <Col md="1">  </Col>
                         <Col md="3">
                           <FormGroup className="mb-3">
-                            <Label htmlFor="validationCustom01"> PAN No.</Label>
+                            <Label> PAN No.</Label>
                             <AvField name="PAN" type="text"
                               value={EditData.PAN}
                               placeholder="Enter your PAN No. "
@@ -446,7 +446,7 @@ const AddEmployee = (props) => {
                       <Row>
                         <Col md="3">
                           <FormGroup className="">
-                            <Label htmlFor="validationCustom01">Address</Label>
+                            <Label>Address</Label>
                             <AvField name="Address" value={EditData.Address} type="text"
                               placeholder=" Please Enter Address "
                               autoComplete='off'
@@ -459,7 +459,7 @@ const AddEmployee = (props) => {
                         <Col md="1"></Col>
                         <Col md="3">
                           <FormGroup >
-                            <Label htmlFor="validationCustom01">State</Label>
+                            <Label>State</Label>
                             <Select
                               value={State_DropdownSelect}
                               options={State_DropdownOptions}
@@ -471,7 +471,7 @@ const AddEmployee = (props) => {
                         <Col md="1"></Col>
                         <Col md="3">
                           <FormGroup >
-                            <Label htmlFor="validationCustom01">District</Label>
+                            <Label>District</Label>
                             <Select
                               value={district_DropdownSelect}
                               options={District_DropdownOptions}
@@ -488,7 +488,7 @@ const AddEmployee = (props) => {
                       <Row >
                         <Col md="3">
                           <FormGroup className="mb-3">
-                            <Label htmlFor="validationCustom01">Employee Type </Label>
+                            <Label>Employee Type </Label>
                             <Select
                               value={employeeType_DropdownSelect}
                               options={EmployeeType_DropdownOptions}
@@ -500,7 +500,7 @@ const AddEmployee = (props) => {
                         <Col md="1">  </Col>
                         <Col md="3">
                           <FormGroup className="mb-3">
-                            <Label htmlFor="validationCustom01">Company Name </Label>
+                            <Label>Company Name </Label>
                             <Select
                               value={company_DropdownSelect}
                               options={Company_DropdownOptions}
@@ -531,7 +531,7 @@ const AddEmployee = (props) => {
 
                         <Col md="3">
                           <FormGroup className="mb-4">
-                            <Label htmlFor="validationCustom01">Designation</Label>
+                            <Label>Designation</Label>
                             <Select
                               value={designation_DropdownSelect}
                               options={Designation_DropdownOptions}
@@ -543,7 +543,7 @@ const AddEmployee = (props) => {
                         <Col md="1">  </Col>
                         <Col md="3">
                           <FormGroup className="mb-3">
-                            <Label htmlFor="validationCustom01">Working Hours </Label>
+                            <Label>Working Hours </Label>
                             <AvField name="working_hours" value={EditData.working_hours}
                               type="text"
                               placeholder="Please Enter Working Hours"

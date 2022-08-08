@@ -3,7 +3,7 @@ import Select from "react-select";
 import { Card, CardBody, Col, Container, Row, CardHeader, Label, Button, FormGroup, Table } from "reactstrap";
 import { AvForm, AvInput } from "availity-reactstrap-validation";
 import { useDispatch, useSelector } from "react-redux";
-import { getEmployee, getRoles, addUser, updateID, addUserSuccess }
+import { getEmployee, getRoles, addUser, updateID, addUserSuccess, GetUserPartiesForUserMastePage, getEmployeeForUseRegistration }
   from "../../../store/Administrator/UserRegistrationRedux/actions";
 import Breadcrumb from "../../../components/Common/Breadcrumb";
 import AvField from "availity-reactstrap-validation/lib/AvField";
@@ -36,30 +36,31 @@ const AddUser = (props) => {
   const [RoleDropDown, setRoleDropDown] = useState([]);
 
   //Access redux store Data /  'save_ModuleSuccess' action data
-  const { PostAPIResponse, employee, Roles,RoleAccessModifiedinSingleArray } = useSelector((state) => ({
+  const { PostAPIResponse, employeelistForDropdown, Roles, userPartiesForUserMaster ,RoleAccessModifiedinSingleArray} = useSelector((state) => ({
     PostAPIResponse: state.User_Registration_Reducer.AddUserMessage,
-    employee: state.User_Registration_Reducer.employee,
+    userPartiesForUserMaster: state.User_Registration_Reducer.userPartiesForUserMaster,
+    employeelistForDropdown: state.User_Registration_Reducer.employeelistForDropdown,
     Roles: state.User_Registration_Reducer.Roles,
     RoleAccessModifiedinSingleArray: state.Login.RoleAccessUpdateData,
+}));
 
-  }));
+// userAccess useEffect
+useEffect(() => {
 
-  // userAccess useEffect
-  useEffect(() => {
-      if ((editDataGatingFromList === undefined)) {
-          const userAcc = CommonGetRoleAccessFunction(history)
-          if (!(userAcc === undefined)) {
-              setUserPageAccessState(userAcc)
-          }
-      } else {
-          let RelatedPageID = history.location.state.UserDetails.RelatedPageID
-          const userfound = RoleAccessModifiedinSingleArray.find((element) => {
-              return element.id === RelatedPageID
-          })
-          setUserPageAccessState(userfound)
-      }
+if ((editDataGatingFromList === undefined)) {
 
-  }, [history])
+    const userAcc = CommonGetRoleAccessFunction(history)
+    if (!(userAcc === undefined)) {
+        setUserPageAccessState(userAcc)
+    }
+} else {
+    let RelatedPageID = history.location.state.UserDetails.RelatedPageID
+    const userfound = RoleAccessModifiedinSingleArray.find((element) => {
+        return element.id === RelatedPageID
+    })
+    setUserPageAccessState(userfound)
+}
+}, [history])
 
   // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
   useEffect(() => {
@@ -118,18 +119,19 @@ const AddUser = (props) => {
   }, [PostAPIResponse.Status])
 
   useEffect(() => {
-    dispatch(getEmployee());
+    dispatch(getEmployeeForUseRegistration());
     dispatch(getRoles());
   }, [dispatch]);
 
 
-  const EmployeeValues = employee.map((Data) => ({
+  const EmployeeValues = employeelistForDropdown.map((Data) => ({
     value: Data.id,
     label: Data.Name
   }));
 
   function handllerEmployeeID(e) {
     setEmployeeSelect(e)
+    dispatch(GetUserPartiesForUserMastePage(e.value))
   }
 
 
@@ -140,26 +142,25 @@ const AddUser = (props) => {
   }));
 
   /// Role dopdown
-  function RoleDropDown_select_handler(e,role,key) {
+  function RoleDropDown_select_handler(e, party, key) {
 
 
-  
-    const find =  RoleDropDown.filter((index,key1) => {
-      return !(index.Role === role)
+
+    const find = RoleData.filter((index, key1) => {
+      return !(index.Party === party.Party_id)
     })
      debugger
-    if (find===undefined){
-      setRoleDropDown([...RoleDropDown,{Party:e.value,Role:role}])
-    }else{
+    if ((find === undefined)) {
+      setRoleData([{Party: party.Party_id, Role: e.value  }])
+    } else {
       // RoleDropDown
-      // setRoleDropDown([...RoleDropDown[a].Party=e.value])
-
+      setRoleData([...find, { Party: party.Party_id, Role: e.value }])
     }
 
 
-    
+
   };
-  debugger
+
   /// Role Table Validation
   function AddRoleHandler() {
     const find = RoleData.find((element) => {
@@ -198,11 +199,12 @@ const AddUser = (props) => {
       isLoginUsingEmail: values.isLoginUsingEmail,
       CreatedBy: 1,
       UpdatedBy: 1,
-      UserRole: RoleData.map((d) => ({
-        Role: d.Role,
-      })),
+      UserRole: RoleData
+      // .map((d) => ({
+      //   Role: d.Role,
+      // })),
     })
-
+    debugger
     if (RoleData.length <= 0) {
       dispatch(AlertState({
         Type: 4, Status: true,
@@ -220,6 +222,7 @@ const AddUser = (props) => {
     }
   };
 
+
   // For Delete Button in table
   function UserRoles_DeleteButton_Handller(tableValue) {
     setRoleData(RoleData.filter(
@@ -229,48 +232,45 @@ const AddUser = (props) => {
   }
 
 
-   const rolaTable=()=>{
-return(
-  <Table className="table table-bordered  text-center">
-  <Thead >
-    <tr>
-      <th>RoleName</th>
+  const rolaTable = () => {
+    return (
+      <Table className="table table-bordered  text-center">
+        <Thead >
+          <tr>
+            <th>Party Name</th>
+            <th>RoleName</th>
 
-      <th>Roles</th>
-    </tr>
-  </Thead>
-  <Tbody  >
-    {Data.map((TableValue,key) => (
-      <tr key={TableValue.Role}>
-        <td>
-          {TableValue.Name}
-        </td>
-        <td>
-          {/* <i className="mdi mdi-trash-can d-block text-danger font-size-20" onClick={() => {
+          </tr>
+        </Thead>
+        <Tbody  >
+          {userPartiesForUserMaster.map((index, key) => (
+            <tr key={index.Role}>
+              <td>
+                {index.Name}
+              </td>
+              <td>
+                {/* <i className="mdi mdi-trash-can d-block text-danger font-size-20" onClick={() => {
             UserRoles_DeleteButton_Handller(TableValue.value)
           }} >
           </i> */}
-          <FormGroup className="" >
-                             
-                              <Select
-                                defaultValue={{value:1,label:"text"}}
-                                options={RolesValues}
-                                onChange={(e) => { RoleDropDown_select_handler(e,TableValue.id,key) }}
-                                classNamePrefix="select2-selection"
-                              />
+                <FormGroup className="" >
 
-                            </FormGroup>
-        </td>
-      </tr>
-    ))}
-  </Tbody>
-</Table>
-)
+                  <Select
+                    defaultValue={{ value: index.Party_id, label: index.Party_id }}
+                    options={RolesValues}
+                    onChange={(e) => { RoleDropDown_select_handler(e, index, key) }}
+                    classNamePrefix="select2-selection"
+                  />
+
+                </FormGroup>
+              </td>
+            </tr>
+          ))}
+        </Tbody>
+      </Table>
+    )
   }
-  var a={test:1,test2:2}
 
- const [test,setTEst]=useState([])
-  console.log("111",a["test"])
   // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
   var IsEditMode_Css = ''
   if (pageMode === "edit" || pageMode == "other") { IsEditMode_Css = "-5.5%" };
@@ -353,8 +353,7 @@ return(
                                 <Col md="1" style={{ marginTop: '9px' }} >
                                   <div className="form-check form-switch form-switch-md ml-4 " dir="ltr">
                                     <AvInput type="checkbox" className="form-check-input" id="customSwitchsizemd"
-                                      checked={EditData.isLoginUsingMobile}
-                                      defaultChecked={true}
+                                      defaultChecked={EditData.isLoginUsingMobile}
                                       name="isLoginUsingMobile"
                                     />
                                     <label className="form-check-label" htmlFor="customSwitchsizemd"></label>
@@ -384,8 +383,7 @@ return(
                                 <Col md={1} style={{ marginTop: '10px' }} >
                                   <div className="form-check form-switch form-switch-md" dir="ltr">
                                     <AvInput type="checkbox" className="form-check-input" id="customSwitchsizemd"
-                                      checked={EditData.isLoginUsingEmail}
-                                      defaultChecked={true}
+                                      defaultChecked={EditData.isLoginUsingEmail}
                                       name="isLoginUsingEmail"
                                     />
                                     <label className="form-check-label" htmlFor="customSwitchsizemd"></label>
@@ -440,7 +438,7 @@ return(
                               {RoleData ? (
 
                                 <div className="table-responsive">
-                                 { rolaTable()}
+                                  {rolaTable()}
                                 </div>
                               ) : (
                                 <>
@@ -448,37 +446,37 @@ return(
                               )}
                             </Col>
                             {/* <FormGroup > */}
-                              
-                              <Row >
-                                <Col sm={2}>
-                                  <div>
-                                    {
-                                      pageMode === "edit" ?
-                                        userPageAccessState.RoleAccess_IsEdit ?
+
+                            <Row >
+                              <Col sm={2}>
+                                <div>
+                                  {
+                                    pageMode === "edit" ?
+                                      userPageAccessState.RoleAccess_IsEdit ?
+                                        <button
+                                          type="submit"
+                                          data-mdb-toggle="tooltip" data-mdb-placement="top" title="Update User"
+                                          className="btn btn-success w-md"
+                                        >
+                                          <i class="fas fa-edit me-2"></i>Update
+                                        </button>
+                                        :
+                                        <></>
+                                      : (
+                                        userPageAccessState.RoleAccess_IsSave ?
                                           <button
                                             type="submit"
-                                            data-mdb-toggle="tooltip" data-mdb-placement="top" title="Update User"
-                                            className="btn btn-success w-md"
-                                          >
-                                            <i class="fas fa-edit me-2"></i>Update
+                                            data-mdb-toggle="tooltip" data-mdb-placement="top" title="Save User"
+                                            className="btn btn-primary w-md"
+                                          > <i className="fas fa-save me-2"></i> Save
                                           </button>
                                           :
                                           <></>
-                                        : (
-                                          userPageAccessState.RoleAccess_IsSave ?
-                                            <button
-                                              type="submit"
-                                              data-mdb-toggle="tooltip" data-mdb-placement="top" title="Save User"
-                                              className="btn btn-primary w-md"
-                                            > <i className="fas fa-save me-2"></i> Save
-                                            </button>
-                                            :
-                                            <></>
-                                        )
-                                    }
-                                  </div>
-                                </Col>
-                              </Row>
+                                      )
+                                  }
+                                </div>
+                              </Col>
+                            </Row>
                             {/* </FormGroup > */}
                           </Row>
                         </CardBody>
@@ -501,23 +499,3 @@ return(
 };
 export default AddUser;
 
-const Data= [
-  {
-    "id": 60,
-    "Name": "Chiatle CSS Manufacturer",
-    "Party_id": 1,
-    "Role_id": null
-  },
-  {
-    "id": 53,
-    "Name": "Shivamrut Distributors",
-    "Party_id": 7,
-    "Role_id": 1
-  },
-  {
-    "id": 54,
-    "Name": "Avdhoot sales",
-    "Party_id": 8,
-    "Role_id": 3
-  }
-]
