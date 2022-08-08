@@ -52,6 +52,10 @@ export const ROLE_API_URL="/Roles"///get api
 
 export const USER_API_URL="/UserList"
 export const REGISTRATION_API_URL="/Registration"
+export const USER_PARTIES_FOR_USER_MASTER="/UserPartiesForUserMaster"
+export const EMPLOYEE_LIST_FOR_DROPDOWN_API_URL="/GetEmployeeForUserCreation"
+
+
 
 // M_Employees api
 export const GET_DESIGNATIONID="/Designations"

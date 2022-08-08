@@ -1,5 +1,4 @@
-import{GET_EMPLOYEE, 
-    GET_EMPLOYEE_SUCCESS,
+import{
     GET_ROLE, 
     GET_ROLE_SUCCESS,
     ADD_USER, 
@@ -12,15 +11,20 @@ import{GET_EMPLOYEE,
     EDIT_SUCCESS,
     UPDATE_USER,
     UPDATE_SUCCESS,
+ 
+    GET_USER_PARTIES_FOR_USER_MASTER,
+    GET_USER_PARTIES_FOR_USER_MASTER_SUCCESS,
+    GET_EMPLOYEE_FOR_USER_REGISTRATION,
+    GET_EMPLOYEE_FOR_USER_REGISTRATION_SUCCESS,
   }from './actionType'
 
   /// M_Employee
-  export const getEmployee = () => ({
-    type: GET_EMPLOYEE,
+  export const getEmployeeForUseRegistration = () => ({
+    type: GET_EMPLOYEE_FOR_USER_REGISTRATION,
    
   });
-  export const getEmployeeSuccess = (data) => ({
-    type: GET_EMPLOYEE_SUCCESS,
+  export const getEmployeeForUseRegistrationSuccess = (data) => ({
+    type: GET_EMPLOYEE_FOR_USER_REGISTRATION_SUCCESS,
     payload:data,
   });
   
@@ -84,5 +88,14 @@ import{GET_EMPLOYEE,
   });
   export const updateSuccess = (data) => ({
     type: UPDATE_SUCCESS,
+    payload: data,
+  });
+  export const GetUserPartiesForUserMastePage = (id) => ({
+    type: GET_USER_PARTIES_FOR_USER_MASTER,
+    id
+  });
+  
+  export const GetUserPartiesForUserMastePageSuccess = (data) => ({
+    type: GET_USER_PARTIES_FOR_USER_MASTER_SUCCESS,
     payload: data,
   });

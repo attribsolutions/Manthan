@@ -112,13 +112,16 @@ export const update_EmployeeAPI = (data, id) => put(`${url.EMPLOYEE_API_URL}/${i
 export const Get_CompanyBy_EmployeeType_For_Dropdown = (id) => get(`${url.GET_COMPANY_BY_EMPLOYEETYPES_ID}/${id}`)//  GetCompanyByDivisionTypeID DropDown API
 
 //User Registration  All APIs 
-export const getEmployee_Dropdown_For_UserRegistration_API = () => get(url.EMPLOYEE_API_URL)//get api for Dropdown_list data 
+export const getEmployee_Dropdown_For_UserRegistration_API = () => get(url.EMPLOYEE_LIST_FOR_DROPDOWN_API_URL)//get api for Dropdown_list data 
 export const RolesListDropdown_For_UserRegistration_API = () => get(url.ROLE_API_URL)
 export const User_Component_PostMethod_API = (data) => post(url.REGISTRATION_API_URL, data)//post for (save and update) User_Component
 export const User_Component_GetMethod_API = () => get(url.USER_API_URL) //Get User_Component
 export const User_Component_Delete_Method_API = (id) => del(`${url.USER_API_URL}/${id}`) // delete api
 export const User_Component_EditById_API = (id) => get(`${url.USER_API_URL}/${id}`) // edit api
 export const User_Component_Update_API = (data, id) => put(`${url.USER_API_URL}/${id}`, data) // update api
+export const UserPartiesForUserMaster_API = (id) => get(`${url.USER_PARTIES_FOR_USER_MASTER}/${id}`) // delete api
+
+
 
 // Role Master
 export const Role_Master_Get_API = () => get(url.ROLE_MASTER_API)//get api

@@ -1,30 +1,30 @@
 import {
-    GET_EMPLOYEE_SUCCESS,
     GET_ROLE_SUCCESS,
     ADD_USER_SUCCESS,
     GET_USER_SUCCESS,
     UPDATE_SUCCESS,
     EDIT_SUCCESS,
-    EDIT_USER,
     DELETE_SUCCESS,
-    DELETE_USER,
+    GET_USER_PARTIES_FOR_USER_MASTER_SUCCESS,
+    GET_EMPLOYEE_FOR_USER_REGISTRATION_SUCCESS,
     
     }from './actionType'
   const INIT_STATE = {
-    employee: [],
+    employeelistForDropdown: [],
     Roles:[],
     AddUserMessage:{ Status: false },
     pages:[],
     deleteSuccessRole: { Status: false },
     editData: { Status: false },
     updateMessage: { Status: false },
+    userPartiesForUserMaster:[],
   };
   const User_Registration_Reducer = (state = INIT_STATE, action) => {
     switch (action.type) {
-      case GET_EMPLOYEE_SUCCESS:
+      case GET_EMPLOYEE_FOR_USER_REGISTRATION_SUCCESS:
         return {
           ...state,
-          employee: action.payload,
+          employeelistForDropdown: action.payload,
         };
   
         case GET_ROLE_SUCCESS:
@@ -66,7 +66,12 @@ import {
             ...state,
             updateMessage: action.payload,
           };
-          
+
+          case GET_USER_PARTIES_FOR_USER_MASTER_SUCCESS:
+            return {
+              ...state,
+              userPartiesForUserMaster: action.payload,
+            };
         default:
         return state;
     }
