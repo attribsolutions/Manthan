@@ -45,7 +45,6 @@ const Modules = (props) => {
     const { PostAPIResponse, RoleAccessModifiedinSingleArray } = useSelector((state) => ({
         PostAPIResponse: state.Modules.modulesSubmitSuccesss,
         RoleAccessModifiedinSingleArray: state.Login.RoleAccessUpdateData,
-
     }));
 
     // userAccess useEffect
@@ -61,7 +60,6 @@ const Modules = (props) => {
                 return element.id === RelatedPageID
             })
             setUserPageAccessState(userfound)
-
         }
 
     }, [history])

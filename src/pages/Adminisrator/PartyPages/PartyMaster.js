@@ -40,23 +40,32 @@ const PartyMaster = (props) => {
 
 
     //Access redux store Data /  'save_ModuleSuccess' action data
-    const { PostAPIResponse, State, DistrictOnState, companyList, DivisionTypes, PartyTypes } = useSelector((state) => ({
+    const { PostAPIResponse, State, DistrictOnState, companyList, DivisionTypes, PartyTypes,RoleAccessModifiedinSingleArray } = useSelector((state) => ({
         PostAPIResponse: state.PartyMasterReducer.PartySaveSuccess,
         State: state.M_EmployeesReducer.State,
         DistrictOnState: state.PartyMasterReducer.DistrictOnState,
         companyList: state.PartyMasterReducer.CompanyName,
         DivisionTypes: state.PartyMasterReducer.DivisionTypes,
         PartyTypes: state.PartyMasterReducer.PartyTypes,
+        RoleAccessModifiedinSingleArray: state.Login.RoleAccessUpdateData,
 
     }));
 
-    // userAccess useEffect
-    useEffect(() => {
+ // userAccess useEffect
+ useEffect(() => {
+    if ((editDataGatingFromList === undefined)) {
         const userAcc = CommonGetRoleAccessFunction(history)
         if (!(userAcc === undefined)) {
             setUserPageAccessState(userAcc)
         }
-    }, [history])
+    } else {
+        let RelatedPageID = history.location.state.UserDetails.RelatedPageID
+        const userfound = RoleAccessModifiedinSingleArray.find((element) => {
+            return element.id === RelatedPageID
+        })
+        setUserPageAccessState(userfound)
+    }
+}, [history])
 
     useEffect(() => {
         dispatch(getState());
@@ -346,11 +355,6 @@ const PartyMaster = (props) => {
                                                 </Row>
                                             </Card>
                                         </Row>
-
-
-
-
-
 
                                         <Row>
                                             <Card className="mt-n2" style={{ backgroundColor: "whitesmoke" }} >

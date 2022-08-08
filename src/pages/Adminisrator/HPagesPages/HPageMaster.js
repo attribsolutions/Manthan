@@ -55,23 +55,32 @@ const HPageMaster = (props) => {
     useState("");
 
   //Access redux store Data
-  const { ModuleData, PostAPIResponse, PageList, PageAccess } = useSelector(
+  const { ModuleData, PostAPIResponse, PageList, PageAccess,RoleAccessModifiedinSingleArray } = useSelector(
     (state) => ({
       ModuleData: state.Modules.modulesList,
       PostAPIResponse: state.H_Pages.saveMessage,
       PageList: state.H_Pages.PageList,
       PageAccess: state.H_Pages.PageAccess,
+      RoleAccessModifiedinSingleArray: state.Login.RoleAccessUpdateData,
+
     })
   );
+ // userAccess useEffect
+ useEffect(() => {
+  if ((editDataGatingFromList === undefined)) {
+      const userAcc = CommonGetRoleAccessFunction(history)
+      if (!(userAcc === undefined)) {
+          setUserPageAccessState(userAcc)
+      }
+  } else {
+      let RelatedPageID = history.location.state.UserDetails.RelatedPageID
+      const userfound = RoleAccessModifiedinSingleArray.find((element) => {
+          return element.id === RelatedPageID
+      })
+      setUserPageAccessState(userfound)
+  }
 
-  // userAccess useEffect
-  useEffect(() => {
-    const userAcc = CommonGetRoleAccessFunction(history)
-    if (!(userAcc === undefined)) {
-      setUserPageAccessState(userAcc)
-    }
-  }, [history])
-
+}, [history])
   // For PageAccess DropDown
   useEffect(() => {
     dispatch(getPageAccess_DropDown_API());

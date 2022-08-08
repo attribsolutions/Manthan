@@ -46,7 +46,7 @@ const AddEmployee = (props) => {
   const [DOB_Date_Select, setDOB_Date_Select] = useState("");
   const [partyDropDownShow_UI, setPartyDropDownShow_UI] = useState(false);
 
-  const { designation, employeeType, State, district, partyList, company, postMessage } = useSelector((state) => ({
+  const { designation, employeeType, State, district, partyList, company, postMessage ,RoleAccessModifiedinSingleArray} = useSelector((state) => ({
     designation: state.M_EmployeesReducer.designation,
     employeeType: state.M_EmployeesReducer.employeeType,
     State: state.M_EmployeesReducer.State,
@@ -54,14 +54,25 @@ const AddEmployee = (props) => {
     partyList: state.PartyMasterReducer.partyList,
     company: state.M_EmployeesReducer.CompanyNames,
     postMessage: state.M_EmployeesReducer.postMessage,
+    RoleAccessModifiedinSingleArray: state.Login.RoleAccessUpdateData,
+
   }));
 
   // userAccess useEffect
   useEffect(() => {
-    const userAcc = CommonGetRoleAccessFunction(history)
-    if (!(userAcc === undefined)) {
-      setUserPageAccessState(userAcc)
-    }
+      if ((editDataGatingFromList === undefined)) {
+          const userAcc = CommonGetRoleAccessFunction(history)
+          if (!(userAcc === undefined)) {
+              setUserPageAccessState(userAcc)
+          }
+      } else {
+          let RelatedPageID = history.location.state.UserDetails.RelatedPageID
+          const userfound = RoleAccessModifiedinSingleArray.find((element) => {
+              return element.id === RelatedPageID
+          })
+          setUserPageAccessState(userfound)
+      }
+
   }, [history])
 
   useEffect(() => {
@@ -106,15 +117,16 @@ const AddEmployee = (props) => {
         value:data.id,
         label:data.Name
       }))
-      console.log("listItems",JSON.stringify(listItems))
+
       setParty_DropdownSelect(listItems)
     
-      if ((editDataGatingFromList.EmployeeParties).length > 0) { setPartyDropDownShow_UI(true) };
+     if ((editDataGatingFromList.EmployeeParties).length > 0) { setPartyDropDownShow_UI(true) };
 
       setCompany_DropdownSelect({
         value: editDataGatingFromList.Company_id,
         label: editDataGatingFromList.CompanyName
       })
+
       dispatch(editEmployeeSuccess({ Status: false }))
       dispatch(BreadcrumbShow(editDataGatingFromList.Name))
       return
@@ -205,17 +217,17 @@ const AddEmployee = (props) => {
     setDesignation_DropdownSelect(e)
   }
   function EmployeeType_Dropdown_Handler(e) {
-    console.log(" data",JSON.stringify(e))
+    // console.log(" data",JSON.stringify(e))
     setEmployeeType_DropdownSelect(e)
     dispatch(Get_CompanyName_By_EmployeeTypeID(e.value))
     setCompany_DropdownSelect('')
-    setPartyDropDownShow_UI([])
+    setParty_DropdownSelect('')
 
     const IsPartyConnection = employeeType.find((element) => {
       return element.id === e.value
     });
 
-    console.log("IsPartyConnection", IsPartyConnection)
+    // console.log("IsPartyConnection", IsPartyConnection)
 
     if (IsPartyConnection.IsPartyConnection) {
       Party_Dropdown_Handler()
@@ -313,7 +325,7 @@ const AddEmployee = (props) => {
 
                         <Col md="3">
                           <FormGroup className="mb-3">
-                            <Label htmlFor="validationCustom01">Name </Label>
+                            <Label>Name </Label>
                             <AvField name="Name" id="txtName" value={EditData.Name}
                               type="text"
                               placeholder="Please Enter Name"
@@ -329,7 +341,7 @@ const AddEmployee = (props) => {
                         <Col md="1">  </Col>
                         <Col md="3">
                           <FormGroup className="mb-3">
-                            <Label htmlFor="validationCustom01">Email</Label>
+                            <Label>Email</Label>
                             <AvField name="email"
                               id="email"
                               type="email"
@@ -353,7 +365,7 @@ const AddEmployee = (props) => {
 
                         <Col md="3">
                           <FormGroup className="mb-3">
-                            <Label htmlFor="validationCustom01">Mobile No.</Label>
+                            <Label>Mobile No.</Label>
                             <AvField name="Mobile" type="tel"
                               value={EditData.Mobile}
                               placeholder="+91 "
@@ -373,7 +385,7 @@ const AddEmployee = (props) => {
                       <Row>
                         <Col md="3">
                           <FormGroup className="mb-3">
-                            <Label htmlFor="validationCustom01">Date of Birth</Label>
+                            <Label>Date of Birth</Label>
                             <Flatpickr
                               id="FSSAIExipry"
                               name="FSSAIExipry"
@@ -396,7 +408,7 @@ const AddEmployee = (props) => {
                         <Col md="1">  </Col>
                         <Col md="3">
                           <FormGroup className="mb-3">
-                            <Label htmlFor="validationCustom01"> Aadhar No.</Label>
+                            <Label> Aadhar No.</Label>
                             <AvField name="AadharNo" type="text"
                               value={EditData.AadharNo}
                               placeholder="Enter your AadharNo. "
@@ -414,7 +426,7 @@ const AddEmployee = (props) => {
                         <Col md="1">  </Col>
                         <Col md="3">
                           <FormGroup className="mb-3">
-                            <Label htmlFor="validationCustom01"> PAN No.</Label>
+                            <Label> PAN No.</Label>
                             <AvField name="PAN" type="text"
                               value={EditData.PAN}
                               placeholder="Enter your PAN No. "
@@ -434,7 +446,7 @@ const AddEmployee = (props) => {
                       <Row>
                         <Col md="3">
                           <FormGroup className="">
-                            <Label htmlFor="validationCustom01">Address</Label>
+                            <Label>Address</Label>
                             <AvField name="Address" value={EditData.Address} type="text"
                               placeholder=" Please Enter Address "
                               autoComplete='off'
@@ -447,7 +459,7 @@ const AddEmployee = (props) => {
                         <Col md="1"></Col>
                         <Col md="3">
                           <FormGroup >
-                            <Label htmlFor="validationCustom01">State</Label>
+                            <Label>State</Label>
                             <Select
                               value={State_DropdownSelect}
                               options={State_DropdownOptions}
@@ -459,7 +471,7 @@ const AddEmployee = (props) => {
                         <Col md="1"></Col>
                         <Col md="3">
                           <FormGroup >
-                            <Label htmlFor="validationCustom01">District</Label>
+                            <Label>District</Label>
                             <Select
                               value={district_DropdownSelect}
                               options={District_DropdownOptions}
@@ -476,23 +488,9 @@ const AddEmployee = (props) => {
                       <Row >
                         <Col md="3">
                           <FormGroup className="mb-3">
-                            <Label htmlFor="validationCustom01">Employee Type </Label>
+                            <Label>Employee Type </Label>
                             <Select
-                              // value={employeeType_DropdownSelect}
-                              value={[
-                                {
-                                  value: 7,
-                                  label: "Shivamrut Distributors"
-                                },
-                                {
-                                  value: 8,
-                                  label: "Avdhoot sales"
-                                },
-                                {
-                                  value: 1,
-                                  label: "Chiatle CSS Manufacturer"
-                                }
-                              ]}
+                              value={employeeType_DropdownSelect}
                               options={EmployeeType_DropdownOptions}
                               onChange={(e) => { EmployeeType_Dropdown_Handler(e) }}
                             />
@@ -502,7 +500,7 @@ const AddEmployee = (props) => {
                         <Col md="1">  </Col>
                         <Col md="3">
                           <FormGroup className="mb-3">
-                            <Label htmlFor="validationCustom01">Company Name </Label>
+                            <Label>Company Name </Label>
                             <Select
                               value={company_DropdownSelect}
                               options={Company_DropdownOptions}
@@ -517,7 +515,7 @@ const AddEmployee = (props) => {
                             <div className="mb-3">
                               <Label className="form-label font-size-13 ">Party name</Label>
                               <Select
-                                Value={Party_DropdownOptions}
+                               defaultValue={party_DropdownSelect}
                                 isMulti={true}
                                 className="basic-multi-select"
                                 options={Party_DropdownOptions}
@@ -533,7 +531,7 @@ const AddEmployee = (props) => {
 
                         <Col md="3">
                           <FormGroup className="mb-4">
-                            <Label htmlFor="validationCustom01">Designation</Label>
+                            <Label>Designation</Label>
                             <Select
                               value={designation_DropdownSelect}
                               options={Designation_DropdownOptions}
@@ -545,7 +543,7 @@ const AddEmployee = (props) => {
                         <Col md="1">  </Col>
                         <Col md="3">
                           <FormGroup className="mb-3">
-                            <Label htmlFor="validationCustom01">Working Hours </Label>
+                            <Label>Working Hours </Label>
                             <AvField name="working_hours" value={EditData.working_hours}
                               type="text"
                               placeholder="Please Enter Working Hours"
