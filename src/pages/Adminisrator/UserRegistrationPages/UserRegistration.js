@@ -36,18 +36,29 @@ const AddUser = (props) => {
   const [RoleDropDown, setRoleDropDown] = useState([]);
 
   //Access redux store Data /  'save_ModuleSuccess' action data
-  const { PostAPIResponse, employee, Roles } = useSelector((state) => ({
+  const { PostAPIResponse, employee, Roles,RoleAccessModifiedinSingleArray } = useSelector((state) => ({
     PostAPIResponse: state.User_Registration_Reducer.AddUserMessage,
     employee: state.User_Registration_Reducer.employee,
-    Roles: state.User_Registration_Reducer.Roles
+    Roles: state.User_Registration_Reducer.Roles,
+    RoleAccessModifiedinSingleArray: state.Login.RoleAccessUpdateData,
+
   }));
 
   // userAccess useEffect
   useEffect(() => {
-    const userAcc = CommonGetRoleAccessFunction(history)
-    if (!(userAcc === undefined)) {
-      setUserPageAccessState(userAcc)
-    }
+      if ((editDataGatingFromList === undefined)) {
+          const userAcc = CommonGetRoleAccessFunction(history)
+          if (!(userAcc === undefined)) {
+              setUserPageAccessState(userAcc)
+          }
+      } else {
+          let RelatedPageID = history.location.state.UserDetails.RelatedPageID
+          const userfound = RoleAccessModifiedinSingleArray.find((element) => {
+              return element.id === RelatedPageID
+          })
+          setUserPageAccessState(userfound)
+      }
+
   }, [history])
 
   // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
@@ -342,7 +353,8 @@ return(
                                 <Col md="1" style={{ marginTop: '9px' }} >
                                   <div className="form-check form-switch form-switch-md ml-4 " dir="ltr">
                                     <AvInput type="checkbox" className="form-check-input" id="customSwitchsizemd"
-                                      defaultChecked={EditData.isLoginUsingMobile}
+                                      checked={EditData.isLoginUsingMobile}
+                                      defaultChecked={true}
                                       name="isLoginUsingMobile"
                                     />
                                     <label className="form-check-label" htmlFor="customSwitchsizemd"></label>
@@ -372,7 +384,8 @@ return(
                                 <Col md={1} style={{ marginTop: '10px' }} >
                                   <div className="form-check form-switch form-switch-md" dir="ltr">
                                     <AvInput type="checkbox" className="form-check-input" id="customSwitchsizemd"
-                                      defaultChecked={EditData.isLoginUsingEmail}
+                                      checked={EditData.isLoginUsingEmail}
+                                      defaultChecked={true}
                                       name="isLoginUsingEmail"
                                     />
                                     <label className="form-check-label" htmlFor="customSwitchsizemd"></label>

@@ -47,18 +47,27 @@ const ItemsMaster = (props) => {
   const [itemGroupSelect, setItemGroupSelect] = useState("");
 
   //Access redux store Data /  'save_ModuleSuccess' action data
-  const { PostAPIResponse, ItemGroupList } = useSelector((state) => ({
+  const { PostAPIResponse, ItemGroupList,RoleAccessModifiedinSingleArray } = useSelector((state) => ({
     PostAPIResponse: state.ItemMastersReducer.postMessage,
     ItemGroupList: state.ItemMastersReducer.ItemGroupList,
   }));
 
   // userAccess useEffect
   useEffect(() => {
-    const userAcc = CommonGetRoleAccessFunction(history)
-    if (!(userAcc === undefined)) {
-      setUserPageAccessState(userAcc)
+    if ((editDataGatingFromList === undefined)) {
+        const userAcc = CommonGetRoleAccessFunction(history)
+        if (!(userAcc === undefined)) {
+            setUserPageAccessState(userAcc)
+        }
+    } else {
+        let RelatedPageID = history.location.state.UserDetails.RelatedPageID
+        const userfound = RoleAccessModifiedinSingleArray.find((element) => {
+            return element.id === RelatedPageID
+        })
+        setUserPageAccessState(userfound)
     }
-  }, [history])
+
+}, [history])
 
   // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
   useEffect(() => {

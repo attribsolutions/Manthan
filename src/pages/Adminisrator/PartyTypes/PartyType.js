@@ -38,18 +38,29 @@ const PartyType = (props) => {
     const [division_dropdown_Select, setDivision_dropdown_Select] = useState("");
 
     //Access redux store Data /  'save_ModuleSuccess' action data
-    const { PostAPIResponse,DivisionTypes } = useSelector((state) => ({
+    const { PostAPIResponse,DivisionTypes,RoleAccessModifiedinSingleArray } = useSelector((state) => ({
         PostAPIResponse: state.PartyTypeReducer.PostData,
         DivisionTypes: state.PartyMasterReducer.DivisionTypes,
+        RoleAccessModifiedinSingleArray: state.Login.RoleAccessUpdateData,
     }));
 
-    // userAccess useEffect
-    useEffect(() => {
+// userAccess useEffect
+useEffect(() => {
+
+    if ((editDataGatingFromList === undefined)) {
+
         const userAcc = CommonGetRoleAccessFunction(history)
         if (!(userAcc === undefined)) {
             setUserPageAccessState(userAcc)
         }
-    }, [history])
+    } else {
+        let RelatedPageID = history.location.state.UserDetails.RelatedPageID
+        const userfound = RoleAccessModifiedinSingleArray.find((element) => {
+            return element.id === RelatedPageID
+        })
+        setUserPageAccessState(userfound)
+    }
+}, [history])
 
     useEffect(() => {
         dispatch(getDivisionTypesID());

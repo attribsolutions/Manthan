@@ -42,11 +42,11 @@ const AddEmployee = (props) => {
   const [State_DropdownSelect, setState_DropdownSelect] = useState("");
   const [district_DropdownSelect, setDistrict_DropdownSelect] = useState("");
   const [company_DropdownSelect, setCompany_DropdownSelect] = useState("");
-  const [party_DropdownSelect, setParty_DropdownSelect] = useState('');
+  const [party_DropdownSelect, setParty_DropdownSelect] = useState([]);
   const [DOB_Date_Select, setDOB_Date_Select] = useState("");
   const [partyDropDownShow_UI, setPartyDropDownShow_UI] = useState(false);
 
-  const { designation, employeeType, State, district, partyList, company, postMessage } = useSelector((state) => ({
+  const { designation, employeeType, State, district, partyList, company, postMessage ,RoleAccessModifiedinSingleArray} = useSelector((state) => ({
     designation: state.M_EmployeesReducer.designation,
     employeeType: state.M_EmployeesReducer.employeeType,
     State: state.M_EmployeesReducer.State,
@@ -54,14 +54,25 @@ const AddEmployee = (props) => {
     partyList: state.PartyMasterReducer.partyList,
     company: state.M_EmployeesReducer.CompanyNames,
     postMessage: state.M_EmployeesReducer.postMessage,
+    RoleAccessModifiedinSingleArray: state.Login.RoleAccessUpdateData,
+
   }));
 
   // userAccess useEffect
   useEffect(() => {
-    const userAcc = CommonGetRoleAccessFunction(history)
-    if (!(userAcc === undefined)) {
-      setUserPageAccessState(userAcc)
-    }
+      if ((editDataGatingFromList === undefined)) {
+          const userAcc = CommonGetRoleAccessFunction(history)
+          if (!(userAcc === undefined)) {
+              setUserPageAccessState(userAcc)
+          }
+      } else {
+          let RelatedPageID = history.location.state.UserDetails.RelatedPageID
+          const userfound = RoleAccessModifiedinSingleArray.find((element) => {
+              return element.id === RelatedPageID
+          })
+          setUserPageAccessState(userfound)
+      }
+
   }, [history])
 
   useEffect(() => {
@@ -106,15 +117,16 @@ const AddEmployee = (props) => {
         value:data.id,
         label:data.Name
       }))
-      console.log("listItems",JSON.stringify(listItems))
+
       setParty_DropdownSelect(listItems)
     
-      if ((editDataGatingFromList.EmployeeParties).length > 0) { setPartyDropDownShow_UI(true) };
+     if ((editDataGatingFromList.EmployeeParties).length > 0) { setPartyDropDownShow_UI(true) };
 
       setCompany_DropdownSelect({
         value: editDataGatingFromList.Company_id,
         label: editDataGatingFromList.CompanyName
       })
+
       dispatch(editEmployeeSuccess({ Status: false }))
       dispatch(BreadcrumbShow(editDataGatingFromList.Name))
       return
@@ -205,17 +217,17 @@ const AddEmployee = (props) => {
     setDesignation_DropdownSelect(e)
   }
   function EmployeeType_Dropdown_Handler(e) {
-    console.log(" data",JSON.stringify(e))
+    // console.log(" data",JSON.stringify(e))
     setEmployeeType_DropdownSelect(e)
     dispatch(Get_CompanyName_By_EmployeeTypeID(e.value))
     setCompany_DropdownSelect('')
-    setPartyDropDownShow_UI([])
+    setParty_DropdownSelect([])
 
     const IsPartyConnection = employeeType.find((element) => {
       return element.id === e.value
     });
 
-    console.log("IsPartyConnection", IsPartyConnection)
+    // console.log("IsPartyConnection", IsPartyConnection)
 
     if (IsPartyConnection.IsPartyConnection) {
       Party_Dropdown_Handler()
@@ -478,21 +490,7 @@ const AddEmployee = (props) => {
                           <FormGroup className="mb-3">
                             <Label htmlFor="validationCustom01">Employee Type </Label>
                             <Select
-                              // value={employeeType_DropdownSelect}
-                              value={[
-                                {
-                                  value: 7,
-                                  label: "Shivamrut Distributors"
-                                },
-                                {
-                                  value: 8,
-                                  label: "Avdhoot sales"
-                                },
-                                {
-                                  value: 1,
-                                  label: "Chiatle CSS Manufacturer"
-                                }
-                              ]}
+                              value={employeeType_DropdownSelect}
                               options={EmployeeType_DropdownOptions}
                               onChange={(e) => { EmployeeType_Dropdown_Handler(e) }}
                             />
@@ -517,7 +515,7 @@ const AddEmployee = (props) => {
                             <div className="mb-3">
                               <Label className="form-label font-size-13 ">Party name</Label>
                               <Select
-                                Value={Party_DropdownOptions}
+                               defaultValue={party_DropdownSelect}
                                 isMulti={true}
                                 className="basic-multi-select"
                                 options={Party_DropdownOptions}

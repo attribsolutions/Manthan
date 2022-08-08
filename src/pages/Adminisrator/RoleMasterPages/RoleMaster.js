@@ -28,17 +28,29 @@ const RoleMaster = (props) => {
   const [userPageAccessState, setUserPageAccessState] = useState('');
 
   //Access redux store Data /  'save_ModuleSuccess' action data
-  const { PostAPIResponse, } = useSelector((state) => ({
+  const { PostAPIResponse, RoleAccessModifiedinSingleArray} = useSelector((state) => ({
     PostAPIResponse: state.RoleMaster_Reducer.AddUserMessage,
+    RoleAccessModifiedinSingleArray: state.Login.RoleAccessUpdateData,
+
   }));
 
   // userAccess useEffect
   useEffect(() => {
-    const userAcc = CommonGetRoleAccessFunction(history)
-    if (!(userAcc === undefined)) {
-      setUserPageAccessState(userAcc)
-    }
+      if ((editDataGatingFromList === undefined)) {
+          const userAcc = CommonGetRoleAccessFunction(history)
+          if (!(userAcc === undefined)) {
+              setUserPageAccessState(userAcc)
+          }
+      } else {
+          let RelatedPageID = history.location.state.UserDetails.RelatedPageID
+          const userfound = RoleAccessModifiedinSingleArray.find((element) => {
+              return element.id === RelatedPageID
+          })
+          setUserPageAccessState(userfound)
+      }
+
   }, [history])
+
 
   // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
   useEffect(() => {
