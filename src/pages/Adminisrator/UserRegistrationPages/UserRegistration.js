@@ -34,7 +34,29 @@ const AddUser = (props) => {
 
   // M_Roles DropDown
   const [RoleDropDown, setRoleDropDown] = useState([]);
+  const [password, setPassword] = useState('');
 
+  const [cPassword, setCPassword] = useState('');
+  const [showErrorMessage, setShowErrorMessage] = useState(false);
+  const [cPasswordClass, setCPasswordClass] = useState('form-control');
+  const [isCPassword, setisCPassword] = useState(false);
+
+  useEffect(() => {
+    if (isCPassword) {
+      if (password === cPassword) {
+        setShowErrorMessage(false);
+        setCPasswordClass('form-control is-valid')
+      } else {
+        setShowErrorMessage(true)
+        setCPasswordClass('form-control is-invalid')
+      }
+    }
+  }, [cPassword])
+
+  const handleCPassword = (e) => {
+    setCPassword(e.target.value);
+    setisCPassword(true);
+  }
   //Access redux store Data /  'save_ModuleSuccess' action data
   const { PostAPIResponse, employeelistForDropdown, Roles, userPartiesForUserMaster, RoleAccessModifiedinSingleArray } = useSelector((state) => ({
     PostAPIResponse: state.User_Registration_Reducer.AddUserMessage,
@@ -134,8 +156,6 @@ const AddUser = (props) => {
     dispatch(GetUserPartiesForUserMastePage(e.value))
   }
 
-
-
   const RolesValues = Roles.map((Data) => ({
     value: Data.id,
     label: Data.Name
@@ -143,16 +163,16 @@ const AddUser = (props) => {
 
   /// Role dopdown
   function RoleDropDown_select_handler(e, party, key) {
+    debugger
 
     const find = RoleData.filter((index, key1) => {
       return !(index.Party === party.Party_id)
     })
-    debugger
     if ((find === undefined)) {
-      setRoleData([{ Party: party.Party_id, Role: e.value }])
+      setRoleData([{ Party: party.Party_id, Role: e.Name }])
     } else {
       // RoleDropDown
-      setRoleData([...find, { Party: party.Party_id, Role: e.value }])
+      setRoleData([...find, { Party: party.Party_id, Role: e.Name }])
     }
 
   };
@@ -200,7 +220,7 @@ const AddUser = (props) => {
       //   Role: d.Role,
       // })),
     })
-    debugger
+
     if (RoleData.length <= 0) {
       dispatch(AlertState({
         Type: 4, Status: true,
@@ -218,7 +238,6 @@ const AddUser = (props) => {
     }
   };
 
-
   // For Delete Button in table
   function UserRoles_DeleteButton_Handller(tableValue) {
     setRoleData(RoleData.filter(
@@ -226,7 +245,6 @@ const AddUser = (props) => {
     )
     )
   }
-
 
   const rolaTable = () => {
     return (
@@ -257,7 +275,6 @@ const AddUser = (props) => {
                     onChange={(e) => { RoleDropDown_select_handler(e, index, key) }}
                     classNamePrefix="select2-selection"
                   />
-
                 </FormGroup>
               </td>
             </tr>
@@ -325,6 +342,22 @@ const AddUser = (props) => {
                             </FormGroup>
                           </Row>
 
+
+
+
+                          {/* <label htmlFor="password" className="form-label">Password</label>
+                          <input type="password" className="form-control" id="password" value={password}
+                            onChange={(e) => { setPassword(e.target.value) }} />
+                        </div>
+                        <div className="mb-3">
+                          <label htmlFor="confirmPassword" className="form-label">Confirm Password</label>
+                          <input type="password" className={cPasswordClass} id="confirmPassword" value={cPassword}
+                            onChange={handleCPassword} />
+                        </div>
+                        {showErrorMessage && isCPassword ? <div> Passwords did not match </div> : ''} */}
+
+
+
                           <Row>
                             <FormGroup className="mb-1 col col-sm-4 " >
                               <Label htmlFor="validationCustom01">Password</Label>
@@ -333,11 +366,14 @@ const AddUser = (props) => {
                                 // value={EditData.password}
                                 placeholder="Please Enter Password"
                                 autoComplete="new-password"
+                                className="form-control"
                                 // validate={{
                                 //   required: { value: true, errorMessage: 'Please Enter Password' },
                                 // }}
-                                onChange={(e) => { }}
-                              />
+
+                                value={password}
+                                onChange={(e) => { setPassword(e.target.value) }} />
+
                             </FormGroup>
 
                           </Row>
@@ -349,11 +385,14 @@ const AddUser = (props) => {
                                 // value={EditData.password}
                                 placeholder="Please Enter Password"
                                 autoComplete="new-password"
+                                className={cPasswordClass}
                                 // validate={{
                                 //   required: { value: true, errorMessage: 'Please Enter Password' },
                                 // }}
-                                onChange={(e) => { }}
-                              />
+                                value={cPassword}
+                                onChange={handleCPassword} />
+                              {showErrorMessage && isCPassword ? <div> Passwords did not match </div> : ''}
+                              {/* <AvFeedback> Passwords did not match </AvFeedback> */}
                             </FormGroup>
 
                           </Row>
@@ -379,7 +418,8 @@ const AddUser = (props) => {
                                 <Col md="1" style={{ marginTop: '9px' }} >
                                   <div className="form-check form-switch form-switch-md " dir="ltr">
                                     <AvInput type="checkbox" className="form-check-input" id="customSwitchsizemd"
-                                      defaultChecked={EditData.isActive}
+                                      checked={EditData.isActive}
+                                      defaultChecked={true}
                                       name="isActive"
                                     />
                                     <label className="form-check-label" htmlFor="customSwitchsizemd"></label>
@@ -397,7 +437,7 @@ const AddUser = (props) => {
                                 <Col md={1} style={{ marginTop: '10px' }} >
                                   <div className="form-check form-switch form-switch-md" dir="ltr">
                                     <AvInput type="checkbox" className="form-check-input" id="customSwitchsizemd"
-                                     checked={EditData.isLoginUsingEmail}
+                                      checked={EditData.isLoginUsingEmail}
                                       name="isLoginUsingEmail"
                                       defaultChecked={true}
                                     />

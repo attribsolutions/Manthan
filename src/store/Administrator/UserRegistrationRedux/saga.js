@@ -50,7 +50,7 @@ function* RolesListDropdoun_GenratorFunction() {
 // post api
 function* user_save_GenratorFunction({ data }) {
 
-debugger
+
   yield put(SpinnerState(true))
   try {
     const response = yield call(User_Component_PostMethod_API, data);
@@ -129,7 +129,7 @@ function* Update_User_GenratorFunction({ data, id }) {
 }
 
 function* Get_UserPartiesForUserMaster_GenratorFunction({ id }) {
-  debugger
+  
   try {
     const response = yield call(UserPartiesForUserMaster_API,  id);
     yield put(GetUserPartiesForUserMastePageSuccess(response.Data))
@@ -142,8 +142,6 @@ function* Get_UserPartiesForUserMaster_GenratorFunction({ id }) {
   }
 }
 
-
-
 function* UserRegistrationSaga() {
   yield takeEvery(GET_EMPLOYEE_FOR_USER_REGISTRATION, EmployeelistDropdown_GenratorFunction);
   yield takeEvery(GET_ROLE, RolesListDropdoun_GenratorFunction);
@@ -152,7 +150,6 @@ function* UserRegistrationSaga() {
   yield takeEvery(DELETE_USER, Delete_UserList_GenratorFunction)
   yield takeEvery(EDIT_USER, Edit_UserList_GenratorFunction)
   yield takeEvery(GET_USER_PARTIES_FOR_USER_MASTER, Get_UserPartiesForUserMaster_GenratorFunction)
-  
   
 }
 export default UserRegistrationSaga;
