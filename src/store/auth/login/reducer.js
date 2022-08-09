@@ -9,7 +9,7 @@ import {
 } from "./actionTypes"
 
 const initialState = {
-  error: "",
+  loginError: null,
   loading: false,
   RoleData:[],
   RoleAccessUpdateData:[]
@@ -22,21 +22,21 @@ const Login = (state = initialState, action) => {
         ...state,
         loading: true,
       }
-      break
+
     case LOGIN_SUCCESS:
       state = {
         ...state,
         loading: false,
       }
-      break
+   
     case LOGOUT_USER:
       state = { ...state }
       break
     case LOGOUT_USER_SUCCESS:
       state = { ...state }
-      break
+      
     case API_ERROR:
-      state = { ...state, error: action.payload, loading: false }
+      state = { ...state, loginError: action.payload, loading: false }
       break
 
       case ROLE_ACCESS_API_CALL_SUCCESS:

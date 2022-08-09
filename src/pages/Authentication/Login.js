@@ -26,14 +26,16 @@ import CarouselPage from "./CarouselPage"
 const Login = props => {
   const dispatch = useDispatch()
 
-  const { error } = useSelector(state => ({
-    error: state.Login.error,
+  const { loginError } = useSelector(state => ({
+    loginError: state.Login.loginError,
   }))
 
-  useEffect(()=>{
-localStorage.clear();
-document.getElementById("UserName").focus();
-  },[])
+  console.log("loginError", loginError)
+  useEffect(() => {
+
+    localStorage.clear();
+    document.getElementById("UserName").focus();
+  }, [])
   // handleValidSubmit
   const handleValidSubmit = (event, values) => {
     dispatch(loginUser(values, props.history))
@@ -61,13 +63,18 @@ document.getElementById("UserName").focus();
                         <h5 className="mb-0">Welcome !</h5>
                         <p className="text-muted mt-2">Sign in to Continue FoodERP.</p>
                       </div>
+                      {loginError ? (
+                        <Alert color="danger" style={{ marginTop: "13px" }}>
+                          {loginError}
+                        </Alert>
+                      ) : null}
                       <AvForm
                         className="custom-form mt-4 pt-2"
                         onValidSubmit={(e, v) => {
                           handleValidSubmit(e, v)
                         }}
                       >
-                        {error ? <Alert color="danger">{error}</Alert> : null}
+
                         <div className="mb-3">
                           <AvField
                             name="UserName"
@@ -104,13 +111,13 @@ document.getElementById("UserName").focus();
                         </div>
                         <div className="row mb-4">
                           {/* <div className="col"> */}
-                            {/* <div className="form-check"> */}
-                              {/* <input className="form-check-input" type="checkbox" id="remember-check" />
+                          {/* <div className="form-check"> */}
+                          {/* <input className="form-check-input" type="checkbox" id="remember-check" />
                               <label className="form-check-label" htmlFor="remember-check">
                                 Remember me
                               </label> */}
-                              <Link to="/forgot-password" className="fw-semibold">Forgot password?</Link>
-                            {/* </div> */}
+                          <Link to="/forgot-password" className="fw-semibold">Forgot password?</Link>
+                          {/* </div> */}
                           {/* </div> */}
 
                         </div>

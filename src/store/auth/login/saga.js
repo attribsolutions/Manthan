@@ -21,14 +21,15 @@ import {
 const fireBaseBackend = getFirebaseBackend()
 
 function* loginUser({ payload: { user, history } }) {
-  // debugger
+  debugger
   try {
     const response =
      yield call(Python_FoodERP_postJwtLogin, {
       LoginName: user.UserName,
       password: user.Password
     })
-    if (response.StatusCode === 200) {
+    try{
+      if (response.StatusCode === 200) {
       yield put(roleAceessAction(1, 1, 1))
 
       localStorage.setItem("token", (response.token))
@@ -36,16 +37,16 @@ function* loginUser({ payload: { user, history } }) {
 
       history.push("/dashboard")
     }
-    else {
-      alert("Login Error")
-    }
+    
+  }catch(e){
+    yield apiError("response.non_field_errors")
+  }
 
   } catch (error) {
-
-    localStorage.setItem("token", ("response.token"))
-    history.push("/dashboard")
-    alert("Login Error")
-    console.log("login error", error);
+    yield put(apiError("Incorrect UserName And Password"))
+    // localStorage.setItem("token", ("response.token"))
+    // history.push("/dashboard")
+    // alert("Login Error")
 
   }
 }
