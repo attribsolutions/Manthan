@@ -12,7 +12,7 @@ import { withRouter, Link, useHistory } from "react-router-dom"
 import { AvForm, AvField } from "availity-reactstrap-validation"
 
 // action
-import { changePasswordForForgetPassword, changePasswordForForgetPasswordError, changePasswordForForgetPasswordSuccess, userForgetPassword, userForgetPassword_sendOTP, userForgetPassword_sendOTP_Success } from "../../store/actions"
+import { changePasswordForForgetPassword, changePasswordForForgetPasswordError, changePasswordForForgetPasswordSuccess, userForgetPassword, userForgetPassword_sendOTP, userForgetPassword_sendOTP_Error, userForgetPassword_sendOTP_Success } from "../../store/actions"
 
 // import images
 import logo from "../../assets/images/logo-sm.svg"
@@ -23,30 +23,54 @@ const ForgetPasswordPage = props => {
   const dispatch = useDispatch();
  const history= useHistory();
   const [paswErr, setPaswErr] = useState(false)
-  const { sendOTPSuccessMsg_redux, sendOtpMegError, sendPasswordError, sendPasswordMsg_reducx } = useSelector(state => ({
+  const { sendOTPSuccessMsg_redux, sendOtpMegError_reducx, sendPasswordError_reducx, sendPasswordMsg_reducx } = useSelector(state => ({
     sendOTPSuccessMsg_redux: state.ForgetPassword.sendOTPSuccessMsg,
-    sendOtpMegError: state.ForgetPassword.sendOtpMegError,
+    sendOtpMegError_reducx: state.ForgetPassword.sendOtpMegError,
     sendPasswordMsg_reducx: state.ForgetPassword.sendPasswordMsg,
-    sendPasswordError: state.ForgetPassword.sendPasswordError,
+    sendPasswordError_reducx: state.ForgetPassword.sendPasswordError,
 
 
   }))
 const [sendPasswordMsg, setSendPasswordMsg] = useState(null)
+const [sendPasswordError, setSendPasswordError] = useState(null)
+
+const [sendOtpMegError, setSendOtpMegError] = useState(null)
 const [sendOTPSuccessMsg, setSendOTPSuccessMsg] = useState(null)
+
+
+
 
   useEffect(() => {
     if(sendPasswordMsg_reducx){
     setSendPasswordMsg(sendPasswordMsg_reducx)
+    setSendPasswordError(null)
+
+
     dispatch(changePasswordForForgetPasswordSuccess(null))
     // dispatch(changePasswordForForgetPasswordError(null))
   
   }
-  if(sendOTPSuccessMsg_redux){
+  if(sendPasswordError_reducx){
+    setSendPasswordError(sendPasswordError_reducx)
+    dispatch(changePasswordForForgetPasswordError(null))
+  
+  }
+  }, [sendPasswordMsg_reducx,sendPasswordError_reducx])
+
+  useEffect(() => {
+     if(sendOTPSuccessMsg_redux){
     setSendOTPSuccessMsg(sendOTPSuccessMsg_redux)
+    setSendOtpMegError(null)
     dispatch(userForgetPassword_sendOTP_Success(null))
   
   }
-  }, [sendPasswordMsg_reducx])
+  if(sendOtpMegError_reducx){
+    setSendOtpMegError(sendOtpMegError_reducx)
+    dispatch(userForgetPassword_sendOTP_Error(null))
+  
+  }
+ 
+  }, [sendOTPSuccessMsg_redux,sendOtpMegError_reducx])
   
   function handleValidSubmit(event, values) {
     var jsonBody = JSON.stringify({
@@ -125,10 +149,10 @@ const [sendOTPSuccessMsg, setSendOTPSuccessMsg] = useState(null)
                                   label="UserID"
                                   className="form-control mb-2"
                                   // dissabled={true}
-                                  autoComplete="new-email"
+                                  // autoComplete="new-email"
                                   placeholder="UserID"
                                   type="text"
-                                  // autoComplete="off"
+                                  autoComplete="off"
                                   required
                                 />
 
