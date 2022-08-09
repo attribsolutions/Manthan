@@ -1,5 +1,5 @@
 import axios from "axios"
-import { del, get, put, post, } from "./api_helper"
+import { del, get, put, post, postForget, } from "./api_helper"
 import * as url from "./url_helper"
 
 // Gets the logged in user data from local session
@@ -90,8 +90,8 @@ const postJwtRegister = (url, data) => {
 export const Python_FoodERP_postJwtLogin = data => post(url.FOOD_ERP_POST_JWT_LOGIN, data)
 
 // postForgetPwd
-export const Python_FoodERP_postJwtForgetPwd = data => post(url.FOOD_ERP_POST_JWT_PASSWORD_FORGET, data)
-export const Python_FoodERP_postJwtForgetPwd_SendOTP = data => post(url.FOOD_ERP_POST_JWT_PASSWORD_FORGET_SEND_OTP, data)
+export const Python_FoodERP_postJwtForgetPwd_Verify_OTP = data => postForget(url.FOOD_ERP_POST_JWT_PASSWORD_FORGET_VERIFY_OTP, data)
+export const Python_FoodERP_postJwtForgetPwd_SendOTP = data => postForget(url.FOOD_ERP_POST_JWT_PASSWORD_FORGET_SEND_OTP, data)
 
 // postSocialLogin
 export const postSocialLogin = data => post(url.SOCIAL_LOGIN, data)

@@ -11,7 +11,7 @@ import {
 const initialState = {
   forgetSuccessMsg: null,
   forgetError: null,
-  sendOtpMsg:null,
+  sendOtpMegError:null,
   sendOtpError:null,
   sendPasswordMsg:null,
   sendPasswordError:null,
@@ -19,24 +19,24 @@ const initialState = {
 
 const forgetPassword = (state = initialState, action) => {
   switch (action.type) {
-    case FORGET_PASSWORD:
-      state = {
-        ...state,
-        forgetSuccessMsg: null,
-        forgetError: null,
+    // case FORGET_PASSWORD:
+    //   state = {
+    //     ...state,
+    //     forgetSuccessMsg: null,
+    //     forgetError: null,
    
-      }
-      break
-    case FORGET_PASSWORD_SUCCESS:
-      state = {
-        ...state,
-        sendOtpMsg: action.payload,
-      }
-      break
-    case FORGET_PASSWORD_ERROR:
-      state = { ...state,
-         forgetError: action.payload }
-      break
+    //   }
+    //   break
+    // case FORGET_PASSWORD_SUCCESS:
+    //   state = {
+    //     ...state,
+    //     sendOtpMsg: action.payload,
+    //   }
+    //   break
+    // case FORGET_PASSWORD_ERROR:
+    //   state = { ...state,
+    //      forgetError: action.payload }
+    //   break
 
     case SEND_OTP_FOR_FORGET_PASSWORD_SUCCESS:
       state = {
@@ -47,20 +47,23 @@ const forgetPassword = (state = initialState, action) => {
 
     case SEND_OTP_FOR_FORGET_PASSWORD_ERROR:
       state = { ...state,
-        sendOtpError: action.payload }
+        sendOtpMegError: action.payload }
       break
 
       case CHANGE_PASSWORD_FOR_FORGET_PASSWORD_SUCCESS:
         state = {
           ...state,
           sendPasswordMsg: action.payload,
+          sendOTPSuccessMsg: null,
         }
         break
   
       case CHANGE_PASSWORD_FOR_FORGET_PASSWORD_ERROR:
         state = { ...state, 
-          sendPasswordError: action.payload }
-        break
+          sendPasswordError: action.payload ,
+          sendOTPSuccessMsg:action.payload,
+          sendOtpMegError:action.payload}
+          
   
 
     default:

@@ -31,7 +31,7 @@ export async function getModify(url) {
 
 export async function post(url, data, config = {}) {
   AuthonticationFunction();
-  return axiosApi
+  var a = axiosApi
     .post(url, data, {
       headers: {
         "Accept": "application/json",
@@ -39,6 +39,7 @@ export async function post(url, data, config = {}) {
       }
     })
     .then(response => response.data)
+  return a
 }
 
 export async function put(url, data, config = {}) {
@@ -60,4 +61,18 @@ export async function del(url, config = {}) {
     .then(response => response.data)
 }
 
+// for forget password
+export async function postForget(url, data, config = {}) {
+  // debugger
+  // AuthonticationFunction();
+  return axiosApi
+    .post(url, data, {
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+      }
+    })
+    .then(response => response.data)
+
+}
 
