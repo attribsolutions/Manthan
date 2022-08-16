@@ -9,7 +9,7 @@ import { useSelector, useDispatch } from "react-redux"
 import { withRouter, Link, useHistory } from "react-router-dom"
 
 // availity-reactstrap-validation
-import { AvForm, AvField } from "availity-reactstrap-validation"
+import { AvForm, AvField, AvInput } from "availity-reactstrap-validation"
 
 // action
 import { changePasswordForForgetPassword, changePasswordForForgetPasswordError, changePasswordForForgetPasswordSuccess, userForgetPassword, userForgetPassword_sendOTP, userForgetPassword_sendOTP_Error, userForgetPassword_sendOTP_Success } from "../../store/actions"
@@ -21,7 +21,7 @@ import resetImage from "../../assets/images/resetpassword.png"
 
 const ForgetPasswordPage = props => {
   const dispatch = useDispatch();
- const history= useHistory();
+  const history = useHistory();
   const [paswErr, setPaswErr] = useState(false)
   const { sendOTPSuccessMsg_redux, sendOtpMegError_reducx, sendPasswordError_reducx, sendPasswordMsg_reducx } = useSelector(state => ({
     sendOTPSuccessMsg_redux: state.ForgetPassword.sendOTPSuccessMsg,
@@ -31,51 +31,55 @@ const ForgetPasswordPage = props => {
 
 
   }))
-const [sendPasswordMsg, setSendPasswordMsg] = useState(null)
-const [sendPasswordError, setSendPasswordError] = useState(null)
+  const [sendPasswordMsg, setSendPasswordMsg] = useState(null)
+  const [sendPasswordError, setSendPasswordError] = useState(null)
 
-const [sendOtpMegError, setSendOtpMegError] = useState(null)
-const [sendOTPSuccessMsg, setSendOTPSuccessMsg] = useState(null)
+  const [sendOtpMegError, setSendOtpMegError] = useState(null)
+  const [sendOTPSuccessMsg, setSendOTPSuccessMsg] = useState(null)
+  const [setpawShowUI, setSetpawShowUI] = useState(false)
 
 
 
 
   useEffect(() => {
-    if(sendPasswordMsg_reducx){
-    setSendPasswordMsg(sendPasswordMsg_reducx)
-    setSendPasswordError(null)
+    if (sendPasswordMsg_reducx) {
+      setSendPasswordMsg(sendPasswordMsg_reducx)
+      setSendPasswordError(null)
 
 
-    dispatch(changePasswordForForgetPasswordSuccess(null))
-    // dispatch(changePasswordForForgetPasswordError(null))
-  
-  }
-  if(sendPasswordError_reducx){
-    setSendPasswordError(sendPasswordError_reducx)
-    dispatch(changePasswordForForgetPasswordError(null))
-  
-  }
-  }, [sendPasswordMsg_reducx,sendPasswordError_reducx])
+      dispatch(changePasswordForForgetPasswordSuccess(null))
+      // dispatch(changePasswordForForgetPasswordError(null))
+
+    }
+    if (sendPasswordError_reducx) {
+      setSendPasswordError(sendPasswordError_reducx)
+      dispatch(changePasswordForForgetPasswordError(null))
+      setSendPasswordMsg(null)
+      setSendOTPSuccessMsg(null)
+
+    }
+  }, [sendPasswordMsg_reducx, sendPasswordError_reducx])
 
   useEffect(() => {
-     if(sendOTPSuccessMsg_redux){
-    setSendOTPSuccessMsg(sendOTPSuccessMsg_redux)
-    setSendOtpMegError(null)
-    dispatch(userForgetPassword_sendOTP_Success(null))
-  
-  }
-  if(sendOtpMegError_reducx){
-    setSendOtpMegError(sendOtpMegError_reducx)
-    dispatch(userForgetPassword_sendOTP_Error(null))
-  
-  }
- 
-  }, [sendOTPSuccessMsg_redux,sendOtpMegError_reducx])
-  
+    if (sendOTPSuccessMsg_redux) {
+      setSendOTPSuccessMsg(sendOTPSuccessMsg_redux)
+      setSendOtpMegError(null)
+      setSetpawShowUI(true)
+      dispatch(userForgetPassword_sendOTP_Success(null))
+
+    }
+    if (sendOtpMegError_reducx) {
+      setSendOtpMegError(sendOtpMegError_reducx)
+      dispatch(userForgetPassword_sendOTP_Error(null))
+
+    }
+
+  }, [sendOTPSuccessMsg_redux, sendOtpMegError_reducx])
+
   function handleValidSubmit(event, values) {
     var jsonBody = JSON.stringify({
       Email: values.email,
-        })
+    })
     dispatch(userForgetPassword_sendOTP(jsonBody))
   }
   function handleValidSubmit1(event, values) {
@@ -126,7 +130,7 @@ const [sendOTPSuccessMsg, setSendOTPSuccessMsg] = useState(null)
                             <h5 className="mb-0">  Reset Password</h5>
                           </div>
 
-                          {sendOtpMegError ? (
+                          {sendOtpMegError||sendPasswordError ? (
                             <Alert color="danger" style={{ marginTop: "13px" }}>
                               {sendOtpMegError}{sendPasswordError}
                             </Alert>
@@ -137,16 +141,15 @@ const [sendOTPSuccessMsg, setSendOTPSuccessMsg] = useState(null)
                             </Alert>
                           ) : null}
 
-                          {((sendOTPSuccessMsg))
+                          {((setpawShowUI))
                             ?
                             <AvForm className="custom-form mt-4"
                               onValidSubmit={(e, v) => handleValidSubmit1(e, v)}
                             >
                               <div className="mb-3">
-
-                                <AvField
+                                <label>UserID</label>
+                                <AvInput
                                   name="userId"
-                                  label="UserID"
                                   className="form-control mb-2"
                                   // dissabled={true}
                                   // autoComplete="new-email"
@@ -155,38 +158,35 @@ const [sendOTPSuccessMsg, setSendOTPSuccessMsg] = useState(null)
                                   autoComplete="off"
                                   required
                                 />
-
-                                <AvField
+                                <label>Enter OTP</label>
+                                <AvInput
                                   name="OTP"
-                                  label="Enter OTP"
                                   className="form-control mb-2"
                                   // dissabled={true}
                                   placeholder="Enter OTP"
                                   type="text"
-
                                   required
                                 />
-                                <AvField
-                                  name="password1"
-                                  label="password"
-                                  className={"form-control  mb-2"}
+                                <label>Password</label>
 
+                                <AvInput
+                                  name="password1"
+                                  className={"form-control  mb-2"}
                                   // dissabled={true}
                                   invalid={paswErr}
-
                                   autoComplete="new-password"
                                   placeholder="Enter password"
                                   type="password"
-
                                   required
                                 />
                                 {(paswErr === true)
                                   ?
                                   <div className="text-danger"> Please Enter Correct Password</div>
                                   : <></>}
-                                <AvField
+                                <label>confirm password</label>
+
+                                <AvInput
                                   name="passwordcon"
-                                  label="confirm password"
                                   className={"form-control  mb-2"}
                                   // dissabled={true}
                                   autoComplete="new-password"
@@ -195,10 +195,10 @@ const [sendOTPSuccessMsg, setSendOTPSuccessMsg] = useState(null)
                                   type="password"
                                   required
                                 />
-                                {(paswErr === true)
+                                {/* {(paswErr === true)
                                   ?
                                   <div className="text-danger"> Please Enter Correct Password</div>
-                                  : <></>}
+                                  : <></>} */}
                               </div>
 
                               <div className="mb-3 mt-4">
@@ -244,11 +244,11 @@ const [sendOTPSuccessMsg, setSendOTPSuccessMsg] = useState(null)
                           </div>
 
                           <Alert color="success" style={{ marginTop: "13px" }}>
-                          {sendPasswordMsg}
-                            </Alert>
+                            {sendPasswordMsg}
+                          </Alert>
 
                           <div className="mt-5 text-center">
-                         <Link to="/Login" className="text-primary fw-semibold"><Button type="submit"  className="btn btn-success w-md" >login Here</Button></Link>
+                            <Link to="/Login" className="text-primary fw-semibold"><Button type="submit" className="btn btn-success w-md" >login Here</Button></Link>
 
                           </div>
                         </div>

@@ -14,6 +14,7 @@ import { BreadcrumbShow } from "../../../store/Utilites/Breadcrumb/actions";
 import { MetaTags } from "react-meta-tags";
 import { CommonGetRoleAccessFunction } from "../../../components/Common/CommonGetRoleAccessFunction";
 import { useHistory } from "react-router-dom";
+import { getPageList } from "../../../store/actions";
 
 const AddUser = (props) => {
 
@@ -174,7 +175,6 @@ const AddUser = (props) => {
       // RoleDropDown
       setRoleData([...find, { Party: party.Party_id, Role: e.Name }])
     }
-
   };
 
   /// Role Table Validation

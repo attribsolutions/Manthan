@@ -54,15 +54,16 @@ const forgetPassword = (state = initialState, action) => {
         state = {
           ...state,
           sendPasswordMsg: action.payload,
-          sendOTPSuccessMsg: null,
+          // sendOTPSuccessMsg: null,
         }
         break
   
       case CHANGE_PASSWORD_FOR_FORGET_PASSWORD_ERROR:
         state = { ...state, 
           sendPasswordError: action.payload ,
-          sendOTPSuccessMsg:action.payload,
-          sendOtpMegError:action.payload}
+          // sendOTPSuccessMsg:'',
+          // sendOtpMegError:''
+        }
           
   
 
