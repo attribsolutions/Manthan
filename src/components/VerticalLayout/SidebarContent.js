@@ -17,7 +17,7 @@ import MetisMenu from "metismenujs";
 import { withRouter } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { roleAceessAction } from "../../store/auth/login/actions";
+import { getUserDetailsAction, roleAceessAction } from "../../store/auth/login/actions";
 import { demoRolleAcess } from "./aaaa";
 // import { RoleAccessData } from "./APIDEMO";
 
@@ -27,14 +27,16 @@ const SidebarContent = (props) => {
   const dispatch = useDispatch();
 
   // const  RoleAccessData=demoRolleAcess
-  const { RoleAccessData, } = useSelector((state) => ({
+  const { RoleAccessData, afterLoginUserDetails } = useSelector((state) => ({
     RoleAccessData: state.Login.RoleData,
+    afterLoginUserDetails: state.Login.afterLoginUserDetails,
   }));
 
   useEffect(() => {
-    if(RoleAccessData.length<=0){
-    dispatch(roleAceessAction(1, 1, 1))
-       }
+    if (RoleAccessData.length <= 0) {
+      var user = localStorage.getItem("userId")
+      dispatch(getUserDetailsAction(user))
+    }
   }, [])
 
   const activateParentDropdown = useCallback((item) => {
@@ -110,7 +112,7 @@ const SidebarContent = (props) => {
     }
   }
 
-// console.log("RoleAccessData:",RoleAccessData)
+  // console.log("RoleAccessData:",RoleAccessData)
   const [isActive, setisActive] = useState('')
 
   // Use ComponentDidMount and ComponentDidUpdate method simultaniously
@@ -148,19 +150,18 @@ const SidebarContent = (props) => {
                   </Link>
                   <ul className="sub-menu">
                     {item.ModuleData.map((index, j) => {
-                      if(index.RoleAccess_IsShowOnMenu===true)
-                      {
+                      if (index.RoleAccess_IsShowOnMenu === true) {
                         return (
                           <li>
-                            <Link to={{pathname:`/${index.ActualPagePath}`, state: {fromDashboardAccess: true,UserDetails:index}}} >{props.t(index.Name)}</Link>
+                            <Link to={{ pathname: `/${index.ActualPagePath}`, state: { fromDashboardAccess: true, UserDetails: index } }} >{props.t(index.Name)}</Link>
                           </li>
                           // class={pathName === indx.SelectIcon ? "active" : ""}
                         )
                       }
-                      else{
+                      else {
                         <></>
                       }
-                     
+
                     })}
                   </ul>
                 </li>

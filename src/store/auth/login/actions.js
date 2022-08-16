@@ -7,7 +7,9 @@ import {
   SOCIAL_LOGIN,
   ROLE_ACCESS_API_CALL,
   ROLE_ACCESS_API_CALL_SUCCESS,
-  ROLE_ACCESS_API_UPDATE_SUCCESS
+  ROLE_ACCESS_API_UPDATE_SUCCESS,
+  GET_USER_DETAILS_AFTER_LOGIN,
+  GET_USER_DETAILS_AFTER_LOGIN_SUCCESS
 } from "./actionTypes"
 
 export const loginUser = (user, history) => {
@@ -51,6 +53,20 @@ export const socialLogin = (data, history, type) => {
     payload: { data, history, type },
   }
 }
+
+export  const getUserDetailsAction=(id)=>{
+  return{
+    type:GET_USER_DETAILS_AFTER_LOGIN,
+    id,
+  }
+  }
+  export  const getUserDetailsActionSuccess=(data)=>{
+    return{
+      type:GET_USER_DETAILS_AFTER_LOGIN_SUCCESS,
+      payload: data,
+    }
+    }
+
 export  const roleAceessAction=(id1,id2,id3)=>{
 return{
   type:ROLE_ACCESS_API_CALL,

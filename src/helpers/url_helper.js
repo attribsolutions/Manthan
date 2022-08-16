@@ -18,6 +18,8 @@ export const ORDER_PAGE_API = "Orders"
 
 //Python Logic 
 export const FOOD_ERP_POST_JWT_LOGIN = "/Login"
+export const FOOD_ERP_POST_USER_DETAILS_AFTER_LOGIN="/GerUserDetials"
+
 export const FOOD_ERP_POST_JWT_PASSWORD_FORGET_VERIFY_OTP= "/VerifyOTP"
 
 export const FOOD_ERP_POST_JWT_PASSWORD_FORGET_SEND_OTP = "/SendMail"

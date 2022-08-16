@@ -88,6 +88,8 @@ const postJwtRegister = (url, data) => {
 }
 
 export const Python_FoodERP_postJwtLogin = data => post(url.FOOD_ERP_POST_JWT_LOGIN, data)
+export const getUserDetails_afterLogin_ApiCall = data => post(url.FOOD_ERP_POST_USER_DETAILS_AFTER_LOGIN, data)
+
 
 // postForgetPwd
 export const Python_FoodERP_postJwtForgetPwd_Verify_OTP = data => postForget(url.FOOD_ERP_POST_JWT_PASSWORD_FORGET_VERIFY_OTP, data)
