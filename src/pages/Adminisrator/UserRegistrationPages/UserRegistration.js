@@ -23,7 +23,7 @@ const AddUser = (props) => {
 
   //*** "isEditdata get all data from ModuleID for Binding  Form controls
   let editDataGatingFromList = props.state;
-  debugger
+  
   //SetState  Edit data Geting From Modules List component
   const [EditData, setEditData] = useState([]);
   const [pageMode, setPageMode] = useState("save");
@@ -162,17 +162,17 @@ const AddUser = (props) => {
   }));
 
   /// Role dopdown
-  function RoleDropDown_select_handler(e, party, key) {
+  function RoleDropDown_select_handler(Role, party, key) {
     debugger
 
     const find = RoleData.filter((index, key1) => {
       return !(index.Party === party.Party_id)
     })
     if ((find === undefined)) {
-      setRoleData([{ Party: party.Party_id, Role: e.Name }])
+      setRoleData([{ Party: party.Party_id, Role: Role.value }])
     } else {
       // RoleDropDown
-      setRoleData([...find, { Party: party.Party_id, Role: e.Name }])
+      setRoleData([...find, { Party: party.Party_id, Role: Role.value }])
     }
 
   };
@@ -344,7 +344,7 @@ const AddUser = (props) => {
                           </Row>
 
 
-                          {EditData==false ? <Card>
+                         
                             <Row>
                               <FormGroup className="mb-1 col col-sm-4 " >
                                 <Label htmlFor="validationCustom01">Password</Label>
@@ -382,7 +382,7 @@ const AddUser = (props) => {
                                 {/* <AvFeedback> Passwords did not match </AvFeedback> */}
                               </FormGroup>
                             </Row>
-                          </Card> : <></>}
+                          
 
 
 
