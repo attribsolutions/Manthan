@@ -55,27 +55,33 @@ const RoleAccessAdd = (props) => {
             PostMessage_ForRoleAccessList: state.RoleAccessReducer.PostMessage_ForRoleAccessList,
         }));
 
-   // userAccess useEffect
-   useEffect(() => {
-       const userAcc = CommonGetRoleAccessFunction(history)
-       const editData = history.location.state.EditData
 
-    if (!(userAcc === undefined)) {
-        setUserPageAccessState(userAcc)
-    }
 
-    if(!(editData===undefined)){
-        var divisionid = editData.Division_id
-        var companyid = editData.company
-        var roleid = editData.Role_id
-       if (roleid > 0 && divisionid > 0) {
-            dispatch(GO_Button_HandlerForRoleAccessListPage(roleid, divisionid));
-            setShowTableOnUI(true)
-          setRoleDropDown({label:editData.RoleName,value:roleid})
-          setDivision_dropdown_Select({label:editData.DivisionName,value:divisionid})
-    }
-}
-}, [history]);
+
+
+
+        
+    // userAccess useEffect
+    useEffect(() => {
+        const userAcc = CommonGetRoleAccessFunction(history)
+        const editData = history.location.state.EditData
+
+        if (!(userAcc === undefined)) {
+            setUserPageAccessState(userAcc)
+        }
+
+        if (!(editData === undefined)) {
+            var divisionid = editData.Division_id
+            var companyid = editData.company
+            var roleid = editData.Role_id
+            if (roleid > 0 && divisionid > 0) {
+                dispatch(GO_Button_HandlerForRoleAccessListPage(roleid, divisionid));
+                setShowTableOnUI(true)
+                setRoleDropDown({ label: editData.RoleName, value: roleid })
+                setDivision_dropdown_Select({ label: editData.DivisionName, value: divisionid })
+            }
+        }
+    }, [history]);
 
     useEffect(() => {
         dispatch(GO_Button_HandlerForRoleAccessListPage_Success([]))
@@ -517,8 +523,9 @@ const RoleAccessAdd = (props) => {
                                                             <Select
                                                                 value={page_DropdownSelect}
                                                                 options={Page_DropdownOption}
-                                                                onChange={(e) => { Page_DropdownSelectHandller(e) }}
-                                                                classNamePrefix="select2-selection"
+                                                                // onChange={(e) => { Page_DropdownSelectHandller(e) }}
+                                                                // onChange={(e)=> {const selectAllOption = {label: 'select all', value: '*' }}}
+                                                            classNamePrefix="select2-selection"
                                                             />
                                                         </Col>
                                                     </FormGroup>

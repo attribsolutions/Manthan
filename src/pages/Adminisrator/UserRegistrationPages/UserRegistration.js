@@ -24,7 +24,7 @@ const AddUser = (props) => {
 
   //*** "isEditdata get all data from ModuleID for Binding  Form controls
   let editDataGatingFromList = props.state;
-
+  
   //SetState  Edit data Geting From Modules List component
   const [EditData, setEditData] = useState([]);
   const [pageMode, setPageMode] = useState("save");
@@ -32,11 +32,11 @@ const AddUser = (props) => {
 
   const [RoleData, setRoleData] = useState([]);
   const [EmployeeSelect, setEmployeeSelect] = useState("");
-
+  const [passwordAndConfirmShowInUI, setPasswordAndConfirmShowInUI] = useState(editDataGatingFromList)
   // M_Roles DropDown
   const [RoleDropDown, setRoleDropDown] = useState([]);
-  const [password, setPassword] = useState('');
 
+  const [password, setPassword] = useState('');
   const [cPassword, setCPassword] = useState('');
   const [showErrorMessage, setShowErrorMessage] = useState(false);
   const [cPasswordClass, setCPasswordClass] = useState('form-control');
@@ -163,17 +163,17 @@ const AddUser = (props) => {
   }));
 
   /// Role dopdown
-  function RoleDropDown_select_handler(e, party, key) {
+  function RoleDropDown_select_handler(Role, party, key) {
     debugger
 
     const find = RoleData.filter((index, key1) => {
       return !(index.Party === party.Party_id)
     })
     if ((find === undefined)) {
-      setRoleData([{ Party: party.Party_id, Role: e.Name }])
+      setRoleData([{ Party: party.Party_id, Role: Role.value }])
     } else {
       // RoleDropDown
-      setRoleData([...find, { Party: party.Party_id, Role: e.Name }])
+      setRoleData([...find, { Party: party.Party_id, Role: Role.value }])
     }
   };
 
@@ -247,6 +247,7 @@ const AddUser = (props) => {
   }
 
   const rolaTable = () => {
+
     return (
       <Table className="table table-bordered  text-center">
         <Thead >
@@ -343,59 +344,49 @@ const AddUser = (props) => {
                           </Row>
 
 
+                         
+                            <Row>
+                              <FormGroup className="mb-1 col col-sm-4 " >
+                                <Label htmlFor="validationCustom01">Password</Label>
+                                <AvField name="password" id="password"
+                                  type="password"
+                                  // value={EditData.password}
+                                  placeholder="Please Enter Password"
+                                  autoComplete="new-password"
+                                  className="form-control"
+                                  // validate={{
+                                  //   required: { value: true, errorMessage: 'Please Enter Password' },
+                                  // }}
+
+                                  value={password}
+                                  onChange={(e) => { setPassword(e.target.value) }} />
+
+                              </FormGroup>
+
+                            </Row>
+                            <Row>
+                              <FormGroup className="mb-1 col col-sm-4 " >
+                                <Label htmlFor="validationCustom01">Confirm Password</Label>
+                                <AvField name="password" id="password"
+                                  type="password"
+                                  // value={EditData.password}
+                                  placeholder="Please Enter Password"
+                                  autoComplete="new-password"
+                                  className={cPasswordClass}
+                                  // validate={{
+                                  //   required: { value: true, errorMessage: 'Please Enter Password' },
+                                  // }}
+                                  value={cPassword}
+                                  onChange={handleCPassword} />
+                                {showErrorMessage && isCPassword ? <div> Passwords did not match </div> : ''}
+                                {/* <AvFeedback> Passwords did not match </AvFeedback> */}
+                              </FormGroup>
+                            </Row>
+                          
 
 
-                          {/* <label htmlFor="password" className="form-label">Password</label>
-                          <input type="password" className="form-control" id="password" value={password}
-                            onChange={(e) => { setPassword(e.target.value) }} />
-                        </div>
-                        <div className="mb-3">
-                          <label htmlFor="confirmPassword" className="form-label">Confirm Password</label>
-                          <input type="password" className={cPasswordClass} id="confirmPassword" value={cPassword}
-                            onChange={handleCPassword} />
-                        </div>
-                        {showErrorMessage && isCPassword ? <div> Passwords did not match </div> : ''} */}
 
 
-
-                          <Row>
-                            <FormGroup className="mb-1 col col-sm-4 " >
-                              <Label htmlFor="validationCustom01">Password</Label>
-                              <AvField name="password" id="password"
-                                type="password"
-                                // value={EditData.password}
-                                placeholder="Please Enter Password"
-                                autoComplete="new-password"
-                                className="form-control"
-                                // validate={{
-                                //   required: { value: true, errorMessage: 'Please Enter Password' },
-                                // }}
-
-                                value={password}
-                                onChange={(e) => { setPassword(e.target.value) }} />
-
-                            </FormGroup>
-
-                          </Row>
-                          <Row>
-                            <FormGroup className="mb-1 col col-sm-4 " >
-                              <Label htmlFor="validationCustom01">Confirm Password</Label>
-                              <AvField name="password" id="password"
-                                type="password"
-                                // value={EditData.password}
-                                placeholder="Please Enter Password"
-                                autoComplete="new-password"
-                                className={cPasswordClass}
-                                // validate={{
-                                //   required: { value: true, errorMessage: 'Please Enter Password' },
-                                // }}
-                                value={cPassword}
-                                onChange={handleCPassword} />
-                              {showErrorMessage && isCPassword ? <div> Passwords did not match </div> : ''}
-                              {/* <AvFeedback> Passwords did not match </AvFeedback> */}
-                            </FormGroup>
-
-                          </Row>
 
 
                           <Row className="mt-2">
@@ -489,7 +480,9 @@ const AddUser = (props) => {
                                 <i className="dripicons-plus "></i>
                               </Button>
                             </Col> */}
-                            <Col sm={6} style={{ marginTop: '28px' }}>
+
+                            {userPartiesForUserMaster.length > 0 ? <Col sm={6} style={{ marginTop: '28px' }}>
+
                               {RoleData ? (
 
                                 <div className="table-responsive">
@@ -499,7 +492,8 @@ const AddUser = (props) => {
                                 <>
                                 </>
                               )}
-                            </Col>
+                            </Col> : <> </>}
+
                             {/* <FormGroup > */}
 
                             <Row >
