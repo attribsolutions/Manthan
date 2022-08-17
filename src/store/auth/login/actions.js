@@ -9,7 +9,8 @@ import {
   ROLE_ACCESS_API_CALL_SUCCESS,
   ROLE_ACCESS_API_UPDATE_SUCCESS,
   GET_USER_DETAILS_AFTER_LOGIN,
-  GET_USER_DETAILS_AFTER_LOGIN_SUCCESS
+  GET_USER_DETAILS_AFTER_LOGIN_SUCCESS,
+  DESISION_DEROPDOWN_SUCCESS_AFTER_LOGIN
 } from "./actionTypes"
 
 export const loginUser = (user, history) => {
@@ -59,7 +60,15 @@ export  const getUserDetailsAction=(id)=>{
     type:GET_USER_DETAILS_AFTER_LOGIN,
     id,
   }
+}
+
+export  const divisionDropdownSelectSuccess=(data)=>{
+  return{
+    type:DESISION_DEROPDOWN_SUCCESS_AFTER_LOGIN,
+    payload: data,
   }
+}
+
   export  const getUserDetailsActionSuccess=(data)=>{
     return{
       type:GET_USER_DETAILS_AFTER_LOGIN_SUCCESS,

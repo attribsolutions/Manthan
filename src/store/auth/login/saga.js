@@ -7,7 +7,7 @@ import {
   ROLE_ACCESS_API_CALL
 } from "./actionTypes"
 import {
-  apiError, getUserDetailsAction, getUserDetailsActionSuccess, loginSuccess,
+  apiError, divisionDropdownSelectSuccess, getUserDetailsAction, getUserDetailsActionSuccess, loginSuccess,
   logoutUserSuccess,
   RoleAccessUpdateSuccess,
   roleAceessAction,
@@ -17,7 +17,7 @@ import {
 import { getFirebaseBackend } from "../../../helpers/firebase_helper"
 import {
   getUserDetails_afterLogin_ApiCall,
-  Python_FoodERP_postJwtLogin, RoleAccessApi_url, showPagesListOnPageAccess_DropDown_List
+  Python_FoodERP_postJwtLogin, RoleAccessApi_url, showPagesListOnPageAccess_DropDown_List, UserPartiesForUserMaster_API
 } from "../../../helpers/backend_helper"
 
 const fireBaseBackend = getFirebaseBackend()
@@ -32,18 +32,33 @@ function* loginUser({ payload: { user, history } }) {
       })
     try {
       if (response.StatusCode === 200) {
-
+        // debugger
         localStorage.setItem("token", (response.token))
         localStorage.setItem("userId", (response.UserID))
-        yield put(getUserDetailsAction(response.UserID))
+        // yield put(getUserDetailsAction(response.UserID))
 
-        yield put(loginSuccess(response))
+        const response1 = yield call(getUserDetails_afterLogin_ApiCall, {
+          UserId: response.UserID,
+        })
+        yield put(getUserDetailsActionSuccess(response1.Data))
 
-        history.push("/dashboard")
+        var employeeId = response1.Data.EmployeeID;
+
+        const response2 = yield call(UserPartiesForUserMaster_API, employeeId)
+        yield put(divisionDropdownSelectSuccess(response2.Data))
+
+        yield put(loginSuccess(response1))
+
+        // history.push("/dashboard")
+        history.push("/division")
+      }
+      else{
+      yield put(apiError("Incorrect UserName And Password"))
+
       }
 
     } catch (e) {
-      yield apiError("response.non_field_errors")
+      yield put(apiError("Incorrect UserName And Password"))
     }
 
   } catch (error) {
@@ -86,7 +101,7 @@ function* logoutUser({ payload: { history } }) {
   }
 }
 function* RoleAccessGenratorFunction({ id1, id2, id3 }) {
-debugger
+  debugger
   try {
     const PageAccessApi = yield call(showPagesListOnPageAccess_DropDown_List)
 

@@ -6,7 +6,8 @@ import {
   API_ERROR,
   ROLE_ACCESS_API_CALL_SUCCESS,
   ROLE_ACCESS_API_UPDATE_SUCCESS,
-  GET_USER_DETAILS_AFTER_LOGIN_SUCCESS
+  GET_USER_DETAILS_AFTER_LOGIN_SUCCESS,
+  DESISION_DEROPDOWN_SUCCESS_AFTER_LOGIN
 } from "./actionTypes"
 
 const initialState = {
@@ -14,7 +15,8 @@ const initialState = {
   loading: false,
   RoleData:[],
   RoleAccessUpdateData:[],
-  afterLoginUserDetails:{}
+  afterLoginUserDetails:{},
+  divisionDropdown:[]
 }
 
 const Login = (state = initialState, action) => {
@@ -45,6 +47,12 @@ const Login = (state = initialState, action) => {
         return {
           ...state,
           afterLoginUserDetails: action.payload,
+        }
+        
+      case DESISION_DEROPDOWN_SUCCESS_AFTER_LOGIN:
+        return {
+          ...state,
+          divisionDropdown: action.payload,
         }
       case ROLE_ACCESS_API_CALL_SUCCESS:
         return {

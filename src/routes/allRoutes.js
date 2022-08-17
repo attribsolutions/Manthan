@@ -48,6 +48,7 @@ import EmployeeTypeList from "../pages/Adminisrator/EmployeeTypes/EmployeeTypeLi
 import DivisionTypeList from "../pages/Adminisrator/DivisionType/DivisionTypeList";
 import PartyType from "../pages/Adminisrator/PartyTypes/PartyType";
 import PartyTypeList from "../pages/Adminisrator/PartyTypes/PartyTypeList";
+import SelectDivisionPage from "../pages/Authentication/SelectDivisionPage";
 
 
 
@@ -161,6 +162,7 @@ const authRoutes = [
   { path: "/ResetPassword", component: ResetPassword },
   { path: "/SendOTP", component: SendOTP },
   { path: "/EnterOTP", component: EnterOTP },
+  { path: "/division", component: SelectDivisionPage },
 
   { path: "/pages-404", component: Error404 },
   { path: "/pages-500", component: Error500 },
