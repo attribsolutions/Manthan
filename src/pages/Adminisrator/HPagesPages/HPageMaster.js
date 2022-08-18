@@ -315,20 +315,35 @@ const HPageMaster = (props) => {
           "AccessName",
           "IsView"
         );
+           // find function pass Parameter (array,indexParameter,findvalue)
+           const find_IsEditSelf = Common_Find_Function(
+            tablePageAccessDataState,
+            "AccessName",
+            "IsEditSelf"
+          );
 
-        if (findIsView == undefined) {
+        if (findIsView === undefined) {
           // find function pass Parameter (array,indexParameter,findvalue)
           const ViewValues = Common_Find_Function(
             PageAccessValues,
             "label",
             "IsView"
           );
-
+          
+          const IsEditSelfValues = Common_Find_Function(
+            PageAccessValues,
+            "label",
+            "IsEditSelf"
+          );
           setTablePageAccessDataState([
             ...tablePageAccessDataState,
             {
               AccessID: ViewValues.value,
               AccessName: ViewValues.label,
+            },
+            {
+              AccessID: IsEditSelfValues.value,
+              AccessName: IsEditSelfValues.label,
             },
             {
               AccessID: drop_value,
@@ -337,6 +352,7 @@ const HPageMaster = (props) => {
           ]);
           return;
         }
+       
       }
 
       setTablePageAccessDataState([
@@ -365,7 +381,7 @@ const HPageMaster = (props) => {
     return tablePageAccessDataState.map((TableValue) => {
       let ViewValues = false;
 
-      if (TableValue.AccessName === "IsView") {
+      if ((TableValue.AccessName === "IsView")||(TableValue.AccessName === "IsEditSelf")) {
         // find function pass Parameter (array,indexParameter,findvalue)
         // const ViewValues = Common_Find_Function(PageAccessValues, "label", "IsView");
         const View = tablePageAccessDataState.find((element) => {
