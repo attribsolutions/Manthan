@@ -55,7 +55,7 @@ const HPageMaster = (props) => {
     useState("");
 
   //Access redux store Data
-  const { ModuleData, PostAPIResponse, PageList, PageAccess,RoleAccessModifiedinSingleArray } = useSelector(
+  const { ModuleData, PostAPIResponse, PageList, PageAccess, RoleAccessModifiedinSingleArray } = useSelector(
     (state) => ({
       ModuleData: state.Modules.modulesList,
       PostAPIResponse: state.H_Pages.saveMessage,
@@ -65,22 +65,22 @@ const HPageMaster = (props) => {
 
     })
   );
- // userAccess useEffect
- useEffect(() => {
-  if ((editDataGatingFromList === undefined)) {
+  // userAccess useEffect
+  useEffect(() => {
+    if ((editDataGatingFromList === undefined)) {
       const userAcc = CommonGetRoleAccessFunction(history)
       if (!(userAcc === undefined)) {
-          setUserPageAccessState(userAcc)
+        setUserPageAccessState(userAcc)
       }
-  } else {
+    } else {
       let RelatedPageID = history.location.state.UserDetails.RelatedPageID
       const userfound = RoleAccessModifiedinSingleArray.find((element) => {
-          return element.id === RelatedPageID
+        return element.id === RelatedPageID
       })
       setUserPageAccessState(userfound)
-  }
+    }
 
-}, [history])
+  }, [history])
   // For PageAccess DropDown
   useEffect(() => {
     dispatch(getPageAccess_DropDown_API());
@@ -315,26 +315,27 @@ const HPageMaster = (props) => {
           "AccessName",
           "IsView"
         );
-           // find function pass Parameter (array,indexParameter,findvalue)
-           const find_IsEditSelf = Common_Find_Function(
-            tablePageAccessDataState,
-            "AccessName",
-            "IsEditSelf"
-          );
+        // find function pass Parameter (array,indexParameter,findvalue)
+        const find_IsEditSelf = Common_Find_Function(
+          tablePageAccessDataState,
+          "AccessName",
+          "IsEditSelf"
+        );
 
-        if (findIsView === undefined) {
+        const ViewValues = Common_Find_Function(
+          PageAccessValues,
+          "label",
+          "IsView"
+        );
+
+        const IsEditSelfValues = Common_Find_Function(
+          PageAccessValues,
+          "label",
+          "IsEditSelf"
+        );
+        if ((findIsView === undefined) && (find_IsEditSelf === undefined)) {
           // find function pass Parameter (array,indexParameter,findvalue)
-          const ViewValues = Common_Find_Function(
-            PageAccessValues,
-            "label",
-            "IsView"
-          );
-          
-          const IsEditSelfValues = Common_Find_Function(
-            PageAccessValues,
-            "label",
-            "IsEditSelf"
-          );
+
           setTablePageAccessDataState([
             ...tablePageAccessDataState,
             {
@@ -352,7 +353,34 @@ const HPageMaster = (props) => {
           ]);
           return;
         }
-       
+        else if (findIsView === undefined) {
+          setTablePageAccessDataState([
+            ...tablePageAccessDataState,
+            {
+              AccessID: ViewValues.value,
+              AccessName: ViewValues.label,
+            },
+            {
+              AccessID: drop_value,
+              AccessName: drop_label,
+            },
+          ]);
+          return;
+        }
+        else if (find_IsEditSelf === undefined) {
+          setTablePageAccessDataState([
+            ...tablePageAccessDataState,
+            {
+              AccessID: IsEditSelfValues.value,
+              AccessName: IsEditSelfValues.label,
+            },
+            {
+              AccessID: drop_value,
+              AccessName: drop_label,
+            },
+          ]);
+          return;
+        }
       }
 
       setTablePageAccessDataState([
@@ -381,7 +409,7 @@ const HPageMaster = (props) => {
     return tablePageAccessDataState.map((TableValue) => {
       let ViewValues = false;
 
-      if ((TableValue.AccessName === "IsView")||(TableValue.AccessName === "IsEditSelf")) {
+      if ((TableValue.AccessName === "IsView") || (TableValue.AccessName === "IsEditSelf")) {
         // find function pass Parameter (array,indexParameter,findvalue)
         // const ViewValues = Common_Find_Function(PageAccessValues, "label", "IsView");
         const View = tablePageAccessDataState.find((element) => {
@@ -411,235 +439,235 @@ const HPageMaster = (props) => {
   if (pageMode === "edit") { IsEditMode_Css = "-5.5%" };
 
   if (!(userPageAccessState === '')) {
-  return (
-    <React.Fragment>
-      <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
-      <Breadcrumb breadcrumbItem={userPageAccessState.PageHeading} />
-        <Container fluid>
-          <MetaTags>
-            <title>Page Master| FoodERP-React FrontEnd</title>
-          </MetaTags>
+    return (
+      <React.Fragment>
+        <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
+          <Breadcrumb breadcrumbItem={userPageAccessState.PageHeading} />
+          <Container fluid>
+            <MetaTags>
+              <title>Page Master| FoodERP-React FrontEnd</title>
+            </MetaTags>
 
-          <Card className="text-black" >
+            <Card className="text-black" >
               <CardHeader className="card-header   text-black" style={{ backgroundColor: "#dddddd" }} >
                 <h4 className="card-title text-black">{userPageAccessState.PageDescription}</h4>
                 <p className="card-title-desc text-black">{userPageAccessState.PageDescriptionDetails}</p>
               </CardHeader>
 
-            <CardBody>
-              <AvForm
-                onValidSubmit={(e, v) => {
-                  FormSubmitButton_Handler(e, v);
-                }}
-                ref={formRef}
-              >
-                <Card>
-                  <CardBody style={{ backgroundColor: "whitesmoke" }}>
-                    <Row>
-                      <Col md="3">
-                        <FormGroup className="mb-3 ">
-                          <Label>Name </Label>
-                          <AvField
-                            name="Name"
-                            id="txtName"
-                            value={EditData.Name}
-                            type="text"
-                            placeholder="Please Enter Name"
-                            autoComplete="off"
-                            validate={{
-                              required: {
-                                value: true,
-                                errorMessage: "Please Enter Name",
-                              },
-                            }}
-                            onChange={(e) => {
-                              dispatch(BreadcrumbShow(e.target.value));
-                            }}
-                          />
-                        </FormGroup>
-                      </Col>
+              <CardBody>
+                <AvForm
+                  onValidSubmit={(e, v) => {
+                    FormSubmitButton_Handler(e, v);
+                  }}
+                  ref={formRef}
+                >
+                  <Card>
+                    <CardBody style={{ backgroundColor: "whitesmoke" }}>
+                      <Row>
+                        <Col md="3">
+                          <FormGroup className="mb-3 ">
+                            <Label>Name </Label>
+                            <AvField
+                              name="Name"
+                              id="txtName"
+                              value={EditData.Name}
+                              type="text"
+                              placeholder="Please Enter Name"
+                              autoComplete="off"
+                              validate={{
+                                required: {
+                                  value: true,
+                                  errorMessage: "Please Enter Name",
+                                },
+                              }}
+                              onChange={(e) => {
+                                dispatch(BreadcrumbShow(e.target.value));
+                              }}
+                            />
+                          </FormGroup>
+                        </Col>
 
-                      <Col md="1"> </Col>
+                        <Col md="1"> </Col>
 
-                      <Col md="7">
-                        <FormGroup className="mb-3 ">
-                          <Label>Page Description </Label>
-                          <AvField
-                            name="pagedescription"
-                            value={EditData.PageDescription}
-                            type="text"
-                            placeholder="Please Enter Page Description"
-                            autoComplete="off"
-                            validate={{
-                              required: {
-                                value: true,
-                                errorMessage: "Please Enter Page Description",
-                              },
-                            }}
-                          />
-                        </FormGroup>
-                      </Col>
-                    </Row>
+                        <Col md="7">
+                          <FormGroup className="mb-3 ">
+                            <Label>Page Description </Label>
+                            <AvField
+                              name="pagedescription"
+                              value={EditData.PageDescription}
+                              type="text"
+                              placeholder="Please Enter Page Description"
+                              autoComplete="off"
+                              validate={{
+                                required: {
+                                  value: true,
+                                  errorMessage: "Please Enter Page Description",
+                                },
+                              }}
+                            />
+                          </FormGroup>
+                        </Col>
+                      </Row>
 
-                    <Row>
-                      <Col md="3">
-                        <FormGroup className="mb-3">
-                          <Label>Page Heading</Label>
-                          <AvField
-                            name="pageheading"
-                            type="text"
-                            defaultValue=""
-                            value={EditData.PageHeading}
-                            placeholder="Enter your Page Heading "
-                          />
-                        </FormGroup>
-                      </Col>
+                      <Row>
+                        <Col md="3">
+                          <FormGroup className="mb-3">
+                            <Label>Page Heading</Label>
+                            <AvField
+                              name="pageheading"
+                              type="text"
+                              defaultValue=""
+                              value={EditData.PageHeading}
+                              placeholder="Enter your Page Heading "
+                            />
+                          </FormGroup>
+                        </Col>
 
-                      <Col md="1"> </Col>
-                      <Col md="7">
-                        <FormGroup className="mb-3">
-                          <Label>Page Description Details</Label>
-                          <AvField
-                            name="pageheadingdescription"
-                            type="text"
-                            defaultValue=""
-                            value={EditData.PageDescriptionDetails}
-                            placeholder="Enter your Description "
-                            validate={{
-                              required: {
-                                value: true,
-                                errorMessage:
-                                  "Please Enter Page Description Deails",
-                              },
-                            }}
-                          />
-                        </FormGroup>
-                      </Col>
-                    </Row>
-                  </CardBody>
-                </Card>
+                        <Col md="1"> </Col>
+                        <Col md="7">
+                          <FormGroup className="mb-3">
+                            <Label>Page Description Details</Label>
+                            <AvField
+                              name="pageheadingdescription"
+                              type="text"
+                              defaultValue=""
+                              value={EditData.PageDescriptionDetails}
+                              placeholder="Enter your Description "
+                              validate={{
+                                required: {
+                                  value: true,
+                                  errorMessage:
+                                    "Please Enter Page Description Deails",
+                                },
+                              }}
+                            />
+                          </FormGroup>
+                        </Col>
+                      </Row>
+                    </CardBody>
+                  </Card>
 
-                <Card className=" mt-n2 text-black">
-                  <CardBody style={{ backgroundColor: "whitesmoke" }}>
-                    <Row>
-                      <Col md="3">
-                        <FormGroup className="mb-3">
-                          <Label htmlFor="validationCustom01">Module</Label>
-                          <Select
-                            value={module_DropdownSelect}
-                            options={Module_DropdownOption}
-                            autoComplete="off"
-                            onChange={(e) => {
-                              Module_DropdownSelectHandller(e);
-                            }}
-                          />
-                        </FormGroup>
-                      </Col>
-                      <Col md="1"> </Col>
-                      <Col md="3">
-                        <FormGroup className="mb-3">
-                          <Label htmlFor="validationCustom01">Page Type</Label>
-                          <Select
-                            value={pageType_DropdownSelect}
-                            options={PageType_DropdownOption}
-                            autoComplete="off"
-                            onChange={(e) => {
-                              PageType_DropdownSelectHandller(e);
-                            }}
-                          />
-                        </FormGroup>
-                      </Col>
+                  <Card className=" mt-n2 text-black">
+                    <CardBody style={{ backgroundColor: "whitesmoke" }}>
+                      <Row>
+                        <Col md="3">
+                          <FormGroup className="mb-3">
+                            <Label htmlFor="validationCustom01">Module</Label>
+                            <Select
+                              value={module_DropdownSelect}
+                              options={Module_DropdownOption}
+                              autoComplete="off"
+                              onChange={(e) => {
+                                Module_DropdownSelectHandller(e);
+                              }}
+                            />
+                          </FormGroup>
+                        </Col>
+                        <Col md="1"> </Col>
+                        <Col md="3">
+                          <FormGroup className="mb-3">
+                            <Label htmlFor="validationCustom01">Page Type</Label>
+                            <Select
+                              value={pageType_DropdownSelect}
+                              options={PageType_DropdownOption}
+                              autoComplete="off"
+                              onChange={(e) => {
+                                PageType_DropdownSelectHandller(e);
+                              }}
+                            />
+                          </FormGroup>
+                        </Col>
 
-                      <Col md="1"> </Col>
-                      <Col md="3">
-                        <FormGroup className="mb-3">
-                          <Label htmlFor="validationCustom01">
-                            Related Page List
-                          </Label>
-                          <Select
-                            value={pageList_DropdownSelect}
-                            options={PageList_DropdownOption}
-                            autoComplete="off"
-                            onChange={(e) => {
-                              PageList_DropdownSelectHandller(e);
-                            }}
-                          />
-                        </FormGroup>
-                      </Col>
-                    </Row>
+                        <Col md="1"> </Col>
+                        <Col md="3">
+                          <FormGroup className="mb-3">
+                            <Label htmlFor="validationCustom01">
+                              Related Page List
+                            </Label>
+                            <Select
+                              value={pageList_DropdownSelect}
+                              options={PageList_DropdownOption}
+                              autoComplete="off"
+                              onChange={(e) => {
+                                PageList_DropdownSelectHandller(e);
+                              }}
+                            />
+                          </FormGroup>
+                        </Col>
+                      </Row>
 
-                    <Row>
-                      <Col md="3">
-                        <FormGroup>
-                          <Label htmlFor="validationCustom01">
-                            Display Index
-                          </Label>
-                          <AvField
-                            name="displayIndex"
-                            value={EditData.DisplayIndex}
-                            type="text"
-                            autoComplete="off"
-                            placeholder=" Please Enter Display Index"
-                            validate={{
-                              number: true,
-                              required: {
-                                value: true,
-                                errorMessage:
-                                  "Please Enter Display Index Only 2 Digit ",
-                              },
-                              tel: {
-                                pattern: /^\d{1,2}$/,
-                              },
-                            }}
-                          />
-                        </FormGroup>
-                      </Col>
+                      <Row>
+                        <Col md="3">
+                          <FormGroup>
+                            <Label htmlFor="validationCustom01">
+                              Display Index
+                            </Label>
+                            <AvField
+                              name="displayIndex"
+                              value={EditData.DisplayIndex}
+                              type="text"
+                              autoComplete="off"
+                              placeholder=" Please Enter Display Index"
+                              validate={{
+                                number: true,
+                                required: {
+                                  value: true,
+                                  errorMessage:
+                                    "Please Enter Display Index Only 2 Digit ",
+                                },
+                                tel: {
+                                  pattern: /^\d{1,2}$/,
+                                },
+                              }}
+                            />
+                          </FormGroup>
+                        </Col>
 
-                      <Col md="1"> </Col>
-                      <Col md="3">
-                        <FormGroup className="mb-3">
-                          <Label htmlFor="validationCustom01">Page Path</Label>
-                          <AvField
-                            name="pagePath"
-                            value={EditData.ActualPagePath}
-                            type="text"
-                            placeholder="Please Enter Page Path"
-                            validate={{
-                              required: {
-                                value: true,
-                                errorMessage: "Please Enter Page Path",
-                              },
-                            }}
-                            autoComplete="off"
-                          />
-                        </FormGroup>
-                      </Col>
+                        <Col md="1"> </Col>
+                        <Col md="3">
+                          <FormGroup className="mb-3">
+                            <Label htmlFor="validationCustom01">Page Path</Label>
+                            <AvField
+                              name="pagePath"
+                              value={EditData.ActualPagePath}
+                              type="text"
+                              placeholder="Please Enter Page Path"
+                              validate={{
+                                required: {
+                                  value: true,
+                                  errorMessage: "Please Enter Page Path",
+                                },
+                              }}
+                              autoComplete="off"
+                            />
+                          </FormGroup>
+                        </Col>
 
-                      <Col md="1"> </Col>
-                      <Col md="3">
-                        <FormGroup className="mb-3">
-                          <Label htmlFor="validationCustom01">Icon</Label>
-                          <AvField
-                            name="Icon"
-                            value={EditData.Icon}
-                            type="text"
-                            placeholder="Please Enter Icon"
-                            validate={{
-                              required: {
-                                value: true,
-                                errorMessage: "Please Enter Icon",
-                              },
-                            }}
-                            autoComplete="off"
-                          />
-                        </FormGroup>
-                      </Col>
-                    </Row>
+                        <Col md="1"> </Col>
+                        <Col md="3">
+                          <FormGroup className="mb-3">
+                            <Label htmlFor="validationCustom01">Icon</Label>
+                            <AvField
+                              name="Icon"
+                              value={EditData.Icon}
+                              type="text"
+                              placeholder="Please Enter Icon"
+                              validate={{
+                                required: {
+                                  value: true,
+                                  errorMessage: "Please Enter Icon",
+                                },
+                              }}
+                              autoComplete="off"
+                            />
+                          </FormGroup>
+                        </Col>
+                      </Row>
 
-                    <Row>
-                      <FormGroup className="mb-1 col col-sm-6">
-                        <Row className="justify-content-md-left">
-                          {/* <Label htmlFor="horizontal-firstname-input" className="col-sm-3 col-form-label" >Show on Menu</Label>
+                      <Row>
+                        <FormGroup className="mb-1 col col-sm-6">
+                          <Row className="justify-content-md-left">
+                            {/* <Label htmlFor="horizontal-firstname-input" className="col-sm-3 col-form-label" >Show on Menu</Label>
                                                     <Col md={2} style={{ marginTop: '9px' }} >
 
                                                         <div className="form-check form-switch form-switch-md mb-1" dir="ltr">
@@ -651,171 +679,171 @@ const HPageMaster = (props) => {
                                                             <label className="form-check-label" htmlFor="customSwitchsizemd"></label>
                                                         </div>
                                                     </Col> */}
-                          {/* <Col md="3">  </Col> */}
-                          <Label
-                            htmlFor="horizontal-firstname-input"
-                            className="col-sm-2 col-form-label"
-                          >
-                            Active{" "}
-                          </Label>
-                          <Col md={2} style={{ marginTop: "9px" }}>
-                            <div
-                              className="form-check form-switch form-switch-md mb-1"
-                              dir="ltr"
+                            {/* <Col md="3">  </Col> */}
+                            <Label
+                              htmlFor="horizontal-firstname-input"
+                              className="col-sm-2 col-form-label"
                             >
-                              <AvInput
-                                type="checkbox"
-                                className="form-check-input"
-                                id="customSwitchsizemd"
-                                checked={EditData.isActive}
-                                name="isActive"
-                                defaultChecked={true}
-                              />
-                              <label
-                                className="form-check-label"
-                                htmlFor="customSwitchsizemd"
-                              ></label>
-                            </div>
+                              Active{" "}
+                            </Label>
+                            <Col md={2} style={{ marginTop: "9px" }}>
+                              <div
+                                className="form-check form-switch form-switch-md mb-1"
+                                dir="ltr"
+                              >
+                                <AvInput
+                                  type="checkbox"
+                                  className="form-check-input"
+                                  id="customSwitchsizemd"
+                                  checked={EditData.isActive}
+                                  name="isActive"
+                                  defaultChecked={true}
+                                />
+                                <label
+                                  className="form-check-label"
+                                  htmlFor="customSwitchsizemd"
+                                ></label>
+                              </div>
+                            </Col>
+                          </Row>
+                        </FormGroup>
+                      </Row>
+                    </CardBody>
+                  </Card>
+                  {pageAccessDropDownView ? (
+                    <Card className=" mt-n2 text-black">
+                      <CardBody style={{ backgroundColor: "whitesmoke" }}>
+                        <Row className="">
+                          <FormGroup className=" ml-3 col col-sm-4 ">
+                            <Label htmlFor="validationCustom01">
+                              Page Access
+                            </Label>
+                            <Select
+                              options={PageAccessValues}
+                              onChange={(e) => {
+                                PageAccess_DropdownSelect_Handler(e);
+                              }}
+                              // defaultValue={{ label: "IsShowOnMenu", value: 1 }}
+                              classNamePrefix="select2-selection"
+                            />
+                          </FormGroup>
+
+                          <Col sm={1} style={{ marginTop: "28px" }}>
+                            <Button
+                              type="button"
+                              className="btn btn-sm mt-1 mb-0 btn-light  btn-outline-primary  "
+                              onClick={() => AddRoleHandler()}
+                            >
+                              <i className="dripicons-plus "></i>
+                            </Button>
+                          </Col>
+
+                          <Col sm={3} style={{ marginTop: "28px" }}>
+                            {tablePageAccessDataState.length > 0 ? (
+                              <div className="table-responsive">
+                                <Table className="table table-bordered  text-center">
+                                  <Thead>
+                                    <tr>
+                                      <th>Page Access</th>
+
+                                      <th>Action</th>
+                                    </tr>
+                                  </Thead>
+
+                                  <Tbody>{TableBodyFunction()}</Tbody>
+                                </Table>
+                              </div>
+                            ) : (
+                              <> </>
+                            )}
                           </Col>
                         </Row>
-                      </FormGroup>
-                    </Row>
-                  </CardBody>
-                </Card>
-                {pageAccessDropDownView ? (
-                  <Card className=" mt-n2 text-black">
-                    <CardBody style={{ backgroundColor: "whitesmoke" }}>
-                      <Row className="">
-                        <FormGroup className=" ml-3 col col-sm-4 ">
-                          <Label htmlFor="validationCustom01">
-                            Page Access
-                          </Label>
-                          <Select
-                            options={PageAccessValues}
-                            onChange={(e) => {
-                              PageAccess_DropdownSelect_Handler(e);
-                            }}
-                            // defaultValue={{ label: "IsShowOnMenu", value: 1 }}
-                            classNamePrefix="select2-selection"
-                          />
-                        </FormGroup>
 
-                        <Col sm={1} style={{ marginTop: "28px" }}>
-                          <Button
-                            type="button"
-                            className="btn btn-sm mt-1 mb-0 btn-light  btn-outline-primary  "
-                            onClick={() => AddRoleHandler()}
-                          >
-                            <i className="dripicons-plus "></i>
-                          </Button>
-                        </Col>
-
-                        <Col sm={3} style={{ marginTop: "28px" }}>
-                          {tablePageAccessDataState.length > 0 ? (
-                            <div className="table-responsive">
-                              <Table className="table table-bordered  text-center">
-                                <Thead>
-                                  <tr>
-                                    <th>Page Access</th>
-
-                                    <th>Action</th>
-                                  </tr>
-                                </Thead>
-
-                                <Tbody>{TableBodyFunction()}</Tbody>
-                              </Table>
-                            </div>
-                          ) : (
-                            <> </>
-                          )}
-                        </Col>
-                      </Row>
-
-                      <FormGroup >
-                            <Row >
-                              <Col sm={2}>
-                                <div>
-                                  {
-                                    pageMode === "edit" ?
-                                      userPageAccessState.RoleAccess_IsEdit ?
+                        <FormGroup >
+                          <Row >
+                            <Col sm={2}>
+                              <div>
+                                {
+                                  pageMode === "edit" ?
+                                    userPageAccessState.RoleAccess_IsEdit ?
+                                      <button
+                                        type="submit"
+                                        data-mdb-toggle="tooltip" data-mdb-placement="top" title="Update Role"
+                                        className="btn btn-success w-md"
+                                      >
+                                        <i class="fas fa-edit me-2"></i>Update
+                                      </button>
+                                      :
+                                      <></>
+                                    : (
+                                      userPageAccessState.RoleAccess_IsSave ?
                                         <button
                                           type="submit"
-                                          data-mdb-toggle="tooltip" data-mdb-placement="top" title="Update Role"
-                                          className="btn btn-success w-md"
-                                        >
-                                          <i class="fas fa-edit me-2"></i>Update
+                                          data-mdb-toggle="tooltip" data-mdb-placement="top" title="Save Role"
+                                          className="btn btn-primary w-md"
+                                        > <i className="fas fa-save me-2"></i> Save
                                         </button>
                                         :
                                         <></>
-                                      : (
-                                        userPageAccessState.RoleAccess_IsSave ?
-                                          <button
-                                            type="submit"
-                                            data-mdb-toggle="tooltip" data-mdb-placement="top" title="Save Role"
-                                            className="btn btn-primary w-md"
-                                          > <i className="fas fa-save me-2"></i> Save
-                                          </button>
-                                          :
-                                          <></>
-                                      )
-                                  }
-                                </div>
-                              </Col>
-                            </Row>
-                          </FormGroup >
-                    </CardBody>
-                  </Card>
-                ) : (
-                  <Card className=" mt-n2 text-black">
-                    <CardBody style={{ backgroundColor: "whitesmoke" }}>
-                    <FormGroup >
-                            <Row >
-                              <Col sm={2}>
-                                <div>
-                                  {
-                                    pageMode === "edit" ?
-                                      userPageAccessState.RoleAccess_IsEdit ?
+                                    )
+                                }
+                              </div>
+                            </Col>
+                          </Row>
+                        </FormGroup >
+                      </CardBody>
+                    </Card>
+                  ) : (
+                    <Card className=" mt-n2 text-black">
+                      <CardBody style={{ backgroundColor: "whitesmoke" }}>
+                        <FormGroup >
+                          <Row >
+                            <Col sm={2}>
+                              <div>
+                                {
+                                  pageMode === "edit" ?
+                                    userPageAccessState.RoleAccess_IsEdit ?
+                                      <button
+                                        type="submit"
+                                        data-mdb-toggle="tooltip" data-mdb-placement="top" title="Update Role"
+                                        className="btn btn-success w-md"
+                                      >
+                                        <i class="fas fa-edit me-2"></i>Update
+                                      </button>
+                                      :
+                                      <></>
+                                    : (
+                                      userPageAccessState.RoleAccess_IsSave ?
                                         <button
                                           type="submit"
-                                          data-mdb-toggle="tooltip" data-mdb-placement="top" title="Update Role"
-                                          className="btn btn-success w-md"
-                                        >
-                                          <i class="fas fa-edit me-2"></i>Update
+                                          data-mdb-toggle="tooltip" data-mdb-placement="top" title="Save Role"
+                                          className="btn btn-primary w-md"
+                                        > <i className="fas fa-save me-2"></i> Save
                                         </button>
                                         :
                                         <></>
-                                      : (
-                                        userPageAccessState.RoleAccess_IsSave ?
-                                          <button
-                                            type="submit"
-                                            data-mdb-toggle="tooltip" data-mdb-placement="top" title="Save Role"
-                                            className="btn btn-primary w-md"
-                                          > <i className="fas fa-save me-2"></i> Save
-                                          </button>
-                                          :
-                                          <></>
-                                      )
-                                  }
-                                </div>
-                              </Col>
-                            </Row>
-                          </FormGroup >
-                    </CardBody>
-                  </Card>
-                )}
-              </AvForm>
-            </CardBody>
-          </Card>
-        </Container>
-      </div>
-    </React.Fragment>
-  );
-}
-else {
-  return (
-    <React.Fragment></React.Fragment>
-  )
-}
+                                    )
+                                }
+                              </div>
+                            </Col>
+                          </Row>
+                        </FormGroup >
+                      </CardBody>
+                    </Card>
+                  )}
+                </AvForm>
+              </CardBody>
+            </Card>
+          </Container>
+        </div>
+      </React.Fragment>
+    );
+  }
+  else {
+    return (
+      <React.Fragment></React.Fragment>
+    )
+  }
 };
 
 export default HPageMaster;
