@@ -29,6 +29,7 @@ import "../../../assets/scss/CustomeTable/datatables.scss"
 import { AlertState } from "../../../store/Utilites/CostumeAlert/actions";
 import { useHistory } from "react-router-dom";
 import { CommonGetRoleAccessFunction } from "../../../components/Common/CommonGetRoleAccessFunction";
+import { listPageCommonButtonFunction } from "../../../components/Common/CmponentRelatedCommonFile/listPageCommonButtons";
 
 const CompanyList = () => {
 
@@ -109,21 +110,6 @@ const CompanyList = () => {
         }
     }, [editData]);
 
-    // Edit button Handller
-    const EditPageHandler = (id) => {
-        dispatch(editCompanyID(id));
-    }
-
-    //Delete Button Handller
-    const deleteHandeler = (id, name) => {
-        dispatch(AlertState({
-            Type: 5, Status: true,
-            Message: `Are you sure you want to delete this Company : "${name}"`,
-            RedirectPath: false,
-            PermissionAction: deleteCompany_ID,
-            ID: id
-        }));
-    }
 
     const pageOptions = {
         sizePerPage: 10,
@@ -168,52 +154,16 @@ const CompanyList = () => {
             dataField: "EmailID",
             sort: true,
         },
-        {
-            text: "Action",
-            hidden: (
-                !(userPageAccessState.RoleAccess_IsEdit)
-                && !(userPageAccessState.RoleAccess_IsView)
-                && !(userPageAccessState.RoleAccess_IsDelete)) ? true : false,
-
-            formatter: (cellContent, module) => (
-                <div className="d-flex gap-3" style={{ display: 'flex', justifyContent: 'center' }} >
-
-
-                    {((userPageAccessState.RoleAccess_IsEdit)) ?
-                        <Button
-                            type="button"
-                            data-mdb-toggle="tooltip" data-mdb-placement="top" title="Edit Company"
-                            onClick={() => { EditPageHandler(module.id); }}
-                            className="badge badge-soft-success font-size-12 btn btn-success waves-effect waves-light w-xxs border border-light"
-                        >
-                            <i className="mdi mdi-pencil font-size-18" id="edittooltip"></i>
-                        </Button> : null}
-
-                    {(!(userPageAccessState.RoleAccess_IsEdit) && (userPageAccessState.RoleAccess_IsView)) ?
-                        <Button
-                            type="button"
-                            data-mdb-toggle="tooltip" data-mdb-placement="top" title="View Company"
-                            onClick={() => { EditPageHandler(module.id); }}
-                            className="badge badge-soft-primary font-size-12 btn btn-primary waves-effect waves-light w-xxs border border-light"
-
-                        >
-                            <i className="bx bxs-show font-size-18 "></i>
-                        </Button> : null}
-
-                    {(userPageAccessState.RoleAccess_IsDelete)
-                        ?
-                        <Button
-                            className="badge badge-soft-danger font-size-12 btn btn-danger waves-effect waves-light w-xxs border border-light"
-                            data-mdb-toggle="tooltip" data-mdb-placement="top" title="Delete Company"
-                            onClick={() => { deleteHandeler(module.id, module.Name); }}
-                        >
-                            <i className="mdi mdi-delete font-size-18"></i>
-                        </Button>
-                        : null
-                    }
-                </div>
-            ),
-        },
+               // For Edit, Delete ,and View Button Common Code function
+               listPageCommonButtonFunction({
+                dispatchHook: dispatch,
+                deletemsgLable: "Company",
+                userPageAccessState: userPageAccessState,
+                editActionFun: editCompanyID,
+                deleteActionFun: deleteCompany_ID
+            })
+    
+      
     ];
 
     if (!(userPageAccessState === '')) {

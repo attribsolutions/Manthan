@@ -9,21 +9,22 @@ export const listPageCommonButtonFunction = (props) => {
     const editActionFun = props.editActionFun;
     const deleteActionFun = props.deleteActionFun;
     const deletemsglable = props.deletemsgLable;
-
+    const userCreated =  parseInt( localStorage.getItem("userId"))
     return ({
         text: "Action",
         hidden:
             (
                 !(userPageAccessState.RoleAccess_IsEdit)
                 && !(userPageAccessState.RoleAccess_IsView)
-                && !(userPageAccessState.RoleAccess_IsDelete)) ? true : false,
+                && !(userPageAccessState.RoleAccess_IsDelete)
+                && !(userPageAccessState.RoleAccess_IsEditSelf)) ? true : false,
 
         formatter: (cellContent, rowData) => (<div className="d-flex gap-3" style={{ display: 'flex', justifyContent: 'center' }} >
 
             {((userPageAccessState.RoleAccess_IsEdit)) ?
                 <Button
                     type="button"
-                    data-mdb-toggle="tooltip" data-mdb-placement="top" title="Edit Module"
+                    data-mdb-toggle="tooltip" data-mdb-placement="top" title={`Edit ${deletemsglable}`}
                     onClick={() => { dispatch(editActionFun(rowData.id)); }}
                     className="badge badge-soft-success font-size-12 btn btn-success waves-effect waves-light w-xxs border border-light"
                 >
@@ -33,7 +34,7 @@ export const listPageCommonButtonFunction = (props) => {
             {(!(userPageAccessState.RoleAccess_IsEdit) && (userPageAccessState.RoleAccess_IsView)) ?
                 <Button
                     type="button"
-                    data-mdb-toggle="tooltip" data-mdb-placement="top" title="View Module"
+                    data-mdb-toggle="tooltip" data-mdb-placement="top" title={`View ${deletemsglable}`}
                     onClick={() => { dispatch(editActionFun(rowData.id)); }}
                     className="badge badge-soft-primary font-size-12 btn btn-primary waves-effect waves-light w-xxs border border-light"
 
@@ -41,12 +42,25 @@ export const listPageCommonButtonFunction = (props) => {
                     <i className="bx bxs-show font-size-18 "></i>
                 </Button> : null}
 
+            {(!(userPageAccessState.RoleAccess_IsEdit) && (rowData.CreatedBy===userCreated)) ?
+                <Button
+                    type="button"
+                    data-mdb-toggle="tooltip" data-mdb-placement="top" title={`EditSelf ${deletemsglable}`}
+                    onClick={() => { dispatch(editActionFun(rowData.id)); }}
+                    className="badge badge-soft-primary font-size-12 btn btn-primary waves-effect waves-light w-xxs border border-light"
+
+                >
+                    {/* editself */}
+                <i className="bx bx-edit font-size-14 text-success"></i>
+                    {/* <i className="bx bxs-show font-size-18 "></i> */}
+                </Button> : null}
+
             {(userPageAccessState.RoleAccess_IsDelete)
                 ?
                 <Button
                     type="button"
                     className="badge badge-soft-danger font-size-12 btn btn-danger waves-effect waves-light w-xxs border border-light"
-                    data-mdb-toggle="tooltip" data-mdb-placement="top" title="Delete Module"
+                    data-mdb-toggle="tooltip" data-mdb-placement="top" title={`Delete ${deletemsglable}`}
                     onClick={() => {
                         dispatch(AlertState({
                             Type: 5, Status: true,
@@ -87,8 +101,8 @@ export const commonPageOptions = (TableList) => {
 }
 
 export const commonListPageDelete_UpdateMsgFunction = (props) => {
- 
-    const dispatch=props.dispatch
+
+    const dispatch = props.dispatch
     const response = props.response
     const resetAction = props.resetAction
     const afterResponseAction = props.afterResponseAction
