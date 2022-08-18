@@ -14,7 +14,6 @@ import { BreadcrumbShow } from "../../../store/Utilites/Breadcrumb/actions";
 import { MetaTags } from "react-meta-tags";
 import { CommonGetRoleAccessFunction } from "../../../components/Common/CommonGetRoleAccessFunction";
 import { useHistory } from "react-router-dom";
-import { getPageList } from "../../../store/actions";
 
 const AddUser = (props) => {
 
@@ -24,7 +23,8 @@ const AddUser = (props) => {
 
   //*** "isEditdata get all data from ModuleID for Binding  Form controls
   let editDataGatingFromList = props.state;
-  
+
+
   //SetState  Edit data Geting From Modules List component
   const [EditData, setEditData] = useState([]);
   const [pageMode, setPageMode] = useState("save");
@@ -32,7 +32,8 @@ const AddUser = (props) => {
 
   const [RoleData, setRoleData] = useState([]);
   const [EmployeeSelect, setEmployeeSelect] = useState("");
-  const [passwordAndConfirmShowInUI, setPasswordAndConfirmShowInUI] = useState(editDataGatingFromList)
+  const [userPartiesForUserMaster, setUserPartiesForUserMaster] = useState([]);
+
   // M_Roles DropDown
   const [RoleDropDown, setRoleDropDown] = useState([]);
 
@@ -41,6 +42,7 @@ const AddUser = (props) => {
   const [showErrorMessage, setShowErrorMessage] = useState(false);
   const [cPasswordClass, setCPasswordClass] = useState('form-control');
   const [isCPassword, setisCPassword] = useState(false);
+
 
   useEffect(() => {
     if (isCPassword) {
@@ -54,14 +56,17 @@ const AddUser = (props) => {
     }
   }, [cPassword])
 
+
   const handleCPassword = (e) => {
     setCPassword(e.target.value);
     setisCPassword(true);
   }
+
+
   //Access redux store Data /  'save_ModuleSuccess' action data
-  const { PostAPIResponse, employeelistForDropdown, Roles, userPartiesForUserMaster, RoleAccessModifiedinSingleArray } = useSelector((state) => ({
+  const { PostAPIResponse, employeelistForDropdown, Roles, userPartiesForUserMaster_redux, RoleAccessModifiedinSingleArray } = useSelector((state) => ({
     PostAPIResponse: state.User_Registration_Reducer.AddUserMessage,
-    userPartiesForUserMaster: state.User_Registration_Reducer.userPartiesForUserMaster,
+    userPartiesForUserMaster_redux: state.User_Registration_Reducer.userPartiesForUserMaster,
     employeelistForDropdown: state.User_Registration_Reducer.employeelistForDropdown,
     Roles: state.User_Registration_Reducer.Roles,
     RoleAccessModifiedinSingleArray: state.Login.RoleAccessUpdateData,
@@ -85,12 +90,28 @@ const AddUser = (props) => {
     }
   }, [history])
 
+
+  useEffect(() => {
+ 
+    let newArray= userPartiesForUserMaster_redux.map((i)=>(
+      {
+        Role:i.Role_id,
+        RoleName: i.RoleName,
+        Party: i.Party_id,
+        PartyName: i.PartyName
+      }
+    ))
+    setUserPartiesForUserMaster(newArray)
+  
+  }, [userPartiesForUserMaster_redux])
+
   // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
   useEffect(() => {
 
     if (!(userPageAccessState === '')) { document.getElementById("txtName").focus(); }
 
     if (!(editDataGatingFromList === undefined)) {
+      debugger
       setEditData(editDataGatingFromList);
       dispatch(BreadcrumbShow(editDataGatingFromList.LoginName))
       setPageMode("edit");
@@ -99,7 +120,10 @@ const AddUser = (props) => {
         value: editDataGatingFromList.Employee,
         label: editDataGatingFromList.EmployeeName
       })
-      setRoleData(editDataGatingFromList.UserRole)
+      setUserPartiesForUserMaster(editDataGatingFromList.UserRole)
+ var a=editDataGatingFromList.UserRole.map((i)=>({ Party: i.Party, Role: i.Role }))
+
+      setRoleData(a)
       return
     }
   }, [editDataGatingFromList])
@@ -163,53 +187,28 @@ const AddUser = (props) => {
   }));
 
   /// Role dopdown
-  function RoleDropDown_select_handler(Role, party, key) {
-    debugger
+  function RoleDropDown_select_handler(role, pty, key) {
 
     const find = RoleData.filter((index, key1) => {
-      return !(index.Party === party.Party_id)
+      return !(index.Party === pty.Party)
     })
     if ((find === undefined)) {
-      setRoleData([{ Party: party.Party_id, Role: Role.value }])
+      setRoleData([{ Party: pty.Party, Role: role.value }])
     } else {
       // RoleDropDown
-      setRoleData([...find, { Party: party.Party_id, Role: Role.value }])
+      setRoleData([...find, { Party: pty.Party, Role: role.value }])
     }
   };
 
-  /// Role Table Validation
-  function AddRoleHandler() {
-    const find = RoleData.find((element) => {
-      return element.Role === RoleDropDown.value
-    });
-
-
-    if (RoleDropDown.length <= 0) {
-      dispatch(AlertState({
-        Type: 3, Status: true,
-        Message: "Select One Role",
-      }));
-    }
-    else if (find === undefined) {
-      setRoleData([...RoleData, { Role: RoleDropDown.value, Name: RoleDropDown.label }]);
-    }
-    else {
-      dispatch(AlertState({
-        Type: 4, Status: true,
-        Message: "RoleData Already Exists ",
-      }));
-    }
-  }
-
   const handleValidSubmit = (event, values) => {
-
+// debugger
     const jsonBody = JSON.stringify({
       email: values.email,
       LoginName: values.loginName,
       password: "1234",
+      AdminPassword: "1234",
       Employee: EmployeeSelect.value,
       isActive: values.isActive,
-      AdminPassword: "1234",
       isSendOTP: values.isSendOTP,
       isLoginUsingMobile: values.isLoginUsingMobile,
       isLoginUsingEmail: values.isLoginUsingEmail,
@@ -261,7 +260,7 @@ const AddUser = (props) => {
           {userPartiesForUserMaster.map((index, key) => (
             <tr key={index.Role}>
               <td>
-                {index.Name}
+                {index.PartyName}
               </td>
               <td>
                 {/* <i className="mdi mdi-trash-can d-block text-danger font-size-20" onClick={() => {
@@ -271,7 +270,7 @@ const AddUser = (props) => {
                 <FormGroup className="" >
 
                   <Select
-                    defaultValue={{ value: index.Party_id, label: index.Party_id }}
+                    defaultValue= {{ value: index.Role, label: index.RoleName }}
                     options={RolesValues}
                     onChange={(e) => { RoleDropDown_select_handler(e, index, key) }}
                     classNamePrefix="select2-selection"
@@ -315,7 +314,7 @@ const AddUser = (props) => {
                       <Card className=" text-black">
                         <CardBody style={{ backgroundColor: "whitesmoke" }}>
                           <Row >
-                            <FormGroup className="mb-1 col col-sm-4 " >
+                            <FormGroup className="mb-2 col col-sm-4 " >
                               <Label htmlFor="validationCustom01">Employee </Label>
                               <Select
                                 value={EmployeeSelect}
@@ -344,48 +343,47 @@ const AddUser = (props) => {
                           </Row>
 
 
-                         
+                          {pageMode === "save" ?
                             <Row>
-                              <FormGroup className="mb-1 col col-sm-4 " >
-                                <Label htmlFor="validationCustom01">Password</Label>
-                                <AvField name="password" id="password"
-                                  type="password"
-                                  // value={EditData.password}
-                                  placeholder="Please Enter Password"
-                                  autoComplete="new-password"
-                                  className="form-control"
-                                  // validate={{
-                                  //   required: { value: true, errorMessage: 'Please Enter Password' },
-                                  // }}
+                              <Row>
+                                <FormGroup className="mb-1 col col-sm-4 " >
+                                  <Label htmlFor="validationCustom01">Password</Label>
+                                  <AvField name="password" id="password"
+                                    type="password"
+                                    // value={EditData.password}
+                                    placeholder="Please Enter Password"
+                                    autoComplete="new-password"
+                                    className="form-control"
+                                    // validate={{
+                                    //   required: { value: true, errorMessage: 'Please Enter Password' },
+                                    // }}
 
-                                  value={password}
-                                  onChange={(e) => { setPassword(e.target.value) }} />
+                                    value={password}
+                                    onChange={(e) => { setPassword(e.target.value) }} />
 
-                              </FormGroup>
+                                </FormGroup>
 
+                              </Row>
+                              <Row>
+                                <FormGroup className="mb-1 col col-sm-4 " >
+                                  <Label htmlFor="validationCustom01">Confirm Password</Label>
+                                  <AvField name="password" id="password"
+                                    type="password"
+                                    // value={EditData.password}
+                                    placeholder="Please Enter Password"
+                                    autoComplete="new-password"
+                                    className={cPasswordClass}
+                                    // validate={{
+                                    //   required: { value: true, errorMessage: 'Please Enter Password' },
+                                    // }}
+                                    value={cPassword}
+                                    onChange={handleCPassword} />
+                                  {showErrorMessage && isCPassword ? <div> Passwords did not match </div> : ''}
+                                  {/* <AvFeedback> Passwords did not match </AvFeedback> */}
+                                </FormGroup>
+                              </Row>
                             </Row>
-                            <Row>
-                              <FormGroup className="mb-1 col col-sm-4 " >
-                                <Label htmlFor="validationCustom01">Confirm Password</Label>
-                                <AvField name="password" id="password"
-                                  type="password"
-                                  // value={EditData.password}
-                                  placeholder="Please Enter Password"
-                                  autoComplete="new-password"
-                                  className={cPasswordClass}
-                                  // validate={{
-                                  //   required: { value: true, errorMessage: 'Please Enter Password' },
-                                  // }}
-                                  value={cPassword}
-                                  onChange={handleCPassword} />
-                                {showErrorMessage && isCPassword ? <div> Passwords did not match </div> : ''}
-                                {/* <AvFeedback> Passwords did not match </AvFeedback> */}
-                              </FormGroup>
-                            </Row>
-                          
-
-
-
+                            : null}
 
 
 
@@ -484,15 +482,13 @@ const AddUser = (props) => {
                             {userPartiesForUserMaster.length > 0 ? <Col sm={6} style={{ marginTop: '28px' }}>
 
                               {RoleData ? (
-
                                 <div className="table-responsive">
                                   {rolaTable()}
                                 </div>
-                              ) : (
-                                <>
-                                </>
-                              )}
-                            </Col> : <> </>}
+                              ) :
+                                null
+                              }
+                            </Col> : null}
 
                             {/* <FormGroup > */}
 

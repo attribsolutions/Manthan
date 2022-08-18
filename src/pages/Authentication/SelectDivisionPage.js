@@ -15,7 +15,7 @@ import { AvForm, AvField } from "availity-reactstrap-validation"
 
 /// tsdfddf Punam demotest
 // actions
-import { loginUser, roleAceessAction } from "../../store/actions"
+import { getUserDetailsAction, loginUser, roleAceessAction } from "../../store/actions"
 
 // import images
 import logo from "../../assets/images/logo-sm.svg"
@@ -38,39 +38,32 @@ const SelectDivisionPage = props => {
 
   useEffect(() => {
 
-    if(!(localStorage.getItem("userId"))){
+    if (!(localStorage.getItem("userId"))) {
       history.push("/login")
 
     }
-
+    else {
+      dispatch(getUserDetailsAction(localStorage.getItem("userId")))
+    }
   }, [])
-  // handleValidSubmit
-  const handleValidSubmit = (event, values) => {
-    dispatch(loginUser(values, props.history))
-  }
+
+
   const divisionDropdown_DropdownOption = divisionDropdown.filter((d) => {
     return !(d.Role_id === null)
   }).map((d) => ({
     value: d.Role_id,
-    label: d.Name,
+    label: d.RoleName,
   }));
 
-  console.log("divisionDropdown", divisionDropdown)
-  console.log("divisionDropdown_DropdownOption", divisionDropdown_DropdownOption)
-
-  // divisionDropdown.map((d) => ({
-  //   value: d.id,
-  //   label: d.Name,
-  // }));
   function goButtonHandller() {
 
     var role = divisionDropdowSelect.value;
     var division = 1;
     var company = 1;
 
+    localStorage.setItem("roleId", (role))
     dispatch(roleAceessAction(role, division, company))
     history.push("/dashboard")
-
 
   }
   return (
@@ -95,7 +88,7 @@ const SelectDivisionPage = props => {
                         <h5 className="mb-0">Welcome !</h5>
                         <p className="text-muted mt-2">Select Role to Continue FoodERP.</p>
                       </div>
-                    
+
 
                       <div className="mb-3">
                         {/* <Label className="form-label font-size-13 "></Label> */}
@@ -129,8 +122,6 @@ const SelectDivisionPage = props => {
   )
 }
 
-export default withRouter(SelectDivisionPage)
+export default SelectDivisionPage
 
-SelectDivisionPage.propTypes = {
-  history: PropTypes.object,
-}
+

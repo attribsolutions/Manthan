@@ -30,7 +30,7 @@ const Login = props => {
     loginError: state.Login.loginError,
   }))
 
-  console.log("loginError", loginError)
+  console.log("loginError", loginError)  
   useEffect(() => {
 
     localStorage.clear();
@@ -110,16 +110,9 @@ const Login = props => {
                           </div>
                         </div>
                         <div className="row mb-4">
-                          {/* <div className="col"> */}
-                          {/* <div className="form-check"> */}
-                          {/* <input className="form-check-input" type="checkbox" id="remember-check" />
-                              <label className="form-check-label" htmlFor="remember-check">
-                                Remember me
-                              </label> */}
+                       
                           <Link to="/forgot-password" className="fw-semibold">Forgot password?</Link>
-                          {/* </div> */}
-                          {/* </div> */}
-
+                    
                         </div>
                         <div className="mb-3">
                           <button className="btn btn-primary w-100 waves-effect waves-light" type="submit">Login</button>

@@ -37,23 +37,23 @@ function* loginUser({ payload: { user, history } }) {
         localStorage.setItem("userId", (response.UserID))
         // yield put(getUserDetailsAction(response.UserID))
 
-        const response1 = yield call(getUserDetails_afterLogin_ApiCall, {
-          UserId: response.UserID,
-        })
-        yield put(getUserDetailsActionSuccess(response1.Data))
+        // const response1 = yield call(getUserDetails_afterLogin_ApiCall, {
+        //   UserId: response.UserID,
+        // })
+        // yield put(getUserDetailsActionSuccess(response1.Data))
 
-        var employeeId = response1.Data.EmployeeID;
+        // var employeeId = response1.Data.EmployeeID;
 
-        const response2 = yield call(UserPartiesForUserMaster_API, employeeId)
-        yield put(divisionDropdownSelectSuccess(response2.Data))
+        // const response2 = yield call(UserPartiesForUserMaster_API, employeeId)
+        // yield put(divisionDropdownSelectSuccess(response2.Data))
 
-        yield put(loginSuccess(response1))
+        // yield put(loginSuccess(response1))
 
         // history.push("/dashboard")
         history.push("/division")
       }
-      else{
-      yield put(apiError("Incorrect UserName And Password"))
+      else {
+        yield put(apiError("Incorrect UserName And Password"))
 
       }
 
@@ -70,18 +70,22 @@ function* loginUser({ payload: { user, history } }) {
   }
 }
 function* afterLoginUserDetails_genFun({ id }) {
-  debugger
+
   try {
     const response = yield call(getUserDetails_afterLogin_ApiCall, {
       UserId: id,
     })
     yield put(getUserDetailsActionSuccess(response.Data))
-    var user = response.Data.UserID;
+
+
     var employee = response.Data.EmployeeID;
     var company = response.Data.CompanyID;
     var companyGroup = response.Data.CompanyGroup;
 
-    yield put(roleAceessAction(user, employee, company))
+    const response2 = yield call(UserPartiesForUserMaster_API, employee)
+    yield put(divisionDropdownSelectSuccess(response2.Data))
+
+    // yield put(roleAceessAction(user, employee, company))
   } catch (e) {
 
   }
@@ -101,7 +105,7 @@ function* logoutUser({ payload: { history } }) {
   }
 }
 function* RoleAccessGenratorFunction({ id1, id2, id3 }) {
-  debugger
+
   try {
     const PageAccessApi = yield call(showPagesListOnPageAccess_DropDown_List)
 

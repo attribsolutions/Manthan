@@ -17,6 +17,7 @@ import { withRouter, Link } from "react-router-dom"
 import user1 from "../../../assets/images/users/avatar-1.jpg"
 
 const ProfileMenu = props => {
+
   // Declare a new state variable, which we'll call "menu"
   const [menu, setMenu] = useState(false)
 
@@ -67,6 +68,10 @@ const ProfileMenu = props => {
             <i className="bx bx-lock-open font-size-16 align-middle me-1" />
             {props.t("Lock screen")}
           </DropdownItem>
+          <Link to="/division" className="dropdown-item">
+            <i className="bx bx-user font-size-16 align-middle me-1  text-primary" />
+            <span>{props.t("Change Division")}</span>
+          </Link>
           <div className="dropdown-divider" />
           <Link to="/logout" className="dropdown-item">
             <i className="bx bx-power-off font-size-16 align-middle me-1 text-danger" />

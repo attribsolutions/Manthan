@@ -112,6 +112,7 @@ function* Edit_UserList_GenratorFunction({ id }) {
 }
 
 function* Update_User_GenratorFunction({ data, id }) {
+  debugger
   try {
     yield put(SpinnerState(true))
     const response = yield call(User_Component_Update_API, data, id);
@@ -146,6 +147,8 @@ function* UserRegistrationSaga() {
   yield takeEvery(GET_EMPLOYEE_FOR_USER_REGISTRATION, EmployeelistDropdown_GenratorFunction);
   yield takeEvery(GET_ROLE, RolesListDropdoun_GenratorFunction);
   yield takeEvery(ADD_USER, user_save_GenratorFunction);
+  yield takeEvery(UPDATE_USER, Update_User_GenratorFunction);
+  
   yield takeEvery(GET_USER, Fetch_UserList_GenratorFunction)
   yield takeEvery(DELETE_USER, Delete_UserList_GenratorFunction)
   yield takeEvery(EDIT_USER, Edit_UserList_GenratorFunction)
