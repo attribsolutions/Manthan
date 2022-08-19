@@ -86,7 +86,7 @@ export const GET_COMPANY_BY_DIVISIONTYPES_ID="/GetCompanyByDivisionTypeID"
 //Role Access
 export const PAGEMASTER_DROPDOWN_ROLE_ACCESS="/RoleAccessGetPages"
 export const GET_ROLE_ACCESS_LIST_FOR_ROLE_ACCESS_PAGE ='/RoleAccessNewUpdated'
-export const POST_COPY_ROLE_ACCESS_API ='/CopyRoleAccess'
+export const POST_COPY_ROLE_ACCESS_API ='/CopyRoleAccessabc'
 
 export const GO_BUTTON_HANDLER_FOR_ROLE_ACCESS_PAGE ='/RoleAccessNewUpdated'
 export const ADD_PAGE_BUTTON_HANDLER_FOR_ROLE_ACCESS_PAGE ='/RoleAccessAddPage'
