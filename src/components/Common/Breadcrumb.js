@@ -73,11 +73,12 @@ const Breadcrumb = props => {
 
     // Onfocus Search Box
     useEffect(() => {
-      if (!(props.breadcrumbCount === undefined)) {
-        // document.getElementById("search-bar-0").focus();
+      // document.getElementById("search-bar-0").focus();
+      // debugger
+      if (!(props.IsSearchVissible === undefined)) {
       }
       history.listen(location => dispatch(BreadcrumbShow('')));
-    }, [])
+    }, [history])
 
 
     useEffect(() => {

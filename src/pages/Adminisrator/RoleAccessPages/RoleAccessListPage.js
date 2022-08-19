@@ -40,7 +40,7 @@ const RoleAccessListPage = () => {
 
     }));
 
-
+console.log('RoleAccessModifiedinSingleArray',RoleAccessModifiedinSingleArray)
     useEffect(() => {
         const userAcc = CommonGetRoleAccessFunction(history)
         if (!(userAcc === undefined)) {
@@ -54,6 +54,7 @@ const RoleAccessListPage = () => {
     }, []);
 
     const EditPageHandler = (data) => {
+        debugger
         const rowData =data
      
         let RelatedPageID = 0
@@ -171,7 +172,7 @@ const RoleAccessListPage = () => {
                         <Button
                             type="button"
                             data-mdb-toggle="tooltip" data-mdb-placement="top" title="View RoleAccess"
-                            onClick={() => { EditPageHandler(RoleAccess.id); }}
+                            onClick={() => { EditPageHandler(RoleAccess); }}
                             className="badge badge-soft-primary font-size-12 btn btn-primary waves-effect waves-light w-xxs border border-light"
 
                         >

@@ -38,6 +38,7 @@ const ModulesList = () => {
     }));
 
     useEffect(() => {
+       
         const userAcc = CommonGetRoleAccessFunction(history)
         if (!(userAcc === undefined)) {
             setUserPageAccessState(userAcc)
@@ -49,6 +50,13 @@ const ModulesList = () => {
         dispatch(fetchModelsList());
     }, []);
 
+    useEffect(() => {
+     if(!(userPageAccessState === '')){
+        debugger
+        var a= document.getElementById("search-bar-0");
+        a.focus();
+     }
+    }, [userPageAccessState]);
 
     // This UseEffect => Edit Modal Show When Edit Data is true
     useEffect(() => {
