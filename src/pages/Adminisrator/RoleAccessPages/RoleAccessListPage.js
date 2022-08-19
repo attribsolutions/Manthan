@@ -32,6 +32,8 @@ const RoleAccessListPage = () => {
 
     const [userPageAccessState, setUserPageAccessState] = useState('');
     const [modal_center, setmodal_center] = useState(false);
+    const [copy_user_RowData, setCopy_user_RowData] = useState({});
+     
 
     const { TableListData, RoleAccessModifiedinSingleArray,PostMessage_ForCopyRoleAccess } = useSelector((state) => ({
         TableListData: state.RoleAccessReducer.RoleAccessListPage,
@@ -40,7 +42,6 @@ const RoleAccessListPage = () => {
 
     }));
 
-console.log('RoleAccessModifiedinSingleArray',RoleAccessModifiedinSingleArray)
     useEffect(() => {
         const userAcc = CommonGetRoleAccessFunction(history)
         if (!(userAcc === undefined)) {
@@ -54,7 +55,7 @@ console.log('RoleAccessModifiedinSingleArray',RoleAccessModifiedinSingleArray)
     }, []);
 
     const EditPageHandler = (data) => {
-        debugger
+     
         const rowData =data
      
         let RelatedPageID = 0
@@ -80,7 +81,10 @@ console.log('RoleAccessModifiedinSingleArray',RoleAccessModifiedinSingleArray)
        
         if ((PostMessage_ForCopyRoleAccess.Status === true) && (PostMessage_ForCopyRoleAccess.StatusCode === 200)) {
             dispatch(PostMethod_ForCopyRoleAccessFor_Role_Success({ Status: false }))
+
+            dispatch(getRoleAccessListPage());
             // GoButton_Handler()
+            tog_center()   
             dispatch(AlertState({
                 Type: 1,
                 Status: true,
@@ -101,8 +105,9 @@ console.log('RoleAccessModifiedinSingleArray',RoleAccessModifiedinSingleArray)
     }, [PostMessage_ForCopyRoleAccess])
 
     //select id for copy row
-    const CopyHandeler = (id, name) => {
+    const CopyHandeler = (event) => {
 
+        setCopy_user_RowData(event)
         tog_center()   
     };
 
@@ -152,7 +157,7 @@ console.log('RoleAccessModifiedinSingleArray',RoleAccessModifiedinSingleArray)
                        <Button
                             className="badge badge-soft-primary font-size-12 btn btn-primary waves-effect waves-light w-xxs border border-light"
                             data-mdb-toggle="tooltip" data-mdb-placement="top" title="Copy RoleAccess"
-                            onClick={() => { CopyHandeler(RoleAccess.id); }}
+                            onClick={() => { CopyHandeler(RoleAccess); }}
                         >
                            copy
                         </Button>
@@ -282,7 +287,7 @@ console.log('RoleAccessModifiedinSingleArray',RoleAccessModifiedinSingleArray)
                             toggle={() => { tog_center() }}
                             size="xl"
                         >
-                            <RoleAccessCopyFunctionality  />
+                            <RoleAccessCopyFunctionality  state={copy_user_RowData} />
                            
                         </Modal>
                     </div>

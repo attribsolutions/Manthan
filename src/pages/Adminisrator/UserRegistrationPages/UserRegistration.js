@@ -92,17 +92,17 @@ const AddUser = (props) => {
 
 
   useEffect(() => {
- 
-    let newArray= userPartiesForUserMaster_redux.map((i)=>(
+
+    let newArray = userPartiesForUserMaster_redux.map((i) => (
       {
-        Role:i.Role_id,
+        Role: i.Role_id,
         RoleName: i.RoleName,
         Party: i.Party_id,
         PartyName: i.PartyName
       }
     ))
     setUserPartiesForUserMaster(newArray)
-  
+
   }, [userPartiesForUserMaster_redux])
 
   // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
@@ -121,9 +121,9 @@ const AddUser = (props) => {
         label: editDataGatingFromList.EmployeeName
       })
       setUserPartiesForUserMaster(editDataGatingFromList.UserRole)
- var a=editDataGatingFromList.UserRole.map((i)=>({ Party: i.Party, Role: i.Role }))
+      var a = editDataGatingFromList.UserRole.map((i) => ({ Party: i.Party, Role: i.Role }))
 
- setPartyRoleData(a)
+      setPartyRoleData(a)
       return
     }
   }, [editDataGatingFromList])
@@ -187,22 +187,27 @@ const AddUser = (props) => {
   }));
 
   /// Role dopdown
-  function RoleDropDown_select_handler( event, pty, key) {
+  function RoleDropDown_select_handler(event, pty, key) {
 debugger
-const nwPtRole=event.map((ind)=>({Role:ind.value}))
+    const nwPtRole = event.map((ind) => ({
+      Party: pty.Party,
+      Role: ind.value
+    }))
+
     const find = partyRoleData.filter((index, key1) => {
       return !(index.Party === pty.Party)
     })
-    // if ((find === undefined)) {
-    //   setRoleData([{ Party: pty.Party, PartyRole: nwPtRole }])
-    // } else {
-      // RoleDropDown
-      setPartyRoleData([...find, { Party: pty.Party, PartyRole: nwPtRole }])
-    // }
+    if ((find === undefined)) {
+      setPartyRoleData(nwPtRole)
+    } else {
+    // RoleDropDown
+    // const newarray=nwPtRole.concat(nwPtRole)
+    setPartyRoleData(nwPtRole.concat(find))
+    }
   };
 
   const handleValidSubmit = (event, values) => {
-// debugger
+    // debugger
     const jsonBody = JSON.stringify({
       email: values.email,
       LoginName: values.loginName,
@@ -222,6 +227,10 @@ const nwPtRole=event.map((ind)=>({Role:ind.value}))
     })
 
     debugger
+
+
+
+
     if (partyRoleData.length <= 0) {
       dispatch(AlertState({
         Type: 4, Status: true,
@@ -244,7 +253,7 @@ const nwPtRole=event.map((ind)=>({Role:ind.value}))
   const rolaTable = () => {
 
     return (
-      <table className="table table-bordered  text-center">
+      <table className="table table-bordered ">
         <Thead >
           <tr>
             <th>Party Name</th>
@@ -255,18 +264,18 @@ const nwPtRole=event.map((ind)=>({Role:ind.value}))
         <Tbody  >
           {userPartiesForUserMaster.map((index, key) => (
             <tr key={index.Role}>
-              <td className="col-sm-4">
+              <td className="col-sm-6">
                 {index.PartyName}
               </td>
               <td>
                 <FormGroup className="" >
 
                   <Select
-                    defaultValue= {pageMode==="edit"?{ value: index.Role, label: index.RoleName }:null}
+                    defaultValue={pageMode === "edit" ? { value: index.Role, label: index.RoleName } : null}
                     options={RolesValues}
                     isMulti={true}
-                                className="basic-multi-select"
-                    onChange={(event) => { RoleDropDown_select_handler(event,index, key) }}
+                    className="basic-multi-select"
+                    onChange={(event) => { RoleDropDown_select_handler(event, index, key) }}
                     classNamePrefix="select2-selection"
                   />
                 </FormGroup>
@@ -274,7 +283,7 @@ const nwPtRole=event.map((ind)=>({Role:ind.value}))
             </tr>
           ))}
         </Tbody>
-       
+
       </table>
     )
   }
@@ -523,6 +532,11 @@ const nwPtRole=event.map((ind)=>({Role:ind.value}))
                       </Card>
                     </AvForm>
                   </CardBody>
+                  <br></br>
+                  <br></br>
+                  <br></br>
+                  <br></br>
+                  <br></br>
                 </Card>
               </Col>
             </Row>

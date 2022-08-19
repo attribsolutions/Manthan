@@ -26,7 +26,7 @@ const RoleAccessAdd = (props) => {
     const history = useHistory()
     console.log("history", history)
 
-    const [userPageAccessState, setUserPageAccessState] = useState(11);
+    const [userPageAccessState, setUserPageAccessState] = useState('');
 
     const [tableListData, setTableListData] = useState([])
     const [tableHederList, setTableHederList] = useState([])
@@ -61,17 +61,24 @@ const RoleAccessAdd = (props) => {
 
 
         
-    // userAccess useEffect
-    useEffect(() => {
-        debugger
+        // userAccess useEffect
+        useEffect(() => {
+          
+        const editDatapre = history.location.state
+        // const editData=editDatapre.EditData
+
         const userAcc = CommonGetRoleAccessFunction(history)
-        const editData = history.location.state
 
-        // if (!(userAcc === undefined)) {
-        //     setUserPageAccessState(userAcc)
-        // }
+        if (!(userAcc === undefined)) {
+            setUserPageAccessState(userAcc)
+        }
 
-        if (!(editData === undefined)) {
+        if (!(editDatapre === undefined)) {
+
+            const editData=editDatapre.EditData
+
+            if (!(editData === undefined)) {
+            // const editData=editDatapre.EditData
             var divisionid = editData.Division_id
             var companyid = editData.company
             var roleid = editData.Role_id
@@ -81,6 +88,7 @@ const RoleAccessAdd = (props) => {
                 setRoleDropDown({ label: editData.RoleName, value: roleid })
                 setDivision_dropdown_Select({ label: editData.DivisionName, value: divisionid })
             }
+        }
         }
     }, [history]);
 
