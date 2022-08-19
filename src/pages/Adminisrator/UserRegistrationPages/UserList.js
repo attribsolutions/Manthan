@@ -20,6 +20,7 @@ import { CommonGetRoleAccessFunction } from "../../../components/Common/CommonGe
 import { useHistory } from "react-router-dom";
 import { MetaTags } from "react-meta-tags";
 import Breadcrumbs from "../../../components/Common/Breadcrumb";
+import { listPageCommonButtonFunction } from "../../../components/Common/CmponentRelatedCommonFile/listPageCommonButtons";
 
 const UserList = () => {
 
@@ -91,23 +92,11 @@ const UserList = () => {
         }
     }, [editData]);
 
-    const EditPageHandler = (id) => {
-        dispatch(editUserId(id));
-    }
 
     function tog_center() {
         setmodal_center(!modal_center)
     }
-    //Delete Button Handller
-    const deleteHandeler = (id, name) => {
-        dispatch(AlertState({
-            Type: 5, Status: true,
-            Message: `Are you sure you want to delete this User : "${name}"`,
-            RedirectPath: false,
-            PermissionAction: deleteUser,
-            ID: id
-        }));
-    }
+
 
     const pageOptions = {
         sizePerPage: 15,
@@ -160,51 +149,16 @@ const UserList = () => {
                     {(user.isSendOTP) ? "true" : "false"}
                 </>
         },
-        {
-            text: "Actions ",
-            hidden: (
-                !(userPageAccessState.RoleAccess_IsEdit)
-                && !(userPageAccessState.RoleAccess_IsView)
-                && !(userPageAccessState.RoleAccess_IsDelete)) ? true : false,
+         // For Edit, Delete ,and View Button Common Code function
+         listPageCommonButtonFunction({
+            dispatchHook: dispatch,
+            deletemsgLable: "User",
+            userPageAccessState: userPageAccessState,
+            editActionFun: editUserId,
+            deleteActionFun: deleteUser
+        })
 
-            formatter: (cellContent, User) => (
-                <div className="d-flex gap-3" style={{ display: 'flex', justifyContent: 'center' }} >
-                      {((userPageAccessState.RoleAccess_IsEdit))  ?
-                        <Button
-                            type="button"
-                            data-mdb-toggle="tooltip" data-mdb-placement="top" title="Edit User"
-                            onClick={() => { EditPageHandler(User.id); }}
-                            className="badge badge-soft-success font-size-12 btn btn-success waves-effect waves-light w-xxs border border-light"
-                        >
-                            <i className="mdi mdi-pencil font-size-18" id="edittooltip"></i>
-                        </Button> : null}
-
-                    {(!(userPageAccessState.RoleAccess_IsEdit) && (userPageAccessState.RoleAccess_IsView)) ?
-                        <Button
-                            type="button"
-                            data-mdb-toggle="tooltip" data-mdb-placement="top" title="View User"
-                            onClick={() => { EditPageHandler(User.id); }}
-                            className="badge badge-soft-primary font-size-12 btn btn-primary waves-effect waves-light w-xxs border border-light"
-
-                        >
-                            <i className="bx bxs-show font-size-18 "></i>
-                        </Button> : null}
-
-                    {(userPageAccessState.RoleAccess_IsDelete)
-                        ?
-                        <Button
-                            className="badge badge-soft-danger font-size-12 btn btn-danger waves-effect waves-light w-xxs border border-light"
-                            data-mdb-toggle="tooltip" data-mdb-placement="top" title="Delete User"
-                            onClick={() => { deleteHandeler(User.id, User.Name); }}
-                        >
-                            <i className="mdi mdi-delete font-size-18"></i>
-                        </Button>
-                        : null
-                    }
-
-                </div>
-            ),
-        },
+    
     ];
 
     if (!(userPageAccessState === '')) {
