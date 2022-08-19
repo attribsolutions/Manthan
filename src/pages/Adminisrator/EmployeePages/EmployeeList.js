@@ -165,7 +165,7 @@ const Employee_List = () => {
     // For Edit, Delete ,and View Button Common Code function
     listPageCommonButtonFunction({
       dispatchHook: dispatch,
-      deletemsgLable: "Page",
+      deletemsgLable: "Employee",
       userPageAccessState: userPageAccessState,
       editActionFun: editEmployeeeId,
       deleteActionFun: delete_Employee_ID
