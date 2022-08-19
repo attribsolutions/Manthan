@@ -26,7 +26,7 @@ const RoleAccessAdd = (props) => {
     const history = useHistory()
     console.log("history", history)
 
-    const [userPageAccessState, setUserPageAccessState] = useState('');
+    const [userPageAccessState, setUserPageAccessState] = useState(11);
 
     const [tableListData, setTableListData] = useState([])
     const [tableHederList, setTableHederList] = useState([])
@@ -63,12 +63,13 @@ const RoleAccessAdd = (props) => {
         
     // userAccess useEffect
     useEffect(() => {
+        debugger
         const userAcc = CommonGetRoleAccessFunction(history)
-        const editData = history.location.state.EditData
+        const editData = history.location.state
 
-        if (!(userAcc === undefined)) {
-            setUserPageAccessState(userAcc)
-        }
+        // if (!(userAcc === undefined)) {
+        //     setUserPageAccessState(userAcc)
+        // }
 
         if (!(editData === undefined)) {
             var divisionid = editData.Division_id

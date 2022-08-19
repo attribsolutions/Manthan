@@ -51,12 +51,12 @@ const SelectDivisionPage = props => {
   const divisionDropdown_DropdownOption = divisionDropdown.filter((d) => {
     return !(d.Role_id === null)
   }).map((d) => ({
-    value: d.Role_id,
+    value: d.Role,
     label: d.RoleName,
   }));
 
   function goButtonHandller() {
-
+debugger
     var role = divisionDropdowSelect.value;
     var division = 1;
     var company = 1;

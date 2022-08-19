@@ -32,7 +32,7 @@ function* loginUser({ payload: { user, history } }) {
       })
     try {
       if (response.StatusCode === 200) {
-        // debugger
+        debugger
         localStorage.setItem("token", (response.token))
         localStorage.setItem("userId", (response.UserID))
         // yield put(getUserDetailsAction(response.UserID))
@@ -70,7 +70,7 @@ function* loginUser({ payload: { user, history } }) {
   }
 }
 function* afterLoginUserDetails_genFun({ id }) {
-
+debugger
   try {
     const response = yield call(getUserDetails_afterLogin_ApiCall, {
       UserId: id,
@@ -105,6 +105,7 @@ function* logoutUser({ payload: { history } }) {
   }
 }
 function* RoleAccessGenratorFunction({ id1, id2, id3 }) {
+  // debugger
 
   try {
     const PageAccessApi = yield call(showPagesListOnPageAccess_DropDown_List)
