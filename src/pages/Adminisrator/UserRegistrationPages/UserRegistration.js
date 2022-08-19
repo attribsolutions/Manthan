@@ -30,7 +30,7 @@ const AddUser = (props) => {
   const [pageMode, setPageMode] = useState("save");
   const [userPageAccessState, setUserPageAccessState] = useState('');
 
-  const [RoleData, setRoleData] = useState([]);
+  const [partyRoleData, setPartyRoleData] = useState([]);
   const [EmployeeSelect, setEmployeeSelect] = useState("");
   const [userPartiesForUserMaster, setUserPartiesForUserMaster] = useState([]);
 
@@ -123,7 +123,7 @@ const AddUser = (props) => {
       setUserPartiesForUserMaster(editDataGatingFromList.UserRole)
  var a=editDataGatingFromList.UserRole.map((i)=>({ Party: i.Party, Role: i.Role }))
 
-      setRoleData(a)
+ setPartyRoleData(a)
       return
     }
   }, [editDataGatingFromList])
@@ -135,7 +135,7 @@ const AddUser = (props) => {
       formRef.current.reset();
       setEmployeeSelect('')
       setRoleDropDown('')
-      setRoleData('')
+      setPartyRoleData('')
       if (pageMode === "other") {
         dispatch(AlertState({
           Type: 1,
@@ -187,17 +187,18 @@ const AddUser = (props) => {
   }));
 
   /// Role dopdown
-  function RoleDropDown_select_handler(role, pty, key) {
-
-    const find = RoleData.filter((index, key1) => {
+  function RoleDropDown_select_handler( event, pty, key) {
+debugger
+const nwPtRole=event.map((ind)=>({Role:ind.value}))
+    const find = partyRoleData.filter((index, key1) => {
       return !(index.Party === pty.Party)
     })
-    if ((find === undefined)) {
-      setRoleData([{ Party: pty.Party, Role: role.value }])
-    } else {
+    // if ((find === undefined)) {
+    //   setRoleData([{ Party: pty.Party, PartyRole: nwPtRole }])
+    // } else {
       // RoleDropDown
-      setRoleData([...find, { Party: pty.Party, Role: role.value }])
-    }
+      setPartyRoleData([...find, { Party: pty.Party, PartyRole: nwPtRole }])
+    // }
   };
 
   const handleValidSubmit = (event, values) => {
@@ -214,13 +215,14 @@ const AddUser = (props) => {
       isLoginUsingEmail: values.isLoginUsingEmail,
       CreatedBy: 1,
       UpdatedBy: 1,
-      UserRole: RoleData
+      UserRole: partyRoleData
       // .map((d) => ({
       //   Role: d.Role,
       // })),
     })
 
-    if (RoleData.length <= 0) {
+    debugger
+    if (partyRoleData.length <= 0) {
       dispatch(AlertState({
         Type: 4, Status: true,
         Message: "At Least One Role Data Add in the Table",
@@ -237,18 +239,12 @@ const AddUser = (props) => {
     }
   };
 
-  // For Delete Button in table
-  function UserRoles_DeleteButton_Handller(tableValue) {
-    setRoleData(RoleData.filter(
-      (item) => !(item.value === tableValue)
-    )
-    )
-  }
+
 
   const rolaTable = () => {
 
     return (
-      <Table className="table table-bordered  text-center">
+      <table className="table table-bordered  text-center">
         <Thead >
           <tr>
             <th>Party Name</th>
@@ -259,20 +255,19 @@ const AddUser = (props) => {
         <Tbody  >
           {userPartiesForUserMaster.map((index, key) => (
             <tr key={index.Role}>
-              <td>
+              <td className="col-sm-4">
                 {index.PartyName}
               </td>
               <td>
-                {/* <i className="mdi mdi-trash-can d-block text-danger font-size-20" onClick={() => {
-            UserRoles_DeleteButton_Handller(TableValue.value)
-          }} >
-          </i> */}
+         
                 <FormGroup className="" >
 
                   <Select
-                    defaultValue= {{ value: index.Role, label: index.RoleName }}
+                    defaultValue= {pageMode==="edit"?{ value: index.Role, label: index.RoleName }:null}
                     options={RolesValues}
-                    onChange={(e) => { RoleDropDown_select_handler(e, index, key) }}
+                    isMulti={true}
+                                className="basic-multi-select"
+                    onChange={(event) => { RoleDropDown_select_handler(event,index, key) }}
                     classNamePrefix="select2-selection"
                   />
                 </FormGroup>
@@ -280,7 +275,8 @@ const AddUser = (props) => {
             </tr>
           ))}
         </Tbody>
-      </Table>
+       
+      </table>
     )
   }
 
@@ -481,8 +477,8 @@ const AddUser = (props) => {
 
                             {userPartiesForUserMaster.length > 0 ? <Col sm={6} style={{ marginTop: '28px' }}>
 
-                              {RoleData ? (
-                                <div className="table-responsive">
+                              {partyRoleData ? (
+                                <div >
                                   {rolaTable()}
                                 </div>
                               ) :

@@ -9,7 +9,7 @@ export const listPageCommonButtonFunction = (props) => {
     const editActionFun = props.editActionFun;
     const deleteActionFun = props.deleteActionFun;
     const deletemsglable = props.deletemsgLable;
-    const userCreated =  parseInt( localStorage.getItem("userId"))
+    const userCreated = parseInt(localStorage.getItem("userId"))
     return ({
         text: "Action",
         hidden:
@@ -21,39 +21,50 @@ export const listPageCommonButtonFunction = (props) => {
 
         formatter: (cellContent, rowData) => (<div className="d-flex gap-3" style={{ display: 'flex', justifyContent: 'center' }} >
 
-            {((userPageAccessState.RoleAccess_IsEdit)) ?
-                <Button
-                    type="button"
-                    data-mdb-toggle="tooltip" data-mdb-placement="top" title={`Edit ${deletemsglable}`}
-                    onClick={() => { dispatch(editActionFun(rowData.id)); }}
-                    className="badge badge-soft-success font-size-12 btn btn-success waves-effect waves-light w-xxs border border-light"
-                >
-                    <i className="mdi mdi-pencil font-size-18" id="edittooltip"></i>
-                </Button> : null}
+            {
+                //** if condition start
 
-            {(!(userPageAccessState.RoleAccess_IsEdit) && (userPageAccessState.RoleAccess_IsView)) ?
-                <Button
-                    type="button"
-                    data-mdb-toggle="tooltip" data-mdb-placement="top" title={`View ${deletemsglable}`}
-                    onClick={() => { dispatch(editActionFun(rowData.id)); }}
-                    className="badge badge-soft-primary font-size-12 btn btn-primary waves-effect waves-light w-xxs border border-light"
+                (userPageAccessState.RoleAccess_IsEdit) //condtion:1
+                    ?
+                    (<Button
+                        type="button"
+                        data-mdb-toggle="tooltip" data-mdb-placement="top" title={`Edit ${deletemsglable}`}
+                        onClick={() => { dispatch(editActionFun(rowData.id)); }}
+                        className="badge badge-soft-success font-size-12 btn btn-success waves-effect waves-light w-xxs border border-light"
+                    >
+                        <i className="mdi mdi-pencil font-size-18" id="edittooltip"></i>
+                    </Button>)
 
-                >
-                    <i className="bx bxs-show font-size-18 "></i>
-                </Button> : null}
+                    : // **Else-If Condition start 
 
-            {(!(userPageAccessState.RoleAccess_IsEdit) && (rowData.CreatedBy===userCreated)) ?
-                <Button
-                    type="button"
-                    data-mdb-toggle="tooltip" data-mdb-placement="top" title={`EditSelf ${deletemsglable}`}
-                    onClick={() => { dispatch(editActionFun(rowData.id)); }}
-                    className="badge badge-soft-primary font-size-12 btn btn-primary waves-effect waves-light w-xxs border border-light"
+                    ((userPageAccessState.RoleAccess_IsEditSelf) && (rowData.CreatedBy === userCreated)) //**condition :2
+                        ?
+                        <Button
+                            type="button"
+                            data-mdb-toggle="tooltip" data-mdb-placement="top" title={`EditSelf ${deletemsglable}`}
+                            onClick={() => { dispatch(editActionFun(rowData.id)); }}
+                            className="badge badge-soft-primary font-size-12 btn btn-primary waves-effect waves-light w-xxs border border-light"
+                        >
+                            <i className="mdi mdi-pencil font-size-18" id="edittooltip"></i>
+                        </Button>
 
-                >
-                    {/* editself */}
-                <i className="bx bx-edit font-size-14 text-success"></i>
-                    {/* <i className="bx bxs-show font-size-18 "></i> */}
-                </Button> : null}
+                        : // **second else-if condition
+
+                        (userPageAccessState.RoleAccess_IsView)  // ** condition :3
+                            ?
+                            <Button
+                                type="button"
+                                data-mdb-toggle="tooltip" data-mdb-placement="top" title={`View ${deletemsglable}`}
+                                onClick={() => { dispatch(editActionFun(rowData.id)); }}
+                                className="badge badge-soft-primary font-size-12 btn btn-primary waves-effect waves-light w-xxs border border-light"
+                            >
+                                <i className="bx bxs-show font-size-18 "></i>
+                            </Button>
+
+                            : null  // **else null
+
+            }
+
 
             {(userPageAccessState.RoleAccess_IsDelete)
                 ?

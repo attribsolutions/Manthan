@@ -20,6 +20,7 @@ import HPageMaster from "./HPageMaster";
 import { AlertState } from "../../../store/Utilites/CostumeAlert/actions";
 import { useHistory } from "react-router-dom";
 import { CommonGetRoleAccessFunction } from "../../../components/Common/CommonGetRoleAccessFunction";
+import { listPageCommonButtonFunction } from "../../../components/Common/CmponentRelatedCommonFile/listPageCommonButtons";
 
 export default function HPageList() {
 
@@ -107,22 +108,7 @@ export default function HPageList() {
     }
   }, [editData]);
 
-  const EditPageHandler = (id) => {
-    dispatch(editHPagesID(id));
-  };
 
-  const deleteHandeler = (id, name) => {
-    dispatch(
-      AlertState({
-        Type: 5,
-        Status: true,
-        Message: `Are you sure you want to delete this Page : "${name}"`,
-        RedirectPath: false,
-        PermissionAction: deleteHpagesUsingID,
-        ID: id,
-      })
-    );
-  };
   const pageOptions = {
     sizePerPage: 15,
     totalSize: HPageListData.length, // replace later with size(users),
@@ -176,51 +162,15 @@ export default function HPageList() {
       dataField: "isActive",
       sort: true,
     },
-    {
-      text: "Action",
-      hidden: (
-        !(userPageAccessState.RoleAccess_IsEdit)
-        && !(userPageAccessState.RoleAccess_IsView)
-        && !(userPageAccessState.RoleAccess_IsDelete)) ? true : false,
-
-      formatter: (cellContent, Pages) => (
-        <div className="d-flex gap-3" style={{ display: 'flex', justifyContent: 'center' }} >
-          {((userPageAccessState.RoleAccess_IsEdit)) ?
-            <Button
-              type="button"
-              data-mdb-toggle="tooltip" data-mdb-placement="top" title="Edit Page"
-              onClick={() => { EditPageHandler(Pages.id); }}
-              className="badge badge-soft-success font-size-12 btn btn-success waves-effect waves-light w-xxs border border-light"
-            >
-              <i className="mdi mdi-pencil font-size-18" id="edittooltip"></i>
-            </Button> : null}
-
-          {(!(userPageAccessState.RoleAccess_IsEdit) && (userPageAccessState.RoleAccess_IsView)) ?
-            <Button
-              type="button"
-              data-mdb-toggle="tooltip" data-mdb-placement="top" title="View Pages"
-              onClick={() => { EditPageHandler(Pages.id); }}
-              className="badge badge-soft-primary font-size-12 btn btn-primary waves-effect waves-light w-xxs border border-light"
-
-            >
-              <i className="bx bxs-show font-size-18 "></i>
-            </Button> : null}
-
-          {(userPageAccessState.RoleAccess_IsDelete)
-            ?
-            <Button
-              className="badge badge-soft-danger font-size-12 btn btn-danger waves-effect waves-light w-xxs border border-light"
-              data-mdb-toggle="tooltip" data-mdb-placement="top" title="Delete Page"
-              onClick={() => { deleteHandeler(Pages.id, Pages.Name); }}
-            >
-              <i className="mdi mdi-delete font-size-18"></i>
-            </Button>
-            : null
-          }
-
-        </div>
-      ),
-    },
+      // For Edit, Delete ,and View Button Common Code function
+      listPageCommonButtonFunction({
+        dispatchHook: dispatch,
+        deletemsgLable: "Page",
+        userPageAccessState: userPageAccessState,
+        editActionFun: editHPagesID,
+        deleteActionFun: deleteHpagesUsingID
+    })
+  
   ];
 
   if (!(userPageAccessState === '')) {
