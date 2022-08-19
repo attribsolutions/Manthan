@@ -24,6 +24,7 @@ import AddEmployee from "./EmployeeMaster";
 import { MetaTags } from "react-meta-tags";
 import { useHistory } from "react-router-dom";
 import { CommonGetRoleAccessFunction } from "../../../components/Common/CommonGetRoleAccessFunction";
+import { listPageCommonButtonFunction } from "../../../components/Common/CmponentRelatedCommonFile/listPageCommonButtons";
 
 const Employee_List = () => {
   const dispatch = useDispatch();
@@ -104,20 +105,6 @@ const Employee_List = () => {
     }
   }, [deleteMessage.Status]);
 
-  //Delete Button Handller
-  const deleteHandeler = (id, name) => {
-    dispatch(
-      AlertState({
-        Type: 5,
-        Status: true,
-        Message: `Are you sure you want to delete this Employee : "${name}"`,
-        RedirectPath: false,
-        PermissionAction: delete_Employee_ID,
-        ID: id,
-      })
-    );
-  };
-
   // Edit Modal Show When Edit Data is true
   useEffect(() => {
     if (editData.Status === true) {
@@ -130,10 +117,6 @@ const Employee_List = () => {
     setmodal_center(!modal_center);
   }
 
-  // Edit Button Handler
-  const EditPageHandler = (id) => {
-    dispatch(editEmployeeeId(id));
-  };
 
   const defaultSorted = [
     {
@@ -179,51 +162,15 @@ const Employee_List = () => {
       sort: true,
     },
 
-    {
-      text: "Action",
-      hidden: (
-        !(userPageAccessState.RoleAccess_IsEdit)
-        && !(userPageAccessState.RoleAccess_IsView)
-        && !(userPageAccessState.RoleAccess_IsDelete)) ? true : false,
+    // For Edit, Delete ,and View Button Common Code function
+    listPageCommonButtonFunction({
+      dispatchHook: dispatch,
+      deletemsgLable: "Page",
+      userPageAccessState: userPageAccessState,
+      editActionFun: editEmployeeeId,
+      deleteActionFun: delete_Employee_ID
+  })
 
-      formatter: (cellContent, TableListData) => (
-        <div className="d-flex gap-3" style={{ display: 'flex', justifyContent: 'center' }} >
-          {(userPageAccessState.RoleAccess_IsEdit) && (userPageAccessState.RoleAccess_IsView) || (userPageAccessState.RoleAccess_IsEdit) ?
-            <Button
-              type="button"
-              data-mdb-toggle="tooltip" data-mdb-placement="top" title="Edit Employee"
-              onClick={() => { EditPageHandler(TableListData.id); }}
-              className="badge badge-soft-success font-size-12 btn btn-success waves-effect waves-light w-xxs border border-light"
-            >
-              <i className="mdi mdi-pencil font-size-18" id="edittooltip"></i>
-            </Button> : null}
-
-          {(!(userPageAccessState.RoleAccess_IsEdit) && (userPageAccessState.RoleAccess_IsView)) ?
-            <Button
-              type="button"
-              data-mdb-toggle="tooltip" data-mdb-placement="top" title="View Employee"
-              onClick={() => { EditPageHandler(TableListData.id); }}
-              className="badge badge-soft-primary font-size-12 btn btn-primary waves-effect waves-light w-xxs border border-light"
-
-            >
-              <i className="bx bxs-show font-size-18 "></i>
-            </Button> : null}
-
-          {(userPageAccessState.RoleAccess_IsDelete)
-            ?
-            <buton
-              className="badge badge-soft-danger font-size-12 btn btn-danger waves-effect waves-light w-xxs border border-light"
-              data-mdb-toggle="tooltip" data-mdb-placement="top" title="Delete Employee"
-              onClick={() => { deleteHandeler(TableListData.id, TableListData.Name); }}
-            >
-              <i className="mdi mdi-delete font-size-18"></i>
-            </buton>
-            : null
-          }
-
-        </div>
-      ),
-    },
   ];
   //tag_center -- Control the Edit Modal show and close
   function tog_center() {
