@@ -259,7 +259,6 @@ const nwPtRole=event.map((ind)=>({Role:ind.value}))
                 {index.PartyName}
               </td>
               <td>
-         
                 <FormGroup className="" >
 
                   <Select
