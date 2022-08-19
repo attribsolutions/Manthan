@@ -532,7 +532,7 @@ const RoleAccessAdd = (props) => {
                                                             <Select
                                                                 value={page_DropdownSelect}
                                                                 options={Page_DropdownOption}
-                                                                // onChange={(e) => { Page_DropdownSelectHandller(e) }}
+                                                                onChange={(e) => { Page_DropdownSelectHandller(e) }}
                                                                 // onChange={(e)=> {const selectAllOption = {label: 'select all', value: '*' }}}
                                                             classNamePrefix="select2-selection"
                                                             />
