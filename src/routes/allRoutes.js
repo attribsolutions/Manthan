@@ -49,6 +49,7 @@ import DivisionTypeList from "../pages/Adminisrator/DivisionType/DivisionTypeLis
 import PartyType from "../pages/Adminisrator/PartyTypes/PartyType";
 import PartyTypeList from "../pages/Adminisrator/PartyTypes/PartyTypeList";
 import SelectDivisionPage from "../pages/Authentication/SelectDivisionPage";
+import RoleAccessCopyFunctionality from "../pages/Adminisrator/RoleAccessPages/RoleAccessCopyFunctionality";
 
 
 
@@ -130,6 +131,7 @@ const userRoutes = [
 
   { path: `/RoleAccess`, component: RoleAccessAdd },
   { path: '/RoleAccessList', component: RoleAccessListPage },
+  { path: `/CopyRoleAccess`, component: RoleAccessCopyFunctionality },
 
   { path: "/EmployeeType", component: EmployeeTypesMaster },
   { path: "/EmployeeTypeList", component: EmployeeTypeList },

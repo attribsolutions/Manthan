@@ -4,6 +4,7 @@ import {
   GET_ROLE_ACCESS_LIST_FOR_ROLE_ACCESS_lIST_PAGE_SUCCESS,
   GO_BUTTON_HANDLER_FOR_ROLE_ACCESS_lIST_PAGE_SUCCESS,
   PAGE_DROPDOWN_FOR_ROLE_ACCESS_lIST_SUCCESS,
+  POST_METHOD_HANDLER_FOR_COPY_ROLE_ACCESS_FOR_ROLE_SUCCESS,
   POST_METHOD_HANDLER_FOR_ROLE_ACCESS_lIST_PAGE_SUCCESS,
 } from "./actionType"
 
@@ -13,7 +14,8 @@ const INIT_STATE = {
   AddPage_PageMasterListForRoleAccess: [],
   GO_buttonPageMasterListForRoleAccess: [],
   PostMessage_ForRoleAccessList: { Status: false },
-  RoleAccessListPage: []
+  RoleAccessListPage: [],
+  PostMessage_ForCopyRoleAccess: { Status: false },
 }
 
 const RoleAccessReducer = (state = INIT_STATE, action) => {
@@ -56,6 +58,14 @@ const RoleAccessReducer = (state = INIT_STATE, action) => {
         RoleAccessListPage: action.payload,
       }
 
+ //  post copy role access 
+ 
+
+   case POST_METHOD_HANDLER_FOR_COPY_ROLE_ACCESS_FOR_ROLE_SUCCESS:
+    return{
+         ...state,
+         PostMessage_ForCopyRoleAccess: action.payload,
+    }
     default:
       return state
   }

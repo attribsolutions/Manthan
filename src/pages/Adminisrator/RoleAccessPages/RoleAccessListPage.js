@@ -16,12 +16,14 @@ import { useDispatch, useSelector } from "react-redux";
 import {
     editModuleID,
     getRoleAccessListPage,
+    PostMethod_ForCopyRoleAccessFor_Role_Success,
 
 } from "../../../store/actions";
 import { AlertState } from "../../../store/Utilites/CostumeAlert/actions";
 import PartyUIDemo from "../PartyPages/PartyUIDemo";
 import { useHistory } from "react-router-dom";
 import { CommonGetRoleAccessFunction } from "../../../components/Common/CommonGetRoleAccessFunction";
+import RoleAccessCopyFunctionality from "./RoleAccessCopyFunctionality";
 
 const RoleAccessListPage = () => {
 
@@ -31,9 +33,10 @@ const RoleAccessListPage = () => {
     const [userPageAccessState, setUserPageAccessState] = useState('');
     const [modal_center, setmodal_center] = useState(false);
 
-    const { TableListData, RoleAccessModifiedinSingleArray } = useSelector((state) => ({
+    const { TableListData, RoleAccessModifiedinSingleArray,PostMessage_ForCopyRoleAccess } = useSelector((state) => ({
         TableListData: state.RoleAccessReducer.RoleAccessListPage,
         RoleAccessModifiedinSingleArray: state.Login.RoleAccessUpdateData,
+        PostMessage_ForCopyRoleAccess: state.RoleAccessReducer.PostMessage_ForCopyRoleAccess,
 
     }));
 
@@ -49,7 +52,6 @@ const RoleAccessListPage = () => {
     useEffect(() => {
         dispatch(getRoleAccessListPage());
     }, []);
-
 
     const EditPageHandler = (data) => {
         const rowData =data
@@ -72,6 +74,36 @@ const RoleAccessListPage = () => {
         }
     }
 
+    
+    useEffect(() => {
+       
+        if ((PostMessage_ForCopyRoleAccess.Status === true) && (PostMessage_ForCopyRoleAccess.StatusCode === 200)) {
+            dispatch(PostMethod_ForCopyRoleAccessFor_Role_Success({ Status: false }))
+            // GoButton_Handler()
+            dispatch(AlertState({
+                Type: 1,
+                Status: true,
+                Message: PostMessage_ForCopyRoleAccess.Message,
+                AfterResponseAction: false
+            }))
+        }
+        else if (PostMessage_ForCopyRoleAccess.Status === true) {
+            dispatch(PostMethod_ForCopyRoleAccessFor_Role_Success({ Status: false }))
+            dispatch(AlertState({
+                Type: 4,
+                Status: true,
+                Message: JSON.stringify(PostMessage_ForCopyRoleAccess.Message),
+                RedirectPath: false,
+                AfterResponseAction: false
+            }));
+        }
+    }, [PostMessage_ForCopyRoleAccess])
+
+    //select id for copy row
+    const CopyHandeler = (id, name) => {
+
+        tog_center()   
+    };
 
 
 
@@ -115,6 +147,16 @@ const RoleAccessListPage = () => {
             formatter: (cellContent, RoleAccess) => (
 
                 <div className="d-flex gap-3" style={{ display: 'flex', justifyContent: 'center' }} >
+
+                       <Button
+                            className="badge badge-soft-primary font-size-12 btn btn-primary waves-effect waves-light w-xxs border border-light"
+                            data-mdb-toggle="tooltip" data-mdb-placement="top" title="Copy RoleAccess"
+                            onClick={() => { CopyHandeler(RoleAccess.id); }}
+                        >
+                           copy
+                        </Button>
+
+
                     {((userPageAccessState.RoleAccess_IsEdit)) ?
                         <Button
                             type="button"
@@ -234,6 +276,14 @@ const RoleAccessListPage = () => {
                             )
                             }
                         </PaginationProvider>
+                        <Modal
+                            isOpen={modal_center}
+                            toggle={() => { tog_center() }}
+                            size="xl"
+                        >
+                            <RoleAccessCopyFunctionality  />
+                           
+                        </Modal>
                     </div>
                 </div>
             </React.Fragment>

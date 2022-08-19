@@ -208,6 +208,7 @@ export const GO_Button_HandlerForRoleAccessList_Api=(id1,id2)=>get(`${url.GO_BUT
 export const AddPageHandlerForRoleAccessList_Api=(id1)=>get(`${url.ADD_PAGE_BUTTON_HANDLER_FOR_ROLE_ACCESS_PAGE}/${id1}`) //get api role List 
 export const PostMethod_HandlerForRoleAccessList_Api=(data)=>post(url.ROLE_ACCESS,data) //post api role Access List 
 export const Get_RoleAccess_List_Page_Api = () => get(url.GET_ROLEACCESS_LIST_PAGE_API)//get RoleAccess List Page API
+export const Post_CopyRoleAccess_for_RoleAccess_Api = (data) => post(url.POST_COPY_ROLE_ACCESS_API)//POST COPY  RoleAccess API
 
 // Employee Type API
 export const Employee_Type_API = (data) => post(url.EMPLOYEE_TYPE_API, data)// post api
