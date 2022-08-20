@@ -95,8 +95,7 @@ const AddUser = (props) => {
 
     let newArray = userPartiesForUserMaster_redux.map((i) => (
       {
-        Role: i.Role_id,
-        RoleName: i.RoleName,
+        PartyRoles:[],
         Party: i.Party_id,
         PartyName: i.PartyName
       }
@@ -111,7 +110,7 @@ const AddUser = (props) => {
     if (!(userPageAccessState === '')) { document.getElementById("txtName").focus(); }
 
     if (!(editDataGatingFromList === undefined)) {
-      debugger
+   
       setEditData(editDataGatingFromList);
       dispatch(BreadcrumbShow(editDataGatingFromList.LoginName))
       setPageMode("edit");
@@ -121,9 +120,14 @@ const AddUser = (props) => {
         label: editDataGatingFromList.EmployeeName
       })
       setUserPartiesForUserMaster(editDataGatingFromList.UserRole)
-      var a = editDataGatingFromList.UserRole.map((i) => ({ Party: i.Party, Role: i.Role }))
-
-      setPartyRoleData(a)
+      // var a = editDataGatingFromList.UserRole.map((i) =>{ ({ Party: i.Party, Role: i.Role })})
+       let arraynew=[]
+      editDataGatingFromList.UserRole.map((i) =>{
+        i .PartyRoles.map((i2) =>{
+          arraynew.push({Party:i.Party, Role: i2.Role })
+        })
+      })
+      setPartyRoleData(arraynew)
       return
     }
   }, [editDataGatingFromList])
@@ -271,7 +275,7 @@ debugger
                 <FormGroup className="" >
 
                   <Select
-                    defaultValue={pageMode === "edit" ? { value: index.Role, label: index.RoleName } : null}
+                    defaultValue={pageMode === "edit" ?index.PartyRoles.map((i)=>({ value: i.Role, label: i.RoleName })) : null}
                     options={RolesValues}
                     isMulti={true}
                     className="basic-multi-select"

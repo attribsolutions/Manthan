@@ -37,6 +37,7 @@ const UserList = () => {
     }));
 
     useEffect(() => {
+        debugger
         const userAcc = CommonGetRoleAccessFunction(history)
         if (!(userAcc === undefined)) {
             setUserPageAccessState(userAcc)
