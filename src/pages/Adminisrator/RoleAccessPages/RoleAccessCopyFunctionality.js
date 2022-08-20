@@ -93,11 +93,10 @@ const RoleAccessCopyFunctionality = (props) => {
     function CopyButton_Handler() {
         const jsonBody = JSON.stringify(
             {
-                Role: role_Dropdown_Select.value,
-                Division: division_dropdown_Select.value,
-                NewRole: copyRole_Dropdown_Select.value,
-                NewDivision: copyDivision_dropdown_Select.value
-
+                Role: copyRole_Dropdown_Select.value,
+                Division: copyDivision_dropdown_Select.value,
+                NewRole: role_Dropdown_Select.value,
+                NewDivision: division_dropdown_Select.value,
             })
 
         dispatch(PostMethodForCopyRoleAccessForRoleAccess(jsonBody))
