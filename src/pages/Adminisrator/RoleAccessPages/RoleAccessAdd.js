@@ -60,10 +60,10 @@ const RoleAccessAdd = (props) => {
 
 
 
-        
-        // userAccess useEffect
-        useEffect(() => {
-          
+
+    // userAccess useEffect
+    useEffect(() => {
+
         const editDatapre = history.location.state
         // const editData=editDatapre.EditData
 
@@ -75,20 +75,20 @@ const RoleAccessAdd = (props) => {
 
         if (!(editDatapre === undefined)) {
 
-            const editData=editDatapre.EditData
+            const editData = editDatapre.EditData
 
             if (!(editData === undefined)) {
-            // const editData=editDatapre.EditData
-            var divisionid = editData.Division_id
-            var companyid = editData.company
-            var roleid = editData.Role_id
-            if (roleid > 0 && divisionid > 0) {
-                dispatch(GO_Button_HandlerForRoleAccessListPage(roleid, divisionid));
-                setShowTableOnUI(true)
-                setRoleDropDown({ label: editData.RoleName, value: roleid })
-                setDivision_dropdown_Select({ label: editData.DivisionName, value: divisionid })
+                // const editData=editDatapre.EditData
+                var divisionid = editData.Division_id
+                var companyid = editData.company
+                var roleid = editData.Role_id
+                if (roleid > 0 && divisionid > 0) {
+                    dispatch(GO_Button_HandlerForRoleAccessListPage(roleid, divisionid));
+                    setShowTableOnUI(true)
+                    setRoleDropDown({ label: editData.RoleName, value: roleid })
+                    setDivision_dropdown_Select({ label: editData.DivisionName, value: divisionid })
+                }
             }
-        }
         }
     }, [history]);
 
@@ -331,8 +331,8 @@ const RoleAccessAdd = (props) => {
             var isTopOfTheDivision = document.getElementById("IsTopOfTheDivision" + i).checked;
 
 
-            if (isShowOnMenu) { isSave = true }
-            if (isEdit || isEditSelf) { isView = true }
+            // if (isShowOnMenu) { isSave = true }
+            // if (isEdit || isEditSelf) { isView = true }
 
 
             roleAccessArray.push({ "PageAccess": 1 });
@@ -401,6 +401,97 @@ const RoleAccessAdd = (props) => {
             return (!(index.ID === id))
         })
         setTableListData(newList)
+    }
+
+
+
+    function input_checkBoxHandler(e, v,) {
+
+        if (e === "IsEdit") {
+            let isEdit = document.getElementById(`IsEdit${v}`)
+            let isView = document.getElementById(`IsView${v}`)
+            let isEditSelf = document.getElementById(`IsEditSelf${v}`)
+            if (isEdit.checked) {
+                isView.checked = true;
+                isEditSelf.checked = true;
+                isView.disabled = true;
+                isEditSelf.disabled = true;
+            }
+            else {
+                isView.disabled = false;
+                isEditSelf.disabled = false;
+            }
+            return
+        }
+        if (e === "IsEditSelf") {
+            let isView = document.getElementById(`IsView${v}`)
+            let isEditSelf = document.getElementById(`IsEditSelf${v}`)
+            let isEdit = document.getElementById(`IsEdit${v}`)
+
+            if ((isEdit.checked) && (e === "IsEditSelf")) {
+                isEditSelf.checked = true;
+                isEditSelf.disabled = true
+            }
+            else if (isEditSelf.checked) {
+                isView.checked = true;
+                isView.disabled = true;
+            }
+            else {
+                isView.disabled = false;
+            }
+            return
+        }
+        if ((e === "IsView")) {
+            let isEdit = document.getElementById(`IsEdit${v}`)
+            if ((isEdit.checked) ) {
+                let isView = document.getElementById(`IsView${v}`)
+                isView.checked = true;
+                isView.disabled = true
+
+            }
+           
+            return
+        }
+
+        if (e === "IsDelete") {
+            let isDelete = document.getElementById(`IsDelete${v}`)
+            let isEditSelf = document.getElementById(`IsEditSelf${v}`)
+            if (isDelete.checked) {
+                isEditSelf.checked = true;
+                isEditSelf.disabled = true;
+            }
+            else {
+                isEditSelf.disabled = false;
+            }
+            return
+        }
+
+        if (e === "IsShowOnMenu") {
+            let isShowOnMenu = document.getElementById(`IsShowOnMenu${v}`)
+            let save = document.getElementById(`IsSave${v}`)
+            if (isShowOnMenu.checked) {
+                save.checked = true;
+                save.disabled = true;
+            }
+            else {
+                save.disabled = false;
+            }
+            return
+        }
+        if ((e === "IsSave")) {
+            let isShowOnMenu = document.getElementById(`IsShowOnMenu${v}`)
+            if ((isShowOnMenu.checked) ) {
+                let isSave = document.getElementById(`IsSave${v}`)
+                isSave.checked = true;
+                isSave.disabled = true
+
+            }
+           
+            return
+        }
+
+
+
     }
     if (!(userPageAccessState === '')) {
         return (
@@ -534,7 +625,7 @@ const RoleAccessAdd = (props) => {
                                                                 options={Page_DropdownOption}
                                                                 onChange={(e) => { Page_DropdownSelectHandller(e) }}
                                                                 // onChange={(e)=> {const selectAllOption = {label: 'select all', value: '*' }}}
-                                                            classNamePrefix="select2-selection"
+                                                                classNamePrefix="select2-selection"
                                                             />
                                                         </Col>
                                                     </FormGroup>
@@ -612,9 +703,11 @@ const RoleAccessAdd = (props) => {
                                                                                     <td className="text-center">
                                                                                         {indx[`PageAccess_${indexPage.Name}`] ?
                                                                                             <input type={"checkbox"} id={indexPage.Name + key}
+                                                                                                onChange={(e) => input_checkBoxHandler(indexPage.Name, key, e)}
                                                                                                 defaultChecked={indx[`RoleAccess_${indexPage.Name}`] > 0 ? true : false} />
                                                                                             : <input type={"hidden"} id={indexPage.Name + key} />
                                                                                         }
+
                                                                                     </td>
                                                                                 )
                                                                             })
