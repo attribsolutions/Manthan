@@ -702,10 +702,10 @@ const RoleAccessAdd = (props) => {
                                                                                 return (
                                                                                     <td className="text-center">
                                                                                         {indx[`PageAccess_${indexPage.Name}`] ?
-                                                                                            <input type={"checkbox"} id={indexPage.Name + key}
+                                                                                            <Input type={"checkbox"} id={indexPage.Name + key}
                                                                                                 onChange={(e) => input_checkBoxHandler(indexPage.Name, key, e)}
                                                                                                 defaultChecked={indx[`RoleAccess_${indexPage.Name}`] > 0 ? true : false} />
-                                                                                            : <input type={"hidden"} id={indexPage.Name + key} />
+                                                                                            : <Input type={"hidden"} id={indexPage.Name + key} />
                                                                                         }
 
                                                                                     </td>
