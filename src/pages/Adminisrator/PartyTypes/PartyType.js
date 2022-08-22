@@ -16,8 +16,8 @@ import { AvField, AvForm, } from "availity-reactstrap-validation";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { CommonGetRoleAccessFunction } from "../../../components/Common/CommonGetRoleAccessFunction";
-import { AlertState } from "../../../store/Utilites/CostumeAlert/actions";
-import { BreadcrumbShow } from "../../../store/actions";
+
+import { BreadcrumbShow,AlertState } from "../../../store/actions";
 import { editPartyTypeSuccess, PostPartyTypeAPI, PostPartyTypeAPISuccess, updatePartyTypeID } from "../../../store/Administrator/PartyTypeRedux/action";
 import { getDivisionTypesID } from "../../../store/Administrator/PartyRedux/action";
 

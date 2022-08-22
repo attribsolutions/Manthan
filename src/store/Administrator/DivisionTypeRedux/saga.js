@@ -1,6 +1,6 @@
 import { call, put, takeEvery } from "redux-saga/effects";
 import { detelet_DivisionType_List_Api, edit_DivisionType_List_Api, get_DivisionType_List_Api, Post_Division_Type_API, update_DivisionType_List_Api } from "../../../helpers/backend_helper";
-import { AlertState } from "../../Utilites/CostumeAlert/actions";
+import { AlertState } from "../../Utilites/CustomAlertRedux/actions";
 import { SpinnerState } from "../../Utilites/Spinner/actions";
 import { deleteDivisionTypeIDSuccess, editDivisionTypeSuccess, getDivisionTypelistSuccess, PostDivisionTypeSuccess, updateDivisionTypeIDSuccess } from "./action";
 import { DELETE_DIVISION_TYPE_ID, EDIT_DIVISION_TYPE_ID, GET_DIVISION_TYPE_LIST, POST_DIVISION_TYPE_API, UPDATE_DIVISION_TYPE_ID } from "./actionType";

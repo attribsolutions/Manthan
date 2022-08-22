@@ -19,7 +19,7 @@ import {
     PostMethod_ForCopyRoleAccessFor_Role_Success,
 
 } from "../../../store/actions";
-import { AlertState } from "../../../store/Utilites/CostumeAlert/actions";
+import { AlertState } from "../../../store/actions";
 import PartyUIDemo from "../PartyPages/PartyUIDemo";
 import { useHistory } from "react-router-dom";
 import { CommonGetRoleAccessFunction } from "../../../components/Common/CommonGetRoleAccessFunction";

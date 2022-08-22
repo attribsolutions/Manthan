@@ -4,7 +4,7 @@ import Breadcrumbs from "../../../components/Common/Breadcrumb";
 import { Modal, Col, Row, Button } from "reactstrap";
 // import { useAlert } from "react-alert";
 import "../../../assets/scss/CustomeTable/datatables.scss";
-import { AlertState } from "../../../store/Utilites/CostumeAlert/actions";
+import { AlertState } from "../../../store/actions";
 import { SpinnerON } from "../../../store/Utilites/Spinner/actions";
 import {
   getEmployeelist,

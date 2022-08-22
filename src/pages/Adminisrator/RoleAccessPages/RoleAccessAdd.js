@@ -3,7 +3,7 @@ import Breadcrumb from "../../../components/Common/Breadcrumb";
 import { Card, CardBody, Col, Container, Row, Label, Input, CardHeader, FormGroup, Button } from "reactstrap";
 import { AvForm, AvGroup, AvField, AvInput } from "availity-reactstrap-validation";
 import { useDispatch, useSelector } from "react-redux";
-import { AlertState } from "../../../store/Utilites/CostumeAlert/actions";
+import { AlertState } from "../../../store/Utilites/CustomAlertRedux/actions";
 import Select from "react-select";
 import {
     editPartyIDSuccess, getDistrictOnState, getDistrictOnStateSuccess, getDivisionTypesID,
@@ -449,7 +449,6 @@ const RoleAccessAdd = (props) => {
                 let isView = document.getElementById(`IsView${v}`)
                 isView.checked = true;
                 isView.disabled = true
-
             }
 
             return
@@ -457,14 +456,25 @@ const RoleAccessAdd = (props) => {
 
         if (e === "IsDelete") {
             let isDelete = document.getElementById(`IsDelete${v}`)
-            let isEditSelf = document.getElementById(`IsEditSelf${v}`)
+            let isDeleteSelf = document.getElementById(`IsDeleteSelf${v}`)
             if (isDelete.checked) {
-                isEditSelf.checked = true;
-                isEditSelf.disabled = true;
+                isDeleteSelf.checked = true;
+                isDeleteSelf.disabled = true;
             }
             else {
-                isEditSelf.disabled = false;
+                isDeleteSelf.disabled = false;
             }
+            return
+        }
+        if ((e === "IsDeleteSelf")) {
+            let isDelete = document.getElementById(`IsDelete${v}`)
+            if ((isDelete.checked)) {
+                let isDeleteSelf = document.getElementById(`IsDeleteSelf${v}`)
+                isDeleteSelf.checked = true;
+                isDeleteSelf.disabled = true
+
+            }
+
             return
         }
 

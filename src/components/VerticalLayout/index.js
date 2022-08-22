@@ -16,8 +16,8 @@ import Footer from "./Footer";
 
 //redux
 import { useSelector, useDispatch } from "react-redux";
-import CostumeAlert from "../Common/CostumeAlert";
 import Spinner from "../Common/Spinner";
+import CustomAlert from "../Common/CustomAlert";
 const Layout = props => {
   const dispatch = useDispatch();
 
@@ -140,7 +140,7 @@ const Layout = props => {
       </div>
 
       <div id="layout-wrapper">
-        <CostumeAlert/>
+        <CustomAlert/>
         <Spinner/>
         <Header toggleMenuCallback={toggleMenuCallback} onChangeLayoutMode={onChangeLayoutMode} />
         <Sidebar

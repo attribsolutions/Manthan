@@ -23,7 +23,7 @@ import {
   UPDATE_MODULE_ID
 } from "./actionType";
 import { SpinnerState } from "../../Utilites/Spinner/actions";
-import { AlertState } from "../../Utilites/CostumeAlert/actions";
+import { AlertState } from "../../Utilites/CustomAlertRedux/actions";
 
 function* SubmitModules_GenratorFunction({ data }) {
   yield put(SpinnerState(true))

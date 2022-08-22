@@ -1,6 +1,6 @@
 import { call, put, takeEvery } from "redux-saga/effects";
 import { Role_Master_Delete_API, Role_Master_Edit_API, Role_Master_Get_API, Role_Master_Post_API, Role_Master_Update_API } from "../../../helpers/backend_helper";
-import { AlertState } from "../../Utilites/CostumeAlert/actions";
+import { AlertState } from "../../Utilites/CustomAlertRedux/actions";
 import { SpinnerState } from "../../Utilites/Spinner/actions";
 import {getRoleSuccess ,PostSuccess,editSuccess, updateSuccess, getRole, deleteSuccess} from "./action";
 import { POST_ROLE,DELETE_ROLE,EDIT_ROLE,UPDATE_ROLE,GET_Role_API } from "./actionTypes";

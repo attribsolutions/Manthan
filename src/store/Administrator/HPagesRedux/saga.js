@@ -9,7 +9,7 @@ import {
   saveHPagesSuccess,
   updateHPagesSuccess,
 } from "./actions";
-import { AlertState } from "../../Utilites/CostumeAlert/actions";
+import { AlertState } from "../../Utilites/CustomAlertRedux/actions";
 import { SpinnerState } from "../../Utilites/Spinner/actions";
 import {
   deletHPagesUsingID_API,

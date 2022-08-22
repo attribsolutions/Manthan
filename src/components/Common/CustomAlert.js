@@ -2,9 +2,9 @@ import React from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { Modal, UncontrolledAlert, } from "reactstrap";
-import { AlertShow } from '../../store/Utilites/CostumeAlert/actions';
+import { AlertShow } from '../../store/Utilites/CustomAlertRedux/actions';
 
-const CostumeAlert = () => {
+const CustomAlert = () => {
 
   const history = useHistory();
   const dispatch = useDispatch();
@@ -167,4 +167,4 @@ const CostumeAlert = () => {
     </React.Fragment>
   )
 }
-export default CostumeAlert
+export default CustomAlert

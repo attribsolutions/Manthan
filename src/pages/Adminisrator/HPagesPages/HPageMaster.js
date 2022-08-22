@@ -10,6 +10,7 @@ import {
   Button,
   FormGroup,
   CardHeader,
+  Modal,
 } from "reactstrap";
 import Breadcrumb from "../../../components/Common/Breadcrumb";
 import { AvForm, AvInput } from "availity-reactstrap-validation";
@@ -27,7 +28,7 @@ import {
 } from "../../../store/Administrator/HPagesRedux/actions";
 import { fetchModelsList } from "../../../store/Administrator/ModulesRedux/actions";
 import { MetaTags } from "react-meta-tags";
-import { AlertState } from "../../../store/Utilites/CostumeAlert/actions";
+import { AlertState } from "../../../store/actions";
 import { BreadcrumbShow } from "../../../store/Utilites/Breadcrumb/actions";
 import { useHistory } from "react-router-dom";
 import { CommonGetRoleAccessFunction } from "../../../components/Common/CommonGetRoleAccessFunction";
@@ -51,6 +52,8 @@ const HPageMaster = (props) => {
   const [pageType_DropdownSelect, setPageType_DropdownSelect] = useState("");
   const [pageList_DropdownSelect, setPageList_DropdownSelect] = useState("");
   const [pageAccessDropDownView, setPageAccessDropDownView] = useState(false);
+  const [modal_center, setmodal_center] = useState(false);
+
   const [pageAccess_DropDownSelect, setPageAccess_DropDownSelect] =
     useState("");
 
@@ -405,6 +408,10 @@ const HPageMaster = (props) => {
     );
   }
 
+  function tog_center() {
+    setmodal_center(!modal_center)
+}
+
   function TableBodyFunction() {
     return tablePageAccessDataState.map((TableValue) => {
       let ViewValues = false;
@@ -551,7 +558,8 @@ const HPageMaster = (props) => {
                     <CardBody style={{ backgroundColor: "whitesmoke" }}>
                       <Row>
                         <Col md="3">
-                          <FormGroup className="mb-3">
+
+                          <FormGroup className="mb-3 ">
                             <Label htmlFor="validationCustom01">Module</Label>
                             <Select
                               value={module_DropdownSelect}
@@ -563,7 +571,11 @@ const HPageMaster = (props) => {
                             />
                           </FormGroup>
                         </Col>
-                        <Col md="1"> </Col>
+
+                        <Col md="1" className=" mt-3">
+                          <Button className=" mt-3 btn btn-sm">add</Button>
+                        </Col>
+
                         <Col md="3">
                           <FormGroup className="mb-3">
                             <Label htmlFor="validationCustom01">Page Type</Label>
@@ -834,6 +846,15 @@ const HPageMaster = (props) => {
                 </AvForm>
               </CardBody>
             </Card>
+            <Modal
+              isOpen={modal_center}
+              toggle={() => {
+                tog_center();
+              }}
+              size="xl"
+            >
+              <HPageMaster state={"editData.Data"} />
+            </Modal>
           </Container>
         </div>
       </React.Fragment>

@@ -30,7 +30,7 @@ import {
 import ItemUnits from "./DemoData";
 
 import { SpinnerState } from "../../Utilites/Spinner/actions";
-import { AlertState } from "../../Utilites/CostumeAlert/actions";
+import { AlertState } from "../../Utilites/CustomAlertRedux/actions";
 
 
 function* fetchOrderItems_GenratorFunction() {
