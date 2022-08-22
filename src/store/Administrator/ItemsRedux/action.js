@@ -1,5 +1,7 @@
 import { DELETE_ITEM_ID, DELETE_ITEM_ID_SUCCESS,
      EDIT_ITEM_ID, EDIT_ITEM_ID_SUCCESS, 
+     GET_BASEUNIT_FOR_DROPDOWN, 
+     GET_BASEUNIT_FOR_DROPDOWN_SUCCESS, 
      GET_ITEM_GROUP_FOR_DROPDOWN, 
      GET_ITEM_GROUP_FOR_DROPDOWN_SUCCESS, 
      GET_ITEM_LIST_API, GET_ITEM_LIST_API_SUCCESS, 
@@ -14,6 +16,16 @@ export const getItemGroup_ForDropDown = () => ({
 
 export const getItemGroup_ForDropDownSuccess = (data) => ({
   type: GET_ITEM_GROUP_FOR_DROPDOWN_SUCCESS,
+  payload:data,
+});
+
+// get BaseUnit for dropdown api
+export const getBaseUnit_ForDropDown = () => ({
+  type: GET_BASEUNIT_FOR_DROPDOWN,
+});
+
+export const getBaseUnit_ForDropDownSuccess = (data) => ({
+  type: GET_BASEUNIT_FOR_DROPDOWN_SUCCESS,
   payload:data,
 });
 

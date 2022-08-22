@@ -188,7 +188,7 @@ export const Items_Master_Delete_API = (id) => del(`${url.Items_MASTER_API}/${id
 export const Items_Master_Edit_API = (id) => get(`${url.Items_MASTER_API}/${id}`)// edit api
 export const Items_Master_Update_API = (data, id) => put(`${url.Items_MASTER_API}/${id}`, data)// update api
 
-
+export const BaseUnit_Get_DropDown_API = () => get(url.CATEGORY_TYPE)//get api
 // Party Master
 export const Party_Master_Get_API = () => get(url.PARTY_MASTER_API)//get api
 export const Party_Master_Post_API = (data) => post(url.PARTY_MASTER_API, data)// post api
