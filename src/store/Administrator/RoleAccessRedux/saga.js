@@ -158,7 +158,7 @@ function*  Post_MethodForCopyRoleAccess_GenFun({data}) {
 
 function* RoleAccessSaga() {
   yield takeEvery(PAGE_DROPDOWN_FOR_ROLE_ACCESS_lIST,PageDropdownForRoleAccessList_GenratorFunction);
- yield takeEvery(GET_ROLE_ACCESS_LIST_FOR_ROLE_ACCESS_lIST_PAGE, GetRoleAccessListForRoleAccessList_GenratorFunction);
+  yield takeEvery(GET_ROLE_ACCESS_LIST_FOR_ROLE_ACCESS_lIST_PAGE, GetRoleAccessListForRoleAccessList_GenratorFunction);
   yield takeEvery(GO_BUTTON_HANDLER_FOR_ROLE_ACCESS_lIST_PAGE, GoButtonHandlerForRoleAccessList_GenratorFunction);
   yield takeEvery(ADD_PAGE_HANDLER_FOR_ROLE_ACCESS_lIST_PAGE, AddPageHandlerForRoleAccessList_GenratorFunction);
   yield takeEvery(POST_METHOD_HANDLER_FOR_ROLE_ACCESS_lIST_PAGE, PostMethod_HandlerForRoleAccessList_GenratorFunction);

@@ -102,3 +102,11 @@ export const PARTYTYPES_API  ='/PartyTypes'
 
 // Division Type API
 export const DIVISION_TYPES_API  ='/DivisionTypes'
+
+
+//Product Cateogory Type Master API
+export const  PRODUCT_CATEGORY_TYPE_MASTER_API = '/ProductCategoryTypes'
+
+
+//Product Types API
+export const  PRODUCT_TYPES_API ='/ProductCategory'
