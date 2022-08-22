@@ -1,6 +1,6 @@
 import { call, put, takeEvery } from "redux-saga/effects";
 import { detelet_PartyType_List_Api, edit_PartyType_List_Api, get_PartyType_List_Api, Post_Party_Type_API, update_PartyType_List_Api } from "../../../helpers/backend_helper";
-import { AlertState } from "../../Utilites/CostumeAlert/actions";
+import { AlertState } from "../../Utilites/CustomAlertRedux/actions";
 import { SpinnerState } from "../../Utilites/Spinner/actions";
 import { deletePartyTypeIDSuccess, editPartyTypeSuccess, getPartyTypelistSuccess, PostPartyTypeAPISuccess, updatePartyTypeIDSuccess } from "./action";
 import { DELETE_PARTY_TYPE_ID, EDIT_PARTY_TYPE_ID, GET_PARTY_TYPE_LIST, POST_PARTY_TYPE_API, UPDATE_PARTY_TYPE_ID } from "./actionTypes";

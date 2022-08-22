@@ -1,7 +1,7 @@
 import { call, put, takeEvery } from "redux-saga/effects";
 import { PostMethod_ForProductCategoryTypeMasterAPISuccess, PostProductCategoryTypeMasterAPISuccess} from "./action";
 import { POST_METHOD_HANDLER_FOR_PRODUCT_CATEGORY_TYPE_MASTER_API, POST_PRODUCT_CATEGORY_TYPE_MASTER_API} from "./actionTypes";
-import { AlertState } from "../../Utilites/CostumeAlert/actions";
+import { AlertState } from "../../Utilites/CustomAlertRedux/actions";
 import { SpinnerState } from "../../Utilites/Spinner/actions";
 import { Post_Product_Category_Type_Master_API} from "../../../helpers/backend_helper";
 
