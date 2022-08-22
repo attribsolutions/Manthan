@@ -152,7 +152,7 @@ const RoleAccessCopyFunctionality = (props) => {
 
 
                                     <Col md="4" className="">
-                                        <FormGroup className="mb-3 row" >
+                                        <FormGroup className="mb-3 row">
                                             <Label className="col-sm-4 p-2">NewDivision</Label>
                                             <Col md="8">
                                                 <Select

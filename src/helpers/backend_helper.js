@@ -231,8 +231,15 @@ export const detelet_DivisionType_List_Api = (id) => del(`${url.DIVISION_TYPES_A
 export const edit_DivisionType_List_Api = (id) => get(`${url.DIVISION_TYPES_API}/${id}`) // edit api
 export const update_DivisionType_List_Api = (data, id) => put(`${url.DIVISION_TYPES_API}/${id}`, data)// update 
 
-export {
-  
+//Product Cateogory Type Master API
+export const Post_Product_Category_Type_Master_API = (data) => post(url.PRODUCT_CATEGORY_TYPE_MASTER_API, data)// post api
+
+//Product Types API
+export const Post_Product_Types_API = (data) => post(url.PRODUCT_TYPES_API, data)// post api
+export const get_Product_Category_Type_Master_API = () => get(url.PRODUCT_TYPES_API)// Product Category DropDown Api api
+
+
+export {  
   getLoggedInUser,
   isUserAuthenticated,
   postFakeRegister,
