@@ -89,9 +89,9 @@ const AddUser = (props) => {
         return (`/${inx.ActualPagePath}` === relatatedPage)
       })
 
-      if (!(userAcc === undefined)) {
-        setUserPageAccessState(userAcc)
-      }
+    }
+    if (!(userAcc === undefined)) {
+      setUserPageAccessState(userAcc)
     }
   }, [RoleAccessModifiedinSingleArray])
 
