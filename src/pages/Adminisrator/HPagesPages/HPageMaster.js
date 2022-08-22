@@ -10,6 +10,7 @@ import {
   Button,
   FormGroup,
   CardHeader,
+  Modal,
 } from "reactstrap";
 import Breadcrumb from "../../../components/Common/Breadcrumb";
 import { AvForm, AvInput } from "availity-reactstrap-validation";
@@ -51,6 +52,8 @@ const HPageMaster = (props) => {
   const [pageType_DropdownSelect, setPageType_DropdownSelect] = useState("");
   const [pageList_DropdownSelect, setPageList_DropdownSelect] = useState("");
   const [pageAccessDropDownView, setPageAccessDropDownView] = useState(false);
+  const [modal_center, setmodal_center] = useState(false);
+
   const [pageAccess_DropDownSelect, setPageAccess_DropDownSelect] =
     useState("");
 
@@ -850,7 +853,7 @@ const HPageMaster = (props) => {
               }}
               size="xl"
             >
-              <HPageMaster state={editData.Data} />
+              <HPageMaster state={"editData.Data"} />
             </Modal>
           </Container>
         </div>
