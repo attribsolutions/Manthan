@@ -42,12 +42,25 @@ const RoleAccessListPage = () => {
 
     }));
 
+    // useEffect(() => {
+    //     const userAcc = CommonGetRoleAccessFunction(history)
+    //     if (!(userAcc === undefined)) {
+    //         setUserPageAccessState(userAcc)
+    //     }
+    // }, [history])
+
     useEffect(() => {
-        const userAcc = CommonGetRoleAccessFunction(history)
+        // debugger
+        // const userAcc = CommonGetRoleAccessFunction(history)
+        const locationPath = history.location.pathname
+        let userAcc = RoleAccessModifiedinSingleArray.find((inx) => {
+            return (`/${inx.ActualPagePath}` === locationPath)
+        })
         if (!(userAcc === undefined)) {
             setUserPageAccessState(userAcc)
         }
-    }, [history])
+    }, [RoleAccessModifiedinSingleArray])
+
 
     //  This UseEffect => Featch Modules List data  First Rendering
     useEffect(() => {
@@ -55,13 +68,13 @@ const RoleAccessListPage = () => {
     }, []);
 
     const EditPageHandler = (data) => {
-     
+    //  debugger
         const rowData =data
      
-        let RelatedPageID = 0
-        const userPageAccess = history.location.state
+        // let RelatedPageID = 0
+        // const userPageAccess = history.location.state
 
-        RelatedPageID = userPageAccess.UserDetails.RelatedPageID
+        let  RelatedPageID = userPageAccessState.RelatedPageID
 
         const found = RoleAccessModifiedinSingleArray.find((element) => {
             return element.id === RelatedPageID
@@ -70,8 +83,10 @@ const RoleAccessListPage = () => {
         if (!(found === undefined)) {
             history.push({
                 pathname: `/${found.ActualPagePath}`,
-                state: { fromDashboardAccess: true, UserDetails: found, EditData: rowData }
-
+                // pathname: `/${found.ActualPagePath}`,
+                // state: { fromDashboardAccess: true, UserDetails: found, EditData: rowData }
+                state:  rowData ,
+                // relatatedPage:"/UserMaster"
             })
         }
     }

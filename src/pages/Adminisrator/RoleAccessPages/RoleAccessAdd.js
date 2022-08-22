@@ -39,12 +39,15 @@ const RoleAccessAdd = (props) => {
 
 
     //Access redux store Data /  'save_ModuleSuccess' action data
+
     const { PageAccess, ModuleData, PageDropdownForRoleAccess,
-        AddPage_PageMasterListForRoleAccess_Redux, GO_buttonPageMasterListForRoleAccess_Redux, PostMessage_ForRoleAccessList,
-        DivisionTypes, Roles, PartyTypes } = useSelector((state) => ({
+        AddPage_PageMasterListForRoleAccess_Redux,
+        GO_buttonPageMasterListForRoleAccess_Redux,
+        PostMessage_ForRoleAccessList,
+        Roles, PartyTypes,
+        RoleAccessModifiedinSingleArray } = useSelector((state) => ({
             PartySaveSuccess: state.PartyMasterReducer.PartySaveSuccess,
             companyList: state.Company.companyList,
-            // DivisionTypes: state.PartyMasterReducer.DivisionTypes,
             PartyTypes: state.PartyMasterReducer.partyList,
             Roles: state.User_Registration_Reducer.Roles,
             ModuleData: state.Modules.modulesList,
@@ -53,44 +56,43 @@ const RoleAccessAdd = (props) => {
             AddPage_PageMasterListForRoleAccess_Redux: state.RoleAccessReducer.AddPage_PageMasterListForRoleAccess,
             GO_buttonPageMasterListForRoleAccess_Redux: state.RoleAccessReducer.GO_buttonPageMasterListForRoleAccess,
             PostMessage_ForRoleAccessList: state.RoleAccessReducer.PostMessage_ForRoleAccessList,
+            RoleAccessModifiedinSingleArray: state.Login.RoleAccessUpdateData,
         }));
 
 
 
-
-
-
-
-    // userAccess useEffect
     useEffect(() => {
 
-        const editDatapre = history.location.state
-        // const editData=editDatapre.EditData
+        const editDataGatingFromList = history.location.state
 
-        const userAcc = CommonGetRoleAccessFunction(history)
+        const locationPath = history.location.pathname
+        let userAcc = RoleAccessModifiedinSingleArray.find((inx) => {
+            return (`/${inx.ActualPagePath}` === locationPath)
+        })
 
+        if (!(editDataGatingFromList === undefined)) {
+
+            var divisionid = editDataGatingFromList.Division_id
+            var companyid = editDataGatingFromList.company
+            var roleid = editDataGatingFromList.Role_id
+            var roleName = editDataGatingFromList.RoleName
+            var divisionName = editDataGatingFromList.DivisionName
+
+            if (roleid > 0 && divisionid > 0) {
+                dispatch(GO_Button_HandlerForRoleAccessListPage(roleid, divisionid));
+                setShowTableOnUI(true)
+                setRoleDropDown({ label: roleName, value: roleid })
+                setDivision_dropdown_Select({ label: divisionName, value: divisionid })
+            }
+        }
         if (!(userAcc === undefined)) {
             setUserPageAccessState(userAcc)
         }
+    }, [RoleAccessModifiedinSingleArray])
 
-        if (!(editDatapre === undefined)) {
 
-            const editData = editDatapre.EditData
 
-            if (!(editData === undefined)) {
-                // const editData=editDatapre.EditData
-                var divisionid = editData.Division_id
-                var companyid = editData.company
-                var roleid = editData.Role_id
-                if (roleid > 0 && divisionid > 0) {
-                    dispatch(GO_Button_HandlerForRoleAccessListPage(roleid, divisionid));
-                    setShowTableOnUI(true)
-                    setRoleDropDown({ label: editData.RoleName, value: roleid })
-                    setDivision_dropdown_Select({ label: editData.DivisionName, value: divisionid })
-                }
-            }
-        }
-    }, [history]);
+    
 
     useEffect(() => {
         dispatch(GO_Button_HandlerForRoleAccessListPage_Success([]))
@@ -443,13 +445,13 @@ const RoleAccessAdd = (props) => {
         }
         if ((e === "IsView")) {
             let isEdit = document.getElementById(`IsEdit${v}`)
-            if ((isEdit.checked) ) {
+            if ((isEdit.checked)) {
                 let isView = document.getElementById(`IsView${v}`)
                 isView.checked = true;
                 isView.disabled = true
 
             }
-           
+
             return
         }
 
@@ -480,13 +482,13 @@ const RoleAccessAdd = (props) => {
         }
         if ((e === "IsSave")) {
             let isShowOnMenu = document.getElementById(`IsShowOnMenu${v}`)
-            if ((isShowOnMenu.checked) ) {
+            if ((isShowOnMenu.checked)) {
                 let isSave = document.getElementById(`IsSave${v}`)
                 isSave.checked = true;
                 isSave.disabled = true
 
             }
-           
+
             return
         }
 

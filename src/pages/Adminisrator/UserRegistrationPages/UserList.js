@@ -29,20 +29,26 @@ const UserList = () => {
     const [userPageAccessState, setUserPageAccessState] = useState('');
     const [modal_center, setmodal_center] = useState(false);
 
-    const { pages, editData, updateMessage, deleteMessage } = useSelector((state) => ({
+    const { pages, editData, updateMessage, deleteMessage, RoleAccessModifiedinSingleArray } = useSelector((state) => ({
         pages: state.User_Registration_Reducer.pages,
         editData: state.User_Registration_Reducer.editData,
         updateMessage: state.User_Registration_Reducer.updateMessage,
         deleteMessage: state.User_Registration_Reducer.deleteSuccessRole,
+        RoleAccessModifiedinSingleArray: state.Login.RoleAccessUpdateData,
+
     }));
 
     useEffect(() => {
-        debugger
-        const userAcc = CommonGetRoleAccessFunction(history)
+        // debugger
+        // const userAcc = CommonGetRoleAccessFunction(history)
+        const locationPath = history.location.pathname
+        let userAcc = RoleAccessModifiedinSingleArray.find((inx) => {
+            return (`/${inx.ActualPagePath}` === locationPath)
+        })
         if (!(userAcc === undefined)) {
             setUserPageAccessState(userAcc)
         }
-    }, [history])
+    }, [RoleAccessModifiedinSingleArray])
 
     //  This UseEffect => Featch Modules List data  First Rendering
     useEffect(() => {
@@ -150,8 +156,8 @@ const UserList = () => {
                     {(user.isSendOTP) ? "true" : "false"}
                 </>
         },
-         // For Edit, Delete ,and View Button Common Code function
-         listPageCommonButtonFunction({
+        // For Edit, Delete ,and View Button Common Code function
+        listPageCommonButtonFunction({
             dispatchHook: dispatch,
             deletemsgLable: "User",
             userPageAccessState: userPageAccessState,
@@ -159,14 +165,14 @@ const UserList = () => {
             deleteActionFun: deleteUser
         })
 
-    
+
     ];
 
     if (!(userPageAccessState === '')) {
         return (
             <React.Fragment>
                 <div className="page-content">
-                <MetaTags>
+                    <MetaTags>
                         <title>User List| FoodERP-React FrontEnd</title>
                     </MetaTags>
                     <PaginationProvider
@@ -182,7 +188,7 @@ const UserList = () => {
 
                                 {toolkitProps => (
                                     <React.Fragment>
-                                  
+
                                         <Breadcrumbs
                                             title={"Count :"}
                                             breadcrumbItem={userPageAccessState.PageHeading}
@@ -190,7 +196,7 @@ const UserList = () => {
                                             IsSearchVissible={true}
                                             SearchProps={toolkitProps.searchProps}
                                             breadcrumbCount={`Users Count: ${pages.length}`}
-                                            // RedirctPath={"/UserMaster"}
+                                        // RedirctPath={"/UserMaster"}
                                         />
                                         <Row>
                                             <Col xl="12">
@@ -227,7 +233,7 @@ const UserList = () => {
                         toggle={() => { tog_center() }}
                         size="xl"
                     >
-                        <AddUser state={editData.Data} />
+                        <AddUser state={editData.Data} relatatedPage={"/UserMaster"} />
                     </Modal>
                 </div>
             </React.Fragment>
