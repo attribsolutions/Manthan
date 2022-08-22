@@ -15,7 +15,7 @@ import { useSelector, useDispatch } from "react-redux";
 import "../../../assets/scss/CustomeTable/datatables.scss"
 import AddUser from "./UserRegistration";
 import { deleteSuccess } from "../../../store/Administrator/RoleMasterRedux/action";
-import { AlertState } from "../../../store/Utilites/CostumeAlert/actions";
+import { AlertState } from "../../../store/Utilites/CustomAlertRedux/actions";
 import { CommonGetRoleAccessFunction } from "../../../components/Common/CommonGetRoleAccessFunction";
 import { useHistory } from "react-router-dom";
 import { MetaTags } from "react-meta-tags";
@@ -159,10 +159,11 @@ const UserList = () => {
         // For Edit, Delete ,and View Button Common Code function
         listPageCommonButtonFunction({
             dispatchHook: dispatch,
-            deletemsgLable: "User",
+            ButtonMsgLable: "User",
+            deleteName:"LoginName",
             userPageAccessState: userPageAccessState,
             editActionFun: editUserId,
-            deleteActionFun: deleteUser
+            deleteActionFun: deleteUser,
         })
 
 

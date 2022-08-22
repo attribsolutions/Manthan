@@ -17,7 +17,7 @@ import {
 } from "../../../store/Administrator/HPagesRedux/actions";
 import Breadcrumbs from "../../../components/Common/Breadcrumb";
 import HPageMaster from "./HPageMaster";
-import { AlertState } from "../../../store/Utilites/CostumeAlert/actions";
+import { AlertState } from "../../../store/actions";
 import { useHistory } from "react-router-dom";
 import { CommonGetRoleAccessFunction } from "../../../components/Common/CommonGetRoleAccessFunction";
 import { listPageCommonButtonFunction } from "../../../components/Common/CmponentRelatedCommonFile/listPageCommonButtons";
@@ -228,6 +228,7 @@ export default function HPageList() {
             )}
           </PaginationProvider>
         </div>
+
         <Modal
           isOpen={modal_center}
           toggle={() => {
@@ -235,8 +236,9 @@ export default function HPageList() {
           }}
           size="xl"
         >
-          <HPageMaster state={editData.Data} />
+          {/* <HPageMaster state={editData.Data} /> */}
         </Modal>
+
       </React.Fragment>
     );
   }

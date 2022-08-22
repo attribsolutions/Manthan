@@ -3,7 +3,7 @@ import Breadcrumb from "../../../components/Common/Breadcrumb";
 import { Card, CardBody, Col, Container, Row, Label, CardHeader, FormGroup } from "reactstrap";
 import { AvForm, AvField, AvInput } from "availity-reactstrap-validation";
 import { useDispatch, useSelector } from "react-redux";
-import { AlertState } from "../../../store/Utilites/CostumeAlert/actions";
+import { AlertState } from "../../../store/actions";
 import Select from "react-select";
 import {
     editPartyIDSuccess, GetCompanyByDivisionTypeID, getDistrictOnState, getDistrictOnStateSuccess, getDivisionTypesID,
@@ -11,7 +11,7 @@ import {
 } from "../../../store/Administrator/PartyRedux/action";
 import { getState } from "../../../store/Administrator/M_EmployeeRedux/action";
 import Flatpickr from "react-flatpickr"
-import { fetchCompanyList } from "../../../store/Administrator/CompanyRedux/actions";
+
 import { BreadcrumbShow } from "../../../store/Utilites/Breadcrumb/actions";
 import { MetaTags } from "react-meta-tags";
 import { CommonGetRoleAccessFunction } from "../../../components/Common/CommonGetRoleAccessFunction";

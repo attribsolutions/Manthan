@@ -13,7 +13,7 @@ import {
   PostEmployeeSuccess,
   Get_CompanyName_By_EmployeeTypeID
 } from "../../../store/Administrator/M_EmployeeRedux/action";
-import { AlertState } from "../../../store/Utilites/CostumeAlert/actions";
+import { AlertState } from "../../../store/actions";
 import { getDistrictOnState, getPartyListAPI } from "../../../store/Administrator/PartyRedux/action";
 import Breadcrumb from "../../../components/Common/Breadcrumb";
 import AvField from "availity-reactstrap-validation/lib/AvField";

@@ -7,7 +7,7 @@ import { getEmployee, getRoles, addUser, updateID, addUserSuccess, GetUserPartie
   from "../../../store/Administrator/UserRegistrationRedux/actions";
 import Breadcrumb from "../../../components/Common/Breadcrumb";
 import AvField from "availity-reactstrap-validation/lib/AvField";
-import { AlertState } from "../../../store/Utilites/CostumeAlert/actions";
+import { AlertState } from "../../../store/Utilites/CustomAlertRedux/actions";
 import { editSuccess } from "../../../store/Administrator/RoleMasterRedux/action";
 import { Tbody, Thead } from "react-super-responsive-table";
 import { BreadcrumbShow } from "../../../store/Utilites/Breadcrumb/actions";
@@ -64,7 +64,13 @@ const AddUser = (props) => {
 
 
   //Access redux store Data /  'save_ModuleSuccess' action data
-  const { PostAPIResponse, employeelistForDropdown, Roles, userPartiesForUserMaster_redux, RoleAccessModifiedinSingleArray } = useSelector((state) => ({
+  const {
+    PostAPIResponse,
+    employeelistForDropdown,
+    Roles,
+    userPartiesForUserMaster_redux,
+    RoleAccessModifiedinSingleArray
+  } = useSelector((state) => ({
     PostAPIResponse: state.User_Registration_Reducer.AddUserMessage,
     userPartiesForUserMaster_redux: state.User_Registration_Reducer.userPartiesForUserMaster,
     employeelistForDropdown: state.User_Registration_Reducer.employeelistForDropdown,
@@ -197,7 +203,7 @@ const AddUser = (props) => {
 
   /// Role dopdown
   function RoleDropDown_select_handler(event, pty, key) {
-    debugger
+
     const nwPtRole = event.map((ind) => ({
       Party: pty.Party,
       Role: ind.value

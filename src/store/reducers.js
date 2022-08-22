@@ -11,7 +11,7 @@ import Profile from "./auth/profile/reducer"
 
 //Administrator
 import SpinnerReducer from './Utilites/Spinner/reducer'
-import AlertReducer from './Utilites/CostumeAlert/reducer'
+import AlertReducer from './Utilites/CustomAlertRedux/reducer'
 import CustomSearchReducer from './Utilites/CustomSearchRedux/reducer'
 import BreadcrumbReducer from './Utilites/Breadcrumb/reducer'
 

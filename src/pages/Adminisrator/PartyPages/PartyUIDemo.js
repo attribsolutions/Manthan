@@ -3,9 +3,6 @@ import Breadcrumbs from "../../../components/Common/Breadcrumb";
 import { Card, CardBody, Col, Container, Row, Label, Input, FormGroup, CardHeader, InputGroup, Button } from "reactstrap";
 import { AvForm, AvGroup, AvField, AvInput } from "availity-reactstrap-validation";
 
-import Flatpickr from "react-flatpickr"
-import Select from "react-select";
-
 const PartyUIDemo = (props) => {
 
     //     return (

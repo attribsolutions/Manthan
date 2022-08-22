@@ -9,7 +9,7 @@ import LayoutSaga from "./layout/saga"
 //Import spinner
 import Spinner_Saga from "./Utilites/Spinner/saga"
 //import AlertSagas 
-import Alert_Saga from "./Utilites/CostumeAlert/saga"
+import Alert_Saga from "./Utilites/CustomAlertRedux/saga"
 import CustomSearch_Saga from "./Utilites/CustomSearchRedux/saga"
 
 // import  Module saga

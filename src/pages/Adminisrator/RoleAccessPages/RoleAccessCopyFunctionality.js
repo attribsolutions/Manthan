@@ -3,11 +3,15 @@ import Breadcrumb from "../../../components/Common/Breadcrumb";
 import { Card, CardHeader, Col, Container, FormGroup, Label, Row, Button } from "reactstrap";
 import Select from "react-select";
 import { MetaTags } from "react-meta-tags";
-import { getDivisionTypesID, getPartyListAPI } from "../../../store/Administrator/PartyRedux/action";
+import { getPartyListAPI } from "../../../store/Administrator/PartyRedux/action";
 import { useDispatch, useSelector } from "react-redux";
-import { BreadcrumbShow, getRoles, PostMethodForCopyRoleAccessForRoleAccess, PostMethod_ForCopyRoleAccessFor_Role_Success } from "../../../store/actions";
+
+import {
+    AlertState,
+    getRoles, PostMethodForCopyRoleAccessForRoleAccess,
+    PostMethod_ForCopyRoleAccessFor_Role_Success
+} from "../../../store/actions";
 import { useHistory } from "react-router-dom";
-import { CommonGetRoleAccessFunction } from "../../../components/Common/CommonGetRoleAccessFunction";
 
 
 const RoleAccessCopyFunctionality = (props) => {
