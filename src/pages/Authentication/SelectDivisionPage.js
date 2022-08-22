@@ -52,7 +52,7 @@ const SelectDivisionPage = props => {
     return !(d.Role_id === null)
   }).map((d) => ({
     value: d.Role,
-    label: d.RoleName,
+    label: d.PartyName,
   }));
 
   function goButtonHandller() {
