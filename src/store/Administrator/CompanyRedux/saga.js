@@ -1,6 +1,6 @@
 import { call, put, takeEvery } from "redux-saga/effects";
 import { delete_CompanyID, edit_CompanyID, fetch_CompanyList, getCompanyGroup, postSubmit_Company, updateCompany_ID } from "../../../helpers/backend_helper";
-import { AlertState } from "../../Utilites/CostumeAlert/actions";
+import { AlertState } from "../../Utilites/CustomAlertRedux/actions";
 import { SpinnerState } from "../../Utilites/Spinner/actions";
 import {  deleteCompanyIDSuccess, editCompanyIDSuccess,  fetchCompanyListSuccess, getCompanyGroupSuccess, PostCompanySubmitSuccess, updateCompanyIDSuccess } from "./actions";
 import {

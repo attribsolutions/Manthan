@@ -12,7 +12,7 @@ import {
   deleteEmployeeIDSuccess, editEmployeeSuccess, updateEmployeeIDSuccess, get_EmployeeTypesID_Success, Get_CompanyName_By_EmployeeTypeID_Success, Get_PartyName_By_EmployeeTypeID_Success,
 } from "./action";
 import { SpinnerState } from "../../Utilites/Spinner/actions";
-import { AlertState } from "../../Utilites/CostumeAlert/actions";
+import { AlertState } from "../../Utilites/CustomAlertRedux/actions";
 
 ///  DesignationID dropdown list
 function* DesignationID_saga() {

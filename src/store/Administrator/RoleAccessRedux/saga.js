@@ -21,7 +21,7 @@ import {
   POST_METHOD_HANDLER_FOR_ROLE_ACCESS_lIST_PAGE,
 } from "./actionType";
 import { SpinnerState } from "../../Utilites/Spinner/actions";
-import { AlertState } from "../../Utilites/CostumeAlert/actions";
+import { AlertState } from "../../Utilites/CustomAlertRedux/actions";
 import {
   AddPageHandlerForRoleAccessListPage_Success,
   getRoleAccessListPageSuccess,

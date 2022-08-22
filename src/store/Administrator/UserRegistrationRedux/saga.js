@@ -23,7 +23,7 @@ import {
   GetUserPartiesForUserMastePageSuccess,
   getEmployeeForUseRegistrationSuccess
 } from "./actions";
-import { AlertState } from "../../Utilites/CostumeAlert/actions";
+import { AlertState } from "../../Utilites/CustomAlertRedux/actions";
 import { SpinnerState } from "../../Utilites/Spinner/actions";
 
 // employee dropdown list

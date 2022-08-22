@@ -9,7 +9,7 @@ import {
   SaveSubModuleSuccess
 } from "./actions";
 import { SpinnerState } from "../../Utilites/Spinner/actions";
-import { AlertState } from "../../Utilites/CostumeAlert/actions";
+import { AlertState } from "../../Utilites/CustomAlertRedux/actions";
 
 function* GetSubModulesData_GenratorFunction() {
   yield put(SpinnerState(true))
