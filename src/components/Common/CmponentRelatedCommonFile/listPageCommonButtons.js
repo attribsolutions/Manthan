@@ -84,7 +84,10 @@ export const listPageCommonButtonFunction = (props) => {
                 >
                     <i className="mdi mdi-delete font-size-18"></i>
                 </Button>
-                : null
+                //chnage delete self functionality  autho by
+                :
+                // ((userPageAccessState.RoleAccess_IsEditSelf) && (rowData.CreatedBy === userCreated))
+                null
             }
 
         </div>
