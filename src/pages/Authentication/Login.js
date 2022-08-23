@@ -22,6 +22,7 @@ import logo from "../../assets/images/logo-sm.svg"
 
 //Import config
 import CarouselPage from "./CarouselPage"
+import axios from "axios";
 
 const Login = props => {
   const dispatch = useDispatch()
@@ -30,7 +31,7 @@ const Login = props => {
     loginError: state.Login.loginError,
   }))
 
-  console.log("loginError", loginError)  
+  console.log("loginError", loginError)
   useEffect(() => {
 
     localStorage.clear();
@@ -39,6 +40,18 @@ const Login = props => {
   // handleValidSubmit
   const handleValidSubmit = (event, values) => {
     dispatch(loginUser(values, props.history))
+  }
+
+  function createSuperAdminHandler() {
+    alert("call super admin API SuccessFully")
+    let token = JSON.parse(sessionStorage.getItem('token'));
+
+    const baseURL = "http://192.168.1.114:8000/SuperAdmin";
+    axios.get(baseURL, { headers: { "Authorization": `Bearer ${token}` } }).then((response) => {
+      // setPost(response.data);
+      console.log(response)
+    });
+
   }
 
   return (
@@ -110,15 +123,18 @@ const Login = props => {
                           </div>
                         </div>
                         <div className="row mb-4">
-                       
+
                           <Link to="/forgot-password" className="fw-semibold">Forgot password?</Link>
-                    
+
                         </div>
                         <div className="mb-3">
                           <button className="btn btn-primary w-100 waves-effect waves-light" type="submit">Login</button>
                         </div>
                       </AvForm>
 
+                      <div className="mt-4 mt-md-5 text-center">
+                        <p className="mb-0 text-primary fw-semibold" onClick={() => { createSuperAdminHandler() }}> Create SuperAdmin </p>
+                      </div>
 
                     </div>
                     <div className="mt-4 mt-md-5 text-center">
