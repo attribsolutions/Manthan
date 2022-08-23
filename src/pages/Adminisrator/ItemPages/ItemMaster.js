@@ -456,22 +456,37 @@ import BreadcrumbDemo from "../../../components/Common/CmponentRelatedCommonFile
 import { AvField, AvForm, AvInput } from "availity-reactstrap-validation"
 import Select from "react-select";
 import { fetchCompanyList } from "../../../store/Administrator/CompanyRedux/actions"
-import { getBaseUnit_ForDropDown } from "../../../store/Administrator/ItemsRedux/action";
+import { getBaseUnit_ForDropDown, get_CategoryTypes_ForDropDown, get_Category_ForDropDown, get_SubCategory_ForDropDown } from "../../../store/Administrator/ItemsRedux/action";
+import { getDivisionTypelist } from "../../../store/Administrator/DivisionTypeRedux/action";
 
 const ItemsMaster = () => {
     const dispatch = useDispatch();
     const [activeTab1, setactiveTab1] = useState("5")
     const [companyList_dropdown_Select, setCompanyList_dropdown_Select] = useState("");
     const [BaseUnit_dropdown_Select, setBaseUnit_dropdown_Select] = useState("");
+    const [categoryType_dropdown_Select, setCategoryType_dropdown_Select] = useState("");
+    const [category_dropdown_Select, setCategory_dropdown_Select] = useState("");
+    const [subCategory_dropdown_Select, setsubCategory_dropdown_Select] = useState("");
+    const [divisionType_dropdown_Select, setDivisionType_dropdown_Select] = useState("");
+    const [name, setName] = useState("");
 
-    const { companyList ,BaseUnit} = useSelector((state) => ({
+
+    const { companyList, BaseUnit, CategoryType, Category, SubCategory,DivisionType } = useSelector((state) => ({
         companyList: state.Company.companyList,
         BaseUnit: state.ItemMastersReducer.BaseUnit,
+        CategoryType: state.ItemMastersReducer.CategoryType,
+        Category: state.ItemMastersReducer.Category,
+        SubCategory: state.ItemMastersReducer.SubCategory,
+        DivisionType: state.DivisionTypeReducer.ListData,
     }));
 
     useEffect(() => {
         dispatch(fetchCompanyList());
         dispatch(getBaseUnit_ForDropDown());
+        dispatch(get_CategoryTypes_ForDropDown());
+        dispatch(get_Category_ForDropDown());
+        dispatch(get_SubCategory_ForDropDown());
+        dispatch(getDivisionTypelist());
     }, [dispatch]);
 
     const toggle1 = tab => {
@@ -485,18 +500,50 @@ const ItemsMaster = () => {
         label: data.Name
     }));
 
-    function handllerCompanyDropDown(e) {
+    function CompanyList_DropDown_handller(e) {
         setCompanyList_dropdown_Select(e)
     }
 
     const BaseUnit_DropdownOptions = BaseUnit.map((data) => ({
-      value: data.id,
-      label: data.Name
-  }));
+        value: data.id,
+        label: data.Name
+    }));
 
-  function handlleraseUnitBDropDown(e) {
-    setBaseUnit_dropdown_Select(e)
-  }
+    function BaseUnit_DropDown_handller(e) {
+        setBaseUnit_dropdown_Select(e)
+    }
+    const CategoryType_DropdownOptions = CategoryType.map((data) => ({
+        value: data.id,
+        label: data.Name
+    }));
+
+    function CategoryType_DropDown_handller(e) {
+        setCategoryType_dropdown_Select(e)
+    }
+    const Category_DropdownOptions = Category.map((data) => ({
+        value: data.id,
+        label: data.Name
+    }));
+
+    function Category_DropDown_handller(e) {
+        setCategory_dropdown_Select(e)
+    }
+    const SubCategory_DropdownOptions = SubCategory.map((data) => ({
+        value: data.id,
+        label: data.Name
+    }));
+
+    function SubCategory_DropDown_handller(e) {
+        setsubCategory_dropdown_Select(e)
+    }
+    const DivisionType_DropdownOptions = DivisionType.map((data) => ({
+        value: data.id,
+        label: data.Name
+    }));
+
+    function DivisionType_DropDown_handller(e) {
+        setDivisionType_dropdown_Select(e)
+    }
     return (
         <React.Fragment>
             <div className="page-content">
@@ -583,6 +630,38 @@ const ItemsMaster = () => {
                                                     <span className="d-none d-sm-block">Tab4</span>
                                                 </NavLink>
                                             </NavItem>
+                                            <NavItem>
+                                                <NavLink
+                                                    style={{ cursor: "pointer" }}
+                                                    className={classnames({
+                                                        active: activeTab1 === "9",
+                                                    })}
+                                                    onClick={() => {
+                                                        toggle1("9")
+                                                    }}
+                                                >
+                                                    <span className="d-block d-sm-none">
+                                                        <i className="fas fa-home"></i>
+                                                    </span>
+                                                    <span className="d-none d-sm-block">Tab5</span>
+                                                </NavLink>
+                                            </NavItem>
+                                            <NavItem>
+                                                <NavLink
+                                                    style={{ cursor: "pointer" }}
+                                                    className={classnames({
+                                                        active: activeTab1 === "10",
+                                                    })}
+                                                    onClick={() => {
+                                                        toggle1("10")
+                                                    }}
+                                                >
+                                                    <span className="d-block d-sm-none">
+                                                        <i className="fas fa-home"></i>
+                                                    </span>
+                                                    <span className="d-none d-sm-block">Tab6</span>
+                                                </NavLink>
+                                            </NavItem>
                                         </Nav>
 
                                         <TabContent activeTab={activeTab1} className="p-3 text-muted">
@@ -600,6 +679,7 @@ const ItemsMaster = () => {
                                                                         validate={{
                                                                             required: { value: true, errorMessage: 'Please Enter Name' },
                                                                         }}
+                                                                        onChange={(e) => { (setName(e.target.value)) }}
                                                                     />
                                                                 </FormGroup>
 
@@ -619,7 +699,7 @@ const ItemsMaster = () => {
                                                                     <Select
                                                                         value={companyList_dropdown_Select}
                                                                         options={Company_DropdownOptions}
-                                                                        onChange={(e) => { handllerCompanyDropDown(e) }}
+                                                                        onChange={(e) => { CompanyList_DropDown_handller(e) }}
                                                                     />
                                                                 </FormGroup>
 
@@ -628,7 +708,7 @@ const ItemsMaster = () => {
                                                                     <Select
                                                                         value={BaseUnit_dropdown_Select}
                                                                         options={BaseUnit_DropdownOptions}
-                                                                    onChange={(e) => { handlleraseUnitBDropDown(e) }}
+                                                                        onChange={(e) => { BaseUnit_DropDown_handller(e) }}
                                                                     />
                                                                 </FormGroup>
 
@@ -679,15 +759,17 @@ const ItemsMaster = () => {
                                                     <Card className="text-black">
                                                         <CardBody style={{ backgroundColor: "whitesmoke" }}>
 
-
+                                                            <Row>
+                                                                <h5>Item Name :<Label className="text-primary" >{name}</Label></h5>
+                                                            </Row>
 
                                                             <Row>
                                                                 <FormGroup className=" col col-sm-4 " >
                                                                     <Label htmlFor="validationCustom21">Category Type</Label>
                                                                     <Select
-                                                                        value={""}
-                                                                        options={""}
-                                                                        // onChange={(e) => { handllerCompanyDropDown(e) }}
+                                                                        value={categoryType_dropdown_Select}
+                                                                        options={CategoryType_DropdownOptions}
+                                                                        onChange={(e) => { CategoryType_DropDown_handller(e) }}
                                                                     />
                                                                 </FormGroup>
                                                             </Row>
@@ -695,66 +777,141 @@ const ItemsMaster = () => {
                                                                 <FormGroup className=" col col-sm-4 " >
                                                                     <Label htmlFor="validationCustom21">Category</Label>
                                                                     <Select
-                                                                        value={""}
-                                                                        options={""}
-                                                                    // onChange={(e) => { handllerCompanyGroupID(e) }}
+                                                                        value={category_dropdown_Select}
+                                                                        options={Category_DropdownOptions}
+                                                                        onChange={(e) => { Category_DropDown_handller(e) }}
                                                                     />
                                                                 </FormGroup>
                                                             </Row>
                                                             <Row>
-                                                            <FormGroup className=" col col-sm-4 " >
-                                                                <Label htmlFor="validationCustom21">Sub Category</Label>
-                                                                <Select
-                                                                    value={""}
-                                                                    options={""}
-                                                                    // onChange={(e) => { handllerCompanyDropDown(e) }}
-                                                                />
-                                                            </FormGroup>
-
-
-                                                        </Row>
-                                                    </CardBody>
-                                                </Card>
-                                            </Col>
-
-                                        </TabPane>
-                                        <TabPane tabId="7">
-                                            <Row>
-                                                <Col sm="12">
-                                                    <CardText className="mb-0">
-                                                        Etsy mixtape wayfarers, ethical wes anderson tofu
-                                                        before they sold out mcsweeney's organic lomo retro
-                                                        fanny pack lo-fi farm-to-table readymade. Messenger
-                                                        bag gentrify pitchfork tattooed craft beer, iphone
-                                                        skateboard locavore carles etsy salvia banksy hoodie
-                                                        helvetica. DIY synth PBR banksy irony. Leggings
-                                                        gentrify squid 8-bit cred pitchfork. Williamsburg
-                                                        banh mi whatever gluten-free, carles pitchfork
-                                                        biodiesel fixie etsy retro mlkshk vice blog.
-                                                        Scenester cred you probably haven't heard of them,
-                                                        vinyl craft beer blog stumptown. Pitchfork
-                                                        sustainable tofu synth chambray yr.
-                                                    </CardText>
+                                                                <FormGroup className=" col col-sm-4 " >
+                                                                    <Label htmlFor="validationCustom21">Sub Category</Label>
+                                                                    <Select
+                                                                        value={subCategory_dropdown_Select}
+                                                                        options={SubCategory_DropdownOptions}
+                                                                        onChange={(e) => { SubCategory_DropDown_handller(e) }}
+                                                                    />
+                                                                </FormGroup>
+                                                            </Row>
+                                                        </CardBody>
+                                                    </Card>
                                                 </Col>
-                                            </Row>
-                                        </TabPane>
 
-                                        <TabPane tabId="8">
-                                            <Row>
-                                                <Col sm="12">
-                                                    <CardText className="mb-0">
-                                                        Trust fund seitan letterpress, keytar raw denim
-                                                        keffiyeh etsy art party before they sold out master
-                                                        cleanse gluten-free squid scenester freegan cosby
-                                                        sweater. Fanny pack portland seitan DIY, art party
-                                                        locavore wolf cliche high life echo park Austin.
-                                                        Cred vinyl keffiyeh DIY salvia PBR, banh mi before
-                                                        they sold out farm-to-table VHS viral locavore cosby
-                                                        sweater. Lomo wolf viral, mustache readymade
-                                                        thundercats keffiyeh craft beer marfa ethical. Wolf
-                                                        salvia freegan, sartorial keffiyeh echo park vegan.
-                                                    </CardText>
+                                            </TabPane>
+                                            <TabPane tabId="7">
+                                                <Row>
+                                               
+                                                </Row>
+                                            </TabPane>
+
+                                            <TabPane tabId="8">
+                                                <Row>
+                                                    <Col sm="12">
+                                                        <CardText className="mb-0">
+                                                            Trust fund seitan letterpress, keytar raw denim
+                                                            keffiyeh etsy art party before they sold out master
+                                                            cleanse gluten-free squid scenester freegan cosby
+                                                            sweater. Fanny pack portland seitan DIY, art party
+                                                            locavore wolf cliche high life echo park Austin.
+                                                            Cred vinyl keffiyeh DIY salvia PBR, banh mi before
+                                                            they sold out farm-to-table VHS viral locavore cosby
+                                                            sweater. Lomo wolf viral, mustache readymade
+                                                            thundercats keffiyeh craft beer marfa ethical. Wolf
+                                                            salvia freegan, sartorial keffiyeh echo park vegan.
+                                                        </CardText>
+                                                    </Col>
+                                                </Row>
+                                            </TabPane>
+                                            <TabPane tabId="9">
+                                                <Row>
+                                                <Row>
+                                                <Col md={12}  >
+                                                    <Card className="text-black">
+                                                        <CardBody style={{ backgroundColor: "whitesmoke" }}>
+
+                                                            <Row>
+                                                                <h5>Item Name :<Label className="text-primary" >{name}</Label></h5>
+                                                            </Row>
+
+                                                            <Row>
+                                                                <FormGroup className=" col col-sm-4 " >
+                                                                    <Label htmlFor="validationCustom21">Division Type</Label>
+                                                                    <Select
+                                                                        value={divisionType_dropdown_Select}
+                                                                        options={DivisionType_DropdownOptions}
+                                                                        onChange={(e) => { DivisionType_DropDown_handller(e) }}
+                                                                    />
+                                                                </FormGroup>
+                                                            </Row>
+                                                           
+                                                        </CardBody>
+                                                    </Card>
                                                 </Col>
+                                                </Row>
+                                                </Row>
+                                            </TabPane>
+                                            <TabPane tabId="10">
+                                                <Row>
+                                                    <Col md={12}  >
+                                                        <Card className="text-black">
+                                                            <CardBody style={{ backgroundColor: "whitesmoke" }}>
+                                                            <Row>
+                                                                <h5>Item Name :<Label className="text-primary" >{name}</Label></h5>
+                                                            </Row>
+                                                                <Row>
+                                                                    <FormGroup className="mb-3 col col-sm-4 " >
+                                                                        <Label htmlFor="validationCustom01">MRP</Label>
+                                                                        <AvField name="MRP" value={""} type="text" id='txtName'
+                                                                            placeholder=" Please Enter MRP "
+                                                                            autoComplete="off"
+                                                                            validate={{
+                                                                                required: { value: true, errorMessage: 'Please Enter MRP ' },
+                                                                            }}
+                                                                            onChange={(e) => { (setName(e.target.value)) }}
+                                                                        />
+                                                                    </FormGroup>
+
+                                                                    <FormGroup className="mb-3 col col-sm-4 " >
+                                                                        <Label htmlFor="validationCustom01">GST</Label>
+                                                                        <AvField name="GST" value={""} type="text" id='txtName'
+                                                                            placeholder=" Please Enter GST "
+                                                                            autoComplete="off"
+                                                                            validate={{
+                                                                                required: { value: true, errorMessage: 'Please Enter GST' },
+                                                                            }}
+                                                                        />
+                                                                    </FormGroup>
+                                                                </Row>
+
+                                                                <Row>
+                                                                <FormGroup className="mb-3 col col-sm-4 " >
+                                                                    <Label htmlFor="validationCustom01">HSN</Label>
+                                                                    <AvField name="HSN" value={""} type="text" id='txtName'
+                                                                        placeholder=" Please Enter HSN "
+                                                                        autoComplete="off"
+                                                                        validate={{
+                                                                            required: { value: true, errorMessage: 'Please Enter HSN' },
+                                                                        }}
+                                                                    />
+                                                                </FormGroup>
+
+                                                                <FormGroup className="mb-3 col col-sm-4 " >
+                                                                    <Label htmlFor="validationCustom01">Margin</Label>
+                                                                    <AvField name="Margin" value={""} type="text" id='txtName'
+                                                                        placeholder=" Please Enter Margin "
+                                                                        autoComplete="off"
+                                                                        validate={{
+                                                                            required: { value: true, errorMessage: 'Please Enter Margin' },
+                                                                        }}
+                                                                    />
+                                                                </FormGroup>
+
+                                                            </Row>
+                                                        </CardBody>
+                                                    </Card>
+                                                 
+                                                </Col>
+                           
                                             </Row>
                                         </TabPane>
                                     </TabContent>
