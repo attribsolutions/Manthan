@@ -51,6 +51,8 @@ import PartyTypeList from "../pages/Adminisrator/PartyTypes/PartyTypeList";
 import SelectDivisionPage from "../pages/Authentication/SelectDivisionPage";
 import RoleAccessCopyFunctionality from "../pages/Adminisrator/RoleAccessPages/RoleAccessCopyFunctionality";
 import ProductCategoryTypeMaster from "../pages/Adminisrator/ProductCategoryMaster/ProductCategoryTypeMaster";
+import ProductCategoryTypeList from "../pages/Adminisrator/ProductCategoryMaster/ProductCategoryTypeList";
+
 import ProductTypes from "../pages/Adminisrator/ProductType/ProductTypes";
 
 
@@ -147,7 +149,11 @@ const userRoutes = [
   { path: "/PartyTypeList", component: PartyTypeList },
 
   { path: "/ProductCategoryMaster", component: ProductCategoryTypeMaster },
+  { path: "/ProductCategoryMaster", component: ProductCategoryTypeList },
+
+
   { path: "/ProductType", component: ProductTypes },
+  
   
   { path: "/partyUIDemo", component: PartyUIDemo },
   { path: "/demoUi3", component: DemoUI3 },
