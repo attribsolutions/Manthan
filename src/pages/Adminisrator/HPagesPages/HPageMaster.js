@@ -26,12 +26,13 @@ import {
   saveHPagesSuccess,
   updateHPages,
 } from "../../../store/Administrator/HPagesRedux/actions";
-import { fetchModelsList } from "../../../store/Administrator/ModulesRedux/actions";
+import { fetchModelsList, PostModelsSubmitSuccess } from "../../../store/Administrator/ModulesRedux/actions";
 import { MetaTags } from "react-meta-tags";
 import { AlertState } from "../../../store/actions";
 import { BreadcrumbShow } from "../../../store/Utilites/Breadcrumb/actions";
 import { useHistory } from "react-router-dom";
 import { CommonGetRoleAccessFunction } from "../../../components/Common/CommonGetRoleAccessFunction";
+import Modules from "../ModulesPages/Modules";
 
 const HPageMaster = (props) => {
 
@@ -58,14 +59,14 @@ const HPageMaster = (props) => {
     useState("");
 
   //Access redux store Data
-  const { ModuleData, PostAPIResponse, PageList, PageAccess, RoleAccessModifiedinSingleArray } = useSelector(
+  const { ModuleData, PostAPIResponse, PageList, PageAccess, RoleAccessModifiedinSingleArray, modulePostAPIResponse } = useSelector(
     (state) => ({
       ModuleData: state.Modules.modulesList,
       PostAPIResponse: state.H_Pages.saveMessage,
       PageList: state.H_Pages.PageList,
       PageAccess: state.H_Pages.PageAccess,
       RoleAccessModifiedinSingleArray: state.Login.RoleAccessUpdateData,
-
+      modulePostAPIResponse: state.Modules.modulesSubmitSuccesss
     })
   );
   // userAccess useEffect
@@ -167,6 +168,32 @@ const HPageMaster = (props) => {
       );
     }
   }, [PostAPIResponse]);
+
+  useEffect(() => {
+    if ((modulePostAPIResponse.Status === true) && (modulePostAPIResponse.StatusCode === 200)) {
+      dispatch(PostModelsSubmitSuccess({ Status: false }))
+      dispatch(AlertState({
+        Type: 1,
+        Status: true,
+        Message: modulePostAPIResponse.Message,
+      }))
+      tog_center()
+    } else if (modulePostAPIResponse.Status === true) {
+      dispatch(PostModelsSubmitSuccess({ Status: false }))
+      dispatch(AlertState({
+        Type: 4,
+        Status: true,
+        Message: JSON.stringify(modulePostAPIResponse.Message),
+        RedirectPath: false,
+        AfterResponseAction: false
+      }));
+    }
+
+  }, [modulePostAPIResponse])
+
+
+
+
 
   const PageAccessValues = PageAccess.map((Data) => ({
     value: Data.id,
@@ -410,7 +437,10 @@ const HPageMaster = (props) => {
 
   function tog_center() {
     setmodal_center(!modal_center)
-}
+  }
+  function DropDownAddHandler() {
+    tog_center()
+  }
 
   function TableBodyFunction() {
     return tablePageAccessDataState.map((TableValue) => {
@@ -573,7 +603,7 @@ const HPageMaster = (props) => {
                         </Col>
 
                         <Col md="1" className=" mt-3">
-                          <Button className=" mt-3 btn btn-sm">add</Button>
+                          <Button className=" mt-3 btn btn-sm" type="button" onClick={() => { DropDownAddHandler() }}>add</Button>
                         </Col>
 
                         <Col md="3">
@@ -853,7 +883,7 @@ const HPageMaster = (props) => {
               }}
               size="xl"
             >
-              <HPageMaster state={"editData.Data"} />
+              <Modules pageMode={"dropdownAdd"} />
             </Modal>
           </Container>
         </div>
