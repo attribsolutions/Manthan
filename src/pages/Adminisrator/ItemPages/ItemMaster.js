@@ -456,22 +456,33 @@ import BreadcrumbDemo from "../../../components/Common/CmponentRelatedCommonFile
 import { AvField, AvForm, AvInput } from "availity-reactstrap-validation"
 import Select from "react-select";
 import { fetchCompanyList } from "../../../store/Administrator/CompanyRedux/actions"
-import { getBaseUnit_ForDropDown } from "../../../store/Administrator/ItemsRedux/action";
+import { getBaseUnit_ForDropDown, get_CategoryTypes_ForDropDown, get_Category_ForDropDown, get_SubCategory_ForDropDown } from "../../../store/Administrator/ItemsRedux/action";
 
 const ItemsMaster = () => {
     const dispatch = useDispatch();
     const [activeTab1, setactiveTab1] = useState("5")
     const [companyList_dropdown_Select, setCompanyList_dropdown_Select] = useState("");
     const [BaseUnit_dropdown_Select, setBaseUnit_dropdown_Select] = useState("");
+    const [categoryType_dropdown_Select, setCategoryType_dropdown_Select] = useState("");
+    const [category_dropdown_Select, setCategory_dropdown_Select] = useState("");
+    const [subCategory_dropdown_Select, setsubCategory_dropdown_Select] = useState("");
+    const [name, setName] = useState("");
 
-    const { companyList ,BaseUnit} = useSelector((state) => ({
+
+    const { companyList, BaseUnit, CategoryType, Category, SubCategory } = useSelector((state) => ({
         companyList: state.Company.companyList,
         BaseUnit: state.ItemMastersReducer.BaseUnit,
+        CategoryType: state.ItemMastersReducer.CategoryType,
+        Category: state.ItemMastersReducer.Category,
+        SubCategory: state.ItemMastersReducer.SubCategory,
     }));
 
     useEffect(() => {
         dispatch(fetchCompanyList());
         dispatch(getBaseUnit_ForDropDown());
+        dispatch(get_CategoryTypes_ForDropDown());
+        dispatch(get_Category_ForDropDown());
+        dispatch(get_SubCategory_ForDropDown());
     }, [dispatch]);
 
     const toggle1 = tab => {
@@ -485,18 +496,43 @@ const ItemsMaster = () => {
         label: data.Name
     }));
 
-    function handllerCompanyDropDown(e) {
+    function CompanyList_DropDown_handller(e) {
         setCompanyList_dropdown_Select(e)
     }
 
     const BaseUnit_DropdownOptions = BaseUnit.map((data) => ({
-      value: data.id,
-      label: data.Name
-  }));
+        value: data.id,
+        label: data.Name
+    }));
 
-  function handlleraseUnitBDropDown(e) {
-    setBaseUnit_dropdown_Select(e)
-  }
+    function BaseUnit_DropDown_handller(e) {
+        setBaseUnit_dropdown_Select(e)
+    }
+    const CategoryType_DropdownOptions = CategoryType.map((data) => ({
+        value: data.id,
+        label: data.Name
+    }));
+
+    function CategoryType_DropDown_handller(e) {
+        setCategoryType_dropdown_Select(e)
+    }
+    const Category_DropdownOptions = Category.map((data) => ({
+        value: data.id,
+        label: data.Name
+    }));
+
+    function Category_DropDown_handller(e) {
+        setCategory_dropdown_Select(e)
+    }
+    const SubCategory_DropdownOptions = SubCategory.map((data) => ({
+        value: data.id,
+        label: data.Name
+    }));
+
+    function SubCategory_DropDown_handller(e) {
+        setsubCategory_dropdown_Select(e)
+    }
+
     return (
         <React.Fragment>
             <div className="page-content">
@@ -600,6 +636,7 @@ const ItemsMaster = () => {
                                                                         validate={{
                                                                             required: { value: true, errorMessage: 'Please Enter Name' },
                                                                         }}
+                                                                        onChange={(e) => { (setName(e.target.value)) }}
                                                                     />
                                                                 </FormGroup>
 
@@ -619,7 +656,7 @@ const ItemsMaster = () => {
                                                                     <Select
                                                                         value={companyList_dropdown_Select}
                                                                         options={Company_DropdownOptions}
-                                                                        onChange={(e) => { handllerCompanyDropDown(e) }}
+                                                                        onChange={(e) => { CompanyList_DropDown_handller(e) }}
                                                                     />
                                                                 </FormGroup>
 
@@ -628,7 +665,7 @@ const ItemsMaster = () => {
                                                                     <Select
                                                                         value={BaseUnit_dropdown_Select}
                                                                         options={BaseUnit_DropdownOptions}
-                                                                    onChange={(e) => { handlleraseUnitBDropDown(e) }}
+                                                                        onChange={(e) => { BaseUnit_DropDown_handller(e) }}
                                                                     />
                                                                 </FormGroup>
 
@@ -679,15 +716,19 @@ const ItemsMaster = () => {
                                                     <Card className="text-black">
                                                         <CardBody style={{ backgroundColor: "whitesmoke" }}>
 
-
+                                                            <Row>
+                                                                
+                                                                    <Label >{name}</Label>
+                                                                    
+                                                            </Row>
 
                                                             <Row>
                                                                 <FormGroup className=" col col-sm-4 " >
                                                                     <Label htmlFor="validationCustom21">Category Type</Label>
                                                                     <Select
-                                                                        value={""}
-                                                                        options={""}
-                                                                        // onChange={(e) => { handllerCompanyDropDown(e) }}
+                                                                        value={categoryType_dropdown_Select}
+                                                                        options={CategoryType_DropdownOptions}
+                                                                        onChange={(e) => { CategoryType_DropDown_handller(e) }}
                                                                     />
                                                                 </FormGroup>
                                                             </Row>
@@ -695,78 +736,78 @@ const ItemsMaster = () => {
                                                                 <FormGroup className=" col col-sm-4 " >
                                                                     <Label htmlFor="validationCustom21">Category</Label>
                                                                     <Select
-                                                                        value={""}
-                                                                        options={""}
-                                                                    // onChange={(e) => { handllerCompanyGroupID(e) }}
+                                                                        value={category_dropdown_Select}
+                                                                        options={Category_DropdownOptions}
+                                                                        onChange={(e) => { Category_DropDown_handller(e) }}
                                                                     />
                                                                 </FormGroup>
                                                             </Row>
                                                             <Row>
-                                                            <FormGroup className=" col col-sm-4 " >
-                                                                <Label htmlFor="validationCustom21">Sub Category</Label>
-                                                                <Select
-                                                                    value={""}
-                                                                    options={""}
-                                                                    // onChange={(e) => { handllerCompanyDropDown(e) }}
-                                                                />
-                                                            </FormGroup>
+                                                                <FormGroup className=" col col-sm-4 " >
+                                                                    <Label htmlFor="validationCustom21">Sub Category</Label>
+                                                                    <Select
+                                                                        value={subCategory_dropdown_Select}
+                                                                        options={SubCategory_DropdownOptions}
+                                                                        onChange={(e) => { SubCategory_DropDown_handller(e) }}
+                                                                    />
+                                                                </FormGroup>
 
 
-                                                        </Row>
-                                                    </CardBody>
-                                                </Card>
-                                            </Col>
-
-                                        </TabPane>
-                                        <TabPane tabId="7">
-                                            <Row>
-                                                <Col sm="12">
-                                                    <CardText className="mb-0">
-                                                        Etsy mixtape wayfarers, ethical wes anderson tofu
-                                                        before they sold out mcsweeney's organic lomo retro
-                                                        fanny pack lo-fi farm-to-table readymade. Messenger
-                                                        bag gentrify pitchfork tattooed craft beer, iphone
-                                                        skateboard locavore carles etsy salvia banksy hoodie
-                                                        helvetica. DIY synth PBR banksy irony. Leggings
-                                                        gentrify squid 8-bit cred pitchfork. Williamsburg
-                                                        banh mi whatever gluten-free, carles pitchfork
-                                                        biodiesel fixie etsy retro mlkshk vice blog.
-                                                        Scenester cred you probably haven't heard of them,
-                                                        vinyl craft beer blog stumptown. Pitchfork
-                                                        sustainable tofu synth chambray yr.
-                                                    </CardText>
+                                                            </Row>
+                                                        </CardBody>
+                                                    </Card>
                                                 </Col>
-                                            </Row>
-                                        </TabPane>
 
-                                        <TabPane tabId="8">
-                                            <Row>
-                                                <Col sm="12">
-                                                    <CardText className="mb-0">
-                                                        Trust fund seitan letterpress, keytar raw denim
-                                                        keffiyeh etsy art party before they sold out master
-                                                        cleanse gluten-free squid scenester freegan cosby
-                                                        sweater. Fanny pack portland seitan DIY, art party
-                                                        locavore wolf cliche high life echo park Austin.
-                                                        Cred vinyl keffiyeh DIY salvia PBR, banh mi before
-                                                        they sold out farm-to-table VHS viral locavore cosby
-                                                        sweater. Lomo wolf viral, mustache readymade
-                                                        thundercats keffiyeh craft beer marfa ethical. Wolf
-                                                        salvia freegan, sartorial keffiyeh echo park vegan.
-                                                    </CardText>
-                                                </Col>
-                                            </Row>
-                                        </TabPane>
-                                    </TabContent>
-                                </CardBody>
-                            </Card>
-                        </Col>
+                                            </TabPane>
+                                            <TabPane tabId="7">
+                                                <Row>
+                                                    <Col sm="12">
+                                                        <CardText className="mb-0">
+                                                            Etsy mixtape wayfarers, ethical wes anderson tofu
+                                                            before they sold out mcsweeney's organic lomo retro
+                                                            fanny pack lo-fi farm-to-table readymade. Messenger
+                                                            bag gentrify pitchfork tattooed craft beer, iphone
+                                                            skateboard locavore carles etsy salvia banksy hoodie
+                                                            helvetica. DIY synth PBR banksy irony. Leggings
+                                                            gentrify squid 8-bit cred pitchfork. Williamsburg
+                                                            banh mi whatever gluten-free, carles pitchfork
+                                                            biodiesel fixie etsy retro mlkshk vice blog.
+                                                            Scenester cred you probably haven't heard of them,
+                                                            vinyl craft beer blog stumptown. Pitchfork
+                                                            sustainable tofu synth chambray yr.
+                                                        </CardText>
+                                                    </Col>
+                                                </Row>
+                                            </TabPane>
 
-                    </Row>
+                                            <TabPane tabId="8">
+                                                <Row>
+                                                    <Col sm="12">
+                                                        <CardText className="mb-0">
+                                                            Trust fund seitan letterpress, keytar raw denim
+                                                            keffiyeh etsy art party before they sold out master
+                                                            cleanse gluten-free squid scenester freegan cosby
+                                                            sweater. Fanny pack portland seitan DIY, art party
+                                                            locavore wolf cliche high life echo park Austin.
+                                                            Cred vinyl keffiyeh DIY salvia PBR, banh mi before
+                                                            they sold out farm-to-table VHS viral locavore cosby
+                                                            sweater. Lomo wolf viral, mustache readymade
+                                                            thundercats keffiyeh craft beer marfa ethical. Wolf
+                                                            salvia freegan, sartorial keffiyeh echo park vegan.
+                                                        </CardText>
+                                                    </Col>
+                                                </Row>
+                                            </TabPane>
+                                        </TabContent>
+                                    </CardBody>
+                                </Card>
+                            </Col>
 
-                </AvForm>
-            </Container>
-        </div>
+                        </Row>
+
+                    </AvForm>
+                </Container>
+            </div>
         </React.Fragment >
     );
 }
