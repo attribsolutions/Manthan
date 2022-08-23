@@ -619,6 +619,38 @@ const ItemsMaster = () => {
                                                     <span className="d-none d-sm-block">Tab4</span>
                                                 </NavLink>
                                             </NavItem>
+                                            <NavItem>
+                                                <NavLink
+                                                    style={{ cursor: "pointer" }}
+                                                    className={classnames({
+                                                        active: activeTab1 === "9",
+                                                    })}
+                                                    onClick={() => {
+                                                        toggle1("9")
+                                                    }}
+                                                >
+                                                    <span className="d-block d-sm-none">
+                                                        <i className="fas fa-home"></i>
+                                                    </span>
+                                                    <span className="d-none d-sm-block">Tab5</span>
+                                                </NavLink>
+                                            </NavItem>
+                                            <NavItem>
+                                                <NavLink
+                                                    style={{ cursor: "pointer" }}
+                                                    className={classnames({
+                                                        active: activeTab1 === "10",
+                                                    })}
+                                                    onClick={() => {
+                                                        toggle1("10")
+                                                    }}
+                                                >
+                                                    <span className="d-block d-sm-none">
+                                                        <i className="fas fa-home"></i>
+                                                    </span>
+                                                    <span className="d-none d-sm-block">Tab6</span>
+                                                </NavLink>
+                                            </NavItem>
                                         </Nav>
 
                                         <TabContent activeTab={activeTab1} className="p-3 text-muted">
@@ -717,9 +749,7 @@ const ItemsMaster = () => {
                                                         <CardBody style={{ backgroundColor: "whitesmoke" }}>
 
                                                             <Row>
-                                                                
-                                                                    {/* <Label className="text-primary fontsize-30" >{name}</Label> */}
-                                                                    <h4><span className="text-primary">{name}</span></h4>
+                                                                <h5>Item Name :<Label className="text-primary" >{name}</Label></h5>
                                                             </Row>
 
                                                             <Row>
@@ -751,8 +781,6 @@ const ItemsMaster = () => {
                                                                         onChange={(e) => { SubCategory_DropDown_handller(e) }}
                                                                     />
                                                                 </FormGroup>
-
-
                                                             </Row>
                                                         </CardBody>
                                                     </Card>
@@ -798,16 +826,98 @@ const ItemsMaster = () => {
                                                     </Col>
                                                 </Row>
                                             </TabPane>
-                                        </TabContent>
-                                    </CardBody>
-                                </Card>
-                            </Col>
+                                            <TabPane tabId="9">
+                                                <Row>
+                                                    <Col sm="12">
+                                                        <CardText className="mb-0">
+                                                            Etsy mixtape wayfarers, ethical wes anderson tofu
+                                                            before they sold out mcsweeney's organic lomo retro
+                                                            fanny pack lo-fi farm-to-table readymade. Messenger
+                                                            bag gentrify pitchfork tattooed craft beer, iphone
+                                                            skateboard locavore carles etsy salvia banksy hoodie
+                                                            helvetica. DIY synth PBR banksy irony. Leggings
+                                                            gentrify squid 8-bit cred pitchfork. Williamsburg
+                                                            banh mi whatever gluten-free, carles pitchfork
+                                                            biodiesel fixie etsy retro mlkshk vice blog.
+                                                            Scenester cred you probably haven't heard of them,
+                                                            vinyl craft beer blog stumptown. Pitchfork
+                                                            sustainable tofu synth chambray yr.
+                                                        </CardText>
+                                                    </Col>
+                                                </Row>
+                                            </TabPane>
+                                            <TabPane tabId="10">
+                                                <Row>
+                                                    <Col md={12}  >
+                                                        <Card className="text-black">
+                                                            <CardBody style={{ backgroundColor: "whitesmoke" }}>
+                                                            <Row>
+                                                                <h5>Item Name :<Label className="text-primary" >{name}</Label></h5>
+                                                            </Row>
+                                                                <Row>
+                                                                    <FormGroup className="mb-3 col col-sm-4 " >
+                                                                        <Label htmlFor="validationCustom01">MRP</Label>
+                                                                        <AvField name="MRP" value={""} type="text" id='txtName'
+                                                                            placeholder=" Please Enter MRP "
+                                                                            autoComplete="off"
+                                                                            validate={{
+                                                                                required: { value: true, errorMessage: 'Please Enter MRP ' },
+                                                                            }}
+                                                                            onChange={(e) => { (setName(e.target.value)) }}
+                                                                        />
+                                                                    </FormGroup>
 
-                        </Row>
+                                                                    <FormGroup className="mb-3 col col-sm-4 " >
+                                                                        <Label htmlFor="validationCustom01">GST</Label>
+                                                                        <AvField name="GST" value={""} type="text" id='txtName'
+                                                                            placeholder=" Please Enter GST "
+                                                                            autoComplete="off"
+                                                                            validate={{
+                                                                                required: { value: true, errorMessage: 'Please Enter GST' },
+                                                                            }}
+                                                                        />
+                                                                    </FormGroup>
+                                                                </Row>
 
-                    </AvForm>
-                </Container>
-            </div>
+                                                                <Row>
+                                                                <FormGroup className="mb-3 col col-sm-4 " >
+                                                                    <Label htmlFor="validationCustom01">HSN</Label>
+                                                                    <AvField name="HSN" value={""} type="text" id='txtName'
+                                                                        placeholder=" Please Enter HSN "
+                                                                        autoComplete="off"
+                                                                        validate={{
+                                                                            required: { value: true, errorMessage: 'Please Enter HSN' },
+                                                                        }}
+                                                                    />
+                                                                </FormGroup>
+
+                                                                <FormGroup className="mb-3 col col-sm-4 " >
+                                                                    <Label htmlFor="validationCustom01">Margin</Label>
+                                                                    <AvField name="Margin" value={""} type="text" id='txtName'
+                                                                        placeholder=" Please Enter Margin "
+                                                                        autoComplete="off"
+                                                                        validate={{
+                                                                            required: { value: true, errorMessage: 'Please Enter Margin' },
+                                                                        }}
+                                                                    />
+                                                                </FormGroup>
+
+                                                            </Row>
+                                                        </CardBody>
+                                                    </Card>
+                                                </Col>
+                                            </Row>
+                                        </TabPane>
+                                    </TabContent>
+                                </CardBody>
+                            </Card>
+                        </Col>
+
+                    </Row>
+
+                </AvForm>
+            </Container>
+        </div>
         </React.Fragment >
     );
 }
