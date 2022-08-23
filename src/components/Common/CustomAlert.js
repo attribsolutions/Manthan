@@ -6,9 +6,6 @@ import { AlertShow } from '../../store/Utilites/CustomAlertRedux/actions';
 
 const CustomAlert = () => {
 
-
-
-   const  [isOpen,setIsOpen]=useState(true)
   const history = useHistory();
   const dispatch = useDispatch();
 
@@ -72,20 +69,6 @@ const CustomAlert = () => {
 
   return (
     <React.Fragment>
-      <Modal
-       isOpen={isOpen}
-       toggle={() => {setIsOpen(!isOpen) }}
-       >
-<div>
-  hdflkhvhVlhvhvhK
-  <br></br>
-  <br></br>
-  <br></br>
-  <br></br>
-  <br></br>
-</div>
-
-      </Modal>
       <Modal
         isOpen={AlertData.Status}
         toggle={() => { tog_standard() }}
