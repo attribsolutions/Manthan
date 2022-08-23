@@ -2,8 +2,11 @@ import {
     DELETE_ITEM_ID_SUCCESS,
     EDIT_ITEM_ID_SUCCESS,
     GET_BASEUNIT_FOR_DROPDOWN_SUCCESS,
+    GET_CATEGORYTYPE_FOR_DROPDOWN_SUCCESS,
+    GET_CATEGORY_FOR_DROPDOWN_SUCCESS,
     GET_ITEM_GROUP_FOR_DROPDOWN_SUCCESS,
     GET_ITEM_LIST_API_SUCCESS,
+    GET_SUBCATEGORY_FOR_DROPDOWN_SUCCESS,
     POST_ITEM_DATA_SUCCESS,
     UPDATE_ITEM_ID_SUCCESS
 } from "./actionType";
@@ -16,8 +19,12 @@ const INIT_STATE = {
     deleteMessage: { Status: false },
     editData: { Status: false },
     updateMessage: { Status: false },
-    ItemGroupList:[],
-    BaseUnit:[]
+    ItemGroupList: [],
+    BaseUnit: [],
+    CategoryType:[],
+    Category:[],
+    SubCategory:[],
+
 };
 
 const ItemMastersReducer = (state = INIT_STATE, action) => {
@@ -29,12 +36,12 @@ const ItemMastersReducer = (state = INIT_STATE, action) => {
                 pages: action.payload,
             }
 
-            case GET_BASEUNIT_FOR_DROPDOWN_SUCCESS:
-                return {
-                    ...state,
-                    BaseUnit: action.payload,
-                }
-    
+        case GET_BASEUNIT_FOR_DROPDOWN_SUCCESS:
+            return {
+                ...state,
+                BaseUnit: action.payload,
+            }
+
         // get group itms
         case GET_ITEM_GROUP_FOR_DROPDOWN_SUCCESS:
             return {
@@ -68,6 +75,24 @@ const ItemMastersReducer = (state = INIT_STATE, action) => {
                 ...state,
                 updateMessage: action.payload,
             };
+
+        case GET_CATEGORYTYPE_FOR_DROPDOWN_SUCCESS:
+            return {
+                ...state,
+                CategoryType: action.payload,
+            }
+
+        case GET_CATEGORY_FOR_DROPDOWN_SUCCESS:
+            return {
+                ...state,
+                Category: action.payload,
+            }
+
+        case GET_SUBCATEGORY_FOR_DROPDOWN_SUCCESS:
+            return {
+                ...state,
+                SubCategory: action.payload,
+            }
 
         default:
             return state;
