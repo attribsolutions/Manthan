@@ -35,7 +35,7 @@ const Modules = (props) => {
     const history = useHistory()
 
     let editDataGatingFromList = props.state;
-    let CheckPageMode = props.IsComponentMode;
+    let propsPageMode = props.pageMode;
 
     const [EditData, setEditData] = useState([]);
     const [pageMode, setPageMode] = useState("save");
@@ -45,24 +45,53 @@ const Modules = (props) => {
     const { PostAPIResponse, RoleAccessModifiedinSingleArray } = useSelector((state) => ({
         PostAPIResponse: state.Modules.modulesSubmitSuccesss,
         RoleAccessModifiedinSingleArray: state.Login.RoleAccessUpdateData,
+
     }));
 
     // userAccess useEffect
     useEffect(() => {
+
+        // if ((editDataGatingFromList === undefined)) {
+        //     const userAcc = CommonGetRoleAccessFunction(history)
+            
+        //     if (!(userAcc === undefined)) {
+        //         setUserPageAccessState(userAcc)
+        //     }
+        // } else {
+        //     let RelatedPageID = history.location.state.UserDetails.RelatedPageID
+        //     const userfound = RoleAccessModifiedinSingleArray.find((element) => {
+        //         return element.id === RelatedPageID
+        //     })
+        //     setUserPageAccessState(userfound)
+        // }
+
+///////////////
+
+        let userAcc = undefined
         if ((editDataGatingFromList === undefined)) {
-            const userAcc = CommonGetRoleAccessFunction(history)
-            if (!(userAcc === undefined)) {
-                setUserPageAccessState(userAcc)
-            }
-        } else {
-            let RelatedPageID = history.location.state.UserDetails.RelatedPageID
-            const userfound = RoleAccessModifiedinSingleArray.find((element) => {
-                return element.id === RelatedPageID
-            })
-            setUserPageAccessState(userfound)
+    
+          let locationPath = history.location.pathname
+          userAcc = RoleAccessModifiedinSingleArray.find((inx) => {
+            return (`/${inx.ActualPagePath}` === locationPath)
+          })
+        }
+        else if (!(editDataGatingFromList === undefined)) {
+          let relatatedPage = props.relatatedPage
+          userAcc = RoleAccessModifiedinSingleArray.find((inx) => {
+            return (`/${inx.ActualPagePath}` === relatatedPage)
+          })
+    
+        }
+        if (!(userAcc === undefined)) {
+          setUserPageAccessState(userAcc)
         }
 
-    }, [history])
+
+
+
+
+
+    }, [RoleAccessModifiedinSingleArray])
 
     // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
     useEffect(() => {
@@ -75,21 +104,21 @@ const Modules = (props) => {
             setPageMode("edit");
             dispatch(editModuleIDSuccess({ Status: false }))
             dispatch(BreadcrumbShow(editDataGatingFromList.Name))
-            return
+           
         }
-        if (!(CheckPageMode === undefined)) {
-            setPageMode("other")
-            return
+        else if (!(propsPageMode === undefined)) {
+            setPageMode(propsPageMode)
+            
         }
-    }, [editDataGatingFromList, CheckPageMode])
+    }, [editDataGatingFromList, propsPageMode])
 
     // This UseEffect clear Form Data and when modules Save Successfully.
     useEffect(() => {
 
-        if ((PostAPIResponse.Status === true) && (PostAPIResponse.StatusCode === 200)) {
+        if ((PostAPIResponse.Status === true) && (PostAPIResponse.StatusCode === 200)&&!(pageMode==="dropdownAdd")) {
             dispatch(PostModelsSubmitSuccess({ Status: false }))
             formRef.current.reset();
-            if (pageMode === "other") {
+            if (pageMode === "dropdownAdd") {
                 dispatch(AlertState({
                     Type: 1,
                     Status: true,
@@ -105,7 +134,7 @@ const Modules = (props) => {
 
                 }))
             }
-        } else if (PostAPIResponse.Status === true) {
+        } else if ((PostAPIResponse.Status === true) && !(pageMode==="dropdownAdd")) {
             dispatch(PostModelsSubmitSuccess({ Status: false }))
             dispatch(AlertState({
                 Type: 4,
@@ -140,7 +169,7 @@ const Modules = (props) => {
 
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
     let IsEditMode_Css = ''
-    if (pageMode === "edit" || pageMode == "other") { IsEditMode_Css = "-5.5%" };
+    if (pageMode === "edit" || pageMode == "dropdownAdd") { IsEditMode_Css = "-5.5%" };
 
     if (!(userPageAccessState === '')) {
         return (

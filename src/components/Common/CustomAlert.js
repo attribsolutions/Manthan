@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { Modal, UncontrolledAlert, } from "reactstrap";
@@ -72,8 +72,9 @@ const CustomAlert = () => {
       <Modal
         isOpen={AlertData.Status}
         toggle={() => { tog_standard() }}
-        scrollable={true}
-      // centered={true} // size={"sm"}
+        // scrollable={true}
+      // centered={true} 
+      // size={"sm"}
       >
         {(AlertData.Type === 1) &&
           <UncontrolledAlert color="success" className="px-6 mb-0 text-center">
