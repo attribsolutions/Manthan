@@ -8,18 +8,24 @@ import paginationFactory, {
 import ToolkitProvider, { Search } from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 import { useSelector, useDispatch } from "react-redux";
-import { AlertState } from "../../../store/Utilites/CostumeAlert/actions";
 import "../../../assets/scss/CustomeTable/datatables.scss";
+import CategoryTypeMaster from "./CategoryTypeMaster";
 
 import { MetaTags } from "react-meta-tags";
 import { useHistory } from "react-router-dom";
 import { CommonGetRoleAccessFunction } from "../../../components/Common/CommonGetRoleAccessFunction";
 // import { deleteProductCategoryTypeIDSuccess, delete_ProductCategoryType_ID,  updateProductCategoryTypeIDSuccess } from "../../../store/Administrator/PartyTypeRedux/action";
-import PartyType from "./PartyType";
-import ProductCategoryTypeMaster from "./ProductCategoryTypeMaster";
-import { deleteProductCategoryTypeIDSuccess, editProductCategoryTypeID, getProductCategoryTypelist } from "../../../store/Administrator/ProductCategoryTypeMasterRedux/action";
 
-const ProductCategoryTypeList = (props) => {
+import {
+  deleteCategoryTypeIDSuccess,
+  delete_CategoryType_ID,
+  editCategoryTypeID,
+  getCategoryTypelist,
+  updateCategoryTypeIDSuccess
+} from "../../../store/actions";
+import { AlertState } from "../../../store/actions";
+
+const CategoryTypeList = (props) => {
 
   const dispatch = useDispatch();
   const history = useHistory()
@@ -30,10 +36,10 @@ const ProductCategoryTypeList = (props) => {
   // get Access redux data
   const { TableListData, editData, updateMessage, deleteMessage } = useSelector(
     (state) => ({
-      TableListData: state.ProductCategoryTypeReducer.ListData,
-      editData: state.ProductCategoryTypeReducer.editData,
-      updateMessage: state.ProductCategoryTypeReducer.updateMessage,
-      deleteMessage: state.ProductCategoryTypeReducer.deleteMessage,
+      TableListData: state.CategoryTypeMasterReducer.categoryTypeListData,
+      editData: state.CategoryTypeReducer.editData,
+      updateMessage: state.CategoryTypeReducer.updateMessage,
+      deleteMessage: state.CategoryTypeReducer.deleteMessage,
     })
   );
 
@@ -46,25 +52,25 @@ const ProductCategoryTypeList = (props) => {
 
   //  This UseEffect => Featch Modules List data  First Rendering
   useEffect(() => {
-    dispatch(getProductCategoryTypelist());
+    dispatch(getCategoryTypelist());
   }, []);
 
   // This UseEffect => UpadateModal Success/Unsucces  Show and Hide Control Alert_modal
   useEffect(() => {
 
     if (updateMessage.Status === true && updateMessage.StatusCode === 200) {
-      dispatch(updateProductCategoryTypeIDSuccess({ Status: false }));
+      dispatch(updateCategoryTypeIDSuccess({ Status: false }));
       dispatch(
         AlertState({
           Type: 1,
           Status: true,
           Message: updateMessage.Message,
-          AfterResponseAction: getProductCategoryTypelist,
+          AfterResponseAction: getCategoryTypelist,
         })
       );
       tog_center();
     } else if (updateMessage.Status === true) {
-      dispatch(updateProductCategoryTypeIDSuccess({ Status: false }));
+      dispatch(updateCategoryTypeIDSuccess({ Status: false }));
       dispatch(
         AlertState({
           Type: 3,
@@ -77,17 +83,17 @@ const ProductCategoryTypeList = (props) => {
 
   useEffect(() => {
     if (deleteMessage.Status === true && deleteMessage.StatusCode === 200) {
-      dispatch(deleteProductCategoryTypeIDSuccess({ Status: false }));
+      dispatch(deleteCategoryTypeIDSuccess({ Status: false }));
       dispatch(
         AlertState({
           Type: 1,
           Status: true,
           Message: deleteMessage.Message,
-          AfterResponseAction: getProductCategoryTypelist,
+          AfterResponseAction: getCategoryTypelist,
         })
       );
     } else if (deleteMessage.Status === true) {
-      dispatch(deleteProductCategoryTypeIDSuccess({ Status: false }));
+      dispatch(deleteCategoryTypeIDSuccess({ Status: false }));
       dispatch(
         AlertState({
           Type: 3,
@@ -115,9 +121,9 @@ const ProductCategoryTypeList = (props) => {
       AlertState({
         Type: 5,
         Status: true,
-        Message: `Are you sure you want to delete this ProductCategoryType Type : "${name}"`,
+        Message: `Are you sure you want to delete this CategoryType Type : "${name}"`,
         RedirectPath: false,
-        PermissionAction: delete_ProductCategoryType_ID,
+        PermissionAction: delete_CategoryType_ID,
         ID: id,
       })
     );
@@ -125,7 +131,7 @@ const ProductCategoryTypeList = (props) => {
 
   // edit Buutton Handller
   const EditPageHandler = (id) => {
-    dispatch(editProductCategoryTypeID(id));
+    dispatch(editCategoryTypeID(id));
   };
 
   const defaultSorted = [
@@ -147,13 +153,8 @@ const ProductCategoryTypeList = (props) => {
       dataField: "Name",
       sort: true,
     },
-    
-    {
-      text: "Category Type Name ",
-      dataField: "CategoryTypeName",
-      sort: true,
-    },
-   
+
+
     {
       text: "Action",
       hidden: (
@@ -163,7 +164,7 @@ const ProductCategoryTypeList = (props) => {
 
       formatter: (cellContent, Role) => (
         <div className="d-flex gap-3" style={{ display: 'flex', justifyContent: 'center' }} >
-            {((userPageAccessState.RoleAccess_IsEdit))  ?
+          {((userPageAccessState.RoleAccess_IsEdit)) ?
             <Button
               type="button"
               data-mdb-toggle="tooltip" data-mdb-placement="top" title="Edit ProductCategory Type"
@@ -205,7 +206,7 @@ const ProductCategoryTypeList = (props) => {
     return (
       <React.Fragment>
         <MetaTags>
-          <title>ProductCategoryTypeList| FoodERP-React FrontEnd</title>
+          <title>CategoryTypeList| FoodERP-React FrontEnd</title>
         </MetaTags>
         <div className="page-content">
           <PaginationProvider pagination={paginationFactory(pageOptions)}>
@@ -260,7 +261,7 @@ const ProductCategoryTypeList = (props) => {
             }}
             size="xl"
           >
-            <ProductCategoryType state={editData.Data} />
+            <CategoryTypeMaster state={editData.Data} />
           </Modal>
         </div>
       </React.Fragment>
@@ -273,4 +274,4 @@ const ProductCategoryTypeList = (props) => {
   }
 }
 
-export default ProductCategoryTypeList;
+export default CategoryTypeList;

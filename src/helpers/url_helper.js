@@ -105,7 +105,7 @@ export const DIVISION_TYPES_API  ='/DivisionTypes'
 
 
 //Product Cateogory Type Master API
-export const  PRODUCT_CATEGORY_TYPE_MASTER_API = '/ProductCategoryTypes'
+export const  CATEGORY_TYPE_MASTER_API = '/ProductCategoryTypes'
 
 
 //Product Types API
