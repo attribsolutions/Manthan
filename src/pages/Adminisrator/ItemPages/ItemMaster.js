@@ -457,6 +457,7 @@ import { AvField, AvForm, AvInput } from "availity-reactstrap-validation"
 import Select from "react-select";
 import { fetchCompanyList } from "../../../store/Administrator/CompanyRedux/actions"
 import { getBaseUnit_ForDropDown, get_CategoryTypes_ForDropDown, get_Category_ForDropDown, get_SubCategory_ForDropDown } from "../../../store/Administrator/ItemsRedux/action";
+import { getDivisionTypelist } from "../../../store/Administrator/DivisionTypeRedux/action";
 
 const ItemsMaster = () => {
     const dispatch = useDispatch();
@@ -466,15 +467,17 @@ const ItemsMaster = () => {
     const [categoryType_dropdown_Select, setCategoryType_dropdown_Select] = useState("");
     const [category_dropdown_Select, setCategory_dropdown_Select] = useState("");
     const [subCategory_dropdown_Select, setsubCategory_dropdown_Select] = useState("");
+    const [divisionType_dropdown_Select, setDivisionType_dropdown_Select] = useState("");
     const [name, setName] = useState("");
 
 
-    const { companyList, BaseUnit, CategoryType, Category, SubCategory } = useSelector((state) => ({
+    const { companyList, BaseUnit, CategoryType, Category, SubCategory,DivisionType } = useSelector((state) => ({
         companyList: state.Company.companyList,
         BaseUnit: state.ItemMastersReducer.BaseUnit,
         CategoryType: state.ItemMastersReducer.CategoryType,
         Category: state.ItemMastersReducer.Category,
         SubCategory: state.ItemMastersReducer.SubCategory,
+        DivisionType: state.DivisionTypeReducer.ListData,
     }));
 
     useEffect(() => {
@@ -483,6 +486,7 @@ const ItemsMaster = () => {
         dispatch(get_CategoryTypes_ForDropDown());
         dispatch(get_Category_ForDropDown());
         dispatch(get_SubCategory_ForDropDown());
+        dispatch(getDivisionTypelist());
     }, [dispatch]);
 
     const toggle1 = tab => {
@@ -532,7 +536,14 @@ const ItemsMaster = () => {
     function SubCategory_DropDown_handller(e) {
         setsubCategory_dropdown_Select(e)
     }
+    const DivisionType_DropdownOptions = DivisionType.map((data) => ({
+        value: data.id,
+        label: data.Name
+    }));
 
+    function DivisionType_DropDown_handller(e) {
+        setDivisionType_dropdown_Select(e)
+    }
     return (
         <React.Fragment>
             <div className="page-content">
@@ -789,22 +800,7 @@ const ItemsMaster = () => {
                                             </TabPane>
                                             <TabPane tabId="7">
                                                 <Row>
-                                                    <Col sm="12">
-                                                        <CardText className="mb-0">
-                                                            Etsy mixtape wayfarers, ethical wes anderson tofu
-                                                            before they sold out mcsweeney's organic lomo retro
-                                                            fanny pack lo-fi farm-to-table readymade. Messenger
-                                                            bag gentrify pitchfork tattooed craft beer, iphone
-                                                            skateboard locavore carles etsy salvia banksy hoodie
-                                                            helvetica. DIY synth PBR banksy irony. Leggings
-                                                            gentrify squid 8-bit cred pitchfork. Williamsburg
-                                                            banh mi whatever gluten-free, carles pitchfork
-                                                            biodiesel fixie etsy retro mlkshk vice blog.
-                                                            Scenester cred you probably haven't heard of them,
-                                                            vinyl craft beer blog stumptown. Pitchfork
-                                                            sustainable tofu synth chambray yr.
-                                                        </CardText>
-                                                    </Col>
+                                               
                                                 </Row>
                                             </TabPane>
 
@@ -828,22 +824,30 @@ const ItemsMaster = () => {
                                             </TabPane>
                                             <TabPane tabId="9">
                                                 <Row>
-                                                    <Col sm="12">
-                                                        <CardText className="mb-0">
-                                                            Etsy mixtape wayfarers, ethical wes anderson tofu
-                                                            before they sold out mcsweeney's organic lomo retro
-                                                            fanny pack lo-fi farm-to-table readymade. Messenger
-                                                            bag gentrify pitchfork tattooed craft beer, iphone
-                                                            skateboard locavore carles etsy salvia banksy hoodie
-                                                            helvetica. DIY synth PBR banksy irony. Leggings
-                                                            gentrify squid 8-bit cred pitchfork. Williamsburg
-                                                            banh mi whatever gluten-free, carles pitchfork
-                                                            biodiesel fixie etsy retro mlkshk vice blog.
-                                                            Scenester cred you probably haven't heard of them,
-                                                            vinyl craft beer blog stumptown. Pitchfork
-                                                            sustainable tofu synth chambray yr.
-                                                        </CardText>
-                                                    </Col>
+                                                <Row>
+                                                <Col md={12}  >
+                                                    <Card className="text-black">
+                                                        <CardBody style={{ backgroundColor: "whitesmoke" }}>
+
+                                                            <Row>
+                                                                <h5>Item Name :<Label className="text-primary" >{name}</Label></h5>
+                                                            </Row>
+
+                                                            <Row>
+                                                                <FormGroup className=" col col-sm-4 " >
+                                                                    <Label htmlFor="validationCustom21">Division Type</Label>
+                                                                    <Select
+                                                                        value={divisionType_dropdown_Select}
+                                                                        options={DivisionType_DropdownOptions}
+                                                                        onChange={(e) => { DivisionType_DropDown_handller(e) }}
+                                                                    />
+                                                                </FormGroup>
+                                                            </Row>
+                                                           
+                                                        </CardBody>
+                                                    </Card>
+                                                </Col>
+                                                </Row>
                                                 </Row>
                                             </TabPane>
                                             <TabPane tabId="10">
@@ -905,7 +909,9 @@ const ItemsMaster = () => {
                                                             </Row>
                                                         </CardBody>
                                                     </Card>
+                                                 
                                                 </Col>
+                           
                                             </Row>
                                         </TabPane>
                                     </TabContent>
