@@ -189,9 +189,9 @@ export const Items_Master_Edit_API = (id) => get(`${url.Items_MASTER_API}/${id}`
 export const Items_Master_Update_API = (data, id) => put(`${url.Items_MASTER_API}/${id}`, data)// update api
 
 export const BaseUnit_Get_DropDown_API = () => get(url.BASEUNIT_DROPDOWN_API)// BaseUnit DropDown api
-export const CategoryType_Get_DropDown_API = () => get(url.PRODUCT_CATEGORY_TYPE_MASTER_API)// CategoryType DropDown api
-export const Category_Get_DropDown_API = () => get(url.PRODUCT_CATEGORY_TYPE_MASTER_API)// Category DropDown api
-export const SubCategory_Get_DropDown_API = () => get(url.PRODUCT_CATEGORY_TYPE_MASTER_API)// SubCategory DropDown api
+export const CategoryType_Get_DropDown_API = () => get(url.CATEGORYTYPE_DROPDOWN_API)// CategoryType DropDown api
+export const Category_Get_DropDown_API = () => get(url.CATEGORY_DROPDOWN_API)// Category DropDown api
+export const SubCategory_Get_DropDown_API = () => get(url.SUBCATEGORY_DROPDOWN_API)// SubCategory DropDown api
 // Party Master
 export const Party_Master_Get_API = () => get(url.PARTY_MASTER_API)//get api
 export const Party_Master_Post_API = (data) => post(url.PARTY_MASTER_API, data)// post api

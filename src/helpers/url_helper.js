@@ -111,5 +111,11 @@ export const  PRODUCT_CATEGORY_TYPE_MASTER_API = '/ProductCategoryTypes'
 //Product Types API
 export const  PRODUCT_TYPES_API ='/ProductCategory'
 
-// CategoryType API
 export const  BASEUNIT_DROPDOWN_API ='/UnitList'
+
+export const  CATEGORYTYPE_DROPDOWN_API ='/CategoryTypes'
+
+export const  CATEGORY_DROPDOWN_API ='/Category'
+
+export const  SUBCATEGORY_DROPDOWN_API ='/SubCategory'
+
