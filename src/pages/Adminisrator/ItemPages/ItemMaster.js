@@ -718,8 +718,8 @@ const ItemsMaster = () => {
 
                                                             <Row>
                                                                 
-                                                                    <Label >{name}</Label>
-                                                                    
+                                                                    {/* <Label className="text-primary fontsize-30" >{name}</Label> */}
+                                                                    <h4><span className="text-primary">{name}</span></h4>
                                                             </Row>
 
                                                             <Row>
