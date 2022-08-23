@@ -20,7 +20,7 @@ import Breadcrumbs from "../../components/Common/Breadcrumb";
 // import generate from "../../Reports/Page"
 import './div.css'
 import OrderPage from "./OrderPage";
-import { AlertState } from "../../store/Utilites/CostumeAlert/actions";
+import { AlertState } from "../../store/actions";
 import generate from "../../Reports/InvioceReport/Page";
 import { InvoiceFakeData } from "./InvioceFakedata";
 

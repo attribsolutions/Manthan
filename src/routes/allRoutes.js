@@ -14,8 +14,8 @@ import Modules from "../pages/Adminisrator/ModulesPages/Modules";
 import ModulesList from "../pages/Adminisrator/ModulesPages/ModulesList";
 import CompanyModule from "../pages/Adminisrator/CompanyPages/CompanyModule";
 import CompanyList from "../pages/Adminisrator/CompanyPages/CompanyList";
-import SubModules from "../pages/Adminisrator/SubModulePages/SubModules";
-import SubModulesList from "../pages/Adminisrator/SubModulePages/SubModulesList";
+// import SubModules from "../pages/Adminisrator/SubModulePages/SubModules";
+// import SubModulesList from "../pages/Adminisrator/SubModulePages/SubModulesList";
 import HPageList from "../pages/Adminisrator/HPagesPages/HPageList";
 import HPageMaster from "../pages/Adminisrator/HPagesPages/HPageMaster";
 import OrderPage from "../pages/Order/OrderPage";
@@ -105,8 +105,8 @@ const userRoutes = [
   { path: '/ModuleMaster', component: Modules },
   { path: '/ModuleList', component: ModulesList },
 
-  { path: "/subModuleMaster", component: SubModules },
-  { path: "/subModuleList", component: SubModulesList },
+  // { path: "/subModuleMaster", component: SubModules },
+  // { path: "/subModuleList", component: SubModulesList },
 
   // Administrator : Company Path and List
   { path: '/CompanyMaster', component: CompanyModule },

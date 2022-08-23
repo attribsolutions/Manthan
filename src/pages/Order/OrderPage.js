@@ -21,7 +21,8 @@ import { useSelector, useDispatch } from "react-redux";
 import './div.css'
 
 import Breadcrumbs3 from "../../components/Common/Breadcrumb3"
-import { AlertState } from "../../store/Utilites/CostumeAlert/actions";
+import { AlertState } from "../../store/actions";
+
 import { MetaTags } from "react-meta-tags";
 import "@vtaits/react-color-picker/dist/index.css"
 import "react-datepicker/dist/react-datepicker.css"
