@@ -145,7 +145,7 @@ const AddUser = (props) => {
 
   useEffect(() => {
 
-    if ((PostAPIResponse.Status === true) && (PostAPIResponse.StatusCode === 201)) {
+    if ((PostAPIResponse.Status === true) && (PostAPIResponse.StatusCode === 200) &&!(pageMode==="dropdownAdd")) {
       dispatch(addUserSuccess({ Status: false }))
       formRef.current.reset();
       setEmployeeSelect('')
@@ -168,7 +168,7 @@ const AddUser = (props) => {
         }))
       }
     }
-    else if (PostAPIResponse.Status === true) {
+    else if ((PostAPIResponse.Status === true)&& !(pageMode==="dropdownAdd")) {
       dispatch(addUserSuccess({ Status: false }))
       dispatch(AlertState({
         Type: 4,

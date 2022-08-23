@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { Modal, UncontrolledAlert, } from "reactstrap";
@@ -6,6 +6,9 @@ import { AlertShow } from '../../store/Utilites/CustomAlertRedux/actions';
 
 const CustomAlert = () => {
 
+
+
+   const  [isOpen,setIsOpen]=useState(true)
   const history = useHistory();
   const dispatch = useDispatch();
 
@@ -70,10 +73,25 @@ const CustomAlert = () => {
   return (
     <React.Fragment>
       <Modal
+       isOpen={isOpen}
+       toggle={() => {setIsOpen(!isOpen) }}
+       >
+<div>
+  hdflkhvhVlhvhvhK
+  <br></br>
+  <br></br>
+  <br></br>
+  <br></br>
+  <br></br>
+</div>
+
+      </Modal>
+      <Modal
         isOpen={AlertData.Status}
         toggle={() => { tog_standard() }}
-        scrollable={true}
-      // centered={true} // size={"sm"}
+        // scrollable={true}
+      // centered={true} 
+      // size={"sm"}
       >
         {(AlertData.Type === 1) &&
           <UncontrolledAlert color="success" className="px-6 mb-0 text-center">
