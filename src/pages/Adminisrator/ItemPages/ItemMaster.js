@@ -432,13 +432,16 @@
 import React, { useEffect, useState } from "react"
 import MetaTags from "react-meta-tags"
 import {
+    Button,
     Card,
     CardBody,
     CardHeader,
+    CardSubtitle,
     CardText,
     CardTitle,
     Col,
     Container,
+    Form,
     FormGroup,
     Label,
     Nav,
@@ -458,20 +461,24 @@ import Select from "react-select";
 import { fetchCompanyList } from "../../../store/Administrator/CompanyRedux/actions"
 import { getBaseUnit_ForDropDown, get_CategoryTypes_ForDropDown, get_Category_ForDropDown, get_SubCategory_ForDropDown } from "../../../store/Administrator/ItemsRedux/action";
 import { getDivisionTypelist } from "../../../store/Administrator/DivisionTypeRedux/action";
+import Dropzone from "react-dropzone";
 
 const ItemsMaster = () => {
+    const [selectedFiles, setselectedFiles] = useState([])
     const dispatch = useDispatch();
     const [activeTab1, setactiveTab1] = useState("5")
     const [companyList_dropdown_Select, setCompanyList_dropdown_Select] = useState("");
     const [BaseUnit_dropdown_Select, setBaseUnit_dropdown_Select] = useState("");
+    const [BaseUnit_dropdown_Select2, setBaseUnit_dropdown_Select2] = useState("");
     const [categoryType_dropdown_Select, setCategoryType_dropdown_Select] = useState("");
     const [category_dropdown_Select, setCategory_dropdown_Select] = useState("");
     const [subCategory_dropdown_Select, setsubCategory_dropdown_Select] = useState("");
     const [divisionType_dropdown_Select, setDivisionType_dropdown_Select] = useState("");
     const [name, setName] = useState("");
+    const [DefaultBaseUnit, setDefaultBaseUnit] = useState("");
 
 
-    const { companyList, BaseUnit, CategoryType, Category, SubCategory,DivisionType } = useSelector((state) => ({
+    const { companyList, BaseUnit, CategoryType, Category, SubCategory, DivisionType } = useSelector((state) => ({
         companyList: state.Company.companyList,
         BaseUnit: state.ItemMastersReducer.BaseUnit,
         CategoryType: state.ItemMastersReducer.CategoryType,
@@ -512,6 +519,16 @@ const ItemsMaster = () => {
     function BaseUnit_DropDown_handller(e) {
         setBaseUnit_dropdown_Select(e)
     }
+
+    const BaseUnit_DropdownOptions2 = BaseUnit.map((data) => ({
+        value: data.id,
+        label: data.Name
+    }));
+
+    function BaseUnit2_DropDown_handller(e) {
+        setBaseUnit_dropdown_Select2(e)
+    }
+
     const CategoryType_DropdownOptions = CategoryType.map((data) => ({
         value: data.id,
         label: data.Name
@@ -544,6 +561,30 @@ const ItemsMaster = () => {
     function DivisionType_DropDown_handller(e) {
         setDivisionType_dropdown_Select(e)
     }
+
+    // for image upload
+    function handleAcceptedFiles(files) {
+        files.map(file =>
+            Object.assign(file, {
+                preview: URL.createObjectURL(file),
+                formattedSize: formatBytes(file.size),
+            })
+        )
+        setselectedFiles(files)
+    }
+
+
+    function formatBytes(bytes, decimals = 2) {
+        if (bytes === 0) return "0 Bytes"
+        const k = 1024
+        const dm = decimals < 0 ? 0 : decimals
+        const sizes = ["Bytes", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"]
+
+        const i = Math.floor(Math.log(bytes) / Math.log(k))
+        return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + " " + sizes[i]
+    }
+
+
     return (
         <React.Fragment>
             <div className="page-content">
@@ -569,6 +610,71 @@ const ItemsMaster = () => {
                                                 <NavLink
                                                     style={{ cursor: "pointer" }}
                                                     className={classnames({
+                                                        active: activeTab1 === "1",
+                                                    })}
+                                                    onClick={() => {
+                                                        toggle1("1")
+                                                    }}
+                                                >
+                                                    <span className="d-block d-sm-none">
+                                                        <i className="fas fa-home"></i>
+                                                    </span>
+                                                    <span className="d-none d-sm-block">Tab1</span>
+                                                </NavLink>
+                                            </NavItem>
+                                            <NavItem>
+                                                <NavLink
+                                                    style={{ cursor: "pointer" }}
+                                                    className={classnames({
+                                                        active: activeTab1 === "2",
+                                                    })}
+                                                    onClick={() => {
+                                                        toggle1("2")
+                                                    }}
+                                                >
+                                                    <span className="d-block d-sm-none">
+                                                        <i className="fas fa-home"></i>
+                                                    </span>
+                                                    <span className="d-none d-sm-block">Tab2</span>
+
+                                                </NavLink>
+                                            </NavItem>
+                                            <NavItem>
+                                                <NavLink
+                                                    style={{ cursor: "pointer" }}
+                                                    className={classnames({
+                                                        active: activeTab1 === "3",
+                                                    })}
+                                                    onClick={() => {
+                                                        toggle1("3")
+                                                    }}
+                                                >
+                                                    <span className="d-block d-sm-none">
+                                                        <i className="fas fa-home"></i>
+                                                    </span>
+                                                    <span className="d-none d-sm-block">Tab3</span>
+                                                </NavLink>
+                                            </NavItem>
+                                            <NavItem>
+                                                <NavLink
+                                                    style={{ cursor: "pointer" }}
+                                                    className={classnames({
+                                                        active: activeTab1 === "4",
+                                                    })}
+                                                    onClick={() => {
+                                                        toggle1("4")
+                                                    }}
+                                                >
+                                                    <span className="d-block d-sm-none">
+                                                        <i className="fas fa-home"></i>
+                                                    </span>
+                                                    <span className="d-none d-sm-block">Tab4</span>
+                                                </NavLink>
+                                            </NavItem>
+                                            <NavItem>
+                                                <NavLink
+                                                    style={{ cursor: "pointer" }}
+                                                    className={classnames({
                                                         active: activeTab1 === "5",
                                                     })}
                                                     onClick={() => {
@@ -578,7 +684,7 @@ const ItemsMaster = () => {
                                                     <span className="d-block d-sm-none">
                                                         <i className="fas fa-home"></i>
                                                     </span>
-                                                    <span className="d-none d-sm-block">Tab1</span>
+                                                    <span className="d-none d-sm-block">Tab5</span>
                                                 </NavLink>
                                             </NavItem>
                                             <NavItem>
@@ -594,78 +700,13 @@ const ItemsMaster = () => {
                                                     <span className="d-block d-sm-none">
                                                         <i className="fas fa-home"></i>
                                                     </span>
-                                                    <span className="d-none d-sm-block">Tab2</span>
-
-                                                </NavLink>
-                                            </NavItem>
-                                            <NavItem>
-                                                <NavLink
-                                                    style={{ cursor: "pointer" }}
-                                                    className={classnames({
-                                                        active: activeTab1 === "7",
-                                                    })}
-                                                    onClick={() => {
-                                                        toggle1("7")
-                                                    }}
-                                                >
-                                                    <span className="d-block d-sm-none">
-                                                        <i className="fas fa-home"></i>
-                                                    </span>
-                                                    <span className="d-none d-sm-block">Tab3</span>
-                                                </NavLink>
-                                            </NavItem>
-                                            <NavItem>
-                                                <NavLink
-                                                    style={{ cursor: "pointer" }}
-                                                    className={classnames({
-                                                        active: activeTab1 === "8",
-                                                    })}
-                                                    onClick={() => {
-                                                        toggle1("8")
-                                                    }}
-                                                >
-                                                    <span className="d-block d-sm-none">
-                                                        <i className="fas fa-home"></i>
-                                                    </span>
-                                                    <span className="d-none d-sm-block">Tab4</span>
-                                                </NavLink>
-                                            </NavItem>
-                                            <NavItem>
-                                                <NavLink
-                                                    style={{ cursor: "pointer" }}
-                                                    className={classnames({
-                                                        active: activeTab1 === "9",
-                                                    })}
-                                                    onClick={() => {
-                                                        toggle1("9")
-                                                    }}
-                                                >
-                                                    <span className="d-block d-sm-none">
-                                                        <i className="fas fa-home"></i>
-                                                    </span>
-                                                    <span className="d-none d-sm-block">Tab5</span>
-                                                </NavLink>
-                                            </NavItem>
-                                            <NavItem>
-                                                <NavLink
-                                                    style={{ cursor: "pointer" }}
-                                                    className={classnames({
-                                                        active: activeTab1 === "10",
-                                                    })}
-                                                    onClick={() => {
-                                                        toggle1("10")
-                                                    }}
-                                                >
-                                                    <span className="d-block d-sm-none">
-                                                        <i className="fas fa-home"></i>
-                                                    </span>
                                                     <span className="d-none d-sm-block">Tab6</span>
                                                 </NavLink>
                                             </NavItem>
                                         </Nav>
 
                                         <TabContent activeTab={activeTab1} className="p-3 text-muted">
-                                            <TabPane tabId="5">
+                                            <TabPane tabId="1">
                                                 <Col md={12}  >
                                                     <Card className="text-black">
                                                         <CardBody style={{ backgroundColor: "whitesmoke" }}>
@@ -754,7 +795,7 @@ const ItemsMaster = () => {
                                                 </Col>
 
                                             </TabPane>
-                                            <TabPane tabId="6">
+                                            <TabPane tabId="2">
                                                 <Col md={12}  >
                                                     <Card className="text-black">
                                                         <CardBody style={{ backgroundColor: "whitesmoke" }}>
@@ -798,66 +839,173 @@ const ItemsMaster = () => {
                                                 </Col>
 
                                             </TabPane>
-                                            <TabPane tabId="7">
-                                                <Row>
-                                               
-                                                </Row>
-                                            </TabPane>
-
-                                            <TabPane tabId="8">
-                                                <Row>
-                                                    <Col sm="12">
-                                                        <CardText className="mb-0">
-                                                            Trust fund seitan letterpress, keytar raw denim
-                                                            keffiyeh etsy art party before they sold out master
-                                                            cleanse gluten-free squid scenester freegan cosby
-                                                            sweater. Fanny pack portland seitan DIY, art party
-                                                            locavore wolf cliche high life echo park Austin.
-                                                            Cred vinyl keffiyeh DIY salvia PBR, banh mi before
-                                                            they sold out farm-to-table VHS viral locavore cosby
-                                                            sweater. Lomo wolf viral, mustache readymade
-                                                            thundercats keffiyeh craft beer marfa ethical. Wolf
-                                                            salvia freegan, sartorial keffiyeh echo park vegan.
-                                                        </CardText>
-                                                    </Col>
-                                                </Row>
-                                            </TabPane>
-                                            <TabPane tabId="9">
-                                                <Row>
-                                                <Row>
-                                                <Col md={12}  >
-                                                    <Card className="text-black">
-                                                        <CardBody style={{ backgroundColor: "whitesmoke" }}>
-
-                                                            <Row>
-                                                                <h5>Item Name :<Label className="text-primary" >{name}</Label></h5>
-                                                            </Row>
-
-                                                            <Row>
-                                                                <FormGroup className=" col col-sm-4 " >
-                                                                    <Label htmlFor="validationCustom21">Division Type</Label>
-                                                                    <Select
-                                                                        value={divisionType_dropdown_Select}
-                                                                        options={DivisionType_DropdownOptions}
-                                                                        onChange={(e) => { DivisionType_DropDown_handller(e) }}
-                                                                    />
-                                                                </FormGroup>
-                                                            </Row>
-                                                           
-                                                        </CardBody>
-                                                    </Card>
-                                                </Col>
-                                                </Row>
-                                                </Row>
-                                            </TabPane>
-                                            <TabPane tabId="10">
+                                            <TabPane tabId="3">
                                                 <Row>
                                                     <Col md={12}  >
                                                         <Card className="text-black">
                                                             <CardBody style={{ backgroundColor: "whitesmoke" }}>
-                                                            <Row>
-                                                                <h5>Item Name :<Label className="text-primary" >{name}</Label></h5>
-                                                            </Row>
+
+                                                                <Row>
+                                                                    <h5>Item Name :<Label className="text-primary" >{name}</Label></h5>
+                                                                </Row>
+
+                                                                <Row>
+                                                                    <FormGroup className=" col col-sm-4 " >
+                                                                        <Label htmlFor="validationCustom21">Base Unit</Label>
+                                                                        <Select
+                                                                            value={BaseUnit_dropdown_Select}
+                                                                            options={BaseUnit_DropdownOptions}
+                                                                            onChange={BaseUnit_DropDown_handller}
+                                                                        />
+                                                                    </FormGroup>
+                                                                    <Row>
+                                                                        <h5> <Label className="text-primary mt-4" >{BaseUnit_dropdown_Select.label}&nbsp;</Label><input></input> </h5>
+                                                                        <FormGroup className=" col col-sm-2 " >
+
+                                                                            <Select
+                                                                                placeholder="select unit"
+                                                                                value={BaseUnit_dropdown_Select2}
+                                                                                options={BaseUnit_DropdownOptions2}
+                                                                                onChange={BaseUnit2_DropDown_handller}
+                                                                            />
+                                                                        </FormGroup>
+                                                                        {/* <FormGroup className="mb-3 col col-sm-4 " >
+
+                                                                            <AvField name="Name" value={""} type="text" id='txtName'
+                                                                                placeholder="  "
+                                                                                autoComplete="off"
+                                                                            />
+
+                                                                        </FormGroup> */}
+                                                                    </Row>
+                                                                </Row>
+
+                                                            </CardBody>
+                                                        </Card>
+                                                    </Col>
+                                                </Row>
+                                            </TabPane>
+
+                                            <TabPane tabId="4">
+                                                <Row>
+                                                    <Col className="col-12">
+                                                        <Card>
+                                                            <CardBody>
+                                                                {/* <CardTitle>Image Upload</CardTitle> */}
+                                                                {/* <CardSubtitle className="mb-3">
+                                                                    {" "}
+                                                                    DropzoneJS is an open source library that provides
+                                                                    drag’n’drop file uploads with image previews.
+                                                                </CardSubtitle> */}
+                                                                <Form>
+                                                                    <Dropzone
+                                                                        onDrop={acceptedFiles => {
+                                                                            handleAcceptedFiles(acceptedFiles)
+                                                                        }}
+                                                                    >
+                                                                        {({ getRootProps, getInputProps }) => (
+                                                                            // <div className="dropzone">
+                                                                            <div
+                                                                                className="dz-message needsclick mt-2"
+                                                                                {...getRootProps()}
+                                                                            >
+                                                                                <input {...getInputProps()} />
+
+                                                                                <div className="mb-3">
+                                                                                    Image Upload
+                                                                                    {/* <i className="display-4 text-muted bx bxs-cloud-upload" /> */}
+                                                                                </div>
+                                                                                {/* <h4>Drop files here or click to upload.</h4> */}
+                                                                            </div>
+                                                                            // </div>
+                                                                        )}
+                                                                    </Dropzone>
+                                                                    <div className="dropzone-previews mt-3" id="file-previews">
+                                                                        {selectedFiles.map((f, i) => {
+                                                                            return (
+                                                                                <Card
+                                                                                    className="mt-1 mb-0 shadow-none border dz-processing dz-image-preview dz-success dz-complete"
+                                                                                    key={i + "-file"}
+                                                                                >
+                                                                                    <div className="p-2">
+                                                                                        <Row className="align-items-center">
+                                                                                            <Col className="col-auto">
+                                                                                                <img
+                                                                                                    data-dz-thumbnail=""
+                                                                                                    height="80"
+                                                                                                    className="avatar-sm rounded bg-light"
+                                                                                                    alt={f.name}
+                                                                                                    src={f.preview}
+                                                                                                />
+                                                                                            </Col>
+                                                                                            <Col>
+                                                                                                <Link
+                                                                                                    to="#"
+                                                                                                    className="text-muted font-weight-bold"
+                                                                                                >
+                                                                                                    {f.name}
+                                                                                                </Link>
+                                                                                                <p className="mb-0">
+                                                                                                    <strong>{f.formattedSize}</strong>
+                                                                                                </p>
+                                                                                            </Col>
+                                                                                        </Row>
+                                                                                    </div>
+                                                                                </Card>
+                                                                            )
+                                                                        })}
+                                                                    </div>
+                                                                </Form>
+
+                                                                <div className="text-center mt-4">
+                                                                    <button
+                                                                        type="button"
+                                                                        className="btn btn-primary "
+                                                                    >
+                                                                        Upload
+                                                                    </button>
+                                                                </div>
+                                                            </CardBody>
+                                                        </Card>
+                                                    </Col>
+                                                </Row>
+                                            </TabPane>
+
+                                            <TabPane tabId="5">
+                                                <Row>
+                                                    <Col md={12}  >
+                                                        <Card className="text-black">
+                                                            <CardBody style={{ backgroundColor: "whitesmoke" }}>
+
+                                                                <Row>
+                                                                    <h5>Item Name :<Label className="text-primary" >{name}</Label></h5>
+                                                                </Row>
+
+                                                                <Row>
+                                                                    <FormGroup className=" col col-sm-4 " >
+                                                                        <Label htmlFor="validationCustom21">Division Type</Label>
+                                                                        <Select
+                                                                            value={divisionType_dropdown_Select}
+                                                                            options={DivisionType_DropdownOptions}
+                                                                            onChange={(e) => { DivisionType_DropDown_handller(e) }}
+                                                                        />
+                                                                    </FormGroup>
+                                                                </Row>
+
+                                                            </CardBody>
+                                                        </Card>
+                                                    </Col>
+                                                </Row>
+
+                                            </TabPane>
+                                            <TabPane tabId="6">
+                                                <Row>
+                                                    <Col md={12}  >
+                                                        <Card className="text-black">
+                                                            <CardBody style={{ backgroundColor: "whitesmoke" }}>
+                                                                <Row>
+                                                                    <h5>Item Name :<Label className="text-primary" >{name}</Label></h5>
+                                                                </Row>
                                                                 <Row>
                                                                     <FormGroup className="mb-3 col col-sm-4 " >
                                                                         <Label htmlFor="validationCustom01">MRP</Label>
@@ -884,46 +1032,46 @@ const ItemsMaster = () => {
                                                                 </Row>
 
                                                                 <Row>
-                                                                <FormGroup className="mb-3 col col-sm-4 " >
-                                                                    <Label htmlFor="validationCustom01">HSN</Label>
-                                                                    <AvField name="HSN" value={""} type="text" id='txtName'
-                                                                        placeholder=" Please Enter HSN "
-                                                                        autoComplete="off"
-                                                                        validate={{
-                                                                            required: { value: true, errorMessage: 'Please Enter HSN' },
-                                                                        }}
-                                                                    />
-                                                                </FormGroup>
+                                                                    <FormGroup className="mb-3 col col-sm-4 " >
+                                                                        <Label htmlFor="validationCustom01">HSN</Label>
+                                                                        <AvField name="HSN" value={""} type="text" id='txtName'
+                                                                            placeholder=" Please Enter HSN "
+                                                                            autoComplete="off"
+                                                                            validate={{
+                                                                                required: { value: true, errorMessage: 'Please Enter HSN' },
+                                                                            }}
+                                                                        />
+                                                                    </FormGroup>
 
-                                                                <FormGroup className="mb-3 col col-sm-4 " >
-                                                                    <Label htmlFor="validationCustom01">Margin</Label>
-                                                                    <AvField name="Margin" value={""} type="text" id='txtName'
-                                                                        placeholder=" Please Enter Margin "
-                                                                        autoComplete="off"
-                                                                        validate={{
-                                                                            required: { value: true, errorMessage: 'Please Enter Margin' },
-                                                                        }}
-                                                                    />
-                                                                </FormGroup>
+                                                                    <FormGroup className="mb-3 col col-sm-4 " >
+                                                                        <Label htmlFor="validationCustom01">Margin</Label>
+                                                                        <AvField name="Margin" value={""} type="text" id='txtName'
+                                                                            placeholder=" Please Enter Margin "
+                                                                            autoComplete="off"
+                                                                            validate={{
+                                                                                required: { value: true, errorMessage: 'Please Enter Margin' },
+                                                                            }}
+                                                                        />
+                                                                    </FormGroup>
 
-                                                            </Row>
-                                                        </CardBody>
-                                                    </Card>
-                                                 
-                                                </Col>
-                           
-                                            </Row>
-                                        </TabPane>
-                                    </TabContent>
-                                </CardBody>
-                            </Card>
-                        </Col>
+                                                                </Row>
+                                                            </CardBody>
+                                                        </Card>
 
-                    </Row>
+                                                    </Col>
 
-                </AvForm>
-            </Container>
-        </div>
+                                                </Row>
+                                            </TabPane>
+                                        </TabContent>
+                                    </CardBody>
+                                </Card>
+                            </Col>
+
+                        </Row>
+
+                    </AvForm>
+                </Container>
+            </div>
         </React.Fragment >
     );
 }
