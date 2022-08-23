@@ -4,8 +4,8 @@ import Breadcrumbs from "../../../components/Common/Breadcrumb";
 import { Modal, Col, Row, Button, Input, } from "reactstrap";
 // import { useAlert } from "react-alert";
 import "../../../assets/scss/CustomeTable/datatables.scss"
-import { AlertState } from "../../../store/Utilites/CostumeAlert/actions";
-import { SpinnerON } from "../../../store/Utilites/Spinner/actions";
+import { AlertState } from "../../../store/actions";
+
 import {
     getEmployeelist, editEmployeeeId, deleteEmployeeIDSuccess, updateEmployeeIDSuccess, delete_Employee_ID
 } from "../../../store/Administrator/M_EmployeeRedux/action";

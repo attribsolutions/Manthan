@@ -17,7 +17,7 @@ import { editEmployeeTypeSuccess, PostEmployeeTypeSubmit, PostEmployeeTypeSubmit
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { CommonGetRoleAccessFunction } from "../../../components/Common/CommonGetRoleAccessFunction";
-import { AlertState } from "../../../store/Utilites/CostumeAlert/actions";
+import { AlertState } from "../../../store/actions";
 import { BreadcrumbShow } from "../../../store/actions";
 
 const EmployeeTypesMaster = (props) => {

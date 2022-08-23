@@ -16,7 +16,8 @@ import { MetaTags } from "react-meta-tags";
 import { BreadcrumbShow } from "../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
 import { getMethodForProductTypes, PostMethodForProductTypes, PostMethod_ForProductTypesAPISuccess   } from "../../../store/Administrator/ProductTypesRedux/action";
-import { AlertState } from "../../../store/Utilites/CostumeAlert/actions";
+import { AlertState } from "../../../store/actions";
+
 
 
 const ProductTypes = (props) => {
