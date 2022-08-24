@@ -16,10 +16,14 @@ import { AlertState } from "../../../store/actions";
 
 import { BreadcrumbShow } from "../../../store/Utilites/Breadcrumb/actions";
 import { useDispatch, useSelector } from "react-redux";
-import { PostMethodForProductCategoryTypeMaster, PostMethod_ForProductCategoryTypeMasterAPISuccess } from "../../../store/Administrator/ProductCategoryTypeMasterRedux/action";
+import { PostMethodForCategoryTypeMaster,
+     PostMethod_ForCategoryTypeMasterAPISuccess
+     } from "../../../store/actions";
+   
+     
 
 
-const ProductCategoryTypeMaster = (props) => {
+const CategoryTypeMaster = (props) => {
     const formRef = useRef(null);
     const [EditData, setEditData] = useState([]);
     const [pageMode, setPageMode] = useState("");
@@ -29,14 +33,14 @@ const ProductCategoryTypeMaster = (props) => {
 
     //Access redux store Data /  'save_ModuleSuccess' action data
     const { PostAPIResponse } = useSelector((state) => ({
-        PostAPIResponse: state.ProductCategoryTypeMasterReducer.PostData,
+        PostAPIResponse: state.CategoryTypeMasterReducer.PostData,
 
     }));
 
     useEffect(() => {
     
         if ((PostAPIResponse.Status === true) && (PostAPIResponse.StatusCode === 200)) {
-            dispatch(PostMethod_ForProductCategoryTypeMasterAPISuccess({ Status: false }))
+            dispatch(PostMethod_ForCategoryTypeMasterAPISuccess({ Status: false }))
            
           
             if (pageMode === "other") {
@@ -56,7 +60,7 @@ const ProductCategoryTypeMaster = (props) => {
             }
           }
           else if (PostAPIResponse.Status === true) {
-            dispatch(PostMethod_ForProductCategoryTypeMasterAPISuccess({ Status: false }))
+            dispatch(PostMethod_ForCategoryTypeMasterAPISuccess({ Status: false }))
             dispatch(AlertState({
               Type: 4,
               Status: true,
@@ -74,7 +78,7 @@ const ProductCategoryTypeMaster = (props) => {
             Name: values.Name,
 
         });
-        dispatch(PostMethodForProductCategoryTypeMaster(jsonBody))
+        dispatch(PostMethodForCategoryTypeMaster(jsonBody))
     }
     
 
@@ -88,7 +92,7 @@ const ProductCategoryTypeMaster = (props) => {
                 <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
                     <Container fluid>
                         <MetaTags>
-                            <title>ProductCategoryTypeMaster| FoodERP-React FrontEnd</title>
+                            <title>CategoryTypeMaster| FoodERP-React FrontEnd</title>
                         </MetaTags>
                         <Breadcrumb breadcrumbItem={"ProductCategoryTypeMaster"} />
 
@@ -161,5 +165,5 @@ const ProductCategoryTypeMaster = (props) => {
     }
 };
 
-export default ProductCategoryTypeMaster
+export default CategoryTypeMaster
 

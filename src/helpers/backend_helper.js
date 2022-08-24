@@ -234,8 +234,12 @@ export const detelet_DivisionType_List_Api = (id) => del(`${url.DIVISION_TYPES_A
 export const edit_DivisionType_List_Api = (id) => get(`${url.DIVISION_TYPES_API}/${id}`) // edit api
 export const update_DivisionType_List_Api = (data, id) => put(`${url.DIVISION_TYPES_API}/${id}`, data)// update 
 
-//Product Cateogory Type Master API
-export const Post_Product_Category_Type_Master_API = (data) => post(url.PRODUCT_CATEGORY_TYPE_MASTER_API, data)// post api
+// Cateogory Type Master API
+export const Post_Category_Type_Master_API = (data) => post(url.CATEGORY_TYPE_MASTER_API, data)// post api
+export const get_CategoryType_List_Api = () => get(url.CATEGORY_TYPE_MASTER_API) // get api
+export const detelet_CategoryType_List_Api = (id) => del(`${url.CATEGORY_TYPE_MASTER_API}/${id}`) // delete api
+export const edit_CategoryType_List_Api = (id) => get(`${url.CATEGORY_TYPE_MASTER_API}/${id}`) // edit api
+export const update_CategoryType_List_Api = (data, id) => put(`${url.CATEGORY_TYPE_MASTER_API}/${id}`, data)// update
 
 //Product Types API
 export const Post_Product_Types_API = (data) => post(url.PRODUCT_TYPES_API, data)// post api
