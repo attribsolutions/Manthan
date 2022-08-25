@@ -30,9 +30,9 @@ const SelectDivisionPage = props => {
 
   const [divisionDropdowSelect, setDivisionDropdowSelect] = useState([]);
 
-  const { loginError, divisionDropdown } = useSelector(state => ({
+  const { loginError, divisionDropdown_redux } = useSelector(state => ({
     loginError: state.Login.loginError,
-    divisionDropdown: state.Login.divisionDropdown,
+    divisionDropdown_redux: state.Login.divisionDropdown,
   }))
 
 
@@ -47,8 +47,21 @@ const SelectDivisionPage = props => {
     }
   }, [])
 
+  useEffect(() => {
 
-  const divisionDropdown_DropdownOption = divisionDropdown.filter((d) => {
+    if (divisionDropdown_redux.length === 1) {
+      var role = divisionDropdown_redux.Role;
+      var division = 1;
+      var company = 1;
+
+      localStorage.setItem("roleId", (role))
+      dispatch(roleAceessAction(role, division, company))
+      history.push("/dashboard")
+    }
+  }, [divisionDropdown_redux])
+
+
+  const divisionDropdown_DropdownOption = divisionDropdown_redux.filter((d) => {
     return !(d.Role_id === null)
   }).map((d) => ({
     value: d.Role,
@@ -56,7 +69,7 @@ const SelectDivisionPage = props => {
   }));
 
   function goButtonHandller() {
-debugger
+    debugger
     var role = divisionDropdowSelect.value;
     var division = 1;
     var company = 1;
