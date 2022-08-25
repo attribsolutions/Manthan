@@ -71,20 +71,43 @@ const HPageMaster = (props) => {
   );
   // userAccess useEffect
   useEffect(() => {
+
+
+    // if ((editDataGatingFromList === undefined)) {
+    //   const userAcc = CommonGetRoleAccessFunction(history)
+    //   if (!(userAcc === undefined)) {
+    //     setUserPageAccessState(userAcc)
+    //   }
+    // } else {
+    //   let RelatedPageID = history.location.state.UserDetails.RelatedPageID
+    //   const userfound = RoleAccessModifiedinSingleArray.find((element) => {
+    //     return element.id === RelatedPageID
+    //   })
+    //   setUserPageAccessState(userfound)
+    // }
+
+    let userAcc = undefined
     if ((editDataGatingFromList === undefined)) {
-      const userAcc = CommonGetRoleAccessFunction(history)
-      if (!(userAcc === undefined)) {
-        setUserPageAccessState(userAcc)
-      }
-    } else {
-      let RelatedPageID = history.location.state.UserDetails.RelatedPageID
-      const userfound = RoleAccessModifiedinSingleArray.find((element) => {
-        return element.id === RelatedPageID
+
+      let locationPath = history.location.pathname
+      userAcc = RoleAccessModifiedinSingleArray.find((inx) => {
+        return (`/${inx.ActualPagePath}` === locationPath)
       })
-      setUserPageAccessState(userfound)
+    }
+    else if (!(editDataGatingFromList === undefined)) {
+      let relatatedPage = props.relatatedPage
+      userAcc = RoleAccessModifiedinSingleArray.find((inx) => {
+        return (`/${inx.ActualPagePath}` === relatatedPage)
+      })
+
+    }
+    if (!(userAcc === undefined)) {
+      setUserPageAccessState(userAcc)
     }
 
-  }, [history])
+
+  }, [RoleAccessModifiedinSingleArray])
+  
   // For PageAccess DropDown
   useEffect(() => {
     dispatch(getPageAccess_DropDown_API());
