@@ -55,7 +55,7 @@ const ItemsMaster = () => {
     },
     ]);
     const [divisionTypeData, setDivisionTypeData] = useState([]);
-    const [priceList_Dropdown_Select, setPriceList_Dropdown_Selecte]=useState([]);
+    const [priceList_Dropdown_Select, setPriceList_Dropdown_Selecte] = useState([]);
     const [baseUnitTableData, setBaseUnitTableData] = useState([{
         conversionRatio: '',
         toBaseUnit: '',
@@ -225,7 +225,7 @@ const ItemsMaster = () => {
         setMultiCat(newarr)
     }
     function MulitDeletrTab_2Handler(key) {
-     
+
         var removeElseArrray = multiCat.filter((i, k) => {
             return !(k === key)
         })
@@ -302,8 +302,40 @@ const ItemsMaster = () => {
         setBaseUnitTableData(newTabArr)
         // setBaseUnit_dropdown_Select2(e)
     }
+    let base64String = "";
+    let imageBase64Stringsep = ''
 
-    console.log("f", baseUnitTableData)
+    function imageUploaded() {
+        debugger
+        var file = document.querySelector(
+            'input[type=file]')['files'][0];
+
+        var reader = new FileReader();
+        console.log("next");
+
+        reader.onload = function () {
+            base64String = reader.result.replace("data:", "")
+                .replace(/^.+,/, "");
+
+            imageBase64Stringsep = base64String;
+
+            alert(imageBase64Stringsep);
+            console.log(base64String);
+            setImage2(base64String)
+        }
+        reader.readAsDataURL(file);
+    }
+    // console.log("base64String", base64String)
+
+    // function displayString() {
+    //     console.log("Base64String about to be printed");
+    //     alert(base64String);
+    // }
+
+    const [image2, setImage2] = useState('')
+
+    // '<svg xmlns="http://www.w3.org/2000/svg" version="1.2" baseProfile="tiny" width="47.4" height="40.65" viewBox="21 18.5 158 135.5"><path d="M25,50 l150,0 0,100 -150,0 z" stroke-width="4" stroke="black" fill="rgb(128,224,255)" fill-opacity="1" ></path><path d="M25,50 L175,150 M25,150 L175,50" stroke-width="4" stroke="black" fill="black" ></path><g transform="translate(0,0)" stroke-width="4" stroke="black" fill="none" ><circle cx="100" cy="30" r="7.5" fill="black" ></circle><circle cx="70" cy="30" r="7.5" fill="black" ></circle><circle cx="130" cy="30" r="7.5" fill="black" ></circle></g></svg>';
+
     return (
         <React.Fragment>
             <div className="page-content">
@@ -338,7 +370,7 @@ const ItemsMaster = () => {
                                                     <span className="d-block d-sm-none">
                                                         <i className="fas fa-home"></i>
                                                     </span>
-                                                    <span className="d-none d-sm-block">Tab1</span>
+                                                    <span className="d-none d-sm-block">Basic Info</span>
                                                 </NavLink>
                                             </NavItem>
                                             <NavItem>
@@ -354,7 +386,7 @@ const ItemsMaster = () => {
                                                     <span className="d-block d-sm-none">
                                                         <i className="fas fa-home"></i>
                                                     </span>
-                                                    <span className="d-none d-sm-block">Tab2</span>
+                                                    <span className="d-none d-sm-block">Category</span>
 
                                                 </NavLink>
                                             </NavItem>
@@ -371,7 +403,7 @@ const ItemsMaster = () => {
                                                     <span className="d-block d-sm-none">
                                                         <i className="fas fa-home"></i>
                                                     </span>
-                                                    <span className="d-none d-sm-block">Tab3</span>
+                                                    <span className="d-none d-sm-block">Unit Conversions</span>
                                                 </NavLink>
                                             </NavItem>
                                             <NavItem>
@@ -387,7 +419,7 @@ const ItemsMaster = () => {
                                                     <span className="d-block d-sm-none">
                                                         <i className="fas fa-home"></i>
                                                     </span>
-                                                    <span className="d-none d-sm-block">Tab4</span>
+                                                    <span className="d-none d-sm-block">Image</span>
                                                 </NavLink>
                                             </NavItem>
                                             <NavItem>
@@ -403,7 +435,7 @@ const ItemsMaster = () => {
                                                     <span className="d-block d-sm-none">
                                                         <i className="fas fa-home"></i>
                                                     </span>
-                                                    <span className="d-none d-sm-block">Tab5</span>
+                                                    <span className="d-none d-sm-block">Division</span>
                                                 </NavLink>
                                             </NavItem>
                                             <NavItem>
@@ -419,7 +451,7 @@ const ItemsMaster = () => {
                                                     <span className="d-block d-sm-none">
                                                         <i className="fas fa-home"></i>
                                                     </span>
-                                                    <span className="d-none d-sm-block">Tab6</span>
+                                                    <span className="d-none d-sm-block">Rate Details</span>
                                                 </NavLink>
                                             </NavItem>
 
@@ -437,19 +469,19 @@ const ItemsMaster = () => {
                                                     <span className="d-block d-sm-none">
                                                         <i className="fas fa-home"></i>
                                                     </span>
-                                                    <span className="d-none d-sm-block">Tab7</span>
+                                                    <span className="d-none d-sm-block">Margin</span>
                                                 </NavLink>
                                             </NavItem>
-                                            
+
                                             <NavItem>
                                                 <NavLink
                                                     style={{ cursor: "pointer" }}
-                                                    // className={classnames({
-                                                    //     active: activeTab1 === "7",
-                                                    // })}
-                                                    // onClick={() => {
-                                                    //     toggle1("7")
-                                                    // }}
+                                                // className={classnames({
+                                                //     active: activeTab1 === "7",
+                                                // })}
+                                                // onClick={() => {
+                                                //     toggle1("7")
+                                                // }}
                                                 >
                                                     <span className="d-block d-sm-none">
                                                         <i className="fas fa-home"></i>
@@ -738,6 +770,49 @@ const ItemsMaster = () => {
                                                                     drag’n’drop file uploads with image previews.
                                                                 </CardSubtitle> */}
                                                                 {/* <Form> */}
+
+
+                                                                <input type="file" name="" id="fileId"
+                                                                    onChange={() => imageUploaded()} />
+                                                                <br></br>
+                                                                {/* <img src={`data:image/png;base64,${image2}`} /> */}
+
+                                                                <Card
+                                                                    className="mt-1 mb-0 shadow-none border dz-processing dz-image-preview dz-success dz-complete"
+                                                                    // key={i + "-file"}
+                                                                >
+                                                                    <div className="p-2">
+                                                                        <Row className="align-items-center">
+                                                                            <Col className="col-auto">
+                                                                                <img
+                                                                                    data-dz-thumbnail=""
+                                                                                    // height="200"
+                                                                                    // width={100}
+                                                                                    className="avatar-sm rounded bg-light"
+                                                                                    alt={"index.name"}
+                                                                                    src={`data:image;base64,${image2}`}
+
+                                                                                />
+                                                                            </Col>
+                                                                            <Col>
+                                                                                <Link
+                                                                                    to="#"
+                                                                                    className="text-muted font-weight-bold"
+                                                                                >
+                                                                                    {"IMAGE NAME.name"}
+                                                                                </Link>
+                                                                                <p className="mb-0">
+                                                                                    <strong>{"index.formattedSize"}</strong>
+                                                                                </p>
+                                                                            </Col>
+                                                                        </Row>
+                                                                    </div>
+                                                                </Card>
+                                                                <br></br>
+                                                                <br></br>
+                                                                <br></br>
+                                                                <br></br>
+
                                                                 <Dropzone
                                                                     onDrop={acceptedFiles => {
                                                                         handleAcceptedFiles(acceptedFiles)
@@ -825,6 +900,7 @@ const ItemsMaster = () => {
                                                                 <Row>
                                                                     <h5>Item Name :<Label className="text-primary" >{name}</Label></h5>
                                                                 </Row>
+
 
                                                                 <Row>
                                                                     <FormGroup className=" col col-sm-4 " >
@@ -957,7 +1033,7 @@ const ItemsMaster = () => {
                                                                         <Select
                                                                             value={priceList_Dropdown_Select}
                                                                             options={PriceList_DropdownOptions}
-                                                                            onChange={()=>{PriceList_DropDown_handller()}}
+                                                                            onChange={() => { PriceList_DropDown_handller() }}
                                                                         />
                                                                     </FormGroup>
 

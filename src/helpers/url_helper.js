@@ -23,8 +23,6 @@ export const FOOD_ERP_POST_USER_DETAILS_AFTER_LOGIN="/GerUserDetials"
 export const FOOD_ERP_POST_JWT_PASSWORD_FORGET_VERIFY_OTP= "/VerifyOTP"
 
 export const FOOD_ERP_POST_JWT_PASSWORD_FORGET_SEND_OTP = "/SendMail"
-//role Aceess url
- export const ROLE_ACCESS="/RoleAccess"
 
 //PAGE Master
 export const GET_DEFAULT_MODULE="/HModules"
@@ -84,7 +82,7 @@ export const GET_PARTYTYPE_BY_DIVISIONTYPES_ID="/GetPartyTypeByDivisionTypeID"
 export const GET_COMPANY_BY_DIVISIONTYPES_ID="/GetCompanyByDivisionTypeID"
 
 //Role Access
-export const PAGEMASTER_DROPDOWN_ROLE_ACCESS="/RoleAccessGetPages"
+export const PAGE_DROPDOWN_FOR_ROLE_ACCESS_ADD_PAGE="/RoleAccessGetPages"
 export const GET_ROLE_ACCESS_LIST_FOR_ROLE_ACCESS_PAGE ='/RoleAccessNewUpdated'
 export const POST_COPY_ROLE_ACCESS_API ='/CopyRoleAccessabc'
 
@@ -93,6 +91,8 @@ export const ADD_PAGE_BUTTON_HANDLER_FOR_ROLE_ACCESS_PAGE ='/RoleAccessAddPage'
 
 // RoleAccess list page API
 export const GET_ROLEACCESS_LIST_PAGE_API ='/RoleAccessList'
+//role Aceess url
+export const ROLE_ACCESS="/RoleAccess"
 
 // EmployeeType API
 export const EMPLOYEE_TYPE_API ='/EmployeeTypes'
