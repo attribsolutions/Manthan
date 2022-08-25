@@ -28,7 +28,7 @@ import RoleAccessSaga from "./Administrator/RoleAccessRedux/saga"
 import EmployeeTypeSaga from "./Administrator/EmployeeTypeRedux/saga"
 import DivisionTypeSaga from "./Administrator/DivisionTypeRedux/saga"
 import PartyTypeSaga from "./Administrator/PartyTypeRedux/saga"
-import ProductCategoryTypeMasterSaga from "./Administrator/ProductCategoryTypeMasterRedux/saga"
+import CategoryTypeMasterSaga from "./Administrator/CategoryTypeMasterRedux/saga"
 import ProductTypesSaga from "./Administrator/ProductTypesRedux/saga"
 
 export default function* rootSaga() {
@@ -56,7 +56,7 @@ export default function* rootSaga() {
     fork(EmployeeTypeSaga),
     fork(PartyTypeSaga),
     fork(DivisionTypeSaga),
-    fork(ProductCategoryTypeMasterSaga),
+    fork(CategoryTypeMasterSaga),
    fork(ProductTypesSaga),
   ])
 }
