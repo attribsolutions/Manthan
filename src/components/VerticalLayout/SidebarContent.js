@@ -33,9 +33,12 @@ const SidebarContent = (props) => {
   }));
 
   useEffect(() => {
+    debugger
     if (RoleAccessData.length <= 0) {
-      var roleId = localStorage.getItem("roleId")
-      dispatch( roleAceessAction(roleId,1,1))
+      var value = JSON.parse( localStorage.getItem("roleId"))
+      var party = value.Party_id
+      var employee = value.Employee_id;
+      dispatch( roleAceessAction(party,employee))
       // dispatch(getUserDetailsAction(user))
       // roleAceessAction()
     }

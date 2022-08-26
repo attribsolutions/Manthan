@@ -50,32 +50,43 @@ const SelectDivisionPage = props => {
   useEffect(() => {
 
     if (divisionDropdown_redux.length === 1) {
-      var role = divisionDropdown_redux.Role;
-      var division = 1;
-      var company = 1;
+ debugger
+      let value = divisionDropdown_redux[0]
+      let employee = value.Employee_id;
+      let party = value.Party_id
+      if(!(party===null)){
+        party=0;
+        value.Party_id=0
+      }
 
-      localStorage.setItem("roleId", (role))
-      dispatch(roleAceessAction(role, division, company))
+
+      localStorage.setItem("roleId", JSON.stringify(value))
+      dispatch(roleAceessAction(party, employee))
       history.push("/dashboard")
     }
   }, [divisionDropdown_redux])
 
 
-  const divisionDropdown_DropdownOption = divisionDropdown_redux.filter((d) => {
-    return !(d.Role_id === null)
-  }).map((d) => ({
-    value: d.Role,
+  // const divisionDropdown_DropdownOption = divisionDropdown_redux.filter((d) => {
+  //   return !(d.Role_id === null)
+  // }).map((d) => ({
+  //   value: d.Employee_id,
+  //   label: d.PartyName,
+  // }));
+
+  const divisionDropdown_DropdownOption = divisionDropdown_redux.map((d, key) => ({
+    value: key,
     label: d.PartyName,
   }));
 
   function goButtonHandller() {
-    debugger
-    var role = divisionDropdowSelect.value;
-    var division = 1;
-    var company = 1;
 
-    localStorage.setItem("roleId", (role))
-    dispatch(roleAceessAction(role, division, company))
+    let value = divisionDropdown_redux[divisionDropdowSelect.value]
+    var employee = value.Employee_id;
+    var party = value.Party_id
+
+    localStorage.setItem("roleId", JSON.stringify(value))
+    dispatch(roleAceessAction(party, employee))
     history.push("/dashboard")
 
   }
