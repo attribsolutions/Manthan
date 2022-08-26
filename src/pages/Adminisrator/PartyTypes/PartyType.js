@@ -203,8 +203,8 @@ useEffect(() => {
                                                             </Col>
                                                         </Row>
 
-                                                        <FormGroup >
-                                                            <Row >
+                                                        <FormGroup>
+                                                            <Row>
                                                                 <Col sm={2}>
                                                                     <div>
                                                                         {
