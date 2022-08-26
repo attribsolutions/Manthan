@@ -50,10 +50,14 @@ const SelectDivisionPage = props => {
   useEffect(() => {
 
     if (divisionDropdown_redux.length === 1) {
-
+ debugger
       let value = divisionDropdown_redux[0]
-      var employee = value.Employee_id;
-      var party = value.Party_id
+      let employee = value.Employee_id;
+      let party = value.Party_id
+      if(!(party===null)){
+        party=0;
+        value.Party_id=0
+      }
 
 
       localStorage.setItem("roleId", JSON.stringify(value))

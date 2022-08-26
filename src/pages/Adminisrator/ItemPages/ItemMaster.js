@@ -60,7 +60,7 @@ const ItemsMaster = () => {
     
     let [name, setName] = useState();
     
-    const [selectValue, setselectValue] = useState(initial);
+    const [selectValue, setSelectValue] = useState(initial);
     
     console.log("test code",selectValue)
 
@@ -114,7 +114,12 @@ const ItemsMaster = () => {
     }));
 
     function CompanyList_DropDown_handller(e) {
-        setCompanyList_dropdown_Select(e)
+        debugger
+        // selectValue.Company=e 
+        var a =selectValue
+        var b= a.Company=e
+        setSelectValue(a)
+        // setCompanyList_dropdown_Select(e)
     }
 
     const BaseUnit_DropdownOptions = BaseUnit.map((data) => ({
@@ -593,8 +598,8 @@ const ItemsMaster = () => {
                                                                     <Select
                                                                         value={selectValue.Company}
                                                                         options={Company_DropdownOptions}
-                                                                        onChange={(e) => {selectValue.Company=e }}
-                                                                        // onChange={(e) => { CompanyList_DropDown_handller(e) }}
+                                                                        // onChange={(e) => {selectValue.Company=e }}
+                                                                        onChange={(e) => { CompanyList_DropDown_handller(e) }}
                                                                     />
                                                                 </FormGroup>
 
