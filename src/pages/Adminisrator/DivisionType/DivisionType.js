@@ -16,7 +16,6 @@ import { AvField, AvForm, AvInput } from "availity-reactstrap-validation";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { CommonGetRoleAccessFunction } from "../../../components/Common/CommonGetRoleAccessFunction";
-
 import { BreadcrumbShow ,AlertState} from "../../../store/actions";
 import { PostDivisionTypeAPI, PostDivisionTypeSuccess, updateDivisionTypeID } from "../../../store/Administrator/DivisionTypeRedux/action";
 import { editEmployeeTypeSuccess } from "../../../store/Administrator/EmployeeTypeRedux/action";
@@ -29,7 +28,7 @@ const DivisionType = (props) => {
 
 //*** "isEditdata get all data from ModuleID for Binding  Form controls
 let editDataGatingFromList = props.state;
-
+let propsPageMode = props.pageMode;
 
   //SetState  Edit data Geting From Modules List component
   const [EditData, setEditData] = useState([]);
@@ -44,21 +43,26 @@ let editDataGatingFromList = props.state;
 
 // userAccess useEffect
 useEffect(() => {
-    if ((editDataGatingFromList === undefined)) {
-        const userAcc = CommonGetRoleAccessFunction(history)
-        if (!(userAcc === undefined)) {
-            setUserPageAccessState(userAcc)
+    let userAcc = undefined
+        if ((editDataGatingFromList === undefined)) {
+    
+          let locationPath = history.location.pathname
+          userAcc = RoleAccessModifiedinSingleArray.find((inx) => {
+            return (`/${inx.ActualPagePath}` === locationPath)
+          })
         }
-    } else {
-        let RelatedPageID = history.location.state.UserDetails.RelatedPageID
-        const userfound = RoleAccessModifiedinSingleArray.find((element) => {
-            return element.id === RelatedPageID
-        })
-        setUserPageAccessState(userfound)
-    }
+        else if (!(editDataGatingFromList === undefined)) {
+          let relatatedPage = props.relatatedPage
+          userAcc = RoleAccessModifiedinSingleArray.find((inx) => {
+            return (`/${inx.ActualPagePath}` === relatatedPage)
+          })
+    
+        }
+        if (!(userAcc === undefined)) {
+          setUserPageAccessState(userAcc)
+        }
 
-}, [history])
-
+    }, [RoleAccessModifiedinSingleArray])
 
   // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
   useEffect(() => {
@@ -68,16 +72,18 @@ useEffect(() => {
       setPageMode("edit");
       dispatch(editEmployeeTypeSuccess({ Status: false }))
       dispatch(BreadcrumbShow(editDataGatingFromList.Name))
-      return
     }
-  }, [editDataGatingFromList])
+    else if (!(propsPageMode === undefined)) {
+        setPageMode(propsPageMode)
+    }
+
+  }, [editDataGatingFromList,propsPageMode])
 
   useEffect(() => {
-    if ((PostAPIResponse.Status === true) && (PostAPIResponse.StatusCode === 200)) {
-     
+    if ((PostAPIResponse.Status === true) && (PostAPIResponse.StatusCode === 200)&&!(pageMode==="dropdownAdd")) {
       dispatch(PostDivisionTypeSuccess({ Status: false }))
       formRef.current.reset();
-      if (pageMode === "other") {
+      if (pageMode === "dropdownAdd") {
         dispatch(AlertState({
           Type: 1,
           Status: true,
@@ -94,7 +100,7 @@ useEffect(() => {
         }))
       }
     }
-    else if (PostAPIResponse.Status === true) {
+    else if ((PostAPIResponse.Status === true) && !(pageMode==="dropdownAdd")) {
       dispatch(PostDivisionTypeSuccess({ Status: false }))
       dispatch(AlertState({
         Type: 4,
@@ -121,7 +127,6 @@ useEffect(() => {
         }
         else {
             dispatch(PostDivisionTypeAPI(jsonBody));
-            console.log("jsonBody",jsonBody)
         }
     };
   
@@ -129,7 +134,7 @@ useEffect(() => {
 
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
     var IsEditMode_Css = ''
-    if (pageMode === "edit") { IsEditMode_Css = "-5.5%" };
+    if (pageMode === "edit" || pageMode == "dropdownAdd") { IsEditMode_Css = "-5.5%" };
 
     if (!(userPageAccessState === '')) {
     return (
@@ -174,7 +179,7 @@ useEffect(() => {
                                                     <Row>
                                                         <FormGroup className="mb-2 col col-sm-5">
                                                             <Row className="justify-content-md-left">
-                                                                <Label htmlFor="horizontal-firstname-input" className="col-sm-5 col-form-label" >IsSCM </Label>
+                                                                <Label htmlFor="horizontal-firstname-input" className="col-sm-2 col-form-label" >IsSCM </Label>
                                                                 <Col md={2} style={{ marginTop: '9px' }} >
                                                                     <div className="form-check form-switch form-switch-md mb-3" dir="ltr">
                                                                         <AvInput type="checkbox" className="form-check-input" id="customSwitchsizemd"

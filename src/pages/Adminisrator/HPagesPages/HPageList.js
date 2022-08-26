@@ -236,7 +236,8 @@ export default function HPageList() {
           }}
           size="xl"
         >
-          {/* <HPageMaster state={editData.Data} /> */}
+          <HPageMaster state={editData.Data} relatatedPage={userPageAccessState.ActualPagePath} />
+
         </Modal>
 
       </React.Fragment>

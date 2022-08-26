@@ -71,7 +71,7 @@ const HPageMaster = (props) => {
   );
   // userAccess useEffect
   useEffect(() => {
-
+debugger
 
     // if ((editDataGatingFromList === undefined)) {
     //   const userAcc = CommonGetRoleAccessFunction(history)

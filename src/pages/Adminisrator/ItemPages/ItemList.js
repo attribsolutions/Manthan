@@ -131,26 +131,40 @@ const ItemsList = (props) => {
 
   const pagesListColumns = [
     {
+      text: "ID",
+      dataField: "id",
+      sort: true,
+    },
+    {
       text: "Item Name",
       dataField: "Name",
       sort: true,
     },
     {
-      text: "GST(%)",
-      dataField: "GSTPercentage",
+      text: "Base Unit",
+      dataField: "BaseUnitName",
       sort: true,
     },
     {
-      text: "MRP",
-      dataField: "MRP",
+      text: "Company",
+      dataField: "CompanyName",
       sort: true,
     },
     {
-      text: "Active",
-      dataField: "isActive",
+      text: "Category Type",
+      dataField: "CategoryTypeName",
       sort: true,
     },
-
+    {
+      text: "Category",
+      dataField: "CategoryName",
+      sort: true,
+    },
+    {
+      text: "SubCategory",
+      dataField: "SubCategoryName",
+      sort: true,
+    },
   // For Edit, Delete ,and View Button Common Code function
   listPageCommonButtonFunction({
     dispatchHook: dispatch,
