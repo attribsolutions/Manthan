@@ -12,6 +12,7 @@ import {
     Container,
     Form,
     FormGroup,
+    Input,
     Label,
     Nav,
     NavItem,
@@ -34,6 +35,7 @@ import { getDivisionTypelist } from "../../../store/Administrator/DivisionTypeRe
 import Dropzone from "react-dropzone";
 import { AlertState } from "../../../store/actions";
 import { Tbody, Thead } from "react-super-responsive-table";
+import { getPartyListAPI } from "../../../store/Administrator/PartyRedux/action";
 
 const ItemsMaster = () => {
     const [selectedFiles, setselectedFiles] = useState([])
@@ -46,7 +48,22 @@ const ItemsMaster = () => {
     const [category_dropdown_Select, setCategory_dropdown_Select] = useState("");
     const [subCategory_dropdown_Select, setsubCategory_dropdown_Select] = useState("");
     const [divisionType_dropdown_Select, setDivisionType_dropdown_Select] = useState("");
-    const [name, setName] = useState("");
+
+    let initial = {
+        Name: "",
+        Sequence: "",
+        ShortName: "",
+        BarCode: "",
+        Company:"",
+        BaseUnit:''
+    }
+    
+    let [name, setName] = useState();
+    
+    const [selectValue, setselectValue] = useState(initial);
+    
+    console.log("test code",selectValue)
+
     const [DefaultBaseUnit, setDefaultBaseUnit] = useState("");
     const [multiCat, setMultiCat] = useState([{
         CategoryType: '',
@@ -54,8 +71,13 @@ const ItemsMaster = () => {
         SubCategory: ''
     },
     ]);
+    const [Margin, setMargine] = useState([{
+        PriceList: '',
+        Margin: ''
+    }]);
+
     const [divisionTypeData, setDivisionTypeData] = useState([]);
-    const [priceList_Dropdown_Select, setPriceList_Dropdown_Selecte]=useState([]);
+    const [priceList_Dropdown_Select, setPriceList_Dropdown_Selecte] = useState([]);
     const [baseUnitTableData, setBaseUnitTableData] = useState([{
         conversionRatio: '',
         toBaseUnit: '',
@@ -68,7 +90,7 @@ const ItemsMaster = () => {
         CategoryType: state.ItemMastersReducer.CategoryType,
         Category: state.ItemMastersReducer.Category,
         SubCategory: state.ItemMastersReducer.SubCategory,
-        DivisionType: state.DivisionTypeReducer.ListData,
+        DivisionType: state.PartyMasterReducer.partyList,
     }));
 
     useEffect(() => {
@@ -77,7 +99,7 @@ const ItemsMaster = () => {
         dispatch(get_CategoryTypes_ForDropDown());
         dispatch(get_Category_ForDropDown());
         dispatch(get_SubCategory_ForDropDown());
-        dispatch(getDivisionTypelist());
+        dispatch(getPartyListAPI());
     }, [dispatch]);
 
     const toggle1 = tab => {
@@ -225,13 +247,57 @@ const ItemsMaster = () => {
         setMultiCat(newarr)
     }
     function MulitDeletrTab_2Handler(key) {
-     
+
         var removeElseArrray = multiCat.filter((i, k) => {
             return !(k === key)
         })
 
         setMultiCat(removeElseArrray)
 
+    }
+
+    function MarginTabHandler(event, key, type) {
+
+        var found = Margin.find((i, k) => {
+            return (k === key)
+        })
+        let newSelectValue = ''
+
+        if (type === "PriceList") {
+            newSelectValue = {
+                PriceList: event,
+                Margin: found.Margin,
+            }
+        }
+        else if (type === 'Margin') {
+            newSelectValue = {
+                PriceList: found.PriceList,
+                Margin: event.target.value,
+            }
+        }
+
+        let newTabArr = Margin.map((index, k) => {
+            return (k === key) ? newSelectValue : index
+        })
+        setMargine(newTabArr)
+    }
+
+    function AddMultipleMarginRow_Handle(key) {
+
+        var newarr1 = [...Margin, {
+            PriceList: { value: 0, label: "select" },
+            Margin: {}
+        }]
+        setMargine(newarr1)
+    }
+
+    function MulitDeletrTab_7Handler(key) {
+        debugger
+        var removeElseArrray1 = Margin.filter((i, k) => {
+            return !(k === key)
+        })
+
+        setMargine(removeElseArrray1)
     }
 
 
@@ -302,8 +368,40 @@ const ItemsMaster = () => {
         setBaseUnitTableData(newTabArr)
         // setBaseUnit_dropdown_Select2(e)
     }
+    let base64String = "";
+    let imageBase64Stringsep = ''
 
-    console.log("f", baseUnitTableData)
+    function imageUploaded() {
+        debugger
+        var file = document.querySelector(
+            'input[type=file]')['files'][0];
+
+        var reader = new FileReader();
+        console.log("next");
+
+        reader.onload = function () {
+            base64String = reader.result.replace("data:", "")
+                .replace(/^.+,/, "");
+
+            imageBase64Stringsep = base64String;
+
+            alert(imageBase64Stringsep);
+            console.log(base64String);
+            setImage2(base64String)
+        }
+        reader.readAsDataURL(file);
+    }
+    // console.log("base64String", base64String)
+
+    // function displayString() {
+    //     console.log("Base64String about to be printed");
+    //     alert(base64String);
+    // }
+
+    const [image2, setImage2] = useState('')
+
+    // '<svg xmlns="http://www.w3.org/2000/svg" version="1.2" baseProfile="tiny" width="47.4" height="40.65" viewBox="21 18.5 158 135.5"><path d="M25,50 l150,0 0,100 -150,0 z" stroke-width="4" stroke="black" fill="rgb(128,224,255)" fill-opacity="1" ></path><path d="M25,50 L175,150 M25,150 L175,50" stroke-width="4" stroke="black" fill="black" ></path><g transform="translate(0,0)" stroke-width="4" stroke="black" fill="none" ><circle cx="100" cy="30" r="7.5" fill="black" ></circle><circle cx="70" cy="30" r="7.5" fill="black" ></circle><circle cx="130" cy="30" r="7.5" fill="black" ></circle></g></svg>';
+
     return (
         <React.Fragment>
             <div className="page-content">
@@ -338,7 +436,7 @@ const ItemsMaster = () => {
                                                     <span className="d-block d-sm-none">
                                                         <i className="fas fa-home"></i>
                                                     </span>
-                                                    <span className="d-none d-sm-block">Tab1</span>
+                                                    <span className="d-none d-sm-block">Basic Info</span>
                                                 </NavLink>
                                             </NavItem>
                                             <NavItem>
@@ -354,7 +452,7 @@ const ItemsMaster = () => {
                                                     <span className="d-block d-sm-none">
                                                         <i className="fas fa-home"></i>
                                                     </span>
-                                                    <span className="d-none d-sm-block">Tab2</span>
+                                                    <span className="d-none d-sm-block">Category</span>
 
                                                 </NavLink>
                                             </NavItem>
@@ -371,7 +469,7 @@ const ItemsMaster = () => {
                                                     <span className="d-block d-sm-none">
                                                         <i className="fas fa-home"></i>
                                                     </span>
-                                                    <span className="d-none d-sm-block">Tab3</span>
+                                                    <span className="d-none d-sm-block">Unit Conversions</span>
                                                 </NavLink>
                                             </NavItem>
                                             <NavItem>
@@ -387,7 +485,7 @@ const ItemsMaster = () => {
                                                     <span className="d-block d-sm-none">
                                                         <i className="fas fa-home"></i>
                                                     </span>
-                                                    <span className="d-none d-sm-block">Tab4</span>
+                                                    <span className="d-none d-sm-block">Image</span>
                                                 </NavLink>
                                             </NavItem>
                                             <NavItem>
@@ -403,7 +501,7 @@ const ItemsMaster = () => {
                                                     <span className="d-block d-sm-none">
                                                         <i className="fas fa-home"></i>
                                                     </span>
-                                                    <span className="d-none d-sm-block">Tab5</span>
+                                                    <span className="d-none d-sm-block">Division</span>
                                                 </NavLink>
                                             </NavItem>
                                             <NavItem>
@@ -419,7 +517,7 @@ const ItemsMaster = () => {
                                                     <span className="d-block d-sm-none">
                                                         <i className="fas fa-home"></i>
                                                     </span>
-                                                    <span className="d-none d-sm-block">Tab6</span>
+                                                    <span className="d-none d-sm-block">Rate Details</span>
                                                 </NavLink>
                                             </NavItem>
 
@@ -437,25 +535,25 @@ const ItemsMaster = () => {
                                                     <span className="d-block d-sm-none">
                                                         <i className="fas fa-home"></i>
                                                     </span>
-                                                    <span className="d-none d-sm-block">Tab7</span>
+                                                    <span className="d-none d-sm-block">Margin</span>
                                                 </NavLink>
                                             </NavItem>
-                                            
+
                                             <NavItem>
                                                 <NavLink
                                                     style={{ cursor: "pointer" }}
-                                                    // className={classnames({
-                                                    //     active: activeTab1 === "7",
-                                                    // })}
-                                                    // onClick={() => {
-                                                    //     toggle1("7")
-                                                    // }}
+                                                // className={classnames({
+                                                //     active: activeTab1 === "7",
+                                                // })}
+                                                // onClick={() => {
+                                                //     toggle1("7")
+                                                // }}
                                                 >
                                                     <span className="d-block d-sm-none">
                                                         <i className="fas fa-home"></i>
                                                     </span>
                                                     {/* <span className="d-none d-sm-block">Tab7</span> */}
-                                                    <Button> save</Button>
+                                                    <Button onClick={() => { console.log(selectValue) }}> save</Button>
                                                 </NavLink>
                                             </NavItem>
                                         </Nav>
@@ -474,7 +572,7 @@ const ItemsMaster = () => {
                                                                         validate={{
                                                                             required: { value: true, errorMessage: 'Please Enter Name' },
                                                                         }}
-                                                                        onChange={(e) => { (setName(e.target.value)) }}
+                                                                        onChange={(e) => { selectValue.Name=e.target.value }}
                                                                     />
                                                                 </FormGroup>
 
@@ -486,47 +584,59 @@ const ItemsMaster = () => {
                                                                         validate={{
                                                                             required: { value: true, errorMessage: 'Please Enter Name' },
                                                                         }}
+                                                                        onChange={(e) => {selectValue.ShortName=e.target.value }}
                                                                     />
                                                                 </FormGroup>
 
                                                                 <FormGroup className=" col col-sm-4 " >
                                                                     <Label htmlFor="validationCustom21">Company</Label>
                                                                     <Select
-                                                                        value={companyList_dropdown_Select}
+                                                                        value={selectValue.Company}
                                                                         options={Company_DropdownOptions}
-                                                                        onChange={(e) => { CompanyList_DropDown_handller(e) }}
+                                                                        onChange={(e) => {selectValue.Company=e }}
+                                                                        // onChange={(e) => { CompanyList_DropDown_handller(e) }}
                                                                     />
                                                                 </FormGroup>
 
                                                                 <FormGroup className=" col col-sm-4 " >
                                                                     <Label htmlFor="validationCustom21">Base Unit</Label>
                                                                     <Select
-                                                                        value={BaseUnit_dropdown_Select}
+                                                                        // value={BaseUnit_dropdown_Select}
+                                                                        value={selectValue.BaseUnit}
                                                                         options={BaseUnit_DropdownOptions}
-                                                                        onChange={(e) => { BaseUnit_DropDown_handller(e) }}
+                                                                        onChange={(e) => {selectValue.BaseUnit=e }}
+                                                                        // onChange={(e) => { BaseUnit_DropDown_handller(e) }}
                                                                     />
                                                                 </FormGroup>
 
                                                                 <FormGroup className="mb-3 col col-sm-4 " >
                                                                     <Label htmlFor="validationCustom01">BarCode</Label>
-                                                                    <AvField name="Name" value={""} type="text" id='txtName'
+                                                                    <Input
                                                                         placeholder=" Please Enter BarCode "
                                                                         autoComplete="off"
-                                                                        validate={{
-                                                                            required: { value: true, errorMessage: 'Please Enter BarCode' },
-                                                                        }}
+                                                                        // validate={{
+                                                                        //     required: { value: true, errorMessage: 'Please Enter BarCode' },
+                                                                        // }}
+                                                                        onChange={(e) => {selectValue.BarCode=e.target.value }}
                                                                     />
                                                                 </FormGroup>
 
                                                                 <FormGroup className="mb-3 col col-sm-4 " >
                                                                     <Label htmlFor="validationCustom01">Sequence</Label>
-                                                                    <AvField name="Name" value={""} type="text" id='txtName'
+                                                                    <Input
                                                                         placeholder=" Please Enter Sequence "
                                                                         autoComplete="off"
+                                                                     
+                                                                        onChange={(e) => {selectValue.Sequence=e.target.value }}
+                                                                    />
+                                                                    {/* <AvField name="Name" value={""} type="text" id='txtName'
+                                                                        placeholder=" Please Enter Sequence "
+                                                                        autoComplete="off"
+
                                                                         validate={{
                                                                             required: { value: true, errorMessage: 'Please Enter Sequence' },
                                                                         }}
-                                                                    />
+                                                                    /> */}
                                                                 </FormGroup>
                                                                 <FormGroup className="mb-2 col col-sm-5">
                                                                     <Row className="justify-content-md-left">
@@ -738,6 +848,49 @@ const ItemsMaster = () => {
                                                                     drag’n’drop file uploads with image previews.
                                                                 </CardSubtitle> */}
                                                                 {/* <Form> */}
+
+
+                                                                <input type="file" name="" id="fileId"
+                                                                    onChange={() => imageUploaded()} />
+                                                                <br></br>
+                                                                {/* <img src={`data:image/png;base64,${image2}`} /> */}
+
+                                                                <Card
+                                                                    className="mt-1 mb-0 shadow-none border dz-processing dz-image-preview dz-success dz-complete"
+                                                                // key={i + "-file"}
+                                                                >
+                                                                    <div className="p-2">
+                                                                        <Row className="align-items-center">
+                                                                            <Col className="col-auto">
+                                                                                <img
+                                                                                    data-dz-thumbnail=""
+                                                                                    // height="200"
+                                                                                    // width={100}
+                                                                                    className="avatar-sm rounded bg-light"
+                                                                                    alt={"index.name"}
+                                                                                    src={`data:image;base64,${image2}`}
+
+                                                                                />
+                                                                            </Col>
+                                                                            <Col>
+                                                                                <Link
+                                                                                    to="#"
+                                                                                    className="text-muted font-weight-bold"
+                                                                                >
+                                                                                    {"IMAGE NAME.name"}
+                                                                                </Link>
+                                                                                <p className="mb-0">
+                                                                                    <strong>{"index.formattedSize"}</strong>
+                                                                                </p>
+                                                                            </Col>
+                                                                        </Row>
+                                                                    </div>
+                                                                </Card>
+                                                                <br></br>
+                                                                <br></br>
+                                                                <br></br>
+                                                                <br></br>
+
                                                                 <Dropzone
                                                                     onDrop={acceptedFiles => {
                                                                         handleAcceptedFiles(acceptedFiles)
@@ -825,6 +978,7 @@ const ItemsMaster = () => {
                                                                 <Row>
                                                                     <h5>Item Name :<Label className="text-primary" >{name}</Label></h5>
                                                                 </Row>
+
 
                                                                 <Row>
                                                                     <FormGroup className=" col col-sm-4 " >
@@ -944,49 +1098,78 @@ const ItemsMaster = () => {
                                             </TabPane>
                                             <TabPane tabId="7">
                                                 <Row>
+
                                                     <Col md={12}  >
                                                         <Card className="text-black">
                                                             <CardBody style={{ backgroundColor: "whitesmoke" }}>
+
                                                                 <Row>
                                                                     <h5>Item Name :<Label className="text-primary" >{name}</Label></h5>
                                                                 </Row>
-                                                                <Row>
+                                                                {Margin.map((index, key) => {
 
-                                                                    <FormGroup className=" col col-sm-4 " >
-                                                                        <Label >Price List</Label>
-                                                                        <Select
-                                                                            value={priceList_Dropdown_Select}
-                                                                            options={PriceList_DropdownOptions}
-                                                                            onChange={()=>{PriceList_DropDown_handller()}}
-                                                                        />
-                                                                    </FormGroup>
+                                                                    return <Row className="mt-3">
+                                                                        <Col className=" col col-10 ">
+                                                                            <Row>
+                                                                                <FormGroup className=" col col-sm-5 " >
+                                                                                    <Label >Price List</Label>
+                                                                                    <Select
+                                                                                        value={Margin[key].PriceList}
+                                                                                        options={PriceList_DropdownOptions}
+                                                                                        onChange={(e) => { MarginTabHandler(e, key, "PriceList") }}
+                                                                                    />
+                                                                                </FormGroup>
 
-                                                                    <FormGroup className="mb-3 col col-sm-4 " >
-                                                                        <Label htmlFor="validationCustom01">Margin</Label>
-                                                                        <AvField name="GST" value={""} type="text" id='txtName'
-                                                                            placeholder=" Please Enter GST "
-                                                                            autoComplete="off"
-                                                                            validate={{
-                                                                                required: { value: true, errorMessage: 'Please Enter GST' },
-                                                                            }}
-                                                                        />
-                                                                    </FormGroup>
-
-                                                                </Row>
-
-                                                                <Row>
+                                                                                <FormGroup className="mb-3 col col-sm-5 " >
+                                                                                    <Label htmlFor="validationCustom01">Margin</Label>
+                                                                                    <AvInput name="value" type="text"
+                                                                                        // defaultValue={Margin}
+                                                                                        placeholder="Please Enter Margin"
+                                                                                        onChange={(e) => MarginTabHandler(e, key, "Margin")}></AvInput>
+                                                                                </FormGroup>
 
 
+                                                                            </Row>
+                                                                        </Col>
+                                                                        {(Margin.length === key + 1) ?
+                                                                            <Col className="col col-1 mt-3">
+                                                                                <Button
+                                                                                    className="btn btn-sm mt-3 mb-0 btn-light  btn-outline-primary  "
+                                                                                    type="button"
+                                                                                    onClick={() => { AddMultipleMarginRow_Handle(key) }} >
+                                                                                    <i className="dripicons-plus"></i></Button>
+                                                                                {/* 
 
-                                                                </Row>
+                                                                                <i
+                                                                                className="dripicons-plus text-primary font-size-20 mt-3"
+                                                                                onClick={() => {
+                                                                                    MuliSelectTab2Handler(key);
+                                                                                }}
+                                                                            ></i> */}
+                                                                            </Col>
+                                                                            : <Col className="col col-1 mt-3">
+
+                                                                                <i
+
+
+                                                                                    className="mdi mdi-trash-can d-block text-danger font-size-20 mt-3"
+                                                                                    onClick={() => {
+                                                                                        MulitDeletrTab_7Handler(key);
+                                                                                    }}
+                                                                                ></i>
+
+                                                                            </Col>}
+                                                                    </Row>
+
+
+                                                                })}
+
                                                             </CardBody>
                                                         </Card>
 
                                                     </Col>
-
                                                 </Row>
                                             </TabPane>
-
                                         </TabContent>
                                     </CardBody>
                                 </Card>
