@@ -36,6 +36,7 @@ const AddEmployee = (props) => {
 
   //*** "isEditdata get all data from ModuleID for Binding  Form controls
   var editDataGatingFromList = props.state;
+  let propsPageMode = props.pageMode;
 
   const [designation_DropdownSelect, setDesignation_DropdownSelect] = useState("");
   const [employeeType_DropdownSelect, setEmployeeType_DropdownSelect] = useState("");
@@ -46,34 +47,40 @@ const AddEmployee = (props) => {
   const [DOB_Date_Select, setDOB_Date_Select] = useState("");
   const [partyDropDownShow_UI, setPartyDropDownShow_UI] = useState(false);
 
-  const { designation, employeeType, State, district, partyList, company, postMessage ,RoleAccessModifiedinSingleArray} = useSelector((state) => ({
+  const { designation, employeeType, State, district, partyList, company, PostAPIResponse ,RoleAccessModifiedinSingleArray} = useSelector((state) => ({
     designation: state.M_EmployeesReducer.designation,
     employeeType: state.M_EmployeesReducer.employeeType,
     State: state.M_EmployeesReducer.State,
     district: state.PartyMasterReducer.DistrictOnState,
     partyList: state.PartyMasterReducer.partyList,
     company: state.M_EmployeesReducer.CompanyNames,
-    postMessage: state.M_EmployeesReducer.postMessage,
+    PostAPIResponse: state.M_EmployeesReducer.postMessage,
     RoleAccessModifiedinSingleArray: state.Login.RoleAccessUpdateData,
 
   }));
 
   // userAccess useEffect
   useEffect(() => {
-      if ((editDataGatingFromList === undefined)) {
-          const userAcc = CommonGetRoleAccessFunction(history)
-          if (!(userAcc === undefined)) {
-              setUserPageAccessState(userAcc)
-          }
-      } else {
-          let RelatedPageID = history.location.state.UserDetails.RelatedPageID
-          const userfound = RoleAccessModifiedinSingleArray.find((element) => {
-              return element.id === RelatedPageID
+     let userAcc = undefined
+        if ((editDataGatingFromList === undefined)) {
+    
+          let locationPath = history.location.pathname
+          userAcc = RoleAccessModifiedinSingleArray.find((inx) => {
+            return (`/${inx.ActualPagePath}` === locationPath)
           })
-          setUserPageAccessState(userfound)
-      }
+        }
+        else if (!(editDataGatingFromList === undefined)) {
+          let relatatedPage = props.relatatedPage
+          userAcc = RoleAccessModifiedinSingleArray.find((inx) => {
+            return (`/${inx.ActualPagePath}` === relatatedPage)
+          })
+    
+        }
+        if (!(userAcc === undefined)) {
+          setUserPageAccessState(userAcc)
+        }
 
-  }, [history])
+    }, [RoleAccessModifiedinSingleArray])
 
   useEffect(() => {
     dispatch(getDesignationID());
@@ -129,13 +136,16 @@ const AddEmployee = (props) => {
 
       dispatch(editEmployeeSuccess({ Status: false }))
       dispatch(BreadcrumbShow(editDataGatingFromList.Name))
-      return
+      }
+      else if (!(propsPageMode === undefined)) {
+        setPageMode(propsPageMode)
+        
     }
-  }, [editDataGatingFromList])
+  }, [editDataGatingFromList,propsPageMode])
 
   useEffect(() => {
 
-    if ((postMessage.Status === true) && (postMessage.StatusCode === 200)) {
+    if ((PostAPIResponse.Status === true) && (PostAPIResponse.StatusCode === 200)&&!(pageMode==="dropdownAdd")) {
       dispatch(PostEmployeeSuccess({ Status: false }))
       formRef.current.reset();
       setDesignation_DropdownSelect('')
@@ -146,34 +156,34 @@ const AddEmployee = (props) => {
       setParty_DropdownSelect('')
       setCompany_DropdownSelect('')
 
-      if (pageMode === "other") {
+      if (pageMode === "dropdownAdd") {
         dispatch(AlertState({
           Type: 1,
           Status: true,
-          Message: postMessage.Message,
+          Message: PostAPIResponse.Message,
         }))
       }
       else {
         dispatch(AlertState({
           Type: 1,
           Status: true,
-          Message: postMessage.Message,
+          Message: PostAPIResponse.Message,
           RedirectPath: '/EmployeeList',
         }))
       }
     }
 
-    else if (postMessage.Status === true) {
+    else if (PostAPIResponse.Status === true) {
       dispatch(PostEmployeeSuccess({ Status: false }))
       dispatch(AlertState({
         Type: 4,
         Status: true,
-        Message: JSON.stringify(postMessage.Message),
+        Message: JSON.stringify(PostAPIResponse.Message),
         RedirectPath: false,
         AfterResponseAction: false
       }));
     }
-  }, [postMessage])
+  }, [PostAPIResponse])
 
 
 
@@ -193,10 +203,6 @@ const AddEmployee = (props) => {
     value: data.id,
     label: data.Name
   }));
-
-
-
-
 
   const State_DropdownOptions = State.map((data) => ({
     value: data.id,
@@ -238,10 +244,6 @@ const AddEmployee = (props) => {
     }
   }
 
-
-
-
-
   function State_Dropdown_Handler(e) {
     dispatch(getDistrictOnState(e.value))
     setState_DropdownSelect(e)
@@ -254,7 +256,6 @@ const AddEmployee = (props) => {
   function Party_Dropdown_Handler(e) {
     setParty_DropdownSelect(e)
   }
-
 
   function Company_Dropdown_Handler(e) {
     setCompany_DropdownSelect(e)
@@ -293,7 +294,7 @@ const AddEmployee = (props) => {
 
   // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
   let IsEditMode_Css = ''
-  if (pageMode === "edit" || pageMode == "other") { IsEditMode_Css = "-5.5%" };
+  if (pageMode === "edit" || pageMode == "dropdownAdd") { IsEditMode_Css = "-5.5%" };
 
   if (!(userPageAccessState === '')) {
     return (
