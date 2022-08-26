@@ -89,7 +89,7 @@ const postJwtRegister = (url, data) => {
 
 export const Python_FoodERP_postJwtLogin = data => post(url.FOOD_ERP_POST_JWT_LOGIN, data)
 export const getUserDetails_afterLogin_ApiCall = data => post(url.FOOD_ERP_POST_USER_DETAILS_AFTER_LOGIN, data)
-
+export const divisionDropdown_Forlogin_ChangeDivisionPage_ApiCall = (id1) => get(`${url.DIVIDION_DROPDOWN_FOR_LOGIN_CHANGE_DIVSION_PAGE}/${id1}`)
 
 // postForgetPwd
 export const Python_FoodERP_postJwtForgetPwd_Verify_OTP = data => postForget(url.FOOD_ERP_POST_JWT_PASSWORD_FORGET_VERIFY_OTP, data)
@@ -98,7 +98,7 @@ export const Python_FoodERP_postJwtForgetPwd_SendOTP = data => postForget(url.FO
 // postSocialLogin
 export const postSocialLogin = data => post(url.SOCIAL_LOGIN, data)
 
-export const RoleAccessApi_url = (id1,id2,id3) => get(`${url.ROLE_ACCESS}/${id1}/${id2}/${id3}`)
+export const RoleAccessApi_url = (id1,id2,) => get(`${url.ROLE_ACCESS}/${id1}/${id2}`)
 
 // Employees  Component All Api 
 

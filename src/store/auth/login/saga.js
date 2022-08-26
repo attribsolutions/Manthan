@@ -16,6 +16,7 @@ import {
 
 import { getFirebaseBackend } from "../../../helpers/firebase_helper"
 import {
+  divisionDropdown_Forlogin_ChangeDivisionPage_ApiCall,
   getUserDetails_afterLogin_ApiCall,
   Python_FoodERP_postJwtLogin, RoleAccessApi_url, showPagesListOnPageAccess_DropDown_List, UserPartiesForUserMaster_API
 } from "../../../helpers/backend_helper"
@@ -82,7 +83,7 @@ debugger
     var company = response.Data.CompanyID;
     var companyGroup = response.Data.CompanyGroup;
 
-    const response2 = yield call(UserPartiesForUserMaster_API, employee)
+    const response2 = yield call(divisionDropdown_Forlogin_ChangeDivisionPage_ApiCall, employee,)
     yield put(divisionDropdownSelectSuccess(response2.Data))
 
     // yield put(roleAceessAction(user, employee, company))
@@ -104,13 +105,13 @@ function* logoutUser({ payload: { history } }) {
     yield put(apiError(error))
   }
 }
-function* RoleAccessGenratorFunction({ id1, id2, id3 }) {
-  // debugger
+function* RoleAccessGenratorFunction({ id1, id2,  }) {
+  debugger
 
   try {
     const PageAccessApi = yield call(showPagesListOnPageAccess_DropDown_List)
 
-    const RoleResponse = yield call(RoleAccessApi_url, id1, id2, id3);
+    const RoleResponse = yield call(RoleAccessApi_url, id1, id2, );
 
     if ((RoleResponse.Data.length > 0) && (PageAccessApi.Data.length > 0)) {
 
