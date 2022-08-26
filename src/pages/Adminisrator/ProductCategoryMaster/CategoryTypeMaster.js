@@ -13,29 +13,77 @@ import {
 import { AvField, AvForm, } from "availity-reactstrap-validation";
 import { MetaTags } from "react-meta-tags";
 import { AlertState } from "../../../store/actions";
+import { CommonGetRoleAccessFunction } from "../../../components/Common/CommonGetRoleAccessFunction";
+import { useHistory } from "react-router-dom";
 
 import { BreadcrumbShow } from "../../../store/Utilites/Breadcrumb/actions";
 import { useDispatch, useSelector } from "react-redux";
-import { PostMethodForCategoryTypeMaster,
-     PostMethod_ForCategoryTypeMasterAPISuccess
-     } from "../../../store/actions";
+// import { PostMethodForCategoryTypeMaster,
+//      PostMethod_ForCategoryTypeMasterAPISuccess
+//      } from "../../../store/actions";
    
-     
+     import {
+        PostMethodForCategoryTypeMaster,
+        PostMethod_ForCategoryTypeMasterAPISuccess,
+         editCategoryTypeIDSuccess,
+         updateCategoryTypeID,
+      } from "../../../store/Administrator/CategoryTypeMasterRedux/actions";
 
 
 const CategoryTypeMaster = (props) => {
     const formRef = useRef(null);
     const [EditData, setEditData] = useState([]);
     const [pageMode, setPageMode] = useState("");
-   
+    const history = useHistory()
     const dispatch = useDispatch();
     const [userPageAccessState, setUserPageAccessState] = useState(123);
 
-    //Access redux store Data /  'save_ModuleSuccess' action data
-    const { PostAPIResponse } = useSelector((state) => ({
-        PostAPIResponse: state.CategoryTypeMasterReducer.PostData,
+//*** "isEditdata get all data from ModuleID for Binding  Form controls
+   let editDataGatingFromList = props.state;
+  
 
+    //Access redux store Data /  'save_ModuleSuccess' action data
+const { PostAPIResponse,RoleAccessModifiedinSingleArray} = useSelector((state) => ({
+        PostAPIResponse: state.categoryTypeMasterReducer.PostData,
+        RoleAccessModifiedinSingleArray: state.Login.RoleAccessUpdateData,
     }));
+
+
+//userAccess useEffect
+useEffect(() => {
+    let userAcc = undefined
+    if ((editDataGatingFromList === undefined)) {
+
+      let locationPath = history.location.pathname
+      userAcc = RoleAccessModifiedinSingleArray.find((inx) => {
+        return (`/${inx.ActualPagePath}` === locationPath)
+      })
+    }
+    else if (!(editDataGatingFromList === undefined)) {
+      let relatatedPage = props.relatatedPage
+      userAcc = RoleAccessModifiedinSingleArray.find((inx) => {
+        return (`/${inx.ActualPagePath}` === relatatedPage)
+      })
+
+    }
+    if (!(userAcc === undefined)) {
+      setUserPageAccessState(userAcc)
+    }
+
+}, [RoleAccessModifiedinSingleArray])
+
+
+ //This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
+ useEffect(() => {
+    if (!(userPageAccessState === '')) { document.getElementById("txtName").focus(); }
+    if (!(editDataGatingFromList === undefined)) {
+        setEditData(editDataGatingFromList);
+        setPageMode("edit");
+        dispatch(editCategoryTypeIDSuccess({ Status: false }))
+        dispatch(BreadcrumbShow(editDataGatingFromList.Name))
+        return
+    }
+}, [editDataGatingFromList])
 
     useEffect(() => {
     
@@ -50,12 +98,13 @@ const CategoryTypeMaster = (props) => {
                 Message: PostAPIResponse.Message,
               }))
             }
+            
             else {
               dispatch(AlertState({
                 Type: 1,
                 Status: true,
                 Message: PostAPIResponse.Message,
-                // RedirectPath: '/',
+                 RedirectPath: '/CategoryTypeList',
               }))
             }
           }
@@ -78,8 +127,14 @@ const CategoryTypeMaster = (props) => {
             Name: values.Name,
 
         });
-        dispatch(PostMethodForCategoryTypeMaster(jsonBody))
-    }
+        if (pageMode === "edit") {
+            dispatch(updateCategoryTypeID(jsonBody, EditData.id));
+        }
+        else {
+            dispatch(PostMethodForCategoryTypeMaster(jsonBody))
+        }
+        
+    };
     
 
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
@@ -94,12 +149,12 @@ const CategoryTypeMaster = (props) => {
                         <MetaTags>
                             <title>CategoryTypeMaster| FoodERP-React FrontEnd</title>
                         </MetaTags>
-                        <Breadcrumb breadcrumbItem={"ProductCategoryTypeMaster"} />
+                        <Breadcrumb breadcrumbItem={userPageAccessState.PageHeading} />
 
                         <Card className="text-black">
                             <CardHeader className="card-header   text-black" style={{ backgroundColor: "#dddddd" }} >
-                                <h4 className="card-title text-black">{"userPageAccessState.PageDescription"}</h4>
-                                <p className="card-title-desc text-black">{"userPageAccessState.PageDescriptionDetails"}</p>
+                                <h4 className="card-title text-black">{userPageAccessState.PageDescription}</h4>
+                                <p className="card-title-desc text-black">{userPageAccessState.PageDescriptionDetails}</p>
                             </CardHeader>
 
                             <CardBody className=" vh-10 0 text-black" style={{ backgroundColor: "#whitesmoke" }} >
@@ -127,9 +182,26 @@ const CategoryTypeMaster = (props) => {
                                                             />
 
                                                         </FormGroup>
-                                                        <Row>
-                                                            <div className="w-xs">
-                                                        <button
+                                                        
+                                                        <FormGroup>
+                                                            <Row>
+                                                                <Col sm={2}>
+                                                                    <div>
+                                                                        {
+                                                                            pageMode === "edit" ?
+                                                                                userPageAccessState.RoleAccess_IsEdit ?
+                                                                                    <button
+                                                                                        type="submit"
+                                                                                        data-mdb-toggle="tooltip" data-mdb-placement="top" title="Update Party Type"
+                                                                                        className="btn btn-success w-md"
+                                                                                    >
+                                                                                        <i class="fas fa-edit me-2"></i>Update
+                                                                                    </button>
+                                                                                    :
+                                                                                    <></>
+                                                                                : (
+                                                                                    userPageAccessState.RoleAccess_IsSave ?
+                                                             <button
                                                                  type="submit"
                                                                  data-mdb-toggle="tooltip" data-mdb-placement="top" title="Save ProductCategory Type"
                                                                 className="btn btn-primary w-sm">
@@ -137,9 +209,14 @@ const CategoryTypeMaster = (props) => {
                                                                  Save
                                                        
                                                                </button>
+                                                               :
+                                                               <></>
+                                                       )
+                                                                                }
                                                                </div>
-                                                        </Row> 
-
+                                                               </Col>
+                                                           </Row>
+                                                      </FormGroup>            
                                                                    
                                                     </Row>
                                                 </CardBody>
@@ -155,7 +232,7 @@ const CategoryTypeMaster = (props) => {
 
                     </Container>
                 </div>
-            </React.Fragment >
+            </React.Fragment>
         );
     }
     else {

@@ -34,14 +34,19 @@ const CategoryTypeList = (props) => {
   const [modal_center, setmodal_center] = useState(false);
 
   // get Access redux data
-  const { TableListData, editData, updateMessage, deleteMessage } = useSelector(
+  // var  editData=[]
+  //var  TableListData=[]
+  const { TableListData, editData, updateMessage, deleteMessage, RoleAccessModifiedinSingleArray } = useSelector(
     (state) => ({
-      TableListData: state.CategoryTypeMasterReducer.categoryTypeListData,
-      editData: state.CategoryTypeReducer.editData,
-      updateMessage: state.CategoryTypeReducer.updateMessage,
-      deleteMessage: state.CategoryTypeReducer.deleteMessage,
+      TableListData: state.categoryTypeMasterReducer.categoryTypeListData,
+      editData: state.categoryTypeMasterReducer.editData,
+      updateMessage: state.categoryTypeMasterReducer.updateMessage,
+      deleteMessage: state.categoryTypeMasterReducer.deleteMessage,
+      RoleAccessModifiedinSingleArray: state.Login.RoleAccessUpdateData,
+
     })
   );
+  //debugger
 
   useEffect(() => {
     const userAcc = CommonGetRoleAccessFunction(history)
@@ -49,6 +54,7 @@ const CategoryTypeList = (props) => {
       setUserPageAccessState(userAcc)
     }
   }, [history])
+
 
   //  This UseEffect => Featch Modules List data  First Rendering
   useEffect(() => {
@@ -167,7 +173,7 @@ const CategoryTypeList = (props) => {
           {((userPageAccessState.RoleAccess_IsEdit)) ?
             <Button
               type="button"
-              data-mdb-toggle="tooltip" data-mdb-placement="top" title="Edit ProductCategory Type"
+              data-mdb-toggle="tooltip" data-mdb-placement="top" title="Edit Category Type"
               onClick={() => { EditPageHandler(Role.id); }}
               className="badge badge-soft-success font-size-12 btn btn-success waves-effect waves-light w-xxs border border-light"
             >
@@ -177,7 +183,7 @@ const CategoryTypeList = (props) => {
           {(!(userPageAccessState.RoleAccess_IsEdit) && (userPageAccessState.RoleAccess_IsView)) ?
             <Button
               type="button"
-              data-mdb-toggle="tooltip" data-mdb-placement="top" title="View ProductCategory Type"
+              data-mdb-toggle="tooltip" data-mdb-placement="top" title="View Category Type"
               onClick={() => { EditPageHandler(Role.id); }}
               className="badge badge-soft-primary font-size-12 btn btn-primary waves-effect waves-light w-xxs border border-light"
 
@@ -189,14 +195,13 @@ const CategoryTypeList = (props) => {
             ?
             <Button
               className="badge badge-soft-danger font-size-12 btn btn-danger waves-effect waves-light w-xxs border border-light"
-              data-mdb-toggle="tooltip" data-mdb-placement="top" title="Delete ProductCategory Type"
+              data-mdb-toggle="tooltip" data-mdb-placement="top" title="Delete Category Type"
               onClick={() => { deleteHandeler(Role.id, Role.Name); }}
             >
               <i className="mdi mdi-delete font-size-18"></i>
             </Button>
             : null
           }
-
         </div>
       ),
     },
@@ -227,7 +232,7 @@ const CategoryTypeList = (props) => {
                       SearchProps={toolkitProps.searchProps}
                       breadcrumbCount={`Product Count: ${TableListData.length}`}
                       IsSearchVissible={true}
-                    // RedirctPath={`/RoleMaster`}
+                      RedirctPath={`/CategoryTypeMaster`}
                     />
                     <Row>
                       <Col xl="12">
