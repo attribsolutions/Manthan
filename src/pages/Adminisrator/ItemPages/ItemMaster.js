@@ -30,8 +30,13 @@ import BreadcrumbDemo from "../../../components/Common/CmponentRelatedCommonFile
 import { AvField, AvForm, AvInput } from "availity-reactstrap-validation"
 import Select from "react-select";
 import { fetchCompanyList } from "../../../store/Administrator/CompanyRedux/actions"
-import { getBaseUnit_ForDropDown, get_CategoryTypes_ForDropDown, get_Category_ForDropDown, get_SubCategory_ForDropDown } from "../../../store/Administrator/ItemsRedux/action";
-import { getDivisionTypelist } from "../../../store/Administrator/DivisionTypeRedux/action";
+import {
+    getBaseUnit_ForDropDown,
+    get_CategoryTypes_ForDropDown,
+    get_Category_ForDropDown,
+    get_SubCategory_ForDropDown,
+    postItemData
+} from "../../../store/Administrator/ItemsRedux/action";
 import Dropzone from "react-dropzone";
 import { AlertState } from "../../../store/actions";
 import { Tbody, Thead } from "react-super-responsive-table";
@@ -41,48 +46,48 @@ const ItemsMaster = () => {
     const [selectedFiles, setselectedFiles] = useState([])
     const dispatch = useDispatch();
     const [activeTab1, setactiveTab1] = useState("1")
+
     const [companyList_dropdown_Select, setCompanyList_dropdown_Select] = useState("");
     const [BaseUnit_dropdown_Select, setBaseUnit_dropdown_Select] = useState("");
-    const [BaseUnit_dropdown_Select2, setBaseUnit_dropdown_Select2] = useState("");
-    const [categoryType_dropdown_Select, setCategoryType_dropdown_Select] = useState("");
-    const [category_dropdown_Select, setCategory_dropdown_Select] = useState("");
-    const [subCategory_dropdown_Select, setsubCategory_dropdown_Select] = useState("");
-    const [divisionType_dropdown_Select, setDivisionType_dropdown_Select] = useState("");
+    const [division_dropdown_Select, setDivision_dropdown_Select] = useState("");
 
     let initial = {
         Name: "",
         Sequence: "",
         ShortName: "",
-        BarCode: "",
-        Company:"",
-        BaseUnit:''
+        BarCode: {label:""},
+        Company: "",
+        BaseUnit: '',
+        MRP: '',
+        GST: '',
+        HSN: '',
     }
-    
-    let [name, setName] = useState();
-    
-    const [selectValue, setSelectValue] = useState(initial);
-    
-    console.log("test code",selectValue)
 
-    const [DefaultBaseUnit, setDefaultBaseUnit] = useState("");
-    const [multiCat, setMultiCat] = useState([{
+    let [name, setName] = useState();
+    let [refresh, setrefresh] = useState('');
+
+    const [formValue, setFormValue] = useState(initial);
+
+
+
+    // categoryTabTable
+    const [categoryTabTable, setCategoryTabTable] = useState([{
         CategoryType: '',
         Category: '',
         SubCategory: ''
-    },
-    ]);
-    const [Margin, setMargine] = useState([{
+    }]);
+
+    const [marginTabTable, setMarginTabTable] = useState([{
         PriceList: '',
         Margin: ''
     }]);
 
-    const [divisionTypeData, setDivisionTypeData] = useState([]);
-    const [priceList_Dropdown_Select, setPriceList_Dropdown_Selecte] = useState([]);
+    const [divisionTableData, setDivisionTableData] = useState([]);
+
     const [baseUnitTableData, setBaseUnitTableData] = useState([{
         conversionRatio: '',
         toBaseUnit: '',
     }]);
-
 
     const { companyList, BaseUnit, CategoryType, Category, SubCategory, DivisionType } = useSelector((state) => ({
         companyList: state.Company.companyList,
@@ -102,6 +107,9 @@ const ItemsMaster = () => {
         dispatch(getPartyListAPI());
     }, [dispatch]);
 
+
+
+
     const toggle1 = tab => {
         if (activeTab1 !== tab) {
             setactiveTab1(tab)
@@ -113,15 +121,6 @@ const ItemsMaster = () => {
         label: data.Name
     }));
 
-    function CompanyList_DropDown_handller(e) {
-        debugger
-        // selectValue.Company=e 
-        var a =selectValue
-        var b= a.Company=e
-        setSelectValue(a)
-        // setCompanyList_dropdown_Select(e)
-    }
-
     const BaseUnit_DropdownOptions = BaseUnit.map((data) => ({
         value: data.id,
         label: data.Name
@@ -132,26 +131,20 @@ const ItemsMaster = () => {
         label: data.Name
     }));
 
-
     const BaseUnit_DropdownOptions2 = BaseUnit.map((data) => ({
         value: data.id,
         label: data.Name
     }));
-
 
     const CategoryType_DropdownOptions = CategoryType.map((data) => ({
         value: data.id,
         label: data.Name
     }));
 
-    function CategoryType_DropDown_handller(e) {
-        setCategoryType_dropdown_Select(e)
-    }
     const Category_DropdownOptions = Category.map((data) => ({
         value: data.id,
         label: data.Name
     }));
-
 
     const SubCategory_DropdownOptions = SubCategory.map((data) => ({
         value: data.id,
@@ -163,52 +156,36 @@ const ItemsMaster = () => {
         label: data.Name
     }));
 
-    function MultipleAddRow_Button_Handler_tab3() {
-        var newarr = [...baseUnitTableData, {
-            conversionRatio: '',
-            toBaseUnit: '',
+
+    function Common_DropDown_handller_ForAll(event,type) {
+        formValue[type]=event
+        setrefresh(event)
+    }
+
+
+
+
+
+    function CategoryTab_AddRow_Handler() {
+        var newarr = [...categoryTabTable, {
+            CategoryType: { value: 0, label: "select" },
+            Category: { value: 0, label: "select" },
+            SubCategory: { value: 0, label: "select" }
         }]
-        setBaseUnitTableData(newarr)
+        setCategoryTabTable(newarr)
     }
-    function BaseUnit_DropDown_handller(e) {
-        setBaseUnit_dropdown_Select(e)
+    function CategoryTab_DeleteRow_Handler(key) {
+
+        var removeElseArrray = categoryTabTable.filter((i, k) => {
+            return !(k === key)
+        })
+
+        setCategoryTabTable(removeElseArrray)
+
     }
-    function PriceList_DropDown_handller(e) {
-        setPriceList_Dropdown_Selecte(e)
-    }
+    function CategoryTab_Common_onChange_Handller(event, key, type) {
 
-
-    function DivisionType_DropDown_handller(e) {
-        setDivisionType_dropdown_Select(e)
-    }
-
-    // for image upload
-    function handleAcceptedFiles(files) {
-        files.map(file =>
-            Object.assign(file, {
-                preview: URL.createObjectURL(file),
-                formattedSize: formatBytes(file.size),
-            })
-        )
-        setselectedFiles(files)
-        console.log("f", files)
-    }
-
-
-    function formatBytes(bytes, decimals = 2) {
-        if (bytes === 0) return "0 Bytes"
-        const k = 1024
-        const dm = decimals < 0 ? 0 : decimals
-        const sizes = ["Bytes", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"]
-
-        const i = Math.floor(Math.log(bytes) / Math.log(k))
-        return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + " " + sizes[i]
-    }
-
-    function Common_DropDown_handller_tabe_2(event, key, type) {
-        debugger
-
-        var found = multiCat.find((i, k) => {
+        var found = categoryTabTable.find((i, k) => {
             return (k === key)
         })
         let newSelectValue = ''
@@ -235,108 +212,21 @@ const ItemsMaster = () => {
             }
         }
 
-        let newTabArr = multiCat.map((index, k) => {
+        let newTabArr = categoryTabTable.map((index, k) => {
             return (k === key) ? newSelectValue : index
         })
-        setMultiCat(newTabArr)
+        setCategoryTabTable(newTabArr)
     }
-    function MuliSelectTab2Handler(key) {
 
 
-        var newarr = [...multiCat, {
-            CategoryType: { value: 0, label: "select" },
-            Category: { value: 0, label: "select" },
-            SubCategory: { value: 0, label: "select" }
+    function UnitConversionsTab_AddRow_Handle() {
+        var newarr = [...baseUnitTableData, {
+            conversionRatio: '',
+            toBaseUnit: '',
         }]
-
-        setMultiCat(newarr)
+        setBaseUnitTableData(newarr)
     }
-    function MulitDeletrTab_2Handler(key) {
-
-        var removeElseArrray = multiCat.filter((i, k) => {
-            return !(k === key)
-        })
-
-        setMultiCat(removeElseArrray)
-
-    }
-
-    function MarginTabHandler(event, key, type) {
-
-        var found = Margin.find((i, k) => {
-            return (k === key)
-        })
-        let newSelectValue = ''
-
-        if (type === "PriceList") {
-            newSelectValue = {
-                PriceList: event,
-                Margin: found.Margin,
-            }
-        }
-        else if (type === 'Margin') {
-            newSelectValue = {
-                PriceList: found.PriceList,
-                Margin: event.target.value,
-            }
-        }
-
-        let newTabArr = Margin.map((index, k) => {
-            return (k === key) ? newSelectValue : index
-        })
-        setMargine(newTabArr)
-    }
-
-    function AddMultipleMarginRow_Handle(key) {
-
-        var newarr1 = [...Margin, {
-            PriceList: { value: 0, label: "select" },
-            Margin: {}
-        }]
-        setMargine(newarr1)
-    }
-
-    function MulitDeletrTab_7Handler(key) {
-        debugger
-        var removeElseArrray1 = Margin.filter((i, k) => {
-            return !(k === key)
-        })
-
-        setMargine(removeElseArrray1)
-    }
-
-
-    /// Role Table Validation
-    function AddDivisionHandler() {
-        const find = divisionTypeData.find((element) => {
-            return element.value === divisionType_dropdown_Select.value
-        });
-
-        if (divisionType_dropdown_Select.length <= 0) {
-            dispatch(AlertState({
-                Type: 3, Status: true,
-                Message: "Select One Role",
-            }));
-        }
-        else if (find === undefined) {
-            setDivisionTypeData([...divisionTypeData, divisionType_dropdown_Select]);
-        }
-        else {
-            dispatch(AlertState({
-                Type: 4, Status: true,
-                Message: "DivisionType already Exists ",
-            }));
-        }
-    }
-    // For Delete Button in table
-    function UserRoles_DeleteButton_Handller(tableValue) {
-        setDivisionTypeData(divisionTypeData.filter(
-            (item) => !(item.value === tableValue)
-        )
-        )
-    }
-
-    function BaseUnitTable_Delete_Row_Handller_tab_3(key) {
+    function UnitConversionsTab_DeleteRow_Handler(key) {
 
         var removeElseArrray = baseUnitTableData.filter((i, k) => {
             return !(k === key)
@@ -345,7 +235,7 @@ const ItemsMaster = () => {
         setBaseUnitTableData(removeElseArrray)
 
     }
-    function BaseUnit2_DropDown_handller(event, key, type) {
+    function  UnitConversionsTab_BaseUnit2_onChange_Handller(event, key, type) {
 
         let newSelectValue = ''
 
@@ -372,12 +262,102 @@ const ItemsMaster = () => {
         })
         setBaseUnitTableData(newTabArr)
         // setBaseUnit_dropdown_Select2(e)
+    } 
+
+
+    function DivisionTab_AddRow_Handle() {
+        const find = divisionTableData.find((element) => {
+            return element.value === division_dropdown_Select.value
+        });
+
+        if (division_dropdown_Select.length <= 0) {
+            dispatch(AlertState({
+                Type: 3, Status: true,
+                Message: "Select One Role",
+            }));
+        }
+        else if (find === undefined) {
+            setDivisionTableData([...divisionTableData, division_dropdown_Select]);
+        }
+        else {
+            dispatch(AlertState({
+                Type: 4, Status: true,
+                Message: "DivisionType already Exists ",
+            }));
+        }
+    }
+    function DivisionTab_Dropdown_onChange_Handler(e) {
+        setDivision_dropdown_Select(e)
+    }
+    function DivisionTab_DeleteRow_Handler(tableValue) {
+        setDivisionTableData(divisionTableData.filter(
+            (item) => !(item.value === tableValue)
+        )
+        )
+    }
+
+
+
+    function MarginTab_AddRow_Handler(key) {
+
+        var newarr1 = [...marginTabTable, {
+            PriceList: { value: 0, label: "select" },
+            Margin: {}
+        }]
+        setMarginTabTable(newarr1)
+    }
+    function MarginTab_DeleteRow_Handler(key) {
+        var removeElseArrray1 = marginTabTable.filter((i, k) => {
+            return !(k === key)
+        })
+        setMarginTabTable(removeElseArrray1)
+    }
+    function MarginTab_onChange_Handler(event, key, type) {
+
+        var found = marginTabTable.find((i, k) => {
+            return (k === key)
+        })
+        let newSelectValue = ''
+
+        if (type === "PriceList") {
+            newSelectValue = {
+                PriceList: event,
+                Margin: found.Margin,
+            }
+        }
+        else if (type === 'Margin') {
+            newSelectValue = {
+                PriceList: found.PriceList,
+                Margin: event.target.value,
+            }
+        }
+
+        let newTabArr = setMarginTabTable.map((index, k) => {
+            return (k === key) ? newSelectValue : index
+        })
+        setMarginTabTable(newTabArr)
+    }
+
+
+
+
+
+
+
+
+    function formatBytes(bytes, decimals = 2) {
+        if (bytes === 0) return "0 Bytes"
+        const k = 1024
+        const dm = decimals < 0 ? 0 : decimals
+        const sizes = ["Bytes", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"]
+
+        const i = Math.floor(Math.log(bytes) / Math.log(k))
+        return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + " " + sizes[i]
     }
     let base64String = "";
     let imageBase64Stringsep = ''
-
     function imageUploaded() {
-        debugger
+
         var file = document.querySelector(
             'input[type=file]')['files'][0];
 
@@ -396,17 +376,71 @@ const ItemsMaster = () => {
         }
         reader.readAsDataURL(file);
     }
-    // console.log("base64String", base64String)
-
-    // function displayString() {
-    //     console.log("Base64String about to be printed");
-    //     alert(base64String);
-    // }
-
     const [image2, setImage2] = useState('')
+    // for image upload
+    function handleAcceptedFiles(files) {
+        files.map(file =>
+            Object.assign(file, {
+                preview: URL.createObjectURL(file),
+                formattedSize: formatBytes(file.size),
+            })
+        )
+        setselectedFiles(files)
+        console.log("f", files)
+    }
 
-    // '<svg xmlns="http://www.w3.org/2000/svg" version="1.2" baseProfile="tiny" width="47.4" height="40.65" viewBox="21 18.5 158 135.5"><path d="M25,50 l150,0 0,100 -150,0 z" stroke-width="4" stroke="black" fill="rgb(128,224,255)" fill-opacity="1" ></path><path d="M25,50 L175,150 M25,150 L175,50" stroke-width="4" stroke="black" fill="black" ></path><g transform="translate(0,0)" stroke-width="4" stroke="black" fill="none" ><circle cx="100" cy="30" r="7.5" fill="black" ></circle><circle cx="70" cy="30" r="7.5" fill="black" ></circle><circle cx="130" cy="30" r="7.5" fill="black" ></circle></g></svg>';
 
+    const handleValidSubmit = (event, values) => {
+        debugger
+        const ItemCategoryDetails = categoryTabTable.map((index) => ({
+            CategoryType: index.CategoryType.value,
+            Category: index.Category.value,
+            SubCategory: index.SubCategory.value
+        }))
+
+        const ItemUnitDetails = baseUnitTableData.map((index) => ({
+            conversionRatio: index.conversionRatio,
+            toBaseUnit: index.toBaseUnit.value,
+        }))
+
+        const ItemDivisionDetails = divisionTableData.map((index) => ({
+            Division: index.value
+        }))
+        const jsonBody = JSON.stringify({
+            Name: values.Name,
+            ShortName: values.ShortName,
+            Sequence: values.Sequence,
+            BarCode: values.BarCode,
+            isActive: values.isActive,
+            Company: companyList_dropdown_Select.value,
+            BaseUnit: BaseUnit_dropdown_Select.value,
+            ItemCategoryDetails: categoryTabTable.value,
+            ItemUnitDetails: baseUnitTableData.value,
+            ItemImagesDetails: [
+                {
+                    ImageType: "1",
+                    Item_pic: "sadsadasdas"
+                }
+            ],
+            ItemDivisionDetails: divisionTableData.value,
+            ItemGstDetails: [
+                {
+                    GSTPercentage: "5.00",
+                    MRP: "100.00",
+                    HSNCode: "Aaaa01"
+                }
+            ],
+            ItemMarginDetails: [
+                {
+                    PriceList: "1",
+                    Margin: "10"
+                }
+            ]
+        });
+
+        dispatch(postItemData(jsonBody));
+        console.log("jsonBody", jsonBody)
+    };
     return (
         <React.Fragment>
             <div className="page-content">
@@ -414,7 +448,7 @@ const ItemsMaster = () => {
                     <title>Tabs & Accordions | Minia - React Admin & Dashboard Template</title>
                 </MetaTags>
                 <Container fluid>
-                    <AvForm >
+                    <AvForm onValidSubmit={(e, v) => { handleValidSubmit(e, v); }}>
                         {/* Render Breadcrumbs */}
                         <BreadcrumbDemo title="Components" breadcrumbItem="Tabs & Accordions" />
                         <Row>
@@ -558,7 +592,7 @@ const ItemsMaster = () => {
                                                         <i className="fas fa-home"></i>
                                                     </span>
                                                     {/* <span className="d-none d-sm-block">Tab7</span> */}
-                                                    <Button onClick={() => { console.log(selectValue) }}> save</Button>
+                                                    <Button type="submit"> save</Button>
                                                 </NavLink>
                                             </NavItem>
                                         </Nav>
@@ -570,36 +604,29 @@ const ItemsMaster = () => {
                                                             <Row>
 
                                                                 <FormGroup className="mb-3 col col-sm-4 " >
-                                                                    <Label htmlFor="validationCustom01">Name</Label>
-                                                                    <AvField name="Name" value={""} type="text" id='txtName'
+                                                                    <Label >Name</Label>
+                                                                    <Input type="text" id='txtName'
                                                                         placeholder=" Please Enter Name "
                                                                         autoComplete="off"
-                                                                        validate={{
-                                                                            required: { value: true, errorMessage: 'Please Enter Name' },
-                                                                        }}
-                                                                        onChange={(e) => { selectValue.Name=e.target.value }}
+                                                                        onChange={(e) => { formValue.Name = e.target.value }}
                                                                     />
                                                                 </FormGroup>
 
                                                                 <FormGroup className="mb-3 col col-sm-4 " >
-                                                                    <Label htmlFor="validationCustom01">ShortName</Label>
-                                                                    <AvField name="Name" value={""} type="text" id='txtName'
+                                                                    <Label >ShortName</Label>
+                                                                    <Input  type="text" id='txtShortName'
                                                                         placeholder=" Please Enter ShortName "
                                                                         autoComplete="off"
-                                                                        validate={{
-                                                                            required: { value: true, errorMessage: 'Please Enter Name' },
-                                                                        }}
-                                                                        onChange={(e) => {selectValue.ShortName=e.target.value }}
+                                                                        onChange={(e) => { formValue.ShortName = e.target.value }}
                                                                     />
                                                                 </FormGroup>
 
                                                                 <FormGroup className=" col col-sm-4 " >
                                                                     <Label htmlFor="validationCustom21">Company</Label>
                                                                     <Select
-                                                                        value={selectValue.Company}
+                                                                        value={formValue.Company}
                                                                         options={Company_DropdownOptions}
-                                                                        // onChange={(e) => {selectValue.Company=e }}
-                                                                        onChange={(e) => { CompanyList_DropDown_handller(e) }}
+                                                                        onChange={(e) => Common_DropDown_handller_ForAll(e,  "Company")}
                                                                     />
                                                                 </FormGroup>
 
@@ -607,10 +634,9 @@ const ItemsMaster = () => {
                                                                     <Label htmlFor="validationCustom21">Base Unit</Label>
                                                                     <Select
                                                                         // value={BaseUnit_dropdown_Select}
-                                                                        value={selectValue.BaseUnit}
+                                                                        value={formValue.BaseUnit}
                                                                         options={BaseUnit_DropdownOptions}
-                                                                        onChange={(e) => {selectValue.BaseUnit=e }}
-                                                                        // onChange={(e) => { BaseUnit_DropDown_handller(e) }}
+                                                                        onChange={(e) => Common_DropDown_handller_ForAll(e,  "BaseUnit")}
                                                                     />
                                                                 </FormGroup>
 
@@ -622,7 +648,7 @@ const ItemsMaster = () => {
                                                                         // validate={{
                                                                         //     required: { value: true, errorMessage: 'Please Enter BarCode' },
                                                                         // }}
-                                                                        onChange={(e) => {selectValue.BarCode=e.target.value }}
+                                                                        onChange={(e) => { formValue.BarCode = e.target.value }}
                                                                     />
                                                                 </FormGroup>
 
@@ -631,8 +657,8 @@ const ItemsMaster = () => {
                                                                     <Input
                                                                         placeholder=" Please Enter Sequence "
                                                                         autoComplete="off"
-                                                                     
-                                                                        onChange={(e) => {selectValue.Sequence=e.target.value }}
+
+                                                                        onChange={(e) => { formValue.Sequence = e.target.value }}
                                                                     />
                                                                     {/* <AvField name="Name" value={""} type="text" id='txtName'
                                                                         placeholder=" Please Enter Sequence "
@@ -673,7 +699,7 @@ const ItemsMaster = () => {
                                                             <Row>
                                                                 <h5>Item Name :<Label className="text-primary" >{name}</Label></h5>
                                                             </Row>
-                                                            {multiCat.map((index, key) => {
+                                                            {categoryTabTable.map((index, key) => {
 
                                                                 return <Row className="mt-3">
                                                                     <Col className=" col col-11 ">
@@ -681,36 +707,36 @@ const ItemsMaster = () => {
                                                                             <FormGroup className=" col col-sm-4 " >
                                                                                 <Label htmlFor="validationCustom21">Category Type</Label>
                                                                                 <Select
-                                                                                    value={multiCat[key].CategoryType}
+                                                                                    value={categoryTabTable[key].CategoryType}
                                                                                     options={CategoryType_DropdownOptions}
-                                                                                    onChange={(e) => { Common_DropDown_handller_tabe_2(e, key, "CategoryType") }}
+                                                                                    onChange={(e) => { CategoryTab_Common_onChange_Handller(e, key, "CategoryType") }}
                                                                                 />
                                                                             </FormGroup>
 
                                                                             <FormGroup className=" col col-sm-4 " >
                                                                                 <Label htmlFor="validationCustom21">Category</Label>
                                                                                 <Select
-                                                                                    value={multiCat[key].Category}
+                                                                                    value={categoryTabTable[key].Category}
                                                                                     options={Category_DropdownOptions}
-                                                                                    onChange={(e) => { Common_DropDown_handller_tabe_2(e, key, "Category") }}
+                                                                                    onChange={(e) => { CategoryTab_Common_onChange_Handller(e, key, "Category") }}
                                                                                 />
                                                                             </FormGroup>
 
                                                                             <FormGroup className=" col col-sm-4 " >
                                                                                 <Label htmlFor="validationCustom21">Sub Category</Label>
                                                                                 <Select
-                                                                                    value={multiCat[key].SubCategory}
+                                                                                    value={categoryTabTable[key].SubCategory}
                                                                                     options={SubCategory_DropdownOptions}
-                                                                                    onChange={(e) => { Common_DropDown_handller_tabe_2(e, key, "SubCategory") }}
+                                                                                    onChange={(e) => { CategoryTab_Common_onChange_Handller(e, key, "SubCategory") }}
                                                                                 />
                                                                             </FormGroup>
                                                                         </Row>
                                                                     </Col>
-                                                                    {(multiCat.length === key + 1) ?
+                                                                    {(categoryTabTable.length === key + 1) ?
                                                                         <Col className="col col-1 mt-3">
                                                                             <Button className="btn btn-sm btn-light mt-3 "
                                                                                 type="button"
-                                                                                onClick={() => { MuliSelectTab2Handler(key) }} >
+                                                                                onClick={() => { CategoryTab_AddRow_Handler() }} >
                                                                                 <i className="dripicons-plus"></i></Button>
                                                                             {/* 
 
@@ -726,7 +752,7 @@ const ItemsMaster = () => {
                                                                             <i
                                                                                 className="mdi mdi-trash-can d-block text-danger font-size-20 mt-3"
                                                                                 onClick={() => {
-                                                                                    MulitDeletrTab_2Handler(key);
+                                                                                    CategoryTab_DeleteRow_Handler(key);
                                                                                 }}
                                                                             ></i>
 
@@ -751,16 +777,17 @@ const ItemsMaster = () => {
                                                                 <CardBody style={{ backgroundColor: "whitesmoke" }}>
 
                                                                     <Row>
-                                                                        <h5>Item Name :<Label className="text-primary" >{name}</Label></h5>
+                                                                        <h5>Item Name :<Label className="text-primary" >{formValue.Name}</Label></h5>
                                                                     </Row>
 
                                                                     <Row>
                                                                         <FormGroup className=" col col-sm-4 " >
                                                                             <Label >Base Unit</Label>
                                                                             <Select
-                                                                                value={BaseUnit_dropdown_Select}
+                                                                                value={formValue.BaseUnit}
                                                                                 options={BaseUnit_DropdownOptions}
-                                                                                onChange={BaseUnit_DropDown_handller}
+                                                                                onChange={(e) => Common_DropDown_handller_ForAll(e,"BaseUnit")}
+
                                                                             />
                                                                         </FormGroup>
                                                                     </Row>
@@ -783,19 +810,19 @@ const ItemsMaster = () => {
                                                                                 {baseUnitTableData.map((TableValue, key) => (
                                                                                     <tr >
                                                                                         <td>
-                                                                                            <Label>1</Label>    {BaseUnit_dropdown_Select.label}
+                                                                                            <Label>1</Label>    {formValue.BaseUnit.label}
                                                                                         </td>
                                                                                         <td>
                                                                                             <AvInput name="value" type="text"
                                                                                                 defaultValue={TableValue.conversionRatio}
-                                                                                                onChange={(e) => BaseUnit2_DropDown_handller(e, key, "Conversion")}></AvInput>
+                                                                                                onChange={(e) => UnitConversionsTab_BaseUnit2_onChange_Handller(e, key, "Conversion")}></AvInput>
                                                                                         </td>
                                                                                         <td>
                                                                                             <Select
                                                                                                 // placeholder="select unit"
                                                                                                 value={TableValue.toBaseUnit}
                                                                                                 options={BaseUnit_DropdownOptions2}
-                                                                                                onChange={(e) => BaseUnit2_DropDown_handller(e, key, "BaseUnit")}
+                                                                                                onChange={(e) => UnitConversionsTab_BaseUnit2_onChange_Handller(e, key, "BaseUnit")}
                                                                                             />
                                                                                         </td>
                                                                                         <td>
@@ -804,13 +831,13 @@ const ItemsMaster = () => {
                                                                                                     <Col >
                                                                                                         <Button className="btn btn-sm btn-light mt-3 col col-6  align-items-sm-end"
                                                                                                             type="button"
-                                                                                                            onClick={() => { MultipleAddRow_Button_Handler_tab3(key) }} >
+                                                                                                            onClick={() => { UnitConversionsTab_AddRow_Handle(key) }} >
                                                                                                             <i className="dripicons-plus"></i>
                                                                                                         </Button>
                                                                                                     </Col>
                                                                                                     <Col className="mt-3">
                                                                                                         < i className="mdi mdi-trash-can d-block text-danger font-size-20" onClick={() => {
-                                                                                                            BaseUnitTable_Delete_Row_Handller_tab_3(key)
+                                                                                                           UnitConversionsTab_DeleteRow_Handler(key)
                                                                                                         }} >
                                                                                                         </i>
                                                                                                     </Col>
@@ -818,7 +845,7 @@ const ItemsMaster = () => {
                                                                                                 :
 
                                                                                                 < i className="mdi mdi-trash-can d-block text-danger font-size-20" onClick={() => {
-                                                                                                    BaseUnitTable_Delete_Row_Handller_tab_3(key)
+                                                                                                    UnitConversionsTab_DeleteRow_Handler(key)
                                                                                                 }} >
                                                                                                 </i>
 
@@ -989,9 +1016,9 @@ const ItemsMaster = () => {
                                                                     <FormGroup className=" col col-sm-4 " >
                                                                         <Label htmlFor="validationCustom21">Division Type</Label>
                                                                         <Select
-                                                                            value={divisionType_dropdown_Select}
+                                                                            value={division_dropdown_Select}
                                                                             options={DivisionType_DropdownOptions}
-                                                                            onChange={(e) => { DivisionType_DropDown_handller(e) }}
+                                                                            onChange={(e) => { DivisionTab_Dropdown_onChange_Handler(e) }}
                                                                         />
                                                                     </FormGroup>
                                                                     <Col sm={1} style={{ marginTop: '28px' }} >
@@ -1000,14 +1027,14 @@ const ItemsMaster = () => {
                                                                             type="button"
                                                                             className="btn btn-sm mt-1 mb-0 btn-light  btn-outline-primary  "
                                                                             onClick={() =>
-                                                                                AddDivisionHandler()
+                                                                                DivisionTab_AddRow_Handle()
                                                                             }
                                                                         >
                                                                             <i className="dripicons-plus "></i>
                                                                         </Button>
                                                                     </Col>
                                                                     <Col sm={3} style={{ marginTop: '28px' }}>
-                                                                        {divisionTypeData.length > 0 ? (
+                                                                        {divisionTableData.length > 0 ? (
 
                                                                             <div className="table-responsive">
                                                                                 <Table className="table table-bordered  text-center">
@@ -1019,14 +1046,14 @@ const ItemsMaster = () => {
                                                                                         </tr>
                                                                                     </Thead>
                                                                                     <Tbody  >
-                                                                                        {divisionTypeData.map((TableValue) => (
+                                                                                        {divisionTableData.map((TableValue) => (
                                                                                             <tr >
                                                                                                 <td>
                                                                                                     {TableValue.label}
                                                                                                 </td>
                                                                                                 <td>
                                                                                                     <i className="mdi mdi-trash-can d-block text-danger font-size-20" onClick={() => {
-                                                                                                        UserRoles_DeleteButton_Handller(TableValue.value)
+                                                                                                        DivisionTab_DeleteRow_Handler(TableValue.value)
                                                                                                     }} >
                                                                                                     </i>
                                                                                                 </td>
@@ -1111,7 +1138,7 @@ const ItemsMaster = () => {
                                                                 <Row>
                                                                     <h5>Item Name :<Label className="text-primary" >{name}</Label></h5>
                                                                 </Row>
-                                                                {Margin.map((index, key) => {
+                                                                {marginTabTable.map((index, key) => {
 
                                                                     return <Row className="mt-3">
                                                                         <Col className=" col col-10 ">
@@ -1119,38 +1146,30 @@ const ItemsMaster = () => {
                                                                                 <FormGroup className=" col col-sm-5 " >
                                                                                     <Label >Price List</Label>
                                                                                     <Select
-                                                                                        value={Margin[key].PriceList}
+                                                                                        value={marginTabTable[key].PriceList}
                                                                                         options={PriceList_DropdownOptions}
-                                                                                        onChange={(e) => { MarginTabHandler(e, key, "PriceList") }}
+                                                                                        onChange={(e) => { MarginTab_onChange_Handler(e, key, "PriceList") }}
                                                                                     />
                                                                                 </FormGroup>
 
                                                                                 <FormGroup className="mb-3 col col-sm-5 " >
-                                                                                    <Label htmlFor="validationCustom01">Margin</Label>
-                                                                                    <AvInput name="value" type="text"
-                                                                                        // defaultValue={Margin}
+                                                                                    <Label >Margin</Label>
+                                                                                    <Input type="text"
+                                                                                        value={marginTabTable.Margin}
                                                                                         placeholder="Please Enter Margin"
-                                                                                        onChange={(e) => MarginTabHandler(e, key, "Margin")}></AvInput>
+                                                                                        onChange={(e) => MarginTab_onChange_Handler(e, key, "Margin")}></Input>
                                                                                 </FormGroup>
 
 
                                                                             </Row>
                                                                         </Col>
-                                                                        {(Margin.length === key + 1) ?
+                                                                        {(marginTabTable.length === key + 1) ?
                                                                             <Col className="col col-1 mt-3">
                                                                                 <Button
                                                                                     className="btn btn-sm mt-3 mb-0 btn-light  btn-outline-primary  "
                                                                                     type="button"
-                                                                                    onClick={() => { AddMultipleMarginRow_Handle(key) }} >
+                                                                                    onClick={() => { MarginTab_AddRow_Handler(key) }} >
                                                                                     <i className="dripicons-plus"></i></Button>
-                                                                                {/* 
-
-                                                                                <i
-                                                                                className="dripicons-plus text-primary font-size-20 mt-3"
-                                                                                onClick={() => {
-                                                                                    MuliSelectTab2Handler(key);
-                                                                                }}
-                                                                            ></i> */}
                                                                             </Col>
                                                                             : <Col className="col col-1 mt-3">
 
@@ -1159,7 +1178,7 @@ const ItemsMaster = () => {
 
                                                                                     className="mdi mdi-trash-can d-block text-danger font-size-20 mt-3"
                                                                                     onClick={() => {
-                                                                                        MulitDeletrTab_7Handler(key);
+                                                                                        MarginTab_DeleteRow_Handler(key);
                                                                                     }}
                                                                                 ></i>
 
