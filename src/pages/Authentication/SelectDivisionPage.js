@@ -50,16 +50,13 @@ const SelectDivisionPage = props => {
   useEffect(() => {
 
     if (divisionDropdown_redux.length === 1) {
-      
-      var party = divisionDropdown_redux.Party_id
-      var employee = divisionDropdown_redux.Employee_id;
 
       let value = divisionDropdown_redux[0]
       var employee = value.Employee_id;
       var party = value.Party_id
 
 
-      // localStorage.setItem("roleId", (role))
+      localStorage.setItem("roleId", JSON.stringify(value))
       dispatch(roleAceessAction(party, employee))
       history.push("/dashboard")
     }
@@ -84,8 +81,7 @@ const SelectDivisionPage = props => {
     var employee = value.Employee_id;
     var party = value.Party_id
 
-
-    // localStorage.setItem("roleId", (role))
+    localStorage.setItem("roleId", JSON.stringify(value))
     dispatch(roleAceessAction(party, employee))
     history.push("/dashboard")
 
