@@ -1,5 +1,6 @@
 
-import {POST_METHOD_HANDLER_FOR_CATEGORY_TYPE_MASTER_API,
+import {
+  POST_METHOD_HANDLER_FOR_CATEGORY_TYPE_MASTER_API,
   POST_METHOD_HANDLER_FOR_CATEGORY_TYPE_MASTER_API_SUCCESS,
   DELETE_CATEGORY_TYPE_ID,
   DELETE_CATEGORY_TYPE_ID_SUCCESS,
@@ -8,7 +9,7 @@ import {POST_METHOD_HANDLER_FOR_CATEGORY_TYPE_MASTER_API,
   GET_CATEGORY_TYPE_LIST,
   GET_CATEGORY_TYPE_LIST_SUCCESS,
   UPDATE_CATEGORY_TYPE_ID,
-  UPDATE_CATEGORY_TYPE_ID_SUCCESS
+  UPDATE_CATEGORY_TYPE_ID_SUCCESS,
   
   } from "./actionTypes";
 
@@ -45,15 +46,16 @@ export const deleteCategoryTypeIDSuccess = (deleteMessage) => ({
 }); 
 
 // edit api
+
 export const editCategoryTypeID = (id) => ({
   type: EDIT_CATEGORY_TYPE_ID,
   id,
 })
+
 export const editCategoryTypeIDSuccess = (editData) => ({
   type: EDIT_CATEGORY_TYPE_ID_SUCCESS,
   payload: editData,
 })
-
 // update api
 export const updateCategoryTypeID = (updateData, ID) => ({
   type: UPDATE_CATEGORY_TYPE_ID,

@@ -148,7 +148,7 @@ const userRoutes = [
   { path: "/PartyType", component: PartyType },
   { path: "/PartyTypeList", component: PartyTypeList },
 
-  { path: "/ProductCategoryMaster", component: CategoryTypeMaster },
+  { path: "/CategoryTypeMaster", component: CategoryTypeMaster },
   { path: "/CategoryTypeList", component: CategoryTypeList },
 
 
