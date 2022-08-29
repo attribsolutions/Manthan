@@ -19,7 +19,7 @@ export *from './Administrator/HPagesRedux/actions'
 export *from './Administrator/UserRegistrationRedux/actions'
 
 
-export *from './Administrator/CategoryTypeMasterRedux/actions'
+export *from './Administrator/CategoryTypeRedux/actions'
 
  
 
