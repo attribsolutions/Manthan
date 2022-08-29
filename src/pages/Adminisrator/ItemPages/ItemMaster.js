@@ -55,12 +55,13 @@ const ItemsMaster = () => {
         Name: "",
         Sequence: "",
         ShortName: "",
-        BarCode: {label:""},
+        BarCode: { label: "" },
         Company: "",
         BaseUnit: '',
         MRP: '',
         GST: '',
         HSN: '',
+        isActive: "",
     }
 
     let [name, setName] = useState();
@@ -77,6 +78,7 @@ const ItemsMaster = () => {
         SubCategory: ''
     }]);
 
+
     const [marginTabTable, setMarginTabTable] = useState([{
         PriceList: '',
         Margin: ''
@@ -87,6 +89,11 @@ const ItemsMaster = () => {
     const [baseUnitTableData, setBaseUnitTableData] = useState([{
         conversionRatio: '',
         toBaseUnit: '',
+    }]);
+    const [rateDetailTableData, setRateDetailTableData] = useState([{
+        MRP: '',
+        GSTPercentage: '',
+        HSNCode: ''
     }]);
 
     const { companyList, BaseUnit, CategoryType, Category, SubCategory, DivisionType } = useSelector((state) => ({
@@ -157,8 +164,8 @@ const ItemsMaster = () => {
     }));
 
 
-    function Common_DropDown_handller_ForAll(event,type) {
-        formValue[type]=event
+    function Common_DropDown_handller_ForAll(event, type) {
+        formValue[type] = event
         setrefresh(event)
     }
 
@@ -235,7 +242,7 @@ const ItemsMaster = () => {
         setBaseUnitTableData(removeElseArrray)
 
     }
-    function  UnitConversionsTab_BaseUnit2_onChange_Handller(event, key, type) {
+    function UnitConversionsTab_BaseUnit2_onChange_Handller(event, key, type) {
 
         let newSelectValue = ''
 
@@ -262,7 +269,7 @@ const ItemsMaster = () => {
         })
         setBaseUnitTableData(newTabArr)
         // setBaseUnit_dropdown_Select2(e)
-    } 
+    }
 
 
     function DivisionTab_AddRow_Handle() {
@@ -332,14 +339,66 @@ const ItemsMaster = () => {
             }
         }
 
-        let newTabArr = setMarginTabTable.map((index, k) => {
+        let newTabArr = marginTabTable.map((index, k) => {
             return (k === key) ? newSelectValue : index
         })
         setMarginTabTable(newTabArr)
     }
 
 
+    function RateDetailTab_AddRow_Handler() {
+        var newarr = [...rateDetailTableData, {
+            MRP: '',
+            GSTPercentage: '',
+            HSNCode: ''
+        }]
+        setRateDetailTableData(newarr)
+    }
+    function RateDetailTab_DeleteRow_Handler(key) {
 
+        var removeElseArrray = rateDetailTableData.filter((i, k) => {
+            return !(k === key)
+        })
+
+        setRateDetailTableData(removeElseArrray)
+
+    }
+    function RateDetail_Common_onChange_Handller(event, key, type) {
+
+        var found = rateDetailTableData.find((i, k) => {
+            return (k === key)
+        })
+        let newSelectValue = ''
+
+
+        if (type === "MRP") {
+            newSelectValue =
+            {
+                MRP: event.target.value,
+                GSTPercentage: found.GST,
+                HSNCode: found.HSN
+            }
+
+        }
+        else if (type === 'GSTPercentage') {
+            newSelectValue = {
+                MRP: found.MRP,
+                GSTPercentage: event.target.value,
+                HSNCode: found.HSN
+            }
+        } else {
+            newSelectValue = {
+                MRP: found.MRP,
+                GSTPercentage: found.GS,
+                HSNCode: event.target.value
+            }
+        }
+
+        let newTabArr = rateDetailTableData.map((index, k) => {
+            return (k === key) ? newSelectValue : index
+        })
+        setRateDetailTableData(newTabArr)
+    }
 
 
 
@@ -356,6 +415,7 @@ const ItemsMaster = () => {
     }
     let base64String = "";
     let imageBase64Stringsep = ''
+
     function imageUploaded() {
 
         var file = document.querySelector(
@@ -392,55 +452,74 @@ const ItemsMaster = () => {
 
     const handleValidSubmit = (event, values) => {
         debugger
-        const ItemCategoryDetails = categoryTabTable.map((index) => ({
+        var values = formValue
+
+        const itemCategoryDetails = categoryTabTable.map((index) => ({
             CategoryType: index.CategoryType.value,
             Category: index.Category.value,
             SubCategory: index.SubCategory.value
         }))
 
-        const ItemUnitDetails = baseUnitTableData.map((index) => ({
+        const itemUnitDetails = baseUnitTableData.map((index) => ({
             conversionRatio: index.conversionRatio,
             toBaseUnit: index.toBaseUnit.value,
         }))
 
-        const ItemDivisionDetails = divisionTableData.map((index) => ({
+        const itemDivisionDetails = divisionTableData.map((index) => ({
             Division: index.value
         }))
+        const iteMarginDetails = marginTabTable.map((index) => ({
+            PriceList: index.PriceList.value,
+            Margin: index.Margin
+        }))
+
         const jsonBody = JSON.stringify({
-            Name: values.Name,
-            ShortName: values.ShortName,
-            Sequence: values.Sequence,
-            BarCode: values.BarCode,
-            isActive: values.isActive,
-            Company: companyList_dropdown_Select.value,
-            BaseUnit: BaseUnit_dropdown_Select.value,
-            ItemCategoryDetails: categoryTabTable.value,
-            ItemUnitDetails: baseUnitTableData.value,
+            Name: formValue.Name,
+            ShortName: formValue.ShortName,
+            Sequence: formValue.Sequence,
+            BarCode: formValue.BarCode,
+            isActive: formValue.isActive,
+            Company: formValue.Company,
+            BaseUnit: formValue.BaseUnit,
+            ItemCategoryDetails: itemCategoryDetails,
+            ItemUnitDetails: itemUnitDetails,
+
             ItemImagesDetails: [
                 {
                     ImageType: "1",
                     Item_pic: "sadsadasdas"
                 }
             ],
-            ItemDivisionDetails: divisionTableData.value,
-            ItemGstDetails: [
-                {
-                    GSTPercentage: "5.00",
-                    MRP: "100.00",
-                    HSNCode: "Aaaa01"
-                }
-            ],
-            ItemMarginDetails: [
-                {
-                    PriceList: "1",
-                    Margin: "10"
-                }
-            ]
+            ItemDivisionDetails: itemDivisionDetails,
+            ItemGstDetails: rateDetailTableData,
+            ItemMarginDetails: iteMarginDetails,
+
+            // ItemImagesDetails: [
+            //     {
+            //         ImageType: "1",
+            //         Item_pic: "sadsadasdas"
+            //     }
+            // ],
+            // ItemDivisionDetails: divisionTableData.value,
+            // ItemGstDetails: [
+            //     {
+            //         GSTPercentage: "5.00",
+            //         MRP: "100.00",
+            //         HSNCode: "Aaaa01"
+            //     }
+            // ],
+            // ItemMarginDetails: [
+            //     {
+            //         PriceList: "1",
+            //         Margin: "10"
+            //     }
+            // ]
         });
 
         dispatch(postItemData(jsonBody));
         console.log("jsonBody", jsonBody)
     };
+
     return (
         <React.Fragment>
             <div className="page-content">
@@ -614,7 +693,8 @@ const ItemsMaster = () => {
 
                                                                 <FormGroup className="mb-3 col col-sm-4 " >
                                                                     <Label >ShortName</Label>
-                                                                    <Input  type="text" id='txtShortName'
+                                                                    <Input type="text" id='txtShortName'
+                                                                        className=""
                                                                         placeholder=" Please Enter ShortName "
                                                                         autoComplete="off"
                                                                         onChange={(e) => { formValue.ShortName = e.target.value }}
@@ -626,7 +706,7 @@ const ItemsMaster = () => {
                                                                     <Select
                                                                         value={formValue.Company}
                                                                         options={Company_DropdownOptions}
-                                                                        onChange={(e) => Common_DropDown_handller_ForAll(e,  "Company")}
+                                                                        onChange={(e) => Common_DropDown_handller_ForAll(e, "Company")}
                                                                     />
                                                                 </FormGroup>
 
@@ -636,7 +716,7 @@ const ItemsMaster = () => {
                                                                         // value={BaseUnit_dropdown_Select}
                                                                         value={formValue.BaseUnit}
                                                                         options={BaseUnit_DropdownOptions}
-                                                                        onChange={(e) => Common_DropDown_handller_ForAll(e,  "BaseUnit")}
+                                                                        onChange={(e) => Common_DropDown_handller_ForAll(e, "BaseUnit")}
                                                                     />
                                                                 </FormGroup>
 
@@ -675,9 +755,10 @@ const ItemsMaster = () => {
                                                                         <Col md={2} style={{ marginTop: '9px' }} >
 
                                                                             <div className="form-check form-switch form-switch-md mb-3" dir="ltr">
-                                                                                <AvInput type="checkbox" className="form-check-input" id="customSwitchsizemd"
+                                                                                <Input type="checkbox" className="form-check-input" id="customSwitchsizemd"
                                                                                     checked={""}
                                                                                     defaultChecked={true}
+                                                                                    onChange={(e) => { formValue.isActive = e.target.value }}
                                                                                     name="isActive"
                                                                                 />
                                                                             </div>
@@ -786,7 +867,7 @@ const ItemsMaster = () => {
                                                                             <Select
                                                                                 value={formValue.BaseUnit}
                                                                                 options={BaseUnit_DropdownOptions}
-                                                                                onChange={(e) => Common_DropDown_handller_ForAll(e,"BaseUnit")}
+                                                                                onChange={(e) => Common_DropDown_handller_ForAll(e, "BaseUnit")}
 
                                                                             />
                                                                         </FormGroup>
@@ -837,7 +918,7 @@ const ItemsMaster = () => {
                                                                                                     </Col>
                                                                                                     <Col className="mt-3">
                                                                                                         < i className="mdi mdi-trash-can d-block text-danger font-size-20" onClick={() => {
-                                                                                                           UnitConversionsTab_DeleteRow_Handler(key)
+                                                                                                            UnitConversionsTab_DeleteRow_Handler(key)
                                                                                                         }} >
                                                                                                         </i>
                                                                                                     </Col>
@@ -1083,44 +1164,79 @@ const ItemsMaster = () => {
                                                                 <Row>
                                                                     <h5>Item Name :<Label className="text-primary" >{name}</Label></h5>
                                                                 </Row>
-                                                                <Row>
-                                                                    <FormGroup className="mb-3 col col-sm-4 " >
-                                                                        <Label htmlFor="validationCustom01">MRP</Label>
-                                                                        <AvField name="MRP" value={""} type="text" id='txtName'
-                                                                            placeholder=" Please Enter MRP "
-                                                                            autoComplete="off"
-                                                                            validate={{
-                                                                                required: { value: true, errorMessage: 'Please Enter MRP ' },
-                                                                            }}
-                                                                            onChange={(e) => { (setName(e.target.value)) }}
-                                                                        />
-                                                                    </FormGroup>
+                                                                {rateDetailTableData.map((index, key) => {
 
-                                                                    <FormGroup className="mb-3 col col-sm-4 " >
-                                                                        <Label htmlFor="validationCustom01">GST</Label>
-                                                                        <AvField name="GST" value={""} type="text" id='txtName'
-                                                                            placeholder=" Please Enter GST "
-                                                                            autoComplete="off"
-                                                                            validate={{
-                                                                                required: { value: true, errorMessage: 'Please Enter GST' },
-                                                                            }}
-                                                                        />
-                                                                    </FormGroup>
-                                                                </Row>
+                                                                    return <Row className="mt-3">
+                                                                        <Col className=" col col-11 ">
+                                                                            <Row>
+                                                                                <FormGroup className="mb-3 col col-sm-4 " >
+                                                                                    <Label htmlFor="validationCustom01">MRP</Label>
+                                                                                    <Input name="MRP" type="text" id='txtMRP'
+                                                                                        placeholder=" Please Enter MRP "
+                                                                                        autoComplete="off"
+                                                                                        value={rateDetailTableData[key].MRP}
+                                                                                        onChange={(e) => { RateDetail_Common_onChange_Handller(e, key, "MRP") }}
 
-                                                                <Row>
-                                                                    <FormGroup className="mb-3 col col-sm-4 " >
-                                                                        <Label htmlFor="validationCustom01">HSN</Label>
-                                                                        <AvField name="HSN" value={""} type="text" id='txtName'
-                                                                            placeholder=" Please Enter HSN "
-                                                                            autoComplete="off"
-                                                                            validate={{
-                                                                                required: { value: true, errorMessage: 'Please Enter HSN' },
-                                                                            }}
-                                                                        />
-                                                                    </FormGroup>
 
-                                                                </Row>
+                                                                                    />
+                                                                                </FormGroup>
+
+                                                                                <FormGroup className="mb-3 col col-sm-4 " >
+                                                                                    <Label htmlFor="validationCustom01">GST</Label>
+                                                                                    <Input name="GST" type="text" id='txtGST'
+                                                                                        value={rateDetailTableData[key].GSTPercentage}
+                                                                                        placeholder=" Please Enter GST "
+                                                                                        autoComplete="off"
+                                                                                        onChange={(e) => { RateDetail_Common_onChange_Handller(e, key, "GSTPercentage") }}
+
+                                                                                    />
+                                                                                </FormGroup>
+
+                                                                                <FormGroup className="mb-3 col col-sm-4 " >
+                                                                                    <Label htmlFor="validationCustom01">HSN</Label>
+                                                                                    <Input name="HSN" type="text" id='txtHSN'
+                                                                                        value={rateDetailTableData[key].HSNCode}
+                                                                                        placeholder=" Please Enter HSN "
+                                                                                        autoComplete="off"
+                                                                                        onChange={(e) => { RateDetail_Common_onChange_Handller(e, key, "HSNCode") }}
+
+
+                                                                                    />
+                                                                                </FormGroup>
+
+                                                                            </Row>
+                                                                        </Col>
+                                                                        {(rateDetailTableData.length === key + 1) ?
+                                                                            <Col className="col col-1 mt-3">
+                                                                                <Button className="btn btn-sm btn-light mt-3 "
+                                                                                    type="button"
+                                                                                    onClick={() => { RateDetailTab_AddRow_Handler() }} >
+                                                                                    <i className="dripicons-plus"></i></Button>
+                                                                                {/* 
+
+                <i
+                className="dripicons-plus text-primary font-size-20 mt-3"
+                onClick={() => {
+                    MuliSelectTab2Handler(key);
+                }}
+            ></i> */}
+                                                                            </Col>
+                                                                            : <Col className="col col-1 mt-3">
+
+                                                                                <i
+                                                                                    className="mdi mdi-trash-can d-block text-danger font-size-20 mt-3"
+                                                                                    onClick={() => {
+                                                                                        RateDetailTab_DeleteRow_Handler(key);
+                                                                                    }}
+                                                                                ></i>
+
+                                                                            </Col>}
+                                                                    </Row>
+
+
+                                                                })}
+
+
                                                             </CardBody>
                                                         </Card>
 
@@ -1172,10 +1288,7 @@ const ItemsMaster = () => {
                                                                                     <i className="dripicons-plus"></i></Button>
                                                                             </Col>
                                                                             : <Col className="col col-1 mt-3">
-
                                                                                 <i
-
-
                                                                                     className="mdi mdi-trash-can d-block text-danger font-size-20 mt-3"
                                                                                     onClick={() => {
                                                                                         MarginTab_DeleteRow_Handler(key);
@@ -1184,7 +1297,6 @@ const ItemsMaster = () => {
 
                                                                             </Col>}
                                                                     </Row>
-
 
                                                                 })}
 
