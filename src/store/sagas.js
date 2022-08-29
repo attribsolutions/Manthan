@@ -29,7 +29,7 @@ import EmployeeTypeSaga from "./Administrator/EmployeeTypeRedux/saga"
 import DivisionTypeSaga from "./Administrator/DivisionTypeRedux/saga"
 import PartyTypeSaga from "./Administrator/PartyTypeRedux/saga"
 import CategoryTypeMasterSaga from "./Administrator/CategoryTypeRedux/saga"
-import CategoryTypesSaga from "./Administrator/CategoryRedux/saga"
+import CategoryMasterSaga from "./Administrator/CategoryRedux/saga"
 
 export default function* rootSaga() {
   yield all([
@@ -57,6 +57,6 @@ export default function* rootSaga() {
     fork(PartyTypeSaga),
     fork(DivisionTypeSaga),
     fork(CategoryTypeMasterSaga),
-   fork(CategoryTypesSaga),
+   fork(CategoryMasterSaga),
   ])
 }
