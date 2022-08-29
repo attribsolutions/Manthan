@@ -226,7 +226,7 @@ const RoleList = (props) => {
             }}
             size="xl"
           >
-            <RoleMaster state={editData.Data} relatatedPage={userPageAccessState.ActualPagePath} />
+            <RoleMaster state={editData.Data} relatatedPage={"/RoleMaster"} />
           </Modal>
         </div>
       </React.Fragment>

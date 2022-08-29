@@ -235,7 +235,7 @@ const Employee_List = () => {
             }}
             size="xl"
           >
-            <AddEmployee state={editData.Data} />
+            <AddEmployee state={editData.Data} relatatedPage={"/EmployeeMaster"} />
           </Modal>
         </div>
       </React.Fragment>
