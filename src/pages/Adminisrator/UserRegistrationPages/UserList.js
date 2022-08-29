@@ -35,12 +35,10 @@ const UserList = () => {
         updateMessage: state.User_Registration_Reducer.updateMessage,
         deleteMessage: state.User_Registration_Reducer.deleteSuccessRole,
         RoleAccessModifiedinSingleArray: state.Login.RoleAccessUpdateData,
-
     }));
 
     useEffect(() => {
-        // debugger
-        // const userAcc = CommonGetRoleAccessFunction(history)
+        
         const locationPath = history.location.pathname
         let userAcc = RoleAccessModifiedinSingleArray.find((inx) => {
             return (`/${inx.ActualPagePath}` === locationPath)
