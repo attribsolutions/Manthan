@@ -242,9 +242,12 @@ export const edit_CategoryType_List_Api = (id) => get(`${url.CATEGORY_TYPE_MASTE
 export const update_CategoryType_List_Api = (data, id) => put(`${url.CATEGORY_TYPE_MASTER_API}/${id}`, data)// update
 
 //Product Types API
-export const Post_Product_Types_API = (data) => post(url.PRODUCT_TYPES_API, data)// post api
-export const get_Product_Category_Type_Master_API = () => get(url.PRODUCT_TYPES_API)// Product Category DropDown Api api
-
+export const Post_Product_Types_API = (data) => post(url. CATEGORY_TYPES_API, data)// post api
+export const get_Product_Category_Type_Master_API = () => get(url. CATEGORY_TYPES_API)// Product Category DropDown Api api
+export const get_Product_Types_List_Api = () => get(url. CATEGORY_TYPES_API) // get api
+export const detelet_Product_Types_List_Api = (id) =>del(`${url. CATEGORY_TYPES_API}/${id}`) // delete api
+export const edit_Product_Types_List_Api = (id) =>get(`${url. CATEGORY_TYPES_API}/${id}`) // edit api
+export const update_Product_Types_List_Api = (data, id) =>put(`${url. CATEGORY_TYPES_API}/${id}`, data)// update
 
 export {  
   getLoggedInUser,

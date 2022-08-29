@@ -50,10 +50,10 @@ import PartyType from "../pages/Adminisrator/PartyTypes/PartyType";
 import PartyTypeList from "../pages/Adminisrator/PartyTypes/PartyTypeList";
 import SelectDivisionPage from "../pages/Authentication/SelectDivisionPage";
 import RoleAccessCopyFunctionality from "../pages/Adminisrator/RoleAccessPages/RoleAccessCopyFunctionality";
-import CategoryTypeMaster from "../pages/Adminisrator/ProductCategoryMaster/CategoryTypeMaster";
-import CategoryTypeList from "../pages/Adminisrator/ProductCategoryMaster/CategoryTypeList";
-
-import ProductTypes from "../pages/Adminisrator/ProductType/ProductTypes";
+import CategoryTypeMaster from "../pages/Adminisrator/CategoryTypePages/CategoryTypeMaster";
+import CategoryTypeList from "../pages/Adminisrator/CategoryTypePages/CategoryTypeList";
+import CategoryTypes from "../pages/Adminisrator/CategoryPages/CategoryTypes";
+import CategoryTypesList from "../pages/Adminisrator/CategoryPages/CategoryTypesList";
 
 
 
@@ -152,8 +152,8 @@ const userRoutes = [
   { path: "/CategoryTypeList", component: CategoryTypeList },
 
 
-  { path: "/ProductType", component: ProductTypes },
-  
+  { path: "/CategoryTypes", component: CategoryTypes },
+  { path: "/CategoryTypesList", component: CategoryTypesList },
   
   { path: "/partyUIDemo", component: PartyUIDemo },
   { path: "/demoUi3", component: DemoUI3 },
