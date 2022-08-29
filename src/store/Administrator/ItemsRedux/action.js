@@ -6,6 +6,8 @@ import { DELETE_ITEM_ID, DELETE_ITEM_ID_SUCCESS,
      GET_CATEGORYTYPE_FOR_DROPDOWN_SUCCESS, 
      GET_CATEGORY_FOR_DROPDOWN, 
      GET_CATEGORY_FOR_DROPDOWN_SUCCESS, 
+     GET_IMAGETYPE_FOR_DROPDOWN, 
+     GET_IMAGETYPE_FOR_DROPDOWN_SUCCESS, 
      GET_ITEM_GROUP_FOR_DROPDOWN, 
      GET_ITEM_GROUP_FOR_DROPDOWN_SUCCESS, 
      GET_ITEM_LIST_API, GET_ITEM_LIST_API_SUCCESS, 
@@ -117,3 +119,13 @@ export const get_CategoryTypes_ForDropDown_Success = (data) => ({
     type: GET_SUBCATEGORY_FOR_DROPDOWN_SUCCESS,
     payload:data,
   });
+
+    // get Image Type for dropdown api
+    export const get_ImageType_ForDropDown = () => ({
+      type: GET_IMAGETYPE_FOR_DROPDOWN,
+    });
+    
+    export const get_ImageType_ForDropDown_Success = (data) => ({
+      type: GET_IMAGETYPE_FOR_DROPDOWN_SUCCESS,
+      payload:data,
+    });

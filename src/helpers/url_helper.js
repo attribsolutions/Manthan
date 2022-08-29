@@ -120,3 +120,5 @@ export const  CATEGORY_DROPDOWN_API ='/Category'
 
 export const  SUBCATEGORY_DROPDOWN_API ='/SubCategory'
 
+export const  IMAGETYPE_DROPDOWN_API ='/ImageTypes'
+

@@ -192,6 +192,9 @@ export const BaseUnit_Get_DropDown_API = () => get(url.BASEUNIT_DROPDOWN_API)// 
 export const CategoryType_Get_DropDown_API = () => get(url.CATEGORYTYPE_DROPDOWN_API)// CategoryType DropDown api
 export const Category_Get_DropDown_API = () => get(url.CATEGORY_DROPDOWN_API)// Category DropDown api
 export const SubCategory_Get_DropDown_API = () => get(url.SUBCATEGORY_DROPDOWN_API)// SubCategory DropDown api
+export const ImageType_Get_DropDown_API = () => get(url.IMAGETYPE_DROPDOWN_API)// ImageType DropDown api
+
+
 // Party Master
 export const Party_Master_Get_API = () => get(url.PARTY_MASTER_API)//get api
 export const Party_Master_Post_API = (data) => post(url.PARTY_MASTER_API, data)// post api
