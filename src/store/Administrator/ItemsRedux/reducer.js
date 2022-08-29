@@ -4,6 +4,7 @@ import {
     GET_BASEUNIT_FOR_DROPDOWN_SUCCESS,
     GET_CATEGORYTYPE_FOR_DROPDOWN_SUCCESS,
     GET_CATEGORY_FOR_DROPDOWN_SUCCESS,
+    GET_IMAGETYPE_FOR_DROPDOWN_SUCCESS,
     GET_ITEM_GROUP_FOR_DROPDOWN_SUCCESS,
     GET_ITEM_LIST_API_SUCCESS,
     GET_SUBCATEGORY_FOR_DROPDOWN_SUCCESS,
@@ -24,6 +25,7 @@ const INIT_STATE = {
     CategoryType:[],
     Category:[],
     SubCategory:[],
+    ImageType:[]
 
 };
 
@@ -94,6 +96,12 @@ const ItemMastersReducer = (state = INIT_STATE, action) => {
                 SubCategory: action.payload,
             }
 
+            case GET_IMAGETYPE_FOR_DROPDOWN_SUCCESS:
+                return {
+                    ...state,
+                    ImageType: action.payload,
+                }
+    
         default:
             return state;
     }

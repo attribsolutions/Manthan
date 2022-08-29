@@ -236,7 +236,7 @@ export default function HPageList() {
           }}
           size="xl"
         >
-          <HPageMaster state={editData.Data} relatatedPage={userPageAccessState.ActualPagePath} />
+          <HPageMaster state={editData.Data} relatatedPage={"/PageMaster"} />
 
         </Modal>
 
