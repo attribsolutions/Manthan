@@ -32,7 +32,7 @@ import EmployeeTypeReducer from "./Administrator/EmployeeTypeRedux/reducer"
 import PartyTypeReducer    from "./Administrator/PartyTypeRedux/reducer"
 import DivisionTypeReducer from "./Administrator/DivisionTypeRedux/reducer"
 import categoryTypeMasterReducer from "./Administrator/CategoryTypeRedux/reducer"
-import CategoryTypesReducer from "./Administrator/CategoryRedux/reducer"
+import CategoryMasterReducer from "./Administrator/CategoryRedux/reducer"
 
 const rootReducer = combineReducers({
   Layout,
@@ -63,7 +63,7 @@ const rootReducer = combineReducers({
   PartyTypeReducer,
   DivisionTypeReducer,
   categoryTypeMasterReducer,
-   CategoryTypesReducer,
+   CategoryMasterReducer,
 })
 
 export default rootReducer
