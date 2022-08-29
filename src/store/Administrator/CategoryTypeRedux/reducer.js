@@ -12,7 +12,7 @@ import {   DELETE_CATEGORY_TYPE_ID_SUCCESS,
     updateMessage: { Status: false },
   }
   
-  const  categoryTypeMasterReducer = (state = INIT_STATE, action) => {
+  const  categoryTypeReducer = (state = INIT_STATE, action) => {
     switch (action.type) {
   
       case POST_METHOD_HANDLER_FOR_CATEGORY_TYPE_MASTER_API_SUCCESS:
@@ -53,4 +53,4 @@ import {   DELETE_CATEGORY_TYPE_ID_SUCCESS,
     }
   }
   
-  export default categoryTypeMasterReducer  
+  export default categoryTypeReducer  

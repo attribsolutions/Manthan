@@ -27,7 +27,7 @@ import { useDispatch, useSelector } from "react-redux";
         PostMethod_ForCategoryTypeMasterAPISuccess,
          editCategoryTypeIDSuccess,
          updateCategoryTypeID,
-      } from "../../../store/Administrator/CategoryTypeMasterRedux/actions";
+      } from "../../../store/Administrator/CategoryTypeRedux/actions";
 
 
 const CategoryTypeMaster = (props) => {

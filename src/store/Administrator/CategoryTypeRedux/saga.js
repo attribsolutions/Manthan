@@ -106,7 +106,7 @@ function* Update_CategoryType_ID_GenratorFunction({ updateData, ID }) {
 }
 
 
-function* CategoryTypeMasterSaga () {
+function* CategoryTypeSaga () {
   yield takeEvery(POST_METHOD_HANDLER_FOR_CATEGORY_TYPE_MASTER_API, Post_Method_ForCategoryTypeMaster_GenFun)
   yield takeEvery(GET_CATEGORY_TYPE_LIST, Get_CategoryType_List_GenratorFunction)
   yield takeEvery(DELETE_CATEGORY_TYPE_ID, Delete_CategoryType_ID_GenratorFunction)
@@ -115,4 +115,4 @@ function* CategoryTypeMasterSaga () {
 
 }
 
-export default CategoryTypeMasterSaga;
+export default CategoryTypeSaga;
