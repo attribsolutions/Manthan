@@ -9,7 +9,7 @@ import ToolkitProvider, { Search } from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 import { useSelector, useDispatch } from "react-redux";
 import "../../../assets/scss/CustomeTable/datatables.scss";
-import CategoryTypes from "./CategoryTypes";
+// import CategoryMaster from "./CategoryMaster";
 
 import { MetaTags } from "react-meta-tags";
 import { useHistory } from "react-router-dom";
@@ -17,9 +17,10 @@ import { CommonGetRoleAccessFunction } from "../../../components/Common/CommonGe
 // import { deleteProductCategoryTypeIDSuccess, delete_ProductCategoryType_ID,  updateProductCategoryTypeIDSuccess } from "../../../store/Administrator/PartyTypeRedux/action";
 import { AlertState } from "../../../store/actions";
 import { deleteProductTypesIDSuccess, delete_ProductTypes_ID, editProductTypesID, getProductTypeslist, updateProductTypesIDSuccess } from "../../../store/Administrator/CategoryRedux/action";
+import CategoryMaster from "./CategoryMaster";
 // import { AlertState } from "../../../store/action";
 
-const CategoryTypesList = (props) => {
+const CategoryList = (props) => {
 
   const dispatch = useDispatch();
   const history = useHistory()
@@ -32,10 +33,10 @@ const CategoryTypesList = (props) => {
 
   const { TableListData, editData, updateMessage, deleteMessage, RoleAccessModifiedinSingleArray } = useSelector(
     (state) => ({
-      TableListData: state.CategoryTypesReducer.ProductTypesListData,
-      editData: state.CategoryTypesReducer.editData,
-      updateMessage: state.CategoryTypesReducer.updateMessage,
-      deleteMessage: state.CategoryTypesReducer.deleteMessage,
+      TableListData: state.CategoryMasterReducer.ProductTypesListData,
+      editData: state.CategoryMasterReducer.editData,
+      updateMessage: state.CategoryMasterReducer.updateMessage,
+      deleteMessage: state.CategoryMasterReducer.deleteMessage,
       RoleAccessModifiedinSingleArray: state.Login.RoleAccessUpdateData,
     })
   );
@@ -230,7 +231,7 @@ const CategoryTypesList = (props) => {
                       SearchProps={toolkitProps.searchProps}
                       breadcrumbCount={`Product Count: ${TableListData.length}`}
                       IsSearchVissible={true}
-                      RedirctPath={`/CategoryTypes`}
+                      RedirctPath={`/CategoryMaster`}
                     />
                     <Row>
                       <Col xl="12">
@@ -264,7 +265,7 @@ const CategoryTypesList = (props) => {
             }}
             size="xl"
           >
-            <CategoryTypes state={editData.Data} />
+            <CategoryMaster state={editData.Data} />
           </Modal>
         </div>
       </React.Fragment>
@@ -277,4 +278,4 @@ const CategoryTypesList = (props) => {
   }
 }
 
-export default CategoryTypesList;
+export default CategoryList;

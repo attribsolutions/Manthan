@@ -27,7 +27,7 @@ import { useHistory } from "react-router-dom";
 
 
 
-const CategoryTypes = (props) => {
+const SubCategoryMaster = (props) => {
     const formRef = useRef(null);
     const [EditData, setEditData] = useState([]);
     const [pageMode, setPageMode] = useState("");
@@ -39,9 +39,9 @@ const CategoryTypes = (props) => {
 
     //Access redux store Data /  'save_ModuleSuccess' action data
     const { PostAPIResponse, ProductTypeAPI, ProductTypes, RoleAccessModifiedinSingleArray } = useSelector((state) => ({
-        PostAPIResponse: state.CategoryTypesReducer.PostDataMessage,
-        ProductTypeAPI: state.CategoryTypesReducer.ProductTypeAPI,
-        ProductTypes: state.CategoryTypesReducer.ProductTypes,
+        PostAPIResponse: state.CategoryMasterReducer.PostDataMessage,
+        ProductTypeAPI: state.CategoryMasterReducer.ProductTypeAPI,
+        ProductTypes: state.CategoryMasterReducer.ProductTypes,
         RoleAccessModifiedinSingleArray: state.Login.RoleAccessUpdateData,
     }));
 
@@ -134,7 +134,7 @@ const CategoryTypes = (props) => {
                     Type: 1,
                     Status: true,
                     Message: PostAPIResponse.Message,
-                    RedirectPath: '/ProductTypesList',
+                    // RedirectPath: '/CategoryList',
                 }))
             }
         }
@@ -193,9 +193,9 @@ const CategoryTypes = (props) => {
                 <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
                     <Container fluid>
                         <MetaTags>
-                            <title>CategoryTypes | FoodERP-React FrontEnd</title>
+                            <title>CategoryMaster | FoodERP-React FrontEnd</title>
                         </MetaTags>
-                        <Breadcrumb breadcrumbItem={"Category Types"} />
+                        <Breadcrumb breadcrumbItem={"Category Master"} />
 
                         <Card className="text-black">
                             <CardHeader className="card-header   text-black" style={{ backgroundColor: "#dddddd" }} >
@@ -231,7 +231,22 @@ const CategoryTypes = (props) => {
                                                         <Row>
                                                             <Col md="4">
                                                                 <FormGroup className="mb-3">
-                                                                    <Label htmlFor="validationCustom01"> ProductCategory Type </Label>
+                                                                    <Label htmlFor="validationCustom01"> Category Type </Label>
+                                                                    <Col sm={12}>
+                                                                        <Select
+                                                                            value={ProductCategoryTypes_dropdown_Select}
+                                                                            options={ProductCategoryTypesValues}
+                                                                            onChange={(e) => { handllerProductCategoryTypes(e) }}
+                                                                        />
+                                                                    </Col>
+                                                                </FormGroup>
+                                                            </Col>
+                                                        </Row>
+
+                                                        <Row>
+                                                            <Col md="4">
+                                                                <FormGroup className="mb-3">
+                                                                    <Label htmlFor="validationCustom01"> Category  </Label>
                                                                     <Col sm={12}>
                                                                         <Select
                                                                             value={ProductCategoryTypes_dropdown_Select}
@@ -302,5 +317,5 @@ const CategoryTypes = (props) => {
     }
 };
 
-export default CategoryTypes
+export default SubCategoryMaster
 
