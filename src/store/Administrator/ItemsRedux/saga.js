@@ -42,6 +42,7 @@ function* Items_Group_GenratorFunction() {
 
 
 function* Submit_Items_GenratorFunction({ data }) {
+  debugger
   yield put(SpinnerState(true))
   try {
     const response = yield call(Items_Master_Post_API, data);
