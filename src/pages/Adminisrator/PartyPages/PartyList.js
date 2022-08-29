@@ -10,7 +10,6 @@ import BootstrapTable from "react-bootstrap-table-next";
 import { useSelector, useDispatch } from "react-redux";
 import { AlertState } from "../../../store/actions";
 
-
 import "../../../assets/scss/CustomeTable/datatables.scss"
 import {
     deletePartyID,
@@ -101,7 +100,6 @@ const PartyList = () => {
         setmodal_center(!modal_center)
     }
 
-
     const pageOptions = {
         sizePerPage: 20,
         totalSize: TableListData.length, // replace later with size(users),
@@ -142,7 +140,6 @@ const PartyList = () => {
                 editActionFun: editPartyID,
                 deleteActionFun: deletePartyID
             })
-    
     ];
 
     if (!(userPageAccessState === '')) {
@@ -210,7 +207,7 @@ const PartyList = () => {
                         toggle={() => { tog_center() }}
                         size="xl"
                     >
-                        <PartyMaster state={editData.Data} />
+                        <PartyMaster state={editData.Data} relatatedPage={"/PartyMaster"}/>
                     </Modal>
                 </div>
             </React.Fragment>

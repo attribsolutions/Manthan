@@ -9,23 +9,17 @@ import ToolkitProvider, { Search } from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 import { useSelector, useDispatch } from "react-redux";
 import "../../../assets/scss/CustomeTable/datatables.scss";
-import CategoryTypeMaster from "./CategoryTypeMaster";
+import CategoryTypes from "./CategoryTypes";
 
 import { MetaTags } from "react-meta-tags";
 import { useHistory } from "react-router-dom";
 import { CommonGetRoleAccessFunction } from "../../../components/Common/CommonGetRoleAccessFunction";
 // import { deleteProductCategoryTypeIDSuccess, delete_ProductCategoryType_ID,  updateProductCategoryTypeIDSuccess } from "../../../store/Administrator/PartyTypeRedux/action";
-
-import {
-  deleteCategoryTypeIDSuccess,
-  delete_CategoryType_ID,
-  editCategoryTypeID,
-  getCategoryTypelist,
-  updateCategoryTypeIDSuccess
-} from "../../../store/actions";
 import { AlertState } from "../../../store/actions";
+import { deleteProductTypesIDSuccess, delete_ProductTypes_ID, editProductTypesID, getProductTypeslist, updateProductTypesIDSuccess } from "../../../store/Administrator/CategoryRedux/action";
+// import { AlertState } from "../../../store/action";
 
-const CategoryTypeList = (props) => {
+const CategoryTypesList = (props) => {
 
   const dispatch = useDispatch();
   const history = useHistory()
@@ -34,14 +28,18 @@ const CategoryTypeList = (props) => {
   const [modal_center, setmodal_center] = useState(false);
 
   // get Access redux data
-  const { TableListData, editData, updateMessage, deleteMessage } = useSelector(
+  // var  editData=[]
+
+  const { TableListData, editData, updateMessage, deleteMessage, RoleAccessModifiedinSingleArray } = useSelector(
     (state) => ({
-      TableListData: state.CategoryTypeMasterReducer.categoryTypeListData,
-      editData: state.CategoryTypeReducer.editData,
-      updateMessage: state.CategoryTypeReducer.updateMessage,
-      deleteMessage: state.CategoryTypeReducer.deleteMessage,
+      TableListData: state.CategoryTypesReducer.ProductTypesListData,
+      editData: state.CategoryTypesReducer.editData,
+      updateMessage: state.CategoryTypesReducer.updateMessage,
+      deleteMessage: state.CategoryTypesReducer.deleteMessage,
+      RoleAccessModifiedinSingleArray: state.Login.RoleAccessUpdateData,
     })
   );
+  console.log("TableListData",TableListData)
 
   useEffect(() => {
     const userAcc = CommonGetRoleAccessFunction(history)
@@ -50,27 +48,28 @@ const CategoryTypeList = (props) => {
     }
   }, [history])
 
+
   //  This UseEffect => Featch Modules List data  First Rendering
   useEffect(() => {
-    dispatch(getCategoryTypelist());
+    dispatch(getProductTypeslist());
   }, []);
 
   // This UseEffect => UpadateModal Success/Unsucces  Show and Hide Control Alert_modal
   useEffect(() => {
 
     if (updateMessage.Status === true && updateMessage.StatusCode === 200) {
-      dispatch(updateCategoryTypeIDSuccess({ Status: false }));
+      dispatch(updateProductTypesIDSuccess({ Status: false }));
       dispatch(
         AlertState({
           Type: 1,
           Status: true,
           Message: updateMessage.Message,
-          AfterResponseAction: getCategoryTypelist,
+          AfterResponseAction: getProductTypeslist,
         })
       );
       tog_center();
     } else if (updateMessage.Status === true) {
-      dispatch(updateCategoryTypeIDSuccess({ Status: false }));
+      dispatch(updateProductTypesIDSuccess({ Status: false }));
       dispatch(
         AlertState({
           Type: 3,
@@ -83,17 +82,17 @@ const CategoryTypeList = (props) => {
 
   useEffect(() => {
     if (deleteMessage.Status === true && deleteMessage.StatusCode === 200) {
-      dispatch(deleteCategoryTypeIDSuccess({ Status: false }));
+      dispatch(deleteProductTypesIDSuccess({ Status: false }));
       dispatch(
         AlertState({
           Type: 1,
           Status: true,
           Message: deleteMessage.Message,
-          AfterResponseAction: getCategoryTypelist,
+          AfterResponseAction: getProductTypeslist,
         })
       );
     } else if (deleteMessage.Status === true) {
-      dispatch(deleteCategoryTypeIDSuccess({ Status: false }));
+      dispatch(deleteProductTypesIDSuccess({ Status: false }));
       dispatch(
         AlertState({
           Type: 3,
@@ -123,7 +122,7 @@ const CategoryTypeList = (props) => {
         Status: true,
         Message: `Are you sure you want to delete this CategoryType Type : "${name}"`,
         RedirectPath: false,
-        PermissionAction: delete_CategoryType_ID,
+        PermissionAction: delete_ProductTypes_ID,
         ID: id,
       })
     );
@@ -131,7 +130,7 @@ const CategoryTypeList = (props) => {
 
   // edit Buutton Handller
   const EditPageHandler = (id) => {
-    dispatch(editCategoryTypeID(id));
+    dispatch(editProductTypesID(id));
   };
 
   const defaultSorted = [
@@ -154,7 +153,12 @@ const CategoryTypeList = (props) => {
       sort: true,
     },
 
-
+    {
+        text: "ProductCategoryType Name ",
+        dataField: "ProductCategoryTypeName",
+        sort: true,
+      },
+     
     {
       text: "Action",
       hidden: (
@@ -167,7 +171,7 @@ const CategoryTypeList = (props) => {
           {((userPageAccessState.RoleAccess_IsEdit)) ?
             <Button
               type="button"
-              data-mdb-toggle="tooltip" data-mdb-placement="top" title="Edit ProductCategory Type"
+              data-mdb-toggle="tooltip" data-mdb-placement="top" title="Edit Category Type"
               onClick={() => { EditPageHandler(Role.id); }}
               className="badge badge-soft-success font-size-12 btn btn-success waves-effect waves-light w-xxs border border-light"
             >
@@ -177,7 +181,7 @@ const CategoryTypeList = (props) => {
           {(!(userPageAccessState.RoleAccess_IsEdit) && (userPageAccessState.RoleAccess_IsView)) ?
             <Button
               type="button"
-              data-mdb-toggle="tooltip" data-mdb-placement="top" title="View ProductCategory Type"
+              data-mdb-toggle="tooltip" data-mdb-placement="top" title="View Product Types"
               onClick={() => { EditPageHandler(Role.id); }}
               className="badge badge-soft-primary font-size-12 btn btn-primary waves-effect waves-light w-xxs border border-light"
 
@@ -189,14 +193,13 @@ const CategoryTypeList = (props) => {
             ?
             <Button
               className="badge badge-soft-danger font-size-12 btn btn-danger waves-effect waves-light w-xxs border border-light"
-              data-mdb-toggle="tooltip" data-mdb-placement="top" title="Delete ProductCategory Type"
+              data-mdb-toggle="tooltip" data-mdb-placement="top" title="Delete Product Types"
               onClick={() => { deleteHandeler(Role.id, Role.Name); }}
             >
               <i className="mdi mdi-delete font-size-18"></i>
             </Button>
             : null
           }
-
         </div>
       ),
     },
@@ -206,7 +209,7 @@ const CategoryTypeList = (props) => {
     return (
       <React.Fragment>
         <MetaTags>
-          <title>CategoryTypeList| FoodERP-React FrontEnd</title>
+          <title>CategoryTypesList| FoodERP-React FrontEnd</title>
         </MetaTags>
         <div className="page-content">
           <PaginationProvider pagination={paginationFactory(pageOptions)}>
@@ -227,7 +230,7 @@ const CategoryTypeList = (props) => {
                       SearchProps={toolkitProps.searchProps}
                       breadcrumbCount={`Product Count: ${TableListData.length}`}
                       IsSearchVissible={true}
-                    // RedirctPath={`/RoleMaster`}
+                      RedirctPath={`/CategoryTypes`}
                     />
                     <Row>
                       <Col xl="12">
@@ -261,7 +264,7 @@ const CategoryTypeList = (props) => {
             }}
             size="xl"
           >
-            <CategoryTypeMaster state={editData.Data} />
+            <CategoryTypes state={editData.Data} />
           </Modal>
         </div>
       </React.Fragment>
@@ -274,4 +277,4 @@ const CategoryTypeList = (props) => {
   }
 }
 
-export default CategoryTypeList;
+export default CategoryTypesList;

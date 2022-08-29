@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState, } from "react";
+import Breadcrumb from "../../../components/Common/Breadcrumb";
 import {
     Card,
     CardBody,
@@ -9,92 +10,119 @@ import {
     Label,
     Row,
 } from "reactstrap";
-import Breadcrumb from "../../../components/Common/Breadcrumb";
+import { AvField, AvForm, } from "availity-reactstrap-validation";
 import Select from "react-select";
 import { MetaTags } from "react-meta-tags";
-import { AvField, AvForm, } from "availity-reactstrap-validation";
+import { BreadcrumbShow } from "../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
-import { useHistory } from "react-router-dom";
+import {
+    editProductTypesIDSuccess, getMethodForProductTypes,
+    PostMethodForProductTypes,
+    PostMethod_ForProductTypesAPISuccess,
+    updateProductTypesID
+} from "../../../store/Administrator/CategoryRedux/action";
+import { AlertState } from "../../../store/actions";
 import { CommonGetRoleAccessFunction } from "../../../components/Common/CommonGetRoleAccessFunction";
+import { useHistory } from "react-router-dom";
 
-import { BreadcrumbShow,AlertState } from "../../../store/actions";
-import { editPartyTypeSuccess, PostPartyTypeAPI, PostPartyTypeAPISuccess, updatePartyTypeID } from "../../../store/Administrator/PartyTypeRedux/action";
-import { getDivisionTypesID } from "../../../store/Administrator/PartyRedux/action";
 
-const PartyType = (props) => {
 
+const CategoryTypes = (props) => {
     const formRef = useRef(null);
+    const [EditData, setEditData] = useState([]);
+    const [pageMode, setPageMode] = useState("");
+    const [ProductCategoryTypes_dropdown_Select, setProductCategoryTypes_dropdown_Select] = useState("");
     const dispatch = useDispatch();
+    const [userPageAccessState, setUserPageAccessState] = useState(123);
+    const [ProductCategoryTypes, setProductCategoryTypes] = useState("");
     const history = useHistory()
 
-    //*** "isEditdata get all data from ModuleID for Binding  Form controls
-    let editDataGatingFromList = props.state;
-    let propsPageMode = props.pageMode;
-
-    //SetState  Edit data Geting From Modules List component
-    const [EditData, setEditData] = useState([]);
-    const [pageMode, setPageMode] = useState("save");
-    const [userPageAccessState, setUserPageAccessState] = useState('');
-    const [division_dropdown_Select, setDivision_dropdown_Select] = useState("");
-
     //Access redux store Data /  'save_ModuleSuccess' action data
-    const { PostAPIResponse,DivisionTypes,RoleAccessModifiedinSingleArray } = useSelector((state) => ({
-        PostAPIResponse: state.PartyTypeReducer.PostData,
-        DivisionTypes: state.PartyMasterReducer.DivisionTypes,
+    const { PostAPIResponse, ProductTypeAPI, ProductTypes, RoleAccessModifiedinSingleArray } = useSelector((state) => ({
+        PostAPIResponse: state.CategoryTypesReducer.PostDataMessage,
+        ProductTypeAPI: state.CategoryTypesReducer.ProductTypeAPI,
+        ProductTypes: state.CategoryTypesReducer.ProductTypes,
         RoleAccessModifiedinSingleArray: state.Login.RoleAccessUpdateData,
     }));
 
-// userAccess useEffect
-useEffect(() => {
-    let userAcc = undefined
-      if ((editDataGatingFromList === undefined)) {
-  
-        let locationPath = history.location.pathname
-        userAcc = RoleAccessModifiedinSingleArray.find((inx) => {
-          return (`/${inx.ActualPagePath}` === locationPath)
-        })
-      }
-      else if (!(editDataGatingFromList === undefined)) {
-        let relatatedPage = props.relatatedPage
-        userAcc = RoleAccessModifiedinSingleArray.find((inx) => {
-          return (`/${inx.ActualPagePath}` === relatatedPage)
-        })
-  
-      }
-      if (!(userAcc === undefined)) {
-        setUserPageAccessState(userAcc)
-      }
+    console.log("ProductTypeAPI", ProductTypeAPI)
 
-  }, [RoleAccessModifiedinSingleArray])
+    //*** "isEditdata get all data from ModuleID for Binding  Form controls
+    let editDataGatingFromList = props.state;
 
+
+    //userAccess useEffect
+    useEffect(() => {
+        let userAcc = undefined
+        if ((editDataGatingFromList === undefined)) {
+
+            let locationPath = history.location.pathname
+            userAcc = RoleAccessModifiedinSingleArray.find((inx) => {
+                return (`/${inx.ActualPagePath}` === locationPath)
+            })
+        }
+        else if (!(editDataGatingFromList === undefined)) {
+            let relatatedPage = props.relatatedPage
+            userAcc = RoleAccessModifiedinSingleArray.find((inx) => {
+                return (`/${inx.ActualPagePath}` === relatatedPage)
+            })
+
+        }
+        if (!(userAcc === undefined)) {
+            setUserPageAccessState(userAcc)
+        }
+
+    }, [RoleAccessModifiedinSingleArray])
+
+
+
+    //userAccess useEffect
+    useEffect(() => {
+
+        if ((editDataGatingFromList === undefined)) {
+
+            const userAcc = CommonGetRoleAccessFunction(history)
+            if (!(userAcc === undefined)) {
+                setUserPageAccessState(userAcc)
+            }
+        } else {
+            let RelatedPageID = history.location.state.UserDetails.RelatedPageID
+            const userfound = RoleAccessModifiedinSingleArray.find((element) => {
+                return element.id === RelatedPageID
+            })
+            setUserPageAccessState(userfound)
+        }
+    }, [history])
 
     useEffect(() => {
-        dispatch(getDivisionTypesID());
+        dispatch(getMethodForProductTypes());
     }, [dispatch]);
+
+
+
     // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
     useEffect(() => {
         if (!(userPageAccessState === '')) { document.getElementById("txtName").focus(); }
         if (!(editDataGatingFromList === undefined)) {
             setEditData(editDataGatingFromList);
             setPageMode("edit");
-            setDivision_dropdown_Select({
-                value: editDataGatingFromList.DivisionType_id,
-                label: editDataGatingFromList.DivisionTypeName
+            setProductCategoryTypes_dropdown_Select({
+                value: editDataGatingFromList.ProductTypes_id,
+                label: editDataGatingFromList.ProductTypeName
             })
-            dispatch(editPartyTypeSuccess({ Status: false }))
+            dispatch(editProductTypesIDSuccess({ Status: false }))
             dispatch(BreadcrumbShow(editDataGatingFromList.Name))
+            return
         }
-        else if (!(propsPageMode === undefined)) {
-            setPageMode(propsPageMode)
-        }
-    }, [editDataGatingFromList,propsPageMode])
+    }, [editDataGatingFromList])
+
 
     useEffect(() => {
-        if ((PostAPIResponse.Status === true) && (PostAPIResponse.StatusCode === 200)&&!(pageMode==="dropdownAdd")) {
-            setDivision_dropdown_Select('')
-            dispatch(PostPartyTypeAPISuccess({ Status: false }))
+        if ((PostAPIResponse.Status === true) && (PostAPIResponse.StatusCode === 200)) {
+            setProductCategoryTypes_dropdown_Select('')
+            dispatch(PostMethod_ForProductTypesAPISuccess({ Status: false }))
             formRef.current.reset();
-            if (pageMode === "dropdownAdd") {
+            if (pageMode === "other") {
                 dispatch(AlertState({
                     Type: 1,
                     Status: true,
@@ -106,64 +134,69 @@ useEffect(() => {
                     Type: 1,
                     Status: true,
                     Message: PostAPIResponse.Message,
-                    RedirectPath: '/PartyTypeList',
-
+                    RedirectPath: '/ProductTypesList',
                 }))
             }
         }
-        else if ((PostAPIResponse.Status === true) && !(pageMode==="dropdownAdd")) {
-            dispatch(PostPartyTypeAPISuccess({ Status: false }))
+        else if (PostAPIResponse.Status === true) {
+            dispatch(PostMethod_ForProductTypesAPISuccess({ Status: false }))
             dispatch(AlertState({
                 Type: 4,
                 Status: true,
-                Message: JSON.stringify(PostAPIResponse.Message),
+                Message: JSON.stringify(postMessage.Message),
                 RedirectPath: false,
                 AfterResponseAction: false
             }));
         }
     }, [PostAPIResponse])
 
-     
-    const DivisionTypesValues = DivisionTypes.map((Data) => ({
+    //get method for dropdown
+    useEffect(() => {
+        dispatch(getMethodForProductTypes());
+    }, [dispatch]);
+
+
+
+    function handllerProductCategoryTypes(e) {
+        setProductCategoryTypes_dropdown_Select(e)
+    }
+
+    const ProductCategoryTypesValues = ProductTypeAPI.map((Data) => ({
         value: Data.id,
         label: Data.Name
     }));
 
-    function handllerDivisionTypes(e) {
-        setDivision_dropdown_Select(e)
-    }
+
 
     const FormSubmitButton_Handler = (event, values) => {
         const jsonBody = JSON.stringify({
             Name: values.Name,
-            DivisionType: division_dropdown_Select.value,
-            CreatedBy: 1,
-            CreatedOn: "2022-07-18T00:00:00",
-            UpdatedBy: 1,
-            UpdatedOn: "2022-07-18T00:00:00"
+            ProductCategoryType: ProductCategoryTypes_dropdown_Select.value,
         });
 
         if (pageMode === "edit") {
-            dispatch(updatePartyTypeID(jsonBody, EditData.id));
+            dispatch(updateProductTypesID(jsonBody, EditData.id));
         }
         else {
-            dispatch(PostPartyTypeAPI(jsonBody));
+            dispatch(PostMethodForProductTypes(jsonBody));
         }
     };
 
+
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
     var IsEditMode_Css = ''
-    if (pageMode === "edit" || pageMode == "dropdownAdd") { IsEditMode_Css = "-5.5%" };
+    if (pageMode === "edit") { IsEditMode_Css = "-5.5%" };
 
     if (!(userPageAccessState === '')) {
         return (
             <React.Fragment>
                 <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
-                    <MetaTags>
-                        <title>PartyType| FoodERP-React FrontEnd</title>
-                    </MetaTags>
-                    <Breadcrumb breadcrumbItem={userPageAccessState.PageHeading} />
                     <Container fluid>
+                        <MetaTags>
+                            <title>CategoryTypes | FoodERP-React FrontEnd</title>
+                        </MetaTags>
+                        <Breadcrumb breadcrumbItem={"Category Types"} />
+
                         <Card className="text-black">
                             <CardHeader className="card-header   text-black" style={{ backgroundColor: "#dddddd" }} >
                                 <h4 className="card-title text-black">{userPageAccessState.PageDescription}</h4>
@@ -194,15 +227,16 @@ useEffect(() => {
                                                                 onChange={(e) => { dispatch(BreadcrumbShow(e.target.value)) }}
                                                             />
                                                         </FormGroup>
+
                                                         <Row>
                                                             <Col md="4">
                                                                 <FormGroup className="mb-3">
-                                                                    <Label htmlFor="validationCustom01"> Division Type </Label>
+                                                                    <Label htmlFor="validationCustom01"> ProductCategory Type </Label>
                                                                     <Col sm={12}>
                                                                         <Select
-                                                                            value={division_dropdown_Select}
-                                                                            options={DivisionTypesValues}
-                                                                            onChange={(e) => { handllerDivisionTypes(e) }}
+                                                                            value={ProductCategoryTypes_dropdown_Select}
+                                                                            options={ProductCategoryTypesValues}
+                                                                            onChange={(e) => { handllerProductCategoryTypes(e) }}
                                                                         />
                                                                     </Col>
                                                                 </FormGroup>
@@ -229,9 +263,11 @@ useEffect(() => {
                                                                                     userPageAccessState.RoleAccess_IsSave ?
                                                                                         <button
                                                                                             type="submit"
-                                                                                            data-mdb-toggle="tooltip" data-mdb-placement="top" title="Save Party Type"
-                                                                                            className="btn btn-primary w-md"
-                                                                                        > <i className="fas fa-save me-2"></i> Save
+                                                                                            data-mdb-toggle="tooltip" data-mdb-placement="top" title="Save ProductCategory Types"
+                                                                                            className="btn btn-primary w-sm">
+                                                                                            <i className="fas fa-save me-2"></i>
+                                                                                            Save
+
                                                                                         </button>
                                                                                         :
                                                                                         <></>
@@ -249,12 +285,15 @@ useEffect(() => {
                                     </Row>
                                 </AvForm>
                             </CardBody>
+
+
+
                         </Card>
 
                     </Container>
                 </div>
-            </React.Fragment>
-        )
+            </React.Fragment >
+        );
     }
     else {
         return (
@@ -263,4 +302,5 @@ useEffect(() => {
     }
 };
 
-export default PartyType
+export default CategoryTypes
+

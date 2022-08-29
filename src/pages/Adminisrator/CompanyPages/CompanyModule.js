@@ -35,6 +35,7 @@ const CompanyModule = (props) => {
 
   //*** "isEditdata get all data from ModuleID for Binding  Form controls
   var editDataGatingFromList = props.state;
+  let propsPageMode = props.pageMode;
 
   const [EditData, setEditData] = useState([]);
   const [pageMode, setPageMode] = useState("save");
@@ -50,20 +51,26 @@ const CompanyModule = (props) => {
 
   // userAccess useEffect
   useEffect(() => {
-      if ((editDataGatingFromList === undefined)) {
-          const userAcc = CommonGetRoleAccessFunction(history)
-          if (!(userAcc === undefined)) {
-              setUserPageAccessState(userAcc)
-          }
-      } else {
-          let RelatedPageID = history.location.state.UserDetails.RelatedPageID
-          const userfound = RoleAccessModifiedinSingleArray.find((element) => {
-              return element.id === RelatedPageID
-          })
-          setUserPageAccessState(userfound)
-      }
+    let userAcc = undefined
+    if ((editDataGatingFromList === undefined)) {
 
-  }, [history])
+      let locationPath = history.location.pathname
+      userAcc = RoleAccessModifiedinSingleArray.find((inx) => {
+        return (`/${inx.ActualPagePath}` === locationPath)
+      })
+    }
+    else if (!(editDataGatingFromList === undefined)) {
+      let relatatedPage = props.relatatedPage
+      userAcc = RoleAccessModifiedinSingleArray.find((inx) => {
+        return (`/${inx.ActualPagePath}` === relatatedPage)
+      })
+
+    }
+    if (!(userAcc === undefined)) {
+      setUserPageAccessState(userAcc)
+    }
+
+}, [RoleAccessModifiedinSingleArray])
 
   // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
   useEffect(() => {
@@ -78,16 +85,18 @@ const CompanyModule = (props) => {
       })
       dispatch(editCompanyIDSuccess({ Status: false }))
       dispatch(BreadcrumbShow(editDataGatingFromList.Name))
-      return
     }
-  }, [editDataGatingFromList]);
+    else if (!(propsPageMode === undefined)) {
+      setPageMode(propsPageMode)
+  }
+  }, [editDataGatingFromList,propsPageMode]);
 
   useEffect(() => {
-    if ((PostAPIResponse.Status === true) && (PostAPIResponse.StatusCode === 200)) {
+    if ((PostAPIResponse.Status === true) && (PostAPIResponse.StatusCode === 200)&&!(pageMode==="dropdownAdd")) {
       dispatch(PostCompanySubmitSuccess({ Status: false }))
       setCompanyGroup('')
       formRef.current.reset();
-      if (pageMode === "other") {
+      if (pageMode === "dropdownAdd") {
         dispatch(AlertState({
           Type: 1,
           Status: true,
@@ -103,7 +112,7 @@ const CompanyModule = (props) => {
         }))
       }
     }
-    else if (PostAPIResponse.Status === true) {
+    else if ((PostAPIResponse.Status === true) && !(pageMode==="dropdownAdd")) {
       dispatch(PostCompanySubmitSuccess({ Status: false }))
       dispatch(AlertState({
         Type: 4,
@@ -158,7 +167,7 @@ const CompanyModule = (props) => {
   };
 
   var IsEditModeSaSS = ''
-  if (pageMode === "edit" || pageMode == "other") { IsEditModeSaSS = "-5.5%" };
+  if (pageMode === "edit" || pageMode == "dropdownAdd") { IsEditModeSaSS = "-5.5%" };
 
   if (!(userPageAccessState === '')) {
     return (

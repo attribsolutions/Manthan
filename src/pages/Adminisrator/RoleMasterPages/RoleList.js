@@ -116,9 +116,6 @@ const RoleList = (props) => {
     setmodal_center(!modal_center);
   }
 
-
-
-
   const defaultSorted = [
     {
       dataField: "Name", // if dataField is not match to any column you defined, it will be ignored.
@@ -229,7 +226,7 @@ const RoleList = (props) => {
             }}
             size="xl"
           >
-            <RoleMaster state={editData.Data} />
+            <RoleMaster state={editData.Data} relatatedPage={"/RoleMaster"} />
           </Modal>
         </div>
       </React.Fragment>
