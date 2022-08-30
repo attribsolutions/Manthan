@@ -978,7 +978,7 @@ const ItemsMaster = (props) => {
                                                                                     <Label htmlFor="validationCustom21">Category</Label>
                                                                                     <Select
                                                                                         id={`dropCategory-${key}`}
-                                                                                        styles={customStyles}
+                                                                                        // styles={customStyles}
                                                                                         value={categoryTabTable[key].Category}
                                                                                         options={Category_DropdownOptions}
                                                                                         onChange={(e) => { CategoryTab_Common_onChange_Handller(e, key, "Category") }}
@@ -988,7 +988,7 @@ const ItemsMaster = (props) => {
                                                                                 <FormGroup className=" col col-sm-4 " >
                                                                                     <Label htmlFor="validationCustom21">Sub Category</Label>
                                                                                     <Select
-                                                                                        styles={customStyles}
+                                                                                        // styles={customStyles}
                                                                                         id={`dropSubCategory-${key}`}
                                                                                         value={categoryTabTable[key].SubCategory}
                                                                                         options={SubCategory_DropdownOptions}
