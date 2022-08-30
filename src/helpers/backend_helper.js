@@ -193,6 +193,7 @@ export const CategoryType_Get_DropDown_API = () => get(url.CATEGORYTYPE_DROPDOWN
 export const Category_Get_DropDown_API = () => get(url.CATEGORY_DROPDOWN_API)// Category DropDown api
 export const SubCategory_Get_DropDown_API = () => get(url.SUBCATEGORY_DROPDOWN_API)// SubCategory DropDown api
 export const ImageType_Get_DropDown_API = () => get(url.IMAGETYPE_DROPDOWN_API)// ImageType DropDown api
+export const MRPType_Get_DropDown_API = () => get(url.MRP_TYPE_DROPDOWN_API)// MRP Type DropDown api
 
 
 // Party Master

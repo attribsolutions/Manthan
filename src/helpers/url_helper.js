@@ -122,3 +122,4 @@ export const  SUBCATEGORY_DROPDOWN_API ='/SubCategory'
 
 export const  IMAGETYPE_DROPDOWN_API ='/ImageTypes'
 
+export const  MRP_TYPE_DROPDOWN_API ='/MRPTypes'
