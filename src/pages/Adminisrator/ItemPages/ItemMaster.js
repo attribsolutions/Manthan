@@ -122,7 +122,7 @@ const ItemsMaster = (props) => {
         MRP: '',
         GSTPercentage: '',
         HSNCode: '',
-        MRPType: { value: 1 }
+        MRPType: ''
     }]);
 
     const { companyList, BaseUnit, CategoryType, Category, SubCategory, DivisionType, PostAPIResponse, RoleAccessModifiedinSingleArray, ImageType, MRPType } = useSelector((state) => ({
@@ -280,10 +280,6 @@ const ItemsMaster = (props) => {
         formValue[type] = event
         setrefresh(event)
     }
-
-
-
-
 
     function CategoryTab_AddRow_Handler() {
         debugger
@@ -543,7 +539,7 @@ const ItemsMaster = (props) => {
 
     function RateDetailTab_AddRow_Handler() {
         var newarr = [...rateDetailTableData, {
-            MRPType: { value: 1 },
+            MRPType: { value: 0, label: "select" },
             MRP: '',
             GSTPercentage: '',
             HSNCode: ''
@@ -560,7 +556,7 @@ const ItemsMaster = (props) => {
 
     }
     function RateDetail_Common_onChange_Handller(event, key, type) {
-
+        debugger
         var found = rateDetailTableData.find((i, k) => {
             return (k === key)
         })
@@ -569,7 +565,7 @@ const ItemsMaster = (props) => {
 
         if (type === "MRP") {
             newSelectValue = {
-                MRP: event,
+                MRP: event.target.value,
                 GSTPercentage: found.GSTPercentage,
                 HSNCode: found.HSNCode,
                 MRPType: found.MRPType
@@ -587,7 +583,7 @@ const ItemsMaster = (props) => {
             newSelectValue = {
                 MRP: found.MRP,
                 GSTPercentage: found.GSTPercentage,
-                HSNCode: event.target.value,
+                HSNCode: found.HSNCode,
                 MRPType: event
             }
         }
@@ -877,7 +873,7 @@ const ItemsMaster = (props) => {
                                                                         <Input type="text" id='txtName'
                                                                             placeholder=" Please Enter Name "
                                                                             autoComplete="off"
-                                                                            onChange={(e) => { dispatch(BreadcrumbShow(e.target.value)) }}
+                                                                            onChange={(e) => { dispatch(BreadcrumbShow(e.target.value));formValue.Name = e.target.value  }}
                                                                         />
                                                                     </FormGroup>
 
@@ -902,6 +898,7 @@ const ItemsMaster = (props) => {
                                                                     </FormGroup>
 
                                                                     <FormGroup className=" col col-sm-4 " >
+                                                                        <Label htmlFor="validationCustom21">Base Unit</Label>
                                                                         <Select
                                                                             id='divBaseUnit'
                                                                             // className="form-control is-invalid"
@@ -910,7 +907,6 @@ const ItemsMaster = (props) => {
                                                                             options={BaseUnit_DropdownOptions}
                                                                             onChange={(event) => Common_DropDown_handller_ForAll(event, "BaseUnit")}
                                                                         />
-                                                                        <Label htmlFor="validationCustom21">Base Unit</Label>
                                                                     </FormGroup>
 
                                                                     <FormGroup className="mb-3 col col-sm-4 " >
@@ -1144,7 +1140,7 @@ const ItemsMaster = (props) => {
                                                                         <FormGroup className="mb-3 col col-sm-4 " >
                                                                             <Label >Upload</Label>
                                                                             <Input type="file" className="form-control col col-sm-4 "
-                                                                                // value={imageTabTable.ImageUpload}
+                                                                                value={imageTabTable.ImageUpload}
                                                                                 // value={"C:\fakepath\cropper.jpg"}
                                                                                 onChange={(e) => ImageTab_onChange_Handler(e, key, "ImageUpload")} />
                                                                         </FormGroup>
@@ -1255,25 +1251,25 @@ const ItemsMaster = (props) => {
                                                                         return <Row className="mt-3">
                                                                             <Col className=" col col-11 ">
                                                                                 <Row>
-                                                                                    {/* <FormGroup className="mb-3 col col-sm-4 " >
-                                                                                    <Label htmlFor="validationCustom01">MRP</Label>
-                                                                                    <Input name="MRP" type="text" id='txtMRP'
-                                                                                        placeholder=" Please Enter MRP "
-                                                                                        autoComplete="off"
-                                                                                        value={rateDetailTableData[key].MRP}
-                                                                                        onChange={(e) => { RateDetail_Common_onChange_Handller(e, key, "MRP") }}
-                                                                                    />
-                                                                                </FormGroup> */}
-                                                                                    <FormGroup className="mb-3 col col-sm-4 " >
-                                                                                        <Label >MRP</Label>
+                                                                                    <FormGroup className="mb-3 col col-sm-3 " >
+                                                                                        <Label >MRP Type</Label>
                                                                                         <Select
-                                                                                            value={rateDetailTableData[key].MRP}
+                                                                                            value={rateDetailTableData[key].MRPType}
                                                                                             options={MRPType_DropdownOptions}
+                                                                                            onChange={(e) => { RateDetail_Common_onChange_Handller(e, key, "MRPType") }}
+                                                                                        />
+                                                                                    </FormGroup>
+                                                                                    <FormGroup className="mb-3 col col-sm-3 " >
+                                                                                        <Label htmlFor="validationCustom01">MRP</Label>
+                                                                                        <Input name="MRP" type="text" id='txtMRP'
+                                                                                            placeholder=" Please Enter MRP "
+                                                                                            autoComplete="off"
+                                                                                            value={rateDetailTableData[key].MRP}
                                                                                             onChange={(e) => { RateDetail_Common_onChange_Handller(e, key, "MRP") }}
                                                                                         />
                                                                                     </FormGroup>
 
-                                                                                    <FormGroup className="mb-3 col col-sm-4 " >
+                                                                                    <FormGroup className="mb-3 col col-sm-3 " >
                                                                                         <Label htmlFor="validationCustom01">GST</Label>
                                                                                         <Input name="GST" type="text" id='txtGST'
                                                                                             value={rateDetailTableData[key].GSTPercentage}
@@ -1283,7 +1279,7 @@ const ItemsMaster = (props) => {
                                                                                         />
                                                                                     </FormGroup>
 
-                                                                                    <FormGroup className="mb-3 col col-sm-4 " >
+                                                                                    <FormGroup className="mb-3 col col-sm-3 " >
                                                                                         <Label htmlFor="validationCustom01">HSN</Label>
                                                                                         <Input name="HSN" type="text" id='txtHSN'
                                                                                             value={rateDetailTableData[key].HSNCode}
