@@ -3,12 +3,12 @@ import {
     EDIT_ITEM_ID_SUCCESS,
     GET_BASEUNIT_FOR_DROPDOWN_SUCCESS,
     GET_CATEGORYTYPE_FOR_DROPDOWN_SUCCESS,
-    GET_CATEGORY_FOR_DROPDOWN_SUCCESS,
+    GET_CATEGORY_BY_CATEGORYTYPE_FOR_DROPDOWN_SUCCESS,
     GET_IMAGETYPE_FOR_DROPDOWN_SUCCESS,
     GET_ITEM_GROUP_FOR_DROPDOWN_SUCCESS,
     GET_ITEM_LIST_API_SUCCESS,
     GET_MRPTYPE_FOR_DROPDOWN_SUCCESS,
-    GET_SUBCATEGORY_FOR_DROPDOWN_SUCCESS,
+    GET_SUB_CATEGORY_BY_CATEGORYTYPE_FOR_DROPDOWN_SUCCESS,
     POST_ITEM_DATA_SUCCESS,
     UPDATE_ITEM_ID_SUCCESS
 } from "./actionType";
@@ -24,8 +24,8 @@ const INIT_STATE = {
     ItemGroupList: [],
     BaseUnit: [],
     CategoryType:[],
-    Category:[],
-    SubCategory:[],
+    CategoryByCategoryType:[],
+    SubCategoryByCategoryType:[],
     ImageType:[],
     MRPType:[],
 };
@@ -85,16 +85,16 @@ const ItemMastersReducer = (state = INIT_STATE, action) => {
                 CategoryType: action.payload,
             }
 
-        case GET_CATEGORY_FOR_DROPDOWN_SUCCESS:
+        case GET_CATEGORY_BY_CATEGORYTYPE_FOR_DROPDOWN_SUCCESS:
             return {
                 ...state,
-                Category: action.payload,
+                CategoryByCategoryType: action.payload,
             }
 
-        case GET_SUBCATEGORY_FOR_DROPDOWN_SUCCESS:
+        case GET_SUB_CATEGORY_BY_CATEGORYTYPE_FOR_DROPDOWN_SUCCESS:
             return {
                 ...state,
-                SubCategory: action.payload,
+                SubCategoryByCategoryType: action.payload,
             }
 
             case GET_IMAGETYPE_FOR_DROPDOWN_SUCCESS:

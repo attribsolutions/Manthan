@@ -33,10 +33,12 @@ import { fetchCompanyList } from "../../../store/Administrator/CompanyRedux/acti
 import {
     getBaseUnit_ForDropDown,
     get_CategoryTypes_ForDropDown,
+    get_Category_By_CategoryType_ForDropDown,
     get_Category_ForDropDown,
     get_ImageType_ForDropDown,
     get_MRPTypes_ForDropDown,
     get_SubCategory_ForDropDown,
+    get_Sub_Category_By_CategoryType_ForDropDown,
     postItemData,
     PostItemDataSuccess
 } from "../../../store/Administrator/ItemsRedux/action";
@@ -128,8 +130,8 @@ const ItemsMaster = (props) => {
         companyList: state.Company.companyList,
         BaseUnit: state.ItemMastersReducer.BaseUnit,
         CategoryType: state.ItemMastersReducer.CategoryType,
-        Category: state.ItemMastersReducer.Category,
-        SubCategory: state.ItemMastersReducer.SubCategory,
+        Category: state.ItemMastersReducer.CategoryByCategoryType,
+        SubCategory: state.ItemMastersReducer.SubCategoryByCategoryType,
         DivisionType: state.PartyMasterReducer.partyList,
         RoleAccessModifiedinSingleArray: state.Login.RoleAccessUpdateData,
         PostAPIResponse: state.ItemMastersReducer.postMessage,
@@ -203,8 +205,8 @@ const ItemsMaster = (props) => {
         dispatch(fetchCompanyList());
         dispatch(getBaseUnit_ForDropDown());
         dispatch(get_CategoryTypes_ForDropDown());
-        dispatch(get_Category_ForDropDown());
-        dispatch(get_SubCategory_ForDropDown());
+        dispatch(get_Category_By_CategoryType_ForDropDown());
+        dispatch(get_Sub_Category_By_CategoryType_ForDropDown());
         dispatch(getPartyListAPI());
         dispatch(get_ImageType_ForDropDown());
         dispatch(get_MRPTypes_ForDropDown());
@@ -245,12 +247,12 @@ const ItemsMaster = (props) => {
         label: data.Name
     }));
 
-    const Category_DropdownOptions = DivisionType.map((data) => ({
+    const Category_DropdownOptions = Category.map((data) => ({
         value: data.id,
         label: data.Name
     }));
 
-    const SubCategory_DropdownOptions = DivisionType.map((data) => ({
+    const SubCategory_DropdownOptions = SubCategory.map((data) => ({
         value: data.id,
         label: data.Name
     }));
@@ -312,6 +314,13 @@ const ItemsMaster = (props) => {
         setrefresh(event)
     }
 
+    function CategoryType_Dropdown_Handler(e) {
+        dispatch(get_Category_By_CategoryType_ForDropDown(e.value))
+    }
+
+    function Category_Dropdown_Handler(e) {
+        dispatch(get_Sub_Category_By_CategoryType_ForDropDown(e.value))
+    }
 
     function CategoryTab_AddRow_Handler() {
         debugger
@@ -1000,7 +1009,7 @@ const ItemsMaster = (props) => {
                                                                                         id={`dropCategoryType-${key}`}
                                                                                         value={categoryTabTable[key].CategoryType}
                                                                                         options={CategoryType_DropdownOptions}
-                                                                                        onChange={(e) => { CategoryTab_Common_onChange_Handller(e, key, "CategoryType") }}
+                                                                                        onChange={(e) => { CategoryTab_Common_onChange_Handller(e, key, "CategoryType"); CategoryType_Dropdown_Handler(e) }}
                                                                                     />
                                                                                 </FormGroup>
 
@@ -1008,15 +1017,17 @@ const ItemsMaster = (props) => {
                                                                                     <Label htmlFor="validationCustom21">Category</Label>
                                                                                     <Select
                                                                                         id={`dropCategory-${key}`}
+                                                                                        // styles={customStyles}
                                                                                         value={categoryTabTable[key].Category}
                                                                                         options={Category_DropdownOptions}
-                                                                                        onChange={(e) => { CategoryTab_Common_onChange_Handller(e, key, "Category") }}
+                                                                                        onChange={(e) => { CategoryTab_Common_onChange_Handller(e, key, "Category"); Category_Dropdown_Handler(e) }}
                                                                                     />
                                                                                 </FormGroup>
 
                                                                                 <FormGroup className=" col col-sm-4 " >
                                                                                     <Label htmlFor="validationCustom21">Sub Category</Label>
                                                                                     <Select
+                                                                                        // styles={customStyles}
                                                                                         id={`dropSubCategory-${key}`}
                                                                                         value={categoryTabTable[key].SubCategory}
                                                                                         options={SubCategory_DropdownOptions}
@@ -1061,6 +1072,7 @@ const ItemsMaster = (props) => {
                                                     </Col>
 
                                                 </TabPane>
+
 
                                                 <TabPane tabId="3">
                                                     <Col md={12}>
