@@ -11,6 +11,8 @@ import { DELETE_ITEM_ID, DELETE_ITEM_ID_SUCCESS,
      GET_ITEM_GROUP_FOR_DROPDOWN, 
      GET_ITEM_GROUP_FOR_DROPDOWN_SUCCESS, 
      GET_ITEM_LIST_API, GET_ITEM_LIST_API_SUCCESS, 
+     GET_MRPTYPE_FOR_DROPDOWN, 
+     GET_MRPTYPE_FOR_DROPDOWN_SUCCESS, 
      GET_SUBCATEGORY_FOR_DROPDOWN, 
      GET_SUBCATEGORY_FOR_DROPDOWN_SUCCESS, 
      POST_ITEM_DATA, POST_ITEM_DATA_SUCCESS, 
@@ -127,5 +129,15 @@ export const get_CategoryTypes_ForDropDown_Success = (data) => ({
     
     export const get_ImageType_ForDropDown_Success = (data) => ({
       type: GET_IMAGETYPE_FOR_DROPDOWN_SUCCESS,
+      payload:data,
+    });
+
+     // get MRPTypes for dropdown api
+     export const get_MRPTypes_ForDropDown = () => ({
+      type: GET_MRPTYPE_FOR_DROPDOWN,
+    });
+    
+    export const get_MRPTypes_ForDropDown_Success = (data) => ({
+      type: GET_MRPTYPE_FOR_DROPDOWN_SUCCESS,
       payload:data,
     });
