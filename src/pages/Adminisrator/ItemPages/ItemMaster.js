@@ -26,7 +26,7 @@ import {
 import { Link, useHistory } from "react-router-dom"
 import { useDispatch, useSelector } from "react-redux";
 import classnames from "classnames"
-import BreadcrumbDemo from "../../../components/Common/CmponentRelatedCommonFile/BreadcrumbDemo"
+import Breadcrumb from "../../../components/Common/Breadcrumb";
 import { AvField, AvForm, AvInput } from "availity-reactstrap-validation"
 import Select from "react-select";
 import { fetchCompanyList } from "../../../store/Administrator/CompanyRedux/actions"
@@ -41,13 +41,15 @@ import {
     PostItemDataSuccess
 } from "../../../store/Administrator/ItemsRedux/action";
 import Dropzone from "react-dropzone";
-import { AlertState } from "../../../store/actions";
+import { AlertState, BreadcrumbShow } from "../../../store/actions";
 import { Tbody, Thead } from "react-super-responsive-table";
 import { getPartyListAPI } from "../../../store/Administrator/PartyRedux/action";
 
-const ItemsMaster = () => {
+const ItemsMaster = (props) => {
     const dispatch = useDispatch();
     const history = useHistory()
+
+    let editDataGatingFromList = props.state;
 
     const [EditData, setEditData] = useState([]);
     const [pageMode, setPageMode] = useState("save");
@@ -120,7 +122,7 @@ const ItemsMaster = () => {
         MRP: '',
         GSTPercentage: '',
         HSNCode: '',
-        MRPType: { value: 1 }
+        MRPType: ''
     }]);
 
     const { companyList, BaseUnit, CategoryType, Category, SubCategory, DivisionType, PostAPIResponse, RoleAccessModifiedinSingleArray, ImageType, MRPType } = useSelector((state) => ({
@@ -137,6 +139,28 @@ const ItemsMaster = () => {
     }));
 
 
+    useEffect(() => {
+        debugger
+        let userAcc = undefined
+        if ((editDataGatingFromList === undefined)) {
+
+            let locationPath = history.location.pathname
+            userAcc = RoleAccessModifiedinSingleArray.find((inx) => {
+                return (`/${inx.ActualPagePath}` === locationPath)
+            })
+        }
+        else if (!(editDataGatingFromList === undefined)) {
+            let relatatedPage = props.relatatedPage
+            userAcc = RoleAccessModifiedinSingleArray.find((inx) => {
+                return (`/${inx.ActualPagePath}` === relatatedPage)
+            })
+
+        }
+        if (!(userAcc === undefined)) {
+            setUserPageAccessState(userAcc)
+        }
+
+    }, [RoleAccessModifiedinSingleArray])
 
     useEffect(() => {
 
@@ -256,10 +280,6 @@ const ItemsMaster = () => {
         formValue[type] = event
         setrefresh(event)
     }
-
-
-
-
 
     function CategoryTab_AddRow_Handler() {
         debugger
@@ -519,7 +539,7 @@ const ItemsMaster = () => {
 
     function RateDetailTab_AddRow_Handler() {
         var newarr = [...rateDetailTableData, {
-            MRPType: { value: 1 },
+            MRPType: { value: 0, label: "select" },
             MRP: '',
             GSTPercentage: '',
             HSNCode: ''
@@ -536,7 +556,7 @@ const ItemsMaster = () => {
 
     }
     function RateDetail_Common_onChange_Handller(event, key, type) {
-
+        debugger
         var found = rateDetailTableData.find((i, k) => {
             return (k === key)
         })
@@ -545,7 +565,7 @@ const ItemsMaster = () => {
 
         if (type === "MRP") {
             newSelectValue = {
-                MRP: event,
+                MRP: event.target.value,
                 GSTPercentage: found.GSTPercentage,
                 HSNCode: found.HSNCode,
                 MRPType: found.MRPType
@@ -563,7 +583,7 @@ const ItemsMaster = () => {
             newSelectValue = {
                 MRP: found.MRP,
                 GSTPercentage: found.GSTPercentage,
-                HSNCode: event.target.value,
+                HSNCode: found.HSNCode,
                 MRPType: event
             }
         }
@@ -677,311 +697,313 @@ const ItemsMaster = () => {
         console.log("jsonBody", jsonBody)
     };
 
-    return (
-        <React.Fragment>
-            <div className="page-content">
-                <MetaTags>
-                    <title>Tabs & Accordions | Minia - React Admin & Dashboard Template</title>
-                </MetaTags>
-                <Container fluid>
-                    <AvForm onValidSubmit={(e, v) => { handleValidSubmit(e, v); }}>
-                        {/* Render Breadcrumbs */}
-                        <BreadcrumbDemo title="Components" breadcrumbItem="Tabs & Accordions" />
-                        <Row>
+
+    if (!(userPageAccessState === '')) {
+        return (
+            <React.Fragment>
+                <div className="page-content">
+                    <MetaTags>
+                        <title>Tabs & Accordions | Minia - React Admin & Dashboard Template</title>
+                    </MetaTags>
+                    <Container fluid>
+                        <AvForm onValidSubmit={(e, v) => { handleValidSubmit(e, v); }}>
+                            {/* Render Breadcrumbs */}
+                            <Breadcrumb breadcrumbItem={userPageAccessState.PageHeading} />
+
+                            <Row>
+
+                                <Col lg={12}>
+                                    <Card className="text-black" >
+                                        <CardHeader className="card-header   text-black" style={{ backgroundColor: "#dddddd" }} >
+                                            <h4 className="card-title text-black">{userPageAccessState.PageDescription}</h4>
+                                            <p className="card-title-desc text-black">{userPageAccessState.PageDescriptionDetails}</p>
+                                        </CardHeader>
+                                        <CardBody>
+                                            <Nav tabs className="nav-tabs-custom nav-justified">
+                                                <NavItem>
+                                                    <NavLink
+                                                        id="nave-link-1"
+                                                        style={{ cursor: "pointer" }}
+                                                        className={classnames({
+                                                            active: activeTab1 === "1",
+                                                        })}
+                                                        onClick={() => {
+                                                            toggle1("1")
+                                                        }}
+                                                    >
+                                                        <span className="d-block d-sm-none">
+                                                            <i className="fas fa-home"></i>
+                                                        </span>
+                                                        <span className="d-none d-sm-block">Basic Info</span>
+                                                    </NavLink>
+                                                </NavItem>
+                                                <NavItem>
+                                                    <NavLink
+                                                        id="nave-link-2"
+                                                        style={{ cursor: "pointer" }}
+                                                        className={classnames({
+                                                            active: activeTab1 === "2",
+                                                        })}
+                                                        onClick={() => {
+                                                            toggle1("2")
+                                                        }}
+                                                    >
+                                                        <span className="d-block d-sm-none">
+                                                            <i className="fas fa-home"></i>
+                                                        </span>
+                                                        <span className="d-none d-sm-block">Category</span>
+
+                                                    </NavLink>
+                                                </NavItem>
+                                                <NavItem>
+                                                    <NavLink
+                                                        id="nave-link-3"
+                                                        style={{ cursor: "pointer" }}
+                                                        className={classnames({
+                                                            active: activeTab1 === "3",
+                                                        })}
+                                                        onClick={() => {
+                                                            toggle1("3")
+                                                        }}
+                                                    >
+                                                        <span className="d-block d-sm-none">
+                                                            <i className="fas fa-home"></i>
+                                                        </span>
+                                                        <span className="d-none d-sm-block">Unit Conversions</span>
+                                                    </NavLink>
+                                                </NavItem>
+                                                <NavItem>
+                                                    <NavLink
+                                                        id="nave-link-4"
+                                                        style={{ cursor: "pointer" }}
+                                                        className={classnames({
+                                                            active: activeTab1 === "4",
+                                                        })}
+                                                        onClick={() => {
+                                                            toggle1("4")
+                                                        }}
+                                                    >
+                                                        <span className="d-block d-sm-none">
+                                                            <i className="fas fa-home"></i>
+                                                        </span>
+                                                        <span className="d-none d-sm-block">Image</span>
+                                                    </NavLink>
+                                                </NavItem>
+                                                <NavItem>
+                                                    <NavLink
+                                                        id="nave-link-5"
+                                                        style={{ cursor: "pointer" }}
+                                                        className={classnames({
+                                                            active: activeTab1 === "5",
+                                                        })}
+                                                        onClick={() => {
+                                                            toggle1("5")
+                                                        }}
+                                                    >
+                                                        <span className="d-block d-sm-none">
+                                                            <i className="fas fa-home"></i>
+                                                        </span>
+                                                        <span className="d-none d-sm-block">Division</span>
+                                                    </NavLink>
+                                                </NavItem>
+                                                <NavItem>
+                                                    <NavLink
+                                                        id="nave-link-6"
+                                                        style={{ cursor: "pointer" }}
+                                                        className={classnames({
+                                                            active: activeTab1 === "6",
+                                                        })}
+                                                        onClick={() => {
+                                                            toggle1("6")
+                                                        }}
+                                                    >
+                                                        <span className="d-block d-sm-none">
+                                                            <i className="fas fa-home"></i>
+                                                        </span>
+                                                        <span className="d-none d-sm-block">Rate Details</span>
+                                                    </NavLink>
+                                                </NavItem>
 
 
-                            <Col lg={12}>
-                                <Card>
-                                    <CardHeader>
-                                        <CardTitle className="h4">Justify Tabs</CardTitle>
+                                                <NavItem>
+                                                    <NavLink
+                                                        id="nave-link-7"
+                                                        style={{ cursor: "pointer" }}
+                                                        className={classnames({
+                                                            active: activeTab1 === "7",
+                                                        })}
+                                                        onClick={() => {
+                                                            toggle1("7")
+                                                        }}
+                                                    >
+                                                        <span className="d-block d-sm-none">
+                                                            <i className="fas fa-home"></i>
+                                                        </span>
+                                                        <span className="d-none d-sm-block">Margin</span>
+                                                    </NavLink>
+                                                </NavItem>
 
-                                    </CardHeader>
-                                    <CardBody>
-                                        <Nav tabs className="nav-tabs-custom nav-justified">
-                                            <NavItem>
-                                                <NavLink
-                                                    id="nave-link-1"
-                                                    style={{ cursor: "pointer" }}
-                                                    className={classnames({
-                                                        active: activeTab1 === "1",
-                                                    })}
-                                                    onClick={() => {
-                                                        toggle1("1")
-                                                    }}
-                                                >
-                                                    <span className="d-block d-sm-none">
-                                                        <i className="fas fa-home"></i>
-                                                    </span>
-                                                    <span className="d-none d-sm-block">Basic Info</span>
-                                                </NavLink>
-                                            </NavItem>
-                                            <NavItem>
-                                                <NavLink
-                                                    id="nave-link-2"
-                                                    style={{ cursor: "pointer" }}
-                                                    className={classnames({
-                                                        active: activeTab1 === "2",
-                                                    })}
-                                                    onClick={() => {
-                                                        toggle1("2")
-                                                    }}
-                                                >
-                                                    <span className="d-block d-sm-none">
-                                                        <i className="fas fa-home"></i>
-                                                    </span>
-                                                    <span className="d-none d-sm-block">Category</span>
+                                                <NavItem>
+                                                    <NavLink
+                                                        style={{ cursor: "pointer" }}
+                                                    // className={classnames({
+                                                    //     active: activeTab1 === "7",
+                                                    // })}
+                                                    // onClick={() => {
+                                                    //     toggle1("7")
+                                                    // }}
+                                                    >
+                                                        <span className="d-block d-sm-none">
+                                                            <i className="fas fa-home"></i>
+                                                        </span>
+                                                        {/* <span className="d-none d-sm-block">Tab7</span> */}
+                                                        <Button type="submit"> save</Button>
+                                                    </NavLink>
+                                                </NavItem>
+                                            </Nav>
+                                            <TabContent activeTab={activeTab1} className="p-3 text-muted">
+                                                <TabPane tabId="1">
+                                                    <Col md={12}  >
+                                                        <Card className="text-black">
+                                                            <CardBody style={{ backgroundColor: "whitesmoke" }}>
+                                                                <Row>
 
-                                                </NavLink>
-                                            </NavItem>
-                                            <NavItem>
-                                                <NavLink
-                                                    id="nave-link-3"
-                                                    style={{ cursor: "pointer" }}
-                                                    className={classnames({
-                                                        active: activeTab1 === "3",
-                                                    })}
-                                                    onClick={() => {
-                                                        toggle1("3")
-                                                    }}
-                                                >
-                                                    <span className="d-block d-sm-none">
-                                                        <i className="fas fa-home"></i>
-                                                    </span>
-                                                    <span className="d-none d-sm-block">Unit Conversions</span>
-                                                </NavLink>
-                                            </NavItem>
-                                            <NavItem>
-                                                <NavLink
-                                                    id="nave-link-4"
-                                                    style={{ cursor: "pointer" }}
-                                                    className={classnames({
-                                                        active: activeTab1 === "4",
-                                                    })}
-                                                    onClick={() => {
-                                                        toggle1("4")
-                                                    }}
-                                                >
-                                                    <span className="d-block d-sm-none">
-                                                        <i className="fas fa-home"></i>
-                                                    </span>
-                                                    <span className="d-none d-sm-block">Image</span>
-                                                </NavLink>
-                                            </NavItem>
-                                            <NavItem>
-                                                <NavLink
-                                                    id="nave-link-5"
-                                                    style={{ cursor: "pointer" }}
-                                                    className={classnames({
-                                                        active: activeTab1 === "5",
-                                                    })}
-                                                    onClick={() => {
-                                                        toggle1("5")
-                                                    }}
-                                                >
-                                                    <span className="d-block d-sm-none">
-                                                        <i className="fas fa-home"></i>
-                                                    </span>
-                                                    <span className="d-none d-sm-block">Division</span>
-                                                </NavLink>
-                                            </NavItem>
-                                            <NavItem>
-                                                <NavLink
-                                                    id="nave-link-6"
-                                                    style={{ cursor: "pointer" }}
-                                                    className={classnames({
-                                                        active: activeTab1 === "6",
-                                                    })}
-                                                    onClick={() => {
-                                                        toggle1("6")
-                                                    }}
-                                                >
-                                                    <span className="d-block d-sm-none">
-                                                        <i className="fas fa-home"></i>
-                                                    </span>
-                                                    <span className="d-none d-sm-block">Rate Details</span>
-                                                </NavLink>
-                                            </NavItem>
+                                                                    <FormGroup className="mb-3 col col-sm-4 " >
+                                                                        <Label >Name</Label>
+                                                                        <Input type="text" id='txtName'
+                                                                            placeholder=" Please Enter Name "
+                                                                            autoComplete="off"
+                                                                            onChange={(e) => { dispatch(BreadcrumbShow(e.target.value));formValue.Name = e.target.value  }}
+                                                                        />
+                                                                    </FormGroup>
 
+                                                                    <FormGroup className="mb-3 col col-sm-4 " >
+                                                                        <Label >ShortName</Label>
+                                                                        <Input type="text" id='txtShortName'
+                                                                            className=""
+                                                                            placeholder=" Please Enter ShortName "
+                                                                            autoComplete="off"
+                                                                            onChange={(e) => { formValue.ShortName = e.target.value }}
+                                                                        />
+                                                                    </FormGroup>
 
-                                            <NavItem>
-                                                <NavLink
-                                                    id="nave-link-7"
-                                                    style={{ cursor: "pointer" }}
-                                                    className={classnames({
-                                                        active: activeTab1 === "7",
-                                                    })}
-                                                    onClick={() => {
-                                                        toggle1("7")
-                                                    }}
-                                                >
-                                                    <span className="d-block d-sm-none">
-                                                        <i className="fas fa-home"></i>
-                                                    </span>
-                                                    <span className="d-none d-sm-block">Margin</span>
-                                                </NavLink>
-                                            </NavItem>
+                                                                    <FormGroup className=" col col-sm-4 " >
+                                                                        <Label htmlFor="validationCustom21">Company</Label>
+                                                                        <Select
+                                                                            id='divCompany'
+                                                                            value={formValue.Company}
+                                                                            options={Company_DropdownOptions}
+                                                                            onChange={(event) => Common_DropDown_handller_ForAll(event, "Company")}
+                                                                        />
+                                                                    </FormGroup>
 
-                                            <NavItem>
-                                                <NavLink
-                                                    style={{ cursor: "pointer" }}
-                                                // className={classnames({
-                                                //     active: activeTab1 === "7",
-                                                // })}
-                                                // onClick={() => {
-                                                //     toggle1("7")
-                                                // }}
-                                                >
-                                                    <span className="d-block d-sm-none">
-                                                        <i className="fas fa-home"></i>
-                                                    </span>
-                                                    {/* <span className="d-none d-sm-block">Tab7</span> */}
-                                                    <Button type="submit"> save</Button>
-                                                </NavLink>
-                                            </NavItem>
-                                        </Nav>
-                                        <TabContent activeTab={activeTab1} className="p-3 text-muted">
-                                            <TabPane tabId="1">
-                                                <Col md={12}  >
-                                                    <Card className="text-black">
-                                                        <CardBody style={{ backgroundColor: "whitesmoke" }}>
-                                                            <Row>
+                                                                    <FormGroup className=" col col-sm-4 " >
+                                                                        <Label htmlFor="validationCustom21">Base Unit</Label>
+                                                                        <Select
+                                                                            id='divBaseUnit'
+                                                                            // className="form-control is-invalid"
 
-                                                                <FormGroup className="mb-3 col col-sm-4 " >
-                                                                    <Label >Name</Label>
-                                                                    <Input type="text" id='txtName'
-                                                                        placeholder=" Please Enter Name "
-                                                                        autoComplete="off"
-                                                                        onChange={(e) => { formValue.Name = e.target.value }}
-                                                                    />
-                                                                </FormGroup>
+                                                                            value={formValue.BaseUnit}
+                                                                            options={BaseUnit_DropdownOptions}
+                                                                            onChange={(event) => Common_DropDown_handller_ForAll(event, "BaseUnit")}
+                                                                        />
+                                                                    </FormGroup>
 
-                                                                <FormGroup className="mb-3 col col-sm-4 " >
-                                                                    <Label >ShortName</Label>
-                                                                    <Input type="text" id='txtShortName'
-                                                                        className=""
-                                                                        placeholder=" Please Enter ShortName "
-                                                                        autoComplete="off"
-                                                                        onChange={(e) => { formValue.ShortName = e.target.value }}
-                                                                    />
-                                                                </FormGroup>
+                                                                    <FormGroup className="mb-3 col col-sm-4 " >
+                                                                        <Label htmlFor="validationCustom01">BarCode</Label>
+                                                                        <Input
+                                                                            placeholder=" Please Enter BarCode "
+                                                                            autoComplete="off"
+                                                                            // validate={{
+                                                                            //     required: { value: true, errorMessage: 'Please Enter BarCode' },
+                                                                            // }}
+                                                                            onChange={(e) => { formValue.BarCode = e.target.value }}
+                                                                        />
+                                                                    </FormGroup>
 
-                                                                <FormGroup className=" col col-sm-4 " >
-                                                                    <Label htmlFor="validationCustom21">Company</Label>
-                                                                    <Select
-                                                                        id='divCompany'
-                                                                        value={formValue.Company}
-                                                                        options={Company_DropdownOptions}
-                                                                        onChange={(event) => Common_DropDown_handller_ForAll(event, "Company")}
-                                                                    />
-                                                                </FormGroup>
+                                                                    <FormGroup className="mb-3 col col-sm-4 " >
+                                                                        <Label htmlFor="validationCustom01">Sequence</Label>
+                                                                        <Input
+                                                                            placeholder=" Please Enter Sequence "
+                                                                            autoComplete="off"
 
-                                                                <FormGroup className=" col col-sm-4 " >
-                                                                    <Label htmlFor="validationCustom21">Base Unit</Label>
-                                                                    <Select
-                                                                        id='divBaseUnit'
-                                                                        // className="form-control is-invalid"
+                                                                            onChange={(e) => { formValue.Sequence = e.target.value }}
+                                                                        />
 
-                                                                        value={formValue.BaseUnit}
-                                                                        options={BaseUnit_DropdownOptions}
-                                                                        onChange={(event) => Common_DropDown_handller_ForAll(event, "BaseUnit")}
-                                                                    />
-                                                                </FormGroup>
+                                                                    </FormGroup>
+                                                                    <FormGroup className="mb-2 col col-sm-5">
+                                                                        <Row className="justify-content-md-left">
+                                                                            <Label htmlFor="horizontal-firstname-input" className="col-sm-2 col-form-label" >Active </Label>
+                                                                            <Col md={2} style={{ marginTop: '9px' }} >
 
-                                                                <FormGroup className="mb-3 col col-sm-4 " >
-                                                                    <Label htmlFor="validationCustom01">BarCode</Label>
-                                                                    <Input
-                                                                        placeholder=" Please Enter BarCode "
-                                                                        autoComplete="off"
-                                                                        // validate={{
-                                                                        //     required: { value: true, errorMessage: 'Please Enter BarCode' },
-                                                                        // }}
-                                                                        onChange={(e) => { formValue.BarCode = e.target.value }}
-                                                                    />
-                                                                </FormGroup>
-
-                                                                <FormGroup className="mb-3 col col-sm-4 " >
-                                                                    <Label htmlFor="validationCustom01">Sequence</Label>
-                                                                    <Input
-                                                                        placeholder=" Please Enter Sequence "
-                                                                        autoComplete="off"
-
-                                                                        onChange={(e) => { formValue.Sequence = e.target.value }}
-                                                                    />
-
-                                                                </FormGroup>
-                                                                <FormGroup className="mb-2 col col-sm-5">
-                                                                    <Row className="justify-content-md-left">
-                                                                        <Label htmlFor="horizontal-firstname-input" className="col-sm-2 col-form-label" >Active </Label>
-                                                                        <Col md={2} style={{ marginTop: '9px' }} >
-
-                                                                            <div className="form-check form-switch form-switch-md mb-3" dir="ltr">
-                                                                                <Input type="checkbox" className="form-check-input" id="customSwitchsizemd"
-                                                                                    value={formValue.isActive}
-                                                                                    defaultChecked={true}
-                                                                                    onChange={(e) => { formValue.isActive = e.target.checked }}
-                                                                                    name="isActive"
-                                                                                />
-                                                                            </div>
-                                                                        </Col>
-                                                                    </Row>
-                                                                </FormGroup>
-                                                            </Row>
-                                                        </CardBody>
-                                                    </Card>
-                                                </Col>
-
-                                            </TabPane>
-
-                                            <TabPane tabId="2">
-                                                <Col md={12}  >
-                                                    <Card className="text-black">
-                                                        <CardBody style={{ backgroundColor: "whitesmoke" }}>
-
-                                                            {categoryTabTable.map((index, key) => {
-
-                                                                return <Row className="mt-3">
-                                                                    <Col className=" col col-11 ">
-                                                                        <Row>
-                                                                            <FormGroup className=" col col-sm-4 " >
-                                                                                <Label htmlFor="validationCustom21">Category Type</Label>
-                                                                                <Select
-                                                                                    id={`dropCategoryType-${key}`}
-                                                                                    value={categoryTabTable[key].CategoryType}
-                                                                                    options={CategoryType_DropdownOptions}
-                                                                                    onChange={(e) => { CategoryTab_Common_onChange_Handller(e, key, "CategoryType") }}
-                                                                                />
-                                                                            </FormGroup>
-
-                                                                            <FormGroup className=" col col-sm-4 " >
-                                                                                <Label htmlFor="validationCustom21">Category</Label>
-                                                                                <Select
-                                                                                    id={`dropCategory-${key}`}
-                                                                                    styles={customStyles}
-                                                                                    value={categoryTabTable[key].Category}
-                                                                                    options={Category_DropdownOptions}
-                                                                                    onChange={(e) => { CategoryTab_Common_onChange_Handller(e, key, "Category") }}
-                                                                                />
-                                                                            </FormGroup>
-
-                                                                            <FormGroup className=" col col-sm-4 " >
-                                                                                <Label htmlFor="validationCustom21">Sub Category</Label>
-                                                                                <Select
-                                                                                    styles={customStyles}
-                                                                                    id={`dropSubCategory-${key}`}
-                                                                                    value={categoryTabTable[key].SubCategory}
-                                                                                    options={SubCategory_DropdownOptions}
-                                                                                    onChange={(e) => { CategoryTab_Common_onChange_Handller(e, key, "SubCategory") }}
-                                                                                />
-                                                                            </FormGroup>
+                                                                                <div className="form-check form-switch form-switch-md mb-3" dir="ltr">
+                                                                                    <Input type="checkbox" className="form-check-input" id="customSwitchsizemd"
+                                                                                        value={formValue.isActive}
+                                                                                        defaultChecked={true}
+                                                                                        onChange={(e) => { formValue.isActive = e.target.checked }}
+                                                                                        name="isActive"
+                                                                                    />
+                                                                                </div>
+                                                                            </Col>
                                                                         </Row>
-                                                                    </Col>
-                                                                    {(categoryTabTable.length === key + 1) ?
-                                                                        <Col className="col col-1 mt-3">
-                                                                            <Button className="btn btn-sm btn-light mt-3 "
-                                                                                type="button"
-                                                                                onClick={() => { CategoryTab_AddRow_Handler() }} >
-                                                                                <i className="dripicons-plus"></i></Button>
-                                                                            {/* 
+                                                                    </FormGroup>
+                                                                </Row>
+                                                            </CardBody>
+                                                        </Card>
+                                                    </Col>
+
+                                                </TabPane>
+
+                                                <TabPane tabId="2">
+                                                    <Col md={12}  >
+                                                        <Card className="text-black">
+                                                            <CardBody style={{ backgroundColor: "whitesmoke" }}>
+
+                                                                {categoryTabTable.map((index, key) => {
+
+                                                                    return <Row className="mt-3">
+                                                                        <Col className=" col col-11 ">
+                                                                            <Row>
+                                                                                <FormGroup className=" col col-sm-4 " >
+                                                                                    <Label htmlFor="validationCustom21">Category Type</Label>
+                                                                                    <Select
+                                                                                        id={`dropCategoryType-${key}`}
+                                                                                        value={categoryTabTable[key].CategoryType}
+                                                                                        options={CategoryType_DropdownOptions}
+                                                                                        onChange={(e) => { CategoryTab_Common_onChange_Handller(e, key, "CategoryType") }}
+                                                                                    />
+                                                                                </FormGroup>
+
+                                                                                <FormGroup className=" col col-sm-4 " >
+                                                                                    <Label htmlFor="validationCustom21">Category</Label>
+                                                                                    <Select
+                                                                                        id={`dropCategory-${key}`}
+                                                                                        styles={customStyles}
+                                                                                        value={categoryTabTable[key].Category}
+                                                                                        options={Category_DropdownOptions}
+                                                                                        onChange={(e) => { CategoryTab_Common_onChange_Handller(e, key, "Category") }}
+                                                                                    />
+                                                                                </FormGroup>
+
+                                                                                <FormGroup className=" col col-sm-4 " >
+                                                                                    <Label htmlFor="validationCustom21">Sub Category</Label>
+                                                                                    <Select
+                                                                                        styles={customStyles}
+                                                                                        id={`dropSubCategory-${key}`}
+                                                                                        value={categoryTabTable[key].SubCategory}
+                                                                                        options={SubCategory_DropdownOptions}
+                                                                                        onChange={(e) => { CategoryTab_Common_onChange_Handller(e, key, "SubCategory") }}
+                                                                                    />
+                                                                                </FormGroup>
+                                                                            </Row>
+                                                                        </Col>
+                                                                        {(categoryTabTable.length === key + 1) ?
+                                                                            <Col className="col col-1 mt-3">
+                                                                                <Button className="btn btn-sm btn-light mt-3 "
+                                                                                    type="button"
+                                                                                    onClick={() => { CategoryTab_AddRow_Handler() }} >
+                                                                                    <i className="dripicons-plus"></i></Button>
+                                                                                {/* 
 
                                                                                 <i
                                                                                 className="dripicons-plus text-primary font-size-20 mt-3"
@@ -989,31 +1011,167 @@ const ItemsMaster = () => {
                                                                                     MuliSelectTab2Handler(key);
                                                                                 }}
                                                                             ></i> */}
-                                                                        </Col>
-                                                                        : <Col className="col col-1 mt-3">
+                                                                            </Col>
+                                                                            : <Col className="col col-1 mt-3">
 
-                                                                            <i
-                                                                                className="mdi mdi-trash-can d-block text-danger font-size-20 mt-3"
-                                                                                onClick={() => {
-                                                                                    CategoryTab_DeleteRow_Handler(key);
-                                                                                }}
-                                                                            ></i>
+                                                                                <i
+                                                                                    className="mdi mdi-trash-can d-block text-danger font-size-20 mt-3"
+                                                                                    onClick={() => {
+                                                                                        CategoryTab_DeleteRow_Handler(key);
+                                                                                    }}
+                                                                                ></i>
 
-                                                                        </Col>}
-                                                                </Row>
+                                                                            </Col>}
+                                                                    </Row>
 
 
-                                                            })}
+                                                                })}
 
-                                                        </CardBody>
-                                                    </Card>
+                                                            </CardBody>
+                                                        </Card>
 
-                                                </Col>
+                                                    </Col>
 
-                                            </TabPane>
+                                                </TabPane>
 
-                                            <TabPane tabId="3">
-                                                <Col md={12}>
+                                                <TabPane tabId="3">
+                                                    <Col md={12}>
+                                                        <Row>
+                                                            <Col md={12}  >
+                                                                <Card className="text-black">
+                                                                    <CardBody style={{ backgroundColor: "whitesmoke" }}>
+
+                                                                        <Row>
+                                                                            <FormGroup className=" col col-sm-4 " >
+                                                                                <Label >Base Unit</Label>
+                                                                                <Select
+                                                                                    value={formValue.BaseUnit}
+                                                                                    options={BaseUnit_DropdownOptions}
+                                                                                    onChange={(e) => Common_DropDown_handller_ForAll(e, "BaseUnit")}
+
+                                                                                />
+                                                                            </FormGroup>
+                                                                        </Row>
+
+                                                                        <Row className="mt-3">
+                                                                            <Col md={8}><Table className="table table-bordered  text-center ">
+                                                                                <Thead >
+                                                                                    <tr>
+                                                                                        <th>Unit Name</th>
+
+                                                                                        <th className="col-sm-3 text-center">Conversion Ratio </th>
+                                                                                        <th> To Base Unit</th>
+                                                                                        <th>Action</th>
+                                                                                    </tr>
+                                                                                </Thead>
+                                                                                <Tbody  >
+                                                                                    {baseUnitTableData.map((TableValue, key) => (
+                                                                                        <tr >
+                                                                                            <td>
+                                                                                                <Label>1</Label>    {formValue.BaseUnit.label}
+                                                                                            </td>
+                                                                                            <td>
+                                                                                                <AvInput name="value" type="text"
+                                                                                                    defaultValue={TableValue.conversionRatio}
+                                                                                                    onChange={(e) => UnitConversionsTab_BaseUnit2_onChange_Handller(e, key, "Conversion")}></AvInput>
+                                                                                            </td>
+                                                                                            <td>
+                                                                                                <Select
+                                                                                                    // placeholder="select unit"
+                                                                                                    value={TableValue.toBaseUnit}
+                                                                                                    options={BaseUnit_DropdownOptions2}
+                                                                                                    onChange={(e) => UnitConversionsTab_BaseUnit2_onChange_Handller(e, key, "BaseUnit")}
+                                                                                                />
+                                                                                            </td>
+                                                                                            <td>
+                                                                                                {(baseUnitTableData.length === key + 1) ?
+                                                                                                    <Row className="">
+                                                                                                        <Col >
+                                                                                                            <Button className="btn btn-sm btn-light mt-3 col col-6  align-items-sm-end"
+                                                                                                                type="button"
+                                                                                                                onClick={() => { UnitConversionsTab_AddRow_Handle(key) }} >
+                                                                                                                <i className="dripicons-plus"></i>
+                                                                                                            </Button>
+                                                                                                        </Col>
+                                                                                                        <Col className="mt-3">
+                                                                                                            < i className="mdi mdi-trash-can d-block text-danger font-size-20" onClick={() => {
+                                                                                                                UnitConversionsTab_DeleteRow_Handler(key)
+                                                                                                            }} >
+                                                                                                            </i>
+                                                                                                        </Col>
+                                                                                                    </Row>
+                                                                                                    :
+
+                                                                                                    < i className="mdi mdi-trash-can d-block text-danger font-size-20" onClick={() => {
+                                                                                                        UnitConversionsTab_DeleteRow_Handler(key)
+                                                                                                    }} >
+                                                                                                    </i>
+                                                                                                }
+                                                                                            </td>
+                                                                                        </tr>
+                                                                                    ))}
+                                                                                </Tbody>
+                                                                            </Table>
+                                                                            </Col>
+                                                                        </Row>
+                                                                    </CardBody>
+                                                                </Card>
+                                                            </Col>
+                                                        </Row>
+                                                    </Col>
+                                                </TabPane>
+
+                                                <TabPane tabId="4">
+                                                    <Col md={12} >
+                                                        <Card className="text-black">
+                                                            <CardBody style={{ backgroundColor: "whitesmoke" }}>
+
+                                                                {imageTabTable.map((index, key) => {
+                                                                    return <Row className=" col col-sm-11" >
+                                                                        <FormGroup className="mb-3 col col-sm-4 " >
+                                                                            <Label htmlFor="validationCustom21">Image Type</Label>
+                                                                            <Select
+                                                                                value={imageTabTable[key].ImageType}
+                                                                                options={ImageType_DropdownOptions}
+                                                                                onChange={(e) => { ImageTab_onChange_Handler(e, key, "ImageType") }}
+                                                                            />
+                                                                        </FormGroup>
+
+                                                                        <FormGroup className="mb-3 col col-sm-4 " >
+                                                                            <Label >Upload</Label>
+                                                                            <Input type="file" className="form-control col col-sm-4 "
+                                                                                value={imageTabTable.ImageUpload}
+                                                                                // value={"C:\fakepath\cropper.jpg"}
+                                                                                onChange={(e) => ImageTab_onChange_Handler(e, key, "ImageUpload")} />
+                                                                        </FormGroup>
+
+                                                                        {(imageTabTable.length === key + 1) ?
+                                                                            <Col className="col col-1 mt-3">
+                                                                                <Button
+                                                                                    className="btn btn-sm mt-3 mb-0 btn-light  btn-outline-primary  "
+                                                                                    type="button"
+                                                                                    onClick={() => { ImageTab_AddRow_Handler(key) }} >
+                                                                                    <i className="dripicons-plus"></i></Button>
+                                                                            </Col>
+                                                                            : <Col className="col col-1 mt-3">
+                                                                                <i
+                                                                                    className="mdi mdi-trash-can d-block text-danger font-size-20 mt-3"
+                                                                                    onClick={() => {
+                                                                                        ImageTab_DeleteRow_Handler(key);
+                                                                                    }}
+                                                                                ></i>
+
+                                                                            </Col>}
+                                                                    </Row>
+                                                                })}
+                                                            </CardBody>
+                                                        </Card>
+                                                    </Col>
+                                                    <Row>
+                                                    </Row>
+                                                </TabPane>
+
+                                                <TabPane tabId="5">
                                                     <Row>
                                                         <Col md={12}  >
                                                             <Card className="text-black">
@@ -1021,348 +1179,217 @@ const ItemsMaster = () => {
 
                                                                     <Row>
                                                                         <FormGroup className=" col col-sm-4 " >
-                                                                            <Label >Base Unit</Label>
+                                                                            <Label htmlFor="validationCustom21">Division Type</Label>
                                                                             <Select
-                                                                                value={formValue.BaseUnit}
-                                                                                options={BaseUnit_DropdownOptions}
-                                                                                onChange={(e) => Common_DropDown_handller_ForAll(e, "BaseUnit")}
-
+                                                                                value={division_dropdown_Select}
+                                                                                options={DivisionType_DropdownOptions}
+                                                                                onChange={(e) => { DivisionTab_Dropdown_onChange_Handler(e) }}
                                                                             />
                                                                         </FormGroup>
-                                                                    </Row>
+                                                                        <Col sm={1} style={{ marginTop: '28px' }} >
+                                                                            {" "}
+                                                                            <Button
+                                                                                type="button"
+                                                                                className="btn btn-sm mt-1 mb-0 btn-light  btn-outline-primary  "
+                                                                                onClick={() =>
+                                                                                    DivisionTab_AddRow_Handle()
+                                                                                }
+                                                                            >
+                                                                                <i className="dripicons-plus "></i>
+                                                                            </Button>
+                                                                        </Col>
+                                                                        <Col sm={3} style={{ marginTop: '28px' }}>
+                                                                            {divisionTableData.length > 0 ? (
 
-                                                                    <Row className="mt-3">
-                                                                        <Col md={8}><Table className="table table-bordered  text-center ">
-                                                                            <Thead >
-                                                                                <tr>
-                                                                                    <th>Unit Name</th>
+                                                                                <div className="table-responsive">
+                                                                                    <Table className="table table-bordered  text-center">
+                                                                                        <Thead >
+                                                                                            <tr>
+                                                                                                <th>Division Type</th>
 
-                                                                                    <th className="col-sm-3 text-center">Conversion Ratio </th>
-                                                                                    <th> To Base Unit</th>
-                                                                                    <th>Action</th>
-                                                                                </tr>
-                                                                            </Thead>
-                                                                            <Tbody  >
-                                                                                {baseUnitTableData.map((TableValue, key) => (
-                                                                                    <tr >
-                                                                                        <td>
-                                                                                            <Label>1</Label>    {formValue.BaseUnit.label}
-                                                                                        </td>
-                                                                                        <td>
-                                                                                            <AvInput name="value" type="text"
-                                                                                                defaultValue={TableValue.conversionRatio}
-                                                                                                onChange={(e) => UnitConversionsTab_BaseUnit2_onChange_Handller(e, key, "Conversion")}></AvInput>
-                                                                                        </td>
-                                                                                        <td>
-                                                                                            <Select
-                                                                                                // placeholder="select unit"
-                                                                                                value={TableValue.toBaseUnit}
-                                                                                                options={BaseUnit_DropdownOptions2}
-                                                                                                onChange={(e) => UnitConversionsTab_BaseUnit2_onChange_Handller(e, key, "BaseUnit")}
-                                                                                            />
-                                                                                        </td>
-                                                                                        <td>
-                                                                                            {(baseUnitTableData.length === key + 1) ?
-                                                                                                <Row className="">
-                                                                                                    <Col >
-                                                                                                        <Button className="btn btn-sm btn-light mt-3 col col-6  align-items-sm-end"
-                                                                                                            type="button"
-                                                                                                            onClick={() => { UnitConversionsTab_AddRow_Handle(key) }} >
-                                                                                                            <i className="dripicons-plus"></i>
-                                                                                                        </Button>
-                                                                                                    </Col>
-                                                                                                    <Col className="mt-3">
-                                                                                                        < i className="mdi mdi-trash-can d-block text-danger font-size-20" onClick={() => {
-                                                                                                            UnitConversionsTab_DeleteRow_Handler(key)
+                                                                                                <th>Action</th>
+                                                                                            </tr>
+                                                                                        </Thead>
+                                                                                        <Tbody  >
+                                                                                            {divisionTableData.map((TableValue) => (
+                                                                                                <tr >
+                                                                                                    <td>
+                                                                                                        {TableValue.label}
+                                                                                                    </td>
+                                                                                                    <td>
+                                                                                                        <i className="mdi mdi-trash-can d-block text-danger font-size-20" onClick={() => {
+                                                                                                            DivisionTab_DeleteRow_Handler(TableValue.value)
                                                                                                         }} >
                                                                                                         </i>
-                                                                                                    </Col>
-                                                                                                </Row>
-                                                                                                :
-
-                                                                                                < i className="mdi mdi-trash-can d-block text-danger font-size-20" onClick={() => {
-                                                                                                    UnitConversionsTab_DeleteRow_Handler(key)
-                                                                                                }} >
-                                                                                                </i>
-                                                                                            }
-                                                                                        </td>
-                                                                                    </tr>
-                                                                                ))}
-                                                                            </Tbody>
-                                                                        </Table>
+                                                                                                    </td>
+                                                                                                </tr>
+                                                                                            ))}
+                                                                                        </Tbody>
+                                                                                    </Table>
+                                                                                </div>
+                                                                            ) : (
+                                                                                <>
+                                                                                </>
+                                                                            )}
                                                                         </Col>
                                                                     </Row>
+
                                                                 </CardBody>
                                                             </Card>
                                                         </Col>
                                                     </Row>
-                                                </Col>
-                                            </TabPane>
+                                                </TabPane>
 
-                                            <TabPane tabId="4">
-                                                <Col md={12} >
-                                                    <Card className="text-black">
-                                                        <CardBody style={{ backgroundColor: "whitesmoke" }}>
-                                                            
-                                                            {imageTabTable.map((index, key) => {
-                                                                return <Row className=" col col-sm-11" >
-                                                                    <FormGroup className="mb-3 col col-sm-4 " >
-                                                                        <Label htmlFor="validationCustom21">Image Type</Label>
-                                                                        <Select
-                                                                            value={imageTabTable[key].ImageType}
-                                                                            options={ImageType_DropdownOptions}
-                                                                            onChange={(e) => { ImageTab_onChange_Handler(e, key, "ImageType") }}
-                                                                        />
-                                                                    </FormGroup>
+                                                <TabPane tabId="6">
+                                                    <Row>
+                                                        <Col md={12}  >
+                                                            <Card className="text-black">
+                                                                <CardBody style={{ backgroundColor: "whitesmoke" }}>
 
-                                                                    <FormGroup className="mb-3 col col-sm-4 " >
-                                                                        <Label >Upload</Label>
-                                                                        <Input type="file" className="form-control col col-sm-4 "
-                                                                            value={imageTabTable[key].ImageUpload}
-                                                                            // value={"C:\fakepath\cropper.jpg"}
-                                                                            onChange={(e) => ImageTab_onChange_Handler(e, key, "ImageUpload")} />
-                                                                    </FormGroup>
+                                                                    {rateDetailTableData.map((index, key) => {
 
-                                                                    {(imageTabTable.length === key + 1) ?
-                                                                        <Col className="col col-1 mt-3">
-                                                                            <Button
-                                                                                className="btn btn-sm mt-3 mb-0 btn-light  btn-outline-primary  "
-                                                                                type="button"
-                                                                                onClick={() => { ImageTab_AddRow_Handler(key) }} >
-                                                                                <i className="dripicons-plus"></i></Button>
-                                                                        </Col>
-                                                                        : <Col className="col col-1 mt-3">
-                                                                            <i
-                                                                                className="mdi mdi-trash-can d-block text-danger font-size-20 mt-3"
-                                                                                onClick={() => {
-                                                                                    ImageTab_DeleteRow_Handler(key);
-                                                                                }}
-                                                                            ></i>
+                                                                        return <Row className="mt-3">
+                                                                            <Col className=" col col-11 ">
+                                                                                <Row>
+                                                                                    <FormGroup className="mb-3 col col-sm-3 " >
+                                                                                        <Label >MRP Type</Label>
+                                                                                        <Select
+                                                                                            value={rateDetailTableData[key].MRPType}
+                                                                                            options={MRPType_DropdownOptions}
+                                                                                            onChange={(e) => { RateDetail_Common_onChange_Handller(e, key, "MRPType") }}
+                                                                                        />
+                                                                                    </FormGroup>
+                                                                                    <FormGroup className="mb-3 col col-sm-3 " >
+                                                                                        <Label htmlFor="validationCustom01">MRP</Label>
+                                                                                        <Input name="MRP" type="text" id='txtMRP'
+                                                                                            placeholder=" Please Enter MRP "
+                                                                                            autoComplete="off"
+                                                                                            value={rateDetailTableData[key].MRP}
+                                                                                            onChange={(e) => { RateDetail_Common_onChange_Handller(e, key, "MRP") }}
+                                                                                        />
+                                                                                    </FormGroup>
 
-                                                                        </Col>}
-                                                                </Row>
-                                                            })}
-                                                        </CardBody>
-                                                    </Card>
-                                                </Col>
-                                                <Row>
-                                                </Row>
-                                            </TabPane>
+                                                                                    <FormGroup className="mb-3 col col-sm-3 " >
+                                                                                        <Label htmlFor="validationCustom01">GST</Label>
+                                                                                        <Input name="GST" type="text" id='txtGST'
+                                                                                            value={rateDetailTableData[key].GSTPercentage}
+                                                                                            placeholder=" Please Enter GST "
+                                                                                            autoComplete="off"
+                                                                                            onChange={(e) => { RateDetail_Common_onChange_Handller(e, key, "GSTPercentage") }}
+                                                                                        />
+                                                                                    </FormGroup>
 
-                                            <TabPane tabId="5">
-                                                <Row>
-                                                    <Col md={12}  >
-                                                        <Card className="text-black">
-                                                            <CardBody style={{ backgroundColor: "whitesmoke" }}>
+                                                                                    <FormGroup className="mb-3 col col-sm-3 " >
+                                                                                        <Label htmlFor="validationCustom01">HSN</Label>
+                                                                                        <Input name="HSN" type="text" id='txtHSN'
+                                                                                            value={rateDetailTableData[key].HSNCode}
+                                                                                            placeholder=" Please Enter HSN "
+                                                                                            autoComplete="off"
+                                                                                            onChange={(e) => { RateDetail_Common_onChange_Handller(e, key, "HSNCode") }}
+                                                                                        />
+                                                                                    </FormGroup>
 
-                                                                <Row>
-                                                                    <FormGroup className=" col col-sm-4 " >
-                                                                        <Label htmlFor="validationCustom21">Division Type</Label>
-                                                                        <Select
-                                                                            value={division_dropdown_Select}
-                                                                            options={DivisionType_DropdownOptions}
-                                                                            onChange={(e) => { DivisionTab_Dropdown_onChange_Handler(e) }}
-                                                                        />
-                                                                    </FormGroup>
-                                                                    <Col sm={1} style={{ marginTop: '28px' }} >
-                                                                        {" "}
-                                                                        <Button
-                                                                            type="button"
-                                                                            className="btn btn-sm mt-1 mb-0 btn-light  btn-outline-primary  "
-                                                                            onClick={() =>
-                                                                                DivisionTab_AddRow_Handle()
-                                                                            }
-                                                                        >
-                                                                            <i className="dripicons-plus "></i>
-                                                                        </Button>
-                                                                    </Col>
-                                                                    <Col sm={3} style={{ marginTop: '28px' }}>
-                                                                        {divisionTableData.length > 0 ? (
-
-                                                                            <div className="table-responsive">
-                                                                                <Table className="table table-bordered  text-center">
-                                                                                    <Thead >
-                                                                                        <tr>
-                                                                                            <th>Division Type</th>
-
-                                                                                            <th>Action</th>
-                                                                                        </tr>
-                                                                                    </Thead>
-                                                                                    <Tbody  >
-                                                                                        {divisionTableData.map((TableValue) => (
-                                                                                            <tr >
-                                                                                                <td>
-                                                                                                    {TableValue.label}
-                                                                                                </td>
-                                                                                                <td>
-                                                                                                    <i className="mdi mdi-trash-can d-block text-danger font-size-20" onClick={() => {
-                                                                                                        DivisionTab_DeleteRow_Handler(TableValue.value)
-                                                                                                    }} >
-                                                                                                    </i>
-                                                                                                </td>
-                                                                                            </tr>
-                                                                                        ))}
-                                                                                    </Tbody>
-                                                                                </Table>
-                                                                            </div>
-                                                                        ) : (
-                                                                            <>
-                                                                            </>
-                                                                        )}
-                                                                    </Col>
-                                                                </Row>
-
-                                                            </CardBody>
-                                                        </Card>
-                                                    </Col>
-                                                </Row>
-                                            </TabPane>
-
-                                            <TabPane tabId="6">
-                                                <Row>
-                                                    <Col md={12}  >
-                                                        <Card className="text-black">
-                                                            <CardBody style={{ backgroundColor: "whitesmoke" }}>
-                                                                
-                                                                {rateDetailTableData.map((index, key) => {
-
-                                                                    return <Row className="mt-3">
-                                                                        <Col className=" col col-11 ">
-                                                                            <Row>
-                                                                                {/* <FormGroup className="mb-3 col col-sm-4 " >
-                                                                                    <Label htmlFor="validationCustom01">MRP</Label>
-                                                                                    <Input name="MRP" type="text" id='txtMRP'
-                                                                                        placeholder=" Please Enter MRP "
-                                                                                        autoComplete="off"
-                                                                                        value={rateDetailTableData[key].MRP}
-                                                                                        onChange={(e) => { RateDetail_Common_onChange_Handller(e, key, "MRP") }}
-                                                                                    />
-                                                                                </FormGroup> */}
-                                                                                <FormGroup className="mb-3 col col-sm-4 " >
-                                                                                    <Label >MRP</Label>
-                                                                                    <Select
-                                                                                        value={rateDetailTableData[key].MRP}
-                                                                                        options={MRPType_DropdownOptions}
-                                                                                        onChange={(e) => { RateDetail_Common_onChange_Handller(e, key, "MRP") }}
-                                                                                    />
-                                                                                </FormGroup>
-
-                                                                                <FormGroup className="mb-3 col col-sm-4 " >
-                                                                                    <Label htmlFor="validationCustom01">GST</Label>
-                                                                                    <Input name="GST" type="text" id='txtGST'
-                                                                                        value={rateDetailTableData[key].GSTPercentage}
-                                                                                        placeholder=" Please Enter GST "
-                                                                                        autoComplete="off"
-                                                                                        onChange={(e) => { RateDetail_Common_onChange_Handller(e, key, "GSTPercentage") }}
-                                                                                    />
-                                                                                </FormGroup>
-
-                                                                                <FormGroup className="mb-3 col col-sm-4 " >
-                                                                                    <Label htmlFor="validationCustom01">HSN</Label>
-                                                                                    <Input name="HSN" type="text" id='txtHSN'
-                                                                                        value={rateDetailTableData[key].HSNCode}
-                                                                                        placeholder=" Please Enter HSN "
-                                                                                        autoComplete="off"
-                                                                                        onChange={(e) => { RateDetail_Common_onChange_Handller(e, key, "HSNCode") }}
-                                                                                    />
-                                                                                </FormGroup>
-
-                                                                            </Row>
-                                                                        </Col>
-                                                                        {(rateDetailTableData.length === key + 1) ?
-                                                                            <Col className="col col-1 mt-3">
-                                                                                <Button className="btn btn-sm btn-light mt-3 "
-                                                                                    type="button"
-                                                                                    onClick={() => { RateDetailTab_AddRow_Handler() }} >
-                                                                                    <i className="dripicons-plus"></i></Button>
-                                                                       </Col>
-                                                                            : <Col className="col col-1 mt-3">
-
-                                                                                <i
-                                                                                    className="mdi mdi-trash-can d-block text-danger font-size-20 mt-3"
-                                                                                    onClick={() => {
-                                                                                        RateDetailTab_DeleteRow_Handler(key);
-                                                                                    }}
-                                                                                ></i>
-
-                                                                            </Col>}
-                                                                    </Row>
-                                                                })}
-                                                            </CardBody>
-                                                        </Card>
-                                                    </Col>
-
-                                                </Row>
-                                            </TabPane>
-                                            <TabPane tabId="7">
-                                                <Row>
-                                                    <Col md={12}  >
-                                                        <Card className="text-black">
-                                                            <CardBody style={{ backgroundColor: "whitesmoke" }}>
-                                                               
-                                                                {marginTabTable.map((index, key) => {
-
-                                                                    return <Row className="mt-3">
-                                                                        <Col className=" col col-10 ">
-                                                                            <Row>
-                                                                                <FormGroup className=" col col-sm-5 " >
-                                                                                    <Label >Price List</Label>
-                                                                                    <Select
-                                                                                        value={marginTabTable[key].PriceList}
-                                                                                        options={PriceList_DropdownOptions}
-                                                                                        onChange={(e) => { MarginTab_onChange_Handler(e, key, "PriceList") }}
-                                                                                    />
-                                                                                </FormGroup>
-
-                                                                                <FormGroup className="mb-3 col col-sm-5 " >
-                                                                                    <Label >Margin</Label>
-                                                                                    <Input type="text"
-                                                                                        value={marginTabTable.Margin}
-                                                                                        placeholder="Please Enter Margin"
-                                                                                        onChange={(e) => MarginTab_onChange_Handler(e, key, "Margin")}></Input>
-                                                                                </FormGroup>
-
-
-                                                                            </Row>
-                                                                        </Col>
-                                                                        {(marginTabTable.length === key + 1) ?
-                                                                            <Col className="col col-1 mt-3">
-                                                                                <Button
-                                                                                    className="btn btn-sm mt-3 mb-0 btn-light  btn-outline-primary  "
-                                                                                    type="button"
-                                                                                    onClick={() => { MarginTab_AddRow_Handler(key) }} >
-                                                                                    <i className="dripicons-plus"></i></Button>
+                                                                                </Row>
                                                                             </Col>
-                                                                            : <Col className="col col-1 mt-3">
-                                                                                <i
-                                                                                    className="mdi mdi-trash-can d-block text-danger font-size-20 mt-3"
-                                                                                    onClick={() => {
-                                                                                        MarginTab_DeleteRow_Handler(key);
-                                                                                    }}
-                                                                                ></i>
+                                                                            {(rateDetailTableData.length === key + 1) ?
+                                                                                <Col className="col col-1 mt-3">
+                                                                                    <Button className="btn btn-sm btn-light mt-3 "
+                                                                                        type="button"
+                                                                                        onClick={() => { RateDetailTab_AddRow_Handler() }} >
+                                                                                        <i className="dripicons-plus"></i></Button>
+                                                                                </Col>
+                                                                                : <Col className="col col-1 mt-3">
 
-                                                                            </Col>}
-                                                                    </Row>
-                                                                })}
+                                                                                    <i
+                                                                                        className="mdi mdi-trash-can d-block text-danger font-size-20 mt-3"
+                                                                                        onClick={() => {
+                                                                                            RateDetailTab_DeleteRow_Handler(key);
+                                                                                        }}
+                                                                                    ></i>
 
-                                                            </CardBody>
-                                                        </Card>
+                                                                                </Col>}
+                                                                        </Row>
+                                                                    })}
+                                                                </CardBody>
+                                                            </Card>
+                                                        </Col>
 
-                                                    </Col>
-                                                </Row>
-                                            </TabPane>
-                                        </TabContent>
-                                    </CardBody>
-                                </Card>
-                            </Col>
+                                                    </Row>
+                                                </TabPane>
+                                                <TabPane tabId="7">
+                                                    <Row>
+                                                        <Col md={12}  >
+                                                            <Card className="text-black">
+                                                                <CardBody style={{ backgroundColor: "whitesmoke" }}>
 
-                        </Row>
+                                                                    {marginTabTable.map((index, key) => {
 
-                    </AvForm>
-                </Container>
-            </div >
-        </React.Fragment >
-    );
-}
+                                                                        return <Row className="mt-3">
+                                                                            <Col className=" col col-10 ">
+                                                                                <Row>
+                                                                                    <FormGroup className=" col col-sm-5 " >
+                                                                                        <Label >Price List</Label>
+                                                                                        <Select
+                                                                                            value={marginTabTable[key].PriceList}
+                                                                                            options={PriceList_DropdownOptions}
+                                                                                            onChange={(e) => { MarginTab_onChange_Handler(e, key, "PriceList") }}
+                                                                                        />
+                                                                                    </FormGroup>
 
+                                                                                    <FormGroup className="mb-3 col col-sm-5 " >
+                                                                                        <Label >Margin</Label>
+                                                                                        <Input type="text"
+                                                                                            value={marginTabTable.Margin}
+                                                                                            placeholder="Please Enter Margin"
+                                                                                            onChange={(e) => MarginTab_onChange_Handler(e, key, "Margin")}></Input>
+                                                                                    </FormGroup>
+
+
+                                                                                </Row>
+                                                                            </Col>
+                                                                            {(marginTabTable.length === key + 1) ?
+                                                                                <Col className="col col-1 mt-3">
+                                                                                    <Button
+                                                                                        className="btn btn-sm mt-3 mb-0 btn-light  btn-outline-primary  "
+                                                                                        type="button"
+                                                                                        onClick={() => { MarginTab_AddRow_Handler(key) }} >
+                                                                                        <i className="dripicons-plus"></i></Button>
+                                                                                </Col>
+                                                                                : <Col className="col col-1 mt-3">
+                                                                                    <i
+                                                                                        className="mdi mdi-trash-can d-block text-danger font-size-20 mt-3"
+                                                                                        onClick={() => {
+                                                                                            MarginTab_DeleteRow_Handler(key);
+                                                                                        }}
+                                                                                    ></i>
+
+                                                                                </Col>}
+                                                                        </Row>
+                                                                    })}
+
+                                                                </CardBody>
+                                                            </Card>
+
+                                                        </Col>
+                                                    </Row>
+                                                </TabPane>
+                                            </TabContent>
+                                        </CardBody>
+                                    </Card>
+                                </Col>
+
+                            </Row>
+
+                        </AvForm>
+                    </Container>
+                </div >
+            </React.Fragment >
+        );
+    }
+    else {
+        return (
+            <React.Fragment></React.Fragment>
+        )
+    }
+};
 export default ItemsMaster;
