@@ -7,6 +7,7 @@ import {
     GET_IMAGETYPE_FOR_DROPDOWN_SUCCESS,
     GET_ITEM_GROUP_FOR_DROPDOWN_SUCCESS,
     GET_ITEM_LIST_API_SUCCESS,
+    GET_MRPTYPE_FOR_DROPDOWN_SUCCESS,
     GET_SUBCATEGORY_FOR_DROPDOWN_SUCCESS,
     POST_ITEM_DATA_SUCCESS,
     UPDATE_ITEM_ID_SUCCESS
@@ -25,8 +26,8 @@ const INIT_STATE = {
     CategoryType:[],
     Category:[],
     SubCategory:[],
-    ImageType:[]
-
+    ImageType:[],
+    MRPType:[],
 };
 
 const ItemMastersReducer = (state = INIT_STATE, action) => {
@@ -102,6 +103,11 @@ const ItemMastersReducer = (state = INIT_STATE, action) => {
                     ImageType: action.payload,
                 }
     
+                case GET_MRPTYPE_FOR_DROPDOWN_SUCCESS:
+                    return {
+                        ...state,
+                        MRPType: action.payload,
+                    }
         default:
             return state;
     }

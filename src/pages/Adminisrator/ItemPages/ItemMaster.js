@@ -34,6 +34,8 @@ import {
     getBaseUnit_ForDropDown,
     get_CategoryTypes_ForDropDown,
     get_Category_ForDropDown,
+    get_ImageType_ForDropDown,
+    get_MRPTypes_ForDropDown,
     get_SubCategory_ForDropDown,
     postItemData,
     PostItemDataSuccess
@@ -44,7 +46,7 @@ import { Tbody, Thead } from "react-super-responsive-table";
 import { getPartyListAPI } from "../../../store/Administrator/PartyRedux/action";
 
 const ItemsMaster = () => {
-    const dispatch = useDispatch(); 
+    const dispatch = useDispatch();
     const history = useHistory()
 
     const [EditData, setEditData] = useState([]);
@@ -106,6 +108,10 @@ const ItemsMaster = () => {
 
     const [divisionTableData, setDivisionTableData] = useState([]);
 
+    const [imageTabTable, setImageTabTable] = useState([{
+        ImageType: '',
+        ImageUpload: ''
+    }]);
     const [baseUnitTableData, setBaseUnitTableData] = useState([{
         conversionRatio: '',
         toBaseUnit: '',
@@ -117,7 +123,7 @@ const ItemsMaster = () => {
         MRPType: { value: 1 }
     }]);
 
-    const { companyList, BaseUnit, CategoryType, Category, SubCategory, DivisionType,PostAPIResponse, RoleAccessModifiedinSingleArray } = useSelector((state) => ({
+    const { companyList, BaseUnit, CategoryType, Category, SubCategory, DivisionType, PostAPIResponse, RoleAccessModifiedinSingleArray, ImageType, MRPType } = useSelector((state) => ({
         companyList: state.Company.companyList,
         BaseUnit: state.ItemMastersReducer.BaseUnit,
         CategoryType: state.ItemMastersReducer.CategoryType,
@@ -126,7 +132,8 @@ const ItemsMaster = () => {
         DivisionType: state.PartyMasterReducer.partyList,
         RoleAccessModifiedinSingleArray: state.Login.RoleAccessUpdateData,
         PostAPIResponse: state.ItemMastersReducer.postMessage,
-      
+        ImageType: state.ItemMastersReducer.ImageType,
+        MRPType: state.ItemMastersReducer.MRPType,
     }));
 
 
@@ -176,6 +183,9 @@ const ItemsMaster = () => {
         dispatch(get_Category_ForDropDown());
         dispatch(get_SubCategory_ForDropDown());
         dispatch(getPartyListAPI());
+        dispatch(get_ImageType_ForDropDown());
+        dispatch(get_MRPTypes_ForDropDown());
+
     }, [dispatch]);
 
 
@@ -227,6 +237,15 @@ const ItemsMaster = () => {
         label: data.Name
     }));
 
+    const ImageType_DropdownOptions = ImageType.map((data) => ({
+        value: data.id,
+        label: data.Name
+    }));
+
+    const MRPType_DropdownOptions = MRPType.map((data) => ({
+        value: data.id,
+        label: data.Name
+    }));
 
     function Common_DropDown_handller_ForAll(event, type,) {
         // if (index.CategoryType.value === 0) {
@@ -415,6 +434,47 @@ const ItemsMaster = () => {
     }
 
 
+    function ImageTab_AddRow_Handler(key) {
+        debugger
+
+        var newarr1 = [...imageTabTable, {
+            ImageType: { value: 0, label: "select" },
+            ImageUpload: {}
+        }]
+        setImageTabTable(newarr1)
+    }
+    function ImageTab_DeleteRow_Handler(key) {
+        debugger
+        var removeElseArrray1 = imageTabTable.filter((i, k) => {
+            return !(k === key)
+        })
+        setImageTabTable(removeElseArrray1)
+    }
+    function ImageTab_onChange_Handler(event, key, type) {
+        debugger
+        var found = imageTabTable.find((i, k) => {
+            return (k === key)
+        })
+        let newSelectValue = ''
+
+        if (type === "ImageType") {
+            newSelectValue = {
+                ImageType: event,
+                ImageUpload: found.ImageUpload,
+            }
+        }
+        else if (type === 'ImageUpload') {
+            newSelectValue = {
+                ImageType: found.ImageType,
+                ImageUpload: event.target.value,
+            }
+        }
+
+        let newTabArr = imageTabTable.map((index, k) => {
+            return (k === key) ? newSelectValue : index
+        })
+        setImageTabTable(newTabArr)
+    }
 
     function MarginTab_AddRow_Handler(key) {
 
@@ -485,7 +545,7 @@ const ItemsMaster = () => {
 
         if (type === "MRP") {
             newSelectValue = {
-                MRP: event.target.value,
+                MRP: event,
                 GSTPercentage: found.GSTPercentage,
                 HSNCode: found.HSNCode,
                 MRPType: found.MRPType
@@ -523,58 +583,7 @@ const ItemsMaster = () => {
     }
 
 
-
-
-
-    function formatBytes(bytes, decimals = 2) {
-        if (bytes === 0) return "0 Bytes"
-        const k = 1024
-        const dm = decimals < 0 ? 0 : decimals
-        const sizes = ["Bytes", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"]
-
-        const i = Math.floor(Math.log(bytes) / Math.log(k))
-        return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + " " + sizes[i]
-    }
-    let base64String = "";
-    let imageBase64Stringsep = ''
-
-    function imageUploaded() {
-
-        var file = document.querySelector(
-            'input[type=file]')['files'][0];
-
-        var reader = new FileReader();
-        console.log("next");
-
-        reader.onload = function () {
-            base64String = reader.result.replace("data:", "")
-                .replace(/^.+,/, "");
-
-            imageBase64Stringsep = base64String;
-
-            alert(imageBase64Stringsep);
-            console.log(base64String);
-            setImage2(base64String)
-        }
-        reader.readAsDataURL(file);
-    }
-    const [image2, setImage2] = useState('')
-    // for image upload
-    function handleAcceptedFiles(files) {
-        files.map(file =>
-            Object.assign(file, {
-                preview: URL.createObjectURL(file),
-                formattedSize: formatBytes(file.size),
-            })
-        )
-        setselectedFiles(files)
-        console.log("f", files)
-    }
-
-    const [naveLinkActive, setNaveLinkActive] = useState()
-
     const handleValidSubmit = (event, values) => {
-        debugger
         var values = formValue
 
         const itemCategoryDetails = categoryTabTable.map((index) => ({
@@ -591,18 +600,18 @@ const ItemsMaster = () => {
         const itemDivisionDetails = divisionTableData.map((index) => ({
             Division: index.value
         }))
+
         const iteMarginDetails = marginTabTable.map((index) => ({
             PriceList: index.PriceList.value,
             Margin: index.Margin
         }))
+
         const itemMRPDetails = rateDetailTableData.map((index) => ({
             MRP: index.MRP,
             GSTPercentage: index.GSTPercentage,
             HSNCode: index.HSNCode,
             MRPType: index.MRPType.value
-        }
-        ))
-
+        }))
 
         if (formValue.Name == '') {
             setactiveTab1("1")
@@ -620,13 +629,6 @@ const ItemsMaster = () => {
             setactiveTab1("1")
             document.getElementById("divBaseUnit").className = "form-control is-invalid"
         }
-
-
-
-
-
-
-
 
         const jsonBody = JSON.stringify({
             Name: formValue.Name,
@@ -935,9 +937,6 @@ const ItemsMaster = () => {
                                                     <Card className="text-black">
                                                         <CardBody style={{ backgroundColor: "whitesmoke" }}>
 
-                                                            <Row>
-                                                                <h5>Item Name :<Label className="text-primary" >{name}</Label></h5>
-                                                            </Row>
                                                             {categoryTabTable.map((index, key) => {
 
                                                                 return <Row className="mt-3">
@@ -1021,10 +1020,6 @@ const ItemsMaster = () => {
                                                                 <CardBody style={{ backgroundColor: "whitesmoke" }}>
 
                                                                     <Row>
-                                                                        <h5>Item Name :<Label className="text-primary" >{formValue.Name}</Label></h5>
-                                                                    </Row>
-
-                                                                    <Row>
                                                                         <FormGroup className=" col col-sm-4 " >
                                                                             <Label >Base Unit</Label>
                                                                             <Select
@@ -1035,9 +1030,6 @@ const ItemsMaster = () => {
                                                                             />
                                                                         </FormGroup>
                                                                     </Row>
-
-
-
 
                                                                     <Row className="mt-3">
                                                                         <Col md={8}><Table className="table table-bordered  text-center ">
@@ -1092,156 +1084,68 @@ const ItemsMaster = () => {
                                                                                                     UnitConversionsTab_DeleteRow_Handler(key)
                                                                                                 }} >
                                                                                                 </i>
-
-
                                                                                             }
                                                                                         </td>
                                                                                     </tr>
                                                                                 ))}
                                                                             </Tbody>
-                                                                        </Table></Col>
-
+                                                                        </Table>
+                                                                        </Col>
                                                                     </Row>
-
                                                                 </CardBody>
                                                             </Card>
                                                         </Col>
                                                     </Row>
                                                 </Col>
-
-
                                             </TabPane>
 
                                             <TabPane tabId="4">
+                                                <Col md={12} >
+                                                    <Card className="text-black">
+                                                        <CardBody style={{ backgroundColor: "whitesmoke" }}>
+                                                            
+                                                            {imageTabTable.map((index, key) => {
+                                                                return <Row className=" col col-sm-11" >
+                                                                    <FormGroup className="mb-3 col col-sm-4 " >
+                                                                        <Label htmlFor="validationCustom21">Image Type</Label>
+                                                                        <Select
+                                                                            value={imageTabTable[key].ImageType}
+                                                                            options={ImageType_DropdownOptions}
+                                                                            onChange={(e) => { ImageTab_onChange_Handler(e, key, "ImageType") }}
+                                                                        />
+                                                                    </FormGroup>
+
+                                                                    <FormGroup className="mb-3 col col-sm-4 " >
+                                                                        <Label >Upload</Label>
+                                                                        <Input type="file" className="form-control col col-sm-4 "
+                                                                            value={imageTabTable[key].ImageUpload}
+                                                                            // value={"C:\fakepath\cropper.jpg"}
+                                                                            onChange={(e) => ImageTab_onChange_Handler(e, key, "ImageUpload")} />
+                                                                    </FormGroup>
+
+                                                                    {(imageTabTable.length === key + 1) ?
+                                                                        <Col className="col col-1 mt-3">
+                                                                            <Button
+                                                                                className="btn btn-sm mt-3 mb-0 btn-light  btn-outline-primary  "
+                                                                                type="button"
+                                                                                onClick={() => { ImageTab_AddRow_Handler(key) }} >
+                                                                                <i className="dripicons-plus"></i></Button>
+                                                                        </Col>
+                                                                        : <Col className="col col-1 mt-3">
+                                                                            <i
+                                                                                className="mdi mdi-trash-can d-block text-danger font-size-20 mt-3"
+                                                                                onClick={() => {
+                                                                                    ImageTab_DeleteRow_Handler(key);
+                                                                                }}
+                                                                            ></i>
+
+                                                                        </Col>}
+                                                                </Row>
+                                                            })}
+                                                        </CardBody>
+                                                    </Card>
+                                                </Col>
                                                 <Row>
-                                                    <Col className="col-12">
-                                                        <Card>
-                                                            <CardBody>
-                                                                {/* <CardTitle>Image Upload</CardTitle> */}
-                                                                {/* <CardSubtitle className="mb-3">
-                                                                    {" "}
-                                                                    DropzoneJS is an open source library that provides
-                                                                    drag’n’drop file uploads with image previews.
-                                                                </CardSubtitle> */}
-                                                                {/* <Form> */}
-
-
-                                                                <input type="file" name="" id="fileId"
-                                                                    onChange={() => imageUploaded()} />
-                                                                <br></br>
-                                                                {/* <img src={`data:image/png;base64,${image2}`} /> */}
-
-                                                                <Card
-                                                                    className="mt-1 mb-0 shadow-none border dz-processing dz-image-preview dz-success dz-complete"
-                                                                // key={i + "-file"}
-                                                                >
-                                                                    <div className="p-2">
-                                                                        <Row className="align-items-center">
-                                                                            <Col className="col-auto">
-                                                                                <img
-                                                                                    data-dz-thumbnail=""
-                                                                                    // height="200"
-                                                                                    // width={100}
-                                                                                    className="avatar-sm rounded bg-light"
-                                                                                    alt={"index.name"}
-                                                                                    src={`data:image;base64,${image2}`}
-
-                                                                                />
-                                                                            </Col>
-                                                                            <Col>
-                                                                                <Link
-                                                                                    to="#"
-                                                                                    className="text-muted font-weight-bold"
-                                                                                >
-                                                                                    {"IMAGE NAME.name"}
-                                                                                </Link>
-                                                                                <p className="mb-0">
-                                                                                    <strong>{"index.formattedSize"}</strong>
-                                                                                </p>
-                                                                            </Col>
-                                                                        </Row>
-                                                                    </div>
-                                                                </Card>
-                                                                <br></br>
-                                                                <br></br>
-                                                                <br></br>
-                                                                <br></br>
-
-                                                                <Dropzone
-                                                                    onDrop={acceptedFiles => {
-                                                                        handleAcceptedFiles(acceptedFiles)
-                                                                    }}
-                                                                >
-                                                                    {({ getRootProps, getInputProps }) => (
-                                                                        // <div className="dropzone">
-                                                                        <div
-                                                                            className="dz-message needsclick mt-2"
-                                                                            {...getRootProps()}
-                                                                        >
-                                                                            <input {...getInputProps()} />
-
-                                                                            <div className="mb-3">
-
-                                                                                <i className="display-6 text-muted bx  bx bx-cloud-upload" />
-                                                                            </div>
-                                                                            {/* <h4>Drop files here or click to upload.</h4> */}
-                                                                        </div>
-                                                                        // </div>
-                                                                    )}
-                                                                </Dropzone>
-                                                                <div className="dropzone-previews mt-3" id="file-previews">
-                                                                    {selectedFiles.map((index, i) => {
-                                                                        return (
-                                                                            <Card
-                                                                                className="mt-1 mb-0 shadow-none border dz-processing dz-image-preview dz-success dz-complete"
-                                                                                key={i + "-file"}
-                                                                            >
-                                                                                <div className="p-2">
-                                                                                    <Row className="align-items-center">
-                                                                                        <Col className="col-auto">
-                                                                                            <img
-                                                                                                data-dz-thumbnail=""
-                                                                                                height="80"
-                                                                                                className="avatar-sm rounded bg-light"
-                                                                                                alt={index.name}
-                                                                                                src={index.preview}
-
-                                                                                            />
-                                                                                        </Col>
-                                                                                        <Col>
-                                                                                            <Link
-                                                                                                to="#"
-                                                                                                className="text-muted font-weight-bold"
-                                                                                            >
-                                                                                                {index.name}
-                                                                                            </Link>
-                                                                                            <p className="mb-0">
-                                                                                                <strong>{index.formattedSize}</strong>
-                                                                                            </p>
-                                                                                        </Col>
-                                                                                    </Row>
-                                                                                </div>
-                                                                            </Card>
-                                                                        )
-                                                                    })}
-                                                                </div>
-                                                                {/* </Form> */}
-
-                                                                <div className="text-center mt-4">
-                                                                    <button
-                                                                        type="button"
-                                                                        className="btn btn-primary "
-                                                                    >
-                                                                        Upload
-                                                                    </button>
-                                                                </div>
-                                                                <form action="/action_page.php">
-                                                                    <input type="file" id="myFile" name="filename" />
-                                                                    <input type="submit" />
-                                                                </form>
-                                                            </CardBody>
-                                                        </Card>
-                                                    </Col>
                                                 </Row>
                                             </TabPane>
 
@@ -1250,11 +1154,6 @@ const ItemsMaster = () => {
                                                     <Col md={12}  >
                                                         <Card className="text-black">
                                                             <CardBody style={{ backgroundColor: "whitesmoke" }}>
-
-                                                                <Row>
-                                                                    <h5>Item Name :<Label className="text-primary" >{name}</Label></h5>
-                                                                </Row>
-
 
                                                                 <Row>
                                                                     <FormGroup className=" col col-sm-4 " >
@@ -1324,23 +1223,27 @@ const ItemsMaster = () => {
                                                     <Col md={12}  >
                                                         <Card className="text-black">
                                                             <CardBody style={{ backgroundColor: "whitesmoke" }}>
-                                                                <Row>
-                                                                    <h5>Item Name :<Label className="text-primary" >{name}</Label></h5>
-                                                                </Row>
+                                                                
                                                                 {rateDetailTableData.map((index, key) => {
 
                                                                     return <Row className="mt-3">
                                                                         <Col className=" col col-11 ">
                                                                             <Row>
-                                                                                <FormGroup className="mb-3 col col-sm-4 " >
+                                                                                {/* <FormGroup className="mb-3 col col-sm-4 " >
                                                                                     <Label htmlFor="validationCustom01">MRP</Label>
                                                                                     <Input name="MRP" type="text" id='txtMRP'
                                                                                         placeholder=" Please Enter MRP "
                                                                                         autoComplete="off"
                                                                                         value={rateDetailTableData[key].MRP}
                                                                                         onChange={(e) => { RateDetail_Common_onChange_Handller(e, key, "MRP") }}
-
-
+                                                                                    />
+                                                                                </FormGroup> */}
+                                                                                <FormGroup className="mb-3 col col-sm-4 " >
+                                                                                    <Label >MRP</Label>
+                                                                                    <Select
+                                                                                        value={rateDetailTableData[key].MRP}
+                                                                                        options={MRPType_DropdownOptions}
+                                                                                        onChange={(e) => { RateDetail_Common_onChange_Handller(e, key, "MRP") }}
                                                                                     />
                                                                                 </FormGroup>
 
@@ -1351,7 +1254,6 @@ const ItemsMaster = () => {
                                                                                         placeholder=" Please Enter GST "
                                                                                         autoComplete="off"
                                                                                         onChange={(e) => { RateDetail_Common_onChange_Handller(e, key, "GSTPercentage") }}
-
                                                                                     />
                                                                                 </FormGroup>
 
@@ -1362,8 +1264,6 @@ const ItemsMaster = () => {
                                                                                         placeholder=" Please Enter HSN "
                                                                                         autoComplete="off"
                                                                                         onChange={(e) => { RateDetail_Common_onChange_Handller(e, key, "HSNCode") }}
-
-
                                                                                     />
                                                                                 </FormGroup>
 
@@ -1375,15 +1275,7 @@ const ItemsMaster = () => {
                                                                                     type="button"
                                                                                     onClick={() => { RateDetailTab_AddRow_Handler() }} >
                                                                                     <i className="dripicons-plus"></i></Button>
-                                                                                {/* 
-
-                <i
-                className="dripicons-plus text-primary font-size-20 mt-3"
-                onClick={() => {
-                    MuliSelectTab2Handler(key);
-                }}
-            ></i> */}
-                                                                            </Col>
+                                                                       </Col>
                                                                             : <Col className="col col-1 mt-3">
 
                                                                                 <i
@@ -1395,28 +1287,19 @@ const ItemsMaster = () => {
 
                                                                             </Col>}
                                                                     </Row>
-
-
                                                                 })}
-
-
                                                             </CardBody>
                                                         </Card>
-
                                                     </Col>
 
                                                 </Row>
                                             </TabPane>
                                             <TabPane tabId="7">
                                                 <Row>
-
                                                     <Col md={12}  >
                                                         <Card className="text-black">
                                                             <CardBody style={{ backgroundColor: "whitesmoke" }}>
-
-                                                                <Row>
-                                                                    <h5>Item Name :<Label className="text-primary" >{name}</Label></h5>
-                                                                </Row>
+                                                               
                                                                 {marginTabTable.map((index, key) => {
 
                                                                     return <Row className="mt-3">
@@ -1460,7 +1343,6 @@ const ItemsMaster = () => {
 
                                                                             </Col>}
                                                                     </Row>
-
                                                                 })}
 
                                                             </CardBody>
