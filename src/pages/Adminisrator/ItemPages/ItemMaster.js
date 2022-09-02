@@ -34,10 +34,8 @@ import {
     getBaseUnit_ForDropDown,
     get_CategoryTypes_ForDropDown,
     get_Category_By_CategoryType_ForDropDown,
-    get_Category_ForDropDown,
     get_ImageType_ForDropDown,
     get_MRPTypes_ForDropDown,
-    get_SubCategory_ForDropDown,
     get_Sub_Category_By_CategoryType_ForDropDown,
     postItemData,
     PostItemDataSuccess
@@ -75,25 +73,35 @@ const ItemsMaster = (props) => {
         GST: '',
         HSN: '',
         isActive: false,
+        MRPType:''
     }
 
-    const initialInValid = ["txtName", "txtShortName", "txtBarCode"]
-    let [isValidate, setIsValidate] = useState(initialInValid);
+    let [name, setName] = useState();
     let [refresh, setrefresh] = useState('');
 
     const [formValue, setFormValue] = useState(initial);
 
 
+
     // categoryTabTable
     const [categoryTabTable, setCategoryTabTable] = useState([{
-        CategoryType: { value: 0, label: "select" },
-        Category: { value: 0, label: "select" },
-        SubCategory: { value: 0, label: "select" }
+        CategoryType: '',
+        Category: '',
+        SubCategory: ''
     }]);
 
-
-
-
+    const customStyles =
+    {
+        control: (provided, state) => ({
+            ...provided,
+            borderRadius: "0.25rem",
+        }),
+        valueContainer: (provided, state) => ({
+            ...provided,
+            padding: "8px 8px",
+        }),
+    }
+   
     const [marginTabTable, setMarginTabTable] = useState([{
         PriceList: '',
         Margin: ''
@@ -105,10 +113,12 @@ const ItemsMaster = (props) => {
         ImageType: '',
         ImageUpload: ''
     }]);
+
     const [baseUnitTableData, setBaseUnitTableData] = useState([{
         conversionRatio: '',
         toBaseUnit: '',
     }]);
+
     const [rateDetailTableData, setRateDetailTableData] = useState([{
         MRP: '',
         GSTPercentage: '',
@@ -116,17 +126,7 @@ const ItemsMaster = (props) => {
         MRPType: ''
     }]);
 
-    const { companyList,
-        BaseUnit,
-        CategoryType,
-        Category,
-        SubCategory,
-        DivisionType,
-        PostAPIResponse,
-        RoleAccessModifiedinSingleArray,
-        ImageType,
-        MRPType
-    } = useSelector((state) => ({
+    const { companyList, BaseUnit, CategoryType, Category, SubCategory, DivisionType, PostAPIResponse, RoleAccessModifiedinSingleArray, ImageType, MRPType } = useSelector((state) => ({
         companyList: state.Company.companyList,
         BaseUnit: state.ItemMastersReducer.BaseUnit,
         CategoryType: state.ItemMastersReducer.CategoryType,
@@ -196,10 +196,6 @@ const ItemsMaster = (props) => {
             }));
         }
     }, [PostAPIResponse])
-
-
-
-
 
     useEffect(() => {
         dispatch(fetchCompanyList());
@@ -272,38 +268,6 @@ const ItemsMaster = (props) => {
         label: data.Name
     }));
 
-    function Common_Drop_Validation(event, key, type) {
-        // debugger
-        let OnchangeControl = document.getElementById(`drop${type}-${key}`)
-        if (event.value === 0) {
-            OnchangeControl.className = 'form-control is-invalid'
-            return false
-        } else {
-            OnchangeControl.className = '';
-            return ''
-        }
-
-    }
-    function CommonTab_SimpleText_INPUT_handller_ForAll(event, type) {
-
-        let value = event.target.value
-        let OnchangeControl = document.getElementById(`txt${type}`)
-
-        if (value === '') {
-            OnchangeControl.className = 'form-control is-invalid'
-            isValidate.push(`txt${type}`)
-            return
-        } else {
-            OnchangeControl.className = 'form-control';
-            isValidate = isValidate.filter((indF) => {
-                formValue[`txt${type}`] = value
-                return !(indF === `txt${type}`)
-            })
-            setIsValidate(isValidate)
-        }
-
-    }
-
     function Common_DropDown_handller_ForAll(event, type,) {
         // if (index.CategoryType.value === 0) {
         //     categoryTypeCont.className = 'form-control is-invalid'
@@ -314,16 +278,8 @@ const ItemsMaster = (props) => {
         setrefresh(event)
     }
 
-    function CategoryType_Dropdown_Handler(e) {
-        dispatch(get_Category_By_CategoryType_ForDropDown(e.value))
-    }
-
-    function Category_Dropdown_Handler(e) {
-        dispatch(get_Sub_Category_By_CategoryType_ForDropDown(e.value))
-    }
-
     function CategoryTab_AddRow_Handler() {
-        debugger
+        
         let key = categoryTabTable.length - 1
         let index = categoryTabTable[key]
 
@@ -331,46 +287,34 @@ const ItemsMaster = (props) => {
         let categoryCont = document.getElementById(`dropCategory-${key}`)
         let subCategoryCont = document.getElementById(`dropSubCategory-${key}`)
 
-        var arr = ["CategoryType", "Category", "SubCategory"];
 
-        let valid = true;
+        if (index.CategoryType.value === 0) {
+            categoryTypeCont.className = 'form-control is-invalid'
+        } else {
+            categoryTypeCont.className = ''
+        }
+        if (index.Category.value === 0) {
+            categoryCont.className = 'form-control is-invalid'
 
-        arr.map((index1) => {
-            var valid11 = Common_Drop_Validation(index[index1], key, index1)
-            let valid = true;
-            if (!valid11) { valid = valid11 }
-        })
+        } else {
+            categoryCont.className = ''
+        }
+        if (index.SubCategory.value === 0) {
+            subCategoryCont.className = 'form-control is-invalid'
 
-        if (valid === false) {
+        } else {
+            subCategoryCont.className = ''
+        }
+
+        if (index.CategoryType.value === 0) {
             return
         }
-        // if (index.CategoryType.value === 0) {
-        //     categoryTypeCont.className = 'form-control is-invalid'
-        // } else {
-        //     categoryTypeCont.className = ''
-        // }
-        // if (index.Category.value === 0) {
-        //     categoryCont.className = 'form-control is-invalid'
-
-        // } else {
-        //     categoryCont.className = ''
-        // }
-        // if (index.SubCategory.value === 0) {
-        //     subCategoryCont.className = 'form-control is-invalid'
-
-        // } else {
-        //     subCategoryCont.className = ''
-        // }
-
-        // if (index.CategoryType.value === 0) {
-        //     return
-        // }
-        // if (index.Category.value === 0) {
-        //     return
-        // }
-        // if (index.SubCategory.value === 0) {
-        //     return
-        // }
+        if (index.Category.value === 0) {
+            return
+        }
+        if (index.SubCategory.value === 0) {
+            return
+        }
 
         var newarr = [...categoryTabTable, {
             CategoryType: { value: 0, label: "select" },
@@ -378,6 +322,7 @@ const ItemsMaster = (props) => {
             SubCategory: { value: 0, label: "select" }
         }]
         setCategoryTabTable(newarr)
+
     }
     function CategoryTab_DeleteRow_Handler(key) {
 
@@ -388,11 +333,23 @@ const ItemsMaster = (props) => {
         setCategoryTabTable(removeElseArrray)
 
     }
-    function CategoryTab_Common_onChange_Handller(event, key, type) {
-        debugger
 
-        let validateReturn = Common_Drop_Validation(event, key, type);
-        if (validateReturn === false) return;
+    function CategoryType_Dropdown_Handler(e) {
+        dispatch(get_Category_By_CategoryType_ForDropDown(e.value))
+    }
+
+    function Category_Dropdown_Handler(e) {
+        dispatch(get_Sub_Category_By_CategoryType_ForDropDown(e.value))
+    }
+
+    function CategoryTab_Common_onChange_Handller(event, key, type) {
+       
+        let OnchangeControl = document.getElementById(`drop${type}-${key}`)
+        if (event.value === 0) {
+            OnchangeControl.className = 'form-control is-invalid'
+            return
+        } else { OnchangeControl.className = '' }
+
 
         var found = categoryTabTable.find((i, k) => {
             return (k === key)
@@ -503,9 +460,8 @@ const ItemsMaster = (props) => {
         )
     }
 
-
     function ImageTab_AddRow_Handler(key) {
-
+        debugger
 
         var newarr1 = [...imageTabTable, {
             ImageType: { value: 0, label: "select" },
@@ -521,7 +477,7 @@ const ItemsMaster = (props) => {
         setImageTabTable(removeElseArrray1)
     }
     function ImageTab_onChange_Handler(event, key, type) {
-
+        debugger
         var found = imageTabTable.find((i, k) => {
             return (k === key)
         })
@@ -588,6 +544,7 @@ const ItemsMaster = (props) => {
 
 
     function RateDetailTab_AddRow_Handler() {
+       
         var newarr = [...rateDetailTableData, {
             MRPType: { value: 0, label: "select" },
             MRP: '',
@@ -606,7 +563,7 @@ const ItemsMaster = (props) => {
 
     }
     function RateDetail_Common_onChange_Handller(event, key, type) {
-
+        debugger
         var found = rateDetailTableData.find((i, k) => {
             return (k === key)
         })
@@ -654,6 +611,7 @@ const ItemsMaster = (props) => {
 
 
     const handleValidSubmit = (event, values) => {
+        var values = formValue
 
         const itemCategoryDetails = categoryTabTable.map((index) => ({
             CategoryType: index.CategoryType.value,
@@ -682,52 +640,74 @@ const ItemsMaster = (props) => {
             MRPType: index.MRPType.value
         }))
 
-
-        let submitValid = false
-        isValidate.map((ind) => {
-            document.getElementById(ind).className = "form-control is-invalid"
-        })
-
-        if ((isValidate.length == 0)) {
-            submitValid = true
-        } else { submitValid = false }
-
-
-
-
-        if (submitValid) {
-
-            const jsonBody = JSON.stringify({
-                Name: formValue.Name,
-                ShortName: formValue.ShortName,
-                Sequence: formValue.Sequence,
-                BarCode: formValue.BarCode,
-                isActive: formValue.isActive,
-                Company: formValue.Company.value,
-                BaseUnitID: formValue.BaseUnit.value,
-                ItemCategoryDetails: itemCategoryDetails,
-                ItemUnitDetails: itemUnitDetails,
-
-                ItemImagesDetails: [
-                    {
-                        ImageType: "1",
-                        Item_pic: "sadsadasdas"
-                    }
-                ],
-                ItemDivisionDetails: itemDivisionDetails,
-                ItemMRPDetails: itemMRPDetails,
-                ItemMarginDetails: iteMarginDetails,
-
-            });
-
-            dispatch(postItemData(jsonBody));
-            console.log("jsonBody", jsonBody)
+        if (formValue.Name == '') {
+            setactiveTab1("1")
+            document.getElementById("txtName").className = "form-control is-invalid"
         }
-        else {
-            setactiveTab1('1');
-            alert("check Validation")
+        if (formValue.ShortName == '') {
+            setactiveTab1("1")
+            document.getElementById("txtShortName").className = "form-control is-invalid"
         }
+        if (!(formValue.Company.value === 0)) {
+            setactiveTab1("1")
+            document.getElementById("divCompany").className = "form-control is-invalid"
+        }
+        if (!(formValue.BaseUnit.value === 0)) {
+            setactiveTab1("1")
+            document.getElementById("divBaseUnit").className = "form-control is-invalid"
+        }
+        if (!(formValue.BaseUnit.value === 0)) {
+            setactiveTab1("1")
+            document.getElementById("divBaseUnit").className = "form-control is-invalid"
+        }
+
+        const jsonBody = JSON.stringify({
+            Name: formValue.Name,
+            ShortName: formValue.ShortName,
+            Sequence: formValue.Sequence,
+            BarCode: formValue.BarCode,
+            isActive: formValue.isActive,
+            Company: formValue.Company.value,
+            BaseUnitID: formValue.BaseUnit.value,
+            ItemCategoryDetails: itemCategoryDetails,
+            ItemUnitDetails: itemUnitDetails,
+
+            ItemImagesDetails: [
+                {
+                    ImageType: "1",
+                    Item_pic: "sadsadasdas"
+                }
+            ],
+            ItemDivisionDetails: itemDivisionDetails,
+            ItemMRPDetails: itemMRPDetails,
+            ItemMarginDetails: iteMarginDetails,
+
+            // ItemImagesDetails: [
+            //     {
+            //         ImageType: "1",
+            //         Item_pic: "sadsadasdas"
+            //     }
+            // ],
+            // ItemDivisionDetails: divisionTableData.value,
+            // ItemGstDetails: [
+            //     {
+            //         GSTPercentage: "5.00",
+            //         MRP: "100.00",
+            //         HSNCode: "Aaaa01"
+            //     }
+            // ],
+            // ItemMarginDetails: [
+            //     {
+            //         PriceList: "1",
+            //         Margin: "10"
+            //     }
+            // ]
+        });
+
+        dispatch(postItemData(jsonBody));
+        console.log("jsonBody", jsonBody)
     };
+
 
     if (!(userPageAccessState === '')) {
         return (
@@ -904,24 +884,17 @@ const ItemsMaster = (props) => {
                                                                         <Input type="text" id='txtName'
                                                                             placeholder=" Please Enter Name "
                                                                             autoComplete="off"
-                                                                            // onChange={(e) => { dispatch(BreadcrumbShow(e.target.value)) }}
-                                                                            onChange={(e) => {
-                                                                                dispatch(BreadcrumbShow(e.target.value));
-                                                                                CommonTab_SimpleText_INPUT_handller_ForAll(e, "Name")
-                                                                            }}
-
+                                                                            onChange={(e) => { dispatch(BreadcrumbShow(e.target.value)); formValue.Name = e.target.value }}
                                                                         />
                                                                     </FormGroup>
 
                                                                     <FormGroup className="mb-3 col col-sm-4 " >
                                                                         <Label >ShortName</Label>
-                                                                        <Input type="text"
-                                                                            id='txtShortName'
+                                                                        <Input type="text" id='txtShortName'
                                                                             className=""
                                                                             placeholder=" Please Enter ShortName "
                                                                             autoComplete="off"
-                                                                            onChange={(e) => { CommonTab_SimpleText_INPUT_handller_ForAll(e, "ShortName") }}
-                                                                        // onChange={(e) => { formValue.ShortName = e.target.value }}
+                                                                            onChange={(e) => { formValue.ShortName = e.target.value }}
                                                                         />
                                                                     </FormGroup>
 
@@ -939,6 +912,8 @@ const ItemsMaster = (props) => {
                                                                         <Label htmlFor="validationCustom21">Base Unit</Label>
                                                                         <Select
                                                                             id='divBaseUnit'
+                                                                            // className="form-control is-invalid"
+
                                                                             value={formValue.BaseUnit}
                                                                             options={BaseUnit_DropdownOptions}
                                                                             onChange={(event) => Common_DropDown_handller_ForAll(event, "BaseUnit")}
@@ -948,15 +923,12 @@ const ItemsMaster = (props) => {
                                                                     <FormGroup className="mb-3 col col-sm-4 " >
                                                                         <Label htmlFor="validationCustom01">BarCode</Label>
                                                                         <Input
-                                                                            id='txtBarCode'
                                                                             placeholder=" Please Enter BarCode "
                                                                             autoComplete="off"
                                                                             // validate={{
                                                                             //     required: { value: true, errorMessage: 'Please Enter BarCode' },
                                                                             // }}
-                                                                            // onChange={(e) => { formValue.BarCode = e.target.value }}
-                                                                            onChange={(e) => { CommonTab_SimpleText_INPUT_handller_ForAll(e, "BarCode") }}
-
+                                                                            onChange={(e) => { formValue.BarCode = e.target.value }}
                                                                         />
                                                                     </FormGroup>
 
@@ -965,8 +937,8 @@ const ItemsMaster = (props) => {
                                                                         <Input
                                                                             placeholder=" Please Enter Sequence "
                                                                             autoComplete="off"
-                                                                            onChange={(e) => { CommonTab_SimpleText_INPUT_handller_ForAll(e, "ShortName") }}
-                                                                        // onChange={(e) => { formValue.Sequence = e.target.value }}
+
+                                                                            onChange={(e) => { formValue.Sequence = e.target.value }}
                                                                         />
 
                                                                     </FormGroup>
@@ -1072,7 +1044,6 @@ const ItemsMaster = (props) => {
                                                     </Col>
 
                                                 </TabPane>
-
 
                                                 <TabPane tabId="3">
                                                     <Col md={12}>
