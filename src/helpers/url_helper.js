@@ -115,6 +115,7 @@ export const  CATEGORY_API ='/Category'
 export const  CATEGORYTYPE_DROPDOWN_API ='/CategoryTypes'
 
 export const  SUB_CATEGORY_API ='/SubCategory'
+export const CATEGORY_TYPES_API='/CategoryTypes'
 
 //Vehicle api
 export const  VEHICLE_API ='/Vehicle'
