@@ -4,8 +4,8 @@ import { DELETE_ITEM_ID, DELETE_ITEM_ID_SUCCESS,
      GET_BASEUNIT_FOR_DROPDOWN_SUCCESS, 
      GET_CATEGORYTYPE_FOR_DROPDOWN, 
      GET_CATEGORYTYPE_FOR_DROPDOWN_SUCCESS, 
-     GET_CATEGORY_FOR_DROPDOWN, 
-     GET_CATEGORY_FOR_DROPDOWN_SUCCESS, 
+     GET_CATEGORY_BY_CATEGORYTYPE_FOR_DROPDOWN, 
+     GET_CATEGORY_BY_CATEGORYTYPE_FOR_DROPDOWN_SUCCESS, 
      GET_IMAGETYPE_FOR_DROPDOWN, 
      GET_IMAGETYPE_FOR_DROPDOWN_SUCCESS, 
      GET_ITEM_GROUP_FOR_DROPDOWN, 
@@ -13,8 +13,8 @@ import { DELETE_ITEM_ID, DELETE_ITEM_ID_SUCCESS,
      GET_ITEM_LIST_API, GET_ITEM_LIST_API_SUCCESS, 
      GET_MRPTYPE_FOR_DROPDOWN, 
      GET_MRPTYPE_FOR_DROPDOWN_SUCCESS, 
-     GET_SUBCATEGORY_FOR_DROPDOWN, 
-     GET_SUBCATEGORY_FOR_DROPDOWN_SUCCESS, 
+     GET_SUB_CATEGORY_BY_CATEGORYTYPE_FOR_DROPDOWN, 
+     GET_SUB_CATEGORY_BY_CATEGORYTYPE_FOR_DROPDOWN_SUCCESS, 
      POST_ITEM_DATA, POST_ITEM_DATA_SUCCESS, 
      UPDATE_ITEM_ID, UPDATE_ITEM_ID_SUCCESS } from "./actionType";
 
@@ -28,7 +28,6 @@ export const getItemGroup_ForDropDownSuccess = (data) => ({
   type: GET_ITEM_GROUP_FOR_DROPDOWN_SUCCESS,
   payload:data,
 });
-
 
 // get api
 export const getItemList = () => ({
@@ -102,23 +101,25 @@ export const get_CategoryTypes_ForDropDown_Success = (data) => ({
   payload:data,
 });
 
-  // get Category  for dropdown api
-  export const get_Category_ForDropDown = () => ({
-    type: GET_CATEGORY_FOR_DROPDOWN,
+// Category  API dependent on CategoryType api
+  export const get_Category_By_CategoryType_ForDropDown = (id) => ({
+    type: GET_CATEGORY_BY_CATEGORYTYPE_FOR_DROPDOWN,
+    id
   });
   
-  export const get_Category_ForDropDown_Success = (data) => ({
-    type: GET_CATEGORY_FOR_DROPDOWN_SUCCESS,
+  export const get_Category_By_CategoryType_ForDropDown_Success = (data) => ({
+    type: GET_CATEGORY_BY_CATEGORYTYPE_FOR_DROPDOWN_SUCCESS,
     payload:data,
   });
 
-   // get Sub-Category  for dropdown api
-   export const get_SubCategory_ForDropDown = () => ({
-    type: GET_SUBCATEGORY_FOR_DROPDOWN,
+  //Sub Category API dependent on Category api 
+   export const get_Sub_Category_By_CategoryType_ForDropDown = (id) => ({
+    type: GET_SUB_CATEGORY_BY_CATEGORYTYPE_FOR_DROPDOWN,
+    id
   });
   
-  export const get_SubCategory_ForDropDown_Success = (data) => ({
-    type: GET_SUBCATEGORY_FOR_DROPDOWN_SUCCESS,
+  export const get_Sub_Category_By_CategoryType_ForDropDown_Success = (data) => ({
+    type: GET_SUB_CATEGORY_BY_CATEGORYTYPE_FOR_DROPDOWN_SUCCESS,
     payload:data,
   });
 
