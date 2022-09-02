@@ -54,8 +54,9 @@ import CategoryTypeMaster from "../pages/Adminisrator/CategoryTypePages/Category
 import CategoryTypeList from "../pages/Adminisrator/CategoryTypePages/CategoryTypeList";
 import CategoryList from "../pages/Adminisrator/CategoryPages/CategoryList";
 import CategoryMaster from "../pages/Adminisrator/CategoryPages/CategoryMaster";
-// import SubCategoryMaster from "../pages/Adminisrator/SubCategoryPages/SubCategoryMaster";
-// import SubCategoryList from "../pages/Adminisrator/SubCategoryPages/SubCategoryList";
+import SubCategoryMaster from "../pages/Adminisrator/SubCategoryPages/SubCategoryMaster";
+import SubCategoryList from "../pages/Adminisrator/SubCategoryPages/SubCategoryList";
+import VehicleMaster from "../pages/Adminisrator/VehiclePages/VehicleMaster";
 
 
 
@@ -156,9 +157,11 @@ const userRoutes = [
   { path: "/CategoryMaster", component: CategoryMaster },
   { path: "/CategoryList", component: CategoryList },
   
-  // { path: "/SubCategoryMaster", component: SubCategoryMaster },
-  // { path: "/SubCategoryList", component: SubCategoryList },
+  { path: "/SubCategoryMaster", component: SubCategoryMaster },
+  { path: "/SubCategoryList", component: SubCategoryList },
   
+  { path: "/VehicleMaster", component: VehicleMaster },
+
 
   { path: "/partyUIDemo", component: PartyUIDemo },
   { path: "/demoUi3", component: DemoUI3 },

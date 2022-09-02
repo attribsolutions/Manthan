@@ -113,10 +113,16 @@ export const  CATEGORY_TYPE_MASTER_API = '/ProductCategoryTypes'
 export const  CATEGORY_TYPES_API ='/ProductCategory'
 
 export const  BASEUNIT_DROPDOWN_API ='/UnitList'
-
+//Category Types API
 export const  CATEGORYTYPE_DROPDOWN_API ='/CategoryTypes'
 
+//Category API
 export const  CATEGORY_DROPDOWN_API ='/Category'
 
+//SubCategory API
 export const  SUBCATEGORY_DROPDOWN_API ='/SubCategory'
 
+//Vehicle API
+export const VEHICLE_API ='/Vehicle'
+export const VEHICLETYPES_DROPDOWN ='/VehicleTypes'
+export const DRIVERLIST_DROPDOWN = '/DriverList'
