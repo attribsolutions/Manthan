@@ -247,11 +247,25 @@ export const update_CategoryType_List_Api = (data, id) => put(`${url.CATEGORY_TY
 
 //Product Types API
 export const Post_Product_Types_API = (data) => post(url. CATEGORY_TYPES_API, data)// post api
-export const get_Product_Category_Type_Master_API = () => get(url. CATEGORY_TYPES_API)// Product Category DropDown Api api
+export const get_Product_Category_Type_Master_API = () => get(url. CATEGORYTYPE_DROPDOWN_API)// Product Category DropDown Api api
 export const get_Product_Types_List_Api = () => get(url. CATEGORY_TYPES_API) // get api
 export const detelet_Product_Types_List_Api = (id) =>del(`${url. CATEGORY_TYPES_API}/${id}`) // delete api
 export const edit_Product_Types_List_Api = (id) =>get(`${url. CATEGORY_TYPES_API}/${id}`) // edit api
 export const update_Product_Types_List_Api = (data, id) =>put(`${url. CATEGORY_TYPES_API}/${id}`, data)// update
+
+//SubCategory API
+export const Post_SubCategory_API = (data) => post(url. SUBCATEGORY_DROPDOWN_API, data)// post api
+export const get_SubCategory_API = () => get(url.SUBCATEGORY_DROPDOWN_API)// Product Category DropDown Api api
+export const get_SubCategory_List_Api = () => get(url. SUBCATEGORY_DROPDOWN_API) // get api
+export const detelet_SubCategory_List_Api = (id) =>del(`${url. SUBCATEGORY_DROPDOWN_API}/${id}`) // delete api
+export const edit_SubCategory_List_Api = (id) =>get(`${url. SUBCATEGORY_DROPDOWN_API}/${id}`) // edit api
+export const update_SubCategory_List_Api = (data, id) =>put(`${url. SUBCATEGORY_DROPDOWN_API}/${id}`, data)// update
+
+//Vehicle API
+export const Post_Vehicle_API = (data) => post(url.VEHICLE_API, data)// post api
+export const get_Vehicle_API = () => get(url.VEHICLE_API)//  get Api 
+export const get_VehicleTypes_API = () => get (url.VEHICLETYPES_DROPDOWN)//dropDown
+export const get_DriverListAPI = () => get (url.DRIVERLIST_DROPDOWN)//dropDown
 
 export {  
   getLoggedInUser,
@@ -264,3 +278,13 @@ export {
   postJwtRegister,
   postJwtProfile,
 }
+
+
+
+
+
+
+
+
+
+

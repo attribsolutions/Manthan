@@ -30,6 +30,8 @@ import DivisionTypeSaga from "./Administrator/DivisionTypeRedux/saga"
 import PartyTypeSaga from "./Administrator/PartyTypeRedux/saga"
 import CategoryTypeMasterSaga from "./Administrator/CategoryTypeRedux/saga"
 import CategoryMasterSaga from "./Administrator/CategoryRedux/saga"
+import SubCategorySaga from "./Administrator/SubCategoryRedux/saga"
+import VehicleSaga from "./Administrator/VehicleRedux/saga"
 
 export default function* rootSaga() {
   yield all([
@@ -58,5 +60,8 @@ export default function* rootSaga() {
     fork(DivisionTypeSaga),
     fork(CategoryTypeMasterSaga),
    fork(CategoryMasterSaga),
+   fork(SubCategorySaga),
+   fork(VehicleSaga),
+
   ])
 }

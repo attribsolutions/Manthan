@@ -113,8 +113,9 @@ export const  CATEGORY_TYPE_MASTER_API = '/ProductCategoryTypes'
 export const  CATEGORY_TYPES_API ='/ProductCategory'
 
 export const  BASEUNIT_DROPDOWN_API ='/UnitList'
-
+//Category Types API
 export const  CATEGORYTYPE_DROPDOWN_API ='/CategoryTypes'
+
 
 export const  CATEGORY_DROPDOWN_API ='/GetCategoryByCategoryTypeID'
 
@@ -123,3 +124,4 @@ export const  SUBCATEGORY_DROPDOWN_API ='/GetSubCategoryByCategoryID'
 export const  IMAGETYPE_DROPDOWN_API ='/ImageTypes'
 
 export const  MRP_TYPE_DROPDOWN_API ='/MRPTypes'
+

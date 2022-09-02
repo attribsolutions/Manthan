@@ -53,6 +53,7 @@ const CategoryMaster = (props) => {
 
     //userAccess useEffect
     useEffect(() => {
+      
         let userAcc = undefined
         if ((editDataGatingFromList === undefined)) {
 
@@ -231,7 +232,7 @@ const CategoryMaster = (props) => {
                                                         <Row>
                                                             <Col md="4">
                                                                 <FormGroup className="mb-3">
-                                                                    <Label htmlFor="validationCustom01"> ProductCategory Type </Label>
+                                                                    <Label htmlFor="validationCustom01"> Category Type </Label>
                                                                     <Col sm={12}>
                                                                         <Select
                                                                             value={ProductCategoryTypes_dropdown_Select}
