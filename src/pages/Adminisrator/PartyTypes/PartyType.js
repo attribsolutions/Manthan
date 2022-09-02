@@ -29,7 +29,7 @@ const PartyType = (props) => {
 
     //*** "isEditdata get all data from ModuleID for Binding  Form controls
     let editDataGatingFromList = props.state;
-
+    let propsPageMode = props.pageMode;
 
     //SetState  Edit data Geting From Modules List component
     const [EditData, setEditData] = useState([]);
@@ -46,21 +46,27 @@ const PartyType = (props) => {
 
 // userAccess useEffect
 useEffect(() => {
-
-    if ((editDataGatingFromList === undefined)) {
-
-        const userAcc = CommonGetRoleAccessFunction(history)
-        if (!(userAcc === undefined)) {
-            setUserPageAccessState(userAcc)
-        }
-    } else {
-        let RelatedPageID = history.location.state.UserDetails.RelatedPageID
-        const userfound = RoleAccessModifiedinSingleArray.find((element) => {
-            return element.id === RelatedPageID
+    let userAcc = undefined
+      if ((editDataGatingFromList === undefined)) {
+  
+        let locationPath = history.location.pathname
+        userAcc = RoleAccessModifiedinSingleArray.find((inx) => {
+          return (`/${inx.ActualPagePath}` === locationPath)
         })
-        setUserPageAccessState(userfound)
-    }
-}, [history])
+      }
+      else if (!(editDataGatingFromList === undefined)) {
+        let relatatedPage = props.relatatedPage
+        userAcc = RoleAccessModifiedinSingleArray.find((inx) => {
+          return (`/${inx.ActualPagePath}` === relatatedPage)
+        })
+  
+      }
+      if (!(userAcc === undefined)) {
+        setUserPageAccessState(userAcc)
+      }
+
+  }, [RoleAccessModifiedinSingleArray])
+
 
     useEffect(() => {
         dispatch(getDivisionTypesID());
@@ -77,16 +83,18 @@ useEffect(() => {
             })
             dispatch(editPartyTypeSuccess({ Status: false }))
             dispatch(BreadcrumbShow(editDataGatingFromList.Name))
-            return
         }
-    }, [editDataGatingFromList])
+        else if (!(propsPageMode === undefined)) {
+            setPageMode(propsPageMode)
+        }
+    }, [editDataGatingFromList,propsPageMode])
 
     useEffect(() => {
-        if ((PostAPIResponse.Status === true) && (PostAPIResponse.StatusCode === 200)) {
+        if ((PostAPIResponse.Status === true) && (PostAPIResponse.StatusCode === 200)&&!(pageMode==="dropdownAdd")) {
             setDivision_dropdown_Select('')
             dispatch(PostPartyTypeAPISuccess({ Status: false }))
             formRef.current.reset();
-            if (pageMode === "other") {
+            if (pageMode === "dropdownAdd") {
                 dispatch(AlertState({
                     Type: 1,
                     Status: true,
@@ -103,7 +111,7 @@ useEffect(() => {
                 }))
             }
         }
-        else if (PostAPIResponse.Status === true) {
+        else if ((PostAPIResponse.Status === true) && !(pageMode==="dropdownAdd")) {
             dispatch(PostPartyTypeAPISuccess({ Status: false }))
             dispatch(AlertState({
                 Type: 4,
@@ -143,11 +151,9 @@ useEffect(() => {
         }
     };
 
-
-
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
     var IsEditMode_Css = ''
-    if (pageMode === "edit") { IsEditMode_Css = "-5.5%" };
+    if (pageMode === "edit" || pageMode == "dropdownAdd") { IsEditMode_Css = "-5.5%" };
 
     if (!(userPageAccessState === '')) {
         return (

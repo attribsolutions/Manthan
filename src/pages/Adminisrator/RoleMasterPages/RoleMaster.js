@@ -8,11 +8,13 @@ import {
   postRole, updateID, PostSuccess
 } from "../../../store/Administrator/RoleMasterRedux/action";
 import { AlertState } from "../../../store/actions";
-
+import Select from "react-select";
 import { BreadcrumbShow } from "../../../store/Utilites/Breadcrumb/actions";
 import { MetaTags } from "react-meta-tags";
 import { useHistory } from "react-router-dom";
 import { CommonGetRoleAccessFunction } from "../../../components/Common/CommonGetRoleAccessFunction";
+import { getEmployeeTypelist } from "../../../store/Administrator/EmployeeTypeRedux/action";
+import BreadcrumbDemo from "../../../components/Common/CmponentRelatedCommonFile/BreadcrumbDemo";
 
 const RoleMaster = (props) => {
 
@@ -22,37 +24,57 @@ const RoleMaster = (props) => {
 
   //*** "isEditdata get all data from ModuleID for Binding  Form controls
   let editDataGatingFromList = props.state;
+  let propsPageMode = props.pageMode;
 
   //SetState  Edit data Geting From Modules List component
   const [EditData, setEditData] = useState([]);
   const [pageMode, setPageMode] = useState("save");
   const [userPageAccessState, setUserPageAccessState] = useState('');
-
+  const [employeeType_DropdownSelect, setEmployeeType_DropdownSelect] = useState('');
   //Access redux store Data /  'save_ModuleSuccess' action data
-  const { PostAPIResponse, RoleAccessModifiedinSingleArray} = useSelector((state) => ({
+  const { PostAPIResponse, RoleAccessModifiedinSingleArray,EmployeeType} = useSelector((state) => ({
     PostAPIResponse: state.RoleMaster_Reducer.AddUserMessage,
+    EmployeeType: state.EmployeeTypeReducer.EmployeeTypeList,
     RoleAccessModifiedinSingleArray: state.Login.RoleAccessUpdateData,
-
   }));
+
+  useEffect(() => {
+    dispatch(getEmployeeTypelist());
+  }, []);
 
   // userAccess useEffect
   useEffect(() => {
-      if ((editDataGatingFromList === undefined)) {
-          const userAcc = CommonGetRoleAccessFunction(history)
-          if (!(userAcc === undefined)) {
-              setUserPageAccessState(userAcc)
-          }
-      } else {
-          let RelatedPageID = history.location.state.UserDetails.RelatedPageID
-          const userfound = RoleAccessModifiedinSingleArray.find((element) => {
-              return element.id === RelatedPageID
+    debugger
+      let userAcc = undefined
+        if ((editDataGatingFromList === undefined)) {
+    
+          let locationPath = history.location.pathname
+          userAcc = RoleAccessModifiedinSingleArray.find((inx) => {
+            return (`/${inx.ActualPagePath}` === locationPath)
           })
-          setUserPageAccessState(userfound)
-      }
+        }
+        else if (!(editDataGatingFromList === undefined)) {
+          let relatatedPage = props.relatatedPage
+          userAcc = RoleAccessModifiedinSingleArray.find((inx) => {
+            return (`/${inx.ActualPagePath}` === relatatedPage)
+          })
+    
+        }
+        if (!(userAcc === undefined)) {
+          setUserPageAccessState(userAcc)
+        }
 
-  }, [history])
+    }, [RoleAccessModifiedinSingleArray])
 
+    
+  const EmployeeType_DropdownOptions = EmployeeType.map((data) => ({
+    value: data.id,
+    label: data.Name
+  }));
 
+  function EmployeeType_Dropdown_Handler(e) {
+    setEmployeeType_DropdownSelect(e)
+  }
   // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
   useEffect(() => {
 
@@ -62,15 +84,18 @@ const RoleMaster = (props) => {
       setPageMode("edit");
       dispatch(editSuccess({ Status: false }))
       dispatch(BreadcrumbShow(editDataGatingFromList.Name))
-      return
     }
-  }, [editDataGatingFromList])
+    else if (!(propsPageMode === undefined)) {
+      setPageMode(propsPageMode)
+  }
+
+  }, [editDataGatingFromList,propsPageMode])
 
   useEffect(() => {
-    if ((PostAPIResponse.Status === true) && (PostAPIResponse.StatusCode === 200)) {
+    if ((PostAPIResponse.Status === true) && (PostAPIResponse.StatusCode === 200)&&!(pageMode==="dropdownAdd")) {
       dispatch(PostSuccess({ Status: false }))
       formRef.current.reset();
-      if (pageMode === "true") {
+      if (pageMode === "dropdownAdd") {
         dispatch(AlertState({
           Type: 1,
           Status: true,
@@ -87,7 +112,7 @@ const RoleMaster = (props) => {
         }))
       }
     }
-    else if (PostAPIResponse.Status === true) {
+    else if ((PostAPIResponse.Status === true) && !(pageMode==="dropdownAdd")) {
       dispatch(PostSuccess({ Status: false }))
       dispatch(AlertState({
         Type: 4,
@@ -99,15 +124,16 @@ const RoleMaster = (props) => {
     }
   }, [PostAPIResponse.Status])
 
+  
   //'Save' And 'Update' Button Handller
   const FormSubmitButton_Handler = (event, values) => {
-
     const jsonBody = JSON.stringify({
       Name: values.Name,
       Description: values.Description,
       isActive: values.isActive,
       Dashboard: values.Dashboard,
       isSCMRole: values.isSCMRole,
+      RoleEmployeeTypes: employeeType_DropdownSelect.map((i) => { return ({ EmployeeType: i.value }) }),
       CreatedBy: 1,
       CreatedOn: "2022-05-20T11:22:55.711483Z",
       UpdatedBy: 1,
@@ -124,7 +150,7 @@ const RoleMaster = (props) => {
 
   // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
   var IsEditMode_Css = ''
-  if (pageMode === "edit") { IsEditMode_Css = "-5.5%" };
+  if (pageMode === "edit" || pageMode == "dropdownAdd") { IsEditMode_Css = "-5.5%" };
 
   if (!(userPageAccessState === '')) {
     return (
@@ -166,6 +192,22 @@ const RoleMaster = (props) => {
                           </Row>
 
                           <Row>
+                          <div className="col-lg-4 col-md-6">
+                            <div className="mb-3">
+                              <Label className="form-label font-size-13 ">Employee Type</Label>
+                              <Select
+                               defaultValue={employeeType_DropdownSelect}
+                                isMulti={true}
+                                className="basic-multi-select"
+                                options={EmployeeType_DropdownOptions}
+                                onChange={(e) => { EmployeeType_Dropdown_Handler(e) }}
+                                classNamePrefix="select2-selection"
+                              />
+                            </div>
+                          </div> 
+                          </Row>
+
+                          <Row>
                             <FormGroup className="mb-3 col col-sm-4 " >
                               <Label htmlFor="validationCustom01">Description </Label>
                               <AvField name="Description" id="txtName"
@@ -193,6 +235,7 @@ const RoleMaster = (props) => {
                             </FormGroup>
                           </Row>
 
+                         
                           <FormGroup className="mb-2 col col-sm-5">
                             <Row className="justify-content-md-left">
                               <Label className="col-sm-3 col-form-label" >Is SCM Role </Label>
@@ -210,7 +253,7 @@ const RoleMaster = (props) => {
 
                           <FormGroup className="mb-2 col col-sm-5">
                             <Row className="justify-content-md-left">
-                              <Label htmlFor="horizontal-firstname-input" className="col-sm-2 col-form-label" >Active </Label>
+                              <Label htmlFor="horizontal-firstname-input" className="col-sm-3 col-form-label" >Active </Label>
                               <Col md={2} style={{ marginTop: '9px' }} >
 
                                 <div className="form-check form-switch form-switch-md mb-3" dir="ltr">
@@ -261,13 +304,9 @@ const RoleMaster = (props) => {
                       </Card>
                     </Col>
                   </Row>
-
-
                 </AvForm>
-
               </CardBody>
             </Card>
-
           </Container>
         </div>
       </React.Fragment>

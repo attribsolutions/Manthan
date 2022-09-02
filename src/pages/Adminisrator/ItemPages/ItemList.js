@@ -33,21 +33,28 @@ const ItemsList = (props) => {
   const [modal_center, setmodal_center] = useState(false);
 
   // get Access redux data
-  const { pages, editData, updateMessage, deleteMessage } = useSelector(
+  const { pages, editData, updateMessage, deleteMessage ,RoleAccessModifiedinSingleArray} = useSelector(
     (state) => ({
       pages: state.ItemMastersReducer.pages,
       editData: state.ItemMastersReducer.editData,
       updateMessage: state.ItemMastersReducer.updateMessage,
       deleteMessage: state.ItemMastersReducer.deleteMessage,
+      RoleAccessModifiedinSingleArray: state.Login.RoleAccessUpdateData,
+
     })
   );
 
   useEffect(() => {
-    const userAcc = CommonGetRoleAccessFunction(history)
+    // debugger
+    // const userAcc = CommonGetRoleAccessFunction(history)
+    const locationPath = history.location.pathname
+    let userAcc = RoleAccessModifiedinSingleArray.find((inx) => {
+        return (`/${inx.ActualPagePath}` === locationPath)
+    })
     if (!(userAcc === undefined)) {
-      setUserPageAccessState(userAcc)
+        setUserPageAccessState(userAcc)
     }
-  }, [history])
+}, [RoleAccessModifiedinSingleArray])
 
   //  This UseEffect => Featch Modules List data  First Rendering
   useEffect(() => {
@@ -131,26 +138,36 @@ const ItemsList = (props) => {
 
   const pagesListColumns = [
     {
+      text: "ID",
+      dataField: "id",
+      sort: true,
+    },
+    {
       text: "Item Name",
       dataField: "Name",
       sort: true,
     },
     {
-      text: "GST(%)",
-      dataField: "GSTPercentage",
+      text: "Short Name",
+      dataField: "ShortName",
       sort: true,
     },
     {
-      text: "MRP",
-      dataField: "MRP",
+      text: "Base Unit",
+      dataField: "BaseUnitName",
       sort: true,
     },
     {
-      text: "Active",
-      dataField: "isActive",
+      text: "Company",
+      dataField: "CompanyName",
       sort: true,
     },
-
+    {
+      text: "BarCode",
+      dataField: "BarCode",
+      sort: true,
+    },
+    
   // For Edit, Delete ,and View Button Common Code function
   listPageCommonButtonFunction({
     dispatchHook: dispatch,

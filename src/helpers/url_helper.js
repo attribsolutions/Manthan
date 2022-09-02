@@ -116,13 +116,12 @@ export const  BASEUNIT_DROPDOWN_API ='/UnitList'
 //Category Types API
 export const  CATEGORYTYPE_DROPDOWN_API ='/CategoryTypes'
 
-//Category API
-export const  CATEGORY_DROPDOWN_API ='/Category'
 
-//SubCategory API
-export const  SUBCATEGORY_DROPDOWN_API ='/SubCategory'
+export const  CATEGORY_DROPDOWN_API ='/GetCategoryByCategoryTypeID'
 
-//Vehicle API
-export const VEHICLE_API ='/Vehicle'
-export const VEHICLETYPES_DROPDOWN ='/VehicleTypes'
-export const DRIVERLIST_DROPDOWN = '/DriverList'
+export const  SUBCATEGORY_DROPDOWN_API ='/GetSubCategoryByCategoryID'
+
+export const  IMAGETYPE_DROPDOWN_API ='/ImageTypes'
+
+export const  MRP_TYPE_DROPDOWN_API ='/MRPTypes'
+
