@@ -40,15 +40,17 @@ const CategoryList = (props) => {
       RoleAccessModifiedinSingleArray: state.Login.RoleAccessUpdateData,
     })
   );
-  console.log("TableListData",TableListData)
-
+ 
   useEffect(() => {
-    const userAcc = CommonGetRoleAccessFunction(history)
+    debugger
+    const locationPath = history.location.pathname
+    let userAcc = RoleAccessModifiedinSingleArray.find((inx) => {
+        return (`/${inx.ActualPagePath}` === locationPath)
+    })
     if (!(userAcc === undefined)) {
-      setUserPageAccessState(userAcc)
+        setUserPageAccessState(userAcc)
     }
-  }, [history])
-
+}, [RoleAccessModifiedinSingleArray])
 
   //  This UseEffect => Featch Modules List data  First Rendering
   useEffect(() => {

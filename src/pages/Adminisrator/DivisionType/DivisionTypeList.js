@@ -46,11 +46,14 @@ const DivisionTypeList = (props) => {
   );
 
   useEffect(() => {
-    const userAcc = CommonGetRoleAccessFunction(history)
+    const locationPath = history.location.pathname
+    let userAcc = RoleAccessModifiedinSingleArray.find((inx) => {
+      return (`/${inx.ActualPagePath}` === locationPath)
+    })
     if (!(userAcc === undefined)) {
       setUserPageAccessState(userAcc)
     }
-  }, [history])
+  }, [RoleAccessModifiedinSingleArray])
 
   //  This UseEffect => Featch Modules List data  First Rendering
   useEffect(() => {
@@ -145,13 +148,13 @@ const DivisionTypeList = (props) => {
       sort: true,
     },
 
-       // For Edit, Delete ,and View Button Common Code function
-       listPageCommonButtonFunction({
-        dispatchHook: dispatch,
-        deletemsgLable: "EmployeeType",
-        userPageAccessState: userPageAccessState,
-        editActionFun: editDivisionTypeId,
-        deleteActionFun: delete_DivisionType_ID
+    // For Edit, Delete ,and View Button Common Code function
+    listPageCommonButtonFunction({
+      dispatchHook: dispatch,
+      deletemsgLable: "EmployeeType",
+      userPageAccessState: userPageAccessState,
+      editActionFun: editDivisionTypeId,
+      deleteActionFun: delete_DivisionType_ID
     })
   ];
 

@@ -44,13 +44,15 @@ const Employee_List = () => {
     })
   );
 
-
   useEffect(() => {
-    const userAcc = CommonGetRoleAccessFunction(history)
+    const locationPath = history.location.pathname
+    let userAcc = RoleAccessModifiedinSingleArray.find((inx) => {
+      return (`/${inx.ActualPagePath}` === locationPath)
+    })
     if (!(userAcc === undefined)) {
       setUserPageAccessState(userAcc)
     }
-  }, [history])
+  }, [RoleAccessModifiedinSingleArray])
 
   //  This UseEffect => Featch Modules List data  First Rendering
   useEffect(() => {
@@ -169,7 +171,7 @@ const Employee_List = () => {
       userPageAccessState: userPageAccessState,
       editActionFun: editEmployeeeId,
       deleteActionFun: delete_Employee_ID
-  })
+    })
 
   ];
   //tag_center -- Control the Edit Modal show and close

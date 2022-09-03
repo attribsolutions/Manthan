@@ -37,11 +37,14 @@ const EmployeeTypeList = (props) => {
   );
 
   useEffect(() => {
-    const userAcc = CommonGetRoleAccessFunction(history)
+    const locationPath = history.location.pathname
+    let userAcc = RoleAccessModifiedinSingleArray.find((inx) => {
+      return (`/${inx.ActualPagePath}` === locationPath)
+    })
     if (!(userAcc === undefined)) {
       setUserPageAccessState(userAcc)
     }
-  }, [history])
+  }, [RoleAccessModifiedinSingleArray])
 
   //  This UseEffect => Featch Modules List data  First Rendering
   useEffect(() => {
@@ -134,21 +137,21 @@ const EmployeeTypeList = (props) => {
       dataField: "IsPartyConnection",
       sort: true,
     },
-    
+
     {
       text: "Is SCM ",
       dataField: "IsSCM",
       sort: true,
     },
-      // For Edit, Delete ,and View Button Common Code function
-      listPageCommonButtonFunction({
-        dispatchHook: dispatch,
-        deletemsgLable: "EmployeeType",
-        userPageAccessState: userPageAccessState,
-        editActionFun: editEmployeeTypeId,
-        deleteActionFun: delete_EmployeeType_ID
+    // For Edit, Delete ,and View Button Common Code function
+    listPageCommonButtonFunction({
+      dispatchHook: dispatch,
+      deletemsgLable: "EmployeeType",
+      userPageAccessState: userPageAccessState,
+      editActionFun: editEmployeeTypeId,
+      deleteActionFun: delete_EmployeeType_ID
     })
-   
+
   ];
 
   if (!(userPageAccessState === '')) {
@@ -211,7 +214,7 @@ const EmployeeTypeList = (props) => {
             }}
             size="xl"
           >
-            <EmployeeTypesMaster state={editData.Data} relatatedPage={"/EmployeeType"}  />
+            <EmployeeTypesMaster state={editData.Data} relatatedPage={"/EmployeeType"} />
           </Modal>
         </div>
       </React.Fragment>

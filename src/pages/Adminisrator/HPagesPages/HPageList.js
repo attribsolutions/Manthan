@@ -39,12 +39,15 @@ export default function HPageList() {
       deleteModuleID: state.H_Pages.deleteModuleID,
     }));
 
-  useEffect(() => {
-    const userAcc = CommonGetRoleAccessFunction(history)
-    if (!(userAcc === undefined)) {
-      setUserPageAccessState(userAcc)
-    }
-  }, [history])
+    useEffect(() => {
+      const locationPath = history.location.pathname
+      let userAcc = RoleAccessModifiedinSingleArray.find((inx) => {
+        return (`/${inx.ActualPagePath}` === locationPath)
+      })
+      if (!(userAcc === undefined)) {
+        setUserPageAccessState(userAcc)
+      }
+    }, [RoleAccessModifiedinSingleArray])
 
   useEffect(() => {
     dispatch(dispatch(GetHpageListData()));
