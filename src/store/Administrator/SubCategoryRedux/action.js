@@ -30,7 +30,7 @@ import {
     
   });
   
-  export const getMethod_ForSubCategoryAPISuccess = (ProductTypes) => ({
+  export const getMethod_ForSubCategoryAPISuccess = (SubCategoryMaster) => ({
     type: GET_METHOD_HANDLER_FOR_SUBCATEGORY_API_SUCCESS,
     payload: SubCategoryMaster,
   });

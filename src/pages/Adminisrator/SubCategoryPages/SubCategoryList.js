@@ -33,10 +33,10 @@ const SubCategoryList = (props) => {
 
   const { TableListData, editData, updateMessage, deleteMessage, RoleAccessModifiedinSingleArray } = useSelector(
     (state) => ({
-      TableListData: state.SubCategoryMasterReducer.ProductTypesListData,
-      editData: state.SubCategoryMasterReducer.editData,
-      updateMessage: state.SubCategoryMasterReducer.updateMessage,
-      deleteMessage: state.SubCategoryMasterReducer.deleteMessage,
+      TableListData: state.SubCategoryReducer.SubCategoryListData,
+      editData: state.SubCategoryReducer.editData,
+      updateMessage: state.SubCategoryReducer.updateMessage,
+      deleteMessage: state.SubCategoryReducer.deleteMessage,
       RoleAccessModifiedinSingleArray: state.Login.RoleAccessUpdateData,
     })
   );
@@ -44,12 +44,12 @@ const SubCategoryList = (props) => {
   useEffect(() => {
     const locationPath = history.location.pathname
     let userAcc = RoleAccessModifiedinSingleArray.find((inx) => {
-        return (`/${inx.ActualPagePath}` === locationPath)
+      return (`/${inx.ActualPagePath}` === locationPath)
     })
     if (!(userAcc === undefined)) {
-        setUserPageAccessState(userAcc)
+      setUserPageAccessState(userAcc)
     }
-}, [RoleAccessModifiedinSingleArray])
+  }, [RoleAccessModifiedinSingleArray])
 
   //  This UseEffect => Featch Modules List data  First Rendering
   useEffect(() => {
@@ -124,7 +124,7 @@ const SubCategoryList = (props) => {
         Status: true,
         Message: `Are you sure you want to delete this CategoryType Type : "${name}"`,
         RedirectPath: false,
-        PermissionAction: delete_SubCategory_ID ,
+        PermissionAction: delete_SubCategory_ID,
         ID: id,
       })
     );
@@ -156,17 +156,11 @@ const SubCategoryList = (props) => {
     },
 
     {
-        text: "CategoryType  ",
-        dataField: "CategoryType",
-        sort: true,
-      },
-     
-      {
-        text: "Category  ",
-        dataField: "Category",
-        sort: true,
-      },
-     
+      text: "Category Type  ",
+      dataField: "ProductCategoryTypeName",
+      sort: true,
+    },
+
     {
       text: "Action",
       hidden: (
