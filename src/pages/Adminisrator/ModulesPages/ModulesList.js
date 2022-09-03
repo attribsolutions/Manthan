@@ -158,6 +158,8 @@ const ModulesList = () => {
                                                 SearchProps={toolkitProps.searchProps}
                                                 breadcrumbCount={`Module Count: ${TableListData.length}`}
                                                 IsSearchVissible={true}
+                                                isExcelButtonVisible={true}
+                                                ExcelData={TableListData}
                                             // RedirctPath={"/moduleMaster"}
                                             />
                                             <Row>

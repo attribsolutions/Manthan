@@ -180,6 +180,8 @@ const DivisionTypeList = (props) => {
                       SearchProps={toolkitProps.searchProps}
                       breadcrumbCount={`Division Count: ${TableListData.length}`}
                       IsSearchVissible={true}
+                      isExcelButtonVisible={true}
+                      ExcelData={TableListData}
                     // RedirctPath={`/RoleMaster`}
                     />
                     <Row>

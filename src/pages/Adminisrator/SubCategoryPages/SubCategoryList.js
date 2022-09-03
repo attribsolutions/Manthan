@@ -238,6 +238,8 @@ const SubCategoryList = (props) => {
                       breadcrumbCount={`Product Count: ${TableListData.length}`}
                       IsSearchVissible={true}
                       RedirctPath={`/SubCategoryMaster`}
+                      isExcelButtonVisible={true}
+                      ExcelData={TableListData}
                     />
                     <Row>
                       <Col xl="12">

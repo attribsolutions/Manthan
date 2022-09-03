@@ -176,6 +176,8 @@ const EmployeeTypeList = (props) => {
                       SearchProps={toolkitProps.searchProps}
                       breadcrumbCount={`EmployeeType Count: ${TableListData.length}`}
                       IsSearchVissible={true}
+                      ExcelData={TableListData}
+                      isExcelButtonVisible={true}
                     />
                     <Row>
                       <Col xl="12">
