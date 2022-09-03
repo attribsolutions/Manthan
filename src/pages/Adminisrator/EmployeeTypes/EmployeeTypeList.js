@@ -27,12 +27,13 @@ const EmployeeTypeList = (props) => {
   const [modal_center, setmodal_center] = useState(false);
 
   // get Access redux data
-  const { TableListData, editData, updateMessage, deleteMessage } = useSelector(
+  const { TableListData, editData, updateMessage, deleteMessage,RoleAccessModifiedinSingleArray } = useSelector(
     (state) => ({
       TableListData: state.EmployeeTypeReducer.EmployeeTypeList,
       editData: state.EmployeeTypeReducer.editData,
       updateMessage: state.EmployeeTypeReducer.updateMessage,
       deleteMessage: state.EmployeeTypeReducer.deleteMessage,
+      RoleAccessModifiedinSingleArray: state.Login.RoleAccessUpdateData,
     })
   );
 

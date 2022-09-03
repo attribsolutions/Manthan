@@ -26,12 +26,13 @@ const PartyTypeList = (props) => {
   const [modal_center, setmodal_center] = useState(false);
 
   // get Access redux data
-  const { TableListData, editData, updateMessage, deleteMessage } = useSelector(
+  const { TableListData, editData, updateMessage, deleteMessage,RoleAccessModifiedinSingleArray } = useSelector(
     (state) => ({
       TableListData: state.PartyTypeReducer.ListData,
       editData: state.PartyTypeReducer.editData,
       updateMessage: state.PartyTypeReducer.updateMessage,
       deleteMessage: state.PartyTypeReducer.deleteMessage,
+      RoleAccessModifiedinSingleArray: state.Login.RoleAccessUpdateData,
     })
   );
 

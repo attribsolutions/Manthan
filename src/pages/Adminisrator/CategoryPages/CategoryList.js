@@ -42,8 +42,7 @@ const CategoryList = (props) => {
   );
  
   useEffect(() => {
-    debugger
-    const locationPath = history.location.pathname
+        const locationPath = history.location.pathname
     let userAcc = RoleAccessModifiedinSingleArray.find((inx) => {
         return (`/${inx.ActualPagePath}` === locationPath)
     })

@@ -35,12 +35,13 @@ const RoleList = (props) => {
   const [modal_center, setmodal_center] = useState(false);
 
   // get Access redux data
-  const { TableListData, editData, updateMessage, deleteMessage } = useSelector(
+  const { TableListData, editData, updateMessage, deleteMessage,RoleAccessModifiedinSingleArray } = useSelector(
     (state) => ({
       TableListData: state.RoleMaster_Reducer.pages,
       editData: state.RoleMaster_Reducer.editData,
       updateMessage: state.RoleMaster_Reducer.updateMessage,
       deleteMessage: state.RoleMaster_Reducer.deleteMessage,
+      RoleAccessModifiedinSingleArray: state.Login.RoleAccessUpdateData,
     })
   );
 

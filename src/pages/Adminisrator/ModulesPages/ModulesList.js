@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react"
-import { Row, Col, Modal,  } from "reactstrap"
+import { Row, Col, Modal, } from "reactstrap"
 import MetaTags from 'react-meta-tags'
 
 // datatable related plugins
@@ -20,7 +20,7 @@ import {
 import Modules from "./Modules";
 import { useHistory } from "react-router-dom";
 import { CommonGetRoleAccessFunction } from "../../../components/Common/CommonGetRoleAccessFunction";
-import { commonDefaultSorted,  commonListPageDelete_UpdateMsgFunction, commonPageOptions, listPageCommonButtonFunction } from "../../../components/Common/CmponentRelatedCommonFile/listPageCommonButtons";
+import { commonDefaultSorted, commonListPageDelete_UpdateMsgFunction, commonPageOptions, listPageCommonButtonFunction } from "../../../components/Common/CmponentRelatedCommonFile/listPageCommonButtons";
 
 const ModulesList = () => {
     const dispatch = useDispatch();
@@ -30,11 +30,13 @@ const ModulesList = () => {
     const [modal_center, setmodal_center] = useState(false);
 
     // get Access redux data
-    const { TableListData, editData, deleteAPIResponse, updateAPIResponse } = useSelector((state) => ({
+    const { TableListData, editData, deleteAPIResponse, updateAPIResponse, RoleAccessModifiedinSingleArray } = useSelector((state) => ({
         TableListData: state.Modules.modulesList,
         updateAPIResponse: state.Modules.updateMessage,
         editData: state.Modules.editData,
         deleteAPIResponse: state.Modules.deleteModuleIDSuccess,
+        RoleAccessModifiedinSingleArray: state.Login.RoleAccessUpdateData,
+
     }));
 
     useEffect(() => {
@@ -53,11 +55,11 @@ const ModulesList = () => {
     }, []);
 
     useEffect(() => {
-     if(!(userPageAccessState === '')){
-        
-        var a= document.getElementById("search-bar-0");
-        a.focus();
-     }
+        if (!(userPageAccessState === '')) {
+
+            var a = document.getElementById("search-bar-0");
+            a.focus();
+        }
     }, [userPageAccessState]);
 
     // This UseEffect => Edit Modal Show When Edit Data is true
@@ -67,15 +69,15 @@ const ModulesList = () => {
         }
     }, [editData]);
 
- 
+
     function tog_center() {
         setmodal_center(!modal_center)
     }
     useEffect(() => {
         if ((updateAPIResponse.Status === true)) {
-            
+
             commonListPageDelete_UpdateMsgFunction(
-               // common function parameters ,data type=> object
+                // common function parameters ,data type=> object
                 {
                     dispatch: dispatch,
                     response: updateAPIResponse,

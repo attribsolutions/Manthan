@@ -31,12 +31,14 @@ export default function HPageList() {
   const [modal_center, setmodal_center] = useState(false);
 
   // var HPageListData = [];
-  const { HPageListData, editData, updateMessage, deleteModuleID } =
+  const { HPageListData, editData, updateMessage, deleteModuleID,RoleAccessModifiedinSingleArray } =
     useSelector((state) => ({
       HPageListData: state.H_Pages.HPagesListData,
       editData: state.H_Pages.editData,
       updateMessage: state.H_Pages.updateMessage,
       deleteModuleID: state.H_Pages.deleteModuleID,
+      RoleAccessModifiedinSingleArray: state.Login.RoleAccessUpdateData,
+      
     }));
 
     useEffect(() => {
