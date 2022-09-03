@@ -46,14 +46,16 @@ const CategoryTypeList = (props) => {
 
     })
   );
-  //debugger
 
   useEffect(() => {
-    const userAcc = CommonGetRoleAccessFunction(history)
+    const locationPath = history.location.pathname
+    let userAcc = RoleAccessModifiedinSingleArray.find((inx) => {
+      return (`/${inx.ActualPagePath}` === locationPath)
+    })
     if (!(userAcc === undefined)) {
       setUserPageAccessState(userAcc)
     }
-  }, [history])
+  }, [RoleAccessModifiedinSingleArray])
 
 
   //  This UseEffect => Featch Modules List data  First Rendering
@@ -268,7 +270,7 @@ const CategoryTypeList = (props) => {
             }}
             size="xl"
           >
-            <CategoryTypeMaster state={editData.Data} relatatedPage={"/CategoryTypeMaster"}/>
+            <CategoryTypeMaster state={editData.Data} relatatedPage={"/CategoryTypeMaster"} />
           </Modal>
         </div>
       </React.Fragment>

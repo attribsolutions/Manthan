@@ -127,8 +127,8 @@ function* Update_ProductTypes_ID_GenratorFunction({ updateData, ID }) {
 
 
   function*  CategorySaga() {
-    yield takeEvery(POST_METHOD_HANDLER_FOR_PRODUCT_TYPES_API,  Post_Method_ForProductTypes_GenFun)
-    yield takeEvery(GET_METHOD_HANDLER_FOR_PRODUCT_TYPES_API,  get_Method_ForProductTypes_GenFun)
+    yield takeEvery(POST_METHOD_HANDLER_FOR_PRODUCT_TYPES_API,Post_Method_ForProductTypes_GenFun)
+    yield takeEvery(GET_METHOD_HANDLER_FOR_PRODUCT_TYPES_API, get_Method_ForProductTypes_GenFun)
     yield takeEvery(GET_PRODUCT_TYPES_LIST, Get_ProductTypes_List_GenratorFunction)
     yield takeEvery(DELETE_PRODUCT_TYPES_ID, Delete_ProductTypes_ID_GenratorFunction)
     yield takeEvery(EDIT_PRODUCT_TYPES_ID, Edit_ProductTypes_ID_GenratorFunction)

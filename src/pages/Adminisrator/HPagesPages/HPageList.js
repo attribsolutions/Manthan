@@ -31,20 +31,25 @@ export default function HPageList() {
   const [modal_center, setmodal_center] = useState(false);
 
   // var HPageListData = [];
-  const { HPageListData, editData, updateMessage, deleteModuleID } =
+  const { HPageListData, editData, updateMessage, deleteModuleID,RoleAccessModifiedinSingleArray } =
     useSelector((state) => ({
       HPageListData: state.H_Pages.HPagesListData,
       editData: state.H_Pages.editData,
       updateMessage: state.H_Pages.updateMessage,
       deleteModuleID: state.H_Pages.deleteModuleID,
+      RoleAccessModifiedinSingleArray: state.Login.RoleAccessUpdateData,
+      
     }));
 
-  useEffect(() => {
-    const userAcc = CommonGetRoleAccessFunction(history)
-    if (!(userAcc === undefined)) {
-      setUserPageAccessState(userAcc)
-    }
-  }, [history])
+    useEffect(() => {
+      const locationPath = history.location.pathname
+      let userAcc = RoleAccessModifiedinSingleArray.find((inx) => {
+        return (`/${inx.ActualPagePath}` === locationPath)
+      })
+      if (!(userAcc === undefined)) {
+        setUserPageAccessState(userAcc)
+      }
+    }, [RoleAccessModifiedinSingleArray])
 
   useEffect(() => {
     dispatch(dispatch(GetHpageListData()));

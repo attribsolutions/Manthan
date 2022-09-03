@@ -38,7 +38,7 @@ const UserList = () => {
     }));
 
     useEffect(() => {
-        
+        debugger
         const locationPath = history.location.pathname
         let userAcc = RoleAccessModifiedinSingleArray.find((inx) => {
             return (`/${inx.ActualPagePath}` === locationPath)

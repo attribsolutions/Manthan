@@ -32,19 +32,23 @@ const PartyList = () => {
     const [modal_center, setmodal_center] = useState(false);
 
     // get Access redux data
-    const { TableListData, editData, updateMessage, deleteMessage } = useSelector((state) => ({
+    const { TableListData, editData, updateMessage, deleteMessage ,RoleAccessModifiedinSingleArray} = useSelector((state) => ({
         TableListData: state.PartyMasterReducer.partyList,
         editData: state.PartyMasterReducer.editData,
         updateMessage: state.PartyMasterReducer.updateMessage,
         deleteMessage: state.PartyMasterReducer.deleteMessage,
+        RoleAccessModifiedinSingleArray: state.Login.RoleAccessUpdateData,
     }));
 
     useEffect(() => {
-        const userAcc = CommonGetRoleAccessFunction(history)
+        const locationPath = history.location.pathname
+        let userAcc = RoleAccessModifiedinSingleArray.find((inx) => {
+            return (`/${inx.ActualPagePath}` === locationPath)
+        })
         if (!(userAcc === undefined)) {
             setUserPageAccessState(userAcc)
         }
-    }, [history])
+    }, [RoleAccessModifiedinSingleArray])
 
     //  This UseEffect => Featch Modules List data  First Rendering
     useEffect(() => {

@@ -45,8 +45,6 @@ const ItemsList = (props) => {
   );
 
   useEffect(() => {
-    // debugger
-    // const userAcc = CommonGetRoleAccessFunction(history)
     const locationPath = history.location.pathname
     let userAcc = RoleAccessModifiedinSingleArray.find((inx) => {
         return (`/${inx.ActualPagePath}` === locationPath)
