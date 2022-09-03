@@ -201,7 +201,10 @@ const ItemsList = (props) => {
                       breadcrumbItem={userPageAccessState.PageHeading}
                       IsButtonVissible={(userPageAccessState.RoleAccess_IsSave) ? true : false}
                       SearchProps={toolkitProps.searchProps}
+                      isExcelButtonVisible={true}
                       breadcrumbCount={`Items Count: ${pages.length}`}
+                      IsSearchVissible={true}
+                      ExcelData={pages}
                     // RedirctPath={`/${btoa("ItemMaster")}`}
                     // RedirctPath={`/ItemMaster`}
                     />

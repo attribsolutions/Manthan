@@ -170,7 +170,8 @@ const PartyList = () => {
                                             IsSearchVissible={true}
                                             defaultSorted={defaultSorted}
                                             breadcrumbCount={`Party Count: ${TableListData.length}`}
-
+                                            isExcelButtonVisible={true}
+                                            ExcelData={TableListData}
                                             RedirctPath={"/PartyMaster"}
                                         />
                                         <Row>

@@ -199,6 +199,8 @@ export default function HPageList() {
                       breadcrumbCount={`Page Count: ${HPageListData.length}`}
                       // RedirctPath={ `/${btoa("PageMaster")}`}
                       RedirctPath={`/PageMaster`}
+                      isExcelButtonVisible={true}
+                      ExcelData={HPageListData}
                     />
                     <Row>
                       <Col xl="12">

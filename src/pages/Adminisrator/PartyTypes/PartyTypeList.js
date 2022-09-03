@@ -224,6 +224,8 @@ const PartyTypeList = (props) => {
                       SearchProps={toolkitProps.searchProps}
                       breadcrumbCount={`Party Count: ${TableListData.length}`}
                       IsSearchVissible={true}
+                      isExcelButtonVisible={true}
+                      ExcelData={TableListData}
                     // RedirctPath={`/RoleMaster`}
                     />
                     <Row>

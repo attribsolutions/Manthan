@@ -200,6 +200,8 @@ const Employee_List = () => {
                       SearchProps={toolkitProps.searchProps}
                       breadcrumbCount={`Employee Count: ${TableListData.length}`}
                       IsSearchVissible={true}
+                      isExcelButtonVisible={true}
+                      ExcelData={TableListData}
                     // RedirctPath={"/employeeMaster"}
                     />
                     <Row>

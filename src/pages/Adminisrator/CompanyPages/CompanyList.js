@@ -194,6 +194,8 @@ const CompanyList = () => {
                                             defaultSorted={defaultSorted}
                                             breadcrumbCount={`Company Count: ${TableListData.length}`}
                                             RedirctPath={"/UserMaster"}
+                                            isExcelButtonVisible={true}
+                                            ExcelData={TableListData}
                                         />
                                         <Row>
                                             <Col xl="12">
