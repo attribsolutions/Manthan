@@ -209,7 +209,7 @@ const EmployeeTypeList = (props) => {
             }}
             size="xl"
           >
-            <EmployeeTypesMaster state={editData.Data} />
+            <EmployeeTypesMaster state={editData.Data} relatatedPage={"/EmployeeType"}  />
           </Modal>
         </div>
       </React.Fragment>

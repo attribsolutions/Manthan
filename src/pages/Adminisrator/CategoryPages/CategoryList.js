@@ -265,7 +265,7 @@ const CategoryList = (props) => {
             }}
             size="xl"
           >
-            <CategoryMaster state={editData.Data} />
+            <CategoryMaster state={editData.Data} relatatedPage={"/CategoryMaster"}/>
           </Modal>
         </div>
       </React.Fragment>
