@@ -200,7 +200,7 @@ const ModulesList = () => {
                             size="xl"
                         >
                             {/* <PartyUIDemo state={editData.Data} /> */}
-                            <Modules state={editData.Data} />
+                            <Modules state={editData.Data} relatatedPage={"/ModuleMaster"} />
                         </Modal>
                     </div>
                 </div>

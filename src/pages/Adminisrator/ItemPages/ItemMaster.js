@@ -72,7 +72,7 @@ const ItemsMaster = (props) => {
         MRP: '',
         GST: '',
         HSN: '',
-        isActive: false,
+        isActive:'true',
         MRPType:''
     }
 
@@ -611,6 +611,7 @@ const ItemsMaster = (props) => {
 
 
     const handleValidSubmit = (event, values) => {
+        debugger
         var values = formValue
 
         const itemCategoryDetails = categoryTabTable.map((index) => ({

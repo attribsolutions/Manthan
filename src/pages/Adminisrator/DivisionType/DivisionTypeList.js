@@ -214,7 +214,7 @@ const DivisionTypeList = (props) => {
             }}
             size="xl"
           >
-            <DivisionType state={editData.Data} />
+            <DivisionType state={editData.Data} relatatedPage={"/DivisionType"} />
           </Modal>
         </div>
       </React.Fragment>

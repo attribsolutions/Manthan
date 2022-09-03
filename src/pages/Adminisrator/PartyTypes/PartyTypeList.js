@@ -258,7 +258,7 @@ const PartyTypeList = (props) => {
             }}
             size="xl"
           >
-            <PartyType state={editData.Data} />
+            <PartyType state={editData.Data} relatatedPage={"/PartyType"}/>
           </Modal>
         </div>
       </React.Fragment>
