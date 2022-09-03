@@ -224,6 +224,8 @@ const PartyTypeList = (props) => {
                       SearchProps={toolkitProps.searchProps}
                       breadcrumbCount={`Party Count: ${TableListData.length}`}
                       IsSearchVissible={true}
+                      isExcelButtonVisible={true}
+                      ExcelData={TableListData}
                     // RedirctPath={`/RoleMaster`}
                     />
                     <Row>
@@ -258,7 +260,7 @@ const PartyTypeList = (props) => {
             }}
             size="xl"
           >
-            <PartyType state={editData.Data} />
+            <PartyType state={editData.Data} relatatedPage={"/PartyType"}/>
           </Modal>
         </div>
       </React.Fragment>

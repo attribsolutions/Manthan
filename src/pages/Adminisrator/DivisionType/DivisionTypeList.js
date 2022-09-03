@@ -180,6 +180,8 @@ const DivisionTypeList = (props) => {
                       SearchProps={toolkitProps.searchProps}
                       breadcrumbCount={`Division Count: ${TableListData.length}`}
                       IsSearchVissible={true}
+                      isExcelButtonVisible={true}
+                      ExcelData={TableListData}
                     // RedirctPath={`/RoleMaster`}
                     />
                     <Row>
@@ -214,7 +216,7 @@ const DivisionTypeList = (props) => {
             }}
             size="xl"
           >
-            <DivisionType state={editData.Data} />
+            <DivisionType state={editData.Data} relatatedPage={"/DivisionType"} />
           </Modal>
         </div>
       </React.Fragment>

@@ -176,6 +176,8 @@ const EmployeeTypeList = (props) => {
                       SearchProps={toolkitProps.searchProps}
                       breadcrumbCount={`EmployeeType Count: ${TableListData.length}`}
                       IsSearchVissible={true}
+                      ExcelData={TableListData}
+                      isExcelButtonVisible={true}
                     />
                     <Row>
                       <Col xl="12">
@@ -209,7 +211,7 @@ const EmployeeTypeList = (props) => {
             }}
             size="xl"
           >
-            <EmployeeTypesMaster state={editData.Data} />
+            <EmployeeTypesMaster state={editData.Data} relatatedPage={"/EmployeeType"}  />
           </Modal>
         </div>
       </React.Fragment>

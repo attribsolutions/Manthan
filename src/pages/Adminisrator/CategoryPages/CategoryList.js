@@ -232,6 +232,8 @@ const CategoryList = (props) => {
                       breadcrumbCount={`Product Count: ${TableListData.length}`}
                       IsSearchVissible={true}
                       RedirctPath={`/CategoryMaster`}
+                      isExcelButtonVisible={true}
+                      ExcelData={TableListData}
                     />
                     <Row>
                       <Col xl="12">
@@ -265,7 +267,7 @@ const CategoryList = (props) => {
             }}
             size="xl"
           >
-            <CategoryMaster state={editData.Data} />
+            <CategoryMaster state={editData.Data} relatatedPage={"/CategoryMaster"}/>
           </Modal>
         </div>
       </React.Fragment>

@@ -193,6 +193,8 @@ const RoleList = (props) => {
                       breadcrumbCount={`Role Count: ${TableListData.length}`}
                       IsSearchVissible={true}
                     // RedirctPath={`/RoleMaster`}
+                    isExcelButtonVisible={true}
+                    ExcelData={TableListData}
                     />
                     <Row>
                       <Col xl="12">

@@ -16,7 +16,7 @@ import { useHistory } from "react-router-dom";
 import { CommonGetRoleAccessFunction } from "../../../components/Common/CommonGetRoleAccessFunction";
 // import { deleteProductCategoryTypeIDSuccess, delete_ProductCategoryType_ID,  updateProductCategoryTypeIDSuccess } from "../../../store/Administrator/PartyTypeRedux/action";
 import { AlertState } from "../../../store/actions";
-import { deleteProductTypesIDSuccess, delete_ProductTypes_ID, editProductTypesID, getProductTypeslist, updateProductTypesIDSuccess } from "../../../store/Administrator/SubCategoryRedux/action";
+import { deleteSubCategoryIDSuccess, delete_SubCategory_ID, editSubCategoryID, getSubCategorylist, updateSubCategoryIDSuccess } from "../../../store/Administrator/SubCategoryRedux/action";
 import SubCategoryMaster from "./SubCategoryMaster";
 // import { AlertState } from "../../../store/action";
 
@@ -52,25 +52,25 @@ const SubCategoryList = (props) => {
 
   //  This UseEffect => Featch Modules List data  First Rendering
   useEffect(() => {
-    dispatch(getProductTypeslist());
+    dispatch(getSubCategorylist());
   }, []);
 
   // This UseEffect => UpadateModal Success/Unsucces  Show and Hide Control Alert_modal
   useEffect(() => {
 
     if (updateMessage.Status === true && updateMessage.StatusCode === 200) {
-      dispatch(updateProductTypesIDSuccess({ Status: false }));
+      dispatch(updateSubCategoryIDSuccess({ Status: false }));
       dispatch(
         AlertState({
           Type: 1,
           Status: true,
           Message: updateMessage.Message,
-          AfterResponseAction: getProductTypeslist,
+          AfterResponseAction: getSubCategorylist,
         })
       );
       tog_center();
     } else if (updateMessage.Status === true) {
-      dispatch(updateProductTypesIDSuccess({ Status: false }));
+      dispatch(updateSubCategoryIDSuccess({ Status: false }));
       dispatch(
         AlertState({
           Type: 3,
@@ -83,17 +83,17 @@ const SubCategoryList = (props) => {
 
   useEffect(() => {
     if (deleteMessage.Status === true && deleteMessage.StatusCode === 200) {
-      dispatch(deleteProductTypesIDSuccess({ Status: false }));
+      dispatch(deleteSubCategoryIDSuccess({ Status: false }));
       dispatch(
         AlertState({
           Type: 1,
           Status: true,
           Message: deleteMessage.Message,
-          AfterResponseAction: getProductTypeslist,
+          AfterResponseAction: getSubCategorylist,
         })
       );
     } else if (deleteMessage.Status === true) {
-      dispatch(deleteProductTypesIDSuccess({ Status: false }));
+      dispatch(deleteSubCategoryIDSuccess({ Status: false }));
       dispatch(
         AlertState({
           Type: 3,
@@ -123,7 +123,7 @@ const SubCategoryList = (props) => {
         Status: true,
         Message: `Are you sure you want to delete this CategoryType Type : "${name}"`,
         RedirectPath: false,
-        PermissionAction: delete_ProductTypes_ID,
+        PermissionAction: delete_SubCategory_ID ,
         ID: id,
       })
     );
@@ -131,7 +131,7 @@ const SubCategoryList = (props) => {
 
   // edit Buutton Handller
   const EditPageHandler = (id) => {
-    dispatch(editProductTypesID(id));
+    dispatch(editSubCategoryID(id));
   };
 
   const defaultSorted = [
@@ -238,6 +238,8 @@ const SubCategoryList = (props) => {
                       breadcrumbCount={`Product Count: ${TableListData.length}`}
                       IsSearchVissible={true}
                       RedirctPath={`/SubCategoryMaster`}
+                      isExcelButtonVisible={true}
+                      ExcelData={TableListData}
                     />
                     <Row>
                       <Col xl="12">
@@ -271,7 +273,7 @@ const SubCategoryList = (props) => {
             }}
             size="xl"
           >
-            <SubCategoryMaster state={editData.Data} />
+            <SubCategoryMaster state={editData.Data} relatatedPage={"/SubCategoryMaster"} />
           </Modal>
         </div>
       </React.Fragment>

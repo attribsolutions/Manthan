@@ -92,6 +92,7 @@ const Breadcrumb = props => {
     }, [props.ExcelData])
 
     const DownloadInExcelButtonHanler = (event, values) => {
+      debugger
       var list = []
       var object1 = {}
       var selectedValues = Object.keys(values);
@@ -144,7 +145,7 @@ const Breadcrumb = props => {
                   <div className="row">
                     <div className="col col-12">
                       <Row>
-                        <Table>
+                        {/* <Table>
                           <tr>
                         <div className="container">
                           <div className="row">
@@ -154,15 +155,16 @@ const Breadcrumb = props => {
                           <label className="form-label text-black"> {index} </label>
                           </td>
                         </div>
-                        {/* <div className="col col-6 bg-info" >
-                        <AvInput className=" text-black checkbox-border-red" type="checkbox" name={index} />&nbsp;&nbsp;&nbsp;
-                        <label className="form-label text-black"> {index} </label>
-                      </div> */}
+                        
 
                       </div>
                       </div>
                       </tr>
-                      </Table>
+                      </Table> */}
+                      <div className="col col-12 " >
+                        <AvInput className=" text-black checkbox-border-red" type="checkbox" name={index} />&nbsp;&nbsp;&nbsp;
+                        <label className="form-label text-black"> {index} </label>
+                      </div>
                       </Row>
                     </div>
                   </div>

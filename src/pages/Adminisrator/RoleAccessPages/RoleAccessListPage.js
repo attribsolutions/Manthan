@@ -262,6 +262,8 @@ const RoleAccessListPage = () => {
                                                 SearchProps={toolkitProps.searchProps}
                                                 IsSearchVissible={true}
                                                 defaultSorted={defaultSorted}
+                                                ExcelData={TableListData}
+                                                isExcelButtonVisible={true}
                                                 breadcrumbCount={`RoleAccess Count: ${TableListData.length}`}
                                             // RedirctPath={"/moduleMaster"}
                                             />

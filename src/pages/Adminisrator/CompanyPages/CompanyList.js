@@ -194,6 +194,8 @@ const CompanyList = () => {
                                             defaultSorted={defaultSorted}
                                             breadcrumbCount={`Company Count: ${TableListData.length}`}
                                             RedirctPath={"/UserMaster"}
+                                            isExcelButtonVisible={true}
+                                            ExcelData={TableListData}
                                         />
                                         <Row>
                                             <Col xl="12">
@@ -229,7 +231,7 @@ const CompanyList = () => {
                     toggle={() => { tog_center() }}
                     size="xl"
                 >
-                    <CompanyModule state={editData.Data} />
+                    <CompanyModule state={editData.Data} relatatedPage={"/CompanyMaster"} />
                 </Modal>
             </React.Fragment >
         );

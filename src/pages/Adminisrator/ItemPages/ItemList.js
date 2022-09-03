@@ -148,6 +148,11 @@ const ItemsList = (props) => {
       sort: true,
     },
     {
+      text: "Short Name",
+      dataField: "ShortName",
+      sort: true,
+    },
+    {
       text: "Base Unit",
       dataField: "BaseUnitName",
       sort: true,
@@ -158,20 +163,11 @@ const ItemsList = (props) => {
       sort: true,
     },
     {
-      text: "Category Type",
-      dataField: "CategoryTypeName",
+      text: "BarCode",
+      dataField: "BarCode",
       sort: true,
     },
-    {
-      text: "Category",
-      dataField: "CategoryName",
-      sort: true,
-    },
-    {
-      text: "SubCategory",
-      dataField: "SubCategoryName",
-      sort: true,
-    },
+    
   // For Edit, Delete ,and View Button Common Code function
   listPageCommonButtonFunction({
     dispatchHook: dispatch,
@@ -205,7 +201,10 @@ const ItemsList = (props) => {
                       breadcrumbItem={userPageAccessState.PageHeading}
                       IsButtonVissible={(userPageAccessState.RoleAccess_IsSave) ? true : false}
                       SearchProps={toolkitProps.searchProps}
+                      isExcelButtonVisible={true}
                       breadcrumbCount={`Items Count: ${pages.length}`}
+                      IsSearchVissible={true}
+                      ExcelData={pages}
                     // RedirctPath={`/${btoa("ItemMaster")}`}
                     // RedirctPath={`/ItemMaster`}
                     />

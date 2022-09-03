@@ -158,6 +158,8 @@ const ModulesList = () => {
                                                 SearchProps={toolkitProps.searchProps}
                                                 breadcrumbCount={`Module Count: ${TableListData.length}`}
                                                 IsSearchVissible={true}
+                                                isExcelButtonVisible={true}
+                                                ExcelData={TableListData}
                                             // RedirctPath={"/moduleMaster"}
                                             />
                                             <Row>
@@ -200,7 +202,7 @@ const ModulesList = () => {
                             size="xl"
                         >
                             {/* <PartyUIDemo state={editData.Data} /> */}
-                            <Modules state={editData.Data} />
+                            <Modules state={editData.Data} relatatedPage={"/ModuleMaster"} />
                         </Modal>
                     </div>
                 </div>
