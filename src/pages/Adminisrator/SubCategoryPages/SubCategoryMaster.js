@@ -13,53 +13,38 @@ import {
 import { AvField, AvForm, } from "availity-reactstrap-validation";
 import Select from "react-select";
 import { MetaTags } from "react-meta-tags";
-import { BreadcrumbShow } from "../../../store/actions";
+import { BreadcrumbShow, getCategoryTypelist } from "../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
 import {
-    editProductCategoryTypesIDSuccess, editSubCategoryIDSuccess,
-    getMethodForSubCategory,
-    PostMethodForProductCategoryTypes,
+    editSubCategoryIDSuccess,
     PostMethodForSubCategory,
-    PostMethod_ForProductCategoryTypesAPISuccess,
     PostMethod_ForSubCategoryAPISuccess,
-    updateProductCategoryTypesID,
     updateSubCategoryID
 } from "../../../store/Administrator/SubCategoryRedux/action";
 import { AlertState } from "../../../store/actions";
 import { CommonGetRoleAccessFunction } from "../../../components/Common/CommonGetRoleAccessFunction";
 import { useHistory } from "react-router-dom";
-import { getProductTypeslist } from "../../../store/Administrator/CategoryRedux/action";
-import { actionChannel } from "redux-saga/effects";
-
-
+import { getMethodForProductTypes } from "../../../store/Administrator/CategoryRedux/action";
 
 const SubCategoryMaster = (props) => {
-    const formRef = useRef(null);
-    const [EditData, setEditData] = useState([]);
-    const [pageMode, setPageMode] = useState("");
-    const [SubCategory_dropdown_Select, setSubCategory_dropdown_Select] = useState("");
-    const [ProductCategoryTypes_dropdown_Select, setProductCategoryTypes_dropdown_Select] = useState("");
-    const dispatch = useDispatch();
-    const [userPageAccessState, setUserPageAccessState] = useState(123);
-    const [ProductCategoryTypes, setProductCategoryTypes] = useState("");
-    const history = useHistory()
-    const [Category_dropdown_Select,setCategory_dropdown_Select] = useState("");
-    //Access redux store Data /  'save_ModuleSuccess' action data
-    const { PostAPIResponse, categoryType_redux, category_redux, RoleAccessModifiedinSingleArray } = useSelector((state) => ({
-        PostAPIResponse: state.CategoryMasterReducer.PostDataMessage,
-        categoryType_redux: state.CategoryMasterReducer.ProductTypeAPI,
-
-        // category_redux: state.ItemMastersReducer.ProductTypeAPI,
-        category_redux:  state.CategoryMasterReducer.ProductTypeAPI,
-        
-        RoleAccessModifiedinSingleArray: state.Login.RoleAccessUpdateData,
-
-    }));
-
 
     //*** "isEditdata get all data from ModuleID for Binding  Form controls
     let editDataGatingFromList = props.state;
 
+    const formRef = useRef(null);
+    const [EditData, setEditData] = useState([]);
+    const [pageMode, setPageMode] = useState("");
+    const [categoryTypes_dropdown_Select, setCategoryTypes_dropdown_Select] = useState("");
+    const dispatch = useDispatch();
+    const [userPageAccessState, setUserPageAccessState] = useState(123);
+    const history = useHistory()
+    //Access redux store Data /  'save_ModuleSuccess' action data
+    const { PostAPIResponse, ProductTypeAPI, RoleAccessModifiedinSingleArray } = useSelector((state) => ({
+        PostAPIResponse: state.CategoryMasterReducer.PostDataMessage,
+        ProductTypeAPI: state.CategoryMasterReducer.ProductTypeAPI,
+        RoleAccessModifiedinSingleArray: state.Login.RoleAccessUpdateData,
+
+    }));
 
     //userAccess useEffect
     useEffect(() => {
@@ -106,12 +91,8 @@ const SubCategoryMaster = (props) => {
     }, [history])
 
     useEffect(() => {
-        // dispatch(getMethodForSubCategory());
-        dispatch(getProductTypeslist());
-        // dispatch(getMethodForCategoryTypes());
+        dispatch(getMethodForProductTypes());
     }, [dispatch]);
-
-    
 
     // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
     useEffect(() => {
@@ -119,9 +100,9 @@ const SubCategoryMaster = (props) => {
         if (!(editDataGatingFromList === undefined)) {
             setEditData(editDataGatingFromList);
             setPageMode("edit");
-            setProductCategoryTypes_dropdown_Select({
-                value: editDataGatingFromList.ProductTypes_id,
-                label: editDataGatingFromList.ProductTypeName
+            setCategoryTypes_dropdown_Select({
+                value: editDataGatingFromList.ProductCategoryType_id,
+                label: editDataGatingFromList.ProductCategoryTypeName
             })
             dispatch(editSubCategoryIDSuccess({ Status: false }))
             dispatch(BreadcrumbShow(editDataGatingFromList.Name))
@@ -131,11 +112,12 @@ const SubCategoryMaster = (props) => {
 
 
     useEffect(() => {
+        debugger
         if ((PostAPIResponse.Status === true) && (PostAPIResponse.StatusCode === 200)) {
-            setSubCategory_dropdown_Select('')
+            setCategoryTypes_dropdown_Select('')
             dispatch(PostMethod_ForSubCategoryAPISuccess({ Status: false }))
             formRef.current.reset();
-            if (pageMode === "other") {
+            if (pageMode === "dropdownAdd") {
                 dispatch(AlertState({
                     Type: 1,
                     Status: true,
@@ -156,45 +138,27 @@ const SubCategoryMaster = (props) => {
             dispatch(AlertState({
                 Type: 4,
                 Status: true,
-                Message: JSON.stringify(postMessage.Message),
+                Message: JSON.stringify(PostAPIResponse.Message),
                 RedirectPath: false,
                 AfterResponseAction: false
             }));
         }
     }, [PostAPIResponse])
 
-    //get method for dropdown
-    // useEffect(() => {
-    //     dispatch(getMethodForProductCategoryTypes ());
-    // }, [dispatch]);
 
-
-
-    function handllerProductCategoryTypes(e) {
-        // dispatch( actionChannel(e.value) );
-        setProductCategoryTypes_dropdown_Select(e)
-    }
-
-    const CategoryTypesOptions = categoryType_redux.map((Data) => ({
+    const CategoryTypesOptions = ProductTypeAPI.map((Data) => ({
         value: Data.id,
         label: Data.Name
     }));
-
     
-
-    function handllerCategory(e) {
-      setCategory_dropdown_Select(e)
+    function handllerProductCategoryTypes(e) {
+        setCategoryTypes_dropdown_Select(e)
     }
-
-    const CategoryOptions = category_redux.map((Data) => ({
-        value: Data.id,
-        label: Data.Name
-    }));
 
     const FormSubmitButton_Handler = (event, values) => {
         const jsonBody = JSON.stringify({
             Name: values.Name,
-            ProductCategoryType: ProductCategoryTypes_dropdown_Select.value,
+            ProductCategoryType: categoryTypes_dropdown_Select.value,
         });
 
         if (pageMode === "edit") {
@@ -257,26 +221,10 @@ const SubCategoryMaster = (props) => {
                                                                     <Label htmlFor="validationCustom01"> Category Type </Label>
                                                                     <Col sm={12}>
                                                                         <Select
-                                                                            value={ProductCategoryTypes_dropdown_Select}
+                                                                            value={categoryTypes_dropdown_Select}
                                                                             options={CategoryTypesOptions}
                                                                             onChange={(e) => { handllerProductCategoryTypes(e) }}
                                                                         />
-                                                                    </Col>
-                                                                </FormGroup>
-                                                            </Col>
-                                                        </Row>
-
-                                                        <Row>
-                                                            <Col md="4">
-                                                                <FormGroup className="mb-3">
-                                                                    <Label htmlFor="validationCustom01"> Category  </Label>
-                                                                    <Col sm={12}>
-                                                                    <Select
-                                                                                    value={Category_dropdown_Select}
-                                                                                    options={CategoryOptions}
-                                                                                    onChange={(e) => { handllerCategory(e) }}
-                                                                                />
-                                                                            
                                                                     </Col>
                                                                 </FormGroup>
                                                             </Col>
