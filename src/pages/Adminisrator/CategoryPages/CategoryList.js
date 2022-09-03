@@ -156,7 +156,7 @@ const CategoryList = (props) => {
     },
 
     {
-        text: "ProductCategoryType Name ",
+        text: "Category Type",
         dataField: "ProductCategoryTypeName",
         sort: true,
       },
