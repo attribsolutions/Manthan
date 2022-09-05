@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react"
 import PropTypes from 'prop-types'
-import { Row, Col, Modal, Table, } from "reactstrap"
+import { Row, Col, Modal, Table, Button, } from "reactstrap"
 import { Redirect, useHistory } from "react-router-dom";
 import { Search } from "react-bootstrap-table2-toolkit";
 import { useDispatch, useSelector } from "react-redux";
@@ -228,16 +228,17 @@ const Breadcrumb = props => {
             {props.isExcelButtonVisible === true ?
               <>
                 <div>
-                  <button
+                  <Button
                     type="button"
-                    className="btn btn-outline-warning btn-sm mt-1 font-size-16  "
+                    title="Download List"
+                    color="btn btn-sm btn-outline-primary mt-1"
                     onClick={() => {
                       tog_scroll();
                     }}
                     data-toggle="modal"
                   >
-                      <i className="bx bx-download text-danger font-size-14" ></i> 
-                  </button>
+                      <i className="bx bx-download font-size-14" ></i> 
+                  </Button>
                 </div>
               </> : <></>}
           </Col>

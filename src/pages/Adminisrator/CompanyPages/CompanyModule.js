@@ -289,7 +289,7 @@ const CompanyModule = (props) => {
 
                           <Row className=" mb-3">
                             <FormGroup className=" col col-sm-4 " >
-                              <Label htmlFor="validationCustom21">Company Group </Label>
+                              <Label htmlFor="validationCustom21">Group Company  </Label>
                               <Select
                                 value={CompanyGroupselect}
                                 options={CompanyGroupValues}
