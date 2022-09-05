@@ -62,9 +62,9 @@ export const postItemData = (data) => ({
   });
   
   // edit api
-  export const editItemId =(ID)=>({
+  export const editItemId =(id,pageMode)=>({
     type:EDIT_ITEM_ID,
-    ID,
+    id,pageMode
   })
   export const editItemSuccess =(data)=>({
     type:EDIT_ITEM_ID_SUCCESS,

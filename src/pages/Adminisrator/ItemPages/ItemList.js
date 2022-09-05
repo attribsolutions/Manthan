@@ -169,7 +169,8 @@ const ItemsList = (props) => {
   // For Edit, Delete ,and View Button Common Code function
   listPageCommonButtonFunction({
     dispatchHook: dispatch,
-    deletemsgLable: "Item",
+    ButtonMsgLable: "Item",
+    deleteName: "Name",
     userPageAccessState: userPageAccessState,
     editActionFun: editItemId,
     deleteActionFun: deleteItemID

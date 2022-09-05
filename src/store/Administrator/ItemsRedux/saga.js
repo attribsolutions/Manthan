@@ -108,9 +108,11 @@ function* Delete_Items_GenratorFunction({ id }) {
   }
 }
 
-function* Edit_Items_GenratorFunction({ ID }) {
+function* Edit_Items_GenratorFunction({ ID ,pageMode}) {
+ 
   try {
     const response = yield call(apiCall.Items_Master_Edit_API, ID);
+    response.pageMode=pageMode
     yield put(editItemSuccess(response));
   } catch (error) {
     yield put(AlertState({
