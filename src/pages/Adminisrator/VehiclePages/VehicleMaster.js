@@ -37,25 +37,30 @@ const VehicleMaster = (props) => {
     const [userPageAccessState, setUserPageAccessState] = useState(123);
     const [EditData, setEditData] = useState([]);
   
+
+
     //Access redux store Data /  'save_ModuleSuccess' action data
-    const { PostAPIResponse, DivisionType, DriverList, VehicleType } = useSelector((state) => ({
-        //  PostAPIResponse: state.VehicleMasterReducer.PostDataMessage,
+    const { PostAPIResponse, DivisionType, VehicleList_redux, VehicleType,DriverList_redux } = useSelector((state) => ({
+         PostAPIResponse: state.VehicleReducer.PostDataMessage,
          DivisionType: state.PartyMasterReducer.partyList,
-         DriverList : state.VehicleReducer,
-        //  VehicleTypes : state.VehicleMasterReducer.VehicleTypes,
+         VehicleList_redux : state.VehicleReducer.VehicleList,
+         VehicleTypes : state.VehicleReducer.VehicleTypes,
+         DriverList_redux : state.VehicleReducer.DriverList,
     }));
 
-console.log("DriverList",DriverList)
+console.log("", )
+
     //*** "isEditdata get all data from ModuleID for Binding  Form controls
     let editDataGatingFromList = props.state;
+
 
     useEffect(() => {
         dispatch(getMethodForVehicle());
         dispatch(getMethod_ForDriverList_ForDropDown());
         dispatch(getMethod_ForVehicleTypes_ForDropDown());
         dispatch(getDivisionTypesID());
-        
-    }, [dispatch]);
+       }, [dispatch]);
+
 
     useEffect(() => {
         if ((PostAPIResponse.Status === true) && (PostAPIResponse.StatusCode === 200)) {
@@ -88,9 +93,10 @@ console.log("DriverList",DriverList)
                 AfterResponseAction: false
             }));
         }
-    }, [PostAPIResponse])
+          }, [PostAPIResponse])
 
     
+
     const DivisionType_DropdownOptions = DivisionType.map((data) => ({
         value: data.id,
         label: data.Name
@@ -100,7 +106,7 @@ console.log("DriverList",DriverList)
         setDivisionType_dropdown_Select(e)
     }
 
-    const DriverList_DropdownOptions = DriverList.map((data) => ({
+    const DriverList_DropdownOptions = DriverList_redux.map((data) => ({
        value: data.id,
        label: data.Name
      }));
@@ -126,8 +132,8 @@ console.log("DriverList",DriverList)
           dispatch(PostMethodForVehicle(jsonBody));  
     };
 
- /// Role Table Validation
- function AddDivisionHandler() {
+   /// Role Table Validation
+    function AddDivisionHandler() {
     const find = divisionTypeData.find((element) => {
         return element.value === divisionType_dropdown_Select.value
     });
@@ -150,14 +156,14 @@ console.log("DriverList",DriverList)
 }
 
 
-
- // For Delete Button in table
+   // For Delete Button in table
  function UserRoles_DeleteButton_Handller(tableValue) {
     setDivisionTypeData(divisionTypeData.filter(
         (item) => !(item.value === tableValue)
     )
     )
 }
+
 
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
     var IsEditMode_Css = ''
@@ -181,8 +187,7 @@ console.log("DriverList",DriverList)
 
                             <CardBody className=" vh-10 0 text-black" style={{ backgroundColor: "#whitesmoke" }} >
                                 <AvForm onValidSubmit={(e, v) => { FormSubmitButton_Handler(e, v) }}
-                                    ref={formRef}
-                                >
+                                    ref={formRef}>
                                     <Row className="">
                                         <Col md={12}>
                                             <Card>
@@ -209,17 +214,16 @@ console.log("DriverList",DriverList)
                                                                 <FormGroup className="mb-3">
                                                                     <Label htmlFor="validationCustom01"> Description </Label>
                                                                     <AvField
-                                                                name="Name"
-                                                                id="txtName"
-                                                                value={EditData.Description}
-                                                                type="text"
-                                                                placeholder="Please Enter Description"
-                                                                autoComplete='off'
-                                                                validate={{
-                                                                    required: { value: true, errorMessage: 'Please Enter Description' },
-                                                                }}
-                                                                onChange={(e) => { dispatch(BreadcrumbShow(e.target.value)) }}
-                                                            />
+                                                                    name="Name"
+                                                                   id="txtName"
+                                                                  value={EditData.Description}
+                                                                  type="text"
+                                                                  placeholder="Please Enter Description"
+                                                                  autoComplete='off'
+                                                                  validate={{
+                                                                             required: { value: true, errorMessage: 'Please Enter Description' },
+                                                                         }}
+                                                                 onChange={(e) => { dispatch(BreadcrumbShow(e.target.value)) }}/>
                                                                 </FormGroup>
                                                             </Col>
                                                         </Row>
@@ -254,7 +258,7 @@ console.log("DriverList",DriverList)
                                                             </Col>
                                                         </Row>
                                                         <Row>
-                                                                    <FormGroup className=" col col-sm-4 " >
+                                                                    <FormGroup className="col col-sm-4">
                                                                         <Label htmlFor="validationCustom21">Division</Label>
                                                                         <Select
                                                                             value={ divisionType_dropdown_Select}
@@ -275,7 +279,7 @@ console.log("DriverList",DriverList)
                                                                         </Button>
                                                                     </Col>
                                                                     <Col sm={3} style={{ marginTop: '28px' }}>
-                                                                        {divisionTypeData.length > 0 ? (
+                                                                        {divisionTypeData.length> 0 ? (
 
                                                                             <div className="table-responsive">
                                                                                 <Table className="table table-bordered  text-center">
@@ -288,7 +292,7 @@ console.log("DriverList",DriverList)
                                                                                     </Thead>
                                                                                     <Tbody>
                                                                                         {divisionTypeData.map((TableValue) => (
-                                                                                            <tr >
+                                                                                            <tr>
                                                                                                 <td>
                                                                                                     {TableValue.label}
                                                                                                 </td>
@@ -323,7 +327,7 @@ console.log("DriverList",DriverList)
                                                           </button>
                                                           </div>                        
                                                             </Row>
-                                                        </FormGroup >
+                                                        </FormGroup>
                                                     </Row>
 
                                                 </CardBody>
@@ -332,14 +336,11 @@ console.log("DriverList",DriverList)
                                     </Row>
                                 </AvForm>
                             </CardBody>
-
-
-
                         </Card>
 
                     </Container>
                 </div>
-            </React.Fragment >
+            </React.Fragment>
         );
     }
     else {
