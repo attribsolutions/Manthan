@@ -51,7 +51,9 @@ const ItemsMaster = (props) => {
     const dispatch = useDispatch();
     const history = useHistory()
 
+    //*** "isEditdata get all data from ModuleID for Binding  Form controls
     let editDataGatingFromList = props.state;
+    let pageModeProps = props.pageMode
 
     const [EditData, setEditData] = useState([]);
     const [pageMode, setPageMode] = useState("save");
@@ -167,52 +169,54 @@ const ItemsMaster = (props) => {
     useEffect(() => {
 
         if (!(userPageAccessState === '')) { document.getElementById("txtName0").focus(); }
-       
-    
-        // if (!(editDataGatingFromList === undefined)) {
-        //   setPageMode(pageModeProps);
-        //   dispatch(BreadcrumbShow(editDataGatingFromList.Name))
-
-        //   setEditData(editDataGatingFromList);
-        //   let initialFormValue = {
-        //     Name: "",
-        //     Sequence: "",
-        //     ShortName: "",
-        //     BarCode: { label: "" },
-        //     Company: "",
-        //     BaseUnit: '',
-        //     MRP: '',
-        //     GST: '',
-        //     HSN: '',
-        //     isActive: true,
-        // }
 
 
+        if (!(editDataGatingFromList === undefined)) {
+            let editMode_Data = editDataGatingFromList
+            setPageMode(pageModeProps);
+            dispatch(BreadcrumbShow(editMode_Data.Name))
 
-        // {
-        //     "CategoryType": 1,
-        //     "CategoryTypeName": "Primary",
-        //     "Category": 1,
-        //     "CategoryName": "Shrikhand",
-        //     "SubCategory": 1,
-        //     "SubCategoryName": "Amba"
-        //   }
-        //   {
-        //     CategoryType: { label: 'select', value: 0 },
-        //     CategoryTypeOption: [],
-        //     Category: { label: 'select', value: 0 },
-        //     SubCategory: { label: 'select', value: 0 },
-    
-        //     Category_DropdownOptions: [],
-        //     SubCategory_DropdownOptions: []
-        // }
+            //   setEditData(editDataGatingFromList);
 
-        // var  initialCategoryValue=
-        //   setFormValue(initial);
-        //   setCategoryTabTable()
-         
-        // }
-      }, [editDataGatingFromList]);
+            let initialFormValue = {
+                Name: editMode_Data.Name,
+                Sequence: editMode_Data.Sequence,
+                ShortName: editMode_Data.ShortName,
+                BarCode: editMode_Data.BarCode,
+                Company: { label: editMode_Data.CompanyName, value: editMode_Data.CompanyName },
+                BaseUnit: { label: editMode_Data.BaseUnitID, value: editMode_Data.BaseUnitName },
+                isActive: true,
+            }
+            let initialCategory = editMode_Data.ItemCategoryDetails.map((indx) => {
+                return {
+                    CategoryType: {
+                        label: indx.CategoryTypeName,
+                        value: indx.CategoryType
+                    },
+                    CategoryTypeOption: [],
+                    Category: {
+                        label: indx.CategoryName,
+                        value: indx.Category
+                    },
+                    SubCategory: {
+                        label: indx.SubCategoryName,
+                        value: indx.SubCategory
+                    },
+
+                    Category_DropdownOptions: [],
+                    SubCategory_DropdownOptions: []
+                }
+            })
+
+
+
+
+            setFormValue(initialFormValue);
+            setCategoryTabTable(initialCategory)
+
+        }
+
+    }, [editDataGatingFromList]);
 
     useEffect(() => {
 
@@ -393,7 +397,7 @@ const ItemsMaster = (props) => {
 
     }
     function Common_Text_INPUT_Validation(value, type, key) {
-     
+
         let OnchangeControl = document.getElementById(`txt${type}${key}`)
 
         if (value === '') {
@@ -421,17 +425,17 @@ const ItemsMaster = (props) => {
 
     }
 
-    function Common_DropDown_handller_ForAll(event, type,) {
+    function Common_DropDown_handller_ForAll(event, type, key) {
 
-        let returnVal = Common_Drop_Validation(event, 0, type)
+        let returnVal = Common_Drop_Validation(event, type, key)
         if (returnVal === '') {
 
-            isValidate.push(`drop${type}-0`)
+            isValidate.push(`drop${type}-${key}`)
             return
         } else {
             isValidate = isValidate.filter((indFind) => {
                 formValue[type] = event
-                return !(indFind === `drop${type}-0`)
+                return !(indFind === `drop${type}-${key}`)
             })
             setIsValidate(isValidate)
         }
@@ -534,13 +538,13 @@ const ItemsMaster = (props) => {
 
 
     function UnitConversionsTab_AddRow_Handle() {
-   
+
         let key = baseUnitTableData.length - 1
         let unit_TableElement = baseUnitTableData[key];
 
         let validateReturn = Common_Drop_Validation(unit_TableElement.Unit, "Unit", key);
         let validateReturn1 = Common_Text_INPUT_Validation(unit_TableElement.Conversion, "Conversion", key)
-        if ((validateReturn1 === false)||(validateReturn === false)) return;
+        if ((validateReturn1 === false) || (validateReturn === false)) return;
 
         var newarr = [...baseUnitTableData, {
             Conversion: '',
@@ -589,7 +593,23 @@ const ItemsMaster = (props) => {
         setBaseUnitTableData(newTabArr)
         // setBaseUnit_dropdown_Select2(e)
     }
+    function UnitConversions_handller(event, type,) {
 
+        let returnVal = Common_Drop_Validation(event, type, 0,)
+        if (returnVal === '') {
+
+            isValidate.push(`drop${type}-0`)
+            return
+        } else {
+            isValidate = isValidate.filter((indFind) => {
+                formValue[type] = event
+                return !(indFind === `drop${type}-0`)
+            })
+            setIsValidate(isValidate)
+        }
+
+        setrefresh(event)
+    }
 
     function DivisionTab_AddRow_Handle() {
         const find = divisionTableData.find((element) => {
@@ -1049,7 +1069,7 @@ const ItemsMaster = (props) => {
                                                                             id='dropCompany-0'
                                                                             value={formValue.Company}
                                                                             options={Company_DropdownOptions}
-                                                                            onChange={(event) => Common_DropDown_handller_ForAll(event, "Company")}
+                                                                            onChange={(event) => Common_DropDown_handller_ForAll(event, "Company", 0)}
                                                                         />
                                                                     </FormGroup>
 
@@ -1059,7 +1079,7 @@ const ItemsMaster = (props) => {
                                                                             id='dropBaseUnit-0'
                                                                             value={formValue.BaseUnit}
                                                                             options={BaseUnit_DropdownOptions}
-                                                                            onChange={(event) => Common_DropDown_handller_ForAll(event, "BaseUnit")}
+                                                                            onChange={(event) => Common_DropDown_handller_ForAll(event, "BaseUnit", 0)}
                                                                         />
                                                                     </FormGroup>
 
@@ -1210,10 +1230,10 @@ const ItemsMaster = (props) => {
                                                                             <FormGroup className=" col col-sm-4 " >
                                                                                 <Label >Base Unit</Label>
                                                                                 <Select
-                                                                                    id={`dropBaseUnit-1`}
+                                                                                    id={`dropBaseUnit-0`}
                                                                                     value={formValue.BaseUnit}
                                                                                     options={BaseUnit_DropdownOptions}
-                                                                                    onChange={(e) => Common_DropDown_handller_ForAll(e, "BaseUnit")}
+                                                                                    onChange={(e) => Common_DropDown_handller_ForAll(e, "BaseUnit", 0)}
 
                                                                                 />
                                                                             </FormGroup>
