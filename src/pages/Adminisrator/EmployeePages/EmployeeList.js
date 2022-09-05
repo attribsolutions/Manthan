@@ -23,7 +23,6 @@ import { useSelector, useDispatch } from "react-redux";
 import AddEmployee from "./EmployeeMaster";
 import { MetaTags } from "react-meta-tags";
 import { useHistory } from "react-router-dom";
-import { CommonGetRoleAccessFunction } from "../../../components/Common/CommonGetRoleAccessFunction";
 import { listPageCommonButtonFunction } from "../../../components/Common/CmponentRelatedCommonFile/listPageCommonButtons";
 
 const Employee_List = () => {
@@ -242,7 +241,7 @@ const Employee_List = () => {
             }}
             size="xl"
           >
-            <AddEmployee state={editData.Data} relatatedPage={"/EmployeeMaster"} />
+            <AddEmployee state={editData.Data} relatatedPage={"/EmployeeMaster"}pageMode={editData.pageMode} />
           </Modal>
         </div>
       </React.Fragment>

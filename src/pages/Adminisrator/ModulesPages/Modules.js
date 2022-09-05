@@ -26,7 +26,6 @@ import { MetaTags } from "react-meta-tags";
 import { AlertState } from "../../../store/actions";
 import { BreadcrumbShow } from "../../../store/Utilites/Breadcrumb/actions";
 import { useHistory } from "react-router-dom";
-import { CommonGetRoleAccessFunction } from "../../../components/Common/CommonGetRoleAccessFunction";
 
 const Modules = (props) => {
 
@@ -36,6 +35,7 @@ const Modules = (props) => {
 
     let editDataGatingFromList = props.state;
     let propsPageMode = props.pageMode;
+    let pageModeProps=props.pageMode
 
     const [EditData, setEditData] = useState([]);
     const [pageMode, setPageMode] = useState("save");
@@ -50,22 +50,6 @@ const Modules = (props) => {
 
     // userAccess useEffect
     useEffect(() => {
-
-        // if ((editDataGatingFromList === undefined)) {
-        //     const userAcc = CommonGetRoleAccessFunction(history)
-            
-        //     if (!(userAcc === undefined)) {
-        //         setUserPageAccessState(userAcc)
-        //     }
-        // } else {
-        //     let RelatedPageID = history.location.state.UserDetails.RelatedPageID
-        //     const userfound = RoleAccessModifiedinSingleArray.find((element) => {
-        //         return element.id === RelatedPageID
-        //     })
-        //     setUserPageAccessState(userfound)
-        // }
-
-///////////////
 
         let userAcc = undefined
         if ((editDataGatingFromList === undefined)) {
@@ -85,12 +69,6 @@ const Modules = (props) => {
         if (!(userAcc === undefined)) {
           setUserPageAccessState(userAcc)
         }
-
-
-
-
-
-
     }, [RoleAccessModifiedinSingleArray])
 
     // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
@@ -101,7 +79,7 @@ const Modules = (props) => {
         if (!(editDataGatingFromList === undefined)) {
 
             setEditData(editDataGatingFromList);
-            setPageMode("edit");
+            setPageMode(pageModeProps);
             dispatch(editModuleIDSuccess({ Status: false }))
             dispatch(BreadcrumbShow(editDataGatingFromList.Name))
            
@@ -169,7 +147,7 @@ const Modules = (props) => {
 
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
     let IsEditMode_Css = ''
-    if (pageMode === "edit" || pageMode == "dropdownAdd") { IsEditMode_Css = "-5.5%" };
+    if ((pageMode === "edit")||(pageMode==="copy")||(pageMode==="dropdownAdd")) { IsEditMode_Css = "-5.5%" };
 
     if (!(userPageAccessState === '')) {
         return (

@@ -74,9 +74,10 @@ function* deleteModule_ID_GenratorFunction({ id }) {
   }
 }
 
-function* editModule_ID_GenratorFunction({ id }) {
+function* editModule_ID_GenratorFunction({ id,pageMode }) {
   try {
     const response = yield call(edit_ModuleID, id);
+    response.pageMode=pageMode
     yield put(editModuleIDSuccess(response));
   } catch (error) {
     yield put(AlertState({ Type: 4, 

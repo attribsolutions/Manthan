@@ -42,9 +42,9 @@ export const deletePartyTypeIDSuccess = (deleteMessage) => ({
 });
 
 // edit api
-export const editPartyTypeId = (id) => ({
+export const editPartyTypeId = (id,pageMode) => ({
   type: EDIT_PARTY_TYPE_ID,
-  id,
+  id,pageMode
 })
 export const editPartyTypeSuccess = (editData) => ({
   type: EDIT_PARTY_TYPE_ID_SUCCESS,

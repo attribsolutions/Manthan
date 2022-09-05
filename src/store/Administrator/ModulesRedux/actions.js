@@ -59,9 +59,9 @@ export const deleteModuleIDError = (deleteModuleIDError) => ({
 
 
 //Edit Modules Using Id
-export const editModuleID = (id) => ({
+export const editModuleID = (id,pageMode) => ({
   type: EDIT_MODULE_ID,
-  id,
+  id,pageMode
 });
 export const editModuleIDSuccess = (editData) => ({
   type: EDIT_MODULE_ID_SUCCESS,

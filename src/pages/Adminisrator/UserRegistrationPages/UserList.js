@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Button, Col, Modal, Row } from "reactstrap";
+import { Col, Modal, Row } from "reactstrap";
 import "../../../assets/scss/CustomeTable/datatables.scss"
 import {
     getUser, deleteUser, editUserId, updateSuccess
@@ -16,7 +16,6 @@ import "../../../assets/scss/CustomeTable/datatables.scss"
 import AddUser from "./UserRegistration";
 import { deleteSuccess } from "../../../store/Administrator/RoleMasterRedux/action";
 import { AlertState } from "../../../store/Utilites/CustomAlertRedux/actions";
-import { CommonGetRoleAccessFunction } from "../../../components/Common/CommonGetRoleAccessFunction";
 import { useHistory } from "react-router-dom";
 import { MetaTags } from "react-meta-tags";
 import Breadcrumbs from "../../../components/Common/Breadcrumb";
@@ -234,7 +233,7 @@ const UserList = () => {
                         toggle={() => { tog_center() }}
                         size="xl"
                     >
-                        <AddUser state={editData.Data} relatatedPage={"/UserMaster"} />
+                        <AddUser state={editData.Data} relatatedPage={"/UserMaster"} pageMode={editData.pageMode} />
                     </Modal>
                 </div>
             </React.Fragment>

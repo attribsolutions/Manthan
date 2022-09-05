@@ -32,9 +32,9 @@ export const deleteEmployeeTypeIDSuccess = (deleteMessage) => ({
 });
 
 // edit api
-export const editEmployeeTypeId =(id)=>({
+export const editEmployeeTypeId =(id,pageMode)=>({
   type:EDIT_EMPLOYEE_TYPE_ID,
-id,
+id,pageMode
 })
 export const editEmployeeTypeSuccess =(editData)=>({
   type:EDIT_EMPLOYEE_TYPE_ID_SUCCESS,

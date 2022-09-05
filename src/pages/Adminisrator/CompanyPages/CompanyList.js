@@ -235,7 +235,7 @@ const CompanyList = () => {
                     toggle={() => { tog_center() }}
                     size="xl"
                 >
-                    <CompanyModule state={editData.Data} relatatedPage={"/CompanyMaster"} />
+                    <CompanyModule state={editData.Data} relatatedPage={"/CompanyMaster"} pageMode={editData.pageMode} />
                 </Modal>
             </React.Fragment >
         );

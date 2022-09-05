@@ -58,9 +58,9 @@ import {
   
   // edit api
   
-  export const editSubCategoryID = (id) => ({
+  export const editSubCategoryID = (id,pageMode) => ({
     type: EDIT_SUBCATEGORY_ID,
-    id,
+    id,pageMode
   })
   
   export const editSubCategoryIDSuccess = (editData) => ({
