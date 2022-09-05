@@ -217,7 +217,7 @@ const SubCategoryMaster = (props) => {
                                                         <Row>
                                                             <Col md="4">
                                                                 <FormGroup className="mb-3">
-                                                                    <Label htmlFor="validationCustom01"> Category Type </Label>
+                                                                    <Label htmlFor="validationCustom01"> Category  </Label>
                                                                     <Col sm={12}>
                                                                         <Select
                                                                             value={categoryTypes_dropdown_Select}
