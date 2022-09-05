@@ -54,9 +54,10 @@ function* Delete_DivisionType_ID_GenratorFunction({ id }) {
 }
 
 // edit api
-function* Edit_DivisionType_ID_GenratorFunction({ id }) {
+function* Edit_DivisionType_ID_GenratorFunction({ id,pageMode }) {
   try {
     const response = yield call(edit_DivisionType_List_Api, id);
+    response.pageMode=pageMode
     yield put(editDivisionTypeSuccess(response));
     console.log("response in saga", response)
 

@@ -83,7 +83,6 @@ function* editHpages_ID({ id,pageMode }) {
   try {
     let response = yield call(edit_HPageID, id);
     response.pageMode=pageMode
-    debugger
     yield put(editHPagesIDSuccess(response));
   } catch (error) {
     yield put(AlertState({

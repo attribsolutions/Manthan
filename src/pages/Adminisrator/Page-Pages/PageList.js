@@ -19,7 +19,6 @@ import Breadcrumbs from "../../../components/Common/Breadcrumb";
 import HPageMaster from "./PageMaster";
 import { AlertState } from "../../../store/actions";
 import { useHistory } from "react-router-dom";
-import { CommonGetRoleAccessFunction } from "../../../components/Common/CommonGetRoleAccessFunction";
 import { listPageCommonButtonFunction } from "../../../components/Common/CmponentRelatedCommonFile/listPageCommonButtons";
 
 export default function PageList() {

@@ -92,9 +92,10 @@ function* Delete_ProductTypes_ID_GenratorFunction({ id }) {
 }
 
 // edit api
-function* Edit_ProductTypes_ID_GenratorFunction({ id }) {
+function* Edit_ProductTypes_ID_GenratorFunction({ id,pageMode }) {
   try {
     const response = yield call(edit_Product_Types_List_Api, id);
+    response.pageMode=pageMode
     yield put(editProductTypesIDSuccess(response));
     console.log("response in saga", response)
 

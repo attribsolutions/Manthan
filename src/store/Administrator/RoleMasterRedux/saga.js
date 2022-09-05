@@ -47,10 +47,11 @@ function* Submit_Roles_GenratorFunction({ Data }) {
     }
   }
 
-function* Edit_Roles_GenratorFunction({ id }) {
-  debugger
+function* Edit_Roles_GenratorFunction({ id ,pageMode}) {
+  
   try {
     const response = yield call(Role_Master_Edit_API, id);
+    response.pageMode=pageMode
     yield put(editSuccess(response));
   } catch (error) {
     yield put(AlertState({ Type: 4, 

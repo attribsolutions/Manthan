@@ -74,9 +74,10 @@ function* Delete_CategoryType_ID_GenratorFunction({ id }) {
 }
 
 // edit api
-function* Edit_CategoryType_ID_GenratorFunction({ id }) {
+function* Edit_CategoryType_ID_GenratorFunction({ id,pageMode }) {
   try {
     const response = yield call(edit_CategoryType_List_Api, id);
+    response.pageMode=pageMode
     yield put(editCategoryTypeIDSuccess(response));
     console.log("response in saga", response)
 

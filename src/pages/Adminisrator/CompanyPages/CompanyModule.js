@@ -10,7 +10,7 @@ import {
   FormGroup,
 } from "reactstrap";
 import Select from "react-select";
-import { AvForm, AvInput} from "availity-reactstrap-validation";
+import { AvForm, AvInput } from "availity-reactstrap-validation";
 import { useDispatch, useSelector } from "react-redux";
 import Breadcrumb from "../../../components/Common/Breadcrumb";
 import AvField from "availity-reactstrap-validation/lib/AvField";
@@ -25,7 +25,6 @@ import { MetaTags } from "react-meta-tags";
 import { AlertState } from "../../../store/actions";
 import { BreadcrumbShow } from "../../../store/Utilites/Breadcrumb/actions";
 import { useHistory } from "react-router-dom";
-import { CommonGetRoleAccessFunction } from "../../../components/Common/CommonGetRoleAccessFunction";
 
 const CompanyModule = (props) => {
 
@@ -36,6 +35,7 @@ const CompanyModule = (props) => {
   //*** "isEditdata get all data from ModuleID for Binding  Form controls
   var editDataGatingFromList = props.state;
   let propsPageMode = props.pageMode;
+  let pageModeProps = props.pageMode;
 
   const [EditData, setEditData] = useState([]);
   const [pageMode, setPageMode] = useState("save");
@@ -44,7 +44,7 @@ const CompanyModule = (props) => {
   const [CompanyGroupselect, setCompanyGroup] = useState("");
 
   //Access redux store Data /  'save_ModuleSuccess' action data
-  const { PostAPIResponse,RoleAccessModifiedinSingleArray } = useSelector((state) => ({
+  const { PostAPIResponse, RoleAccessModifiedinSingleArray } = useSelector((state) => ({
     PostAPIResponse: state.Company.companySubmitSuccesss,
     RoleAccessModifiedinSingleArray: state.Login.RoleAccessUpdateData,
   }));
@@ -70,7 +70,7 @@ const CompanyModule = (props) => {
       setUserPageAccessState(userAcc)
     }
 
-}, [RoleAccessModifiedinSingleArray])
+  }, [RoleAccessModifiedinSingleArray])
 
   // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
   useEffect(() => {
@@ -78,7 +78,7 @@ const CompanyModule = (props) => {
     if (!(userPageAccessState === '')) { document.getElementById("txtName").focus(); }
     if (!(editDataGatingFromList === undefined)) {
       setEditData(editDataGatingFromList);
-      setPageMode("edit");
+      setPageMode(pageModeProps);
       setCompanyGroup({
         value: editDataGatingFromList.CompanyGroup_id,
         label: editDataGatingFromList.CompanyGroupName
@@ -88,11 +88,11 @@ const CompanyModule = (props) => {
     }
     else if (!(propsPageMode === undefined)) {
       setPageMode(propsPageMode)
-  }
-  }, [editDataGatingFromList,propsPageMode]);
+    }
+  }, [editDataGatingFromList, propsPageMode]);
 
   useEffect(() => {
-    if ((PostAPIResponse.Status === true) && (PostAPIResponse.StatusCode === 200)&&!(pageMode==="dropdownAdd")) {
+    if ((PostAPIResponse.Status === true) && (PostAPIResponse.StatusCode === 200) && !(pageMode === "dropdownAdd")) {
       dispatch(PostCompanySubmitSuccess({ Status: false }))
       setCompanyGroup('')
       formRef.current.reset();
@@ -112,7 +112,7 @@ const CompanyModule = (props) => {
         }))
       }
     }
-    else if ((PostAPIResponse.Status === true) && !(pageMode==="dropdownAdd")) {
+    else if ((PostAPIResponse.Status === true) && !(pageMode === "dropdownAdd")) {
       dispatch(PostCompanySubmitSuccess({ Status: false }))
       dispatch(AlertState({
         Type: 4,
@@ -166,13 +166,13 @@ const CompanyModule = (props) => {
     }
   };
 
-  var IsEditModeSaSS = ''
-  if (pageMode === "edit" || pageMode == "dropdownAdd") { IsEditModeSaSS = "-5.5%" };
+  var IsEditMode_Css = ''
+  if ((pageMode === "edit")||(pageMode==="copy")||(pageMode==="dropdownAdd")) { IsEditMode_Css = "-5.5%" };
 
   if (!(userPageAccessState === '')) {
     return (
       <React.Fragment>
-        <div className={"page-content"} style={{ marginTop: IsEditModeSaSS }} >
+        <div className={"page-content"} style={{ marginTop: IsEditMode_Css }} >
           <MetaTags>
             <title>Company Master| FoodERP-React FrontEnd</title>
           </MetaTags>
@@ -289,7 +289,7 @@ const CompanyModule = (props) => {
 
                           <Row className=" mb-3">
                             <FormGroup className=" col col-sm-4 " >
-                              <Label htmlFor="validationCustom21">Company Group </Label>
+                              <Label htmlFor="validationCustom21">Group Company  </Label>
                               <Select
                                 value={CompanyGroupselect}
                                 options={CompanyGroupValues}

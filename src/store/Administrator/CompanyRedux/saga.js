@@ -56,9 +56,10 @@ function* deleteCompany_ID({ id }) {
   }
 }
 
-function* editCompany_ID({ id }) {
+function* editCompany_ID({ id,pageMode }) {
   try {
     const response = yield call(edit_CompanyID, id);
+    response.pageMode=pageMode
     yield put(editCompanyIDSuccess(response));
   } catch (error) {
     yield put(AlertState({ Type: 4, 

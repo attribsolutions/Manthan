@@ -48,9 +48,10 @@ function* Get_Party_GenratorFunction() {
       }
     }
   
-  function* Edit_Party_GenratorFunction({ id }) {
+  function* Edit_Party_GenratorFunction({ id,pageMode }) {
     try {
       const response = yield call(Party_Master_Edit_API, id);
+      response.pageMode=pageMode
       yield put(editPartyIDSuccess(response));
  
     } catch (error) {

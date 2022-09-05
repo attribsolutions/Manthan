@@ -19,7 +19,6 @@ import {
 } from "../../../store/actions";
 import Modules from "./Modules";
 import { useHistory } from "react-router-dom";
-import { CommonGetRoleAccessFunction } from "../../../components/Common/CommonGetRoleAccessFunction";
 import { commonDefaultSorted, commonListPageDelete_UpdateMsgFunction, commonPageOptions, listPageCommonButtonFunction } from "../../../components/Common/CmponentRelatedCommonFile/listPageCommonButtons";
 
 const ModulesList = () => {
@@ -207,7 +206,7 @@ const ModulesList = () => {
                             size="xl"
                         >
                             {/* <PartyUIDemo state={editData.Data} /> */}
-                            <Modules state={editData.Data} relatatedPage={"/ModuleMaster"} />
+                            <Modules state={editData.Data} relatatedPage={"/ModuleMaster"} pageMode={editData.pageMode}/>
                         </Modal>
                     </div>
                 </div>

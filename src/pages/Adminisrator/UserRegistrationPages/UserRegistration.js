@@ -23,7 +23,7 @@ const AddUser = (props) => {
 
   //*** "isEditdata get all data from ModuleID for Binding  Form controls
   let editDataGatingFromList = props.state;
-
+  let pageModeProps = props.pageMode;
 
   //SetState  Edit data Geting From Modules List component
   const [EditData, setEditData] = useState([]);
@@ -124,7 +124,7 @@ const AddUser = (props) => {
 
       setEditData(editDataGatingFromList);
       dispatch(BreadcrumbShow(editDataGatingFromList.LoginName))
-      setPageMode("edit");
+      setPageMode(pageModeProps);
       dispatch(editSuccess({ Status: false }))
       setEmployeeSelect({
         value: editDataGatingFromList.Employee,
@@ -145,7 +145,7 @@ const AddUser = (props) => {
 
   useEffect(() => {
 
-    if ((PostAPIResponse.Status === true) && (PostAPIResponse.StatusCode === 200) &&!(pageMode==="dropdownAdd")) {
+    if ((PostAPIResponse.Status === true) && (PostAPIResponse.StatusCode === 200) && !(pageMode === "dropdownAdd")) {
       dispatch(addUserSuccess({ Status: false }))
       formRef.current.reset();
       setEmployeeSelect('')
@@ -168,7 +168,7 @@ const AddUser = (props) => {
         }))
       }
     }
-    else if ((PostAPIResponse.Status === true)&& !(pageMode==="dropdownAdd")) {
+    else if ((PostAPIResponse.Status === true) && !(pageMode === "dropdownAdd")) {
       dispatch(addUserSuccess({ Status: false }))
       dispatch(AlertState({
         Type: 4,
@@ -241,11 +241,6 @@ const AddUser = (props) => {
       // })),
     })
 
-    debugger
-
-
-
-
     if (partyRoleData.length <= 0) {
       dispatch(AlertState({
         Type: 4, Status: true,
@@ -262,8 +257,6 @@ const AddUser = (props) => {
       dispatch(addUser(jsonBody));
     }
   };
-
-
 
   const rolaTable = () => {
 
@@ -305,7 +298,7 @@ const AddUser = (props) => {
 
   // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
   var IsEditMode_Css = ''
-  if (pageMode === "edit" || pageMode == "other") { IsEditMode_Css = "-5.5%" };
+  if ((pageMode === "edit")||(pageMode==="copy")||(pageMode==="dropdownAdd")) { IsEditMode_Css = "-5.5%" };
 
   if (!(userPageAccessState === '')) {
     return (

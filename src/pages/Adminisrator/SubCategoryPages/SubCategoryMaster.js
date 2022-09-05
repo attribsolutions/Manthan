@@ -30,6 +30,7 @@ const SubCategoryMaster = (props) => {
 
     //*** "isEditdata get all data from ModuleID for Binding  Form controls
     let editDataGatingFromList = props.state;
+    let pageModeProps=props.pageMode;
 
     const formRef = useRef(null);
     const [EditData, setEditData] = useState([]);
@@ -70,8 +71,6 @@ const SubCategoryMaster = (props) => {
 
     }, [RoleAccessModifiedinSingleArray])
 
-
-
     //userAccess useEffect
     useEffect(() => {
 
@@ -99,7 +98,7 @@ const SubCategoryMaster = (props) => {
         if (!(userPageAccessState === '')) { document.getElementById("txtName").focus(); }
         if (!(editDataGatingFromList === undefined)) {
             setEditData(editDataGatingFromList);
-            setPageMode("edit");
+            setPageMode(pageModeProps);
             setCategoryTypes_dropdown_Select({
                 value: editDataGatingFromList.ProductCategoryType_id,
                 label: editDataGatingFromList.ProductCategoryTypeName
@@ -112,7 +111,7 @@ const SubCategoryMaster = (props) => {
 
 
     useEffect(() => {
-        debugger
+        
         if ((PostAPIResponse.Status === true) && (PostAPIResponse.StatusCode === 200)) {
             setCategoryTypes_dropdown_Select('')
             dispatch(PostMethod_ForSubCategoryAPISuccess({ Status: false }))
@@ -172,7 +171,7 @@ const SubCategoryMaster = (props) => {
 
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
     var IsEditMode_Css = ''
-    if (pageMode === "edit") { IsEditMode_Css = "-5.5%" };
+    if ((pageMode === "edit")||(pageMode==="copy")||(pageMode==="dropdownAdd")) { IsEditMode_Css = "-5.5%" };
 
     if (!(userPageAccessState === '')) {
         return (

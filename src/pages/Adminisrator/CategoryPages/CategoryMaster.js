@@ -26,8 +26,9 @@ import { CommonGetRoleAccessFunction } from "../../../components/Common/CommonGe
 import { useHistory } from "react-router-dom";
 
 const CategoryMaster = (props) => {
-  
+
     let editDataGatingFromList = props.state;
+    let pageModeProps = props.pageMode;
 
     const formRef = useRef(null);
     const [EditData, setEditData] = useState([]);
@@ -47,7 +48,7 @@ const CategoryMaster = (props) => {
 
     //userAccess useEffect
     useEffect(() => {
-      
+
         let userAcc = undefined
         if ((editDataGatingFromList === undefined)) {
 
@@ -75,9 +76,9 @@ const CategoryMaster = (props) => {
         if (!(userPageAccessState === '')) { document.getElementById("txtName").focus(); }
         if (!(editDataGatingFromList === undefined)) {
             setEditData(editDataGatingFromList);
-            setPageMode("edit");
+            setPageMode(pageModeProps);
             setProductCategoryTypes_dropdown_Select({
-               
+
                 value: editDataGatingFromList.ProductCategoryType_id,
                 label: editDataGatingFromList.ProductCategoryTypeName
             })
@@ -153,7 +154,7 @@ const CategoryMaster = (props) => {
 
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
     var IsEditMode_Css = ''
-    if (pageMode === "edit") { IsEditMode_Css = "-5.5%" };
+    if ((pageMode === "edit")||(pageMode==="copy")||(pageMode==="dropdownAdd")) { IsEditMode_Css = "-5.5%" };
 
     if (!(userPageAccessState === '')) {
         return (

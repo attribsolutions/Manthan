@@ -13,22 +13,16 @@ import {
 import { AvField, AvForm, } from "availity-reactstrap-validation";
 import { MetaTags } from "react-meta-tags";
 import { AlertState } from "../../../store/actions";
-import { CommonGetRoleAccessFunction } from "../../../components/Common/CommonGetRoleAccessFunction";
 import { useHistory } from "react-router-dom";
 
 import { BreadcrumbShow } from "../../../store/Utilites/Breadcrumb/actions";
 import { useDispatch, useSelector } from "react-redux";
-// import { PostMethodForCategoryTypeMaster,
-//      PostMethod_ForCategoryTypeMasterAPISuccess
-//      } from "../../../store/actions";
-   
-     import {
-        PostMethodForCategoryTypeMaster,
-        PostMethod_ForCategoryTypeMasterAPISuccess,
-         editCategoryTypeIDSuccess,
-         updateCategoryTypeID,
-      } from "../../../store/Administrator/CategoryTypeRedux/actions";
-
+import {
+    PostMethodForCategoryTypeMaster,
+    PostMethod_ForCategoryTypeMasterAPISuccess,
+    editCategoryTypeIDSuccess,
+    updateCategoryTypeID,
+} from "../../../store/Administrator/CategoryTypeRedux/actions";
 
 const CategoryTypeMaster = (props) => {
     const formRef = useRef(null);
@@ -38,89 +32,89 @@ const CategoryTypeMaster = (props) => {
     const dispatch = useDispatch();
     const [userPageAccessState, setUserPageAccessState] = useState(123);
 
-//*** "isEditdata get all data from ModuleID for Binding  Form controls
-   let editDataGatingFromList = props.state;
-  
+    //*** "isEditdata get all data from ModuleID for Binding  Form controls
+    let editDataGatingFromList = props.state;
+    let pageModeProps=props.pageMode;
 
     //Access redux store Data /  'save_ModuleSuccess' action data
-const { PostAPIResponse,RoleAccessModifiedinSingleArray} = useSelector((state) => ({
+    const { PostAPIResponse, RoleAccessModifiedinSingleArray } = useSelector((state) => ({
         PostAPIResponse: state.categoryTypeMasterReducer.PostData,
         RoleAccessModifiedinSingleArray: state.Login.RoleAccessUpdateData,
     }));
 
 
-//userAccess useEffect
-useEffect(() => {
-    let userAcc = undefined
-    if ((editDataGatingFromList === undefined)) {
+    //userAccess useEffect
+    useEffect(() => {
+        let userAcc = undefined
+        if ((editDataGatingFromList === undefined)) {
 
-      let locationPath = history.location.pathname
-      userAcc = RoleAccessModifiedinSingleArray.find((inx) => {
-        return (`/${inx.ActualPagePath}` === locationPath)
-      })
-    }
-    else if (!(editDataGatingFromList === undefined)) {
-      let relatatedPage = props.relatatedPage
-      userAcc = RoleAccessModifiedinSingleArray.find((inx) => {
-        return (`/${inx.ActualPagePath}` === relatatedPage)
-      })
+            let locationPath = history.location.pathname
+            userAcc = RoleAccessModifiedinSingleArray.find((inx) => {
+                return (`/${inx.ActualPagePath}` === locationPath)
+            })
+        }
+        else if (!(editDataGatingFromList === undefined)) {
+            let relatatedPage = props.relatatedPage
+            userAcc = RoleAccessModifiedinSingleArray.find((inx) => {
+                return (`/${inx.ActualPagePath}` === relatatedPage)
+            })
 
-    }
-    if (!(userAcc === undefined)) {
-      setUserPageAccessState(userAcc)
-    }
+        }
+        if (!(userAcc === undefined)) {
+            setUserPageAccessState(userAcc)
+        }
 
-}, [RoleAccessModifiedinSingleArray])
+    }, [RoleAccessModifiedinSingleArray])
 
 
- //This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
- useEffect(() => {
-    if (!(userPageAccessState === '')) { document.getElementById("txtName").focus(); }
-    if (!(editDataGatingFromList === undefined)) {
-        setEditData(editDataGatingFromList);
-        setPageMode("edit");
-        dispatch(editCategoryTypeIDSuccess({ Status: false }))
-        dispatch(BreadcrumbShow(editDataGatingFromList.Name))
-        return
-    }
-}, [editDataGatingFromList])
+    //This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
+    useEffect(() => {
+        if (!(userPageAccessState === '')) { document.getElementById("txtName").focus(); }
+        if (!(editDataGatingFromList === undefined)) {
+            setEditData(editDataGatingFromList);
+            setPageMode(pageModeProps);
+            dispatch(editCategoryTypeIDSuccess({ Status: false }))
+            dispatch(BreadcrumbShow(editDataGatingFromList.Name))
+            return
+        }
+    }, [editDataGatingFromList])
 
     useEffect(() => {
-    
+
         if ((PostAPIResponse.Status === true) && (PostAPIResponse.StatusCode === 200)) {
             dispatch(PostMethod_ForCategoryTypeMasterAPISuccess({ Status: false }))
-           
-          
+
+
             if (pageMode === "other") {
-              dispatch(AlertState({
-                Type: 1,
-                Status: true,
-                Message: PostAPIResponse.Message,
-              }))
+                dispatch(AlertState({
+                    Type: 1,
+                    Status: true,
+                    Message: PostAPIResponse.Message,
+                }))
             }
-            
+
             else {
-              dispatch(AlertState({
-                Type: 1,
-                Status: true,
-                Message: PostAPIResponse.Message,
-                 RedirectPath: '/CategoryTypeList',
-              }))
+                dispatch(AlertState({
+                    Type: 1,
+                    Status: true,
+                    Message: PostAPIResponse.Message,
+                    RedirectPath: '/CategoryTypeList',
+                }))
             }
-          }
-          else if (PostAPIResponse.Status === true) {
+        }
+        else if (PostAPIResponse.Status === true) {
             dispatch(PostMethod_ForCategoryTypeMasterAPISuccess({ Status: false }))
             dispatch(AlertState({
-              Type: 4,
-              Status: true,
-              Message: JSON.stringify(postMessage.Message),
-              RedirectPath: false,
-              AfterResponseAction: false
+                Type: 4,
+                Status: true,
+                Message: JSON.stringify(postMessage.Message),
+                RedirectPath: false,
+                AfterResponseAction: false
             }));
-          }
-        }, [PostAPIResponse])
+        }
+    }, [PostAPIResponse])
 
-    
+
 
     const FormSubmitButton_Handler = (event, values) => {
         const jsonBody = JSON.stringify({
@@ -133,13 +127,13 @@ useEffect(() => {
         else {
             dispatch(PostMethodForCategoryTypeMaster(jsonBody))
         }
-        
+
     };
-    
+
 
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
     var IsEditMode_Css = ''
-    if (pageMode === "edit") { IsEditMode_Css = "-5.5%" };
+    if ((pageMode === "edit")||(pageMode==="copy")||(pageMode==="dropdownAdd")) { IsEditMode_Css = "-5.5%" };
 
     if (!(userPageAccessState === '')) {
         return (
@@ -182,7 +176,7 @@ useEffect(() => {
                                                             />
 
                                                         </FormGroup>
-                                                        
+
                                                         <FormGroup>
                                                             <Row>
                                                                 <Col sm={2}>
@@ -201,23 +195,23 @@ useEffect(() => {
                                                                                     <></>
                                                                                 : (
                                                                                     userPageAccessState.RoleAccess_IsSave ?
-                                                             <button
-                                                                 type="submit"
-                                                                 data-mdb-toggle="tooltip" data-mdb-placement="top" title="Save ProductCategory Type"
-                                                                className="btn btn-primary w-sm">
-                                                                 <i className="fas fa-save me-2"></i> 
-                                                                 Save
-                                                       
-                                                               </button>
-                                                               :
-                                                               <></>
-                                                       )
-                                                                                }
-                                                               </div>
-                                                               </Col>
-                                                           </Row>
-                                                      </FormGroup>            
-                                                                   
+                                                                                        <button
+                                                                                            type="submit"
+                                                                                            data-mdb-toggle="tooltip" data-mdb-placement="top" title="Save ProductCategory Type"
+                                                                                            className="btn btn-primary w-sm">
+                                                                                            <i className="fas fa-save me-2"></i>
+                                                                                            Save
+
+                                                                                        </button>
+                                                                                        :
+                                                                                        <></>
+                                                                                )
+                                                                        }
+                                                                    </div>
+                                                                </Col>
+                                                            </Row>
+                                                        </FormGroup>
+
                                                     </Row>
                                                 </CardBody>
                                             </Card>
