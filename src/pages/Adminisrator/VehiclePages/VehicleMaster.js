@@ -20,8 +20,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { Tbody,Thead} from "react-super-responsive-table";
 import { AlertState } from "../../../store/actions";
 import { CommonGetRoleAccessFunction } from "../../../components/Common/CommonGetRoleAccessFunction";
-import { getMethodForVehicle, getMethod_ForDriverList_ForDropDown, getMethod_ForVehicleTypes_ForDropDown, PostMethodForVehicle, PostMethod_ForVehicleAPISuccess } from "../../../store/Administrator/VehicleRedux/action";
-import { getDivisionTypesID } from "../../../store/Administrator/PartyRedux/action";
+import { PostMethodForVehicleMaster, getMethodForVehicleList, getMethod_DriverList_ForDropDown, getMethod_VehicleTypes_ForDropDown, PostMethod_ForVehicleMasterSuccess, getMethod_ForVehicleListSuccess } from "../../../store/Administrator/VehicleRedux/action";
+import { getDivisionTypesID, getPartyListAPI } from "../../../store/Administrator/PartyRedux/action";
 // import { actionChannel } from "redux-saga/effects";
 
 
@@ -32,6 +32,8 @@ const VehicleMaster = (props) => {
     const [divisionType_dropdown_Select, setDivisionType_dropdown_Select] = useState("");
     const [DriverList_dropdown_Select,setDriverList_dropdown_Select]= useState("");
     const [VehicleType_dropdown_Select,setVehicleType_dropdown_Select]=useState("");
+    const [VehicleList_dropdown_Select,setVehicleList_dropdown_Select]= useState("");
+
     const [pageMode, setPageMode] = useState("");
     const dispatch = useDispatch();
     const [userPageAccessState, setUserPageAccessState] = useState(123);
@@ -40,7 +42,7 @@ const VehicleMaster = (props) => {
 
 
     //Access redux store Data /  'save_ModuleSuccess' action data
-    const { PostAPIResponse, DivisionType, VehicleList_redux, VehicleType,DriverList_redux } = useSelector((state) => ({
+    const { PostAPIResponse, DivisionType, VehicleList_redux, VehicleTypes,DriverList_redux } = useSelector((state) => ({
          PostAPIResponse: state.VehicleReducer.PostDataMessage,
          DivisionType: state.PartyMasterReducer.partyList,
          VehicleList_redux : state.VehicleReducer.VehicleList,
@@ -55,17 +57,18 @@ console.log("", )
 
 
     useEffect(() => {
-        dispatch(getMethodForVehicle());
-        dispatch(getMethod_ForDriverList_ForDropDown());
-        dispatch(getMethod_ForVehicleTypes_ForDropDown());
-        dispatch(getDivisionTypesID());
+        //  dispatch(PostMethodForVehicleMaster());
+        dispatch(getMethodForVehicleList());
+        dispatch(getMethod_DriverList_ForDropDown());
+        dispatch(getMethod_VehicleTypes_ForDropDown());
+        dispatch(getPartyListAPI());
        }, [dispatch]);
 
 
     useEffect(() => {
         if ((PostAPIResponse.Status === true) && (PostAPIResponse.StatusCode === 200)) {
             // setSubCategory_dropdown_Select('')
-            dispatch(PostMethod_ForVehicleAPISuccess({ Status: false }))
+            dispatch(PostMethod_ForVehicleMasterSuccess({ Status: false }))
             formRef.current.reset();
             if (pageMode === "other") {
                 dispatch(AlertState({
@@ -79,12 +82,12 @@ console.log("", )
                     Type: 1,
                     Status: true,
                     Message: PostAPIResponse.Message,
-                    // RedirectPath: '/SubCategoryList',
+                    RedirectPath: '/VehicleList',
                 }))
             }
         }
         else if (PostAPIResponse.Status === true) {
-            dispatch(PostMethod_ForVehicleAPISuccess({ Status: false }))
+            dispatch(getMethod_ForVehicleListSuccess({ Status: false }))
             dispatch(AlertState({
                 Type: 4,
                 Status: true,
@@ -115,7 +118,7 @@ console.log("", )
         setDriverList_dropdown_Select(e)
     }
 
-    const VehicleType_DropdownOptions = VehicleType.map((data) => ({
+    const VehicleType_DropdownOptions = VehicleTypes.map((data) => ({
         value: data.id,
         label: data.Name
       }));
@@ -124,12 +127,23 @@ console.log("", )
         setVehicleType_dropdown_Select(e)
     }
 
+
+    const VehicleList_DropdownOptions = VehicleList_redux.map((data) => ({
+        value: data.id,
+        label: data.Name
+      }));
+ 
+    function VehicleList_DropDown_handller(e) {
+        setVehicleList_dropdown_Select(e)
+    }
+
+
     const FormSubmitButton_Handler = (event, values) => {
         const jsonBody = JSON.stringify({
             Name: values.Name,
             
         });
-          dispatch(PostMethodForVehicle(jsonBody));  
+          dispatch(PostMethodForVehicleMaster(jsonBody));  
     };
 
    /// Role Table Validation
@@ -177,7 +191,7 @@ console.log("", )
                         <MetaTags>
                             <title>VehicleMaster | FoodERP-React FrontEnd</title>
                         </MetaTags>
-                        <Breadcrumb breadcrumbItem={"SubCategory Master"} />
+                        <Breadcrumb breadcrumbItem={"Vehicle Master"} />
 
                         <Card className="text-black">
                             <CardHeader className="card-header   text-black" style={{ backgroundColor: "#dddddd" }} >

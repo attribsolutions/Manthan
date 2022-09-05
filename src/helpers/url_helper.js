@@ -121,6 +121,8 @@ export const CATEGORY_TYPES_API='/CategoryTypes'
 export const  VEHICLE_API ='/Vehicle'
 export const  VEHICLETYPES_DROPDOWN ='/VehicleTypes'
 export const  DRIVERLIST_DROPDOWN ='/DriverList'
+
+
 export const  BASEUNIT_DROPDOWN_API ='/UnitList'
 
 //Category Types API
