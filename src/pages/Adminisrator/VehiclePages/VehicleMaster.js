@@ -106,7 +106,7 @@ const VehicleMaster = (props) => {
 
         if (!(userPageAccessState === '')) { document.getElementById("txtName").focus(); }
         if (!(editDataGatingFromList === undefined)) {
-            debugger
+            
             setEditData(editDataGatingFromList);
             setPageMode(pageModeProps);
 
