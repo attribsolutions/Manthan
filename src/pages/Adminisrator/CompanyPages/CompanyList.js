@@ -160,7 +160,8 @@ const CompanyList = () => {
         // For Edit, Delete ,and View Button Common Code function
         listPageCommonButtonFunction({
             dispatchHook: dispatch,
-            deletemsgLable: "Company",
+            ButtonMsgLable: "Company",
+            deleteName:"Name",
             userPageAccessState: userPageAccessState,
             editActionFun: editCompanyID,
             deleteActionFun: deleteCompany_ID

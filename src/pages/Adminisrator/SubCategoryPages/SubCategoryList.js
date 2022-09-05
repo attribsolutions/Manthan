@@ -13,11 +13,11 @@ import "../../../assets/scss/CustomeTable/datatables.scss";
 
 import { MetaTags } from "react-meta-tags";
 import { useHistory } from "react-router-dom";
-import { CommonGetRoleAccessFunction } from "../../../components/Common/CommonGetRoleAccessFunction";
 // import { deleteProductCategoryTypeIDSuccess, delete_ProductCategoryType_ID,  updateProductCategoryTypeIDSuccess } from "../../../store/Administrator/PartyTypeRedux/action";
 import { AlertState } from "../../../store/actions";
 import { deleteSubCategoryIDSuccess, delete_SubCategory_ID, editSubCategoryID, getSubCategorylist, updateSubCategoryIDSuccess } from "../../../store/Administrator/SubCategoryRedux/action";
 import SubCategoryMaster from "./SubCategoryMaster";
+import { listPageCommonButtonFunction } from "../../../components/Common/CmponentRelatedCommonFile/listPageCommonButtons";
 // import { AlertState } from "../../../store/action";
 
 const SubCategoryList = (props) => {
@@ -116,25 +116,6 @@ const SubCategoryList = (props) => {
     setmodal_center(!modal_center);
   }
 
-  //select id for delete row
-  const deleteHandeler = (id, name) => {
-    dispatch(
-      AlertState({
-        Type: 5,
-        Status: true,
-        Message: `Are you sure you want to delete this CategoryType Type : "${name}"`,
-        RedirectPath: false,
-        PermissionAction: delete_SubCategory_ID,
-        ID: id,
-      })
-    );
-  };
-
-  // edit Buutton Handller
-  const EditPageHandler = (id) => {
-    dispatch(editSubCategoryID(id));
-  };
-
   const defaultSorted = [
     {
       dataField: "Name", // if dataField is not match to any column you defined, it will be ignored.
@@ -161,50 +142,15 @@ const SubCategoryList = (props) => {
       sort: true,
     },
 
-    {
-      text: "Action",
-      hidden: (
-        !(userPageAccessState.RoleAccess_IsEdit)
-        && !(userPageAccessState.RoleAccess_IsView)
-        && !(userPageAccessState.RoleAccess_IsDelete)) ? true : false,
-
-      formatter: (cellContent, Role) => (
-        <div className="d-flex gap-3" style={{ display: 'flex', justifyContent: 'center' }} >
-          {((userPageAccessState.RoleAccess_IsEdit)) ?
-            <Button
-              type="button"
-              data-mdb-toggle="tooltip" data-mdb-placement="top" title="Edit Category Type"
-              onClick={() => { EditPageHandler(Role.id); }}
-              className="badge badge-soft-success font-size-12 btn btn-success waves-effect waves-light w-xxs border border-light"
-            >
-              <i className="mdi mdi-pencil font-size-18" id="edittooltip"></i>
-            </Button> : null}
-
-          {(!(userPageAccessState.RoleAccess_IsEdit) && (userPageAccessState.RoleAccess_IsView)) ?
-            <Button
-              type="button"
-              data-mdb-toggle="tooltip" data-mdb-placement="top" title="View Product Types"
-              onClick={() => { EditPageHandler(Role.id); }}
-              className="badge badge-soft-primary font-size-12 btn btn-primary waves-effect waves-light w-xxs border border-light"
-
-            >
-              <i className="bx bxs-show font-size-18 "></i>
-            </Button> : null}
-
-          {(userPageAccessState.RoleAccess_IsDelete)
-            ?
-            <Button
-              className="badge badge-soft-danger font-size-12 btn btn-danger waves-effect waves-light w-xxs border border-light"
-              data-mdb-toggle="tooltip" data-mdb-placement="top" title="Delete Product Types"
-              onClick={() => { deleteHandeler(Role.id, Role.Name); }}
-            >
-              <i className="mdi mdi-delete font-size-18"></i>
-            </Button>
-            : null
-          }
-        </div>
-      ),
-    },
+   // For Edit, Delete ,and View Button Common Code function
+   listPageCommonButtonFunction({
+    dispatchHook: dispatch,
+    ButtonMsgLable: "SubCategory",
+    deleteName:"Name",
+    userPageAccessState: userPageAccessState,
+    editActionFun: editSubCategoryID,
+    deleteActionFun: delete_SubCategory_ID
+})
   ];
 
   if (!(userPageAccessState === '')) {
