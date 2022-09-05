@@ -77,7 +77,7 @@ const ItemsMaster = (props) => {
         isActive: true,
     }
 
-    const initialInValid = ["txtName", "txtShortName", "txtBarCode", "dropBaseUnit-0", "dropCompany-0", "txtSequence"]
+    const initialInValid = ["txtName0", "txtShortName0", "txtBarCode0", "dropBaseUnit-0", "dropCompany-0", "txtSequence0"]
     let [isValidate, setIsValidate] = useState(initialInValid);
     let [refresh, setrefresh] = useState('');
 
@@ -110,8 +110,8 @@ const ItemsMaster = (props) => {
         ImageUpload: ''
     }]);
     const [baseUnitTableData, setBaseUnitTableData] = useState([{
-        conversionRatio: '',
-        toBaseUnit: '',
+        Conversion: '',
+        Unit: { label: "", value: 0 },
     }]);
     const [rateDetailTableData, setRateDetailTableData] = useState([{
         MRP: '',
@@ -334,7 +334,7 @@ const ItemsMaster = (props) => {
         label: data.Name
     }));
 
-    function Common_Drop_Validation(event, key, type) {
+    function Common_Drop_Validation(event, type, key) {
         let OnchangeControl = document.getElementById(`drop${type}-${key}`)
         if (event.value === 0) {
             OnchangeControl.className = 'form-control is-invalid'
@@ -345,29 +345,29 @@ const ItemsMaster = (props) => {
         }
 
     }
-    function Common_Text_INPUT_Validation(event, type,key) {
-        let value = event.target.value
-        let OnchangeControl = document.getElementById(`txt${type}-${key}`)
+    function Common_Text_INPUT_Validation(value, type, key) {
+     
+        let OnchangeControl = document.getElementById(`txt${type}${key}`)
 
         if (value === '') {
             OnchangeControl.className = 'form-control is-invalid'
-            return  false
+            return false
         } else {
             OnchangeControl.className = 'form-control';
-                return true
-            }
+            return true
+        }
     }
-    function CommonTab_SimpleText_INPUT_handller_ForAll(event, type,key) {
-        let validateReturn= Common_Text_INPUT_Validation(event, type,key);
+    function CommonTab_SimpleText_INPUT_handller_ForAll(event, type, key) {
+        let validateReturn = Common_Text_INPUT_Validation(event, type, 0);
 
         if (validateReturn === true) {
-            isValidate.push(`txt${type}-0`)
+            isValidate.push(`txt${type}0`)
             return
         } else {
-            
+
             isValidate = isValidate.filter((indF) => {
-                formValue[`txt${type}`] = event.target.value
-                return !(indF === `txt${type}`)
+                formValue[`txt${type}0`] = event.target.value
+                return !(indF === `txt${type}0`)
             })
             setIsValidate(isValidate)
         }
@@ -413,7 +413,7 @@ const ItemsMaster = (props) => {
 
         let arr = ["CategoryType", "Category", "SubCategory"];
         arr.map((label) => {
-            var valid11 = Common_Drop_Validation(cat_TableElement[label], key, label)
+            var valid11 = Common_Drop_Validation(cat_TableElement[label], label, key,)
             if (!valid11) { valid = valid11 }
         })
 
@@ -439,9 +439,9 @@ const ItemsMaster = (props) => {
         setCategoryTabTable(removeElseArrray)
 
     }
-    function CategoryTab_Common_onChange_Handller(event, key, type) {
+    function CategoryTab_Common_onChange_Handller(event, type, key) {
 
-        let validateReturn = Common_Drop_Validation(event, key, type);
+        let validateReturn = Common_Drop_Validation(event, type, key);
         if (validateReturn === false) return;
 
 
@@ -487,9 +487,17 @@ const ItemsMaster = (props) => {
 
 
     function UnitConversionsTab_AddRow_Handle() {
+   
+        let key = baseUnitTableData.length - 1
+        let unit_TableElement = baseUnitTableData[key];
+
+        let validateReturn = Common_Drop_Validation(unit_TableElement.Unit, "Unit", key);
+        let validateReturn1 = Common_Text_INPUT_Validation(unit_TableElement.Conversion, "Conversion", key)
+        if ((validateReturn1 === false)||(validateReturn === false)) return;
+
         var newarr = [...baseUnitTableData, {
-            conversionRatio: '',
-            toBaseUnit: '',
+            Conversion: '',
+            Unit: '',
         }]
         setBaseUnitTableData(newarr)
     }
@@ -502,9 +510,8 @@ const ItemsMaster = (props) => {
         setBaseUnitTableData(removeElseArrray)
 
     }
-    function UnitConversionsTab_BaseUnit2_onChange_Handller(event, key, type) {
-        
-      
+    function UnitConversionsTab_BaseUnit2_onChange_Handller(event, type, key,) {
+
 
         let newSelectValue = ''
 
@@ -513,20 +520,20 @@ const ItemsMaster = (props) => {
         })
 
         if (type === "Conversion") {
+            let validateReturn = Common_Text_INPUT_Validation(event, type, key);
+            if (validateReturn === false) return;
             newSelectValue = {
-                conversionRatio: event.target.value,
-                toBaseUnit: found.toBaseUnit,
+                Conversion: event.target.value,
+                Unit: found.Unit,
             }
         }
-        else if (type === 'BaseUnit') {
-            let validateReturn = Common_Drop_Validation(event, key, type);
+        else if (type === 'Unit') {
+            let validateReturn = Common_Drop_Validation(event, type, key,)
             if (validateReturn === false) return;
-    
             newSelectValue = {
-                conversionRatio: found.conversionRatio,
-                toBaseUnit: event,
+                Conversion: found.Conversion,
+                Unit: event,
             }
-
         }
 
         let newTabArr = baseUnitTableData.map((index, k) => {
@@ -726,8 +733,8 @@ const ItemsMaster = (props) => {
         }))
 
         const itemUnitDetails = baseUnitTableData.map((index) => ({
-            BaseUnitQuantity: index.conversionRatio,
-            UnitID: index.toBaseUnit.value,
+            BaseUnitQuantity: index.Conversion,
+            UnitID: index.Unit.value,
         }))
 
         const itemDivisionDetails = divisionTableData.map((index) => ({
@@ -965,13 +972,13 @@ const ItemsMaster = (props) => {
 
                                                                     <FormGroup className="mb-3 col col-sm-4 " >
                                                                         <Label >Name</Label>
-                                                                        <Input type="text" id='txtName'
+                                                                        <Input type="text" id='txtName0'
                                                                             placeholder=" Please Enter Name "
                                                                             autoComplete="off"
                                                                             // onChange={(e) => { dispatch(BreadcrumbShow(e.target.value)) }}
                                                                             onChange={(e) => {
                                                                                 dispatch(BreadcrumbShow(e.target.value));
-                                                                                CommonTab_SimpleText_INPUT_handller_ForAll(e, "Name")
+                                                                                CommonTab_SimpleText_INPUT_handller_ForAll(e.target.value, "Name")
                                                                             }}
 
                                                                         />
@@ -980,11 +987,11 @@ const ItemsMaster = (props) => {
                                                                     <FormGroup className="mb-3 col col-sm-4 " >
                                                                         <Label >ShortName</Label>
                                                                         <Input type="text"
-                                                                            id='txtShortName'
+                                                                            id='txtShortName0'
                                                                             className=""
                                                                             placeholder=" Please Enter ShortName "
                                                                             autoComplete="off"
-                                                                            onChange={(e) => { CommonTab_SimpleText_INPUT_handller_ForAll(e, "ShortName") }}
+                                                                            onChange={(e) => { CommonTab_SimpleText_INPUT_handller_ForAll(e.target.value, "ShortName") }}
                                                                         // onChange={(e) => { formValue.ShortName = e.target.value }}
                                                                         />
                                                                     </FormGroup>
@@ -1012,24 +1019,24 @@ const ItemsMaster = (props) => {
                                                                     <FormGroup className="mb-3 col col-sm-4 " >
                                                                         <Label htmlFor="validationCustom01">BarCode</Label>
                                                                         <Input
-                                                                            id='txtBarCode'
+                                                                            id='txtBarCode0'
                                                                             placeholder=" Please Enter BarCode "
                                                                             autoComplete="off"
                                                                             // validate={{
                                                                             //     required: { value: true, errorMessage: 'Please Enter BarCode' },
                                                                             // }}
                                                                             // onChange={(e) => { formValue.BarCode = e.target.value }}
-                                                                            onChange={(e) => { CommonTab_SimpleText_INPUT_handller_ForAll(e, "BarCode") }}
+                                                                            onChange={(e) => { CommonTab_SimpleText_INPUT_handller_ForAll(e.target.value, "BarCode") }}
                                                                         />
                                                                     </FormGroup>
 
                                                                     <FormGroup className="mb-3 col col-sm-4 " >
                                                                         <Label htmlFor="validationCustom01">Sequence</Label>
                                                                         <Input
-                                                                            id='txtSequence'
+                                                                            id='txtSequence0'
                                                                             placeholder=" Please Enter Sequence "
                                                                             autoComplete="off"
-                                                                            onChange={(e) => { CommonTab_SimpleText_INPUT_handller_ForAll(e, "ShortName") }}
+                                                                            onChange={(e) => { CommonTab_SimpleText_INPUT_handller_ForAll(e.target.value, "ShortName") }}
                                                                         // onChange={(e) => { formValue.Sequence = e.target.value }}
                                                                         />
 
@@ -1186,17 +1193,17 @@ const ItemsMaster = (props) => {
                                                                                                 <AvInput
                                                                                                     name="value"
                                                                                                     type="text"
-                                                                                                    id={"txtConversion"}
-                                                                                                    defaultValue={TableValue.conversionRatio}
-                                                                                                    onChange={(e) => UnitConversionsTab_BaseUnit2_onChange_Handller(e, key, "Conversion")}></AvInput>
+                                                                                                    id={`txtConversion${key}`}
+                                                                                                    defaultValue={TableValue.Conversion}
+                                                                                                    onChange={(e) => UnitConversionsTab_BaseUnit2_onChange_Handller(e, "Conversion", key,)}></AvInput>
                                                                                             </td>
                                                                                             <td>
                                                                                                 <Select
-                                                                                                    id={`dropBaseUnit-2`}
+                                                                                                    id={`dropUnit-${key}`}
                                                                                                     placeholder="select unit"
-                                                                                                    value={TableValue.toBaseUnit}
+                                                                                                    value={TableValue.Unit}
                                                                                                     options={BaseUnit_DropdownOptions2}
-                                                                                                    onChange={(e) => UnitConversionsTab_BaseUnit2_onChange_Handller(e, key, "BaseUnit")}
+                                                                                                    onChange={(e) => UnitConversionsTab_BaseUnit2_onChange_Handller(e, "Unit", key)}
                                                                                                 />
                                                                                             </td>
                                                                                             <td>
