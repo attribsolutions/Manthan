@@ -31,9 +31,9 @@ export const deleteDivisionTypeIDSuccess = (deleteMessage) => ({
 });
 
 // edit api
-export const editDivisionTypeId =(id)=>({
+export const editDivisionTypeId =(id,pageMode)=>({
   type:EDIT_DIVISION_TYPE_ID,
-id,
+id,pageMode
 })
 export const editDivisionTypeSuccess =(editData)=>({
   type:EDIT_DIVISION_TYPE_ID_SUCCESS,

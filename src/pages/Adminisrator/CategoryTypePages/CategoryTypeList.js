@@ -208,7 +208,7 @@ const CategoryTypeList = (props) => {
             }}
             size="xl"
           >
-            <CategoryTypeMaster state={editData.Data} relatatedPage={"/CategoryTypeMaster"} />
+            <CategoryTypeMaster state={editData.Data} relatatedPage={"/CategoryTypeMaster"} pageMode={editData.pageMode} />
           </Modal>
         </div>
       </React.Fragment>

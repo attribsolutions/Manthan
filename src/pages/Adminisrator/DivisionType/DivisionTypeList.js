@@ -7,16 +7,11 @@ import paginationFactory, {
 } from "react-bootstrap-table2-paginator";
 import ToolkitProvider, { Search } from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
-import Breadcrumb from "../../../components/Common/Breadcrumb"
 import { useSelector, useDispatch } from "react-redux";
 import { AlertState } from "../../../store/actions";
 import "../../../assets/scss/CustomeTable/datatables.scss";
-
 import { MetaTags } from "react-meta-tags";
 import { useHistory } from "react-router-dom";
-import {
-  CommonGetRoleAccessFunction
-} from "../../../components/Common/CommonGetRoleAccessFunction";
 import DivisionType from "./DivisionType";
 import {
   deleteDivisionTypeIDSuccess,
@@ -223,7 +218,7 @@ const DivisionTypeList = (props) => {
             }}
             size="xl"
           >
-            <DivisionType state={editData.Data} relatatedPage={"/DivisionType"} />
+            <DivisionType state={editData.Data} relatatedPage={"/DivisionType"} pageMode={editData.pageMode}/>
           </Modal>
         </div>
       </React.Fragment>

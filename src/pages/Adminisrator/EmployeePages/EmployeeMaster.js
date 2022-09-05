@@ -20,7 +20,6 @@ import AvField from "availity-reactstrap-validation/lib/AvField";
 import Flatpickr from "react-flatpickr"
 import { BreadcrumbShow } from "../../../store/Utilites/Breadcrumb/actions";
 import { MetaTags } from "react-meta-tags";
-import { CommonGetRoleAccessFunction } from "../../../components/Common/CommonGetRoleAccessFunction";
 import { useHistory } from "react-router-dom";
 
 
@@ -37,6 +36,7 @@ const AddEmployee = (props) => {
   //*** "isEditdata get all data from ModuleID for Binding  Form controls
   var editDataGatingFromList = props.state;
   let propsPageMode = props.pageMode;
+  let pageModeProps=props.pageMode;
 
   const [designation_DropdownSelect, setDesignation_DropdownSelect] = useState("");
   const [employeeType_DropdownSelect, setEmployeeType_DropdownSelect] = useState("");
@@ -97,7 +97,7 @@ const AddEmployee = (props) => {
     if (!(userPageAccessState === '')) { document.getElementById("txtName").focus(); }
     if (!(editDataGatingFromList === undefined)) {
 
-      setPageMode("edit");
+      setPageMode(pageModeProps);
       dispatch(BreadcrumbShow(editDataGatingFromList.Name))
       setEditData(editDataGatingFromList);
       // setIsEdit(true);
@@ -294,7 +294,7 @@ const AddEmployee = (props) => {
 
   // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
   let IsEditMode_Css = ''
-  if (pageMode === "edit" || pageMode == "dropdownAdd") { IsEditMode_Css = "-5.5%" };
+  if ((pageMode === "edit")||(pageMode==="copy")||(pageMode==="dropdownAdd")) { IsEditMode_Css = "-5.5%" };
 
   if (!(userPageAccessState === '')) {
     return (

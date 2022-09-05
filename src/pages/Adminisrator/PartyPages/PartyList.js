@@ -213,7 +213,7 @@ const PartyList = () => {
                         toggle={() => { tog_center() }}
                         size="xl"
                     >
-                        <PartyMaster state={editData.Data} relatatedPage={"/PartyMaster"}/>
+                        <PartyMaster state={editData.Data} relatatedPage={"/PartyMaster"} pageMode={editData.pageMode}/>
                     </Modal>
                 </div>
             </React.Fragment>
