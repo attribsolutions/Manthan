@@ -266,6 +266,9 @@ export const Post_Vehicle_API = (data) => post(url.VEHICLE_API, data)// post api
 export const get_Vehicle_API = () => get(url.VEHICLE_API)//  get Api 
 export const get_VehicleTypes_API = () => get (url.VEHICLETYPES_DROPDOWN)//dropDown
 export const get_DriverListAPI = () => get (url.DRIVERLIST_DROPDOWN)//dropDown
+export const detelet_VehicleType_List_Api = (id) =>del(`${url. VEHICLE_API}/${id}`) // delete api
+export const edit_VehicleType_List_Api = (id) =>get(`${url. VEHICLE_API}/${id}`) // edit api
+export const update_VehicleType_List_Api = (data, id) =>put(`${url. VEHICLE_API}/${id}`, data)// update
 
 export {  
   getLoggedInUser,

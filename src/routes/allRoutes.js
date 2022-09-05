@@ -57,6 +57,7 @@ import CategoryMaster from "../pages/Adminisrator/CategoryPages/CategoryMaster";
 import SubCategoryMaster from "../pages/Adminisrator/SubCategoryPages/SubCategoryMaster";
 import SubCategoryList from "../pages/Adminisrator/SubCategoryPages/SubCategoryList";
 import VehicleMaster from "../pages/Adminisrator/VehiclePages/VehicleMaster";
+import VehicleList from "../pages/Adminisrator/VehiclePages/VehicleList";
 
 
 
@@ -161,6 +162,7 @@ const userRoutes = [
   { path: "/SubCategoryList", component: SubCategoryList },
   
   { path: "/VehicleMaster", component: VehicleMaster },
+  { path: "/VehicleList", component: VehicleList },
 
 
   { path: "/partyUIDemo", component: PartyUIDemo },
