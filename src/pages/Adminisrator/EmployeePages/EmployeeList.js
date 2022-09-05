@@ -35,7 +35,7 @@ const Employee_List = () => {
 
 
   // get Access redux data
-  const { TableListData, editData, updateMessage, deleteMessage,RoleAccessModifiedinSingleArray } = useSelector(
+  const { TableListData, editData, updateMessage, deleteMessage, RoleAccessModifiedinSingleArray } = useSelector(
     (state) => ({
       TableListData: state.M_EmployeesReducer.employeeList,
       editData: state.M_EmployeesReducer.editData,
@@ -46,7 +46,7 @@ const Employee_List = () => {
   );
 
   useEffect(() => {
-    debugger
+
     const locationPath = history.location.pathname
     let userAcc = RoleAccessModifiedinSingleArray.find((inx) => {
       return (`/${inx.ActualPagePath}` === locationPath)
@@ -169,7 +169,8 @@ const Employee_List = () => {
     // For Edit, Delete ,and View Button Common Code function
     listPageCommonButtonFunction({
       dispatchHook: dispatch,
-      deletemsgLable: "Employee",
+      ButtonMsgLable: "Employee",
+      deleteName: "Name",
       userPageAccessState: userPageAccessState,
       editActionFun: editEmployeeeId,
       deleteActionFun: delete_Employee_ID

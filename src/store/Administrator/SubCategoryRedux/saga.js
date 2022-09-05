@@ -1,13 +1,7 @@
 import { call, put, takeEvery } from "redux-saga/effects";
-import { getMethod_ForSubCategoryAPISuccess, PostMethod_ForSubCategoryAPISuccess} from "./action";
-import { GET_METHOD_HANDLER_FOR_PRODUCT_TYPES_API,
-        POST_METHOD_HANDLER_FOR_PRODUCT_TYPES_API,
-        DELETE_PRODUCT_TYPES_ID,
-        EDIT_PRODUCT_TYPES_ID,
-        GET_PRODUCT_TYPES_LIST,
-        UPDATE_PRODUCT_TYPES_ID,
+import { PostMethod_ForSubCategoryAPISuccess} from "./action";
+import { 
         POST_METHOD_HANDLER_FOR_SUBCATEGORY_API,
-        GET_METHOD_HANDLER_FOR_SUBCATEGORY_API,
         GET_SUBCATEGORY_LIST,
         EDIT_SUBCATEGORY_ID,
         DELETE_SUBCATEGORY_ID,
@@ -17,7 +11,7 @@ import { GET_METHOD_HANDLER_FOR_PRODUCT_TYPES_API,
 import { AlertState } from "../../Utilites/CustomAlertRedux/actions";
 import { SpinnerState } from "../../Utilites/Spinner/actions";
 
-import { get_SubCategory_API, 
+import {
          Post_SubCategory_API,
          detelet_SubCategory_List_Api,
          edit_SubCategory_List_Api,
@@ -42,6 +36,7 @@ function*  Post_Method_ForSubCategory_GenFun({ data }) {
     const response = yield call(Post_SubCategory_API, data);
     yield put(SpinnerState(false))
     yield put(PostMethod_ForSubCategoryAPISuccess(response));
+    console.log("response",response)
   } catch (error) {
     yield put(SpinnerState(false))
     yield put(AlertState({
@@ -50,20 +45,6 @@ function*  Post_Method_ForSubCategory_GenFun({ data }) {
     }));
   }
 }
-
-
-///  ProductTypes dropdown list
-function* get_Method_ForSubCategory_GenFun() {
-  
-  try {
-    const response = yield call(get_SubCategory_API);
-    yield put(getMethod_ForSubCategoryAPISuccess(response.Data));
-    console.log("response",response)
-  } catch (error) {
-    console.log("Product Types API page error", error);
-  }
-}
-
 
 // get api
 function* Get_SubCategory_List_GenratorFunction() {
@@ -130,12 +111,8 @@ function* Update_SubCategory_ID_GenratorFunction({ updateData, ID }) {
   }
 }
 
-
-
-
   function*  SubCategorySaga() {
     yield takeEvery(POST_METHOD_HANDLER_FOR_SUBCATEGORY_API,  Post_Method_ForSubCategory_GenFun)
-    yield takeEvery(GET_METHOD_HANDLER_FOR_SUBCATEGORY_API,  get_Method_ForSubCategory_GenFun)
     yield takeEvery(GET_SUBCATEGORY_LIST, Get_SubCategory_List_GenratorFunction)
     yield takeEvery(DELETE_SUBCATEGORY_ID, Delete_SubCategory_ID_GenratorFunction)
     yield takeEvery(EDIT_SUBCATEGORY_ID, Edit_SubCategory_ID_GenratorFunction)

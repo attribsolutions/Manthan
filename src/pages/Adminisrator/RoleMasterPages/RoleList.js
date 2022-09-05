@@ -163,7 +163,8 @@ const RoleList = (props) => {
     // For Edit, Delete ,and View Button Common Code function
     listPageCommonButtonFunction({
       dispatchHook: dispatch,
-      deletemsgLable: "Role",
+      ButtonMsgLable: "Role",
+      deleteName:"Name",
       userPageAccessState: userPageAccessState,
       editActionFun: editRoleId,
       deleteActionFun: deleteRole
