@@ -25,9 +25,10 @@ import { AlertState } from "../../../store/actions";
 import { CommonGetRoleAccessFunction } from "../../../components/Common/CommonGetRoleAccessFunction";
 import { useHistory } from "react-router-dom";
 
-
-
 const CategoryMaster = (props) => {
+  
+    let editDataGatingFromList = props.state;
+
     const formRef = useRef(null);
     const [EditData, setEditData] = useState([]);
     const [pageMode, setPageMode] = useState("");
@@ -41,15 +42,8 @@ const CategoryMaster = (props) => {
     const { PostAPIResponse, ProductTypeAPI, ProductTypes, RoleAccessModifiedinSingleArray } = useSelector((state) => ({
         PostAPIResponse: state.CategoryMasterReducer.PostDataMessage,
         ProductTypeAPI: state.CategoryMasterReducer.ProductTypeAPI,
-        ProductTypes: state.CategoryMasterReducer.ProductTypes,
         RoleAccessModifiedinSingleArray: state.Login.RoleAccessUpdateData,
     }));
-
-    console.log("ProductTypeAPI", ProductTypeAPI)
-
-    //*** "isEditdata get all data from ModuleID for Binding  Form controls
-    let editDataGatingFromList = props.state;
-
 
     //userAccess useEffect
     useEffect(() => {
@@ -75,41 +69,17 @@ const CategoryMaster = (props) => {
 
     }, [RoleAccessModifiedinSingleArray])
 
-
-
-    //userAccess useEffect
-    useEffect(() => {
-
-        if ((editDataGatingFromList === undefined)) {
-
-            const userAcc = CommonGetRoleAccessFunction(history)
-            if (!(userAcc === undefined)) {
-                setUserPageAccessState(userAcc)
-            }
-        } else {
-            let RelatedPageID = history.location.state.UserDetails.RelatedPageID
-            const userfound = RoleAccessModifiedinSingleArray.find((element) => {
-                return element.id === RelatedPageID
-            })
-            setUserPageAccessState(userfound)
-        }
-    }, [history])
-
-    useEffect(() => {
-        dispatch(getMethodForProductTypes());
-    }, [dispatch]);
-
-
-
     // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
     useEffect(() => {
+        debugger
         if (!(userPageAccessState === '')) { document.getElementById("txtName").focus(); }
         if (!(editDataGatingFromList === undefined)) {
             setEditData(editDataGatingFromList);
             setPageMode("edit");
             setProductCategoryTypes_dropdown_Select({
-                value: editDataGatingFromList.ProductTypes_id,
-                label: editDataGatingFromList.ProductTypeName
+               
+                value: editDataGatingFromList.ProductCategoryType_id,
+                label: editDataGatingFromList.ProductCategoryTypeName
             })
             dispatch(editProductTypesIDSuccess({ Status: false }))
             dispatch(BreadcrumbShow(editDataGatingFromList.Name))
@@ -157,7 +127,6 @@ const CategoryMaster = (props) => {
     }, [dispatch]);
 
 
-
     function handllerProductCategoryTypes(e) {
         setProductCategoryTypes_dropdown_Select(e)
     }
@@ -166,8 +135,6 @@ const CategoryMaster = (props) => {
         value: Data.id,
         label: Data.Name
     }));
-
-
 
     const FormSubmitButton_Handler = (event, values) => {
         const jsonBody = JSON.stringify({
@@ -253,7 +220,7 @@ const CategoryMaster = (props) => {
                                                                                 userPageAccessState.RoleAccess_IsEdit ?
                                                                                     <button
                                                                                         type="submit"
-                                                                                        data-mdb-toggle="tooltip" data-mdb-placement="top" title="Update Party Type"
+                                                                                        data-mdb-toggle="tooltip" data-mdb-placement="top" title="Update Category"
                                                                                         className="btn btn-success w-md"
                                                                                     >
                                                                                         <i class="fas fa-edit me-2"></i>Update
@@ -264,7 +231,7 @@ const CategoryMaster = (props) => {
                                                                                     userPageAccessState.RoleAccess_IsSave ?
                                                                                         <button
                                                                                             type="submit"
-                                                                                            data-mdb-toggle="tooltip" data-mdb-placement="top" title="Save ProductCategory Types"
+                                                                                            data-mdb-toggle="tooltip" data-mdb-placement="top" title="Save Category"
                                                                                             className="btn btn-primary w-sm">
                                                                                             <i className="fas fa-save me-2"></i>
                                                                                             Save
@@ -286,8 +253,6 @@ const CategoryMaster = (props) => {
                                     </Row>
                                 </AvForm>
                             </CardBody>
-
-
 
                         </Card>
 

@@ -40,20 +40,23 @@ const CompanyList = () => {
     const [modal_center, setmodal_center] = useState(false);
 
     // get Access redux data
-    const { TableListData, editData, updateMessage, deleteCompanyID, } = useSelector((state) => ({
+    const { TableListData, editData, updateMessage, deleteCompanyID,RoleAccessModifiedinSingleArray } = useSelector((state) => ({
         TableListData: state.Company.companyList,
-        
+        RoleAccessModifiedinSingleArray: state.Login.RoleAccessUpdateData,
         editData: state.Company.editData,
         updateMessage: state.Company.updateMessage,
         deleteCompanyID: state.Company.deleteCompanyID,
     }));
 
     useEffect(() => {
-        const userAcc = CommonGetRoleAccessFunction(history)
+        const locationPath = history.location.pathname
+        let userAcc = RoleAccessModifiedinSingleArray.find((inx) => {
+            return (`/${inx.ActualPagePath}` === locationPath)
+        })
         if (!(userAcc === undefined)) {
             setUserPageAccessState(userAcc)
         }
-    }, [history])
+    }, [RoleAccessModifiedinSingleArray])
 
     // tag_center -- Control the Edit Modal show and close
     function tog_center() {
@@ -154,16 +157,17 @@ const CompanyList = () => {
             dataField: "EmailID",
             sort: true,
         },
-               // For Edit, Delete ,and View Button Common Code function
-               listPageCommonButtonFunction({
-                dispatchHook: dispatch,
-                deletemsgLable: "Company",
-                userPageAccessState: userPageAccessState,
-                editActionFun: editCompanyID,
-                deleteActionFun: deleteCompany_ID
-            })
-    
-      
+        // For Edit, Delete ,and View Button Common Code function
+        listPageCommonButtonFunction({
+            dispatchHook: dispatch,
+            ButtonMsgLable: "Company",
+            deleteName:"Name",
+            userPageAccessState: userPageAccessState,
+            editActionFun: editCompanyID,
+            deleteActionFun: deleteCompany_ID
+        })
+
+
     ];
 
     if (!(userPageAccessState === '')) {
@@ -194,6 +198,8 @@ const CompanyList = () => {
                                             defaultSorted={defaultSorted}
                                             breadcrumbCount={`Company Count: ${TableListData.length}`}
                                             RedirctPath={"/UserMaster"}
+                                            isExcelButtonVisible={true}
+                                            ExcelData={TableListData}
                                         />
                                         <Row>
                                             <Col xl="12">

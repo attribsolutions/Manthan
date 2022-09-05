@@ -38,7 +38,7 @@ const UserList = () => {
     }));
 
     useEffect(() => {
-        
+        debugger
         const locationPath = history.location.pathname
         let userAcc = RoleAccessModifiedinSingleArray.find((inx) => {
             return (`/${inx.ActualPagePath}` === locationPath)
@@ -194,7 +194,9 @@ const UserList = () => {
                                             IsButtonVissible={(userPageAccessState.RoleAccess_IsSave) ? true : false}
                                             IsSearchVissible={true}
                                             SearchProps={toolkitProps.searchProps}
-                                            breadcrumbCount={`Users Count: ${pages.length}`}
+                                            breadcrumbCount={`Users Count: ${pages.length}`} 
+                                            isExcelButtonVisible={true}
+                                            ExcelData={pages}
                                         // RedirctPath={"/UserMaster"}
                                         />
                                         <Row>

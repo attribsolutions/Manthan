@@ -18,6 +18,7 @@ import { CommonGetRoleAccessFunction } from "../../../components/Common/CommonGe
 import { AlertState } from "../../../store/actions";
 import { deleteProductTypesIDSuccess, delete_ProductTypes_ID, editProductTypesID, getProductTypeslist, updateProductTypesIDSuccess } from "../../../store/Administrator/CategoryRedux/action";
 import CategoryMaster from "./CategoryMaster";
+import { listPageCommonButtonFunction } from "../../../components/Common/CmponentRelatedCommonFile/listPageCommonButtons";
 // import { AlertState } from "../../../store/action";
 
 const CategoryList = (props) => {
@@ -40,15 +41,16 @@ const CategoryList = (props) => {
       RoleAccessModifiedinSingleArray: state.Login.RoleAccessUpdateData,
     })
   );
-  console.log("TableListData",TableListData)
 
   useEffect(() => {
-    const userAcc = CommonGetRoleAccessFunction(history)
+    const locationPath = history.location.pathname
+    let userAcc = RoleAccessModifiedinSingleArray.find((inx) => {
+      return (`/${inx.ActualPagePath}` === locationPath)
+    })
     if (!(userAcc === undefined)) {
       setUserPageAccessState(userAcc)
     }
-  }, [history])
-
+  }, [RoleAccessModifiedinSingleArray])
 
   //  This UseEffect => Featch Modules List data  First Rendering
   useEffect(() => {
@@ -115,25 +117,6 @@ const CategoryList = (props) => {
     setmodal_center(!modal_center);
   }
 
-  //select id for delete row
-  const deleteHandeler = (id, name) => {
-    dispatch(
-      AlertState({
-        Type: 5,
-        Status: true,
-        Message: `Are you sure you want to delete this CategoryType Type : "${name}"`,
-        RedirectPath: false,
-        PermissionAction: delete_ProductTypes_ID,
-        ID: id,
-      })
-    );
-  };
-
-  // edit Buutton Handller
-  const EditPageHandler = (id) => {
-    dispatch(editProductTypesID(id));
-  };
-
   const defaultSorted = [
     {
       dataField: "Name", // if dataField is not match to any column you defined, it will be ignored.
@@ -155,55 +138,21 @@ const CategoryList = (props) => {
     },
 
     {
-        text: "ProductCategoryType Name ",
-        dataField: "ProductCategoryTypeName",
-        sort: true,
-      },
-     
-    {
-      text: "Action",
-      hidden: (
-        !(userPageAccessState.RoleAccess_IsEdit)
-        && !(userPageAccessState.RoleAccess_IsView)
-        && !(userPageAccessState.RoleAccess_IsDelete)) ? true : false,
-
-      formatter: (cellContent, Role) => (
-        <div className="d-flex gap-3" style={{ display: 'flex', justifyContent: 'center' }} >
-          {((userPageAccessState.RoleAccess_IsEdit)) ?
-            <Button
-              type="button"
-              data-mdb-toggle="tooltip" data-mdb-placement="top" title="Edit Category Type"
-              onClick={() => { EditPageHandler(Role.id); }}
-              className="badge badge-soft-success font-size-12 btn btn-success waves-effect waves-light w-xxs border border-light"
-            >
-              <i className="mdi mdi-pencil font-size-18" id="edittooltip"></i>
-            </Button> : null}
-
-          {(!(userPageAccessState.RoleAccess_IsEdit) && (userPageAccessState.RoleAccess_IsView)) ?
-            <Button
-              type="button"
-              data-mdb-toggle="tooltip" data-mdb-placement="top" title="View Product Types"
-              onClick={() => { EditPageHandler(Role.id); }}
-              className="badge badge-soft-primary font-size-12 btn btn-primary waves-effect waves-light w-xxs border border-light"
-
-            >
-              <i className="bx bxs-show font-size-18 "></i>
-            </Button> : null}
-
-          {(userPageAccessState.RoleAccess_IsDelete)
-            ?
-            <Button
-              className="badge badge-soft-danger font-size-12 btn btn-danger waves-effect waves-light w-xxs border border-light"
-              data-mdb-toggle="tooltip" data-mdb-placement="top" title="Delete Product Types"
-              onClick={() => { deleteHandeler(Role.id, Role.Name); }}
-            >
-              <i className="mdi mdi-delete font-size-18"></i>
-            </Button>
-            : null
-          }
-        </div>
-      ),
+      text: "Category Type",
+      dataField: "ProductCategoryTypeName",
+      sort: true,
     },
+
+    // For Edit, Delete ,and View Button Common Code function
+    listPageCommonButtonFunction({
+      dispatchHook: dispatch,
+      ButtonMsgLable: "Category",
+      deleteName: "Name",
+      userPageAccessState: userPageAccessState,
+      editActionFun: editProductTypesID,
+      deleteActionFun: delete_ProductTypes_ID
+    })
+
   ];
 
   if (!(userPageAccessState === '')) {
@@ -232,6 +181,8 @@ const CategoryList = (props) => {
                       breadcrumbCount={`Product Count: ${TableListData.length}`}
                       IsSearchVissible={true}
                       RedirctPath={`/CategoryMaster`}
+                      isExcelButtonVisible={true}
+                      ExcelData={TableListData}
                     />
                     <Row>
                       <Col xl="12">
@@ -265,7 +216,7 @@ const CategoryList = (props) => {
             }}
             size="xl"
           >
-            <CategoryMaster state={editData.Data} />
+            <CategoryMaster state={editData.Data} relatatedPage={"/CategoryMaster"} />
           </Modal>
         </div>
       </React.Fragment>

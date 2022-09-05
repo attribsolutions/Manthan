@@ -16,8 +16,8 @@ import CompanyModule from "../pages/Adminisrator/CompanyPages/CompanyModule";
 import CompanyList from "../pages/Adminisrator/CompanyPages/CompanyList";
 // import SubModules from "../pages/Adminisrator/SubModulePages/SubModules";
 // import SubModulesList from "../pages/Adminisrator/SubModulePages/SubModulesList";
-import HPageList from "../pages/Adminisrator/HPagesPages/HPageList";
-import HPageMaster from "../pages/Adminisrator/HPagesPages/HPageMaster";
+import PageList from "../pages/Adminisrator/Page-Pages/PageList";
+import PageMaster from "../pages/Adminisrator/Page-Pages/PageMaster";
 import OrderPage from "../pages/Order/OrderPage";
 import OrderList from "../pages/Order/OrderList"
 import AddUser from "../pages/Adminisrator/UserRegistrationPages/UserRegistration";
@@ -116,8 +116,8 @@ const userRoutes = [
   { path: '/CompanyMaster', component: CompanyModule },
   { path: '/CompanyList', component: CompanyList },
 
-  { path: `/PageList`, component: HPageList },
-  { path: `/PageMaster`, component: HPageMaster },
+  { path: `/PageList`, component: PageList },
+  { path: `/PageMaster`, component: PageMaster },
 
   { path: `/Order`, component: OrderPage },
   { path: `/Orders`, component: OrderList },

@@ -31,7 +31,6 @@ import {
   SAVE_HPAGES,
   UPDATE_H_PAGES,
 } from "./actionType";
-import PageListDropdownData from "./PageListData";
 
 function* fetchHPagesList_GneratorFunction() {
   yield put(SpinnerState(true))
@@ -80,9 +79,11 @@ function* saveHPageSaga_GneratorFunction({ Data }) {
   }
 }
 
-function* editHpages_ID({ id }) {
+function* editHpages_ID({ id,pageMode }) {
   try {
-    const response = yield call(edit_HPageID, id);
+    let response = yield call(edit_HPageID, id);
+    response.pageMode=pageMode
+    debugger
     yield put(editHPagesIDSuccess(response));
   } catch (error) {
     yield put(AlertState({

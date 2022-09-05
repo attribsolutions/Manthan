@@ -24,8 +24,8 @@ const INIT_STATE = {
     ItemGroupList: [],
     BaseUnit: [],
     CategoryType:[],
-    CategoryByCategoryType:[],
-    SubCategoryByCategoryType:[],
+    CategoryByCategoryType:{Data:[],key:null},
+    SubCategoryByCategoryType:{Data:[],key:null},
     ImageType:[],
     MRPType:[],
 };

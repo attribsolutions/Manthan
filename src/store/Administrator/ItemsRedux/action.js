@@ -102,9 +102,9 @@ export const get_CategoryTypes_ForDropDown_Success = (data) => ({
 });
 
 // Category  API dependent on CategoryType api
-  export const get_Category_By_CategoryType_ForDropDown = (id) => ({
+  export const get_Category_By_CategoryType_ForDropDown = (id,key) => ({
     type: GET_CATEGORY_BY_CATEGORYTYPE_FOR_DROPDOWN,
-    id
+    id,key
   });
   
   export const get_Category_By_CategoryType_ForDropDown_Success = (data) => ({
@@ -113,9 +113,9 @@ export const get_CategoryTypes_ForDropDown_Success = (data) => ({
   });
 
   //Sub Category API dependent on Category api 
-   export const get_Sub_Category_By_CategoryType_ForDropDown = (id) => ({
+   export const get_Sub_Category_By_CategoryType_ForDropDown = (id,key) => ({
     type: GET_SUB_CATEGORY_BY_CATEGORYTYPE_FOR_DROPDOWN,
-    id
+    id,key
   });
   
   export const get_Sub_Category_By_CategoryType_ForDropDown_Success = (data) => ({

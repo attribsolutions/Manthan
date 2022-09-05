@@ -35,22 +35,26 @@ const Employee_List = () => {
 
 
   // get Access redux data
-  const { TableListData, editData, updateMessage, deleteMessage } = useSelector(
+  const { TableListData, editData, updateMessage, deleteMessage, RoleAccessModifiedinSingleArray } = useSelector(
     (state) => ({
       TableListData: state.M_EmployeesReducer.employeeList,
       editData: state.M_EmployeesReducer.editData,
       updateMessage: state.M_EmployeesReducer.updateMessage,
       deleteMessage: state.M_EmployeesReducer.deleteMessage,
+      RoleAccessModifiedinSingleArray: state.Login.RoleAccessUpdateData,
     })
   );
 
-
   useEffect(() => {
-    const userAcc = CommonGetRoleAccessFunction(history)
+
+    const locationPath = history.location.pathname
+    let userAcc = RoleAccessModifiedinSingleArray.find((inx) => {
+      return (`/${inx.ActualPagePath}` === locationPath)
+    })
     if (!(userAcc === undefined)) {
       setUserPageAccessState(userAcc)
     }
-  }, [history])
+  }, [RoleAccessModifiedinSingleArray])
 
   //  This UseEffect => Featch Modules List data  First Rendering
   useEffect(() => {
@@ -165,11 +169,12 @@ const Employee_List = () => {
     // For Edit, Delete ,and View Button Common Code function
     listPageCommonButtonFunction({
       dispatchHook: dispatch,
-      deletemsgLable: "Employee",
+      ButtonMsgLable: "Employee",
+      deleteName: "Name",
       userPageAccessState: userPageAccessState,
       editActionFun: editEmployeeeId,
       deleteActionFun: delete_Employee_ID
-  })
+    })
 
   ];
   //tag_center -- Control the Edit Modal show and close
@@ -200,6 +205,8 @@ const Employee_List = () => {
                       SearchProps={toolkitProps.searchProps}
                       breadcrumbCount={`Employee Count: ${TableListData.length}`}
                       IsSearchVissible={true}
+                      isExcelButtonVisible={true}
+                      ExcelData={TableListData}
                     // RedirctPath={"/employeeMaster"}
                     />
                     <Row>

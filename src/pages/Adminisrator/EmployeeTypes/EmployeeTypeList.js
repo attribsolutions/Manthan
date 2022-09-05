@@ -27,21 +27,25 @@ const EmployeeTypeList = (props) => {
   const [modal_center, setmodal_center] = useState(false);
 
   // get Access redux data
-  const { TableListData, editData, updateMessage, deleteMessage } = useSelector(
+  const { TableListData, editData, updateMessage, deleteMessage,RoleAccessModifiedinSingleArray } = useSelector(
     (state) => ({
       TableListData: state.EmployeeTypeReducer.EmployeeTypeList,
       editData: state.EmployeeTypeReducer.editData,
       updateMessage: state.EmployeeTypeReducer.updateMessage,
       deleteMessage: state.EmployeeTypeReducer.deleteMessage,
+      RoleAccessModifiedinSingleArray: state.Login.RoleAccessUpdateData,
     })
   );
 
   useEffect(() => {
-    const userAcc = CommonGetRoleAccessFunction(history)
+    const locationPath = history.location.pathname
+    let userAcc = RoleAccessModifiedinSingleArray.find((inx) => {
+      return (`/${inx.ActualPagePath}` === locationPath)
+    })
     if (!(userAcc === undefined)) {
       setUserPageAccessState(userAcc)
     }
-  }, [history])
+  }, [RoleAccessModifiedinSingleArray])
 
   //  This UseEffect => Featch Modules List data  First Rendering
   useEffect(() => {
@@ -134,21 +138,22 @@ const EmployeeTypeList = (props) => {
       dataField: "IsPartyConnection",
       sort: true,
     },
-    
+
     {
       text: "Is SCM ",
       dataField: "IsSCM",
       sort: true,
     },
-      // For Edit, Delete ,and View Button Common Code function
-      listPageCommonButtonFunction({
-        dispatchHook: dispatch,
-        deletemsgLable: "EmployeeType",
-        userPageAccessState: userPageAccessState,
-        editActionFun: editEmployeeTypeId,
-        deleteActionFun: delete_EmployeeType_ID
+    // For Edit, Delete ,and View Button Common Code function
+    listPageCommonButtonFunction({
+      dispatchHook: dispatch,
+      ButtonMsgLable: "Employee Type",
+      deleteName:"Name",
+      userPageAccessState: userPageAccessState,
+      editActionFun: editEmployeeTypeId,
+      deleteActionFun: delete_EmployeeType_ID
     })
-   
+
   ];
 
   if (!(userPageAccessState === '')) {
@@ -176,6 +181,8 @@ const EmployeeTypeList = (props) => {
                       SearchProps={toolkitProps.searchProps}
                       breadcrumbCount={`EmployeeType Count: ${TableListData.length}`}
                       IsSearchVissible={true}
+                      ExcelData={TableListData}
+                      isExcelButtonVisible={true}
                     />
                     <Row>
                       <Col xl="12">
@@ -209,7 +216,7 @@ const EmployeeTypeList = (props) => {
             }}
             size="xl"
           >
-            <EmployeeTypesMaster state={editData.Data} />
+            <EmployeeTypesMaster state={editData.Data} relatatedPage={"/EmployeeType"} />
           </Modal>
         </div>
       </React.Fragment>

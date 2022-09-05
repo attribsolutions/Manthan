@@ -34,7 +34,7 @@ import { useHistory } from "react-router-dom";
 import { CommonGetRoleAccessFunction } from "../../../components/Common/CommonGetRoleAccessFunction";
 import Modules from "../ModulesPages/Modules";
 
-const HPageMaster = (props) => {
+const PageMaster = (props) => {
 
   const formRef = useRef(null);
   const dispatch = useDispatch();
@@ -42,6 +42,7 @@ const HPageMaster = (props) => {
 
   //*** "isEditdata get all data from ModuleID for Binding  Form controls
   let editDataGatingFromList = props.state;
+  let pageModeProps=props.pageMode
 
   //SetState  Edit data Geting From Modules List component
   const [EditData, setEditData] = useState([]);
@@ -59,19 +60,25 @@ const HPageMaster = (props) => {
     useState("");
 
   //Access redux store Data
-  const { ModuleData, PostAPIResponse, PageList, PageAccess, RoleAccessModifiedinSingleArray, modulePostAPIResponse } = useSelector(
-    (state) => ({
-      ModuleData: state.Modules.modulesList,
-      PostAPIResponse: state.H_Pages.saveMessage,
-      PageList: state.H_Pages.PageList,
-      PageAccess: state.H_Pages.PageAccess,
-      RoleAccessModifiedinSingleArray: state.Login.RoleAccessUpdateData,
-      modulePostAPIResponse: state.Modules.modulesSubmitSuccesss
-    })
-  );
+  const {
+    ModuleData,
+    PostAPIResponse,
+    PageList,
+    PageAccess,
+    RoleAccessModifiedinSingleArray,
+    modulePostAPIResponse } = useSelector(
+      (state) => ({
+        ModuleData: state.Modules.modulesList,
+        PostAPIResponse: state.H_Pages.saveMessage,
+        PageList: state.H_Pages.PageList,
+        PageAccess: state.H_Pages.PageAccess,
+        RoleAccessModifiedinSingleArray: state.Login.RoleAccessUpdateData,
+        modulePostAPIResponse: state.Modules.modulesSubmitSuccesss
+      })
+    );
   // userAccess useEffect
   useEffect(() => {
-debugger
+    // debugger
 
     // if ((editDataGatingFromList === undefined)) {
     //   const userAcc = CommonGetRoleAccessFunction(history)
@@ -107,7 +114,7 @@ debugger
 
 
   }, [RoleAccessModifiedinSingleArray])
-  
+
   // For PageAccess DropDown
   useEffect(() => {
     dispatch(getPageAccess_DropDown_API());
@@ -118,10 +125,13 @@ debugger
 
     if (!(userPageAccessState === '')) { document.getElementById("txtName").focus(); }
     dispatch(fetchModelsList());
+
     if (!(editDataGatingFromList === undefined)) {
+   
+      setPageMode(pageModeProps);
+      
       dispatch(BreadcrumbShow(editDataGatingFromList.Name))
       setEditData(editDataGatingFromList);
-      setPageMode("edit");
       setTablePageAccessDataState(editDataGatingFromList.PagePageAccess);
 
       setModule_DropdownSelect({
@@ -496,7 +506,7 @@ debugger
   }
   // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
   var IsEditMode_Css = "";
-  if (pageMode === "edit") { IsEditMode_Css = "-5.5%" };
+  if ((pageMode === "edit")||(pageMode==="copy")||(pageMode==="dropdownAdd")) { IsEditMode_Css = "-5.5%" };
 
   if (!(userPageAccessState === '')) {
     return (
@@ -833,7 +843,7 @@ debugger
                                     userPageAccessState.RoleAccess_IsEdit ?
                                       <button
                                         type="submit"
-                                        data-mdb-toggle="tooltip" data-mdb-placement="top" title="Update Role"
+                                        data-mdb-toggle="tooltip" data-mdb-placement="top" title="Update Page"
                                         className="btn btn-success w-md"
                                       >
                                         <i class="fas fa-edit me-2"></i>Update
@@ -844,7 +854,7 @@ debugger
                                       userPageAccessState.RoleAccess_IsSave ?
                                         <button
                                           type="submit"
-                                          data-mdb-toggle="tooltip" data-mdb-placement="top" title="Save Role"
+                                          data-mdb-toggle="tooltip" data-mdb-placement="top" title="Save Page"
                                           className="btn btn-primary w-md"
                                         > <i className="fas fa-save me-2"></i> Save
                                         </button>
@@ -920,4 +930,4 @@ debugger
   }
 };
 
-export default HPageMaster;
+export default PageMaster;
