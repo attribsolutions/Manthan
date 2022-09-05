@@ -32,7 +32,7 @@ export const listPageCommonButtonFunction = (props) => {
                     (<Button
                         type="button"
                         data-mdb-toggle="tooltip" data-mdb-placement="top" title={`Edit ${ButtonMsgLable}`}
-                        onClick={() => { dispatch(editActionFun(rowData.id,'edit')); }}
+                        onClick={() => { dispatch(editActionFun(rowData.id, 'edit')); }}
                         className="badge badge-soft-success font-size-12 btn btn-success waves-effect waves-light w-xxs border border-light"
                     >
                         <i className="mdi mdi-pencil font-size-18" id="edittooltip"></i>
@@ -45,7 +45,7 @@ export const listPageCommonButtonFunction = (props) => {
                         <Button
                             type="button"
                             data-mdb-toggle="tooltip" data-mdb-placement="top" title={`EditSelf ${ButtonMsgLable}`}
-                            onClick={() => { dispatch(editActionFun(rowData.id,'edit')); }}
+                            onClick={() => { dispatch(editActionFun(rowData.id, 'edit')); }}
                             className="badge badge-soft-primary font-size-12 btn btn-primary waves-effect waves-light w-xxs border border-light"
                         >
                             <i className="mdi mdi-pencil font-size-18" id="edittooltip"></i>
@@ -58,7 +58,7 @@ export const listPageCommonButtonFunction = (props) => {
                             <Button
                                 type="button"
                                 data-mdb-toggle="tooltip" data-mdb-placement="top" title={`View ${ButtonMsgLable}`}
-                                onClick={() => { dispatch(editActionFun(rowData.id,'copy')); }}
+                                onClick={() => { dispatch(editActionFun(rowData.id, 'copy')); }}
                                 className="badge badge-soft-primary font-size-12 btn btn-primary waves-effect waves-light w-xxs border border-light"
                             >
                                 <i className="bx bxs-show font-size-18 "></i>
@@ -114,8 +114,8 @@ export const listPageCommonButtonFunction = (props) => {
 
             <Button
                 type="button"
-                data-mdb-toggle="tooltip" data-mdb-placement="top" title={`View ${ButtonMsgLable}`}
-                onClick={() => { dispatch(editActionFun((rowData.id),"copy")); }}
+                data-mdb-toggle="tooltip" data-mdb-placement="top" title={`Copy ${ButtonMsgLable}`}
+                onClick={() => { dispatch(editActionFun((rowData.id), "copy")); }}
                 className="badge badge-soft-primary font-size-12 btn btn-primary waves-effect waves-light w-xxs border border-light"
             >
                 <i className="bx bxs-copy font-size-18 "></i>

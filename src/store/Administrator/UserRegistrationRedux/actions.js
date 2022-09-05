@@ -71,9 +71,9 @@ import{
   });
   
   ///// edit api
-  export const editUserId =(id)=>({
+  export const editUserId =(id,pageMode)=>({
     type:EDIT_USER,
-  id,
+  id,pageMode
   })
   export const editSuccess =(data)=>({
     type:EDIT_SUCCESS,

@@ -58,9 +58,9 @@ export const deleteProductTypesIDSuccess = (deleteMessage) => ({
 
 // edit api
 
-export const editProductTypesID = (id) => ({
+export const editProductTypesID = (id,pageMode) => ({
   type: EDIT_PRODUCT_TYPES_ID,
-  id,
+  id,pageMode
 })
 
 export const editProductTypesIDSuccess = (editData) => ({

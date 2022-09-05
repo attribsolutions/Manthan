@@ -54,11 +54,11 @@ function* Delete_EmployeeTypeList_ID_GenratorFunction({ id }) {
 }
 
 // edit api
-function* Edit_EmployeeTypeList_ID_GenratorFunction({ id }) {
+function* Edit_EmployeeTypeList_ID_GenratorFunction({ id ,pageMode}) {
   try {
     const response = yield call(edit_EmployeeType_List_Api, id);
+    response.pageMode=pageMode
     yield put(editEmployeeTypeSuccess(response));
-    console.log("response in saga", response)
 
   } catch (error) {
     yield put(AlertState({

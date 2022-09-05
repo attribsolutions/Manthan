@@ -214,7 +214,7 @@ const SubCategoryList = (props) => {
             }}
             size="xl"
           >
-            <SubCategoryMaster state={editData.Data} relatatedPage={"/SubCategoryMaster"} />
+            <SubCategoryMaster state={editData.Data} relatatedPage={"/SubCategoryMaster"} pageMode={editData.pageMode}/>
           </Modal>
         </div>
       </React.Fragment>

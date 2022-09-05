@@ -54,9 +54,10 @@ function* Delete_PartyType_ID_GenratorFunction({ id }) {
 }
 
 // edit api
-function* Edit_PartyType_ID_GenratorFunction({ id }) {
+function* Edit_PartyType_ID_GenratorFunction({ id,pageMode }) {
   try {
     const response = yield call(edit_PartyType_List_Api, id);
+    response.pageMode=pageMode
     yield put(editPartyTypeSuccess(response));
     console.log("response in saga", response)
 

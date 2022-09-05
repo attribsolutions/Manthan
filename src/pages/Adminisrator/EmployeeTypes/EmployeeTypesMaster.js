@@ -16,7 +16,6 @@ import { AvField, AvForm, AvInput } from "availity-reactstrap-validation";
 import { editEmployeeTypeSuccess, PostEmployeeTypeSubmit, PostEmployeeTypeSubmitSuccess, updateEmployeeTypeID } from "../../../store/Administrator/EmployeeTypeRedux/action";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
-import { CommonGetRoleAccessFunction } from "../../../components/Common/CommonGetRoleAccessFunction";
 import { AlertState } from "../../../store/actions";
 import { BreadcrumbShow } from "../../../store/actions";
 
@@ -29,6 +28,7 @@ const EmployeeTypesMaster = (props) => {
 //*** "isEditdata get all data from ModuleID for Binding  Form controls
 let editDataGatingFromList = props.state;
 let propsPageMode = props.pageMode;
+let pageModeProps=props.pageMode;
 
   //SetState  Edit data Geting From Modules List component
   const [EditData, setEditData] = useState([]);
@@ -70,7 +70,7 @@ let propsPageMode = props.pageMode;
     if (!(userPageAccessState === '')) { document.getElementById("txtName").focus(); }
     if (!(editDataGatingFromList === undefined)) {
       setEditData(editDataGatingFromList);
-      setPageMode("edit");
+      setPageMode(pageModeProps);
       dispatch(editEmployeeTypeSuccess({ Status: false }))
       dispatch(BreadcrumbShow(editDataGatingFromList.Name))
     }
@@ -133,12 +133,10 @@ let propsPageMode = props.pageMode;
             dispatch(PostEmployeeTypeSubmit(jsonBody));
         }
     };
-  
-
 
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
     var IsEditMode_Css = ''
-    if (pageMode === "edit" || pageMode == "dropdownAdd") { IsEditMode_Css = "-5.5%" };
+    if ((pageMode === "edit")||(pageMode==="copy")||(pageMode==="dropdownAdd")) { IsEditMode_Css = "-5.5%" };
 
     if (!(userPageAccessState === '')) {
     return (

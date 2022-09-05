@@ -1,5 +1,3 @@
-import { GET_PAGE_ACCESS } from "../../../helpers/url_helper";
-import { DELETE_MODULE_ID_SUCCESS } from "../ModulesRedux/actionType";
 import {
   DELETE_HPAGES_USING_ID,
   DELETE_H_MODULE_ID_SUCCESS,

@@ -39,9 +39,9 @@ export const fetchCompanyListError = (modulesListError) => ({
 });
 
 //Edit COMPANY Using Id
-export const editCompanyID = (id) => ({
+export const editCompanyID = (id,pageMode) => ({
   type: EDIT_COMPANY_ID,
-  id,
+  id,pageMode
 });
 export const editCompanyIDSuccess = (editData) => ({
   type: EDIT_COMPANY_ID_SUCCESS,

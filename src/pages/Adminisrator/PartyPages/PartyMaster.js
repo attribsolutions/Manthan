@@ -11,10 +11,8 @@ import {
 } from "../../../store/Administrator/PartyRedux/action";
 import { getState } from "../../../store/Administrator/M_EmployeeRedux/action";
 import Flatpickr from "react-flatpickr"
-
 import { BreadcrumbShow } from "../../../store/Utilites/Breadcrumb/actions";
 import { MetaTags } from "react-meta-tags";
-import { CommonGetRoleAccessFunction } from "../../../components/Common/CommonGetRoleAccessFunction";
 import { useHistory } from "react-router-dom";
 
 const PartyMaster = (props) => {
@@ -26,8 +24,7 @@ const PartyMaster = (props) => {
     //*** "isEditdata get all data from ModuleID for Binding  Form controls
     let editDataGatingFromList = props.state;
     let propsPageMode = props.pageMode;
-    // let propsPageMode = props.relatatedPage;
-
+    let pageModeProps=props.pageMode;
 
     //SetState  Edit data Geting From Modules List component
     const [EditData, setEditData] = useState([]);
@@ -57,7 +54,7 @@ const PartyMaster = (props) => {
     // userAccess useEffect
 
     useEffect(() => {
-        debugger
+        
         let userAcc = undefined 
         if ((editDataGatingFromList === undefined)) {
 
@@ -96,7 +93,7 @@ const PartyMaster = (props) => {
         if (!(editDataGatingFromList === undefined)) {
             setEditData(editDataGatingFromList);
             dispatch(BreadcrumbShow(editDataGatingFromList.Name))
-            setPageMode("edit");
+            setPageMode(pageModeProps);
             setFSSAIExipry_Date_Select(editDataGatingFromList.FSSAIExipry)
 
             setDistrict_dropdown_Select({
@@ -264,7 +261,8 @@ const PartyMaster = (props) => {
 
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
     var IsEditMode_Css = ''
-    if (pageMode === "edit" || pageMode == "dropdownAdd") { IsEditMode_Css = "-5.5%" };
+    if ((pageMode === "edit")||(pageMode==="copy")||(pageMode==="dropdownAdd")) { IsEditMode_Css = "-5.5%" };
+
 
     if (!(userPageAccessState === '')) {
         return (
