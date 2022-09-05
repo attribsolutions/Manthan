@@ -60,8 +60,6 @@ const ItemsMaster = (props) => {
 
     const [activeTab1, setactiveTab1] = useState("1")
 
-    const [companyList_dropdown_Select, setCompanyList_dropdown_Select] = useState("");
-    const [BaseUnit_dropdown_Select, setBaseUnit_dropdown_Select] = useState("");
     const [division_dropdown_Select, setDivision_dropdown_Select] = useState("");
 
     let initial = {
@@ -166,6 +164,55 @@ const ItemsMaster = (props) => {
         }
 
     }, [RoleAccessModifiedinSingleArray])
+    useEffect(() => {
+
+        if (!(userPageAccessState === '')) { document.getElementById("txtName0").focus(); }
+       
+    
+        // if (!(editDataGatingFromList === undefined)) {
+        //   setPageMode(pageModeProps);
+        //   dispatch(BreadcrumbShow(editDataGatingFromList.Name))
+
+        //   setEditData(editDataGatingFromList);
+        //   let initialFormValue = {
+        //     Name: "",
+        //     Sequence: "",
+        //     ShortName: "",
+        //     BarCode: { label: "" },
+        //     Company: "",
+        //     BaseUnit: '',
+        //     MRP: '',
+        //     GST: '',
+        //     HSN: '',
+        //     isActive: true,
+        // }
+
+
+
+        // {
+        //     "CategoryType": 1,
+        //     "CategoryTypeName": "Primary",
+        //     "Category": 1,
+        //     "CategoryName": "Shrikhand",
+        //     "SubCategory": 1,
+        //     "SubCategoryName": "Amba"
+        //   }
+        //   {
+        //     CategoryType: { label: 'select', value: 0 },
+        //     CategoryTypeOption: [],
+        //     Category: { label: 'select', value: 0 },
+        //     SubCategory: { label: 'select', value: 0 },
+    
+        //     Category_DropdownOptions: [],
+        //     SubCategory_DropdownOptions: []
+        // }
+
+        // var  initialCategoryValue=
+        //   setFormValue(initial);
+        //   setCategoryTabTable()
+         
+        // }
+      }, [editDataGatingFromList]);
 
     useEffect(() => {
 
