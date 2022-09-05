@@ -147,7 +147,8 @@ const EmployeeTypeList = (props) => {
     // For Edit, Delete ,and View Button Common Code function
     listPageCommonButtonFunction({
       dispatchHook: dispatch,
-      deletemsgLable: "EmployeeType",
+      ButtonMsgLable: "Employee Type",
+      deleteName:"Name",
       userPageAccessState: userPageAccessState,
       editActionFun: editEmployeeTypeId,
       deleteActionFun: delete_EmployeeType_ID

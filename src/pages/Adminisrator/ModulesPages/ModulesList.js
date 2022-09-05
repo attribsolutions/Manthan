@@ -124,7 +124,8 @@ const ModulesList = () => {
         // For Edit, Delete ,and View Button Common Code function
         listPageCommonButtonFunction({
             dispatchHook: dispatch,
-            deletemsgLable: "Module",
+            ButtonMsgLable: "Module",
+            deleteName:"Name",
             userPageAccessState: userPageAccessState,
             editActionFun: editModuleID,
             deleteActionFun: deleteModuleID

@@ -139,7 +139,8 @@ const PartyList = () => {
             // For Edit, Delete ,and View Button Common Code function
             listPageCommonButtonFunction({
                 dispatchHook: dispatch,
-                deletemsgLable: "Module",
+                ButtonMsgLable: "Party",
+                deleteName:"Name",
                 userPageAccessState: userPageAccessState,
                 editActionFun: editPartyID,
                 deleteActionFun: deletePartyID

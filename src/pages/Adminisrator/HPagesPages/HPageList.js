@@ -170,7 +170,8 @@ export default function HPageList() {
       // For Edit, Delete ,and View Button Common Code function
       listPageCommonButtonFunction({
         dispatchHook: dispatch,
-        deletemsgLable: "Page",
+        ButtonMsgLable: "Page ",
+        deleteName:"Name",
         userPageAccessState: userPageAccessState,
         editActionFun: editHPagesID,
         deleteActionFun: deleteHpagesUsingID
