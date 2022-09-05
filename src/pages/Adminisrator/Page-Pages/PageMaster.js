@@ -47,7 +47,7 @@ const PageMaster = (props) => {
   const [EditData, setEditData] = useState([]);
   const [pageMode, setPageMode] = useState("save");
   const [userPageAccessState, setUserPageAccessState] = useState('');
-
+  const [relatedPageListShowUI, setRelatedPageListShowUI] = useState(false);
   const [tablePageAccessDataState, setTablePageAccessDataState] = useState([]);
   const [module_DropdownSelect, setModule_DropdownSelect] = useState("");
   const [pageType_DropdownSelect, setPageType_DropdownSelect] = useState("");
@@ -311,24 +311,27 @@ const PageMaster = (props) => {
   //  for PageType deropDown
   const PageType_DropdownSelectHandller = (e) => {
     if (e.value === 2) {
+      PageList_DropdownSelectHandller()
+      setRelatedPageListShowUI(true)
       // let showCheckBox = document.getElementById("inp-showOnMenu")
-      const findShowOnMenu = PageAccessValues.find((element) => {
-        return element.label === "IsShowOnMenu";
-      });
-      if (!(findShowOnMenu === undefined)) {
-        setTablePageAccessDataState([
-          {
-            AccessID: findShowOnMenu.value,
-            AccessName: findShowOnMenu.label,
-          },
-        ]);
-      }
+      // const findShowOnMenu = PageAccessValues.find((element) => {
+      //   return element.label === "IsShowOnMenu";
+      // });
+      // if (!(findShowOnMenu === undefined)) {
+      //   setTablePageAccessDataState([
+      //     {
+      //       AccessID: findShowOnMenu.value,
+      //       AccessName: findShowOnMenu.label,
+      //     },
+      //   ]);
+      // }
 
       // setisShowPageChecked(true)
       dispatch(getPageList(e.value));
       // showCheckBox.disabled = true
       setPageAccessDropDownView(true);
     } else if (e.value === 1) {
+      setRelatedPageListShowUI(false)
       setTablePageAccessDataState([]);
       // showCheckBox.disabled = false
       setPageAccessDropDownView(false);
@@ -653,7 +656,7 @@ const PageMaster = (props) => {
                         </Col>
 
                         <Col md="1"> </Col>
-                        <Col md="3">
+                        {relatedPageListShowUI ? <Col md="3">
                           <FormGroup className="mb-3">
                             <Label htmlFor="validationCustom01">
                               Related Page List
@@ -667,7 +670,8 @@ const PageMaster = (props) => {
                               }}
                             />
                           </FormGroup>
-                        </Col>
+                        </Col>:<></> }
+                        
                       </Row>
 
                       <Row>
@@ -716,9 +720,11 @@ const PageMaster = (props) => {
                             />
                           </FormGroup>
                         </Col>
+                       
+                      </Row>
 
-                        <Col md="1"> </Col>
-                        <Col md="3">
+                      <Row>
+                      <Col md="3">
                           <FormGroup className="mb-3">
                             <Label htmlFor="validationCustom01">Icon</Label>
                             <AvField
@@ -736,38 +742,25 @@ const PageMaster = (props) => {
                             />
                           </FormGroup>
                         </Col>
-                      </Row>
 
-                      <Row>
+                        <Col md="1"> </Col>
                         <FormGroup className="mb-1 col col-sm-6">
                           <Row className="justify-content-md-left">
-                            {/* <Label htmlFor="horizontal-firstname-input" className="col-sm-3 col-form-label" >Show on Menu</Label>
-                                                    <Col md={2} style={{ marginTop: '9px' }} >
-
-                                                        <div className="form-check form-switch form-switch-md mb-1" dir="ltr">
-                                                            <input type="checkbox" className="form-check-input " id="inp-showOnMenu"
-                                                                checked={isShowPageChecked}
-                                                                name="isShowOnMenu"
-                                                                onChange={() => { setisShowPageChecked(!isShowPageChecked) }}
-                                                            />
-                                                            <label className="form-check-label" htmlFor="customSwitchsizemd"></label>
-                                                        </div>
-                                                    </Col> */}
-                            {/* <Col md="3">  </Col> */}
+                           
                             <Label
                               htmlFor="horizontal-firstname-input"
-                              className="col-sm-2 col-form-label"
+                              className="col-sm-2 col-form-label mt-4"
                             >
                               Active{" "}
                             </Label>
-                            <Col md={2} style={{ marginTop: "9px" }}>
+                            <Col md={5} style={{ marginTop: "15px" }}>
                               <div
                                 className="form-check form-switch form-switch-md mb-1"
                                 dir="ltr"
                               >
                                 <AvInput
                                   type="checkbox"
-                                  className="form-check-input"
+                                  className="form-check-input mt-4"
                                   id="customSwitchsizemd"
                                   checked={EditData.isActive}
                                   name="isActive"
@@ -788,7 +781,7 @@ const PageMaster = (props) => {
                     <Card className=" mt-n2 text-black">
                       <CardBody style={{ backgroundColor: "whitesmoke" }}>
                         <Row className="">
-                          <FormGroup className=" ml-3 col col-sm-4 ">
+                          <FormGroup className=" ml-3 col col-sm-4 mb-3 ">
                             <Label htmlFor="validationCustom01">
                               Page Access
                             </Label>
