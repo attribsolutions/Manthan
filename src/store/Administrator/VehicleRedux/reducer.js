@@ -10,7 +10,6 @@ import {
 
 const INIT_STATE = {
   PostDataMessage: { Status: false },
-  VehicleListAPI: [],
   VehicleList: [],
   DriverList: [],
   VehicleTypes:[],

@@ -70,9 +70,9 @@ export const deleteVehicleTypeIDSuccess = (deleteMessage) => ({
 });
 
 // edit api
-export const editVehicleTypeId = (id) => ({
+export const editVehicleTypeId = (id,pageMode) => ({
   type: EDIT_VEHICLE_TYPE_ID,
-  id,
+  id,pageMode
 })
 export const editVehicleTypeSuccess = (editData) => ({
   type: EDIT_VEHICLE_TYPE_ID_SUCCESS,

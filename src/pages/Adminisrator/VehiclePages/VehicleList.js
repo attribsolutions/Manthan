@@ -148,14 +148,14 @@ const VehicleList = (props) => {
       },
       {
         text: "Vehicle Type",
-        dataField: "VehicleType",
+        dataField: "Vehicletype",
         sort: true,
       },
-      {
-        text: "Division",
-        dataField: "DivisionType",
-        sort: true,
-      },
+      // {
+      //   text: "Division",
+      //   dataField: "DivisionName",
+      //   sort: true,
+      // },
 
     // For Edit, Delete ,and View Button Common Code function
     listPageCommonButtonFunction({
@@ -229,7 +229,7 @@ const VehicleList = (props) => {
             }}
             size="xl"
           >
-            <VehicleMaster state={editData.Data} relatatedPage={"/VehicleMaster"} />
+            <VehicleMaster state={editData.Data} relatatedPage={"/VehicleMaster"} pageMode={editData.pageMode} />
           </Modal>
         </div>
       </React.Fragment>

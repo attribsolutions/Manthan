@@ -21,6 +21,7 @@ import { POST_METHOD_FOR_VEHICLE_MASTER,
 
 } from "./actionType";
 import { AlertState } from "../../actions";
+import { PaginationListStandalone } from "react-bootstrap-table2-paginator";
 
 // Get List Page API
 function* Get_Vehicle_GenratorFunction() {
@@ -95,9 +96,10 @@ function* Delete_VehicleType_ID_GenratorFunction({ id }) {
 }
 
 // edit api
-function* Edit_VehicleType_ID_GenratorFunction({ id }) {
+function* Edit_VehicleType_ID_GenratorFunction({ id ,pageMode}) {
   try {
     const response = yield call(edit_VehicleType_List_Api, id);
+    response.pageMode=pageMode
     yield put(editVehicleTypeSuccess(response));
     console.log("response in saga", response)
 
