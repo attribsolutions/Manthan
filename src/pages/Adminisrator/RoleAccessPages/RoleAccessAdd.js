@@ -26,7 +26,7 @@ const RoleAccessAdd = (props) => {
     const history = useHistory()
     console.log("history", history)
 
-    const [userPageAccessState, setUserPageAccessState] = useState('');
+    const [userPageAccessState, setUserPageAccessState] = useState('11');
 
     const [tableListData, setTableListData] = useState([])
     const [tableHederList, setTableHederList] = useState([])
