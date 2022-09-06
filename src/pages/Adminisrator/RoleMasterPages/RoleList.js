@@ -35,21 +35,25 @@ const RoleList = (props) => {
   const [modal_center, setmodal_center] = useState(false);
 
   // get Access redux data
-  const { TableListData, editData, updateMessage, deleteMessage } = useSelector(
+  const { TableListData, editData, updateMessage, deleteMessage,RoleAccessModifiedinSingleArray } = useSelector(
     (state) => ({
       TableListData: state.RoleMaster_Reducer.pages,
       editData: state.RoleMaster_Reducer.editData,
       updateMessage: state.RoleMaster_Reducer.updateMessage,
       deleteMessage: state.RoleMaster_Reducer.deleteMessage,
+      RoleAccessModifiedinSingleArray: state.Login.RoleAccessUpdateData,
     })
   );
 
   useEffect(() => {
-    const userAcc = CommonGetRoleAccessFunction(history)
+    const locationPath = history.location.pathname
+    let userAcc = RoleAccessModifiedinSingleArray.find((inx) => {
+        return (`/${inx.ActualPagePath}` === locationPath)
+    })
     if (!(userAcc === undefined)) {
-      setUserPageAccessState(userAcc)
+        setUserPageAccessState(userAcc)
     }
-  }, [history])
+}, [RoleAccessModifiedinSingleArray])
 
   //  This UseEffect => Featch Modules List data  First Rendering
   useEffect(() => {
@@ -159,7 +163,8 @@ const RoleList = (props) => {
     // For Edit, Delete ,and View Button Common Code function
     listPageCommonButtonFunction({
       dispatchHook: dispatch,
-      deletemsgLable: "Role",
+      ButtonMsgLable: "Role",
+      deleteName:"Name",
       userPageAccessState: userPageAccessState,
       editActionFun: editRoleId,
       deleteActionFun: deleteRole
@@ -193,6 +198,8 @@ const RoleList = (props) => {
                       breadcrumbCount={`Role Count: ${TableListData.length}`}
                       IsSearchVissible={true}
                     // RedirctPath={`/RoleMaster`}
+                    isExcelButtonVisible={true}
+                    ExcelData={TableListData}
                     />
                     <Row>
                       <Col xl="12">
@@ -226,7 +233,7 @@ const RoleList = (props) => {
             }}
             size="xl"
           >
-            <RoleMaster state={editData.Data} relatatedPage={"/RoleMaster"} />
+            <RoleMaster state={editData.Data} relatatedPage={"/RoleMaster"} pageMode={editData.pageMode} />
           </Modal>
         </div>
       </React.Fragment>

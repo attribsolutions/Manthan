@@ -16,13 +16,12 @@ import {
   updateHPagesSuccess,
 } from "../../../store/Administrator/HPagesRedux/actions";
 import Breadcrumbs from "../../../components/Common/Breadcrumb";
-import HPageMaster from "./HPageMaster";
+import HPageMaster from "./PageMaster";
 import { AlertState } from "../../../store/actions";
 import { useHistory } from "react-router-dom";
-import { CommonGetRoleAccessFunction } from "../../../components/Common/CommonGetRoleAccessFunction";
 import { listPageCommonButtonFunction } from "../../../components/Common/CmponentRelatedCommonFile/listPageCommonButtons";
 
-export default function HPageList() {
+export default function PageList() {
 
   const dispatch = useDispatch();
   const history = useHistory()
@@ -31,20 +30,25 @@ export default function HPageList() {
   const [modal_center, setmodal_center] = useState(false);
 
   // var HPageListData = [];
-  const { HPageListData, editData, updateMessage, deleteModuleID } =
+  const { HPageListData, editData, updateMessage, deleteModuleID,RoleAccessModifiedinSingleArray } =
     useSelector((state) => ({
       HPageListData: state.H_Pages.HPagesListData,
       editData: state.H_Pages.editData,
       updateMessage: state.H_Pages.updateMessage,
       deleteModuleID: state.H_Pages.deleteModuleID,
+      RoleAccessModifiedinSingleArray: state.Login.RoleAccessUpdateData,
+      
     }));
 
-  useEffect(() => {
-    const userAcc = CommonGetRoleAccessFunction(history)
-    if (!(userAcc === undefined)) {
-      setUserPageAccessState(userAcc)
-    }
-  }, [history])
+    useEffect(() => {
+      const locationPath = history.location.pathname
+      let userAcc = RoleAccessModifiedinSingleArray.find((inx) => {
+        return (`/${inx.ActualPagePath}` === locationPath)
+      })
+      if (!(userAcc === undefined)) {
+        setUserPageAccessState(userAcc)
+      }
+    }, [RoleAccessModifiedinSingleArray])
 
   useEffect(() => {
     dispatch(dispatch(GetHpageListData()));
@@ -165,7 +169,8 @@ export default function HPageList() {
       // For Edit, Delete ,and View Button Common Code function
       listPageCommonButtonFunction({
         dispatchHook: dispatch,
-        deletemsgLable: "Page",
+        ButtonMsgLable: "Page ",
+        deleteName:"Name",
         userPageAccessState: userPageAccessState,
         editActionFun: editHPagesID,
         deleteActionFun: deleteHpagesUsingID
@@ -199,6 +204,8 @@ export default function HPageList() {
                       breadcrumbCount={`Page Count: ${HPageListData.length}`}
                       // RedirctPath={ `/${btoa("PageMaster")}`}
                       RedirctPath={`/PageMaster`}
+                      isExcelButtonVisible={true}
+                      ExcelData={HPageListData}
                     />
                     <Row>
                       <Col xl="12">
@@ -236,7 +243,7 @@ export default function HPageList() {
           }}
           size="xl"
         >
-          <HPageMaster state={editData.Data} relatatedPage={"/PageMaster"} />
+          <HPageMaster state={editData.Data} relatatedPage={"/PageMaster"} pageMode={editData.pageMode}/>
 
         </Modal>
 

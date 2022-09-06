@@ -7,16 +7,11 @@ import paginationFactory, {
 } from "react-bootstrap-table2-paginator";
 import ToolkitProvider, { Search } from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
-import Breadcrumb from "../../../components/Common/Breadcrumb"
 import { useSelector, useDispatch } from "react-redux";
 import { AlertState } from "../../../store/actions";
 import "../../../assets/scss/CustomeTable/datatables.scss";
-
 import { MetaTags } from "react-meta-tags";
 import { useHistory } from "react-router-dom";
-import {
-  CommonGetRoleAccessFunction
-} from "../../../components/Common/CommonGetRoleAccessFunction";
 import DivisionType from "./DivisionType";
 import {
   deleteDivisionTypeIDSuccess,
@@ -36,21 +31,27 @@ const DivisionTypeList = (props) => {
   const [modal_center, setmodal_center] = useState(false);
 
   // get Access redux data
-  const { TableListData, editData, updateMessage, deleteMessage } = useSelector(
+  const { TableListData, editData, updateMessage, deleteMessage, RoleAccessModifiedinSingleArray } = useSelector(
     (state) => ({
       TableListData: state.DivisionTypeReducer.ListData,
       editData: state.DivisionTypeReducer.editData,
       updateMessage: state.DivisionTypeReducer.updateMessage,
       deleteMessage: state.DivisionTypeReducer.deleteMessage,
+      RoleAccessModifiedinSingleArray: state.Login.RoleAccessUpdateData,
+
     })
   );
 
   useEffect(() => {
-    const userAcc = CommonGetRoleAccessFunction(history)
+
+    const locationPath = history.location.pathname
+    let userAcc = RoleAccessModifiedinSingleArray.find((inx) => {
+      return (`/${inx.ActualPagePath}` === locationPath)
+    })
     if (!(userAcc === undefined)) {
       setUserPageAccessState(userAcc)
     }
-  }, [history])
+  }, [RoleAccessModifiedinSingleArray])
 
   //  This UseEffect => Featch Modules List data  First Rendering
   useEffect(() => {
@@ -145,13 +146,14 @@ const DivisionTypeList = (props) => {
       sort: true,
     },
 
-       // For Edit, Delete ,and View Button Common Code function
-       listPageCommonButtonFunction({
-        dispatchHook: dispatch,
-        deletemsgLable: "EmployeeType",
-        userPageAccessState: userPageAccessState,
-        editActionFun: editDivisionTypeId,
-        deleteActionFun: delete_DivisionType_ID
+    // For Edit, Delete ,and View Button Common Code function
+    listPageCommonButtonFunction({
+      dispatchHook: dispatch,
+      ButtonMsgLable: "Division Type",
+      deleteName: "Name",
+      userPageAccessState: userPageAccessState,
+      editActionFun: editDivisionTypeId,
+      deleteActionFun: delete_DivisionType_ID
     })
   ];
 
@@ -180,6 +182,8 @@ const DivisionTypeList = (props) => {
                       SearchProps={toolkitProps.searchProps}
                       breadcrumbCount={`Division Count: ${TableListData.length}`}
                       IsSearchVissible={true}
+                      isExcelButtonVisible={true}
+                      ExcelData={TableListData}
                     // RedirctPath={`/RoleMaster`}
                     />
                     <Row>
@@ -214,7 +218,7 @@ const DivisionTypeList = (props) => {
             }}
             size="xl"
           >
-            <DivisionType state={editData.Data} />
+            <DivisionType state={editData.Data} relatatedPage={"/DivisionType"} pageMode={editData.pageMode}/>
           </Modal>
         </div>
       </React.Fragment>

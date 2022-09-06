@@ -34,8 +34,10 @@ import {
     getBaseUnit_ForDropDown,
     get_CategoryTypes_ForDropDown,
     get_Category_By_CategoryType_ForDropDown,
+    get_Category_ForDropDown,
     get_ImageType_ForDropDown,
     get_MRPTypes_ForDropDown,
+    get_SubCategory_ForDropDown,
     get_Sub_Category_By_CategoryType_ForDropDown,
     postItemData,
     PostItemDataSuccess
@@ -49,17 +51,17 @@ const ItemsMaster = (props) => {
     const dispatch = useDispatch();
     const history = useHistory()
 
+    //*** "isEditdata get all data from ModuleID for Binding  Form controls
     let editDataGatingFromList = props.state;
+    let pageModeProps = props.pageMode
 
     const [EditData, setEditData] = useState([]);
     const [pageMode, setPageMode] = useState("save");
-    const [userPageAccessState, setUserPageAccessState] = useState('');
+    const [userPageAccessState, setUserPageAccessState] = useState(11);
     const [selectedFiles, setselectedFiles] = useState([])
 
     const [activeTab1, setactiveTab1] = useState("1")
 
-    const [companyList_dropdown_Select, setCompanyList_dropdown_Select] = useState("");
-    const [BaseUnit_dropdown_Select, setBaseUnit_dropdown_Select] = useState("");
     const [division_dropdown_Select, setDivision_dropdown_Select] = useState("");
 
     let initial = {
@@ -72,36 +74,30 @@ const ItemsMaster = (props) => {
         MRP: '',
         GST: '',
         HSN: '',
-        isActive: false,
-        MRPType:''
+        isActive: true,
     }
 
-    let [name, setName] = useState();
+    const initialInValid = ["txtName0", "txtShortName0", "txtBarCode0", "dropBaseUnit-0", "dropCompany-0", "txtSequence0"]
+    let [isValidate, setIsValidate] = useState(initialInValid);
     let [refresh, setrefresh] = useState('');
 
     const [formValue, setFormValue] = useState(initial);
 
 
-
     // categoryTabTable
     const [categoryTabTable, setCategoryTabTable] = useState([{
-        CategoryType: '',
-        Category: '',
-        SubCategory: ''
+        CategoryType: { label: 'select', value: 0 },
+        CategoryTypeOption: [],
+        Category: { label: 'select', value: 0 },
+        SubCategory: { label: 'select', value: 0 },
+
+        Category_DropdownOptions: [],
+        SubCategory_DropdownOptions: []
     }]);
 
-    const customStyles =
-    {
-        control: (provided, state) => ({
-            ...provided,
-            borderRadius: "0.25rem",
-        }),
-        valueContainer: (provided, state) => ({
-            ...provided,
-            padding: "8px 8px",
-        }),
-    }
-   
+
+
+
     const [marginTabTable, setMarginTabTable] = useState([{
         PriceList: '',
         Margin: ''
@@ -113,12 +109,10 @@ const ItemsMaster = (props) => {
         ImageType: '',
         ImageUpload: ''
     }]);
-
     const [baseUnitTableData, setBaseUnitTableData] = useState([{
-        conversionRatio: '',
-        toBaseUnit: '',
+        Conversion: '',
+        Unit: { label: "", value: 0 },
     }]);
-
     const [rateDetailTableData, setRateDetailTableData] = useState([{
         MRP: '',
         GSTPercentage: '',
@@ -126,7 +120,17 @@ const ItemsMaster = (props) => {
         MRPType: ''
     }]);
 
-    const { companyList, BaseUnit, CategoryType, Category, SubCategory, DivisionType, PostAPIResponse, RoleAccessModifiedinSingleArray, ImageType, MRPType } = useSelector((state) => ({
+    const { companyList,
+        BaseUnit,
+        CategoryType,
+        Category,
+        SubCategory,
+        DivisionType,
+        PostAPIResponse,
+        RoleAccessModifiedinSingleArray,
+        ImageType,
+        MRPType
+    } = useSelector((state) => ({
         companyList: state.Company.companyList,
         BaseUnit: state.ItemMastersReducer.BaseUnit,
         CategoryType: state.ItemMastersReducer.CategoryType,
@@ -141,7 +145,7 @@ const ItemsMaster = (props) => {
 
 
     useEffect(() => {
-        debugger
+
         let userAcc = undefined
         if ((editDataGatingFromList === undefined)) {
 
@@ -162,6 +166,57 @@ const ItemsMaster = (props) => {
         }
 
     }, [RoleAccessModifiedinSingleArray])
+    useEffect(() => {
+
+        if (!(userPageAccessState === '')) { document.getElementById("txtName0").focus(); }
+
+
+        if (!(editDataGatingFromList === undefined)) {
+            let editMode_Data = editDataGatingFromList
+            setPageMode(pageModeProps);
+            dispatch(BreadcrumbShow(editMode_Data.Name))
+
+            //   setEditData(editDataGatingFromList);
+
+            let initialFormValue = {
+                Name: editMode_Data.Name,
+                Sequence: editMode_Data.Sequence,
+                ShortName: editMode_Data.ShortName,
+                BarCode: editMode_Data.BarCode,
+                Company: { label: editMode_Data.CompanyName, value: editMode_Data.CompanyName },
+                BaseUnit: { label: editMode_Data.BaseUnitID, value: editMode_Data.BaseUnitName },
+                isActive: true,
+            }
+            let initialCategory = editMode_Data.ItemCategoryDetails.map((indx) => {
+                return {
+                    CategoryType: {
+                        label: indx.CategoryTypeName,
+                        value: indx.CategoryType
+                    },
+                    CategoryTypeOption: [],
+                    Category: {
+                        label: indx.CategoryName,
+                        value: indx.Category
+                    },
+                    SubCategory: {
+                        label: indx.SubCategoryName,
+                        value: indx.SubCategory
+                    },
+
+                    Category_DropdownOptions: [],
+                    SubCategory_DropdownOptions: []
+                }
+            })
+
+
+
+
+            setFormValue(initialFormValue);
+            setCategoryTabTable(initialCategory)
+
+        }
+
+    }, [editDataGatingFromList]);
 
     useEffect(() => {
 
@@ -197,18 +252,80 @@ const ItemsMaster = (props) => {
         }
     }, [PostAPIResponse])
 
+
+
+
+
     useEffect(() => {
         dispatch(fetchCompanyList());
         dispatch(getBaseUnit_ForDropDown());
         dispatch(get_CategoryTypes_ForDropDown());
-        dispatch(get_Category_By_CategoryType_ForDropDown());
-        dispatch(get_Sub_Category_By_CategoryType_ForDropDown());
+        // dispatch(get_Category_By_CategoryType_ForDropDown());
+        // dispatch(get_Sub_Category_By_CategoryType_ForDropDown());
         dispatch(getPartyListAPI());
         dispatch(get_ImageType_ForDropDown());
         dispatch(get_MRPTypes_ForDropDown());
 
     }, [dispatch]);
 
+
+    useEffect(() => {
+
+        let key = Category.key
+        if ((key === null)) return;
+
+        let Category_DropdownOptions = Category.Data.map((data) => ({
+            value: data.id,
+            label: data.Name
+        }));
+
+        var found = categoryTabTable.find((i, k) => {
+            return (k === key)
+        })
+
+        let newSelectValue = {
+            CategoryType: found.CategoryType,
+            Category: found.Category,
+            SubCategory: found.SubCategory,
+            Category_DropdownOptions: Category_DropdownOptions,
+            SubCategory_DropdownOptions: []
+        }
+
+        let newTabArr = categoryTabTable.map((index, k) => {
+            return (k === key) ? newSelectValue : index
+        })
+        setCategoryTabTable(newTabArr)
+
+    }, [Category]);
+
+    useEffect(() => {
+
+        let key = SubCategory.key
+        if ((key === null)) return;
+
+        let SubCategory_DropdownOptions = SubCategory.Data.map((data) => ({
+            value: data.id,
+            label: data.Name
+        }));
+
+        var found = categoryTabTable.find((i, k) => {
+            return (k === key)
+        })
+
+        let newSelectValue = {
+            CategoryType: found.CategoryType,
+            Category: found.Category,
+            SubCategory: found.SubCategory,
+            Category_DropdownOptions: found.Category_DropdownOptions,
+            SubCategory_DropdownOptions: SubCategory_DropdownOptions,
+        }
+
+        let newTabArr = categoryTabTable.map((index, k) => {
+            return (k === key) ? newSelectValue : index
+        })
+        setCategoryTabTable(newTabArr)
+
+    }, [SubCategory]);
 
 
 
@@ -243,15 +360,15 @@ const ItemsMaster = (props) => {
         label: data.Name
     }));
 
-    const Category_DropdownOptions = Category.map((data) => ({
-        value: data.id,
-        label: data.Name
-    }));
+    // const Category_DropdownOptions = Category.map((data) => ({
+    //     value: data.id,
+    //     label: data.Name
+    // }));
 
-    const SubCategory_DropdownOptions = SubCategory.map((data) => ({
-        value: data.id,
-        label: data.Name
-    }));
+    // const SubCategory_DropdownOptions = SubCategory.Data.map((data) => ({
+    //     value: data.id,
+    //     label: data.Name
+    // }));
 
     const DivisionType_DropdownOptions = DivisionType.map((data) => ({
         value: data.id,
@@ -268,61 +385,101 @@ const ItemsMaster = (props) => {
         label: data.Name
     }));
 
-    function Common_DropDown_handller_ForAll(event, type,) {
-        // if (index.CategoryType.value === 0) {
-        //     categoryTypeCont.className = 'form-control is-invalid'
-        // } else {
-        //     categoryTypeCont.className = ''
-        // }
-        formValue[type] = event
+    function Common_Drop_Validation(event, type, key) {
+        let OnchangeControl = document.getElementById(`drop${type}-${key}`)
+        if (event.value === 0) {
+            OnchangeControl.className = 'form-control is-invalid'
+            return false
+        } else {
+            OnchangeControl.className = '';
+            return true
+        }
+
+    }
+    function Common_Text_INPUT_Validation(value, type, key) {
+
+        let OnchangeControl = document.getElementById(`txt${type}${key}`)
+
+        if (value === '') {
+            OnchangeControl.className = 'form-control is-invalid'
+            return false
+        } else {
+            OnchangeControl.className = 'form-control';
+            return true
+        }
+    }
+    function CommonTab_SimpleText_INPUT_handller_ForAll(event, type, key) {
+        let validateReturn = Common_Text_INPUT_Validation(event, type, 0);
+
+        if (validateReturn === true) {
+            isValidate.push(`txt${type}0`)
+            return
+        } else {
+
+            isValidate = isValidate.filter((indF) => {
+                formValue[`txt${type}0`] = event.target.value
+                return !(indF === `txt${type}0`)
+            })
+            setIsValidate(isValidate)
+        }
+
+    }
+
+    function Common_DropDown_handller_ForAll(event, type, key) {
+
+        let returnVal = Common_Drop_Validation(event, type, key)
+        if (returnVal === '') {
+
+            isValidate.push(`drop${type}-${key}`)
+            return
+        } else {
+            isValidate = isValidate.filter((indFind) => {
+                formValue[type] = event
+                return !(indFind === `drop${type}-${key}`)
+            })
+            setIsValidate(isValidate)
+        }
+
         setrefresh(event)
     }
 
+    function CategoryType_Dropdown_Handler(e, key) {
+        CategoryTab_Common_onChange_Handller(e, key, "CategoryType");
+        dispatch(get_Category_By_CategoryType_ForDropDown
+            (e.value, key))
+    }
+
+    function Category_Dropdown_Handler(e, key) {
+        CategoryTab_Common_onChange_Handller(e, key, "Category");
+        dispatch(get_Sub_Category_By_CategoryType_ForDropDown(e.value, key))
+    }
+
+
+
     function CategoryTab_AddRow_Handler() {
-        
+
         let key = categoryTabTable.length - 1
-        let index = categoryTabTable[key]
+        let cat_TableElement = categoryTabTable[key];
+        let valid = true;
 
-        let categoryTypeCont = document.getElementById(`dropCategoryType-${key}`)
-        let categoryCont = document.getElementById(`dropCategory-${key}`)
-        let subCategoryCont = document.getElementById(`dropSubCategory-${key}`)
+        let arr = ["CategoryType", "Category", "SubCategory"];
+        arr.map((label) => {
+            var valid11 = Common_Drop_Validation(cat_TableElement[label], label, key,)
+            if (!valid11) { valid = valid11 }
+        })
 
-
-        if (index.CategoryType.value === 0) {
-            categoryTypeCont.className = 'form-control is-invalid'
-        } else {
-            categoryTypeCont.className = ''
-        }
-        if (index.Category.value === 0) {
-            categoryCont.className = 'form-control is-invalid'
-
-        } else {
-            categoryCont.className = ''
-        }
-        if (index.SubCategory.value === 0) {
-            subCategoryCont.className = 'form-control is-invalid'
-
-        } else {
-            subCategoryCont.className = ''
-        }
-
-        if (index.CategoryType.value === 0) {
-            return
-        }
-        if (index.Category.value === 0) {
-            return
-        }
-        if (index.SubCategory.value === 0) {
+        if (valid === false) {
             return
         }
 
         var newarr = [...categoryTabTable, {
             CategoryType: { value: 0, label: "select" },
             Category: { value: 0, label: "select" },
-            SubCategory: { value: 0, label: "select" }
+            SubCategory: { value: 0, label: "select" },
+            Category_DropdownOptions: [],
+            SubCategory_DropdownOptions: []
         }]
         setCategoryTabTable(newarr)
-
     }
     function CategoryTab_DeleteRow_Handler(key) {
 
@@ -333,46 +490,43 @@ const ItemsMaster = (props) => {
         setCategoryTabTable(removeElseArrray)
 
     }
+    function CategoryTab_Common_onChange_Handller(event, type, key) {
 
-    function CategoryType_Dropdown_Handler(e) {
-        dispatch(get_Category_By_CategoryType_ForDropDown(e.value))
-    }
-
-    function Category_Dropdown_Handler(e) {
-        dispatch(get_Sub_Category_By_CategoryType_ForDropDown(e.value))
-    }
-
-    function CategoryTab_Common_onChange_Handller(event, key, type) {
-       
-        let OnchangeControl = document.getElementById(`drop${type}-${key}`)
-        if (event.value === 0) {
-            OnchangeControl.className = 'form-control is-invalid'
-            return
-        } else { OnchangeControl.className = '' }
+        let validateReturn = Common_Drop_Validation(event, type, key);
+        if (validateReturn === false) return;
 
 
         var found = categoryTabTable.find((i, k) => {
             return (k === key)
         })
+
         let newSelectValue = ''
+
         if (type === "CategoryType") {
             newSelectValue = {
                 CategoryType: event,
-                Category: found.Category,
-                SubCategory: found.SubCategory
+                Category: { label: 'select', value: 0 },
+                SubCategory: { label: 'select', value: 0 },
+                Category_DropdownOptions: [],
+                SubCategoryOption: []
             }
         }
         else if (type === 'Category') {
             newSelectValue = {
                 CategoryType: found.CategoryType,
                 Category: event,
-                SubCategory: found.SubCategory
+                SubCategory: { label: 'select', value: 0 },
+                Category_DropdownOptions: found.Category_DropdownOptions,
+                SubCategory_DropdownOptions: []
             }
-        } else {
+        }
+        else {
             newSelectValue = {
                 CategoryType: found.CategoryType,
                 Category: found.Category,
-                SubCategory: event
+                SubCategory: event,
+                Category_DropdownOptions: found.Category_DropdownOptions,
+                SubCategory_DropdownOptions: found.SubCategory_DropdownOptions
             }
         }
 
@@ -384,9 +538,17 @@ const ItemsMaster = (props) => {
 
 
     function UnitConversionsTab_AddRow_Handle() {
+
+        let key = baseUnitTableData.length - 1
+        let unit_TableElement = baseUnitTableData[key];
+
+        let validateReturn = Common_Drop_Validation(unit_TableElement.Unit, "Unit", key);
+        let validateReturn1 = Common_Text_INPUT_Validation(unit_TableElement.Conversion, "Conversion", key)
+        if ((validateReturn1 === false) || (validateReturn === false)) return;
+
         var newarr = [...baseUnitTableData, {
-            conversionRatio: '',
-            toBaseUnit: '',
+            Conversion: '',
+            Unit: '',
         }]
         setBaseUnitTableData(newarr)
     }
@@ -399,7 +561,8 @@ const ItemsMaster = (props) => {
         setBaseUnitTableData(removeElseArrray)
 
     }
-    function UnitConversionsTab_BaseUnit2_onChange_Handller(event, key, type) {
+    function UnitConversionsTab_BaseUnit2_onChange_Handller(event, type, key,) {
+
 
         let newSelectValue = ''
 
@@ -408,17 +571,20 @@ const ItemsMaster = (props) => {
         })
 
         if (type === "Conversion") {
+            let validateReturn = Common_Text_INPUT_Validation(event, type, key);
+            if (validateReturn === false) return;
             newSelectValue = {
-                conversionRatio: event.target.value,
-                toBaseUnit: found.toBaseUnit,
+                Conversion: event.target.value,
+                Unit: found.Unit,
             }
         }
-        else if (type === 'BaseUnit') {
+        else if (type === 'Unit') {
+            let validateReturn = Common_Drop_Validation(event, type, key,)
+            if (validateReturn === false) return;
             newSelectValue = {
-                conversionRatio: found.conversionRatio,
-                toBaseUnit: event,
+                Conversion: found.Conversion,
+                Unit: event,
             }
-
         }
 
         let newTabArr = baseUnitTableData.map((index, k) => {
@@ -427,7 +593,23 @@ const ItemsMaster = (props) => {
         setBaseUnitTableData(newTabArr)
         // setBaseUnit_dropdown_Select2(e)
     }
+    function UnitConversions_handller(event, type,) {
 
+        let returnVal = Common_Drop_Validation(event, type, 0,)
+        if (returnVal === '') {
+
+            isValidate.push(`drop${type}-0`)
+            return
+        } else {
+            isValidate = isValidate.filter((indFind) => {
+                formValue[type] = event
+                return !(indFind === `drop${type}-0`)
+            })
+            setIsValidate(isValidate)
+        }
+
+        setrefresh(event)
+    }
 
     function DivisionTab_AddRow_Handle() {
         const find = divisionTableData.find((element) => {
@@ -460,8 +642,9 @@ const ItemsMaster = (props) => {
         )
     }
 
+
     function ImageTab_AddRow_Handler(key) {
-        debugger
+
 
         var newarr1 = [...imageTabTable, {
             ImageType: { value: 0, label: "select" },
@@ -470,14 +653,13 @@ const ItemsMaster = (props) => {
         setImageTabTable(newarr1)
     }
     function ImageTab_DeleteRow_Handler(key) {
-        debugger
         var removeElseArrray1 = imageTabTable.filter((i, k) => {
             return !(k === key)
         })
         setImageTabTable(removeElseArrray1)
     }
     function ImageTab_onChange_Handler(event, key, type) {
-        debugger
+
         var found = imageTabTable.find((i, k) => {
             return (k === key)
         })
@@ -544,7 +726,6 @@ const ItemsMaster = (props) => {
 
 
     function RateDetailTab_AddRow_Handler() {
-       
         var newarr = [...rateDetailTableData, {
             MRPType: { value: 0, label: "select" },
             MRP: '',
@@ -563,7 +744,7 @@ const ItemsMaster = (props) => {
 
     }
     function RateDetail_Common_onChange_Handller(event, key, type) {
-        debugger
+
         var found = rateDetailTableData.find((i, k) => {
             return (k === key)
         })
@@ -611,7 +792,6 @@ const ItemsMaster = (props) => {
 
 
     const handleValidSubmit = (event, values) => {
-        var values = formValue
 
         const itemCategoryDetails = categoryTabTable.map((index) => ({
             CategoryType: index.CategoryType.value,
@@ -620,8 +800,8 @@ const ItemsMaster = (props) => {
         }))
 
         const itemUnitDetails = baseUnitTableData.map((index) => ({
-            BaseUnitQuantity: index.conversionRatio,
-            UnitID: index.toBaseUnit.value,
+            BaseUnitQuantity: index.Conversion,
+            UnitID: index.Unit.value,
         }))
 
         const itemDivisionDetails = divisionTableData.map((index) => ({
@@ -640,74 +820,52 @@ const ItemsMaster = (props) => {
             MRPType: index.MRPType.value
         }))
 
-        if (formValue.Name == '') {
-            setactiveTab1("1")
-            document.getElementById("txtName").className = "form-control is-invalid"
-        }
-        if (formValue.ShortName == '') {
-            setactiveTab1("1")
-            document.getElementById("txtShortName").className = "form-control is-invalid"
-        }
-        if (!(formValue.Company.value === 0)) {
-            setactiveTab1("1")
-            document.getElementById("divCompany").className = "form-control is-invalid"
-        }
-        if (!(formValue.BaseUnit.value === 0)) {
-            setactiveTab1("1")
-            document.getElementById("divBaseUnit").className = "form-control is-invalid"
-        }
-        if (!(formValue.BaseUnit.value === 0)) {
-            setactiveTab1("1")
-            document.getElementById("divBaseUnit").className = "form-control is-invalid"
-        }
 
-        const jsonBody = JSON.stringify({
-            Name: formValue.Name,
-            ShortName: formValue.ShortName,
-            Sequence: formValue.Sequence,
-            BarCode: formValue.BarCode,
-            isActive: formValue.isActive,
-            Company: formValue.Company.value,
-            BaseUnitID: formValue.BaseUnit.value,
-            ItemCategoryDetails: itemCategoryDetails,
-            ItemUnitDetails: itemUnitDetails,
+        let submitValid = false
+        isValidate.map((ind) => {
+            document.getElementById(ind).className = "form-control is-invalid"
+        })
 
-            ItemImagesDetails: [
-                {
-                    ImageType: "1",
-                    Item_pic: "sadsadasdas"
-                }
-            ],
-            ItemDivisionDetails: itemDivisionDetails,
-            ItemMRPDetails: itemMRPDetails,
-            ItemMarginDetails: iteMarginDetails,
+        if ((isValidate.length == 0)) {
+            submitValid = true
+        } else { submitValid = false }
 
-            // ItemImagesDetails: [
-            //     {
-            //         ImageType: "1",
-            //         Item_pic: "sadsadasdas"
-            //     }
-            // ],
-            // ItemDivisionDetails: divisionTableData.value,
-            // ItemGstDetails: [
-            //     {
-            //         GSTPercentage: "5.00",
-            //         MRP: "100.00",
-            //         HSNCode: "Aaaa01"
-            //     }
-            // ],
-            // ItemMarginDetails: [
-            //     {
-            //         PriceList: "1",
-            //         Margin: "10"
-            //     }
-            // ]
-        });
 
-        dispatch(postItemData(jsonBody));
-        console.log("jsonBody", jsonBody)
+
+
+        if (submitValid) {
+
+            const jsonBody = JSON.stringify({
+                Name: formValue.Name,
+                ShortName: formValue.ShortName,
+                Sequence: formValue.Sequence,
+                BarCode: formValue.BarCode,
+                isActive: formValue.isActive,
+                Company: formValue.Company.value,
+                BaseUnitID: formValue.BaseUnit.value,
+                ItemCategoryDetails: itemCategoryDetails,
+                ItemUnitDetails: itemUnitDetails,
+
+                ItemImagesDetails: [
+                    {
+                        ImageType: "1",
+                        Item_pic: "sadsadasdas"
+                    }
+                ],
+                ItemDivisionDetails: itemDivisionDetails,
+                ItemMRPDetails: itemMRPDetails,
+                ItemMarginDetails: iteMarginDetails,
+
+            });
+
+            dispatch(postItemData(jsonBody));
+            console.log("jsonBody", jsonBody)
+        }
+        else {
+            setactiveTab1('1');
+            alert("check Validation")
+        }
     };
-
 
     if (!(userPageAccessState === '')) {
         return (
@@ -881,64 +1039,72 @@ const ItemsMaster = (props) => {
 
                                                                     <FormGroup className="mb-3 col col-sm-4 " >
                                                                         <Label >Name</Label>
-                                                                        <Input type="text" id='txtName'
+                                                                        <Input type="text" id='txtName0'
                                                                             placeholder=" Please Enter Name "
                                                                             autoComplete="off"
-                                                                            onChange={(e) => { dispatch(BreadcrumbShow(e.target.value)); formValue.Name = e.target.value }}
+                                                                            // onChange={(e) => { dispatch(BreadcrumbShow(e.target.value)) }}
+                                                                            onChange={(e) => {
+                                                                                dispatch(BreadcrumbShow(e.target.value));
+                                                                                CommonTab_SimpleText_INPUT_handller_ForAll(e.target.value, "Name")
+                                                                            }}
+
                                                                         />
                                                                     </FormGroup>
 
                                                                     <FormGroup className="mb-3 col col-sm-4 " >
                                                                         <Label >ShortName</Label>
-                                                                        <Input type="text" id='txtShortName'
+                                                                        <Input type="text"
+                                                                            id='txtShortName0'
                                                                             className=""
                                                                             placeholder=" Please Enter ShortName "
                                                                             autoComplete="off"
-                                                                            onChange={(e) => { formValue.ShortName = e.target.value }}
+                                                                            onChange={(e) => { CommonTab_SimpleText_INPUT_handller_ForAll(e.target.value, "ShortName") }}
+                                                                        // onChange={(e) => { formValue.ShortName = e.target.value }}
                                                                         />
                                                                     </FormGroup>
 
                                                                     <FormGroup className=" col col-sm-4 " >
                                                                         <Label htmlFor="validationCustom21">Company</Label>
                                                                         <Select
-                                                                            id='divCompany'
+                                                                            id='dropCompany-0'
                                                                             value={formValue.Company}
                                                                             options={Company_DropdownOptions}
-                                                                            onChange={(event) => Common_DropDown_handller_ForAll(event, "Company")}
+                                                                            onChange={(event) => Common_DropDown_handller_ForAll(event, "Company", 0)}
                                                                         />
                                                                     </FormGroup>
 
                                                                     <FormGroup className=" col col-sm-4 " >
                                                                         <Label htmlFor="validationCustom21">Base Unit</Label>
                                                                         <Select
-                                                                            id='divBaseUnit'
-                                                                            // className="form-control is-invalid"
-
+                                                                            id='dropBaseUnit-0'
                                                                             value={formValue.BaseUnit}
                                                                             options={BaseUnit_DropdownOptions}
-                                                                            onChange={(event) => Common_DropDown_handller_ForAll(event, "BaseUnit")}
+                                                                            onChange={(event) => Common_DropDown_handller_ForAll(event, "BaseUnit", 0)}
                                                                         />
                                                                     </FormGroup>
 
                                                                     <FormGroup className="mb-3 col col-sm-4 " >
                                                                         <Label htmlFor="validationCustom01">BarCode</Label>
                                                                         <Input
+                                                                            id='txtBarCode0'
                                                                             placeholder=" Please Enter BarCode "
                                                                             autoComplete="off"
                                                                             // validate={{
                                                                             //     required: { value: true, errorMessage: 'Please Enter BarCode' },
                                                                             // }}
-                                                                            onChange={(e) => { formValue.BarCode = e.target.value }}
+                                                                            // onChange={(e) => { formValue.BarCode = e.target.value }}
+                                                                            onChange={(e) => { CommonTab_SimpleText_INPUT_handller_ForAll(e.target.value, "BarCode") }}
                                                                         />
                                                                     </FormGroup>
 
                                                                     <FormGroup className="mb-3 col col-sm-4 " >
                                                                         <Label htmlFor="validationCustom01">Sequence</Label>
                                                                         <Input
+                                                                            id='txtSequence0'
                                                                             placeholder=" Please Enter Sequence "
                                                                             autoComplete="off"
-
-                                                                            onChange={(e) => { formValue.Sequence = e.target.value }}
+                                                                            onChange={(e) => { CommonTab_SimpleText_INPUT_handller_ForAll(e.target.value, "ShortName") }}
+                                                                        // onChange={(e) => { formValue.Sequence = e.target.value }}
                                                                         />
 
                                                                     </FormGroup>
@@ -980,8 +1146,11 @@ const ItemsMaster = (props) => {
                                                                                     <Select
                                                                                         id={`dropCategoryType-${key}`}
                                                                                         value={categoryTabTable[key].CategoryType}
+
                                                                                         options={CategoryType_DropdownOptions}
-                                                                                        onChange={(e) => { CategoryTab_Common_onChange_Handller(e, key, "CategoryType"); CategoryType_Dropdown_Handler(e) }}
+                                                                                        onChange={(e) => {
+                                                                                            CategoryType_Dropdown_Handler(e, key, "CategoryType")
+                                                                                        }}
                                                                                     />
                                                                                 </FormGroup>
 
@@ -991,8 +1160,12 @@ const ItemsMaster = (props) => {
                                                                                         id={`dropCategory-${key}`}
                                                                                         // styles={customStyles}
                                                                                         value={categoryTabTable[key].Category}
-                                                                                        options={Category_DropdownOptions}
-                                                                                        onChange={(e) => { CategoryTab_Common_onChange_Handller(e, key, "Category"); Category_Dropdown_Handler(e) }}
+                                                                                        options={categoryTabTable[key].Category_DropdownOptions}
+
+                                                                                        onChange={(e) => {
+                                                                                            Category_Dropdown_Handler(e, key, "Category")
+
+                                                                                        }}
                                                                                     />
                                                                                 </FormGroup>
 
@@ -1002,7 +1175,7 @@ const ItemsMaster = (props) => {
                                                                                         // styles={customStyles}
                                                                                         id={`dropSubCategory-${key}`}
                                                                                         value={categoryTabTable[key].SubCategory}
-                                                                                        options={SubCategory_DropdownOptions}
+                                                                                        options={categoryTabTable[key].SubCategory_DropdownOptions}
                                                                                         onChange={(e) => { CategoryTab_Common_onChange_Handller(e, key, "SubCategory") }}
                                                                                     />
                                                                                 </FormGroup>
@@ -1045,6 +1218,7 @@ const ItemsMaster = (props) => {
 
                                                 </TabPane>
 
+
                                                 <TabPane tabId="3">
                                                     <Col md={12}>
                                                         <Row>
@@ -1056,9 +1230,10 @@ const ItemsMaster = (props) => {
                                                                             <FormGroup className=" col col-sm-4 " >
                                                                                 <Label >Base Unit</Label>
                                                                                 <Select
+                                                                                    id={`dropBaseUnit-0`}
                                                                                     value={formValue.BaseUnit}
                                                                                     options={BaseUnit_DropdownOptions}
-                                                                                    onChange={(e) => Common_DropDown_handller_ForAll(e, "BaseUnit")}
+                                                                                    onChange={(e) => Common_DropDown_handller_ForAll(e, "BaseUnit", 0)}
 
                                                                                 />
                                                                             </FormGroup>
@@ -1082,16 +1257,20 @@ const ItemsMaster = (props) => {
                                                                                                 <Label>1</Label>    {formValue.BaseUnit.label}
                                                                                             </td>
                                                                                             <td>
-                                                                                                <AvInput name="value" type="text"
-                                                                                                    defaultValue={TableValue.conversionRatio}
-                                                                                                    onChange={(e) => UnitConversionsTab_BaseUnit2_onChange_Handller(e, key, "Conversion")}></AvInput>
+                                                                                                <AvInput
+                                                                                                    name="value"
+                                                                                                    type="text"
+                                                                                                    id={`txtConversion${key}`}
+                                                                                                    defaultValue={TableValue.Conversion}
+                                                                                                    onChange={(e) => UnitConversionsTab_BaseUnit2_onChange_Handller(e, "Conversion", key,)}></AvInput>
                                                                                             </td>
                                                                                             <td>
                                                                                                 <Select
-                                                                                                    // placeholder="select unit"
-                                                                                                    value={TableValue.toBaseUnit}
+                                                                                                    id={`dropUnit-${key}`}
+                                                                                                    placeholder="select unit"
+                                                                                                    value={TableValue.Unit}
                                                                                                     options={BaseUnit_DropdownOptions2}
-                                                                                                    onChange={(e) => UnitConversionsTab_BaseUnit2_onChange_Handller(e, key, "BaseUnit")}
+                                                                                                    onChange={(e) => UnitConversionsTab_BaseUnit2_onChange_Handller(e, "Unit", key)}
                                                                                                 />
                                                                                             </td>
                                                                                             <td>
@@ -1404,3 +1583,7 @@ const ItemsMaster = (props) => {
     }
 };
 export default ItemsMaster;
+
+
+
+

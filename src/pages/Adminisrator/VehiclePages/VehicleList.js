@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Breadcrumbs from "../../../components/Common/Breadcrumb";
-import { Button, Col, Modal, Row } from "reactstrap";
+import { Col, Modal, Row } from "reactstrap";
 import paginationFactory, {
   PaginationListStandalone,
   PaginationProvider,
@@ -9,18 +9,21 @@ import ToolkitProvider, { Search } from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 import { useSelector, useDispatch } from "react-redux";
 import "../../../assets/scss/CustomeTable/datatables.scss";
-// import CategoryMaster from "./CategoryMaster";
-
+import VehicleMaster from "./VehicleMaster";
 import { MetaTags } from "react-meta-tags";
 import { useHistory } from "react-router-dom";
-// import { deleteProductCategoryTypeIDSuccess, delete_ProductCategoryType_ID,  updateProductCategoryTypeIDSuccess } from "../../../store/Administrator/PartyTypeRedux/action";
+import {
+    deleteVehicleTypeIDSuccess,
+    updateVehicleTypeIDSuccess,
+    getMethodForVehicleList,
+    editVehicleTypeId,
+    delete_VehicleType_ID,
+} from "../../../store/Administrator/VehicleRedux/action";
 import { AlertState } from "../../../store/actions";
-import { deleteSubCategoryIDSuccess, delete_SubCategory_ID, editSubCategoryID, getSubCategorylist, updateSubCategoryIDSuccess } from "../../../store/Administrator/SubCategoryRedux/action";
-import SubCategoryMaster from "./SubCategoryMaster";
-import { listPageCommonButtonFunction } from "../../../components/Common/CmponentRelatedCommonFile/listPageCommonButtons";
-// import { AlertState } from "../../../store/action";
+import { listPageCommonButtonFunction } 
+from "../../../components/Common/CmponentRelatedCommonFile/listPageCommonButtons";
 
-const SubCategoryList = (props) => {
+const VehicleList = (props) => {
 
   const dispatch = useDispatch();
   const history = useHistory()
@@ -28,16 +31,14 @@ const SubCategoryList = (props) => {
   const [userPageAccessState, setUserPageAccessState] = useState('');
   const [modal_center, setmodal_center] = useState(false);
 
-  // get Access redux data
-  // var  editData=[]
-
   const { TableListData, editData, updateMessage, deleteMessage, RoleAccessModifiedinSingleArray } = useSelector(
     (state) => ({
-      TableListData: state.SubCategoryReducer.SubCategoryListData,
-      editData: state.SubCategoryReducer.editData,
-      updateMessage: state.SubCategoryReducer.updateMessage,
-      deleteMessage: state.SubCategoryReducer.deleteMessage,
+      TableListData: state.VehicleReducer.VehicleList,
+      editData: state.VehicleReducer.editData,
+      updateMessage: state.VehicleReducer.updateMessage,
+      deleteMessage: state.VehicleReducer.deleteMessage,
       RoleAccessModifiedinSingleArray: state.Login.RoleAccessUpdateData,
+
     })
   );
 
@@ -53,25 +54,25 @@ const SubCategoryList = (props) => {
 
   //  This UseEffect => Featch Modules List data  First Rendering
   useEffect(() => {
-    dispatch(getSubCategorylist());
+    dispatch(getMethodForVehicleList());
   }, []);
 
   // This UseEffect => UpadateModal Success/Unsucces  Show and Hide Control Alert_modal
   useEffect(() => {
 
     if (updateMessage.Status === true && updateMessage.StatusCode === 200) {
-      dispatch(updateSubCategoryIDSuccess({ Status: false }));
+      dispatch(updateVehicleTypeIDSuccess({ Status: false }));
       dispatch(
         AlertState({
           Type: 1,
           Status: true,
           Message: updateMessage.Message,
-          AfterResponseAction: getSubCategorylist,
+          AfterResponseAction: getMethodForVehicleList,
         })
       );
       tog_center();
     } else if (updateMessage.Status === true) {
-      dispatch(updateSubCategoryIDSuccess({ Status: false }));
+      dispatch(updateVehicleTypeIDSuccess({ Status: false }));
       dispatch(
         AlertState({
           Type: 3,
@@ -84,17 +85,17 @@ const SubCategoryList = (props) => {
 
   useEffect(() => {
     if (deleteMessage.Status === true && deleteMessage.StatusCode === 200) {
-      dispatch(deleteSubCategoryIDSuccess({ Status: false }));
+      dispatch(deleteVehicleTypeIDSuccess({ Status: false }));
       dispatch(
         AlertState({
           Type: 1,
           Status: true,
           Message: deleteMessage.Message,
-          AfterResponseAction: getSubCategorylist,
+          AfterResponseAction: getMethodForVehicleList,
         })
       );
     } else if (deleteMessage.Status === true) {
-      dispatch(deleteSubCategoryIDSuccess({ Status: false }));
+      dispatch(deleteVehicleTypeIDSuccess({ Status: false }));
       dispatch(
         AlertState({
           Type: 3,
@@ -131,33 +132,47 @@ const SubCategoryList = (props) => {
 
   const pagesListColumns = [
     {
-      text: "Name",
-      dataField: "Name",
+      text: "Vehicle Number",
+      dataField: "VehicleNumber",
       sort: true,
     },
-
     {
-      text: "Category Type  ",
-      dataField: "ProductCategoryTypeName",
-      sort: true,
-    },
+        text: "Description",
+        dataField: "Description",
+        sort: true,
+      },
+      {
+        text: "Driver Name",
+        dataField: "DriverName",
+        sort: true,
+      },
+      {
+        text: "Vehicle Type",
+        dataField: "Vehicletype",
+        sort: true,
+      },
+      // {
+      //   text: "Division",
+      //   dataField: "DivisionName",
+      //   sort: true,
+      // },
 
-   // For Edit, Delete ,and View Button Common Code function
-   listPageCommonButtonFunction({
-    dispatchHook: dispatch,
-    ButtonMsgLable: "SubCategory",
-    deleteName:"Name",
-    userPageAccessState: userPageAccessState,
-    editActionFun: editSubCategoryID,
-    deleteActionFun: delete_SubCategory_ID
-})
+    // For Edit, Delete ,and View Button Common Code function
+    listPageCommonButtonFunction({
+      dispatchHook: dispatch,
+      ButtonMsgLable: "vehicle Type",
+      deleteName: "Name",
+      userPageAccessState: userPageAccessState,
+      editActionFun: editVehicleTypeId,
+      deleteActionFun: delete_VehicleType_ID
+    })
   ];
 
   if (!(userPageAccessState === '')) {
     return (
       <React.Fragment>
         <MetaTags>
-          <title>SubCategoryList| FoodERP-React FrontEnd</title>
+          <title>VehicleList| FoodERP-React FrontEnd</title>
         </MetaTags>
         <div className="page-content">
           <PaginationProvider pagination={paginationFactory(pageOptions)}>
@@ -178,7 +193,7 @@ const SubCategoryList = (props) => {
                       SearchProps={toolkitProps.searchProps}
                       breadcrumbCount={`Product Count: ${TableListData.length}`}
                       IsSearchVissible={true}
-                      RedirctPath={`/SubCategoryMaster`}
+                      RedirctPath={`/VehicleMaster`}
                       isExcelButtonVisible={true}
                       ExcelData={TableListData}
                     />
@@ -214,7 +229,7 @@ const SubCategoryList = (props) => {
             }}
             size="xl"
           >
-            <SubCategoryMaster state={editData.Data} relatatedPage={"/SubCategoryMaster"} pageMode={editData.pageMode}/>
+            <VehicleMaster state={editData.Data} relatatedPage={"/VehicleMaster"} pageMode={editData.pageMode} />
           </Modal>
         </div>
       </React.Fragment>
@@ -227,4 +242,4 @@ const SubCategoryList = (props) => {
   }
 }
 
-export default SubCategoryList;
+export default VehicleList;

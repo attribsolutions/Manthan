@@ -92,9 +92,10 @@ function* Delete_ProductTypes_ID_GenratorFunction({ id }) {
 }
 
 // edit api
-function* Edit_ProductTypes_ID_GenratorFunction({ id }) {
+function* Edit_ProductTypes_ID_GenratorFunction({ id,pageMode }) {
   try {
     const response = yield call(edit_Product_Types_List_Api, id);
+    response.pageMode=pageMode
     yield put(editProductTypesIDSuccess(response));
     console.log("response in saga", response)
 
@@ -127,8 +128,8 @@ function* Update_ProductTypes_ID_GenratorFunction({ updateData, ID }) {
 
 
   function*  CategorySaga() {
-    yield takeEvery(POST_METHOD_HANDLER_FOR_PRODUCT_TYPES_API,  Post_Method_ForProductTypes_GenFun)
-    yield takeEvery(GET_METHOD_HANDLER_FOR_PRODUCT_TYPES_API,  get_Method_ForProductTypes_GenFun)
+    yield takeEvery(POST_METHOD_HANDLER_FOR_PRODUCT_TYPES_API,Post_Method_ForProductTypes_GenFun)
+    yield takeEvery(GET_METHOD_HANDLER_FOR_PRODUCT_TYPES_API, get_Method_ForProductTypes_GenFun)
     yield takeEvery(GET_PRODUCT_TYPES_LIST, Get_ProductTypes_List_GenratorFunction)
     yield takeEvery(DELETE_PRODUCT_TYPES_ID, Delete_ProductTypes_ID_GenratorFunction)
     yield takeEvery(EDIT_PRODUCT_TYPES_ID, Edit_ProductTypes_ID_GenratorFunction)

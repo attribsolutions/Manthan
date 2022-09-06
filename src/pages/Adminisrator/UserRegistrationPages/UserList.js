@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Button, Col, Modal, Row } from "reactstrap";
+import { Col, Modal, Row } from "reactstrap";
 import "../../../assets/scss/CustomeTable/datatables.scss"
 import {
     getUser, deleteUser, editUserId, updateSuccess
@@ -16,7 +16,6 @@ import "../../../assets/scss/CustomeTable/datatables.scss"
 import AddUser from "./UserRegistration";
 import { deleteSuccess } from "../../../store/Administrator/RoleMasterRedux/action";
 import { AlertState } from "../../../store/Utilites/CustomAlertRedux/actions";
-import { CommonGetRoleAccessFunction } from "../../../components/Common/CommonGetRoleAccessFunction";
 import { useHistory } from "react-router-dom";
 import { MetaTags } from "react-meta-tags";
 import Breadcrumbs from "../../../components/Common/Breadcrumb";
@@ -38,7 +37,7 @@ const UserList = () => {
     }));
 
     useEffect(() => {
-        
+        debugger
         const locationPath = history.location.pathname
         let userAcc = RoleAccessModifiedinSingleArray.find((inx) => {
             return (`/${inx.ActualPagePath}` === locationPath)
@@ -194,7 +193,9 @@ const UserList = () => {
                                             IsButtonVissible={(userPageAccessState.RoleAccess_IsSave) ? true : false}
                                             IsSearchVissible={true}
                                             SearchProps={toolkitProps.searchProps}
-                                            breadcrumbCount={`Users Count: ${pages.length}`}
+                                            breadcrumbCount={`Users Count: ${pages.length}`} 
+                                            isExcelButtonVisible={true}
+                                            ExcelData={pages}
                                         // RedirctPath={"/UserMaster"}
                                         />
                                         <Row>
@@ -232,7 +233,7 @@ const UserList = () => {
                         toggle={() => { tog_center() }}
                         size="xl"
                     >
-                        <AddUser state={editData.Data} relatatedPage={"/UserMaster"} />
+                        <AddUser state={editData.Data} relatatedPage={"/UserMaster"} pageMode={editData.pageMode} />
                     </Modal>
                 </div>
             </React.Fragment>

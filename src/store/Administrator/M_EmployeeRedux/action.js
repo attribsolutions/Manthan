@@ -74,9 +74,9 @@ export const delete_Employee_ID = (id) => ({
   });
   
   // edit api
-  export const editEmployeeeId =(id)=>({
+  export const editEmployeeeId =(id,pageMode)=>({
     type:EDIT_EMPLOYEE_ID,
-  id,
+  id,pageMode
   })
   export const editEmployeeSuccess =(editData)=>({
     type:EDIT_EMPLOYEE_ID_SUCCESS,

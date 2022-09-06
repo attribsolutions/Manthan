@@ -1,9 +1,10 @@
 
+import SubCategoryMaster from "../../../pages/Adminisrator/SubCategoryPages/SubCategoryMaster";
 import {
-    GET_METHOD_HANDLER_FOR_SUBCATEGORY_MASTER_API,
-    GET_METHOD_HANDLER_FOR_SUBCATEGORY_MASTER_API_SUCCESS,
-    POST_METHOD_HANDLER_FOR_SUBCATEGORY_MASTER_API,
-    POST_METHOD_HANDLER_FOR_SUBCATEGORY_MASTER_API_SUCCESS,
+    GET_METHOD_HANDLER_FOR_SUBCATEGORY_API,
+    GET_METHOD_HANDLER_FOR_SUBCATEGORY_API_SUCCESS,
+    POST_METHOD_HANDLER_FOR_SUBCATEGORY_API,
+    POST_METHOD_HANDLER_FOR_SUBCATEGORY_API_SUCCESS,
     DELETE_SUBCATEGORY_ID,
     DELETE_SUBCATEGORY_ID_SUCCESS,
     EDIT_SUBCATEGORY_ID,
@@ -11,31 +12,30 @@ import {
     GET_SUBCATEGORY_LIST,
     GET_SUBCATEGORY_LIST_SUCCESS,
     UPDATE_SUBCATEGORY_ID,
-    UPDATE_SUBCATEGORY_ID_SUCCESS,
-    
+    UPDATE_SUBCATEGORY_ID_SUCCESS
   } from "./actionTypes";
   
-  export const PostMethodForSubCategoryMaster= (data) => ({
-    type: POST_METHOD_HANDLER_FOR_SUBCATEGORY_MASTER_API,
+  export const PostMethodForSubCategory = (data) => ({
+    type: POST_METHOD_HANDLER_FOR_SUBCATEGORY_API,
     data,
   });
-  
-  export const PostMethod_ForSubCategoryMasterAPISuccess = (data) => ({
-    type: POST_METHOD_HANDLER_FOR_SUBCATEGORY_MASTER_API_SUCCESS,
+ 
+  export const PostMethod_ForSubCategoryAPISuccess = (data) => ({
+    type: POST_METHOD_HANDLER_FOR_SUBCATEGORY_API_SUCCESS,
     payload: data,
   });
   
-  export const getMethodForSubCategoryMaster= () => ({
-    type: GET_METHOD_HANDLER_FOR_SUBCATEGORY_MASTER_API,
+  export const getMethodForSubCategory = () => ({
+    type: GET_METHOD_HANDLER_FOR_SUBCATEGORY_API,
     
   });
   
-  export const getMethod_ForSubCategoryMasterAPISuccess = (ProductTypes) => ({
-    type: GET_METHOD_HANDLER_FOR_SUBCATEGORY_MASTER_API_SUCCESS,
-    payload: ProductTypes,
+  export const getMethod_ForSubCategoryAPISuccess = (SubCategoryMaster) => ({
+    type: GET_METHOD_HANDLER_FOR_SUBCATEGORY_API_SUCCESS,
+    payload: SubCategoryMaster,
   });
   
-  /// get Product Category Type list 
+  /// get SubCategory list 
   export const getSubCategorylist = () => ({
     type: GET_SUBCATEGORY_LIST,
   });
@@ -58,9 +58,9 @@ import {
   
   // edit api
   
-  export const editSubCategoryID = (id) => ({
+  export const editSubCategoryID = (id,pageMode) => ({
     type: EDIT_SUBCATEGORY_ID,
-    id,
+    id,pageMode
   })
   
   export const editSubCategoryIDSuccess = (editData) => ({
@@ -76,5 +76,9 @@ import {
     type: UPDATE_SUBCATEGORY_ID_SUCCESS,
     payload: updateMessage,
   })
+
+
+
   
+
   

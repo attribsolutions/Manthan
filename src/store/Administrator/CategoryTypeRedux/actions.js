@@ -47,9 +47,9 @@ export const deleteCategoryTypeIDSuccess = (deleteMessage) => ({
 
 // edit api
 
-export const editCategoryTypeID = (id) => ({
+export const editCategoryTypeID = (id,pageMode) => ({
   type: EDIT_CATEGORY_TYPE_ID,
-  id,
+  id,pageMode
 })
 
 export const editCategoryTypeIDSuccess = (editData) => ({

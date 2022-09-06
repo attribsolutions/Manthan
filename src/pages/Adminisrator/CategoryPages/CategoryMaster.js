@@ -25,9 +25,11 @@ import { AlertState } from "../../../store/actions";
 import { CommonGetRoleAccessFunction } from "../../../components/Common/CommonGetRoleAccessFunction";
 import { useHistory } from "react-router-dom";
 
-
-
 const CategoryMaster = (props) => {
+
+    let editDataGatingFromList = props.state;
+    let pageModeProps = props.pageMode;
+
     const formRef = useRef(null);
     const [EditData, setEditData] = useState([]);
     const [pageMode, setPageMode] = useState("");
@@ -41,18 +43,12 @@ const CategoryMaster = (props) => {
     const { PostAPIResponse, ProductTypeAPI, ProductTypes, RoleAccessModifiedinSingleArray } = useSelector((state) => ({
         PostAPIResponse: state.CategoryMasterReducer.PostDataMessage,
         ProductTypeAPI: state.CategoryMasterReducer.ProductTypeAPI,
-        ProductTypes: state.CategoryMasterReducer.ProductTypes,
         RoleAccessModifiedinSingleArray: state.Login.RoleAccessUpdateData,
     }));
 
-    console.log("ProductTypeAPI", ProductTypeAPI)
-
-    //*** "isEditdata get all data from ModuleID for Binding  Form controls
-    let editDataGatingFromList = props.state;
-
-
     //userAccess useEffect
     useEffect(() => {
+
         let userAcc = undefined
         if ((editDataGatingFromList === undefined)) {
 
@@ -74,41 +70,17 @@ const CategoryMaster = (props) => {
 
     }, [RoleAccessModifiedinSingleArray])
 
-
-
-    //userAccess useEffect
-    useEffect(() => {
-
-        if ((editDataGatingFromList === undefined)) {
-
-            const userAcc = CommonGetRoleAccessFunction(history)
-            if (!(userAcc === undefined)) {
-                setUserPageAccessState(userAcc)
-            }
-        } else {
-            let RelatedPageID = history.location.state.UserDetails.RelatedPageID
-            const userfound = RoleAccessModifiedinSingleArray.find((element) => {
-                return element.id === RelatedPageID
-            })
-            setUserPageAccessState(userfound)
-        }
-    }, [history])
-
-    useEffect(() => {
-        dispatch(getMethodForProductTypes());
-    }, [dispatch]);
-
-
-
     // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
     useEffect(() => {
+  
         if (!(userPageAccessState === '')) { document.getElementById("txtName").focus(); }
         if (!(editDataGatingFromList === undefined)) {
             setEditData(editDataGatingFromList);
-            setPageMode("edit");
+            setPageMode(pageModeProps);
             setProductCategoryTypes_dropdown_Select({
-                value: editDataGatingFromList.ProductTypes_id,
-                label: editDataGatingFromList.ProductTypeName
+
+                value: editDataGatingFromList.ProductCategoryType_id,
+                label: editDataGatingFromList.ProductCategoryTypeName
             })
             dispatch(editProductTypesIDSuccess({ Status: false }))
             dispatch(BreadcrumbShow(editDataGatingFromList.Name))
@@ -156,7 +128,6 @@ const CategoryMaster = (props) => {
     }, [dispatch]);
 
 
-
     function handllerProductCategoryTypes(e) {
         setProductCategoryTypes_dropdown_Select(e)
     }
@@ -165,8 +136,6 @@ const CategoryMaster = (props) => {
         value: Data.id,
         label: Data.Name
     }));
-
-
 
     const FormSubmitButton_Handler = (event, values) => {
         const jsonBody = JSON.stringify({
@@ -185,7 +154,7 @@ const CategoryMaster = (props) => {
 
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
     var IsEditMode_Css = ''
-    if (pageMode === "edit") { IsEditMode_Css = "-5.5%" };
+    if ((pageMode === "edit")||(pageMode==="copy")||(pageMode==="dropdownAdd")) { IsEditMode_Css = "-5.5%" };
 
     if (!(userPageAccessState === '')) {
         return (
@@ -231,7 +200,7 @@ const CategoryMaster = (props) => {
                                                         <Row>
                                                             <Col md="4">
                                                                 <FormGroup className="mb-3">
-                                                                    <Label htmlFor="validationCustom01"> ProductCategory Type </Label>
+                                                                    <Label htmlFor="validationCustom01"> Category Type </Label>
                                                                     <Col sm={12}>
                                                                         <Select
                                                                             value={ProductCategoryTypes_dropdown_Select}
@@ -252,7 +221,7 @@ const CategoryMaster = (props) => {
                                                                                 userPageAccessState.RoleAccess_IsEdit ?
                                                                                     <button
                                                                                         type="submit"
-                                                                                        data-mdb-toggle="tooltip" data-mdb-placement="top" title="Update Party Type"
+                                                                                        data-mdb-toggle="tooltip" data-mdb-placement="top" title="Update Category"
                                                                                         className="btn btn-success w-md"
                                                                                     >
                                                                                         <i class="fas fa-edit me-2"></i>Update
@@ -263,7 +232,7 @@ const CategoryMaster = (props) => {
                                                                                     userPageAccessState.RoleAccess_IsSave ?
                                                                                         <button
                                                                                             type="submit"
-                                                                                            data-mdb-toggle="tooltip" data-mdb-placement="top" title="Save ProductCategory Types"
+                                                                                            data-mdb-toggle="tooltip" data-mdb-placement="top" title="Save Category"
                                                                                             className="btn btn-primary w-sm">
                                                                                             <i className="fas fa-save me-2"></i>
                                                                                             Save
@@ -285,8 +254,6 @@ const CategoryMaster = (props) => {
                                     </Row>
                                 </AvForm>
                             </CardBody>
-
-
 
                         </Card>
 

@@ -99,9 +99,10 @@ function* Delete_UserList_GenratorFunction({ id }) {
 }
 
 // edit api
-function* Edit_UserList_GenratorFunction({ id }) {
+function* Edit_UserList_GenratorFunction({ id,pageMode}) {
   try {
     const response = yield call(User_Component_EditById_API, id);
+    response.pageMode=pageMode
     yield put(editSuccess(response));
   } catch (error) {
     yield put(AlertState({

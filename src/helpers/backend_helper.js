@@ -189,7 +189,7 @@ export const Items_Master_Edit_API = (id) => get(`${url.Items_MASTER_API}/${id}`
 export const Items_Master_Update_API = (data, id) => put(`${url.Items_MASTER_API}/${id}`, data)// update api
 
 export const BaseUnit_Get_DropDown_API = () => get(url.BASEUNIT_DROPDOWN_API)// BaseUnit DropDown api
-export const CategoryType_Get_DropDown_API = () => get(url.CATEGORYTYPE_DROPDOWN_API)// CategoryType DropDown api
+export const CategoryType_Get_DropDown_API = () => get(url.CATEGORY_TYPES_API)// CategoryType DropDown api
 export const ImageType_Get_DropDown_API = () => get(url.IMAGETYPE_DROPDOWN_API)// ImageType DropDown api
 export const MRPType_Get_DropDown_API = () => get(url.MRP_TYPE_DROPDOWN_API)// MRP Type DropDown api
 export const Category_By_CategoryTypes_DropDown_API = (id) => get(`${url.CATEGORY_DROPDOWN_API}/${id}`)//  GetCategoryByCategoryTypeID DropDown API
@@ -238,20 +238,37 @@ export const detelet_DivisionType_List_Api = (id) => del(`${url.DIVISION_TYPES_A
 export const edit_DivisionType_List_Api = (id) => get(`${url.DIVISION_TYPES_API}/${id}`) // edit api
 export const update_DivisionType_List_Api = (data, id) => put(`${url.DIVISION_TYPES_API}/${id}`, data)// update 
 
-// Cateogory Type Master API
-export const Post_Category_Type_Master_API = (data) => post(url.CATEGORY_TYPE_MASTER_API, data)// post api
-export const get_CategoryType_List_Api = () => get(url.CATEGORY_TYPE_MASTER_API) // get api
-export const detelet_CategoryType_List_Api = (id) => del(`${url.CATEGORY_TYPE_MASTER_API}/${id}`) // delete api
-export const edit_CategoryType_List_Api = (id) => get(`${url.CATEGORY_TYPE_MASTER_API}/${id}`) // edit api
-export const update_CategoryType_List_Api = (data, id) => put(`${url.CATEGORY_TYPE_MASTER_API}/${id}`, data)// update
+// Cateogory Types API
+export const Post_Category_Type_Master_API = (data) => post(url.CATEGORY_TYPES_API, data)// post api
+export const get_CategoryType_List_Api = () => get(url.CATEGORY_TYPES_API) // get api
+export const detelet_CategoryType_List_Api = (id) => del(`${url.CATEGORY_TYPES_API}/${id}`) // delete api
+export const edit_CategoryType_List_Api = (id) => get(`${url.CATEGORY_TYPES_API}/${id}`) // edit api
+export const update_CategoryType_List_Api = (data, id) => put(`${url.CATEGORY_TYPES_API}/${id}`, data)// update
 
-//Product Types API
-export const Post_Product_Types_API = (data) => post(url. CATEGORY_TYPES_API, data)// post api
+//Category API
+export const Post_Product_Types_API = (data) => post(url. CATEGORY_API,data)// post api
 export const get_Product_Category_Type_Master_API = () => get(url. CATEGORY_TYPES_API)// Product Category DropDown Api api
-export const get_Product_Types_List_Api = () => get(url. CATEGORY_TYPES_API) // get api
-export const detelet_Product_Types_List_Api = (id) =>del(`${url. CATEGORY_TYPES_API}/${id}`) // delete api
-export const edit_Product_Types_List_Api = (id) =>get(`${url. CATEGORY_TYPES_API}/${id}`) // edit api
-export const update_Product_Types_List_Api = (data, id) =>put(`${url. CATEGORY_TYPES_API}/${id}`, data)// update
+export const get_Product_Types_List_Api = () => get(url. CATEGORY_API) // get api
+export const detelet_Product_Types_List_Api = (id) =>del(`${url. CATEGORY_API}/${id}`) // delete api
+export const edit_Product_Types_List_Api = (id) =>get(`${url. CATEGORY_API}/${id}`) // edit api
+export const update_Product_Types_List_Api = (data, id) =>put(`${url. CATEGORY_API}/${id}`, data)// update
+
+//Sub-Category API
+export const Post_SubCategory_API = (data) => post(url. SUB_CATEGORY_API, data)// post api
+export const get_SubCategory_API = () => get(url.CATEGORY_API)// Product Category DropDown Api api
+export const get_SubCategory_List_Api = () => get(url. SUB_CATEGORY_API) // get api
+export const detelet_SubCategory_List_Api = (id) =>del(`${url. SUB_CATEGORY_API}/${id}`) // delete api
+export const edit_SubCategory_List_Api = (id) =>get(`${url. SUB_CATEGORY_API}/${id}`) // edit api
+export const update_SubCategory_List_Api = (data, id) =>put(`${url. SUB_CATEGORY_API}/${id}`, data)// update
+
+//Vehicle API
+export const Post_Vehicle_API = (data) => post(url.VEHICLE_API, data)// post api
+export const get_Vehicle_API = () => get(url.VEHICLE_API)//  get Api 
+export const get_VehicleTypes_API = () => get (url.VEHICLETYPES_DROPDOWN)//dropDown
+export const get_DriverListAPI = () => get (url.DRIVERLIST_DROPDOWN)//dropDown
+export const detelet_VehicleType_List_Api = (id) =>del(`${url. VEHICLE_API}/${id}`) // delete api
+export const edit_VehicleType_List_Api = (id) =>get(`${url. VEHICLE_API}/${id}`) // edit api
+export const update_VehicleType_List_Api = (data, id) =>put(`${url. VEHICLE_API}/${id}`, data)// update
 
 export {  
   getLoggedInUser,
@@ -263,4 +280,18 @@ export {
 
   postJwtRegister,
   postJwtProfile,
+
+
+
+  
 }
+
+
+
+
+
+
+
+
+
+

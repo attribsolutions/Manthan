@@ -31,10 +31,9 @@ import { MetaTags } from "react-meta-tags";
 import { AlertState } from "../../../store/actions";
 import { BreadcrumbShow } from "../../../store/Utilites/Breadcrumb/actions";
 import { useHistory } from "react-router-dom";
-import { CommonGetRoleAccessFunction } from "../../../components/Common/CommonGetRoleAccessFunction";
 import Modules from "../ModulesPages/Modules";
 
-const HPageMaster = (props) => {
+const PageMaster = (props) => {
 
   const formRef = useRef(null);
   const dispatch = useDispatch();
@@ -42,12 +41,13 @@ const HPageMaster = (props) => {
 
   //*** "isEditdata get all data from ModuleID for Binding  Form controls
   let editDataGatingFromList = props.state;
+  let pageModeProps=props.pageMode
 
   //SetState  Edit data Geting From Modules List component
   const [EditData, setEditData] = useState([]);
   const [pageMode, setPageMode] = useState("save");
   const [userPageAccessState, setUserPageAccessState] = useState('');
-
+  const [relatedPageListShowUI, setRelatedPageListShowUI] = useState(false);
   const [tablePageAccessDataState, setTablePageAccessDataState] = useState([]);
   const [module_DropdownSelect, setModule_DropdownSelect] = useState("");
   const [pageType_DropdownSelect, setPageType_DropdownSelect] = useState("");
@@ -59,19 +59,25 @@ const HPageMaster = (props) => {
     useState("");
 
   //Access redux store Data
-  const { ModuleData, PostAPIResponse, PageList, PageAccess, RoleAccessModifiedinSingleArray, modulePostAPIResponse } = useSelector(
-    (state) => ({
-      ModuleData: state.Modules.modulesList,
-      PostAPIResponse: state.H_Pages.saveMessage,
-      PageList: state.H_Pages.PageList,
-      PageAccess: state.H_Pages.PageAccess,
-      RoleAccessModifiedinSingleArray: state.Login.RoleAccessUpdateData,
-      modulePostAPIResponse: state.Modules.modulesSubmitSuccesss
-    })
-  );
+  const {
+    ModuleData,
+    PostAPIResponse,
+    PageList,
+    PageAccess,
+    RoleAccessModifiedinSingleArray,
+    modulePostAPIResponse } = useSelector(
+      (state) => ({
+        ModuleData: state.Modules.modulesList,
+        PostAPIResponse: state.H_Pages.saveMessage,
+        PageList: state.H_Pages.PageList,
+        PageAccess: state.H_Pages.PageAccess,
+        RoleAccessModifiedinSingleArray: state.Login.RoleAccessUpdateData,
+        modulePostAPIResponse: state.Modules.modulesSubmitSuccesss
+      })
+    );
   // userAccess useEffect
   useEffect(() => {
-debugger
+    // debugger
 
     // if ((editDataGatingFromList === undefined)) {
     //   const userAcc = CommonGetRoleAccessFunction(history)
@@ -107,7 +113,7 @@ debugger
 
 
   }, [RoleAccessModifiedinSingleArray])
-  
+
   // For PageAccess DropDown
   useEffect(() => {
     dispatch(getPageAccess_DropDown_API());
@@ -118,10 +124,13 @@ debugger
 
     if (!(userPageAccessState === '')) { document.getElementById("txtName").focus(); }
     dispatch(fetchModelsList());
+
     if (!(editDataGatingFromList === undefined)) {
+   
+      setPageMode(pageModeProps);
+      
       dispatch(BreadcrumbShow(editDataGatingFromList.Name))
       setEditData(editDataGatingFromList);
-      setPageMode("edit");
       setTablePageAccessDataState(editDataGatingFromList.PagePageAccess);
 
       setModule_DropdownSelect({
@@ -302,24 +311,27 @@ debugger
   //  for PageType deropDown
   const PageType_DropdownSelectHandller = (e) => {
     if (e.value === 2) {
+      PageList_DropdownSelectHandller()
+      setRelatedPageListShowUI(true)
       // let showCheckBox = document.getElementById("inp-showOnMenu")
-      const findShowOnMenu = PageAccessValues.find((element) => {
-        return element.label === "IsShowOnMenu";
-      });
-      if (!(findShowOnMenu === undefined)) {
-        setTablePageAccessDataState([
-          {
-            AccessID: findShowOnMenu.value,
-            AccessName: findShowOnMenu.label,
-          },
-        ]);
-      }
+      // const findShowOnMenu = PageAccessValues.find((element) => {
+      //   return element.label === "IsShowOnMenu";
+      // });
+      // if (!(findShowOnMenu === undefined)) {
+      //   setTablePageAccessDataState([
+      //     {
+      //       AccessID: findShowOnMenu.value,
+      //       AccessName: findShowOnMenu.label,
+      //     },
+      //   ]);
+      // }
 
       // setisShowPageChecked(true)
       dispatch(getPageList(e.value));
       // showCheckBox.disabled = true
       setPageAccessDropDownView(true);
     } else if (e.value === 1) {
+      setRelatedPageListShowUI(false)
       setTablePageAccessDataState([]);
       // showCheckBox.disabled = false
       setPageAccessDropDownView(false);
@@ -496,7 +508,7 @@ debugger
   }
   // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
   var IsEditMode_Css = "";
-  if (pageMode === "edit") { IsEditMode_Css = "-5.5%" };
+  if ((pageMode === "edit")||(pageMode==="copy")||(pageMode==="dropdownAdd")) { IsEditMode_Css = "-5.5%" };
 
   if (!(userPageAccessState === '')) {
     return (
@@ -644,7 +656,7 @@ debugger
                         </Col>
 
                         <Col md="1"> </Col>
-                        <Col md="3">
+                        {relatedPageListShowUI ? <Col md="3">
                           <FormGroup className="mb-3">
                             <Label htmlFor="validationCustom01">
                               Related Page List
@@ -658,7 +670,8 @@ debugger
                               }}
                             />
                           </FormGroup>
-                        </Col>
+                        </Col>:<></> }
+                        
                       </Row>
 
                       <Row>
@@ -707,9 +720,11 @@ debugger
                             />
                           </FormGroup>
                         </Col>
+                       
+                      </Row>
 
-                        <Col md="1"> </Col>
-                        <Col md="3">
+                      <Row>
+                      <Col md="3">
                           <FormGroup className="mb-3">
                             <Label htmlFor="validationCustom01">Icon</Label>
                             <AvField
@@ -727,38 +742,25 @@ debugger
                             />
                           </FormGroup>
                         </Col>
-                      </Row>
 
-                      <Row>
+                        <Col md="1"> </Col>
                         <FormGroup className="mb-1 col col-sm-6">
                           <Row className="justify-content-md-left">
-                            {/* <Label htmlFor="horizontal-firstname-input" className="col-sm-3 col-form-label" >Show on Menu</Label>
-                                                    <Col md={2} style={{ marginTop: '9px' }} >
-
-                                                        <div className="form-check form-switch form-switch-md mb-1" dir="ltr">
-                                                            <input type="checkbox" className="form-check-input " id="inp-showOnMenu"
-                                                                checked={isShowPageChecked}
-                                                                name="isShowOnMenu"
-                                                                onChange={() => { setisShowPageChecked(!isShowPageChecked) }}
-                                                            />
-                                                            <label className="form-check-label" htmlFor="customSwitchsizemd"></label>
-                                                        </div>
-                                                    </Col> */}
-                            {/* <Col md="3">  </Col> */}
+                           
                             <Label
                               htmlFor="horizontal-firstname-input"
-                              className="col-sm-2 col-form-label"
+                              className="col-sm-2 col-form-label mt-4"
                             >
                               Active{" "}
                             </Label>
-                            <Col md={2} style={{ marginTop: "9px" }}>
+                            <Col md={5} style={{ marginTop: "15px" }}>
                               <div
                                 className="form-check form-switch form-switch-md mb-1"
                                 dir="ltr"
                               >
                                 <AvInput
                                   type="checkbox"
-                                  className="form-check-input"
+                                  className="form-check-input mt-4"
                                   id="customSwitchsizemd"
                                   checked={EditData.isActive}
                                   name="isActive"
@@ -779,7 +781,7 @@ debugger
                     <Card className=" mt-n2 text-black">
                       <CardBody style={{ backgroundColor: "whitesmoke" }}>
                         <Row className="">
-                          <FormGroup className=" ml-3 col col-sm-4 ">
+                          <FormGroup className=" ml-3 col col-sm-4 mb-3 ">
                             <Label htmlFor="validationCustom01">
                               Page Access
                             </Label>
@@ -833,7 +835,7 @@ debugger
                                     userPageAccessState.RoleAccess_IsEdit ?
                                       <button
                                         type="submit"
-                                        data-mdb-toggle="tooltip" data-mdb-placement="top" title="Update Role"
+                                        data-mdb-toggle="tooltip" data-mdb-placement="top" title="Update Page"
                                         className="btn btn-success w-md"
                                       >
                                         <i class="fas fa-edit me-2"></i>Update
@@ -844,7 +846,7 @@ debugger
                                       userPageAccessState.RoleAccess_IsSave ?
                                         <button
                                           type="submit"
-                                          data-mdb-toggle="tooltip" data-mdb-placement="top" title="Save Role"
+                                          data-mdb-toggle="tooltip" data-mdb-placement="top" title="Save Page"
                                           className="btn btn-primary w-md"
                                         > <i className="fas fa-save me-2"></i> Save
                                         </button>
@@ -920,4 +922,4 @@ debugger
   }
 };
 
-export default HPageMaster;
+export default PageMaster;

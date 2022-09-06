@@ -16,8 +16,8 @@ import CompanyModule from "../pages/Adminisrator/CompanyPages/CompanyModule";
 import CompanyList from "../pages/Adminisrator/CompanyPages/CompanyList";
 // import SubModules from "../pages/Adminisrator/SubModulePages/SubModules";
 // import SubModulesList from "../pages/Adminisrator/SubModulePages/SubModulesList";
-import HPageList from "../pages/Adminisrator/HPagesPages/HPageList";
-import HPageMaster from "../pages/Adminisrator/HPagesPages/HPageMaster";
+import PageList from "../pages/Adminisrator/Page-Pages/PageList";
+import PageMaster from "../pages/Adminisrator/Page-Pages/PageMaster";
 import OrderPage from "../pages/Order/OrderPage";
 import OrderList from "../pages/Order/OrderList"
 import AddUser from "../pages/Adminisrator/UserRegistrationPages/UserRegistration";
@@ -54,8 +54,10 @@ import CategoryTypeMaster from "../pages/Adminisrator/CategoryTypePages/Category
 import CategoryTypeList from "../pages/Adminisrator/CategoryTypePages/CategoryTypeList";
 import CategoryList from "../pages/Adminisrator/CategoryPages/CategoryList";
 import CategoryMaster from "../pages/Adminisrator/CategoryPages/CategoryMaster";
-// import SubCategoryMaster from "../pages/Adminisrator/SubCategoryPages/SubCategoryMaster";
-// import SubCategoryList from "../pages/Adminisrator/SubCategoryPages/SubCategoryList";
+import SubCategoryMaster from "../pages/Adminisrator/SubCategoryPages/SubCategoryMaster";
+import SubCategoryList from "../pages/Adminisrator/SubCategoryPages/SubCategoryList";
+import VehicleMaster from "../pages/Adminisrator/VehiclePages/VehicleMaster";
+import VehicleList from "../pages/Adminisrator/VehiclePages/VehicleList";
 
 
 
@@ -115,8 +117,8 @@ const userRoutes = [
   { path: '/CompanyMaster', component: CompanyModule },
   { path: '/CompanyList', component: CompanyList },
 
-  { path: `/PageList`, component: HPageList },
-  { path: `/PageMaster`, component: HPageMaster },
+  { path: `/PageList`, component: PageList },
+  { path: `/PageMaster`, component: PageMaster },
 
   { path: `/Order`, component: OrderPage },
   { path: `/Orders`, component: OrderList },
@@ -156,9 +158,12 @@ const userRoutes = [
   { path: "/CategoryMaster", component: CategoryMaster },
   { path: "/CategoryList", component: CategoryList },
   
-  // { path: "/SubCategoryMaster", component: SubCategoryMaster },
-  // { path: "/SubCategoryList", component: SubCategoryList },
+  { path: "/SubCategoryMaster", component: SubCategoryMaster },
+  { path: "/SubCategoryList", component: SubCategoryList },
   
+  { path: "/VehicleMaster", component: VehicleMaster },
+  { path: "/VehicleList", component: VehicleList },
+
 
   { path: "/partyUIDemo", component: PartyUIDemo },
   { path: "/demoUi3", component: DemoUI3 },

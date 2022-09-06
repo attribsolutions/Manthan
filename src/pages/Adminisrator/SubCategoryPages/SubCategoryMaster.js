@@ -13,50 +13,47 @@ import {
 import { AvField, AvForm, } from "availity-reactstrap-validation";
 import Select from "react-select";
 import { MetaTags } from "react-meta-tags";
-import { BreadcrumbShow } from "../../../store/actions";
+import { BreadcrumbShow, getCategoryTypelist } from "../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
 import {
-    editProductTypesIDSuccess, getMethodForProductTypes,
-    PostMethodForProductTypes,
-    PostMethod_ForProductTypesAPISuccess,
-    updateProductTypesID
-} from "../../../store/Administrator/CategoryRedux/action";
+    editSubCategoryIDSuccess,
+    PostMethodForSubCategory,
+    PostMethod_ForSubCategoryAPISuccess,
+    updateSubCategoryID
+} from "../../../store/Administrator/SubCategoryRedux/action";
 import { AlertState } from "../../../store/actions";
 import { CommonGetRoleAccessFunction } from "../../../components/Common/CommonGetRoleAccessFunction";
 import { useHistory } from "react-router-dom";
-
-
+import { getMethodForProductTypes } from "../../../store/Administrator/CategoryRedux/action";
 
 const SubCategoryMaster = (props) => {
-    const formRef = useRef(null);
-    const [EditData, setEditData] = useState([]);
-    const [pageMode, setPageMode] = useState("");
-    const [ProductCategoryTypes_dropdown_Select, setProductCategoryTypes_dropdown_Select] = useState("");
-    const dispatch = useDispatch();
-    const [userPageAccessState, setUserPageAccessState] = useState(123);
-    const [ProductCategoryTypes, setProductCategoryTypes] = useState("");
-    const history = useHistory()
-
-    //Access redux store Data /  'save_ModuleSuccess' action data
-    const { PostAPIResponse, ProductTypeAPI, ProductTypes, RoleAccessModifiedinSingleArray } = useSelector((state) => ({
-        PostAPIResponse: state.CategoryMasterReducer.PostDataMessage,
-        ProductTypeAPI: state.CategoryMasterReducer.ProductTypeAPI,
-        ProductTypes: state.CategoryMasterReducer.ProductTypes,
-        RoleAccessModifiedinSingleArray: state.Login.RoleAccessUpdateData,
-    }));
-
-    console.log("ProductTypeAPI", ProductTypeAPI)
 
     //*** "isEditdata get all data from ModuleID for Binding  Form controls
     let editDataGatingFromList = props.state;
+    let pageModeProps=props.pageMode;
 
+    const formRef = useRef(null);
+    const [EditData, setEditData] = useState([]);
+    const [pageMode, setPageMode] = useState("");
+    const [categoryTypes_dropdown_Select, setCategoryTypes_dropdown_Select] = useState("");
+    const dispatch = useDispatch();
+    const [userPageAccessState, setUserPageAccessState] = useState(123);
+    const history = useHistory()
+    //Access redux store Data /  'save_ModuleSuccess' action data
+    const { PostAPIResponse, ProductTypeAPI, RoleAccessModifiedinSingleArray } = useSelector((state) => ({
+        PostAPIResponse: state.CategoryMasterReducer.PostDataMessage,
+        ProductTypeAPI: state.CategoryMasterReducer.ProductTypeAPI,
+        RoleAccessModifiedinSingleArray: state.Login.RoleAccessUpdateData,
+
+    }));
 
     //userAccess useEffect
     useEffect(() => {
+       
         let userAcc = undefined
         if ((editDataGatingFromList === undefined)) {
 
-            let locationPath = history.location.pathname
+            let locationPath = history.location.pathname;
             userAcc = RoleAccessModifiedinSingleArray.find((inx) => {
                 return (`/${inx.ActualPagePath}` === locationPath)
             })
@@ -73,8 +70,6 @@ const SubCategoryMaster = (props) => {
         }
 
     }, [RoleAccessModifiedinSingleArray])
-
-
 
     //userAccess useEffect
     useEffect(() => {
@@ -98,19 +93,17 @@ const SubCategoryMaster = (props) => {
         dispatch(getMethodForProductTypes());
     }, [dispatch]);
 
-
-
     // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
     useEffect(() => {
         if (!(userPageAccessState === '')) { document.getElementById("txtName").focus(); }
         if (!(editDataGatingFromList === undefined)) {
             setEditData(editDataGatingFromList);
-            setPageMode("edit");
-            setProductCategoryTypes_dropdown_Select({
-                value: editDataGatingFromList.ProductTypes_id,
-                label: editDataGatingFromList.ProductTypeName
+            setPageMode(pageModeProps);
+            setCategoryTypes_dropdown_Select({
+                value: editDataGatingFromList.ProductCategoryType_id,
+                label: editDataGatingFromList.ProductCategoryTypeName
             })
-            dispatch(editProductTypesIDSuccess({ Status: false }))
+            dispatch(editSubCategoryIDSuccess({ Status: false }))
             dispatch(BreadcrumbShow(editDataGatingFromList.Name))
             return
         }
@@ -118,11 +111,12 @@ const SubCategoryMaster = (props) => {
 
 
     useEffect(() => {
+        
         if ((PostAPIResponse.Status === true) && (PostAPIResponse.StatusCode === 200)) {
-            setProductCategoryTypes_dropdown_Select('')
-            dispatch(PostMethod_ForProductTypesAPISuccess({ Status: false }))
+            setCategoryTypes_dropdown_Select('')
+            dispatch(PostMethod_ForSubCategoryAPISuccess({ Status: false }))
             formRef.current.reset();
-            if (pageMode === "other") {
+            if (pageMode === "dropdownAdd") {
                 dispatch(AlertState({
                     Type: 1,
                     Status: true,
@@ -134,58 +128,50 @@ const SubCategoryMaster = (props) => {
                     Type: 1,
                     Status: true,
                     Message: PostAPIResponse.Message,
-                    // RedirectPath: '/CategoryList',
+                    RedirectPath: '/SubCategoryList',
                 }))
             }
         }
         else if (PostAPIResponse.Status === true) {
-            dispatch(PostMethod_ForProductTypesAPISuccess({ Status: false }))
+            dispatch(PostMethod_ForSubCategoryAPISuccess({ Status: false }))
             dispatch(AlertState({
                 Type: 4,
                 Status: true,
-                Message: JSON.stringify(postMessage.Message),
+                Message: JSON.stringify(PostAPIResponse.Message),
                 RedirectPath: false,
                 AfterResponseAction: false
             }));
         }
     }, [PostAPIResponse])
 
-    //get method for dropdown
-    useEffect(() => {
-        dispatch(getMethodForProductTypes());
-    }, [dispatch]);
 
-
-
-    function handllerProductCategoryTypes(e) {
-        setProductCategoryTypes_dropdown_Select(e)
-    }
-
-    const ProductCategoryTypesValues = ProductTypeAPI.map((Data) => ({
+    const CategoryTypesOptions = ProductTypeAPI.map((Data) => ({
         value: Data.id,
         label: Data.Name
     }));
-
-
+    
+    function handllerProductCategoryTypes(e) {
+        setCategoryTypes_dropdown_Select(e)
+    }
 
     const FormSubmitButton_Handler = (event, values) => {
         const jsonBody = JSON.stringify({
             Name: values.Name,
-            ProductCategoryType: ProductCategoryTypes_dropdown_Select.value,
+            ProductCategoryType: categoryTypes_dropdown_Select.value,
         });
 
         if (pageMode === "edit") {
-            dispatch(updateProductTypesID(jsonBody, EditData.id));
+            dispatch(updateSubCategoryID(jsonBody, EditData.id));
         }
         else {
-            dispatch(PostMethodForProductTypes(jsonBody));
+            dispatch(PostMethodForSubCategory(jsonBody));
         }
     };
 
 
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
     var IsEditMode_Css = ''
-    if (pageMode === "edit") { IsEditMode_Css = "-5.5%" };
+    if ((pageMode === "edit")||(pageMode==="copy")||(pageMode==="dropdownAdd")) { IsEditMode_Css = "-5.5%" };
 
     if (!(userPageAccessState === '')) {
         return (
@@ -193,9 +179,9 @@ const SubCategoryMaster = (props) => {
                 <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
                     <Container fluid>
                         <MetaTags>
-                            <title>CategoryMaster | FoodERP-React FrontEnd</title>
+                            <title>SubCategoryMaster | FoodERP-React FrontEnd</title>
                         </MetaTags>
-                        <Breadcrumb breadcrumbItem={"Category Master"} />
+                        <Breadcrumb breadcrumbItem={"SubCategory Master"} />
 
                         <Card className="text-black">
                             <CardHeader className="card-header   text-black" style={{ backgroundColor: "#dddddd" }} >
@@ -231,26 +217,11 @@ const SubCategoryMaster = (props) => {
                                                         <Row>
                                                             <Col md="4">
                                                                 <FormGroup className="mb-3">
-                                                                    <Label htmlFor="validationCustom01"> Category Type </Label>
-                                                                    <Col sm={12}>
-                                                                        <Select
-                                                                            value={ProductCategoryTypes_dropdown_Select}
-                                                                            options={ProductCategoryTypesValues}
-                                                                            onChange={(e) => { handllerProductCategoryTypes(e) }}
-                                                                        />
-                                                                    </Col>
-                                                                </FormGroup>
-                                                            </Col>
-                                                        </Row>
-
-                                                        <Row>
-                                                            <Col md="4">
-                                                                <FormGroup className="mb-3">
                                                                     <Label htmlFor="validationCustom01"> Category  </Label>
                                                                     <Col sm={12}>
                                                                         <Select
-                                                                            value={ProductCategoryTypes_dropdown_Select}
-                                                                            options={ProductCategoryTypesValues}
+                                                                            value={categoryTypes_dropdown_Select}
+                                                                            options={CategoryTypesOptions}
                                                                             onChange={(e) => { handllerProductCategoryTypes(e) }}
                                                                         />
                                                                     </Col>
