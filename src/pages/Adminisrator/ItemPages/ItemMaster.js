@@ -260,7 +260,7 @@ const ItemsMaster = (props) => {
             setDivisionTableData(itemDivisionDetails)
             setRateDetailTableData(ItemMRPDetails)
             setBaseUnitTableData(ItemUnitDetails)
-
+            setIsValidate([])
         }
 
     }, [editDataGatingFromList])
@@ -442,6 +442,7 @@ const ItemsMaster = (props) => {
         }
     }
     function CommonTab_SimpleText_INPUT_handller_ForAll(event, type, key) {
+        debugger
         let validateReturn = Common_Text_INPUT_Validation(event, type, 0);
 
         if (validateReturn === false) {
@@ -449,8 +450,8 @@ const ItemsMaster = (props) => {
             return
         } else {
 
+            formValue[type] = event
             isValidate = isValidate.filter((indF) => {
-                formValue[`txt${type}0`] = event
                 return !(indF === `txt${type}0`)
             })
             setIsValidate(isValidate)
@@ -466,8 +467,8 @@ const ItemsMaster = (props) => {
             isValidate.push(`drop${type}-${key}`)
             return
         } else {
+            formValue[type] = event
             isValidate = isValidate.filter((indFind) => {
-                formValue[type] = event
                 return !(indFind === `drop${type}-${key}`)
             })
             setIsValidate(isValidate)
@@ -875,16 +876,17 @@ const ItemsMaster = (props) => {
         }))
 
 
-        let submitValid1 = false;
-        let submitValid2 = false
+        let submitValid1 = true;
+        let submitValid2 = true
+        let submitValid3 = true
+        let submitValid4 = true;
+        let submitValid5 = true
+        let submitValid6 = true
+        let submitValid7 = true
 
         isValidate.map((ind) => {
             document.getElementById(ind).className = "form-control is-invalid"
         })
-
-        if ((isValidate.length == 0)) {
-            submitValid1 = true
-        } else { submitValid1 = false }
 
         categoryTabTable.map((ind, key) => {
 
@@ -898,8 +900,73 @@ const ItemsMaster = (props) => {
             if (return3 === false) submitValid2 = return3;
         })
 
+        baseUnitTableData.map((ind, key) => {
 
-        // if (submitValid1) {
+            let return1 = Common_Text_INPUT_Validation(ind.Conversion, "Conversion", key);
+            if (return1 === false) submitValid3 = return1;
+
+            let return2 = Common_Drop_Validation(ind.Unit, "Unit", key);
+            if (return2 === false) submitValid3 = return2;
+
+
+        })
+
+        rateDetailTableData.map((ind, key) => {
+
+            let return1 = Common_Drop_Validation(ind.MRPType, "MRPType", key);
+            if (return1 === false) submitValid6 = return1;
+
+            let return2 = Common_Text_INPUT_Validation(ind.MRP, "MRP", key);
+            if (return2 === false) submitValid6 = return2;
+
+            let return3 = Common_Text_INPUT_Validation(ind.GSTPercentage, "GSTPercentage", key);
+            if (return3 === false) submitValid6 = return3;
+
+            let return4 = Common_Text_INPUT_Validation(ind.HSNCode, "HSNCode", key);
+            if (return4 === false) submitValid6 = return4;
+
+        })
+
+        marginTabTable.map((ind, key) => {
+
+            let return1 = Common_Text_INPUT_Validation(ind.Margin, "Margin", key);
+            if (return1 === false) submitValid7 = return1;
+
+            let return2 = Common_Drop_Validation(ind.PriceList, "PriceList", key);
+            if (return2 === false) submitValid7 = return2;
+        })
+
+        if (!(isValidate.length === 0)) {
+            setactiveTab1('1');
+            return
+        };
+
+        if (!submitValid2) {
+            setactiveTab1('2');
+            return
+        };
+        if (!submitValid3) {
+            setactiveTab1('3');
+            return
+        };
+        if ((divisionTableData.length === 0)) {
+            setactiveTab1('5');
+            document.getElementById("dropDivisionType-0").className = "form-control is-invalid"
+            return
+        };
+
+        if (!submitValid6) {
+            setactiveTab1('6');
+            return
+        };
+
+        if (!submitValid7) {
+            setactiveTab1('7');
+            return
+        };
+
+
+        debugger
 
         const jsonBody = JSON.stringify({
             Name: formValue.Name,
@@ -932,13 +999,10 @@ const ItemsMaster = (props) => {
         else {
             dispatch(postItemData(jsonBody));
         }
-        // else {
-        //     setactiveTab1('1');
-        //     alert("check Validation")
-        // }
+
+    };
 
 
-    }
     var IsEditMode_Css = ''
     if ((pageMode === "edit") || (pageMode === "copy") || (pageMode === "dropdownAdd")) { IsEditMode_Css = "-5.5%" };
     if (!(userPageAccessState === '')) {
@@ -1211,7 +1275,7 @@ const ItemsMaster = (props) => {
                                                                             defaultValue={EditData.Sequence}
                                                                             placeholder=" Please Enter Sequence "
                                                                             autoComplete="off"
-                                                                            onChange={(e) => { CommonTab_SimpleText_INPUT_handller_ForAll(e.target.value, "ShortName") }}
+                                                                            onChange={(e) => { CommonTab_SimpleText_INPUT_handller_ForAll(e.target.value, "Sequence") }}
                                                                         // onChange={(e) => { formValue.Sequence = e.target.value }}
                                                                         />
 
@@ -1365,12 +1429,15 @@ const ItemsMaster = (props) => {
                                                                                                 <Label>1</Label>    {formValue.BaseUnit.label}
                                                                                             </td>
                                                                                             <td>
-                                                                                                <AvInput
-                                                                                                    name="value"
+                                                                                                <Input
+
                                                                                                     type="text"
                                                                                                     id={`txtConversion${key}`}
-                                                                                                    defaultValue={baseUnitTableData[key].Conversion}
-                                                                                                    onChange={(e) => UnitConversionsTab_BaseUnit2_onChange_Handller(e, "Conversion", key,)}></AvInput>
+                                                                                                    placeholder={"Select Ratio"}
+                                                                                                    value={baseUnitTableData[key].Conversion}
+                                                                                                    onChange={(e) => UnitConversionsTab_BaseUnit2_onChange_Handller(e, "Conversion", key,)}>
+
+                                                                                                </Input>
                                                                                             </td>
                                                                                             <td>
                                                                                                 <Select
@@ -1391,12 +1458,14 @@ const ItemsMaster = (props) => {
                                                                                                                 <i className="dripicons-plus"></i>
                                                                                                             </Button>
                                                                                                         </Col>
-                                                                                                        <Col className="mt-3">
-                                                                                                            < i className="mdi mdi-trash-can d-block text-danger font-size-20" onClick={() => {
-                                                                                                                UnitConversionsTab_DeleteRow_Handler(key)
-                                                                                                            }} >
-                                                                                                            </i>
-                                                                                                        </Col>
+                                                                                                        {(baseUnitTableData.length > 1) ? <>
+                                                                                                            <Col className="mt-3">
+                                                                                                                < i className="mdi mdi-trash-can d-block text-danger font-size-20" onClick={() => {
+                                                                                                                    UnitConversionsTab_DeleteRow_Handler(key)
+                                                                                                                }} >
+                                                                                                                </i>
+                                                                                                            </Col>
+                                                                                                        </> : null}
                                                                                                     </Row>
                                                                                                     :
 
@@ -1632,6 +1701,9 @@ const ItemsMaster = (props) => {
                                                                                     <FormGroup className=" col col-sm-5 " >
                                                                                         <Label >Price List</Label>
                                                                                         <Select
+
+
+                                                                                            id={`dropPriceList-${key}`}
                                                                                             value={marginTabTable[key].PriceList}
                                                                                             options={PriceList_DropdownOptions}
                                                                                             onChange={(e) => { MarginTab_onChange_Handler(e, key, "PriceList") }}
@@ -1641,9 +1713,10 @@ const ItemsMaster = (props) => {
                                                                                     <FormGroup className="mb-3 col col-sm-5 " >
                                                                                         <Label >Margin</Label>
                                                                                         <Input type="text"
+                                                                                            id={`txtMargin${key}`}
                                                                                             value={marginTabTable[key].Margin}
                                                                                             placeholder="Please Enter Margin"
-                                                                                            onChange={(e) => MarginTab_onChange_Handler(e, key, "Margin")}></Input>
+                                                                                            onChange={(e) => MarginTab_onChange_Handler(e.target.value, key, "Margin")}></Input>
                                                                                     </FormGroup>
 
 
