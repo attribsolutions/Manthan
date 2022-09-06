@@ -19,7 +19,7 @@ import {
     editCompanyGroupTypeId,
     delete_CompanyGroupType_ID,
 } from "../../../store/Administrator/CompanyGroupRedux/action";
-import { AlertState } from "../../../store/action";
+import { AlertState } from "../../../store/actions";
 import { listPageCommonButtonFunction } 
 from "../../../components/Common/CmponentRelatedCommonFile/listPageCommonButtons";
 
