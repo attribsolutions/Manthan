@@ -111,7 +111,7 @@ const ItemsList = (props) => {
 
   // This UseEffect => Edit Modal Show When Edit Data is true
   useEffect(() => {
-    if (editData.Status === true) {
+    if (editData.Status === 'true') {
       tog_center();
     }
   }, [editData]);
@@ -240,7 +240,7 @@ const ItemsList = (props) => {
             }}
             size="xl"
           >
-            <ItemsMaster state={editData.Data} />
+            <ItemsMaster state={editData.Data} relatatedPage={"/ItemMaster"} pageMode={editData.pageMode}/>
           </Modal>
         </div>
       </React.Fragment>
