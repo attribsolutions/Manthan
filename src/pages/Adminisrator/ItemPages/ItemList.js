@@ -15,6 +15,7 @@ import {
   deleteItemID,
   deleteItemIdSuccess,
   editItemId,
+  editItemSuccess,
   getItemList,
   updateItemSuccess,
 } from "../../../store/Administrator/ItemsRedux/action";
@@ -33,7 +34,7 @@ const ItemsList = (props) => {
   const [modal_center, setmodal_center] = useState(false);
 
   // get Access redux data
-  const { pages, editData, updateMessage, deleteMessage ,RoleAccessModifiedinSingleArray} = useSelector(
+  const { pages, editData, updateMessage, deleteMessage, RoleAccessModifiedinSingleArray } = useSelector(
     (state) => ({
       pages: state.ItemMastersReducer.pages,
       editData: state.ItemMastersReducer.editData,
@@ -47,12 +48,12 @@ const ItemsList = (props) => {
   useEffect(() => {
     const locationPath = history.location.pathname
     let userAcc = RoleAccessModifiedinSingleArray.find((inx) => {
-        return (`/${inx.ActualPagePath}` === locationPath)
+      return (`/${inx.ActualPagePath}` === locationPath)
     })
     if (!(userAcc === undefined)) {
-        setUserPageAccessState(userAcc)
+      setUserPageAccessState(userAcc)
     }
-}, [RoleAccessModifiedinSingleArray])
+  }, [RoleAccessModifiedinSingleArray])
 
   //  This UseEffect => Featch Modules List data  First Rendering
   useEffect(() => {
@@ -111,16 +112,20 @@ const ItemsList = (props) => {
 
   // This UseEffect => Edit Modal Show When Edit Data is true
   useEffect(() => {
-    if (editData.Status === 'true') {
+    if (editData.Status === true) {
       tog_center();
+      // dispatch(editItemSuccess({ Status: false }))
     }
+   
   }, [editData]);
 
   function tog_center() {
     setmodal_center(!modal_center);
+     
+
   }
 
-
+console.log("editData",editData)
   const pageOptions = {
     sizePerPage: 10,
     totalSize: pages.length,
@@ -165,17 +170,17 @@ const ItemsList = (props) => {
       dataField: "BarCode",
       sort: true,
     },
-    
-  // For Edit, Delete ,and View Button Common Code function
-  listPageCommonButtonFunction({
-    dispatchHook: dispatch,
-    ButtonMsgLable: "Item",
-    deleteName: "Name",
-    userPageAccessState: userPageAccessState,
-    editActionFun: editItemId,
-    deleteActionFun: deleteItemID
-})
-   
+
+    // For Edit, Delete ,and View Button Common Code function
+    listPageCommonButtonFunction({
+      dispatchHook: dispatch,
+      ButtonMsgLable: "Item",
+      deleteName: "Name",
+      userPageAccessState: userPageAccessState,
+      editActionFun: editItemId,
+      deleteActionFun: deleteItemID
+    })
+
   ];
 
   if (!(userPageAccessState === '')) {
@@ -240,7 +245,7 @@ const ItemsList = (props) => {
             }}
             size="xl"
           >
-            <ItemsMaster state={editData.Data} relatatedPage={"/ItemMaster"} pageMode={editData.pageMode}/>
+            <ItemsMaster state={editData.Data} relatatedPage={"/ItemMaster"} pageMode={editData.pageMode} />
           </Modal>
         </div>
       </React.Fragment>

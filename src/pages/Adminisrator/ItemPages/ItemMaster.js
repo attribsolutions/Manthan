@@ -27,14 +27,17 @@ import { AvField, AvForm, AvInput } from "availity-reactstrap-validation"
 import Select from "react-select";
 import { fetchCompanyList } from "../../../store/Administrator/CompanyRedux/actions"
 import {
+    editItemSuccess,
     getBaseUnit_ForDropDown,
     get_CategoryTypes_ForDropDown,
     get_Category_By_CategoryType_ForDropDown,
+    get_Category_By_CategoryType_ForDropDown_Success,
     get_Category_ForDropDown,
     get_ImageType_ForDropDown,
     get_MRPTypes_ForDropDown,
     get_SubCategory_ForDropDown,
     get_Sub_Category_By_CategoryType_ForDropDown,
+    get_Sub_Category_By_CategoryType_ForDropDown_Success,
     postItemData,
     PostItemDataSuccess,
     updateItemID
@@ -178,7 +181,7 @@ const ItemsMaster = (props) => {
                 BarCode: editMode_Data.BarCode,
                 Company: { label: editMode_Data.CompanyName, value: editMode_Data.Company },
                 BaseUnit: { label: editMode_Data.BaseUnitName, value: editMode_Data.BaseUnitID },
-                isActive: true,
+                isActive:editMode_Data.isActive ,
             }
             let initialCategory = editMode_Data.ItemCategoryDetails.map((indx) => {
                 return {
@@ -261,6 +264,9 @@ const ItemsMaster = (props) => {
             setRateDetailTableData(ItemMRPDetails)
             setBaseUnitTableData(ItemUnitDetails)
             setIsValidate([])
+
+            dispatch(editItemSuccess({ Status: false }))
+
         }
 
     }, [editDataGatingFromList])
@@ -339,7 +345,7 @@ const ItemsMaster = (props) => {
             return (k === key) ? newSelectValue : index
         })
         setCategoryTabTable(newTabArr)
-
+        dispatch(get_Category_By_CategoryType_ForDropDown_Success({ Data: [], key: null }))
     }, [Category]);
 
     useEffect(() => {
@@ -368,6 +374,7 @@ const ItemsMaster = (props) => {
             return (k === key) ? newSelectValue : index
         })
         setCategoryTabTable(newTabArr)
+        dispatch(get_Sub_Category_By_CategoryType_ForDropDown_Success({ Data: [], key: null }))
 
     }, [SubCategory]);
 
@@ -442,7 +449,7 @@ const ItemsMaster = (props) => {
         }
     }
     function CommonTab_SimpleText_INPUT_handller_ForAll(event, type, key) {
-        debugger
+
         let validateReturn = Common_Text_INPUT_Validation(event, type, 0);
 
         if (validateReturn === false) {
@@ -479,8 +486,7 @@ const ItemsMaster = (props) => {
 
     function CategoryType_Dropdown_Handler(e, key) {
         CategoryTab_Common_onChange_Handller(e, "CategoryType", key,);
-        dispatch(get_Category_By_CategoryType_ForDropDown
-            (e.value, key))
+        dispatch(get_Category_By_CategoryType_ForDropDown(e.value, key))
     }
 
     function Category_Dropdown_Handler(e, key) {
@@ -1287,8 +1293,8 @@ const ItemsMaster = (props) => {
 
                                                                                 <div className="form-check form-switch form-switch-md mb-3" dir="ltr">
                                                                                     <Input type="checkbox" className="form-check-input" id="customSwitchsizemd"
-                                                                                        defaultValue={formValue.isActive}
-                                                                                        defaultChecked={true}
+                                                                                      defaultChecked={formValue.isActive}
+                                                                                        // defaultChecked={true}
                                                                                         onChange={(e) => { formValue.isActive = e.target.checked }}
                                                                                         name="isActive"
                                                                                     />
