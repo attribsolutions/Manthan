@@ -181,7 +181,7 @@ const ItemsMaster = (props) => {
                 BarCode: editMode_Data.BarCode,
                 Company: { label: editMode_Data.CompanyName, value: editMode_Data.Company },
                 BaseUnit: { label: editMode_Data.BaseUnitName, value: editMode_Data.BaseUnitID },
-                isActive:editMode_Data.isActive ,
+                isActive: editMode_Data.isActive,
             }
             let initialCategory = editMode_Data.ItemCategoryDetails.map((indx) => {
                 return {
@@ -1293,10 +1293,10 @@ const ItemsMaster = (props) => {
 
                                                                                 <div className="form-check form-switch form-switch-md mb-3" dir="ltr">
                                                                                     <Input type="checkbox" className="form-check-input" id="customSwitchsizemd"
-                                                                                      defaultChecked={formValue.isActive}
+                                                                                        defaultChecked={formValue.isActive}
                                                                                         // defaultChecked={true}
                                                                                         onChange={(e) => { formValue.isActive = e.target.checked }}
-                                                                                        name="isActive"
+
                                                                                     />
                                                                                 </div>
                                                                             </Col>
@@ -1359,20 +1359,31 @@ const ItemsMaster = (props) => {
                                                                                 </FormGroup>
                                                                             </Row>
                                                                         </Col>
-                                                                        {(categoryTabTable.length === key + 1) ?
-                                                                            <Col className="col col-1 mt-3">
-                                                                                <Button className="btn btn-sm btn-light mt-3 "
-                                                                                    type="button"
-                                                                                    onClick={() => { CategoryTab_AddRow_Handler() }} >
-                                                                                    <i className="dripicons-plus"></i></Button>
-                                                                                {/* 
 
-                                                                                <i
-                                                                                className="dripicons-plus text-primary font-size-20 mt-3"
-                                                                                onClick={() => {
-                                                                                    MuliSelectTab2Handler(key);
-                                                                                }}
-                                                                            ></i> */}
+                                                                        {(categoryTabTable.length === key + 1) ?
+                                                                            <Col className="  col col-1 mt-3">
+                                                                                <Row>
+                                                                                    <Col md={6}>
+                                                                                        {(categoryTabTable.length > 1) ? <>
+                                                                                            <i
+                                                                                                className="mdi mdi-trash-can d-block text-danger font-size-20 mt-3"
+                                                                                                onClick={() => {
+                                                                                                    CategoryTab_DeleteRow_Handler(key);
+                                                                                                }}
+                                                                                            ></i>
+
+
+                                                                                        </> : null}
+                                                                                    </Col>
+                                                                                    <Col md={6}>
+                                                                                        <Button className="btn btn-sm btn-light mt-3 "
+                                                                                            type="button"
+                                                                                            onClick={() => { CategoryTab_AddRow_Handler() }} >
+                                                                                            <i className="dripicons-plus"></i>
+                                                                                        </Button>
+                                                                                    </Col>
+
+                                                                                </Row>
                                                                             </Col>
                                                                             : <Col className="col col-1 mt-3">
 
@@ -1418,7 +1429,7 @@ const ItemsMaster = (props) => {
                                                                         </Row>
 
                                                                         <Row className="mt-3">
-                                                                            <Col md={8}><Table className="table table-bordered  text-center ">
+                                                                            <Col md={8}><Table className="table table-bordered  ">
                                                                                 <Thead >
                                                                                     <tr>
                                                                                         <th>Unit Name</th>
@@ -1457,21 +1468,21 @@ const ItemsMaster = (props) => {
                                                                                             <td>
                                                                                                 {(baseUnitTableData.length === key + 1) ?
                                                                                                     <Row className="">
-                                                                                                        <Col >
-                                                                                                            <Button className="btn btn-sm btn-light mt-3 col col-6  align-items-sm-end"
+                                                                                                        <Col md={6} className=" mt-3">
+                                                                                                            {(baseUnitTableData.length > 1) ? <>
+                                                                                                                < i className="mdi mdi-trash-can d-block text-danger font-size-20" onClick={() => {
+                                                                                                                    UnitConversionsTab_DeleteRow_Handler(key)
+                                                                                                                }} >
+                                                                                                                </i>
+                                                                                                            </> :<Col md={6} ></Col>}
+                                                                                                        </Col>
+                                                                                                        <Col md={6} >
+                                                                                                            <Button className="btn btn-sm btn-light mt-3   align-items-sm-end"
                                                                                                                 type="button"
                                                                                                                 onClick={() => { UnitConversionsTab_AddRow_Handle(key) }} >
                                                                                                                 <i className="dripicons-plus"></i>
                                                                                                             </Button>
                                                                                                         </Col>
-                                                                                                        {(baseUnitTableData.length > 1) ? <>
-                                                                                                            <Col className="mt-3">
-                                                                                                                < i className="mdi mdi-trash-can d-block text-danger font-size-20" onClick={() => {
-                                                                                                                    UnitConversionsTab_DeleteRow_Handler(key)
-                                                                                                                }} >
-                                                                                                                </i>
-                                                                                                            </Col>
-                                                                                                        </> : null}
                                                                                                     </Row>
                                                                                                     :
 
