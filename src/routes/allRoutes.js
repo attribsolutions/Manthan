@@ -58,6 +58,8 @@ import SubCategoryMaster from "../pages/Adminisrator/SubCategoryPages/SubCategor
 import SubCategoryList from "../pages/Adminisrator/SubCategoryPages/SubCategoryList";
 import VehicleMaster from "../pages/Adminisrator/VehiclePages/VehicleMaster";
 import VehicleList from "../pages/Adminisrator/VehiclePages/VehicleList";
+import CompanyGroupMaster from "../pages/Adminisrator/CompanyGroupPages/CompanyGroupMaster";
+import CompanyGroupList from "../pages/Adminisrator/CompanyGroupPages/CompanyGroupList";
 
 
 
@@ -163,6 +165,9 @@ const userRoutes = [
   
   { path: "/VehicleMaster", component: VehicleMaster },
   { path: "/VehicleList", component: VehicleList },
+
+  { path: "/CompanyGroupMaster", component: CompanyGroupMaster },
+  { path: "/CompanyGroupList", component: CompanyGroupList },
 
 
   { path: "/partyUIDemo", component: PartyUIDemo },

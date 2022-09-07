@@ -270,6 +270,16 @@ export const detelet_VehicleType_List_Api = (id) =>del(`${url. VEHICLE_API}/${id
 export const edit_VehicleType_List_Api = (id) =>get(`${url. VEHICLE_API}/${id}`) // edit api
 export const update_VehicleType_List_Api = (data, id) =>put(`${url. VEHICLE_API}/${id}`, data)// update
 
+
+//CompanyGroup API
+export const Post_CompanyGroup_API = (data) => post(url.COMPANYGROUP_API, data)// post api
+export const get_CompanyGroupList_API = () => get(url.COMPANYGROUP_API)//  get Api 
+export const detelet_CompanyGroupType_List_Api = (id) =>del(`${url. COMPANYGROUP_API}/${id}`) // delete api
+export const edit_CompanyGroupType_List_Api = (id) =>get(`${url. COMPANYGROUP_API}/${id}`) // edit api
+export const update_CompanyGroupType_List_Api = (data, id) =>put(`${url. COMPANYGROUP_API}/${id}`, data)// update
+
+
+
 export {  
   getLoggedInUser,
   isUserAuthenticated,

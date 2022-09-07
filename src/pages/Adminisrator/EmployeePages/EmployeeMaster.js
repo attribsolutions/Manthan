@@ -133,7 +133,7 @@ const AddEmployee = (props) => {
         value: editDataGatingFromList.Company_id,
         label: editDataGatingFromList.CompanyName
       })
-
+ 
       dispatch(editEmployeeSuccess({ Status: false }))
       dispatch(BreadcrumbShow(editDataGatingFromList.Name))
       }

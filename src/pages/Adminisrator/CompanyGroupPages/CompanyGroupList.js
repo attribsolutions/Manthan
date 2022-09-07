@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Breadcrumbs from "../../../components/Common/Breadcrumb";
-import { Button, Col, Modal, Row } from "reactstrap";
+import { Col, Modal, Row } from "reactstrap";
 import paginationFactory, {
   PaginationListStandalone,
   PaginationProvider,
@@ -8,38 +8,35 @@ import paginationFactory, {
 import ToolkitProvider, { Search } from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 import { useSelector, useDispatch } from "react-redux";
-import { AlertState } from "../../../store/actions";
-
 import "../../../assets/scss/CustomeTable/datatables.scss";
-import {
-  deleteItemID,
-  deleteItemIdSuccess,
-  editItemId,
-  editItemSuccess,
-  getItemList,
-  updateItemSuccess,
-} from "../../../store/Administrator/ItemsRedux/action";
-import ItemsMaster from "./ItemMaster";
+import CompanyGroupMaster from "./CompanyGroupMaster";
 import { MetaTags } from "react-meta-tags";
 import { useHistory } from "react-router-dom";
-import { CommonGetRoleAccessFunction } from "../../../components/Common/CommonGetRoleAccessFunction";
-import { listPageCommonButtonFunction } from "../../../components/Common/CmponentRelatedCommonFile/listPageCommonButtons";
+import {
+    deleteCompanyGroupTypeIDSuccess,
+    updateCompanyGroupTypeIDSuccess,
+    getMethodForCompanyGroupList,
+    editCompanyGroupTypeId,
+    delete_CompanyGroupType_ID,
+} from "../../../store/Administrator/CompanyGroupRedux/action";
+import { AlertState } from "../../../store/actions";
+import { listPageCommonButtonFunction } 
+from "../../../components/Common/CmponentRelatedCommonFile/listPageCommonButtons";
 
-const ItemsList = (props) => {
+const CompanyGroupList = (props) => {
 
   const dispatch = useDispatch();
-  const history = useHistory();
+  const history = useHistory()
 
   const [userPageAccessState, setUserPageAccessState] = useState('');
   const [modal_center, setmodal_center] = useState(false);
 
-  // get Access redux data
-  const { pages, editData, updateMessage, deleteMessage, RoleAccessModifiedinSingleArray } = useSelector(
+  const { TableListData, editData, updateMessage, deleteMessage, RoleAccessModifiedinSingleArray } = useSelector(
     (state) => ({
-      pages: state.ItemMastersReducer.pages,
-      editData: state.ItemMastersReducer.editData,
-      updateMessage: state.ItemMastersReducer.updateMessage,
-      deleteMessage: state.ItemMastersReducer.deleteMessage,
+      TableListData: state.CompanyGroupReducer.CompanyGroupList,
+      editData: state.CompanyGroupReducer.editData,
+      updateMessage: state.CompanyGroupReducer.updateMessage,
+      deleteMessage: state.CompanyGroupReducer.deleteMessage,
       RoleAccessModifiedinSingleArray: state.Login.RoleAccessUpdateData,
 
     })
@@ -57,24 +54,25 @@ const ItemsList = (props) => {
 
   //  This UseEffect => Featch Modules List data  First Rendering
   useEffect(() => {
-    dispatch(getItemList());
+    dispatch(getMethodForCompanyGroupList());
   }, []);
 
   // This UseEffect => UpadateModal Success/Unsucces  Show and Hide Control Alert_modal
   useEffect(() => {
+
     if (updateMessage.Status === true && updateMessage.StatusCode === 200) {
-      dispatch(updateItemSuccess({ Status: false }));
+      dispatch(updateCompanyGroupTypeIDSuccess({ Status: false }));
       dispatch(
         AlertState({
           Type: 1,
           Status: true,
           Message: updateMessage.Message,
-          AfterResponseAction: getItemList,
+          AfterResponseAction: getMethodForCompanyGroupList,
         })
       );
       tog_center();
     } else if (updateMessage.Status === true) {
-      dispatch(updateItemSuccess({ Status: false }));
+      dispatch(updateCompanyGroupTypeIDSuccess({ Status: false }));
       dispatch(
         AlertState({
           Type: 3,
@@ -83,54 +81,41 @@ const ItemsList = (props) => {
         })
       );
     }
-  }, [updateMessage.Status, dispatch]);
+  }, [updateMessage]);
 
-  // This UseEffect => delete Module Success/Unsucces  Show and Hide Control Alert_modal.
   useEffect(() => {
     if (deleteMessage.Status === true && deleteMessage.StatusCode === 200) {
-      dispatch(deleteItemIdSuccess({ Status: false }));
+      dispatch(deleteCompanyGroupTypeIDSuccess({ Status: false }));
       dispatch(
         AlertState({
           Type: 1,
           Status: true,
           Message: deleteMessage.Message,
-          AfterResponseAction: getItemList,
+          AfterResponseAction: getMethodForCompanyGroupList,
         })
       );
     } else if (deleteMessage.Status === true) {
-      dispatch(deleteItemIdSuccess({ Status: false }));
+      dispatch(deleteCompanyGroupTypeIDSuccess({ Status: false }));
       dispatch(
         AlertState({
           Type: 3,
           Status: true,
           Message: JSON.stringify(deleteMessage.Message),
-
         })
       );
     }
-  }, [deleteMessage.Status]);
+  }, [deleteMessage]);
 
-  // This UseEffect => Edit Modal Show When Edit Data is true
+  // Edit Modal Show When Edit Data is true
   useEffect(() => {
     if (editData.Status === true) {
       tog_center();
-      // dispatch(editItemSuccess({ Status: false }))
     }
-   
   }, [editData]);
 
   function tog_center() {
     setmodal_center(!modal_center);
-     
-
   }
-
-console.log("editData",editData)
-  const pageOptions = {
-    sizePerPage: 10,
-    totalSize: pages.length,
-    custom: true,
-  };
 
   const defaultSorted = [
     {
@@ -139,62 +124,50 @@ console.log("editData",editData)
     },
   ];
 
+  const pageOptions = {
+    sizePerPage: 10,
+    totalSize: TableListData.length,
+    custom: true,
+  };
+
   const pagesListColumns = [
     {
-      text: "ID",
-      dataField: "id",
+      text: "CompanyGroup",
+      dataField: "CompanyGroup",
       sort: true,
     },
     {
-      text: "Item Name",
-      dataField: "Name",
-      sort: true,
-    },
-    {
-      text: "Short Name",
-      dataField: "ShortName",
-      sort: true,
-    },
-    {
-      text: "Base Unit",
-      dataField: "BaseUnitName",
-      sort: true,
-    },
-    {
-      text: "Company",
-      dataField: "CompanyName",
-      sort: true,
-    },
-    {
-      text: "BarCode",
-      dataField: "BarCode",
-      sort: true,
-    },
+        text: "Description",
+        dataField: "Description",
+        sort: true,
+      },
+      
+      
 
     // For Edit, Delete ,and View Button Common Code function
     listPageCommonButtonFunction({
       dispatchHook: dispatch,
-      ButtonMsgLable: "Item",
+      ButtonMsgLable: "CompanyGroupType",
       deleteName: "Name",
       userPageAccessState: userPageAccessState,
-      editActionFun: editItemId,
-      deleteActionFun: deleteItemID
+      editActionFun: editCompanyGroupTypeId,
+      deleteActionFun: delete_CompanyGroupType_ID
     })
-
   ];
 
   if (!(userPageAccessState === '')) {
     return (
       <React.Fragment>
         <MetaTags>
-          <title>Item List| FoodERP-React FrontEnd</title>
+          <title>CompanyGroupList| FoodERP-React FrontEnd</title>
         </MetaTags>
         <div className="page-content">
           <PaginationProvider pagination={paginationFactory(pageOptions)}>
             {({ paginationProps, paginationTableProps }) => (
               <ToolkitProvider
                 keyField="id"
-                data={pages}
+                defaultSorted={defaultSorted}
+                data={TableListData}
                 columns={pagesListColumns}
                 search
               >
@@ -205,12 +178,11 @@ console.log("editData",editData)
                       breadcrumbItem={userPageAccessState.PageHeading}
                       IsButtonVissible={(userPageAccessState.RoleAccess_IsSave) ? true : false}
                       SearchProps={toolkitProps.searchProps}
-                      isExcelButtonVisible={true}
-                      breadcrumbCount={`Items Count: ${pages.length}`}
+                      breadcrumbCount={`Product Count: ${TableListData.length}`}
                       IsSearchVissible={true}
-                      ExcelData={pages}
-                    // RedirctPath={`/${btoa("ItemMaster")}`}
-                    // RedirctPath={`/ItemMaster`}
+                      RedirctPath={`/CompanyGroupMaster`}
+                      isExcelButtonVisible={true}
+                      ExcelData={TableListData}
                     />
                     <Row>
                       <Col xl="12">
@@ -220,7 +192,6 @@ console.log("editData",editData)
                             responsive
                             bordered={false}
                             striped={false}
-                            defaultSorted={defaultSorted}
                             classes={"table  table-bordered"}
                             {...toolkitProps.baseProps}
                             {...paginationTableProps}
@@ -245,7 +216,7 @@ console.log("editData",editData)
             }}
             size="xl"
           >
-            <ItemsMaster state={editData.Data} relatatedPage={"/ItemMaster"} pageMode={editData.pageMode} />
+            <CompanyGroupMaster state={editData.Data} relatatedPage={"/CompanyGroupMaster"} pageMode={editData.pageMode} />
           </Modal>
         </div>
       </React.Fragment>
@@ -258,4 +229,4 @@ console.log("editData",editData)
   }
 }
 
-export default ItemsList;
+export default CompanyGroupList;

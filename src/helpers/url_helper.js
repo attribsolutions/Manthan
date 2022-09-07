@@ -115,6 +115,10 @@ export const VEHICLETYPES_DROPDOWN = '/VehicleTypes'
 export const DRIVERLIST_DROPDOWN = '/DriverList'
 export const BASEUNIT_DROPDOWN_API = '/UnitList'
 
+
+//CompantGroup api
+export const COMPANYGROUP_API = '/CompanyGroup'
+
 //Category Types API
 
 export const CATEGORY_DROPDOWN_API = '/GetCategoryByCategoryTypeID'

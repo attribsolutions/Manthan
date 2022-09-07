@@ -64,11 +64,13 @@ export const postItemData = (data) => ({
   // edit api
   export const editItemId =(id,pageMode)=>({
     type:EDIT_ITEM_ID,
+    // type:EDIT_ITEM_ID_SUCCESS,
+    // payload:{status:false},
     id,pageMode
   })
-  export const editItemSuccess =(data)=>({
+  export const editItemSuccess =(editData)=>({
     type:EDIT_ITEM_ID_SUCCESS,
-   payload:data,
+   payload:editData,
   })
   
   // update api
@@ -76,9 +78,9 @@ export const postItemData = (data) => ({
     type:UPDATE_ITEM_ID,
     updateData,ID,
   })
-  export const updateItemSuccess =(data)=>({
+  export const updateItemSuccess =(updateMessage)=>({
     type:UPDATE_ITEM_ID_SUCCESS,
-    payload:data,
+    payload:updateMessage,
   })
   
   // get BaseUnit for dropdown api
