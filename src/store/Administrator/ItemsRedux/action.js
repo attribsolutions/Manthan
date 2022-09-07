@@ -64,6 +64,8 @@ export const postItemData = (data) => ({
   // edit api
   export const editItemId =(id,pageMode)=>({
     type:EDIT_ITEM_ID,
+    // type:EDIT_ITEM_ID_SUCCESS,
+    // payload:{status:false},
     id,pageMode
   })
   export const editItemSuccess =(editData)=>({
