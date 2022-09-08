@@ -36,7 +36,7 @@ const AddEmployee = (props) => {
   //*** "isEditdata get all data from ModuleID for Binding  Form controls
   var editDataGatingFromList = props.state;
   let propsPageMode = props.pageMode;
-  let pageModeProps=props.pageMode;
+  let pageModeProps = props.pageMode;
 
   const [designation_DropdownSelect, setDesignation_DropdownSelect] = useState("");
   const [employeeType_DropdownSelect, setEmployeeType_DropdownSelect] = useState("");
@@ -47,7 +47,7 @@ const AddEmployee = (props) => {
   const [DOB_Date_Select, setDOB_Date_Select] = useState("");
   const [partyDropDownShow_UI, setPartyDropDownShow_UI] = useState(false);
 
-  const { designation, employeeType, State, district, partyList, company, PostAPIResponse ,RoleAccessModifiedinSingleArray} = useSelector((state) => ({
+  const { designation, employeeType, State, district, partyList, company, PostAPIResponse, RoleAccessModifiedinSingleArray } = useSelector((state) => ({
     designation: state.M_EmployeesReducer.designation,
     employeeType: state.M_EmployeesReducer.employeeType,
     State: state.M_EmployeesReducer.State,
@@ -61,26 +61,26 @@ const AddEmployee = (props) => {
 
   // userAccess useEffect
   useEffect(() => {
-     let userAcc = undefined
-        if ((editDataGatingFromList === undefined)) {
-    
-          let locationPath = history.location.pathname
-          userAcc = RoleAccessModifiedinSingleArray.find((inx) => {
-            return (`/${inx.ActualPagePath}` === locationPath)
-          })
-        }
-        else if (!(editDataGatingFromList === undefined)) {
-          let relatatedPage = props.relatatedPage
-          userAcc = RoleAccessModifiedinSingleArray.find((inx) => {
-            return (`/${inx.ActualPagePath}` === relatatedPage)
-          })
-    
-        }
-        if (!(userAcc === undefined)) {
-          setUserPageAccessState(userAcc)
-        }
+    let userAcc = undefined
+    if ((editDataGatingFromList === undefined)) {
 
-    }, [RoleAccessModifiedinSingleArray])
+      let locationPath = history.location.pathname
+      userAcc = RoleAccessModifiedinSingleArray.find((inx) => {
+        return (`/${inx.ActualPagePath}` === locationPath)
+      })
+    }
+    else if (!(editDataGatingFromList === undefined)) {
+      let relatatedPage = props.relatatedPage
+      userAcc = RoleAccessModifiedinSingleArray.find((inx) => {
+        return (`/${inx.ActualPagePath}` === relatatedPage)
+      })
+
+    }
+    if (!(userAcc === undefined)) {
+      setUserPageAccessState(userAcc)
+    }
+
+  }, [RoleAccessModifiedinSingleArray])
 
   useEffect(() => {
     dispatch(getDesignationID());
@@ -119,33 +119,33 @@ const AddEmployee = (props) => {
         value: editDataGatingFromList.District_id,
         label: editDataGatingFromList.DistrictName
       })
-      
+
       const listItems = editDataGatingFromList.EmployeeParties.map((data) => ({
-        value:data.id,
-        label:data.Name
+        value: data.id,
+        label: data.Name
       }))
 
       setParty_DropdownSelect(listItems)
-    
-     if ((editDataGatingFromList.EmployeeParties).length > 0) { setPartyDropDownShow_UI(true) };
+
+      if ((editDataGatingFromList.EmployeeParties).length > 0) { setPartyDropDownShow_UI(true) };
 
       setCompany_DropdownSelect({
         value: editDataGatingFromList.Company_id,
         label: editDataGatingFromList.CompanyName
       })
- 
+
       dispatch(editEmployeeSuccess({ Status: false }))
       dispatch(BreadcrumbShow(editDataGatingFromList.Name))
-      }
-      else if (!(propsPageMode === undefined)) {
-        setPageMode(propsPageMode)
-        
     }
-  }, [editDataGatingFromList,propsPageMode])
+    else if (!(propsPageMode === undefined)) {
+      setPageMode(propsPageMode)
+
+    }
+  }, [editDataGatingFromList, propsPageMode])
 
   useEffect(() => {
 
-    if ((PostAPIResponse.Status === true) && (PostAPIResponse.StatusCode === 200)&&!(pageMode==="dropdownAdd")) {
+    if ((PostAPIResponse.Status === true) && (PostAPIResponse.StatusCode === 200) && !(pageMode === "dropdownAdd")) {
       dispatch(PostEmployeeSuccess({ Status: false }))
       formRef.current.reset();
       setDesignation_DropdownSelect('')
@@ -184,10 +184,6 @@ const AddEmployee = (props) => {
       }));
     }
   }, [PostAPIResponse])
-
-
-
-
 
   const Party_DropdownOptions = partyList.map((data) => ({
     value: data.id,
@@ -233,14 +229,13 @@ const AddEmployee = (props) => {
       return element.id === e.value
     });
 
-    // console.log("IsPartyConnection", IsPartyConnection)
-
     if (IsPartyConnection.IsPartyConnection) {
       Party_Dropdown_Handler()
       setPartyDropDownShow_UI(true)
     }
     else {
       setPartyDropDownShow_UI(false)
+      setParty_DropdownSelect([{ value:null }])
     }
   }
 
@@ -248,14 +243,14 @@ const AddEmployee = (props) => {
     dispatch(getDistrictOnState(e.value))
     setState_DropdownSelect(e)
   }
+
   function District_Dropdown_Handler(e) {
     setDistrict_DropdownSelect(e)
   }
 
-
   function Party_Dropdown_Handler(e) {
     setParty_DropdownSelect(e)
-  }
+     }
 
   function Company_Dropdown_Handler(e) {
     setCompany_DropdownSelect(e)
@@ -263,7 +258,7 @@ const AddEmployee = (props) => {
 
   //'Save' And 'Update' Button Handller
   const handleValidSubmit = (event, values) => {
-    debugger
+    
     const jsonBody = JSON.stringify({
       Name: values.Name,
       Address: values.Address,
@@ -288,13 +283,13 @@ const AddEmployee = (props) => {
     }
     else {
       dispatch(postEmployee(jsonBody));
-
+      console.log("jsonBody",jsonBody)
     }
   };
 
   // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
   let IsEditMode_Css = ''
-  if ((pageMode === "edit")||(pageMode==="copy")||(pageMode==="dropdownAdd")) { IsEditMode_Css = "-5.5%" };
+  if ((pageMode === "edit") || (pageMode === "copy") || (pageMode === "dropdownAdd")) { IsEditMode_Css = "-5.5%" };
 
   if (!(userPageAccessState === '')) {
     return (
@@ -516,7 +511,7 @@ const AddEmployee = (props) => {
                             <div className="mb-3">
                               <Label className="form-label font-size-13 ">Party name</Label>
                               <Select
-                               defaultValue={party_DropdownSelect}
+                                defaultValue={party_DropdownSelect}
                                 isMulti={true}
                                 className="basic-multi-select"
                                 options={Party_DropdownOptions}
