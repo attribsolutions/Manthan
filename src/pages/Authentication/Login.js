@@ -15,7 +15,7 @@ import { AvForm, AvField } from "availity-reactstrap-validation"
 
 /// tsdfddf Punam demotest
 // actions
-import { loginUser } from "../../store/actions"
+import { loginUser, postSuperAdmin } from "../../store/actions"
 
 // import images
 import logo from "../../assets/images/logo-sm.svg"
@@ -43,15 +43,16 @@ const Login = props => {
   }
 
   function createSuperAdminHandler() {
-    alert("call super admin API SuccessFully")
-    let token = JSON.parse(sessionStorage.getItem('token'));
-
-    const baseURL = "http://192.168.1.114:8000/SuperAdmin";
-    axios.get(baseURL, { headers: { "Authorization": `Bearer ${token}` } }).then((response) => {
-      // setPost(response.data);
-      console.log(response)
-    });
-
+    //     debugger
+    //     alert("call super admin API SuccessFully")
+    //     let token = JSON.parse(sessionStorage.getItem('token'));
+    // if (token==null)token=''
+    //     const baseURL = "http://192.168.1.114:8001/SuperAdmin";
+    //     axios.get(baseURL, { headers: { "Authorization": `Bearer${token}` } }).then((response) => {
+    //       // setPost(response.data);
+    //       console.log(response)
+    //     });
+    dispatch(postSuperAdmin())
   }
 
   return (
