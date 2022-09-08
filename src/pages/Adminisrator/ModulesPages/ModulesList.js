@@ -164,7 +164,7 @@ const ModulesList = () => {
                                                 IsSearchVissible={true}
                                                 isExcelButtonVisible={true}
                                                 ExcelData={TableListData}
-                                            // RedirctPath={"/moduleMaster"}
+                                            RedirctPath={"/moduleMaster"}
                                             />
                                             <Row>
                                                 <Col xl="12">
