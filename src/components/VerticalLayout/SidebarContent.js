@@ -14,7 +14,7 @@ import { withTranslation } from "react-i18next";
 
 // MetisMenu
 import MetisMenu from "metismenujs";
-import { withRouter } from "react-router-dom";
+import { useHistory, withRouter } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { getUserDetailsAction, roleAceessAction } from "../../store/auth/login/actions";
@@ -26,27 +26,35 @@ const SidebarContent = (props) => {
   const pathName = props.location.pathname;
   const dispatch = useDispatch();
 
+
   // const  RoleAccessData=demoRolleAcess
-  const { RoleAccessData, afterLoginUserDetails } = useSelector((state) => ({
+  const {
+    RoleAccessData,
+    afterLoginUserDetails,
+    RoleAccessModifiedinSingleArray
+  } = useSelector((state) => ({
     RoleAccessData: state.Login.RoleData,
     afterLoginUserDetails: state.Login.afterLoginUserDetails,
+    RoleAccessModifiedinSingleArray: state.Login.RoleAccessUpdateData,
   }));
 
   useEffect(() => {
-    
+
     if (RoleAccessData.length <= 0) {
-      var value = JSON.parse( localStorage.getItem("roleId"))
-      if(value===undefined)return;
+      var value = JSON.parse(localStorage.getItem("roleId"))
+      if (value === undefined) return;
 
       var party = value.Party_id
       var employee = value.Employee_id;
-      dispatch( roleAceessAction(party,employee))
+      dispatch(roleAceessAction(party, employee))
       // dispatch(getUserDetailsAction(user))
       // roleAceessAction()
     }
   }, [])
 
   const activateParentDropdown = useCallback((item) => {
+    debugger
+
     item.classList.add("active")
     const parent = item.parentElement
     const parent2El = parent.childNodes[1]
@@ -86,9 +94,26 @@ const SidebarContent = (props) => {
 
   // Use ComponentDidMount and ComponentDidUpdate method symultaniously
   useEffect(() => {
-    const pathName = props.location.pathname
+    let pathName = props.location.pathname
+
+    let userAcc = RoleAccessModifiedinSingleArray.find((inx) => {
+      return (`/${inx.ActualPagePath}` === pathName)
+    })
+    if (userAcc === undefined) {
+      return
+    }
+    else if (!userAcc.RoleAccess_IsShowOnMenu) {
+      let listPagePath = RoleAccessModifiedinSingleArray.find((inx) => {
+        return (inx.id === userAcc.RelatedPageID)
+      })
+      if (!(listPagePath === undefined)) {
+        pathName = `/${listPagePath.ActualPagePath}`
+      }
+    }
 
     const initMenu = () => {
+
+      debugger
       new MetisMenu("#side-menu")
       let matchingMenuItem = null
       const ul = document.getElementById("side-menu")
@@ -104,7 +129,7 @@ const SidebarContent = (props) => {
       }
     }
     initMenu()
-  }, [props.location.pathname, activateParentDropdown])
+  }, [pathName, activateParentDropdown, RoleAccessModifiedinSingleArray])
 
   useEffect(() => {
     ref.current.recalculate()
@@ -119,13 +144,6 @@ const SidebarContent = (props) => {
     }
   }
 
-  // console.log("RoleAccessData:",RoleAccessData)
-  const [isActive, setisActive] = useState('')
-
-  // Use ComponentDidMount and ComponentDidUpdate method simultaniously
-  useEffect(() => {
-    setisActive("active")
-  }, [pathName])
 
   return (
     <React.Fragment>
@@ -160,7 +178,7 @@ const SidebarContent = (props) => {
                       if (index.RoleAccess_IsShowOnMenu === true) {
                         return (
                           <li>
-                            <Link to={{ pathname: `/${index.ActualPagePath}`, state: { fromDashboardAccess: true, UserDetails: index } }} >{props.t(index.Name)}</Link>
+                            <Link to={{ pathname: `/${index.ActualPagePath}`,  }} >{props.t(index.Name)}</Link>
                           </li>
                           // class={pathName === indx.SelectIcon ? "active" : ""}
                         )
