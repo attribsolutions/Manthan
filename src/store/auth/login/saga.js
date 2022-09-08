@@ -2,6 +2,7 @@ import { call, put, takeEvery } from "redux-saga/effects"
 
 // Login Redux States
 import {
+  GET_SUPER_ADMIN_API,
   GET_USER_DETAILS_AFTER_LOGIN,
   LOGIN_USER, LOGOUT_USER,
   ROLE_ACCESS_API_CALL
@@ -9,6 +10,7 @@ import {
 import {
   apiError, divisionDropdownSelectSuccess, getUserDetailsAction, getUserDetailsActionSuccess, loginSuccess,
   logoutUserSuccess,
+  postSuperAdminSuccess,
   RoleAccessUpdateSuccess,
   roleAceessAction,
   roleAceessActionSuccess
@@ -18,8 +20,10 @@ import { getFirebaseBackend } from "../../../helpers/firebase_helper"
 import {
   divisionDropdown_Forlogin_ChangeDivisionPage_ApiCall,
   getUserDetails_afterLogin_ApiCall,
+  post_SuperAdmin,
   Python_FoodERP_postJwtLogin, RoleAccessApi_url, showPagesListOnPageAccess_DropDown_List, UserPartiesForUserMaster_API
 } from "../../../helpers/backend_helper"
+import { AlertState } from "../../actions"
 
 const fireBaseBackend = getFirebaseBackend()
 
@@ -175,11 +179,25 @@ function* RoleAccessGenratorFunction({ id1, id2,  }) {
   }
 }
 
+function* Post_SuperAdmin_API_GenratorFunction() {
+  // yield put(SpinnerState(true))
+  try {
+    const response = yield call(post_SuperAdmin);
+    yield put(postSuperAdminSuccess(response.Data));
+    // yield put(SpinnerState(false))
+  } catch (error) {
+  // / yield put(SpinnerState(false))
+    yield put(AlertState({ Type: 4, 
+      Status: true, Message: "500 Error Message",
+    }));
+  }
+}
 function* authSaga() {
   yield takeEvery(LOGIN_USER, loginUser)
   yield takeEvery(GET_USER_DETAILS_AFTER_LOGIN, afterLoginUserDetails_genFun)
   yield takeEvery(ROLE_ACCESS_API_CALL, RoleAccessGenratorFunction)
   yield takeEvery(LOGOUT_USER, logoutUser)
+  yield takeEvery(GET_SUPER_ADMIN_API, Post_SuperAdmin_API_GenratorFunction)
 }
 
 export default authSaga
