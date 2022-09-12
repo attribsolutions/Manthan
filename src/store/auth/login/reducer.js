@@ -7,7 +7,8 @@ import {
   ROLE_ACCESS_API_CALL_SUCCESS,
   ROLE_ACCESS_API_UPDATE_SUCCESS,
   GET_USER_DETAILS_AFTER_LOGIN_SUCCESS,
-  DESISION_DEROPDOWN_SUCCESS_AFTER_LOGIN
+  DESISION_DEROPDOWN_SUCCESS_AFTER_LOGIN,
+  GET_SUPER_ADMIN_API_SUCCESS
 } from "./actionTypes"
 
 const initialState = {
@@ -16,7 +17,8 @@ const initialState = {
   RoleData:[],
   RoleAccessUpdateData:[],
   afterLoginUserDetails:{},
-  divisionDropdown:[]
+  divisionDropdown:[],
+  SuperAdmin:[]
 }
 
 const Login = (state = initialState, action) => {
@@ -66,6 +68,11 @@ const Login = (state = initialState, action) => {
             RoleAccessUpdateData: action.payload,
           }
 
+          case GET_SUPER_ADMIN_API_SUCCESS:
+            return {
+              ...state,
+              SuperAdmin: action.payload,
+            }
     default:
       state = { ...state }
       break

@@ -99,7 +99,7 @@ function* Delete_EmployeeID_GenratorFunction({ id }) {
 function* Edit_EmployeeID_GenratorFunction({ id,pageMode }) {
   try {
     const response = yield call(edit_EmployeeAPI, id);
-    
+    response.pageMode=pageMode
     yield put(editEmployeeSuccess(response));
     console.log("response in saga", response)
 

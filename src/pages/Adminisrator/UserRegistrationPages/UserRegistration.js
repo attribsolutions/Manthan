@@ -24,7 +24,7 @@ const AddUser = (props) => {
   //*** "isEditdata get all data from ModuleID for Binding  Form controls
   let editDataGatingFromList = props.state;
   let pageModeProps = props.pageMode;
-
+  console.log("editDataGatingFromList",editDataGatingFromList)
   //SetState  Edit data Geting From Modules List component
   const [EditData, setEditData] = useState([]);
   const [pageMode, setPageMode] = useState("save");
@@ -101,6 +101,9 @@ const AddUser = (props) => {
     }
   }, [RoleAccessModifiedinSingleArray])
 
+  const FindPartyID = userPartiesForUserMaster_redux.find((index) => {
+    return index.Party_id === null
+  })
 
   useEffect(() => {
 
@@ -131,14 +134,15 @@ const AddUser = (props) => {
         label: editDataGatingFromList.EmployeeName
       })
       setUserPartiesForUserMaster(editDataGatingFromList.UserRole)
-      // var a = editDataGatingFromList.UserRole.map((i) =>{ ({ Party: i.Party, Role: i.Role })})
-      let arraynew = []
-      editDataGatingFromList.UserRole.map((i) => {
-        i.PartyRoles.map((i2) => {
-          arraynew.push({ Party: i.Party, Role: i2.Role })
-        })
-      })
-      setPartyRoleData(arraynew)
+
+      
+      // let arraynew = []
+      // editDataGatingFromList.UserRole.map((i) => {
+      //   i.PartyRoles.map((i2) => {
+      //     arraynew.push({ Party: i.Party, Role: i2.Role })
+      //   })
+      // })
+      setPartyRoleData(editDataGatingFromList.UserRole)
       return
     }
   }, [editDataGatingFromList])
@@ -201,6 +205,12 @@ const AddUser = (props) => {
     label: Data.Name
   }));
 
+
+  function RoleDropdownHandler(e) {
+    setRoleDropDown(e)
+
+  }
+
   /// Role dopdown
   function RoleDropDown_select_handler(event, pty, key) {
 
@@ -235,13 +245,13 @@ const AddUser = (props) => {
       isLoginUsingEmail: values.isLoginUsingEmail,
       CreatedBy: 1,
       UpdatedBy: 1,
-      UserRole: partyRoleData
+      UserRole: FindPartyID ? RoleDropDown.map((i) => { return ({ Party: null, Role: i.value }) }) : partyRoleData
       // .map((d) => ({
       //   Role: d.Role,
       // })),
     })
 
-    if (partyRoleData.length <= 0) {
+    if (partyRoleData.length <= 0 && !(FindPartyID)) {
       dispatch(AlertState({
         Type: 4, Status: true,
         Message: "At Least One Role Data Add in the Table",
@@ -252,11 +262,13 @@ const AddUser = (props) => {
     else if (pageMode === 'edit') {
       dispatch(updateID(jsonBody, EditData.id));
       setEditData([]);
+      console.log("jsonBody", jsonBody)
     }
     else {
       dispatch(addUser(jsonBody));
     }
   };
+
 
   const rolaTable = () => {
 
@@ -298,7 +310,7 @@ const AddUser = (props) => {
 
   // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
   var IsEditMode_Css = ''
-  if ((pageMode === "edit")||(pageMode==="copy")||(pageMode==="dropdownAdd")) { IsEditMode_Css = "-5.5%" };
+  if ((pageMode === "edit") || (pageMode === "copy") || (pageMode === "dropdownAdd")) { IsEditMode_Css = "-5.5%" };
 
   if (!(userPageAccessState === '')) {
     return (
@@ -490,19 +502,31 @@ const AddUser = (props) => {
                                 <i className="dripicons-plus "></i>
                               </Button>
                             </Col> */}
+                            {!(FindPartyID) ? userPartiesForUserMaster.length > 0 ?
+                              <Col sm={6} style={{ marginTop: '28px' }}>
 
-                            {userPartiesForUserMaster.length > 0 ? <Col sm={6} style={{ marginTop: '28px' }}>
+                                {partyRoleData ? (
+                                  <div >
+                                    {rolaTable()}
+                                  </div>
+                                ) :
+                                  null
+                                }
+                              </Col> : null : <></>}
 
-                              {partyRoleData ? (
-                                <div >
-                                  {rolaTable()}
-                                </div>
-                              ) :
-                                null
-                              }
-                            </Col> : null}
-
-                            {/* <FormGroup > */}
+                            {FindPartyID ? <div className="col-lg-3 col-md-6">
+                              <div className="mb-3">
+                                <Label className="form-label font-size-13 ">Role name</Label>
+                                <Select
+                                  defaultValue={RoleDropDown}
+                                  isMulti={true}
+                                  className="basic-multi-select"
+                                  options={RolesValues}
+                                  onChange={(e) => { RoleDropdownHandler(e) }}
+                                  classNamePrefix="select2-selection"
+                                />
+                              </div>
+                            </div> : <></>}
 
                             <Row >
                               <Col sm={2}>

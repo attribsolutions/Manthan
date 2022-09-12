@@ -24,7 +24,6 @@ const RoleAccessAdd = (props) => {
     const formRef = useRef(null);
     const dispatch = useDispatch();
     const history = useHistory()
-    console.log("history", history)
 
     const [userPageAccessState, setUserPageAccessState] = useState('11');
 
@@ -230,8 +229,6 @@ const RoleAccessAdd = (props) => {
     }));
     // console.log("PageDropdownForRoleAccess",PageDropdownForRoleAccess)
 
-
-
     /// Role dopdown
     function RoleDropDown_select_handler(e) {
         setRoleDropDown(e)
@@ -255,22 +252,27 @@ const RoleAccessAdd = (props) => {
     }
 
     const GoButton_Handler = () => {
-        // debugger
-        var division = division_dropdown_Select.value
+
+        
+        var division = division_dropdown_Select.value 
         var role = role_dropdown_Select.value
-        if (role > 0 && division > 0) {
+        if (division === undefined) {
+            division=0
+        }
+        if (role > 0 )  {
             dispatch(GO_Button_HandlerForRoleAccessListPage(role, division));
             setShowTableOnUI(true)
         }
-        else {
-            dispatch(AlertState({
-                Type: 4,
-                Status: true,
-                Message: role > 0 ? "Please Select Division" : "Please Select Role",
-                RedirectPath: false,
-                AfterResponseAction: false
-            }));
-        }
+        // console.log("role", role)
+        // else {
+        //     dispatch(AlertState({
+        //         Type: 4,
+        //         Status: true,
+        //         Message: role > 0 ? "Please Select Division" : "Please Select Role",
+        //         RedirectPath: false,
+        //         AfterResponseAction: false
+        //     }));
+        // }
     }
 
     const AddPageButton_Handeler = () => {
@@ -527,7 +529,7 @@ const RoleAccessAdd = (props) => {
                                     {
                                         !showTableOnUI ?
                                             <>
-                                                <CardHeader className="card-header   text-black " style={{ backgroundColor: "#f8f9fa" }} >
+                                                <CardHeader className="card-header   text-black " style={{ backgroundColor: "#dddddd" }} >
                                                     <Row className="mt-3">
                                                         <Col md="4">
 
@@ -753,7 +755,7 @@ const RoleAccessAdd = (props) => {
                                                 </CardBody>
                                             </>
                                     }
-                           </CardBody>
+                                </CardBody>
                             </Card>
                         </Card>
                     </Container>

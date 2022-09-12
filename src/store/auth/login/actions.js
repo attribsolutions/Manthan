@@ -10,7 +10,9 @@ import {
   ROLE_ACCESS_API_UPDATE_SUCCESS,
   GET_USER_DETAILS_AFTER_LOGIN,
   GET_USER_DETAILS_AFTER_LOGIN_SUCCESS,
-  DESISION_DEROPDOWN_SUCCESS_AFTER_LOGIN
+  DESISION_DEROPDOWN_SUCCESS_AFTER_LOGIN,
+  GET_SUPER_ADMIN_API,
+  GET_SUPER_ADMIN_API_SUCCESS
 } from "./actionTypes"
 
 export const loginUser = (user, history) => {
@@ -95,3 +97,13 @@ export  const roleAceessActionSuccess=(data)=>{
       payload: data,
     }
     }
+
+    export const postSuperAdmin = () => ({
+      type: GET_SUPER_ADMIN_API,
+  });
+  
+  export const postSuperAdminSuccess = (data) => ({
+      type: GET_SUPER_ADMIN_API_SUCCESS,
+      payload:data,
+  });
+  
