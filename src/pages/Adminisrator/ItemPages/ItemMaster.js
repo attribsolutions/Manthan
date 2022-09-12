@@ -1432,19 +1432,18 @@ const ItemsMaster = (props) => {
                                                                             <Col md={8}><Table className="table table-bordered  ">
                                                                                 <Thead >
                                                                                     <tr>
-                                                                                        <th>Unit Name</th>
+
 
                                                                                         <th className="col-sm-3 text-center">Conversion Ratio </th>
                                                                                         <th> To Base Unit</th>
+                                                                                        <th>Unit Name</th>
                                                                                         <th>Action</th>
                                                                                     </tr>
                                                                                 </Thead>
                                                                                 <Tbody  >
                                                                                     {baseUnitTableData.map((TableValue, key) => (
                                                                                         <tr >
-                                                                                            <td>
-                                                                                                <Label>1</Label>    {formValue.BaseUnit.label}
-                                                                                            </td>
+
                                                                                             <td>
                                                                                                 <Input
 
@@ -1466,6 +1465,9 @@ const ItemsMaster = (props) => {
                                                                                                 />
                                                                                             </td>
                                                                                             <td>
+                                                                                                <Label>1</Label>    {formValue.BaseUnit.label}
+                                                                                            </td>
+                                                                                            <td>
                                                                                                 {(baseUnitTableData.length === key + 1) ?
                                                                                                     <Row className="">
                                                                                                         <Col md={6} className=" mt-3">
@@ -1474,8 +1476,10 @@ const ItemsMaster = (props) => {
                                                                                                                     UnitConversionsTab_DeleteRow_Handler(key)
                                                                                                                 }} >
                                                                                                                 </i>
-                                                                                                            </> :<Col md={6} ></Col>}
+                                                                                                            </> : <Col md={6} ></Col>}
+
                                                                                                         </Col>
+
                                                                                                         <Col md={6} >
                                                                                                             <Button className="btn btn-sm btn-light mt-3   align-items-sm-end"
                                                                                                                 type="button"
@@ -1492,6 +1496,7 @@ const ItemsMaster = (props) => {
                                                                                                     </i>
                                                                                                 }
                                                                                             </td>
+
                                                                                         </tr>
                                                                                     ))}
                                                                                 </Tbody>
