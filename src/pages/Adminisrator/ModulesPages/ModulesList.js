@@ -124,7 +124,7 @@ const ModulesList = () => {
         listPageCommonButtonFunction({
             dispatchHook: dispatch,
             ButtonMsgLable: "Module",
-            deleteName:"Name",
+            deleteName: "Name",
             userPageAccessState: userPageAccessState,
             editActionFun: editModuleID,
             deleteActionFun: deleteModuleID
@@ -164,7 +164,7 @@ const ModulesList = () => {
                                                 IsSearchVissible={true}
                                                 isExcelButtonVisible={true}
                                                 ExcelData={TableListData}
-                                            RedirctPath={"/moduleMaster"}
+                                                RedirctPath={"/ModuleMaster"}
                                             />
                                             <Row>
                                                 <Col xl="12">
@@ -206,7 +206,7 @@ const ModulesList = () => {
                             size="xl"
                         >
                             {/* <PartyUIDemo state={editData.Data} /> */}
-                            <Modules state={editData.Data} relatatedPage={"/ModuleMaster"} pageMode={editData.pageMode}/>
+                            <Modules state={editData.Data} relatatedPage={"/ModuleMaster"} pageMode={editData.pageMode} />
                         </Modal>
                     </div>
                 </div>

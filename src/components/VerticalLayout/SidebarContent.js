@@ -53,8 +53,7 @@ const SidebarContent = (props) => {
   }, [])
 
   const activateParentDropdown = useCallback((item) => {
-    debugger
-
+   
     item.classList.add("active")
     const parent = item.parentElement
     const parent2El = parent.childNodes[1]
@@ -94,6 +93,7 @@ const SidebarContent = (props) => {
 
   // Use ComponentDidMount and ComponentDidUpdate method symultaniously
   useEffect(() => {
+    debugger
     let pathName = props.location.pathname
 
     let userAcc = RoleAccessModifiedinSingleArray.find((inx) => {
@@ -113,7 +113,6 @@ const SidebarContent = (props) => {
 
     const initMenu = () => {
 
-      debugger
       new MetisMenu("#side-menu")
       let matchingMenuItem = null
       const ul = document.getElementById("side-menu")
@@ -178,7 +177,7 @@ const SidebarContent = (props) => {
                       if (index.RoleAccess_IsShowOnMenu === true) {
                         return (
                           <li>
-                            <Link to={{ pathname: `/${index.ActualPagePath}`,  }} >{props.t(index.Name)}</Link>
+                            <Link to={{ pathname: `/${index.ActualPagePath}`, }} >{props.t(index.Name)}</Link>
                           </li>
                           // class={pathName === indx.SelectIcon ? "active" : ""}
                         )
