@@ -24,7 +24,7 @@ import {
 import { AlertState } from "../../../store/actions";
 import { CommonGetRoleAccessFunction } from "../../../components/Common/CommonGetRoleAccessFunction";
 import { useHistory } from "react-router-dom";
-import { getMethodForProductTypes } from "../../../store/Administrator/CategoryRedux/action";
+import { getMethodForCategory, getMethodForProductTypes } from "../../../store/Administrator/CategoryRedux/action";
 
 const SubCategoryMaster = (props) => {
 
@@ -90,7 +90,7 @@ const SubCategoryMaster = (props) => {
     }, [history])
 
     useEffect(() => {
-        dispatch(getMethodForProductTypes());
+        dispatch(getMethodForCategory());
     }, [dispatch]);
 
     // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
@@ -150,7 +150,7 @@ const SubCategoryMaster = (props) => {
         label: Data.Name
     }));
     
-    function handllerProductCategoryTypes(e) {
+    function handllerCategoryTypes(e) {
         setCategoryTypes_dropdown_Select(e)
     }
 
@@ -222,7 +222,7 @@ const SubCategoryMaster = (props) => {
                                                                         <Select
                                                                             value={categoryTypes_dropdown_Select}
                                                                             options={CategoryTypesOptions}
-                                                                            onChange={(e) => { handllerProductCategoryTypes(e) }}
+                                                                            onChange={(e) => { handllerCategoryTypes(e) }}
                                                                         />
                                                                     </Col>
                                                                 </FormGroup>
