@@ -16,7 +16,7 @@ import { useHistory } from "react-router-dom";
 import { CommonGetRoleAccessFunction } from "../../../components/Common/CommonGetRoleAccessFunction";
 // import { deleteProductCategoryTypeIDSuccess, delete_ProductCategoryType_ID,  updateProductCategoryTypeIDSuccess } from "../../../store/Administrator/PartyTypeRedux/action";
 import { AlertState } from "../../../store/actions";
-import { deleteProductTypesIDSuccess, delete_ProductTypes_ID, editProductTypesID, getProductTypeslist, updateProductTypesIDSuccess } from "../../../store/Administrator/CategoryRedux/action";
+import { deleteCategoryIDSuccess, deleteProductTypesIDSuccess, delete_Category_ID, delete_ProductTypes_ID, editCategoryID, editProductTypesID, getCategorylist, getProductTypeslist, updateCategoryIDSuccess, updateProductTypesIDSuccess } from "../../../store/Administrator/CategoryRedux/action";
 import CategoryMaster from "./CategoryMaster";
 import { listPageCommonButtonFunction } from "../../../components/Common/CmponentRelatedCommonFile/listPageCommonButtons";
 // import { AlertState } from "../../../store/action";
@@ -34,7 +34,7 @@ const CategoryList = (props) => {
 
   const { TableListData, editData, updateMessage, deleteMessage, RoleAccessModifiedinSingleArray } = useSelector(
     (state) => ({
-      TableListData: state.CategoryMasterReducer.ProductTypesListData,
+      TableListData: state.CategoryMasterReducer.CategoryListData,
       editData: state.CategoryMasterReducer.editData,
       updateMessage: state.CategoryMasterReducer.updateMessage,
       deleteMessage: state.CategoryMasterReducer.deleteMessage,
@@ -54,25 +54,25 @@ const CategoryList = (props) => {
 
   //  This UseEffect => Featch Modules List data  First Rendering
   useEffect(() => {
-    dispatch(getProductTypeslist());
+    dispatch(getCategorylist());
   }, []);
 
   // This UseEffect => UpadateModal Success/Unsucces  Show and Hide Control Alert_modal
   useEffect(() => {
 
     if (updateMessage.Status === true && updateMessage.StatusCode === 200) {
-      dispatch(updateProductTypesIDSuccess({ Status: false }));
+      dispatch(updateCategoryIDSuccess({ Status: false }));
       dispatch(
         AlertState({
           Type: 1,
           Status: true,
           Message: updateMessage.Message,
-          AfterResponseAction: getProductTypeslist,
+          AfterResponseAction: getCategorylist,
         })
       );
       tog_center();
     } else if (updateMessage.Status === true) {
-      dispatch(updateProductTypesIDSuccess({ Status: false }));
+      dispatch(updateCategoryIDSuccess({ Status: false }));
       dispatch(
         AlertState({
           Type: 3,
@@ -85,17 +85,17 @@ const CategoryList = (props) => {
 
   useEffect(() => {
     if (deleteMessage.Status === true && deleteMessage.StatusCode === 200) {
-      dispatch(deleteProductTypesIDSuccess({ Status: false }));
+      dispatch(deleteCategoryIDSuccess({ Status: false }));
       dispatch(
         AlertState({
           Type: 1,
           Status: true,
           Message: deleteMessage.Message,
-          AfterResponseAction: getProductTypeslist,
+          AfterResponseAction: getCategorylist,
         })
       );
     } else if (deleteMessage.Status === true) {
-      dispatch(deleteProductTypesIDSuccess({ Status: false }));
+      dispatch(deleteCategoryIDSuccess({ Status: false }));
       dispatch(
         AlertState({
           Type: 3,
@@ -149,8 +149,8 @@ const CategoryList = (props) => {
       ButtonMsgLable: "Category",
       deleteName: "Name",
       userPageAccessState: userPageAccessState,
-      editActionFun: editProductTypesID,
-      deleteActionFun: delete_ProductTypes_ID
+      editActionFun: editCategoryID,
+      deleteActionFun: delete_Category_ID
     })
 
   ];

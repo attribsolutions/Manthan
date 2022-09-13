@@ -247,12 +247,12 @@ export const edit_CategoryType_List_Api = (id) => get(`${url.CATEGORY_TYPES_API}
 export const update_CategoryType_List_Api = (data, id) => put(`${url.CATEGORY_TYPES_API}/${id}`, data)// update
 
 //Category API
-export const Post_Product_Types_API = (data) => post(url. CATEGORY_API,data)// post api
-export const get_Product_Category_Type_Master_API = () => get(url. CATEGORY_TYPES_API)// Product Category DropDown Api api
-export const get_Product_Types_List_Api = () => get(url. CATEGORY_API) // get api
-export const detelet_Product_Types_List_Api = (id) =>del(`${url. CATEGORY_API}/${id}`) // delete api
-export const edit_Product_Types_List_Api = (id) =>get(`${url. CATEGORY_API}/${id}`) // edit api
-export const update_Product_Types_List_Api = (data, id) =>put(`${url. CATEGORY_API}/${id}`, data)// update
+export const Post_Category_API = (data) => post(url. CATEGORY_API,data)// post api
+export const get_Category_Master_API = () => get(url. CATEGORY_TYPES_API)// Product Category DropDown Api api
+export const get_Category_List_Api = () => get(url. CATEGORY_API) // get api
+export const detelet_Category_List_Api = (id) =>del(`${url. CATEGORY_API}/${id}`) // delete api
+export const edit_Category_List_Api = (id) =>get(`${url. CATEGORY_API}/${id}`) // edit api
+export const update_Category_List_Api = (data, id) =>put(`${url. CATEGORY_API}/${id}`, data)// update
 
 //Sub-Category API
 export const Post_SubCategory_API = (data) => post(url. SUB_CATEGORY_API, data)// post api
