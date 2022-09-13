@@ -28,7 +28,7 @@ import { AlertState } from "../../actions"
 const fireBaseBackend = getFirebaseBackend()
 
 function* loginUser({ payload: { user, history } }) {
-  
+
   try {
     const response =
       yield call(Python_FoodERP_postJwtLogin, {
@@ -37,9 +37,10 @@ function* loginUser({ payload: { user, history } }) {
       })
     try {
       if (response.StatusCode === 200) {
-        
+
         localStorage.setItem("token", (response.token))
         localStorage.setItem("userId", (response.UserID))
+
         // yield put(getUserDetailsAction(response.UserID))
 
         // const response1 = yield call(getUserDetails_afterLogin_ApiCall, {
@@ -77,10 +78,12 @@ function* loginUser({ payload: { user, history } }) {
 function* afterLoginUserDetails_genFun({ id }) {
 
   try {
+    debugger
     const response = yield call(getUserDetails_afterLogin_ApiCall, {
       UserId: id,
     })
     yield put(getUserDetailsActionSuccess(response.Data))
+    localStorage.setItem("UserName", (response.Data.UserName))
 
 
     var employee = response.Data.EmployeeID;
@@ -109,13 +112,13 @@ function* logoutUser({ payload: { history } }) {
     yield put(apiError(error))
   }
 }
-function* RoleAccessGenratorFunction({ id1, id2,  }) {
-  
+function* RoleAccessGenratorFunction({ id1, id2, }) {
+
 
   try {
     const PageAccessApi = yield call(showPagesListOnPageAccess_DropDown_List)
 
-    const RoleResponse = yield call(RoleAccessApi_url, id1, id2, );
+    const RoleResponse = yield call(RoleAccessApi_url, id1, id2,);
 
     if ((RoleResponse.Data.length > 0) && (PageAccessApi.Data.length > 0)) {
 
@@ -186,8 +189,9 @@ function* Post_SuperAdmin_API_GenratorFunction() {
     yield put(postSuperAdminSuccess(response.Data));
     // yield put(SpinnerState(false))
   } catch (error) {
-  // / yield put(SpinnerState(false))
-    yield put(AlertState({ Type: 4, 
+    // / yield put(SpinnerState(false))
+    yield put(AlertState({
+      Type: 4,
       Status: true, Message: "500 Error Message",
     }));
   }
