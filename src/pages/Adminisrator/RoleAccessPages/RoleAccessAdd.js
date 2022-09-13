@@ -31,7 +31,7 @@ const RoleAccessAdd = (props) => {
     const [tableHederList, setTableHederList] = useState([])
     const [showTableOnUI, setShowTableOnUI] = useState(false)
 
-    const [division_dropdown_Select, setDivision_dropdown_Select] = useState("");
+    const [division_dropdown_Select, setDivision_dropdown_Select] = useState({ value: 0 });
     const [role_dropdown_Select, setRoleDropDown] = useState("");
     const [module_DropdownSelect, setModule_DropdownSelect] = useState('');
     const [page_DropdownSelect, setPage_DropdownSelect] = useState('');
@@ -77,7 +77,7 @@ const RoleAccessAdd = (props) => {
             var roleName = editDataGatingFromList.RoleName
             var divisionName = editDataGatingFromList.DivisionName
 
-            if (roleid > 0 && divisionid > 0) {
+            if (roleid > 0) {
                 dispatch(GO_Button_HandlerForRoleAccessListPage(roleid, divisionid));
                 setShowTableOnUI(true)
                 setRoleDropDown({ label: roleName, value: roleid })
@@ -253,13 +253,13 @@ const RoleAccessAdd = (props) => {
 
     const GoButton_Handler = () => {
 
-        
-        var division = division_dropdown_Select.value 
+
+        var division = division_dropdown_Select.value
         var role = role_dropdown_Select.value
         if (division === undefined) {
-            division=0
+            division = 0
         }
-        if (role > 0 )  {
+        if (role > 0) {
             dispatch(GO_Button_HandlerForRoleAccessListPage(role, division));
             setShowTableOnUI(true)
         }
@@ -604,8 +604,12 @@ const RoleAccessAdd = (props) => {
                                                         </Col>
 
                                                         <Col md="4" className="p-2 ">
-                                                            <Label className=" p-2 col-sm-3 ">Division</Label>
-                                                            <Button type="button" color="btn btn-outline-warning" className="btn-sm" ><h className="text-black">{division_dropdown_Select.label}</h></Button>
+                                                            {(division_dropdown_Select.value > 0)
+                                                                ? <> <Label className=" p-2 col-sm-3 ">Division</Label>
+                                                                    <Button type="button" color="btn btn-outline-warning" className="btn-sm" >
+                                                                        <h className="text-black">{division_dropdown_Select.label}</h></Button>
+                                                                </>
+                                                                : null}
                                                         </Col>
                                                         <Col md="4" className="p-2 text-end">
                                                             <Button type="button" color="btn btn-outline-secondary" className="btn-sm" onClick={() => { ChangeButtonHandeler() }}><h className="text-black">Change Role</h></Button>
