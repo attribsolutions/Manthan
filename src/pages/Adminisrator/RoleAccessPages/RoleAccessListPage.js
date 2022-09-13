@@ -67,9 +67,11 @@ const RoleAccessListPage = () => {
         dispatch(getRoleAccessListPage());
     }, []);
 
-    const EditPageHandler = (data) => {
-    //  debugger
-        const rowData =data
+    const EditPageHandler = (rowData) => {
+     debugger
+       if(rowData.Division_id===null) {
+        rowData.Division_id=0
+       }
      
         // let RelatedPageID = 0
         // const userPageAccess = history.location.state
