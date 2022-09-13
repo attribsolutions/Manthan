@@ -402,7 +402,7 @@ const ItemsMaster = (props) => {
     const BaseUnit_DropdownOptions2 = BaseUnit.map((data) => ({
         value: data.id,
         label: data.Name
-    }));
+    }))
 
     const CategoryType_DropdownOptions = CategoryType.map((data) => ({
         value: data.id,
@@ -485,6 +485,7 @@ const ItemsMaster = (props) => {
     }
 
     function CategoryType_Dropdown_Handler(e, key) {
+
         CategoryTab_Common_onChange_Handller(e, "CategoryType", key,);
         dispatch(get_Category_By_CategoryType_ForDropDown(e.value, key))
     }
@@ -500,7 +501,7 @@ const ItemsMaster = (props) => {
         let cat_TableElement = categoryTabTable[key];
         let valid = true;
 
-        let arr = ["CategoryType", "Category", "SubCategory"];
+        let arr = ["CategoryType", "Category",];
         arr.map((label) => {
             var valid11 = Common_Drop_Validation(cat_TableElement[label], label, key,)
             if (!valid11) { valid = valid11 }
@@ -529,6 +530,19 @@ const ItemsMaster = (props) => {
 
     }
     function CategoryTab_Common_onChange_Handller(event, type, key) {
+
+        const foundDublicate = categoryTabTable.find((element) => {
+            return (element[type].value === event.value)
+        });
+        if (!(foundDublicate === undefined)) {
+            dispatch(AlertState({
+                Type: 4,
+                Status: true,
+                Message: "Category alredy Select",
+            }))
+            return
+        }
+
 
         let validateReturn = Common_Drop_Validation(event, type, key);
         if (validateReturn === false) return;
@@ -600,7 +614,6 @@ const ItemsMaster = (props) => {
     }
     function UnitConversionsTab_BaseUnit2_onChange_Handller(event, type, key,) {
 
-
         let newSelectValue = ''
 
         var found = baseUnitTableData.find((i, k) => {
@@ -617,6 +630,18 @@ const ItemsMaster = (props) => {
             }
         }
         else if (type === 'Unit') {
+            // if(event.label===formValue.){ }
+            const foundDublicate = baseUnitTableData.find((element) => {
+                return (element[type].value === event.value)
+            });
+            if (!(foundDublicate === undefined)) {
+                dispatch(AlertState({
+                    Type: 4,
+                    Status: true,
+                    Message: "Unit alredy Select",
+                }))
+                return
+            }
             let validateReturn = Common_Drop_Validation(event, type, key,)
             if (validateReturn === false) return;
 
@@ -1016,7 +1041,7 @@ const ItemsMaster = (props) => {
             <React.Fragment>
                 <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
                     <MetaTags>
-                        <title>Tabs & Accordions | Minia - React Admin & Dashboard Template</title>
+                        <title>Item Master| FoodERP-React FrontEnd</title>
                     </MetaTags>
                     <Container fluid>
                         <AvForm onValidSubmit={(e, v) => { handleValidSubmit(e, v); }}>
@@ -1434,9 +1459,9 @@ const ItemsMaster = (props) => {
                                                                                     <tr>
 
 
-                                                                                        <th className="col-sm-3 text-center">Conversion Ratio </th>
-                                                                                        <th> To Base Unit</th>
                                                                                         <th>Unit Name</th>
+                                                                                        <th className="col-sm-3 text-center">Conversion To Base Unit </th>
+                                                                                        {/* <th> To Base Unit</th> */}
                                                                                         <th>Action</th>
                                                                                     </tr>
                                                                                 </Thead>
@@ -1444,29 +1469,40 @@ const ItemsMaster = (props) => {
                                                                                     {baseUnitTableData.map((TableValue, key) => (
                                                                                         <tr >
 
+
                                                                                             <td>
-                                                                                                <Input
-
-                                                                                                    type="text"
-                                                                                                    id={`txtConversion${key}`}
-                                                                                                    placeholder={"Select Ratio"}
-                                                                                                    value={baseUnitTableData[key].Conversion}
-                                                                                                    onChange={(e) => UnitConversionsTab_BaseUnit2_onChange_Handller(e, "Conversion", key,)}>
-
-                                                                                                </Input>
+                                                                                                <Row>
+                                                                                                    <Label className=" col-sm-3 col-form-label">1</Label>
+                                                                                                    <Col>
+                                                                                                        <Select
+                                                                                                            id={`dropUnit-${key}`}
+                                                                                                            placeholder="select unit"
+                                                                                                            value={baseUnitTableData[key].Unit}
+                                                                                                            options={BaseUnit_DropdownOptions2}
+                                                                                                            onChange={(e) => UnitConversionsTab_BaseUnit2_onChange_Handller(e, "Unit", key)}
+                                                                                                        />
+                                                                                                    </Col>
+                                                                                                    < Label className=" col-sm-3 col-form-label">=</Label>
+                                                                                                </Row>
                                                                                             </td>
                                                                                             <td>
-                                                                                                <Select
-                                                                                                    id={`dropUnit-${key}`}
-                                                                                                    placeholder="select unit"
-                                                                                                    value={baseUnitTableData[key].Unit}
-                                                                                                    options={BaseUnit_DropdownOptions2}
-                                                                                                    onChange={(e) => UnitConversionsTab_BaseUnit2_onChange_Handller(e, "Unit", key)}
-                                                                                                />
+                                                                                                <Row>
+                                                                                                    <Col>
+                                                                                                        <Input
+                                                                                                            type="text"
+                                                                                                            id={`txtConversion${key}`}
+                                                                                                            placeholder={"Select Ratio"}
+                                                                                                            value={baseUnitTableData[key].Conversion}
+                                                                                                            onChange={(e) => UnitConversionsTab_BaseUnit2_onChange_Handller(e, "Conversion", key,)}>
+
+                                                                                                        </Input>
+                                                                                                    </Col>
+                                                                                                    <Label className=" col-sm-3 col-form-label"> {formValue.BaseUnit.label}</Label>
+                                                                                                </Row>
                                                                                             </td>
-                                                                                            <td>
+                                                                                            {/* <td>
                                                                                                 <Label>1</Label>    {formValue.BaseUnit.label}
-                                                                                            </td>
+                                                                                            </td> */}
                                                                                             <td>
                                                                                                 {(baseUnitTableData.length === key + 1) ?
                                                                                                     <Row className="">
