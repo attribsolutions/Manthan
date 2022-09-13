@@ -24,18 +24,22 @@ const ProfileMenu = props => {
   const [username, setusername] = useState("Admin")
 
   useEffect(() => {
-    if (localStorage.getItem("authUser")) {
+   
+    if (localStorage.getItem("UserName")) {
       if (process.env.REACT_APP_DEFAULTAUTH === "firebase") {
-        const obj = JSON.parse(localStorage.getItem("authUser"))
+        const obj = JSON.parse(localStorage.getItem("roleId"))
         setusername(obj.displayName)
       } else if (
         process.env.REACT_APP_DEFAULTAUTH === "fake" ||
         process.env.REACT_APP_DEFAULTAUTH === "jwt"
       ) {
-        const obj = JSON.parse(localStorage.getItem("authUser"))
-        setusername(obj.username)
+        // const obj = JSON.parse(localStorage.getItem("UserName"))
+        // setusername(obj.username)
+        const obj = localStorage.getItem("UserName")
+        setusername(obj)
       }
     }
+   
   }, [props.success])
 
   return (
@@ -60,9 +64,9 @@ const ProfileMenu = props => {
         </DropdownToggle>
         <DropdownMenu className="dropdown-menu-end">
           <DropdownItem tag="a" href="/profile">
-            {" "}
+            
             <i className="bx bx-user font-size-16 align-middle me-1" />
-            {props.t("Profile")}{" "}
+            {props.t("Profile")}
           </DropdownItem>
           <DropdownItem tag="a" href="auth-lock-screen">
             <i className="bx bx-lock-open font-size-16 align-middle me-1" />
