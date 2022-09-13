@@ -70,7 +70,7 @@ const ItemsMaster = (props) => {
         ShortName: "",
         BarCode: { label: "" },
         Company: "",
-        BaseUnit: '',
+        BaseUnit: { value: 0, label: "select" },
         MRP: '',
         GST: '',
         HSN: '',
@@ -393,16 +393,28 @@ const ItemsMaster = (props) => {
         value: data.id,
         label: data.Name
     }));
+    // const BaseUnit_DropdownOptions2 = BaseUnit.map((data) => ({
+    //     value: data.id,
+    //     label: data.Name
+    // }))
+
+    let BaseUnit_DropdownOptions2 = []
+    BaseUnit.forEach(myFunction);
+    function myFunction(item, index, arr) {
+        if (!(formValue.BaseUnit.label === item.Name)) {
+            BaseUnit_DropdownOptions2[index] = {
+                value: item.id,
+                label: item.Name
+            };
+        }
+    }
+
 
     const PriceList_DropdownOptions = BaseUnit.map((data) => ({
         value: data.id,
         label: data.Name
     }));
 
-    const BaseUnit_DropdownOptions2 = BaseUnit.map((data) => ({
-        value: data.id,
-        label: data.Name
-    }))
 
     const CategoryType_DropdownOptions = CategoryType.map((data) => ({
         value: data.id,
@@ -638,7 +650,7 @@ const ItemsMaster = (props) => {
                 dispatch(AlertState({
                     Type: 4,
                     Status: true,
-                    Message: "Unit alredy Select",
+                    Message: "Unit already Select",
                 }))
                 return
             }
@@ -712,6 +724,17 @@ const ItemsMaster = (props) => {
         let newSelectValue = ''
 
         if (type === "ImageType") {
+            const foundDublicate = imageTabTable.find((element) => {
+                return (element[type].value === event.value)
+            });
+            if (!(foundDublicate === undefined)) {
+                dispatch(AlertState({
+                    Type: 4,
+                    Status: true,
+                    Message: "PriceList Already Select",
+                }))
+                return
+            }
             newSelectValue = {
                 ImageType: event,
                 ImageUpload: found.ImageUpload,
@@ -744,14 +767,12 @@ const ItemsMaster = (props) => {
         }]
         setMarginTabTable(newarr1)
     }
-
     function MarginTab_DeleteRow_Handler(key) {
         var removeElseArrray1 = marginTabTable.filter((i, k) => {
             return !(k === key)
         })
         setMarginTabTable(removeElseArrray1)
     }
-
     function MarginTab_onChange_Handler(event, key, type) {
 
         var found = marginTabTable.find((i, k) => {
@@ -760,6 +781,17 @@ const ItemsMaster = (props) => {
         let newSelectValue = ''
 
         if (type === "PriceList") {
+            const foundDublicate = marginTabTable.find((element) => {
+                return (element[type].value === event.value)
+            });
+            if (!(foundDublicate === undefined)) {
+                dispatch(AlertState({
+                    Type: 4,
+                    Status: true,
+                    Message: "PriceList Already Select",
+                }))
+                return
+            }
 
             let validateReturn = Common_Drop_Validation(event, type, key,)
             if (validateReturn === false) return;
@@ -824,8 +856,31 @@ const ItemsMaster = (props) => {
         })
         let newSelectValue = ''
 
+        if (type === "MRPType") {
 
-        if (type === "MRP") {
+            const foundDublicate = rateDetailTableData.find((element) => {
+                return (element[type].value === event.value)
+            });
+            if (!(foundDublicate === undefined)) {
+                dispatch(AlertState({
+                    Type: 4,
+                    Status: true,
+                    Message: "MRPType Already Select",
+                }))
+                return
+            }
+            let validateReturn = Common_Drop_Validation(event, type, key);
+            if (validateReturn === false) return;
+
+            newSelectValue = {
+                MRP: found.MRP,
+                GSTPercentage: found.GSTPercentage,
+                HSNCode: found.HSNCode,
+                MRPType: event
+            }
+        }
+
+        else if (type === "MRP") {
             let validateReturn = Common_Text_INPUT_Validation(event, type, key);
             if (validateReturn === false) return;
 
@@ -857,17 +912,6 @@ const ItemsMaster = (props) => {
                 GSTPercentage: found.GSTPercentage,
                 HSNCode: event,
                 MRPType: found.MRPType
-            }
-        }
-        else if (type === "MRPType") {
-            let validateReturn = Common_Drop_Validation(event, type, key);
-            if (validateReturn === false) return;
-
-            newSelectValue = {
-                MRP: found.MRP,
-                GSTPercentage: found.GSTPercentage,
-                HSNCode: found.HSNCode,
-                MRPType: event
             }
         }
 
@@ -1448,97 +1492,97 @@ const ItemsMaster = (props) => {
                                                                                     value={formValue.BaseUnit}
                                                                                     options={BaseUnit_DropdownOptions}
                                                                                     onChange={(e) => Common_DropDown_handller_ForAll(e, "BaseUnit", 0)}
-
                                                                                 />
                                                                             </FormGroup>
                                                                         </Row>
 
-                                                                        <Row className="mt-3">
-                                                                            <Col md={8}><Table className="table table-bordered  ">
-                                                                                <Thead >
-                                                                                    <tr>
+                                                                        {!(formValue.BaseUnit.value === 0)
+                                                                            ? <Row className="mt-3">
+                                                                                <Col md={8}><Table className="table table-bordered  ">
+                                                                                    <Thead >
+                                                                                        <tr>
+                                                                                            <th className="col-sm-3">Unit Name</th>
+                                                                                            <th className="col-sm-3 text-center">Conversion To Base Unit </th>
+                                                                                            {/* <th> To Base Unit</th> */}
+                                                                                            <th className="col-sm-2">Action</th>
+                                                                                        </tr>
+                                                                                    </Thead>
+                                                                                    <Tbody  >
+                                                                                        {baseUnitTableData.map((TableValue, key) => (
+                                                                                            <tr >
+                                                                                                <td>
+                                                                                                    <Row>
+                                                                                                        <Label className=" col-sm-2 col-form-label">1</Label>
+                                                                                                        <Col md={7}>
+                                                                                                            <Select
+                                                                                                                id={`dropUnit-${key}`}
+                                                                                                                placeholder="select unit"
+                                                                                                                value={baseUnitTableData[key].Unit}
+                                                                                                                options={BaseUnit_DropdownOptions2}
+                                                                                                                onChange={(e) => UnitConversionsTab_BaseUnit2_onChange_Handller(e, "Unit", key)}
+                                                                                                            />
+                                                                                                        </Col>
+                                                                                                        < Label className=" col-sm-3 col-form-label">=</Label>
+                                                                                                    </Row>
+                                                                                                </td>
+                                                                                                <td>
+                                                                                                    <Row>
+                                                                                                        <Col>
+                                                                                                            <Input
+                                                                                                                type="text"
+                                                                                                                id={`txtConversion${key}`}
+                                                                                                                placeholder={"Select Ratio"}
+                                                                                                                value={baseUnitTableData[key].Conversion}
+                                                                                                                onChange={(e) => UnitConversionsTab_BaseUnit2_onChange_Handller(e, "Conversion", key,)}>
 
-
-                                                                                        <th>Unit Name</th>
-                                                                                        <th className="col-sm-3 text-center">Conversion To Base Unit </th>
-                                                                                        {/* <th> To Base Unit</th> */}
-                                                                                        <th>Action</th>
-                                                                                    </tr>
-                                                                                </Thead>
-                                                                                <Tbody  >
-                                                                                    {baseUnitTableData.map((TableValue, key) => (
-                                                                                        <tr >
-
-
-                                                                                            <td>
-                                                                                                <Row>
-                                                                                                    <Label className=" col-sm-3 col-form-label">1</Label>
-                                                                                                    <Col>
-                                                                                                        <Select
-                                                                                                            id={`dropUnit-${key}`}
-                                                                                                            placeholder="select unit"
-                                                                                                            value={baseUnitTableData[key].Unit}
-                                                                                                            options={BaseUnit_DropdownOptions2}
-                                                                                                            onChange={(e) => UnitConversionsTab_BaseUnit2_onChange_Handller(e, "Unit", key)}
-                                                                                                        />
-                                                                                                    </Col>
-                                                                                                    < Label className=" col-sm-3 col-form-label">=</Label>
-                                                                                                </Row>
-                                                                                            </td>
-                                                                                            <td>
-                                                                                                <Row>
-                                                                                                    <Col>
-                                                                                                        <Input
-                                                                                                            type="text"
-                                                                                                            id={`txtConversion${key}`}
-                                                                                                            placeholder={"Select Ratio"}
-                                                                                                            value={baseUnitTableData[key].Conversion}
-                                                                                                            onChange={(e) => UnitConversionsTab_BaseUnit2_onChange_Handller(e, "Conversion", key,)}>
-
-                                                                                                        </Input>
-                                                                                                    </Col>
-                                                                                                    <Label className=" col-sm-3 col-form-label"> {formValue.BaseUnit.label}</Label>
-                                                                                                </Row>
-                                                                                            </td>
-                                                                                            {/* <td>
+                                                                                                            </Input>
+                                                                                                        </Col>
+                                                                                                        <Label className=" col-sm-4 col-form-label"> {formValue.BaseUnit.label}</Label>
+                                                                                                    </Row>
+                                                                                                </td>
+                                                                                                {/* <td>
                                                                                                 <Label>1</Label>    {formValue.BaseUnit.label}
                                                                                             </td> */}
-                                                                                            <td>
-                                                                                                {(baseUnitTableData.length === key + 1) ?
-                                                                                                    <Row className="">
-                                                                                                        <Col md={6} className=" mt-3">
-                                                                                                            {(baseUnitTableData.length > 1) ? <>
-                                                                                                                < i className="mdi mdi-trash-can d-block text-danger font-size-20" onClick={() => {
-                                                                                                                    UnitConversionsTab_DeleteRow_Handler(key)
-                                                                                                                }} >
-                                                                                                                </i>
-                                                                                                            </> : <Col md={6} ></Col>}
+                                                                                                <td>
+                                                                                                    {(baseUnitTableData.length === key + 1) ?
+                                                                                                        <Row className="">
+                                                                                                            <Col md={6} className=" mt-3">
+                                                                                                                {(baseUnitTableData.length > 1) ? <>
+                                                                                                                    < i className="mdi mdi-trash-can d-block text-danger font-size-20" onClick={() => {
+                                                                                                                        UnitConversionsTab_DeleteRow_Handler(key)
+                                                                                                                    }} >
+                                                                                                                    </i>
+                                                                                                                </> : <Col md={6} ></Col>}
 
-                                                                                                        </Col>
+                                                                                                            </Col>
 
-                                                                                                        <Col md={6} >
-                                                                                                            <Button className="btn btn-sm btn-light mt-3   align-items-sm-end"
-                                                                                                                type="button"
-                                                                                                                onClick={() => { UnitConversionsTab_AddRow_Handle(key) }} >
-                                                                                                                <i className="dripicons-plus"></i>
-                                                                                                            </Button>
-                                                                                                        </Col>
-                                                                                                    </Row>
-                                                                                                    :
+                                                                                                            <Col md={6} >
+                                                                                                                <Button className="btn btn-sm btn-light mt-3   align-items-sm-end"
+                                                                                                                    type="button"
+                                                                                                                    onClick={() => { UnitConversionsTab_AddRow_Handle(key) }} >
+                                                                                                                    <i className="dripicons-plus"></i>
+                                                                                                                </Button>
+                                                                                                            </Col>
+                                                                                                        </Row>
+                                                                                                        :
 
-                                                                                                    < i className="mdi mdi-trash-can d-block text-danger font-size-20" onClick={() => {
-                                                                                                        UnitConversionsTab_DeleteRow_Handler(key)
-                                                                                                    }} >
-                                                                                                    </i>
-                                                                                                }
-                                                                                            </td>
+                                                                                                        < i className="mdi mdi-trash-can d-block text-danger font-size-20" onClick={() => {
+                                                                                                            UnitConversionsTab_DeleteRow_Handler(key)
+                                                                                                        }} >
+                                                                                                        </i>
+                                                                                                    }
+                                                                                                </td>
 
-                                                                                        </tr>
-                                                                                    ))}
-                                                                                </Tbody>
-                                                                            </Table>
-                                                                            </Col>
-                                                                        </Row>
+                                                                                            </tr>
+                                                                                        ))}
+                                                                                    </Tbody>
+                                                                                </Table>
+                                                                                </Col>
+                                                                            </Row>
+                                                                            :
+                                                                            <Row className="mt-3">
+                                                                                <br></br>
+                                                                                <Label className="text-danger">Please select BaseUnit</Label></Row>}
                                                                     </CardBody>
                                                                 </Card>
                                                             </Col>
