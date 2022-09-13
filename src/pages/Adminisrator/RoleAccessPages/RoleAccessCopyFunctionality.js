@@ -54,9 +54,7 @@ const RoleAccessCopyFunctionality = (props) => {
 
     // userAccess useEffect
     useEffect(() => {
-
         debugger
-
         if (!(editDataGatingFromList === undefined)) {
             var C_props = editDataGatingFromList
 
@@ -64,7 +62,7 @@ const RoleAccessCopyFunctionality = (props) => {
 
             var roleId = C_props.Role_id
 
-            if (roleId > 0 && divisionId > 0) {
+            if (roleId > 0) {
 
                 setCopyRole_Dropdown_Select({ label: C_props.RoleName, value: roleId })
                 setCopyDivision_dropdown_Select({ label: C_props.DivisionName, value: divisionId })
@@ -73,6 +71,7 @@ const RoleAccessCopyFunctionality = (props) => {
 
     }, [history]);
 
+    console.log("copyDivision_dropdown_Select,", copyDivision_dropdown_Select)
 
     const DivisionTypesOption = DivisionTypes_redux.map((Data) => ({
         value: Data.id,
@@ -140,10 +139,15 @@ const RoleAccessCopyFunctionality = (props) => {
                                     <Button type="button" color="btn btn-outline-warning" className="btn-sm" ><h className="text-black">{copyRole_Dropdown_Select.label}</h></Button>
                                 </Col>
 
-                                <Col md="4" className="p-2 ">
-                                    <Label className=" p-2 col-sm-3 ">Division</Label>
-                                    <Button type="button" color="btn btn-outline-warning" className="btn-sm" ><h className="text-black">{copyDivision_dropdown_Select.label}</h></Button>
-                                </Col>
+                                {(copyDivision_dropdown_Select.value > 0)
+                                    ?
+                                    <Col md="4" className="p-2 ">
+
+                                        <Label className=" p-2 col-sm-3 ">Division</Label>
+                                        <Button type="button" color="btn btn-outline-warning" className="btn-sm" ><h className="text-black">{copyDivision_dropdown_Select.label}</h></Button>
+                                    </Col>
+                                    : null
+                                }
                                 {/* <Col md="4" className="p-2 text-end">
                                                     <Button type="button" color="btn btn-outline-secondary" className="btn-sm" onClick={() => { ChangeButtonHandeler() }}><h className="text-black">Change Role</h></Button>
                                                 </Col> */}
