@@ -16,10 +16,10 @@ import { MetaTags } from "react-meta-tags";
 import { BreadcrumbShow } from "../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
 import {
-    editProductTypesIDSuccess, getMethodForProductTypes,
-    PostMethodForProductTypes,
-    PostMethod_ForProductTypesAPISuccess,
-    updateProductTypesID
+    editCategoryIDSuccess, getMethodForCategory,
+    PostMethodForCategory,
+    PostMethod_ForCategoryAPISuccess,
+    updateCategoryID
 } from "../../../store/Administrator/CategoryRedux/action";
 import { AlertState } from "../../../store/actions";
 import { CommonGetRoleAccessFunction } from "../../../components/Common/CommonGetRoleAccessFunction";
@@ -33,16 +33,16 @@ const CategoryMaster = (props) => {
     const formRef = useRef(null);
     const [EditData, setEditData] = useState([]);
     const [pageMode, setPageMode] = useState("");
-    const [ProductCategoryTypes_dropdown_Select, setProductCategoryTypes_dropdown_Select] = useState("");
+    const [CategoryTypes_dropdown_Select, setCategoryTypes_dropdown_Select] = useState("");
     const dispatch = useDispatch();
     const [userPageAccessState, setUserPageAccessState] = useState(123);
-    const [ProductCategoryTypes, setProductCategoryTypes] = useState("");
+    const [CategoryTypes, setCategoryTypes] = useState("");
     const history = useHistory()
 
     //Access redux store Data /  'save_ModuleSuccess' action data
-    const { PostAPIResponse, ProductTypeAPI, ProductTypes, RoleAccessModifiedinSingleArray } = useSelector((state) => ({
+    const { PostAPIResponse,CategoryAPI,  RoleAccessModifiedinSingleArray } = useSelector((state) => ({
         PostAPIResponse: state.CategoryMasterReducer.PostDataMessage,
-        ProductTypeAPI: state.CategoryMasterReducer.ProductTypeAPI,
+        CategoryAPI: state.CategoryMasterReducer.CategoryAPI,
         RoleAccessModifiedinSingleArray: state.Login.RoleAccessUpdateData,
     }));
 
@@ -77,12 +77,12 @@ const CategoryMaster = (props) => {
         if (!(editDataGatingFromList === undefined)) {
             setEditData(editDataGatingFromList);
             setPageMode(pageModeProps);
-            setProductCategoryTypes_dropdown_Select({
+            setCategoryTypes_dropdown_Select({
 
                 value: editDataGatingFromList.ProductCategoryType_id,
                 label: editDataGatingFromList.ProductCategoryTypeName
             })
-            dispatch(editProductTypesIDSuccess({ Status: false }))
+            dispatch(editCategoryIDSuccess({ Status: false }))
             dispatch(BreadcrumbShow(editDataGatingFromList.Name))
             return
         }
@@ -91,8 +91,8 @@ const CategoryMaster = (props) => {
 
     useEffect(() => {
         if ((PostAPIResponse.Status === true) && (PostAPIResponse.StatusCode === 200)) {
-            setProductCategoryTypes_dropdown_Select('')
-            dispatch(PostMethod_ForProductTypesAPISuccess({ Status: false }))
+            setCategoryTypes_dropdown_Select('')
+            dispatch(PostMethod_ForCategoryAPISuccess({ Status: false }))
             formRef.current.reset();
             if (pageMode === "other") {
                 dispatch(AlertState({
@@ -111,7 +111,7 @@ const CategoryMaster = (props) => {
             }
         }
         else if (PostAPIResponse.Status === true) {
-            dispatch(PostMethod_ForProductTypesAPISuccess({ Status: false }))
+            dispatch(PostMethod_ForCategoryAPISuccess({ Status: false }))
             dispatch(AlertState({
                 Type: 4,
                 Status: true,
@@ -124,15 +124,15 @@ const CategoryMaster = (props) => {
 
     //get method for dropdown
     useEffect(() => {
-        dispatch(getMethodForProductTypes());
+        dispatch(getMethodForCategory());
     }, [dispatch]);
 
 
-    function handllerProductCategoryTypes(e) {
-        setProductCategoryTypes_dropdown_Select(e)
+    function handllerCategoryTypes(e) {
+        setCategoryTypes_dropdown_Select  (e)
     }
 
-    const ProductCategoryTypesValues = ProductTypeAPI.map((Data) => ({
+    const CategoryTypesValues = CategoryAPI.map((Data) => ({
         value: Data.id,
         label: Data.Name
     }));
@@ -140,14 +140,14 @@ const CategoryMaster = (props) => {
     const FormSubmitButton_Handler = (event, values) => {
         const jsonBody = JSON.stringify({
             Name: values.Name,
-            ProductCategoryType: ProductCategoryTypes_dropdown_Select.value,
+            ProductCategoryType:CategoryTypes_dropdown_Select .value,
         });
 
         if (pageMode === "edit") {
-            dispatch(updateProductTypesID(jsonBody, EditData.id));
+            dispatch(updateCategoryID(jsonBody, EditData.id));
         }
         else {
-            dispatch(PostMethodForProductTypes(jsonBody));
+            dispatch(PostMethodForCategory(jsonBody));
         }
     };
 
@@ -203,9 +203,9 @@ const CategoryMaster = (props) => {
                                                                     <Label htmlFor="validationCustom01"> Category Type </Label>
                                                                     <Col sm={12}>
                                                                         <Select
-                                                                            value={ProductCategoryTypes_dropdown_Select}
-                                                                            options={ProductCategoryTypesValues}
-                                                                            onChange={(e) => { handllerProductCategoryTypes(e) }}
+                                                                            value={CategoryTypes_dropdown_Select}
+                                                                            options={CategoryTypesValues}
+                                                                            onChange={(e) => { handllerCategoryTypes(e) }}
                                                                         />
                                                                     </Col>
                                                                 </FormGroup>
