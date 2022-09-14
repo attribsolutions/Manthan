@@ -219,7 +219,7 @@ const RoleAccessListPage = () => {
     ];
 
     const defaultSorted = [{
-        dataField: 'Role',
+        dataField: 'RoleName',
         order: 'asc'
     }];
 
