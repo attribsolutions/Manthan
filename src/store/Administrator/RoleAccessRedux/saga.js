@@ -52,9 +52,9 @@ function* GetRoleAccessListForRoleAccessList_GenratorFunction({ id1, id2 }) {
 }
 
 
-function* PageDropdownForRoleAccessList_GenratorFunction({ id }) {
+function* PageDropdownForRoleAccessList_GenratorFunction({ id1,id2 }) {
   try {
-    const response = yield call(PageDropdownForRoleAccessList_Api, id);
+    const response = yield call(PageDropdownForRoleAccessList_Api, id1,id2);
     yield put(PageDropdownForRoleAccessList_Success(response.Data));
   }
   catch (error) {

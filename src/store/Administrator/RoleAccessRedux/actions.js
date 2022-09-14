@@ -30,9 +30,9 @@ export const GetRoleListForRoleAccessListPage_Success = (data) => ({
 });
 
 
-export const PageDropdownForRoleAccessList = (id) => ({
+export const PageDropdownForRoleAccessList = (id1,id2) => ({
   type: PAGE_DROPDOWN_FOR_ROLE_ACCESS_lIST,
-  id,
+  id1,id2
 });
 
 export const PageDropdownForRoleAccessList_Success = (data) => ({
