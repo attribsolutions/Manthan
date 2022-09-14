@@ -78,13 +78,19 @@ const RoleMaster = (props) => {
   }
   // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
   useEffect(() => {
-
+debugger
     if (!(userPageAccessState === '')) { document.getElementById("txtName").focus(); }
     if (!(editDataGatingFromList === undefined)) {
       setEditData(editDataGatingFromList);
       setPageMode(pageModeProps);
       dispatch(editSuccess({ Status: false }))
       dispatch(BreadcrumbShow(editDataGatingFromList.Name))
+      const listItems = editDataGatingFromList.RoleEmployeeTypes.map((data) => ({
+        value: data.EmployeeType,
+        label: data.EmployeeTypeName
+      }))
+
+      setEmployeeType_DropdownSelect(listItems)
     }
     else if (!(propsPageMode === undefined)) {
       setPageMode(propsPageMode)
@@ -134,6 +140,7 @@ const RoleMaster = (props) => {
       isActive: values.isActive,
       Dashboard: values.Dashboard,
       isSCMRole: values.isSCMRole,
+      IsPartyConnection:values.IsPartyConnection,
       RoleEmployeeTypes: employeeType_DropdownSelect.map((i) => { return ({ EmployeeType: i.value }) }),
       CreatedBy: 1,
       CreatedOn: "2022-05-20T11:22:55.711483Z",
@@ -239,7 +246,7 @@ const RoleMaster = (props) => {
                          
                           <FormGroup className="mb-2 col col-sm-5">
                             <Row className="justify-content-md-left">
-                              <Label className="col-sm-3 col-form-label" >Is SCM Role </Label>
+                              <Label className="col-sm-4 col-form-label" >Is SCM Role </Label>
                               <Col md={2} style={{ marginTop: '9px' }} >
 
                                 <div className="form-check form-switch form-switch-md mb-3" >
@@ -254,7 +261,7 @@ const RoleMaster = (props) => {
 
                           <FormGroup className="mb-2 col col-sm-5">
                             <Row className="justify-content-md-left">
-                              <Label htmlFor="horizontal-firstname-input" className="col-sm-3 col-form-label" >Active </Label>
+                              <Label  className="col-sm-4 col-form-label" >Active </Label>
                               <Col md={2} style={{ marginTop: '9px' }} >
 
                                 <div className="form-check form-switch form-switch-md mb-3" dir="ltr">
@@ -262,6 +269,21 @@ const RoleMaster = (props) => {
                                     checked={EditData.isActive}
                                     defaultChecked={true}
                                     name="isActive"
+                                  />
+                                </div>
+                              </Col>
+                            </Row>
+                          </FormGroup>
+
+                          <FormGroup className="mb-2 col col-sm-5">
+                            <Row className="justify-content-md-left">
+                              <Label className="col-sm-4 col-form-label" >Is PartyConnection </Label>
+                              <Col md={2} style={{ marginTop: '9px' }} >
+
+                                <div className="form-check form-switch form-switch-md mb-3" dir="ltr">
+                                  <AvInput type="checkbox" className="form-check-input" id="customSwitchsizemd"
+                                    defaultChecked={EditData.IsPartyConnection}
+                                    name="IsPartyConnection"
                                   />
                                 </div>
                               </Col>
