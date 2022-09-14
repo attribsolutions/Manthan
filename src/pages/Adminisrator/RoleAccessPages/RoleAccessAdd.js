@@ -13,7 +13,7 @@ import {
 
 import { MetaTags } from "react-meta-tags";
 // import { getRoles } from "../../../store/Administrator/UserRegistrationRedux/actions";
-import { AddPageHandlerForRoleAccessListPage, GetHpageListData, getH_Modules, getPageAccess_DropDown_API, GetRoleListForRoleAccessListPage, getRoles, GO_Button_HandlerForRoleAccessListPage, GO_Button_HandlerForRoleAccessListPage_Success, PageDropdownForRoleAccessList, PageMasterForRoleAccessLit, PostMethodForRoleAccessListPage, PostMethod_ForRoleAccessListPage_Success, roleAceessAction } from "../../../store/actions";
+import { AddPageHandlerForRoleAccessListPage, GetHpageListData, getH_Modules, getPageAccess_DropDown_API, GetRoleListForRoleAccessListPage, getRoles, GO_Button_HandlerForRoleAccessListPage, GO_Button_HandlerForRoleAccessListPage_Success, PageDropdownForRoleAccessList, PageDropdownForRoleAccessList_Success, PageMasterForRoleAccessLit, PostMethodForRoleAccessListPage, PostMethod_ForRoleAccessListPage_Success, roleAceessAction } from "../../../store/actions";
 import { fetchModelsList } from "../../../store/actions";
 
 import { useHistory, useLocation, useParams } from "react-router-dom";
@@ -31,7 +31,7 @@ const RoleAccessAdd = (props) => {
     const [tableHederList, setTableHederList] = useState([])
     const [showTableOnUI, setShowTableOnUI] = useState(false)
 
-    const [division_dropdown_Select, setDivision_dropdown_Select] = useState({ value: 0 });
+    const [division_dropdown_Select, setDivision_dropdown_Select] = useState({ label: "select Division", value: 0 });
     const [role_dropdown_Select, setRoleDropDown] = useState("");
     const [module_DropdownSelect, setModule_DropdownSelect] = useState('');
     const [page_DropdownSelect, setPage_DropdownSelect] = useState('');
@@ -90,22 +90,20 @@ const RoleAccessAdd = (props) => {
     }, [RoleAccessModifiedinSingleArray])
 
 
-
-
-
     useEffect(() => {
         dispatch(GO_Button_HandlerForRoleAccessListPage_Success([]))
+        dispatch(getPartyListAPI());//for division dropdown API
+        dispatch(getRoles());//for Role  dropdown API
+        dispatch(fetchModelsList())//for Modules  dropdown API
+        dispatch(getPageAccess_DropDown_API());//for Page Access  API from pages saga file
+        dispatch(PageDropdownForRoleAccessList_Success([]))// for clear page dropdown clear  list when first rendring
+
+        // dispatch(GetHpageListData())
         // dispatch(fetchCompanyList());
         // dispatch(getDivisionTypesID());
-        dispatch(getPartyListAPI());
-
-        dispatch(getRoles());
-        dispatch(fetchModelsList())
-        dispatch(GetHpageListData())
-        dispatch(getPageAccess_DropDown_API());
-
         // dispatch(PageMasterForRoleAccessLit(1));
         // dispatch(roleAceessAction(1, 1, 1))
+
 
     }, []);
 
@@ -242,9 +240,11 @@ const RoleAccessAdd = (props) => {
 
     // for module dropdown
     const Module_DropdownSelectHandller = (e) => {
+        var module = e.value;
+        var division = division_dropdown_Select.value
         setModule_DropdownSelect(e);
-        dispatch(PageDropdownForRoleAccessList(e.value));
-
+        setPage_DropdownSelect([])
+        dispatch(PageDropdownForRoleAccessList(module, division));
     }
 
     const Page_DropdownSelectHandller = (e) => {
@@ -540,6 +540,7 @@ const RoleAccessAdd = (props) => {
                                                                         value={role_dropdown_Select}
                                                                         options={Role_DropdownOption}
                                                                         className="rounded-bottom"
+                                                                        placeholder="select"
                                                                         onChange={(e) => { RoleDropDown_select_handler(e) }}
                                                                         classNamePrefix="select2-selection"
 
@@ -555,6 +556,7 @@ const RoleAccessAdd = (props) => {
                                                                     <Select
                                                                         value={division_dropdown_Select}
                                                                         className="rounded-bottom"
+                                                                        placeholder="select"
                                                                         options={DivisionTypesValues}
                                                                         onChange={(e) => { handllerDivisionTypes(e) }}
                                                                     />
@@ -626,6 +628,7 @@ const RoleAccessAdd = (props) => {
 
                                                                     <Select
                                                                         value={module_DropdownSelect}
+                                                                        placeholder="select.."
                                                                         options={Module_DropdownOption}
                                                                         onChange={(e) => { Module_DropdownSelectHandller(e) }}
                                                                         classNamePrefix="select2-selection"
@@ -642,6 +645,7 @@ const RoleAccessAdd = (props) => {
 
                                                                     <Select
                                                                         value={page_DropdownSelect}
+                                                                        placeholder="select.."
                                                                         options={Page_DropdownOption}
                                                                         onChange={(e) => { Page_DropdownSelectHandller(e) }}
                                                                         // onChange={(e)=> {const selectAllOption = {label: 'select all', value: '*' }}}
