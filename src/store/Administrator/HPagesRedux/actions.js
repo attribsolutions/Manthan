@@ -14,7 +14,11 @@ import {
   GET_PAGELIST,
   GET_PAGELIST_SUCCESS,
   GET_PAGEACCESS_DROPDOWN_API_SUCCESS,
-  GET_PAGEACCESS_DROPDOWN_API
+  GET_PAGEACCESS_DROPDOWN_API,
+  GET_CONTROL_TYPES,
+  GET_CONTROL_TYPES_SUCCESS,
+  GET_FIELD_VALIDATIONS,
+  GET_FIELD_VALIDATIONS_SUCCESS
 } from "./actionType";
 
 export const getH_Modules = () => ({
@@ -106,5 +110,24 @@ export const getPageAccess_DropDown_API = (id) => ({
 });
 export const getPageAccess_DropDown_API_Success = (data) => ({
   type: GET_PAGEACCESS_DROPDOWN_API_SUCCESS,
+  payload: data,
+});
+
+// ControlTypes
+export const getControlTypes = () => ({
+  type: GET_CONTROL_TYPES,
+});
+
+export const getControlTypesSuccess = (data) => ({
+  type:GET_CONTROL_TYPES_SUCCESS ,
+  payload: data,
+});
+// FieldValidations
+export const getFieldValidations = () => ({
+  type: GET_FIELD_VALIDATIONS,
+});
+
+export const getFieldValidationsSuccess = (data) => ({
+  type: GET_FIELD_VALIDATIONS_SUCCESS,
   payload: data,
 });

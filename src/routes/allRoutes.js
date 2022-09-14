@@ -60,6 +60,7 @@ import VehicleMaster from "../pages/Adminisrator/VehiclePages/VehicleMaster";
 import VehicleList from "../pages/Adminisrator/VehiclePages/VehicleList";
 import CompanyGroupMaster from "../pages/Adminisrator/CompanyGroupPages/CompanyGroupMaster";
 import CompanyGroupList from "../pages/Adminisrator/CompanyGroupPages/CompanyGroupList";
+import PageMasterTab from "../pages/Adminisrator/Page-Pages/PageMasterTab";
 
 
 
@@ -121,6 +122,7 @@ const userRoutes = [
 
   { path: `/PageList`, component: PageList },
   { path: `/PageMaster`, component: PageMaster },
+  {path:'/PageMasterTab',component: PageMasterTab},
 
   { path: `/Order`, component: OrderPage },
   { path: `/Orders`, component: OrderList },

@@ -30,6 +30,8 @@ export const GET_DEFAULT_MODULE = "/HModules"
 export const POST_MODULE_ID = "/HModules"
 export const SHOW_PAGESLIST_ON_PAGE_TYPE_FOR_DROPDOWN = "/showPagesListOnPageType"
 export const SHOW_PAGESLIST_ON_PAGEACCESS_FOR_DROPDOWN = "/PageAccess"
+export const GET_CONTROLTYPES_DROPDOWN_API = "/ControlTypes"
+export const GET_FIELD_VALIDATIONS_DROPDOWN_API = "/FieldValidations"
 
 // Moduls Submit  Method URL
 export const H_MODULES_API_URL = "/Modules"
