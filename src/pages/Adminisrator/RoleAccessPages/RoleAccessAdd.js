@@ -361,9 +361,11 @@ const RoleAccessAdd = (props) => {
             if (isTopOfTheDivision) roleAccessArray2.push({ "PageAccess": 9 });
             // roleAccessArray.push(roleAccessElement)
 
+            let divisionID = division_dropdown_Select.value
+
             pageAccessElement["Role"] = role_dropdown_Select.value
             pageAccessElement["Company"] = 1
-            pageAccessElement["Division"] = division_dropdown_Select.value
+            pageAccessElement["Division"] =  (divisionID === 0 ? "" : divisionID)
             pageAccessElement["Modules"] = moduleId
             pageAccessElement["Pages"] = pageId
             pageAccessElement["CreatedBy"] = 1
@@ -374,9 +376,10 @@ const RoleAccessAdd = (props) => {
                 let pageAccessElement2 = {}
                 selectedItemArray.push(pageAccessElement)
                 if (relatedPageID > 0) {
+
                     pageAccessElement2["Role"] = role_dropdown_Select.value
                     pageAccessElement2["Company"] = 1
-                    pageAccessElement2["Division"] = division_dropdown_Select.value
+                    pageAccessElement2["Division"] = (divisionID === 0 ? "" : divisionID)
                     pageAccessElement2["Modules"] = moduleId
                     pageAccessElement2["Pages"] = relatedPageID
                     pageAccessElement2["CreatedBy"] = 1
@@ -395,7 +398,7 @@ const RoleAccessAdd = (props) => {
         const jsonBody = JSON.stringify(selectedItemArray)
 
         dispatch(PostMethodForRoleAccessListPage(jsonBody));
-        // debugger
+        debugger
         // console.log("roleAccess Post data", jsonBody)
 
     };
