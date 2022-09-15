@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import Breadcrumb from "../../../components/Common/Breadcrumb";
-import { Card, CardBody, Col, Container, Row, Label, Input, CardHeader, FormGroup, Button } from "reactstrap";
+import { Card, CardBody, Col, Container, Row, Label, Input, CardHeader, FormGroup, Button, Table } from "reactstrap";
 import { AvForm, AvGroup, AvField, AvInput } from "availity-reactstrap-validation";
 import { useDispatch, useSelector } from "react-redux";
 import { AlertState } from "../../../store/Utilites/CustomAlertRedux/actions";
@@ -58,7 +58,7 @@ const RoleAccessAdd = (props) => {
             RoleAccessModifiedinSingleArray: state.Login.RoleAccessUpdateData,
         }));
 
-
+console.log("testReload")
 
     useEffect(() => {
 
@@ -108,7 +108,6 @@ const RoleAccessAdd = (props) => {
     }, []);
 
     useEffect(() => {
-        console.log("history list", history)
         var Array = []
         var eleList = {}
 
@@ -324,7 +323,8 @@ const RoleAccessAdd = (props) => {
             var relatedPageID = parseInt(relatedPage)
 
 
-            var isShowOnMenu = document.getElementById("IsShowOnMenu" + i).checked;
+            var addIsShowOnMenu = document.getElementById("addIsShowOnMenu" + i).checked;
+            var listIsShowOnMenu = document.getElementById("listIsShowOnMenu" + i).checked;
             var isSave = document.getElementById("IsSave" + i).checked
             var isView = document.getElementById("IsView" + i).checked;
             var isEdit = document.getElementById("IsEdit" + i).checked;
@@ -340,7 +340,7 @@ const RoleAccessAdd = (props) => {
 
 
             roleAccessArray.push({ "PageAccess": 1 });
-            // if (isShowOnMenu) roleAccessArray.push({ "PageAccess": 1 });
+            if (listIsShowOnMenu) roleAccessArray.push({ "PageAccess": 1 });
             if (isSave) roleAccessArray.push({ "PageAccess": 2 });
             if (isView) roleAccessArray.push({ "PageAccess": 3 });
             if (isEdit) roleAccessArray.push({ "PageAccess": 4 });
@@ -350,7 +350,7 @@ const RoleAccessAdd = (props) => {
             if (isPrint) roleAccessArray.push({ "PageAccess": 8 });
             if (isTopOfTheDivision) roleAccessArray.push({ "PageAccess": 9 });
 
-            if (isShowOnMenu) roleAccessArray2.push({ "PageAccess": 1 });
+            if (addIsShowOnMenu) roleAccessArray2.push({ "PageAccess": 1 });
             if (isSave) roleAccessArray2.push({ "PageAccess": 2 });
             if (isView) roleAccessArray2.push({ "PageAccess": 3 });
             if (isEdit) roleAccessArray2.push({ "PageAccess": 4 });
@@ -364,8 +364,8 @@ const RoleAccessAdd = (props) => {
             let divisionID = division_dropdown_Select.value
 
             pageAccessElement["Role"] = role_dropdown_Select.value
-            pageAccessElement["Company"] = 1
-            pageAccessElement["Division"] =  (divisionID === 0 ? "" : divisionID)
+            pageAccessElement["Company"] = ""
+            pageAccessElement["Division"] = (divisionID === 0 ? "" : divisionID)
             pageAccessElement["Modules"] = moduleId
             pageAccessElement["Pages"] = pageId
             pageAccessElement["CreatedBy"] = 1
@@ -378,7 +378,7 @@ const RoleAccessAdd = (props) => {
                 if (relatedPageID > 0) {
 
                     pageAccessElement2["Role"] = role_dropdown_Select.value
-                    pageAccessElement2["Company"] = 1
+                    pageAccessElement2["Company"] = ""
                     pageAccessElement2["Division"] = (divisionID === 0 ? "" : divisionID)
                     pageAccessElement2["Modules"] = moduleId
                     pageAccessElement2["Pages"] = relatedPageID
@@ -482,8 +482,8 @@ const RoleAccessAdd = (props) => {
             return
         }
 
-        if (e === "IsShowOnMenu") {
-            let isShowOnMenu = document.getElementById(`IsShowOnMenu${v}`)
+        if (e === "addIsShowOnMenu") {
+            let isShowOnMenu = document.getElementById(`addIsShowOnMenu${v}`)
             let save = document.getElementById(`IsSave${v}`)
             if (isShowOnMenu.checked) {
                 save.checked = true;
@@ -495,7 +495,7 @@ const RoleAccessAdd = (props) => {
             return
         }
         if ((e === "IsSave")) {
-            let isShowOnMenu = document.getElementById(`IsShowOnMenu${v}`)
+            let isShowOnMenu = document.getElementById(`addIsShowOnMenu${v}`)
             if ((isShowOnMenu.checked)) {
                 let isSave = document.getElementById(`IsSave${v}`)
                 isSave.checked = true;
@@ -507,8 +507,8 @@ const RoleAccessAdd = (props) => {
         }
 
 
-
     }
+    console.log(tableListData)
     if (!(userPageAccessState === '')) {
         return (
             <React.Fragment>
@@ -669,18 +669,48 @@ const RoleAccessAdd = (props) => {
 
                                                     </Row>
                                                 </CardHeader>
-                                                <CardBody>
+ 
                                                     {tableListData.length > 0
                                                         ?
                                                         <>
-                                                            <table className="table table-bordered">
-                                                                <thead>
+                                                            <Table className="table-responsive table-bordered  mt-2 ">
+                                                                {/* <thead> */}
                                                                     <tr>
                                                                         {tableHederList.map((indx) => {
-                                                                            return <th>{indx.text}</th>
+                                                                            if (indx.text === "IsShowOnMenu") {
+                                                                                return (
+                                                                                    <th colSpan={2} style={{
+                                                                                        textAlign: "center",
+                                                                                        verticalAlign: "middle"
+                                                                                    }}>
+                                                                                        {indx.text}
+                                                                                    </th>
+                                                                                )
+                                                                            }
+                                                                            else if ((indx.text === "PageName")) {
+                                                                               
+                                                                                return (
+                                                                                    <th rowSpan={2}
+                                                                                        style={{
+                                                                                            textAlign: "center",
+                                                                                            verticalAlign: "middle",
+                                                                                        }}>
+                                                                                        {indx.text}
+                                                                                    </th>
+                                                                                )
+                                                                            }
+                                                                            else {
+                                                                                return <th rowSpan={2} style={{ textAlign: "center", verticalAlign: "middle" }} >{indx.text}</th>
+                                                                            }
+
                                                                         })}
                                                                     </tr>
-                                                                </thead>
+                                                                    <tr>
+                                                                        <th scope="col">Add</th>
+                                                                        <th scope="col">List</th>
+                                                                        {/* <th scope="col">Accepted</th> */}
+                                                                    </tr>
+                                                                {/* </thead> */}
                                                                 <tbody>
 
                                                                     {tableListData.map((indx, key) => {
@@ -725,18 +755,66 @@ const RoleAccessAdd = (props) => {
                                                                                 </td>
                                                                                 {
                                                                                     PageAccess.map((indexPage) => {
+                                                                                        if (indexPage.Name === "IsShowOnMenu") {
+                                                                                            return (
+                                                                                                // <td className="text-center" >
+                                                                                                //     {indx[`PageAccess_${indexPage.Name}`] ?
+                                                                                                //         <Row>
+                                                                                                //             <Col md={6}>
+                                                                                                //                 <Input type={"checkbox"} id={indexPage.Name + key}
+                                                                                                //                     onChange={(e) => input_checkBoxHandler(indexPage.Name, key, e)}
+                                                                                                //                     defaultChecked={indx[`RoleAccess_${indexPage.Name}`] > 0 ? true : false} />
+                                                                                                //             </Col>
 
-                                                                                        return (
-                                                                                            <td className="text-center">
-                                                                                                {indx[`PageAccess_${indexPage.Name}`] ?
-                                                                                                    <Input type={"checkbox"} id={indexPage.Name + key}
-                                                                                                        onChange={(e) => input_checkBoxHandler(indexPage.Name, key, e)}
-                                                                                                        defaultChecked={indx[`RoleAccess_${indexPage.Name}`] > 0 ? true : false} />
-                                                                                                    : <Input type={"hidden"} id={indexPage.Name + key} />
-                                                                                                }
+                                                                                                //             <Col md={6}>
+                                                                                                //                 <Input type={"checkbox"} id={indexPage.Name + key}
+                                                                                                //                     onChange={(e) => input_checkBoxHandler(indexPage.Name, key, e)}
+                                                                                                //                     defaultChecked={indx[`RoleAccess_${indexPage.Name}`] > 0 ? true : false} />
+                                                                                                //             </Col>
 
-                                                                                            </td>
-                                                                                        )
+                                                                                                //         </Row>
+                                                                                                //         : <>
+                                                                                                //             <Input type={"hidden"} id={indexPage.Name + key} />
+                                                                                                //             <Input type={"hidden"} id={indexPage.Name + key} />
+                                                                                                //         </>
+                                                                                                //     }
+
+                                                                                                // </td>
+                                                                                                <>
+                                                                                                    <td className="text-center">
+                                                                                                        {indx[`PageAccess_${indexPage.Name}`] ?
+                                                                                                            <Input type={"checkbox"} id={`addIsShowOnMenu${key}`}
+                                                                                                                onChange={(e) => input_checkBoxHandler(`addIsShowOnMenu`, key, e)}
+                                                                                                                defaultChecked={indx[`RoleAccess_IsShowOnMenuForMaster`] > 0 ? true : false} />
+                                                                                                            : <Input type={"hidden"} id={`addIsShowOnMenu${key}`} />
+                                                                                                        }
+
+                                                                                                    </td>
+                                                                                                    <td className="text-center">
+                                                                                                        {indx[`PageAccess_${indexPage.Name}`] ?
+                                                                                                            <Input type={"checkbox"} id={`listIsShowOnMenu${key}`}
+                                                                                                                onChange={(e) => input_checkBoxHandler(`listIsShowOnMenu`, key, e)}
+                                                                                                                defaultChecked={indx[`RoleAccess_IsShowOnMenuForList`] > 0 ? true : false} />
+                                                                                                            : <Input type={"hidden"} id={`listIsShowOnMenu${key}`} />
+                                                                                                        }
+
+                                                                                                    </td>
+                                                                                                </>
+                                                                                            )
+                                                                                        }
+                                                                                        else {
+                                                                                            return (
+                                                                                                <td className="text-center">
+                                                                                                    {indx[`PageAccess_${indexPage.Name}`] ?
+                                                                                                        <Input type={"checkbox"} id={indexPage.Name + key}
+                                                                                                            onChange={(e) => input_checkBoxHandler(indexPage.Name, key, e)}
+                                                                                                            defaultChecked={indx[`RoleAccess_${indexPage.Name}`] > 0 ? true : false} />
+                                                                                                        : <Input type={"hidden"} id={indexPage.Name + key} />
+                                                                                                    }
+
+                                                                                                </td>
+                                                                                            )
+                                                                                        }
                                                                                     })
                                                                                 }
 
@@ -748,7 +826,8 @@ const RoleAccessAdd = (props) => {
 
 
                                                                 </tbody>
-                                                            </table>
+                                                            </Table>
+
 
                                                         </> :
                                                         <>
@@ -763,9 +842,10 @@ const RoleAccessAdd = (props) => {
                                                         </>
                                                     }
 
-                                                </CardBody>
+                                               
                                             </>
                                     }
+                                    
                                 </CardBody>
                             </Card>
                         </Card>
