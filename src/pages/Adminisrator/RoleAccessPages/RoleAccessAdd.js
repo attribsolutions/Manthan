@@ -313,7 +313,7 @@ const RoleAccessAdd = (props) => {
         let roleAccessArray2 = []
 
         for (var i = 0; i < tableListData.length; i++) {
-            // debugger
+            debugger
             var moduleName = document.getElementById("ModuleID" + i).value;
             var pageName = document.getElementById("PageID" + i).value;
             var relatedPage = document.getElementById("RelatedPageID" + i).value;
@@ -338,7 +338,7 @@ const RoleAccessAdd = (props) => {
             // if (isEdit || isEditSelf) { isView = true }
 
 
-            roleAccessArray.push({ "PageAccess": 1 });
+            // roleAccessArray.push({ "PageAccess": 1 });
             if (listIsShowOnMenu) roleAccessArray.push({ "PageAccess": 1 });
             if (isSave) roleAccessArray.push({ "PageAccess": 2 });
             if (isView) roleAccessArray.push({ "PageAccess": 3 });
