@@ -121,7 +121,7 @@ const RoleList = (props) => {
   }, [deleteMessage]);
 
   useEffect(() => {
-    debugger
+   
     if ((PostAPIResponse.Status === true) && (PostAPIResponse.StatusCode === 200)) {
       dispatch(PostSuccess({ Status: false }))
       tog_center();
