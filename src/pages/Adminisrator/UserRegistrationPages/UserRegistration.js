@@ -24,7 +24,7 @@ const AddUser = (props) => {
   //*** "isEditdata get all data from ModuleID for Binding  Form controls
   let editDataGatingFromList = props.state;
   let pageModeProps = props.pageMode;
-  console.log("editDataGatingFromList",editDataGatingFromList)
+
   //SetState  Edit data Geting From Modules List component
   const [EditData, setEditData] = useState([]);
   const [pageMode, setPageMode] = useState("save");
