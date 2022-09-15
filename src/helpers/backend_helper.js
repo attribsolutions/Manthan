@@ -165,6 +165,8 @@ export const postAddPage = (data) => post(url.H_SUB_MODULES_API_URL, data)
 export const getPageAcess = () => get(url.GET_PAGE_ACCESS)
 export const showPagesListOnPageType_DropDown_List = () => get(url.SHOW_PAGESLIST_ON_PAGE_TYPE_FOR_DROPDOWN)
 export const showPagesListOnPageAccess_DropDown_List = (id) => get(url.SHOW_PAGESLIST_ON_PAGEACCESS_FOR_DROPDOWN)
+export const ControlTypes_DropDown_Api = () => get(url.GET_CONTROLTYPES_DROPDOWN_API)
+export const FieldValidations_DropDown_Api = () => get(url.GET_FIELD_VALIDATIONS_DROPDOWN_API)
 
 // H_subModule Api
 export const saveH_SubModules = (data) => post(url.H_SUB_MODULES_API_URL, data)
