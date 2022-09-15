@@ -137,8 +137,8 @@ const SubCategoryList = (props) => {
     },
 
     {
-      text: "Category Type  ",
-      dataField: "ProductCategoryTypeName",
+      text: "Category  ",
+      dataField: "ProductCategoryName",
       sort: true,
     },
 
