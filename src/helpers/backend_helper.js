@@ -165,6 +165,8 @@ export const postAddPage = (data) => post(url.H_SUB_MODULES_API_URL, data)
 export const getPageAcess = () => get(url.GET_PAGE_ACCESS)
 export const showPagesListOnPageType_DropDown_List = () => get(url.SHOW_PAGESLIST_ON_PAGE_TYPE_FOR_DROPDOWN)
 export const showPagesListOnPageAccess_DropDown_List = (id) => get(url.SHOW_PAGESLIST_ON_PAGEACCESS_FOR_DROPDOWN)
+export const ControlTypes_DropDown_Api = () => get(url.GET_CONTROLTYPES_DROPDOWN_API)
+export const FieldValidations_DropDown_Api = () => get(url.GET_FIELD_VALIDATIONS_DROPDOWN_API)
 
 // H_subModule Api
 export const saveH_SubModules = (data) => post(url.H_SUB_MODULES_API_URL, data)
@@ -210,7 +212,7 @@ export const GetCompanyByDivisionTypeID_For_Dropdown = (id) => get(`${url.GET_CO
 
 //RoleAccess
 
-export const PageDropdownForRoleAccessList_Api = (id) => get(`${url.PAGE_DROPDOWN_FOR_ROLE_ACCESS_ADD_PAGE}/${id}`)//get api Pages
+export const PageDropdownForRoleAccessList_Api = (id1,id2) => get(`${url.PAGE_DROPDOWN_FOR_ROLE_ACCESS_ADD_PAGE}/${id1}/${id2}`)//get api Pages
 export const GetRoleListForRoleAccessList_Page_Api=(id1,id2)=>get(`${url.GET_ROLE_ACCESS_LIST_FOR_ROLE_ACCESS_PAGE}/${id1}/${id2}`) //get api role List 
 export const GO_Button_HandlerForRoleAccessList_Api=(id1,id2)=>get(`${url.GO_BUTTON_HANDLER_FOR_ROLE_ACCESS_PAGE}/${id1}/${id2}`) //get api role List 
 export const AddPageHandlerForRoleAccessList_Api=(id1)=>get(`${url.ADD_PAGE_BUTTON_HANDLER_FOR_ROLE_ACCESS_PAGE}/${id1}`) //get api role List 

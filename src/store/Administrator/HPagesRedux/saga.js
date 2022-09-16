@@ -2,6 +2,8 @@ import { call, put, takeEvery } from "redux-saga/effects";
 import {
   deleteModuleIDSuccess,
   editHPagesIDSuccess,
+  getControlTypesSuccess,
+  getFieldValidationsSuccess,
   GetHpageListDataSuccess,
   getH_ModulesSuccess,
   getPageAccess_DropDown_API_Success,
@@ -12,9 +14,11 @@ import {
 import { AlertState } from "../../Utilites/CustomAlertRedux/actions";
 import { SpinnerState } from "../../Utilites/Spinner/actions";
 import {
+  ControlTypes_DropDown_Api,
   deletHPagesUsingID_API,
   edit_HPageID,
   Fetch_HPagesListApi,
+  FieldValidations_DropDown_Api,
   get_Module_HPages,
   saveHPagesAPI,
   showPagesListOnPageAccess_DropDown_List,
@@ -24,6 +28,8 @@ import {
 import {
   DELETE_HPAGES_USING_ID,
   EDIT_H_PAGES_ID,
+  GET_CONTROL_TYPES,
+  GET_FIELD_VALIDATIONS,
   GET_HPAGES_LIST_DATA,
   GET_H_SUB_MODULES,
   GET_PAGEACCESS_DROPDOWN_API,
@@ -69,7 +75,7 @@ function* saveHPageSaga_GneratorFunction({ Data }) {
     const response = yield call(saveHPagesAPI, Data);
     yield put(SpinnerState(false))
     yield put(saveHPagesSuccess(response));
-    console.log("response", response)
+    console.log("Post response", response)
   } catch (error) {
     yield put(SpinnerState(false))
     yield put(AlertState({
@@ -143,6 +149,24 @@ function* PageAccess_DropDown_GenratorFunction() {
     console.log("PageList_saga page error", error);
   }
 }
+
+//  Control Types dropdown list
+function* ControlTypes_DropDown_GenratorFunction() {
+  try {
+    const response = yield call(ControlTypes_DropDown_Api);
+    yield put(getControlTypesSuccess(response.Data));
+  } catch (error) {
+  }
+}
+
+//  Field Validations dropdown list
+function* FieldValidations_DropDown_GenratorFunction() {
+  try {
+    const response = yield call(FieldValidations_DropDown_Api);
+    yield put(getFieldValidationsSuccess(response.Data));
+  } catch (error) {
+  }
+}
 function* HPageSaga() {
   yield takeEvery(SAVE_HPAGES, saveHPageSaga_GneratorFunction)
   yield takeEvery(GET_HPAGES_LIST_DATA, fetchHPagesList_GneratorFunction);
@@ -152,8 +176,8 @@ function* HPageSaga() {
   yield takeEvery(DELETE_HPAGES_USING_ID, deleteHpagesUsingID_GenratorFunction)
   yield takeEvery(GET_PAGELIST, PageList_DropDown_GenratorFunction)
   yield takeEvery(GET_PAGEACCESS_DROPDOWN_API, PageAccess_DropDown_GenratorFunction)
-
-
+  yield takeEvery(GET_CONTROL_TYPES, ControlTypes_DropDown_GenratorFunction)
+  yield takeEvery(GET_FIELD_VALIDATIONS, FieldValidations_DropDown_GenratorFunction)
 }
 
 export default HPageSaga;

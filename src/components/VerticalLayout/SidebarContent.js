@@ -93,7 +93,7 @@ const SidebarContent = (props) => {
 
   // Use ComponentDidMount and ComponentDidUpdate method symultaniously
   useEffect(() => {
-    debugger
+    // debugger
     let pathName = props.location.pathname
 
     let userAcc = RoleAccessModifiedinSingleArray.find((inx) => {

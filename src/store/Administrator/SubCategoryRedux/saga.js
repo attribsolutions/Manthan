@@ -29,6 +29,7 @@ import {
 
 // post api
 function* Post_Method_ForSubCategory_GenFun({ data }) {
+  debugger
   yield put(SpinnerState(true))
   try {
     const response = yield call(Post_SubCategory_API, data);

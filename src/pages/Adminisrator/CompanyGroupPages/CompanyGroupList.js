@@ -18,6 +18,7 @@ import {
     getMethodForCompanyGroupList,
     editCompanyGroupTypeId,
     delete_CompanyGroupType_ID,
+    PostMethod_ForCompanyGroupMasterSuccess,
 } from "../../../store/Administrator/CompanyGroupRedux/action";
 import { AlertState } from "../../../store/actions";
 import { listPageCommonButtonFunction } 
@@ -31,17 +32,17 @@ const CompanyGroupList = (props) => {
   const [userPageAccessState, setUserPageAccessState] = useState('');
   const [modal_center, setmodal_center] = useState(false);
 
-  const { TableListData, editData, updateMessage, deleteMessage, RoleAccessModifiedinSingleArray } = useSelector(
+  const { TableListData, editData, updateMessage, deleteMessage, RoleAccessModifiedinSingleArray,PostAPIResponse } = useSelector(
     (state) => ({
       TableListData: state.CompanyGroupReducer.CompanyGroupList,
       editData: state.CompanyGroupReducer.editData,
       updateMessage: state.CompanyGroupReducer.updateMessage,
       deleteMessage: state.CompanyGroupReducer.deleteMessage,
       RoleAccessModifiedinSingleArray: state.Login.RoleAccessUpdateData,
-
+      PostAPIResponse: state.CompanyGroupReducer.PostDataMessage,
     })
   );
-
+console.log("TableListData",TableListData)
   useEffect(() => {
     const locationPath = history.location.pathname
     let userAcc = RoleAccessModifiedinSingleArray.find((inx) => {
@@ -106,6 +107,33 @@ const CompanyGroupList = (props) => {
     }
   }, [deleteMessage]);
 
+
+  useEffect(() => {
+   
+    if ((PostAPIResponse.Status === true) && (PostAPIResponse.StatusCode === 200)) {
+      dispatch(PostMethod_ForCompanyGroupMasterSuccess({ Status: false }))
+      tog_center();
+      dispatch(getMethodForCompanyGroupList());
+      dispatch(AlertState({
+        Type: 1,
+        Status: true,
+        Message: PostAPIResponse.Message,
+      }))
+    }
+
+    else if ((PostAPIResponse.Status === true)) {
+      dispatch(PostMethod_ForCompanyGroupMasterSuccess({ Status: false }))
+      dispatch(AlertState({
+        Type: 4,
+        Status: true,
+        Message: JSON.stringify(PostAPIResponse.Message),
+        RedirectPath: false,
+        AfterResponseAction: false
+      }));
+    }
+
+
+  }, [PostAPIResponse.Status])
   // Edit Modal Show When Edit Data is true
   useEffect(() => {
     if (editData.Status === true) {
@@ -132,16 +160,11 @@ const CompanyGroupList = (props) => {
 
   const pagesListColumns = [
     {
-      text: "CompanyGroup",
-      dataField: "CompanyGroup",
+      text: "Name",
+      dataField: "Name",
       sort: true,
     },
-    {
-        text: "Description",
-        dataField: "Description",
-        sort: true,
-      },
-      
+   
       
 
     // For Edit, Delete ,and View Button Common Code function

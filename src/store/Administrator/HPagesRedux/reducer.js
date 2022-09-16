@@ -1,6 +1,8 @@
 import {
   DELETE_H_MODULE_ID_SUCCESS,
   EDIT_H_PAGES_ID_SUCCESS,
+  GET_CONTROL_TYPES_SUCCESS,
+  GET_FIELD_VALIDATIONS_SUCCESS,
   GET_HPAGES_LIST_DATA_SUCCESS,
   GET_H_MODULES_SUCCESS,
   GET_H_SUB_MODULES_SUCCESS,
@@ -22,6 +24,8 @@ const INIT_STATE = {
   updateMessage: { Status: false },
   PageList: [],
   PageAccess:[],
+  ControlTypes:[],
+  FieldValidations:[]
 
 }
 
@@ -77,6 +81,18 @@ const H_Pages = (state = INIT_STATE, action) => {
         ...state,
         PageAccess: action.payload,
       };
+
+      case GET_CONTROL_TYPES_SUCCESS:
+        return {
+          ...state,
+          ControlTypes: action.payload,
+        }
+
+        case GET_FIELD_VALIDATIONS_SUCCESS:
+          return {
+            ...state,
+            FieldValidations: action.payload,
+          }
     default:
       return state
   }

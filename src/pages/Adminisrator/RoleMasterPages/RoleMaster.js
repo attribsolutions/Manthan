@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import Breadcrumb from "../../../components/Common/Breadcrumb";
-import { Card, CardBody, Col, Container, Row, Label, CardHeader, FormGroup,} from "reactstrap";
+import { Card, CardBody, Col, Container, Row, Label, CardHeader, FormGroup, } from "reactstrap";
 import { AvForm, AvField, AvInput } from "availity-reactstrap-validation";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -25,7 +25,7 @@ const RoleMaster = (props) => {
   //*** "isEditdata get all data from ModuleID for Binding  Form controls
   let editDataGatingFromList = props.state;
   let propsPageMode = props.pageMode;
-  let pageModeProps=props.pageMode;
+  let pageModeProps = props.pageMode;
 
   //SetState  Edit data Geting From Modules List component
   const [EditData, setEditData] = useState([]);
@@ -33,7 +33,7 @@ const RoleMaster = (props) => {
   const [userPageAccessState, setUserPageAccessState] = useState('');
   const [employeeType_DropdownSelect, setEmployeeType_DropdownSelect] = useState('');
   //Access redux store Data /  'save_ModuleSuccess' action data
-  const { PostAPIResponse, RoleAccessModifiedinSingleArray,EmployeeType} = useSelector((state) => ({
+  const { PostAPIResponse, RoleAccessModifiedinSingleArray, EmployeeType } = useSelector((state) => ({
     PostAPIResponse: state.RoleMaster_Reducer.AddUserMessage,
     EmployeeType: state.EmployeeTypeReducer.EmployeeTypeList,
     RoleAccessModifiedinSingleArray: state.Login.RoleAccessUpdateData,
@@ -45,29 +45,29 @@ const RoleMaster = (props) => {
 
   // userAccess useEffect
   useEffect(() => {
-    
-      let userAcc = undefined
-        if ((editDataGatingFromList === undefined)) {
-    
-          let locationPath = history.location.pathname
-          userAcc = RoleAccessModifiedinSingleArray.find((inx) => {
-            return (`/${inx.ActualPagePath}` === locationPath)
-          })
-        }
-        else if (!(editDataGatingFromList === undefined)) {
-          let relatatedPage = props.relatatedPage
-          userAcc = RoleAccessModifiedinSingleArray.find((inx) => {
-            return (`/${inx.ActualPagePath}` === relatatedPage)
-          })
-    
-        }
-        if (!(userAcc === undefined)) {
-          setUserPageAccessState(userAcc)
-        }
 
-    }, [RoleAccessModifiedinSingleArray])
+    let userAcc = undefined
+    if ((editDataGatingFromList === undefined)) {
 
-    
+      let locationPath = history.location.pathname
+      userAcc = RoleAccessModifiedinSingleArray.find((inx) => {
+        return (`/${inx.ActualPagePath}` === locationPath)
+      })
+    }
+    else if (!(editDataGatingFromList === undefined)) {
+      let relatatedPage = props.relatatedPage
+      userAcc = RoleAccessModifiedinSingleArray.find((inx) => {
+        return (`/${inx.ActualPagePath}` === relatatedPage)
+      })
+
+    }
+    if (!(userAcc === undefined)) {
+      setUserPageAccessState(userAcc)
+    }
+
+  }, [RoleAccessModifiedinSingleArray])
+
+
   const EmployeeType_DropdownOptions = EmployeeType.map((data) => ({
     value: data.id,
     label: data.Name
@@ -78,22 +78,28 @@ const RoleMaster = (props) => {
   }
   // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
   useEffect(() => {
-
+    debugger
     if (!(userPageAccessState === '')) { document.getElementById("txtName").focus(); }
     if (!(editDataGatingFromList === undefined)) {
       setEditData(editDataGatingFromList);
       setPageMode(pageModeProps);
       dispatch(editSuccess({ Status: false }))
       dispatch(BreadcrumbShow(editDataGatingFromList.Name))
+      const listItems = editDataGatingFromList.RoleEmployeeTypes.map((data) => ({
+        value: data.EmployeeType,
+        label: data.EmployeeTypeName
+      }))
+
+      setEmployeeType_DropdownSelect(listItems)
     }
     else if (!(propsPageMode === undefined)) {
       setPageMode(propsPageMode)
-  }
+    }
 
-  }, [editDataGatingFromList,propsPageMode])
+  }, [editDataGatingFromList, propsPageMode])
 
   useEffect(() => {
-    if ((PostAPIResponse.Status === true) && (PostAPIResponse.StatusCode === 200)&&!(pageMode==="dropdownAdd")) {
+    if ((PostAPIResponse.Status === true) && (PostAPIResponse.StatusCode === 200) && !(pageMode === "dropdownAdd")) {
       dispatch(PostSuccess({ Status: false }))
       formRef.current.reset();
       if (pageMode === "dropdownAdd") {
@@ -113,7 +119,7 @@ const RoleMaster = (props) => {
         }))
       }
     }
-    else if ((PostAPIResponse.Status === true) && !(pageMode==="dropdownAdd")) {
+    else if ((PostAPIResponse.Status === true) && !(pageMode === "dropdownAdd")) {
       dispatch(PostSuccess({ Status: false }))
       dispatch(AlertState({
         Type: 4,
@@ -125,7 +131,7 @@ const RoleMaster = (props) => {
     }
   }, [PostAPIResponse.Status])
 
-  
+
   //'Save' And 'Update' Button Handller
   const FormSubmitButton_Handler = (event, values) => {
     const jsonBody = JSON.stringify({
@@ -134,6 +140,7 @@ const RoleMaster = (props) => {
       isActive: values.isActive,
       Dashboard: values.Dashboard,
       isSCMRole: values.isSCMRole,
+      IsPartyConnection: values.IsPartyConnection,
       RoleEmployeeTypes: employeeType_DropdownSelect.map((i) => { return ({ EmployeeType: i.value }) }),
       CreatedBy: 1,
       CreatedOn: "2022-05-20T11:22:55.711483Z",
@@ -151,7 +158,7 @@ const RoleMaster = (props) => {
 
   // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
   var IsEditMode_Css = ''
-  if ((pageMode === "edit")||(pageMode==="copy")||(pageMode==="dropdownAdd")) { IsEditMode_Css = "-5.5%" };
+  if ((pageMode === "edit") || (pageMode === "copy") || (pageMode === "dropdownAdd")) { IsEditMode_Css = "-5.5%" };
 
   if (!(userPageAccessState === '')) {
     return (
@@ -190,22 +197,21 @@ const RoleMaster = (props) => {
                                 onChange={(e) => { dispatch(BreadcrumbShow(e.target.value)) }}
                               />
                             </FormGroup>
-                          </Row>
 
-                          <Row>
-                          <div className="col-lg-4 col-md-6">
-                            <div className="mb-3">
-                              <Label className="form-label font-size-13 ">Employee Type</Label>
-                              <Select
-                               defaultValue={employeeType_DropdownSelect}
-                                isMulti={true}
-                                className="basic-multi-select"
-                                options={EmployeeType_DropdownOptions}
-                                onChange={(e) => { EmployeeType_Dropdown_Handler(e) }}
-                                classNamePrefix="select2-selection"
-                              />
+                            <Col md="1">  </Col>
+                            <div className="col-lg-4 col-md-6">
+                              <div className="mb-3">
+                                <Label className="form-label font-size-13 ">Employee Type</Label>
+                                <Select
+                                  defaultValue={employeeType_DropdownSelect}
+                                  isMulti={true}
+                                  className="basic-multi-select"
+                                  options={EmployeeType_DropdownOptions}
+                                  onChange={(e) => { EmployeeType_Dropdown_Handler(e) }}
+                                  classNamePrefix="select2-selection"
+                                />
+                              </div>
                             </div>
-                          </div> 
                           </Row>
 
                           <Row>
@@ -220,9 +226,8 @@ const RoleMaster = (props) => {
                                   required: { value: true, errorMessage: 'Please Enter Description' },
                                 }} />
                             </FormGroup>
-                          </Row>
 
-                          <Row>
+                            <Col md="1">  </Col>
                             <FormGroup className="mb-3 col col-sm-4 " >
                               <Label htmlFor="validationCustom01">Dashboard </Label>
                               <AvField name="Dashboard" id="txtName"
@@ -236,14 +241,14 @@ const RoleMaster = (props) => {
                             </FormGroup>
                           </Row>
 
-                         
+                          <Row>
                           <FormGroup className="mb-2 col col-sm-5">
                             <Row className="justify-content-md-left">
-                              <Label className="col-sm-3 col-form-label" >Is SCM Role </Label>
+                              <Label className="col-sm-4 col-form-label" >Is SCM Role </Label>
                               <Col md={2} style={{ marginTop: '9px' }} >
 
                                 <div className="form-check form-switch form-switch-md mb-3" >
-                                  <AvInput type="checkbox" className="form-check-input" 
+                                  <AvInput type="checkbox" className="form-check-input"
                                     defaultChecked={EditData.isSCMRole}
                                     name="isSCMRole"
                                   />
@@ -252,9 +257,10 @@ const RoleMaster = (props) => {
                             </Row>
                           </FormGroup>
 
+                          
                           <FormGroup className="mb-2 col col-sm-5">
                             <Row className="justify-content-md-left">
-                              <Label htmlFor="horizontal-firstname-input" className="col-sm-3 col-form-label" >Active </Label>
+                              <Label className="col-sm-3 col-form-label" >Active</Label>
                               <Col md={2} style={{ marginTop: '9px' }} >
 
                                 <div className="form-check form-switch form-switch-md mb-3" dir="ltr">
@@ -267,6 +273,25 @@ const RoleMaster = (props) => {
                               </Col>
                             </Row>
                           </FormGroup>
+
+                          <FormGroup className="mb-2 col col-sm-5">
+                            <Row className="justify-content-md-left">
+                              <Label className="col-sm-4 col-form-label" >Is PartyConnection </Label>
+                              <Col md={2} style={{ marginTop: '9px' }} >
+
+                                <div className="form-check form-switch form-switch-md mb-3" dir="ltr">
+                                  <AvInput type="checkbox" className="form-check-input" id="customSwitchsizemd"
+                                    defaultChecked={EditData.IsPartyConnection}
+                                    name="IsPartyConnection"
+                                  />
+                                </div>
+                              </Col>
+                            </Row>
+                          </FormGroup>
+                          </Row>
+                         
+
+                      
 
                           <FormGroup >
                             <Row >

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Col, Modal, Row } from "reactstrap";
 import "../../../assets/scss/CustomeTable/datatables.scss"
 import {
-    getUser, deleteUser, editUserId, updateSuccess
+    getUser, deleteUser, editUserId, updateSuccess, addUserSuccess
 } from "../../../store/Administrator/UserRegistrationRedux/actions";
 import paginationFactory, {
     PaginationListStandalone,
@@ -28,12 +28,13 @@ const UserList = () => {
     const [userPageAccessState, setUserPageAccessState] = useState('');
     const [modal_center, setmodal_center] = useState(false);
 
-    const { pages, editData, updateMessage, deleteMessage, RoleAccessModifiedinSingleArray } = useSelector((state) => ({
+    const { pages, editData, updateMessage, deleteMessage, RoleAccessModifiedinSingleArray,PostAPIResponse } = useSelector((state) => ({
         pages: state.User_Registration_Reducer.pages,
         editData: state.User_Registration_Reducer.editData,
         updateMessage: state.User_Registration_Reducer.updateMessage,
         deleteMessage: state.User_Registration_Reducer.deleteSuccessRole,
         RoleAccessModifiedinSingleArray: state.Login.RoleAccessUpdateData,
+        PostAPIResponse: state.User_Registration_Reducer.AddUserMessage,
     }));
 
     useEffect(() => {
@@ -89,6 +90,32 @@ const UserList = () => {
             }));
         }
     }, [deleteMessage])
+
+
+    useEffect(() => {
+
+        if ((PostAPIResponse.Status === true) && (PostAPIResponse.StatusCode === 200)) {
+            dispatch(addUserSuccess({ Status: false }))
+            tog_center();
+            dispatch(getUser());
+            dispatch(AlertState({
+                Type: 1,
+                Status: true,
+                Message: PostAPIResponse.Message,
+            }))
+        }
+    
+        else if ((PostAPIResponse.Status === true)) {
+            dispatch(addUserSuccess({ Status: false }))
+            dispatch(AlertState({
+                Type: 4,
+                Status: true,
+                Message: JSON.stringify(PostAPIResponse.Message),
+                RedirectPath: false,
+                AfterResponseAction: false
+            }));
+        }
+    }, [PostAPIResponse.Status])
 
     useEffect(() => {
         if (editData.Status === true) {

@@ -7,6 +7,7 @@ import {
   editRoleId,
   updateSuccess,
   deleteSuccess,
+  PostSuccess,
 } from "../../../store/Administrator/RoleMasterRedux/action";
 
 import paginationFactory, {
@@ -35,25 +36,35 @@ const RoleList = (props) => {
   const [modal_center, setmodal_center] = useState(false);
 
   // get Access redux data
-  const { TableListData, editData, updateMessage, deleteMessage,RoleAccessModifiedinSingleArray } = useSelector(
+  const {
+    TableListData,
+    PostAPIResponse,
+    editData,
+    updateMessage,
+    deleteMessage,
+    RoleAccessModifiedinSingleArray
+  } = useSelector(
     (state) => ({
       TableListData: state.RoleMaster_Reducer.pages,
       editData: state.RoleMaster_Reducer.editData,
       updateMessage: state.RoleMaster_Reducer.updateMessage,
       deleteMessage: state.RoleMaster_Reducer.deleteMessage,
+      PostAPIResponse: state.RoleMaster_Reducer.AddUserMessage,
       RoleAccessModifiedinSingleArray: state.Login.RoleAccessUpdateData,
+
+
     })
   );
 
   useEffect(() => {
     const locationPath = history.location.pathname
     let userAcc = RoleAccessModifiedinSingleArray.find((inx) => {
-        return (`/${inx.ActualPagePath}` === locationPath)
+      return (`/${inx.ActualPagePath}` === locationPath)
     })
     if (!(userAcc === undefined)) {
-        setUserPageAccessState(userAcc)
+      setUserPageAccessState(userAcc)
     }
-}, [RoleAccessModifiedinSingleArray])
+  }, [RoleAccessModifiedinSingleArray])
 
   //  This UseEffect => Featch Modules List data  First Rendering
   useEffect(() => {
@@ -109,6 +120,32 @@ const RoleList = (props) => {
     }
   }, [deleteMessage]);
 
+  useEffect(() => {
+   
+    if ((PostAPIResponse.Status === true) && (PostAPIResponse.StatusCode === 200)) {
+      dispatch(PostSuccess({ Status: false }))
+      tog_center();
+      dispatch(getRole());
+      dispatch(AlertState({
+        Type: 1,
+        Status: true,
+        Message: PostAPIResponse.Message,
+      }))
+    }
+
+    else if ((PostAPIResponse.Status === true)) {
+      dispatch(PostSuccess({ Status: false }))
+      dispatch(AlertState({
+        Type: 4,
+        Status: true,
+        Message: JSON.stringify(PostAPIResponse.Message),
+        RedirectPath: false,
+        AfterResponseAction: false
+      }));
+    }
+
+
+  }, [PostAPIResponse.Status])
   // Edit Modal Show When Edit Data is true
   useEffect(() => {
     if (editData.Status === true) {
@@ -164,12 +201,12 @@ const RoleList = (props) => {
     listPageCommonButtonFunction({
       dispatchHook: dispatch,
       ButtonMsgLable: "Role",
-      deleteName:"Name",
+      deleteName: "Name",
       userPageAccessState: userPageAccessState,
       editActionFun: editRoleId,
       deleteActionFun: deleteRole
-  })
-   
+    })
+
   ];
 
   if (!(userPageAccessState === '')) {
@@ -197,9 +234,9 @@ const RoleList = (props) => {
                       SearchProps={toolkitProps.searchProps}
                       breadcrumbCount={`Role Count: ${TableListData.length}`}
                       IsSearchVissible={true}
-                    // RedirctPath={`/RoleMaster`}
-                    isExcelButtonVisible={true}
-                    ExcelData={TableListData}
+                      // RedirctPath={`/RoleMaster`}
+                      isExcelButtonVisible={true}
+                      ExcelData={TableListData}
                     />
                     <Row>
                       <Col xl="12">

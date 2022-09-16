@@ -68,7 +68,7 @@ const ItemsMaster = (props) => {
         Name: "",
         Sequence: "",
         ShortName: "",
-        BarCode: { label: "" },
+        BarCode: '',
         Company: "",
         BaseUnit: { value: 0, label: "select" },
         MRP: '',
@@ -183,7 +183,10 @@ const ItemsMaster = (props) => {
                 BaseUnit: { label: editMode_Data.BaseUnitName, value: editMode_Data.BaseUnitID },
                 isActive: editMode_Data.isActive,
             }
-            let initialCategory = editMode_Data.ItemCategoryDetails.map((indx) => {
+            let initialCategory = editMode_Data.ItemCategoryDetails.map((indx, key) => {
+               
+                dispatch(get_Category_By_CategoryType_ForDropDown(indx.CategoryType, key))
+                dispatch(get_Sub_Category_By_CategoryType_ForDropDown(indx.Category, key))
                 return {
                     CategoryType: {
                         label: indx.CategoryTypeName,
@@ -505,6 +508,7 @@ const ItemsMaster = (props) => {
     function Category_Dropdown_Handler(e, key) {
         CategoryTab_Common_onChange_Handller(e, "Category", key,);
         dispatch(get_Sub_Category_By_CategoryType_ForDropDown(e.value, key))
+
     }
 
     function CategoryTab_AddRow_Handler() {
@@ -671,20 +675,24 @@ const ItemsMaster = (props) => {
     }
 
     function DivisionTab_AddRow_Handle() {
+
         const find = divisionTableData.find((element) => {
             return element.value === division_dropdown_Select.value
         });
 
         if (division_dropdown_Select.length <= 0) {
+
             dispatch(AlertState({
                 Type: 3, Status: true,
                 Message: "Select One Role",
             }));
         }
         else if (find === undefined) {
+            document.getElementById("dropDivisionType-0").className = ""
             setDivisionTableData([...divisionTableData, division_dropdown_Select]);
         }
         else {
+            document.getElementById("dropDivisionType-0").className = ""
             dispatch(AlertState({
                 Type: 4, Status: true,
                 Message: "DivisionType already Exists ",
@@ -692,6 +700,7 @@ const ItemsMaster = (props) => {
         }
     }
     function DivisionTab_Dropdown_onChange_Handler(e) {
+
         setDivision_dropdown_Select(e)
     }
     function DivisionTab_DeleteRow_Handler(tableValue) {
@@ -971,20 +980,20 @@ const ItemsMaster = (props) => {
             let return2 = Common_Drop_Validation(ind.Category, "Category", key);
             if (return2 === false) submitValid2 = return2;
 
-            let return3 = Common_Drop_Validation(ind.SubCategory, "SubCategory", key);
-            if (return3 === false) submitValid2 = return3;
+            // let return3 = Common_Drop_Validation(ind.SubCategory, "SubCategory", key);
+            // if (return3 === false) submitValid2 = return3;
         })
 
-        baseUnitTableData.map((ind, key) => {
+        if (formValue.BaseUnit.value > 0) {
+            baseUnitTableData.map((ind, key) => {
+                let return1 = Common_Text_INPUT_Validation(ind.Conversion, "Conversion", key);
+                if (return1 === false) submitValid3 = return1;
 
-            let return1 = Common_Text_INPUT_Validation(ind.Conversion, "Conversion", key);
-            if (return1 === false) submitValid3 = return1;
+                let return2 = Common_Drop_Validation(ind.Unit, "Unit", key);
+                if (return2 === false) submitValid3 = return2;
 
-            let return2 = Common_Drop_Validation(ind.Unit, "Unit", key);
-            if (return2 === false) submitValid3 = return2;
-
-
-        })
+            })
+        }
 
         rateDetailTableData.map((ind, key) => {
 
@@ -1024,7 +1033,7 @@ const ItemsMaster = (props) => {
             setactiveTab1('3');
             return
         };
-        if ((divisionTableData.length === 0)) {
+        if ((divisionTableData.length < 1)) {
             setactiveTab1('5');
             document.getElementById("dropDivisionType-0").className = "form-control is-invalid"
             return
@@ -1614,7 +1623,7 @@ const ItemsMaster = (props) => {
                                                                                 onChange={(e) => ImageTab_onChange_Handler(e, key, "ImageUpload")} />
                                                                         </FormGroup>
 
-                                                                        {(imageTabTable.length === key + 1) ?
+                                                                        {/* {(imageTabTable.length === key + 1) ?
                                                                             <Col className="col col-1 mt-3">
                                                                                 <Button
                                                                                     className="btn btn-sm mt-3 mb-0 btn-light  btn-outline-primary  "
@@ -1630,7 +1639,40 @@ const ItemsMaster = (props) => {
                                                                                     }}
                                                                                 ></i>
 
-                                                                            </Col>}
+                                                                            </Col>} */}
+                                                                        <Col md={1}>
+                                                                            {(imageTabTable.length === key + 1) ?
+                                                                                <Row className=" mt-3">
+                                                                                    <Col md={6} className=" mt-3">
+                                                                                        {(imageTabTable.length > 1)
+                                                                                            ?
+                                                                                            < i className="mdi mdi-trash-can d-block text-danger font-size-20" onClick={() => {
+                                                                                                ImageTab_DeleteRow_Handler(key)
+                                                                                            }} >
+                                                                                            </i>
+                                                                                            : <Col md={6} ></Col>
+                                                                                        }
+
+                                                                                    </Col>
+
+                                                                                    <Col md={6}>
+                                                                                        <Button className="btn btn-sm btn-light mt-3   align-items-sm-end"
+                                                                                            type="button"
+                                                                                            onClick={() => { ImageTab_AddRow_Handler(key) }} >
+                                                                                            <i className="dripicons-plus"></i>
+                                                                                        </Button>
+                                                                                    </Col>
+                                                                                </Row>
+                                                                                :
+                                                                                <Row className="mt-3">
+                                                                                    < i className="mdi mdi-trash-can d-block text-danger font-size-20 mt-3" onClick={() => {
+                                                                                        ImageTab_DeleteRow_Handler(key)
+                                                                                    }} >
+                                                                                    </i>
+                                                                                </Row>
+                                                                            }
+
+                                                                        </Col>
                                                                     </Row>
                                                                 })}
                                                             </CardBody>
@@ -1650,6 +1692,7 @@ const ItemsMaster = (props) => {
                                                                         <FormGroup className=" col col-sm-4 " >
                                                                             <Label htmlFor="validationCustom21">Division Type</Label>
                                                                             <Select
+                                                                                id={"dropDivisionType-0"}
                                                                                 value={division_dropdown_Select}
                                                                                 options={DivisionType_DropdownOptions}
                                                                                 onChange={(e) => { DivisionTab_Dropdown_onChange_Handler(e) }}
@@ -1764,23 +1807,39 @@ const ItemsMaster = (props) => {
 
                                                                                 </Row>
                                                                             </Col>
-                                                                            {(rateDetailTableData.length === key + 1) ?
-                                                                                <Col className="col col-1 mt-3">
-                                                                                    <Button className="btn btn-sm btn-light mt-3 "
-                                                                                        type="button"
-                                                                                        onClick={() => { RateDetailTab_AddRow_Handler(key) }} >
-                                                                                        <i className="dripicons-plus"></i></Button>
-                                                                                </Col>
-                                                                                : <Col className="col col-1 mt-3">
+                                                                            <Col md={1}>
+                                                                                {(rateDetailTableData.length === key + 1) ?
+                                                                                    <Row className=" mt-3">
+                                                                                        <Col md={6} className=" mt-3">
+                                                                                            {(rateDetailTableData.length > 1)
+                                                                                                ?
+                                                                                                < i className="mdi mdi-trash-can d-block text-danger font-size-20" onClick={() => {
+                                                                                                    RateDetailTab_DeleteRow_Handler(key)
+                                                                                                }} >
+                                                                                                </i>
+                                                                                                : <Col md={6} ></Col>
+                                                                                            }
 
-                                                                                    <i
-                                                                                        className="mdi mdi-trash-can d-block text-danger font-size-20 mt-3"
-                                                                                        onClick={() => {
-                                                                                            RateDetailTab_DeleteRow_Handler(key);
-                                                                                        }}
-                                                                                    ></i>
+                                                                                        </Col>
 
-                                                                                </Col>}
+                                                                                        <Col md={6}>
+                                                                                            <Button className="btn btn-sm btn-light mt-3   align-items-sm-end"
+                                                                                                type="button"
+                                                                                                onClick={() => { RateDetailTab_AddRow_Handler(key) }} >
+                                                                                                <i className="dripicons-plus"></i>
+                                                                                            </Button>
+                                                                                        </Col>
+                                                                                    </Row>
+                                                                                    :
+                                                                                    <Row className="mt-3">
+                                                                                        < i className="mdi mdi-trash-can d-block text-danger font-size-20 mt-3" onClick={() => {
+                                                                                            RateDetailTab_DeleteRow_Handler(key)
+                                                                                        }} >
+                                                                                        </i>
+                                                                                    </Row>
+                                                                                }
+
+                                                                            </Col>
                                                                         </Row>
                                                                     })}
                                                                 </CardBody>
@@ -1798,13 +1857,11 @@ const ItemsMaster = (props) => {
                                                                     {marginTabTable.map((index, key) => {
 
                                                                         return <Row className="mt-3">
-                                                                            <Col className=" col col-10 ">
+                                                                            <Col className=" col col-6 ">
                                                                                 <Row>
-                                                                                    <FormGroup className=" col col-sm-5 " >
+                                                                                    <FormGroup className=" col col-sm-6 " >
                                                                                         <Label >Price List</Label>
                                                                                         <Select
-
-
                                                                                             id={`dropPriceList-${key}`}
                                                                                             value={marginTabTable[key].PriceList}
                                                                                             options={PriceList_DropdownOptions}
@@ -1812,7 +1869,7 @@ const ItemsMaster = (props) => {
                                                                                         />
                                                                                     </FormGroup>
 
-                                                                                    <FormGroup className="mb-3 col col-sm-5 " >
+                                                                                    <FormGroup className="mb-3 col col-sm-6 " >
                                                                                         <Label >Margin</Label>
                                                                                         <Input type="text"
                                                                                             id={`txtMargin${key}`}
@@ -1824,23 +1881,40 @@ const ItemsMaster = (props) => {
 
                                                                                 </Row>
                                                                             </Col>
-                                                                            {(marginTabTable.length === key + 1) ?
-                                                                                <Col className="col col-1 mt-3">
-                                                                                    <Button
-                                                                                        className="btn btn-sm mt-3 mb-0 btn-light  btn-outline-primary  "
-                                                                                        type="button"
-                                                                                        onClick={() => { MarginTab_AddRow_Handler(key) }} >
-                                                                                        <i className="dripicons-plus"></i></Button>
-                                                                                </Col>
-                                                                                : <Col className="col col-1 mt-3">
-                                                                                    <i
-                                                                                        className="mdi mdi-trash-can d-block text-danger font-size-20 mt-3"
-                                                                                        onClick={() => {
-                                                                                            MarginTab_DeleteRow_Handler(key);
-                                                                                        }}
-                                                                                    ></i>
+                                                                            <Col md={1}>
+                                                                                {(marginTabTable.length === key + 1) ?
+                                                                                    <Row className=" mt-3">
+                                                                                        <Col md={6} className=" mt-3">
+                                                                                            {(marginTabTable.length > 1)
+                                                                                                ?
+                                                                                                < i className="mdi mdi-trash-can d-block text-danger font-size-20" onClick={() => {
+                                                                                                    MarginTab_DeleteRow_Handler(key)
+                                                                                                }} >
+                                                                                                </i>
+                                                                                                : <Col md={6} ></Col>
+                                                                                            }
 
-                                                                                </Col>}
+                                                                                        </Col>
+
+                                                                                        <Col md={6}>
+                                                                                            <Button className="btn btn-sm btn-light mt-3   align-items-sm-end"
+                                                                                                type="button"
+                                                                                                onClick={() => { MarginTab_AddRow_Handler(key) }} >
+                                                                                                <i className="dripicons-plus"></i>
+                                                                                            </Button>
+                                                                                        </Col>
+                                                                                    </Row>
+                                                                                    :
+                                                                                    <Row className="mt-3">
+                                                                                        < i className="mdi mdi-trash-can d-block text-danger font-size-20 mt-3" onClick={() => {
+                                                                                            MarginTab_DeleteRow_Handler(key)
+                                                                                        }} >
+                                                                                        </i>
+                                                                                    </Row>
+                                                                                }
+
+                                                                            </Col>
+
                                                                         </Row>
                                                                     })}
 
