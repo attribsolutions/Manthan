@@ -17,6 +17,7 @@ import {
   editItemId,
   editItemSuccess,
   getItemList,
+  PostItemDataSuccess,
   updateItemSuccess,
 } from "../../../store/Administrator/ItemsRedux/action";
 import ItemsMaster from "./ItemMaster";
@@ -34,14 +35,14 @@ const ItemsList = (props) => {
   const [modal_center, setmodal_center] = useState(false);
 
   // get Access redux data
-  const { pages, editData, updateMessage, deleteMessage, RoleAccessModifiedinSingleArray } = useSelector(
+  const { pages, editData, updateMessage, deleteMessage, RoleAccessModifiedinSingleArray,PostAPIResponse } = useSelector(
     (state) => ({
       pages: state.ItemMastersReducer.pages,
       editData: state.ItemMastersReducer.editData,
       updateMessage: state.ItemMastersReducer.updateMessage,
       deleteMessage: state.ItemMastersReducer.deleteMessage,
       RoleAccessModifiedinSingleArray: state.Login.RoleAccessUpdateData,
-
+      PostAPIResponse: state.ItemMastersReducer.postMessage,
     })
   );
 
@@ -110,6 +111,30 @@ const ItemsList = (props) => {
     }
   }, [deleteMessage.Status]);
 
+  useEffect(() => {
+
+    if ((PostAPIResponse.Status === true) && (PostAPIResponse.StatusCode === 200)) {
+        dispatch(PostItemDataSuccess({ Status: false }))
+        tog_center();
+        dispatch(getItemList());
+        dispatch(AlertState({
+            Type: 1,
+            Status: true,
+            Message: PostAPIResponse.Message,
+        }))
+    }
+
+    else if ((PostAPIResponse.Status === true)) {
+        dispatch(PostItemDataSuccess({ Status: false }))
+        dispatch(AlertState({
+            Type: 4,
+            Status: true,
+            Message: JSON.stringify(PostAPIResponse.Message),
+            RedirectPath: false,
+            AfterResponseAction: false
+        }));
+    }
+}, [PostAPIResponse.Status])
   // This UseEffect => Edit Modal Show When Edit Data is true
   useEffect(() => {
     if (editData.Status === true) {

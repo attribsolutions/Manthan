@@ -17,6 +17,7 @@ import {
   delete_CategoryType_ID,
   editCategoryTypeID,
   getCategoryTypelist,
+  PostMethod_ForCategoryTypeMasterAPISuccess,
   updateCategoryTypeIDSuccess
 } from "../../../store/actions";
 import { AlertState } from "../../../store/actions";
@@ -30,8 +31,9 @@ const CategoryTypeList = (props) => {
   const [userPageAccessState, setUserPageAccessState] = useState('');
   const [modal_center, setmodal_center] = useState(false);
 
-  const { TableListData, editData, updateMessage, deleteMessage, RoleAccessModifiedinSingleArray } = useSelector(
+  const { TableListData, editData, updateMessage, deleteMessage, RoleAccessModifiedinSingleArray ,PostAPIResponse} = useSelector(
     (state) => ({
+      PostAPIResponse: state.categoryTypeMasterReducer.PostData,
       TableListData: state.categoryTypeMasterReducer.categoryTypeListData,
       editData: state.categoryTypeMasterReducer.editData,
       updateMessage: state.categoryTypeMasterReducer.updateMessage,
@@ -105,6 +107,33 @@ const CategoryTypeList = (props) => {
     }
   }, [deleteMessage]);
 
+
+  useEffect(() => {
+   
+    if ((PostAPIResponse.Status === true) && (PostAPIResponse.StatusCode === 200)) {
+      dispatch(PostMethod_ForCategoryTypeMasterAPISuccess({ Status: false }))
+      tog_center();
+      dispatch(getCategoryTypelist());
+      dispatch(AlertState({
+        Type: 1,
+        Status: true,
+        Message: PostAPIResponse.Message,
+      }))
+    }
+
+    else if ((PostAPIResponse.Status === true)) {
+      dispatch(PostMethod_ForCategoryTypeMasterAPISuccess({ Status: false }))
+      dispatch(AlertState({
+        Type: 4,
+        Status: true,
+        Message: JSON.stringify(PostAPIResponse.Message),
+        RedirectPath: false,
+        AfterResponseAction: false
+      }));
+    }
+
+
+  }, [PostAPIResponse.Status])
   // Edit Modal Show When Edit Data is true
   useEffect(() => {
     if (editData.Status === true) {

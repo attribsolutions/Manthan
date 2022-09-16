@@ -18,6 +18,7 @@ import {
     getMethodForVehicleList,
     editVehicleTypeId,
     delete_VehicleType_ID,
+    PostMethod_ForVehicleMasterSuccess,
 } from "../../../store/Administrator/VehicleRedux/action";
 import { AlertState } from "../../../store/actions";
 import { listPageCommonButtonFunction } 
@@ -31,14 +32,14 @@ const VehicleList = (props) => {
   const [userPageAccessState, setUserPageAccessState] = useState('');
   const [modal_center, setmodal_center] = useState(false);
 
-  const { TableListData, editData, updateMessage, deleteMessage, RoleAccessModifiedinSingleArray } = useSelector(
+  const { TableListData, editData, updateMessage, deleteMessage, RoleAccessModifiedinSingleArray ,PostAPIResponse} = useSelector(
     (state) => ({
       TableListData: state.VehicleReducer.VehicleList,
       editData: state.VehicleReducer.editData,
       updateMessage: state.VehicleReducer.updateMessage,
       deleteMessage: state.VehicleReducer.deleteMessage,
       RoleAccessModifiedinSingleArray: state.Login.RoleAccessUpdateData,
-
+      PostAPIResponse: state.VehicleReducer.PostDataMessage,
     })
   );
 
@@ -106,6 +107,31 @@ const VehicleList = (props) => {
     }
   }, [deleteMessage]);
 
+
+  useEffect(() => {
+
+    if ((PostAPIResponse.Status === true) && (PostAPIResponse.StatusCode === 200)) {
+        dispatch(PostMethod_ForVehicleMasterSuccess({ Status: false }))
+        tog_center();
+        dispatch(getMethodForVehicleList());
+        dispatch(AlertState({
+            Type: 1,
+            Status: true,
+            Message: PostAPIResponse.Message,
+        }))
+    }
+
+    else if ((PostAPIResponse.Status === true)) {
+        dispatch(PostMethod_ForVehicleMasterSuccess({ Status: false }))
+        dispatch(AlertState({
+            Type: 4,
+            Status: true,
+            Message: JSON.stringify(PostAPIResponse.Message),
+            RedirectPath: false,
+            AfterResponseAction: false
+        }));
+    }
+}, [PostAPIResponse.Status])
   // Edit Modal Show When Edit Data is true
   useEffect(() => {
     if (editData.Status === true) {
