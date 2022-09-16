@@ -12,6 +12,7 @@ import {
   deleteEmployeeIDSuccess,
   updateEmployeeIDSuccess,
   delete_Employee_ID,
+  PostEmployeeSuccess,
 } from "../../../store/Administrator/M_EmployeeRedux/action";
 import paginationFactory, {
   PaginationListStandalone,
@@ -34,13 +35,14 @@ const Employee_List = () => {
 
 
   // get Access redux data
-  const { TableListData, editData, updateMessage, deleteMessage, RoleAccessModifiedinSingleArray } = useSelector(
+  const { TableListData, editData, updateMessage, deleteMessage, RoleAccessModifiedinSingleArray,PostAPIResponse } = useSelector(
     (state) => ({
       TableListData: state.M_EmployeesReducer.employeeList,
       editData: state.M_EmployeesReducer.editData,
       updateMessage: state.M_EmployeesReducer.updateMessage,
       deleteMessage: state.M_EmployeesReducer.deleteMessage,
       RoleAccessModifiedinSingleArray: state.Login.RoleAccessUpdateData,
+      PostAPIResponse: state.M_EmployeesReducer.postMessage,
     })
   );
 
@@ -108,6 +110,31 @@ const Employee_List = () => {
     }
   }, [deleteMessage.Status]);
 
+
+  useEffect(() => {
+
+    if ((PostAPIResponse.Status === true) && (PostAPIResponse.StatusCode === 200)) {
+        dispatch(PostEmployeeSuccess({ Status: false }))
+        tog_center();
+        dispatch(getEmployeelist());
+        dispatch(AlertState({
+            Type: 1,
+            Status: true,
+            Message: PostAPIResponse.Message,
+        }))
+    }
+
+    else if ((PostAPIResponse.Status === true)) {
+        dispatch(PostEmployeeSuccess({ Status: false }))
+        dispatch(AlertState({
+            Type: 4,
+            Status: true,
+            Message: JSON.stringify(PostAPIResponse.Message),
+            RedirectPath: false,
+            AfterResponseAction: false
+        }));
+    }
+}, [PostAPIResponse.Status])
   // Edit Modal Show When Edit Data is true
   useEffect(() => {
     if (editData.Status === true) {

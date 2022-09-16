@@ -12,7 +12,6 @@ import { editSuccess } from "../../../store/Administrator/RoleMasterRedux/action
 import { Tbody, Thead } from "react-super-responsive-table";
 import { BreadcrumbShow } from "../../../store/Utilites/Breadcrumb/actions";
 import { MetaTags } from "react-meta-tags";
-import { CommonGetRoleAccessFunction } from "../../../components/Common/CommonGetRoleAccessFunction";
 import { useHistory } from "react-router-dom";
 
 const AddUser = (props) => {
@@ -24,7 +23,7 @@ const AddUser = (props) => {
   //*** "isEditdata get all data from ModuleID for Binding  Form controls
   let editDataGatingFromList = props.state;
   let pageModeProps = props.pageMode;
-
+  console.log("editDataGatingFromList", editDataGatingFromList)
   //SetState  Edit data Geting From Modules List component
   const [EditData, setEditData] = useState([]);
   const [pageMode, setPageMode] = useState("save");
@@ -121,21 +120,24 @@ const AddUser = (props) => {
   // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
   useEffect(() => {
 
-    if (!(userPageAccessState === '')) { document.getElementById("txtName").focus(); }
+    if (!(userPageAccessState === '')) { document.getElementById("txtName").focus();
+    //  document.getElementById("EmployeeDropDown").disabled = true
+     document.getElementById("txtName").disabled = true }
 
     if (!(editDataGatingFromList === undefined)) {
-
+     
       setEditData(editDataGatingFromList);
       dispatch(BreadcrumbShow(editDataGatingFromList.LoginName))
       setPageMode(pageModeProps);
       dispatch(editSuccess({ Status: false }))
       setEmployeeSelect({
         value: editDataGatingFromList.Employee,
-        label: editDataGatingFromList.EmployeeName
+        label: editDataGatingFromList.EmployeeName,
       })
+    
       setUserPartiesForUserMaster(editDataGatingFromList.UserRole)
 
-      
+
       // let arraynew = []
       // editDataGatingFromList.UserRole.map((i) => {
       //   i.PartyRoles.map((i2) => {
@@ -145,6 +147,7 @@ const AddUser = (props) => {
       setPartyRoleData(editDataGatingFromList.UserRole)
       return
     }
+ 
   }, [editDataGatingFromList])
 
   useEffect(() => {
@@ -260,6 +263,7 @@ const AddUser = (props) => {
       }));
     }
     else if (pageMode === 'edit') {
+     
       dispatch(updateID(jsonBody, EditData.id));
       setEditData([]);
       console.log("jsonBody", jsonBody)
@@ -338,15 +342,20 @@ const AddUser = (props) => {
                       <Card className=" text-black">
                         <CardBody style={{ backgroundColor: "whitesmoke" }}>
                           <Row >
+                           
+                            <div>
                             <FormGroup className="mb-2 col col-sm-4 " >
-                              <Label htmlFor="validationCustom01">Employee </Label>
+                              <Label htmlFor="validationCustom01">Employee</Label>
                               <Select
+                                id="EmployeeDropDown "
+                                // disabled={true}
                                 value={EmployeeSelect}
                                 options={EmployeeValues}
                                 onChange={(e) => { handllerEmployeeID(e) }}
                               />
                             </FormGroup>
-
+                            </div>
+                            
                           </Row>
                           <Row >
 
@@ -533,7 +542,9 @@ const AddUser = (props) => {
                                 <div>
                                   {
                                     pageMode === "edit" ?
+                                    
                                       userPageAccessState.RoleAccess_IsEdit ?
+                                      
                                         <button
                                           type="submit"
                                           data-mdb-toggle="tooltip" data-mdb-placement="top" title="Update User"

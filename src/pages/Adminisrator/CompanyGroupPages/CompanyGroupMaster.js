@@ -200,7 +200,7 @@ const CompanyGroupMaster = (props) => {
                                                 <CardBody style={{ backgroundColor: "whitesmoke" }}>
                                                     <Row>
                                                         <FormGroup className="mb-2 col col-sm-4 ">
-                                                            <Label htmlFor="validationCustom01">CompanyGroup </Label>
+                                                            <Label htmlFor="validationCustom01">Company Group </Label>
                                                             <AvField
                                                                 name="Name"
                                                                 id="txtName"
@@ -220,16 +220,16 @@ const CompanyGroupMaster = (props) => {
                                                         <FormGroup className="mb-2 col col-sm-4 ">
                                                             <Label htmlFor="validationCustom01">Company Description </Label>
                                                             <AvField
-                                                                name="Name"
-                                                                id="txtName"
-                                                                value={EditData.Name}
+                                                                name="CompanyDescription"
+                                                                id="CompanyDescription"
+                                                                value={EditData.CompanyDescription}
                                                                 type="text"
                                                                 placeholder="Please Enter Description"
                                                                 autoComplete='off'
                                                                 validate={{
                                                                     required: { value: true, errorMessage: 'Please Enter Description' },
                                                                 }}
-                                                                onChange={(e) => { dispatch(BreadcrumbShow(e.target.value)) }}
+                                                               
                                                             />
                                                         </FormGroup>
 

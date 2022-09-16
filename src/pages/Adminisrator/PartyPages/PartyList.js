@@ -16,6 +16,7 @@ import {
     deletePartyIDSuccess,
     editPartyID,
     getPartyListAPI,
+    postPartyDataSuccess,
     updatePartyIDSuccess
 } from '../../../store/Administrator/PartyRedux/action';
 import PartyMaster from './PartyMaster';
@@ -32,12 +33,13 @@ const PartyList = () => {
     const [modal_center, setmodal_center] = useState(false);
 
     // get Access redux data
-    const { TableListData, editData, updateMessage, deleteMessage ,RoleAccessModifiedinSingleArray} = useSelector((state) => ({
+    const { TableListData, editData, updateMessage, deleteMessage ,RoleAccessModifiedinSingleArray,PostAPIResponse} = useSelector((state) => ({
         TableListData: state.PartyMasterReducer.partyList,
         editData: state.PartyMasterReducer.editData,
         updateMessage: state.PartyMasterReducer.updateMessage,
         deleteMessage: state.PartyMasterReducer.deleteMessage,
         RoleAccessModifiedinSingleArray: state.Login.RoleAccessUpdateData,
+        PostAPIResponse: state.PartyMasterReducer.PartySaveSuccess,
     }));
 
     useEffect(() => {
@@ -93,6 +95,32 @@ const PartyList = () => {
         }
     }, [deleteMessage.Status])
 
+
+    
+  useEffect(() => {
+
+    if ((PostAPIResponse.Status === true) && (PostAPIResponse.StatusCode === 200)) {
+        dispatch(postPartyDataSuccess({ Status: false }))
+        tog_center();
+        dispatch(getPartyListAPI());
+        dispatch(AlertState({
+            Type: 1,
+            Status: true,
+            Message: PostAPIResponse.Message,
+        }))
+    }
+
+    else if ((PostAPIResponse.Status === true)) {
+        dispatch(postPartyDataSuccess({ Status: false }))
+        dispatch(AlertState({
+            Type: 4,
+            Status: true,
+            Message: JSON.stringify(PostAPIResponse.Message),
+            RedirectPath: false,
+            AfterResponseAction: false
+        }));
+    }
+}, [PostAPIResponse.Status])
     // Edit Modal Show When Edit Data is true
     useEffect(() => {
         if (editData.Status === true) {

@@ -15,7 +15,7 @@ import { MetaTags } from "react-meta-tags";
 import { useHistory } from "react-router-dom";
 // import { deleteProductCategoryTypeIDSuccess, delete_ProductCategoryType_ID,  updateProductCategoryTypeIDSuccess } from "../../../store/Administrator/PartyTypeRedux/action";
 import { AlertState } from "../../../store/actions";
-import { deleteSubCategoryIDSuccess, delete_SubCategory_ID, editSubCategoryID, getSubCategorylist, updateSubCategoryIDSuccess } from "../../../store/Administrator/SubCategoryRedux/action";
+import { deleteSubCategoryIDSuccess, delete_SubCategory_ID, editSubCategoryID, getSubCategorylist, PostMethod_ForSubCategoryAPISuccess, updateSubCategoryIDSuccess } from "../../../store/Administrator/SubCategoryRedux/action";
 import SubCategoryMaster from "./SubCategoryMaster";
 import { listPageCommonButtonFunction } from "../../../components/Common/CmponentRelatedCommonFile/listPageCommonButtons";
 // import { AlertState } from "../../../store/action";
@@ -31,13 +31,14 @@ const SubCategoryList = (props) => {
   // get Access redux data
   // var  editData=[]
 
-  const { TableListData, editData, updateMessage, deleteMessage, RoleAccessModifiedinSingleArray } = useSelector(
+  const { TableListData, editData, updateMessage, deleteMessage, RoleAccessModifiedinSingleArray,PostAPIResponse } = useSelector(
     (state) => ({
       TableListData: state.SubCategoryReducer.SubCategoryListData,
       editData: state.SubCategoryReducer.editData,
       updateMessage: state.SubCategoryReducer.updateMessage,
       deleteMessage: state.SubCategoryReducer.deleteMessage,
       RoleAccessModifiedinSingleArray: state.Login.RoleAccessUpdateData,
+      PostAPIResponse: state.SubCategoryReducer.PostDataMessage,
     })
   );
 
@@ -104,6 +105,31 @@ const SubCategoryList = (props) => {
       );
     }
   }, [deleteMessage]);
+
+  useEffect(() => {
+
+    if ((PostAPIResponse.Status === true) && (PostAPIResponse.StatusCode === 200)) {
+        dispatch(PostMethod_ForSubCategoryAPISuccess({ Status: false }))
+        tog_center();
+        dispatch(getSubCategorylist());
+        dispatch(AlertState({
+            Type: 1,
+            Status: true,
+            Message: PostAPIResponse.Message,
+        }))
+    }
+
+    else if ((PostAPIResponse.Status === true)) {
+        dispatch(PostMethod_ForSubCategoryAPISuccess({ Status: false }))
+        dispatch(AlertState({
+            Type: 4,
+            Status: true,
+            Message: JSON.stringify(PostAPIResponse.Message),
+            RedirectPath: false,
+            AfterResponseAction: false
+        }));
+    }
+}, [PostAPIResponse.Status])
 
   // Edit Modal Show When Edit Data is true
   useEffect(() => {

@@ -16,7 +16,7 @@ import { useHistory } from "react-router-dom";
 import { CommonGetRoleAccessFunction } from "../../../components/Common/CommonGetRoleAccessFunction";
 // import { deleteProductCategoryTypeIDSuccess, delete_ProductCategoryType_ID,  updateProductCategoryTypeIDSuccess } from "../../../store/Administrator/PartyTypeRedux/action";
 import { AlertState } from "../../../store/actions";
-import { deleteCategoryIDSuccess, deleteProductTypesIDSuccess, delete_Category_ID, delete_ProductTypes_ID, editCategoryID, editProductTypesID, getCategorylist, getProductTypeslist, updateCategoryIDSuccess, updateProductTypesIDSuccess } from "../../../store/Administrator/CategoryRedux/action";
+import { deleteCategoryIDSuccess, deleteProductTypesIDSuccess, delete_Category_ID, delete_ProductTypes_ID, editCategoryID, editProductTypesID, getCategorylist, getProductTypeslist, PostMethod_ForCategoryAPISuccess, updateCategoryIDSuccess, updateProductTypesIDSuccess } from "../../../store/Administrator/CategoryRedux/action";
 import CategoryMaster from "./CategoryMaster";
 import { listPageCommonButtonFunction } from "../../../components/Common/CmponentRelatedCommonFile/listPageCommonButtons";
 // import { AlertState } from "../../../store/action";
@@ -32,13 +32,14 @@ const CategoryList = (props) => {
   // get Access redux data
   // var  editData=[]
 
-  const { TableListData, editData, updateMessage, deleteMessage, RoleAccessModifiedinSingleArray } = useSelector(
+  const { TableListData, editData, updateMessage, deleteMessage, RoleAccessModifiedinSingleArray, PostAPIResponse } = useSelector(
     (state) => ({
       TableListData: state.CategoryMasterReducer.CategoryListData,
       editData: state.CategoryMasterReducer.editData,
       updateMessage: state.CategoryMasterReducer.updateMessage,
       deleteMessage: state.CategoryMasterReducer.deleteMessage,
       RoleAccessModifiedinSingleArray: state.Login.RoleAccessUpdateData,
+      PostAPIResponse: state.CategoryMasterReducer.PostDataMessage,
     })
   );
 
@@ -106,6 +107,32 @@ const CategoryList = (props) => {
     }
   }, [deleteMessage]);
 
+
+  useEffect(() => {
+    if ((PostAPIResponse.Status === true) && (PostAPIResponse.StatusCode === 200)) {
+      dispatch(PostMethod_ForCategoryAPISuccess({ Status: false }))
+      tog_center();
+      dispatch(getCategorylist());
+      dispatch(AlertState({
+        Type: 1,
+        Status: true,
+        Message: PostAPIResponse.Message,
+      }))
+    }
+
+    else if ((PostAPIResponse.Status === true)) {
+      dispatch(PostMethod_ForCategoryAPISuccess({ Status: false }))
+      dispatch(AlertState({
+        Type: 4,
+        Status: true,
+        Message: JSON.stringify(PostAPIResponse.Message),
+        RedirectPath: false,
+        AfterResponseAction: false
+      }));
+    }
+
+  }, [PostAPIResponse.Status])
+  
   // Edit Modal Show When Edit Data is true
   useEffect(() => {
     if (editData.Status === true) {
@@ -216,7 +243,7 @@ const CategoryList = (props) => {
             }}
             size="xl"
           >
-            <CategoryMaster state={editData.Data} relatatedPage={"/CategoryMaster"} pageMode={editData.pageMode}/>
+            <CategoryMaster state={editData.Data} relatatedPage={"/CategoryMaster"} pageMode={editData.pageMode} />
           </Modal>
         </div>
       </React.Fragment>
