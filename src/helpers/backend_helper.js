@@ -166,7 +166,7 @@ export const getPageAcess = () => get(url.GET_PAGE_ACCESS)
 export const showPagesListOnPageType_DropDown_List = () => get(url.SHOW_PAGESLIST_ON_PAGE_TYPE_FOR_DROPDOWN)
 export const showPagesListOnPageAccess_DropDown_List = (id) => get(url.SHOW_PAGESLIST_ON_PAGEACCESS_FOR_DROPDOWN)
 export const ControlTypes_DropDown_Api = () => get(url.GET_CONTROLTYPES_DROPDOWN_API)
-export const GetFieldValidationOnControlType_DropDown_API = (id) => get(`${url.GET_FIELD_VALIDATIONS_DROPDOWN_API}/${id}`)//  GetFieldValidationOnControlType DropDown API
+export const FieldValidations_DropDown_Api = () => get(url.GET_FIELD_VALIDATIONS_DROPDOWN_API)
 
 // H_subModule Api
 export const saveH_SubModules = (data) => post(url.H_SUB_MODULES_API_URL, data)
@@ -176,8 +176,9 @@ export const getSubModulesEditDataUsingID_ApiCall = (id) => get(`${url.H_SUB_MOD
 export const putUpdateSubModule = (Data, id) => put(`${url.H_SUB_MODULES_API_URL}/${id}`, Data)/// update api
 
 //H_pages
-export const get_Module_HPages = (id) => get(`${url.H_MODULES_API_URL}/${id}`)// Get subModule For H_pages
+export const get_Module_HPages = () => get(url.H_MODULES_API_URL)// Get subModule For H_pages
 export const Fetch_HPagesListApi = () => get(url.H_PAGES_API_URL)//get H_Pages List 
+export const GetFieldValidationOnControlType_DropDown_API = (id) => get(`${url.GET_FIELD_VALIDATIONS_DROPDOWN_API}/${id}`)//  GetFieldValidationOnControlType DropDown API
 export const edit_HPageID = (id) => get(`${url.H_PAGES_API_URL}/${id}`)// get edit H_Pages ID Data 
 export const updateHPages = (Data, id) => put(`${url.H_PAGES_API_URL}/${id}`, Data) // Upadate H_Page api
 export const saveHPagesAPI = (Data) => post(url.H_PAGES_API_URL, Data)
@@ -280,6 +281,13 @@ export const get_CompanyGroupList_API = () => get(url.COMPANYGROUP_API)//  get A
 export const detelet_CompanyGroupType_List_Api = (id) =>del(`${url. COMPANYGROUP_API}/${id}`) // delete api
 export const edit_CompanyGroupType_List_Api = (id) =>get(`${url. COMPANYGROUP_API}/${id}`) // edit api
 export const update_CompanyGroupType_List_Api = (data, id) =>put(`${url. COMPANYGROUP_API}/${id}`, data)// update
+
+//Driver api
+export const Post_Driver_API = (data) => post(url.DRIVER_API, data)// post api
+export const get_DriverList_API = () => get(url.DRIVER_API)//  get Api 
+export const detelet_DriverType_List_Api = (id) =>del(`${url. DRIVER_API}/${id}`) // delete api
+export const edit_DriverType_List_Api = (id) =>get(`${url. DRIVER_API}/${id}`) // edit api
+export const update_DriverType_List_Api = (data, id) =>put(`${url. DRIVER_API}/${id}`, data)// update
 
 
 

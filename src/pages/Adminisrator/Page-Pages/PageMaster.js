@@ -28,7 +28,7 @@ import classnames from "classnames";
 import { AvField, AvForm, AvInput } from "availity-reactstrap-validation";
 import ReactSelect from "react-select";
 import { Tbody, Thead } from "react-super-responsive-table";
-import { AlertState, BreadcrumbShow, editHPagesIDSuccess, getControlTypes, getFieldValidations, getPageAccess_DropDown_API, getPageList, getPageListSuccess, PostModelsSubmitSuccess, saveHPages, saveHPagesSuccess, updateHPages } from "../../../store/actions";
+import { AlertState, BreadcrumbShow, editHPagesIDSuccess, fetchModelsList, getControlTypes, getFieldValidations, getPageAccess_DropDown_API, getPageList, getPageListSuccess, PostModelsSubmitSuccess, saveHPages, saveHPagesSuccess, updateHPages } from "../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 
@@ -116,6 +116,7 @@ const PageMaster = (props) => {
   }, [RoleAccessModifiedinSingleArray])
 
   useEffect(() => {
+    dispatch(fetchModelsList());
     dispatch(getControlTypes());
     dispatch(getFieldValidations());
     dispatch(getPageAccess_DropDown_API());
@@ -274,13 +275,13 @@ const PageMaster = (props) => {
     value: data.id,
     label: data.Name
   }));
-  console.log("ControlTypes_DropdownOptions", ControlTypes_DropdownOptions)
+ 
 
   const FieldValidations_DropdownOptions = FieldValidations.map((data) => ({
     value: data.id,
     label: data.Name
   }));
-  console.log("FieldValidations_DropdownOptions", FieldValidations_DropdownOptions)
+
 
   function PageField_Tab_AddRow_Handler() {
 
@@ -519,11 +520,14 @@ const PageMaster = (props) => {
   const FormSubmitButton_Handler = (event, values) => {
 
     const PageFieldMaster = pageFieldTabTable.map((index) => ({
+      ControlID:index.ControlID,
       FieldLabel: index.FieldLabel,
       IsCompulsory: index.IsCompulsory,
+      DefaultSort:index.DefaultSort,
       ListPageSeq: index.ListPageSeq,
       ShowInListPage: index.ShowInListPage,
       ShowInDownload: index.ShowInDownload,
+      DownloadDefaultSelect:index.DownloadDefaultSelect,
       ControlType: index.ControlType.value,
       FieldValidation: index.FieldValidation.value,
     }))

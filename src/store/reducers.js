@@ -35,6 +35,7 @@ import categoryTypeMasterReducer from "./Administrator/CategoryTypeRedux/reducer
 import CategoryMasterReducer from "./Administrator/CategoryRedux/reducer"
 import SubCategoryReducer from "./Administrator/SubCategoryRedux/reducer"
 import VehicleReducer from "./Administrator/VehicleRedux/reducer"
+import DriverReducer from "./Administrator/DriverRedux/reducer"
 import CompanyGroupReducer from "./Administrator/CompanyGroupRedux/reducer"
 
 const rootReducer = combineReducers({
@@ -69,7 +70,9 @@ const rootReducer = combineReducers({
    CategoryMasterReducer,
    SubCategoryReducer,
    VehicleReducer,
+   DriverReducer,
    CompanyGroupReducer,
+
 })
 
 export default rootReducer
