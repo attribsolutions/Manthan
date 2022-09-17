@@ -39,7 +39,7 @@ const PageMaster = (props) => {
   //*** "isEditdata get all data from ModuleID for Binding  Form controls
   let editDataGatingFromList = props.state;
   let pageModeProps = props.pageMode
-console.log("editDataGatingFromList",editDataGatingFromList)
+  console.log("editDataGatingFromList", editDataGatingFromList)
   const [EditData, setEditData] = useState([]);
   const [pageMode, setPageMode] = useState("save");
   const [userPageAccessState, setUserPageAccessState] = useState('');
@@ -49,7 +49,7 @@ console.log("editDataGatingFromList",editDataGatingFromList)
   const [tablePageAccessDataState, setTablePageAccessDataState] = useState([]);
   const [module_DropdownSelect, setModule_DropdownSelect] = useState("");
   const [pageType_DropdownSelect, setPageType_DropdownSelect] = useState("");
-  const [pageList_DropdownSelect, setPageList_DropdownSelect] = useState("");
+  const [relatedPage_DropdownSelect, setrelatedPage_DropdownSelect] = useState("");
   const [pageAccessDropDownView, setPageAccessDropDownView] = useState(false);
   const [modal_center, setmodal_center] = useState(false);
 
@@ -58,17 +58,17 @@ console.log("editDataGatingFromList",editDataGatingFromList)
 
 
   const [pageFieldTabTable, setPageFieldTabTable] = useState([{
-    ControlID:'',
+    ControlID: '',
     FieldLabel: '',
     ControlType: { label: "select", value: 0 },
     FieldValidation: { label: "select", value: 0 },
-    IsCompulsory: '',
-    DefaultSort:'',
-    FieldSequence: '',
-    ShowInListPage: '',
     ListPageSeq: '',
-    ShowInDownload: '',
-    DownloadDefaultSelect: '',
+    IsCompulsory: false,
+    DefaultSort: false,
+    FieldSequence: false,
+    ShowInListPage: false,
+    ShowInDownload: false,
+    DownloadDefaultSelect: false,
 
   }]);
 
@@ -139,7 +139,11 @@ console.log("editDataGatingFromList",editDataGatingFromList)
         label: editDataGatingFromList.ModuleName,
         value: editDataGatingFromList.Module,
       });
-      setPageList_DropdownSelect({
+
+      if (editDataGatingFromList.PageType === 2) {
+        setRelatedPageListShowUI(true)
+      }
+      setrelatedPage_DropdownSelect({
         value: editDataGatingFromList.RelatedPageID,
         label: editDataGatingFromList.RelatedPageName,
       });
@@ -151,9 +155,10 @@ console.log("editDataGatingFromList",editDataGatingFromList)
         setPageAccessDropDownView(true);
         dispatch(getPageList(pageType_ID));
         setPageType_DropdownSelect({ value: 2, label: "ListPage" });
+
       } else if (pageType_ID === 1) {
         dispatch(getPageListSuccess([]));
-        setPageList_DropdownSelect({ value: 0 });
+        setrelatedPage_DropdownSelect({ value: 0 });
         setPageType_DropdownSelect({ value: 1, label: "AddPage" });
       }
       let PageFieldMaster = editDataGatingFromList.PageFieldMaster.map((index) => {
@@ -167,10 +172,10 @@ console.log("editDataGatingFromList",editDataGatingFromList)
             label: index.FieldValidationName,
             value: index.FieldValidation
           },
-          ControlID:index.ControlID,
+          ControlID: index.ControlID,
           FieldLabel: index.FieldLabel,
           IsCompulsory: index.IsCompulsory,
-          DefaultSort:index.DefaultSort,
+          DefaultSort: index.DefaultSort,
           ListPageSeq: index.ListPageSeq,
           ShowInListPage: index.ShowInListPage,
           ShowInDownload: index.ShowInDownload,
@@ -189,7 +194,7 @@ console.log("editDataGatingFromList",editDataGatingFromList)
       setModule_DropdownSelect("");
       setPageAccess_DropDownSelect("");
       setPageType_DropdownSelect("");
-      setPageList_DropdownSelect("");
+      setrelatedPage_DropdownSelect("");
       if (pageMode === "true") {
         dispatch(
           AlertState({
@@ -277,7 +282,7 @@ console.log("editDataGatingFromList",editDataGatingFromList)
     value: data.id,
     label: data.Name
   }));
- 
+
 
   const FieldValidations_DropdownOptions = FieldValidations.map((data) => ({
     value: data.id,
@@ -288,12 +293,12 @@ console.log("editDataGatingFromList",editDataGatingFromList)
   function PageField_Tab_AddRow_Handler() {
 
     var newarr1 = [...pageFieldTabTable, {
-      ControlID:'',
+      ControlID: '',
       FieldLabel: '',
       ControlType: { label: "select", value: 0 },
       FieldValidation: { label: "select", value: 0 },
       IsCompulsory: '',
-      DefaultSort:'',
+      DefaultSort: '',
       FieldSequence: '',
       ShowInListPage: '',
       ListPageSeq: '',
@@ -319,16 +324,16 @@ console.log("editDataGatingFromList",editDataGatingFromList)
       return (k === key)
     })
     let newSelectValue = ''
-    
+
     if (type === "ControlID") {
 
       newSelectValue = {
-        ControlID:event,
+        ControlID: event,
         FieldLabel: found.FieldLabel,
         ControlType: found.ControlType,
         FieldValidation: found.FieldValidation,
         IsCompulsory: found.IsCompulsory,
-        DefaultSort:found.DefaultSort,
+        DefaultSort: found.DefaultSort,
         ShowInListPage: found.ShowInListPage,
         ListPageSeq: found.ListPageSeq,
         ShowInDownload: found.ShowInDownload,
@@ -337,15 +342,15 @@ console.log("editDataGatingFromList",editDataGatingFromList)
       }
     }
 
-   else if (type === "FieldLabel") {
+    else if (type === "FieldLabel") {
 
       newSelectValue = {
-        ControlID:found.ControlID,
+        ControlID: found.ControlID,
         FieldLabel: event,
         ControlType: found.ControlType,
         FieldValidation: found.FieldValidation,
         IsCompulsory: found.IsCompulsory,
-        DefaultSort:found.DefaultSort,
+        DefaultSort: found.DefaultSort,
         ShowInListPage: found.ShowInListPage,
         ListPageSeq: found.ListPageSeq,
         ShowInDownload: found.ShowInDownload,
@@ -356,12 +361,12 @@ console.log("editDataGatingFromList",editDataGatingFromList)
     else if (type === 'ControlType') {
 
       newSelectValue = {
-        ControlID:found.ControlID,
+        ControlID: found.ControlID,
         FieldLabel: found.FieldLabel,
         ControlType: event,
         FieldValidation: found.FieldValidation,
         IsCompulsory: found.IsCompulsory,
-        DefaultSort:found.DefaultSort,
+        DefaultSort: found.DefaultSort,
         ShowInListPage: found.ShowInListPage,
         ListPageSeq: found.ListPageSeq,
         ShowInDownload: found.ShowInDownload,
@@ -373,12 +378,12 @@ console.log("editDataGatingFromList",editDataGatingFromList)
     else if (type === 'FieldValidation') {
 
       newSelectValue = {
-        ControlID:found.ControlID,
+        ControlID: found.ControlID,
         FieldLabel: found.FieldLabel,
         ControlType: found.ControlType,
         FieldValidation: event,
         IsCompulsory: found.IsCompulsory,
-        DefaultSort:found.DefaultSort,
+        DefaultSort: found.DefaultSort,
         ShowInListPage: found.ShowInListPage,
         ListPageSeq: found.ListPageSeq,
         ShowInDownload: found.ShowInDownload,
@@ -389,12 +394,12 @@ console.log("editDataGatingFromList",editDataGatingFromList)
     else if (type === 'IsCompulsory') {
 
       newSelectValue = {
-        ControlID:found.ControlID,
+        ControlID: found.ControlID,
         FieldLabel: found.FieldLabel,
         ControlType: found.ControlType,
         FieldValidation: found.FieldValidation,
         IsCompulsory: event,
-        DefaultSort:found.DefaultSort,
+        DefaultSort: found.DefaultSort,
         ShowInListPage: found.ShowInListPage,
         ListPageSeq: found.ListPageSeq,
         ShowInDownload: found.ShowInDownload,
@@ -406,12 +411,12 @@ console.log("editDataGatingFromList",editDataGatingFromList)
     else if (type === 'DefaultSort') {
 
       newSelectValue = {
-        ControlID:found.ControlID,
+        ControlID: found.ControlID,
         FieldLabel: found.FieldLabel,
         ControlType: found.ControlType,
         FieldValidation: found.FieldValidation,
-        IsCompulsory:found.IsCompulsory,
-        DefaultSort:event,
+        IsCompulsory: found.IsCompulsory,
+        DefaultSort: event,
         ShowInListPage: found.ShowInListPage,
         ListPageSeq: found.ListPageSeq,
         ShowInDownload: found.ShowInDownload,
@@ -423,12 +428,12 @@ console.log("editDataGatingFromList",editDataGatingFromList)
     else if (type === 'ShowInListPage') {
 
       newSelectValue = {
-        ControlID:found.ControlID,
+        ControlID: found.ControlID,
         FieldLabel: found.FieldLabel,
         ControlType: found.ControlType,
         FieldValidation: found.FieldValidation,
         IsCompulsory: found.IsCompulsory,
-        DefaultSort:found.DefaultSort,
+        DefaultSort: found.DefaultSort,
         ShowInListPage: event,
         ListPageSeq: found.ListPageSeq,
         ShowInDownload: found.ShowInDownload,
@@ -439,12 +444,12 @@ console.log("editDataGatingFromList",editDataGatingFromList)
     else if (type === 'ListPageSeq') {
 
       newSelectValue = {
-        ControlID:found.ControlID,
+        ControlID: found.ControlID,
         FieldLabel: found.FieldLabel,
         ControlType: found.ControlType,
         FieldValidation: found.FieldValidation,
         IsCompulsory: found.IsCompulsory,
-        DefaultSort:found.DefaultSort,
+        DefaultSort: found.DefaultSort,
         ShowInListPage: found.ShowInListPage,
         ListPageSeq: event,
         ShowInDownload: found.ShowInDownload,
@@ -455,12 +460,12 @@ console.log("editDataGatingFromList",editDataGatingFromList)
     else if (type === 'ShowInDownload') {
 
       newSelectValue = {
-        ControlID:found.ControlID,
+        ControlID: found.ControlID,
         FieldLabel: found.FieldLabel,
         ControlType: found.ControlType,
         FieldValidation: found.FieldValidation,
         IsCompulsory: found.IsCompulsory,
-        DefaultSort:found.DefaultSort,
+        DefaultSort: found.DefaultSort,
         ShowInListPage: found.ShowInListPage,
         ListPageSeq: found.ListPageSeq,
         ShowInDownload: event,
@@ -471,12 +476,12 @@ console.log("editDataGatingFromList",editDataGatingFromList)
     else if (type === 'DownloadDefaultSelect') {
 
       newSelectValue = {
-        ControlID:found.ControlID,
+        ControlID: found.ControlID,
         FieldLabel: found.FieldLabel,
         ControlType: found.ControlType,
         FieldValidation: found.FieldValidation,
         IsCompulsory: found.IsCompulsory,
-        DefaultSort:found.DefaultSort,
+        DefaultSort: found.DefaultSort,
         ShowInListPage: found.ShowInListPage,
         ListPageSeq: found.ListPageSeq,
         ShowInDownload: found.ShowInDownload,
@@ -487,12 +492,12 @@ console.log("editDataGatingFromList",editDataGatingFromList)
     else if (type === 'LinktoField') {
 
       newSelectValue = {
-        ControlID:found.ControlID,
+        ControlID: found.ControlID,
         FieldLabel: found.FieldLabel,
         ControlType: found.ControlType,
         FieldValidation: found.FieldValidation,
         IsCompulsory: found.IsCompulsory,
-        DefaultSort:found.DefaultSort,
+        DefaultSort: found.DefaultSort,
         FieldSequence: found.FieldSequence,
         ShowInListPage: found.ShowInListPage,
         ListPageSeq: found.ListPageSeq,
@@ -522,14 +527,14 @@ console.log("editDataGatingFromList",editDataGatingFromList)
   const FormSubmitButton_Handler = (event, values) => {
 
     const PageFieldMaster = pageFieldTabTable.map((index) => ({
-      ControlID:index.ControlID,
+      ControlID: index.ControlID,
       FieldLabel: index.FieldLabel,
       IsCompulsory: index.IsCompulsory,
-      DefaultSort:index.DefaultSort,
+      DefaultSort: index.DefaultSort,
       ListPageSeq: index.ListPageSeq,
       ShowInListPage: index.ShowInListPage,
       ShowInDownload: index.ShowInDownload,
-      DownloadDefaultSelect:index.DownloadDefaultSelect,
+      DownloadDefaultSelect: index.DownloadDefaultSelect,
       ControlType: index.ControlType.value,
       FieldValidation: index.FieldValidation.value,
     }))
@@ -561,7 +566,7 @@ console.log("editDataGatingFromList",editDataGatingFromList)
       PageHeading: values.pageheading,
       PageDescription: values.pagedescription,
       PageDescriptionDetails: values.pageheadingdescription,
-      RelatedPageID: pageList_DropdownSelect.value,
+      RelatedPageID: relatedPage_DropdownSelect.value,
       IsDivisionRequired: values.IsDivisionRequired,
       CreatedBy: 1,
       UpdatedBy: 1,
@@ -594,7 +599,7 @@ console.log("editDataGatingFromList",editDataGatingFromList)
   //  for PageType deropDown
   const PageType_DropdownSelectHandller = (e) => {
     if (e.value === 2) {
-      PageList_DropdownSelectHandller()
+      relatedPage_DropdownSelectHandller()
       setRelatedPageListShowUI(true)
       // let showCheckBox = document.getElementById("inp-showOnMenu")
       // const findShowOnMenu = PageAccessValues.find((element) => {
@@ -619,13 +624,13 @@ console.log("editDataGatingFromList",editDataGatingFromList)
       // showCheckBox.disabled = false
       setPageAccessDropDownView(false);
       dispatch(getPageListSuccess([]));
-      setPageList_DropdownSelect({ value: 0 });
+      setrelatedPage_DropdownSelect({ value: 0 });
     }
     setPageType_DropdownSelect(e);
   };
 
-  const PageList_DropdownSelectHandller = (e) => {
-    setPageList_DropdownSelect(e);
+  const relatedPage_DropdownSelectHandller = (e) => {
+    setrelatedPage_DropdownSelect(e);
   };
 
   // ADD Button handler
@@ -1054,21 +1059,23 @@ console.log("editDataGatingFromList",editDataGatingFromList)
                                 </Col>
 
                                 <Col md="1"> </Col>
-                                {relatedPageListShowUI ? <Col md="3">
-                                  <FormGroup className="mb-3">
-                                    <Label htmlFor="validationCustom01">
-                                      Related Page List
-                                    </Label>
-                                    <Select
-                                      value={pageList_DropdownSelect}
-                                      options={PageList_DropdownOption}
-                                      autoComplete="off"
-                                      onChange={(e) => {
-                                        PageList_DropdownSelectHandller(e);
-                                      }}
-                                    />
-                                  </FormGroup>
-                                </Col> : <></>}
+                                {relatedPageListShowUI ?
+                                  <Col md="3">
+                                    <FormGroup className="mb-3">
+                                      <Label htmlFor="validationCustom01">
+                                        Related Page List
+                                      </Label>
+                                      <Select
+                                        value={relatedPage_DropdownSelect}
+                                        options={PageList_DropdownOption}
+                                        autoComplete="off"
+                                        onChange={(e) => {
+                                          relatedPage_DropdownSelectHandller(e);
+                                        }}
+                                      />
+                                    </FormGroup>
+                                  </Col> : null}
+
 
                               </Row>
 
@@ -1321,7 +1328,7 @@ console.log("editDataGatingFromList",editDataGatingFromList)
                                         // placeholder="select unit"
                                         value={pageFieldTabTable[key].ControlType}
                                         options={ControlTypes_DropdownOptions}
-                                        onChange={(e) => {FieldValidation_Dropdown_Handler(e); PageField_onChange_Handler(e, "ControlType", key) }}
+                                        onChange={(e) => { FieldValidation_Dropdown_Handler(e); PageField_onChange_Handler(e, "ControlType", key) }}
                                       />
                                     </td>
 
@@ -1331,7 +1338,7 @@ console.log("editDataGatingFromList",editDataGatingFromList)
                                         // placeholder="select unit"
                                         value={pageFieldTabTable[key].FieldValidation}
                                         options={FieldValidations_DropdownOptions}
-                                        onChange={(e) => { PageField_onChange_Handler(e, "FieldValidation", key);  }}
+                                        onChange={(e) => { PageField_onChange_Handler(e, "FieldValidation", key); }}
                                       />
                                     </td>
                                     <td>
