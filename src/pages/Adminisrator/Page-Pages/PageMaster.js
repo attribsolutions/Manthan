@@ -39,7 +39,7 @@ const PageMaster = (props) => {
   //*** "isEditdata get all data from ModuleID for Binding  Form controls
   let editDataGatingFromList = props.state;
   let pageModeProps = props.pageMode
-
+console.log("editDataGatingFromList",editDataGatingFromList)
   const [EditData, setEditData] = useState([]);
   const [pageMode, setPageMode] = useState("save");
   const [userPageAccessState, setUserPageAccessState] = useState('');
@@ -167,8 +167,10 @@ const PageMaster = (props) => {
             label: index.FieldValidationName,
             value: index.FieldValidation
           },
+          ControlID:index.ControlID,
           FieldLabel: index.FieldLabel,
           IsCompulsory: index.IsCompulsory,
+          DefaultSort:index.DefaultSort,
           ListPageSeq: index.ListPageSeq,
           ShowInListPage: index.ShowInListPage,
           ShowInDownload: index.ShowInDownload,
@@ -1190,9 +1192,8 @@ const PageMaster = (props) => {
                                           type="checkbox"
                                           className="form-check-input mt-4"
                                           id="customSwitchsizemd"
-                                          checked={EditData.IsDivisionRequired}
+                                          defaultChecked={EditData.IsDivisionRequired}
                                           name="IsDivisionRequired"
-                                          defaultChecked={true}
                                         />
                                         <label
                                           className="form-check-label"
