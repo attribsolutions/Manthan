@@ -13,7 +13,7 @@ import {
 import { AvField, AvForm, } from "availity-reactstrap-validation";
 import Select from "react-select";
 import { MetaTags } from "react-meta-tags";
-import { BreadcrumbShow } from "../../../store/actions";
+import { BreadcrumbShow, getCategoryTypelist } from "../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
 import {
     editCategoryIDSuccess, getMethodForCategory,
@@ -124,7 +124,7 @@ const CategoryMaster = (props) => {
 
     //get method for dropdown
     useEffect(() => {
-        dispatch(getMethodForCategory());
+        dispatch(getCategoryTypelist());
     }, [dispatch]);
 
 

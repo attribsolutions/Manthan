@@ -24,10 +24,6 @@ const AddUser = (props) => {
   let editDataGatingFromList = props.state;
   let pageModeProps = props.pageMode;
 
-  console.log("editDataGatingFromList", editDataGatingFromList)
-
-  
-
   //SetState  Edit data Geting From Modules List component
   const [EditData, setEditData] = useState([]);
   const [pageMode, setPageMode] = useState("save");

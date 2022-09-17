@@ -25,16 +25,6 @@ export const PostMethod_ForCategoryAPISuccess = (data) => ({
   payload: data,
 });
 
-export const getMethodForCategory  = () => ({
-  type: GET_METHOD_HANDLER_FOR_CATEGORY,
-  
-});
-
-export const getMethod_ForCategoryAPISuccess = (Category) => ({
-  type: GET_METHOD_HANDLER_FOR_CATEGORY_SUCCESS,
-  payload: Category,
-});
-
 /// get Product Category Type list 
 export const getCategorylist = () => ({
   type: GET_CATEGORY_LIST,
