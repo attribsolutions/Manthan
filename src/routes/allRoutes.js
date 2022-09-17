@@ -58,6 +58,8 @@ import SubCategoryMaster from "../pages/Adminisrator/SubCategoryPages/SubCategor
 import SubCategoryList from "../pages/Adminisrator/SubCategoryPages/SubCategoryList";
 import VehicleMaster from "../pages/Adminisrator/VehiclePages/VehicleMaster";
 import VehicleList from "../pages/Adminisrator/VehiclePages/VehicleList";
+import DriverMaster from "../pages/Adminisrator/DriverPage/DriverMaster";
+import DriverList from "../pages/Adminisrator/DriverPage/DriverList";
 import CompanyGroupMaster from "../pages/Adminisrator/CompanyGroupPages/CompanyGroupMaster";
 import CompanyGroupList from "../pages/Adminisrator/CompanyGroupPages/CompanyGroupList";
 import PageMasterTab from "../pages/Adminisrator/Page-Pages/PageMasterTab";
@@ -167,6 +169,9 @@ const userRoutes = [
   
   { path: "/VehicleMaster", component: VehicleMaster },
   { path: "/VehicleList", component: VehicleList },
+
+  { path: "/DriverMaster", component: DriverMaster },
+  { path: "/DriverList", component: DriverList },
 
   { path: "/CompanyGroupMaster", component: CompanyGroupMaster },
   { path: "/CompanyGroupList", component: CompanyGroupList },

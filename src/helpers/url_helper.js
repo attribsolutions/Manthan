@@ -118,8 +118,12 @@ export const DRIVERLIST_DROPDOWN = '/Driver'
 export const BASEUNIT_DROPDOWN_API = '/UnitList'
 
 
-//CompantGroup api
+//CompanyGroup api
 export const COMPANYGROUP_API = '/CompanyGroups'
+
+//Driver api
+export const DRIVER_API = '/Driver'
+
 
 //Category Types API
 
