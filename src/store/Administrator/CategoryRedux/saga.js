@@ -45,19 +45,6 @@ function*  Post_Method_ForCategory_GenFun({ data }) {
 }
 
 
-///  ProductTypes dropdown list
-function* get_Method_ForCategory_GenFun() {
-  
-  try {
-    const response = yield call(get_Category_Master_API);
-    yield put(getMethod_ForCategoryAPISuccess(response.Data));
-    console.log("response",response)
-  } catch (error) {
-    console.log("Product Types API page error", error);
-  }
-}
-
-
 // get api
 function* Get_Category_List_GenratorFunction() {
   yield put(SpinnerState(true))
@@ -129,7 +116,6 @@ function* Update_Category_ID_GenratorFunction({ updateData, ID }) {
 
   function*  CategorySaga() {
     yield takeEvery( POST_METHOD_HANDLER_FOR_CATEGORY_API,Post_Method_ForCategory_GenFun)
-    yield takeEvery(GET_METHOD_HANDLER_FOR_CATEGORY, get_Method_ForCategory_GenFun)
     yield takeEvery(GET_CATEGORY_LIST, Get_Category_List_GenratorFunction)
     yield takeEvery(DELETE_CATEGORY_ID, Delete_Category_ID_GenratorFunction)
     yield takeEvery(EDIT_CATEGORY_ID, Edit_Category_ID_GenratorFunction)
