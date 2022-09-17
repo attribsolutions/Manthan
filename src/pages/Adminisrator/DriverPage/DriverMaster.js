@@ -8,98 +8,95 @@ import {
     Container,
     FormGroup,
     Label,
-    Row,
+    Row
 } from "reactstrap";
-import { AvField, AvForm, AvInput, } from "availity-reactstrap-validation";
+import { AvField, AvForm, } from "availity-reactstrap-validation";
 import Select from "react-select";
 import { MetaTags } from "react-meta-tags";
 import { BreadcrumbShow } from "../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
-import {
-    
-    PostMethod_ForCompanyGroupMasterSuccess,
-    editCompanyGroupTypeSuccess,
-    updateCompanyGroupTypeID,
-    PostMethodForCompanyGroupMaster,
-    getMethodForCompanyGroupList
-} from "../../../store/Administrator/CompanyGroupRedux/action";
 import { AlertState } from "../../../store/actions";
 import { CommonGetRoleAccessFunction } from "../../../components/Common/CommonGetRoleAccessFunction";
+import { PostMethodForDriverMaster, getMethodForDriverList, PostMethod_ForDriverMasterSuccess, getMethod_ForDriverListSuccess, editDriverTypeSuccess } from "../../../store/Administrator/DriverRedux/action";
 import { useHistory } from "react-router-dom";
+import Flatpickr from "react-flatpickr"
 
-const CompanyGroupMaster = (props) => {
+// import { actionChannel } from "redux-saga/effects";
 
-    //*** "isEditdata get all data from ModuleID for Binding  Form controls
+
+
+const DriverMaster = (props) => {
+
+    const dispatch = useDispatch();
+    const history = useHistory()
+
     let editDataGatingFromList = props.state;
-    let pageModeProps=props.pageMode;
+    let pageModeProps = props.pageMode;
 
     const formRef = useRef(null);
-    const [EditData, setEditData] = useState([]);
     const [pageMode, setPageMode] = useState("");
-    const dispatch = useDispatch();
-    const [userPageAccessState, setUserPageAccessState] = useState(123);
-    const history = useHistory()
+    const [userPageAccessState, setUserPageAccessState] = useState("");
+    const [EditData, setEditData] = useState([]);
+    const [DOB_Date_Select, setDOB_Date_Select] = useState("");
 
 
     //Access redux store Data /  'save_ModuleSuccess' action data
-    const { PostAPIResponse, CompanyGroupList, RoleAccessModifiedinSingleArray } = useSelector((state) => ({
-        PostAPIResponse: state.CompanyGroupReducer.PostDataMessage,
-        CompanyGroupList: state.CompanyGroupReducer.CompanyGroupList,
-        RoleAccessModifiedinSingleArray: state.Login.RoleAccessUpdateData,
+    const { PostAPIResponse, DriverList, RoleAccessModifiedinSingleArray } = useSelector((state) => ({
+            PostAPIResponse: state.DriverReducer.PostDataMessage,
+            DriverList: state.DriverReducer.DriverList,
+            RoleAccessModifiedinSingleArray: state.Login.RoleAccessUpdateData,
 
-    }));
+        }));
 
 
     useEffect(() => {
-        dispatch(PostMethodForCompanyGroupMaster());
-        dispatch(getMethodForCompanyGroupList());
+         dispatch(getMethodForDriverList());
         
     }, [dispatch]);
 
-
-
     //userAccess useEffect
     useEffect(() => {
-       
+        debugger
         let userAcc = undefined
         if ((editDataGatingFromList === undefined)) {
-
-            let locationPath = history.location.pathname;
-            userAcc = RoleAccessModifiedinSingleArray.find((inx) => {
-                return (`/${inx.ActualPagePath}` === locationPath)
-            })
+    
+          let locationPath = history.location.pathname
+          userAcc = RoleAccessModifiedinSingleArray.find((inx) => {
+            return (`/${inx.ActualPagePath}` === locationPath)
+          })
         }
         else if (!(editDataGatingFromList === undefined)) {
-            let relatatedPage = props.relatatedPage
-            userAcc = RoleAccessModifiedinSingleArray.find((inx) => {
-                return (`/${inx.ActualPagePath}` === relatatedPage)
-            })
-
+          let relatatedPage = props.relatatedPage
+          userAcc = RoleAccessModifiedinSingleArray.find((inx) => {
+            return (`/${inx.ActualPagePath}` === relatatedPage)
+          })
+    
         }
         if (!(userAcc === undefined)) {
-            setUserPageAccessState(userAcc)
+          setUserPageAccessState(userAcc)
         }
-
-    }, [RoleAccessModifiedinSingleArray])
-
+    
+      }, [RoleAccessModifiedinSingleArray])
+    
     // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
     useEffect(() => {
+
         if (!(userPageAccessState === '')) { document.getElementById("txtName").focus(); }
         if (!(editDataGatingFromList === undefined)) {
+            
             setEditData(editDataGatingFromList);
             setPageMode(pageModeProps);
-            dispatch(editCompanyGroupTypeSuccess({ Status: false }))
-            dispatch(BreadcrumbShow(editDataGatingFromList.Name))
+
+            dispatch(editDriverTypeSuccess({ Status: false }))
+            dispatch(BreadcrumbShow(editDataGatingFromList.DriverMaster))
             return
         }
     }, [editDataGatingFromList])
 
 
     useEffect(() => {
-        
         if ((PostAPIResponse.Status === true) && (PostAPIResponse.StatusCode === 200)) {
-            // setCategoryTypes_dropdown_Select('')
-            dispatch(PostMethod_ForCompanyGroupMasterSuccess({ Status: false }))
+            dispatch(PostMethod_ForDriverMasterSuccess({ Status: false }))
             formRef.current.reset();
             if (pageMode === "dropdownAdd") {
                 dispatch(AlertState({
@@ -113,16 +110,16 @@ const CompanyGroupMaster = (props) => {
                     Type: 1,
                     Status: true,
                     Message: PostAPIResponse.Message,
-                    RedirectPath: '/CompanyGroupList',
+                    RedirectPath: '/DriverList',
                 }))
             }
         }
         else if (PostAPIResponse.Status === true) {
-            dispatch(PostMethod_ForCompanyGroupMasterSuccess({ Status: false }))
+            dispatch(getMethod_ForDriverListSuccess({ Status: false }))
             dispatch(AlertState({
                 Type: 4,
                 Status: true,
-                Message: JSON.stringify(PostAPIResponse.Message),
+                Message: JSON.stringify(postMessage.Message),
                 RedirectPath: false,
                 AfterResponseAction: false
             }));
@@ -130,26 +127,21 @@ const CompanyGroupMaster = (props) => {
     }, [PostAPIResponse])
 
 
-    
-
     const FormSubmitButton_Handler = (event, values) => {
         const jsonBody = JSON.stringify({
-            CompanyGroup: values.CompanyGroup,
-            CompanyDescription:values.CompanyDescription
+            Name: values.Name,
+            Address: values.Address,
+            DOB: DOB_Date_Select,
+            UID: values.UID
         });
-
-        if (pageMode === "edit") {
-            dispatch(updateCompanyGroupTypeID(jsonBody, EditData.id));
-        }
-        else {
-            dispatch(PostMethodForCompanyGroupMaster(jsonBody));
-        }
+        dispatch(PostMethodForDriverMaster(jsonBody));
     };
 
+    
 
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
     var IsEditMode_Css = ''
-    if ((pageMode === "edit")||(pageMode==="copy")||(pageMode==="dropdownAdd")) { IsEditMode_Css = "-5.5%" };
+    if ((pageMode === "edit") || (pageMode === "copy") || (pageMode === "dropdownAdd")) { IsEditMode_Css = "-5.5%" };
 
     if (!(userPageAccessState === '')) {
         return (
@@ -157,9 +149,9 @@ const CompanyGroupMaster = (props) => {
                 <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
                     <Container fluid>
                         <MetaTags>
-                            <title>CompanyGroupMaster | FoodERP-React FrontEnd</title>
+                            <title>DriverMaster | FoodERP-React FrontEnd</title>
                         </MetaTags>
-                        <Breadcrumb breadcrumbItem={"CompanyGroupMaster"} />
+                        <Breadcrumb breadcrumbItem={userPageAccessState.PageHeading} />
 
                         <Card className="text-black">
                             <CardHeader className="card-header   text-black" style={{ backgroundColor: "#dddddd" }} >
@@ -169,65 +161,84 @@ const CompanyGroupMaster = (props) => {
 
                             <CardBody className=" vh-10 0 text-black" style={{ backgroundColor: "#whitesmoke" }} >
                                 <AvForm onValidSubmit={(e, v) => { FormSubmitButton_Handler(e, v) }}
-                                    ref={formRef}
-                                >
+                                    ref={formRef}>
                                     <Row className="">
                                         <Col md={12}>
                                             <Card>
                                                 <CardBody style={{ backgroundColor: "whitesmoke" }}>
                                                     <Row>
                                                         <FormGroup className="mb-2 col col-sm-4 ">
-                                                            <Label htmlFor="validationCustom01">Company Group </Label>
+                                                            <Label htmlFor="validationCustom01">Name </Label>
                                                             <AvField
                                                                 name="Name"
                                                                 id="txtName"
                                                                 value={EditData.Name}
                                                                 type="text"
-                                                                placeholder="Please Enter Company Group"
+                                                                placeholder="Please Enter Name"
                                                                 autoComplete='off'
                                                                 validate={{
-                                                                    required: { value: true, errorMessage: 'Please Enter Company Group' },
+                                                                    required: { value: true, errorMessage: 'Please Enter Name ' },
                                                                 }}
                                                                 onChange={(e) => { dispatch(BreadcrumbShow(e.target.value)) }}
                                                             />
                                                         </FormGroup>
-                                                         </Row>
+                                                        <Row>
+                                                            <Col md="4">
+                                                            <FormGroup className="mb-3">
+                                                            <Label>Date of Birth</Label>
+                                                           <Flatpickr
+                                                                      id="FSSAIExipry"
+                                                                      name="FSSAIExipry"
+                                                                      value={DOB_Date_Select}
+                                                                      className="form-control d-block p-2 bg-white text-dark"
+                                                                      placeholder="YYYY-MM-DD"
+                                                                      autoComplete='off'
+                                                                      options={{
+                                                                      altInput: true,
+                                                                      altFormat: "F j, Y",
+                                                                      dateFormat: "Y-m-d"
+                                                                                      }}
+                                                                      onChange={(selectedDates, dateStr, instance) => {
+                                                                      setDOB_Date_Select(dateStr)
+                                                                                  }}
+                                                                                   />
+                                                                     </FormGroup>
+                                                                    </Col>
+                                                                   </Row>
 
                                                         <Row>
                                                         <FormGroup className="mb-2 col col-sm-4 ">
-                                                            <Label htmlFor="validationCustom01">Company Description </Label>
+                                                            <Label htmlFor="validationCustom01">Address </Label>
                                                             <AvField
-                                                                name="CompanyDescription"
-                                                                id="CompanyDescription"
-                                                                value={EditData.CompanyDescription}
+                                                                name="Address"
+                                                                value={EditData.Address}
                                                                 type="text"
-                                                                placeholder="Please Enter Description"
+                                                                placeholder="Please Enter Address"
                                                                 autoComplete='off'
                                                                 validate={{
-                                                                    required: { value: true, errorMessage: 'Please Enter Description' },
+                                                                    required: { value: true, errorMessage: 'Please Enter Address ' },
                                                                 }}
-                                                               
+                                                                unChange={(e) => { dispatch(BreadcrumbShow(e.target.value)) }}
                                                             />
                                                         </FormGroup>
+                                                       </Row>
 
-                                                        <Row>
-                                                        <FormGroup className="mb-2 col col-sm-5">
-                                                            <Row className="justify-content-md-left">
-                                                                <Label htmlFor="horizontal-firstname-input" className="col-sm-3 col-form-label" >IsActive </Label>
-                                                                <Col md={2} style={{ marginTop: '9px' }} >
-                                                                    <div className="form-check form-switch form-switch-md mb-3" dir="ltr">
-                                                                        <AvInput type="checkbox" className="form-check-input" id="customSwitchsizemd"
-                                                                            defaultChecked={EditData.IsActive}
-                                                                            name="IsActive"
-                                                                        // defaultChecked
-                                                                        />
-                                                                        <label className="form-check-label" htmlFor="customSwitchsizemd"></label>
-                                                                    </div>
-                                                                </Col>
-                                                            </Row>
+                                                       <Row>
+                                                        <FormGroup className="mb-2 col col-sm-4 ">
+                                                            <Label htmlFor="validationCustom01">UID </Label>
+                                                            <AvField
+                                                                name="UID"
+                                                                value={EditData.UID}
+                                                                type="text"
+                                                                placeholder="Please Enter UID"
+                                                                autoComplete='off'
+                                                                validate={{
+                                                                    required: { value: true, errorMessage: 'Please Enter UID ' },
+                                                                }}
+                                                                unChange={(e) => { dispatch(BreadcrumbShow(e.target.value)) }}
+                                                            />
                                                         </FormGroup>
-                                                    </Row>
-
+                                                       </Row>
                                                         <FormGroup>
                                                             <Row>
                                                                 <Col sm={2}>
@@ -237,22 +248,21 @@ const CompanyGroupMaster = (props) => {
                                                                                 userPageAccessState.RoleAccess_IsEdit ?
                                                                                     <button
                                                                                         type="submit"
-                                                                                        data-mdb-toggle="tooltip" data-mdb-placement="top" title="Update Company Group Type"
-                                                                                        className="btn btn-success w-md"
+                                                                                        data-mdb-toggle="tooltip" data-mdb-placement="top" title="Update Party Type"
+                                                                                        className="btn btn-success w-md mt-3"
                                                                                     >
                                                                                         <i class="fas fa-edit me-2"></i>Update
                                                                                     </button>
                                                                                     :
                                                                                     <></>
                                                                                 : (
+                                                                                    
                                                                                     userPageAccessState.RoleAccess_IsSave ?
                                                                                         <button
                                                                                             type="submit"
-                                                                                            data-mdb-toggle="tooltip" data-mdb-placement="top" title="Save Company group "
-                                                                                            className="btn btn-primary w-sm">
-                                                                                            <i className="fas fa-save me-2"></i>
-                                                                                            Save
-
+                                                                                            data-mdb-toggle="tooltip" data-mdb-placement="top" title="Save Party Type"
+                                                                                            className="btn btn-primary w-md mt-3 "
+                                                                                        > <i className="fas fa-save me-2"></i> Save
                                                                                         </button>
                                                                                         :
                                                                                         <></>
@@ -261,7 +271,7 @@ const CompanyGroupMaster = (props) => {
                                                                     </div>
                                                                 </Col>
                                                             </Row>
-                                                        </FormGroup >
+                                                        </FormGroup>
                                                     </Row>
 
                                                 </CardBody>
@@ -270,14 +280,11 @@ const CompanyGroupMaster = (props) => {
                                     </Row>
                                 </AvForm>
                             </CardBody>
-
-
-
                         </Card>
 
                     </Container>
                 </div>
-            </React.Fragment >
+            </React.Fragment>
         );
     }
     else {
@@ -287,5 +294,5 @@ const CompanyGroupMaster = (props) => {
     }
 };
 
-export default CompanyGroupMaster
+export default DriverMaster
 

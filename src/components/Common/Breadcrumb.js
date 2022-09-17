@@ -40,6 +40,7 @@ const Breadcrumb = props => {
 
   // New Button Handller
   const NewButtonHandeller = () => {
+
     let pathName = history.location.pathname
 
     let userAcc = RoleAccessModifiedinSingleArray.find((inx) => {
@@ -52,23 +53,23 @@ const Breadcrumb = props => {
       return
     }
     //  if (listPagePath.RoleAccess_IsShowOnMenu) {
-      history.push({
-        pathname: `/${listPagePath.ActualPagePath}`,
-      })
+    history.push({
+      pathname: `/${listPagePath.ActualPagePath}`,
+    })
     // }else{
     //   setIsRedirectNewButton(true)
     // }
 
 
-    }
+  }
 
 
-  
+
 
   // Onfocus Search Box
   useEffect(() => {
     // document.getElementById("search-bar-0").focus();
-    // debugger
+    debugger
     if (!(props.IsSearchVissible === undefined)) {
     }
     history.listen(location => dispatch(BreadcrumbShow('')));
@@ -117,13 +118,13 @@ const Breadcrumb = props => {
         document.getElementById(`chckbox${i}`).checked = true
       }
     }
-     else {
+    else {
       for (var i = 0; i < ListData.length; i++) {
         document.getElementById(`chckbox${i}`).checked = false
       }
     }
   };
-  
+
 
   return (
     <React.Fragment>
@@ -170,7 +171,7 @@ const Breadcrumb = props => {
                           type="checkbox"
                           id={`chckbox${key}`}
                           name={index}
-                          checked={key ?.isChecked || false}
+                          checked={key?.isChecked || false}
                           onChange={() => { handleChange() }}
                         />&nbsp;&nbsp;&nbsp;
                         <label className="form-label text-black"> {index} </label>
@@ -223,9 +224,14 @@ const Breadcrumb = props => {
                     <label className="font-size-20  col-ls-6 col-form-label text-black" style={{ marginLeft: "6px" }}>{props.breadcrumbItem}</label>
                     {/* {bredcrumbName.length > 0 ? <label className="font-size-24 form-label  text-nowrap bd-highlight text-secondary" style={{ paddingLeft: "7px" }} >&nbsp;/ <kbd className="bg-light text-secondary">{bredcrumbName}</kbd></label>
                     : <></>} */}
-                    {bredcrumbName.length > 0 ? <label className="font-size-24 form-label  text-nowrap bd-highlight text-primary" style={{ paddingLeft: "7px", color: "#5156be" }} >&nbsp;/&nbsp;{bredcrumbName}</label>
-                      : <></>}
-                    {/* color:"#5156be" */}
+
+                    {!bredcrumbName === "" ?
+                      bredcrumbName.length > 0 ?
+                        <label className="font-size-24 form-label  text-nowrap bd-highlight text-primary"
+                          style={{ paddingLeft: "7px", color: "#5156be" }} >&nbsp;/&nbsp;{bredcrumbName}</label>
+                        : <></>
+                      : null
+                    }
                   </Col>
                 </Row>
             }

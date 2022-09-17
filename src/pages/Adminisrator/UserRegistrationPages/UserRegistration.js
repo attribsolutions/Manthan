@@ -23,7 +23,7 @@ const AddUser = (props) => {
   //*** "isEditdata get all data from ModuleID for Binding  Form controls
   let editDataGatingFromList = props.state;
   let pageModeProps = props.pageMode;
-  
+
   //SetState  Edit data Geting From Modules List component
   const [EditData, setEditData] = useState([]);
   const [pageMode, setPageMode] = useState("save");
@@ -138,13 +138,6 @@ console.log(editDataGatingFromList,"editDataGatingFromList")
       setUserPartiesForUserMaster(editDataGatingFromList.UserRole)
 
 
-      let arraynew = []
-      editDataGatingFromList.UserRole.map((i) => {
-        i.PartyRoles.map((i2) => {
-          arraynew.push({ Party: i.Party, Role: i2.Role })
-        })
-      })
-    
       setPartyRoleData(editDataGatingFromList.UserRole)
       // setRoleDropDown(editDataGatingFromList.UserRole)
       return

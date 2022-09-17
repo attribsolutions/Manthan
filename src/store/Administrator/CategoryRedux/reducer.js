@@ -25,12 +25,6 @@ const CategoryReducer = (state = INIT_STATE, action) => {
         PostDataMessage: action.payload,
       }
 
-    case GET_METHOD_HANDLER_FOR_CATEGORY_SUCCESS:
-      return {
-        ...state,
-        CategoryAPI: action.payload,
-      }
-
     // get api
     case GET_CATEGORY_LIST_SUCCESS:
       return {
