@@ -1,9 +1,9 @@
 import React, { useState, useRef, useEffect } from "react";
 import Select from "react-select";
-import { Card, CardBody, Col, Container, Row, CardHeader, Label, Button, FormGroup, Table } from "reactstrap";
+import { Card, CardBody, Col, Container, Row, CardHeader, Label,  FormGroup,  } from "reactstrap";
 import { AvForm, AvInput } from "availity-reactstrap-validation";
 import { useDispatch, useSelector } from "react-redux";
-import { getEmployee, getRoles, addUser, updateID, addUserSuccess, GetUserPartiesForUserMastePage, getEmployeeForUseRegistration }
+import {  getRoles, addUser, updateID, addUserSuccess, GetUserPartiesForUserMastePage, getEmployeeForUseRegistration }
   from "../../../store/Administrator/UserRegistrationRedux/actions";
 import Breadcrumb from "../../../components/Common/Breadcrumb";
 import AvField from "availity-reactstrap-validation/lib/AvField";
@@ -23,7 +23,11 @@ const AddUser = (props) => {
   //*** "isEditdata get all data from ModuleID for Binding  Form controls
   let editDataGatingFromList = props.state;
   let pageModeProps = props.pageMode;
+
   console.log("editDataGatingFromList", editDataGatingFromList)
+
+  
+
   //SetState  Edit data Geting From Modules List component
   const [EditData, setEditData] = useState([]);
   const [pageMode, setPageMode] = useState("save");
@@ -32,7 +36,7 @@ const AddUser = (props) => {
   const [partyRoleData, setPartyRoleData] = useState([]);
   const [EmployeeSelect, setEmployeeSelect] = useState("");
   const [userPartiesForUserMaster, setUserPartiesForUserMaster] = useState([]);
-
+console.log(editDataGatingFromList,"editDataGatingFromList")
   // M_Roles DropDown
   const [RoleDropDown, setRoleDropDown] = useState([]);
 
@@ -138,13 +142,15 @@ const AddUser = (props) => {
       setUserPartiesForUserMaster(editDataGatingFromList.UserRole)
 
 
-      // let arraynew = []
-      // editDataGatingFromList.UserRole.map((i) => {
-      //   i.PartyRoles.map((i2) => {
-      //     arraynew.push({ Party: i.Party, Role: i2.Role })
-      //   })
-      // })
+      let arraynew = []
+      editDataGatingFromList.UserRole.map((i) => {
+        i.PartyRoles.map((i2) => {
+          arraynew.push({ Party: i.Party, Role: i2.Role })
+        })
+      })
+    
       setPartyRoleData(editDataGatingFromList.UserRole)
+      // setRoleDropDown(editDataGatingFromList.UserRole)
       return
     }
  
@@ -511,7 +517,7 @@ const AddUser = (props) => {
                                 <i className="dripicons-plus "></i>
                               </Button>
                             </Col> */}
-                            {!(FindPartyID) ? userPartiesForUserMaster.length > 0 ?
+                            {!(userPartiesForUserMaster.length === 0) ? userPartiesForUserMaster[0].Party>0 ?
                               <Col sm={6} style={{ marginTop: '28px' }}>
 
                                 {partyRoleData ? (
@@ -521,9 +527,22 @@ const AddUser = (props) => {
                                 ) :
                                   null
                                 }
-                              </Col> : null : <></>}
+                              </Col> :<div className="col-lg-3 col-md-6">
+                              <div className="mb-3">
+                                <Label className="form-label font-size-13 ">Role name</Label>
+                               
+                  <Select
+                    defaultValue={pageMode === "edit" ? userPartiesForUserMaster[0].PartyRoles.map((i) => ({ value: i.Role, label: i.RoleName })) : null}
+                    options={RolesValues}
+                    isMulti={true}
+                    className="basic-multi-select"
+                    onChange={(event) => { RoleDropDown_select_handler(event, userPartiesForUserMaster[0], 0) }}
+                    classNamePrefix="select2-selection"
+                  />
+                              </div>
+                            </div> : <></>}
 
-                            {FindPartyID ? <div className="col-lg-3 col-md-6">
+                            {/* {FindPartyID ? <div className="col-lg-3 col-md-6">
                               <div className="mb-3">
                                 <Label className="form-label font-size-13 ">Role name</Label>
                                 <Select
@@ -535,7 +554,7 @@ const AddUser = (props) => {
                                   classNamePrefix="select2-selection"
                                 />
                               </div>
-                            </div> : <></>}
+                            </div> : <></>} */}
 
                             <Row >
                               <Col sm={2}>

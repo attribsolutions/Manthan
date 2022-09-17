@@ -123,8 +123,9 @@ export const getControlTypesSuccess = (data) => ({
   payload: data,
 });
 // FieldValidations
-export const getFieldValidations = () => ({
+export const getFieldValidations = (id) => ({
   type: GET_FIELD_VALIDATIONS,
+  id
 });
 
 export const getFieldValidationsSuccess = (data) => ({
