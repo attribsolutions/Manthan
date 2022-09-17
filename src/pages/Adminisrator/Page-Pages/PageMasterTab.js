@@ -75,22 +75,10 @@ const PageMaster = (props) => {
         modulePostAPIResponse: state.Modules.modulesSubmitSuccesss
       })
     );
+
   // userAccess useEffect
   useEffect(() => {
-    // debugger
-
-    // if ((editDataGatingFromList === undefined)) {
-    //   const userAcc = CommonGetRoleAccessFunction(history)
-    //   if (!(userAcc === undefined)) {
-    //     setUserPageAccessState(userAcc)
-    //   }
-    // } else {
-    //   let RelatedPageID = history.location.state.UserDetails.RelatedPageID
-    //   const userfound = RoleAccessModifiedinSingleArray.find((element) => {
-    //     return element.id === RelatedPageID
-    //   })
-    //   setUserPageAccessState(userfound)
-    // }
+    
 
     let userAcc = undefined
     if ((editDataGatingFromList === undefined)) {
@@ -110,7 +98,6 @@ const PageMaster = (props) => {
     if (!(userAcc === undefined)) {
       setUserPageAccessState(userAcc)
     }
-
 
   }, [RoleAccessModifiedinSingleArray])
 
@@ -222,10 +209,6 @@ const PageMaster = (props) => {
     }
 
   }, [modulePostAPIResponse])
-
-
-
-
 
   const PageAccessValues = PageAccess.map((Data) => ({
     value: Data.id,
@@ -777,6 +760,7 @@ const PageMaster = (props) => {
                       </Row>
                     </CardBody>
                   </Card>
+                  
                   {pageAccessDropDownView ? (
                     <Card className=" mt-n2 text-black">
                       <CardBody style={{ backgroundColor: "whitesmoke" }}>
