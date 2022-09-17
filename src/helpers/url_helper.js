@@ -114,12 +114,12 @@ export const SUB_CATEGORY_API = '/SubCategorys'
 //Vehicle api
 export const VEHICLE_API = '/Vehicle'
 export const VEHICLETYPES_DROPDOWN = '/VehicleTypes'
-export const DRIVERLIST_DROPDOWN = '/DriverList'
+export const DRIVERLIST_DROPDOWN = '/Driver'
 export const BASEUNIT_DROPDOWN_API = '/UnitList'
 
 
 //CompantGroup api
-export const COMPANYGROUP_API = '/CompanyGroup'
+export const COMPANYGROUP_API = '/CompanyGroups'
 
 //Category Types API
 

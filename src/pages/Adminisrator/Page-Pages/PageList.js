@@ -13,6 +13,7 @@ import {
   deleteModuleIDSuccess,
   editHPagesID,
   GetHpageListData,
+  saveHPagesSuccess,
   updateHPagesSuccess,
 } from "../../../store/Administrator/HPagesRedux/actions";
 import Breadcrumbs from "../../../components/Common/Breadcrumb";
@@ -30,14 +31,14 @@ export default function PageList() {
   const [modal_center, setmodal_center] = useState(false);
 
   // var HPageListData = [];
-  const { HPageListData, editData, updateMessage, deleteModuleID,RoleAccessModifiedinSingleArray } =
+  const { HPageListData, editData, updateMessage, deleteModuleID,RoleAccessModifiedinSingleArray,PostAPIResponse} =
     useSelector((state) => ({
       HPageListData: state.H_Pages.HPagesListData,
       editData: state.H_Pages.editData,
       updateMessage: state.H_Pages.updateMessage,
       deleteModuleID: state.H_Pages.deleteModuleID,
       RoleAccessModifiedinSingleArray: state.Login.RoleAccessUpdateData,
-      
+      PostAPIResponse: state.H_Pages.saveMessage,
     }));
 
     useEffect(() => {
@@ -105,6 +106,32 @@ export default function PageList() {
       );
     }
   }, [deleteModuleID.Status]);
+
+
+  useEffect(() => {
+
+    if ((PostAPIResponse.Status === true) && (PostAPIResponse.StatusCode === 200)) {
+        dispatch(saveHPagesSuccess({ Status: false }))
+        tog_center();
+        dispatch(GetHpageListData());
+        dispatch(AlertState({
+            Type: 1,
+            Status: true,
+            Message: PostAPIResponse.Message,
+        }))
+    }
+
+    else if ((PostAPIResponse.Status === true)) {
+        dispatch(saveHPagesSuccess({ Status: false }))
+        dispatch(AlertState({
+            Type: 4,
+            Status: true,
+            Message: JSON.stringify(PostAPIResponse.Message),
+            RedirectPath: false,
+            AfterResponseAction: false
+        }));
+    }
+}, [PostAPIResponse.Status])
 
   useEffect(() => {
     if (editData.Status === true) {

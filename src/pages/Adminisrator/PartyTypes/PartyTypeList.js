@@ -14,7 +14,7 @@ import "../../../assets/scss/CustomeTable/datatables.scss";
 import { MetaTags } from "react-meta-tags";
 import { useHistory } from "react-router-dom";
 import { CommonGetRoleAccessFunction } from "../../../components/Common/CommonGetRoleAccessFunction";
-import { deletePartyTypeIDSuccess, delete_PartyType_ID, editPartyTypeId, getPartyTypelist, updatePartyTypeIDSuccess } from "../../../store/Administrator/PartyTypeRedux/action";
+import { deletePartyTypeIDSuccess, delete_PartyType_ID, editPartyTypeId, getPartyTypelist, PostPartyTypeAPISuccess, updatePartyTypeIDSuccess } from "../../../store/Administrator/PartyTypeRedux/action";
 import PartyType from "./PartyType";
 
 const PartyTypeList = (props) => {
@@ -26,13 +26,14 @@ const PartyTypeList = (props) => {
   const [modal_center, setmodal_center] = useState(false);
 
   // get Access redux data
-  const { TableListData, editData, updateMessage, deleteMessage,RoleAccessModifiedinSingleArray } = useSelector(
+  const { TableListData, editData, updateMessage, deleteMessage,RoleAccessModifiedinSingleArray,PostAPIResponse } = useSelector(
     (state) => ({
       TableListData: state.PartyTypeReducer.ListData,
       editData: state.PartyTypeReducer.editData,
       updateMessage: state.PartyTypeReducer.updateMessage,
       deleteMessage: state.PartyTypeReducer.deleteMessage,
       RoleAccessModifiedinSingleArray: state.Login.RoleAccessUpdateData,
+      PostAPIResponse: state.PartyTypeReducer.PostData,
     })
   );
 
@@ -99,6 +100,31 @@ const PartyTypeList = (props) => {
       );
     }
   }, [deleteMessage]);
+
+  useEffect(() => {
+
+    if ((PostAPIResponse.Status === true) && (PostAPIResponse.StatusCode === 200)) {
+        dispatch(PostPartyTypeAPISuccess({ Status: false }))
+        tog_center();
+        dispatch(getPartyTypelist());
+        dispatch(AlertState({
+            Type: 1,
+            Status: true,
+            Message: PostAPIResponse.Message,
+        }))
+    }
+
+    else if ((PostAPIResponse.Status === true)) {
+        dispatch(PostPartyTypeAPISuccess({ Status: false }))
+        dispatch(AlertState({
+            Type: 4,
+            Status: true,
+            Message: JSON.stringify(PostAPIResponse.Message),
+            RedirectPath: false,
+            AfterResponseAction: false
+        }));
+    }
+}, [PostAPIResponse.Status])
 
   // Edit Modal Show When Edit Data is true
   useEffect(() => {

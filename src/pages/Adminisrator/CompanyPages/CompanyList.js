@@ -12,6 +12,7 @@ import {
     fetchCompanyList,
     updateCompanyIDSuccess,
     deleteCompanyIDSuccess,
+    PostCompanySubmitSuccess,
 } from "../../../store/Administrator/CompanyRedux/actions";
 import Breadcrumbs from "../../../components/Common/Breadcrumb";
 
@@ -40,8 +41,9 @@ const CompanyList = () => {
     const [modal_center, setmodal_center] = useState(false);
 
     // get Access redux data
-    const { TableListData, editData, updateMessage, deleteCompanyID,RoleAccessModifiedinSingleArray } = useSelector((state) => ({
+    const { TableListData, editData, updateMessage, deleteCompanyID, RoleAccessModifiedinSingleArray, PostAPIResponse } = useSelector((state) => ({
         TableListData: state.Company.companyList,
+        PostAPIResponse: state.Company.companySubmitSuccesss,
         RoleAccessModifiedinSingleArray: state.Login.RoleAccessUpdateData,
         editData: state.Company.editData,
         updateMessage: state.Company.updateMessage,
@@ -106,6 +108,32 @@ const CompanyList = () => {
         }
     }, [deleteCompanyID.Status])
 
+
+    useEffect(() => {
+
+        if ((PostAPIResponse.Status === true) && (PostAPIResponse.StatusCode === 200)) {
+            dispatch(PostCompanySubmitSuccess({ Status: false }))
+            tog_center();
+            dispatch(fetchCompanyList());
+            dispatch(AlertState({
+                Type: 1,
+                Status: true,
+                Message: PostAPIResponse.Message,
+            }))
+        }
+
+        else if ((PostAPIResponse.Status === true)) {
+            dispatch(PostCompanySubmitSuccess({ Status: false }))
+            dispatch(AlertState({
+                Type: 4,
+                Status: true,
+                Message: JSON.stringify(PostAPIResponse.Message),
+                RedirectPath: false,
+                AfterResponseAction: false
+            }));
+        }
+    }, [PostAPIResponse.Status])
+    
     // Edit Modal Show When Edit Data is true
     useEffect(() => {
         if (editData.Status === true) {
@@ -161,7 +189,7 @@ const CompanyList = () => {
         listPageCommonButtonFunction({
             dispatchHook: dispatch,
             ButtonMsgLable: "Company",
-            deleteName:"Name",
+            deleteName: "Name",
             userPageAccessState: userPageAccessState,
             editActionFun: editCompanyID,
             deleteActionFun: deleteCompany_ID

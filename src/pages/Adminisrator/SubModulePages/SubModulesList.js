@@ -23,6 +23,7 @@ import {
     getSubModules, updateSubModuleSuccess
 } from "../../../store/Administrator/SubModulesRedux/actions";
 import SubModules from './SubModules'
+import { PostModelsSubmitSuccess } from "../../../store/actions";
 
 const SubModulesList = () => {
 
@@ -30,10 +31,11 @@ const SubModulesList = () => {
     const [modal_center, setmodal_center] = useState(false);
 
     // get Access redux data
-    const { TableListData, editData, updateMessage } = useSelector((state) => ({
+    const { TableListData, editData, updateMessage ,PostAPIResponse} = useSelector((state) => ({
         TableListData: state.SubModules.ListData,
         editData: state.SubModules.editData,
         updateMessage: state.SubModules.updateMessage,
+        PostAPIResponse: state.Modules.modulesSubmitSuccesss,
     }));
 
     // tag_center -- Control the Edit Modal show and close
@@ -59,10 +61,36 @@ const SubModulesList = () => {
         }
     }, [editData,updateMessage]);
 
+
+    useEffect(() => {
+
+        if ((PostAPIResponse.Status === true) && (PostAPIResponse.StatusCode === 200)) {
+            dispatch(PostModelsSubmitSuccess({ Status: false }))
+            tog_center();
+            dispatch(getSubModules());
+            dispatch(AlertState({
+                Type: 1,
+                Status: true,
+                Message: PostAPIResponse.Message,
+            }))
+        }
+    
+        else if ((PostAPIResponse.Status === true)) {
+            dispatch(PostModelsSubmitSuccess({ Status: false }))
+            dispatch(AlertState({
+                Type: 4,
+                Status: true,
+                Message: JSON.stringify(PostAPIResponse.Message),
+                RedirectPath: false,
+                AfterResponseAction: false
+            }));
+        }
+    }, [PostAPIResponse.Status])
     // Edit button Handller
     const EditPageHandler = (id) => {
         dispatch(GetSubModuleEditDataUsingID(id));
     }
+
 
     //Delete Button Handller
     const deleteHandeler = (id, name) => {
