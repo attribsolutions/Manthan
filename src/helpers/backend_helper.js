@@ -176,6 +176,7 @@ export const getSubModulesEditDataUsingID_ApiCall = (id) => get(`${url.H_SUB_MOD
 export const putUpdateSubModule = (Data, id) => put(`${url.H_SUB_MODULES_API_URL}/${id}`, Data)/// update api
 
 //H_pages
+
 export const get_Module_HPages = () => get(url.H_MODULES_API_URL)// Get subModule For H_pages
 export const Fetch_HPagesListApi = () => get(url.H_PAGES_API_URL)//get H_Pages List 
 export const GetFieldValidationOnControlType_DropDown_API = (id) => get(`${url.GET_FIELD_VALIDATIONS_DROPDOWN_API}/${id}`)//  GetFieldValidationOnControlType DropDown API
