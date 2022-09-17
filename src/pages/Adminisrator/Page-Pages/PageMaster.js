@@ -1192,9 +1192,8 @@ console.log("editDataGatingFromList",editDataGatingFromList)
                                           type="checkbox"
                                           className="form-check-input mt-4"
                                           id="customSwitchsizemd"
-                                          checked={EditData.IsDivisionRequired}
+                                          defaultChecked={EditData.IsDivisionRequired}
                                           name="IsDivisionRequired"
-                                          defaultChecked={true}
                                         />
                                         <label
                                           className="form-check-label"
