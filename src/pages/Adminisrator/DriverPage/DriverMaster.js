@@ -9,14 +9,13 @@ import {
     FormGroup,
     Label,
     Row,
-   
+
 } from "reactstrap";
 import { AvField, AvForm, } from "availity-reactstrap-validation";
 import Select from "react-select";
 import { MetaTags } from "react-meta-tags";
 import { BreadcrumbShow } from "../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
-import { Tbody, Thead } from "react-super-responsive-table";
 import { AlertState } from "../../../store/actions";
 import { CommonGetRoleAccessFunction } from "../../../components/Common/CommonGetRoleAccessFunction";
 import { PostMethodForDriverMaster, getMethodForDriverList, PostMethod_ForDriverMasterSuccess, getMethod_ForDriverListSuccess, editDriverTypeSuccess } from "../../../store/Administrator/DriverRedux/action";
@@ -42,8 +41,8 @@ const DriverMaster = (props) => {
 
     //Access redux store Data /  'save_ModuleSuccess' action data
     const { PostAPIResponse, DriverList, RoleAccessModifiedinSingleArray } = useSelector((state) => ({
-            PostAPIResponse: state.VehicleReducer.PostDataMessage,
-            DriverList: state.VehicleReducer.DriverList,
+            PostAPIResponse: state.DriverReducer.PostDataMessage,
+            DriverList: state.DriverReducer.DriverList,
             RoleAccessModifiedinSingleArray: state.Login.RoleAccessUpdateData,
 
         }));
@@ -96,7 +95,6 @@ const DriverMaster = (props) => {
 
     useEffect(() => {
         if ((PostAPIResponse.Status === true) && (PostAPIResponse.StatusCode === 200)) {
-            // setSubCategory_dropdown_Select('')
             dispatch(PostMethod_ForDriverMasterSuccess({ Status: false }))
             formRef.current.reset();
             if (pageMode === "dropdownAdd") {
