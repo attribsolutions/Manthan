@@ -138,13 +138,6 @@ console.log(editDataGatingFromList,"editDataGatingFromList")
       setUserPartiesForUserMaster(editDataGatingFromList.UserRole)
 
 
-      let arraynew = []
-      editDataGatingFromList.UserRole.map((i) => {
-        i.PartyRoles.map((i2) => {
-          arraynew.push({ Party: i.Party, Role: i2.Role })
-        })
-      })
-    
       setPartyRoleData(editDataGatingFromList.UserRole)
       // setRoleDropDown(editDataGatingFromList.UserRole)
       return

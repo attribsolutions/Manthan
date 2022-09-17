@@ -53,16 +53,16 @@ function* fetchHPagesList_GneratorFunction() {
   }
 }
 
-function* GetH_Modules({ id }) {
+function* GetH_Modules() {
   try {
 
-    const response = yield call(get_Module_HPages, id);
+    const response = yield call(get_Module_HPages);
     yield put(getH_ModulesSuccess(response.Data))
   } catch (error) {
     yield put(AlertState({
       Type: 3,
       Status: true,
-      Message: " GetH_Sub_Modules Network error Message",
+      Message: " get_Module_HPages Network error Message",
       RedirectPath: false,
       AfterResponseAction: false
     }));
