@@ -185,7 +185,7 @@ console.log("TableListData",TableListData)
     listPageCommonButtonFunction({
       dispatchHook: dispatch,
       ButtonMsgLable: "DriverType",
-      deleteName: "DriverType",
+      deleteName: "Name",
       userPageAccessState: userPageAccessState,
       editActionFun: editDriverTypeId,
       deleteActionFun: delete_DriverType_ID
