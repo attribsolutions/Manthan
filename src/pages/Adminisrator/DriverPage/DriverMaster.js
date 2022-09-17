@@ -86,6 +86,7 @@ const DriverMaster = (props) => {
             
             setEditData(editDataGatingFromList);
             setPageMode(pageModeProps);
+            setDOB_Date_Select(editDataGatingFromList.DOB)
 
             dispatch(editDriverTypeSuccess({ Status: false }))
             dispatch(BreadcrumbShow(editDataGatingFromList.DriverMaster))
