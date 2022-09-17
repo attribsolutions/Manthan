@@ -17,7 +17,7 @@ import { BreadcrumbShow } from "../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
 import { AlertState } from "../../../store/actions";
 import { CommonGetRoleAccessFunction } from "../../../components/Common/CommonGetRoleAccessFunction";
-import { PostMethodForDriverMaster, getMethodForDriverList, PostMethod_ForDriverMasterSuccess, getMethod_ForDriverListSuccess, editDriverTypeSuccess } from "../../../store/Administrator/DriverRedux/action";
+import { PostMethodForDriverMaster, getMethodForDriverList, PostMethod_ForDriverMasterSuccess, getMethod_ForDriverListSuccess, editDriverTypeSuccess, updateDriverTypeID } from "../../../store/Administrator/DriverRedux/action";
 import { useHistory } from "react-router-dom";
 import Flatpickr from "react-flatpickr"
 
@@ -135,9 +135,15 @@ const DriverMaster = (props) => {
             DOB: DOB_Date_Select,
             UID: values.UID
         });
+    
+    if (pageMode === 'edit') {
+        dispatch(updateDriverTypeID(jsonBody, EditData.id));
+      }
+  
+      else {
         dispatch(PostMethodForDriverMaster(jsonBody));
+      }
     };
-
     
 
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
