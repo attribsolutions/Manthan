@@ -250,7 +250,7 @@ export const update_CategoryType_List_Api = (data, id) => put(`${url.CATEGORY_TY
 
 //Category API
 export const Post_Category_API = (data) => post(url. CATEGORY_API,data)// post api
-export const get_Category_Master_API = () => get(url. CATEGORY_TYPES_API)// Product Category DropDown Api api
+// export const get_Category_Master_API = () => get(url. CATEGORY_TYPES_API)// Product Category DropDown Api api
 export const get_Category_List_Api = () => get(url. CATEGORY_API) // get api
 export const detelet_Category_List_Api = (id) =>del(`${url. CATEGORY_API}/${id}`) // delete api
 export const edit_Category_List_Api = (id) =>get(`${url. CATEGORY_API}/${id}`) // edit api
