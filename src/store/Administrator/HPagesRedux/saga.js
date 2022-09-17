@@ -18,7 +18,7 @@ import {
   deletHPagesUsingID_API,
   edit_HPageID,
   Fetch_HPagesListApi,
-  FieldValidations_DropDown_Api,
+  GetFieldValidationOnControlType_DropDown_API,
   get_Module_HPages,
   saveHPagesAPI,
   showPagesListOnPageAccess_DropDown_List,
@@ -160,9 +160,9 @@ function* ControlTypes_DropDown_GenratorFunction() {
 }
 
 //  Field Validations dropdown list
-function* FieldValidations_DropDown_GenratorFunction() {
+function* FieldValidations_DropDown_GenratorFunction({ id }) {
   try {
-    const response = yield call(FieldValidations_DropDown_Api);
+    const response = yield call(GetFieldValidationOnControlType_DropDown_API,id);
     yield put(getFieldValidationsSuccess(response.Data));
   } catch (error) {
   }
