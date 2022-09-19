@@ -23,7 +23,7 @@ const AddUser = (props) => {
   //*** "isEditdata get all data from ModuleID for Binding  Form controls
   let editDataGatingFromList = props.state;
   let pageModeProps = props.pageMode;
-
+  
   //SetState  Edit data Geting From Modules List component
   const [EditData, setEditData] = useState([]);
   const [pageMode, setPageMode] = useState("save");
@@ -141,7 +141,9 @@ const AddUser = (props) => {
           arraynew.push({ Party: i.Party, Role: i2.Role })
         })
       })
+
       setPartyRoleData(arraynew)
+
       return
     }
 
@@ -239,6 +241,7 @@ const AddUser = (props) => {
       UpdatedBy: 1,
       UserRole: partyRoleData
 
+
     })
     if (partyRoleData.length === 0) {
       dispatch(AlertState({
@@ -254,6 +257,7 @@ const AddUser = (props) => {
     }
     else {
       dispatch(addUser(jsonBody));
+      console.log("Post jsonBody", jsonBody)
     }
   };
 

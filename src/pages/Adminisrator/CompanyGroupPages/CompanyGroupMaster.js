@@ -51,9 +51,7 @@ const CompanyGroupMaster = (props) => {
 
 
     useEffect(() => {
-        dispatch(PostMethodForCompanyGroupMaster());
         dispatch(getMethodForCompanyGroupList());
-        
     }, [dispatch]);
 
 
@@ -134,8 +132,10 @@ const CompanyGroupMaster = (props) => {
 
     const FormSubmitButton_Handler = (event, values) => {
         const jsonBody = JSON.stringify({
-            CompanyGroup: values.CompanyGroup,
-            CompanyDescription:values.CompanyDescription
+            Name: values.Name,
+            IsSCM:values.IsSCM,
+            CreatedBy:1,
+            UpdatedBy:1
         });
 
         if (pageMode === "edit") {
@@ -177,48 +177,32 @@ const CompanyGroupMaster = (props) => {
                                                 <CardBody style={{ backgroundColor: "whitesmoke" }}>
                                                     <Row>
                                                         <FormGroup className="mb-2 col col-sm-4 ">
-                                                            <Label htmlFor="validationCustom01">Company Group </Label>
+                                                            <Label htmlFor="validationCustom01">Name </Label>
                                                             <AvField
                                                                 name="Name"
                                                                 id="txtName"
                                                                 value={EditData.Name}
                                                                 type="text"
-                                                                placeholder="Please Enter Company Group"
+                                                                placeholder="Please Enter Name"
                                                                 autoComplete='off'
                                                                 validate={{
-                                                                    required: { value: true, errorMessage: 'Please Enter Company Group' },
+                                                                    required: { value: true, errorMessage: 'Please Enter Name' },
                                                                 }}
                                                                 onChange={(e) => { dispatch(BreadcrumbShow(e.target.value)) }}
                                                             />
                                                         </FormGroup>
-                                                         </Row>
+                                                         
 
-                                                        <Row>
-                                                        <FormGroup className="mb-2 col col-sm-4 ">
-                                                            <Label htmlFor="validationCustom01">Company Description </Label>
-                                                            <AvField
-                                                                name="CompanyDescription"
-                                                                id="CompanyDescription"
-                                                                value={EditData.CompanyDescription}
-                                                                type="text"
-                                                                placeholder="Please Enter Description"
-                                                                autoComplete='off'
-                                                                validate={{
-                                                                    required: { value: true, errorMessage: 'Please Enter Description' },
-                                                                }}
-                                                               
-                                                            />
-                                                        </FormGroup>
-
+                                                        
                                                         <Row>
                                                         <FormGroup className="mb-2 col col-sm-5">
                                                             <Row className="justify-content-md-left">
-                                                                <Label htmlFor="horizontal-firstname-input" className="col-sm-3 col-form-label" >IsActive </Label>
+                                                                <Label htmlFor="horizontal-firstname-input" className="col-sm-3 col-form-label" >IsSCM </Label>
                                                                 <Col md={2} style={{ marginTop: '9px' }} >
                                                                     <div className="form-check form-switch form-switch-md mb-3" dir="ltr">
                                                                         <AvInput type="checkbox" className="form-check-input" id="customSwitchsizemd"
-                                                                            defaultChecked={EditData.IsActive}
-                                                                            name="IsActive"
+                                                                            defaultChecked={EditData.IsSCM}
+                                                                            name="IsSCM"
                                                                         // defaultChecked
                                                                         />
                                                                         <label className="form-check-label" htmlFor="customSwitchsizemd"></label>
