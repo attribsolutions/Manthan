@@ -165,12 +165,16 @@ console.log("TableListData",TableListData)
       sort: true,
     },
    
-      
+    {
+      text: "IsSCM",
+      dataField: "IsSCM",
+      sort: true,
+    },
 
     // For Edit, Delete ,and View Button Common Code function
     listPageCommonButtonFunction({
       dispatchHook: dispatch,
-      ButtonMsgLable: "CompanyGroupType",
+      ButtonMsgLable: "Name",
       deleteName: "Name",
       userPageAccessState: userPageAccessState,
       editActionFun: editCompanyGroupTypeId,
