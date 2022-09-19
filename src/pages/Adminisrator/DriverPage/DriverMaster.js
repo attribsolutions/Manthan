@@ -8,19 +8,19 @@ import {
     Container,
     FormGroup,
     Label,
-    Row,
-   
+    Row
 } from "reactstrap";
 import { AvField, AvForm, } from "availity-reactstrap-validation";
 import Select from "react-select";
 import { MetaTags } from "react-meta-tags";
 import { BreadcrumbShow } from "../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
-import { Tbody, Thead } from "react-super-responsive-table";
 import { AlertState } from "../../../store/actions";
 import { CommonGetRoleAccessFunction } from "../../../components/Common/CommonGetRoleAccessFunction";
-import { PostMethodForDriverMaster, getMethodForDriverList, PostMethod_ForDriverMasterSuccess, getMethod_ForDriverListSuccess, editDriverTypeSuccess } from "../../../store/Administrator/DriverRedux/action";
+import { PostMethodForDriverMaster, getMethodForDriverList, PostMethod_ForDriverMasterSuccess, getMethod_ForDriverListSuccess, editDriverTypeSuccess, updateDriverTypeID } from "../../../store/Administrator/DriverRedux/action";
 import { useHistory } from "react-router-dom";
+import Flatpickr from "react-flatpickr"
+
 // import { actionChannel } from "redux-saga/effects";
 
 
@@ -35,15 +35,15 @@ const DriverMaster = (props) => {
 
     const formRef = useRef(null);
     const [pageMode, setPageMode] = useState("");
-    const [userPageAccessState, setUserPageAccessState] = useState(123);
+    const [userPageAccessState, setUserPageAccessState] = useState("");
     const [EditData, setEditData] = useState([]);
-
+    const [DOB_Date_Select, setDOB_Date_Select] = useState("");
 
 
     //Access redux store Data /  'save_ModuleSuccess' action data
     const { PostAPIResponse, DriverList, RoleAccessModifiedinSingleArray } = useSelector((state) => ({
-            PostAPIResponse: state.VehicleReducer.PostDataMessage,
-            DriverList: state.VehicleReducer.DriverList,
+            PostAPIResponse: state.DriverReducer.PostDataMessage,
+            DriverList: state.DriverReducer.DriverList,
             RoleAccessModifiedinSingleArray: state.Login.RoleAccessUpdateData,
 
         }));
@@ -56,28 +56,28 @@ const DriverMaster = (props) => {
 
     //userAccess useEffect
     useEffect(() => {
-
+        debugger
         let userAcc = undefined
         if ((editDataGatingFromList === undefined)) {
-
-            let locationPath = history.location.pathname
-            userAcc = RoleAccessModifiedinSingleArray.find((inx) => {
-                return (`/${inx.ActualPagePath}` === locationPath)
-            })
+    
+          let locationPath = history.location.pathname
+          userAcc = RoleAccessModifiedinSingleArray.find((inx) => {
+            return (`/${inx.ActualPagePath}` === locationPath)
+          })
         }
         else if (!(editDataGatingFromList === undefined)) {
-            let relatatedPage = props.relatatedPage
-            userAcc = RoleAccessModifiedinSingleArray.find((inx) => {
-                return (`/${inx.ActualPagePath}` === relatatedPage)
-            })
-
+          let relatatedPage = props.relatatedPage
+          userAcc = RoleAccessModifiedinSingleArray.find((inx) => {
+            return (`/${inx.ActualPagePath}` === relatatedPage)
+          })
+    
         }
         if (!(userAcc === undefined)) {
-            setUserPageAccessState(userAcc)
+          setUserPageAccessState(userAcc)
         }
-
-    }, [RoleAccessModifiedinSingleArray])
-
+    
+      }, [RoleAccessModifiedinSingleArray])
+    
     // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
     useEffect(() => {
 
@@ -86,6 +86,7 @@ const DriverMaster = (props) => {
             
             setEditData(editDataGatingFromList);
             setPageMode(pageModeProps);
+            setDOB_Date_Select(editDataGatingFromList.DOB)
 
             dispatch(editDriverTypeSuccess({ Status: false }))
             dispatch(BreadcrumbShow(editDataGatingFromList.DriverMaster))
@@ -96,7 +97,6 @@ const DriverMaster = (props) => {
 
     useEffect(() => {
         if ((PostAPIResponse.Status === true) && (PostAPIResponse.StatusCode === 200)) {
-            // setSubCategory_dropdown_Select('')
             dispatch(PostMethod_ForDriverMasterSuccess({ Status: false }))
             formRef.current.reset();
             if (pageMode === "dropdownAdd") {
@@ -131,11 +131,19 @@ const DriverMaster = (props) => {
     const FormSubmitButton_Handler = (event, values) => {
         const jsonBody = JSON.stringify({
             Name: values.Name,
-
+            Address: values.Address,
+            DOB: DOB_Date_Select,
+            UID: values.UID
         });
+    
+    if (pageMode === 'edit') {
+        dispatch(updateDriverTypeID(jsonBody, EditData.id));
+      }
+  
+      else {
         dispatch(PostMethodForDriverMaster(jsonBody));
+      }
     };
-
     
 
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
@@ -167,21 +175,77 @@ const DriverMaster = (props) => {
                                                 <CardBody style={{ backgroundColor: "whitesmoke" }}>
                                                     <Row>
                                                         <FormGroup className="mb-2 col col-sm-4 ">
-                                                            <Label htmlFor="validationCustom01">DriverMaster </Label>
+                                                            <Label htmlFor="validationCustom01">Name </Label>
                                                             <AvField
                                                                 name="Name"
                                                                 id="txtName"
-                                                                value={EditData.VehicleNumber}
+                                                                value={EditData.Name}
                                                                 type="text"
-                                                                placeholder="Please Enter DriverMaster"
+                                                                placeholder="Please Enter Name"
                                                                 autoComplete='off'
                                                                 validate={{
-                                                                    required: { value: true, errorMessage: 'Please Enter DriverMaster ' },
+                                                                    required: { value: true, errorMessage: 'Please Enter Name ' },
                                                                 }}
                                                                 onChange={(e) => { dispatch(BreadcrumbShow(e.target.value)) }}
                                                             />
                                                         </FormGroup>
+                                                        <Row>
+                                                            <Col md="4">
+                                                            <FormGroup className="mb-3">
+                                                            <Label>Date of Birth</Label>
+                                                           <Flatpickr
+                                                                      id="FSSAIExipry"
+                                                                      name="FSSAIExipry"
+                                                                      value={DOB_Date_Select}
+                                                                      className="form-control d-block p-2 bg-white text-dark"
+                                                                      placeholder="YYYY-MM-DD"
+                                                                      autoComplete='off'
+                                                                      options={{
+                                                                      altInput: true,
+                                                                      altFormat: "F j, Y",
+                                                                      dateFormat: "Y-m-d"
+                                                                                      }}
+                                                                      onChange={(selectedDates, dateStr, instance) => {
+                                                                      setDOB_Date_Select(dateStr)
+                                                                                  }}
+                                                                                   />
+                                                                     </FormGroup>
+                                                                    </Col>
+                                                                   </Row>
 
+                                                        <Row>
+                                                        <FormGroup className="mb-2 col col-sm-4 ">
+                                                            <Label htmlFor="validationCustom01">Address </Label>
+                                                            <AvField
+                                                                name="Address"
+                                                                value={EditData.Address}
+                                                                type="text"
+                                                                placeholder="Please Enter Address"
+                                                                autoComplete='off'
+                                                                validate={{
+                                                                    required: { value: true, errorMessage: 'Please Enter Address ' },
+                                                                }}
+                                                                unChange={(e) => { dispatch(BreadcrumbShow(e.target.value)) }}
+                                                            />
+                                                        </FormGroup>
+                                                       </Row>
+
+                                                       <Row>
+                                                        <FormGroup className="mb-2 col col-sm-4 ">
+                                                            <Label htmlFor="validationCustom01">UID </Label>
+                                                            <AvField
+                                                                name="UID"
+                                                                value={EditData.UID}
+                                                                type="text"
+                                                                placeholder="Please Enter UID"
+                                                                autoComplete='off'
+                                                                validate={{
+                                                                    required: { value: true, errorMessage: 'Please Enter UID ' },
+                                                                }}
+                                                                unChange={(e) => { dispatch(BreadcrumbShow(e.target.value)) }}
+                                                            />
+                                                        </FormGroup>
+                                                       </Row>
                                                         <FormGroup>
                                                             <Row>
                                                                 <Col sm={2}>
@@ -214,7 +278,7 @@ const DriverMaster = (props) => {
                                                                     </div>
                                                                 </Col>
                                                             </Row>
-                                                        </FormGroup >
+                                                        </FormGroup>
                                                     </Row>
 
                                                 </CardBody>

@@ -23,7 +23,7 @@ const AddUser = (props) => {
   //*** "isEditdata get all data from ModuleID for Binding  Form controls
   let editDataGatingFromList = props.state;
   let pageModeProps = props.pageMode;
-
+  
   //SetState  Edit data Geting From Modules List component
   const [EditData, setEditData] = useState([]);
   const [pageMode, setPageMode] = useState("save");
@@ -138,6 +138,13 @@ console.log(editDataGatingFromList,"editDataGatingFromList")
       setUserPartiesForUserMaster(editDataGatingFromList.UserRole)
 
 
+      let arraynew = []
+      editDataGatingFromList.UserRole.map((i) => {
+        i.PartyRoles.map((i2) => {
+          arraynew.push({ Party: i.Party, Role: i2.Role })
+        })
+      })
+    
       setPartyRoleData(editDataGatingFromList.UserRole)
       // setRoleDropDown(editDataGatingFromList.UserRole)
       return
@@ -230,7 +237,7 @@ console.log(editDataGatingFromList,"editDataGatingFromList")
   };
 
   const handleValidSubmit = (event, values) => {
-    // debugger
+    debugger
     const jsonBody = JSON.stringify({
       email: values.email,
       LoginName: values.loginName,
@@ -243,10 +250,7 @@ console.log(editDataGatingFromList,"editDataGatingFromList")
       isLoginUsingEmail: values.isLoginUsingEmail,
       CreatedBy: 1,
       UpdatedBy: 1,
-      UserRole: FindPartyID ? RoleDropDown.map((i) => { return ({ Party: null, Role: i.value }) }) : partyRoleData
-      // .map((d) => ({
-      //   Role: d.Role,
-      // })),
+      UserRole: partyRoleData
     })
 
     if (partyRoleData.length <= 0 && !(FindPartyID)) {
@@ -261,10 +265,11 @@ console.log(editDataGatingFromList,"editDataGatingFromList")
      
       dispatch(updateID(jsonBody, EditData.id));
       setEditData([]);
-      console.log("jsonBody", jsonBody)
+      console.log("Update jsonBody", jsonBody)
     }
     else {
       dispatch(addUser(jsonBody));
+      console.log("Post jsonBody", jsonBody)
     }
   };
 

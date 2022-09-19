@@ -160,18 +160,32 @@ console.log("TableListData",TableListData)
 
   const pagesListColumns = [
     {
-      text: "DriverMaster",
-      dataField: "DriverMaster",
+      text: "Name",
+      dataField: "Name",
       sort: true,
     },
    
-      
+    {
+      text: "Date Of Birth",
+      dataField: "DOB",
+      sort: true,
+    },
+    {
+      text: "Address",
+      dataField: "Address",
+      sort: true,
+    },
+    {
+      text: "UID",
+      dataField: "UID",
+      sort: true,
+    },
 
     // For Edit, Delete ,and View Button Common Code function
     listPageCommonButtonFunction({
       dispatchHook: dispatch,
       ButtonMsgLable: "DriverType",
-      deleteName: "DriverType",
+      deleteName: "Name",
       userPageAccessState: userPageAccessState,
       editActionFun: editDriverTypeId,
       deleteActionFun: delete_DriverType_ID
