@@ -19,7 +19,7 @@ import { CommonGetRoleAccessFunction } from "../../../components/Common/CommonGe
 
 import { BreadcrumbShow,AlertState } from "../../../store/actions";
 import { editPartyTypeSuccess, PostPartyTypeAPI, PostPartyTypeAPISuccess, updatePartyTypeID } from "../../../store/Administrator/PartyTypeRedux/action";
-import { getDivisionTypesID } from "../../../store/Administrator/PartyRedux/action";
+import { getDivisionTypesID, GetPartyTypeByDivisionTypeID } from "../../../store/Administrator/PartyRedux/action";
 
 const PartyType = (props) => {
 
@@ -35,12 +35,12 @@ const PartyType = (props) => {
     const [EditData, setEditData] = useState([]);
     const [pageMode, setPageMode] = useState("save");
     const [userPageAccessState, setUserPageAccessState] = useState('');
-    const [division_dropdown_Select, setDivision_dropdown_Select] = useState("");
+    const [partyType_dropdown_Select, setPartyType_dropdown_Select] = useState("");
 
     //Access redux store Data /  'save_ModuleSuccess' action data
-    const { PostAPIResponse,DivisionTypes,RoleAccessModifiedinSingleArray } = useSelector((state) => ({
+    const { PostAPIResponse,PartyTypes,RoleAccessModifiedinSingleArray } = useSelector((state) => ({
         PostAPIResponse: state.PartyTypeReducer.PostData,
-        DivisionTypes: state.PartyMasterReducer.DivisionTypes,
+        PartyTypes: state.PartyMasterReducer.PartyTypes,
         RoleAccessModifiedinSingleArray: state.Login.RoleAccessUpdateData,
     }));
 
@@ -69,7 +69,7 @@ useEffect(() => {
 
 
     useEffect(() => {
-        dispatch(getDivisionTypesID());
+        dispatch(GetPartyTypeByDivisionTypeID());
     }, [dispatch]);
     // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
     useEffect(() => {
@@ -77,9 +77,9 @@ useEffect(() => {
         if (!(editDataGatingFromList === undefined)) {
             setEditData(editDataGatingFromList);
             setPageMode("edit");
-            setDivision_dropdown_Select({
-                value: editDataGatingFromList.DivisionType_id,
-                label: editDataGatingFromList.DivisionTypeName
+            setPartyType_dropdown_Select({
+                value: editDataGatingFromList.PartyType_id,
+                label: editDataGatingFromList.PartyTypeName
             })
             dispatch(editPartyTypeSuccess({ Status: false }))
             dispatch(BreadcrumbShow(editDataGatingFromList.Name))
@@ -91,7 +91,7 @@ useEffect(() => {
 
     useEffect(() => {
         if ((PostAPIResponse.Status === true) && (PostAPIResponse.StatusCode === 200)&&!(pageMode==="dropdownAdd")) {
-            setDivision_dropdown_Select('')
+            setPartyType_dropdown_Select('')
             dispatch(PostPartyTypeAPISuccess({ Status: false }))
             formRef.current.reset();
             if (pageMode === "dropdownAdd") {
@@ -124,19 +124,19 @@ useEffect(() => {
     }, [PostAPIResponse])
 
      
-    const DivisionTypesValues = DivisionTypes.map((Data) => ({
+    const PartyTypeByDivisionTypeIDValues = PartyTypes.map((Data) => ({
         value: Data.id,
         label: Data.Name
     }));
 
-    function handllerDivisionTypes(e) {
-        setDivision_dropdown_Select(e)
+    function handllerPartyTypeByDivisionTypeID(e) {
+        setPartyType_dropdown_Select(e)
     }
 
     const FormSubmitButton_Handler = (event, values) => {
         const jsonBody = JSON.stringify({
             Name: values.Name,
-            DivisionType: division_dropdown_Select.value,
+            partyType: partyType_dropdown_Select.value,
             CreatedBy: 1,
             CreatedOn: "2022-07-18T00:00:00",
             UpdatedBy: 1,
@@ -197,12 +197,12 @@ useEffect(() => {
                                                         <Row>
                                                             <Col md="4">
                                                                 <FormGroup className="mb-3">
-                                                                    <Label htmlFor="validationCustom01"> Division Type </Label>
+                                                                    <Label htmlFor="validationCustom01"> Party Type </Label>
                                                                     <Col sm={12}>
                                                                         <Select
-                                                                            value={division_dropdown_Select}
-                                                                            options={DivisionTypesValues}
-                                                                            onChange={(e) => { handllerDivisionTypes(e) }}
+                                                                            value={partyType_dropdown_Select}
+                                                                            options={PartyTypeByDivisionTypeIDValues}
+                                                                            onChange={(e) => { handllerPartyTypeByDivisionTypeID(e) }}
                                                                         />
                                                                     </Col>
                                                                 </FormGroup>
