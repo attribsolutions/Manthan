@@ -162,7 +162,7 @@ const PartyType = (props) => {
 var IsEditMode_Css = ''
 if ((pageMode === "edit")||(pageMode==="copy")||(pageMode==="dropdownAdd")) { IsEditMode_Css = "-5.5%" };
 
-    if (!(userPageAccessState === '')) {
+    if (!(userPageAccessState === '')) {   
         return (
             <React.Fragment>
                 <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
