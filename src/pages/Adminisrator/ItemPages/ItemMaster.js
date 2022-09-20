@@ -1755,7 +1755,7 @@ const ItemsMaster = (props) => {
 
                                                                     <Row>
                                                                         <FormGroup className=" col col-sm-4 " >
-                                                                            <Label htmlFor="validationCustom21">Division Type</Label>
+                                                                            <Label htmlFor="validationCustom21">Division</Label>
                                                                             <Select
                                                                                 id={"dropDivisionType-0"}
                                                                                 value={division_dropdown_Select}
