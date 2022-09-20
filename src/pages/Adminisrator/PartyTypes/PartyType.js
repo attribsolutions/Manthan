@@ -135,13 +135,13 @@ const PartyType = (props) => {
 
 
      
-    const PartyTypeValues = PartyTypes.map((Data) => ({
+    const PartyType_Dropdown_Options = PartyTypes.map((Data) => ({
 
         value: Data.id,
         label: Data.Name
     }));
 
-    function handllerPartyTypeByDivisionTypeID(e) {
+    function PartyType_OnChange_Handler(e) {
         setPartyType_dropdown_Select(e)
     }
 
@@ -293,8 +293,8 @@ const PartyType = (props) => {
                                                                     <Col sm={12}>
                                                                         <Select
                                                                             value={partyType_dropdown_Select}
-                                                                            options={PartyTypeByDivisionTypeIDValues}
-                                                                            onChange={(e) => { handllerPartyTypeByDivisionTypeID(e) }}
+                                                                            options={PartyType_Dropdown_Options}
+                                                                            onChange={(e) => { PartyType_OnChange_Handler(e) }}
                                                                         />
                                                                     </Col>
                                                                 </FormGroup>
