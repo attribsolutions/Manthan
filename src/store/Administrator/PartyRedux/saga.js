@@ -1,9 +1,9 @@
 import { call, put, takeEvery } from "redux-saga/effects";
-import { DivisionTypes_For_Dropdown, GetCompanyByDivisionTypeID_For_Dropdown, GetDistrictOnState_For_Dropdown, GetPartyTypeByDivisionTypeID_For_Dropdown, Party_Master_Delete_API, Party_Master_Edit_API, Party_Master_Get_API, Party_Master_Post_API, Party_Master_Update_API } from "../../../helpers/backend_helper";
+import { GetPriceList_For_Dropdown, GetCompanyByDivisionTypeID_For_Dropdown, GetDistrictOnState_For_Dropdown, GetPartyTypeByDivisionTypeID_For_Dropdown, Party_Master_Delete_API, Party_Master_Edit_API, Party_Master_Get_API, Party_Master_Post_API, Party_Master_Update_API } from "../../../helpers/backend_helper";
 import { AlertState } from "../../Utilites/CustomAlertRedux/actions";
 import { SpinnerState } from "../../Utilites/Spinner/actions";
-import { deletePartyIDSuccess, editPartyIDSuccess, GetCompanyByDivisionTypeIDSuccess, getDistrictOnStateSuccess, getDivisionTypesSuccess, getPartyListAPISuccess, GetPartyTypeByDivisionTypeIDSuccess, postPartyDataSuccess, updatePartyIDSuccess } from "./action";
-import { DELETE_PARTY_ID, EDIT_PARTY_ID, GET_COMPANY_BY_DIVISIONTYPES_ID, GET_DISTRICT_ON_STATE, GET_DIVISION_TYPES_ID, GET_PARTTYPE_BY_DIVISIONTYPES_ID, GET_PARTY_LIST_API, POST_PARTY_DATA, UPDATE_PARTY_ID } from "./actionTypes";
+import { deletePartyIDSuccess, editPartyIDSuccess, GetCompanyByDivisionTypeIDSuccess, getDistrictOnStateSuccess,  getPartyListAPISuccess, GetPartyTypeByDivisionTypeIDSuccess, getPricelistSuccess, postPartyDataSuccess, updatePartyIDSuccess } from "./action";
+import { DELETE_PARTY_ID, EDIT_PARTY_ID, GET_COMPANY_BY_DIVISIONTYPES_ID, GET_DISTRICT_ON_STATE, GET_PRICELIST, GET_PARTTYPE_BY_DIVISIONTYPES_ID, GET_PARTY_LIST_API, POST_PARTY_DATA, UPDATE_PARTY_ID } from "./actionTypes";
 
 function* Get_Party_GenratorFunction() {
     yield put(SpinnerState(true))
@@ -87,15 +87,16 @@ function* GetDistrictOnState_saga({id}) {
   }
 }
 
-///  DivisionTypes dropdown list
-function* DivisionTypes_GenratorFunction() {
+//get pricelist
+function* GetPriceList_saga({id}) {
   try {
-    const response = yield call(DivisionTypes_For_Dropdown);
-    yield put(getDivisionTypesSuccess(response.Data));
+    const response = yield call(GetPriceList_For_Dropdown,id);
+    yield put(getPricelistSuccess(response.Data));
   } catch (error) {
-    console.log("DivisionTypes saga page error", error);
+    console.log("GetpriceList_saga page error", error);
   }
 }
+
 
   // GetPartyTypeByDivisionTypeID API dependent on DivisionTypes api
 function* GetPartyTypeByDivisionTypeID_GenratorFunction({id}) {
@@ -123,7 +124,7 @@ function* GetCompanyByDivisionTypeID_GenratorFunction({id}) {
       yield takeEvery(DELETE_PARTY_ID, Delete_Party_GenratorFunction);
       yield takeEvery(UPDATE_PARTY_ID, Update_Party_GenratorFunction);
       yield takeEvery(GET_DISTRICT_ON_STATE, GetDistrictOnState_saga);
-      yield takeEvery(GET_DIVISION_TYPES_ID, DivisionTypes_GenratorFunction);
+      yield takeEvery(GET_PRICELIST, GetPriceList_saga);
       yield takeEvery(GET_PARTTYPE_BY_DIVISIONTYPES_ID, GetPartyTypeByDivisionTypeID_GenratorFunction);
       yield takeEvery(GET_COMPANY_BY_DIVISIONTYPES_ID, GetCompanyByDivisionTypeID_GenratorFunction);
 

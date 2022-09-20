@@ -150,13 +150,13 @@ const PartyList = () => {
             sort: true,
         },
         {
-            text: "PartyType",
-            dataField: "PartyTypeName",
+            text: "Pricelist",
+            dataField: "Pricelist",
             sort: true,
         },
         {
-            text: "DivisionType",
-            dataField: "DivisionTypeName",
+            text: "PartyType",
+            dataField: "PartyTypeName",
             sort: true,
         },
         {

@@ -80,7 +80,7 @@ export const ITEMS_GROUP_API = "/ItemGroups"
 // Party Master 
 export const PARTY_MASTER_API = "/M_Parties"
 export const GetDistrictOnState = "/GetDistrictOnState"
-export const GET_DIVISION_TYPES_ID = "/DivisionTypes"
+export const PRICELIST = "/DivisionTypes"
 export const GET_PARTYTYPE_BY_DIVISIONTYPES_ID = "/GetPartyTypeByDivisionTypeID"
 export const GET_COMPANY_BY_DIVISIONTYPES_ID = "/GetCompanyByDivisionTypeID"
 

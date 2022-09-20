@@ -4,9 +4,9 @@ import {
     GET_COMPANY_BY_DIVISIONTYPES_ID,
     GET_COMPANY_BY_DIVISIONTYPES_ID_SUCCESS,
     GET_DISTRICT_ON_STATE,
+    GET_PRICELIST,
+    GET_PRICELIST_SUCCESS,
     GET_DISTRICT_ON_STATE_SUCCESS,
-    GET_DIVISION_TYPES_ID,
-    GET_DIVISION_TYPES_ID_SUCCESS,
     GET_PARTTYPE_BY_DIVISIONTYPES_ID,
     GET_PARTTYPE_BY_DIVISIONTYPES_ID_SUCCESS,
     GET_PARTY_LIST_API, GET_PARTY_LIST_API_SUCCESS,
@@ -77,15 +77,16 @@ export const getDistrictOnState = (id) => ({
     payload:data,
   });
 
-  //DivisionTypes  dropdown api
-export const getDivisionTypesID = () => ({
-    type: GET_DIVISION_TYPES_ID,
-   
-  });
-  export const getDivisionTypesSuccess = (DivisionTypes) => ({
-    type:GET_DIVISION_TYPES_ID_SUCCESS,
-    payload:DivisionTypes,
-  });
+//get pricelist
+export const getPricelist = (id) => ({
+  type: GET_PRICELIST,
+  id,
+ 
+});
+export const getPricelistSuccess = (data) => ({
+  type:GET_PRICELIST_SUCCESS,
+  payload:data,
+});
 
   // GetPartyTypeByDivisionTypeID API dependent on DivisionTypes api
 export const GetPartyTypeByDivisionTypeID = (id) => ({
