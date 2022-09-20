@@ -5,19 +5,23 @@ import {
     CardHeader,
     Col,
     Container,
+    DropdownItem,
+    DropdownMenu,
+    DropdownToggle,
     FormGroup,
     Label,
     Row,
+    UncontrolledDropdown,
 } from "reactstrap";
 import Breadcrumb from "../../../components/Common/Breadcrumb";
 import Select from "react-select";
 import { MetaTags } from "react-meta-tags";
 import { AvField, AvForm, } from "availity-reactstrap-validation";
 import { useDispatch, useSelector } from "react-redux";
-import { useHistory } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { CommonGetRoleAccessFunction } from "../../../components/Common/CommonGetRoleAccessFunction";
 
-import { BreadcrumbShow,AlertState } from "../../../store/actions";
+import { BreadcrumbShow, AlertState } from "../../../store/actions";
 import { editPartyTypeSuccess, PostPartyTypeAPI, PostPartyTypeAPISuccess, updatePartyTypeID } from "../../../store/Administrator/PartyTypeRedux/action";
 import { getDivisionTypesID, GetPartyTypeByDivisionTypeID } from "../../../store/Administrator/PartyRedux/action";
 
@@ -38,34 +42,38 @@ const PartyType = (props) => {
     const [partyType_dropdown_Select, setPartyType_dropdown_Select] = useState("");
 
     //Access redux store Data /  'save_ModuleSuccess' action data
+
     const { PostAPIResponse,PartyTypes,RoleAccessModifiedinSingleArray } = useSelector((state) => ({
         PostAPIResponse: state.PartyTypeReducer.PostData,
         PartyTypes: state.PartyMasterReducer.PartyTypes,
         RoleAccessModifiedinSingleArray: state.Login.RoleAccessUpdateData,
     }));
 
-// userAccess useEffect
-useEffect(() => {
-    let userAcc = undefined
-      if ((editDataGatingFromList === undefined)) {
-  
-        let locationPath = history.location.pathname
-        userAcc = RoleAccessModifiedinSingleArray.find((inx) => {
-          return (`/${inx.ActualPagePath}` === locationPath)
-        })
-      }
-      else if (!(editDataGatingFromList === undefined)) {
-        let relatatedPage = props.relatatedPage
-        userAcc = RoleAccessModifiedinSingleArray.find((inx) => {
-          return (`/${inx.ActualPagePath}` === relatatedPage)
-        })
-  
-      }
-      if (!(userAcc === undefined)) {
-        setUserPageAccessState(userAcc)
-      }
+    
 
-  }, [RoleAccessModifiedinSingleArray])
+    // userAccess useEffect
+    useEffect(() => {
+        let userAcc = undefined
+        if ((editDataGatingFromList === undefined)) {
+
+            let locationPath = history.location.pathname
+            userAcc = RoleAccessModifiedinSingleArray.find((inx) => {
+                return (`/${inx.ActualPagePath}` === locationPath)
+            })
+        }
+        else if (!(editDataGatingFromList === undefined)) {
+            let relatatedPage = props.relatatedPage
+            userAcc = RoleAccessModifiedinSingleArray.find((inx) => {
+                return (`/${inx.ActualPagePath}` === relatatedPage)
+            })
+
+        }
+        if (!(userAcc === undefined)) {
+            setUserPageAccessState(userAcc)
+        }
+
+
+    }, [RoleAccessModifiedinSingleArray])
 
 
     useEffect(() => {
@@ -87,11 +95,13 @@ useEffect(() => {
         else if (!(propsPageMode === undefined)) {
             setPageMode(propsPageMode)
         }
-    }, [editDataGatingFromList,propsPageMode])
+    }, [editDataGatingFromList, propsPageMode])
 
     useEffect(() => {
+
         if ((PostAPIResponse.Status === true) && (PostAPIResponse.StatusCode === 200)&&!(pageMode==="dropdownAdd")) {
             setPartyType_dropdown_Select('')
+
             dispatch(PostPartyTypeAPISuccess({ Status: false }))
             formRef.current.reset();
             if (pageMode === "dropdownAdd") {
@@ -111,7 +121,7 @@ useEffect(() => {
                 }))
             }
         }
-        else if ((PostAPIResponse.Status === true) && !(pageMode==="dropdownAdd")) {
+        else if ((PostAPIResponse.Status === true) && !(pageMode === "dropdownAdd")) {
             dispatch(PostPartyTypeAPISuccess({ Status: false }))
             dispatch(AlertState({
                 Type: 4,
@@ -123,8 +133,10 @@ useEffect(() => {
         }
     }, [PostAPIResponse])
 
+
      
-    const PartyTypeByDivisionTypeIDValues = PartyTypes.map((Data) => ({
+    const PartyTypeValues = PartyTypes.map((Data) => ({
+
         value: Data.id,
         label: Data.Name
     }));
@@ -150,6 +162,86 @@ useEffect(() => {
             dispatch(PostPartyTypeAPI(jsonBody));
         }
     };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    const test = () => {
+        const abc = (aa) => {
+            if (!(aa.length === 0)) arrayFun(aa)
+        }
+        function arrayFun(arrData1) {
+            return (
+                <ul className="metismenu list-unstyled" id="side-menu">
+
+                    {arrData1.map((item) => {
+                        return (
+                            <li >
+                                <DropdownItem to="#">{item.Name}</DropdownItem>
+                                {abc(item.arrData)}
+
+
+                            </li>
+                        )
+                    })
+                    }
+                </ul>
+            )
+
+        }
+
+
+
+        return (
+            <UncontrolledDropdown>
+                <DropdownToggle type="button" className="btn btn-info">
+                    Info <i className="mdi mdi-chevron-down"></i></DropdownToggle>
+                <DropdownMenu className="dropdownmenu-info">
+                    <ul >
+
+                        {arrData.map((item) => {
+                            return (
+                                <li >
+                                    <DropdownItem to="#">{item.Name}</DropdownItem>
+
+                                    {abc(item.arrData)}
+                                    {/* <ul className="sub-menu">
+                                        {item.ModuleData.map((index, j) => {
+    
+                                            return (
+                                                <li>
+                                                    <DropdownItem to="#">{index.Name}</DropdownItem>
+                                                    
+                                                </li>
+                                            )
+    
+    
+    
+                                        })}
+                                    </ul> */}
+                                </li>
+                            )
+                        })}
+
+                    </ul>
+                </DropdownMenu>
+            </UncontrolledDropdown>
+        )
+    }
 
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
     var IsEditMode_Css = ''
@@ -208,7 +300,35 @@ useEffect(() => {
                                                                 </FormGroup>
                                                             </Col>
                                                         </Row>
+                                                        <Row>
+                                                            <Col md="4">
+                                                                {test()}
 
+
+                                                            </Col>
+                                                        </Row>
+
+                                                        <br></br>
+                                                        <br></br>
+                                                        <br></br>
+                                                        <br></br>
+                                                        <br></br>
+                                                        <br></br>
+                                                        <br></br>
+                                                        <br></br>
+                                                        <br></br>
+                                                        <br></br>
+                                                        <br></br>
+                                                        <br></br>
+                                                        <br></br>
+                                                        <br></br>
+                                                        <br></br>
+                                                        <br></br>
+                                                        <br></br>
+                                                        <br></br>
+                                                        <br></br>
+                                                        <br></br>
+                                                        <br></br>
                                                         <FormGroup>
                                                             <Row>
                                                                 <Col sm={2}>
@@ -253,7 +373,7 @@ useEffect(() => {
 
                     </Container>
                 </div>
-            </React.Fragment>
+            </React.Fragment >
         )
     }
     else {
@@ -264,3 +384,58 @@ useEffect(() => {
 };
 
 export default PartyType
+
+export
+
+    var arrData = [
+        {
+            id: 1,
+            Name: "IsShowOnMenu1",
+            arrData: [
+                {
+                    id: 1,
+                    Name: "IsShowOnMenu2",
+                    arrData: [
+                        {
+                            id: 1,
+                            Name: "IsShowOnMenu3",
+                            arrData: []
+                        },
+                        {
+                            id: 1,
+                            Name: "IsShowOnMenu4",
+                            arrData: []
+                        }
+                    ]
+                },
+                {
+                    id: 1,
+                    Name: "IsShowOnMenu5",
+                    arrData: [
+                        {
+                            id: 1,
+                            Name: "IsShowOnMenu6",
+                            arrData: []
+                        },
+                        {
+                            id: 1,
+                            Name: "IsShowOnMenu7",
+                            arrData: [
+                                {
+                                    id: 1,
+                                    Name: "IsShowOnMenu8",
+                                    arrData: []
+                                },
+                                {
+                                    id: 1,
+                                    Name: "IsShowOnMenu9",
+                                    arrData: []
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+
