@@ -1,107 +1,108 @@
-import React, { useEffect, useRef, useState, } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
-    Card,
-    CardBody,
-    CardHeader,
-    Col,
-    Container,
-    DropdownItem,
-    DropdownMenu,
-    DropdownToggle,
-    FormGroup,
-    Label,
-    Row,
-    UncontrolledDropdown,
+  Card,
+  CardBody,
+  CardHeader,
+  Col,
+  Container,
+  FormGroup,
+  Label,
+  Row,
+ 
 } from "reactstrap";
-import Breadcrumb from "../../../components/Common/Breadcrumb";
+
 import Select from "react-select";
 import { MetaTags } from "react-meta-tags";
-import { AvField, AvForm, } from "availity-reactstrap-validation";
+
+import Breadcrumb from "../../../components/Common/Breadcrumb";
+import { AvField, AvForm,AvInput, } from "availity-reactstrap-validation";
+
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useHistory } from "react-router-dom";
 import { CommonGetRoleAccessFunction } from "../../../components/Common/CommonGetRoleAccessFunction";
 
-import { BreadcrumbShow, AlertState } from "../../../store/actions";
-import { editPartyTypeSuccess, PostPartyTypeAPI, PostPartyTypeAPISuccess, updatePartyTypeID } from "../../../store/Administrator/PartyTypeRedux/action";
-import { getDivisionTypesID } from "../../../store/Administrator/PartyRedux/action";
+
+import { BreadcrumbShow,AlertState } from "../../../store/actions";
+
+import {
+  editPartyTypeSuccess,
+  PostPartyTypeAPISuccess,
+  getPartyTypelist,
+  updatePartyTypeID,
+  PostPartyTypeAPI,
+} from "../../../store/Administrator/PartyTypeRedux/action";
+
 
 const PartyType = (props) => {
+  const formRef = useRef(null);
+  const dispatch = useDispatch();
+  const history = useHistory();
 
-    const formRef = useRef(null);
-    const dispatch = useDispatch();
-    const history = useHistory()
+  //*** "isEditdata get all data from ModuleID for Binding  Form controls
+  let editDataGatingFromList = props.state;
+  let propsPageMode = props.pageMode;
 
-    //*** "isEditdata get all data from ModuleID for Binding  Form controls
-    let editDataGatingFromList = props.state;
-    let propsPageMode = props.pageMode;
+  //SetState  Edit data Geting From Modules List component
+  const [EditData, setEditData] = useState([]);
+  const [pageMode, setPageMode] = useState("save");
+  const [userPageAccessState, setUserPageAccessState] = useState("");
 
-    //SetState  Edit data Geting From Modules List component
-    const [EditData, setEditData] = useState([]);
-    const [pageMode, setPageMode] = useState("save");
-    const [userPageAccessState, setUserPageAccessState] = useState('');
-    const [division_dropdown_Select, setDivision_dropdown_Select] = useState("");
+  console.log("userPageAccessState",userPageAccessState)
 
-    //Access redux store Data /  'save_ModuleSuccess' action data
-    const {
-        PostAPIResponse,
-        DivisionTypes,
-        RoleAccessModifiedinSingleArray,
-        RoleAccessData } = useSelector((state) => ({
-            PostAPIResponse: state.PartyTypeReducer.PostData,
-            DivisionTypes: state.PartyMasterReducer.DivisionTypes,
-            RoleAccessModifiedinSingleArray: state.Login.RoleAccessUpdateData,
-            RoleAccessData: state.Login.RoleData,
+    
 
-        }));
+  //Access redux store Data /  'save_ModuleSuccess' action data
 
-    // userAccess useEffect
-    useEffect(() => {
-        let userAcc = undefined
-        if ((editDataGatingFromList === undefined)) {
+  const { PostAPIResponse, PartyTypes, RoleAccessModifiedinSingleArray } =
+    useSelector((state) => ({
+      PostAPIResponse: state.PartyTypeReducer.PostData,
+      PartyTypes: state.PartyMasterReducer.PartyTypes,
+      RoleAccessModifiedinSingleArray: state.Login.RoleAccessUpdateData,
+    }));
 
-            let locationPath = history.location.pathname
-            userAcc = RoleAccessModifiedinSingleArray.find((inx) => {
-                return (`/${inx.ActualPagePath}` === locationPath)
-            })
-        }
-        else if (!(editDataGatingFromList === undefined)) {
-            let relatatedPage = props.relatatedPage
-            userAcc = RoleAccessModifiedinSingleArray.find((inx) => {
-                return (`/${inx.ActualPagePath}` === relatatedPage)
-            })
+  // userAccess useEffect
+  useEffect(() => {
+    let userAcc = undefined;
+    if (editDataGatingFromList === undefined) {
+      let locationPath = history.location.pathname;
+      userAcc = RoleAccessModifiedinSingleArray.find((inx) => {
+        return `/${inx.ActualPagePath}` === locationPath;
+      });
+    } else if (!(editDataGatingFromList === undefined)) {
+      let relatatedPage = props.relatatedPage;
+      userAcc = RoleAccessModifiedinSingleArray.find((inx) => {
+        return `/${inx.ActualPagePath}` === relatatedPage;
+      });
+    }
+    if (!(userAcc === undefined)) {
+      setUserPageAccessState(userAcc);
+    }
+  }, [RoleAccessModifiedinSingleArray]);
 
-        }
-        if (!(userAcc === undefined)) {
-            setUserPageAccessState(userAcc)
-        }
-
-    }, [RoleAccessModifiedinSingleArray])
+  useEffect(() => {
+    dispatch(getPartyTypelist());
+  }, [dispatch]);
 
 
-    useEffect(() => {
-        dispatch(getDivisionTypesID());
-    }, [dispatch]);
-    // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
-    useEffect(() => {
-        if (!(userPageAccessState === '')) { document.getElementById("txtName").focus(); }
-        if (!(editDataGatingFromList === undefined)) {
-            setEditData(editDataGatingFromList);
-            setPageMode("edit");
-            setDivision_dropdown_Select({
-                value: editDataGatingFromList.DivisionType_id,
-                label: editDataGatingFromList.DivisionTypeName
-            })
-            dispatch(editPartyTypeSuccess({ Status: false }))
-            dispatch(BreadcrumbShow(editDataGatingFromList.Name))
-        }
-        else if (!(propsPageMode === undefined)) {
-            setPageMode(propsPageMode)
-        }
-    }, [editDataGatingFromList, propsPageMode])
+  // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
+  useEffect(() => {
+    if (!(userPageAccessState === "")) {
+      document.getElementById("txtName").focus();
+    }
+    if (!(editDataGatingFromList === undefined)) {
+      setEditData(editDataGatingFromList);
+      setPageMode("edit");
+      dispatch(editPartyTypeSuccess({ Status: false }));
+      dispatch(BreadcrumbShow(editDataGatingFromList.Name));
+    } else if (!(propsPageMode === undefined)) {
+      setPageMode(propsPageMode);
+    }
+  }, [editDataGatingFromList, propsPageMode]);
+
 
     useEffect(() => {
-        if ((PostAPIResponse.Status === true) && (PostAPIResponse.StatusCode === 200) && !(pageMode === "dropdownAdd")) {
-            setDivision_dropdown_Select('')
+        if ((PostAPIResponse.Status === true) && (PostAPIResponse.StatusCode === 200)&&!(pageMode==="dropdownAdd")) {
+            // setpartyType_dropdown_Select('')
             dispatch(PostPartyTypeAPISuccess({ Status: false }))
             formRef.current.reset();
             if (pageMode === "dropdownAdd") {
@@ -121,7 +122,7 @@ const PartyType = (props) => {
                 }))
             }
         }
-        else if ((PostAPIResponse.Status === true) && !(pageMode === "dropdownAdd")) {
+        else if ((PostAPIResponse.Status === true) && !(pageMode==="dropdownAdd")) {
             dispatch(PostPartyTypeAPISuccess({ Status: false }))
             dispatch(AlertState({
                 Type: 4,
@@ -134,25 +135,20 @@ const PartyType = (props) => {
     }, [PostAPIResponse])
 
 
-    const DivisionTypesValues = DivisionTypes.map((Data) => ({
-        value: Data.id,
-        label: Data.Name
-    }));
-
-    function handllerDivisionTypes(e) {
-        setDivision_dropdown_Select(e)
-    }
+    
 
     const FormSubmitButton_Handler = (event, values) => {
         const jsonBody = JSON.stringify({
             Name: values.Name,
-            DivisionType: division_dropdown_Select.value,
+            IsSCM: values.IsSCM,
+            IsDivision: values.IsDivision,
             CreatedBy: 1,
             CreatedOn: "2022-07-18T00:00:00",
             UpdatedBy: 1,
             UpdatedOn: "2022-07-18T00:00:00"
         });
 
+      
         if (pageMode === "edit") {
             dispatch(updatePartyTypeID(jsonBody, EditData.id));
         }
@@ -160,90 +156,11 @@ const PartyType = (props) => {
             dispatch(PostPartyTypeAPI(jsonBody));
         }
     };
+  
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    const test = () => {
-        const abc = (aa) => {
-            if (!(aa.length === 0)) arrayFun(aa)
-        }
-        function arrayFun(arrData1) {
-            return (
-                <ul className="metismenu list-unstyled" id="side-menu">
-
-                    {arrData1.map((item) => {
-                        return (
-                            <li >
-                                <DropdownItem to="#">{item.Name}</DropdownItem>
-                                {abc(item.arrData)}
-
-
-                            </li>
-                        )
-                    })
-                    }
-                </ul>
-            )
-
-        }
-
-
-
-        return (
-            <UncontrolledDropdown>
-                <DropdownToggle type="button" className="btn btn-info">
-                    Info <i className="mdi mdi-chevron-down"></i></DropdownToggle>
-                <DropdownMenu className="dropdownmenu-info">
-                    <ul >
-
-                        {arrData.map((item) => {
-                            return (
-                                <li >
-                                    <DropdownItem to="#">{item.Name}</DropdownItem>
-
-                                    {abc(item.arrData)}
-                                    {/* <ul className="sub-menu">
-                                        {item.ModuleData.map((index, j) => {
-    
-                                            return (
-                                                <li>
-                                                    <DropdownItem to="#">{index.Name}</DropdownItem>
-                                                    
-                                                </li>
-                                            )
-    
-    
-    
-                                        })}
-                                    </ul> */}
-                                </li>
-                            )
-                        })}
-
-                    </ul>
-                </DropdownMenu>
-            </UncontrolledDropdown>
-        )
-    }
-
-    // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
-    var IsEditMode_Css = ''
-    if (pageMode === "edit" || pageMode == "dropdownAdd") { IsEditMode_Css = "-5.5%" };
+// IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
+var IsEditMode_Css = ''
+if ((pageMode === "edit")||(pageMode==="copy")||(pageMode==="dropdownAdd")) { IsEditMode_Css = "-5.5%" };
 
     if (!(userPageAccessState === '')) {
         return (
@@ -284,49 +201,43 @@ const PartyType = (props) => {
                                                                 onChange={(e) => { dispatch(BreadcrumbShow(e.target.value)) }}
                                                             />
                                                         </FormGroup>
+                                                        
                                                         <Row>
-                                                            <Col md="4">
-                                                                <FormGroup className="mb-3">
-                                                                    <Label htmlFor="validationCustom01"> Division Type </Label>
-                                                                    <Col sm={12}>
-                                                                        <Select
-                                                                            value={division_dropdown_Select}
-                                                                            options={DivisionTypesValues}
-                                                                            onChange={(e) => { handllerDivisionTypes(e) }}
+                                                        <FormGroup className="mb-2 col col-sm-5">
+                                                            <Row className="justify-content-md-left">
+                                                                <Label htmlFor="horizontal-firstname-input" className="col-sm-3 col-form-label" >IsSCM </Label>
+                                                                <Col md={2} style={{ marginTop: '9px' }} >
+                                                                    <div className="form-check form-switch form-switch-md mb-3" dir="ltr">
+                                                                        <AvInput type="checkbox" className="form-check-input" id="customSwitchsizemd"
+                                                                            defaultChecked={EditData.IsSCM}
+                                                                            name="IsSCM"
+                                                                        // defaultChecked
                                                                         />
-                                                                    </Col>
-                                                                </FormGroup>
-                                                            </Col>
-                                                        </Row>
-                                                        <Row>
-                                                            <Col md="4">
-                                                                {test()}
+                                                                        <label className="form-check-label" htmlFor="customSwitchsizemd"></label>
+                                                                    </div>
+                                                                </Col>
+                                                            </Row>
+                                                        </FormGroup>
+                                                    </Row>
 
+                                                    <Row>
+                                                        <FormGroup className="mb-2 col col-sm-5">
+                                                            <Row className="justify-content-md-left">
+                                                                <Label htmlFor="horizontal-firstname-input" className="col-sm-3 col-form-label" >IsDivision </Label>
+                                                                <Col md={2} style={{ marginTop: '9px' }} >
+                                                                    <div className="form-check form-switch form-switch-md mb-3" dir="ltr">
+                                                                        <AvInput type="checkbox" className="form-check-input" id="customSwitchsizemd"
+                                                                            defaultChecked={EditData.IsDivision}
+                                                                            name="IsDivision"
+                                                                        // defaultChecked
+                                                                        />
+                                                                        <label className="form-check-label" htmlFor="customSwitchsizemd"></label>
+                                                                    </div>
+                                                                </Col>
+                                                            </Row>
+                                                        </FormGroup>
+                                                    </Row>
 
-                                                            </Col>
-                                                        </Row>
-
-                                                        <br></br>
-                                                        <br></br>
-                                                        <br></br>
-                                                        <br></br>
-                                                        <br></br>
-                                                        <br></br>
-                                                        <br></br>
-                                                        <br></br>
-                                                        <br></br>
-                                                        <br></br>
-                                                        <br></br>
-                                                        <br></br>
-                                                        <br></br>
-                                                        <br></br>
-                                                        <br></br>
-                                                        <br></br>
-                                                        <br></br>
-                                                        <br></br>
-                                                        <br></br>
-                                                        <br></br>
-                                                        <br></br>
                                                         <FormGroup>
                                                             <Row>
                                                                 <Col sm={2}>
@@ -371,69 +282,17 @@ const PartyType = (props) => {
 
                     </Container>
                 </div>
-            </React.Fragment >
+            </React.Fragment>
         )
     }
     else {
         return (
             <React.Fragment></React.Fragment>
         )
-    }
+        }
 };
-
+    
 export default PartyType
 
-export
 
-    var arrData = [
-        {
-            id: 1,
-            Name: "IsShowOnMenu1",
-            arrData: [
-                {
-                    id: 1,
-                    Name: "IsShowOnMenu2",
-                    arrData: [
-                        {
-                            id: 1,
-                            Name: "IsShowOnMenu3",
-                            arrData: []
-                        },
-                        {
-                            id: 1,
-                            Name: "IsShowOnMenu4",
-                            arrData: []
-                        }
-                    ]
-                },
-                {
-                    id: 1,
-                    Name: "IsShowOnMenu5",
-                    arrData: [
-                        {
-                            id: 1,
-                            Name: "IsShowOnMenu6",
-                            arrData: []
-                        },
-                        {
-                            id: 1,
-                            Name: "IsShowOnMenu7",
-                            arrData: [
-                                {
-                                    id: 1,
-                                    Name: "IsShowOnMenu8",
-                                    arrData: []
-                                },
-                                {
-                                    id: 1,
-                                    Name: "IsShowOnMenu9",
-                                    arrData: []
-                                }
-                            ]
-                        }
-                    ]
-                }
-            ]
-        }
-    ]
-
+ 

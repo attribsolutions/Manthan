@@ -177,8 +177,13 @@ const PartyTypeList = (props) => {
     },
     
     {
-      text: "Division Type Name ",
-      dataField: "DivisionTypeName",
+      text: "IsSCM",
+      dataField: "IsSCM",
+      sort: true,
+    },
+    {
+      text: "IsDivision",
+      dataField: "IsDivision",
       sort: true,
     },
    
