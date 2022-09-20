@@ -12,14 +12,13 @@ import {
 import Breadcrumb from "../../../components/Common/Breadcrumb";
 import Select from "react-select";
 import { MetaTags } from "react-meta-tags";
-import { AvField, AvForm, } from "availity-reactstrap-validation";
+import { AvField, AvForm, AvInput, } from "availity-reactstrap-validation";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { CommonGetRoleAccessFunction } from "../../../components/Common/CommonGetRoleAccessFunction";
 
 import { BreadcrumbShow,AlertState } from "../../../store/actions";
-import { editPartyTypeSuccess, PostPartyTypeAPI, PostPartyTypeAPISuccess, updatePartyTypeID } from "../../../store/Administrator/PartyTypeRedux/action";
-import { getDivisionTypesID, GetPartyTypeByDivisionTypeID } from "../../../store/Administrator/PartyRedux/action";
+import { editPartyTypeSuccess, getPartyTypelist, PostPartyTypeAPI, PostPartyTypeAPISuccess, updatePartyTypeID } from "../../../store/Administrator/PartyTypeRedux/action";
 
 const PartyType = (props) => {
 
@@ -35,7 +34,7 @@ const PartyType = (props) => {
     const [EditData, setEditData] = useState([]);
     const [pageMode, setPageMode] = useState("save");
     const [userPageAccessState, setUserPageAccessState] = useState('');
-    const [partyType_dropdown_Select, setPartyType_dropdown_Select] = useState("");
+   
 
     //Access redux store Data /  'save_ModuleSuccess' action data
     const { PostAPIResponse,PartyTypes,RoleAccessModifiedinSingleArray } = useSelector((state) => ({
@@ -69,18 +68,14 @@ useEffect(() => {
 
 
     useEffect(() => {
-        dispatch(GetPartyTypeByDivisionTypeID());
+        dispatch(getPartyTypelist());
     }, [dispatch]);
     // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
     useEffect(() => {
         if (!(userPageAccessState === '')) { document.getElementById("txtName").focus(); }
         if (!(editDataGatingFromList === undefined)) {
             setEditData(editDataGatingFromList);
-            setPageMode("edit");
-            setPartyType_dropdown_Select({
-                value: editDataGatingFromList.PartyType_id,
-                label: editDataGatingFromList.PartyTypeName
-            })
+            setPageMode("edit")
             dispatch(editPartyTypeSuccess({ Status: false }))
             dispatch(BreadcrumbShow(editDataGatingFromList.Name))
         }
@@ -91,7 +86,7 @@ useEffect(() => {
 
     useEffect(() => {
         if ((PostAPIResponse.Status === true) && (PostAPIResponse.StatusCode === 200)&&!(pageMode==="dropdownAdd")) {
-            setPartyType_dropdown_Select('')
+            // setpartyType_dropdown_Select('')
             dispatch(PostPartyTypeAPISuccess({ Status: false }))
             formRef.current.reset();
             if (pageMode === "dropdownAdd") {
@@ -123,20 +118,14 @@ useEffect(() => {
         }
     }, [PostAPIResponse])
 
-     
-    const PartyTypeByDivisionTypeIDValues = PartyTypes.map((Data) => ({
-        value: Data.id,
-        label: Data.Name
-    }));
 
-    function handllerPartyTypeByDivisionTypeID(e) {
-        setPartyType_dropdown_Select(e)
-    }
+    
 
     const FormSubmitButton_Handler = (event, values) => {
         const jsonBody = JSON.stringify({
             Name: values.Name,
-            partyType: partyType_dropdown_Select.value,
+            IsSCM: values.IsSCM,
+            IsDivision: values.IsDivision,
             CreatedBy: 1,
             CreatedOn: "2022-07-18T00:00:00",
             UpdatedBy: 1,
@@ -194,20 +183,42 @@ useEffect(() => {
                                                                 onChange={(e) => { dispatch(BreadcrumbShow(e.target.value)) }}
                                                             />
                                                         </FormGroup>
+                                                        
                                                         <Row>
-                                                            <Col md="4">
-                                                                <FormGroup className="mb-3">
-                                                                    <Label htmlFor="validationCustom01"> Party Type </Label>
-                                                                    <Col sm={12}>
-                                                                        <Select
-                                                                            value={partyType_dropdown_Select}
-                                                                            options={PartyTypeByDivisionTypeIDValues}
-                                                                            onChange={(e) => { handllerPartyTypeByDivisionTypeID(e) }}
+                                                        <FormGroup className="mb-2 col col-sm-5">
+                                                            <Row className="justify-content-md-left">
+                                                                <Label htmlFor="horizontal-firstname-input" className="col-sm-3 col-form-label" >IsSCM </Label>
+                                                                <Col md={2} style={{ marginTop: '9px' }} >
+                                                                    <div className="form-check form-switch form-switch-md mb-3" dir="ltr">
+                                                                        <AvInput type="checkbox" className="form-check-input" id="customSwitchsizemd"
+                                                                            defaultChecked={EditData.IsSCM}
+                                                                            name="IsSCM"
+                                                                        // defaultChecked
                                                                         />
-                                                                    </Col>
-                                                                </FormGroup>
-                                                            </Col>
-                                                        </Row>
+                                                                        <label className="form-check-label" htmlFor="customSwitchsizemd"></label>
+                                                                    </div>
+                                                                </Col>
+                                                            </Row>
+                                                        </FormGroup>
+                                                    </Row>
+
+                                                    <Row>
+                                                        <FormGroup className="mb-2 col col-sm-5">
+                                                            <Row className="justify-content-md-left">
+                                                                <Label htmlFor="horizontal-firstname-input" className="col-sm-3 col-form-label" >IsDivision </Label>
+                                                                <Col md={2} style={{ marginTop: '9px' }} >
+                                                                    <div className="form-check form-switch form-switch-md mb-3" dir="ltr">
+                                                                        <AvInput type="checkbox" className="form-check-input" id="customSwitchsizemd"
+                                                                            defaultChecked={EditData.IsDivision}
+                                                                            name="IsDivision"
+                                                                        // defaultChecked
+                                                                        />
+                                                                        <label className="form-check-label" htmlFor="customSwitchsizemd"></label>
+                                                                    </div>
+                                                                </Col>
+                                                            </Row>
+                                                        </FormGroup>
+                                                    </Row>
 
                                                         <FormGroup>
                                                             <Row>
