@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import Breadcrumb from "../../../components/Common/Breadcrumb";
-import { Card, CardBody, Col, Container, Row, Label, CardHeader, FormGroup } from "reactstrap";
+import { Card, CardBody, Col, Container, Row, Label, CardHeader, FormGroup, TabPane, Button, Input  } from "reactstrap";
 import { AvForm, AvField, AvInput } from "availity-reactstrap-validation";
 import { useDispatch, useSelector } from "react-redux";
 import { AlertState } from "../../../store/actions";
@@ -37,7 +37,7 @@ const PartyMaster = (props) => {
     const [companyList_dropdown_Select, setCompanyList_dropdown_Select] = useState("");
     const [partyType_dropdown_Select, setPartyType_dropdown_Select] = useState("");
     const [PriceList_dropdown_Select, setPriceList_dropdown_Select] = useState("");
-
+    const [MKUpMkDown_DropdownSelect,setMKUpMkDown_DropdownSelect]=  useState("");
 
 
     //Access redux store Data /  'save_ModuleSuccess' action data
@@ -179,6 +179,9 @@ const PartyMaster = (props) => {
 
     }
 
+
+   
+
     const DistrictOnStateValues = DistrictOnState.map((Data) => ({
         value: Data.id,
         label: Data.Name
@@ -199,18 +202,21 @@ const PartyMaster = (props) => {
 
     }
 
-    const PartyTypeByDivisionTypeIDValues = PartyTypes.map((Data) => ({
+    const PartyTypeDropdown_Options= PartyTypes.map((Data) => ({
         value: Data.id,
         label: Data.Name
     }));
 
-    function handllerPartyTypeByDivisionTypeID(e) {
+    function PartyType_Dropdown_OnChange_Handller(e) {
         setPartyType_dropdown_Select(e)
         dispatch(GetPartyTypeByDivisionTypeID(e.value))
         dispatch(GetCompanyByDivisionTypeID(e.value))
         setPriceList_dropdown_Select('')
         setCompanyList_dropdown_Select('')
     }
+
+    
+
 
     const PriceList_DropdownOptions = PriceList.map((Data) => ({
         value: Data.id,
@@ -221,6 +227,27 @@ const PartyMaster = (props) => {
         setPriceList_dropdown_Select(e)
 
     }
+
+    const [marginTabTable, setMarginTabTable] = useState([{
+       State : { label: "selectState", value: 0 },
+        Margin: ''
+    }]);
+
+
+
+    
+
+//Mkup down dropdown
+const MKUpMkDown_DropdownSelectHandller = (e) => {
+    if (e.value === 2){
+        // dispatch( getMarkup (e.value));
+    }
+    else if (e.value === 1) {
+
+        // dispatch(getMarkupSuccess([]));
+    }
+    setMKUpMkDown_DropdownSelect(e);
+};
 
     //'Save' And 'Update' Button Handller
     const FormSubmitButton_Handler = (event, values) => {
@@ -340,7 +367,7 @@ const PartyMaster = (props) => {
                                                             </FormGroup>
                                                         </Col>
                                                     </Row>
-                                                    <Row className="mt-3 ">
+                                                    <Row className="mt-3">
                                                         <Col md="3">
                                                             <FormGroup className="mb-3">
                                                                 <Label htmlFor="validationCustom01">Email </Label>
@@ -372,8 +399,8 @@ const PartyMaster = (props) => {
                                                                 <Col sm={12}>
                                                                     <Select
                                                                         value={partyType_dropdown_Select}
-                                                                        options={PartyTypeByDivisionTypeIDValues}
-                                                                        onChange={(e) => { handllerPartyTypeByDivisionTypeID(e) }}
+                                                                        options={PartyTypeDropdown_Options}
+                                                                        onChange={(e) => { PartyType_Dropdown_OnChange_Handller(e) }}
                                                                     />
                                                                 </Col>
                                                             </FormGroup>
@@ -466,9 +493,117 @@ const PartyMaster = (props) => {
                                                                 />
                                                             </FormGroup>
                                                         </Col>
-                                                        <Col md="1">  </Col>
-                                                    </Row>
 
+                                                        <Col md="1">  </Col>
+                                                        <Col md="3">
+                                                           <FormGroup className="mb-3">
+                                                 <Label htmlFor="validationCustom01">MKUp MkDown</Label>
+                                                <Select
+                                              value={MKUpMkDown_DropdownSelect}
+                                           //   options={MKUpMkDown_DropdownOption}
+                                            autoComplete="off"
+                                             onChange={(e) => {
+                                              MKUpMkDown_DropdownSelectHandller(e);
+                                               }}
+                                              />
+                                               </FormGroup>
+                                                 </Col>
+                                                    </Row>
+<Row>
+                                                    <Col md="3">
+                                                            <FormGroup className="mb-3">
+                                                                <Label htmlFor="validationCustom01">State </Label>
+                                                                <Col sm={12}>
+                                                                    <Select
+                                                                        value={state_DropDown_select}
+                                                                        options={StateValues}
+                                                                        onChange={(e) => { handllerState(e) }}
+                                                                    />
+                                                                </Col>
+                                                            </FormGroup>
+                                                        </Col>
+
+                                                        <Col md="1">  </Col>
+                                                        <Col md="3">
+                                                            <FormGroup className="mb-3">
+                                                                <Label htmlFor="validationCustom01">District </Label>
+                                                                <Col sm={12}>
+                                                                    <Select
+                                                                        value={district_dropdown_Select}
+                                                                        options={DistrictOnStateValues}
+                                                                        onChange={(e) => { handllerDistrictOnState(e) }}
+                                                                    />
+                                                                </Col>
+                                                            </FormGroup>
+                                                        </Col>
+                                                        
+                                                        <Col md="1"></Col>
+                                                        <Col md="3">
+                                                            <FormGroup className="mb-3">
+                                                                <Row style={{ marginTop: '25px' }}>
+                                                                    <Label
+                                                                        htmlFor="horizontal-firstname-input"
+                                                                        className="col-sm-4 col-form-label"
+                                                                    >
+                                                                        Active
+                                                                    </Label>
+                                                                    <Col md={4} style={{ marginTop: '7px' }} className=" form-check form-switch form-switch-sm ">
+                                                                        <div className="form-check form-switch form-switch-md mb-3" dir="ltr">
+                                                                            <AvInput type="checkbox" className="form-check-input " id="inp-isActive"
+                                                                                checked={EditData.isActive}
+                                                                                defaultChecked={true}
+                                                                                name="isActive"
+                                                                            />
+                                                                            <label className="form-check-label" htmlFor="customSwitchsizemd"></label>
+                                                                        </div>
+                                                                    </Col>
+                                                                </Row>
+                                                            </FormGroup>
+                                                        </Col>
+                                                    </Row>
+                                                </Card>
+                                            </Row>
+
+                                            <Row>
+                                                <Card className="mt-n2" style={{ backgroundColor: "whitesmoke" }} >
+                                                    <Row className="mt-3 ">
+                                                        <Col md="7" >
+                                                            <FormGroup className="mb-3">
+                                                                <Label htmlFor="validationCustom01">Address </Label>
+                                                                <AvField name="Address" value={EditData.Address} type="text"
+                                                                    placeholder=" Please Enter Address "
+                                                                    validate={{
+                                                                        required: { value: true, errorMessage: 'Please Enter your Address' },
+                                                                    }}
+                                                                />
+                                                            </FormGroup>
+                                                        </Col>
+                                    
+                                                        <Col md="1">  </Col>
+                                                                <Col md="1">  
+                                                                   <Button className="btn btn-sm btn-light mt-4    align-items-sm-end " 
+                                                                           type="button"
+                                                                          onClick={() => {}} >
+                                                                         <i className="dripicons-plus"></i>
+                                                                   </Button>
+                                                                   </Col>
+                                                       
+                                                                        
+                                                                
+
+                                                        {/* <Col md="1">  </Col>
+                                                        <Col md="3">
+                                                            <FormGroup className="mb-2">
+                                                                <Label htmlFor="validationCustom01"> City </Label>
+                                                                <Select
+                                                                    value={""}
+                                                                    options={""}
+                                                                // onChange={(e) => { handllerDesignationID(e) }}
+                                                                />
+                                                            </FormGroup>
+                                                        </Col> */}
+
+                                                    </Row>
                                                     <Row>
                                                         {/* <Col md="4"></Col> */}
                                                         <Col md="3">
@@ -512,88 +647,6 @@ const PartyMaster = (props) => {
                                                                         setFSSAIExipry_Date_Select(dateStr)
                                                                     }}
                                                                 />
-                                                            </FormGroup>
-                                                        </Col>
-                                                        <Col md="1"></Col>
-                                                        <Col md="3">
-                                                            <FormGroup className="mb-3">
-                                                                <Row style={{ marginTop: '25px' }}>
-                                                                    <Label
-                                                                        htmlFor="horizontal-firstname-input"
-                                                                        className="col-sm-4 col-form-label"
-                                                                    >
-                                                                        Active
-                                                                    </Label>
-                                                                    <Col md={4} style={{ marginTop: '7px' }} className=" form-check form-switch form-switch-sm ">
-                                                                        <div className="form-check form-switch form-switch-md mb-3" dir="ltr">
-                                                                            <AvInput type="checkbox" className="form-check-input " id="inp-isActive"
-                                                                                checked={EditData.isActive}
-                                                                                defaultChecked={true}
-                                                                                name="isActive"
-                                                                            />
-                                                                            <label className="form-check-label" htmlFor="customSwitchsizemd"></label>
-                                                                        </div>
-                                                                    </Col>
-                                                                </Row>
-                                                            </FormGroup>
-                                                        </Col>
-                                                    </Row>
-                                                </Card>
-                                            </Row>
-
-                                            <Row  >
-                                                <Card className="mt-n2" style={{ backgroundColor: "whitesmoke" }} >
-                                                    <Row className="mt-3 ">
-                                                        <Col md="7" >
-                                                            <FormGroup className="mb-3">
-                                                                <Label htmlFor="validationCustom01">Address </Label>
-                                                                <AvField name="Address" value={EditData.Address} type="text"
-                                                                    placeholder=" Please Enter Address "
-                                                                    validate={{
-                                                                        required: { value: true, errorMessage: 'Please Enter your Address' },
-                                                                    }}
-                                                                />
-                                                            </FormGroup>
-                                                        </Col>
-                                                        {/* <Col md="1">  </Col>
-                                                        <Col md="3">
-                                                            <FormGroup className="mb-2">
-                                                                <Label htmlFor="validationCustom01"> City </Label>
-                                                                <Select
-                                                                    value={""}
-                                                                    options={""}
-                                                                // onChange={(e) => { handllerDesignationID(e) }}
-                                                                />
-                                                            </FormGroup>
-                                                        </Col> */}
-
-                                                    </Row>
-                                                    <Row>
-
-                                                        <Col md="3">
-                                                            <FormGroup className="mb-3">
-                                                                <Label htmlFor="validationCustom01">State </Label>
-                                                                <Col sm={12}>
-                                                                    <Select
-                                                                        value={state_DropDown_select}
-                                                                        options={StateValues}
-                                                                        onChange={(e) => { handllerState(e) }}
-                                                                    />
-                                                                </Col>
-                                                            </FormGroup>
-                                                        </Col>
-
-                                                        <Col md="1">  </Col>
-                                                        <Col md="3">
-                                                            <FormGroup className="mb-3">
-                                                                <Label htmlFor="validationCustom01">District </Label>
-                                                                <Col sm={12}>
-                                                                    <Select
-                                                                        value={district_dropdown_Select}
-                                                                        options={DistrictOnStateValues}
-                                                                        onChange={(e) => { handllerDistrictOnState(e) }}
-                                                                    />
-                                                                </Col>
                                                             </FormGroup>
                                                         </Col>
                                                         {/* <Col md="1">  </Col>

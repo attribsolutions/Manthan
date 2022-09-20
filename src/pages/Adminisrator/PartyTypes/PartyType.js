@@ -5,33 +5,33 @@ import {
   CardHeader,
   Col,
   Container,
-  DropdownItem,
-  DropdownMenu,
-  DropdownToggle,
   FormGroup,
   Label,
   Row,
-  UncontrolledDropdown,
+ 
 } from "reactstrap";
-import Breadcrumb from "../../../components/Common/Breadcrumb";
+
 import Select from "react-select";
 import { MetaTags } from "react-meta-tags";
-import { AvField, AvForm } from "availity-reactstrap-validation";
+
+import Breadcrumb from "../../../components/Common/Breadcrumb";
+import { AvField, AvForm,AvInput, } from "availity-reactstrap-validation";
+
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useHistory } from "react-router-dom";
 import { CommonGetRoleAccessFunction } from "../../../components/Common/CommonGetRoleAccessFunction";
 
-import { BreadcrumbShow, AlertState } from "../../../store/actions";
+
+import { BreadcrumbShow,AlertState } from "../../../store/actions";
+
 import {
   editPartyTypeSuccess,
-  PostPartyTypeAPI,
   PostPartyTypeAPISuccess,
+  getPartyTypelist,
   updatePartyTypeID,
+  PostPartyTypeAPI,
 } from "../../../store/Administrator/PartyTypeRedux/action";
-import {
-  getDivisionTypesID,
-  GetPartyTypeByDivisionTypeID,
-} from "../../../store/Administrator/PartyRedux/action";
+
 
 const PartyType = (props) => {
   const formRef = useRef(null);
@@ -46,8 +46,10 @@ const PartyType = (props) => {
   const [EditData, setEditData] = useState([]);
   const [pageMode, setPageMode] = useState("save");
   const [userPageAccessState, setUserPageAccessState] = useState("");
-  const [partyType_dropdown_Select, setPartyType_dropdown_Select] =
-    useState("");
+
+  console.log("userPageAccessState",userPageAccessState)
+
+    
 
   //Access redux store Data /  'save_ModuleSuccess' action data
 
@@ -78,8 +80,10 @@ const PartyType = (props) => {
   }, [RoleAccessModifiedinSingleArray]);
 
   useEffect(() => {
-    dispatch(GetPartyTypeByDivisionTypeID());
+    dispatch(getPartyTypelist());
   }, [dispatch]);
+
+
   // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
   useEffect(() => {
     if (!(userPageAccessState === "")) {
@@ -88,10 +92,6 @@ const PartyType = (props) => {
     if (!(editDataGatingFromList === undefined)) {
       setEditData(editDataGatingFromList);
       setPageMode("edit");
-      setPartyType_dropdown_Select({
-        value: editDataGatingFromList.PartyType_id,
-        label: editDataGatingFromList.PartyTypeName,
-      });
       dispatch(editPartyTypeSuccess({ Status: false }));
       dispatch(BreadcrumbShow(editDataGatingFromList.Name));
     } else if (!(propsPageMode === undefined)) {
@@ -99,263 +99,200 @@ const PartyType = (props) => {
     }
   }, [editDataGatingFromList, propsPageMode]);
 
-  useEffect(() => {
-    if (
-      PostAPIResponse.Status === true &&
-      PostAPIResponse.StatusCode === 200 &&
-      !(pageMode === "dropdownAdd")
-    ) {
-      setPartyType_dropdown_Select("");
 
-      dispatch(PostPartyTypeAPISuccess({ Status: false }));
-      formRef.current.reset();
-      if (pageMode === "dropdownAdd") {
-        dispatch(
-          AlertState({
-            Type: 1,
-            Status: true,
-            Message: PostAPIResponse.Message,
-          })
-        );
-      } else {
-        dispatch(
-          AlertState({
-            Type: 1,
-            Status: true,
-            Message: PostAPIResponse.Message,
-            RedirectPath: "/PartyTypeList",
-          })
-        );
-      }
-    } else if (
-      PostAPIResponse.Status === true &&
-      !(pageMode === "dropdownAdd")
-    ) {
-      dispatch(PostPartyTypeAPISuccess({ Status: false }));
-      dispatch(
-        AlertState({
-          Type: 4,
-          Status: true,
-          Message: JSON.stringify(PostAPIResponse.Message),
-          RedirectPath: false,
-          AfterResponseAction: false,
-        })
-      );
+    useEffect(() => {
+        if ((PostAPIResponse.Status === true) && (PostAPIResponse.StatusCode === 200)&&!(pageMode==="dropdownAdd")) {
+            // setpartyType_dropdown_Select('')
+            dispatch(PostPartyTypeAPISuccess({ Status: false }))
+            formRef.current.reset();
+            if (pageMode === "dropdownAdd") {
+                dispatch(AlertState({
+                    Type: 1,
+                    Status: true,
+                    Message: PostAPIResponse.Message,
+                }))
+            }
+            else {
+                dispatch(AlertState({
+                    Type: 1,
+                    Status: true,
+                    Message: PostAPIResponse.Message,
+                    RedirectPath: '/PartyTypeList',
+
+                }))
+            }
+        }
+        else if ((PostAPIResponse.Status === true) && !(pageMode==="dropdownAdd")) {
+            dispatch(PostPartyTypeAPISuccess({ Status: false }))
+            dispatch(AlertState({
+                Type: 4,
+                Status: true,
+                Message: JSON.stringify(PostAPIResponse.Message),
+                RedirectPath: false,
+                AfterResponseAction: false
+            }));
+        }
+    }, [PostAPIResponse])
+
+
+    
+
+    const FormSubmitButton_Handler = (event, values) => {
+        const jsonBody = JSON.stringify({
+            Name: values.Name,
+            IsSCM: values.IsSCM,
+            IsDivision: values.IsDivision,
+            CreatedBy: 1,
+            CreatedOn: "2022-07-18T00:00:00",
+            UpdatedBy: 1,
+            UpdatedOn: "2022-07-18T00:00:00"
+        });
+
+      
+        if (pageMode === "edit") {
+            dispatch(updatePartyTypeID(jsonBody, EditData.id));
+        }
+        else {
+            dispatch(PostPartyTypeAPI(jsonBody));
+        }
+    };
+  
+
+// IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
+var IsEditMode_Css = ''
+if ((pageMode === "edit")||(pageMode==="copy")||(pageMode==="dropdownAdd")) { IsEditMode_Css = "-5.5%" };
+
+    if (!(userPageAccessState === '')) {
+        return (
+            <React.Fragment>
+                <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
+                    <MetaTags>
+                        <title>PartyType| FoodERP-React FrontEnd</title>
+                    </MetaTags>
+                    <Breadcrumb breadcrumbItem={userPageAccessState.PageHeading} />
+                    <Container fluid>
+                        <Card className="text-black">
+                            <CardHeader className="card-header   text-black" style={{ backgroundColor: "#dddddd" }} >
+                                <h4 className="card-title text-black">{userPageAccessState.PageDescription}</h4>
+                                <p className="card-title-desc text-black">{userPageAccessState.PageDescriptionDetails}</p>
+                            </CardHeader>
+
+                            <CardBody className=" vh-10 0 text-black" style={{ backgroundColor: "#whitesmoke" }} >
+                                <AvForm onValidSubmit={(e, v) => { FormSubmitButton_Handler(e, v) }}
+                                    ref={formRef}
+                                >
+                                    <Row className="">
+                                        <Col md={12}>
+                                            <Card>
+                                                <CardBody style={{ backgroundColor: "whitesmoke" }}>
+                                                    <Row>
+                                                        <FormGroup className="mb-2 col col-sm-4 ">
+                                                            <Label htmlFor="validationCustom01">Name </Label>
+                                                            <AvField
+                                                                name="Name"
+                                                                id="txtName"
+                                                                value={EditData.Name}
+                                                                type="text"
+                                                                placeholder="Please Enter Name"
+                                                                autoComplete='off'
+                                                                validate={{
+                                                                    required: { value: true, errorMessage: 'Please Enter Name' },
+                                                                }}
+                                                                onChange={(e) => { dispatch(BreadcrumbShow(e.target.value)) }}
+                                                            />
+                                                        </FormGroup>
+                                                        
+                                                        <Row>
+                                                        <FormGroup className="mb-2 col col-sm-5">
+                                                            <Row className="justify-content-md-left">
+                                                                <Label htmlFor="horizontal-firstname-input" className="col-sm-3 col-form-label" >IsSCM </Label>
+                                                                <Col md={2} style={{ marginTop: '9px' }} >
+                                                                    <div className="form-check form-switch form-switch-md mb-3" dir="ltr">
+                                                                        <AvInput type="checkbox" className="form-check-input" id="customSwitchsizemd"
+                                                                            defaultChecked={EditData.IsSCM}
+                                                                            name="IsSCM"
+                                                                        // defaultChecked
+                                                                        />
+                                                                        <label className="form-check-label" htmlFor="customSwitchsizemd"></label>
+                                                                    </div>
+                                                                </Col>
+                                                            </Row>
+                                                        </FormGroup>
+                                                    </Row>
+
+                                                    <Row>
+                                                        <FormGroup className="mb-2 col col-sm-5">
+                                                            <Row className="justify-content-md-left">
+                                                                <Label htmlFor="horizontal-firstname-input" className="col-sm-3 col-form-label" >IsDivision </Label>
+                                                                <Col md={2} style={{ marginTop: '9px' }} >
+                                                                    <div className="form-check form-switch form-switch-md mb-3" dir="ltr">
+                                                                        <AvInput type="checkbox" className="form-check-input" id="customSwitchsizemd"
+                                                                            defaultChecked={EditData.IsDivision}
+                                                                            name="IsDivision"
+                                                                        // defaultChecked
+                                                                        />
+                                                                        <label className="form-check-label" htmlFor="customSwitchsizemd"></label>
+                                                                    </div>
+                                                                </Col>
+                                                            </Row>
+                                                        </FormGroup>
+                                                    </Row>
+
+                                                        <FormGroup>
+                                                            <Row>
+                                                                <Col sm={2}>
+                                                                    <div>
+                                                                        {
+                                                                            pageMode === "edit" ?
+                                                                                userPageAccessState.RoleAccess_IsEdit ?
+                                                                                    <button
+                                                                                        type="submit"
+                                                                                        data-mdb-toggle="tooltip" data-mdb-placement="top" title="Update Party Type"
+                                                                                        className="btn btn-success w-md"
+                                                                                    >
+                                                                                        <i class="fas fa-edit me-2"></i>Update
+                                                                                    </button>
+                                                                                    :
+                                                                                    <></>
+                                                                                : (
+                                                                                    userPageAccessState.RoleAccess_IsSave ?
+                                                                                        <button
+                                                                                            type="submit"
+                                                                                            data-mdb-toggle="tooltip" data-mdb-placement="top" title="Save Party Type"
+                                                                                            className="btn btn-primary w-md"
+                                                                                        > <i className="fas fa-save me-2"></i> Save
+                                                                                        </button>
+                                                                                        :
+                                                                                        <></>
+                                                                                )
+                                                                        }
+                                                                    </div>
+                                                                </Col>
+                                                            </Row>
+                                                        </FormGroup >
+                                                    </Row>
+
+                                                </CardBody>
+                                            </Card>
+                                        </Col>
+                                    </Row>
+                                </AvForm>
+                            </CardBody>
+                        </Card>
+
+                    </Container>
+                </div>
+            </React.Fragment>
+        )
     }
-  }, [PostAPIResponse]);
-
-  const PartyType_Dropdown_Options = PartyTypes.map((Data) => ({
-    value: Data.id,
-    label: Data.Name,
-  }));
-
-  function PartyType_OnChange_Handler(e) {
-    setPartyType_dropdown_Select(e);
-  }
-
-  const FormSubmitButton_Handler = (event, values) => {
-    const jsonBody = JSON.stringify({
-      Name: values.Name,
-      partyType: partyType_dropdown_Select.value,
-      CreatedBy: 1,
-      CreatedOn: "2022-07-18T00:00:00",
-      UpdatedBy: 1,
-      UpdatedOn: "2022-07-18T00:00:00",
-    });
-
-    if (pageMode === "edit") {
-      dispatch(updatePartyTypeID(jsonBody, EditData.id));
-    } else {
-      dispatch(PostPartyTypeAPI(jsonBody));
-    }
-  };
-
-  // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
-  var IsEditMode_Css = "";
-  if (pageMode === "edit" || pageMode == "dropdownAdd") {
-    IsEditMode_Css = "-5.5%";
-  }
-
-  if (!(userPageAccessState === "")) {
-    return (
-      <React.Fragment>
-        <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
-          <MetaTags>
-            <title>PartyType| FoodERP-React FrontEnd</title>
-          </MetaTags>
-          <Breadcrumb breadcrumbItem={userPageAccessState.PageHeading} />
-          <Container fluid>
-            <Card className="text-black">
-              <CardHeader
-                className="card-header   text-black"
-                style={{ backgroundColor: "#dddddd" }}
-              >
-                <h4 className="card-title text-black">
-                  {userPageAccessState.PageDescription}
-                </h4>
-                <p className="card-title-desc text-black">
-                  {userPageAccessState.PageDescriptionDetails}
-                </p>
-              </CardHeader>
-
-              <CardBody
-                className=" vh-10 0 text-black"
-                style={{ backgroundColor: "#whitesmoke" }}
-              >
-                <AvForm
-                  onValidSubmit={(e, v) => {
-                    FormSubmitButton_Handler(e, v);
-                  }}
-                  ref={formRef}
-                >
-                  <Row className="">
-                    <Col md={12}>
-                      <Card>
-                        <CardBody style={{ backgroundColor: "whitesmoke" }}>
-                          <Row>
-                            <FormGroup className="mb-2 col col-sm-4 ">
-                              <Label htmlFor="validationCustom01">Name </Label>
-                              <AvField
-                                name="Name"
-                                id="txtName"
-                                value={EditData.Name}
-                                type="text"
-                                placeholder="Please Enter Name"
-                                autoComplete="off"
-                                validate={{
-                                  required: {
-                                    value: true,
-                                    errorMessage: "Please Enter Name",
-                                  },
-                                }}
-                                onChange={(e) => {
-                                  dispatch(BreadcrumbShow(e.target.value));
-                                }}
-                              />
-                            </FormGroup>
-                            <Row>
-                              <Col md="4">
-                                <FormGroup className="mb-3">
-                                  <Label htmlFor="validationCustom01">
-                                    {" "}
-                                    Party Type{" "}
-                                  </Label>
-                                  <Col sm={12}>
-                                    <Select
-                                      value={partyType_dropdown_Select}
-                                      options={PartyType_Dropdown_Options}
-                                      onChange={(e) => {
-                                        PartyType_OnChange_Handler(e);
-                                      }}
-                                    />
-                                  </Col>
-                                </FormGroup>
-                              </Col>
-                            </Row>
-                            <FormGroup>
-                              <Row>
-                                <Col sm={2}>
-                                  <div>
-                                    {pageMode === "edit" ? (
-                                      userPageAccessState.RoleAccess_IsEdit ? (
-                                        <button
-                                          type="submit"
-                                          data-mdb-toggle="tooltip"
-                                          data-mdb-placement="top"
-                                          title="Update Party Type"
-                                          className="btn btn-success w-md"
-                                        >
-                                          <i class="fas fa-edit me-2"></i>Update
-                                        </button>
-                                      ) : (
-                                        <></>
-                                      )
-                                    ) : userPageAccessState.RoleAccess_IsSave ? (
-                                      <button
-                                        type="submit"
-                                        data-mdb-toggle="tooltip"
-                                        data-mdb-placement="top"
-                                        title="Save Party Type"
-                                        className="btn btn-primary w-md"
-                                      >
-                                        {" "}
-                                        <i className="fas fa-save me-2"></i>{" "}
-                                        Save
-                                      </button>
-                                    ) : (
-                                      <></>
-                                    )}
-                                  </div>
-                                </Col>
-                              </Row>
-                            </FormGroup>
-                          </Row>
-                        </CardBody>
-                      </Card>
-                    </Col>
-                  </Row>
-                </AvForm>
-              </CardBody>
-            </Card>
-          </Container>
-        </div>
-      </React.Fragment>
-    );
-  } else {
-    return <React.Fragment></React.Fragment>;
-  }
+    else {
+        return (
+            <React.Fragment></React.Fragment>
+        )
+        }
 };
+    
+export default PartyType
 
-export default PartyType;
 
-export var arrData = [
-  {
-    id: 1,
-    Name: "IsShowOnMenu1",
-    arrData: [
-      {
-        id: 1,
-        Name: "IsShowOnMenu2",
-        arrData: [
-          {
-            id: 1,
-            Name: "IsShowOnMenu3",
-            arrData: [],
-          },
-          {
-            id: 1,
-            Name: "IsShowOnMenu4",
-            arrData: [],
-          },
-        ],
-      },
-      {
-        id: 1,
-        Name: "IsShowOnMenu5",
-        arrData: [
-          {
-            id: 1,
-            Name: "IsShowOnMenu6",
-            arrData: [],
-          },
-          {
-            id: 1,
-            Name: "IsShowOnMenu7",
-            arrData: [
-              {
-                id: 1,
-                Name: "IsShowOnMenu8",
-                arrData: [],
-              },
-              {
-                id: 1,
-                Name: "IsShowOnMenu9",
-                arrData: [],
-              },
-            ],
-          },
-        ],
-      },
-    ],
-  },
-];
+ 
