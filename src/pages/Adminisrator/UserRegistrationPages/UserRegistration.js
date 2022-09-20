@@ -1,9 +1,9 @@
 import React, { useState, useRef, useEffect } from "react";
 import Select from "react-select";
-import { Card, CardBody, Col, Container, Row, CardHeader, Label, FormGroup, } from "reactstrap";
+import { Card, CardBody, Col, Container, Row, CardHeader, Label,  FormGroup,  } from "reactstrap";
 import { AvForm, AvInput } from "availity-reactstrap-validation";
 import { useDispatch, useSelector } from "react-redux";
-import { getRoles, addUser, updateID, addUserSuccess, GetUserPartiesForUserMastePage, getEmployeeForUseRegistration }
+import {  getRoles, addUser, updateID, addUserSuccess, GetUserPartiesForUserMastePage, getEmployeeForUseRegistration }
   from "../../../store/Administrator/UserRegistrationRedux/actions";
 import Breadcrumb from "../../../components/Common/Breadcrumb";
 import AvField from "availity-reactstrap-validation/lib/AvField";
@@ -32,7 +32,7 @@ const AddUser = (props) => {
   const [partyRoleData, setPartyRoleData] = useState([]);
   const [EmployeeSelect, setEmployeeSelect] = useState("");
   const [userPartiesForUserMaster, setUserPartiesForUserMaster] = useState([]);
-
+console.log(editDataGatingFromList,"editDataGatingFromList")
   // M_Roles DropDown
   const [RoleDropDown, setRoleDropDown] = useState([]);
 
@@ -100,6 +100,9 @@ const AddUser = (props) => {
     }
   }, [RoleAccessModifiedinSingleArray])
 
+  const FindPartyID = userPartiesForUserMaster_redux.find((index) => {
+    return index.Party_id === null
+  })
 
   useEffect(() => {
 
@@ -117,13 +120,12 @@ const AddUser = (props) => {
   // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
   useEffect(() => {
 
-    if (!(userPageAccessState === '')) {
-      document.getElementById("txtName").focus();
-      document.getElementById("txtName").disabled = true
-    }
+    if (!(userPageAccessState === '')) { document.getElementById("txtName").focus();
+    //  document.getElementById("EmployeeDropDown").disabled = true
+     document.getElementById("txtName").disabled = true }
 
     if (!(editDataGatingFromList === undefined)) {
-
+     
       setEditData(editDataGatingFromList);
       dispatch(BreadcrumbShow(editDataGatingFromList.LoginName))
       setPageMode(pageModeProps);
@@ -132,8 +134,9 @@ const AddUser = (props) => {
         value: editDataGatingFromList.Employee,
         label: editDataGatingFromList.EmployeeName,
       })
-
+    
       setUserPartiesForUserMaster(editDataGatingFromList.UserRole)
+
 
       let arraynew = []
       editDataGatingFromList.UserRole.map((i) => {
@@ -141,12 +144,12 @@ const AddUser = (props) => {
           arraynew.push({ Party: i.Party, Role: i2.Role })
         })
       })
-
-      setPartyRoleData(arraynew)
-
+    
+      setPartyRoleData(editDataGatingFromList.UserRole)
+      // setRoleDropDown(editDataGatingFromList.UserRole)
       return
     }
-
+ 
   }, [editDataGatingFromList])
 
   useEffect(() => {
@@ -155,6 +158,7 @@ const AddUser = (props) => {
       dispatch(addUserSuccess({ Status: false }))
       formRef.current.reset();
       setEmployeeSelect('')
+      setRoleDropDown('')
       setPartyRoleData('')
       if (pageMode === "other") {
         dispatch(AlertState({
@@ -207,6 +211,11 @@ const AddUser = (props) => {
   }));
 
 
+  function RoleDropdownHandler(e) {
+    setRoleDropDown(e)
+
+  }
+
   /// Role dopdown
   function RoleDropDown_select_handler(event, pty, key) {
 
@@ -221,12 +230,14 @@ const AddUser = (props) => {
     if ((find === undefined)) {
       setPartyRoleData(nwPtRole)
     } else {
+      // RoleDropDown
+      // const newarray=nwPtRole.concat(nwPtRole)
       setPartyRoleData(nwPtRole.concat(find))
     }
   };
 
   const handleValidSubmit = (event, values) => {
-
+    debugger
     const jsonBody = JSON.stringify({
       email: values.email,
       LoginName: values.loginName,
@@ -240,10 +251,9 @@ const AddUser = (props) => {
       CreatedBy: 1,
       UpdatedBy: 1,
       UserRole: partyRoleData
-
-
     })
-    if (partyRoleData.length === 0) {
+
+    if (partyRoleData.length <= 0 && !(FindPartyID)) {
       dispatch(AlertState({
         Type: 4, Status: true,
         Message: "At Least One Role Data Add in the Table",
@@ -252,14 +262,17 @@ const AddUser = (props) => {
       }));
     }
     else if (pageMode === 'edit') {
+     
       dispatch(updateID(jsonBody, EditData.id));
       setEditData([]);
+      console.log("Update jsonBody", jsonBody)
     }
     else {
       dispatch(addUser(jsonBody));
       console.log("Post jsonBody", jsonBody)
     }
   };
+
 
   const rolaTable = () => {
 
@@ -329,21 +342,20 @@ const AddUser = (props) => {
                       <Card className=" text-black">
                         <CardBody style={{ backgroundColor: "whitesmoke" }}>
                           <Row >
-
+                           
                             <div>
-                              <FormGroup className="mb-2 col col-sm-4 " >
-                                <Label htmlFor="validationCustom01">Employee</Label>
-                                <Select
-                                  id="EmployeeDropDown "
-                                  // disabled={true}
-                                  value={EmployeeSelect}
-                                  options={EmployeeValues}
-                                  onChange={(e) => { handllerEmployeeID(e) }}
-                                  isDisabled={(pageMode === "save") ? false : true}
-                                />
-                              </FormGroup>
+                            <FormGroup className="mb-2 col col-sm-4 " >
+                              <Label htmlFor="validationCustom01">Employee</Label>
+                              <Select
+                                id="EmployeeDropDown "
+                                // disabled={true}
+                                value={EmployeeSelect}
+                                options={EmployeeValues}
+                                onChange={(e) => { handllerEmployeeID(e) }}
+                              />
+                            </FormGroup>
                             </div>
-
+                            
                           </Row>
                           <Row >
 
@@ -499,7 +511,7 @@ const AddUser = (props) => {
                                 <i className="dripicons-plus "></i>
                               </Button>
                             </Col> */}
-                            {!(userPartiesForUserMaster.length === 0) ? userPartiesForUserMaster[0].Party > 0 ?
+                            {!(userPartiesForUserMaster.length === 0) ? userPartiesForUserMaster[0].Party>0 ?
                               <Col sm={6} style={{ marginTop: '28px' }}>
 
                                 {partyRoleData ? (
@@ -509,20 +521,20 @@ const AddUser = (props) => {
                                 ) :
                                   null
                                 }
-                              </Col> : <div className="col-lg-3 col-md-6">
-                                <div className="mb-3">
-                                  <Label className="form-label font-size-13 ">Role name</Label>
-
-                                  <Select
-                                    defaultValue={pageMode === "edit" ? userPartiesForUserMaster[0].PartyRoles.map((i) => ({ value: i.Role, label: i.RoleName })) : null}
-                                    options={RolesValues}
-                                    isMulti={true}
-                                    className="basic-multi-select"
-                                    onChange={(event) => { RoleDropDown_select_handler(event, userPartiesForUserMaster[0], 0) }}
-                                    classNamePrefix="select2-selection"
-                                  />
-                                </div>
-                              </div> : <></>}
+                              </Col> :<div className="col-lg-3 col-md-6">
+                              <div className="mb-3">
+                                <Label className="form-label font-size-13 ">Role name</Label>
+                               
+                  <Select
+                    defaultValue={pageMode === "edit" ? userPartiesForUserMaster[0].PartyRoles.map((i) => ({ value: i.Role, label: i.RoleName })) : null}
+                    options={RolesValues}
+                    isMulti={true}
+                    className="basic-multi-select"
+                    onChange={(event) => { RoleDropDown_select_handler(event, userPartiesForUserMaster[0], 0) }}
+                    classNamePrefix="select2-selection"
+                  />
+                              </div>
+                            </div> : <></>}
 
                             {/* {FindPartyID ? <div className="col-lg-3 col-md-6">
                               <div className="mb-3">
@@ -543,9 +555,9 @@ const AddUser = (props) => {
                                 <div>
                                   {
                                     pageMode === "edit" ?
-
+                                    
                                       userPageAccessState.RoleAccess_IsEdit ?
-
+                                      
                                         <button
                                           type="submit"
                                           data-mdb-toggle="tooltip" data-mdb-placement="top" title="Update User"
