@@ -18,13 +18,13 @@ export const EDIT_PARTY_ID_SUCCESS="EDIT_PARTY_ID_SUCCESS"
 export const UPDATE_PARTY_ID="UPDATE_PARTY_ID"
 export const UPDATE_PARTY_ID_SUCCESS="UPDATE_PARTY_ID_SUCCESS"
 
+//get pricelist
+  export const  GET_PRICELIST="GET_PRICELIST"
+  export const   GET_PRICELIST_SUCCESS="GET_PRICELIST_SUCCESS"
+  
 // GetDistrictOnState API
 export const GET_DISTRICT_ON_STATE="GET_DISTRICT_ON_STATE"
 export const GET_DISTRICT_ON_STATE_SUCCESS="GET_DISTRICT_ON_STATE_SUCCESS"
-
-  //DivisionTypes  dropdown api
-export const GET_DIVISION_TYPES_ID="GET_DIVISION_TYPES_ID"
-export const GET_DIVISION_TYPES_ID_SUCCESS="GET_DIVISION_TYPES_ID_SUCCESS"
 
 
   // GetPartyTypeByDivisionTypeID API dependent on DivisionTypes api

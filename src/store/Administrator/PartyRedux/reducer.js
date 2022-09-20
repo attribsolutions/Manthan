@@ -3,8 +3,8 @@ import {
     EDIT_PARTY_ID_SUCCESS,
     GET_COMPANY_BY_DIVISIONTYPES_ID_SUCCESS,
     GET_DISTRICT_ON_STATE_SUCCESS,
-    GET_DIVISION_TYPES_ID_SUCCESS,
     GET_PARTTYPE_BY_DIVISIONTYPES_ID_SUCCESS,
+    GET_PRICELIST_SUCCESS,
     GET_PARTY_LIST_API_SUCCESS,
     POST_PARTY_DATA_SUCCESS,
     UPDATE_PARTY_ID_SUCCESS
@@ -17,8 +17,8 @@ const INIT_STATE = {
     editData: { Status: false },
     updateMessage: { Status: false },
     DistrictOnState:[],
-    DivisionTypes:[],
     PartyTypes:[],
+    priceList:[],
     CompanyName:[]
 };
 
@@ -68,12 +68,13 @@ const PartyMasterReducer = (state = INIT_STATE, action) => {
             };
   
 
-         //DivisionTypes  dropdown api
-        case GET_DIVISION_TYPES_ID_SUCCESS:
-          return {
-            ...state,
-            DivisionTypes: action.payload,
-          };
+        //get PriceList
+        case GET_PRICELIST_SUCCESS:
+            return {
+              ...state,
+              priceList: action.payload,
+            };
+  
 
           // GetPartyTypeByDivisionTypeID API dependent on DivisionTypes api
         case GET_PARTTYPE_BY_DIVISIONTYPES_ID_SUCCESS:

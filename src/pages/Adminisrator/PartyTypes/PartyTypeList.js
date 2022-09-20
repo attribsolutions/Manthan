@@ -177,8 +177,8 @@ const PartyTypeList = (props) => {
     },
     
     {
-      text: "Division Type Name ",
-      dataField: "DivisionTypeName",
+      text: "Party Type Name ",
+      dataField: "PartyTypeName",
       sort: true,
     },
    

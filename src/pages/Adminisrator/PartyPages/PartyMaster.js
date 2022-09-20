@@ -7,7 +7,7 @@ import { AlertState } from "../../../store/actions";
 import Select from "react-select";
 import {
     editPartyIDSuccess, GetCompanyByDivisionTypeID, getDistrictOnState, getDistrictOnStateSuccess, getDivisionTypesID,
-    GetPartyTypeByDivisionTypeID, postPartyData, postPartyDataSuccess, updatePartyID
+    GetPartyTypeByDivisionTypeID, getPricelist, postPartyData, postPartyDataSuccess, updatePartyID
 } from "../../../store/Administrator/PartyRedux/action";
 import { getState } from "../../../store/Administrator/M_EmployeeRedux/action";
 import Flatpickr from "react-flatpickr"
@@ -35,18 +35,19 @@ const PartyMaster = (props) => {
     const [FSSAIExipry_Date_Select, setFSSAIExipry_Date_Select] = useState("");
     const [district_dropdown_Select, setDistrict_dropdown_Select] = useState("");
     const [companyList_dropdown_Select, setCompanyList_dropdown_Select] = useState("");
-    const [division_dropdown_Select, setDivision_dropdown_Select] = useState("");
     const [partyType_dropdown_Select, setPartyType_dropdown_Select] = useState("");
+    const [PriceList_dropdown_Select, setPriceList_dropdown_Select] = useState("");
+
 
 
     //Access redux store Data /  'save_ModuleSuccess' action data
-    const { PostAPIResponse, State, DistrictOnState, companyList, DivisionTypes, PartyTypes, RoleAccessModifiedinSingleArray } = useSelector((state) => ({
+    const { PostAPIResponse, State, DistrictOnState, companyList, PartyTypes, PriceList, RoleAccessModifiedinSingleArray } = useSelector((state) => ({
         PostAPIResponse: state.PartyMasterReducer.PartySaveSuccess,
         State: state.M_EmployeesReducer.State,
         DistrictOnState: state.PartyMasterReducer.DistrictOnState,
         companyList: state.PartyMasterReducer.CompanyName,
-        DivisionTypes: state.PartyMasterReducer.DivisionTypes,
         PartyTypes: state.PartyMasterReducer.PartyTypes,
+        PriceList:state.PartyMasterReducer.priceList,
         RoleAccessModifiedinSingleArray: state.Login.RoleAccessUpdateData,
 
     }));
@@ -81,8 +82,8 @@ const PartyMaster = (props) => {
         dispatch(getState());
         dispatch(getDistrictOnState());
         dispatch(GetCompanyByDivisionTypeID());
-        dispatch(getDivisionTypesID());
         dispatch(GetPartyTypeByDivisionTypeID());
+        dispatch(getPricelist());
     }, [dispatch]);
 
 
@@ -106,13 +107,13 @@ const PartyMaster = (props) => {
                 label: editDataGatingFromList.CompanyName
             })
 
-            setDivision_dropdown_Select({
-                value: editDataGatingFromList.DivisionType_id,
-                label: editDataGatingFromList.DivisionTypeName
-            })
             setPartyType_dropdown_Select({
                 value: editDataGatingFromList.PartyType_id,
                 label: editDataGatingFromList.PartyTypeName
+            })
+            setPriceList_dropdown_Select({
+                value: editDataGatingFromList.PriceList_id,
+                label: editDataGatingFromList.PriceListName
             })
             setState_DropDown_select({
                 value: editDataGatingFromList.State_id,
@@ -132,8 +133,8 @@ const PartyMaster = (props) => {
             dispatch(postPartyDataSuccess({ Status: false }))
             formRef.current.reset();
             setCompanyList_dropdown_Select('')
-            setDivision_dropdown_Select('')
             setPartyType_dropdown_Select('')
+            setPriceList_dropdown_Select('')
             setDistrict_dropdown_Select('')
             setState_DropDown_select('')
             setFSSAIExipry_Date_Select('')
@@ -198,19 +199,6 @@ const PartyMaster = (props) => {
 
     }
 
-    const DivisionTypesValues = DivisionTypes.map((Data) => ({
-        value: Data.id,
-        label: Data.Name
-    }));
-
-    function handllerDivisionTypes(e) {
-        setDivision_dropdown_Select(e)
-        dispatch(GetPartyTypeByDivisionTypeID(e.value))
-        dispatch(GetCompanyByDivisionTypeID(e.value))
-        setPartyType_dropdown_Select('')
-        setCompanyList_dropdown_Select('')
-    }
-
     const PartyTypeByDivisionTypeIDValues = PartyTypes.map((Data) => ({
         value: Data.id,
         label: Data.Name
@@ -218,6 +206,19 @@ const PartyMaster = (props) => {
 
     function handllerPartyTypeByDivisionTypeID(e) {
         setPartyType_dropdown_Select(e)
+        dispatch(GetPartyTypeByDivisionTypeID(e.value))
+        dispatch(GetCompanyByDivisionTypeID(e.value))
+        setPriceList_dropdown_Select('')
+        setCompanyList_dropdown_Select('')
+    }
+
+    const PriceList_DropdownOptions = PriceList.map((Data) => ({
+        value: Data.id,
+        label: Data.Name
+    }));
+
+    function handllerPriceList(e) {
+        setPriceList_dropdown_Select(e)
 
     }
 
@@ -226,8 +227,8 @@ const PartyMaster = (props) => {
 
         const jsonBody = JSON.stringify({
             Name: values.Name,
-            PartyType: partyType_dropdown_Select.value,
-            DivisionType: division_dropdown_Select.value,
+            PriceList: PriceList_DropdownOptions.value,
+            PartyType:  partyType_dropdown_Select.value,
             Company: companyList_dropdown_Select.value,
             PAN: values.PAN,
             CustomerDivision: values.CustomerDivision,
@@ -367,37 +368,26 @@ const PartyMaster = (props) => {
                                                     <Row className="mt-3 ">
                                                         <Col md="3">
                                                             <FormGroup className="mb-3">
-                                                                <Label htmlFor="validationCustom01"> Division Type </Label>
-                                                                <Col sm={12}>
-                                                                    <Select
-                                                                        value={division_dropdown_Select}
-                                                                        options={DivisionTypesValues}
-                                                                        onChange={(e) => { handllerDivisionTypes(e) }}
-                                                                    />
-                                                                </Col>
-                                                            </FormGroup>
-                                                        </Col>
-
-
-
-
-
-
-
-
-
-
-
-
-                                                        <Col md="1">  </Col>
-                                                        <Col md="3">
-                                                            <FormGroup className="mb-3">
-                                                                <Label htmlFor="validationCustom01">Party Type </Label>
+                                                                <Label htmlFor="validationCustom01"> Party Type </Label>
                                                                 <Col sm={12}>
                                                                     <Select
                                                                         value={partyType_dropdown_Select}
                                                                         options={PartyTypeByDivisionTypeIDValues}
                                                                         onChange={(e) => { handllerPartyTypeByDivisionTypeID(e) }}
+                                                                    />
+                                                                </Col>
+                                                            </FormGroup>
+                                                        </Col>
+
+                                                        <Col md="1">  </Col>
+                                                        <Col md="3">
+                                                            <FormGroup className="mb-3">
+                                                                <Label htmlFor="validationCustom01">Price List </Label>
+                                                                <Col sm={12}>
+                                                                    <Select
+                                                                        value={PriceList_dropdown_Select}
+                                                                        options={PriceList_DropdownOptions}
+                                                                        onChange={(e) => { handllerPriceList(e) }}
                                                                     />
                                                                 </Col>
                                                             </FormGroup>
