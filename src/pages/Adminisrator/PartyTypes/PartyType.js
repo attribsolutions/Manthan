@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import {
+    Breadcrumb,
   Card,
   CardBody,
   CardHeader,
@@ -22,13 +23,14 @@ import { Link, useHistory } from "react-router-dom";
 import { CommonGetRoleAccessFunction } from "../../../components/Common/CommonGetRoleAccessFunction";
 
 
-import { BreadcrumbShow,AlertState } from "../../../store/action";
+import { BreadcrumbShow,AlertState } from "../../../store/actions";
 
 import {
   editPartyTypeSuccess,
   PostPartyTypeAPISuccess,
   getPartyTypelist,
   updatePartyTypeID,
+  PostPartyTypeAPI,
 } from "../../../store/Administrator/PartyTypeRedux/action";
 
 
