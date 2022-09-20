@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
 import {
-    Breadcrumb,
   Card,
   CardBody,
   CardHeader,
@@ -15,7 +14,7 @@ import {
 import Select from "react-select";
 import { MetaTags } from "react-meta-tags";
 
-
+import Breadcrumb from "../../../components/Common/Breadcrumb";
 import { AvField, AvForm,AvInput, } from "availity-reactstrap-validation";
 
 import { useDispatch, useSelector } from "react-redux";
@@ -48,6 +47,7 @@ const PartyType = (props) => {
   const [pageMode, setPageMode] = useState("save");
   const [userPageAccessState, setUserPageAccessState] = useState("");
 
+  console.log("userPageAccessState",userPageAccessState)
 
     
 
