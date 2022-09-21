@@ -6,8 +6,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { AlertState } from "../../../store/actions";
 import Select from "react-select";
 import {
-    editPartyIDSuccess, GetCompanyByDivisionTypeID, getDistrictOnState, getDistrictOnStateSuccess, getDivisionTypesID,
-    GetPartyTypeByDivisionTypeID, getPricelist, postPartyData, postPartyDataSuccess, updatePartyID
+    editPartyIDSuccess, getAddressTypes, GetCompanyByDivisionTypeID, getDistrictOnState, getDistrictOnStateSuccess, getDivisionTypesID,
+    GetPartyTypeByDivisionTypeID, getPricelist,postPartyData, postPartyDataSuccess, updatePartyID
 } from "../../../store/Administrator/PartyRedux/action";
 import { getState } from "../../../store/Administrator/M_EmployeeRedux/action";
 import Flatpickr from "react-flatpickr"
@@ -38,16 +38,17 @@ const PartyMaster = (props) => {
     const [partyType_dropdown_Select, setPartyType_dropdown_Select] = useState("");
     const [PriceList_dropdown_Select, setPriceList_dropdown_Select] = useState("");
     const [MKUpMkDown_DropdownSelect,setMKUpMkDown_DropdownSelect]=  useState("");
-
+    const [AddressType_DropdownSelect, setAddressType_DropdownSelect] = useState("");
 
     //Access redux store Data /  'save_ModuleSuccess' action data
-    const { PostAPIResponse, State, DistrictOnState, companyList, PartyTypes, PriceList, RoleAccessModifiedinSingleArray } = useSelector((state) => ({
+    const { PostAPIResponse, State, DistrictOnState, companyList, PartyTypes, PriceList, AddressTypes, RoleAccessModifiedinSingleArray } = useSelector((state) => ({
         PostAPIResponse: state.PartyMasterReducer.PartySaveSuccess,
         State: state.M_EmployeesReducer.State,
         DistrictOnState: state.PartyMasterReducer.DistrictOnState,
         companyList: state.PartyMasterReducer.CompanyName,
         PartyTypes: state.PartyMasterReducer.PartyTypes,
         PriceList:state.PartyMasterReducer.priceList,
+        AddressTypes:state.PartyMasterReducer.AddressTypes,
         RoleAccessModifiedinSingleArray: state.Login.RoleAccessUpdateData,
 
     }));
@@ -81,6 +82,7 @@ const PartyMaster = (props) => {
     useEffect(() => {
         dispatch(getState());
         dispatch(getDistrictOnState());
+        dispatch(getAddressTypes());
         dispatch(GetCompanyByDivisionTypeID());
         dispatch(GetPartyTypeByDivisionTypeID());
         dispatch(getPricelist());
@@ -120,6 +122,12 @@ const PartyMaster = (props) => {
                 label: editDataGatingFromList.StateName
             })
 
+            setAddressType_DropdownSelect({
+                value: editDataGatingFromList.Address_id,
+                label: editDataGatingFromList.AddressName
+            })
+
+
             dispatch(editPartyIDSuccess({ Status: false }))
         }
         else if (!(propsPageMode === undefined)) {
@@ -138,6 +146,7 @@ const PartyMaster = (props) => {
             setDistrict_dropdown_Select('')
             setState_DropDown_select('')
             setFSSAIExipry_Date_Select('')
+            setAddressType_DropdownSelect('')
             if (pageMode === "dropdownAdd") {
                 dispatch(AlertState({
                     Type: 1,
@@ -179,9 +188,6 @@ const PartyMaster = (props) => {
 
     }
 
-
-   
-
     const DistrictOnStateValues = DistrictOnState.map((Data) => ({
         value: Data.id,
         label: Data.Name
@@ -213,10 +219,10 @@ const PartyMaster = (props) => {
         dispatch(GetCompanyByDivisionTypeID(e.value))
         setPriceList_dropdown_Select('')
         setCompanyList_dropdown_Select('')
+
     }
 
     
-
 
     const PriceList_DropdownOptions = PriceList.map((Data) => ({
         value: Data.id,
@@ -228,14 +234,19 @@ const PartyMaster = (props) => {
 
     }
 
-    const [marginTabTable, setMarginTabTable] = useState([{
-       State : { label: "selectState", value: 0 },
-        Margin: ''
-    }]);
+    // for AddressType dropdown
+  const AddressTypes_DropdownSelectHandller = (e) => {
+    setAddressType_DropdownSelect(e);
+  };
 
 
-
+  const AddressType_DropdownOption = AddressTypes.map((d) => ({
+    value: d.id,
+    label: d.Name,
+  }));
     
+    
+
 
 //Mkup down dropdown
 const MKUpMkDown_DropdownSelectHandller = (e) => {
@@ -260,6 +271,7 @@ const MKUpMkDown_DropdownSelectHandller = (e) => {
             PAN: values.PAN,
             CustomerDivision: values.CustomerDivision,
             Email: values.Email,
+            AddressType:AddressType_DropdownSelect.value,
             Address: values.Address,
             PIN: values.PIN,
             MobileNo: values.MobileNo,
@@ -509,7 +521,7 @@ const MKUpMkDown_DropdownSelectHandller = (e) => {
                                                </FormGroup>
                                                  </Col>
                                                     </Row>
-<Row>
+                                                   <Row>
                                                     <Col md="3">
                                                             <FormGroup className="mb-3">
                                                                 <Label htmlFor="validationCustom01">State </Label>
@@ -566,7 +578,23 @@ const MKUpMkDown_DropdownSelectHandller = (e) => {
 
                                             <Row>
                                                 <Card className="mt-n2" style={{ backgroundColor: "whitesmoke" }} >
-                                                    <Row className="mt-3 ">
+                                                    <Row className="mt-3">
+
+                                                    <Col md="7" >
+                                                            <FormGroup className="mb-3">
+                                                                <Label htmlFor="validationCustom01">AddressType </Label>
+                                                                <Select
+                                                                       value={AddressType_DropdownSelect}
+                                                                       options={AddressType_DropdownOption}
+                                                                       autoComplete="off"
+                                                                        onChange={(e) => {
+                                                                            AddressTypes_DropdownSelectHandller(e);
+                                                                  }}
+                                                                       />
+                                                            </FormGroup>
+                                                        </Col>
+
+
                                                         <Col md="7" >
                                                             <FormGroup className="mb-3">
                                                                 <Label htmlFor="validationCustom01">Address </Label>
@@ -587,10 +615,7 @@ const MKUpMkDown_DropdownSelectHandller = (e) => {
                                                                          <i className="dripicons-plus"></i>
                                                                    </Button>
                                                                    </Col>
-                                                       
-                                                                        
-                                                                
-
+                                            
                                                         {/* <Col md="1">  </Col>
                                                         <Col md="3">
                                                             <FormGroup className="mb-2">
@@ -681,10 +706,94 @@ const MKUpMkDown_DropdownSelectHandller = (e) => {
                                                                 />
                                                             </FormGroup>
                                                         </Col>
-                                                    </Row>
 
-                                                    <FormGroup >
-                                                        <Row >
+                                                        <Col md="1">  </Col>
+                                                        <Col md="9">
+                                                        <FormGroup className="mb-2 col col-sm-5">
+                                                            <Row className="justify-content-md-left">
+                                                                <Label htmlFor="horizontal-firstname-input" className="col-sm-3 col-form-label" >IsDefault </Label>
+                                                                <Col md={2} style={{ marginTop: '9px' }} >
+                                                                    <div className="form-check form-switch form-switch-md mb-3" dir="ltr">
+                                                                        <AvInput type="checkbox" className="form-check-input" id="customSwitchsizemd"
+                                                                            defaultChecked={EditData.IsDefault}
+                                                                            name="IsDefault"
+                                                                        // defaultChecked
+                                                                        />
+                                                                        <label className="form-check-label" htmlFor="customSwitchsizemd"></label>
+                                                                    </div>
+                                                                </Col>
+                                                            </Row>
+                                                        </FormGroup>
+                                                    </Col>
+
+                                                    </Row>
+                                                    </Card>
+                                                    {/* <Row>
+                                                        <Col md={12}  >
+                                                            <Card className="text-black">
+                                                                <CardBody style={{ backgroundColor: "whitesmoke" }}>
+
+                                                                    { AddressTabTable.map((index, key) => {
+
+                                                                        return <Row className="mt-3">
+                                                                            <Col className=" col col-11 ">
+                                                                            <Row>
+                                                         <Card className="mt-n2" style={{ backgroundColor: "whitesmoke" }} >
+                                                         <Row className="mt-3">
+
+                                                         <Col md="7" >
+                                                            <FormGroup className="mb-3">
+                                                                <Label htmlFor="validationCustom01">AddressType </Label>
+                                                                <Select
+                                                                       value={AddressType_DropdownSelect}
+                                                                       options={AddressType_DropdownOption}
+                                                                       autoComplete="off"
+                                                                        onChange={(e) => {
+                                                                            AddressType_DropdownSelectHandller(e);
+                                                                  }}
+                                                                       />
+                                                            </FormGroup>
+                                                        </Col>
+
+
+                                                        <Col md="7" >
+                                                            <FormGroup className="mb-3">
+                                                                <Label htmlFor="validationCustom01">Address </Label>
+                                                                <AvField name="Address" value={EditData.Address} type="text"
+                                                                    placeholder=" Please Enter Address "
+                                                                    validate={{
+                                                                        required: { value: true, errorMessage: 'Please Enter your Address' },
+                                                                    }}
+                                                                />
+                                                            </FormGroup>
+                                                        </Col>
+                                    
+                                                        <Col md="1">  </Col>
+                                                                <Col md="1">  
+                                                                   <Button className="btn btn-sm btn-light mt-4    align-items-sm-end " 
+                                                                           type="button"
+                                                                          onClick={() => {}} >
+                                                                         <i className="dripicons-plus"></i>
+                                                                   </Button>
+                                                                   </Col>
+                                            
+                                                        {/* <Col md="1">  </Col>
+                                                        <Col md="3">
+                                                            <FormGroup className="mb-2">
+                                                                <Label htmlFor="validationCustom01"> City </Label>
+                                                                <Select
+                                                                    value={""}
+                                                                    options={""}
+                                                                // onChange={(e) => { handllerDesignationID(e) }}
+                                                                />
+                                                            </FormGroup>
+                                                        </Col> */}
+
+                                                   </Row>
+                                                                 
+
+                                                    <FormGroup>
+                                                        <Row>
                                                             <Col sm={2}>
                                                                 <div>
                                                                     {
@@ -715,9 +824,7 @@ const MKUpMkDown_DropdownSelectHandller = (e) => {
                                                             </Col>
                                                         </Row>
                                                     </FormGroup >
-                                                </Card>
-                                            </Row>
-
+                                         
                                         </AvForm>
                                     </CardBody>
                                 </Card>
@@ -725,11 +832,12 @@ const MKUpMkDown_DropdownSelectHandller = (e) => {
                         </Row>
                     </Container>
                 </div>
-            </React.Fragment >
+            </React.Fragment>
         );
     }
     else{
         return  <React.Fragment></React.Fragment>
     }
-}
+ }
+
 export default PartyMaster
