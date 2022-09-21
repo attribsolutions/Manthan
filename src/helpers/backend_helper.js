@@ -197,6 +197,9 @@ export const BaseUnit_Get_DropDown_API = () => get(url.BASEUNIT_DROPDOWN_API)// 
 export const CategoryType_Get_DropDown_API = () => get(url.CATEGORY_TYPES_API)// CategoryType DropDown api
 export const ImageType_Get_DropDown_API = () => get(url.IMAGETYPE_DROPDOWN_API)// ImageType DropDown api
 export const MRPType_Get_DropDown_API = () => get(url.MRP_TYPE_DROPDOWN_API)// MRP Type DropDown api
+export const Division_Get_DropDown_API  = (id) => get(`${url.DIVISION_DROPDOWN_API}/${id}`)// Division DropDown api
+export const Party_Get_DropDown_API  = (id) => get(`${url.DIVISION_DROPDOWN_API}/${id}`)// Division DropDown api
+export const PriceList_Get_DropDown_API = () => get(url.PRICE_LIST_DROPDOWN_API)// PriceList DropDown api
 export const Category_By_CategoryTypes_DropDown_API = (id) => get(`${url.CATEGORY_DROPDOWN_API}/${id}`)//  GetCategoryByCategoryTypeID DropDown API
 export const SubCategory_By_CategoryTypes_DropDown_API = (id) => get(`${url.SUBCATEGORY_DROPDOWN_API}/${id}`)//  GetSubCategoryByCategoryID DropDown API
 
