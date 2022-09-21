@@ -4,10 +4,13 @@ import {
     GET_BASEUNIT_FOR_DROPDOWN_SUCCESS,
     GET_CATEGORYTYPE_FOR_DROPDOWN_SUCCESS,
     GET_CATEGORY_BY_CATEGORYTYPE_FOR_DROPDOWN_SUCCESS,
+    GET_DIVISION_FOR_DROPDOWN_SUCCESS,
     GET_IMAGETYPE_FOR_DROPDOWN_SUCCESS,
     GET_ITEM_GROUP_FOR_DROPDOWN_SUCCESS,
     GET_ITEM_LIST_API_SUCCESS,
     GET_MRPTYPE_FOR_DROPDOWN_SUCCESS,
+    GET_PARTY_FOR_DROPDOWN_SUCCESS,
+    GET_PRICE_LIST_FOR_DROPDOWN_SUCCESS,
     GET_SUB_CATEGORY_BY_CATEGORYTYPE_FOR_DROPDOWN_SUCCESS,
     POST_ITEM_DATA_SUCCESS,
     UPDATE_ITEM_ID_SUCCESS
@@ -23,11 +26,14 @@ const INIT_STATE = {
     updateMessage: { Status: false },
     ItemGroupList: [],
     BaseUnit: [],
-    CategoryType:[],
-    CategoryByCategoryType:{Data:[],key:null},
-    SubCategoryByCategoryType:{Data:[],key:null},
-    ImageType:[],
-    MRPType:[],
+    CategoryType: [],
+    CategoryByCategoryType: { Data: [], key: null },
+    SubCategoryByCategoryType: { Data: [], key: null },
+    ImageType: [],
+    MRPType: [],
+    Division: [],
+    Party:[],
+    PriceList:[],
 };
 
 const ItemMastersReducer = (state = INIT_STATE, action) => {
@@ -97,16 +103,31 @@ const ItemMastersReducer = (state = INIT_STATE, action) => {
                 SubCategoryByCategoryType: action.payload,
             }
 
-            case GET_IMAGETYPE_FOR_DROPDOWN_SUCCESS:
+        case GET_IMAGETYPE_FOR_DROPDOWN_SUCCESS:
+            return {
+                ...state,
+                ImageType: action.payload,
+            }
+
+        case GET_MRPTYPE_FOR_DROPDOWN_SUCCESS:
+            return {
+                ...state,
+                MRPType: action.payload,
+            }
+        case GET_DIVISION_FOR_DROPDOWN_SUCCESS:
+            return {
+                ...state,
+                Division: action.payload,
+            }
+            case GET_PARTY_FOR_DROPDOWN_SUCCESS:
                 return {
                     ...state,
-                    ImageType: action.payload,
+                    Party: action.payload,
                 }
-    
-                case GET_MRPTYPE_FOR_DROPDOWN_SUCCESS:
+                case GET_PRICE_LIST_FOR_DROPDOWN_SUCCESS:
                     return {
                         ...state,
-                        MRPType: action.payload,
+                        PriceList: action.payload,
                     }
         default:
             return state;
