@@ -20,7 +20,7 @@ const INIT_STATE = {
     updateMessage: { Status: false },
     DistrictOnState:[],
     PartyTypes:[],
-    priceList:[],
+    PriceList:[],
     CompanyName:[],
     AddressTypes:[]
 };
@@ -75,7 +75,7 @@ const PartyMasterReducer = (state = INIT_STATE, action) => {
         case GET_PRICELIST_SUCCESS:
             return {
               ...state,
-              priceList: action.payload,
+              PriceList: action.payload,
             };
   
 

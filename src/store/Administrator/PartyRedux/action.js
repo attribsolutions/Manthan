@@ -80,12 +80,12 @@ export const getDistrictOnState = (id) => ({
   });
 
 //get pricelist
-export const getPricelist = (id) => ({
+export const getPriceList = () => ({
   type: GET_PRICELIST,
-  id,
+  
  
 });
-export const getPricelistSuccess = (data) => ({
+export const getPriceListSuccess= (data) => ({
   type:GET_PRICELIST_SUCCESS,
   payload:data,
 });

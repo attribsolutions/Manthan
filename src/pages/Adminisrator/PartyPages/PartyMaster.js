@@ -7,7 +7,7 @@ import { AlertState } from "../../../store/actions";
 import Select from "react-select";
 import {
     editPartyIDSuccess, getAddressTypes, GetCompanyByDivisionTypeID, getDistrictOnState, getDistrictOnStateSuccess, getDivisionTypesID,
-    GetPartyTypeByDivisionTypeID, getPricelist,postPartyData, postPartyDataSuccess, updatePartyID
+    GetPartyTypeByDivisionTypeID, getPriceList, getPricelist,postPartyData, postPartyDataSuccess, updatePartyID
 } from "../../../store/Administrator/PartyRedux/action";
 import { getState } from "../../../store/Administrator/M_EmployeeRedux/action";
 import Flatpickr from "react-flatpickr"
@@ -47,7 +47,7 @@ const PartyMaster = (props) => {
         DistrictOnState: state.PartyMasterReducer.DistrictOnState,
         companyList: state.PartyMasterReducer.CompanyName,
         PartyTypes: state.PartyMasterReducer.PartyTypes,
-        PriceList:state.PartyMasterReducer.priceList,
+        PriceList:state.PartyMasterReducer.PriceList,
         AddressTypes:state.PartyMasterReducer.AddressTypes,
         RoleAccessModifiedinSingleArray: state.Login.RoleAccessUpdateData,
 
@@ -85,7 +85,7 @@ const PartyMaster = (props) => {
         dispatch(getAddressTypes());
         dispatch(GetCompanyByDivisionTypeID());
         dispatch(GetPartyTypeByDivisionTypeID());
-        dispatch(getPricelist());
+        dispatch(getPriceList());
     }, [dispatch]);
 
 
@@ -265,7 +265,7 @@ const MKUpMkDown_DropdownSelectHandller = (e) => {
 
         const jsonBody = JSON.stringify({
             Name: values.Name,
-            PriceList: PriceList_DropdownOptions.value,
+            PriceList: PriceList_dropdown_Select.value,
             PartyType:  partyType_dropdown_Select.value,
             Company: companyList_dropdown_Select.value,
             PAN: values.PAN,

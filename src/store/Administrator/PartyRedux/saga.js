@@ -2,7 +2,7 @@ import { call, put, takeEvery } from "redux-saga/effects";
 import { GetPriceList_For_Dropdown, GetCompanyByDivisionTypeID_For_Dropdown, GetDistrictOnState_For_Dropdown, GetPartyTypeByDivisionTypeID_For_Dropdown, Party_Master_Delete_API, Party_Master_Edit_API, Party_Master_Get_API, Party_Master_Post_API, Party_Master_Update_API, GetAddressTypes_For_Dropdown } from "../../../helpers/backend_helper";
 import { AlertState } from "../../Utilites/CustomAlertRedux/actions";
 import { SpinnerState } from "../../Utilites/Spinner/actions";
-import { deletePartyIDSuccess, editPartyIDSuccess, GetCompanyByDivisionTypeIDSuccess, getDistrictOnStateSuccess,  getPartyListAPISuccess, GetPartyTypeByDivisionTypeIDSuccess, getPricelistSuccess, postPartyDataSuccess, updatePartyIDSuccess,getAddressTypesSuccess } from "./action";
+import { deletePartyIDSuccess, editPartyIDSuccess, GetCompanyByDivisionTypeIDSuccess, getDistrictOnStateSuccess,  getPartyListAPISuccess, GetPartyTypeByDivisionTypeIDSuccess, getPriceListSuccess, postPartyDataSuccess, updatePartyIDSuccess,getAddressTypesSuccess } from "./action";
 import { DELETE_PARTY_ID, EDIT_PARTY_ID, GET_COMPANY_BY_DIVISIONTYPES_ID, GET_DISTRICT_ON_STATE, GET_PRICELIST,GET_ADDRESSTYPES, GET_PARTTYPE_BY_DIVISIONTYPES_ID, GET_PARTY_LIST_API, POST_PARTY_DATA, UPDATE_PARTY_ID } from "./actionTypes";
 
 function* Get_Party_GenratorFunction() {
@@ -88,17 +88,17 @@ function* GetDistrictOnState_saga({id}) {
 }
 
 //get pricelist
-function* GetPriceList_saga({id}) {
+function* GetPriceList_saga({}) {
   try {
-    const response = yield call(GetPriceList_For_Dropdown,id);
-    yield put(getPricelistSuccess(response.Data));
+    const response = yield call(GetPriceList_For_Dropdown);
+    yield put(getPriceListSuccess(response.Data));
   } catch (error) {
     console.log("GetpriceList_saga page error", error);
   }
 }
 
 //get addresstypes
-function* GetAddressTypes_saga({id}) {
+function* GetAddressTypes_saga({}) {
   try {
     const response = yield call(GetAddressTypes_For_Dropdown);
     yield put(getAddressTypesSuccess(response.Data));
