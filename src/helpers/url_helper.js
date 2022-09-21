@@ -135,4 +135,8 @@ export const IMAGETYPE_DROPDOWN_API = '/ImageTypes'
 
 export const MRP_TYPE_DROPDOWN_API = '/MRPTypes'
 
+export const DIVISION_DROPDOWN_API = '/Divisions'
+
+export const PRICE_LIST_DROPDOWN_API = '/PriceList'
+
 export const SUPER_ADMIN_API = '/SuperAdmin'

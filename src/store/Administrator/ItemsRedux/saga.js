@@ -20,8 +20,11 @@ import {
   getItemGroup_ForDropDownSuccess,
   getItemListSuccess, get_CategoryTypes_ForDropDown_Success,
   get_Category_By_CategoryType_ForDropDown_Success,
+  get_Division_ForDropDown_Success,
   get_ImageType_ForDropDown_Success,
   get_MRPTypes_ForDropDown_Success,
+  get_Party_ForDropDown_Success,
+  get_PriceList_ForDropDown_Success,
   get_Sub_Category_By_CategoryType_ForDropDown_Success,
   PostItemDataSuccess,
   updateItemSuccess
@@ -32,10 +35,13 @@ import {
   GET_CATEGORYTYPE_FOR_DROPDOWN,
   GET_CATEGORY_BY_CATEGORYTYPE_FOR_DROPDOWN,
   GET_CATEGORY_FOR_DROPDOWN,
+  GET_DIVISION_FOR_DROPDOWN,
   GET_IMAGETYPE_FOR_DROPDOWN,
   GET_ITEM_GROUP_FOR_DROPDOWN,
   GET_ITEM_LIST_API,
   GET_MRPTYPE_FOR_DROPDOWN,
+  GET_PARTY_FOR_DROPDOWN,
+  GET_PRICE_LIST_FOR_DROPDOWN,
   GET_SUBCATEGORY_FOR_DROPDOWN,
   GET_SUB_CATEGORY_BY_CATEGORYTYPE_FOR_DROPDOWN,
   POST_ITEM_DATA,
@@ -198,6 +204,32 @@ function* MRPType_DropDown_GenratorFunction() {
   }
 }
 
+function* Division_DropDown_GenratorFunction({id="1"}) {
+  try {
+    const response = yield call(apiCall.Division_Get_DropDown_API,id="1");
+    yield put(get_Division_ForDropDown_Success(response.Data));
+  } catch (error) {
+    console.log("Division saga page error", error);
+  }
+}
+
+function* Party_DropDown_GenratorFunction({id="0"}) {
+  try {
+    const response = yield call(apiCall.Party_Get_DropDown_API,id="0");
+    yield put(get_Party_ForDropDown_Success(response.Data));
+  } catch (error) {
+    console.log("Party saga page error", error);
+  }
+}
+
+function* PriceList_DropDown_GenratorFunction() {
+  try {
+    const response = yield call(apiCall.PriceList_Get_DropDown_API);
+    yield put(get_PriceList_ForDropDown_Success(response.Data));
+  } catch (error) {
+    console.log("MRP Type saga page error", error);
+  }
+}
 
 function* ItemsMastersSaga() {
   yield takeEvery(GET_ITEM_LIST_API, Get_Items_GenratorFunction);
@@ -212,6 +244,9 @@ function* ItemsMastersSaga() {
   yield takeEvery(GET_BASEUNIT_FOR_DROPDOWN, BaseUnit_DropDown_GenratorFunction);
   yield takeEvery(GET_IMAGETYPE_FOR_DROPDOWN, ImageType_DropDown_GenratorFunction);
   yield takeEvery(GET_MRPTYPE_FOR_DROPDOWN, MRPType_DropDown_GenratorFunction);
+  yield takeEvery(GET_DIVISION_FOR_DROPDOWN, Division_DropDown_GenratorFunction);
+  yield takeEvery(GET_PARTY_FOR_DROPDOWN, Party_DropDown_GenratorFunction);
+  yield takeEvery(GET_PRICE_LIST_FOR_DROPDOWN, PriceList_DropDown_GenratorFunction);
 
 }
 

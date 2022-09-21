@@ -33,8 +33,11 @@ import {
     get_Category_By_CategoryType_ForDropDown,
     get_Category_By_CategoryType_ForDropDown_Success,
     get_Category_ForDropDown,
+    get_Division_ForDropDown,
     get_ImageType_ForDropDown,
     get_MRPTypes_ForDropDown,
+    get_Party_ForDropDown,
+    get_PriceList_ForDropDown,
     get_SubCategory_ForDropDown,
     get_Sub_Category_By_CategoryType_ForDropDown,
     get_Sub_Category_By_CategoryType_ForDropDown_Success,
@@ -129,7 +132,10 @@ const ItemsMaster = (props) => {
         PostAPIResponse,
         RoleAccessModifiedinSingleArray,
         ImageType,
-        MRPType
+        MRPType,
+        Division,
+        Party,
+        PriceList
     } = useSelector((state) => ({
         companyList: state.Company.companyList,
         BaseUnit: state.ItemMastersReducer.BaseUnit,
@@ -141,9 +147,12 @@ const ItemsMaster = (props) => {
         PostAPIResponse: state.ItemMastersReducer.postMessage,
         ImageType: state.ItemMastersReducer.ImageType,
         MRPType: state.ItemMastersReducer.MRPType,
+        Division: state.ItemMastersReducer.Division,
+        Party: state.ItemMastersReducer.Party,
+        PriceList: state.ItemMastersReducer.PriceList,
     }));
 
-
+    
     useEffect(() => {
 
         let userAcc = undefined
@@ -321,7 +330,9 @@ const ItemsMaster = (props) => {
         dispatch(getPartyListAPI());
         dispatch(get_ImageType_ForDropDown());
         dispatch(get_MRPTypes_ForDropDown());
-
+        dispatch(get_Division_ForDropDown());
+        dispatch(get_Party_ForDropDown());
+        dispatch(get_PriceList_ForDropDown());
     }, [dispatch]);
 
 
@@ -447,11 +458,20 @@ const ItemsMaster = (props) => {
         label: data.Name
     }));
 
-    const MRPType_DropdownOptions = MRPType.map((data) => ({
+    const Division_DropdownOptions = Division.map((data) => ({
         value: data.id,
         label: data.Name
     }));
 
+    const Party_DropdownOptions = Party.map((data) => ({
+        value: data.id,
+        label: data.Name
+    }));
+
+    const PriceList_DropdownOptions_In_MarginTab = PriceList.map((data) => ({
+        value: data.id,
+        label: data.Name
+    }));
     function Common_Drop_Validation(event, type, key) {
         
         let OnchangeControl = document.getElementById(`drop${type}-${key}`)
@@ -1759,7 +1779,7 @@ const ItemsMaster = (props) => {
                                                                             <Select
                                                                                 id={"dropDivisionType-0"}
                                                                                 value={division_dropdown_Select}
-                                                                                options={DivisionType_DropdownOptions}
+                                                                                options={Division_DropdownOptions}
                                                                                 onChange={(e) => { DivisionTab_Dropdown_onChange_Handler(e) }}
                                                                             />
                                                                         </FormGroup>
@@ -1834,7 +1854,7 @@ const ItemsMaster = (props) => {
                                                                                         <Select
                                                                                             id={`dropDivision-${key}`}
                                                                                             value={MRP_Tab_TableData[key].Division}
-                                                                                            options={PriceList_DropdownOptions}
+                                                                                            options={Division_DropdownOptions}
                                                                                             onChange={(e) => { MRP_Tab__Common_onChange_Handller(e, "Division", key) }}
                                                                                         />
                                                                                     </FormGroup>
@@ -1852,7 +1872,7 @@ const ItemsMaster = (props) => {
                                                                                         <Select
                                                                                             id={`dropPartyName-${key}`}
                                                                                             value={MRP_Tab_TableData[key].PartyName}
-                                                                                            options={BaseUnit_DropdownOptions}
+                                                                                            options={Party_DropdownOptions}
                                                                                             onChange={(e) => { MRP_Tab__Common_onChange_Handller(e, "PartyName", key,) }}
                                                                                         />
                                                                                     </FormGroup>
@@ -1961,7 +1981,7 @@ const ItemsMaster = (props) => {
                                                                                         <Select
                                                                                             id={`dropPriceList-${key}`}
                                                                                             defaultValue={marginTabTable[key].PriceList}
-                                                                                            options={PriceList_DropdownOptions}
+                                                                                            options={PriceList_DropdownOptions_In_MarginTab}
                                                                                             onChange={(e) => { MarginTab_onChange_Handler(e, "PriceList", key) }}
                                                                                         />
                                                                                     </FormGroup>
@@ -1995,7 +2015,7 @@ const ItemsMaster = (props) => {
                                                                                         <Select
                                                                                             id={`dropPartyName-${key}`}
                                                                                             defaultValue={marginTabTable[key].PartyName}
-                                                                                            options={BaseUnit_DropdownOptions}
+                                                                                            options={Party_DropdownOptions}
                                                                                             onChange={(e) => { MarginTab_onChange_Handler(e,"PartyName",key) }}
                                                                                         />
                                                                                     </FormGroup>
@@ -2048,6 +2068,7 @@ const ItemsMaster = (props) => {
 
                                                                         </Row>
                                                                     })}
+
 
                                                                 </CardBody>
                                                             </Card>
