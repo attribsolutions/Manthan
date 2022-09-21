@@ -6,6 +6,8 @@ import {
     GET_DISTRICT_ON_STATE,
     GET_PRICELIST,
     GET_PRICELIST_SUCCESS,
+    GET_ADDRESSTYPES,
+    GET_ADDRESSTYPES_SUCCESS,
     GET_DISTRICT_ON_STATE_SUCCESS,
     GET_PARTTYPE_BY_DIVISIONTYPES_ID,
     GET_PARTTYPE_BY_DIVISIONTYPES_ID_SUCCESS,
@@ -87,6 +89,17 @@ export const getPricelistSuccess = (data) => ({
   type:GET_PRICELIST_SUCCESS,
   payload:data,
 });
+//get AddressType dropdown api
+export const getAddressTypes = () => ({
+  type: GET_ADDRESSTYPES,
+  
+ 
+});
+export const getAddressTypesSuccess = (data) => ({
+  type:GET_ADDRESSTYPES_SUCCESS,
+  payload:data,
+});
+
 
   // GetPartyTypeByDivisionTypeID API dependent on DivisionTypes api
 export const GetPartyTypeByDivisionTypeID = (id) => ({

@@ -18,7 +18,7 @@ import {
     Table,
     TabPane,
 } from "reactstrap"
-
+import Flatpickr from "react-flatpickr"
 import { Link, useHistory } from "react-router-dom"
 import { useDispatch, useSelector } from "react-redux";
 import classnames from "classnames"
@@ -59,7 +59,7 @@ const ItemsMaster = (props) => {
     const [pageMode, setPageMode] = useState("save");
     const [userPageAccessState, setUserPageAccessState] = useState(11);
     const [selectedFiles, setselectedFiles] = useState([])
-
+    const [DOB_Date_Select, setDOB_Date_Select] = useState("");
     const [activeTab1, setactiveTab1] = useState("1")
 
     const [division_dropdown_Select, setDivision_dropdown_Select] = useState("");
@@ -96,7 +96,9 @@ const ItemsMaster = (props) => {
     }]);
 
     const [marginTabTable, setMarginTabTable] = useState([{
-        PriceList: { label: "selectPrice", value: 0 },
+        PriceList: { label: "select", value: 0 },
+        EffectiveDate: '',
+        PartyName: { label: "select", value: 0 },
         Margin: ''
     }]);
 
@@ -110,11 +112,12 @@ const ItemsMaster = (props) => {
         Conversion: '',
         Unit: { label: "", value: 0 },
     }]);
-    const [rateDetailTableData, setRateDetailTableData] = useState([{
+    const [MRP_Tab_TableData, setMRP_Tab_TableData] = useState([{
+        Division: { label: "select", value: 0 },
+        EffectiveDate: '',
+        PartyName: { label: "select", value: 0 },
         MRP: '',
-        GSTPercentage: '',
-        HSNCode: '',
-        MRPType: { value: 0, label: "select" }
+
     }]);
 
     const { companyList,
@@ -184,7 +187,7 @@ const ItemsMaster = (props) => {
                 isActive: editMode_Data.isActive,
             }
             let initialCategory = editMode_Data.ItemCategoryDetails.map((indx, key) => {
-               
+
                 dispatch(get_Category_By_CategoryType_ForDropDown(indx.CategoryType, key))
                 dispatch(get_Sub_Category_By_CategoryType_ForDropDown(indx.Category, key))
                 return {
@@ -264,7 +267,7 @@ const ItemsMaster = (props) => {
             setMarginTabTable(ItemMarginDetails)
             setImageTabTable(ItemImagesDetails)
             setDivisionTableData(itemDivisionDetails)
-            setRateDetailTableData(ItemMRPDetails)
+            setMRP_Tab_TableData(ItemMRPDetails)
             setBaseUnitTableData(ItemUnitDetails)
             setIsValidate([])
 
@@ -418,6 +421,16 @@ const ItemsMaster = (props) => {
         label: data.Name
     }));
 
+//   const PriceList_DropdownOptions = [
+//     {
+//       value: 1,
+//       label: "ABC",
+//     },
+//     {
+//       value: 2,
+//       label: "XYZ",
+//     },
+//   ];
 
     const CategoryType_DropdownOptions = CategoryType.map((data) => ({
         value: data.id,
@@ -440,7 +453,7 @@ const ItemsMaster = (props) => {
     }));
 
     function Common_Drop_Validation(event, type, key) {
-
+        
         let OnchangeControl = document.getElementById(`drop${type}-${key}`)
         if (event.value === 0) {
             OnchangeControl.className = 'form-control is-invalid'
@@ -477,6 +490,23 @@ const ItemsMaster = (props) => {
                 return !(indF === `txt${type}0`)
             })
             setIsValidate(isValidate)
+        }
+
+    }
+
+
+
+    function CommonTab_DatePicker_handller_ForAll(event, type, key) {
+
+
+        let OnchangeControl = document.getElementById(`txt${type}${key}`)
+
+        if (event === '') {
+            OnchangeControl.className = 'form-control is-invalid'
+            return false
+        } else {
+            OnchangeControl.className = 'form-control';
+            return true
         }
 
     }
@@ -767,11 +797,17 @@ const ItemsMaster = (props) => {
         let margin_TableElement = marginTabTable[key];
 
         let validateReturn = Common_Drop_Validation(margin_TableElement.PriceList, "PriceList", key);
-        let validateReturn1 = Common_Text_INPUT_Validation(margin_TableElement.Margin, "Margin", key)
-        if ((validateReturn1 === false) || (validateReturn === false)) return;
+        let validateReturn1 = CommonTab_DatePicker_handller_ForAll(margin_TableElement.EffectiveDate, "EffectiveDate", key)
+        let validateReturn2 = Common_Drop_Validation(margin_TableElement.PartyName, "PartyName", key)
+        let validateReturn3 = Common_Text_INPUT_Validation(margin_TableElement.Margin, "Margin", key)
+
+        if ((validateReturn1 === false) || (validateReturn === false) || (validateReturn2 === false) || (validateReturn3 === false)) return;
+        // if ((validateReturn === false) || (validateReturn2 === false) || (validateReturn3 === false)) return;
 
         var newarr1 = [...marginTabTable, {
-            PriceList: { label: "selectPrice", value: 0 },
+            PriceList: { label: "select", value: 0 },
+            EffectiveDate: '',
+            PartyName: { label: "select", value: 0 },
             Margin: ''
         }]
         setMarginTabTable(newarr1)
@@ -782,7 +818,7 @@ const ItemsMaster = (props) => {
         })
         setMarginTabTable(removeElseArrray1)
     }
-    function MarginTab_onChange_Handler(event, key, type) {
+    function MarginTab_onChange_Handler(event, type, key) {
 
         var found = marginTabTable.find((i, k) => {
             return (k === key)
@@ -802,11 +838,36 @@ const ItemsMaster = (props) => {
                 return
             }
 
-            let validateReturn = Common_Drop_Validation(event, type, key,)
+            let validateReturn = Common_Drop_Validation(event, type, key)
             if (validateReturn === false) return;
 
             newSelectValue = {
                 PriceList: event,
+                EffectiveDate: found.EffectiveDate,
+                PartyName: found.PartyName,
+                Margin: found.Margin,
+            }
+        }
+
+        else if (type === 'EffectiveDate') {
+            // let validateReturn = CommonTab_DatePicker_handller_ForAll(event, type, key);
+            // if (validateReturn === false) return;
+
+            newSelectValue = {
+                PriceList: found.PriceList,
+                EffectiveDate: event,
+                PartyName: found.PartyName,
+                Margin: found.Margin,
+            }
+        }
+        else if (type === 'PartyName') {
+            let validateReturn = Common_Drop_Validation(event, type, key);
+            if (validateReturn === false) return;
+
+            newSelectValue = {
+                PriceList: found.PriceList,
+                EffectiveDate: found.EffectiveDate,
+                PartyName: event,
                 Margin: found.Margin,
             }
         }
@@ -816,6 +877,8 @@ const ItemsMaster = (props) => {
 
             newSelectValue = {
                 PriceList: found.PriceList,
+                EffectiveDate: found.EffectiveDate,
+                PartyName: found.PartyName,
                 Margin: event,
             }
         }
@@ -826,55 +889,56 @@ const ItemsMaster = (props) => {
         setMarginTabTable(newTabArr)
     }
 
-    function RateDetailTab_AddRow_Handler(key) {
+    function MRP_Tab_Tab_AddRow_Handler(key) {
 
-        let rate_TableElement = rateDetailTableData[key];
+        let rate_TableElement = MRP_Tab_TableData[key];
 
-        let validateReturn1 = Common_Drop_Validation(rate_TableElement.MRPType, "MRPType", key)
-        let validateReturn2 = Common_Text_INPUT_Validation(rate_TableElement.MRP, "MRP", key);
+        let validateReturn1 = Common_Drop_Validation(rate_TableElement.Division, "Division", key)
+        let validateReturn2 = CommonTab_DatePicker_handller_ForAll(rate_TableElement.EffectiveDate, "EffectiveDate", key);
 
-        let validateReturn3 = Common_Text_INPUT_Validation(rate_TableElement.GSTPercentage, "GSTPercentage", key);
-        let validateReturn4 = Common_Text_INPUT_Validation(rate_TableElement.HSNCode, "HSNCode", key);
+        let validateReturn3 = Common_Drop_Validation(rate_TableElement.PartyName, "PartyName", key);
+        let validateReturn4 = Common_Text_INPUT_Validation(rate_TableElement.MRP, "MRP", key);
 
-        if ((validateReturn1 === false)
+        if (
+            (validateReturn1 === false)
             || (validateReturn2 === false)
             || (validateReturn3 === false)
             || (validateReturn4 === false)) return;
 
-        var newarr = [...rateDetailTableData, {
-            MRPType: { value: 0, label: "select" },
+        var newarr = [...MRP_Tab_TableData, {
+            Division: { label: "select", value: 0 },
+            EffectiveDate: '',
+            PartyName: { label: "select", value: 0 },
             MRP: '',
-            GSTPercentage: '',
-            HSNCode: ''
         }]
-        setRateDetailTableData(newarr)
+        setMRP_Tab_TableData(newarr)
     }
-    function RateDetailTab_DeleteRow_Handler(key) {
-
-        var removeElseArrray = rateDetailTableData.filter((i, k) => {
+    function MRP_Tab_Tab_DeleteRow_Handler(key) {
+        debugger
+        var removeElseArrray = MRP_Tab_TableData.filter((i, k) => {
             return !(k === key)
         })
 
-        setRateDetailTableData(removeElseArrray)
+        setMRP_Tab_TableData(removeElseArrray)
 
     }
-    function RateDetail_Common_onChange_Handller(event, type, key,) {
+    function MRP_Tab__Common_onChange_Handller(event, type, key) {
 
-        var found = rateDetailTableData.find((i, k) => {
+        var found = MRP_Tab_TableData.find((i, k) => {
             return (k === key)
         })
         let newSelectValue = ''
 
-        if (type === "MRPType") {
+        if (type === "Division") {
 
-            const foundDublicate = rateDetailTableData.find((element) => {
+            const foundDublicate = MRP_Tab_TableData.find((element) => {
                 return (element[type].value === event.value)
             });
             if (!(foundDublicate === undefined)) {
                 dispatch(AlertState({
                     Type: 4,
                     Status: true,
-                    Message: "MRPType Already Select",
+                    Message: "Division Already Select",
                 }))
                 return
             }
@@ -882,52 +946,52 @@ const ItemsMaster = (props) => {
             if (validateReturn === false) return;
 
             newSelectValue = {
+                Division: event,
+                EffectiveDate: found.EffectiveDate,
+                PartyName: found.PartyName,
                 MRP: found.MRP,
-                GSTPercentage: found.GSTPercentage,
-                HSNCode: found.HSNCode,
-                MRPType: event
             }
         }
 
-        else if (type === "MRP") {
+        else if (type === "EffectiveDate") {
+            let validateReturn = CommonTab_DatePicker_handller_ForAll(event, type, key);
+            if (validateReturn === false) return;
+
+            newSelectValue = {
+                Division: found.Division,
+                EffectiveDate: event,
+                PartyName: found.PartyName,
+                MRP: found.MRP,
+            }
+
+        }
+
+        else if (type === "PartyName") {
+            let validateReturn = Common_Drop_Validation(event, type, key);
+            if (validateReturn === false) return;
+
+            newSelectValue = {
+                Division: found.Division,
+                EffectiveDate: found.EffectiveDate,
+                PartyName: event,
+                MRP: found.MRP,
+            }
+        } else if (type === "MRP") {
             let validateReturn = Common_Text_INPUT_Validation(event, type, key);
             if (validateReturn === false) return;
 
             newSelectValue = {
+                Division: found.Division,
+                EffectiveDate: found.EffectiveDate,
+                PartyName: found.PartyName,
                 MRP: event,
-                GSTPercentage: found.GSTPercentage,
-                HSNCode: found.HSNCode,
-                MRPType: found.MRPType
-            }
-
-        }
-
-        else if (type === "GSTPercentage") {
-            let validateReturn = Common_Text_INPUT_Validation(event, type, key);
-            if (validateReturn === false) return;
-
-            newSelectValue = {
-                MRP: found.MRP,
-                GSTPercentage: event,
-                HSNCode: found.HSNCode,
-                MRPType: found.MRPType
-            }
-        } else if (type === "HSNCode") {
-            let validateReturn = Common_Text_INPUT_Validation(event, type, key);
-            if (validateReturn === false) return;
-
-            newSelectValue = {
-                MRP: found.MRP,
-                GSTPercentage: found.GSTPercentage,
-                HSNCode: event,
-                MRPType: found.MRPType
             }
         }
 
-        let newTabArr = rateDetailTableData.map((index, k) => {
+        let newTabArr = MRP_Tab_TableData.map((index, k) => {
             return (k === key) ? newSelectValue : index
         })
-        setRateDetailTableData(newTabArr)
+        setMRP_Tab_TableData(newTabArr)
     }
 
     const handleValidSubmit = (event, values) => {
@@ -949,14 +1013,16 @@ const ItemsMaster = (props) => {
 
         const iteMarginDetails = marginTabTable.map((index) => ({
             PriceList: index.PriceList.value,
+            EffectiveDate: index.EffectiveDate,
+            PartyName: index.PartyName.value,
             Margin: index.Margin
         }))
 
-        const itemMRPDetails = rateDetailTableData.map((index) => ({
+        const itemMRPDetails = MRP_Tab_TableData.map((index) => ({
+            Division: index.Division,
+            EffectiveDate: index.EffectiveDate,
+            PartyName: index.PartyName,
             MRP: index.MRP,
-            GSTPercentage: index.GSTPercentage,
-            HSNCode: index.HSNCode,
-            MRPType: index.MRPType.value
         }))
 
 
@@ -995,7 +1061,7 @@ const ItemsMaster = (props) => {
             })
         }
 
-        rateDetailTableData.map((ind, key) => {
+        MRP_Tab_TableData.map((ind, key) => {
 
             let return1 = Common_Drop_Validation(ind.MRPType, "MRPType", key);
             if (return1 === false) submitValid6 = return1;
@@ -1049,9 +1115,6 @@ const ItemsMaster = (props) => {
             return
         };
 
-
-        debugger
-
         const jsonBody = JSON.stringify({
             Name: formValue.Name,
             ShortName: formValue.ShortName,
@@ -1082,6 +1145,7 @@ const ItemsMaster = (props) => {
 
         else {
             dispatch(postItemData(jsonBody));
+            console.log("post json", jsonBody)
         }
 
     };
@@ -1211,9 +1275,10 @@ const ItemsMaster = (props) => {
                                                         <span className="d-block d-sm-none">
                                                             <i className="fas fa-home"></i>
                                                         </span>
-                                                        <span className="d-none d-sm-block">Rate Details</span>
+                                                        <span className="d-none d-sm-block">MRP</span>
                                                     </NavLink>
                                                 </NavItem>
+
 
                                                 <NavItem>
                                                     <NavLink
@@ -1690,7 +1755,7 @@ const ItemsMaster = (props) => {
 
                                                                     <Row>
                                                                         <FormGroup className=" col col-sm-4 " >
-                                                                            <Label htmlFor="validationCustom21">Division Type</Label>
+                                                                            <Label htmlFor="validationCustom21">Division</Label>
                                                                             <Select
                                                                                 id={"dropDivisionType-0"}
                                                                                 value={division_dropdown_Select}
@@ -1758,63 +1823,85 @@ const ItemsMaster = (props) => {
                                                             <Card className="text-black">
                                                                 <CardBody style={{ backgroundColor: "whitesmoke" }}>
 
-                                                                    {rateDetailTableData.map((index, key) => {
+                                                                    {MRP_Tab_TableData.map((index, key) => {
 
                                                                         return <Row className="mt-3">
                                                                             <Col className=" col col-11 ">
                                                                                 <Row>
+
                                                                                     <FormGroup className="mb-3 col col-sm-3 " >
-                                                                                        <Label >MRP Type</Label>
+                                                                                        <Label >Division</Label>
                                                                                         <Select
-                                                                                            id={`dropMRPType-${key}`}
-                                                                                            value={rateDetailTableData[key].MRPType}
-                                                                                            options={MRPType_DropdownOptions}
-                                                                                            onChange={(e) => { RateDetail_Common_onChange_Handller(e, "MRPType", key,) }}
+                                                                                            id={`dropDivision-${key}`}
+                                                                                            value={MRP_Tab_TableData[key].Division}
+                                                                                            options={PriceList_DropdownOptions}
+                                                                                            onChange={(e) => { MRP_Tab__Common_onChange_Handller(e, "Division", key) }}
                                                                                         />
                                                                                     </FormGroup>
+                                                                                    {/* <FormGroup className="mb-3 col col-sm-3 " >
+                                                                                        <Label >Party Name</Label>
+                                                                                        <Select
+                                                                                            id={`PartyName-${key}`}
+                                                                                            value={MRP_Tab_TableData[key].PartyName}
+                                                                                            options={PriceList_DropdownOptions}
+                                                                                            onChange={(e) => { MRP_Tab__Common_onChange_Handller(e, "PartyName", key,) }}
+                                                                                        />
+                                                                                    </FormGroup> */}
+                                                                                    <FormGroup className="mb-3 col col-sm-3 " >
+                                                                                        <Label >Party Name</Label>
+                                                                                        <Select
+                                                                                            id={`dropPartyName-${key}`}
+                                                                                            value={MRP_Tab_TableData[key].PartyName}
+                                                                                            options={BaseUnit_DropdownOptions}
+                                                                                            onChange={(e) => { MRP_Tab__Common_onChange_Handller(e, "PartyName", key,) }}
+                                                                                        />
+                                                                                    </FormGroup>
+
+
+                                                                                    <FormGroup className="mb-3 col col-sm-3 ">
+                                                                                        <Label>Effective Date</Label>
+                                                                                        <div  id={`txtEffectiveDate${key}`} style={{backgroundColor:"whitesmoke"}}>
+                                                                                        <Flatpickr
+                                                                                           
+                                                                                            name="FSSAIExipry"
+                                                                                            // value={DOB_Date_Select}
+                                                                                            value={MRP_Tab_TableData[key].EffectiveDate}
+                                                                                            className="form-control d-block p-2 bg-white text-dark"
+                                                                                            placeholder="YYYY-MM-DD"
+                                                                                            autoComplete='off'
+                                                                                            options={{
+                                                                                                altInput: true,
+                                                                                                altFormat: "F j, Y",
+                                                                                                dateFormat: "Y-m-d"
+                                                                                            }}
+                                                                                            onChange={(dateStr) => {
+                                                                                                MRP_Tab__Common_onChange_Handller(dateStr, "EffectiveDate", key)
+                                                                                            }}
+                                                                                        />
+                                                                                        </div>
+                                                                                    </FormGroup>
+
                                                                                     <FormGroup className="mb-3 col col-sm-3 " >
                                                                                         <Label htmlFor="validationCustom01">MRP</Label>
                                                                                         <Input name="MRP" type="text"
                                                                                             id={`txtMRP${key}`}
                                                                                             placeholder=" Please Enter MRP "
                                                                                             autoComplete="off"
-                                                                                            value={rateDetailTableData[key].MRP}
-                                                                                            onChange={(e) => { RateDetail_Common_onChange_Handller(e.target.value, "MRP", key) }}
-                                                                                        />
-                                                                                    </FormGroup>
-
-                                                                                    <FormGroup className="mb-3 col col-sm-3 " >
-                                                                                        <Label htmlFor="validationCustom01">GST</Label>
-                                                                                        <Input name="GST" type="text"
-                                                                                            id={`txtGSTPercentage${key}`}
-                                                                                            value={rateDetailTableData[key].GSTPercentage}
-                                                                                            placeholder=" Please Enter GST "
-                                                                                            autoComplete="off"
-                                                                                            onChange={(e) => { RateDetail_Common_onChange_Handller(e.target.value, "GSTPercentage", key) }}
-                                                                                        />
-                                                                                    </FormGroup>
-
-                                                                                    <FormGroup className="mb-3 col col-sm-3 " >
-                                                                                        <Label htmlFor="validationCustom01">HSN</Label>
-                                                                                        <Input name="HSN" type="text"
-                                                                                            id={`txtHSNCode${key}`}
-                                                                                            value={rateDetailTableData[key].HSNCode}
-                                                                                            placeholder=" Please Enter HSN "
-                                                                                            autoComplete="off"
-                                                                                            onChange={(e) => { RateDetail_Common_onChange_Handller(e.target.value, "HSNCode", key) }}
+                                                                                            value={MRP_Tab_TableData[key].MRP}
+                                                                                            onChange={(e) => { MRP_Tab__Common_onChange_Handller(e.target.value, "MRP", key) }}
                                                                                         />
                                                                                     </FormGroup>
 
                                                                                 </Row>
                                                                             </Col>
                                                                             <Col md={1}>
-                                                                                {(rateDetailTableData.length === key + 1) ?
+                                                                                {(MRP_Tab_TableData.length === key + 1) ?
                                                                                     <Row className=" mt-3">
                                                                                         <Col md={6} className=" mt-3">
-                                                                                            {(rateDetailTableData.length > 1)
+                                                                                            {(MRP_Tab_TableData.length > 1)
                                                                                                 ?
                                                                                                 < i className="mdi mdi-trash-can d-block text-danger font-size-20" onClick={() => {
-                                                                                                    RateDetailTab_DeleteRow_Handler(key)
+                                                                                                    MRP_Tab_Tab_DeleteRow_Handler(key)
                                                                                                 }} >
                                                                                                 </i>
                                                                                                 : <Col md={6} ></Col>
@@ -1825,7 +1912,7 @@ const ItemsMaster = (props) => {
                                                                                         <Col md={6}>
                                                                                             <Button className="btn btn-sm btn-light mt-3   align-items-sm-end"
                                                                                                 type="button"
-                                                                                                onClick={() => { RateDetailTab_AddRow_Handler(key) }} >
+                                                                                                onClick={() => { MRP_Tab_Tab_AddRow_Handler(key) }} >
                                                                                                 <i className="dripicons-plus"></i>
                                                                                             </Button>
                                                                                         </Col>
@@ -1833,7 +1920,7 @@ const ItemsMaster = (props) => {
                                                                                     :
                                                                                     <Row className="mt-3">
                                                                                         < i className="mdi mdi-trash-can d-block text-danger font-size-20 mt-3" onClick={() => {
-                                                                                            RateDetailTab_DeleteRow_Handler(key)
+                                                                                            MRP_Tab_Tab_DeleteRow_Handler(key)
                                                                                         }} >
                                                                                         </i>
                                                                                     </Row>
@@ -1848,6 +1935,7 @@ const ItemsMaster = (props) => {
 
                                                     </Row>
                                                 </TabPane>
+
                                                 <TabPane tabId="7">
                                                     <Row>
                                                         <Col md={12}  >
@@ -1857,25 +1945,68 @@ const ItemsMaster = (props) => {
                                                                     {marginTabTable.map((index, key) => {
 
                                                                         return <Row className="mt-3">
-                                                                            <Col className=" col col-6 ">
+                                                                            <Col className=" col col-11 ">
                                                                                 <Row>
-                                                                                    <FormGroup className=" col col-sm-6 " >
+                                                                                    {/* <FormGroup className="mb-3 col col-sm-3 " >
+                                                                                        <Label >Division</Label>
+                                                                                        <Select
+                                                                                            id={`dropMRPType-${key}`}
+                                                                                            value={MRP_Tab_TableData[key].PartyName}
+                                                                                            options={DivisionType_DropdownOptions}
+                                                                                            onChange={(e) => { MRP_Tab__Common_onChange_Handller(e, "PartyName", key,) }}
+                                                                                        />
+                                                                                    </FormGroup> */}
+                                                                                    <FormGroup className=" col col-sm-3 " >
                                                                                         <Label >Price List</Label>
                                                                                         <Select
                                                                                             id={`dropPriceList-${key}`}
-                                                                                            value={marginTabTable[key].PriceList}
+                                                                                            defaultValue={marginTabTable[key].PriceList}
                                                                                             options={PriceList_DropdownOptions}
-                                                                                            onChange={(e) => { MarginTab_onChange_Handler(e, key, "PriceList") }}
+                                                                                            onChange={(e) => { MarginTab_onChange_Handler(e, "PriceList", key) }}
+                                                                                        />
+                                                                                    </FormGroup>
+                                                                                    <FormGroup className="mb-3 col col-sm-3 ">
+                                                                                        <Label>Effective Date</Label>
+                                                                                        <div  id={`txtEffectiveDate${key}`} style={{backgroundColor:"whitesmoke"}}>
+                                                                                        <Flatpickr
+                                                                                            id={`txtEffectiveDate${key}`}
+                                                                                            // id="EffectiveDate"
+                                                                                            name="FSSAIExipry"
+                                                                                            required={true}
+                                                                                            // value={DOB_Date_Select}
+                                                                                            value={marginTabTable[key].EffectiveDate}
+                                                                                            className="form-control d-block p-2 bg-white text-dark"
+                                                                                            placeholder="YYYY-MM-DD"
+                                                                                            autoComplete='off'
+                                                                                            options={{
+                                                                                                altInput: true,
+                                                                                                altFormat: "F j, Y",
+                                                                                                dateFormat: "Y-m-d"
+                                                                                            }}
+                                                                                            onChange={(ee, dateStr) => {
+                                                                                                MarginTab_onChange_Handler(dateStr, "EffectiveDate", key)
+                                                                                            }}
+                                                                                        />
+                                                                                        </div>
+                                                                                    </FormGroup>
+
+                                                                                    <FormGroup className="mb-3 col col-sm-3 " >
+                                                                                        <Label >Party Name</Label>
+                                                                                        <Select
+                                                                                            id={`dropPartyName-${key}`}
+                                                                                            defaultValue={marginTabTable[key].PartyName}
+                                                                                            options={BaseUnit_DropdownOptions}
+                                                                                            onChange={(e) => { MarginTab_onChange_Handler(e,"PartyName",key) }}
                                                                                         />
                                                                                     </FormGroup>
 
-                                                                                    <FormGroup className="mb-3 col col-sm-6 " >
+                                                                                    <FormGroup className="mb-3 col col-sm-3 " >
                                                                                         <Label >Margin</Label>
                                                                                         <Input type="text"
                                                                                             id={`txtMargin${key}`}
-                                                                                            value={marginTabTable[key].Margin}
+                                                                                            defaultValue={marginTabTable[key].Margin}
                                                                                             placeholder="Please Enter Margin"
-                                                                                            onChange={(e) => MarginTab_onChange_Handler(e.target.value, key, "Margin")}></Input>
+                                                                                            onChange={(e) => MarginTab_onChange_Handler(e.target.value, "Margin", key)}></Input>
                                                                                     </FormGroup>
 
 

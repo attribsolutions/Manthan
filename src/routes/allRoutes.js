@@ -42,10 +42,8 @@ import SendOTP from "../pages/Authentication/SendOTP";
 import EnterOTP from "../pages/Authentication/EnterOTP";
 import RoleAccessListPage from "../pages/Adminisrator/RoleAccessPages/RoleAccessListPage";
 import EmployeeTypesMaster from "../pages/Adminisrator/EmployeeTypes/EmployeeTypesMaster";
-import DivisionType from "../pages/Adminisrator/DivisionType/DivisionType";
 import RoleAccessAdd from "../pages/Adminisrator/RoleAccessPages/RoleAccessAdd";
 import EmployeeTypeList from "../pages/Adminisrator/EmployeeTypes/EmployeeTypeList";
-import DivisionTypeList from "../pages/Adminisrator/DivisionType/DivisionTypeList";
 import PartyType from "../pages/Adminisrator/PartyTypes/PartyType";
 import PartyTypeList from "../pages/Adminisrator/PartyTypes/PartyTypeList";
 import SelectDivisionPage from "../pages/Authentication/SelectDivisionPage";
@@ -150,9 +148,6 @@ const userRoutes = [
 
   { path: "/EmployeeType", component: EmployeeTypesMaster },
   { path: "/EmployeeTypeList", component: EmployeeTypeList },
-
-  { path: "/DivisionType", component: DivisionType },
-  { path: "/DivisionTypeList", component: DivisionTypeList },
 
   { path: "/PartyType", component: PartyType },
   { path: "/PartyTypeList", component: PartyTypeList },
