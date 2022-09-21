@@ -6,6 +6,10 @@ import {
     GET_DISTRICT_ON_STATE,
     GET_PRICELIST,
     GET_PRICELIST_SUCCESS,
+    GET_PARTYTYPES,
+    GET_PARTYTYPES_SUCCESS,
+    GET_COMPANY,
+    GET_COMPANY_SUCCESS,
     GET_ADDRESSTYPES,
     GET_ADDRESSTYPES_SUCCESS,
     GET_DISTRICT_ON_STATE_SUCCESS,
@@ -80,12 +84,12 @@ export const getDistrictOnState = (id) => ({
   });
 
 //get pricelist
-export const getPricelist = (id) => ({
+export const getPriceList = () => ({
   type: GET_PRICELIST,
-  id,
+  
  
 });
-export const getPricelistSuccess = (data) => ({
+export const getPriceListSuccess= (data) => ({
   type:GET_PRICELIST_SUCCESS,
   payload:data,
 });
@@ -99,6 +103,31 @@ export const getAddressTypesSuccess = (data) => ({
   type:GET_ADDRESSTYPES_SUCCESS,
   payload:data,
 });
+
+//get PartyType dropdown api
+export const getPartyTypes = () => ({
+  type: GET_PARTYTYPES,
+  
+ 
+});
+export const getPartyTypesSuccess = (data) => ({
+  type:GET_PARTYTYPES_SUCCESS,
+  payload:data,
+});
+
+
+
+//get company dropdown api
+export const getCompany = () => ({
+  type: GET_COMPANY,
+  
+ 
+});
+export const getCompanySuccess = (data) => ({
+  type:GET_COMPANY_SUCCESS,
+  payload:data,
+});
+
 
 
   // GetPartyTypeByDivisionTypeID API dependent on DivisionTypes api

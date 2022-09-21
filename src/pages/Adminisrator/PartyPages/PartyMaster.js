@@ -6,8 +6,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { AlertState } from "../../../store/actions";
 import Select from "react-select";
 import {
-    editPartyIDSuccess, getAddressTypes, GetCompanyByDivisionTypeID, getDistrictOnState, getDistrictOnStateSuccess, getDivisionTypesID,
-    GetPartyTypeByDivisionTypeID, getPricelist,postPartyData, postPartyDataSuccess, updatePartyID
+    editPartyIDSuccess, getAddressTypes, getCompany, GetCompanyByDivisionTypeID, getDistrictOnState, 
+    
+    GetPartyTypeByDivisionTypeID, getPartyTypes, getPriceList, postPartyData, postPartyDataSuccess, updatePartyID
 } from "../../../store/Administrator/PartyRedux/action";
 import { getState } from "../../../store/Administrator/M_EmployeeRedux/action";
 import Flatpickr from "react-flatpickr"
@@ -37,17 +38,17 @@ const PartyMaster = (props) => {
     const [companyList_dropdown_Select, setCompanyList_dropdown_Select] = useState("");
     const [partyType_dropdown_Select, setPartyType_dropdown_Select] = useState("");
     const [PriceList_dropdown_Select, setPriceList_dropdown_Select] = useState("");
-    const [MKUpMkDown_DropdownSelect,setMKUpMkDown_DropdownSelect]=  useState("");
+    const [MKupMkdown_DropdownSelect,setMKupMkdown_DropdownSelect]=  useState("");
     const [AddressType_DropdownSelect, setAddressType_DropdownSelect] = useState("");
 
     //Access redux store Data /  'save_ModuleSuccess' action data
-    const { PostAPIResponse, State, DistrictOnState, companyList, PartyTypes, PriceList, AddressTypes, RoleAccessModifiedinSingleArray } = useSelector((state) => ({
+    const { PostAPIResponse, State, DistrictOnState, Company, PartyTypes, PriceList, AddressTypes, RoleAccessModifiedinSingleArray } = useSelector((state) => ({
         PostAPIResponse: state.PartyMasterReducer.PartySaveSuccess,
         State: state.M_EmployeesReducer.State,
         DistrictOnState: state.PartyMasterReducer.DistrictOnState,
-        companyList: state.PartyMasterReducer.CompanyName,
+        Company: state.PartyMasterReducer.Company,
         PartyTypes: state.PartyMasterReducer.PartyTypes,
-        PriceList:state.PartyMasterReducer.priceList,
+        PriceList:state.PartyMasterReducer.PriceList,
         AddressTypes:state.PartyMasterReducer.AddressTypes,
         RoleAccessModifiedinSingleArray: state.Login.RoleAccessUpdateData,
 
@@ -83,10 +84,27 @@ const PartyMaster = (props) => {
         dispatch(getState());
         dispatch(getDistrictOnState());
         dispatch(getAddressTypes());
-        dispatch(GetCompanyByDivisionTypeID());
-        dispatch(GetPartyTypeByDivisionTypeID());
-        dispatch(getPricelist());
+        dispatch(getPriceList());
+        dispatch(getPartyTypes());
+        dispatch(getCompany());
+
+
     }, [dispatch]);
+
+
+// MkupMkdown  Dropdown
+const MkupMkdown_DropdownOption = [
+    {
+      value: 1,
+      label: "MKUp",
+    },
+    {
+      value: 2,
+      label: "MkDown",
+    },
+  ];
+
+
 
 
     // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
@@ -147,6 +165,7 @@ const PartyMaster = (props) => {
             setState_DropDown_select('')
             setFSSAIExipry_Date_Select('')
             setAddressType_DropdownSelect('')
+            setMKupMkdown_DropdownSelect('')
             if (pageMode === "dropdownAdd") {
                 dispatch(AlertState({
                     Type: 1,
@@ -198,7 +217,7 @@ const PartyMaster = (props) => {
 
     }
 
-    const companyListValues = companyList.map((Data) => ({
+    const companyListValues = Company.map((Data) => ({
         value: Data.id,
         label: Data.Name
     }));
@@ -215,8 +234,8 @@ const PartyMaster = (props) => {
 
     function PartyType_Dropdown_OnChange_Handller(e) {
         setPartyType_dropdown_Select(e)
-        dispatch(GetPartyTypeByDivisionTypeID(e.value))
-        dispatch(GetCompanyByDivisionTypeID(e.value))
+        // dispatch(GetPartyTypeByDivisionTypeID(e.value))
+        // dispatch(GetCompanyByDivisionTypeID(e.value))
         setPriceList_dropdown_Select('')
         setCompanyList_dropdown_Select('')
 
@@ -245,27 +264,17 @@ const PartyMaster = (props) => {
     label: d.Name,
   }));
     
-    
-
-
-//Mkup down dropdown
-const MKUpMkDown_DropdownSelectHandller = (e) => {
-    if (e.value === 2){
-        // dispatch( getMarkup (e.value));
-    }
-    else if (e.value === 1) {
-
-        // dispatch(getMarkupSuccess([]));
-    }
-    setMKUpMkDown_DropdownSelect(e);
-};
+    //for MKupMKdown dropdown
+  const MKupMkdown_DropdownSelectHandller = (e) => {
+    setMKupMkdown_DropdownSelect(e);
+    };
 
     //'Save' And 'Update' Button Handller
     const FormSubmitButton_Handler = (event, values) => {
 
         const jsonBody = JSON.stringify({
             Name: values.Name,
-            PriceList: PriceList_DropdownOptions.value,
+            PriceList: PriceList_dropdown_Select.value,
             PartyType:  partyType_dropdown_Select.value,
             Company: companyList_dropdown_Select.value,
             PAN: values.PAN,
@@ -511,11 +520,11 @@ const MKUpMkDown_DropdownSelectHandller = (e) => {
                                                            <FormGroup className="mb-3">
                                                  <Label htmlFor="validationCustom01">MKUp MkDown</Label>
                                                 <Select
-                                              value={MKUpMkDown_DropdownSelect}
-                                           //   options={MKUpMkDown_DropdownOption}
+                                              value={MKupMkdown_DropdownSelect}
+                                             options={MkupMkdown_DropdownOption}
                                             autoComplete="off"
                                              onChange={(e) => {
-                                              MKUpMkDown_DropdownSelectHandller(e);
+                                              MKupMkdown_DropdownSelectHandller(e);
                                                }}
                                               />
                                                </FormGroup>
