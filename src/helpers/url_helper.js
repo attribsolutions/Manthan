@@ -82,6 +82,8 @@ export const PARTY_MASTER_API = "/M_Parties"
 export const GetDistrictOnState = "/GetDistrictOnState"
 export const PRICELIST = "/PriceList"
 export const ADDRESSTYPES ="/AddressTypes"
+export const PARTYTYPES ="/PartyTypes"
+export const COMPANY ="/Company"
 export const GET_PARTYTYPE_BY_DIVISIONTYPES_ID = "/GetPartyTypeByDivisionTypeID"
 export const GET_COMPANY_BY_DIVISIONTYPES_ID = "/GetCompanyByDivisionTypeID"
 
