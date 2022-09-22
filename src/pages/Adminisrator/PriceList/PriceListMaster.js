@@ -215,7 +215,7 @@ const PriceListMaster = (props) => {
 
     }
 
-
+console.log(priceListByPartyType)
 
 
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
@@ -237,14 +237,14 @@ const PriceListMaster = (props) => {
                             <p className="card-title-desc text-black">{userPageAccessState.PageDescriptionDetails}</p>
                         </CardHeader>
 
-                        <CardBody className=" vh-10 0 text-black" style={{ backgroundColor: "#whitesmoke" }} >
+                        <CardBody className=" vh-10 0 text-black"  >
 
                             <Row className="">
                                 <Col md={12}>
                                     <Card style={{ backgroundColor: "whitesmoke" }}>
 
 
-                                        <CardHeader className="card-header   text-black " style={{ backgroundColor: "#dddddd" }} >
+                                        <CardHeader className="card-header   text-black " style={{ backgroundColor: "#e9e9ef" }} >
                                             <Row className="mt-3">
                                                 <Col md="4">
 
@@ -273,69 +273,74 @@ const PriceListMaster = (props) => {
 
 
 
-                                        <div className={" row mt-4"}>
-                                            <Modal
-                                                isOpen={dropOpen}
-                                                toggle={() => { setDropOpen(!dropOpen) }}
-                                                size="sm"
-                                                centered={true}
-                                                backdrop={'static'}
-                                            >
-                                                <div className="modal-header">
-                                                    <h5 className="modal-title mt-0">Add sub-Price </h5>
-                                                    <button
-                                                        type="button"
-                                                        onClick={() => {
-                                                            setDropOpen(!dropOpen)
-                                                        }}
-                                                        className="close"
-                                                        data-dismiss="modal"
-                                                        aria-label="Close"
+                                        {
+                                            (!(priceListByPartyType.length===0)) ?
+                                                <div className={" row mt-4"}>
+                                                    <Modal
+                                                        isOpen={dropOpen}
+                                                        toggle={() => { setDropOpen(!dropOpen) }}
+                                                        size="sm"
+                                                        centered={true}
+                                                        backdrop={'static'}
                                                     >
-                                                        <span aria-hidden="true">&times;</span>
-                                                    </button>
+                                                        <div className="modal-header">
+                                                            <h5 className="modal-title mt-0">Add sub-Price </h5>
+                                                            <button
+                                                                type="button"
+                                                                onClick={() => {
+                                                                    setDropOpen(!dropOpen)
+                                                                }}
+                                                                className="close"
+                                                                data-dismiss="modal"
+                                                                aria-label="Close"
+                                                            >
+                                                                <span aria-hidden="true">&times;</span>
+                                                            </button>
+                                                        </div>
+                                                        <div className="modal-body">
+                                                            <Row className="justify-content-md-left">
+
+                                                                <span className="form-label text-primary text-center">{currentPrice.Name}</span>
+
+                                                                <Label htmlFor="horizontal-firstname-input"
+                                                                    className="col-4 col-form-label" >sub-Price </Label>
+                                                                <Col style={{ marginTop: '9px' }} >
+                                                                    <Input type="text" id='txtsubprice' />
+                                                                </Col>
+                                                            </Row>
+                                                            <Row className="mt-2">
+                                                                <Label className="col-4 col-form-label" >MkUp </Label>
+                                                                <Col className="mt-2">
+                                                                    <Input type={"checkbox"} id='mkupMkdown' />
+                                                                </Col>
+                                                            </Row>
+                                                        </div>
+                                                        <div className="modal-footer">
+                                                            <button type="button" className="btn btn-light" onClick={() => {
+                                                                setDropOpen(!dropOpen)
+                                                            }}>Close</button>
+                                                            <button type="button" className="btn btn-primary"
+                                                                onClick={() => { sub_Price_Add_Handler() }} >Add</button>
+                                                        </div>
+
+                                                    </Modal>
+                                                    <Col md={1} ></Col>
+                                                    <Col md={5} >
+                                                        <div className="row"> <h4 className={'text-center text-primary'}>Price List</h4></div>
+                                                        <Card>
+                                                            <CardBody className="mt-3">
+
+                                                                {fun1(priceListByPartyType)}
+
+                                                            </CardBody>
+
+                                                        </Card>
+                                                    </Col>
+
                                                 </div>
-                                                <div className="modal-body">
-                                                    <Row className="justify-content-md-left">
+                                                : null
+                                        }
 
-                                                        <span className="form-label text-primary text-center">{currentPrice.Name}</span>
-
-                                                        <Label htmlFor="horizontal-firstname-input" 
-                                                        className="col-4 col-form-label" >sub-Price </Label>
-                                                        <Col style={{ marginTop: '9px' }} >
-                                                            <Input type="text" id='txtsubprice' />
-                                                        </Col>
-                                                    </Row>
-                                                    <Row className="mt-2">
-                                                        <Label className="col-4 col-form-label" >MkUp </Label>
-                                                        <Col className="mt-2">
-                                                            <Input type={"checkbox"} id='mkupMkdown' />
-                                                        </Col>
-                                                    </Row>
-                                                </div>
-                                                <div className="modal-footer">
-                                                    <button type="button" className="btn btn-light" onClick={() => {
-                                                        setDropOpen(!dropOpen)
-                                                    }}>Close</button>
-                                                    <button type="button" className="btn btn-primary" 
-                                                    onClick={() => { sub_Price_Add_Handler() }} >Add</button>
-                                                </div>
-
-                                            </Modal>
-                                            <Col md={1} ></Col>
-                                            <Col md={5} >
-                                           <div className="row"> <h4 className={'text-center text-primary'}>Price List</h4></div>
-                                                <Card>
-                                                    <CardBody className="mt-3">
-                                                        
-                                                        {fun1(priceListByPartyType)}
-
-                                                    </CardBody>
-
-                                                </Card>
-                                            </Col>
-
-                                        </div>
                                     </Card>
                                 </Col>
                             </Row>
