@@ -1,15 +1,4 @@
 import { call, put, takeEvery } from "redux-saga/effects";
-// import {
-//   BaseUnit_Get_DropDown_API,
-//   CategoryType_Get_DropDown_API,
-//   Category_By_CategoryTypes_DropDown_API,
-//   ImageType_Get_DropDown_API, Items_Group_Get_API,
-//   Items_Master_Delete_API, Items_Master_Edit_API,
-//   Items_Master_Get_API, Items_Master_Post_API, Items_Master_Update_API,
-//   MRPType_Get_DropDown_API,
-//   SubCategory_By_CategoryTypes_DropDown_API,
-//   SubCategory_Get_DropDown_API
-// } from "../../../helpers/backend_helper";
 import * as  apiCall  from "../../../helpers/backend_helper";
 import { AlertState } from "../../Utilites/CustomAlertRedux/actions";
 import { SpinnerState } from "../../Utilites/Spinner/actions";
@@ -42,7 +31,6 @@ import {
   GET_MRPTYPE_FOR_DROPDOWN,
   GET_PARTY_FOR_DROPDOWN,
   GET_PRICE_LIST_FOR_DROPDOWN,
-  GET_SUBCATEGORY_FOR_DROPDOWN,
   GET_SUB_CATEGORY_BY_CATEGORYTYPE_FOR_DROPDOWN,
   POST_ITEM_DATA,
   UPDATE_ITEM_ID
@@ -204,18 +192,18 @@ function* MRPType_DropDown_GenratorFunction() {
   }
 }
 
-function* Division_DropDown_GenratorFunction({id="1"}) {
+function* Division_DropDown_GenratorFunction({id=1}) {
   try {
-    const response = yield call(apiCall.Division_Get_DropDown_API,id="1");
+    const response = yield call(apiCall.Division_Get_DropDown_API,id);
     yield put(get_Division_ForDropDown_Success(response.Data));
   } catch (error) {
     console.log("Division saga page error", error);
   }
 }
 
-function* Party_DropDown_GenratorFunction({id="0"}) {
+function* Party_DropDown_GenratorFunction({id=0}) {
   try {
-    const response = yield call(apiCall.Party_Get_DropDown_API,id="0");
+    const response = yield call(apiCall.Party_Get_DropDown_API,id);
     yield put(get_Party_ForDropDown_Success(response.Data));
   } catch (error) {
     console.log("Party saga page error", error);
