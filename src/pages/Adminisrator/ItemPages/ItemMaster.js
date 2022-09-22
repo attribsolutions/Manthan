@@ -1040,6 +1040,16 @@ const ItemsMaster = (props) => {
 
     function GSTDetails_Tab_AddRow_Handler(key) {
         debugger
+
+
+        let validateReturn1 = CommonTab_DatePicker_handller_ForAll(GStDetailsMaster.EffectiveDate, "EffectiveDate", 0)
+        let validateReturn2 = Common_Text_INPUT_Validation(GStDetailsMaster.GST, "GST", 0);
+        let validateReturn3 = Common_Text_INPUT_Validation(GStDetailsMaster.HSNCode, "HSNCode",0);
+
+        if ( (validateReturn1 === false)
+            || (validateReturn2 === false)
+            || (validateReturn3 === false)) return;
+
         var length = GStDetailsTabTable.length
         var newArr = {
             id: length,
@@ -1048,6 +1058,7 @@ const ItemsMaster = (props) => {
             HSNCode: GStDetailsMaster.HSNCode
         }
         setGSTDetailsTabTable([...GStDetailsTabTable, newArr])
+        
     }
     function GSTDetails_Delete_Handller(event, v, k) {
 
@@ -2020,7 +2031,7 @@ const ItemsMaster = (props) => {
                                                                                                     altFormat: "F j, Y",
                                                                                                     dateFormat: "Y-m-d"
                                                                                                 }}
-                                                                                                onChange={(ee,dateStr) => {
+                                                                                                onChange={(ee, dateStr) => {
                                                                                                     MRP_Tab__Common_onChange_Handller(dateStr, "EffectiveDate", key)
                                                                                                 }}
                                                                                             />
@@ -2216,7 +2227,7 @@ const ItemsMaster = (props) => {
 
                                                                                 <FormGroup className="mb-3 col col-sm-4 ">
                                                                                     <Label>Effective Date</Label>
-                                                                                    <div id={`txtEffectiveDate${0}`} style={{ backgroundColor: "whitesmoke" }}>
+                                                                                    <div id={`txtEffectiveDate${0}`} >
                                                                                         <Flatpickr
                                                                                             id={`txtEffectiveDate${0}`}
                                                                                             // id="EffectiveDate"
@@ -2233,7 +2244,7 @@ const ItemsMaster = (props) => {
                                                                                                 dateFormat: "Y-m-d"
                                                                                             }}
                                                                                             onChange={(ee, dateStr) => {
-                                                                                                GSTDetails_onChange_Handller(dateStr, "EffectiveDate",)
+                                                                                                GSTDetails_onChange_Handller(dateStr, "EffectiveDate", 0)
                                                                                             }}
                                                                                         />
                                                                                     </div>
@@ -2245,7 +2256,7 @@ const ItemsMaster = (props) => {
                                                                                         id={`txtGST${0}`}
                                                                                         // defaultValue={GStDetailsMaster[0].GST}
                                                                                         placeholder="Please Enter Margin"
-                                                                                        onChange={(e) => GSTDetails_onChange_Handller(e.target.value, "GST",)}
+                                                                                        onChange={(e) => GSTDetails_onChange_Handller(e.target.value, "GST", 0)}
                                                                                     />
 
                                                                                 </FormGroup>
@@ -2256,7 +2267,7 @@ const ItemsMaster = (props) => {
                                                                                         id={`txtHSNCode${0}`}
                                                                                         // defaultValue={GStDetailsMaster[0].HSNCode}
                                                                                         placeholder="Please Enter Margin"
-                                                                                        onChange={(e) => GSTDetails_onChange_Handller(e.target.value, "HSNCode",)}
+                                                                                        onChange={(e) => GSTDetails_onChange_Handller(e.target.value, "HSNCode", 0)}
                                                                                     />
 
                                                                                 </FormGroup>
