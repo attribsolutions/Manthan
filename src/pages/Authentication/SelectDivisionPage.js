@@ -48,7 +48,7 @@ const SelectDivisionPage = props => {
   }, [])
 
   useEffect(() => {
-
+// debugger
     if (divisionDropdown_redux.length === 1) {
 
       let value = divisionDropdown_redux[0]
