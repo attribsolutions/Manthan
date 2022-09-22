@@ -1,8 +1,9 @@
-import { GET_PRICE_LIST_DATA_SUCCESS, POST_PRICE_LIST_DATA_SUCCESS } from "./actionType";
+import { DELETE_PRICE_LIST_SUCCESS, GET_PRICE_LIST_DATA_SUCCESS, POST_PRICE_LIST_DATA_SUCCESS } from "./actionType";
 
 const INIT_STATE = {
     PostData: [],
-    priceListByPartyType: []
+    priceListByPartyType: [],
+    deletePriceMsg:[]
 };
 
 const PriceListReducer = (state = INIT_STATE, action) => {
@@ -19,6 +20,13 @@ const PriceListReducer = (state = INIT_STATE, action) => {
             return {
                 ...state,
                 priceListByPartyType: action.payload,
+            };
+
+            // DELETE api
+        case DELETE_PRICE_LIST_SUCCESS:
+            return {
+                ...state,
+                deletePriceMsg: action.payload,
             };
 
 
