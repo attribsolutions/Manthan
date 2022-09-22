@@ -299,6 +299,7 @@ export const update_DriverType_List_Api = (data, id) =>put(`${url. DRIVER_API}/$
 //PriceList api
 export const Post_PriceList_API = (data) => post(url.PRICE_LIST, data)// post api
 export const get_PriceListByPartyType_API = (partyType) => get(`${url. PRICE_LIST}/${partyType}`)// post api
+export const delete_PriceList_API = (id) => del(`${url. PRICE_LIST}/${id}`)// post api
 
 export {  
   getLoggedInUser,

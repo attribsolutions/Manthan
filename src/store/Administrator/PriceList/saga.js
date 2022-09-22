@@ -1,9 +1,9 @@
 import { call, put, takeEvery } from "redux-saga/effects";
-import { get_PriceListByPartyType_API, Post_PriceList_API } from "../../../helpers/backend_helper";
+import { delete_PriceList_API, get_PriceListByPartyType_API, Post_PriceList_API } from "../../../helpers/backend_helper";
 import { AlertState } from "../../Utilites/CustomAlertRedux/actions";
 import { SpinnerState } from "../../Utilites/Spinner/actions";
-import { getPriceListDataSuccess, postPriceListDataSuccess } from "./action";
-import { GET_PRICE_LIST_DATA, POST_PRICE_LIST_DATA } from "./actionType";
+import { delete_PriceListSuccess, getPriceListDataSuccess, postPriceListDataSuccess } from "./action";
+import { DELETE_PRICE_LIST, GET_PRICE_LIST_DATA, POST_PRICE_LIST_DATA } from "./actionType";
 
 
 function* Post_PriceList_GenratorFunction({ Data }) {
@@ -35,8 +35,23 @@ function* get_PriceList_GenratorFunction({ partyType }) {
   }
 }
 
+function* delete_PriceList_GenFun({ id }) {
+  yield put(SpinnerState(true))
+  try {
+    const response = yield call(delete_PriceList_API, id);
+    yield put(SpinnerState(false))
+    yield put(delete_PriceListSuccess(response));
+  } catch (error) {
+    yield put(SpinnerState(false))
+    yield put(AlertState({ Type: 4, 
+      Status: true, Message: "500 Error Message",
+    }));
+  }
+}
+
   function* PriceListSaga() {
     yield takeEvery(POST_PRICE_LIST_DATA, Post_PriceList_GenratorFunction);
     yield takeEvery(GET_PRICE_LIST_DATA, get_PriceList_GenratorFunction);
+    yield takeEvery(DELETE_PRICE_LIST, delete_PriceList_GenFun);
   }
   export default PriceListSaga;

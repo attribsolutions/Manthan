@@ -3,6 +3,7 @@ import {
     Button,
     Card,
     CardBody,
+    CardFooter,
     CardHeader,
     Col,
     Container,
@@ -27,7 +28,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, useHistory } from "react-router-dom";
 
 import { BreadcrumbShow, AlertState } from "../../../store/actions";
-import { getPriceListData, postPriceListData, postPriceListDataSuccess } from "../../../store/Administrator/PriceList/action";
+import { delete_PriceList, delete_PriceListSuccess, getPriceListData, postPriceListData, postPriceListDataSuccess } from "../../../store/Administrator/PriceList/action";
 import { getPartyTypes } from "../../../store/Administrator/PartyRedux/action";
 
 const PriceListMaster = (props) => {
@@ -50,10 +51,12 @@ const PriceListMaster = (props) => {
 
     const { PostAPIResponse,
         priceListByPartyType,
+        deleteAPIResponse,
         PartyTypes,
         RoleAccessModifiedinSingleArray
     } = useSelector((state) => ({
         PostAPIResponse: state.PriceListReducer.PostData,
+        deleteAPIResponse: state.PriceListReducer.deletePriceMsg,
         PartyTypes: state.PartyMasterReducer.PartyTypes,
         priceListByPartyType: state.PriceListReducer.priceListByPartyType,
         RoleAccessModifiedinSingleArray: state.Login.RoleAccessUpdateData,
@@ -97,22 +100,39 @@ const PriceListMaster = (props) => {
             // setpartyType_dropdown_Select('')
             dispatch(postPriceListDataSuccess({ Status: false }))
             dispatch(getPriceListData(partyType_dropdown_Select.value))
-            setDropOpen(!dropOpen)
+            setDropOpen(false)
             dispatch(AlertState({
                 Type: 1,
                 Status: true,
                 Message: PostAPIResponse.Message,
+                RedirectPath: '',
+            }))
+        }
+
+    }, [PostAPIResponse])
+
+    useEffect(() => {
+        if ((deleteAPIResponse.Status === true) && (deleteAPIResponse.StatusCode === 200)) {
+            // setpartyType_dropdown_Select('')
+            dispatch(delete_PriceListSuccess({ Status: false }))
+            dispatch(getPriceListData(partyType_dropdown_Select.value))
+            // setDropOpen(!dropOpen)
+            dispatch(AlertState({
+                Type: 1,
+                Status: true,
+                Message: deleteAPIResponse.Message,
                 RedirectPath: '',
 
             }))
 
         }
 
-    }, [PostAPIResponse])
+    }, [deleteAPIResponse])
 
     function goButtonHandler() {
         if (!(partyType_dropdown_Select === '')) {
             dispatch(getPriceListData(partyType_dropdown_Select.value))
+            setHasPartySelect(true)
         }
     }
 
@@ -122,13 +142,25 @@ const PriceListMaster = (props) => {
     const [menu, setMenu] = useState(false);
     const [dropOpen, setDropOpen] = useState(false);
     const [currentPrice, setCurrentPrice] = useState({ Name: '' });
+    const [hasPartySelect, setHasPartySelect] = useState(false);
+
 
     const dropOpen_ONClickHandler = price => {
         setCurrentPrice(price)
         setDropOpen(true)
+        // if(price.id==0){
+        //     sub_Price_Add_Handler()
+        // }
     }
-    const delete_PriceList = price => {
-
+    const delete_PriceList_Handler = price => {
+        debugger
+        dispatch(AlertState({
+            Type: 5, Status: true,
+            Message: `Are you sure you want to delete this Price : "${price.Name}"`,
+            RedirectPath: false,
+            PermissionAction: delete_PriceList ,
+            ID:price.id
+        }));
     }
 
     function sub_Price_Add_Handler() {
@@ -142,7 +174,7 @@ const PriceListMaster = (props) => {
                 Name: price.value,
                 BasePriceListID: currentPrice.id,
                 PLPartyType: partyType_dropdown_Select.value,
-                MkUpMkDn: 1,
+                MkUpMkDn: mkup,
                 Company: 1,
                 CreatedBy: 1,
                 CreatedOn: "2022-07-18T00:00:00",
@@ -173,17 +205,28 @@ const PriceListMaster = (props) => {
             <div style={{ paddingLeft: "20px" }} className={""} >
                 <div className='row justify-content-center mt-n4 '>
                     <div className=' col-10'>
-                        <Input type="text" disabled={true} defaultValue={node.Name} >
+                        <Input
+                            type="text"
+                            disabled={true}
+                            defaultValue={node.Name} >
                         </Input>
                     </div>
                     <div className=' col-1 al-end'>
-                        <input type="checkBox" id={`mkUp${node.id}`}>
-                        </input>
+                        <Input
+                            type="checkbox"
+                            id={`mkUp${node.id}`}
+                            defaultChecked={node.MkUpMkDn}
+                            disabled={true}
+                        />
+
                     </div>
                     <div className=' col-1 '>
                         <i className="mdi mdi-pencil font-size-12"
                             onClick={e => setMenu(node.id)}  ></i>
-                        <Dropdown isOpen={menu === node.id} toggle={toggle} className="d-inline-block">
+                        <Dropdown
+                            isOpen={menu === node.id}
+                            toggle={toggle}
+                            className="d-inline-block">
                             <DropdownToggle className="btn header-item " tag="button">
 
                             </DropdownToggle>
@@ -192,14 +235,12 @@ const PriceListMaster = (props) => {
                                     key={node.id}
                                     onClick={(e) => { dropOpen_ONClickHandler(node) }}
                                 >
-                                    <span className="align-middle text-black" >{"Add Sub-Rate"}</span>
+                                    <span className="align-middle text-black" >{"Add Sub-List"}</span>
                                 </DropdownItem>
 
                                 <DropdownItem
                                     key={node.id}
-                                    onClick={() => delete_PriceList(node.id)}
-                                // // className={`notify-item ${selectedLang === key ? "active" : "none"
-                                //     }`}
+                                    onClick={() => delete_PriceList_Handler(node)}
                                 >
                                     <span className="align-middle text-danger"> {"Delete"} </span>
                                 </DropdownItem>
@@ -215,7 +256,7 @@ const PriceListMaster = (props) => {
 
     }
 
-console.log(priceListByPartyType)
+    console.log(priceListByPartyType)
 
 
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
@@ -273,73 +314,107 @@ console.log(priceListByPartyType)
 
 
 
-                                        {
-                                            (!(priceListByPartyType.length===0)) ?
-                                                <div className={" row mt-4"}>
-                                                    <Modal
-                                                        isOpen={dropOpen}
-                                                        toggle={() => { setDropOpen(!dropOpen) }}
-                                                        size="sm"
-                                                        centered={true}
-                                                        backdrop={'static'}
-                                                    >
-                                                        <div className="modal-header">
-                                                            <h5 className="modal-title mt-0">Add sub-Price </h5>
-                                                            <button
-                                                                type="button"
-                                                                onClick={() => {
-                                                                    setDropOpen(!dropOpen)
-                                                                }}
-                                                                className="close"
-                                                                data-dismiss="modal"
-                                                                aria-label="Close"
-                                                            >
-                                                                <span aria-hidden="true">&times;</span>
-                                                            </button>
-                                                        </div>
-                                                        <div className="modal-body">
-                                                            <Row className="justify-content-md-left">
 
-                                                                <span className="form-label text-primary text-center">{currentPrice.Name}</span>
-
-                                                                <Label htmlFor="horizontal-firstname-input"
-                                                                    className="col-4 col-form-label" >sub-Price </Label>
-                                                                <Col style={{ marginTop: '9px' }} >
-                                                                    <Input type="text" id='txtsubprice' />
-                                                                </Col>
-                                                            </Row>
-                                                            <Row className="mt-2">
-                                                                <Label className="col-4 col-form-label" >MkUp </Label>
-                                                                <Col className="mt-2">
-                                                                    <Input type={"checkbox"} id='mkupMkdown' />
-                                                                </Col>
-                                                            </Row>
-                                                        </div>
-                                                        <div className="modal-footer">
-                                                            <button type="button" className="btn btn-light" onClick={() => {
+                                        {hasPartySelect ?
+                                            <div className={" row mt-4"}>
+                                                <Modal
+                                                    isOpen={dropOpen}
+                                                    toggle={() => { setDropOpen(!dropOpen) }}
+                                                    size="sm"
+                                                    centered={true}
+                                                    backdrop={'static'}
+                                                >
+                                                    <div className="modal-header">
+                                                        <h5 className="modal-title mt-0">{currentPrice.id === 0 ? "Add Main Price" : "Add sub-Price"} </h5>
+                                                        <button
+                                                            type="button"
+                                                            onClick={() => {
                                                                 setDropOpen(!dropOpen)
-                                                            }}>Close</button>
-                                                            <button type="button" className="btn btn-primary"
-                                                                onClick={() => { sub_Price_Add_Handler() }} >Add</button>
-                                                        </div>
+                                                            }}
+                                                            className="close"
+                                                            data-dismiss="modal"
+                                                            aria-label="Close"
+                                                        >
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                    <div className="modal-body">
+                                                        <Row className="justify-content-md-left">
 
-                                                    </Modal>
-                                                    <Col md={1} ></Col>
-                                                    <Col md={5} >
-                                                        <div className="row"> <h4 className={'text-center text-primary'}>Price List</h4></div>
-                                                        <Card>
-                                                            <CardBody className="mt-3">
+                                                            <span className="form-label text-primary text-center">{currentPrice.Name}</span>
 
-                                                                {fun1(priceListByPartyType)}
+                                                            <Label htmlFor="horizontal-firstname-input"
+                                                                className="col-4 col-form-label" > {currentPrice.id === 0 ? "Main Price" : "sub-Price"} </Label>
+                                                            <Col style={{ marginTop: '9px' }} >
+                                                                <Input type="text" id='txtsubprice' />
+                                                            </Col>
+                                                        </Row>
+                                                        <Row className="mt-2">
+                                                            <Label className="col-4 col-form-label" >MkUp </Label>
+                                                            <Col className="mt-2">
+                                                                <Input type={"checkbox"} id='mkupMkdown' />
+                                                            </Col>
+                                                        </Row>
+                                                    </div>
+                                                    <div className="modal-footer">
+                                                        <button type="button" className="btn btn-light" onClick={() => {
+                                                            setDropOpen(!dropOpen)
+                                                        }}>Close</button>
+                                                        <button type="button" className="btn btn-primary"
+                                                            onClick={() => { sub_Price_Add_Handler() }} >Add</button>
+                                                    </div>
 
-                                                            </CardBody>
+                                                </Modal>
+                                                <Col md={1} ></Col>
+                                                <Col md={5} >
+                                                    <div className="row"> <h4 className={'text-center text-primary'}>Price List</h4></div>
+                                                    <Card>
+                                                        <CardBody className="mt-3">
 
-                                                        </Card>
-                                                    </Col>
+                                                            {fun1(priceListByPartyType)}
 
-                                                </div>
-                                                : null
+                                                            {((priceListByPartyType.length === 0)) ?
+                                                                <div className='row justify-content-center mt-n4 '>
+                                                                    <div className=' col-10'>
+                                                                        <Input type="text" disabled={true}
+                                                                            value={'Base Price  Not Exist'} >
+                                                                        </Input>
+                                                                    </div>
+                                                                </div>
+                                                                : null
+                                                            }
+
+
+
+
+
+                                                        </CardBody>
+                                                        <CardFooter >
+                                                            <Row>
+                                                                <Col >
+                                                                    <span className="align-middle text-primary" onClick={(e) => dropOpen_ONClickHandler({ id: 0, })}>  <i className="dripicons-plus">
+                                                                    </i> &nbsp; &nbsp;{"Add Sub-Rate"}</span>
+                                                                </Col>
+                                                                <Col className="col col-4">
+
+
+                                                                    <button type="button" className="btn btn-light"
+                                                                        onClick={() => {
+                                                                            // sub_Price_Add_Handler()
+                                                                        }} >change party Type</button>
+
+                                                                </Col>
+                                                            </Row>
+                                                        </CardFooter>
+
+                                                    </Card>
+                                                </Col>
+
+                                            </div>
+                                            : null
                                         }
+
+
 
                                     </Card>
                                 </Col>

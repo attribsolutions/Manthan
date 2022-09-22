@@ -1,4 +1,6 @@
 import {
+    DELETE_PRICE_LIST,
+    DELETE_PRICE_LIST_SUCCESS,
     GET_PRICE_LIST_DATA,
     GET_PRICE_LIST_DATA_SUCCESS,
     POST_PRICE_LIST_DATA,
@@ -23,5 +25,14 @@ export const getPriceListData = (partyType) => ({
 
 export const getPriceListDataSuccess = (data) => ({
     type: GET_PRICE_LIST_DATA_SUCCESS,
+    payload: data,
+});
+export const delete_PriceList = (id) => ({
+    type: DELETE_PRICE_LIST,
+    id,
+});
+
+export const delete_PriceListSuccess = (data) => ({
+    type: DELETE_PRICE_LIST_SUCCESS,
     payload: data,
 });
