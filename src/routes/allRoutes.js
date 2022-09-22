@@ -61,6 +61,7 @@ import DriverList from "../pages/Adminisrator/DriverPage/DriverList";
 import CompanyGroupMaster from "../pages/Adminisrator/CompanyGroupPages/CompanyGroupMaster";
 import CompanyGroupList from "../pages/Adminisrator/CompanyGroupPages/CompanyGroupList";
 import PageMasterTab from "../pages/Adminisrator/Page-Pages/PageMasterTab";
+import PriceListMaster from "../pages/Adminisrator/PriceList/PriceListMaster";
 
 
 
@@ -155,7 +156,6 @@ const userRoutes = [
   { path: "/CategoryTypeMaster", component: CategoryTypeMaster },
   { path: "/CategoryTypeList", component: CategoryTypeList },
 
-
   { path: "/CategoryMaster", component: CategoryMaster },
   { path: "/CategoryList", component: CategoryList },
   
@@ -171,11 +171,11 @@ const userRoutes = [
   { path: "/CompanyGroupMaster", component: CompanyGroupMaster },
   { path: "/CompanyGroupList", component: CompanyGroupList },
 
+  { path: "/PriceListMaster", component: PriceListMaster },
 
   { path: "/partyUIDemo", component: PartyUIDemo },
   { path: "/demoUi3", component: DemoUI3 },
   { path: "/demoUi2", component: DemoUI2 },
-
 
   // { path: "/AddItemMaster", component: AddItemMaster },
   { path: "/SearchBox2", component: SearchBoxSecond },

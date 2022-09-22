@@ -33,6 +33,7 @@ import SubCategorySaga from "./Administrator/SubCategoryRedux/saga"
 import VehicleSaga from "./Administrator/VehicleRedux/saga"
 import DriverSaga from "./Administrator/DriverRedux/saga"
 import CompanyGroupSaga from "./Administrator/CompanyGroupRedux/saga"
+import PriceListSaga from "./Administrator/PriceList/saga"
 
 export default function* rootSaga() {
   yield all([
@@ -64,6 +65,6 @@ export default function* rootSaga() {
    fork(VehicleSaga),
    fork(DriverSaga),
    fork(CompanyGroupSaga),
-
+   fork(PriceListSaga),
   ])
 }
