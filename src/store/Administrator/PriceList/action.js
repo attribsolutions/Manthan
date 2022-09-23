@@ -17,7 +17,8 @@ export const postPriceListDataSuccess = (data,id) => ({
     type: POST_PRICE_LIST_DATA_SUCCESS,
     payload: data,
 });
-// post api
+
+// post api 
 export const getPriceListData = (partyType) => ({
     type: GET_PRICE_LIST_DATA,
     partyType,
