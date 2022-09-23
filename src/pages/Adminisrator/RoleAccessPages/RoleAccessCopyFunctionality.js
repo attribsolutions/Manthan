@@ -16,11 +16,11 @@ import { useHistory } from "react-router-dom";
 
 const RoleAccessCopyFunctionality = (props) => {
 
-    const [role_Dropdown_Select, setRoleDropdown_Select] = useState("");
     const [copyRole_Dropdown_Select, setCopyRole_Dropdown_Select] = useState("");
-
-    const [division_dropdown_Select, setDivision_dropdown_Select] = useState("");
     const [copyDivision_dropdown_Select, setCopyDivision_dropdown_Select] = useState("");
+
+    const [newRoleDropdown_Select, setNewRoleDropdown_Select] = useState("");
+    const [newDivision_dropdown_Select, setNewDivision_dropdown_Select] = useState(null);
 
     const [userPageAccessState, setUserPageAccessState] = useState('');
     const [showTableOnUI, setShowTableOnUI] = useState(false)
@@ -59,7 +59,9 @@ const RoleAccessCopyFunctionality = (props) => {
             var C_props = editDataGatingFromList
 
             var divisionId = C_props.Division_id
-
+            if (divisionId === null) {
+                divisionId = 0
+            }
             var roleId = C_props.Role_id
 
             if (roleId > 0) {
@@ -71,26 +73,25 @@ const RoleAccessCopyFunctionality = (props) => {
 
     }, [history]);
 
-    console.log("copyDivision_dropdown_Select,", copyDivision_dropdown_Select)
 
-    const DivisionTypesOption = DivisionTypes_redux.map((Data) => ({
+    const newDivisionTypesOption = DivisionTypes_redux.map((Data) => ({
         value: Data.id,
         label: Data.Name
     }));
 
-    const Role_DropdownOption = Roles_redux.map((Data) => ({
+    const newRole_DropdownOption = Roles_redux.map((Data) => ({
         value: Data.id,
         label: Data.Name
     }));
 
 
 
-    function RoleDropDown_onChangeHandler(e) {
-        setRoleDropdown_Select(e)
+    function newRoleDropDown_onChangeHandler(e) {
+        setNewRoleDropdown_Select(e)
     }
 
-    function DivisionTypes_onChangeHandler(e) {
-        setDivision_dropdown_Select(e)
+    function newDivisionTypes_onChangeHandler(e) {
+        setNewDivision_dropdown_Select(e)
     }
 
     function CopyButton_Handler() {
@@ -98,8 +99,10 @@ const RoleAccessCopyFunctionality = (props) => {
             {
                 Role: copyRole_Dropdown_Select.value,
                 Division: copyDivision_dropdown_Select.value,
-                NewRole: role_Dropdown_Select.value,
-                NewDivision: division_dropdown_Select.value,
+                NewRole: newRoleDropdown_Select.value,
+                NewDivision: (newDivision_dropdown_Select) ?
+                    newDivision_dropdown_Select.value
+                    : 0,
             })
 
         dispatch(PostMethodForCopyRoleAccessForRoleAccess(jsonBody))
@@ -162,10 +165,10 @@ const RoleAccessCopyFunctionality = (props) => {
                                         <Label className="col-sm-2 p-2 ml-n4 ">Role</Label>
                                         <Col md="9">
                                             <Select
-                                                value={role_Dropdown_Select}
-                                                options={Role_DropdownOption}
+                                                value={newRoleDropdown_Select}
+                                                options={newRole_DropdownOption}
                                                 className="rounded-bottom"
-                                                onChange={(e) => { RoleDropDown_onChangeHandler(e) }}
+                                                onChange={(e) => { newRoleDropDown_onChangeHandler(e) }}
                                                 classNamePrefix="select2-selection"
 
                                             />
@@ -178,10 +181,10 @@ const RoleAccessCopyFunctionality = (props) => {
                                         <Label className="col-sm-3 p-2">Division</Label>
                                         <Col md="9">
                                             <Select
-                                                value={division_dropdown_Select}
+                                                value={newDivision_dropdown_Select}
                                                 className="rounded-bottom"
-                                                options={DivisionTypesOption}
-                                                onChange={(e) => { DivisionTypes_onChangeHandler(e) }}
+                                                options={newDivisionTypesOption}
+                                                onChange={(e) => { newDivisionTypes_onChangeHandler(e) }}
                                             />
                                         </Col>
                                     </FormGroup>

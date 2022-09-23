@@ -62,6 +62,10 @@ import CompanyGroupMaster from "../pages/Adminisrator/CompanyGroupPages/CompanyG
 import CompanyGroupList from "../pages/Adminisrator/CompanyGroupPages/CompanyGroupList";
 import PageMasterTab from "../pages/Adminisrator/Page-Pages/PageMasterTab";
 
+// import PartyMasterTab from "../pages/Adminisrator/PartyTab/PartyMasterTab";
+
+// import PriceListMaster from "../pages/Adminisrator/PriceList/PriceListMaster";
+
 
 
 
@@ -155,7 +159,6 @@ const userRoutes = [
   { path: "/CategoryTypeMaster", component: CategoryTypeMaster },
   { path: "/CategoryTypeList", component: CategoryTypeList },
 
-
   { path: "/CategoryMaster", component: CategoryMaster },
   { path: "/CategoryList", component: CategoryList },
   
@@ -172,10 +175,15 @@ const userRoutes = [
   { path: "/CompanyGroupList", component: CompanyGroupList },
 
 
+  // { path: "/PartyMasterTab", component: PartyMasterTab },
+
+
+  // { path: "/PriceListMaster", component: PriceListMaster },
+
+
   { path: "/partyUIDemo", component: PartyUIDemo },
   { path: "/demoUi3", component: DemoUI3 },
   { path: "/demoUi2", component: DemoUI2 },
-
 
   // { path: "/AddItemMaster", component: AddItemMaster },
   { path: "/SearchBox2", component: SearchBoxSecond },
