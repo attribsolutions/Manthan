@@ -59,7 +59,10 @@ import DriverList from "../pages/Adminisrator/DriverPage/DriverList";
 import CompanyGroupMaster from "../pages/Adminisrator/CompanyGroupPages/CompanyGroupMaster";
 import CompanyGroupList from "../pages/Adminisrator/CompanyGroupPages/CompanyGroupList";
 import PageMasterTab from "../pages/Adminisrator/Page-Pages/PageMasterTab";
-import PriceListMaster from "../pages/Adminisrator/PriceList/PriceListMaster";
+
+// import PartyMasterTab from "../pages/Adminisrator/PartyTab/PartyMasterTab";
+
+// import PriceListMaster from "../pages/Adminisrator/PriceList/PriceListMaster";
 
 
 
@@ -169,7 +172,12 @@ const userRoutes = [
   { path: "/CompanyGroupMaster", component: CompanyGroupMaster },
   { path: "/CompanyGroupList", component: CompanyGroupList },
 
-  { path: "/PriceListMaster", component: PriceListMaster },
+
+  // { path: "/PartyMasterTab", component: PartyMasterTab },
+
+
+  // { path: "/PriceListMaster", component: PriceListMaster },
+
 
 
 
