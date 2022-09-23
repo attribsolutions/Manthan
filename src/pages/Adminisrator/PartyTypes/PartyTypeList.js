@@ -10,7 +10,7 @@ import BootstrapTable from "react-bootstrap-table-next";
 import { useSelector, useDispatch } from "react-redux";
 import { AlertState } from "../../../store/actions";
 import "../../../assets/scss/CustomeTable/datatables.scss";
-
+import cellEditFactory, { Type } from 'react-bootstrap-table2-editor';
 import { MetaTags } from "react-meta-tags";
 import { useHistory } from "react-router-dom";
 import { CommonGetRoleAccessFunction } from "../../../components/Common/CommonGetRoleAccessFunction";
@@ -26,7 +26,7 @@ const PartyTypeList = (props) => {
   const [modal_center, setmodal_center] = useState(false);
 
   // get Access redux data
-  const { TableListData, editData, updateMessage, deleteMessage,RoleAccessModifiedinSingleArray,PostAPIResponse } = useSelector(
+  const { TableListData, editData, updateMessage, deleteMessage, RoleAccessModifiedinSingleArray, PostAPIResponse } = useSelector(
     (state) => ({
       TableListData: state.PartyTypeReducer.ListData,
       editData: state.PartyTypeReducer.editData,
@@ -40,12 +40,12 @@ const PartyTypeList = (props) => {
   useEffect(() => {
     const locationPath = history.location.pathname
     let userAcc = RoleAccessModifiedinSingleArray.find((inx) => {
-        return (`/${inx.ActualPagePath}` === locationPath)
+      return (`/${inx.ActualPagePath}` === locationPath)
     })
     if (!(userAcc === undefined)) {
-        setUserPageAccessState(userAcc)
+      setUserPageAccessState(userAcc)
     }
-}, [RoleAccessModifiedinSingleArray])
+  }, [RoleAccessModifiedinSingleArray])
 
   //  This UseEffect => Featch Modules List data  First Rendering
   useEffect(() => {
@@ -104,27 +104,27 @@ const PartyTypeList = (props) => {
   useEffect(() => {
 
     if ((PostAPIResponse.Status === true) && (PostAPIResponse.StatusCode === 200)) {
-        dispatch(PostPartyTypeAPISuccess({ Status: false }))
-        tog_center();
-        dispatch(getPartyTypelist());
-        dispatch(AlertState({
-            Type: 1,
-            Status: true,
-            Message: PostAPIResponse.Message,
-        }))
+      dispatch(PostPartyTypeAPISuccess({ Status: false }))
+      tog_center();
+      dispatch(getPartyTypelist());
+      dispatch(AlertState({
+        Type: 1,
+        Status: true,
+        Message: PostAPIResponse.Message,
+      }))
     }
 
     else if ((PostAPIResponse.Status === true)) {
-        dispatch(PostPartyTypeAPISuccess({ Status: false }))
-        dispatch(AlertState({
-            Type: 4,
-            Status: true,
-            Message: JSON.stringify(PostAPIResponse.Message),
-            RedirectPath: false,
-            AfterResponseAction: false
-        }));
+      dispatch(PostPartyTypeAPISuccess({ Status: false }))
+      dispatch(AlertState({
+        Type: 4,
+        Status: true,
+        Message: JSON.stringify(PostAPIResponse.Message),
+        RedirectPath: false,
+        AfterResponseAction: false
+      }));
     }
-}, [PostAPIResponse.Status])
+  }, [PostAPIResponse.Status])
 
   // Edit Modal Show When Edit Data is true
   useEffect(() => {
@@ -175,7 +175,7 @@ const PartyTypeList = (props) => {
       dataField: "Name",
       sort: true,
     },
-    
+
     {
       text: "IsSCM",
       dataField: "IsSCM",
@@ -185,8 +185,12 @@ const PartyTypeList = (props) => {
       text: "IsDivision",
       dataField: "IsDivision",
       sort: true,
+      editor: {
+        type: Type.CHECKBOX,
+        value: 'true:false'
+      }
     },
-   
+
     {
       text: "Action",
       hidden: (
@@ -196,7 +200,7 @@ const PartyTypeList = (props) => {
 
       formatter: (cellContent, Role) => (
         <div className="d-flex gap-3" style={{ display: 'flex', justifyContent: 'center' }} >
-            {((userPageAccessState.RoleAccess_IsEdit))  ?
+          {((userPageAccessState.RoleAccess_IsEdit)) ?
             <Button
               type="button"
               data-mdb-toggle="tooltip" data-mdb-placement="top" title="Edit Party Type"
@@ -233,7 +237,7 @@ const PartyTypeList = (props) => {
       ),
     },
   ];
-
+console.log("TableListData",TableListData)
   if (!(userPageAccessState === '')) {
     return (
       <React.Fragment>
@@ -244,10 +248,10 @@ const PartyTypeList = (props) => {
           <PaginationProvider pagination={paginationFactory(pageOptions)}>
             {({ paginationProps, paginationTableProps }) => (
               <ToolkitProvider
-                keyField="id"
-                defaultSorted={defaultSorted}
-                data={TableListData}
-                columns={pagesListColumns}
+                // keyField="id"
+                // defaultSorted={defaultSorted}
+                // data={TableListData}
+                // columns={pagesListColumns}
                 search
               >
                 {(toolkitProps) => (
@@ -267,13 +271,10 @@ const PartyTypeList = (props) => {
                       <Col xl="12">
                         <div className="table-responsive">
                           <BootstrapTable
-                            keyField={"id"}
-                            responsive
-                            bordered={false}
-                            striped={false}
-                            classes={"table  table-bordered"}
-                            {...toolkitProps.baseProps}
-                            {...paginationTableProps}
+                            keyField="id"
+                            data={TableListData}
+                            columns={pagesListColumns}
+                            cellEdit={cellEditFactory({ mode: 'dbclick' ,blurToSave: true})}
                           />
                         </div>
                       </Col>
@@ -295,7 +296,7 @@ const PartyTypeList = (props) => {
             }}
             size="xl"
           >
-            <PartyType state={editData.Data} relatatedPage={"/PartyType"}/>
+            <PartyType state={editData.Data} relatatedPage={"/PartyType"} />
           </Modal>
         </div>
       </React.Fragment>

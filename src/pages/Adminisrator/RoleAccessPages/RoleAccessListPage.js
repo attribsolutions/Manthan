@@ -14,15 +14,12 @@ import Breadcrumb from "../../../components/Common/Breadcrumb"
 import "../../../assets/scss/CustomeTable/datatables.scss"
 import { useDispatch, useSelector } from "react-redux";
 import {
-    editModuleID,
     getRoleAccessListPage,
     PostMethod_ForCopyRoleAccessFor_Role_Success,
 
 } from "../../../store/actions";
 import { AlertState } from "../../../store/actions";
-import PartyUIDemo from "../PartyPages/PartyUIDemo";
 import { useHistory } from "react-router-dom";
-import { CommonGetRoleAccessFunction } from "../../../components/Common/CommonGetRoleAccessFunction";
 import RoleAccessCopyFunctionality from "./RoleAccessCopyFunctionality";
 
 const RoleAccessListPage = () => {
