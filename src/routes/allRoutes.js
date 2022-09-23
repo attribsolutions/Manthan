@@ -34,9 +34,7 @@ import SearchBoxSecond from "../pages/Adminisrator/SearchBox/SearchBoxSecond";
 import SerachBox3 from "../pages/Adminisrator/SearchBox/SerachBox3";
 import PartyList from "../pages/Adminisrator/PartyPages/PartyList";
 import PartyMaster from "../pages/Adminisrator/PartyPages/PartyMaster";
-import DemoUI3 from "../pages/Adminisrator/PartyPages/DemoUI3";
-import DemoUI2 from "../pages/Adminisrator/PartyPages/DemoUI2";
-import PartyUIDemo from "../pages/Adminisrator/PartyPages/PartyUIDemo";
+
 import ResetPassword from "../pages/Authentication/ResetPassword";
 import SendOTP from "../pages/Authentication/SendOTP";
 import EnterOTP from "../pages/Authentication/EnterOTP";
@@ -181,9 +179,7 @@ const userRoutes = [
   // { path: "/PriceListMaster", component: PriceListMaster },
 
 
-  { path: "/partyUIDemo", component: PartyUIDemo },
-  { path: "/demoUi3", component: DemoUI3 },
-  { path: "/demoUi2", component: DemoUI2 },
+
 
   // { path: "/AddItemMaster", component: AddItemMaster },
   { path: "/SearchBox2", component: SearchBoxSecond },
