@@ -31,6 +31,12 @@ import { BreadcrumbShow, AlertState } from "../../../store/actions";
 import { delete_PriceList, delete_PriceListSuccess, getPriceListData, postPriceListData, postPriceListDataSuccess } from "../../../store/Administrator/PriceList/action";
 import { getPartyTypes } from "../../../store/Administrator/PartyRedux/action";
 
+import DropdownTreeSelect, { ExtractTextPlugin } from 'react-dropdown-tree-select'
+// import 'react-dropdown-tree-select/dist/styles.css'
+import "./index.css";
+
+
+
 const PriceListMaster = (props) => {
     const formRef = useRef(null);
     const dispatch = useDispatch();
@@ -46,6 +52,11 @@ const PriceListMaster = (props) => {
     // const [partyTypeSelect, setPartyTypeSelect] = useState({ value: '' });
     const [userPageAccessState, setUserPageAccessState] = useState("");
     const [partyType_dropdown_Select, setPartyType_dropdown_Select] = useState("");
+
+    const [menu, setMenu] = useState(false);
+    const [dropOpen, setDropOpen] = useState(false);
+    const [currentPrice, setCurrentPrice] = useState({ Name: '' });
+    const [hasPartySelect, setHasPartySelect] = useState(false);
 
     //Access redux store Data /  'save_ModuleSuccess' action data
 
@@ -85,16 +96,6 @@ const PriceListMaster = (props) => {
         dispatch(getPartyTypes());
     }, [dispatch]);
 
-
-    const PartyTypeDropdown_Options = PartyTypes.map((Data) => ({
-        value: Data.id,
-        label: Data.Name
-    }));
-
-    function PartyType_Dropdown_OnChange_Handller(e) {
-        setPartyType_dropdown_Select(e)
-
-    }
     useEffect(() => {
         if ((PostAPIResponse.Status === true) && (PostAPIResponse.StatusCode === 200)) {
             // setpartyType_dropdown_Select('')
@@ -129,6 +130,11 @@ const PriceListMaster = (props) => {
 
     }, [deleteAPIResponse])
 
+    const PartyTypeDropdown_Options = PartyTypes.map((Data) => ({
+        value: Data.id,
+        label: Data.Name
+    }));
+
     function goButtonHandler() {
         if (!(partyType_dropdown_Select === '')) {
             dispatch(getPriceListData(partyType_dropdown_Select.value))
@@ -136,15 +142,10 @@ const PriceListMaster = (props) => {
         }
     }
 
+    function PartyType_Dropdown_OnChange_Handller(e) {
+        setPartyType_dropdown_Select(e)
 
-
-
-    const [menu, setMenu] = useState(false);
-    const [dropOpen, setDropOpen] = useState(false);
-    const [currentPrice, setCurrentPrice] = useState({ Name: '' });
-    const [hasPartySelect, setHasPartySelect] = useState(false);
-
-
+    }
     const dropOpen_ONClickHandler = price => {
         setCurrentPrice(price)
         setDropOpen(true)
@@ -153,13 +154,12 @@ const PriceListMaster = (props) => {
         // }
     }
     const delete_PriceList_Handler = price => {
-        debugger
         dispatch(AlertState({
             Type: 5, Status: true,
-            Message: `Are you sure you want to delete this Price : "${price.Name}"`,
+            Message: `Are you sure you want to delete this Price : "${price.label}"`,
             RedirectPath: false,
-            PermissionAction: delete_PriceList ,
-            ID:price.id
+            PermissionAction: delete_PriceList,
+            ID: price.value
         }));
     }
 
@@ -172,7 +172,7 @@ const PriceListMaster = (props) => {
             var mkup = document.getElementById(`mkupMkdown`).checked
             const jsonBody = JSON.stringify({
                 Name: price.value,
-                BasePriceListID: currentPrice.id,
+                BasePriceListID: currentPrice.value,
                 PLPartyType: partyType_dropdown_Select.value,
                 MkUpMkDn: mkup,
                 Company: 1,
@@ -208,13 +208,13 @@ const PriceListMaster = (props) => {
                         <Input
                             type="text"
                             disabled={true}
-                            defaultValue={node.Name} >
+                            defaultValue={node.label} >
                         </Input>
                     </div>
                     <div className=' col-1 al-end'>
                         <Input
                             type="checkbox"
-                            id={`mkUp${node.id}`}
+                            id={`mkUp${node.value}`}
                             defaultChecked={node.MkUpMkDn}
                             disabled={true}
                         />
@@ -222,9 +222,9 @@ const PriceListMaster = (props) => {
                     </div>
                     <div className=' col-1 '>
                         <i className="mdi mdi-pencil font-size-12"
-                            onClick={e => setMenu(node.id)}  ></i>
+                            onClick={e => setMenu(node.value)}  ></i>
                         <Dropdown
-                            isOpen={menu === node.id}
+                            isOpen={menu === node.value}
                             toggle={toggle}
                             className="d-inline-block">
                             <DropdownToggle className="btn header-item " tag="button">
@@ -232,14 +232,14 @@ const PriceListMaster = (props) => {
                             </DropdownToggle>
                             <DropdownMenu className="language-switch dropdown-menu-end">
                                 <DropdownItem
-                                    key={node.id}
+                                    key={node.value}
                                     onClick={(e) => { dropOpen_ONClickHandler(node) }}
                                 >
                                     <span className="align-middle text-black" >{"Add Sub-List"}</span>
                                 </DropdownItem>
 
                                 <DropdownItem
-                                    key={node.id}
+                                    key={node.value}
                                     onClick={() => delete_PriceList_Handler(node)}
                                 >
                                     <span className="align-middle text-danger"> {"Delete"} </span>
@@ -248,7 +248,7 @@ const PriceListMaster = (props) => {
                         </Dropdown>
                     </div>
 
-                    {node.childern ? fun1(node.childern) : null}
+                    {node.children ? fun1(node.children) : null}
                 </div>
             </div>
 
@@ -256,7 +256,8 @@ const PriceListMaster = (props) => {
 
     }
 
-    console.log(priceListByPartyType)
+
+
 
 
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
@@ -278,8 +279,18 @@ const PriceListMaster = (props) => {
                             <p className="card-title-desc text-black">{userPageAccessState.PageDescriptionDetails}</p>
                         </CardHeader>
 
+                        {/* <DropdownTreeSelect
+                            texts={{ placeholder: ' search price list', }}
+                            data={data} onChange={onChange}
+                            onAction={onAction}
+                            onNodeToggle={onNodeToggle}
+                        /> */}
+                        {/* <DropdownTreeSelect
+                            data={data}
+                            onChange={onChange}
+                            className="bootstrap-demo"
+                        /> */}
                         <CardBody className=" vh-10 0 text-black"  >
-
                             <Row className="">
                                 <Col md={12}>
                                     <Card style={{ backgroundColor: "whitesmoke" }}>
