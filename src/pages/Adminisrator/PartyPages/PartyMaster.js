@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { AlertState } from "../../../store/actions";
 import Select from "react-select";
 import {
-    editPartyIDSuccess, getAddressTypes, getCompany, GetCompanyByDivisionTypeID, getDistrictOnState,
+    editPartyIDSuccess, getAddressTypes, getCompany,  getDistrictOnState,
 
     GetPartyTypeByDivisionTypeID, getPartyTypes, getPriceList, postPartyData, postPartyDataSuccess, updatePartyID
 } from "../../../store/Administrator/PartyRedux/action";
@@ -17,6 +17,7 @@ import { MetaTags } from "react-meta-tags";
 import { useHistory } from "react-router-dom";
 import DropdownTreeSelect from 'react-dropdown-tree-select'
 import { getPriceListData } from "../../../store/Administrator/PriceList/action";
+import '../../../assets/tree_select_css/index.css'
 
 const PartyMaster = (props) => {
 

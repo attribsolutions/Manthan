@@ -52,6 +52,8 @@ import paginationFactory, {
 } from "react-bootstrap-table2-paginator";
 import ToolkitProvider, { Search } from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next"
+import StudentForm from "./StudentForm"
+import GSTDetailsTable from "./GSTDetailsTable"
 
 const ItemsMaster = (props) => {
     const dispatch = useDispatch();
@@ -59,6 +61,7 @@ const ItemsMaster = (props) => {
 
     //*** "isEditdata get all data from ModuleID for Binding  Form controls
     let editDataGatingFromList = props.state;
+    console.log("editDataGatingFromList",editDataGatingFromList)
     let pageModeProps = props.pageMode
 
     const [EditData, setEditData] = useState([]);
@@ -101,7 +104,10 @@ const ItemsMaster = (props) => {
         SubCategory_DropdownOptions: []
     }]);
 
-    const [marginTabTable, setMarginTabTable] = useState([{
+    const [marginTabTable, setMarginTabTable] = useState([])
+
+    const [marginMaster, setMarginMaster] = useState([{
+        id: 0,
         PriceList: { label: "select", value: 0 },
         EffectiveDate: '',
         PartyName: { label: "select", value: 0 },
@@ -437,7 +443,6 @@ const ItemsMaster = (props) => {
             };
         }
     }
-
 
     const PriceList_DropdownOptions = BaseUnit.map((data) => ({
         value: data.id,
@@ -822,25 +827,48 @@ const ItemsMaster = (props) => {
         setImageTabTable(newTabArr)
     }
 
+    function GSTDetails_Tab_AddRow_Handler(key) {
+        debugger
+
+        let validateReturn1 = CommonTab_DatePicker_handller_ForAll(GStDetailsMaster.EffectiveDate, "EffectiveDate", 0)
+        let validateReturn2 = Common_Text_INPUT_Validation(GStDetailsMaster.GST, "GST", 0);
+        let validateReturn3 = Common_Text_INPUT_Validation(GStDetailsMaster.HSNCode, "HSNCode", 0);
+
+        if ((validateReturn1 === false)
+            || (validateReturn2 === false)
+            || (validateReturn3 === false)) return;
+
+        var length = GStDetailsTabTable.length
+        var newArr = {
+            id: length,
+            EffectiveDate: GStDetailsMaster.EffectiveDate,
+            GST: GStDetailsMaster.GST,
+            HSNCode: GStDetailsMaster.HSNCode
+        }
+        setGSTDetailsTabTable([...GStDetailsTabTable, newArr])
+
+    }
+
     function MarginTab_AddRow_Handler(key) {
 
-        let margin_TableElement = marginTabTable[key];
-
-        let validateReturn = Common_Drop_Validation(margin_TableElement.PriceList, "PriceList", key);
-        let validateReturn1 = CommonTab_DatePicker_handller_ForAll(margin_TableElement.EffectiveDate, "EffectiveDate", key)
-        let validateReturn2 = Common_Drop_Validation(margin_TableElement.PartyName, "PartyName", key)
-        let validateReturn3 = Common_Text_INPUT_Validation(margin_TableElement.Margin, "Margin", key)
+        let validateReturn = Common_Drop_Validation(marginMaster.PriceList, "PriceList", 0);
+        let validateReturn1 = CommonTab_DatePicker_handller_ForAll(marginMaster.EffectiveDate, "EffectiveDate", 0)
+        let validateReturn2 = Common_Drop_Validation(marginMaster.PartyName, "PartyName", 0)
+        let validateReturn3 = Common_Text_INPUT_Validation(marginMaster.Margin, "Margin", 0)
 
         if ((validateReturn1 === false) || (validateReturn === false) || (validateReturn2 === false) || (validateReturn3 === false)) return;
         // if ((validateReturn === false) || (validateReturn2 === false) || (validateReturn3 === false)) return;
 
-        var newarr1 = [...marginTabTable, {
+        var length = marginTabTable.length
+        var newArr = {
+            id: length,
             PriceList: { label: "select", value: 0 },
-            EffectiveDate: '',
+            EffectiveDate: marginMaster.EffectiveDate,
             PartyName: { label: "select", value: 0 },
-            Margin: ''
-        }]
-        setMarginTabTable(newarr1)
+            Margin: marginMaster.Margin,
+
+        }
+        setMarginTabTable([...GStDetailsTabTable, newArr])
     }
     function MarginTab_DeleteRow_Handler(key) {
         var removeElseArrray1 = marginTabTable.filter((i, k) => {
@@ -850,73 +878,18 @@ const ItemsMaster = (props) => {
     }
     function MarginTab_onChange_Handler(event, type, key) {
 
-        var found = marginTabTable.find((i, k) => {
-            return (k === key)
-        })
-        let newSelectValue = ''
-
         if (type === "PriceList") {
-            const foundDublicate = marginTabTable.find((element) => {
-                return (element[type].value === event.value)
-            });
-            if (!(foundDublicate === undefined)) {
-                dispatch(AlertState({
-                    Type: 4,
-                    Status: true,
-                    Message: "PriceList Already Select",
-                }))
-                return
-            }
-
-            let validateReturn = Common_Drop_Validation(event, type, key)
-            if (validateReturn === false) return;
-
-            newSelectValue = {
-                PriceList: event,
-                EffectiveDate: found.EffectiveDate,
-                PartyName: found.PartyName,
-                Margin: found.Margin,
-            }
+            marginMaster.EffectiveDate = event
         }
-
-        else if (type === 'EffectiveDate') {
-            // let validateReturn = CommonTab_DatePicker_handller_ForAll(event, type, key);
-            // if (validateReturn === false) return;
-
-            newSelectValue = {
-                PriceList: found.PriceList,
-                EffectiveDate: event,
-                PartyName: found.PartyName,
-                Margin: found.Margin,
-            }
+        else if (type === "EffectiveDate") {
+            marginMaster.GST = event
         }
-        else if (type === 'PartyName') {
-            let validateReturn = Common_Drop_Validation(event, type, key);
-            if (validateReturn === false) return;
-
-            newSelectValue = {
-                PriceList: found.PriceList,
-                EffectiveDate: found.EffectiveDate,
-                PartyName: event,
-                Margin: found.Margin,
-            }
+        else if (type === "PartyName") {
+            marginMaster.HSNCode = event
         }
-        else if (type === 'Margin') {
-            let validateReturn = Common_Text_INPUT_Validation(event, type, key);
-            if (validateReturn === false) return;
-
-            newSelectValue = {
-                PriceList: found.PriceList,
-                EffectiveDate: found.EffectiveDate,
-                PartyName: found.PartyName,
-                Margin: event,
-            }
+        else if (type === "Margin") {
+            marginMaster.HSNCode = event
         }
-
-        let newTabArr = marginTabTable.map((index, k) => {
-            return (k === key) ? newSelectValue : index
-        })
-        setMarginTabTable(newTabArr)
     }
 
     function MRP_Tab_Tab_AddRow_Handler(key) {
@@ -954,74 +927,18 @@ const ItemsMaster = (props) => {
     }
     function MRP_Tab__Common_onChange_Handller(event, type, key) {
 
-        var found = MRP_Tab_TableData.find((i, k) => {
-            return (k === key)
-        })
-        let newSelectValue = ''
-
-        if (type === "Division") {
-
-            const foundDublicate = MRP_Tab_TableData.find((element) => {
-                return (element[type].value === event.value)
-            });
-            if (!(foundDublicate === undefined)) {
-                dispatch(AlertState({
-                    Type: 4,
-                    Status: true,
-                    Message: "Division Already Select",
-                }))
-                return
-            }
-            let validateReturn = Common_Drop_Validation(event, type, key);
-            if (validateReturn === false) return;
-
-            newSelectValue = {
-                Division: event,
-                EffectiveDate: found.EffectiveDate,
-                PartyName: found.PartyName,
-                MRP: found.MRP,
-            }
+        if (type === "PriceList") {
+            marginMaster.EffectiveDate = event
         }
-
         else if (type === "EffectiveDate") {
-            let validateReturn = CommonTab_DatePicker_handller_ForAll(event, type, key);
-            if (validateReturn === false) return;
-
-            newSelectValue = {
-                Division: found.Division,
-                EffectiveDate: event,
-                PartyName: found.PartyName,
-                MRP: found.MRP,
-            }
-
+            marginMaster.GST = event
         }
-
         else if (type === "PartyName") {
-            let validateReturn = Common_Drop_Validation(event, type, key);
-            if (validateReturn === false) return;
-
-            newSelectValue = {
-                Division: found.Division,
-                EffectiveDate: found.EffectiveDate,
-                PartyName: event,
-                MRP: found.MRP,
-            }
-        } else if (type === "MRP") {
-            let validateReturn = Common_Text_INPUT_Validation(event, type, key);
-            if (validateReturn === false) return;
-
-            newSelectValue = {
-                Division: found.Division,
-                EffectiveDate: found.EffectiveDate,
-                PartyName: found.PartyName,
-                MRP: event,
-            }
+            marginMaster.HSNCode = event
         }
-
-        let newTabArr = MRP_Tab_TableData.map((index, k) => {
-            return (k === key) ? newSelectValue : index
-        })
-        setMRP_Tab_TableData(newTabArr)
+        else if (type === "Margin") {
+            marginMaster.HSNCode = event
+        }
     }
 
     function GSTDetails_onChange_Handller(event, type, key) {
@@ -1041,12 +958,11 @@ const ItemsMaster = (props) => {
     function GSTDetails_Tab_AddRow_Handler(key) {
         debugger
 
-
         let validateReturn1 = CommonTab_DatePicker_handller_ForAll(GStDetailsMaster.EffectiveDate, "EffectiveDate", 0)
         let validateReturn2 = Common_Text_INPUT_Validation(GStDetailsMaster.GST, "GST", 0);
-        let validateReturn3 = Common_Text_INPUT_Validation(GStDetailsMaster.HSNCode, "HSNCode",0);
+        let validateReturn3 = Common_Text_INPUT_Validation(GStDetailsMaster.HSNCode, "HSNCode", 0);
 
-        if ( (validateReturn1 === false)
+        if ((validateReturn1 === false)
             || (validateReturn2 === false)
             || (validateReturn3 === false)) return;
 
@@ -1058,8 +974,9 @@ const ItemsMaster = (props) => {
             HSNCode: GStDetailsMaster.HSNCode
         }
         setGSTDetailsTabTable([...GStDetailsTabTable, newArr])
-        
+
     }
+
     function GSTDetails_Delete_Handller(event, v, k) {
 
         var filter = GStDetailsTabTable
@@ -1245,6 +1162,12 @@ const ItemsMaster = (props) => {
 
     };
 
+    const pageOptionsForMarginTable = {
+        sizePerPage: 10,
+        totalSize: marginMaster.length,
+        custom: true,
+    };
+
     const pageOptions = {
         sizePerPage: 10,
         totalSize: GStDetailsTabTable.length,
@@ -1290,6 +1213,7 @@ const ItemsMaster = (props) => {
         }
 
     ];
+
 
     var IsEditMode_Css = ''
     if ((pageMode === "edit") || (pageMode === "copy") || (pageMode === "dropdownAdd")) { IsEditMode_Css = "-5.5%" };
@@ -1455,7 +1379,9 @@ const ItemsMaster = (props) => {
                                                         <span className="d-none d-sm-block">GST Details</span>
                                                     </NavLink>
                                                 </NavItem>
+                                                
                                                 <NavItem>
+
                                                     <NavLink
                                                         style={{ cursor: "pointer" }}
                                                     // className={classnames({
@@ -1990,7 +1916,7 @@ const ItemsMaster = (props) => {
                                                                                         <Label >Division</Label>
                                                                                         <Select
                                                                                             id={`dropDivision-${key}`}
-                                                                                            value={MRP_Tab_TableData[key].Division}
+                                                                                            defalutValue={MRP_Tab_TableData[key].Division}
                                                                                             options={Division_DropdownOptions}
                                                                                             onChange={(e) => { MRP_Tab__Common_onChange_Handller(e, "Division", key) }}
                                                                                         />
@@ -2008,7 +1934,7 @@ const ItemsMaster = (props) => {
                                                                                         <Label >Party Name</Label>
                                                                                         <Select
                                                                                             id={`dropPartyName-${key}`}
-                                                                                            value={MRP_Tab_TableData[key].PartyName}
+                                                                                            defalutValue={MRP_Tab_TableData[key].PartyName}
                                                                                             options={Party_DropdownOptions}
                                                                                             onChange={(e) => { MRP_Tab__Common_onChange_Handller(e, "PartyName", key,) }}
                                                                                         />
@@ -2044,7 +1970,7 @@ const ItemsMaster = (props) => {
                                                                                             id={`txtMRP${key}`}
                                                                                             placeholder=" Please Enter MRP "
                                                                                             autoComplete="off"
-                                                                                            value={MRP_Tab_TableData[key].MRP}
+                                                                                            defaultValue={MRP_Tab_TableData[key].MRP}
                                                                                             onChange={(e) => { MRP_Tab__Common_onChange_Handller(e.target.value, "MRP", key) }}
                                                                                         />
                                                                                     </FormGroup>
@@ -2094,138 +2020,35 @@ const ItemsMaster = (props) => {
                                                 </TabPane>
 
                                                 <TabPane tabId="7">
+
                                                     <Row>
                                                         <Col md={12}  >
                                                             <Card className="text-black">
                                                                 <CardBody style={{ backgroundColor: "whitesmoke" }}>
-
-                                                                    {marginTabTable.map((index, key) => {
-
-                                                                        return <Row className="mt-3">
-                                                                            <Col className=" col col-11 ">
-                                                                                <Row>
-                                                                                    {/* <FormGroup className="mb-3 col col-sm-3 " >
-                                                                                        <Label >Division</Label>
-                                                                                        <Select
-                                                                                            id={`dropMRPType-${key}`}
-                                                                                            value={MRP_Tab_TableData[key].PartyName}
-                                                                                            options={DivisionType_DropdownOptions}
-                                                                                            onChange={(e) => { MRP_Tab__Common_onChange_Handller(e, "PartyName", key,) }}
-                                                                                        />
-                                                                                    </FormGroup> */}
-                                                                                    <FormGroup className=" col col-sm-3 " >
-                                                                                        <Label >Price List</Label>
-                                                                                        <Select
-                                                                                            id={`dropPriceList-${key}`}
-                                                                                            defaultValue={marginTabTable[key].PriceList}
-                                                                                            options={PriceList_DropdownOptions_In_MarginTab}
-                                                                                            onChange={(e) => { MarginTab_onChange_Handler(e, "PriceList", key) }}
-                                                                                        />
-                                                                                    </FormGroup>
-
-
-                                                                                    <FormGroup className="mb-3 col col-sm-3 " >
-                                                                                        <Label >Party Name</Label>
-                                                                                        <Select
-                                                                                            id={`dropPartyName-${key}`}
-                                                                                            defaultValue={marginTabTable[key].PartyName}
-                                                                                            options={Party_DropdownOptions}
-                                                                                            onChange={(e) => { MarginTab_onChange_Handler(e, "PartyName", key) }}
-                                                                                        />
-                                                                                    </FormGroup>
-
-                                                                                    <FormGroup className="mb-3 col col-sm-3 ">
-                                                                                        <Label>Effective Date</Label>
-                                                                                        <div id={`txtEffectiveDate${key}`} style={{ backgroundColor: "whitesmoke" }}>
-                                                                                            <Flatpickr
-                                                                                                id={`txtEffectiveDate${key}`}
-                                                                                                // id="EffectiveDate"
-                                                                                                name="FSSAIExipry"
-                                                                                                required={true}
-                                                                                                // value={DOB_Date_Select}
-                                                                                                value={marginTabTable[key].EffectiveDate}
-                                                                                                className="form-control d-block p-2 bg-white text-dark"
-                                                                                                placeholder="YYYY-MM-DD"
-                                                                                                autoComplete='off'
-                                                                                                options={{
-                                                                                                    altInput: true,
-                                                                                                    altFormat: "F j, Y",
-                                                                                                    dateFormat: "Y-m-d"
-                                                                                                }}
-                                                                                                onChange={(ee, dateStr) => {
-                                                                                                    MarginTab_onChange_Handler(dateStr, "EffectiveDate", key)
-                                                                                                }}
-                                                                                            />
-                                                                                        </div>
-                                                                                    </FormGroup>
-                                                                                    <FormGroup className="mb-3 col col-sm-3 " >
-                                                                                        <Label >Margin</Label>
-                                                                                        <Input type="text"
-                                                                                            id={`txtMargin${key}`}
-                                                                                            defaultValue={marginTabTable[key].Margin}
-                                                                                            placeholder="Please Enter Margin"
-                                                                                            onChange={(e) => MarginTab_onChange_Handler(e.target.value, "Margin", key)}></Input>
-                                                                                    </FormGroup>
-
-
-                                                                                </Row>
-                                                                            </Col>
-                                                                            <Col md={1}>
-                                                                                {(marginTabTable.length === key + 1) ?
-                                                                                    <Row className=" mt-3">
-                                                                                        <Col md={6} className=" mt-3">
-                                                                                            {(marginTabTable.length > 1)
-                                                                                                ?
-                                                                                                < i className="mdi mdi-trash-can d-block text-danger font-size-20" onClick={() => {
-                                                                                                    MarginTab_DeleteRow_Handler(key)
-                                                                                                }} >
-                                                                                                </i>
-                                                                                                : <Col md={6} ></Col>
-                                                                                            }
-
-                                                                                        </Col>
-
-                                                                                        <Col md={6}>
-                                                                                            <Button className="btn btn-sm btn-light mt-3   align-items-sm-end"
-                                                                                                type="button"
-                                                                                                onClick={() => { MarginTab_AddRow_Handler(key) }} >
-                                                                                                <i className="dripicons-plus"></i>
-                                                                                            </Button>
-                                                                                        </Col>
-                                                                                    </Row>
-                                                                                    :
-                                                                                    <Row className="mt-3">
-                                                                                        < i className="mdi mdi-trash-can d-block text-danger font-size-20 mt-3" onClick={() => {
-                                                                                            MarginTab_DeleteRow_Handler(key)
-                                                                                        }} >
-                                                                                        </i>
-                                                                                    </Row>
-                                                                                }
-
-                                                                            </Col>
-
-                                                                        </Row>
-                                                                    })}
-
-
-                                                                </CardBody>
-                                                            </Card>
-
-                                                        </Col>
-                                                    </Row>
-                                                </TabPane>
-                                                <TabPane tabId="8">
-                                                    <Row>
-                                                        <Col md={12}  >
-                                                            <Card className="text-black">
-                                                                <CardBody style={{ backgroundColor: "whitesmoke" }}>
-
                                                                     <Row className="mt-3">
                                                                         <Col className=" col col-11 ">
                                                                             <Row>
+                                                                                <FormGroup className=" col col-sm-3 " >
+                                                                                    <Label >Price List</Label>
+                                                                                    <Select
+                                                                                        id={`dropPriceList-${0}`}
+                                                                                        // defaultValue={marginTabTable[0].PriceList}
+                                                                                        options={PriceList_DropdownOptions_In_MarginTab}
+                                                                                        onChange={(e) => { MarginTab_onChange_Handler(e, "PriceList", 0) }}
+                                                                                    />
+                                                                                </FormGroup>
 
+                                                                                <FormGroup className="mb-3 col col-sm-3 " >
+                                                                                    <Label >Party Name</Label>
+                                                                                    <Select
+                                                                                        id={`dropPartyName-${0}`}
+                                                                                        // defaultValue={marginTabTable[0].PartyName}
+                                                                                        options={Party_DropdownOptions}
+                                                                                        onChange={(e) => { MarginTab_onChange_Handler(e, "PartyName", 0) }}
+                                                                                    />
+                                                                                </FormGroup>
 
-                                                                                <FormGroup className="mb-3 col col-sm-4 ">
+                                                                                <FormGroup className="mb-3 col col-sm-3 ">
                                                                                     <Label>Effective Date</Label>
                                                                                     <div id={`txtEffectiveDate${0}`} >
                                                                                         <Flatpickr
@@ -2244,34 +2067,20 @@ const ItemsMaster = (props) => {
                                                                                                 dateFormat: "Y-m-d"
                                                                                             }}
                                                                                             onChange={(ee, dateStr) => {
-                                                                                                GSTDetails_onChange_Handller(dateStr, "EffectiveDate", 0)
+                                                                                                MarginTab_onChange_Handler(dateStr, "EffectiveDate", 0)
                                                                                             }}
                                                                                         />
                                                                                     </div>
                                                                                 </FormGroup>
 
-                                                                                <FormGroup className="mb-3 col col-sm-4 " >
-                                                                                    <Label >GST</Label>
+                                                                                <FormGroup className="mb-3 col col-sm-3 " >
+                                                                                    <Label >Margin</Label>
                                                                                     <Input type="text"
-                                                                                        id={`txtGST${0}`}
-                                                                                        // defaultValue={GStDetailsMaster[0].GST}
+                                                                                        id={`txtMargin${0}`}
+                                                                                        // defaultValue={marginTabTable[0].Margin}
                                                                                         placeholder="Please Enter Margin"
-                                                                                        onChange={(e) => GSTDetails_onChange_Handller(e.target.value, "GST", 0)}
-                                                                                    />
-
+                                                                                        onChange={(e) => MarginTab_onChange_Handler(e.target.value, "Margin", 0)}></Input>
                                                                                 </FormGroup>
-
-                                                                                <FormGroup className="mb-3 col col-sm-4 " >
-                                                                                    <Label >HSNCode</Label>
-                                                                                    <Input type="text"
-                                                                                        id={`txtHSNCode${0}`}
-                                                                                        // defaultValue={GStDetailsMaster[0].HSNCode}
-                                                                                        placeholder="Please Enter Margin"
-                                                                                        onChange={(e) => GSTDetails_onChange_Handller(e.target.value, "HSNCode", 0)}
-                                                                                    />
-
-                                                                                </FormGroup>
-
 
                                                                             </Row>
                                                                         </Col>
@@ -2283,7 +2092,7 @@ const ItemsMaster = (props) => {
                                                                                 <Col md={6}>
                                                                                     <Button className="btn btn-sm btn-light mt-3   align-items-sm-end"
                                                                                         type="button"
-                                                                                        onClick={() => { GSTDetails_Tab_AddRow_Handler() }} >
+                                                                                        onClick={() => { MarginTab_AddRow_Handler() }} >
                                                                                         <i className="dripicons-plus"></i>
                                                                                     </Button>
                                                                                 </Col>
@@ -2298,46 +2107,63 @@ const ItemsMaster = (props) => {
 
                                                                 </CardBody>
                                                             </Card>
-                                                            <PaginationProvider pagination={paginationFactory(pageOptions)}>
-                                                                {({ paginationProps, paginationTableProps }) => (
-                                                                    <ToolkitProvider
-                                                                        keyField="id"
-                                                                        data={GStDetailsTabTable}
-                                                                        columns={pagesListColumns}
-                                                                        search
-                                                                    >
-                                                                        {(toolkitProps) => (
-                                                                            <React.Fragment>
 
-                                                                                <Row>
-                                                                                    <Col xl="12">
-                                                                                        <div className="table-responsive">
-                                                                                            <BootstrapTable
-                                                                                                keyField={"id"}
-                                                                                                responsive
-                                                                                                bordered={false}
-                                                                                                striped={false}
-                                                                                                // defaultSorted={defaultSorted}
-                                                                                                classes={"table  table-bordered"}
-                                                                                                {...toolkitProps.baseProps}
-                                                                                                {...paginationTableProps}
-                                                                                            />
-                                                                                        </div>
-                                                                                    </Col>
-                                                                                </Row>
-                                                                                <Row className="align-items-md-center mt-30">
-                                                                                    <Col className="pagination pagination-rounded justify-content-end mb-2">
-                                                                                        <PaginationListStandalone {...paginationProps} />
-                                                                                    </Col>
-                                                                                </Row>
-                                                                            </React.Fragment>
-                                                                        )}
-                                                                    </ToolkitProvider>
-                                                                )}
-                                                            </PaginationProvider>
+                                                            {marginTabTable.length > 0 ?
+                                                                <PaginationProvider pagination={paginationFactory(pageOptions)}>
+                                                                    {({ paginationProps, paginationTableProps }) => (
+                                                                        <ToolkitProvider
+                                                                            keyField="id"
+                                                                            data={marginTabTable}
+                                                                            columns={pagesListColumns}
+                                                                            search
+                                                                        >
+                                                                            {(toolkitProps) => (
+                                                                                <React.Fragment>
+
+                                                                                    <Row>
+                                                                                        <Col xl="12">
+                                                                                            <div className="table-responsive">
+                                                                                                <BootstrapTable
+                                                                                                    keyField={"id"}
+                                                                                                    responsive
+                                                                                                    bordered={false}
+                                                                                                    striped={false}
+                                                                                                    // defaultSorted={defaultSorted}
+                                                                                                    classes={"table  table-bordered"}
+                                                                                                    {...toolkitProps.baseProps}
+                                                                                                    {...paginationTableProps}
+                                                                                                />
+                                                                                            </div>
+                                                                                        </Col>
+                                                                                    </Row>
+                                                                                    <Row className="align-items-md-center mt-30">
+                                                                                        <Col className="pagination pagination-rounded justify-content-end mb-2">
+                                                                                            <PaginationListStandalone {...paginationProps} />
+                                                                                        </Col>
+                                                                                    </Row>
+                                                                                </React.Fragment>
+                                                                            )}
+                                                                        </ToolkitProvider>
+                                                                    )}
+                                                                </PaginationProvider> : <></>}
                                                         </Col>
                                                     </Row>
                                                 </TabPane>
+
+                                                <TabPane tabId="8">
+                                                    <Row>
+                                                        <Col md={12}  >
+                                                            <Row className="mt-3">
+                                                                <Col className=" col col-11 ">
+                                                                    <GSTDetailsTable></GSTDetailsTable>
+                                                                </Col>
+                                                            </Row>
+                                                        </Col>
+                                                    </Row>
+                                                </TabPane>
+
+                                               
+
                                             </TabContent>
                                         </CardBody>
                                     </Card>

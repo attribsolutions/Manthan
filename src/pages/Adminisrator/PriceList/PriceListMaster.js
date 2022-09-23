@@ -22,23 +22,24 @@ import Select from "react-select";
 import { MetaTags } from "react-meta-tags";
 
 import Breadcrumb from "../../../components/Common/Breadcrumb";
-import { AvField, AvForm, AvInput, } from "availity-reactstrap-validation";
 
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 
 import { BreadcrumbShow, AlertState } from "../../../store/actions";
-import { delete_PriceList, delete_PriceListSuccess, getPriceListData, postPriceListData, postPriceListDataSuccess } from "../../../store/Administrator/PriceList/action";
+import {
+    delete_PriceList,
+    delete_PriceListSuccess,
+    getPriceListData,
+    postPriceListData,
+    postPriceListDataSuccess
+} from "../../../store/Administrator/PriceList/action";
 import { getPartyTypes } from "../../../store/Administrator/PartyRedux/action";
 
-import DropdownTreeSelect, { ExtractTextPlugin } from 'react-dropdown-tree-select'
-// import 'react-dropdown-tree-select/dist/styles.css'
-import "./index.css";
 
 
 
 const PriceListMaster = (props) => {
-    const formRef = useRef(null);
     const dispatch = useDispatch();
     const history = useHistory();
 
