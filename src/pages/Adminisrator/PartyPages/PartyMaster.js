@@ -1,13 +1,13 @@
 import React, { useEffect, useRef, useState } from "react";
 import Breadcrumb from "../../../components/Common/Breadcrumb";
-import { Card, CardBody, Col, Container, Row, Label, CardHeader, FormGroup, TabPane, Button, Input  } from "reactstrap";
+import { Card, CardBody, Col, Container, Row, Label, CardHeader, FormGroup, TabPane, Button, Input } from "reactstrap";
 import { AvForm, AvField, AvInput } from "availity-reactstrap-validation";
 import { useDispatch, useSelector } from "react-redux";
 import { AlertState } from "../../../store/actions";
 import Select from "react-select";
 import {
-    editPartyIDSuccess, getAddressTypes, getCompany, GetCompanyByDivisionTypeID, getDistrictOnState, 
-    
+    editPartyIDSuccess, getAddressTypes, getCompany,  getDistrictOnState,
+
     GetPartyTypeByDivisionTypeID, getPartyTypes, getPriceList, postPartyData, postPartyDataSuccess, updatePartyID
 } from "../../../store/Administrator/PartyRedux/action";
 import { getState } from "../../../store/Administrator/M_EmployeeRedux/action";
@@ -15,6 +15,9 @@ import Flatpickr from "react-flatpickr"
 import { BreadcrumbShow } from "../../../store/Utilites/Breadcrumb/actions";
 import { MetaTags } from "react-meta-tags";
 import { useHistory } from "react-router-dom";
+import DropdownTreeSelect from 'react-dropdown-tree-select'
+import { getPriceListData } from "../../../store/Administrator/PriceList/action";
+import '../../../assets/tree_select_css/index.css'
 
 const PartyMaster = (props) => {
 
@@ -25,7 +28,7 @@ const PartyMaster = (props) => {
     //*** "isEditdata get all data from ModuleID for Binding  Form controls
     let editDataGatingFromList = props.state;
     let propsPageMode = props.pageMode;
-    let pageModeProps=props.pageMode;
+    let pageModeProps = props.pageMode;
 
     //SetState  Edit data Geting From Modules List component
     const [EditData, setEditData] = useState([]);
@@ -38,27 +41,37 @@ const PartyMaster = (props) => {
     const [companyList_dropdown_Select, setCompanyList_dropdown_Select] = useState("");
     const [partyType_dropdown_Select, setPartyType_dropdown_Select] = useState("");
     const [PriceList_dropdown_Select, setPriceList_dropdown_Select] = useState("");
-    const [MKupMkdown_DropdownSelect,setMKupMkdown_DropdownSelect]=  useState("");
+    const [MKupMkdown_DropdownSelect, setMKupMkdown_DropdownSelect] = useState("");
     const [AddressType_DropdownSelect, setAddressType_DropdownSelect] = useState("");
 
     //Access redux store Data /  'save_ModuleSuccess' action data
-    const { PostAPIResponse, State, DistrictOnState, Company, PartyTypes, PriceList, AddressTypes, RoleAccessModifiedinSingleArray } = useSelector((state) => ({
+    const { PostAPIResponse,
+        State,
+        DistrictOnState,
+        Company,
+        PartyTypes,
+        PriceList,
+        AddressTypes,
+        priceListByPartyType,
+        RoleAccessModifiedinSingleArray
+    } = useSelector((state) => ({
         PostAPIResponse: state.PartyMasterReducer.PartySaveSuccess,
         State: state.M_EmployeesReducer.State,
         DistrictOnState: state.PartyMasterReducer.DistrictOnState,
         Company: state.PartyMasterReducer.Company,
         PartyTypes: state.PartyMasterReducer.PartyTypes,
-        PriceList:state.PartyMasterReducer.PriceList,
-        AddressTypes:state.PartyMasterReducer.AddressTypes,
+        PriceList: state.PartyMasterReducer.PriceList,
+        AddressTypes: state.PartyMasterReducer.AddressTypes,
         RoleAccessModifiedinSingleArray: state.Login.RoleAccessUpdateData,
+        priceListByPartyType: state.PriceListReducer.priceListByPartyType,
 
     }));
 
     // userAccess useEffect
 
     useEffect(() => {
-        
-        let userAcc = undefined 
+
+        let userAcc = undefined
         if ((editDataGatingFromList === undefined)) {
 
             let locationPath = history.location.pathname
@@ -92,18 +105,17 @@ const PartyMaster = (props) => {
     }, [dispatch]);
 
 
-// MkupMkdown  Dropdown
-const MkupMkdown_DropdownOption = [
-    {
-      value: 1,
-      label: "MKUp",
-    },
-    {
-      value: 2,
-      label: "MkDown",
-    },
-  ];
-
+    // MkupMkdown  Dropdown
+    const MkupMkdown_DropdownOption = [
+        {
+            value: 1,
+            label: "MKUp",
+        },
+        {
+            value: 2,
+            label: "MkDown",
+        },
+    ];
 
 
 
@@ -200,6 +212,26 @@ const MkupMkdown_DropdownOption = [
         label: Data.Name
     }));
 
+    const DistrictOnStateValues = DistrictOnState.map((Data) => ({
+        value: Data.id,
+        label: Data.Name
+    }));
+
+    const companyListValues = Company.map((Data) => ({
+        value: Data.id,
+        label: Data.Name
+    }));
+
+    const PartyTypeDropdown_Options = PartyTypes.map((Data) => ({
+        value: Data.id,
+        label: Data.Name
+    }));
+
+    const AddressType_DropdownOption = AddressTypes.map((d) => ({
+        value: d.id,
+        label: d.Name,
+    }));
+
     function handllerState(e) {
         setState_DropDown_select(e)
         dispatch(getDistrictOnState(e.value))
@@ -207,30 +239,15 @@ const MkupMkdown_DropdownOption = [
 
     }
 
-    const DistrictOnStateValues = DistrictOnState.map((Data) => ({
-        value: Data.id,
-        label: Data.Name
-    }));
-
     function handllerDistrictOnState(e) {
         setDistrict_dropdown_Select(e)
 
     }
 
-    const companyListValues = Company.map((Data) => ({
-        value: Data.id,
-        label: Data.Name
-    }));
-
     function handllercompanyList(e) {
         setCompanyList_dropdown_Select(e)
 
     }
-
-    const PartyTypeDropdown_Options= PartyTypes.map((Data) => ({
-        value: Data.id,
-        label: Data.Name
-    }));
 
     function PartyType_Dropdown_OnChange_Handller(e) {
         setPartyType_dropdown_Select(e)
@@ -238,35 +255,25 @@ const MkupMkdown_DropdownOption = [
         // dispatch(GetCompanyByDivisionTypeID(e.value))
         setPriceList_dropdown_Select('')
         setCompanyList_dropdown_Select('')
+        dispatch(getPriceListData(e.value))
 
     }
 
-    
 
-    const PriceList_DropdownOptions = PriceList.map((Data) => ({
-        value: Data.id,
-        label: Data.Name
-    }));
-
-    function handllerPriceList(e) {
-        setPriceList_dropdown_Select(e)
-
+    const onChangePriceListHandler = (currentNode, selectedNodes) => {
+        setPriceList_dropdown_Select(currentNode.value)
+        // console.log('onChange::', currentNode, selectedNodes)
     }
 
     // for AddressType dropdown
-  const AddressTypes_DropdownSelectHandller = (e) => {
-    setAddressType_DropdownSelect(e);
-  };
+    const AddressTypes_DropdownSelectHandller = (e) => {
+        setAddressType_DropdownSelect(e);
+    };
 
 
-  const AddressType_DropdownOption = AddressTypes.map((d) => ({
-    value: d.id,
-    label: d.Name,
-  }));
-    
     //for MKupMKdown dropdown
-  const MKupMkdown_DropdownSelectHandller = (e) => {
-    setMKupMkdown_DropdownSelect(e);
+    const MKupMkdown_DropdownSelectHandller = (e) => {
+        setMKupMkdown_DropdownSelect(e);
     };
 
     //'Save' And 'Update' Button Handller
@@ -275,12 +282,12 @@ const MkupMkdown_DropdownOption = [
         const jsonBody = JSON.stringify({
             Name: values.Name,
             PriceList: PriceList_dropdown_Select.value,
-            PartyType:  partyType_dropdown_Select.value,
+            PartyType: partyType_dropdown_Select.value,
             Company: companyList_dropdown_Select.value,
             PAN: values.PAN,
             CustomerDivision: values.CustomerDivision,
             Email: values.Email,
-            AddressType:AddressType_DropdownSelect.value,
+            AddressType: AddressType_DropdownSelect.value,
             Address: values.Address,
             PIN: values.PIN,
             MobileNo: values.MobileNo,
@@ -310,7 +317,7 @@ const MkupMkdown_DropdownOption = [
 
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
     var IsEditMode_Css = ''
-    if ((pageMode === "edit")||(pageMode==="copy")||(pageMode==="dropdownAdd")) { IsEditMode_Css = "-5.5%" };
+    if ((pageMode === "edit") || (pageMode === "copy") || (pageMode === "dropdownAdd")) { IsEditMode_Css = "-5.5%" };
 
 
     if (!(userPageAccessState === '')) {
@@ -423,6 +430,7 @@ const MkupMkdown_DropdownOption = [
                                                                         options={PartyTypeDropdown_Options}
                                                                         onChange={(e) => { PartyType_Dropdown_OnChange_Handller(e) }}
                                                                     />
+
                                                                 </Col>
                                                             </FormGroup>
                                                         </Col>
@@ -432,10 +440,15 @@ const MkupMkdown_DropdownOption = [
                                                             <FormGroup className="mb-3">
                                                                 <Label htmlFor="validationCustom01">Price List </Label>
                                                                 <Col sm={12}>
-                                                                    <Select
+                                                                    {/* <Select
                                                                         value={PriceList_dropdown_Select}
                                                                         options={PriceList_DropdownOptions}
                                                                         onChange={(e) => { handllerPriceList(e) }}
+                                                                    /> */}
+                                                                    <DropdownTreeSelect
+                                                                        data={priceListByPartyType}
+                                                                        onChange={onChangePriceListHandler}
+                                                                        className="bootstrap-demo"
                                                                     />
                                                                 </Col>
                                                             </FormGroup>
@@ -517,21 +530,21 @@ const MkupMkdown_DropdownOption = [
 
                                                         <Col md="1">  </Col>
                                                         <Col md="3">
-                                                           <FormGroup className="mb-3">
-                                                 <Label htmlFor="validationCustom01">MKUp MkDown</Label>
-                                                <Select
-                                              value={MKupMkdown_DropdownSelect}
-                                             options={MkupMkdown_DropdownOption}
-                                            autoComplete="off"
-                                             onChange={(e) => {
-                                              MKupMkdown_DropdownSelectHandller(e);
-                                               }}
-                                              />
-                                               </FormGroup>
-                                                 </Col>
+                                                            <FormGroup className="mb-3">
+                                                                <Label htmlFor="validationCustom01">MKUp MkDown</Label>
+                                                                <Select
+                                                                    value={MKupMkdown_DropdownSelect}
+                                                                    options={MkupMkdown_DropdownOption}
+                                                                    autoComplete="off"
+                                                                    onChange={(e) => {
+                                                                        MKupMkdown_DropdownSelectHandller(e);
+                                                                    }}
+                                                                />
+                                                            </FormGroup>
+                                                        </Col>
                                                     </Row>
-                                                   <Row>
-                                                    <Col md="3">
+                                                    <Row>
+                                                        <Col md="3">
                                                             <FormGroup className="mb-3">
                                                                 <Label htmlFor="validationCustom01">State </Label>
                                                                 <Col sm={12}>
@@ -557,7 +570,7 @@ const MkupMkdown_DropdownOption = [
                                                                 </Col>
                                                             </FormGroup>
                                                         </Col>
-                                                        
+
                                                         <Col md="1"></Col>
                                                         <Col md="3">
                                                             <FormGroup className="mb-3">
@@ -589,17 +602,17 @@ const MkupMkdown_DropdownOption = [
                                                 <Card className="mt-n2" style={{ backgroundColor: "whitesmoke" }} >
                                                     <Row className="mt-3">
 
-                                                    <Col md="7" >
+                                                        <Col md="7" >
                                                             <FormGroup className="mb-3">
                                                                 <Label htmlFor="validationCustom01">AddressType </Label>
                                                                 <Select
-                                                                       value={AddressType_DropdownSelect}
-                                                                       options={AddressType_DropdownOption}
-                                                                       autoComplete="off"
-                                                                        onChange={(e) => {
-                                                                            AddressTypes_DropdownSelectHandller(e);
-                                                                  }}
-                                                                       />
+                                                                    value={AddressType_DropdownSelect}
+                                                                    options={AddressType_DropdownOption}
+                                                                    autoComplete="off"
+                                                                    onChange={(e) => {
+                                                                        AddressTypes_DropdownSelectHandller(e);
+                                                                    }}
+                                                                />
                                                             </FormGroup>
                                                         </Col>
 
@@ -615,16 +628,16 @@ const MkupMkdown_DropdownOption = [
                                                                 />
                                                             </FormGroup>
                                                         </Col>
-                                    
+
                                                         <Col md="1">  </Col>
-                                                                <Col md="1">  
-                                                                   <Button className="btn btn-sm btn-light mt-4    align-items-sm-end " 
-                                                                           type="button"
-                                                                          onClick={() => {}} >
-                                                                         <i className="dripicons-plus"></i>
-                                                                   </Button>
-                                                                   </Col>
-                                            
+                                                        <Col md="1">
+                                                            <Button className="btn btn-sm btn-light mt-4    align-items-sm-end "
+                                                                type="button"
+                                                                onClick={() => { }} >
+                                                                <i className="dripicons-plus"></i>
+                                                            </Button>
+                                                        </Col>
+
                                                         {/* <Col md="1">  </Col>
                                                         <Col md="3">
                                                             <FormGroup className="mb-2">
@@ -718,26 +731,26 @@ const MkupMkdown_DropdownOption = [
 
                                                         <Col md="1">  </Col>
                                                         <Col md="9">
-                                                        <FormGroup className="mb-2 col col-sm-5">
-                                                            <Row className="justify-content-md-left">
-                                                                <Label htmlFor="horizontal-firstname-input" className="col-sm-3 col-form-label" >IsDefault </Label>
-                                                                <Col md={2} style={{ marginTop: '9px' }} >
-                                                                    <div className="form-check form-switch form-switch-md mb-3" dir="ltr">
-                                                                        <AvInput type="checkbox" className="form-check-input" id="customSwitchsizemd"
-                                                                            defaultChecked={EditData.IsDefault}
-                                                                            name="IsDefault"
-                                                                        // defaultChecked
-                                                                        />
-                                                                        <label className="form-check-label" htmlFor="customSwitchsizemd"></label>
-                                                                    </div>
-                                                                </Col>
-                                                            </Row>
-                                                        </FormGroup>
-                                                    </Col>
+                                                            <FormGroup className="mb-2 col col-sm-5">
+                                                                <Row className="justify-content-md-left">
+                                                                    <Label htmlFor="horizontal-firstname-input" className="col-sm-3 col-form-label" >IsDefault </Label>
+                                                                    <Col md={2} style={{ marginTop: '9px' }} >
+                                                                        <div className="form-check form-switch form-switch-md mb-3" dir="ltr">
+                                                                            <AvInput type="checkbox" className="form-check-input" id="customSwitchsizemd"
+                                                                                defaultChecked={EditData.IsDefault}
+                                                                                name="IsDefault"
+                                                                            // defaultChecked
+                                                                            />
+                                                                            <label className="form-check-label" htmlFor="customSwitchsizemd"></label>
+                                                                        </div>
+                                                                    </Col>
+                                                                </Row>
+                                                            </FormGroup>
+                                                        </Col>
 
                                                     </Row>
-                                                    </Card>
-                                                    {/* <Row>
+                                                </Card>
+                                                {/* <Row>
                                                         <Col md={12}  >
                                                             <Card className="text-black">
                                                                 <CardBody style={{ backgroundColor: "whitesmoke" }}>
@@ -798,42 +811,42 @@ const MkupMkdown_DropdownOption = [
                                                             </FormGroup>
                                                         </Col> */}
 
-                                                   </Row>
-                                                                 
+                                            </Row>
 
-                                                    <FormGroup>
-                                                        <Row>
-                                                            <Col sm={2}>
-                                                                <div>
-                                                                    {
-                                                                        pageMode === "edit" ?
-                                                                            userPageAccessState.RoleAccess_IsEdit ?
-                                                                                <button
-                                                                                    type="submit"
-                                                                                    data-mdb-toggle="tooltip" data-mdb-placement="top" title="Update Party"
-                                                                                    className="btn btn-success w-md"
-                                                                                >
-                                                                                    <i class="fas fa-edit me-2"></i>Update
-                                                                                </button>
-                                                                                :
-                                                                                <></>
-                                                                            : (
-                                                                                userPageAccessState.RoleAccess_IsSave ?
-                                                                                    <button
-                                                                                        type="submit"
-                                                                                        data-mdb-toggle="tooltip" data-mdb-placement="top" title="Save Party"
-                                                                                        className="btn btn-primary w-md"
-                                                                                    > <i className="fas fa-save me-2"></i> Save
-                                                                                    </button>
-                                                                                    :
-                                                                                    <></>
-                                                                            )
-                                                                    }
-                                                                </div>
-                                                            </Col>
-                                                        </Row>
-                                                    </FormGroup >
-                                         
+
+                                            <FormGroup>
+                                                <Row>
+                                                    <Col sm={2}>
+                                                        <div>
+                                                            {
+                                                                pageMode === "edit" ?
+                                                                    userPageAccessState.RoleAccess_IsEdit ?
+                                                                        <button
+                                                                            type="submit"
+                                                                            data-mdb-toggle="tooltip" data-mdb-placement="top" title="Update Party"
+                                                                            className="btn btn-success w-md"
+                                                                        >
+                                                                            <i class="fas fa-edit me-2"></i>Update
+                                                                        </button>
+                                                                        :
+                                                                        <></>
+                                                                    : (
+                                                                        userPageAccessState.RoleAccess_IsSave ?
+                                                                            <button
+                                                                                type="submit"
+                                                                                data-mdb-toggle="tooltip" data-mdb-placement="top" title="Save Party"
+                                                                                className="btn btn-primary w-md"
+                                                                            > <i className="fas fa-save me-2"></i> Save
+                                                                            </button>
+                                                                            :
+                                                                            <></>
+                                                                    )
+                                                            }
+                                                        </div>
+                                                    </Col>
+                                                </Row>
+                                            </FormGroup >
+
                                         </AvForm>
                                     </CardBody>
                                 </Card>
@@ -844,9 +857,9 @@ const MkupMkdown_DropdownOption = [
             </React.Fragment>
         );
     }
-    else{
-        return  <React.Fragment></React.Fragment>
+    else {
+        return <React.Fragment></React.Fragment>
     }
- }
+}
 
 export default PartyMaster

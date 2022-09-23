@@ -21,7 +21,7 @@ import { Tbody, Thead } from "react-super-responsive-table";
 import { AlertState } from "../../../store/actions";
 import { CommonGetRoleAccessFunction } from "../../../components/Common/CommonGetRoleAccessFunction";
 import { PostMethodForVehicleMaster, getMethodForVehicleList, getMethod_DriverList_ForDropDown, getMethod_VehicleTypes_ForDropDown, PostMethod_ForVehicleMasterSuccess, getMethod_ForVehicleListSuccess, editVehicleTypeSuccess } from "../../../store/Administrator/VehicleRedux/action";
-import { getDivisionTypesID, getPartyListAPI } from "../../../store/Administrator/PartyRedux/action";
+import { get_Division_ForDropDown,  } from "../../../store/Administrator/ItemsRedux/action";
 import { useHistory } from "react-router-dom";
 // import { actionChannel } from "redux-saga/effects";
 
@@ -52,13 +52,13 @@ const VehicleMaster = (props) => {
 
     //Access redux store Data /  'save_ModuleSuccess' action data
     const { PostAPIResponse,
-        DivisionType,
+        Divisions,
         VehicleList_redux,
         VehicleTypes,
         DriverList_redux,
         RoleAccessModifiedinSingleArray } = useSelector((state) => ({
             PostAPIResponse: state.VehicleReducer.PostDataMessage,
-            DivisionType: state.PartyMasterReducer.partyList,
+            Divisions: state.ItemMastersReducer.Division,
             VehicleList_redux: state.VehicleReducer.VehicleList,
             VehicleTypes: state.VehicleReducer.VehicleTypes,
             DriverList_redux: state.VehicleReducer.DriverList,
@@ -74,7 +74,7 @@ const VehicleMaster = (props) => {
         dispatch(getMethodForVehicleList());
         dispatch(getMethod_DriverList_ForDropDown());
         dispatch(getMethod_VehicleTypes_ForDropDown());
-        dispatch(getPartyListAPI());
+        dispatch(get_Division_ForDropDown());
     }, [dispatch]);
 
     //userAccess useEffect
@@ -152,7 +152,7 @@ const VehicleMaster = (props) => {
 
 
 
-    const DivisionType_DropdownOptions = DivisionType.map((data) => ({
+    const DivisionType_DropdownOptions = Divisions.map((data) => ({
         value: data.id,
         label: data.Name
     }));
@@ -258,8 +258,42 @@ const VehicleMaster = (props) => {
                                         <Col md={12}>
                                             <Card>
                                                 <CardBody style={{ backgroundColor: "whitesmoke" }}>
-                                                    <Row>
-                                                        <FormGroup className="mb-2 col col-sm-4 ">
+
+
+                                                <Row className="mt-3 ">
+                                                            <Col md="3">
+                                                                <FormGroup className="mb-3">
+                                                                    <Label htmlFor="validationCustom01"> Driver Name </Label>
+                                                                    <Col sm={12}>
+                                                                        <Select
+                                                                            value={DriverList_dropdown_Select}
+                                                                            options={DriverList_DropdownOptions}
+                                                                            onChange={(e) => { DriverList_DropDown_handller(e) }}
+                                                                        />
+                                                                    </Col>
+                                                                </FormGroup>
+                                                            </Col>
+                                                     
+                                                       
+                                                             <Col md="1">  </Col>
+                                                            <Col md="3">
+                                                                <FormGroup className="mb-3">
+                                                                    <Label htmlFor="validationCustom01"> Vehicle Type </Label>
+                                                                    <Col sm={12}>
+                                                                        <Select
+                                                                            value={VehicleType_dropdown_Select}
+                                                                            options={VehicleType_DropdownOptions}
+                                                                            onChange={(e) => { VehicleType_DropDown_handller(e) }}
+                                                                        />
+                                                                    </Col>
+                                                                </FormGroup>
+                                                            </Col>
+                                                        
+
+                                                            <Col md="1">  
+                                                             </Col>
+                                                            <Col md="4">
+                                                        <FormGroup className="mb-2 col col-sm-8 ">
                                                             <Label htmlFor="validationCustom01">Vehicle Number </Label>
                                                             <AvField
                                                                 name="Name"
@@ -274,9 +308,11 @@ const VehicleMaster = (props) => {
                                                                 onChange={(e) => { dispatch(BreadcrumbShow(e.target.value)) }}
                                                             />
                                                         </FormGroup>
-
+                                                        
+                                                        </Col>
+                                                      
                                                         <Row>
-                                                            <Col md="4">
+                                                            <Col md="3">
                                                                 <FormGroup className="mb-3">
                                                                     <Label htmlFor="validationCustom01"> Description </Label>
                                                                     <AvField
@@ -292,39 +328,10 @@ const VehicleMaster = (props) => {
                                                                   />
                                                                 </FormGroup>
                                                             </Col>
-                                                        </Row>
+                                                            </Row>
 
                                                         <Row>
-                                                            <Col md="4">
-                                                                <FormGroup className="mb-3">
-                                                                    <Label htmlFor="validationCustom01"> Driver Name </Label>
-                                                                    <Col sm={12}>
-                                                                        <Select
-                                                                            value={DriverList_dropdown_Select}
-                                                                            options={DriverList_DropdownOptions}
-                                                                            onChange={(e) => { DriverList_DropDown_handller(e) }}
-                                                                        />
-                                                                    </Col>
-                                                                </FormGroup>
-                                                            </Col>
-                                                        </Row>
-
-                                                        <Row>
-                                                            <Col md="4">
-                                                                <FormGroup className="mb-3">
-                                                                    <Label htmlFor="validationCustom01"> Vehicle Type </Label>
-                                                                    <Col sm={12}>
-                                                                        <Select
-                                                                            value={VehicleType_dropdown_Select}
-                                                                            options={VehicleType_DropdownOptions}
-                                                                            onChange={(e) => { VehicleType_DropDown_handller(e) }}
-                                                                        />
-                                                                    </Col>
-                                                                </FormGroup>
-                                                            </Col>
-                                                        </Row>
-                                                        <Row>
-                                                            <FormGroup className="col col-sm-4">
+                                                            <FormGroup className="col col-sm-3">
                                                                 <Label htmlFor="validationCustom21">Division</Label>
                                                                 <Select
                                                                     value={divisionType_dropdown_Select}

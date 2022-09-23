@@ -34,9 +34,7 @@ import SearchBoxSecond from "../pages/Adminisrator/SearchBox/SearchBoxSecond";
 import SerachBox3 from "../pages/Adminisrator/SearchBox/SerachBox3";
 import PartyList from "../pages/Adminisrator/PartyPages/PartyList";
 import PartyMaster from "../pages/Adminisrator/PartyPages/PartyMaster";
-import DemoUI3 from "../pages/Adminisrator/PartyPages/DemoUI3";
-import DemoUI2 from "../pages/Adminisrator/PartyPages/DemoUI2";
-import PartyUIDemo from "../pages/Adminisrator/PartyPages/PartyUIDemo";
+
 import ResetPassword from "../pages/Authentication/ResetPassword";
 import SendOTP from "../pages/Authentication/SendOTP";
 import EnterOTP from "../pages/Authentication/EnterOTP";
@@ -61,7 +59,10 @@ import DriverList from "../pages/Adminisrator/DriverPage/DriverList";
 import CompanyGroupMaster from "../pages/Adminisrator/CompanyGroupPages/CompanyGroupMaster";
 import CompanyGroupList from "../pages/Adminisrator/CompanyGroupPages/CompanyGroupList";
 import PageMasterTab from "../pages/Adminisrator/Page-Pages/PageMasterTab";
-import PriceListMaster from "../pages/Adminisrator/PriceList/PriceListMaster";
+
+// import PartyMasterTab from "../pages/Adminisrator/PartyTab/PartyMasterTab";
+
+// import PriceListMaster from "../pages/Adminisrator/PriceList/PriceListMaster";
 
 
 
@@ -171,11 +172,14 @@ const userRoutes = [
   { path: "/CompanyGroupMaster", component: CompanyGroupMaster },
   { path: "/CompanyGroupList", component: CompanyGroupList },
 
-  { path: "/PriceListMaster", component: PriceListMaster },
 
-  { path: "/partyUIDemo", component: PartyUIDemo },
-  { path: "/demoUi3", component: DemoUI3 },
-  { path: "/demoUi2", component: DemoUI2 },
+  // { path: "/PartyMasterTab", component: PartyMasterTab },
+
+
+  // { path: "/PriceListMaster", component: PriceListMaster },
+
+
+
 
   // { path: "/AddItemMaster", component: AddItemMaster },
   { path: "/SearchBox2", component: SearchBoxSecond },
