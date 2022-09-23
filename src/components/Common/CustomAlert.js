@@ -28,7 +28,7 @@ const CustomAlert = () => {
 
   //remove Css when modul hide Mode 
   function removeBodyCss() {
-    document.body.classList.add("no_padding")
+    // document.body.classList.add("no_padding")
   }
 
   // Success Alert Ok button Hnadller

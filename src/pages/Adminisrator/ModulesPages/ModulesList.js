@@ -14,9 +14,7 @@ import Breadcrumb from "../../../components/Common/Breadcrumb"
 import "../../../assets/scss/CustomeTable/datatables.scss"
 import { useDispatch, useSelector } from "react-redux";
 import {
-    AlertState,
-    deleteModuleID, deleteModuleIDSuccess, editModuleID, editModuleIDSuccess, fetchModelsList,
-    PostModelsSubmitSuccess,
+    deleteModuleID, deleteModuleIDSuccess, editModuleID, fetchModelsList,
     updateModuleIDSuccess
 } from "../../../store/actions";
 import Modules from "./Modules";
@@ -31,13 +29,13 @@ const ModulesList = () => {
     const [modal_center, setmodal_center] = useState(false);
 
     // get Access redux data
-    const { TableListData, editData, deleteAPIResponse, updateAPIResponse, RoleAccessModifiedinSingleArray,PostAPIResponse } = useSelector((state) => ({
+    const { TableListData, editData, deleteAPIResponse, updateAPIResponse, RoleAccessModifiedinSingleArray } = useSelector((state) => ({
         TableListData: state.Modules.modulesList,
         updateAPIResponse: state.Modules.updateMessage,
         editData: state.Modules.editData,
         deleteAPIResponse: state.Modules.deleteModuleIDSuccess,
         RoleAccessModifiedinSingleArray: state.Login.RoleAccessUpdateData,
-        PostAPIResponse: state.Modules.modulesSubmitSuccesss,
+
     }));
 
     useEffect(() => {
@@ -92,24 +90,6 @@ const ModulesList = () => {
     }, [updateAPIResponse])
 
     useEffect(() => {
-        if ((editData.Status === true)) {
-
-            commonListPageDelete_UpdateMsgFunction(
-                // common function parameters ,data type=> object
-                {
-                    dispatch: dispatch,
-                    response: editData,
-                    resetAction: editModuleIDSuccess,
-                    afterResponseAction: fetchModelsList
-                }
-            )
-            tog_center()
-        }
-
-    }, [editData])
-
-
-    useEffect(() => {
 
         if ((deleteAPIResponse.Status === true)) {
             commonListPageDelete_UpdateMsgFunction(
@@ -123,30 +103,7 @@ const ModulesList = () => {
         }
     }, [deleteAPIResponse])
 
-    useEffect(() => {
 
-        if ((PostAPIResponse.Status === true) && (PostAPIResponse.StatusCode === 200)) {
-            dispatch(PostModelsSubmitSuccess({ Status: false }))
-            tog_center();
-            dispatch(fetchModelsList());
-            dispatch(AlertState({
-                Type: 1,
-                Status: true,
-                Message: PostAPIResponse.Message,
-            }))
-        }
-    
-        else if ((PostAPIResponse.Status === true)) {
-            dispatch(PostModelsSubmitSuccess({ Status: false }))
-            dispatch(AlertState({
-                Type: 4,
-                Status: true,
-                Message: JSON.stringify(PostAPIResponse.Message),
-                RedirectPath: false,
-                AfterResponseAction: false
-            }));
-        }
-    }, [PostAPIResponse.Status])
     //Modules list component table columns 
     const TableColumns = [
         {
