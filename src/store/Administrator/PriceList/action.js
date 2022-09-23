@@ -28,6 +28,7 @@ export const getPriceListDataSuccess = (data) => ({
     type: GET_PRICE_LIST_DATA_SUCCESS,
     payload: data,
 });
+
 export const delete_PriceList = (id) => ({
     type: DELETE_PRICE_LIST,
     id,
