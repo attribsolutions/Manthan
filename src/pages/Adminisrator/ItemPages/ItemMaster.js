@@ -32,23 +32,26 @@ import {
     get_CategoryTypes_ForDropDown,
     get_Category_By_CategoryType_ForDropDown,
     get_Category_By_CategoryType_ForDropDown_Success,
-    get_Category_ForDropDown,
     get_Division_ForDropDown,
     get_ImageType_ForDropDown,
     get_MRPTypes_ForDropDown,
     get_Party_ForDropDown,
     get_PriceList_ForDropDown,
-    get_SubCategory_ForDropDown,
     get_Sub_Category_By_CategoryType_ForDropDown,
     get_Sub_Category_By_CategoryType_ForDropDown_Success,
     postItemData,
     PostItemDataSuccess,
     updateItemID
 } from "../../../store/Administrator/ItemsRedux/action";
-import Dropzone from "react-dropzone";
 import { AlertState, BreadcrumbShow } from "../../../store/actions";
 import { Tbody, Thead } from "react-super-responsive-table";
 import { getPartyListAPI } from "../../../store/Administrator/PartyRedux/action";
+import paginationFactory, {
+    PaginationListStandalone,
+    PaginationProvider,
+} from "react-bootstrap-table2-paginator";
+import ToolkitProvider, { Search } from "react-bootstrap-table2-toolkit";
+import BootstrapTable from "react-bootstrap-table-next"
 
 const ItemsMaster = (props) => {
     const dispatch = useDispatch();
@@ -123,6 +126,15 @@ const ItemsMaster = (props) => {
 
     }]);
 
+    const [GStDetailsTabTable, setGSTDetailsTabTable] = useState([]);
+
+    const [GStDetailsMaster, setGStDetailsMaster] = useState({
+        id: 0,
+        EffectiveDate: '',
+        GST: '',
+        HSNCode: ''
+    });
+
     const { companyList,
         BaseUnit,
         CategoryType,
@@ -152,7 +164,7 @@ const ItemsMaster = (props) => {
         PriceList: state.ItemMastersReducer.PriceList,
     }));
 
-    
+
     useEffect(() => {
 
         let userAcc = undefined
@@ -432,16 +444,16 @@ const ItemsMaster = (props) => {
         label: data.Name
     }));
 
-//   const PriceList_DropdownOptions = [
-//     {
-//       value: 1,
-//       label: "ABC",
-//     },
-//     {
-//       value: 2,
-//       label: "XYZ",
-//     },
-//   ];
+    //   const PriceList_DropdownOptions = [
+    //     {
+    //       value: 1,
+    //       label: "ABC",
+    //     },
+    //     {
+    //       value: 2,
+    //       label: "XYZ",
+    //     },
+    //   ];
 
     const CategoryType_DropdownOptions = CategoryType.map((data) => ({
         value: data.id,
@@ -473,7 +485,7 @@ const ItemsMaster = (props) => {
         label: data.Name
     }));
     function Common_Drop_Validation(event, type, key) {
-        
+
         let OnchangeControl = document.getElementById(`drop${type}-${key}`)
         if (event.value === 0) {
             OnchangeControl.className = 'form-control is-invalid'
@@ -513,8 +525,6 @@ const ItemsMaster = (props) => {
         }
 
     }
-
-
 
     function CommonTab_DatePicker_handller_ForAll(event, type, key) {
 
@@ -934,7 +944,7 @@ const ItemsMaster = (props) => {
         setMRP_Tab_TableData(newarr)
     }
     function MRP_Tab_Tab_DeleteRow_Handler(key) {
-        debugger
+
         var removeElseArrray = MRP_Tab_TableData.filter((i, k) => {
             return !(k === key)
         })
@@ -1014,8 +1024,57 @@ const ItemsMaster = (props) => {
         setMRP_Tab_TableData(newTabArr)
     }
 
-    const handleValidSubmit = (event, values) => {
+    function GSTDetails_onChange_Handller(event, type, key) {
 
+
+        if (type === "EffectiveDate") {
+            GStDetailsMaster.EffectiveDate = event
+        }
+        else if (type === "GST") {
+            GStDetailsMaster.GST = event
+        }
+        else if (type === "HSNCode") {
+            GStDetailsMaster.HSNCode = event
+        }
+    }
+
+    function GSTDetails_Tab_AddRow_Handler(key) {
+        debugger
+
+
+        let validateReturn1 = CommonTab_DatePicker_handller_ForAll(GStDetailsMaster.EffectiveDate, "EffectiveDate", 0)
+        let validateReturn2 = Common_Text_INPUT_Validation(GStDetailsMaster.GST, "GST", 0);
+        let validateReturn3 = Common_Text_INPUT_Validation(GStDetailsMaster.HSNCode, "HSNCode",0);
+
+        if ( (validateReturn1 === false)
+            || (validateReturn2 === false)
+            || (validateReturn3 === false)) return;
+
+        var length = GStDetailsTabTable.length
+        var newArr = {
+            id: length,
+            EffectiveDate: GStDetailsMaster.EffectiveDate,
+            GST: GStDetailsMaster.GST,
+            HSNCode: GStDetailsMaster.HSNCode
+        }
+        setGSTDetailsTabTable([...GStDetailsTabTable, newArr])
+        
+    }
+    function GSTDetails_Delete_Handller(event, v, k) {
+
+        var filter = GStDetailsTabTable
+        // .filter(i => {
+
+        //    return !(i.id === event.id)
+        // })
+        // if (!(filter === undefined)) {
+        //     setGSTDetailsTabTable(filter)
+        // } else {
+        //     setGSTDetailsTabTable([])
+        // }
+    }
+    const handleValidSubmit = (event, values) => {
+        debugger
         const itemCategoryDetails = categoryTabTable.map((index) => ({
             CategoryType: index.CategoryType.value,
             Category: index.Category.value,
@@ -1035,16 +1094,29 @@ const ItemsMaster = (props) => {
             PriceList: index.PriceList.value,
             EffectiveDate: index.EffectiveDate,
             PartyName: index.PartyName.value,
-            Margin: index.Margin
+            Margin: index.Margin,
+            CreatedBy: 1,
+            UpdatedBy: 1,
+            Company: 1,
         }))
 
         const itemMRPDetails = MRP_Tab_TableData.map((index) => ({
-            Division: index.Division,
+            Division: index.Division.value,
             EffectiveDate: index.EffectiveDate,
-            PartyName: index.PartyName,
+            PartyName: index.PartyName.value,
             MRP: index.MRP,
+            CreatedBy: 1,
+            UpdatedBy: 1,
+            Company: 1,
         }))
 
+        const ItemGSTHSNDetails = GStDetailsTabTable.map((index) => ({
+            EffectiveDate: index.EffectiveDate,
+            GSTPercentage: index.GST,
+            HSNCode: index.HSNCode,
+            CreatedBy: 1,
+            UpdatedBy: 1,
+        }))
 
         let submitValid1 = true;
         let submitValid2 = true
@@ -1054,86 +1126,86 @@ const ItemsMaster = (props) => {
         let submitValid6 = true
         let submitValid7 = true
 
-        isValidate.map((ind) => {
-            document.getElementById(ind).className = "form-control is-invalid"
-        })
+        // isValidate.map((ind) => {
+        //     document.getElementById(ind).className = "form-control is-invalid"
+        // })
 
-        categoryTabTable.map((ind, key) => {
+        // categoryTabTable.map((ind, key) => {
 
-            let return1 = Common_Drop_Validation(ind.CategoryType, "CategoryType", key);
-            if (return1 === false) submitValid2 = return1;
+        //     let return1 = Common_Drop_Validation(ind.CategoryType, "CategoryType", key);
+        //     if (return1 === false) submitValid2 = return1;
 
-            let return2 = Common_Drop_Validation(ind.Category, "Category", key);
-            if (return2 === false) submitValid2 = return2;
+        //     let return2 = Common_Drop_Validation(ind.Category, "Category", key);
+        //     if (return2 === false) submitValid2 = return2;
 
-            // let return3 = Common_Drop_Validation(ind.SubCategory, "SubCategory", key);
-            // if (return3 === false) submitValid2 = return3;
-        })
+        //     // let return3 = Common_Drop_Validation(ind.SubCategory, "SubCategory", key);
+        //     // if (return3 === false) submitValid2 = return3;
+        // })
 
-        if (formValue.BaseUnit.value > 0) {
-            baseUnitTableData.map((ind, key) => {
-                let return1 = Common_Text_INPUT_Validation(ind.Conversion, "Conversion", key);
-                if (return1 === false) submitValid3 = return1;
+        // if (formValue.BaseUnit.value > 0) {
+        //     baseUnitTableData.map((ind, key) => {
+        //         let return1 = Common_Text_INPUT_Validation(ind.Conversion, "Conversion", key);
+        //         if (return1 === false) submitValid3 = return1;
 
-                let return2 = Common_Drop_Validation(ind.Unit, "Unit", key);
-                if (return2 === false) submitValid3 = return2;
+        //         let return2 = Common_Drop_Validation(ind.Unit, "Unit", key);
+        //         if (return2 === false) submitValid3 = return2;
 
-            })
-        }
+        //     })
+        // }
 
-        MRP_Tab_TableData.map((ind, key) => {
+        // MRP_Tab_TableData.map((ind, key) => {
 
-            let return1 = Common_Drop_Validation(ind.MRPType, "MRPType", key);
-            if (return1 === false) submitValid6 = return1;
+        //     let return1 = Common_Drop_Validation(ind.MRPType, "MRPType", key);
+        //     if (return1 === false) submitValid6 = return1;
 
-            let return2 = Common_Text_INPUT_Validation(ind.MRP, "MRP", key);
-            if (return2 === false) submitValid6 = return2;
+        //     let return2 = Common_Text_INPUT_Validation(ind.MRP, "MRP", key);
+        //     if (return2 === false) submitValid6 = return2;
 
-            let return3 = Common_Text_INPUT_Validation(ind.GSTPercentage, "GSTPercentage", key);
-            if (return3 === false) submitValid6 = return3;
+        //     let return3 = Common_Text_INPUT_Validation(ind.GSTPercentage, "GSTPercentage", key);
+        //     if (return3 === false) submitValid6 = return3;
 
-            let return4 = Common_Text_INPUT_Validation(ind.HSNCode, "HSNCode", key);
-            if (return4 === false) submitValid6 = return4;
+        //     let return4 = Common_Text_INPUT_Validation(ind.HSNCode, "HSNCode", key);
+        //     if (return4 === false) submitValid6 = return4;
 
-        })
+        // })
 
-        marginTabTable.map((ind, key) => {
+        // marginTabTable.map((ind, key) => {
 
-            let return1 = Common_Text_INPUT_Validation(ind.Margin, "Margin", key);
-            if (return1 === false) submitValid7 = return1;
+        //     let return1 = Common_Text_INPUT_Validation(ind.Margin, "Margin", key);
+        //     if (return1 === false) submitValid7 = return1;
 
-            let return2 = Common_Drop_Validation(ind.PriceList, "PriceList", key);
-            if (return2 === false) submitValid7 = return2;
-        })
+        //     let return2 = Common_Drop_Validation(ind.PriceList, "PriceList", key);
+        //     if (return2 === false) submitValid7 = return2;
+        // })
 
-        if (!(isValidate.length === 0)) {
-            setactiveTab1('1');
-            return
-        };
+        // if (!(isValidate.length === 0)) {
+        //     setactiveTab1('1');
+        //     return
+        // };
 
-        if (!submitValid2) {
-            setactiveTab1('2');
-            return
-        };
-        if (!submitValid3) {
-            setactiveTab1('3');
-            return
-        };
-        if ((divisionTableData.length < 1)) {
-            setactiveTab1('5');
-            document.getElementById("dropDivisionType-0").className = "form-control is-invalid"
-            return
-        };
+        // if (!submitValid2) {
+        //     setactiveTab1('2');
+        //     return
+        // };
+        // if (!submitValid3) {
+        //     setactiveTab1('3');
+        //     return
+        // };
+        // if ((divisionTableData.length < 1)) {
+        //     setactiveTab1('5');
+        //     document.getElementById("dropDivisionType-0").className = "form-control is-invalid"
+        //     return
+        // };
 
-        if (!submitValid6) {
-            setactiveTab1('6');
-            return
-        };
+        // if (!submitValid6) {
+        //     setactiveTab1('6');
+        //     return
+        // };
 
-        if (!submitValid7) {
-            setactiveTab1('7');
-            return
-        };
+        // if (!submitValid7) {
+        //     setactiveTab1('7');
+        //     return
+        // };
 
         const jsonBody = JSON.stringify({
             Name: formValue.Name,
@@ -1143,6 +1215,8 @@ const ItemsMaster = (props) => {
             isActive: formValue.isActive,
             Company: formValue.Company.value,
             BaseUnitID: formValue.BaseUnit.value,
+            CreatedBy: 1,
+            UpdatedBy: 1,
             ItemCategoryDetails: itemCategoryDetails,
             ItemUnitDetails: itemUnitDetails,
 
@@ -1155,6 +1229,7 @@ const ItemsMaster = (props) => {
             ItemDivisionDetails: itemDivisionDetails,
             ItemMRPDetails: itemMRPDetails,
             ItemMarginDetails: iteMarginDetails,
+            ItemGSTHSNDetails: ItemGSTHSNDetails
 
         });
 
@@ -1170,6 +1245,51 @@ const ItemsMaster = (props) => {
 
     };
 
+    const pageOptions = {
+        sizePerPage: 10,
+        totalSize: GStDetailsTabTable.length,
+        custom: true,
+    };
+
+    const pagesListColumns = [
+
+        {
+            text: "EffectiveDate",
+            dataField: "EffectiveDate",
+            sort: true,
+        },
+        {
+            text: "GST",
+            dataField: "GST",
+            sort: true,
+        },
+        {
+            text: "HSNCode",
+            dataField: "HSNCode",
+            sort: true,
+        },
+        {
+            text: " ",
+            dataField: "buttons",
+
+            formatter: (cellContent, ele, k) => (
+                <>
+                    <div class="d-flex gap-3" style={{ display: 'flex', justifyContent: 'center' }} >
+                        <buton
+                            className="badge badge-soft-danger font-size-12"
+                            onClick={() => {
+                                GSTDetails_Delete_Handller(cellContent, ele, k)
+                            }}
+                        >
+                            <i class="mdi mdi-delete font-size-18" ></i>
+                        </buton>
+
+                    </div>
+                </>
+            )
+        }
+
+    ];
 
     var IsEditMode_Css = ''
     if ((pageMode === "edit") || (pageMode === "copy") || (pageMode === "dropdownAdd")) { IsEditMode_Css = "-5.5%" };
@@ -1318,6 +1438,23 @@ const ItemsMaster = (props) => {
                                                     </NavLink>
                                                 </NavItem>
 
+                                                <NavItem>
+                                                    <NavLink
+                                                        id="nave-link-8"
+                                                        style={{ cursor: "pointer" }}
+                                                        className={classnames({
+                                                            active: activeTab1 === "8",
+                                                        })}
+                                                        onClick={() => {
+                                                            toggle1("8")
+                                                        }}
+                                                    >
+                                                        <span className="d-block d-sm-none">
+                                                            <i className="fas fa-home"></i>
+                                                        </span>
+                                                        <span className="d-none d-sm-block">GST Details</span>
+                                                    </NavLink>
+                                                </NavItem>
                                                 <NavItem>
                                                     <NavLink
                                                         style={{ cursor: "pointer" }}
@@ -1880,24 +2017,24 @@ const ItemsMaster = (props) => {
 
                                                                                     <FormGroup className="mb-3 col col-sm-3 ">
                                                                                         <Label>Effective Date</Label>
-                                                                                        <div  id={`txtEffectiveDate${key}`} style={{backgroundColor:"whitesmoke"}}>
-                                                                                        <Flatpickr
-                                                                                           
-                                                                                            name="FSSAIExipry"
-                                                                                            // value={DOB_Date_Select}
-                                                                                            value={MRP_Tab_TableData[key].EffectiveDate}
-                                                                                            className="form-control d-block p-2 bg-white text-dark"
-                                                                                            placeholder="YYYY-MM-DD"
-                                                                                            autoComplete='off'
-                                                                                            options={{
-                                                                                                altInput: true,
-                                                                                                altFormat: "F j, Y",
-                                                                                                dateFormat: "Y-m-d"
-                                                                                            }}
-                                                                                            onChange={(dateStr) => {
-                                                                                                MRP_Tab__Common_onChange_Handller(dateStr, "EffectiveDate", key)
-                                                                                            }}
-                                                                                        />
+                                                                                        <div id={`txtEffectiveDate${key}`} style={{ backgroundColor: "whitesmoke" }}>
+                                                                                            <Flatpickr
+
+                                                                                                name="FSSAIExipry"
+                                                                                                // value={DOB_Date_Select}
+                                                                                                value={MRP_Tab_TableData[key].EffectiveDate}
+                                                                                                className="form-control d-block p-2 bg-white text-dark"
+                                                                                                placeholder="YYYY-MM-DD"
+                                                                                                autoComplete='off'
+                                                                                                options={{
+                                                                                                    altInput: true,
+                                                                                                    altFormat: "F j, Y",
+                                                                                                    dateFormat: "Y-m-d"
+                                                                                                }}
+                                                                                                onChange={(ee, dateStr) => {
+                                                                                                    MRP_Tab__Common_onChange_Handller(dateStr, "EffectiveDate", key)
+                                                                                                }}
+                                                                                            />
                                                                                         </div>
                                                                                     </FormGroup>
 
@@ -1985,30 +2122,7 @@ const ItemsMaster = (props) => {
                                                                                             onChange={(e) => { MarginTab_onChange_Handler(e, "PriceList", key) }}
                                                                                         />
                                                                                     </FormGroup>
-                                                                                    <FormGroup className="mb-3 col col-sm-3 ">
-                                                                                        <Label>Effective Date</Label>
-                                                                                        <div  id={`txtEffectiveDate${key}`} style={{backgroundColor:"whitesmoke"}}>
-                                                                                        <Flatpickr
-                                                                                            id={`txtEffectiveDate${key}`}
-                                                                                            // id="EffectiveDate"
-                                                                                            name="FSSAIExipry"
-                                                                                            required={true}
-                                                                                            // value={DOB_Date_Select}
-                                                                                            value={marginTabTable[key].EffectiveDate}
-                                                                                            className="form-control d-block p-2 bg-white text-dark"
-                                                                                            placeholder="YYYY-MM-DD"
-                                                                                            autoComplete='off'
-                                                                                            options={{
-                                                                                                altInput: true,
-                                                                                                altFormat: "F j, Y",
-                                                                                                dateFormat: "Y-m-d"
-                                                                                            }}
-                                                                                            onChange={(ee, dateStr) => {
-                                                                                                MarginTab_onChange_Handler(dateStr, "EffectiveDate", key)
-                                                                                            }}
-                                                                                        />
-                                                                                        </div>
-                                                                                    </FormGroup>
+
 
                                                                                     <FormGroup className="mb-3 col col-sm-3 " >
                                                                                         <Label >Party Name</Label>
@@ -2016,10 +2130,34 @@ const ItemsMaster = (props) => {
                                                                                             id={`dropPartyName-${key}`}
                                                                                             defaultValue={marginTabTable[key].PartyName}
                                                                                             options={Party_DropdownOptions}
-                                                                                            onChange={(e) => { MarginTab_onChange_Handler(e,"PartyName",key) }}
+                                                                                            onChange={(e) => { MarginTab_onChange_Handler(e, "PartyName", key) }}
                                                                                         />
                                                                                     </FormGroup>
 
+                                                                                    <FormGroup className="mb-3 col col-sm-3 ">
+                                                                                        <Label>Effective Date</Label>
+                                                                                        <div id={`txtEffectiveDate${key}`} style={{ backgroundColor: "whitesmoke" }}>
+                                                                                            <Flatpickr
+                                                                                                id={`txtEffectiveDate${key}`}
+                                                                                                // id="EffectiveDate"
+                                                                                                name="FSSAIExipry"
+                                                                                                required={true}
+                                                                                                // value={DOB_Date_Select}
+                                                                                                value={marginTabTable[key].EffectiveDate}
+                                                                                                className="form-control d-block p-2 bg-white text-dark"
+                                                                                                placeholder="YYYY-MM-DD"
+                                                                                                autoComplete='off'
+                                                                                                options={{
+                                                                                                    altInput: true,
+                                                                                                    altFormat: "F j, Y",
+                                                                                                    dateFormat: "Y-m-d"
+                                                                                                }}
+                                                                                                onChange={(ee, dateStr) => {
+                                                                                                    MarginTab_onChange_Handler(dateStr, "EffectiveDate", key)
+                                                                                                }}
+                                                                                            />
+                                                                                        </div>
+                                                                                    </FormGroup>
                                                                                     <FormGroup className="mb-3 col col-sm-3 " >
                                                                                         <Label >Margin</Label>
                                                                                         <Input type="text"
@@ -2073,6 +2211,130 @@ const ItemsMaster = (props) => {
                                                                 </CardBody>
                                                             </Card>
 
+                                                        </Col>
+                                                    </Row>
+                                                </TabPane>
+                                                <TabPane tabId="8">
+                                                    <Row>
+                                                        <Col md={12}  >
+                                                            <Card className="text-black">
+                                                                <CardBody style={{ backgroundColor: "whitesmoke" }}>
+
+                                                                    <Row className="mt-3">
+                                                                        <Col className=" col col-11 ">
+                                                                            <Row>
+
+
+                                                                                <FormGroup className="mb-3 col col-sm-4 ">
+                                                                                    <Label>Effective Date</Label>
+                                                                                    <div id={`txtEffectiveDate${0}`} >
+                                                                                        <Flatpickr
+                                                                                            id={`txtEffectiveDate${0}`}
+                                                                                            // id="EffectiveDate"
+                                                                                            name="FSSAIExipry"
+                                                                                            required={true}
+                                                                                            // value={DOB_Date_Select}
+                                                                                            // defaultValue={GStDetailsMaster[0].EffectiveDate}
+                                                                                            className="form-control d-block p-2 bg-white text-dark"
+                                                                                            placeholder="YYYY-MM-DD"
+                                                                                            autoComplete='off'
+                                                                                            options={{
+                                                                                                altInput: true,
+                                                                                                altFormat: "F j, Y",
+                                                                                                dateFormat: "Y-m-d"
+                                                                                            }}
+                                                                                            onChange={(ee, dateStr) => {
+                                                                                                GSTDetails_onChange_Handller(dateStr, "EffectiveDate", 0)
+                                                                                            }}
+                                                                                        />
+                                                                                    </div>
+                                                                                </FormGroup>
+
+                                                                                <FormGroup className="mb-3 col col-sm-4 " >
+                                                                                    <Label >GST</Label>
+                                                                                    <Input type="text"
+                                                                                        id={`txtGST${0}`}
+                                                                                        // defaultValue={GStDetailsMaster[0].GST}
+                                                                                        placeholder="Please Enter Margin"
+                                                                                        onChange={(e) => GSTDetails_onChange_Handller(e.target.value, "GST", 0)}
+                                                                                    />
+
+                                                                                </FormGroup>
+
+                                                                                <FormGroup className="mb-3 col col-sm-4 " >
+                                                                                    <Label >HSNCode</Label>
+                                                                                    <Input type="text"
+                                                                                        id={`txtHSNCode${0}`}
+                                                                                        // defaultValue={GStDetailsMaster[0].HSNCode}
+                                                                                        placeholder="Please Enter Margin"
+                                                                                        onChange={(e) => GSTDetails_onChange_Handller(e.target.value, "HSNCode", 0)}
+                                                                                    />
+
+                                                                                </FormGroup>
+
+
+                                                                            </Row>
+                                                                        </Col>
+                                                                        <Col md={1}>
+
+                                                                            <Row className=" mt-3">
+
+
+                                                                                <Col md={6}>
+                                                                                    <Button className="btn btn-sm btn-light mt-3   align-items-sm-end"
+                                                                                        type="button"
+                                                                                        onClick={() => { GSTDetails_Tab_AddRow_Handler() }} >
+                                                                                        <i className="dripicons-plus"></i>
+                                                                                    </Button>
+                                                                                </Col>
+                                                                            </Row>
+
+
+                                                                        </Col>
+
+                                                                    </Row>
+
+
+
+                                                                </CardBody>
+                                                            </Card>
+                                                            <PaginationProvider pagination={paginationFactory(pageOptions)}>
+                                                                {({ paginationProps, paginationTableProps }) => (
+                                                                    <ToolkitProvider
+                                                                        keyField="id"
+                                                                        data={GStDetailsTabTable}
+                                                                        columns={pagesListColumns}
+                                                                        search
+                                                                    >
+                                                                        {(toolkitProps) => (
+                                                                            <React.Fragment>
+
+                                                                                <Row>
+                                                                                    <Col xl="12">
+                                                                                        <div className="table-responsive">
+                                                                                            <BootstrapTable
+                                                                                                keyField={"id"}
+                                                                                                responsive
+                                                                                                bordered={false}
+                                                                                                striped={false}
+                                                                                                // defaultSorted={defaultSorted}
+                                                                                                classes={"table  table-bordered"}
+                                                                                                {...toolkitProps.baseProps}
+                                                                                                {...paginationTableProps}
+                                                                                            />
+                                                                                        </div>
+                                                                                    </Col>
+                                                                                </Row>
+                                                                                <Row className="align-items-md-center mt-30">
+                                                                                    <Col className="pagination pagination-rounded justify-content-end mb-2">
+                                                                                        <PaginationListStandalone {...paginationProps} />
+                                                                                    </Col>
+                                                                                </Row>
+                                                                            </React.Fragment>
+                                                                        )}
+                                                                    </ToolkitProvider>
+                                                                )}
+                                                            </PaginationProvider>
                                                         </Col>
                                                     </Row>
                                                 </TabPane>

@@ -199,7 +199,7 @@ export const ImageType_Get_DropDown_API = () => get(url.IMAGETYPE_DROPDOWN_API)/
 export const MRPType_Get_DropDown_API = () => get(url.MRP_TYPE_DROPDOWN_API)// MRP Type DropDown api
 export const Division_Get_DropDown_API  = (id) => get(`${url.DIVISION_DROPDOWN_API}/${id}`)// Division DropDown api
 export const Party_Get_DropDown_API  = (id) => get(`${url.DIVISION_DROPDOWN_API}/${id}`)// Division DropDown api
-export const PriceList_Get_DropDown_API = () => get(url.PRICE_LIST_DROPDOWN_API)// PriceList DropDown api
+export const PriceList_Get_DropDown_API = () => get(url.PRICE_LIST)// PriceList DropDown api
 export const Category_By_CategoryTypes_DropDown_API = (id) => get(`${url.CATEGORY_DROPDOWN_API}/${id}`)//  GetCategoryByCategoryTypeID DropDown API
 export const SubCategory_By_CategoryTypes_DropDown_API = (id) => get(`${url.SUBCATEGORY_DROPDOWN_API}/${id}`)//  GetSubCategoryByCategoryID DropDown API
 
@@ -296,7 +296,10 @@ export const detelet_DriverType_List_Api = (id) =>del(`${url. DRIVER_API}/${id}`
 export const edit_DriverType_List_Api = (id) =>get(`${url. DRIVER_API}/${id}`) // edit api
 export const update_DriverType_List_Api = (data, id) =>put(`${url. DRIVER_API}/${id}`, data)// update
 
-
+//PriceList api
+export const Post_PriceList_API = (data) => post(url.PRICE_LIST, data)// post api
+export const get_PriceListByPartyType_API = (partyType) => get(`${url. PRICE_LIST}/${partyType}`)// post api
+export const delete_PriceList_API = (id) => del(`${url. PRICE_LIST}/${id}`)// post api
 
 export {  
   getLoggedInUser,
@@ -305,7 +308,6 @@ export {
   postFakeLogin,
   postFakeProfile,
   postFakeForgetPwd,
-
   postJwtRegister,
   postJwtProfile,
 
