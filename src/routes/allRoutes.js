@@ -61,6 +61,7 @@ import DriverList from "../pages/Adminisrator/DriverPage/DriverList";
 import CompanyGroupMaster from "../pages/Adminisrator/CompanyGroupPages/CompanyGroupMaster";
 import CompanyGroupList from "../pages/Adminisrator/CompanyGroupPages/CompanyGroupList";
 import PageMasterTab from "../pages/Adminisrator/Page-Pages/PageMasterTab";
+import PartyMasterTab from "../pages/Adminisrator/PartyTab/PartyMasterTab";
 
 
 
@@ -170,6 +171,8 @@ const userRoutes = [
 
   { path: "/CompanyGroupMaster", component: CompanyGroupMaster },
   { path: "/CompanyGroupList", component: CompanyGroupList },
+
+  { path: "/PartyMasterTab", component: PartyMasterTab },
 
 
   { path: "/partyUIDemo", component: PartyUIDemo },
