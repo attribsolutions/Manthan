@@ -1,29 +1,28 @@
 import React, { useState } from 'react';
 import { Button, Table, } from 'reactstrap';
 import { Tbody, Thead } from 'react-super-responsive-table';
-import StudentForm from './StudentForm';
-import ItemsMaster from './ItemMaster';
-function GSTDetailsTable(props) {
-    const [TableData, setTableData] = useState([]);
 
-
+function MarginTable(props) {
+debugger
     const ondeleteHandeler = (ele) => {
 
         if (!(ele === 0)) {
-            var a = TableData.filter((i) => {
+            var fil = props.tableData.filter((i) => {
                 return !(i.id === ele);
             });
-            setTableData(a);
+            props.func(fil);
         }
     };
 
-    const tableRows = TableData.map((info) => {
+    const tableRows = props.tableData.map((info) => {
+        debugger
         return (
             <tr>
                 {/* <td>{info.id}</td> */}
+                <td>{info.PriceListName}</td>
+                <td>{info.PartyName}</td>
                 <td>{info.EffectiveDate}</td>
-                <td>{info.GST}</td>
-                <td>{info.HSNCode}</td>
+                <td>{info.Margin}</td>
                 <td>
                     <Button
                         className="badge badge-soft-danger font-size-12 btn btn-danger waves-effect waves-light w-xxs border border-light"
@@ -39,35 +38,26 @@ function GSTDetailsTable(props) {
         );
     });
 
-    const addRows = (data) => {
-        const totalTableData = TableData.length;
-        data.id = totalTableData + 1;
-        const updatedTableData = [...TableData];
-        updatedTableData.push(data);
-        setTableData(updatedTableData);
-    };
     return (
-
-        <div>
-            <StudentForm func={addRows} />
-            
-            {TableData.length > 0 ?
+        <>
+            <div>
+                {props.tableData.length > 0 ?
                     <Table className="table table-bordered table-hover">
                         <Thead>
                             <tr>
+                                <th className="col col-sm-3">Price List</th>
+                                <th className="col col-sm-3">Party Name</th>
                                 <th className="col col-sm-3">EffectiveDate</th>
-                                <th className="col col-sm-3">GST</th>
-                                <th className="col col-sm-3">HSNCode</th>
+                                <th className="col col-sm-3">Margin</th>
                                 <th className="col col-sm-3">{"Action"}</th>
                             </tr>
                         </Thead>
                         <Tbody>{tableRows}</Tbody>
                     </Table>
                     : null}
-
-        </div>
-        
+            </div>
+        </>
     );
 }
 
-export default GSTDetailsTable;
+export default MarginTable;
