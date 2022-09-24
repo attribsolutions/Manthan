@@ -173,8 +173,8 @@ const userRoutes = [
   { path: "/CompanyGroupList", component: CompanyGroupList },
 
 
-  // { path: "/PartyMasterTab", component: PartyMasterTab },
-  { path: "/PriceListMaster", component: PriceListMaster },
+  // { path: "/PriceList", component: PartyMasterTab },
+  { path: "/PriceMaster", component: PriceListMaster },
 
 
 
