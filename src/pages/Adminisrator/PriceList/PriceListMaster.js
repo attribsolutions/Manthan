@@ -166,13 +166,13 @@ const PriceListMaster = (props) => {
 
     function sub_Price_Add_Handler() {
         debugger
-        var price = document.getElementById("txtsubprice")
-        if (price.value === "") {
+        var textInp1 = document.getElementById("txtsubprice")
+        if (textInp1.value === "") {
             alert("please enter value")
         } else {
             var mkup = document.getElementById(`mkupMkdown`).checked
             const jsonBody = JSON.stringify({
-                Name: price.value,
+                Name: textInp1.value,
                 BasePriceListID: currentPrice.value,
                 PLPartyType: partyType_dropdown_Select.value,
                 MkUpMkDn: mkup,
@@ -203,7 +203,7 @@ const PriceListMaster = (props) => {
     function fun2(node) {
 
         return (
-            <div style={{ paddingLeft: "20px" }} className={""} >
+            <div style={{ paddingLeft: "50px" }} className={""} >
                 <div className='row justify-content-center mt-n4 '>
                     <div className=' col-10'>
                         <Input
@@ -404,16 +404,16 @@ const PriceListMaster = (props) => {
                                                         <CardFooter >
                                                             <Row>
                                                                 <Col >
-                                                                    <span className="align-middle text-primary" onClick={(e) => dropOpen_ONClickHandler({ id: 0, })}>  <i className="dripicons-plus">
+                                                                    <span className="align-middle text-primary" onClick={(e) => dropOpen_ONClickHandler({ value: 0, })}>  <i className="dripicons-plus">
                                                                     </i> &nbsp; &nbsp;{"Add Sub-Rate"}</span>
                                                                 </Col>
                                                                 <Col className="col col-4">
 
 
-                                                                    <button type="button" className="btn btn-light"
+                                                                    {/* <button type="button" className="btn btn-light"
                                                                         onClick={() => {
                                                                             // sub_Price_Add_Handler()
-                                                                        }} >change party Type</button>
+                                                                        }} >change party Type</button> */}
 
                                                                 </Col>
                                                             </Row>
@@ -425,8 +425,6 @@ const PriceListMaster = (props) => {
                                             </div>
                                             : null
                                         }
-
-
 
                                     </Card>
                                 </Col>
