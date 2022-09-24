@@ -40,12 +40,11 @@ const CategoryMaster = (props) => {
     const history = useHistory()
 
     //Access redux store Data /  'save_ModuleSuccess' action data
-    const { PostAPIResponse,CategoryAPI,  RoleAccessModifiedinSingleArray } = useSelector((state) => ({
+    const { PostAPIResponse, CategoryAPI, RoleAccessModifiedinSingleArray } = useSelector((state) => ({
         PostAPIResponse: state.CategoryMasterReducer.PostDataMessage,
-        CategoryAPI: state.CategoryMasterReducer.CategoryAPI,
+        CategoryAPI: state.categoryTypeMasterReducer.categoryTypeListData,
         RoleAccessModifiedinSingleArray: state.Login.RoleAccessUpdateData,
     }));
-
     //userAccess useEffect
     useEffect(() => {
 
@@ -72,7 +71,7 @@ const CategoryMaster = (props) => {
 
     // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
     useEffect(() => {
-  
+
         if (!(userPageAccessState === '')) { document.getElementById("txtName").focus(); }
         if (!(editDataGatingFromList === undefined)) {
             setEditData(editDataGatingFromList);
@@ -129,7 +128,7 @@ const CategoryMaster = (props) => {
 
 
     function handllerCategoryTypes(e) {
-        setCategoryTypes_dropdown_Select  (e)
+        setCategoryTypes_dropdown_Select(e)
     }
 
     const CategoryTypesValues = CategoryAPI.map((Data) => ({
@@ -140,7 +139,7 @@ const CategoryMaster = (props) => {
     const FormSubmitButton_Handler = (event, values) => {
         const jsonBody = JSON.stringify({
             Name: values.Name,
-            ProductCategoryType:CategoryTypes_dropdown_Select .value,
+            ProductCategoryType: CategoryTypes_dropdown_Select.value,
         });
 
         if (pageMode === "edit") {
@@ -154,7 +153,7 @@ const CategoryMaster = (props) => {
 
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
     var IsEditMode_Css = ''
-    if ((pageMode === "edit")||(pageMode==="copy")||(pageMode==="dropdownAdd")) { IsEditMode_Css = "-5.5%" };
+    if ((pageMode === "edit") || (pageMode === "copy") || (pageMode === "dropdownAdd")) { IsEditMode_Css = "-5.5%" };
 
     if (!(userPageAccessState === '')) {
         return (
