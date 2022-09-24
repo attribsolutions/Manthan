@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
-import Breadcrumbs from "../../../components/Common/Breadcrumb";
+
+import Breadcrumb from "../../../components/Common/Breadcrumb"
 import { Button, Col, Modal, Row } from "reactstrap";
 import paginationFactory, {
   PaginationListStandalone,
@@ -13,7 +14,6 @@ import "../../../assets/scss/CustomeTable/datatables.scss";
 import cellEditFactory, { Type } from 'react-bootstrap-table2-editor';
 import { MetaTags } from "react-meta-tags";
 import { useHistory } from "react-router-dom";
-import { CommonGetRoleAccessFunction } from "../../../components/Common/CommonGetRoleAccessFunction";
 import { deletePartyTypeIDSuccess, delete_PartyType_ID, editPartyTypeId, getPartyTypelist, PostPartyTypeAPISuccess, updatePartyTypeIDSuccess } from "../../../store/Administrator/PartyTypeRedux/action";
 import PartyType from "./PartyType";
 
@@ -237,67 +237,85 @@ const PartyTypeList = (props) => {
       ),
     },
   ];
-console.log("TableListData",TableListData)
+ 
   if (!(userPageAccessState === '')) {
     return (
       <React.Fragment>
-        <MetaTags>
-          <title>Party Type List| FoodERP-React FrontEnd</title>
-        </MetaTags>
         <div className="page-content">
-          <PaginationProvider pagination={paginationFactory(pageOptions)}>
-            {({ paginationProps, paginationTableProps }) => (
-              <ToolkitProvider
-                // keyField="id"
-                // defaultSorted={defaultSorted}
-                // data={TableListData}
-                // columns={pagesListColumns}
-                search
-              >
-                {(toolkitProps) => (
-                  <React.Fragment>
-                    <Breadcrumbs
-                      title={"Count :"}
-                      breadcrumbItem={userPageAccessState.PageHeading}
-                      IsButtonVissible={(userPageAccessState.RoleAccess_IsSave) ? true : false}
-                      SearchProps={toolkitProps.searchProps}
-                      breadcrumbCount={`Party Count: ${TableListData.length}`}
-                      IsSearchVissible={true}
-                      isExcelButtonVisible={true}
-                      ExcelData={TableListData}
-                    // RedirctPath={`/RoleMaster`}
-                    />
-                    <Row>
-                      <Col xl="12">
-                        <div className="table-responsive">
-                          <BootstrapTable
-                            keyField="id"
-                            data={TableListData}
-                            columns={pagesListColumns}
-                            cellEdit={cellEditFactory({ mode: 'dbclick' ,blurToSave: true})}
+          <MetaTags>
+            <title>Party Type List| FoodERP-React FrontEnd</title>
+          </MetaTags>
+          <div className="container-fluid">
+            <PaginationProvider
+              pagination={paginationFactory(pageOptions)}
+            >
+              {({ paginationProps, paginationTableProps }) => (
+                <ToolkitProvider
+                  keyField='id'
+                  columns={pagesListColumns}
+                  data={TableListData}
+                  search
+                >
+                  {toolkitProps => (
+                    <React.Fragment>
+                      <Breadcrumb
+                        title={"Count :"}
+                        breadcrumbItem={userPageAccessState.PageHeading}
+                        IsButtonVissible={(userPageAccessState.RoleAccess_IsSave) ? true : false}
+                        SearchProps={toolkitProps.searchProps}
+                        breadcrumbCount={`Module Count: ${TableListData.length}`}
+                        IsSearchVissible={true}
+                        isExcelButtonVisible={true}
+                        ExcelData={TableListData}
+                        RedirctPath={"/PartyType"}
+                      />
+                       
+
+                      <Row>
+                        <Col xl="12">
+                          <div className="table-responsive">
+                            <BootstrapTable
+                              keyField={"id"}
+                              responsive
+                              bordered={true}
+                              striped={false}
+                              // cellEdit={cellEditFactory({ mode: 'dbclick' ,blurToSave: true})}
+                              // defaultSorted={commonDefaultSorted("Name")}
+                              classes={"table align-middle table-nowrap table-hover"}
+                              headerWrapperClasses={"thead-light"}
+                              {...toolkitProps.baseProps}
+                              {...paginationTableProps}
+                            />
+
+                          </div>
+                        </Col>
+                      </Row>
+
+                      <Row className="align-items-md-center mt-30">
+                        <Col className="pagination pagination-rounded justify-content-end mb-2">
+                          <PaginationListStandalone
+                            {...paginationProps}
                           />
-                        </div>
-                      </Col>
-                    </Row>
-                    <Row className="align-items-md-center mt-30">
-                      <Col className="pagination pagination-rounded justify-content-end mb-2">
-                        <PaginationListStandalone {...paginationProps} />
-                      </Col>
-                    </Row>
-                  </React.Fragment>
-                )}
-              </ToolkitProvider>
-            )}
-          </PaginationProvider>
-          <Modal
-            isOpen={modal_center}
-            toggle={() => {
-              tog_center();
-            }}
-            size="xl"
-          >
-            <PartyType state={editData.Data} relatatedPage={"/PartyType"} />
-          </Modal>
+                        </Col>
+                      </Row>
+                    </React.Fragment>
+                  )
+                  }
+                </ToolkitProvider>
+              )
+              }
+
+            </PaginationProvider>
+            <Modal
+              isOpen={modal_center}
+              toggle={() => { tog_center() }}
+              size="xl"
+            >
+              {/* <PartyUIDemo state={editData.Data} /> */}
+              <PartyType state={editData.Data} relatatedPage={"/PartyType"} />
+            </Modal>
+
+          </div>
         </div>
       </React.Fragment>
     );
