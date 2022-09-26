@@ -35,8 +35,12 @@ export default function Tree(props) {
                         onClick={(e) => { props.func1(node) }
                         }
                     > */}
-                    <span className="align-middle text-black list-group-ite  form-select" onClick={(e) => { props.func1(node) }
-                    } >{node.label}</span>
+                    <span className="align-middle text-black list-group-ite  form-select"
+                        onClick={(e) => {
+                            props.func1(node);
+                            props.func2(false)
+                        }
+                        } >{node.label}</span>
                     {/* </DropdownItem> */}
                 </div>
                 {/* {
