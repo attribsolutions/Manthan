@@ -56,9 +56,9 @@ function AddressDetails_Tab(props) {
     }
 
     const addRowsHandler = (data) => {
-        debugger
+        
         const val = {
-            AddressTypeid: AddressType_DropdownSelect.value,
+            AddressType: AddressType_DropdownSelect.value,
             AddressTypeName: AddressType_DropdownSelect.label,
             Address: address,
             FSSAINo: FSSAINo,
@@ -206,7 +206,7 @@ function AddressDetails_Tab(props) {
                             <Col md="9">
                                 <FormGroup className="mb-2 col col-sm-5">
                                     <Row className="justify-content-md-left">
-                                        <Label htmlFor="horizontal-firstname-input" className="col-sm-3 col-form-label" >IsDefault </Label>
+                                        <Label htmlFor="horizontal-firstname-input" className="col-sm-4 col-form-label" >IsDefault </Label>
                                         <Col md={2} style={{ marginTop: '9px' }} >
                                             <div className="form-check form-switch form-switch-md mb-3" dir="ltr">
                                                 <AvInput type="checkbox" className="form-check-input" id="customSwitchsizemd"

@@ -7,7 +7,7 @@ import { Card, CardBody, CardHeader, Col, Dropdown, DropdownItem, DropdownMenu, 
 export default function Tree(props) {
     // const data = props.data
     const TreeNode = (node) => {
-        debugger
+        
         // const node = props.node
         // const [childVisible, setchildVisible] = useState(false);
         // const haschild = node.children ? true : false;
@@ -59,7 +59,7 @@ export default function Tree(props) {
     }
 
     const tree = (tree1) => {
-        debugger
+        
         return (
             <ul className='list-group '>
                 {tree1.map((tree) => (
@@ -71,7 +71,7 @@ export default function Tree(props) {
         )
     }
 
-    debugger
+    
     return (
         <>
             {tree(props.data)}
