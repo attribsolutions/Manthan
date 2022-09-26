@@ -203,57 +203,51 @@ const PriceListMaster = (props) => {
     function fun2(node) {
 
         return (
-            <div style={{ paddingLeft: "50px" }} className={''}>
-                <div className='row justify-content-end mt- ' >
-                    <Row className='  form-select mt-n4 '>
-                        {/* <Input
+            <div style={{ paddingLeft: "50px" }} className={""} >
+                <div className='row justify-content-center mt-n4 '>
+                    <div className=' col-10'>
+                        <Input
                             type="text"
                             disabled={true}
                             defaultValue={node.label} >
-                        </Input> */}
-                        <Col>
-                            <Label> {node.label}</Label> </Col>
-                        <Col>
-                            <Input
-                                type="checkbox"
-                                id={`mkUp${node.value}`}
-                                defaultChecked={node.MkUpMkDn}
-                                disabled={true}
-                            /></Col>
-                        <Col>
-                            <i className="mdi mdi-pencil font-size-12"
-                                onClick={e => setMenu(node.value)}  ></i></Col>
+                        </Input>
+                    </div>
+                    <div className=' col-1 al-end'>
+                        <Input
+                            type="checkbox"
+                            id={`mkUp${node.value}`}
+                            defaultChecked={node.MkUpMkDn}
+                            disabled={true}
+                        />
 
+                    </div>
+                    <div className=' col-1 '>
+                        <i className="mdi mdi-pencil font-size-12"
+                            onClick={e => setMenu(node.value)}  ></i>
+                        <Dropdown
+                            isOpen={menu === node.value}
+                            toggle={toggle}
+                            className="d-inline-block">
+                            <DropdownToggle className="btn header-item " tag="button">
 
+                            </DropdownToggle>
+                            <DropdownMenu className="language-switch dropdown-menu-end">
+                                <DropdownItem
+                                    key={node.value}
+                                    onClick={(e) => { dropOpen_ONClickHandler(node) }}
+                                >
+                                    <span className="align-middle text-black" >{"Add Sub-List"}</span>
+                                </DropdownItem>
 
-                    </Row>
-
-
-
-                    <Dropdown
-                        isOpen={menu === node.value}
-                        toggle={toggle}
-                        className="">
-                        <DropdownToggle className="btn header-item " tag="button">
-
-                        </DropdownToggle>
-                        <DropdownMenu className="language-switch dropdown-menu-end">
-                            <DropdownItem
-                                key={node.value}
-                                onClick={(e) => { dropOpen_ONClickHandler(node) }}
-                            >
-                                <span className="align-middle text-black" >{"Add Sub-List"}</span>
-                            </DropdownItem>
-
-                            <DropdownItem
-                                key={node.value}
-                                onClick={() => delete_PriceList_Handler(node)}
-                            >
-                                <span className="align-middle text-danger"> {"Delete"} </span>
-                            </DropdownItem>
-                        </DropdownMenu>
-                    </Dropdown>
-
+                                <DropdownItem
+                                    key={node.value}
+                                    onClick={() => delete_PriceList_Handler(node)}
+                                >
+                                    <span className="align-middle text-danger"> {"Delete"} </span>
+                                </DropdownItem>
+                            </DropdownMenu>
+                        </Dropdown>
+                    </div>
 
                     {node.children ? fun1(node.children) : null}
                 </div>
@@ -447,6 +441,8 @@ const PriceListMaster = (props) => {
 
 
 export default PriceListMaster
+
+
 
 
 
