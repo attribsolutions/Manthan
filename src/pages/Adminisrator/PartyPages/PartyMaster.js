@@ -1,12 +1,12 @@
 import React, { useEffect, useRef, useState } from "react";
 import Breadcrumb from "../../../components/Common/Breadcrumb";
-import { Card, CardBody, Col, Container, Row, Label, CardHeader, FormGroup, TabPane, Button, Input } from "reactstrap";
+import { Card, CardBody, Col, Container, Row, Label, CardHeader, FormGroup, TabPane, Button, Input, Modal } from "reactstrap";
 import { AvForm, AvField, AvInput } from "availity-reactstrap-validation";
 import { useDispatch, useSelector } from "react-redux";
 import { AlertState } from "../../../store/actions";
 import Select from "react-select";
 import {
-    editPartyIDSuccess, getAddressTypes, getCompany,  getDistrictOnState,
+    editPartyIDSuccess, getAddressTypes, getCompany, getDistrictOnState,
 
     GetPartyTypeByDivisionTypeID, getPartyTypes, getPriceList, postPartyData, postPartyDataSuccess, updatePartyID
 } from "../../../store/Administrator/PartyRedux/action";
@@ -18,7 +18,7 @@ import { useHistory } from "react-router-dom";
 import DropdownTreeSelect from 'react-dropdown-tree-select'
 import { getPriceListData } from "../../../store/Administrator/PriceList/action";
 import '../../../assets/tree_select_css/index.css'
-
+import Tree from "./Tree"
 const PartyMaster = (props) => {
 
     const formRef = useRef(null);
@@ -319,6 +319,53 @@ const PartyMaster = (props) => {
     var IsEditMode_Css = ''
     if ((pageMode === "edit") || (pageMode === "copy") || (pageMode === "dropdownAdd")) { IsEditMode_Css = "-5.5%" };
 
+    const [dropOpen, setDropOpen] = useState(false);
+    const [priceList, setParicelist] = useState({ label: 'aaa' });
+    // const [dropOpen, setDropOpen] = useState(false);
+
+    const test1 = () => {
+        return (
+            <>
+                <Col >
+                    {/* <DropdownTreeSelect
+                data={priceListByPartyType}
+                onChange={onChangePriceListHandler}
+                // className="bootstrap-demo"
+                // multiSelect
+                expanded={false}
+                // className='mdl-demo'
+            /> */}
+                </Col>
+                <Input value={priceList.label} onClick={(e) => setDropOpen(!dropOpen)}></Input>
+
+                <Modal
+                    isOpen={dropOpen}
+                    toggle={() => { setDropOpen(!dropOpen) }}
+                    size="sm"
+                    centered={true}
+                // backdrop={'static'}
+                >
+                    <div>
+                        <div className="text-center mt-2">
+                            {/* <Label className="text-primary text-center "> {priceList.label}</Label> */}
+                            <Input type="button" className="btn btn-light text-primary"
+                                onClick={() => {
+                                    // sub_Price_Add_Handler()
+                                }} 
+                                value=  {priceList.label}>
+
+                                </Input>
+                               
+                        </div>
+                        <Tree data={priceListByPartyType} priceList={priceList}
+                            func1={setParicelist} />
+                    </div>
+
+                </Modal>
+
+            </>
+        )
+    }
 
     if (!(userPageAccessState === '')) {
         return (
@@ -331,6 +378,7 @@ const PartyMaster = (props) => {
                     <Container fluid>
                         <Row>
                             <Col lg={12}>
+
                                 <Card className="text-black" >
                                     <CardHeader className="card-header   text-black" style={{ backgroundColor: "#dddddd" }} >
                                         <h4 className="card-title text-black">{userPageAccessState.PageDescription}</h4>
@@ -439,18 +487,20 @@ const PartyMaster = (props) => {
                                                         <Col md="3">
                                                             <FormGroup className="mb-3">
                                                                 <Label htmlFor="validationCustom01">Price List </Label>
-                                                                <Col sm={12}>
-                                                                    {/* <Select
+
+                                                                {/* <Select
                                                                         value={PriceList_dropdown_Select}
                                                                         options={PriceList_DropdownOptions}
                                                                         onChange={(e) => { handllerPriceList(e) }}
                                                                     /> */}
-                                                                    <DropdownTreeSelect
-                                                                        data={priceListByPartyType}
-                                                                        onChange={onChangePriceListHandler}
-                                                                        className="bootstrap-demo"
-                                                                    />
-                                                                </Col>
+
+
+                                                                {test1()}
+
+
+
+
+
                                                             </FormGroup>
                                                         </Col>
                                                         <Col md="1">  </Col>
@@ -852,6 +902,8 @@ const PartyMaster = (props) => {
                                 </Card>
                             </Col>
                         </Row>
+
+
                     </Container>
                 </div>
             </React.Fragment>

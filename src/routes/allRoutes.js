@@ -9,7 +9,7 @@ import Login from "../pages/Authentication/Login"
 import Logout from "../pages/Authentication/Logout"
 import ForgetPwd from "../pages/Authentication/ForgetPassword"
 
-//Import  Administrator : Modules and ModulesList
+//Import  Administrator : Modules and ModulesListItem
 import Modules from "../pages/Adminisrator/ModulesPages/Modules";
 import ModulesList from "../pages/Adminisrator/ModulesPages/ModulesList";
 import CompanyModule from "../pages/Adminisrator/CompanyPages/CompanyModule";
@@ -29,7 +29,8 @@ import RoleList from "../pages/Adminisrator/RoleMasterPages/RoleList"
 import Error404 from "../pages/Utility/Error404";
 import Error500 from "../pages/Utility/Error500";
 import ItemsList from "../pages/Adminisrator/ItemPages/ItemList";
-import ItemsMaster from "../pages/Adminisrator/ItemPages/ItemMaster";
+import ItemsMaster from "../pages/Adminisrator/ItemPages/ItemMaster/index";
+
 import SearchBoxSecond from "../pages/Adminisrator/SearchBox/SearchBoxSecond";
 import SerachBox3 from "../pages/Adminisrator/SearchBox/SerachBox3";
 import PartyList from "../pages/Adminisrator/PartyPages/PartyList";
@@ -173,8 +174,8 @@ const userRoutes = [
   { path: "/CompanyGroupList", component: CompanyGroupList },
 
 
-  // { path: "/PartyMasterTab", component: PartyMasterTab },
-  { path: "/PriceListMaster", component: PriceListMaster },
+  // { path: "/PriceList", component: PartyMasterTab },
+  { path: "/PriceMaster", component: PriceListMaster },
 
 
 

@@ -68,6 +68,7 @@ const RoleAccessAdd = (props) => {
             return (`/${inx.ActualPagePath}` === locationPath)
         })
 
+        debugger
         if (!(editDataGatingFromList === undefined)) {
 
             var divisionid = editDataGatingFromList.Division_id

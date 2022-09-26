@@ -20,7 +20,7 @@ import {
   PostItemDataSuccess,
   updateItemSuccess,
 } from "../../../store/Administrator/ItemsRedux/action";
-import ItemsMaster from "./ItemMaster";
+import ItemsMaster from "./ItemMaster/index";
 import { MetaTags } from "react-meta-tags";
 import { useHistory } from "react-router-dom";
 import { CommonGetRoleAccessFunction } from "../../../components/Common/CommonGetRoleAccessFunction";
