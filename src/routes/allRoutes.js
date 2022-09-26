@@ -64,6 +64,8 @@ import PageMasterTab from "../pages/Adminisrator/Page-Pages/PageMasterTab";
 // import PartyMasterTab from "../pages/Adminisrator/PartyTab/PartyMasterTab";
 
 import PriceListMaster from "../pages/Adminisrator/PriceList/PriceListMaster";
+import MRPMaster from "../pages/Adminisrator/MRPMaster/MRPMaster";
+import MarginMaster from "../pages/Adminisrator/MarginMaster/MarginMaster";
 
 
 
@@ -176,7 +178,8 @@ const userRoutes = [
 
   // { path: "/PriceList", component: PartyMasterTab },
   { path: "/PriceMaster", component: PriceListMaster },
-
+  { path: "/MRPMaster", component: MRPMaster },
+  { path: "/MarginMaster", component: MarginMaster },
 
 
 
