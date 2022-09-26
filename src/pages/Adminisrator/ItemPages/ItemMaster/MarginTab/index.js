@@ -59,7 +59,7 @@ function Margin_Tab(props) {
     const addRowsHandler = (data) => {
 
         const val = {
-            priceListid: priceList.value,
+            PriceList: priceList.value,
             PriceListName: priceList.label,
             PartyName: partyName.label,
             party: partyName.value,
