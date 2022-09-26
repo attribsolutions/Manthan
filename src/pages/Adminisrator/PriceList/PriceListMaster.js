@@ -58,6 +58,8 @@ const PriceListMaster = (props) => {
     const [dropOpen, setDropOpen] = useState(false);
     const [currentPrice, setCurrentPrice] = useState({ Name: '' });
     const [hasPartySelect, setHasPartySelect] = useState(false);
+    const [priceList, setPriceList] = useState('');
+
 
     //Access redux store Data /  'save_ModuleSuccess' action data
 
@@ -65,11 +67,13 @@ const PriceListMaster = (props) => {
         priceListByPartyType,
         deleteAPIResponse,
         PartyTypes,
+        PriceList,
         RoleAccessModifiedinSingleArray
     } = useSelector((state) => ({
         PostAPIResponse: state.PriceListReducer.PostData,
         deleteAPIResponse: state.PriceListReducer.deletePriceMsg,
         PartyTypes: state.PartyMasterReducer.PartyTypes,
+        PriceList: state.ItemMastersReducer.PriceList,
         priceListByPartyType: state.PriceListReducer.priceListByPartyType,
         RoleAccessModifiedinSingleArray: state.Login.RoleAccessUpdateData,
     }));
@@ -136,6 +140,11 @@ const PriceListMaster = (props) => {
         label: Data.Name
     }));
 
+    const PriceList_DropdownOptions = PriceList.map((data) => ({
+        value: data.id,
+        label: data.Name
+    }));
+
     function goButtonHandler() {
         if (!(partyType_dropdown_Select === '')) {
             dispatch(getPriceListData(partyType_dropdown_Select.value))
@@ -176,6 +185,7 @@ const PriceListMaster = (props) => {
                 BasePriceListID: currentPrice.value,
                 PLPartyType: partyType_dropdown_Select.value,
                 MkUpMkDn: mkup,
+                // PriceList:PriceList.value,
                 Company: 1,
                 CreatedBy: 1,
                 CreatedOn: "2022-07-18T00:00:00",
@@ -334,7 +344,7 @@ const PriceListMaster = (props) => {
                                                     toggle={() => { setDropOpen(!dropOpen) }}
                                                     size="sm"
                                                     centered={true}
-                                                    backdrop={'static'}
+                                                // backdrop={'static'}
                                                 >
                                                     <div className="modal-header">
                                                         <h5 className="modal-title mt-0">{currentPrice.id === 0 ? "Add Main Price" : "Add sub-Price"} </h5>
@@ -362,11 +372,23 @@ const PriceListMaster = (props) => {
                                                             </Col>
                                                         </Row>
                                                         <Row className="mt-2">
+                                                            <Label className="col-4 col-form-label" >Price List</Label>
+                                                            <Col className="col">
+                                                                <Select
+                                                                    // id={`dropPriceList-${0}`}
+                                                                    value={priceList}
+                                                                    options={PriceList_DropdownOptions}
+                                                                    onChange={(e) => setPriceList(e)}
+                                                                /></Col>
+
+                                                        </Row>
+                                                        <Row className="mt-2">
                                                             <Label className="col-4 col-form-label" >MkUp </Label>
                                                             <Col className="mt-2">
                                                                 <Input type={"checkbox"} id='mkupMkdown' />
                                                             </Col>
                                                         </Row>
+
                                                     </div>
                                                     <div className="modal-footer">
                                                         <button type="button" className="btn btn-light" onClick={() => {
