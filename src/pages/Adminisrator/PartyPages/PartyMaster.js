@@ -273,7 +273,7 @@ const PartyMaster = (props) => {
         setPartyType_dropdown_Select(e)
         // dispatch(GetPartyTypeByDivisionTypeID(e.value))
         // dispatch(GetCompanyByDivisionTypeID(e.value))
-        setPriceList_dropdown_Select({})
+        setPriceList_dropdown_Select({label:''})
         setCompanyList_dropdown_Select('')
         dispatch(getPriceListData(e.value))
 
@@ -293,20 +293,8 @@ const PartyMaster = (props) => {
     const test1 = () => {
         return (
             <>
-                <Col >
-                    {/* <DropdownTreeSelect
-                data={priceListByPartyType}
-                onChange={onChangePriceListHandler}
-                // className="bootstrap-demo"
-                // multiSelect
-                expanded={false}
-                // className='mdl-demo'
-            /> */}
-                </Col>
-                <Input value={PriceList_dropdown_Select.label}
-                    placeholder="Select..."
-                    onClick={(e) => setDropOpen(!dropOpen)}>
-                </Input>
+
+
 
                 <Modal
                     isOpen={dropOpen}
@@ -589,7 +577,11 @@ const PartyMaster = (props) => {
                                                                         onChange={(e) => { handllerPriceList(e) }}
                                                                     /> */}
 
-
+                                                                        <Input
+                                                                            value={PriceList_dropdown_Select.label}
+                                                                            placeholder="Select..."
+                                                                            onClick={(e) => setDropOpen(!dropOpen)}>
+                                                                        </Input>
                                                                         {test1()}
 
 
