@@ -47,8 +47,6 @@ function GSTTab(props) {
         else {
             alert("Please Enter value")
         }
-
-
     };
     const clearState = () => {
         setGST('');
