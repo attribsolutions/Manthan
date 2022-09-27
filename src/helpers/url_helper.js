@@ -143,3 +143,5 @@ export const DIVISION_DROPDOWN_API = '/Divisions'
 export const PRICE_LIST = '/PriceList'
 
 export const SUPER_ADMIN_API = '/SuperAdmin'
+
+export const MRP_MASTER_LIST = '/Mrps'

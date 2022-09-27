@@ -301,6 +301,9 @@ export const Post_PriceList_API = (data) => post(url.PRICE_LIST, data)// post ap
 export const get_PriceListByPartyType_API = (partyType) => get(`${url. PRICE_LIST}/${partyType}`)// post api
 export const delete_PriceList_API = (id) => del(`${url. PRICE_LIST}/${id}`)// post api
 
+// MRP Master 
+export const Post_MRPMaster_API = (data) => post(url.MRP_MASTER_LIST, data)// post api
+
 export {  
   getLoggedInUser,
   isUserAuthenticated,

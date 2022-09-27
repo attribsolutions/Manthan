@@ -55,7 +55,8 @@ function MRPTab(props) {
     }
 
 
-    const addRowsHandler = (data) => {
+    const addRowsHandler = (e) => {
+        
         debugger
         const val = {
             Division: division.value,
@@ -86,13 +87,7 @@ function MRPTab(props) {
         else {
             alert("Please Enter value")
         }
-
-        const totalTableData = props.tableData.length;
-        val.id = totalTableData + 1;
-        const updatedTableData = [...props.tableData];
-        updatedTableData.push(val);
-        props.func(updatedTableData)
-        clearState();
+        
     };
     const clearState = () => {
         setDivision('');

@@ -31,32 +31,37 @@ const RoleAccessAdd = (props) => {
     const [tableHederList, setTableHederList] = useState([])
     const [showTableOnUI, setShowTableOnUI] = useState(false)
 
-    const [division_dropdown_Select, setDivision_dropdown_Select] = useState({ label: "select Division", value: 0 });
+    const [division_dropdown_Select, setDivision_dropdown_Select] = useState({ label: "Select...", value: 0 });
     const [role_dropdown_Select, setRoleDropDown] = useState("");
     const [module_DropdownSelect, setModule_DropdownSelect] = useState('');
-    const [page_DropdownSelect, setPage_DropdownSelect] = useState('');
+    const [page_DropdownSelect, setPage_DropdownSelect] = useState({ value: 0, label: "All Pages" });
 
 
     //Access redux store Data /  'save_ModuleSuccess' action data
 
-    const { PageAccess, ModuleData, PageDropdownForRoleAccess,
+    const {
+        PageAccess,
+        ModuleData,
+        PageDropdownForRoleAccess,
         AddPage_PageMasterListForRoleAccess_Redux,
         GO_buttonPageMasterListForRoleAccess_Redux,
         PostMessage_ForRoleAccessList,
-        Roles, PartyTypes,
-        RoleAccessModifiedinSingleArray } = useSelector((state) => ({
-            PartySaveSuccess: state.PartyMasterReducer.PartySaveSuccess,
-            companyList: state.Company.companyList,
-            PartyTypes: state.PartyMasterReducer.partyList,
-            Roles: state.User_Registration_Reducer.Roles,
-            ModuleData: state.Modules.modulesList,
-            PageAccess: state.H_Pages.PageAccess,
-            PageDropdownForRoleAccess: state.RoleAccessReducer.PageDropdownForRoleAccess,
-            AddPage_PageMasterListForRoleAccess_Redux: state.RoleAccessReducer.AddPage_PageMasterListForRoleAccess,
-            GO_buttonPageMasterListForRoleAccess_Redux: state.RoleAccessReducer.GO_buttonPageMasterListForRoleAccess,
-            PostMessage_ForRoleAccessList: state.RoleAccessReducer.PostMessage_ForRoleAccessList,
-            RoleAccessModifiedinSingleArray: state.Login.RoleAccessUpdateData,
-        }));
+        Roles,
+        PartyTypes,
+        RoleAccessModifiedinSingleArray
+    } = useSelector((state) => ({
+        PartySaveSuccess: state.PartyMasterReducer.PartySaveSuccess,
+        companyList: state.Company.companyList,
+        PartyTypes: state.PartyMasterReducer.partyList,
+        Roles: state.User_Registration_Reducer.Roles,
+        ModuleData: state.Modules.modulesList,
+        PageAccess: state.H_Pages.PageAccess,
+        PageDropdownForRoleAccess: state.RoleAccessReducer.PageDropdownForRoleAccess,
+        AddPage_PageMasterListForRoleAccess_Redux: state.RoleAccessReducer.AddPage_PageMasterListForRoleAccess,
+        GO_buttonPageMasterListForRoleAccess_Redux: state.RoleAccessReducer.GO_buttonPageMasterListForRoleAccess,
+        PostMessage_ForRoleAccessList: state.RoleAccessReducer.PostMessage_ForRoleAccessList,
+        RoleAccessModifiedinSingleArray: state.Login.RoleAccessUpdateData,
+    }));
 
 
     useEffect(() => {
@@ -242,7 +247,7 @@ const RoleAccessAdd = (props) => {
         var module = e.value;
         var division = division_dropdown_Select.value
         setModule_DropdownSelect(e);
-        setPage_DropdownSelect([])
+        setPage_DropdownSelect({ value: 0, label: "All Pages" })
         dispatch(PageDropdownForRoleAccessList(module, division));
     }
 
@@ -251,7 +256,6 @@ const RoleAccessAdd = (props) => {
     }
 
     const GoButton_Handler = () => {
-
 
         var division = division_dropdown_Select.value
         var role = role_dropdown_Select.value
@@ -275,28 +279,43 @@ const RoleAccessAdd = (props) => {
     }
 
     const AddPageButton_Handeler = () => {
+       
         let selectePageID = page_DropdownSelect.value
-        let found = tableListData.find((inx) => { return inx.PageID === selectePageID })
 
-        if ((found === undefined) && !(selectePageID === undefined)) {
-            dispatch(AddPageHandlerForRoleAccessListPage(selectePageID));
-        }
-        else if (found) {
-            dispatch(AlertState({
-                Type: 4, Status: true,
-                Message: "Page Alredy Exist",
-                RedirectPath: false,
-                PermissionAction: false,
-            }));
-
+        if (selectePageID === 0) {
+            var pageId = 0
+            PageDropdownForRoleAccess.forEach((i) => {
+                pageId = i.id
+                let found = tableListData.find((inx) => { return inx.PageID === pageId })
+                if ((found === undefined) && !(pageId === 0)) {
+                    dispatch(AddPageHandlerForRoleAccessListPage(pageId));
+                }
+            })
         }
         else {
-            dispatch(AlertState({
-                Type: 4, Status: true,
-                Message: "Page is Not Select",
-                RedirectPath: false,
-                PermissionAction: false,
-            }));
+
+            let found = tableListData.find((inx) => { return inx.PageID === selectePageID })
+
+            if ((found === undefined) && !(selectePageID === undefined)) {
+                dispatch(AddPageHandlerForRoleAccessListPage(selectePageID));
+            }
+            else if (found) {
+                dispatch(AlertState({
+                    Type: 4, Status: true,
+                    Message: "Page Alredy Exist",
+                    RedirectPath: false,
+                    PermissionAction: false,
+                }));
+
+            }
+            else {
+                dispatch(AlertState({
+                    Type: 4, Status: true,
+                    Message: "Page is Not Select",
+                    RedirectPath: false,
+                    PermissionAction: false,
+                }));
+            }
         }
     }
 
@@ -542,7 +561,7 @@ const RoleAccessAdd = (props) => {
                                                                         value={role_dropdown_Select}
                                                                         options={Role_DropdownOption}
                                                                         className="rounded-bottom"
-                                                                        placeholder="select"
+                                                                        placeholder="Select..."
                                                                         onChange={(e) => { RoleDropDown_select_handler(e) }}
                                                                         classNamePrefix="select2-selection"
 
@@ -558,7 +577,7 @@ const RoleAccessAdd = (props) => {
                                                                     <Select
                                                                         value={division_dropdown_Select}
                                                                         className="rounded-bottom"
-                                                                        placeholder="select"
+                                                                        placeholder="Select..."
                                                                         options={DivisionTypesValues}
                                                                         onChange={(e) => { handllerDivisionTypes(e) }}
                                                                     />
@@ -658,7 +677,9 @@ const RoleAccessAdd = (props) => {
                                                         </Col >
 
                                                         <Col md="2" className=" ">
-                                                            <Button type="button" color="btn btn-outline-success" className="" onClick={() => { AddPageButton_Handeler() }}>Add Page</Button>
+                                                            <Button type="button" color="btn btn-outline-success" className=""
+                                                                onClick={() => { AddPageButton_Handeler() }}>
+                                                                {page_DropdownSelect.value === 0 ? 'Add All Page' : "Add Page"}</Button>
                                                         </Col>
 
 
