@@ -54,7 +54,7 @@ const MarginMaster = (props) => {
         RoleAccessModifiedinSingleArray
     } = useSelector((state) => ({
         pages: state.ItemMastersReducer.pages,
-        PostAPIResponse: state.PriceListReducer.PostData,
+        PostAPIResponse: state.PriceListReducer.postMsg,
         PartyTypes: state.PartyMasterReducer.PartyTypes,
         PriceList: state.ItemMastersReducer.PriceList,
         RoleAccessModifiedinSingleArray: state.Login.RoleAccessUpdateData,

@@ -64,7 +64,6 @@ import PageMasterTab from "../pages/Adminisrator/Page-Pages/PageMasterTab";
 // import PartyMasterTab from "../pages/Adminisrator/PartyTab/PartyMasterTab";
 
 import PriceMaster from "../pages/Adminisrator/PriceList/PriceMaster";
-
 import PriceList from "../pages/Adminisrator/PriceList/PriceList";
 
 import MRPMaster from "../pages/Adminisrator/MRPMaster/MRPMaster";
