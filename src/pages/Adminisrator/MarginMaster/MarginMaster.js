@@ -30,6 +30,7 @@ import { getPartyTypes } from "../../../store/Administrator/PartyRedux/action";
 import { getItemList, get_Division_ForDropDown, get_PriceList_ForDropDown } from "../../../store/Administrator/ItemsRedux/action";
 import BootstrapTable from "react-bootstrap-table-next";
 import { AvField } from "availity-reactstrap-validation";
+import cellEditFactory, { Type } from 'react-bootstrap-table2-editor';
 
 const MarginMaster = (props) => {
     const dispatch = useDispatch();
@@ -40,7 +41,6 @@ const MarginMaster = (props) => {
 
     //SetState  Edit data Geting From Modules List component
     const [pageMode, setPageMode] = useState("save");
-    // const [partyTypeSelect, setPartyTypeSelect] = useState({ value: '' });
     const [userPageAccessState, setUserPageAccessState] = useState("");
     const [partyType_dropdown_Select, setPartyType_dropdown_Select] = useState("");
     const [priceList_dropdown_Select, setpriceList_dropdown_Select] = useState("");
@@ -271,6 +271,7 @@ const MarginMaster = (props) => {
                                                         bordered={false}
                                                         striped={false}
                                                         // defaultSorted={defaultSorted}
+                                                        //  cellEdit={ cellEditFactory({ mode: 'click', blurToSave: true }) }
                                                         classes={"table  table-bordered"}
                                                         {...toolkitProps.baseProps}
                                                         {...paginationTableProps}
