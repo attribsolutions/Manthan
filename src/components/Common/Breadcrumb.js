@@ -225,8 +225,8 @@ const Breadcrumb = props => {
                     {/* {bredcrumbName.length > 0 ? <label className="font-size-24 form-label  text-nowrap bd-highlight text-secondary" style={{ paddingLeft: "7px" }} >&nbsp;/ <kbd className="bg-light text-secondary">{bredcrumbName}</kbd></label>
                     : <></>} */}
 
-                    {!bredcrumbName === "" ?
-                      bredcrumbName.length > 0 ?
+                    {!(bredcrumbName === "") ?
+                     ( bredcrumbName.length > 0 )?
                         <label className="font-size-24 form-label  text-nowrap bd-highlight text-primary"
                           style={{ paddingLeft: "7px", color: "#5156be" }} >&nbsp;/&nbsp;{bredcrumbName}</label>
                         : <></>

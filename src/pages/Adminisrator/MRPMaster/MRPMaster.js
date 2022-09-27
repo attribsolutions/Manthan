@@ -57,7 +57,7 @@ const MRPMaster = (props) => {
         RoleAccessModifiedinSingleArray
     } = useSelector((state) => ({
         pages: state.ItemMastersReducer.pages,
-        PostAPIResponse: state.PriceListReducer.PostData,
+        PostAPIResponse: state.PriceListReducer.postMsg,
         Party: state.ItemMastersReducer.Party,
         Division: state.ItemMastersReducer.Division,
         RoleAccessModifiedinSingleArray: state.Login.RoleAccessUpdateData,
