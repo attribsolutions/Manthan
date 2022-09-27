@@ -5,20 +5,38 @@ import { SpinnerState } from "../../Utilites/Spinner/actions";
 import { deletePartyIDSuccess, editPartyIDSuccess, GetCompanyByDivisionTypeIDSuccess, getDistrictOnStateSuccess,  getPartyListAPISuccess, GetPartyTypeByDivisionTypeIDSuccess, getPriceListSuccess, postPartyDataSuccess, updatePartyIDSuccess,getAddressTypesSuccess, getPartySuccess, getPartyTypesSuccess, getCompanySuccess } from "./action";
 import { DELETE_PARTY_ID, EDIT_PARTY_ID, GET_COMPANY_BY_DIVISIONTYPES_ID, GET_DISTRICT_ON_STATE, GET_PRICELIST,GET_ADDRESSTYPES, GET_PARTTYPE_BY_DIVISIONTYPES_ID, GET_PARTY_LIST_API, POST_PARTY_DATA, UPDATE_PARTY_ID, GET_PARTY, GET_PARTYTYPES, GET_COMPANY } from "./actionTypes";
 
-function* Get_Party_GenratorFunction() {
+// function* Get_Party_GenratorFunction() {
+//     yield put(SpinnerState(true))
+//     try {
+//       const response = yield call(Party_Master_Get_API);
+//       yield put(getPartyListAPISuccess(response.Data));
+//       yield put(SpinnerState(false))
+//     } catch (error) {
+//       yield put(SpinnerState(false))
+//       yield put(AlertState({ Type: 4, 
+//         Status: true, Message: "500 Error Message",
+//       }));
+//     }
+//   }
+  
+  function* Get_Party_GenratorFunction() {
     yield put(SpinnerState(true))
     try {
       const response = yield call(Party_Master_Get_API);
-      yield put(getPartyListAPISuccess(response.Data));
       yield put(SpinnerState(false))
+      if (response.StatusCode === 200) yield put(getPartyListAPISuccess(response.Data))
+      else yield put(AlertState({
+        Type: 4,
+        Status: true, Message: JSON.stringify(response.Message),
+      }));
     } catch (error) {
       yield put(SpinnerState(false))
-      yield put(AlertState({ Type: 4, 
+      yield put(AlertState({
+        Type: 4,
         Status: true, Message: "500 Error Message",
       }));
     }
   }
-  
   function* Submit_Party_GenratorFunction({ Data }) {
     yield put(SpinnerState(true))
     try {
