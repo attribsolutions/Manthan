@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import {
+    Button,
     Card,
     CardBody,
     CardHeader,
@@ -27,9 +28,10 @@ import {
     postPriceListDataSuccess
 } from "../../../store/Administrator/PriceList/action";
 import { getPartyTypes } from "../../../store/Administrator/PartyRedux/action";
-import { getItemList, get_Division_ForDropDown } from "../../../store/Administrator/ItemsRedux/action";
+import { getItemList, get_Division_ForDropDown, get_Party_ForDropDown } from "../../../store/Administrator/ItemsRedux/action";
 import BootstrapTable from "react-bootstrap-table-next";
-import { AvField } from "availity-reactstrap-validation";
+import { AvField, AvForm } from "availity-reactstrap-validation";
+import { postMRPMasterData, postMRPMasterDataSuccess } from "../../../store/Administrator/MRPMasterRedux/action";
 
 const MRPMaster = (props) => {
     const dispatch = useDispatch();
@@ -42,43 +44,55 @@ const MRPMaster = (props) => {
     const [pageMode, setPageMode] = useState("save");
     // const [partyTypeSelect, setPartyTypeSelect] = useState({ value: '' });
     const [userPageAccessState, setUserPageAccessState] = useState("");
-    const [partyType_dropdown_Select, setPartyType_dropdown_Select] = useState("");
+    const [party_dropdown_Select, setPartyType_dropdown_Select] = useState("");
     const [division_dropdown_Select, setDivision_dropdown_Select] = useState("");
-    const [FSSAIExipry, setFSSAIExipry] = useState('');
+    const [EffectiveDate, setEffectiveDate] = useState('');
+    const [MRP, setMRP] = useState('');
 
     //Access redux store Data /  'save_ModuleSuccess' action data
     const { PostAPIResponse,
         pages,
-        PartyTypes,
+        Party,
         Division,
         RoleAccessModifiedinSingleArray
     } = useSelector((state) => ({
         pages: state.ItemMastersReducer.pages,
         PostAPIResponse: state.PriceListReducer.PostData,
-        PartyTypes: state.PartyMasterReducer.PartyTypes,
+        Party: state.ItemMastersReducer.Party,
         Division: state.ItemMastersReducer.Division,
         RoleAccessModifiedinSingleArray: state.Login.RoleAccessUpdateData,
     }));
 
-  
+    // userAccess useEffect
     useEffect(() => {
-        debugger
-        const locationPath = history.location.pathname
-        let userAcc = RoleAccessModifiedinSingleArray.find((inx) => {
-          return (`/${inx.ActualPagePath}` === locationPath)
-        })
-        if (!(userAcc === undefined)) {
-          setUserPageAccessState(userAcc)
+        let userAcc = undefined
+        if ((editDataGatingFromList === undefined)) {
+
+            let locationPath = history.location.pathname
+            userAcc = RoleAccessModifiedinSingleArray.find((inx) => {
+                return (`/${inx.ActualPagePath}` === locationPath)
+            })
         }
-      }, [RoleAccessModifiedinSingleArray])
+        else if (!(editDataGatingFromList === undefined)) {
+            let relatatedPage = props.relatatedPage
+            userAcc = RoleAccessModifiedinSingleArray.find((inx) => {
+                return (`/${inx.ActualPagePath}` === relatatedPage)
+            })
+
+        }
+        if (!(userAcc === undefined)) {
+            setUserPageAccessState(userAcc)
+        }
+
+    }, [RoleAccessModifiedinSingleArray])
 
     useEffect(() => {
-        dispatch(getPartyTypes());
+        dispatch(get_Party_ForDropDown());
         dispatch(get_Division_ForDropDown());
         dispatch(getItemList());
     }, [dispatch]);
 
-    const PartyTypeDropdown_Options = PartyTypes.map((Data) => ({
+    const PartyDropdown_Options = Party.map((Data) => ({
         value: Data.id,
         label: Data.Name
     }));
@@ -97,14 +111,14 @@ const MRPMaster = (props) => {
         setDivision_dropdown_Select(e)
 
     }
-    const FSSAIExipryHandler = (e, date) => {
-        setFSSAIExipry(date)
+    const EffectiveDateHandler = (e, date) => {
+        setEffectiveDate(date)
     }
     useEffect(() => {
         if ((PostAPIResponse.Status === true) && (PostAPIResponse.StatusCode === 200)) {
             // setpartyType_dropdown_Select('')
-            dispatch(postPriceListDataSuccess({ Status: false }))
-            dispatch(getPriceListData(partyType_dropdown_Select.value))
+            dispatch(postMRPMasterDataSuccess({ Status: false }))
+            // dispatch(getPriceListData(partyType_dropdown_Select.value))
             dispatch(AlertState({
                 Type: 1,
                 Status: true,
@@ -121,12 +135,6 @@ const MRPMaster = (props) => {
         custom: true,
     };
 
-    // const defaultSorted = [
-    //     {
-    //       dataField: "Name",
-    //       order: "asc",
-    //     },
-    //   ];
     const pagesListColumns = [
         {
             text: "Item Name",
@@ -146,16 +154,41 @@ const MRPMaster = (props) => {
                 <>
                     <div class="d-flex gap-3" style={{ display: 'flex', justifyContent: 'center' }} >
                         <Col>
-                        <FormGroup className="mb-3 col col-sm-4 ">
-                            <Input type="text" className="col col-sm text-center"></Input>
+                            <FormGroup className="mb-3 col col-sm-4 ">
+                                <Input
+                                    type="text"
+                                    defaultValue={MRP}
+                                    className="col col-sm text-center"></Input>
                             </FormGroup>
                         </Col>
-                       
+
                     </div>
                 </>
             ),
         },
     ]
+
+    const ItemData = pages.map((index) => ({
+        Name: index.Name,
+        MRP: 1234
+    }))
+
+    //'Save' And 'Update' Button Handller
+    const handleValidSubmit = (event, values) => {
+        debugger
+        const jsonBody = JSON.stringify({
+            Division: division_dropdown_Select.value,
+            Party: party_dropdown_Select.value,
+            EffectiveDate: EffectiveDate,
+            "CreatedBy": 1,
+            "UpdatedBy": 1,
+            Items: ItemData
+        });
+
+        dispatch(postMRPMasterData(jsonBody));
+        console.log("jsonBody", jsonBody)
+    };
+
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
     var IsEditMode_Css = ''
     if ((pageMode === "edit") || (pageMode === "copy") || (pageMode === "dropdownAdd")) { IsEditMode_Css = "-5.5%" };
@@ -175,75 +208,87 @@ const MRPMaster = (props) => {
                             <p className="card-title-desc text-black">{userPageAccessState.PageDescriptionDetails}</p>
                         </CardHeader>
 
-                        <CardBody className=" vh-10 0 text-black"  >
-                            <Row className="">
-                                <Col md={12}>
-                                    <Card style={{ backgroundColor: "whitesmoke" }}>
+                        <CardBody>
+                            <AvForm onValidSubmit={(e, v) => { handleValidSubmit(e, v) }}
+
+                            >
+                                <Row className="">
+                                    <Col md={12}>
+                                        <Card style={{ backgroundColor: "whitesmoke" }}>
 
 
-                                        <CardHeader className="card-header   text-black " style={{ backgroundColor: "#e9e9ef" }} >
-                                            <Row className="mt-3">
-                                            <Col md="4">
-                                                    <FormGroup className="mb-3 row ">
-                                                        <Label className="col-sm-3 p-2 ml-n4 ">Division</Label>
-                                                        <Col md="9">
-                                                            <Select
-                                                                value={division_dropdown_Select}
-                                                                options={Division_DropdownOptions}
-                                                                className="rounded-bottom"
-                                                                placeholder="select"
-                                                                onChange={(e) => { Division_Dropdown_OnChange_Handller(e) }}
-                                                                classNamePrefix="select2-selection"
+                                            <CardHeader className="card-header   text-black " style={{ backgroundColor: "#e9e9ef" }} >
+                                                <Row className="mt-3">
+                                                    <Col md="4">
+                                                        <FormGroup className="mb-3 row ">
+                                                            <Label className="col-sm-3 p-2 ml-n4 ">Division</Label>
+                                                            <Col md="9">
+                                                                <Select
+                                                                    value={division_dropdown_Select}
+                                                                    options={Division_DropdownOptions}
+                                                                    className="rounded-bottom"
+                                                                    placeholder="select"
+                                                                    onChange={(e) => { Division_Dropdown_OnChange_Handller(e) }}
+                                                                    classNamePrefix="select2-selection"
 
-                                                            />
-                                                        </Col>
-                                                    </FormGroup>
-                                                </Col>
+                                                                />
+                                                            </Col>
+                                                        </FormGroup>
+                                                    </Col>
 
-                                                <Col md="4">
-                                                    <FormGroup className="mb-3 row ">
-                                                        <Label className="col-sm-3 p-2 ml-n4 ">Party Type</Label>
-                                                        <Col md="9">
-                                                            <Select
-                                                                value={partyType_dropdown_Select}
-                                                                options={PartyTypeDropdown_Options}
-                                                                className="rounded-bottom"
-                                                                placeholder="select"
-                                                                onChange={(e) => { PartyType_Dropdown_OnChange_Handller(e) }}
-                                                                classNamePrefix="select2-selection"
+                                                    <Col md="4">
+                                                        <FormGroup className="mb-3 row ">
+                                                            <Label className="col-sm-3 p-2 ml-n4 ">Party Name</Label>
+                                                            <Col md="9">
+                                                                <Select
+                                                                    value={party_dropdown_Select}
+                                                                    options={PartyDropdown_Options}
+                                                                    className="rounded-bottom"
+                                                                    placeholder="select"
+                                                                    onChange={(e) => { PartyType_Dropdown_OnChange_Handller(e) }}
+                                                                    classNamePrefix="select2-selection"
 
-                                                            />
-                                                        </Col>
-                                                    </FormGroup>
-                                                </Col>
+                                                                />
+                                                            </Col>
+                                                        </FormGroup>
+                                                    </Col>
 
-                                                <Col md="4">
-                                                    <FormGroup className="mb-3 row ">
-                                                        <Label className="col-sm-3 p-1 ml-n4 ">EffectiveDate</Label>
-                                                        <Col md="9">
-                                                            <Flatpickr
-                                                                id="FSSAIExipry"
-                                                                name="FSSAIExipry"
-                                                                value={FSSAIExipry}
-                                                                className="form-control d-block p-2 bg-white text-dark"
-                                                                placeholder=" Please Enter FSSAI Exipry"
-                                                                options={{
-                                                                    altInput: true,
-                                                                    altFormat: "F j, Y",
-                                                                    dateFormat: "Y-m-d"
-                                                                }}
-                                                                onChange={FSSAIExipryHandler}
-                                                            />
-                                                        </Col>
-                                                    </FormGroup>
-                                                </Col>
-                                            </Row>
-                                        </CardHeader>
-                                    </Card>
-                                </Col>
-                            </Row>
+                                                    <Col md="4">
+                                                        <FormGroup className="mb-3 row ">
+                                                            <Label className="col-sm-3 p-1 ml-n4 ">EffectiveDate</Label>
+                                                            <Col md="9">
+                                                                <Flatpickr
+                                                                    id="EffectiveDate"
+                                                                    name="EffectiveDate"
+                                                                    value={EffectiveDate}
+                                                                    className="form-control d-block p-2 bg-white text-dark"
+                                                                    placeholder=" Please Enter FSSAI Exipry"
+                                                                    options={{
+                                                                        altInput: true,
+                                                                        altFormat: "F j, Y",
+                                                                        dateFormat: "Y-m-d"
+                                                                    }}
+                                                                    onChange={EffectiveDateHandler}
+                                                                />
+                                                            </Col>
+                                                        </FormGroup>
+
+                                                    </Col>
+                                                </Row>
+                                            </CardHeader>
+                                        </Card>
+                                    </Col>
+                                </Row>
+                                <button
+                                    type="submit"
+                                    data-mdb-toggle="tooltip" data-mdb-placement="top" title="Save MRP"
+                                    className="btn btn-primary w-md mt-2 float-end"
+                                > <i className="fas fa-save me-2"></i> Save
+                                </button>
+                            </AvForm>
                         </CardBody>
                     </Card>
+
                     <PaginationProvider pagination={paginationFactory(pageOptions)}>
                         {({ paginationProps, paginationTableProps }) => (
                             <ToolkitProvider
@@ -279,7 +324,9 @@ const MRPMaster = (props) => {
                                 )}
                             </ToolkitProvider>
                         )}
+
                     </PaginationProvider>
+
                 </Container>
             </div>
         </React.Fragment>
