@@ -72,13 +72,13 @@ export const GET_COMPANY_BY_EMPLOYEETYPES_ID = "/GetCompanyByEmployeeType" //Com
 export const ROLE_MASTER_API = "/Roles" // role get api
 
 // M_Items Api
-export const Items_MASTER_API = "/M_Items"
+export const Items_MASTER_API = "/Items"
 
 // M_Items_group Api
 export const ITEMS_GROUP_API = "/ItemGroups"
 
 // Party Master 
-export const PARTY_MASTER_API = "/M_Parties"
+export const PARTY_MASTER_API = "/Parties"
 export const GetDistrictOnState = "/GetDistrictOnState"
 export const PRICELIST = "/PriceList"
 export const ADDRESSTYPES ="/AddressTypes"
@@ -143,3 +143,5 @@ export const DIVISION_DROPDOWN_API = '/Divisions'
 export const PRICE_LIST = '/PriceList'
 
 export const SUPER_ADMIN_API = '/SuperAdmin'
+
+export const MRP_MASTER_LIST = '/Mrps'

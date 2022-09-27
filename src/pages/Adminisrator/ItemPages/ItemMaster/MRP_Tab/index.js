@@ -58,10 +58,10 @@ function MRPTab(props) {
     const addRowsHandler = (data) => {
         debugger
         const val = {
-            Divisionid: division.value,
+            Division: division.value,
             DivisionName: division.label,
             PartyName: partyName.label,
-            partyid: partyName.value,
+            Party: partyName.value,
             EffectiveDate: effectiveDate,
             MRP: MRP,
             CreatedBy: 1,

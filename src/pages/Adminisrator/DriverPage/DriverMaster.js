@@ -7,6 +7,7 @@ import {
     Col,
     Container,
     FormGroup,
+    Input,
     Label,
     Row
 } from "reactstrap";
@@ -42,48 +43,47 @@ const DriverMaster = (props) => {
 
     //Access redux store Data /  'save_ModuleSuccess' action data
     const { PostAPIResponse, DriverList, RoleAccessModifiedinSingleArray } = useSelector((state) => ({
-            PostAPIResponse: state.DriverReducer.PostDataMessage,
-            DriverList: state.DriverReducer.DriverList,
-            RoleAccessModifiedinSingleArray: state.Login.RoleAccessUpdateData,
+        PostAPIResponse: state.DriverReducer.PostDataMessage,
+        DriverList: state.DriverReducer.DriverList,
+        RoleAccessModifiedinSingleArray: state.Login.RoleAccessUpdateData,
 
-        }));
+    }));
 
 
     useEffect(() => {
-         dispatch(getMethodForDriverList());
-        
+        dispatch(getMethodForDriverList());
+
     }, [dispatch]);
 
     //userAccess useEffect
     useEffect(() => {
-        debugger
         let userAcc = undefined
         if ((editDataGatingFromList === undefined)) {
-    
-          let locationPath = history.location.pathname
-          userAcc = RoleAccessModifiedinSingleArray.find((inx) => {
-            return (`/${inx.ActualPagePath}` === locationPath)
-          })
+
+            let locationPath = history.location.pathname
+            userAcc = RoleAccessModifiedinSingleArray.find((inx) => {
+                return (`/${inx.ActualPagePath}` === locationPath)
+            })
         }
         else if (!(editDataGatingFromList === undefined)) {
-          let relatatedPage = props.relatatedPage
-          userAcc = RoleAccessModifiedinSingleArray.find((inx) => {
-            return (`/${inx.ActualPagePath}` === relatatedPage)
-          })
-    
+            let relatatedPage = props.relatatedPage
+            userAcc = RoleAccessModifiedinSingleArray.find((inx) => {
+                return (`/${inx.ActualPagePath}` === relatatedPage)
+            })
+
         }
         if (!(userAcc === undefined)) {
-          setUserPageAccessState(userAcc)
+            setUserPageAccessState(userAcc)
         }
-    
-      }, [RoleAccessModifiedinSingleArray])
-    
+
+    }, [RoleAccessModifiedinSingleArray])
+
     // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
     useEffect(() => {
 
         if (!(userPageAccessState === '')) { document.getElementById("txtName").focus(); }
         if (!(editDataGatingFromList === undefined)) {
-            
+
             setEditData(editDataGatingFromList);
             setPageMode(pageModeProps);
             setDOB_Date_Select(editDataGatingFromList.DOB)
@@ -135,16 +135,69 @@ const DriverMaster = (props) => {
             DOB: DOB_Date_Select,
             UID: values.UID
         });
-    
-    if (pageMode === 'edit') {
-        dispatch(updateDriverTypeID(jsonBody, EditData.id));
-      }
-  
-      else {
-        dispatch(PostMethodForDriverMaster(jsonBody));
-      }
+
+        if (pageMode === 'edit') {
+            dispatch(updateDriverTypeID(jsonBody, EditData.id));
+        }
+
+        else {
+            dispatch(PostMethodForDriverMaster(jsonBody));
+        }
     };
+
+    const [state, setState] = useState({
+        name: '',
+        address: '',
+        uid: '',
+        isError: {
+            name: '',
+        address: '',
+        uid: '',
+        }
+    }
+    )
+
+
+    const formValChange = e => {
+        debugger
+        e.preventDefault();
+        const { name, value } = e.target;
+        let isError = { ...state.isError };
+        switch (name) {
+            case "name":
+                isError.name =
+                    value.length < 4 ? "Atleast 4 characaters required" : "";
+                break;
+            case "adress":
+                isError.address = regExp.test(value)
+                    ? ""
+                    : "Email address is invalid";
+                break;
+            case "uid":
+                isError.uid =
+                    value.length < 12 ? "Atleast 6 characaters required" : "";
+                break;
+            default:
+                break;
+        }
+        setState({
+            isError,
+            [name]: value
+        })
+    };
+   
     
+    const onSubmit = e => {
+        
+        e.preventDefault();
+        if (formValid(state)) {
+            console.log(state)
+        } else {
+            console.log("Form is invalid!");
+        }
+    };
+
+    const { isError } = state;
 
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
     var IsEditMode_Css = ''
@@ -167,16 +220,17 @@ const DriverMaster = (props) => {
                             </CardHeader>
 
                             <CardBody className=" vh-10 0 text-black" style={{ backgroundColor: "#whitesmoke" }} >
-                                <AvForm onValidSubmit={(e, v) => { FormSubmitButton_Handler(e, v) }}
-                                    ref={formRef}>
+
+                                <form onSubmit={onSubmit} noValidate>
+
                                     <Row className="">
                                         <Col md={12}>
                                             <Card>
                                                 <CardBody style={{ backgroundColor: "whitesmoke" }}>
                                                     <Row>
-                                                        <FormGroup className="mb-2 col col-sm-4 ">
+                                                        {/* <FormGroup className="mb-2 col col-sm-4 ">
                                                             <Label htmlFor="validationCustom01">Name </Label>
-                                                            <AvField
+                                                             <AvField
                                                                 name="Name"
                                                                 id="txtName"
                                                                 value={EditData.Name}
@@ -187,65 +241,87 @@ const DriverMaster = (props) => {
                                                                     required: { value: true, errorMessage: 'Please Enter Name ' },
                                                                 }}
                                                                 onChange={(e) => { dispatch(BreadcrumbShow(e.target.value)) }}
+                                                            /> 
+                                                        </FormGroup> */}
+                                                        <FormGroup className="mb-2 col col-sm-4 ">
+                                                            <Label htmlFor="validationCustom01">Name </Label>
+                                                            <Input
+                                                                type="text"
+                                                                className={isError.name.length > 0 ? "is-invalid form-control" : "form-control"}
+                                                                name="name"
+                                                                placeholder="Please Enter Name"
+                                                                onChange={(e) => {
+                                                                    formValChange(e);
+                                                                    dispatch(BreadcrumbShow(e.target.value))
+                                                                }}
+
                                                             />
+                                                            {isError.name.length > 0 && (
+                                                                <span className="invalid-feedback">{isError.name}</span>
+                                                            )}
                                                         </FormGroup>
                                                         <Row>
                                                             <Col md="4">
-                                                            <FormGroup className="mb-3">
-                                                            <Label>Date of Birth</Label>
-                                                           <Flatpickr
-                                                                      id="FSSAIExipry"
-                                                                      name="FSSAIExipry"
-                                                                      value={DOB_Date_Select}
-                                                                      className="form-control d-block p-2 bg-white text-dark"
-                                                                      placeholder="YYYY-MM-DD"
-                                                                      autoComplete='off'
-                                                                      options={{
-                                                                      altInput: true,
-                                                                      altFormat: "F j, Y",
-                                                                      dateFormat: "Y-m-d"
-                                                                                      }}
-                                                                      onChange={(selectedDates, dateStr, instance) => {
-                                                                      setDOB_Date_Select(dateStr)
-                                                                                  }}
-                                                                                   />
-                                                                     </FormGroup>
-                                                                    </Col>
-                                                                   </Row>
+                                                                <FormGroup className="mb-3">
+                                                                    <Label>Date of Birth</Label>
+                                                                    <Flatpickr
+                                                                        id="FSSAIExipry"
+                                                                        name="FSSAIExipry"
+                                                                        value={DOB_Date_Select}
+                                                                        className="form-control d-block p-2 bg-white text-dark"
+                                                                        placeholder="YYYY-MM-DD"
+                                                                        autoComplete='off'
+                                                                        options={{
+                                                                            altInput: true,
+                                                                            altFormat: "F j, Y",
+                                                                            dateFormat: "Y-m-d"
+                                                                        }}
+                                                                        onChange={(selectedDates, dateStr, instance) => {
+                                                                            setDOB_Date_Select(dateStr)
+                                                                        }}
+                                                                    />
+                                                                </FormGroup>
+                                                            </Col>
+                                                        </Row>
+
+                                                        <Row>
+                                                            <FormGroup className="mb-2 col col-sm-4 ">
+                                                                <Label htmlFor="validationCustom01">Address </Label>
+                                                                <Input
+                                                                    type="text"
+                                                                    value={EditData.Address}
+                                                                    className={isError.name.length > 0 ? "is-invalid form-control" : "form-control"}
+                                                                    name="address"
+                                                                    placeholder="Please Enter Address"
+                                                                    autoComplete='off'
+                                                                    onChange={formValChange}
+                                                                />
+                                                                {isError.name.length > 0 && (
+                                                                    <span className="invalid-feedback">{isError.Address}</span>
+                                                                )}
+                                                            </FormGroup>
+                                                        </Row>
 
                                                         <Row>
                                                         <FormGroup className="mb-2 col col-sm-4 ">
-                                                            <Label htmlFor="validationCustom01">Address </Label>
-                                                            <AvField
-                                                                name="Address"
-                                                                value={EditData.Address}
-                                                                type="text"
-                                                                placeholder="Please Enter Address"
-                                                                autoComplete='off'
-                                                                validate={{
-                                                                    required: { value: true, errorMessage: 'Please Enter Address ' },
-                                                                }}
-                                                                unChange={(e) => { dispatch(BreadcrumbShow(e.target.value)) }}
-                                                            />
-                                                        </FormGroup>
-                                                       </Row>
-
-                                                       <Row>
-                                                        <FormGroup className="mb-2 col col-sm-4 ">
-                                                            <Label htmlFor="validationCustom01">UID </Label>
-                                                            <AvField
-                                                                name="UID"
-                                                                value={EditData.UID}
-                                                                type="text"
-                                                                placeholder="Please Enter UID"
-                                                                autoComplete='off'
-                                                                validate={{
-                                                                    required: { value: true, errorMessage: 'Please Enter UID ' },
-                                                                }}
-                                                                unChange={(e) => { dispatch(BreadcrumbShow(e.target.value)) }}
-                                                            />
-                                                        </FormGroup>
-                                                       </Row>
+                                                                <Label htmlFor="validationCustom01">UID </Label>
+                                                                <Input
+                                                                   name="uid"
+                                                                   value={EditData.UID}
+                                                                   type="text"
+                                                                   placeholder="Please Enter UID"
+                                                                   autoComplete='off'
+                                                                   validate={{
+                                                                       required: { value: true, errorMessage: 'Please Enter UID ' },
+                                                                   }}
+                                                                    onChange={formValChange}
+                                                                />
+                                                                {isError.name.length > 0 && (
+                                                                    <span className="invalid-feedback">{isError.Address}</span>
+                                                                )}
+                                                            </FormGroup>
+                                                            
+                                                        </Row>
                                                         <FormGroup>
                                                             <Row>
                                                                 <Col sm={2}>
@@ -263,7 +339,7 @@ const DriverMaster = (props) => {
                                                                                     :
                                                                                     <></>
                                                                                 : (
-                                                                                    
+
                                                                                     userPageAccessState.RoleAccess_IsSave ?
                                                                                         <button
                                                                                             type="submit"
@@ -285,7 +361,7 @@ const DriverMaster = (props) => {
                                             </Card>
                                         </Col>
                                     </Row>
-                                </AvForm>
+                                </form>
                             </CardBody>
                         </Card>
 
@@ -302,4 +378,29 @@ const DriverMaster = (props) => {
 };
 
 export default DriverMaster
+
+
+const formValid = ({ isError, ...rest }) => {
+    debugger
+    let isValid = false;
+    Object.values(isError).forEach(val => {
+        if (val.length > 0) {
+            isValid = false
+        } else {
+            isValid = true
+        }
+    });
+    Object.values(rest).forEach(val => {
+        if (val === null) {
+            isValid = false
+        } else {
+            isValid = true
+        }
+    });
+    return isValid;
+};
+
+const regExp = RegExp(
+    /^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[A-Za-z]+$/
+)
 
