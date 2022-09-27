@@ -34,7 +34,7 @@ const RoleAccessAdd = (props) => {
     const [division_dropdown_Select, setDivision_dropdown_Select] = useState({ label: "select Division", value: 0 });
     const [role_dropdown_Select, setRoleDropDown] = useState("");
     const [module_DropdownSelect, setModule_DropdownSelect] = useState('');
-    const [page_DropdownSelect, setPage_DropdownSelect] = useState('');
+    const [page_DropdownSelect, setPage_DropdownSelect] = useState({value:0,label:"All Pages"});
 
 
     //Access redux store Data /  'save_ModuleSuccess' action data
@@ -242,7 +242,7 @@ const RoleAccessAdd = (props) => {
         var module = e.value;
         var division = division_dropdown_Select.value
         setModule_DropdownSelect(e);
-        setPage_DropdownSelect([])
+        setPage_DropdownSelect({value:0,label:"All Pages"})
         dispatch(PageDropdownForRoleAccessList(module, division));
     }
 
@@ -251,7 +251,6 @@ const RoleAccessAdd = (props) => {
     }
 
     const GoButton_Handler = () => {
-
 
         var division = division_dropdown_Select.value
         var role = role_dropdown_Select.value
@@ -658,7 +657,9 @@ const RoleAccessAdd = (props) => {
                                                         </Col >
 
                                                         <Col md="2" className=" ">
-                                                            <Button type="button" color="btn btn-outline-success" className="" onClick={() => { AddPageButton_Handeler() }}>Add Page</Button>
+                                                            <Button type="button" color="btn btn-outline-success" className=""
+                                                                onClick={() => { AddPageButton_Handeler() }}>
+                                                                {page_DropdownSelect.value > 0 ? 'Add All Page' : "Add Page"}</Button>
                                                         </Col>
 
 
