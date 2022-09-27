@@ -52,7 +52,7 @@ const PageMaster = (props) => {
   const [relatedPage_DropdownSelect, setrelatedPage_DropdownSelect] = useState("");
   const [pageAccessDropDownView, setPageAccessDropDownView] = useState(false);
   const [modal_center, setmodal_center] = useState(false);
-
+  const [PageFieldShowUI, setPageFieldShowUI] = useState(false);
   const [pageAccess_DropDownSelect, setPageAccess_DropDownSelect] =
     useState("");
 
@@ -134,12 +134,16 @@ const PageMaster = (props) => {
       dispatch(BreadcrumbShow(editDataGatingFromList.Name))
       setEditData(editDataGatingFromList);
       setTablePageAccessDataState(editDataGatingFromList.PagePageAccess);
-
+      
       setModule_DropdownSelect({
         label: editDataGatingFromList.ModuleName,
         value: editDataGatingFromList.Module,
       });
-
+      if (editDataGatingFromList.PageFieldMaster.length===0) {
+        console.log("Array is empty")
+        setPageFieldShowUI(true)
+      }
+      
       if (editDataGatingFromList.PageType === 2) {
         setRelatedPageListShowUI(true)
       }
@@ -283,12 +287,10 @@ const PageMaster = (props) => {
     label: data.Name
   }));
 
-
   const FieldValidations_DropdownOptions = FieldValidations.map((data) => ({
     value: data.id,
     label: data.Name
   }));
-
 
   function PageField_Tab_AddRow_Handler() {
 
@@ -1274,234 +1276,235 @@ const PageMaster = (props) => {
 
                         {/* <Card> */}
                         {/* <CardBody style={{ backgroundColor: "whitesmoke" }}> */}
+                       
+                          < Row className="mt-3">
+                        <Col md={12}>
+                          <Table className="table table-bordered">
+                            <Thead >
+                              <tr>
+                                <th>Control ID</th>
+                                <th>Field Label</th>
+                                <th className="col col-sm-2">Control Type</th>
+                                <th className="col col-sm-2" >Field Validation</th>
+                                <th>List Page Seq</th>
+                                <th>Is Compulsory</th>
+                                <th>Default Sort</th>
+                                <th>Show In List Page</th>
+                                <th>Show In Download</th>
+                                <th>Download Default Select</th>
+                                <th>Action</th>
 
-                        <Row className="mt-3">
-                          <Col md={12}>
-                            <Table className="table table-bordered">
-                              <Thead >
-                                <tr>
-                                  <th>Control ID</th>
-                                  <th>Field Label</th>
-                                  <th className="col col-sm-2">Control Type</th>
-                                  <th className="col col-sm-2" >Field Validation</th>
-                                  <th>List Page Seq</th>
-                                  <th>Is Compulsory</th>
-                                  <th>Default Sort</th>
-                                  <th>Show In List Page</th>
-                                  <th>Show In Download</th>
-                                  <th>Download Default Select</th>
-                                  <th>Action</th>
 
+                              </tr>
+                            </Thead>
+                            <Tbody  >
+                            { !(PageFieldShowUI) ?
+                              pageFieldTabTable.map((TableValue, key) => (
+                                <tr >
+                                  <td>
+                                    <Col >
+                                      <Input
+                                        type="text"
+                                        id={`ControlID${key}`}
+                                        defaultValue={EditData.ControlID}
+                                        value={pageFieldTabTable[key].ControlID}
+                                        onChange={(e) => PageField_onChange_Handler(e.target.value, "ControlID", key)}>
+                                      </Input>
+                                    </Col>
+                                  </td>
+                                  <td>
+                                    <Col >
+                                      <Input
+                                        type="text"
+                                        id={`FieldLabel${key}`}
+                                        defaultValue={EditData.FieldLabel}
+                                        value={pageFieldTabTable[key].FieldLabel}
+                                        onChange={(e) => PageField_onChange_Handler(e.target.value, "FieldLabel", key)}>
+                                      </Input>
+                                    </Col>
+                                  </td>
+                                  <td>
+
+                                    <Select
+                                      id={`ControlType-${key}`}
+
+                                      // placeholder="select unit"
+                                      value={pageFieldTabTable[key].ControlType}
+                                      options={ControlTypes_DropdownOptions}
+                                      onChange={(e) => { FieldValidation_Dropdown_Handler(e); PageField_onChange_Handler(e, "ControlType", key) }}
+                                    />
+                                  </td>
+
+                                  <td>
+                                    <Select
+                                      id={`FieldValidation-${key}`}
+                                      // placeholder="select unit"
+                                      value={pageFieldTabTable[key].FieldValidation}
+                                      options={FieldValidations_DropdownOptions}
+                                      onChange={(e) => { PageField_onChange_Handler(e, "FieldValidation", key); }}
+                                    />
+                                  </td>
+                                  <td>
+                                    <Input
+
+                                      type="text"
+                                      id={`ListPageSeq${key}`}
+                                      defaultValue={EditData.ListPageSeq}
+                                      value={pageFieldTabTable[key].ListPageSeq}
+                                      onChange={(e) => PageField_onChange_Handler(e.target.value, "ListPageSeq", key)}>
+
+                                    </Input>
+                                  </td>
+                                  <td>
+                                    <Input
+
+                                      type="checkbox"
+                                      id={`IsCompulsory${key}`}
+                                      checked={pageFieldTabTable[key].IsCompulsory}
+                                      onChange={(e) => PageField_onChange_Handler(e.target.checked, "IsCompulsory", key)}>
+
+                                    </Input>
+                                  </td>
+
+                                  <td>
+                                    <Input
+
+                                      type="checkbox"
+                                      id={`DefaultSort${key}`}
+                                      checked={pageFieldTabTable[key].DefaultSort}
+                                      onChange={(e) => PageField_onChange_Handler(e.target.checked, "DefaultSort", key)}>
+
+                                    </Input>
+                                  </td>
+
+                                  <td>
+                                    <Input
+
+                                      type="checkbox"
+                                      id={`ShowInListPage${key}`}
+                                      checked={pageFieldTabTable[key].ShowInListPage}
+                                      onChange={(e) => PageField_onChange_Handler(e.target.checked, "ShowInListPage", key)}>
+
+                                    </Input>
+                                  </td>
+
+                                  <td>
+                                    <Input
+
+                                      type="checkbox"
+                                      id={`ShowInDownload${key}`}
+                                      checked={pageFieldTabTable[key].ShowInDownload}
+                                      onChange={(e) => PageField_onChange_Handler(e.target.checked, "ShowInDownload", key)}>
+
+                                    </Input>
+                                  </td>
+
+                                  <td>
+                                    <Input
+
+                                      type="checkbox"
+                                      id={`DownloadDefaultSelect${key}`}
+                                      checked={pageFieldTabTable[key].DownloadDefaultSelect}
+                                      onChange={(e) => PageField_onChange_Handler(e.target.checked, "DownloadDefaultSelect", key)}>
+
+                                    </Input>
+                                  </td>
+
+                                  <td>
+                                    {(pageFieldTabTable.length === key + 1) ?
+                                      <Row className="">
+                                        <Col md={6} className=" mt-3">
+                                          {(pageFieldTabTable.length > 1) ? <>
+                                            < i className="mdi mdi-trash-can d-block text-danger font-size-20" onClick={() => {
+                                              PageField_DeleteRow_Handler(key)
+                                            }} >
+                                            </i>
+                                          </> : <Col md={6} ></Col>}
+
+                                        </Col>
+
+                                        <Col md={6} >
+                                          <Button className="btn btn-sm btn-light mt-3   align-items-sm-center text-center"
+                                            type="button"
+                                            onClick={() => { PageField_Tab_AddRow_Handler(key) }} >
+                                            <i className="dripicons-plus"></i>
+                                          </Button>
+                                        </Col>
+                                      </Row>
+                                      :
+
+                                      < i className="mdi mdi-trash-can d-block text-danger font-size-20" onClick={() => {
+                                        PageField_DeleteRow_Handler(key)
+                                      }} >
+                                      </i>
+                                    }
+                                  </td>
 
                                 </tr>
-                              </Thead>
-                              <Tbody  >
-                                {pageFieldTabTable.map((TableValue, key) => (
-                                  <tr >
-                                    <td>
-                                      <Col >
-                                        <Input
-                                          type="text"
-                                          id={`ControlID${key}`}
-                                          defaultValue={EditData.ControlID}
-                                          value={pageFieldTabTable[key].ControlID}
-                                          onChange={(e) => PageField_onChange_Handler(e.target.value, "ControlID", key)}>
-                                        </Input>
-                                      </Col>
-                                    </td>
-                                    <td>
-                                      <Col >
-                                        <Input
-                                          type="text"
-                                          id={`FieldLabel${key}`}
-                                          defaultValue={EditData.FieldLabel}
-                                          value={pageFieldTabTable[key].FieldLabel}
-                                          onChange={(e) => PageField_onChange_Handler(e.target.value, "FieldLabel", key)}>
-                                        </Input>
-                                      </Col>
-                                    </td>
-                                    <td>
+                              ))
+ :<></>}
 
-                                      <Select
-                                        id={`ControlType-${key}`}
+                            </Tbody>
+                          </Table>
+                        </Col>
+                      </Row>
 
-                                        // placeholder="select unit"
-                                        value={pageFieldTabTable[key].ControlType}
-                                        options={ControlTypes_DropdownOptions}
-                                        onChange={(e) => { FieldValidation_Dropdown_Handler(e); PageField_onChange_Handler(e, "ControlType", key) }}
-                                      />
-                                    </td>
+                      {/* </CardBody> */}
+                      {/* </Card> */}
 
-                                    <td>
-                                      <Select
-                                        id={`FieldValidation-${key}`}
-                                        // placeholder="select unit"
-                                        value={pageFieldTabTable[key].FieldValidation}
-                                        options={FieldValidations_DropdownOptions}
-                                        onChange={(e) => { PageField_onChange_Handler(e, "FieldValidation", key); }}
-                                      />
-                                    </td>
-                                    <td>
-                                      <Input
-
-                                        type="text"
-                                        id={`ListPageSeq${key}`}
-                                        defaultValue={EditData.ListPageSeq}
-                                        value={pageFieldTabTable[key].ListPageSeq}
-                                        onChange={(e) => PageField_onChange_Handler(e.target.value, "ListPageSeq", key)}>
-
-                                      </Input>
-                                    </td>
-                                    <td>
-                                      <Input
-
-                                        type="checkbox"
-                                        id={`IsCompulsory${key}`}
-                                        checked={pageFieldTabTable[key].IsCompulsory}
-                                        onChange={(e) => PageField_onChange_Handler(e.target.checked, "IsCompulsory", key)}>
-
-                                      </Input>
-                                    </td>
-
-                                    <td>
-                                      <Input
-
-                                        type="checkbox"
-                                        id={`DefaultSort${key}`}
-                                        checked={pageFieldTabTable[key].DefaultSort}
-                                        onChange={(e) => PageField_onChange_Handler(e.target.checked, "DefaultSort", key)}>
-
-                                      </Input>
-                                    </td>
-
-                                    <td>
-                                      <Input
-
-                                        type="checkbox"
-                                        id={`ShowInListPage${key}`}
-                                        checked={pageFieldTabTable[key].ShowInListPage}
-                                        onChange={(e) => PageField_onChange_Handler(e.target.checked, "ShowInListPage", key)}>
-
-                                      </Input>
-                                    </td>
-
-                                    <td>
-                                      <Input
-
-                                        type="checkbox"
-                                        id={`ShowInDownload${key}`}
-                                        checked={pageFieldTabTable[key].ShowInDownload}
-                                        onChange={(e) => PageField_onChange_Handler(e.target.checked, "ShowInDownload", key)}>
-
-                                      </Input>
-                                    </td>
-
-                                    <td>
-                                      <Input
-
-                                        type="checkbox"
-                                        id={`DownloadDefaultSelect${key}`}
-                                        checked={pageFieldTabTable[key].DownloadDefaultSelect}
-                                        onChange={(e) => PageField_onChange_Handler(e.target.checked, "DownloadDefaultSelect", key)}>
-
-                                      </Input>
-                                    </td>
-
-                                    <td>
-                                      {(pageFieldTabTable.length === key + 1) ?
-                                        <Row className="">
-                                          <Col md={6} className=" mt-3">
-                                            {(pageFieldTabTable.length > 1) ? <>
-                                              < i className="mdi mdi-trash-can d-block text-danger font-size-20" onClick={() => {
-                                                PageField_DeleteRow_Handler(key)
-                                              }} >
-                                              </i>
-                                            </> : <Col md={6} ></Col>}
-
-                                          </Col>
-
-                                          <Col md={6} >
-                                            <Button className="btn btn-sm btn-light mt-3   align-items-sm-center text-center"
-                                              type="button"
-                                              onClick={() => { PageField_Tab_AddRow_Handler(key) }} >
-                                              <i className="dripicons-plus"></i>
-                                            </Button>
-                                          </Col>
-                                        </Row>
-                                        :
-
-                                        < i className="mdi mdi-trash-can d-block text-danger font-size-20" onClick={() => {
-                                          PageField_DeleteRow_Handler(key)
-                                        }} >
-                                        </i>
-                                      }
-                                    </td>
-
-                                  </tr>
-                                ))}
-
-
-                              </Tbody>
-                            </Table>
-                          </Col>
-                        </Row>
-
-                        {/* </CardBody> */}
-                        {/* </Card> */}
-
-                      </TabPane>
-                      <TabPane tabId="3">
-                        <Row>
-                          <Col sm="12">
-                            <CardText className="mb-0">
-                              Etsy mixtape wayfarers, ethical wes anderson tofu
-                              before they sold out mcsweeney's organic lomo retro
-                              fanny pack lo-fi farm-to-table readymade. Messenger
-                              bag gentrify pitchfork tattooed craft beer, iphone
-                              skateboard locavore carles etsy salvia banksy hoodie
-                              helvetica. DIY synth PBR banksy irony. Leggings
-                              gentrify squid 8-bit cred pitchfork. Williamsburg
-                              banh mi whatever gluten-free, carles pitchfork
-                              biodiesel fixie etsy retro mlkshk vice blog.
-                              Scenester cred you probably haven't heard of them,
-                              vinyl craft beer blog stumptown. Pitchfork
-                              sustainable tofu synth chambray yr.
-                            </CardText>
-                          </Col>
-                        </Row>
-                      </TabPane>
-                      <TabPane tabId="4">
-                        <Row>
-                          <Col sm="12">
-                            <CardText className="mb-0">
-                              Trust fund seitan letterpress, keytar raw denim
-                              keffiyeh etsy art party before they sold out master
-                              cleanse gluten-free squid scenester freegan cosby
-                              sweater. Fanny pack portland seitan DIY, art party
-                              locavore wolf cliche high life echo park Austin.
-                              Cred vinyl keffiyeh DIY salvia PBR, banh mi before
-                              they sold out farm-to-table VHS viral locavore cosby
-                              sweater. Lomo wolf viral, mustache readymade
-                              thundercats keffiyeh craft beer marfa ethical. Wolf
-                              salvia freegan, sartorial keffiyeh echo park vegan.
-                            </CardText>
-                          </Col>
-                        </Row>
-                      </TabPane>
-                    </TabContent>
-                  </CardBody>
-                </Card>
-              </Col>
-            </AvForm>
-          </Container>
-        </div>
-      </React.Fragment>
+                    </TabPane>
+                    <TabPane tabId="3">
+                      <Row>
+                        <Col sm="12">
+                          <CardText className="mb-0">
+                            Etsy mixtape wayfarers, ethical wes anderson tofu
+                            before they sold out mcsweeney's organic lomo retro
+                            fanny pack lo-fi farm-to-table readymade. Messenger
+                            bag gentrify pitchfork tattooed craft beer, iphone
+                            skateboard locavore carles etsy salvia banksy hoodie
+                            helvetica. DIY synth PBR banksy irony. Leggings
+                            gentrify squid 8-bit cred pitchfork. Williamsburg
+                            banh mi whatever gluten-free, carles pitchfork
+                            biodiesel fixie etsy retro mlkshk vice blog.
+                            Scenester cred you probably haven't heard of them,
+                            vinyl craft beer blog stumptown. Pitchfork
+                            sustainable tofu synth chambray yr.
+                          </CardText>
+                        </Col>
+                      </Row>
+                    </TabPane>
+                    <TabPane tabId="4">
+                      <Row>
+                        <Col sm="12">
+                          <CardText className="mb-0">
+                            Trust fund seitan letterpress, keytar raw denim
+                            keffiyeh etsy art party before they sold out master
+                            cleanse gluten-free squid scenester freegan cosby
+                            sweater. Fanny pack portland seitan DIY, art party
+                            locavore wolf cliche high life echo park Austin.
+                            Cred vinyl keffiyeh DIY salvia PBR, banh mi before
+                            they sold out farm-to-table VHS viral locavore cosby
+                            sweater. Lomo wolf viral, mustache readymade
+                            thundercats keffiyeh craft beer marfa ethical. Wolf
+                            salvia freegan, sartorial keffiyeh echo park vegan.
+                          </CardText>
+                        </Col>
+                      </Row>
+                    </TabPane>
+                  </TabContent>
+                </CardBody>
+              </Card>
+            </Col>
+          </AvForm>
+        </Container>
+      </div>
+      </React.Fragment >
     )
   }
   else {
-    return (
-      <React.Fragment></React.Fragment>
-    )
-  }
+  return (
+    <React.Fragment></React.Fragment>
+  )
+}
 }
 export default PageMaster;

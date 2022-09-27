@@ -55,13 +55,14 @@ function MRPTab(props) {
     }
 
 
-    const addRowsHandler = (data) => {
+    const addRowsHandler = (e) => {
+        
         debugger
         const val = {
-            Divisionid: division.value,
+            Division: division.value,
             DivisionName: division.label,
             PartyName: partyName.label,
-            partyid: partyName.value,
+            Party: partyName.value,
             EffectiveDate: effectiveDate,
             MRP: MRP,
             CreatedBy: 1,
@@ -86,13 +87,7 @@ function MRPTab(props) {
         else {
             alert("Please Enter value")
         }
-
-        const totalTableData = props.tableData.length;
-        val.id = totalTableData + 1;
-        const updatedTableData = [...props.tableData];
-        updatedTableData.push(val);
-        props.func(updatedTableData)
-        clearState();
+        
     };
     const clearState = () => {
         setDivision('');

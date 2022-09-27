@@ -2,8 +2,10 @@ import React, { useState } from 'react';
 import { Button, Table, } from 'reactstrap';
 import { Tbody, Thead } from 'react-super-responsive-table';
 
-function MarginTable(props) {
+function AddressDetailsTable(props) {
+
     const ondeleteHandeler = (ele) => {
+
         if (!(ele === 0)) {
             var fil = props.tableData.filter((i) => {
                 return !(i.id === ele);
@@ -13,14 +15,16 @@ function MarginTable(props) {
     };
 
     const tableRows = props.tableData.map((info) => {
-        debugger
+        
         return (
             <tr>
                 {/* <td>{info.id}</td> */}
-                <td>{info.PriceListName}</td>
-                <td>{info.PartyName}</td>
-                <td>{info.EffectiveDate}</td>
-                <td>{info.Margin}</td>
+                <td>{info.AddressTypeName}</td>
+                <td>{info.Address}</td>
+                <td>{info.FSSAINo}</td>
+                <td>{info.FSSAIExipry}</td>
+                <td>{info.PIN}</td>
+                < td>{`${info.IsDefault}`}</td>
                 <td>
                     <Button
                         className="badge badge-soft-danger font-size-12 btn btn-danger waves-effect waves-light w-xxs border border-light"
@@ -43,10 +47,12 @@ function MarginTable(props) {
                     <Table className="table table-bordered table-hover">
                         <Thead>
                             <tr>
-                                <th className="col col-sm-3">Price List</th>
-                                <th className="col col-sm-3">Party Name</th>
-                                <th className="col col-sm-3">EffectiveDate</th>
-                                <th className="col col-sm-3">Margin</th>
+                                <th className="col col-sm-3">Address Type</th>
+                                <th className="col col-sm-3">Address</th>
+                                <th className="col col-sm-3">FSSAINo</th>
+                                <th className="col col-sm-3">FSSAIExipry</th>
+                                <th className="col col-sm-3">PIN</th>
+                                <th className="col col-sm-3">IsDefault</th>
                                 <th className="col col-sm-3">{"Action"}</th>
                             </tr>
                         </Thead>
@@ -58,4 +64,4 @@ function MarginTable(props) {
     );
 }
 
-export default MarginTable;
+export default AddressDetailsTable;

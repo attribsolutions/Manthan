@@ -304,6 +304,9 @@ export const edit_PriceList = (id) =>get(`${url. PRICE_LIST}/${id}`) // edit api
 export const update_PriceList = (data, id) =>put(`${url. PRICE_LIST}/${id}`, data)// update
 
 
+// MRP Master 
+export const Post_MRPMaster_API = (data) => post(url.MRP_MASTER_LIST, data)// post api
+
 export {  
   getLoggedInUser,
   isUserAuthenticated,

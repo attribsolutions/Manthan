@@ -150,8 +150,8 @@ const PartyList = () => {
             sort: true,
         },
         {
-            text: "Pricelist",
-            dataField: "Pricelist",
+            text: "PriceList",
+            dataField: "PriceListName",
             sort: true,
         },
         {
@@ -159,11 +159,11 @@ const PartyList = () => {
             dataField: "PartyTypeName",
             sort: true,
         },
-        {
-            text: "Address",
-            dataField: "Address",
-            sort: true,
-        },
+        // {
+        //     text: "Party Address",
+        //     dataField: "PartyAddress",
+        //     sort: true,
+        // },
             // For Edit, Delete ,and View Button Common Code function
             listPageCommonButtonFunction({
                 dispatchHook: dispatch,
