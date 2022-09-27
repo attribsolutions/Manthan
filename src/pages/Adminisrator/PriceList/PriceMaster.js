@@ -39,7 +39,7 @@ import { getPartyTypes } from "../../../store/Administrator/PartyRedux/action";
 
 
 
-const PriceListMaster = (props) => {
+const PriceMaster = (props) => {
     const dispatch = useDispatch();
     const history = useHistory();
 
@@ -70,8 +70,8 @@ const PriceListMaster = (props) => {
         PriceList,
         RoleAccessModifiedinSingleArray
     } = useSelector((state) => ({
-        PostAPIResponse: state.PriceListReducer.PostData,
-        deleteAPIResponse: state.PriceListReducer.deletePriceMsg,
+        PostAPIResponse: state.PriceListReducer.postMsg,
+        deleteAPIResponse: state.PriceListReducer.deleteMsg,
         PartyTypes: state.PartyMasterReducer.PartyTypes,
         PriceList: state.ItemMastersReducer.PriceList,
         priceListByPartyType: state.PriceListReducer.priceListByPartyType,
@@ -462,7 +462,7 @@ const PriceListMaster = (props) => {
 }
 
 
-export default PriceListMaster
+export default PriceMaster
 
 
 
