@@ -37,7 +37,7 @@ const CompanyGroupList = (props) => {
       TableListData: state.CompanyGroupReducer.CompanyGroupList,
       editData: state.CompanyGroupReducer.editData,
       updateMessage: state.CompanyGroupReducer.updateMessage,
-      deleteMessage: state.CompanyGroupReducer.deleteMessage,
+       deleteMessage: state.CompanyGroupReducer.deleteMessage,
       RoleAccessModifiedinSingleArray: state.Login.RoleAccessUpdateData,
       PostAPIResponse: state.CompanyGroupReducer.PostDataMessage,
     })
