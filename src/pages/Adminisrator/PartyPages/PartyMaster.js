@@ -670,37 +670,7 @@ const PartyMaster = (props) => {
                                                                         </Row>
                                                                     </FormGroup>
                                                                 </Col>
-                                                                {/* <FormGroup className="mb-1 col col-sm-6">
-                                                                    <Row className="justify-content-md-left">
-
-                                                                        <Label
-                                                                            htmlFor="horizontal-firstname-input"
-                                                                            className="col-sm-4 col-form-label mt-4"
-                                                                        >
-                                                                            MkUpMkDn{" "}
-                                                                        </Label>
-                                                                        <Col md={5} style={{ marginTop: "15px" }}>
-                                                                            <div
-                                                                                className="form-check form-switch form-switch-md mb-1"
-                                                                                dir="ltr"
-                                                                            >
-                                                                                <AvInput
-                                                                                    type="checkbox"
-                                                                                    className="form-check-input mt-4"
-                                                                                    id="customSwitchsizemd"
-                                                                                    // checked={EditData.MkUpMkDn}
-                                                                                    defaultChecked={EditData.MkUpMkDn}
-                                                                                    // defaultChecked={false}
-                                                                                    name="MkUpMkDn"
-                                                                                />
-                                                                                <label
-                                                                                    className="form-check-label"
-                                                                                    htmlFor="customSwitchsizemd"
-                                                                                ></label>
-                                                                            </div>
-                                                                        </Col>
-                                                                    </Row>
-                                                                </FormGroup> */}
+                                                               
                                                             </Row>
                                                             <Row>
                                                                 <Col md="3">
