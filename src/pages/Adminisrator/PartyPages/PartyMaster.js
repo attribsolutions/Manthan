@@ -19,7 +19,6 @@ import {
     Table,
     TabPane,
 } from "reactstrap"
-import Flatpickr from "react-flatpickr"
 import { Link, useHistory } from "react-router-dom"
 import { useDispatch, useSelector } from "react-redux";
 import classnames from "classnames"
@@ -27,10 +26,6 @@ import Breadcrumb from "../../../components/Common/Breadcrumb";
 import { AvField, AvForm, AvInput } from "availity-reactstrap-validation"
 import Select from "react-select";
 import { getPriceListData } from "../../../store/Administrator/PriceList/action";
-import {
-    postItemData,
-    updateItemID
-} from "../../../store/Administrator/ItemsRedux/action";
 import { getState } from "../../../store/Administrator/M_EmployeeRedux/action"
 import { editPartyIDSuccess, getAddressTypes, getCompany, getDistrictOnState, getPartyTypes, getPriceList, postPartyData, postPartyDataSuccess, updatePartyID } from "../../../store/Administrator/PartyRedux/action"
 import { AlertState, BreadcrumbShow } from "../../../store/actions"
@@ -50,19 +45,14 @@ const PartyMaster = (props) => {
     const [EditData, setEditData] = useState([]);
     const [pageMode, setPageMode] = useState("save");
     const [userPageAccessState, setUserPageAccessState] = useState(11);
-    const [selectedFiles, setselectedFiles] = useState([])
-    const [DOB_Date_Select, setDOB_Date_Select] = useState("");
     const [activeTab1, setactiveTab1] = useState("1")
     const [state_DropDown_select, setState_DropDown_select] = useState("");
-    const [FSSAIExipry_Date_Select, setFSSAIExipry_Date_Select] = useState("");
     const [district_dropdown_Select, setDistrict_dropdown_Select] = useState("");
     const [companyList_dropdown_Select, setCompanyList_dropdown_Select] = useState("");
     const [partyType_dropdown_Select, setPartyType_dropdown_Select] = useState("");
     const [PriceList_dropdown_Select, setPriceList_dropdown_Select] = useState("");
     const [MKupMkdown_DropdownSelect, setMKupMkdown_DropdownSelect] = useState("");
-    const [AddressType_DropdownSelect, setAddressType_DropdownSelect] = useState("");
     const [dropOpen, setDropOpen] = useState(false);
-    const [priceList, setParicelist] = useState({});
     const [AddressDetailsMaster, setAddressDetailsMaster] = useState([]);
     const toggle1 = tab => {
         if (activeTab1 !== tab) {
@@ -76,8 +66,6 @@ const PartyMaster = (props) => {
         DistrictOnState,
         Company,
         PartyTypes,
-        PriceList,
-        AddressTypes,
         priceListByPartyType,
         RoleAccessModifiedinSingleArray
     } = useSelector((state) => ({
@@ -144,21 +132,17 @@ const PartyMaster = (props) => {
 
         if (!(userPageAccessState === '')) { document.getElementById("txtName").focus(); }
         if (!(editDataGatingFromList === undefined)) {
+            debugger
             setEditData(editDataGatingFromList);
             dispatch(BreadcrumbShow(editDataGatingFromList.Name))
             setPageMode(pageModeProps);
-            setFSSAIExipry_Date_Select(editDataGatingFromList.FSSAIExipry)
 
-            setDistrict_dropdown_Select({
-                value: editDataGatingFromList.District_id,
-                label: editDataGatingFromList.DistrictName
-            })
-
+            
             setCompanyList_dropdown_Select({
-                value: editDataGatingFromList.Company_id,
+                value: editDataGatingFromList.Company,
                 label: editDataGatingFromList.CompanyName
             })
-
+            
             setPartyType_dropdown_Select({
                 value: editDataGatingFromList.PartyType_id,
                 label: editDataGatingFromList.PartyTypeName
@@ -168,14 +152,15 @@ const PartyMaster = (props) => {
                 label: editDataGatingFromList.PriceListName
             })
             setState_DropDown_select({
-                value: editDataGatingFromList.State_id,
+                value: editDataGatingFromList.State,
                 label: editDataGatingFromList.StateName
             })
-
-            setAddressType_DropdownSelect({
-                value: editDataGatingFromList.Address_id,
-                label: editDataGatingFromList.AddressName
+            setDistrict_dropdown_Select({
+                value: editDataGatingFromList.District,
+                label: editDataGatingFromList.DistrictName
             })
+
+          
             setAddressDetailsMaster(editDataGatingFromList.PartyAddress)
 
             dispatch(editPartyIDSuccess({ Status: false }))
@@ -195,8 +180,6 @@ const PartyMaster = (props) => {
             setPriceList_dropdown_Select('')
             setDistrict_dropdown_Select('')
             setState_DropDown_select('')
-            setFSSAIExipry_Date_Select('')
-            setAddressType_DropdownSelect('')
             setMKupMkdown_DropdownSelect('')
             if (pageMode === "dropdownAdd") {
                 dispatch(AlertState({
@@ -247,11 +230,6 @@ const PartyMaster = (props) => {
         label: Data.Name
     }));
 
-    const AddressType_DropdownOption = AddressTypes.map((d) => ({
-        value: d.id,
-        label: d.Name,
-    }));
-
     function handllerState(e) {
         setState_DropDown_select(e)
         dispatch(getDistrictOnState(e.value))
@@ -273,17 +251,11 @@ const PartyMaster = (props) => {
         setPartyType_dropdown_Select(e)
         // dispatch(GetPartyTypeByDivisionTypeID(e.value))
         // dispatch(GetCompanyByDivisionTypeID(e.value))
-        setPriceList_dropdown_Select({label:''})
+        setPriceList_dropdown_Select({ label: '' })
         setCompanyList_dropdown_Select('')
         dispatch(getPriceListData(e.value))
 
     }
-
-    // for AddressType dropdown
-    const AddressTypes_DropdownSelectHandller = (e) => {
-        setAddressType_DropdownSelect(e);
-    };
-
 
     //for MKupMKdown dropdown
     const MKupMkdown_DropdownSelectHandller = (e) => {
@@ -293,9 +265,6 @@ const PartyMaster = (props) => {
     const test1 = () => {
         return (
             <>
-
-
-
                 <Modal
                     isOpen={dropOpen}
                     toggle={() => { setDropOpen(!dropOpen) }}
@@ -342,6 +311,7 @@ const PartyMaster = (props) => {
             Taluka: 0,
             City: 0,
             GSTIN: values.GSTIN,
+            MKupMkdown:MKupMkdown_DropdownSelect.value,
             isActive: values.isActive,
             IsDivision: false,
             CreatedBy: 1,
@@ -350,15 +320,15 @@ const PartyMaster = (props) => {
             UpdatedOn: "2022-06-24T11:16:53.330888Z",
             PartyAddress: AddressDetailsMaster,
 
-            
         });
 
         if (pageMode === 'edit') {
             dispatch(updatePartyID(jsonBody, EditData.id));
+            console.log("update jsonBody", jsonBody)
         }
         else {
             dispatch(postPartyData(jsonBody));
-            console.log("jsonBody",jsonBody)
+            console.log("post jsonBody", jsonBody)
         }
     };
 
@@ -747,7 +717,7 @@ const PartyMaster = (props) => {
                                                 </TabPane>
 
                                                 <TabPane tabId="3">
-                                                   
+
                                                 </TabPane>
                                             </TabContent>
                                         </CardBody>

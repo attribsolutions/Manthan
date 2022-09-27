@@ -62,7 +62,7 @@ const MRPMaster = (props) => {
         Division: state.ItemMastersReducer.Division,
         RoleAccessModifiedinSingleArray: state.Login.RoleAccessUpdateData,
     }));
-
+    console.log(pages)
     // userAccess useEffect
     useEffect(() => {
         let userAcc = undefined
@@ -168,22 +168,27 @@ const MRPMaster = (props) => {
         },
     ]
 
-    const ItemData = pages.map((index) => ({
-        Name: index.Name,
-        MRP: 1234
-    }))
+    // const ItemData = pages.map((index) => ({
+    //     Item: index.id,
+        
+    // }))
 
     //'Save' And 'Update' Button Handller
     const handleValidSubmit = (event, values) => {
+        const ItemData = pages.map((index) => {return index.id })
         debugger
-        const jsonBody = JSON.stringify({
+        const jsonBody = JSON.stringify([{
             Division: division_dropdown_Select.value,
             Party: party_dropdown_Select.value,
             EffectiveDate: EffectiveDate,
-            "CreatedBy": 1,
-            "UpdatedBy": 1,
-            Items: ItemData
-        });
+            Company: 1,
+            CreatedBy: 1,
+            UpdatedBy: 1,
+            Item:ItemData
+
+
+            // MRP:MRP.value
+        }]);
 
         dispatch(postMRPMasterData(jsonBody));
         console.log("jsonBody", jsonBody)
