@@ -63,9 +63,13 @@ import PageMasterTab from "../pages/Adminisrator/Page-Pages/PageMasterTab";
 
 // import PartyMasterTab from "../pages/Adminisrator/PartyTab/PartyMasterTab";
 
-import PriceListMaster from "../pages/Adminisrator/PriceList/PriceListMaster";
+import PriceMaster from "../pages/Adminisrator/PriceList/PriceMaster";
+
+import PriceList from "../pages/Adminisrator/PriceList/PriceList";
+
 import MRPMaster from "../pages/Adminisrator/MRPMaster/MRPMaster";
 import MarginMaster from "../pages/Adminisrator/MarginMaster/MarginMaster";
+
 
 
 
@@ -176,10 +180,17 @@ const userRoutes = [
   { path: "/CompanyGroupList", component: CompanyGroupList },
 
 
+  
+
+  // { path: "/PartyMasterTab", component: PartyMasterTab },
+ 
+  
+  { path: "/PriceList", component: PriceList},
   // { path: "/PriceList", component: PartyMasterTab },
-  { path: "/PriceMaster", component: PriceListMaster },
+  { path: "/PriceMaster", component: PriceMaster },
   { path: "/MRPMaster", component: MRPMaster },
   { path: "/MarginMaster", component: MarginMaster },
+
 
 
 
