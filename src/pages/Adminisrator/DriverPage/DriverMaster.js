@@ -24,7 +24,75 @@ import Flatpickr from "react-flatpickr"
 
 // import { actionChannel } from "redux-saga/effects";
 
+const formValid = ({ isError, required, hasValid },func) => {
 
+    let isValid = false;
+    Object.values(isError).forEach(val => {
+
+        if ((val.length >= 0)) {
+            isValid = false
+        } else {
+            isValid = true
+        }
+    });
+
+    Object.keys(required).forEach((lab) => {
+
+        if ((isError[lab].length >= 0)) {
+            isError[lab] = hasValid[lab].inValidMsg
+            isValid = false
+            func({
+                isError,
+                hasValid,
+                required
+            })
+        } else {
+            isValid = true
+        }
+    });
+
+
+    return isValid
+};
+
+
+const formValChange = (e , state,setFunc) => {
+
+    e.preventDefault();
+    const { name, value } = e.target;
+    let isError = { ...state.isError };
+    let hasValid = { ...state.hasValid };
+
+    const regExp = RegExp(hasValid[name].regExp)
+    isError[name] = regExp.test(value)
+        ? ""
+        : hasValid[name].inValidMsg
+
+    // switch (name) {
+    //     case "name":
+    //         isError.name =
+    //             value.length < 4 ? "Atleast 4 characaters required" : "";
+    //         break;
+    //     case "address":
+    //         // isError.address =[isvalid.address.FieldValidationName].test(value)
+    //         isError.address = address.test(value)
+    //             ? ""
+    //             : "Email address is invalid";
+    //         break;
+    //     case "uid":
+    //         isError.uid =
+    //             value.length < 12 ? "Atleast 6 characaters required" : "";
+    //         break;
+    //     default:
+    //         break;
+    // }
+    setFunc({
+        isError,
+        hasValid,
+        [name]: value
+
+    })
+};
 
 const DriverMaster = (props) => {
 
@@ -81,7 +149,7 @@ const DriverMaster = (props) => {
     // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
     useEffect(() => {
 
-        if (!(userPageAccessState === '')) { document.getElementById("txtName").focus(); }
+        // if (!(userPageAccessState === '')) { document.getElementById("txtName").focus(); }
         if (!(editDataGatingFromList === undefined)) {
 
             setEditData(editDataGatingFromList);
@@ -145,58 +213,109 @@ const DriverMaster = (props) => {
         }
     };
 
+    const PageFieldMaster = [
+        {
+            ControlID: 2,
+            ControlType: 2,
+            ControlTypeName: "Dropdown",
+            FieldLabel: "demo data List",
+            IsCompulsory: true,
+            DefaultSort: true,
+            FieldValidation: 4,
+            FieldValidationName: "Mobile",
+            ListPageSeq: 1,
+            ShowInListPage: true,
+            ShowInDownload: true,
+            DownloadDefaultSelect: false
+        },
+        {
+            ControlID: 1,
+            ControlType: 1,
+            ControlTypeName: "TextBox",
+            FieldLabel: "demo data List",
+            IsCompulsory: true,
+            DefaultSort: true,
+            FieldValidation: 1,
+            FieldValidationName: "Length(50)",
+            ListPageSeq: 1,
+            ShowInListPage: true,
+            ShowInDownload: false,
+            DownloadDefaultSelect: false
+        },
+        {
+            ControlID: 2,
+            ControlType: 2,
+            ControlTypeName: "Dropdown",
+            FieldLabel: "demo data List",
+            IsCompulsory: true,
+            DefaultSort: true,
+            FieldValidation: 4,
+            FieldValidationName: "MobileNo",
+            ListPageSeq: 1,
+            ShowInListPage: true,
+            ShowInDownload: true,
+            DownloadDefaultSelect: true
+        },
+
+    ]
+
+
     const [state, setState] = useState({
-        name: '',
-        address: '',
-        uid: '',
+        value: {},
         isError: {
             name: '',
-        address: '',
-        uid: '',
+            address: '',
+            uid: '',
+        },
+        hasValid: {
+            name: {
+                regExp: /^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[A-Za-z]+$/,
+                inValidMsg: "Name  is invalid",
+            },
+            address: {
+                regExp: /^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[A-Za-z]+$/,
+                inValidMsg: "Email address is invalid",
+            },
+
+            uid: {
+                regExp: /^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[A-Za-z]+$/,
+                inValidMsg: "UID  is invalid",
+            },
+        },
+        required: {
+            name: true,
+            address: true,
+            uid: false,
         }
     }
     )
+    // const [hasField, setHasField] = useState({
+    //     name: {},
+    //     address: {},
+    //     uid: {},
+    // }
+
+    // )
 
 
-    const formValChange = e => {
-        debugger
-        e.preventDefault();
-        const { name, value } = e.target;
-        let isError = { ...state.isError };
-        switch (name) {
-            case "name":
-                isError.name =
-                    value.length < 4 ? "Atleast 4 characaters required" : "";
-                break;
-            case "adress":
-                isError.address = regExp.test(value)
-                    ? ""
-                    : "Email address is invalid";
-                break;
-            case "uid":
-                isError.uid =
-                    value.length < 12 ? "Atleast 6 characaters required" : "";
-                break;
-            default:
-                break;
-        }
-        setState({
-            isError,
-            [name]: value
-        })
-    };
+
    
+
+
+
     
+
+
     const onSubmit = e => {
-        
+
         e.preventDefault();
-        if (formValid(state)) {
-            console.log(state)
+        if (formValid(state,setState)) {
+            console.log("isvalid", state)
         } else {
             console.log("Form is invalid!");
         }
     };
-
+    console.log(state)
     const { isError } = state;
 
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
@@ -228,21 +347,6 @@ const DriverMaster = (props) => {
                                             <Card>
                                                 <CardBody style={{ backgroundColor: "whitesmoke" }}>
                                                     <Row>
-                                                        {/* <FormGroup className="mb-2 col col-sm-4 ">
-                                                            <Label htmlFor="validationCustom01">Name </Label>
-                                                             <AvField
-                                                                name="Name"
-                                                                id="txtName"
-                                                                value={EditData.Name}
-                                                                type="text"
-                                                                placeholder="Please Enter Name"
-                                                                autoComplete='off'
-                                                                validate={{
-                                                                    required: { value: true, errorMessage: 'Please Enter Name ' },
-                                                                }}
-                                                                onChange={(e) => { dispatch(BreadcrumbShow(e.target.value)) }}
-                                                            /> 
-                                                        </FormGroup> */}
                                                         <FormGroup className="mb-2 col col-sm-4 ">
                                                             <Label htmlFor="validationCustom01">Name </Label>
                                                             <Input
@@ -251,7 +355,7 @@ const DriverMaster = (props) => {
                                                                 name="name"
                                                                 placeholder="Please Enter Name"
                                                                 onChange={(e) => {
-                                                                    formValChange(e);
+                                                                    formValChange(e,setState);
                                                                     dispatch(BreadcrumbShow(e.target.value))
                                                                 }}
 
@@ -290,37 +394,35 @@ const DriverMaster = (props) => {
                                                                 <Input
                                                                     type="text"
                                                                     value={EditData.Address}
-                                                                    className={isError.name.length > 0 ? "is-invalid form-control" : "form-control"}
+                                                                    className={isError.address.length > 0 ? "is-invalid form-control" : "form-control"}
                                                                     name="address"
                                                                     placeholder="Please Enter Address"
                                                                     autoComplete='off'
-                                                                    onChange={formValChange}
+                                                                    onChange={(e) => { formValChange(e,setState) }}
                                                                 />
-                                                                {isError.name.length > 0 && (
-                                                                    <span className="invalid-feedback">{isError.Address}</span>
+                                                                {isError.address.length > 0 && (
+                                                                    <span className="invalid-feedback">{isError.address}</span>
                                                                 )}
                                                             </FormGroup>
                                                         </Row>
 
                                                         <Row>
-                                                        <FormGroup className="mb-2 col col-sm-4 ">
+                                                            <FormGroup className="mb-2 col col-sm-4 ">
                                                                 <Label htmlFor="validationCustom01">UID </Label>
                                                                 <Input
-                                                                   name="uid"
-                                                                   value={EditData.UID}
-                                                                   type="text"
-                                                                   placeholder="Please Enter UID"
-                                                                   autoComplete='off'
-                                                                   validate={{
-                                                                       required: { value: true, errorMessage: 'Please Enter UID ' },
-                                                                   }}
-                                                                    onChange={formValChange}
+                                                                    name="uid"
+                                                                    value={EditData.UID}
+                                                                    type="text"
+                                                                    placeholder="Please Enter UID"
+                                                                    autoComplete='off'
+                                                                    className={isError.uid.length > 0 ? "is-invalid form-control" : "form-control"}
+                                                                    onChange={(e) => { formValChange(e,setState) }}
                                                                 />
                                                                 {isError.name.length > 0 && (
-                                                                    <span className="invalid-feedback">{isError.Address}</span>
+                                                                    <span className="invalid-feedback">{isError.uid}</span>
                                                                 )}
                                                             </FormGroup>
-                                                            
+
                                                         </Row>
                                                         <FormGroup>
                                                             <Row>
@@ -380,27 +482,15 @@ const DriverMaster = (props) => {
 export default DriverMaster
 
 
-const formValid = ({ isError, ...rest }) => {
-    debugger
-    let isValid = false;
-    Object.values(isError).forEach(val => {
-        if (val.length > 0) {
-            isValid = false
-        } else {
-            isValid = true
-        }
-    });
-    Object.values(rest).forEach(val => {
-        if (val === null) {
-            isValid = false
-        } else {
-            isValid = true
-        }
-    });
-    return isValid;
-};
 
-const regExp = RegExp(
+
+const Email = RegExp(
     /^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[A-Za-z]+$/
 )
 
+const Mobile = RegExp(
+    /^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[A-Za-z]+$/
+)
+const NotNull = RegExp(
+    /^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[A-Za-z]+$/
+)
