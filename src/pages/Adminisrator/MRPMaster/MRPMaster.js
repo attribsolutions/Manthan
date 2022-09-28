@@ -23,15 +23,11 @@ import paginationFactory, {
     PaginationProvider,
 } from "react-bootstrap-table2-paginator";
 import ToolkitProvider, { Search } from "react-bootstrap-table2-toolkit";
-import {
-    getPriceListData,
-    postPriceListDataSuccess
-} from "../../../store/Administrator/PriceList/action";
-import { getPartyTypes } from "../../../store/Administrator/PartyRedux/action";
 import { getItemList, get_Division_ForDropDown, get_Party_ForDropDown } from "../../../store/Administrator/ItemsRedux/action";
 import BootstrapTable from "react-bootstrap-table-next";
-import { AvField, AvForm } from "availity-reactstrap-validation";
+import { AvForm } from "availity-reactstrap-validation";
 import { postMRPMasterData, postMRPMasterDataSuccess } from "../../../store/Administrator/MRPMasterRedux/action";
+import { getCategorylist } from "../../../store/Administrator/CategoryRedux/action";
 
 const MRPMaster = (props) => {
     const dispatch = useDispatch();
@@ -42,27 +38,27 @@ const MRPMaster = (props) => {
 
     //SetState  Edit data Geting From Modules List component
     const [pageMode, setPageMode] = useState("save");
-    // const [partyTypeSelect, setPartyTypeSelect] = useState({ value: '' });
     const [userPageAccessState, setUserPageAccessState] = useState("");
     const [party_dropdown_Select, setPartyType_dropdown_Select] = useState("");
     const [division_dropdown_Select, setDivision_dropdown_Select] = useState("");
     const [EffectiveDate, setEffectiveDate] = useState('');
-    const [MRP, setMRP] = useState('');
+    const [MRP, setMRP] = useState();
 
     //Access redux store Data /  'save_ModuleSuccess' action data
     const { PostAPIResponse,
-        pages,
+        TableData,
         Party,
         Division,
         RoleAccessModifiedinSingleArray
     } = useSelector((state) => ({
-        pages: state.ItemMastersReducer.pages,
+        TableData: state.ItemMastersReducer.pages,
+        // TableData: state.CategoryMasterReducer.CategoryListData,
         PostAPIResponse: state.PriceListReducer.PostData,
         Party: state.ItemMastersReducer.Party,
         Division: state.ItemMastersReducer.Division,
         RoleAccessModifiedinSingleArray: state.Login.RoleAccessUpdateData,
     }));
-    console.log(pages)
+    console.log("TableData", TableData)
     // userAccess useEffect
     useEffect(() => {
         let userAcc = undefined
@@ -90,6 +86,7 @@ const MRPMaster = (props) => {
         dispatch(get_Party_ForDropDown());
         dispatch(get_Division_ForDropDown());
         dispatch(getItemList());
+        // dispatch(getCategorylist());
     }, [dispatch]);
 
     const PartyDropdown_Options = Party.map((Data) => ({
@@ -114,7 +111,14 @@ const MRPMaster = (props) => {
     const EffectiveDateHandler = (e, date) => {
         setEffectiveDate(date)
     }
+
+    const MRPHandler = (e, cellContent,user,abd) => {
+      user["MRP"]=e.target.value
+        // setMRP(event.target.value)
+    }
+
     useEffect(() => {
+
         if ((PostAPIResponse.Status === true) && (PostAPIResponse.StatusCode === 200)) {
             // setpartyType_dropdown_Select('')
             dispatch(postMRPMasterDataSuccess({ Status: false }))
@@ -131,7 +135,7 @@ const MRPMaster = (props) => {
 
     const pageOptions = {
         sizePerPage: 10,
-        totalSize: pages.length,
+        totalSize: TableData.length,
         custom: true,
     };
 
@@ -147,48 +151,46 @@ const MRPMaster = (props) => {
             sort: true,
         },
         {
+
             text: "MRP ",
             dataField: "",
             sort: true,
-            formatter: (cellContent, user) => (
+            formatter: (cellContent, user, abd) => (
                 <>
-                    <div class="d-flex gap-3" style={{ display: 'flex', justifyContent: 'center' }} >
+                    <div style={{ justifyContent: 'center' }} >
                         <Col>
-                            <FormGroup className="mb-3 col col-sm-4 ">
+                            <FormGroup className=" col col-sm-4 ">
                                 <Input
                                     type="text"
                                     defaultValue={MRP}
-                                    className="col col-sm text-center"></Input>
+                                    className="col col-sm text-center"
+                                    onChange={(e) => MRPHandler(e, cellContent, user, abd)}
+                                />
                             </FormGroup>
                         </Col>
-
                     </div>
                 </>
             ),
         },
     ]
 
-    // const ItemData = pages.map((index) => ({
-    //     Item: index.id,
-        
-    // }))
 
     //'Save' And 'Update' Button Handller
     const handleValidSubmit = (event, values) => {
-        const ItemData = pages.map((index) => {return index.id })
-        debugger
-        const jsonBody = JSON.stringify([{
+
+        const ItemData = TableData.map((index) => ({
             Division: division_dropdown_Select.value,
             Party: party_dropdown_Select.value,
             EffectiveDate: EffectiveDate,
             Company: 1,
             CreatedBy: 1,
             UpdatedBy: 1,
-            Item:ItemData
+            Item: index.id,
+            MRP:index.MRP 
+        }))
 
-
-            // MRP:MRP.value
-        }]);
+        console.log("MRP", MRP)
+        const jsonBody = JSON.stringify(ItemData)
 
         dispatch(postMRPMasterData(jsonBody));
         console.log("jsonBody", jsonBody)
@@ -298,7 +300,7 @@ const MRPMaster = (props) => {
                         {({ paginationProps, paginationTableProps }) => (
                             <ToolkitProvider
                                 keyField="id"
-                                data={pages}
+                                data={TableData}
                                 columns={pagesListColumns}
                                 search
                             >
