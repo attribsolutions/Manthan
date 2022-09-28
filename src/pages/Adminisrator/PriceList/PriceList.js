@@ -9,7 +9,7 @@ import ToolkitProvider, { Search } from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 import { useSelector, useDispatch } from "react-redux";
 import "../../../assets/scss/CustomeTable/datatables.scss";
-import PriceListMaster from "./PriceMaster";
+import PriceMaster from "./PriceMaster";
 import { MetaTags } from "react-meta-tags";
 import { useHistory } from "react-router-dom";
 import {
@@ -18,7 +18,8 @@ import {
     postPriceListDataSuccess,
     delete_PriceList,
     editPriceList,
-    updatePriceListSuccess
+    updatePriceListSuccess,
+    getPriceListPage
     
 } from "../../../store/Administrator/PriceList/action";
 import { AlertState } from "../../../store/actions";
@@ -26,7 +27,7 @@ import { listPageCommonButtonFunction }
 from "../../../components/Common/CmponentRelatedCommonFile/listPageCommonButtons";
 
 const PriceList = (props) => {
-
+debugger
   const dispatch = useDispatch();
   const history = useHistory()
 
@@ -35,12 +36,12 @@ const PriceList = (props) => {
 
   const { TableListData, editData, updateMessage, deleteMessage, RoleAccessModifiedinSingleArray,PostAPIResponse } = useSelector(
     (state) => ({
-      TableListData: state.PriceListReducer.priceListByPartyType,
+      TableListData: state.PriceListReducer.priceList,
       editData: state.PriceListReducer.editData,
       updateMessage: state.PriceListReducer.updateMessage,
-      deleteMessage: state.PriceListReducer.deleteMessage,
+      deleteMessage: state.PriceListReducer.deleteMsg,
       RoleAccessModifiedinSingleArray: state.Login.RoleAccessUpdateData,
-      PostAPIResponse: state.PriceListReducer.PostDataMessage,
+      PostAPIResponse: state.PriceListReducer.postMsg,
     })
   );
 console.log("TableListData",TableListData)
@@ -56,7 +57,7 @@ console.log("TableListData",TableListData)
 
   //  This UseEffect => Featch Modules List data  First Rendering
   useEffect(() => {
-    dispatch(getPriceListData());
+    dispatch(getPriceListPage());
   }, []);
 
   // This UseEffect => UpadateModal Success/Unsucces  Show and Hide Control Alert_modal
@@ -162,12 +163,28 @@ console.log("TableListData",TableListData)
 
   const pagesListColumns = [
     {
-      text: "party type",
-      dataField: "partytype",
+      text: "Name",
+      dataField: "Name",
       sort: true,
     },
    
+    {
+      text: "PLPartyTypeName",
+      dataField: "PLPartyTypeName",
+      sort: true,
+    },
+    {
+      text: "CompanyName",
+      dataField: "CompanyName",
+      sort: true,
+    },
     
+    {
+      text:"MkUpMkDn",
+      dataField: "MkUpMkDn",
+      sort: true,
+    },
+
     // For Edit, Delete ,and View Button Common Code function
     listPageCommonButtonFunction({
       dispatchHook: dispatch,
@@ -204,7 +221,7 @@ console.log("TableListData",TableListData)
                       SearchProps={toolkitProps.searchProps}
                       breadcrumbCount={`Product Count: ${TableListData.length}`}
                       IsSearchVissible={true}
-                      RedirctPath={`/PriceListMaster`}
+                      RedirctPath={`/PriceMaster`}
                       isExcelButtonVisible={true}
                       ExcelData={TableListData}
                     />
@@ -240,7 +257,7 @@ console.log("TableListData",TableListData)
             }}
             size="xl"
           >
-            <PriceListMaster state={editData.Data} relatatedPage={"/PriceListMaster"} pageMode={editData.pageMode} />
+            <PriceMaster state={editData.Data} relatatedPage={"/PriceMaster"} pageMode={editData.pageMode} />
           </Modal>
         </div>
       </React.Fragment>
