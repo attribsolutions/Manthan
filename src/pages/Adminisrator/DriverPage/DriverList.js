@@ -13,16 +13,16 @@ import DriverMaster from "./DriverMaster";
 import { MetaTags } from "react-meta-tags";
 import { useHistory } from "react-router-dom";
 import {
-    deleteDriverTypeIDSuccess,
-    updateDriverTypeIDSuccess,
-    getMethodForDriverList,
-    editDriverTypeId,
-    delete_DriverType_ID,
-    PostMethod_ForDriverMasterSuccess,
+  deleteDriverTypeIDSuccess,
+  updateDriverTypeIDSuccess,
+  getMethodForDriverList,
+  editDriverTypeId,
+  delete_DriverType_ID,
+  PostMethod_ForDriverMasterSuccess,
 } from "../../../store/Administrator/DriverRedux/action";
 import { AlertState } from "../../../store/actions";
-import { listPageCommonButtonFunction } 
-from "../../../components/Common/CmponentRelatedCommonFile/listPageCommonButtons";
+import { listPageCommonButtonFunction }
+  from "../../../components/Common/CmponentRelatedCommonFile/listPageCommonButtons";
 
 const DriverList = (props) => {
 
@@ -32,7 +32,14 @@ const DriverList = (props) => {
   const [userPageAccessState, setUserPageAccessState] = useState('');
   const [modal_center, setmodal_center] = useState(false);
 
-  const { TableListData, editData, updateMessage, deleteMessage, RoleAccessModifiedinSingleArray,PostAPIResponse } = useSelector(
+  const {
+    TableListData,
+    editData,
+    updateMessage,
+    deleteMessage,
+    RoleAccessModifiedinSingleArray,
+    PostAPIResponse
+  } = useSelector(
     (state) => ({
       TableListData: state.DriverReducer.DriverList,
       editData: state.DriverReducer.editData,
@@ -42,7 +49,7 @@ const DriverList = (props) => {
       PostAPIResponse: state.DriverReducer.PostDataMessage,
     })
   );
-console.log("TableListData",TableListData)
+  console.log("TableListData", TableListData)
   useEffect(() => {
     const locationPath = history.location.pathname
     let userAcc = RoleAccessModifiedinSingleArray.find((inx) => {
@@ -109,7 +116,7 @@ console.log("TableListData",TableListData)
 
 
   useEffect(() => {
-   
+
     if ((PostAPIResponse.Status === true) && (PostAPIResponse.StatusCode === 200)) {
       dispatch(PostMethod_ForDriverMasterSuccess({ Status: false }))
       tog_center();
@@ -164,7 +171,7 @@ console.log("TableListData",TableListData)
       dataField: "Name",
       sort: true,
     },
-   
+
     {
       text: "Date Of Birth",
       dataField: "DOB",
