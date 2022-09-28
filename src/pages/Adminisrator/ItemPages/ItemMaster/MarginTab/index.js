@@ -62,7 +62,7 @@ function Margin_Tab(props) {
             PriceList: priceList.value,
             PriceListName: priceList.label,
             PartyName: partyName.label,
-            party: partyName.value,
+            Party: !(partyName === "") ? partyName.value : '',
             EffectiveDate: effectiveDate,
             Margin: margin,
             CreatedBy: 1,
@@ -71,7 +71,6 @@ function Margin_Tab(props) {
         };
 
         if (!(priceList === "")
-            && !(partyName === "")
             && !(margin === "")
             && !(effectiveDate === "")
         ) {

@@ -9,40 +9,42 @@ import ToolkitProvider, { Search } from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 import { useSelector, useDispatch } from "react-redux";
 import "../../../assets/scss/CustomeTable/datatables.scss";
-import VehicleMaster from "./VehicleMaster";
+import PriceMaster from "./PriceMaster";
 import { MetaTags } from "react-meta-tags";
 import { useHistory } from "react-router-dom";
 import {
-    deleteVehicleTypeIDSuccess,
-    updateVehicleTypeIDSuccess,
-    getMethodForVehicleList,
-    editVehicleTypeId,
-    delete_VehicleType_ID,
-    PostMethod_ForVehicleMasterSuccess,
-} from "../../../store/Administrator/VehicleRedux/action";
+    getPriceListData,
+    delete_PriceListSuccess,
+    postPriceListDataSuccess,
+    delete_PriceList,
+    editPriceList,
+    updatePriceListSuccess,
+    getPriceListPage
+    
+} from "../../../store/Administrator/PriceList/action";
 import { AlertState } from "../../../store/actions";
 import { listPageCommonButtonFunction } 
 from "../../../components/Common/CmponentRelatedCommonFile/listPageCommonButtons";
 
-const VehicleList = (props) => {
-
+const PriceList = (props) => {
+debugger
   const dispatch = useDispatch();
   const history = useHistory()
 
   const [userPageAccessState, setUserPageAccessState] = useState('');
   const [modal_center, setmodal_center] = useState(false);
 
-  const { TableListData, editData, updateMessage, deleteMessage, RoleAccessModifiedinSingleArray ,PostAPIResponse} = useSelector(
+  const { TableListData, editData, updateMessage, deleteMessage, RoleAccessModifiedinSingleArray,PostAPIResponse } = useSelector(
     (state) => ({
-      TableListData: state.VehicleReducer.VehicleList,
-      editData: state.VehicleReducer.editData,
-      updateMessage: state.VehicleReducer.updateMessage,
-      deleteMessage: state.VehicleReducer.deleteMessage,
+      TableListData: state.PriceListReducer.priceList,
+      editData: state.PriceListReducer.editData,
+      updateMessage: state.PriceListReducer.updateMessage,
+      deleteMessage: state.PriceListReducer.deleteMsg,
       RoleAccessModifiedinSingleArray: state.Login.RoleAccessUpdateData,
-      PostAPIResponse: state.VehicleReducer.PostDataMessage,
+      PostAPIResponse: state.PriceListReducer.postMsg,
     })
   );
-
+console.log("TableListData",TableListData)
   useEffect(() => {
     const locationPath = history.location.pathname
     let userAcc = RoleAccessModifiedinSingleArray.find((inx) => {
@@ -55,25 +57,25 @@ const VehicleList = (props) => {
 
   //  This UseEffect => Featch Modules List data  First Rendering
   useEffect(() => {
-    dispatch(getMethodForVehicleList());
+    dispatch(getPriceListPage());
   }, []);
 
   // This UseEffect => UpadateModal Success/Unsucces  Show and Hide Control Alert_modal
   useEffect(() => {
 
     if (updateMessage.Status === true && updateMessage.StatusCode === 200) {
-      dispatch(updateVehicleTypeIDSuccess({ Status: false }));
+      dispatch(updatePriceListSuccess({ Status: false }));
       dispatch(
         AlertState({
           Type: 1,
           Status: true,
           Message: updateMessage.Message,
-          AfterResponseAction: getMethodForVehicleList,
+          AfterResponseAction: getPriceListData,
         })
       );
       tog_center();
     } else if (updateMessage.Status === true) {
-      dispatch(updateVehicleTypeIDSuccess({ Status: false }));
+      dispatch(updatePriceListSuccess({ Status: false }));
       dispatch(
         AlertState({
           Type: 3,
@@ -86,17 +88,17 @@ const VehicleList = (props) => {
 
   useEffect(() => {
     if (deleteMessage.Status === true && deleteMessage.StatusCode === 200) {
-      dispatch(deleteVehicleTypeIDSuccess({ Status: false }));
+      dispatch(delete_PriceListSuccess({ Status: false }));
       dispatch(
         AlertState({
           Type: 1,
           Status: true,
           Message: deleteMessage.Message,
-          AfterResponseAction: getMethodForVehicleList,
+          AfterResponseAction: getPriceListData,
         })
       );
     } else if (deleteMessage.Status === true) {
-      dispatch(deleteVehicleTypeIDSuccess({ Status: false}));
+      dispatch(delete_PriceListSuccess({ Status: false }));
       dispatch(
         AlertState({
           Type: 3,
@@ -109,29 +111,32 @@ const VehicleList = (props) => {
 
 
   useEffect(() => {
-
+   
     if ((PostAPIResponse.Status === true) && (PostAPIResponse.StatusCode === 200)) {
-        dispatch(PostMethod_ForVehicleMasterSuccess({ Status: false }))
-        tog_center();
-        dispatch(getMethodForVehicleList());
-        dispatch(AlertState({
-            Type: 1,
-            Status: true,
-            Message: PostAPIResponse.Message,
-        }))
+      dispatch(postPriceListDataSuccess({ Status: false }))
+      tog_center();
+      dispatch(getPriceListData());
+      dispatch(AlertState({
+        Type: 1,
+        Status: true,
+        Message: PostAPIResponse.Message,
+      }))
     }
 
     else if ((PostAPIResponse.Status === true)) {
-        dispatch(PostMethod_ForVehicleMasterSuccess({ Status: false }))
-        dispatch(AlertState({
-            Type: 4,
-            Status: true,
-            Message: JSON.stringify(PostAPIResponse.Message),
-            RedirectPath: false,
-            AfterResponseAction:false
-        }));
+      dispatch(postPriceListDataSuccess({ Status: false }))
+      dispatch(AlertState({
+        Type: 4,
+        Status: true,
+        Message: JSON.stringify(PostAPIResponse.Message),
+        RedirectPath: false,
+        AfterResponseAction: false
+      }));
     }
-}, [PostAPIResponse.Status])
+
+
+  }, [PostAPIResponse.Status])
+
   // Edit Modal Show When Edit Data is true
   useEffect(() => {
     if (editData.Status === true) {
@@ -158,39 +163,36 @@ const VehicleList = (props) => {
 
   const pagesListColumns = [
     {
-      text: "Vehicle Number",
-      dataField: "VehicleNumber",
+      text: "Name",
+      dataField: "Name",
+      sort: true,
+    },
+   
+    {
+      text: "PLPartyTypeName",
+      dataField: "PLPartyTypeName",
       sort: true,
     },
     {
-        text: "Description",
-        dataField: "Description",
-        sort: true,
-      },
-      {
-        text: "Driver Name",
-        dataField: "DriverName",
-        sort: true,
-      },
-      {
-        text: "Vehicle Type",
-        dataField: "Vehicletype",
-        sort: true,
-      },
-      // {
-      //   text: "Division",
-      //   dataField: "DivisionName",
-      //   sort: true,
-      // },
+      text: "CompanyName",
+      dataField: "CompanyName",
+      sort: true,
+    },
+    
+    {
+      text:"MkUpMkDn",
+      dataField: "MkUpMkDn",
+      sort: true,
+    },
 
     // For Edit, Delete ,and View Button Common Code function
     listPageCommonButtonFunction({
       dispatchHook: dispatch,
-      ButtonMsgLable: "vehicle Type",
+      ButtonMsgLable: "Name",
       deleteName: "Name",
       userPageAccessState: userPageAccessState,
-      editActionFun: editVehicleTypeId,
-      deleteActionFun: delete_VehicleType_ID
+       editActionFun: editPriceList,
+      deleteActionFun: delete_PriceList
     })
   ];
 
@@ -198,7 +200,7 @@ const VehicleList = (props) => {
     return (
       <React.Fragment>
         <MetaTags>
-          <title>VehicleList| FoodERP-React FrontEnd</title>
+          <title>PriceList| FoodERP-React FrontEnd</title>
         </MetaTags>
         <div className="page-content">
           <PaginationProvider pagination={paginationFactory(pageOptions)}>
@@ -219,7 +221,7 @@ const VehicleList = (props) => {
                       SearchProps={toolkitProps.searchProps}
                       breadcrumbCount={`Product Count: ${TableListData.length}`}
                       IsSearchVissible={true}
-                      RedirctPath={`/VehicleMaster`}
+                      RedirctPath={`/PriceMaster`}
                       isExcelButtonVisible={true}
                       ExcelData={TableListData}
                     />
@@ -255,7 +257,7 @@ const VehicleList = (props) => {
             }}
             size="xl"
           >
-            <VehicleMaster state={editData.Data} relatatedPage={"/VehicleMaster"} pageMode={editData.pageMode} />
+            <PriceMaster state={editData.Data} relatatedPage={"/PriceMaster"} pageMode={editData.pageMode} />
           </Modal>
         </div>
       </React.Fragment>
@@ -268,4 +270,4 @@ const VehicleList = (props) => {
   }
 }
 
-export default VehicleList;
+export default PriceList;
