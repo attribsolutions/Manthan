@@ -49,7 +49,6 @@ const DriverMaster = (props) => {
 
     }));
 
-
     useEffect(() => {
         dispatch(getMethodForDriverList());
 
@@ -156,7 +155,6 @@ const DriverMaster = (props) => {
         }
     }
     )
-
 
     const formValChange = e => {
         debugger
@@ -331,7 +329,7 @@ const DriverMaster = (props) => {
                                                                                 userPageAccessState.RoleAccess_IsEdit ?
                                                                                     <button
                                                                                         type="submit"
-                                                                                        data-mdb-toggle="tooltip" data-mdb-placement="top" title="Update Party Type"
+                                                                                        data-mdb-toggle="tooltip" data-mdb-placement="top" title="Update Driver Type"
                                                                                         className="btn btn-success w-md mt-3"
                                                                                     >
                                                                                         <i class="fas fa-edit me-2"></i>Update
@@ -343,7 +341,7 @@ const DriverMaster = (props) => {
                                                                                     userPageAccessState.RoleAccess_IsSave ?
                                                                                         <button
                                                                                             type="submit"
-                                                                                            data-mdb-toggle="tooltip" data-mdb-placement="top" title="Save Party Type"
+                                                                                            data-mdb-toggle="tooltip" data-mdb-placement="top" title="Save Driver Type"
                                                                                             className="btn btn-primary w-md mt-3 "
                                                                                         > <i className="fas fa-save me-2"></i> Save
                                                                                         </button>
