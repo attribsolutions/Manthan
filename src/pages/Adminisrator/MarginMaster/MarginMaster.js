@@ -24,15 +24,17 @@ import paginationFactory, {
 } from "react-bootstrap-table2-paginator";
 import ToolkitProvider, { Search } from "react-bootstrap-table2-toolkit";
 import { getPartyTypes } from "../../../store/Administrator/PartyRedux/action";
-import { getItemList, get_PriceList_ForDropDown } from "../../../store/Administrator/ItemsRedux/action";
+import { get_PriceList_ForDropDown } from "../../../store/Administrator/ItemsRedux/action";
 import BootstrapTable from "react-bootstrap-table-next";
 import { postGoButtonData, postMarginMasterData, postMarginMasterDataSuccess } from "../../../store/Administrator/MarginMasterRedux/action";
 import { AvForm } from "availity-reactstrap-validation";
 
 const MarginMaster = (props) => {
+
     const dispatch = useDispatch();
     const history = useHistory();
     const formRef = useRef(null);
+
     //*** "isEditdata get all data from ModuleID for Binding  Form controls
     let editDataGatingFromList = props.state;
 
@@ -43,6 +45,8 @@ const MarginMaster = (props) => {
     const [priceList_dropdown_Select, setpriceList_dropdown_Select] = useState("");
     const [effectiveDate, setEffectiveDate] = useState('');
     const [Margin, setMRP] = useState('');
+    const [columnsShowUI, setColumnsShowUI] = useState();
+    
     //Access redux store Data /  'save_ModuleSuccess' action data
     const { PostAPIResponse,
         TableData,
@@ -56,7 +60,7 @@ const MarginMaster = (props) => {
         PriceList: state.ItemMastersReducer.PriceList,
         RoleAccessModifiedinSingleArray: state.Login.RoleAccessUpdateData,
     }));
-    
+
     // userAccess useEffect
     useEffect(() => {
         let userAcc = undefined;
@@ -110,6 +114,10 @@ const MarginMaster = (props) => {
         user["Margin"] = e.target.value
     }
 
+    const CurrentMRPHandler = (e, cellContent, user, key) => {
+        user["CurrentMRP"] = e.target.value
+    }
+
     const GoButton_Handler = (event, values) => {
 
         const jsonBody = JSON.stringify({
@@ -161,19 +169,12 @@ const MarginMaster = (props) => {
         }
     }, [PostAPIResponse])
 
-
-    const pageOptions = {
+        const pageOptions = {
         sizePerPage: 10,
         totalSize: TableData.length,
         custom: true,
     };
 
-    // const defaultSorted = [
-    //     {
-    //       dataField: "Name",
-    //       order: "asc",
-    //     },
-    //   ];
     const pagesListColumns = [
         {
             text: "Item Name",
@@ -184,7 +185,7 @@ const MarginMaster = (props) => {
             text: "Current Margin",
             dataField: "",
             sort: true,
-            formatter: (cellContent, user, abd) => (
+            formatter: (cellContent, user, key) => (
                 <>
                     <div style={{ justifyContent: 'center' }} >
                         <Col>
@@ -193,8 +194,9 @@ const MarginMaster = (props) => {
                                     id=""
                                     type="text"
                                     disabled={true}
-                                    // defaultValue={Margin}
+                                    defaultValue={TableData[key].CurrentMargin}
                                     className="col col-sm text-center"
+                                    onChange={(e) => CurrentMRPHandler(e, cellContent, user, key)}
                                 />
                             </FormGroup>
                         </Col>
@@ -234,7 +236,7 @@ const MarginMaster = (props) => {
         var ItemData = TableData.map((index) => ({
             PriceList: priceList_dropdown_Select.value,
             Party: partyName_dropdown_Select.value,
-            effectiveDate: effectiveDate,
+            EffectiveDate: effectiveDate,
             Company: 1,
             CreatedBy: 1,
             UpdatedBy: 1,
@@ -321,7 +323,7 @@ const MarginMaster = (props) => {
 
                                                     <Col md="3">
                                                         <FormGroup className="mb-3 row ">
-                                                            <Label className="col-sm-3  ml-n4 ">effectiveDate</Label>
+                                                            <Label className="col-sm-3 p-2 ml-n4 ">EffectiveDate</Label>
                                                             <Col md="9">
                                                                 <Flatpickr
                                                                     id="effectiveDate"
