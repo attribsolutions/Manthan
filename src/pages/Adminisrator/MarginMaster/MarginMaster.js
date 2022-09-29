@@ -24,9 +24,9 @@ import paginationFactory, {
 } from "react-bootstrap-table2-paginator";
 import ToolkitProvider, { Search } from "react-bootstrap-table2-toolkit";
 import { getPartyTypes } from "../../../store/Administrator/PartyRedux/action";
-import { getItemList, get_Division_ForDropDown, get_PriceList_ForDropDown } from "../../../store/Administrator/ItemsRedux/action";
+import { getItemList, get_PriceList_ForDropDown } from "../../../store/Administrator/ItemsRedux/action";
 import BootstrapTable from "react-bootstrap-table-next";
-import { postMarginMasterData, postMarginMasterDataSuccess } from "../../../store/Administrator/MarginMasterRedux/action";
+import { postGoButtonData, postMarginMasterData, postMarginMasterDataSuccess } from "../../../store/Administrator/MarginMasterRedux/action";
 import { AvForm } from "availity-reactstrap-validation";
 
 const MarginMaster = (props) => {
@@ -41,7 +41,7 @@ const MarginMaster = (props) => {
     const [userPageAccessState, setUserPageAccessState] = useState("");
     const [partyName_dropdown_Select, setPartyName_dropdown_Select] = useState("");
     const [priceList_dropdown_Select, setpriceList_dropdown_Select] = useState("");
-    const [EffectiveDate, setEffectiveDate] = useState('');
+    const [effectiveDate, setEffectiveDate] = useState('');
     const [Margin, setMRP] = useState('');
     //Access redux store Data /  'save_ModuleSuccess' action data
     const { PostAPIResponse,
@@ -50,13 +50,13 @@ const MarginMaster = (props) => {
         PriceList,
         RoleAccessModifiedinSingleArray
     } = useSelector((state) => ({
-        TableData: state.ItemMastersReducer.pages,
+        TableData: state.MarginMasterReducer.GoButtonPostData,
         PostAPIResponse: state.MarginMasterReducer.PostData,
         PartyTypes: state.PartyMasterReducer.PartyTypes,
         PriceList: state.ItemMastersReducer.PriceList,
         RoleAccessModifiedinSingleArray: state.Login.RoleAccessUpdateData,
     }));
-
+    
     // userAccess useEffect
     useEffect(() => {
         let userAcc = undefined;
@@ -79,7 +79,7 @@ const MarginMaster = (props) => {
     useEffect(() => {
         dispatch(getPartyTypes());
         dispatch(get_PriceList_ForDropDown());
-        dispatch(getItemList());
+        // dispatch(getItemList());
 
     }, [dispatch]);
 
@@ -109,6 +109,18 @@ const MarginMaster = (props) => {
     const MRPHandler = (e, cellContent, user, abd) => {
         user["Margin"] = e.target.value
     }
+
+    const GoButton_Handler = (event, values) => {
+
+        const jsonBody = JSON.stringify({
+            PriceList: priceList_dropdown_Select.value,
+            Party: partyName_dropdown_Select.value,
+            EffectiveDate: effectiveDate
+
+        });
+        dispatch(postGoButtonData(jsonBody))
+        console.log("jsonBody", jsonBody)
+    };
 
     useEffect(() => {
 
@@ -222,7 +234,7 @@ const MarginMaster = (props) => {
         var ItemData = TableData.map((index) => ({
             PriceList: priceList_dropdown_Select.value,
             Party: partyName_dropdown_Select.value,
-            EffectiveDate: EffectiveDate,
+            effectiveDate: effectiveDate,
             Company: 1,
             CreatedBy: 1,
             UpdatedBy: 1,
@@ -309,12 +321,12 @@ const MarginMaster = (props) => {
 
                                                     <Col md="3">
                                                         <FormGroup className="mb-3 row ">
-                                                            <Label className="col-sm-3  ml-n4 ">EffectiveDate</Label>
+                                                            <Label className="col-sm-3  ml-n4 ">effectiveDate</Label>
                                                             <Col md="9">
                                                                 <Flatpickr
-                                                                    id="EffectiveDate"
-                                                                    name="EffectiveDate"
-                                                                    value={EffectiveDate}
+                                                                    id="effectiveDate"
+                                                                    name="effectiveDate"
+                                                                    value={effectiveDate}
                                                                     className="form-control d-block p-2 bg-white text-dark"
                                                                     placeholder=" Please Enter FSSAI Exipry"
                                                                     options={{
@@ -328,7 +340,7 @@ const MarginMaster = (props) => {
                                                         </FormGroup>
                                                     </Col>
                                                     <Col md="3" className="mt- ">
-                                                        <Button type="button" color="primary" >Go</Button>
+                                                        <Button type="button" color="primary" onClick={() => { GoButton_Handler() }} >Go</Button>
                                                     </Col>
 
                                                 </Row>
