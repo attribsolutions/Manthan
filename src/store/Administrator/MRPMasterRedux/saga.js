@@ -136,7 +136,7 @@ function* GoButton_post_GenratorFunction({ data }) {
 function* MRPMasterSaga() {
   yield takeEvery(POST_MRP_MASTER_DATA, Post_MRPMaster_GenratorFunction);
   yield takeEvery(POST_GO_BUTTON_DATA, GoButton_post_GenratorFunction);
-    yield takeEvery(GET_MRP_LIST_PAGE,    get_MRPListPage_GenratorFunction);
+    yield takeEvery(GET_MRP_LIST_PAGE,   get_MRPListPage_GenratorFunction);
     yield takeEvery(DELETE_MRP_LIST_PAGE, delete_MRPListPage_GenratorFunction);
     yield takeEvery(EDIT_MRP_LIST_PAGE, Edit_MRPListPage_GenratorFunction);
     yield takeEvery(UPDATE_MRP_LIST_PAGE, Update_MRPListPage_GenratorFunction);

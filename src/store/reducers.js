@@ -17,8 +17,7 @@ import BreadcrumbReducer from './Utilites/Breadcrumb/reducer'
 
 import Modules from './Administrator/ModulesRedux/reducer'
 import Company from './Administrator/CompanyRedux/reducer'
-import SubModules from "./Administrator/SubModulesRedux/reducer"
-import PageList from "./Administrator/PageMasterRedux/reducer"
+
 import H_Pages from './Administrator/HPagesRedux/reducer'
 import OrderPageReducer from "./Purchase/OrderPageRedux/reducer"
 
@@ -52,9 +51,9 @@ const rootReducer = combineReducers({
   // Administator
   Modules,
   Company,
-  SubModules,
+  // SubModules,
   H_Pages,
-  PageList,
+  // PageList,
   User_Registration_Reducer,
   M_EmployeesReducer,
   // Purchase
