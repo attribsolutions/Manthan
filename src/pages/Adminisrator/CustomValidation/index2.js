@@ -57,7 +57,7 @@ export default function Index() {
         })
     };
 
-    const regExp = RegExp(/^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[A-Za-z]+$/)
+    const regExp = RegExp( /^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[A-Za-z]+$/)
 
 
     const formValid = ({ isError, ...rest }) => {
@@ -83,30 +83,29 @@ export default function Index() {
     };
 
     const { isError } = state;
-    console.log("page")
+ console.log("page")
     return (
         <div className="page-content">
             <Form onSubmit={onSubmit} >
                 <div className="form-group">
-                    <label >Name</label>
-                   
+                    <label>Name</label>
                     <Input
                         type="text"
                         className={isError.name.length > 0 ? "is-invalid form-control" : "form-control"}
                         name="name"
-                        onChange={(e) => { formValChange(e) }}
+                        onChange={(e)=>{formValChange(e)}}
                     />
                     {isError.name.length > 0 && (
                         <span className="invalid-feedback">{isError.name}</span>
                     )}
                 </div>
                 <div className="form-group">
-                    <label >Email *</label>
+                    <label>Email</label>
                     <Input
                         type="text"
                         className={isError.email.length > 0 ? "is-invalid form-control" : "form-control"}
                         name="email"
-                        onChange={(e) => { formValChange(e) }}
+                        onChange={(e)=>{formValChange(e)}}
                     />
                     {isError.email.length > 0 && (
                         <span className="invalid-feedback">{isError.email}</span>
@@ -117,8 +116,8 @@ export default function Index() {
                     <Input
                         type="text"
                         className={isError.password.length > 0 ? "is-invalid form-control" : "form-control"}
-                    // name="password"
-                    // onChange={e=>formValChange(e)}
+                        // name="password"
+                        // onChange={e=>formValChange(e)}
                     />
                     {isError.password.length > 0 && (
                         <span className="invalid-feedback">{isError.password}</span>

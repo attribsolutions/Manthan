@@ -330,8 +330,14 @@ const VehicleMaster = (props) => {
                                                                     placeholder="Please Enter VehicleNumber"
                                                                     autoComplete='off'
                                                                     validate={{
-                                                                        required: { value: true, errorMessage: 'Please Enter VehicleNumber ' },
-                                                                    }}
+                                                                        required: {
+                                                                          value: true, errorMessage: "Please Enter valid VehicleNumber."
+                                                                        },
+                                                                        tel: {
+                                                                          pattern: /^[A-Z]{2}[ -]{0,1}[0-9]{2}[ -]{0,1}[A-Z]{1,2}[ -]{0,1}[0-9]{1,4}$/,
+                                                                          errorMessage: "Please Enter valid VehicleNumber.(Ex:MH 15 AA 1234)"
+                                                                        }
+                                                                      }}
 
                                                                 />
                                                             </FormGroup>
@@ -423,7 +429,7 @@ const VehicleMaster = (props) => {
                                                                                 userPageAccessState.RoleAccess_IsEdit ?
                                                                                     <button
                                                                                         type="submit"
-                                                                                        data-mdb-toggle="tooltip" data-mdb-placement="top" title="Update Party Type"
+                                                                                        data-mdb-toggle="tooltip" data-mdb-placement="top" title="Update Vehicle Type"
                                                                                         className="btn btn-success w-md mt-3"
                                                                                     >
                                                                                         <i class="fas fa-edit me-2"></i>Update
@@ -435,7 +441,7 @@ const VehicleMaster = (props) => {
                                                                                     userPageAccessState.RoleAccess_IsSave ?
                                                                                         <button
                                                                                             type="submit"
-                                                                                            data-mdb-toggle="tooltip" data-mdb-placement="top" title="Save Party Type"
+                                                                                            data-mdb-toggle="tooltip" data-mdb-placement="top" title="Save Vehicle Type"
                                                                                             className="btn btn-primary w-md mt-3 "
                                                                                         > <i className="fas fa-save me-2"></i> Save
                                                                                         </button>
