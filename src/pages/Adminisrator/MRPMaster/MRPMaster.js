@@ -50,7 +50,7 @@ const MRPMaster = (props) => {
     const [division_dropdown_Select, setDivision_dropdown_Select] = useState("");
     const [effectiveDate, setEffectiveDate] = useState('');
     const [MRP, setMRP] = useState('');
-    const [CurrentMRP, setCurrentMRP] = useState();
+    const [columnsShowUI, setColumnsShowUI] = useState(false);
 
     //Access redux store Data /  'save_ModuleSuccess' action data
     const { PostAPIResponse,
@@ -125,11 +125,12 @@ const MRPMaster = (props) => {
         user["MRP"] = e.target.value
     }
 
-    const CurrentMRPHandler = (e, cellContent, user, abd) => {
-        debugger
+    const CurrentMRPHandler = (e, cellContent, user, key) => {
         user["CurrentMRP"] = e.target.value
     }
+
     const GoButton_Handler = (event, values) => {
+
         const jsonBody = JSON.stringify({
             Division: division_dropdown_Select.value,
             Party: party_dropdown_Select.value,
@@ -137,6 +138,7 @@ const MRPMaster = (props) => {
 
         });
         dispatch(postGoButtonData(jsonBody))
+        setColumnsShowUI(true)
         console.log("jsonBody", jsonBody)
     };
 
@@ -195,7 +197,7 @@ const MRPMaster = (props) => {
             text: "Current MRP",
             dataField: "CurrentMRP",
             sort: true,
-            formatter: (cellContent, user, abd) => (
+            formatter: (cellContent, user, key) => (
                 <>
                     <div style={{ justifyContent: 'center' }} >
                         <Col>
@@ -204,9 +206,9 @@ const MRPMaster = (props) => {
                                     id=""
                                     type="text"
                                     disabled={true}
-                                    defaultValue={GoButtonPostData.CurrentMRP}
+                                    defaultValue={GoButtonPostData[key].CurrentMRP}
                                     className="col col-sm text-center"
-                                    onChange={(e) => CurrentMRPHandler(e, cellContent, user, abd)}
+                                    onChange={(e) => CurrentMRPHandler(e, cellContent, user, key)}
                                 />
                             </FormGroup>
                         </Col>
@@ -239,6 +241,7 @@ const MRPMaster = (props) => {
             ),
         },
     ]
+
 
 
     //'Save' And 'Update' Button Handller

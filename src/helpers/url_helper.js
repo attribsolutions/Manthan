@@ -15,7 +15,6 @@ export const POST_EDIT_PROFILE = "/post-fake-profile"
 export const GET_ORDER_ITEM = "Items"
 export const ORDER_PAGE_API = "Orders"
 
-
 //Python Logic 
 export const FOOD_ERP_POST_JWT_LOGIN = "/Login"
 export const FOOD_ERP_POST_USER_DETAILS_AFTER_LOGIN = "/GerUserDetials"
@@ -25,9 +24,6 @@ export const FOOD_ERP_POST_JWT_PASSWORD_FORGET_SEND_OTP = "/SendMail"
 export const SUPER_ADMIN_API = '/SuperAdmin'
 
 export const PAGE_FIELD = '/PageMaster'
-
-
-
 
 //PAGE Master
 export const GET_DEFAULT_MODULE = "/HModules"
@@ -49,14 +45,11 @@ export const GET_PAGE_ACCESS = "/HPageAccessNames"
 export const H_PAGES_API_URL = "/PageMaster"/// post api
 export const ROLE_API_URL = "/Roles"///get api
 
-/// User Registration
-
+// User Registration
 export const USER_API_URL = "/UserList"
 export const REGISTRATION_API_URL = "/Registration"
 export const USER_PARTIES_FOR_USER_MASTER = "/UserPartiesForUserMaster"
 export const EMPLOYEE_LIST_FOR_DROPDOWN_API_URL = "/GetEmployeeForUserCreation"
-
-
 
 // M_Employees api
 export const GET_DESIGNATIONID = "/Designations"
@@ -117,16 +110,13 @@ export const VEHICLETYPES_DROPDOWN = '/VehicleTypes'
 export const DRIVERLIST_DROPDOWN = '/Driver'
 export const BASEUNIT_DROPDOWN_API = '/UnitList'
 
-
 //CompanyGroup api
 export const COMPANYGROUP_API = '/CompanyGroups'
 
 //Driver api
 export const DRIVER_API = '/Driver'
 
-
 //Category Types API
-
 export const CATEGORY_DROPDOWN_API = '/GetCategoryByCategoryTypeID'
 export const SUBCATEGORY_DROPDOWN_API = '/GetSubCategoryByCategoryID'
 export const IMAGETYPE_DROPDOWN_API = '/ImageTypes'
@@ -134,8 +124,10 @@ export const MRP_TYPE_DROPDOWN_API = '/MRPTypes'
 export const DIVISION_DROPDOWN_API = '/Divisions'
 export const PRICE_LIST = '/PriceList'
 
-
-
+// MRP Master Api
 export const MRP_MASTER_LIST = '/Mrps'
 export const GO_BUTTON_POST_API = '/GetMRP'
+
+// Margin Master
 export const MARGIN_MASTER_LIST = '/Margins'
+export const GO_BUTTON_POST_API_FOR_MARGIN_MASTER = '/GetMargin'

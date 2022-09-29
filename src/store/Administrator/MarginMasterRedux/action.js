@@ -7,7 +7,9 @@ import { POST_MARGIN_MASTER_DATA,
      EDIT_MARGIN_LIST_PAGE,
      EDIT_MARGIN_LIST_PAGE_SUCCESS,
      UPDATE_MARGIN_LIST_PAGE,
-     UPDATE_MARGIN_LIST_PAGE_SUCCESS
+     UPDATE_MARGIN_LIST_PAGE_SUCCESS,
+     POST_GO_BUTTON_DATA,
+     POST_GO_BUTTON_DATA_SUCCESS
     } from "./actionType";
 
 // post api
@@ -64,3 +66,14 @@ export const updateMarginListSuccess = (updateMessage) => ({
     type: UPDATE_MARGIN_LIST_PAGE_SUCCESS,
     payload: updateMessage,
 })
+
+// Go Button Post API
+export const postGoButtonData = (data,) => ({
+    type: POST_GO_BUTTON_DATA,
+    data,
+});
+
+export const postGoButtonDataSuccess = (data) => ({
+    type: POST_GO_BUTTON_DATA_SUCCESS,
+    payload: data,
+});
