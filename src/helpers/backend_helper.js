@@ -311,7 +311,7 @@ export const GetMarginList_For_Listpage = () => get(url.MARGIN_MASTER_LIST)//  g
 export const delete_MarginList_API = (id) => del(`${url. MARGIN_MASTER_LIST}/${id}`)// post api
 export const edit_MarginList = (id) =>get(`${url. MARGIN_MASTER_LIST}/${id}`) // edit api
 export const update_MarginList = (data, id) =>put(`${url.MARGIN_MASTER_LIST}/${id}`, data)// update
-
+export const GoButton_Post_API_For_MarginMaster = (data) => post(url.GO_BUTTON_POST_API_FOR_MARGIN_MASTER, data)// go button postapi
 
 export {  
   getLoggedInUser,
