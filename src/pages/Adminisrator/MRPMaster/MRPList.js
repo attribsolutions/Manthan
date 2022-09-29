@@ -22,7 +22,7 @@ import {
   postMRPMasterDataSuccess,
   updateMRPListSuccess
 } from "../../../store/Administrator/MRPMasterRedux/action";
-import MRPMaster from'./MRPMaster'
+import MRPMaster from './MRPMaster'
 const MRPList = (props) => {
 
   const dispatch = useDispatch();
