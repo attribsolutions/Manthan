@@ -68,8 +68,12 @@ import PriceList from "../pages/Adminisrator/PriceList/PriceList";
 
 import MRPMaster from "../pages/Adminisrator/MRPMaster/MRPMaster";
 import MarginMaster from "../pages/Adminisrator/MarginMaster/MarginMaster";
+
+import Index from "../pages/Adminisrator/CustomValidation";
+
 import MRPList from "../pages/Adminisrator/MRPMaster/MRPList";
 import MarginList from "../pages/Adminisrator/MarginMaster/MarginList";
+
 
 
 
@@ -199,6 +203,7 @@ const userRoutes = [
   // { path: "/AddItemMaster", component: AddItemMaster },
   { path: "/SearchBox2", component: SearchBoxSecond },
   { path: "/SearchBox3", component: SerachBox3 },
+  { path: "/valid", component: Index },
 
   // this route should be at the end of all other routes
   { path: "/", exact: true, component: () => <Redirect to="/dashboard" /> },
