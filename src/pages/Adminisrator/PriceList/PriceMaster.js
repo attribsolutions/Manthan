@@ -275,7 +275,6 @@ const PriceMaster = (props) => {
     var IsEditMode_Css = ''
     if ((pageMode === "edit") || (pageMode === "copy") || (pageMode === "dropdownAdd")) { IsEditMode_Css = "-5.5%" };
 
-
     return (
         <React.Fragment>
             <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
@@ -333,10 +332,6 @@ const PriceMaster = (props) => {
 
                                             </Row>
                                         </CardHeader>
-
-
-
-
                                         {hasPartySelect ?
                                             <div className={" row mt-4"}>
                                                 <Modal
@@ -417,10 +412,6 @@ const PriceMaster = (props) => {
                                                                 </div>
                                                                 : null
                                                             }
-
-
-
-
 
                                                         </CardBody>
                                                         <CardFooter >

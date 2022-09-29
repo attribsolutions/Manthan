@@ -8,7 +8,9 @@ import {
     EDIT_PRICE_LIST,
     EDIT_PRICE_LIST_SUCCESS,
     UPDATE_PRICE_LIST,
-    UPDATE_PRICE_LIST_SUCCESS
+    UPDATE_PRICE_LIST_SUCCESS,
+    GET_PRICE_LIST_PAGE,
+    GET_PRICE_LIST_PAGE_SUCCESS
 } from "./actionType";
 
 // post api
@@ -22,7 +24,7 @@ export const postPriceListDataSuccess = (data,id) => ({
     payload: data,
 });
 
-// post api 
+// get api 
 export const getPriceListData = (partyType) => ({
     type: GET_PRICE_LIST_DATA,
     partyType,
@@ -33,6 +35,18 @@ export const getPriceListDataSuccess = (data) => ({
     payload: data,
 });
 
+ //get listpage api
+export const getPriceListPage = () => ({
+    type: GET_PRICE_LIST_PAGE,
+    
+});
+
+export const getPriceListPageSuccess = (data) => ({
+    type: GET_PRICE_LIST_PAGE_SUCCESS,
+    payload: data,
+});
+
+//delete
 export const delete_PriceList = (id) => ({
     type: DELETE_PRICE_LIST,
     id,
@@ -63,3 +77,4 @@ export const updatePriceListSuccess = (updateMessage) => ({
  type: UPDATE_PRICE_LIST_SUCCESS,
  payload: updateMessage,
 })
+

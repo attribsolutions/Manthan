@@ -51,9 +51,10 @@ const PartyMaster = (props) => {
     const [companyList_dropdown_Select, setCompanyList_dropdown_Select] = useState("");
     const [partyType_dropdown_Select, setPartyType_dropdown_Select] = useState("");
     const [PriceList_dropdown_Select, setPriceList_dropdown_Select] = useState("");
-    const [MKupMkdown_DropdownSelect, setMKupMkdown_DropdownSelect] = useState("");
+    // const [MKupMkdown_DropdownSelect, setMKupMkdown_DropdownSelect] = useState("");
     const [dropOpen, setDropOpen] = useState(false);
     const [AddressDetailsMaster, setAddressDetailsMaster] = useState([]);
+
     const toggle1 = tab => {
         if (activeTab1 !== tab) {
             setactiveTab1(tab)
@@ -116,17 +117,17 @@ const PartyMaster = (props) => {
     }, [dispatch]);
 
 
-    // MkupMkdown  Dropdown
-    const MkupMkdown_DropdownOption = [
-        {
-            value: 1,
-            label: "MKUp",
-        },
-        {
-            value: 2,
-            label: "MkDown",
-        },
-    ];
+    // // MkupMkdown  Dropdown
+    // const MkupMkdown_DropdownOption = [
+    //     {
+    //         value: 1,
+    //         label: "MKUp",
+    //     },
+    //     {
+    //         value: 2,
+    //         label: "MkDown",
+    //     },
+    // ];
 
     useEffect(() => {
 
@@ -137,18 +138,18 @@ const PartyMaster = (props) => {
             dispatch(BreadcrumbShow(editDataGatingFromList.Name))
             setPageMode(pageModeProps);
 
-            
+
             setCompanyList_dropdown_Select({
                 value: editDataGatingFromList.Company,
                 label: editDataGatingFromList.CompanyName
             })
-            
+
             setPartyType_dropdown_Select({
-                value: editDataGatingFromList.PartyType_id,
+                value: editDataGatingFromList.PartyType,
                 label: editDataGatingFromList.PartyTypeName
             })
             setPriceList_dropdown_Select({
-                value: editDataGatingFromList.PriceList_id,
+                value: editDataGatingFromList.PriceList,
                 label: editDataGatingFromList.PriceListName
             })
             setState_DropDown_select({
@@ -160,7 +161,7 @@ const PartyMaster = (props) => {
                 label: editDataGatingFromList.DistrictName
             })
 
-          
+
             setAddressDetailsMaster(editDataGatingFromList.PartyAddress)
 
             dispatch(editPartyIDSuccess({ Status: false }))
@@ -180,7 +181,7 @@ const PartyMaster = (props) => {
             setPriceList_dropdown_Select('')
             setDistrict_dropdown_Select('')
             setState_DropDown_select('')
-            setMKupMkdown_DropdownSelect('')
+            // setMKupMkdown_DropdownSelect('')
             if (pageMode === "dropdownAdd") {
                 dispatch(AlertState({
                     Type: 1,
@@ -257,10 +258,10 @@ const PartyMaster = (props) => {
 
     }
 
-    //for MKupMKdown dropdown
-    const MKupMkdown_DropdownSelectHandller = (e) => {
-        setMKupMkdown_DropdownSelect(e);
-    };
+    // //for MKupMKdown dropdown
+    // const MKupMkdown_DropdownSelectHandller = (e) => {
+    //     setMKupMkdown_DropdownSelect(e);
+    // };
 
     const test1 = () => {
         return (
@@ -311,7 +312,7 @@ const PartyMaster = (props) => {
             Taluka: 0,
             City: 0,
             GSTIN: values.GSTIN,
-            MKupMkdown:MKupMkdown_DropdownSelect.value,
+            MkUpMkDn: values.MkUpMkDn,
             isActive: values.isActive,
             IsDivision: false,
             CreatedBy: 1,
@@ -634,7 +635,7 @@ const PartyMaster = (props) => {
                                                                 </Col>
 
                                                                 <Col md="1">  </Col>
-                                                                <Col md="3">
+                                                                {/* <Col md="3">
                                                                     <FormGroup className="mb-3">
                                                                         <Label htmlFor="validationCustom01">MKUp MkDown</Label>
                                                                         <Select
@@ -646,7 +647,30 @@ const PartyMaster = (props) => {
                                                                             }}
                                                                         />
                                                                     </FormGroup>
+                                                                </Col> */}
+                                                                <Col md="3">
+                                                                    <FormGroup className="mb-3">
+                                                                        <Row style={{ marginTop: '25px' }}>
+                                                                            <Label
+                                                                                htmlFor="horizontal-firstname-input"
+                                                                                className="col-sm-4 col-form-label"
+                                                                            >
+                                                                                MKUpMkDn
+                                                                            </Label>
+                                                                            <Col md={4} style={{ marginTop: '7px' }} className=" form-check form-switch form-switch-sm ">
+                                                                                <div className="form-check form-switch form-switch-md mb-3" dir="ltr">
+                                                                                    <AvInput type="checkbox" className="form-check-input " id="inp-MkUpMkDn"
+                                                                                        checked={EditData.MkUpMkDn}
+                                                                                        // defaultChecked={true}
+                                                                                        name="MkUpMkDn"
+                                                                                    />
+                                                                                    <label className="form-check-label" ></label>
+                                                                                </div>
+                                                                            </Col>
+                                                                        </Row>
+                                                                    </FormGroup>
                                                                 </Col>
+                                                               
                                                             </Row>
                                                             <Row>
                                                                 <Col md="3">
