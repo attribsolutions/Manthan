@@ -6,7 +6,7 @@ import {
 
 export const commonPageField = (pageId) => ({
   type: COMMON_PAGE_FILED,
-  payload: pageId,
+  pageId,
 });
 export const commonPageFieldSuccess = (data) => ({
   type: COMMON_PAGE_FILED_SUCCESS,

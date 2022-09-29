@@ -159,6 +159,10 @@ export default function PageList() {
 
   const HPageListColoumns = [
     {
+      text: "ID",
+      dataField: "id",
+      sort: true,
+    }, {
       text: "Name",
       dataField: "Name",
       sort: true,

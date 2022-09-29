@@ -14,6 +14,7 @@ import SpinnerReducer from './Utilites/Spinner/reducer'
 import AlertReducer from './Utilites/CustomAlertRedux/reducer'
 import CustomSearchReducer from './Utilites/CustomSearchRedux/reducer'
 import BreadcrumbReducer from './Utilites/Breadcrumb/reducer'
+import CommonPageFieldReducer from './Utilites/PageFiled/reducer'
 
 import Modules from './Administrator/ModulesRedux/reducer'
 import Company from './Administrator/CompanyRedux/reducer'
@@ -48,6 +49,7 @@ const rootReducer = combineReducers({
   AlertReducer,
   CustomSearchReducer,
   BreadcrumbReducer,
+  CommonPageFieldReducer,
   // Administator
   Modules,
   Company,

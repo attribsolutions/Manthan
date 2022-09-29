@@ -49,13 +49,25 @@ export const formValChange = ({ event, state, setState }) => {
 
 
 export function comAddPageFieldFunc({ state, setState, fieldData }) {
-
     var isState = { ...state }
-    const values = { ...state.values }
-    fieldData.forEach(ele => {
+    // isState['fieldLabel'] = {}
+    // isState['isError'] = {}
+    // isState['hasValid'] = {}
+    // isState['required'] = {}
 
+    const values = { ...state.values }
+
+    fieldData.forEach(ele => {
+        debugger
         Object.keys(values).forEach(lab => {
             if (lab === ele.controlId) {
+                // isState['hasValid'] = {
+                //     [lab]: {
+                //         regExp: ele.regExp,
+                //         inValidMsg: ele.fieldLabel,
+                //         valid: false
+                //     }
+                // }
                 isState.fieldLabel[lab] = ele.fieldLabel
                 isState.hasValid[lab].regExp = ele.regExp
                 isState.hasValid[lab].inValidMsg = ele.inValidMsg
@@ -65,6 +77,7 @@ export function comAddPageFieldFunc({ state, setState, fieldData }) {
             }
         });
     });
+    debugger
     setState(isState)
 
 }

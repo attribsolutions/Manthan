@@ -1,13 +1,17 @@
-import { put, takeEvery } from "redux-saga/effects";
+import { call, put, takeEvery } from "redux-saga/effects";
 import { commonPageFiled_API } from "../../../helpers/backend_helper";
-import { CustomSearchInput } from "./actions";
-import { COMMON_PAGE_FILED, CUSTOM_SEARCH_INPUT_SUCCESS } from "./actionType";
+import { COMMON_PAGE_FILED } from "./actionType";
+import {
+  commonPageFieldSuccess,
+  SpinnerState,AlertState
+} from "../../actions"
 
 function* commonPageFiled_GenFunc({ pageId }) {
   yield put(SpinnerState(true))
   try {
-    const response = yield call(commonPageFiled_API,pageId);
-    yield put(getMethod_ForVehicleListSuccess(response.Data));
+    const response = yield call(commonPageFiled_API, pageId);
+
+    yield put(commonPageFieldSuccess(response.Data));
     yield put(SpinnerState(false))
   } catch (error) {
     yield put(SpinnerState(false))
@@ -19,6 +23,6 @@ function* commonPageFiled_GenFunc({ pageId }) {
 }
 
 function* CommonPageField_Saga() {
-  yield takeEvery(COMMON_PAGE_FILED,commonPageFiled_GenFunc);
+  yield takeEvery(COMMON_PAGE_FILED, commonPageFiled_GenFunc);
 }
 export default CommonPageField_Saga;

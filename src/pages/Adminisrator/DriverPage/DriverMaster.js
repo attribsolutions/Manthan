@@ -14,10 +14,10 @@ import {
 import { AvField, AvForm, } from "availity-reactstrap-validation";
 import Select from "react-select";
 import { MetaTags } from "react-meta-tags";
-import { BreadcrumbShow } from "../../../store/actions";
+import { BreadcrumbShow, commonPageFieldSuccess } from "../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
-import { AlertState } from "../../../store/actions";
-import { CommonGetRoleAccessFunction } from "../../../components/Common/CommonGetRoleAccessFunction";
+import { AlertState, commonPageField } from "../../../store/actions";
+
 import {
     PostMethodForDriverMaster,
     getMethodForDriverList,
@@ -48,61 +48,66 @@ const DriverMaster = (props) => {
     const [userPageAccessState, setUserPageAccessState] = useState("");
     const [EditData, setEditData] = useState([]);
     const [DOB_Date_Select, setDOB_Date_Select] = useState("");
-    const [state, setState] = useState({
-        values: {
-            name: "",
-            address: "",
-            uid: "",
-        },
-        fieldLabel: {
-            name: '',
-            address: '',
-            uid: '',
-        },
-
-        isError: {
-            name: "",
-            address: "",
-            uid: "",
-        },
-
-        hasValid: {
-            name: {
-                regExp: '',
-                inValidMsg: "",
-                valid:false
+    const [state, setState] = useState(
+        {
+            values: {
+                name: "",
+                address: "",
+                uid: "",
             },
-            address: {
-                regExp: '',
-                inValidMsg: "",
-                valid:false
+            fieldLabel: {
+                name: '',
+                address: '',
+                uid: '',
             },
-
-            uid: {
-                regExp: '',
-                inValidMsg: "",
-                valid:false
+    
+            isError: {
+                name: "",
+                address: "",
+                uid: "",
             },
-        },
-        required: {
-            name: true,
+    
+            hasValid: {
+                name: {
+                    regExp: '',
+                    inValidMsg: "",
+                    valid: false
+                },
+                address: {
+                    regExp: '',
+                    inValidMsg: "",
+                    valid: false
+                },
+    
+                uid: {
+                    regExp: '',
+                    inValidMsg: "",
+                    valid: false
+                },
+            },
+            required: {
+                name: true,
+            }
         }
-    }
     )
-
+    
     //Access redux store Data /  'save_ModuleSuccess' action data
-    const { PostAPIResponse, DriverList, RoleAccessModifiedinSingleArray } = useSelector((state) => ({
+    const {
+        PostAPIResponse,
+        pageFiled,
+        RoleAccessModifiedinSingleArray
+    } = useSelector((state) => ({
         PostAPIResponse: state.DriverReducer.PostDataMessage,
-        DriverList: state.DriverReducer.DriverList,
         RoleAccessModifiedinSingleArray: state.Login.RoleAccessUpdateData,
-
+        pageFiled: state.CommonPageFieldReducer.pageField
     }));
-
+ 
 
     useEffect(() => {
-        dispatch(getMethodForDriverList());
+        // dispatch(getMethodForDriverList());
+        // dispatch(commonPageField(89))
 
-    }, [dispatch]);
+    }, []);
 
     //userAccess useEffect
     useEffect(() => {
@@ -143,7 +148,7 @@ const DriverMaster = (props) => {
         }
     }, [editDataGatingFromList])
 
-    const values={...state.values}
+    const values = { ...state.values }
 
     useEffect(() => {
         if ((PostAPIResponse.Status === true) && (PostAPIResponse.StatusCode === 200)) {
@@ -180,31 +185,27 @@ const DriverMaster = (props) => {
     const formSubmitHandler = (event) => {
 
         event.preventDefault();
-        if (formValid(state, setState )) {
+        if (formValid(state, setState)) {
             console.log("isvalid", state)
-            
+
             const jsonBody = JSON.stringify({
                 Name: values.name,
                 Address: values.address,
                 DOB: DOB_Date_Select,
                 UID: values.uid
             });
-    
+
             if (pageMode === 'edit') {
                 dispatch(updateDriverTypeID(jsonBody, EditData.id));
             }
-    
+
             else {
                 dispatch(PostMethodForDriverMaster(jsonBody));
             }
-        } 
-       
-        
+        }
+
+
     };
-
-
-
-   
 
     useEffect(() => {
         comAddPageFieldFunc({ state, setState, fieldData })
@@ -213,7 +214,7 @@ const DriverMaster = (props) => {
     const onChange = (event) => {
         formValChange({ event, state, setState })
     }
-;
+        ;
 
 
     const { isError } = state;
@@ -223,7 +224,7 @@ const DriverMaster = (props) => {
     var IsEditMode_Css = ''
     if ((pageMode === "edit") || (pageMode === "copy") || (pageMode === "dropdownAdd")) { IsEditMode_Css = "-5.5%" };
 
-    if (!(userPageAccessState === '')) {
+    if (!(userPageAccessState ==='')) {
         return (
             <React.Fragment>
                 <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
