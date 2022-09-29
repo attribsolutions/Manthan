@@ -20,10 +20,14 @@ export const ORDER_PAGE_API = "Orders"
 export const FOOD_ERP_POST_JWT_LOGIN = "/Login"
 export const FOOD_ERP_POST_USER_DETAILS_AFTER_LOGIN = "/GerUserDetials"
 export const DIVIDION_DROPDOWN_FOR_LOGIN_CHANGE_DIVSION_PAGE = "/PartyDropdownforloginpage"
-
 export const FOOD_ERP_POST_JWT_PASSWORD_FORGET_VERIFY_OTP = "/VerifyOTP"
-
 export const FOOD_ERP_POST_JWT_PASSWORD_FORGET_SEND_OTP = "/SendMail"
+export const SUPER_ADMIN_API = '/SuperAdmin'
+
+export const PAGE_FIELD = '/PageMaster'
+
+
+
 
 //PAGE Master
 export const GET_DEFAULT_MODULE = "/HModules"
@@ -41,15 +45,8 @@ export const COMPANY_API_URL = "/Company"
 
 // Company Group drop down api
 export const GET_COMPANYGROUP = "/CompanyGroups"
-
 export const GET_PAGE_ACCESS = "/HPageAccessNames"
-
-export const H_SUB_MODULES_API_URL = "/H_SubModules"/// post api
-
-export const H_SUB_MODULES_FROM_HPAGES = "/GetSubModuleFromModuleID"/// post api
-
 export const H_PAGES_API_URL = "/PageMaster"/// post api
-
 export const ROLE_API_URL = "/Roles"///get api
 
 /// User Registration
@@ -131,21 +128,14 @@ export const DRIVER_API = '/Driver'
 //Category Types API
 
 export const CATEGORY_DROPDOWN_API = '/GetCategoryByCategoryTypeID'
-
 export const SUBCATEGORY_DROPDOWN_API = '/GetSubCategoryByCategoryID'
-
 export const IMAGETYPE_DROPDOWN_API = '/ImageTypes'
-
 export const MRP_TYPE_DROPDOWN_API = '/MRPTypes'
-
 export const DIVISION_DROPDOWN_API = '/Divisions'
-
 export const PRICE_LIST = '/PriceList'
 
-export const SUPER_ADMIN_API = '/SuperAdmin'
+
 
 export const MRP_MASTER_LIST = '/Mrps'
-
 export const GO_BUTTON_POST_API = '/GetMRP'
-
 export const MARGIN_MASTER_LIST = '/Margins'

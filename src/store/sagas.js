@@ -15,8 +15,6 @@ import CustomSearch_Saga from "./Utilites/CustomSearchRedux/saga"
 // import  Module saga
 import ModulesSaga from "./Administrator/ModulesRedux/saga"
 import CompanySaga from "./Administrator/CompanyRedux/saga"
-import SubModuleSaga from "./Administrator/SubModulesRedux/saga"
-import PageListSaga from "./Administrator/PageMasterRedux/saga"
 import HPageSaga from "./Administrator/HPagesRedux/saga"
 import OrderPageSaga from "./Purchase/OrderPageRedux/saga"
 import UserRegistrationSaga from "./Administrator/UserRegistrationRedux/saga"
@@ -49,8 +47,6 @@ export default function* rootSaga() {
     fork(Alert_Saga),
     fork(ModulesSaga),
     fork(CompanySaga),
-    fork(SubModuleSaga),
-    fork(PageListSaga),
     fork(HPageSaga),
     fork(OrderPageSaga),
     fork(UserRegistrationSaga),
@@ -62,13 +58,13 @@ export default function* rootSaga() {
     fork(EmployeeTypeSaga),
     fork(PartyTypeSaga),
     fork(CategoryTypeMasterSaga),
-   fork(CategoryMasterSaga),
-   fork(SubCategorySaga),
-   fork(VehicleSaga),
-   fork(DriverSaga),
-   fork(CompanyGroupSaga),
-   fork(PriceListSaga),
-   fork(MRPMasterSaga),
-   fork(MarginMasterSaga),
+    fork(CategoryMasterSaga),
+    fork(SubCategorySaga),
+    fork(VehicleSaga),
+    fork(DriverSaga),
+    fork(CompanyGroupSaga),
+    fork(PriceListSaga),
+    fork(MRPMasterSaga),
+    fork(MarginMasterSaga),
   ])
 }
