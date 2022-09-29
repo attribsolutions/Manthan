@@ -298,16 +298,19 @@ export const update_PriceList = (data, id) =>put(`${url. PRICE_LIST}/${id}`, dat
 
 // MRP Master 
 export const Post_MRPMaster_API = (data) => post(url.MRP_MASTER_LIST, data)// post api
+export const GetMRPList_For_Listpage = (data) => post(url.MRP_MASTER_LIST, data)// getapi
+export const update_MRPList = (data) => post(url.MRP_MASTER_LIST, data)// update_MRPList
+export const edit_MRPList = (data) => post(url.MRP_MASTER_LIST, data)// edit api
+export const delete_MRPList_API = (data) => post(url.MRP_MASTER_LIST, data)// delete api
+export const GoButton_Post_API = (data) => post(url.GO_BUTTON_POST_API, data)// go button postapi
 
-export const GoButton_Post_API = (data) => post(url.GO_BUTTON_POST_API, data)// post api
 
 // Margin Master
 export const Post_MarginMaster_API = (data) => post(url.MARGIN_MASTER_LIST, data)// post api
-
-export const GetMRPList_For_Listpage = () => get(url.MRP_MASTER_LIST)//  get priceList
-export const delete_MRPList_API = (id) => del(`${url. MRP_MASTER_LIST}/${id}`)// post api
-export const edit_MRPList = (id) =>get(`${url. MRP_MASTER_LIST}/${id}`) // edit api
-export const update_MRPList = (data, id) =>put(`${url.MRP_MASTER_LIST}/${id}`, data)// update
+export const GetMarginList_For_Listpage = () => get(url.MARGIN_MASTER_LIST)//  get priceList
+export const delete_MarginList_API = (id) => del(`${url. MARGIN_MASTER_LIST}/${id}`)// post api
+export const edit_MarginList = (id) =>get(`${url. MARGIN_MASTER_LIST}/${id}`) // edit api
+export const update_MarginList = (data, id) =>put(`${url.MARGIN_MASTER_LIST}/${id}`, data)// update
 
 
 export {  

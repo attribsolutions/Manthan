@@ -1,4 +1,9 @@
-import { POST_MARGIN_MASTER_DATA_SUCCESS } from "./actionType";
+import { DELETE_MARGIN_LIST_PAGE_SUCCESS, 
+       EDIT_MARGIN_LIST_PAGE_SUCCESS,
+      GET_MARGIN_LIST_PAGE_SUCCESS,
+      POST_MARGIN_MASTER_DATA_SUCCESS,
+       UPDATE_MARGIN_LIST_PAGE_SUCCESS 
+    } from "./actionType";
 
 const INIT_STATE = {
     PostData: [],
