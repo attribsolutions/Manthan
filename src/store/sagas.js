@@ -35,6 +35,7 @@ import DriverSaga from "./Administrator/DriverRedux/saga"
 import CompanyGroupSaga from "./Administrator/CompanyGroupRedux/saga"
 import PriceListSaga from "./Administrator/PriceList/saga"
 import MRPMasterSaga from "./Administrator/MRPMasterRedux/saga"
+import MarginMasterSaga from "./Administrator/MarginMasterRedux/saga"
 
 export default function* rootSaga() {
   yield all([
@@ -68,5 +69,6 @@ export default function* rootSaga() {
    fork(CompanyGroupSaga),
    fork(PriceListSaga),
    fork(MRPMasterSaga),
+   fork(MarginMasterSaga),
   ])
 }
