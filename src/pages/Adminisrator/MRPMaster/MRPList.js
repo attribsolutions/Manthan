@@ -14,7 +14,6 @@ import "../../../assets/scss/CustomeTable/datatables.scss";
 import cellEditFactory, { Type } from 'react-bootstrap-table2-editor';
 import { MetaTags } from "react-meta-tags";
 import { useHistory } from "react-router-dom";
-import MRPMaster from "./MRPMaster";
 import {
   delete_MRPList,
   delete_MRPListSuccess,
@@ -23,7 +22,7 @@ import {
   postMRPMasterDataSuccess,
   updateMRPListSuccess
 } from "../../../store/Administrator/MRPMasterRedux/action";
-
+import MRPMaster from'./MRPMaster'
 const MRPList = (props) => {
 
   const dispatch = useDispatch();

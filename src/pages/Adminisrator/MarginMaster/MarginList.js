@@ -14,8 +14,17 @@ import "../../../assets/scss/CustomeTable/datatables.scss";
 import cellEditFactory, { Type } from 'react-bootstrap-table2-editor';
 import { MetaTags } from "react-meta-tags";
 import { useHistory } from "react-router-dom";
-import MRPMaster from "./MRPMaster";
-import { delete_MRPList, delete_MRPListSuccess, editMRPList, getMRPListPage, postMRPMasterDataSuccess, updateMRPListSuccess } from "../../../store/Administrator/MRPMasterRedux/action";
+import {
+  delete_MRPList,
+  delete_MRPListSuccess,
+  editMRPList,
+  getMRPListPage,
+  postMRPMasterDataSuccess,
+  updateMRPListSuccess
+} from "../../../store/Administrator/MRPMasterRedux/action";
+import MarginMaster from "./MarginMaster"
+
+
 
 const MarginList = (props) => {
 
@@ -182,20 +191,20 @@ const MarginList = (props) => {
     //     sort: true,
     //   },
 
-      {
-        text: "DivisionName",
-        dataField: "DivisionName",
-        sort: true,
-      },
+    {
+      text: "DivisionName",
+      dataField: "DivisionName",
+      sort: true,
+    },
 
-      {
-        text: "PartyName",
-        dataField: "PartyName",
-        sort: true,
-      },
-  
+    {
+      text: "PartyName",
+      dataField: "PartyName",
+      sort: true,
+    },
 
-    
+
+
     {
       text: "Action",
       hidden: (
@@ -242,7 +251,7 @@ const MarginList = (props) => {
       ),
     },
   ];
- 
+
   if (!(userPageAccessState === '')) {
     return (
       <React.Fragment>
@@ -274,7 +283,7 @@ const MarginList = (props) => {
                         ExcelData={TableListData}
                         RedirctPath={"/MarginMaster"}
                       />
-                       
+
 
                       <Row>
                         <Col xl="12">
