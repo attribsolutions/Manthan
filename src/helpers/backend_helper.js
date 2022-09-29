@@ -101,6 +101,10 @@ export const postSocialLogin = data => post(url.SOCIAL_LOGIN, data)
 export const RoleAccessApi_url = (id1,id2,) => get(`${url.ROLE_ACCESS}/${id1}/${id2}`)
 export const post_SuperAdmin = (data) => post(url.SUPER_ADMIN_API, data) //save And Update
 
+//  common pages get data for page filed and validation
+export const commonPageFiled_API = (data) => get(url.SUPER_ADMIN_API, data) //save And Update
+
+
 // Employees  Component All Api 
 
 export const getDesignationID_For_Dropdown = () => get(url.GET_DESIGNATIONID)
@@ -158,25 +162,12 @@ export const updateCompany_ID = (data, id) => put(`${url.COMPANY_API_URL}/${id}`
 export const getCompanyGroup = () => get(url.GET_COMPANYGROUP)// CompanyGroup DropDown API
 
 //PageList And PageMaster
-export const getDefaultModule = () => get(url.GET_DEFAULT_MODULE)
-export const postDefaultMogeuleId = (id) => get(url.POST_MODULE_ID, id)
-export const postSubModule = (id) => get(`${url.H_SUB_MODULES_API_URL}/${id}`)
-export const postAddPage = (data) => post(url.H_SUB_MODULES_API_URL, data)
-export const getPageAcess = () => get(url.GET_PAGE_ACCESS)
 export const showPagesListOnPageType_DropDown_List = () => get(url.SHOW_PAGESLIST_ON_PAGE_TYPE_FOR_DROPDOWN)
 export const showPagesListOnPageAccess_DropDown_List = (id) => get(url.SHOW_PAGESLIST_ON_PAGEACCESS_FOR_DROPDOWN)
 export const ControlTypes_DropDown_Api = () => get(url.GET_CONTROLTYPES_DROPDOWN_API)
-export const FieldValidations_DropDown_Api = () => get(url.GET_FIELD_VALIDATIONS_DROPDOWN_API)
 
-// H_subModule Api
-export const saveH_SubModules = (data) => post(url.H_SUB_MODULES_API_URL, data)
-export const get_SubModulesListData_ApiCall = () => get(url.H_SUB_MODULES_API_URL)
-export const deleteSubModulesUsingID_ApiCall = (id) => del(`${url.H_SUB_MODULES_API_URL}/${id}`)// delete api
-export const getSubModulesEditDataUsingID_ApiCall = (id) => get(`${url.H_SUB_MODULES_API_URL}/${id}`)// edit api
-export const putUpdateSubModule = (Data, id) => put(`${url.H_SUB_MODULES_API_URL}/${id}`, Data)/// update api
 
 //H_pages
-
 export const get_Module_HPages = () => get(url.H_MODULES_API_URL)// Get subModule For H_pages
 export const Fetch_HPagesListApi = () => get(url.H_PAGES_API_URL)//get H_Pages List 
 export const GetFieldValidationOnControlType_DropDown_API = (id) => get(`${url.GET_FIELD_VALIDATIONS_DROPDOWN_API}/${id}`)//  GetFieldValidationOnControlType DropDown API
