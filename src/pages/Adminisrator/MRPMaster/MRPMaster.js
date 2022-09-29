@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import {
     Button,
     Card,
@@ -23,46 +23,43 @@ import paginationFactory, {
     PaginationProvider,
 } from "react-bootstrap-table2-paginator";
 import ToolkitProvider, { Search } from "react-bootstrap-table2-toolkit";
-import {
-    getPriceListData,
-    postPriceListDataSuccess
-} from "../../../store/Administrator/PriceList/action";
-import { getPartyTypes } from "../../../store/Administrator/PartyRedux/action";
 import { getItemList, get_Division_ForDropDown, get_Party_ForDropDown } from "../../../store/Administrator/ItemsRedux/action";
 import BootstrapTable from "react-bootstrap-table-next";
-import { AvField, AvForm } from "availity-reactstrap-validation";
-import { postMRPMasterData, postMRPMasterDataSuccess } from "../../../store/Administrator/MRPMasterRedux/action";
+import { AvForm } from "availity-reactstrap-validation";
+import { postGoButtonData, postMRPMasterData, postMRPMasterDataSuccess } from "../../../store/Administrator/MRPMasterRedux/action";
 
 const MRPMaster = (props) => {
     const dispatch = useDispatch();
     const history = useHistory();
-
+    const formRef = useRef(null);
     //*** "isEditdata get all data from ModuleID for Binding  Form controls
     let editDataGatingFromList = props.state;
 
     //SetState  Edit data Geting From Modules List component
     const [pageMode, setPageMode] = useState("save");
-    // const [partyTypeSelect, setPartyTypeSelect] = useState({ value: '' });
     const [userPageAccessState, setUserPageAccessState] = useState("");
-    const [party_dropdown_Select, setPartyType_dropdown_Select] = useState("");
+    const [party_dropdown_Select, setParty_dropdown_Select] = useState("");
     const [division_dropdown_Select, setDivision_dropdown_Select] = useState("");
-    const [EffectiveDate, setEffectiveDate] = useState('');
+    const [effectiveDate, setEffectiveDate] = useState('');
     const [MRP, setMRP] = useState('');
+    const [CurrentMRP, setCurrentMRP] = useState();
 
     //Access redux store Data /  'save_ModuleSuccess' action data
     const { PostAPIResponse,
-        pages,
+        GoButtonPostData,
         Party,
         Division,
         RoleAccessModifiedinSingleArray
     } = useSelector((state) => ({
-        pages: state.ItemMastersReducer.pages,
-        PostAPIResponse: state.PriceListReducer.postMsg,
+        // TableData: state.ItemMastersReducer.pages,
+        // TableData: state.CategoryMasterReducer.CategoryListData,
+        PostAPIResponse: state.MRPMasterReducer.PostData,
+        GoButtonPostData: state.MRPMasterReducer.GoButtonPostData,
         Party: state.ItemMastersReducer.Party,
         Division: state.ItemMastersReducer.Division,
         RoleAccessModifiedinSingleArray: state.Login.RoleAccessUpdateData,
     }));
-    console.log(pages)
+    console.log("GoButtonPostData", GoButtonPostData)
     // userAccess useEffect
     useEffect(() => {
         let userAcc = undefined
@@ -89,7 +86,8 @@ const MRPMaster = (props) => {
     useEffect(() => {
         dispatch(get_Party_ForDropDown());
         dispatch(get_Division_ForDropDown());
-        dispatch(getItemList());
+        // dispatch(getItemList());
+
     }, [dispatch]);
 
     const PartyDropdown_Options = Party.map((Data) => ({
@@ -103,7 +101,7 @@ const MRPMaster = (props) => {
     }));
 
     function PartyType_Dropdown_OnChange_Handller(e) {
-        setPartyType_dropdown_Select(e)
+        setParty_dropdown_Select(e)
 
     }
 
@@ -114,24 +112,68 @@ const MRPMaster = (props) => {
     const EffectiveDateHandler = (e, date) => {
         setEffectiveDate(date)
     }
+
+    const MRPHandler = (e, cellContent, user, abd) => {
+        user["MRP"] = e.target.value
+    }
+
+    const CurrentMRPHandler = (e, cellContent, user, abd) => {
+        debugger
+        user["CurrentMRP"] = e.target.value
+    }
+    const GoButton_Handler = (event, values) => {
+        const jsonBody = JSON.stringify({
+            Division: division_dropdown_Select.value,
+            Party: party_dropdown_Select.value,
+            EffectiveDate: effectiveDate
+
+        });
+        dispatch(postGoButtonData(jsonBody))
+        console.log("jsonBody", jsonBody)
+    };
+
     useEffect(() => {
-        if ((PostAPIResponse.Status === true) && (PostAPIResponse.StatusCode === 200)) {
-            // setpartyType_dropdown_Select('')
+
+        if ((PostAPIResponse.Status === true) && (PostAPIResponse.StatusCode === 200) && !(pageMode === "dropdownAdd")) {
             dispatch(postMRPMasterDataSuccess({ Status: false }))
-            // dispatch(getPriceListData(partyType_dropdown_Select.value))
-            dispatch(AlertState({
-                Type: 1,
-                Status: true,
-                Message: PostAPIResponse.Message,
-                RedirectPath: '',
-            }))
+            formRef.current.reset();
+            setDivision_dropdown_Select('')
+            setEffectiveDate('')
+            setParty_dropdown_Select('')
+            setMRP('')
+
+            if (pageMode === "dropdownAdd") {
+                dispatch(AlertState({
+                    Type: 1,
+                    Status: true,
+                    Message: PostAPIResponse.Message,
+                }))
+            }
+            else {
+                dispatch(AlertState({
+                    Type: 1,
+                    Status: true,
+                    Message: PostAPIResponse.Message,
+                    //   RedirectPath: '/EmployeeList',
+                }))
+            }
         }
 
+        else if (PostAPIResponse.Status === true) {
+            dispatch(postMRPMasterDataSuccess({ Status: false }))
+            dispatch(AlertState({
+                Type: 4,
+                Status: true,
+                Message: JSON.stringify(PostAPIResponse.Message),
+                RedirectPath: false,
+                AfterResponseAction: false
+            }));
+        }
     }, [PostAPIResponse])
 
     const pageOptions = {
         sizePerPage: 10,
-        totalSize: pages.length,
+        totalSize: GoButtonPostData.length,
         custom: true,
     };
 
@@ -143,22 +185,44 @@ const MRPMaster = (props) => {
         },
         {
             text: "Current MRP",
-            dataField: "",
+            dataField: "CurrentMRP",
             sort: true,
+            formatter: (cellContent, user, abd) => (
+                <>
+                    <div style={{ justifyContent: 'center' }} >
+                        <Col>
+                            <FormGroup className=" col col-sm-4 ">
+                                <Input
+                                    id=""
+                                    type="text"
+                                    disabled={true}
+                                    defaultValue={GoButtonPostData.CurrentMRP}
+                                    className="col col-sm text-center"
+                                    onChange={(e) => CurrentMRPHandler(e, cellContent, user, abd)}
+                                />
+                            </FormGroup>
+                        </Col>
+
+                    </div>
+                </>
+            ),
         },
         {
+
             text: "MRP ",
-            dataField: "",
+            dataField: "MRP",
             sort: true,
-            formatter: (cellContent, user) => (
+            formatter: (cellContent, user, abd) => (
                 <>
-                    <div class="d-flex gap-3" style={{ display: 'flex', justifyContent: 'center' }} >
+                    <div style={{ justifyContent: 'center' }} >
                         <Col>
-                            <FormGroup className="mb-3 col col-sm-4 ">
+                            <FormGroup className=" col col-sm-4 ">
                                 <Input
                                     type="text"
                                     defaultValue={MRP}
-                                    className="col col-sm text-center"></Input>
+                                    className="col col-sm text-center"
+                                    onChange={(e) => MRPHandler(e, cellContent, user, abd)}
+                                />
                             </FormGroup>
                         </Col>
 
@@ -168,27 +232,27 @@ const MRPMaster = (props) => {
         },
     ]
 
-    // const ItemData = pages.map((index) => ({
-    //     Item: index.id,
-        
-    // }))
 
     //'Save' And 'Update' Button Handller
     const handleValidSubmit = (event, values) => {
-        const ItemData = pages.map((index) => {return index.id })
         debugger
-        const jsonBody = JSON.stringify([{
+        var ItemData = GoButtonPostData.map((index) => ({
             Division: division_dropdown_Select.value,
             Party: party_dropdown_Select.value,
-            EffectiveDate: EffectiveDate,
+            EffectiveDate: effectiveDate,
             Company: 1,
             CreatedBy: 1,
             UpdatedBy: 1,
-            Item:ItemData
+            Item: index.id,
+            MRP: index.MRP
+        }))
 
+        const Find = ItemData.filter((index) => {
+            return !(index.MRP === '')
+        })
 
-            // MRP:MRP.value
-        }]);
+        console.log("Find", Find)
+        const jsonBody = JSON.stringify(Find)
 
         dispatch(postMRPMasterData(jsonBody));
         console.log("jsonBody", jsonBody)
@@ -214,8 +278,11 @@ const MRPMaster = (props) => {
                         </CardHeader>
 
                         <CardBody>
-                            <AvForm onValidSubmit={(e, v) => { handleValidSubmit(e, v) }}
-
+                            <AvForm
+                                onValidSubmit={(e, v) => {
+                                    handleValidSubmit(e, v);
+                                }}
+                                ref={formRef}
                             >
                                 <Row className="">
                                     <Col md={12}>
@@ -224,7 +291,7 @@ const MRPMaster = (props) => {
 
                                             <CardHeader className="card-header   text-black " style={{ backgroundColor: "#e9e9ef" }} >
                                                 <Row className="mt-3">
-                                                    <Col md="4">
+                                                    <Col md="3">
                                                         <FormGroup className="mb-3 row ">
                                                             <Label className="col-sm-3 p-2 ml-n4 ">Division</Label>
                                                             <Col md="9">
@@ -241,7 +308,7 @@ const MRPMaster = (props) => {
                                                         </FormGroup>
                                                     </Col>
 
-                                                    <Col md="4">
+                                                    <Col md="3">
                                                         <FormGroup className="mb-3 row ">
                                                             <Label className="col-sm-3 p-2 ml-n4 ">Party Name</Label>
                                                             <Col md="9">
@@ -258,14 +325,14 @@ const MRPMaster = (props) => {
                                                         </FormGroup>
                                                     </Col>
 
-                                                    <Col md="4">
+                                                    <Col md="3">
                                                         <FormGroup className="mb-3 row ">
-                                                            <Label className="col-sm-3 p-1 ml-n4 ">EffectiveDate</Label>
+                                                            <Label className="col-sm-3 ml-n5 ">EffectiveDate</Label>
                                                             <Col md="9">
                                                                 <Flatpickr
                                                                     id="EffectiveDate"
-                                                                    name="EffectiveDate"
-                                                                    value={EffectiveDate}
+                                                                    name="effectiveDate"
+                                                                    value={effectiveDate}
                                                                     className="form-control d-block p-2 bg-white text-dark"
                                                                     placeholder=" Please Enter FSSAI Exipry"
                                                                     options={{
@@ -277,8 +344,11 @@ const MRPMaster = (props) => {
                                                                 />
                                                             </Col>
                                                         </FormGroup>
-
                                                     </Col>
+                                                    <Col md="3" className="mt- ">
+                                                        <Button type="button" color="primary" onClick={() => { GoButton_Handler() }} >Go</Button>
+                                                    </Col>
+
                                                 </Row>
                                             </CardHeader>
                                         </Card>
@@ -298,7 +368,7 @@ const MRPMaster = (props) => {
                         {({ paginationProps, paginationTableProps }) => (
                             <ToolkitProvider
                                 keyField="id"
-                                data={pages}
+                                data={GoButtonPostData}
                                 columns={pagesListColumns}
                                 search
                             >

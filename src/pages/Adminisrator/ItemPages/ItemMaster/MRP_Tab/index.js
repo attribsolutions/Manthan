@@ -10,7 +10,7 @@ import { get_Division_ForDropDown, get_Party_ForDropDown } from '../../../../../
 function MRPTab(props) {
   
     const dispatch = useDispatch();
-    const [division, setDivision] = useState('');
+    const [division, setDivision] = useState();
     const [partyName, setPartyName] = useState('');
     const [effectiveDate, setEffectiveDate] = useState('');
     const [MRP, setMRP] = useState('');
@@ -59,10 +59,10 @@ function MRPTab(props) {
         
         debugger
         const val = {
-            Division: division.value,
+            Division: !(division === "") ? division.value : '',
             DivisionName: division.label,
             PartyName: partyName.label,
-            Party: partyName.value,
+            Party:!(partyName === "") ? partyName.value : '',
             EffectiveDate: effectiveDate,
             MRP: MRP,
             CreatedBy: 1,
@@ -71,9 +71,7 @@ function MRPTab(props) {
 
         };
 
-        if (!(division === "")
-            && !(partyName === "")
-            && !(effectiveDate === "")
+        if ( !(effectiveDate === "")
             && !(MRP === "")
         ) {
             const totalTableData = props.tableData.length;
