@@ -38,6 +38,7 @@ import DriverReducer from "./Administrator/DriverRedux/reducer"
 import CompanyGroupReducer from "./Administrator/CompanyGroupRedux/reducer"
 import PriceListReducer from "./Administrator/PriceList/reducer"
 import MRPMasterReducer from "./Administrator/MRPMasterRedux/reducer"
+import MarginMasterReducer from "./Administrator/MarginMasterRedux/reducer"
 const rootReducer = combineReducers({
   Layout,
   Login,
@@ -72,8 +73,8 @@ const rootReducer = combineReducers({
    DriverReducer,
    CompanyGroupReducer,
    PriceListReducer,
-   MRPMasterReducer
-
+   MRPMasterReducer,
+   MarginMasterReducer,
 })
 
 export default rootReducer

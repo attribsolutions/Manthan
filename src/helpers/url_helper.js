@@ -145,3 +145,7 @@ export const PRICE_LIST = '/PriceList'
 export const SUPER_ADMIN_API = '/SuperAdmin'
 
 export const MRP_MASTER_LIST = '/Mrps'
+
+export const GO_BUTTON_POST_API = '/GetMRP'
+
+export const MARGIN_MASTER_LIST = '/Margins'

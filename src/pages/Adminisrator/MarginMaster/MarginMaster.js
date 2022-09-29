@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import {
+    Button,
     Card,
     CardBody,
     CardHeader,
@@ -22,39 +23,35 @@ import paginationFactory, {
     PaginationProvider,
 } from "react-bootstrap-table2-paginator";
 import ToolkitProvider, { Search } from "react-bootstrap-table2-toolkit";
-import {
-    getPriceListData,
-    postPriceListDataSuccess
-} from "../../../store/Administrator/PriceList/action";
 import { getPartyTypes } from "../../../store/Administrator/PartyRedux/action";
 import { getItemList, get_Division_ForDropDown, get_PriceList_ForDropDown } from "../../../store/Administrator/ItemsRedux/action";
 import BootstrapTable from "react-bootstrap-table-next";
-import { AvField } from "availity-reactstrap-validation";
-import cellEditFactory, { Type } from 'react-bootstrap-table2-editor';
+import { postMarginMasterData, postMarginMasterDataSuccess } from "../../../store/Administrator/MarginMasterRedux/action";
+import { AvForm } from "availity-reactstrap-validation";
 
 const MarginMaster = (props) => {
     const dispatch = useDispatch();
     const history = useHistory();
-
+    const formRef = useRef(null);
     //*** "isEditdata get all data from ModuleID for Binding  Form controls
     let editDataGatingFromList = props.state;
 
     //SetState  Edit data Geting From Modules List component
     const [pageMode, setPageMode] = useState("save");
     const [userPageAccessState, setUserPageAccessState] = useState("");
-    const [partyType_dropdown_Select, setPartyType_dropdown_Select] = useState("");
+    const [partyName_dropdown_Select, setPartyName_dropdown_Select] = useState("");
     const [priceList_dropdown_Select, setpriceList_dropdown_Select] = useState("");
-    const [FSSAIExipry, setFSSAIExipry] = useState('');
-
+    const [EffectiveDate, setEffectiveDate] = useState('');
+    const [Margin, setMRP] = useState('');
     //Access redux store Data /  'save_ModuleSuccess' action data
     const { PostAPIResponse,
-        pages,
+        TableData,
         PartyTypes,
         PriceList,
         RoleAccessModifiedinSingleArray
     } = useSelector((state) => ({
-        pages: state.ItemMastersReducer.pages,
-        PostAPIResponse: state.PriceListReducer.postMsg,
+        TableData: state.ItemMastersReducer.pages,
+        PostAPIResponse: state.MarginMasterReducer.PostData,
         PartyTypes: state.PartyMasterReducer.PartyTypes,
         PriceList: state.ItemMastersReducer.PriceList,
         RoleAccessModifiedinSingleArray: state.Login.RoleAccessUpdateData,
@@ -81,9 +78,9 @@ const MarginMaster = (props) => {
 
     useEffect(() => {
         dispatch(getPartyTypes());
-        dispatch(get_Division_ForDropDown());
-        dispatch(getItemList());
         dispatch(get_PriceList_ForDropDown());
+        dispatch(getItemList());
+
     }, [dispatch]);
 
     const PartyTypeDropdown_Options = PartyTypes.map((Data) => ({
@@ -97,7 +94,7 @@ const MarginMaster = (props) => {
     }));
 
     function PartyType_Dropdown_OnChange_Handller(e) {
-        setPartyType_dropdown_Select(e)
+        setPartyName_dropdown_Select(e)
 
     }
 
@@ -105,27 +102,57 @@ const MarginMaster = (props) => {
         setpriceList_dropdown_Select(e)
 
     }
-    const FSSAIExipryHandler = (e, date) => {
-        setFSSAIExipry(date)
+    const EffectiveDateHandler = (e, date) => {
+        setEffectiveDate(date)
     }
+
+    const MRPHandler = (e, cellContent, user, abd) => {
+        user["Margin"] = e.target.value
+    }
+
     useEffect(() => {
-        if ((PostAPIResponse.Status === true) && (PostAPIResponse.StatusCode === 200)) {
-            // setpartyType_dropdown_Select('')
-            dispatch(postPriceListDataSuccess({ Status: false }))
-            dispatch(getPriceListData(partyType_dropdown_Select.value))
-            dispatch(AlertState({
-                Type: 1,
-                Status: true,
-                Message: PostAPIResponse.Message,
-                RedirectPath: '',
-            }))
+
+        if ((PostAPIResponse.Status === true) && (PostAPIResponse.StatusCode === 200) && !(pageMode === "dropdownAdd")) {
+            dispatch(postMarginMasterDataSuccess({ Status: false }))
+            formRef.current.reset();
+            setPartyName_dropdown_Select('')
+            setEffectiveDate('')
+            setpriceList_dropdown_Select('')
+            setMRP('')
+
+            if (pageMode === "dropdownAdd") {
+                dispatch(AlertState({
+                    Type: 1,
+                    Status: true,
+                    Message: PostAPIResponse.Message,
+                }))
+            }
+            else {
+                dispatch(AlertState({
+                    Type: 1,
+                    Status: true,
+                    Message: PostAPIResponse.Message,
+                    //   RedirectPath: '/EmployeeList',
+                }))
+            }
         }
 
+        else if (PostAPIResponse.Status === true) {
+            dispatch(postMarginMasterDataSuccess({ Status: false }))
+            dispatch(AlertState({
+                Type: 4,
+                Status: true,
+                Message: JSON.stringify(PostAPIResponse.Message),
+                RedirectPath: false,
+                AfterResponseAction: false
+            }));
+        }
     }, [PostAPIResponse])
+
 
     const pageOptions = {
         sizePerPage: 10,
-        totalSize: pages.length,
+        totalSize: TableData.length,
         custom: true,
     };
 
@@ -142,28 +169,77 @@ const MarginMaster = (props) => {
             sort: true,
         },
         {
-            text: "Current MRP",
+            text: "Current Margin",
             dataField: "",
             sort: true,
-        },
-        {
-            text: "MRP ",
-            dataField: "",
-            sort: true,
-            formatter: (cellContent, user) => (
+            formatter: (cellContent, user, abd) => (
                 <>
-                    <div class="d-flex gap-3" style={{ display: 'flex', justifyContent: 'center' }} >
+                    <div style={{ justifyContent: 'center' }} >
                         <Col>
-                        <FormGroup className="mb-3 col col-sm-4 ">
-                            <Input type="text" className="col col-sm text-center"></Input>
+                            <FormGroup className=" col col-sm-4 ">
+                                <Input
+                                    id=""
+                                    type="text"
+                                    disabled={true}
+                                    // defaultValue={Margin}
+                                    className="col col-sm text-center"
+                                />
                             </FormGroup>
                         </Col>
-                       
+
+                    </div>
+                </>
+            ),
+        },
+        {
+
+            text: "Margin ",
+            dataField: "",
+            sort: true,
+            formatter: (cellContent, user, abd) => (
+                <>
+                    <div style={{ justifyContent: 'center' }} >
+                        <Col>
+                            <FormGroup className=" col col-sm-4 ">
+                                <Input
+                                    type="text"
+                                    defaultValue={Margin}
+                                    className="col col-sm text-center"
+                                    onChange={(e) => MRPHandler(e, cellContent, user, abd)}
+                                />
+                            </FormGroup>
+                        </Col>
+
                     </div>
                 </>
             ),
         },
     ]
+
+    //'Save' And 'Update' Button Handller
+    const handleValidSubmit = (event, values) => {
+
+        var ItemData = TableData.map((index) => ({
+            PriceList: priceList_dropdown_Select.value,
+            Party: partyName_dropdown_Select.value,
+            EffectiveDate: EffectiveDate,
+            Company: 1,
+            CreatedBy: 1,
+            UpdatedBy: 1,
+            Item: index.id,
+            Margin: index.Margin
+        }))
+
+        const Find = ItemData.find((index) => {
+            return !(index.Margin === undefined)
+        })
+
+        console.log("Find", Find)
+        const jsonBody = JSON.stringify([Find])
+
+        dispatch(postMarginMasterData(jsonBody));
+        console.log("jsonBody", jsonBody)
+    };
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
     var IsEditMode_Css = ''
     if ((pageMode === "edit") || (pageMode === "copy") || (pageMode === "dropdownAdd")) { IsEditMode_Css = "-5.5%" };
@@ -184,79 +260,96 @@ const MarginMaster = (props) => {
                         </CardHeader>
 
                         <CardBody className=" vh-10 0 text-black"  >
-                            <Row className="">
-                                <Col md={12}>
-                                    <Card style={{ backgroundColor: "whitesmoke" }}>
+                            <AvForm
+                                onValidSubmit={(e, v) => {
+                                    handleValidSubmit(e, v);
+                                }}
+                                ref={formRef}
+                            >
+                                <Row className="">
+                                    <Col md={12}>
+                                        <Card style={{ backgroundColor: "whitesmoke" }}>
 
 
-                                        <CardHeader className="card-header   text-black " style={{ backgroundColor: "#e9e9ef" }} >
-                                            <Row className="mt-3">
-                                            <Col md="4">
-                                                    <FormGroup className="mb-3 row ">
-                                                        <Label className="col-sm-3 p-2 ml-n4 ">PriceList</Label>
-                                                        <Col md="9">
-                                                            <Select
-                                                                value={priceList_dropdown_Select}
-                                                                options={PriceList_DropdownOptions}
-                                                                className="rounded-bottom"
-                                                                placeholder="select"
-                                                                onChange={(e) => { PriceList_Dropdown_OnChange_Handller(e) }}
-                                                                classNamePrefix="select2-selection"
+                                            <CardHeader className="card-header   text-black " style={{ backgroundColor: "#e9e9ef" }} >
+                                                <Row className="mt-3">
+                                                    <Col md="3">
+                                                        <FormGroup className="mb-3 row ">
+                                                            <Label className="col-sm-3 p-2 ml-n4 ">PriceList</Label>
+                                                            <Col md="9">
+                                                                <Select
+                                                                    value={priceList_dropdown_Select}
+                                                                    options={PriceList_DropdownOptions}
+                                                                    className="rounded-bottom"
+                                                                    placeholder="select"
+                                                                    onChange={(e) => { PriceList_Dropdown_OnChange_Handller(e) }}
+                                                                    classNamePrefix="select2-selection"
 
-                                                            />
-                                                        </Col>
-                                                    </FormGroup>
-                                                </Col>
+                                                                />
+                                                            </Col>
+                                                        </FormGroup>
+                                                    </Col>
 
-                                                <Col md="4">
-                                                    <FormGroup className="mb-3 row ">
-                                                        <Label className="col-sm-3 p-2 ml-n4 ">Party Type</Label>
-                                                        <Col md="9">
-                                                            <Select
-                                                                value={partyType_dropdown_Select}
-                                                                options={PartyTypeDropdown_Options}
-                                                                className="rounded-bottom"
-                                                                placeholder="select"
-                                                                onChange={(e) => { PartyType_Dropdown_OnChange_Handller(e) }}
-                                                                classNamePrefix="select2-selection"
+                                                    <Col md="3">
+                                                        <FormGroup className="mb-3 row ">
+                                                            <Label className="col-sm-3 p-2 ml-n4 ">Party Name</Label>
+                                                            <Col md="9">
+                                                                <Select
+                                                                    value={partyName_dropdown_Select}
+                                                                    options={PartyTypeDropdown_Options}
+                                                                    className="rounded-bottom"
+                                                                    placeholder="select"
+                                                                    onChange={(e) => { PartyType_Dropdown_OnChange_Handller(e) }}
+                                                                    classNamePrefix="select2-selection"
 
-                                                            />
-                                                        </Col>
-                                                    </FormGroup>
-                                                </Col>
+                                                                />
+                                                            </Col>
+                                                        </FormGroup>
+                                                    </Col>
 
-                                                <Col md="4">
-                                                    <FormGroup className="mb-3 row ">
-                                                        <Label className="col-sm-3 p-1 ml-n4 ">EffectiveDate</Label>
-                                                        <Col md="9">
-                                                            <Flatpickr
-                                                                id="FSSAIExipry"
-                                                                name="FSSAIExipry"
-                                                                value={FSSAIExipry}
-                                                                className="form-control d-block p-2 bg-white text-dark"
-                                                                placeholder=" Please Enter FSSAI Exipry"
-                                                                options={{
-                                                                    altInput: true,
-                                                                    altFormat: "F j, Y",
-                                                                    dateFormat: "Y-m-d"
-                                                                }}
-                                                                onChange={FSSAIExipryHandler}
-                                                            />
-                                                        </Col>
-                                                    </FormGroup>
-                                                </Col>
-                                            </Row>
-                                        </CardHeader>
-                                    </Card>
-                                </Col>
-                            </Row>
+                                                    <Col md="3">
+                                                        <FormGroup className="mb-3 row ">
+                                                            <Label className="col-sm-3  ml-n4 ">EffectiveDate</Label>
+                                                            <Col md="9">
+                                                                <Flatpickr
+                                                                    id="EffectiveDate"
+                                                                    name="EffectiveDate"
+                                                                    value={EffectiveDate}
+                                                                    className="form-control d-block p-2 bg-white text-dark"
+                                                                    placeholder=" Please Enter FSSAI Exipry"
+                                                                    options={{
+                                                                        altInput: true,
+                                                                        altFormat: "F j, Y",
+                                                                        dateFormat: "Y-m-d"
+                                                                    }}
+                                                                    onChange={EffectiveDateHandler}
+                                                                />
+                                                            </Col>
+                                                        </FormGroup>
+                                                    </Col>
+                                                    <Col md="3" className="mt- ">
+                                                        <Button type="button" color="primary" >Go</Button>
+                                                    </Col>
+
+                                                </Row>
+                                            </CardHeader>
+                                        </Card>
+                                    </Col>
+                                </Row>
+                                <button
+                                    type="submit"
+                                    data-mdb-toggle="tooltip" data-mdb-placement="top" title="Save MRP"
+                                    className="btn btn-primary w-md mt-2 float-end"
+                                > <i className="fas fa-save me-2"></i> Save
+                                </button>
+                            </AvForm>
                         </CardBody>
                     </Card>
                     <PaginationProvider pagination={paginationFactory(pageOptions)}>
                         {({ paginationProps, paginationTableProps }) => (
                             <ToolkitProvider
                                 keyField="id"
-                                data={pages}
+                                data={TableData}
                                 columns={pagesListColumns}
                                 search
                             >

@@ -81,12 +81,12 @@ const PartyMaster = (props) => {
         priceListByPartyType: state.PriceListReducer.priceListByPartyType,
 
     }));
-
+    console.log("PartyTypes",PartyTypes)
     useEffect(() => {
-
+        
         let userAcc = undefined
         if ((editDataGatingFromList === undefined)) {
-
+            
             let locationPath = history.location.pathname
             userAcc = RoleAccessModifiedinSingleArray.find((inx) => {
                 return (`/${inx.ActualPagePath}` === locationPath)
@@ -97,13 +97,15 @@ const PartyMaster = (props) => {
             userAcc = RoleAccessModifiedinSingleArray.find((inx) => {
                 return (`/${inx.ActualPagePath}` === relatatedPage)
             })
-
+            
         }
         if (!(userAcc === undefined)) {
             setUserPageAccessState(userAcc)
         }
-
+        
     }, [RoleAccessModifiedinSingleArray])
+    
+   
 
     useEffect(() => {
         dispatch(getState());
@@ -249,6 +251,11 @@ const PartyMaster = (props) => {
     }
 
     function PartyType_Dropdown_OnChange_Handller(e) {
+        const IsDivision = PartyTypes.filter((element) => {
+            return element.IsDivision === true
+          });
+        console.log("IsDivision", IsDivision)
+
         setPartyType_dropdown_Select(e)
         // dispatch(GetPartyTypeByDivisionTypeID(e.value))
         // dispatch(GetCompanyByDivisionTypeID(e.value))
@@ -670,7 +677,7 @@ const PartyMaster = (props) => {
                                                                         </Row>
                                                                     </FormGroup>
                                                                 </Col>
-                                                               
+
                                                             </Row>
                                                             <Row>
                                                                 <Col md="3">
