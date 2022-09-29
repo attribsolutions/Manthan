@@ -68,7 +68,11 @@ import PriceList from "../pages/Adminisrator/PriceList/PriceList";
 
 import MRPMaster from "../pages/Adminisrator/MRPMaster/MRPMaster";
 import MarginMaster from "../pages/Adminisrator/MarginMaster/MarginMaster";
+
 import Index from "../pages/Adminisrator/CustomValidation";
+
+import MRPList from "../pages/Adminisrator/MRPMaster/MRPList";
+import MarginList from "../pages/Adminisrator/MarginMaster/MarginList";
 
 
 
@@ -189,7 +193,9 @@ const userRoutes = [
   // { path: "/PriceList", component: PartyMasterTab },
   { path: "/PriceMaster", component: PriceMaster },
   { path: "/MRPMaster", component: MRPMaster },
+  { path: "/MRPList", component: MRPList},
   { path: "/MarginMaster", component: MarginMaster },
+  { path: "/MarginList", component: MarginList },
 
 
 

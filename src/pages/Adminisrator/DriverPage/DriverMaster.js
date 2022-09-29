@@ -18,81 +18,22 @@ import { BreadcrumbShow } from "../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
 import { AlertState } from "../../../store/actions";
 import { CommonGetRoleAccessFunction } from "../../../components/Common/CommonGetRoleAccessFunction";
-import { PostMethodForDriverMaster, getMethodForDriverList, PostMethod_ForDriverMasterSuccess, getMethod_ForDriverListSuccess, editDriverTypeSuccess, updateDriverTypeID } from "../../../store/Administrator/DriverRedux/action";
+import {
+    PostMethodForDriverMaster,
+    getMethodForDriverList,
+    PostMethod_ForDriverMasterSuccess,
+    getMethod_ForDriverListSuccess,
+    editDriverTypeSuccess,
+    updateDriverTypeID
+} from "../../../store/Administrator/DriverRedux/action";
 import { useHistory } from "react-router-dom";
 import Flatpickr from "react-flatpickr"
-
-// import { actionChannel } from "redux-saga/effects";
-
-const formValid = ({ isError, required, hasValid },func) => {
-
-    let isValid = false;
-    Object.values(isError).forEach(val => {
-
-        if ((val.length >= 0)) {
-            isValid = false
-        } else {
-            isValid = true
-        }
-    });
-
-    Object.keys(required).forEach((lab) => {
-
-        if ((isError[lab].length >= 0)) {
-            isError[lab] = hasValid[lab].inValidMsg
-            isValid = false
-            func({
-                isError,
-                hasValid,
-                required
-            })
-        } else {
-            isValid = true
-        }
-    });
-
-
-    return isValid
-};
-
-
-const formValChange = (e , state,setFunc) => {
-
-    e.preventDefault();
-    const { name, value } = e.target;
-    let isError = { ...state.isError };
-    let hasValid = { ...state.hasValid };
-
-    const regExp = RegExp(hasValid[name].regExp)
-    isError[name] = regExp.test(value)
-        ? ""
-        : hasValid[name].inValidMsg
-
-    // switch (name) {
-    //     case "name":
-    //         isError.name =
-    //             value.length < 4 ? "Atleast 4 characaters required" : "";
-    //         break;
-    //     case "address":
-    //         // isError.address =[isvalid.address.FieldValidationName].test(value)
-    //         isError.address = address.test(value)
-    //             ? ""
-    //             : "Email address is invalid";
-    //         break;
-    //     case "uid":
-    //         isError.uid =
-    //             value.length < 12 ? "Atleast 6 characaters required" : "";
-    //         break;
-    //     default:
-    //         break;
-    // }
-    setFunc({
-        isError,
-        hasValid,
-        [name]: value
-
-    })
-};
+import {
+    comAddPageFieldFunc,
+    fieldData,
+    formValChange,
+    formValid,
+} from "./validfiles";
 
 const DriverMaster = (props) => {
 
@@ -107,7 +48,47 @@ const DriverMaster = (props) => {
     const [userPageAccessState, setUserPageAccessState] = useState("");
     const [EditData, setEditData] = useState([]);
     const [DOB_Date_Select, setDOB_Date_Select] = useState("");
+    const [state, setState] = useState({
+        values: {
+            name: "",
+            address: "",
+            uid: "",
+        },
+        fieldLabel: {
+            name: '',
+            address: '',
+            uid: '',
+        },
 
+        isError: {
+            name: "",
+            address: "",
+            uid: "",
+        },
+
+        hasValid: {
+            name: {
+                regExp: '',
+                inValidMsg: "",
+                valid:false
+            },
+            address: {
+                regExp: '',
+                inValidMsg: "",
+                valid:false
+            },
+
+            uid: {
+                regExp: '',
+                inValidMsg: "",
+                valid:false
+            },
+        },
+        required: {
+            name: true,
+        }
+    }
+    )
 
     //Access redux store Data /  'save_ModuleSuccess' action data
     const { PostAPIResponse, DriverList, RoleAccessModifiedinSingleArray } = useSelector((state) => ({
@@ -162,6 +143,7 @@ const DriverMaster = (props) => {
         }
     }, [editDataGatingFromList])
 
+    const values={...state.values}
 
     useEffect(() => {
         if ((PostAPIResponse.Status === true) && (PostAPIResponse.StatusCode === 200)) {
@@ -195,128 +177,47 @@ const DriverMaster = (props) => {
         }
     }, [PostAPIResponse])
 
+    const formSubmitHandler = (event) => {
 
-    const FormSubmitButton_Handler = (event, values) => {
-        const jsonBody = JSON.stringify({
-            Name: values.Name,
-            Address: values.Address,
-            DOB: DOB_Date_Select,
-            UID: values.UID
-        });
-
-        if (pageMode === 'edit') {
-            dispatch(updateDriverTypeID(jsonBody, EditData.id));
-        }
-
-        else {
-            dispatch(PostMethodForDriverMaster(jsonBody));
-        }
+        event.preventDefault();
+        if (formValid(state, setState )) {
+            console.log("isvalid", state)
+            
+            const jsonBody = JSON.stringify({
+                Name: values.name,
+                Address: values.address,
+                DOB: DOB_Date_Select,
+                UID: values.uid
+            });
+    
+            if (pageMode === 'edit') {
+                dispatch(updateDriverTypeID(jsonBody, EditData.id));
+            }
+    
+            else {
+                dispatch(PostMethodForDriverMaster(jsonBody));
+            }
+        } 
+       
+        
     };
-
-    const PageFieldMaster = [
-        {
-            ControlID: 2,
-            ControlType: 2,
-            ControlTypeName: "Dropdown",
-            FieldLabel: "demo data List",
-            IsCompulsory: true,
-            DefaultSort: true,
-            FieldValidation: 4,
-            FieldValidationName: "Mobile",
-            ListPageSeq: 1,
-            ShowInListPage: true,
-            ShowInDownload: true,
-            DownloadDefaultSelect: false
-        },
-        {
-            ControlID: 1,
-            ControlType: 1,
-            ControlTypeName: "TextBox",
-            FieldLabel: "demo data List",
-            IsCompulsory: true,
-            DefaultSort: true,
-            FieldValidation: 1,
-            FieldValidationName: "Length(50)",
-            ListPageSeq: 1,
-            ShowInListPage: true,
-            ShowInDownload: false,
-            DownloadDefaultSelect: false
-        },
-        {
-            ControlID: 2,
-            ControlType: 2,
-            ControlTypeName: "Dropdown",
-            FieldLabel: "demo data List",
-            IsCompulsory: true,
-            DefaultSort: true,
-            FieldValidation: 4,
-            FieldValidationName: "MobileNo",
-            ListPageSeq: 1,
-            ShowInListPage: true,
-            ShowInDownload: true,
-            DownloadDefaultSelect: true
-        },
-
-    ]
-
-
-    const [state, setState] = useState({
-        value: {},
-        isError: {
-            name: '',
-            address: '',
-            uid: '',
-        },
-        hasValid: {
-            name: {
-                regExp: /^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[A-Za-z]+$/,
-                inValidMsg: "Name  is invalid",
-            },
-            address: {
-                regExp: /^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[A-Za-z]+$/,
-                inValidMsg: "Email address is invalid",
-            },
-
-            uid: {
-                regExp: /^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[A-Za-z]+$/,
-                inValidMsg: "UID  is invalid",
-            },
-        },
-        required: {
-            name: true,
-            address: true,
-            uid: false,
-        }
-    }
-    )
-    // const [hasField, setHasField] = useState({
-    //     name: {},
-    //     address: {},
-    //     uid: {},
-    // }
-
-    // )
 
 
 
    
 
+    useEffect(() => {
+        comAddPageFieldFunc({ state, setState, fieldData })
+    }, [])
+
+    const onChange = (event) => {
+        formValChange({ event, state, setState })
+    }
+;
 
 
-    
-
-
-    const onSubmit = e => {
-
-        e.preventDefault();
-        if (formValid(state,setState)) {
-            console.log("isvalid", state)
-        } else {
-            console.log("Form is invalid!");
-        }
-    };
-    console.log(state)
     const { isError } = state;
+    const { fieldLabel } = state;
 
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
     var IsEditMode_Css = ''
@@ -340,7 +241,7 @@ const DriverMaster = (props) => {
 
                             <CardBody className=" vh-10 0 text-black" style={{ backgroundColor: "#whitesmoke" }} >
 
-                                <form onSubmit={onSubmit} noValidate>
+                                <form onSubmit={formSubmitHandler} noValidate>
 
                                     <Row className="">
                                         <Col md={12}>
@@ -348,14 +249,14 @@ const DriverMaster = (props) => {
                                                 <CardBody style={{ backgroundColor: "whitesmoke" }}>
                                                     <Row>
                                                         <FormGroup className="mb-2 col col-sm-4 ">
-                                                            <Label htmlFor="validationCustom01">Name </Label>
+                                                            <Label htmlFor="validationCustom01">{fieldLabel.name} </Label>
                                                             <Input
                                                                 type="text"
                                                                 className={isError.name.length > 0 ? "is-invalid form-control" : "form-control"}
                                                                 name="name"
                                                                 placeholder="Please Enter Name"
                                                                 onChange={(e) => {
-                                                                    formValChange(e,setState);
+                                                                    onChange(e)
                                                                     dispatch(BreadcrumbShow(e.target.value))
                                                                 }}
 
@@ -390,7 +291,7 @@ const DriverMaster = (props) => {
 
                                                         <Row>
                                                             <FormGroup className="mb-2 col col-sm-4 ">
-                                                                <Label htmlFor="validationCustom01">Address </Label>
+                                                                <Label htmlFor="validationCustom01">{fieldLabel.address} </Label>
                                                                 <Input
                                                                     type="text"
                                                                     value={EditData.Address}
@@ -398,7 +299,7 @@ const DriverMaster = (props) => {
                                                                     name="address"
                                                                     placeholder="Please Enter Address"
                                                                     autoComplete='off'
-                                                                    onChange={(e) => { formValChange(e,setState) }}
+                                                                    onChange={onChange}
                                                                 />
                                                                 {isError.address.length > 0 && (
                                                                     <span className="invalid-feedback">{isError.address}</span>
@@ -408,7 +309,7 @@ const DriverMaster = (props) => {
 
                                                         <Row>
                                                             <FormGroup className="mb-2 col col-sm-4 ">
-                                                                <Label htmlFor="validationCustom01">UID </Label>
+                                                                <Label htmlFor="validationCustom01">{fieldLabel.uid}</Label>
                                                                 <Input
                                                                     name="uid"
                                                                     value={EditData.UID}
@@ -416,7 +317,7 @@ const DriverMaster = (props) => {
                                                                     placeholder="Please Enter UID"
                                                                     autoComplete='off'
                                                                     className={isError.uid.length > 0 ? "is-invalid form-control" : "form-control"}
-                                                                    onChange={(e) => { formValChange(e,setState) }}
+                                                                    onChange={onChange}
                                                                 />
                                                                 {isError.name.length > 0 && (
                                                                     <span className="invalid-feedback">{isError.uid}</span>
