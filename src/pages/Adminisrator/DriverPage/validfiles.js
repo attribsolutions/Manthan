@@ -1,13 +1,13 @@
 export const formValid = ({ isError, required, hasValid, fieldLabel, values }, setState) => {
 
-    let isValid = false;
-    Object.values(isError).forEach(val => {
-        if ((val.length > 0)) {
-            isValid = false
-        } else {
-            isValid = true
-        }
-    });
+    let isValid = true;
+    //     Object.values(isError).forEach(val => {
+    //         if ((val.length > 0)) {
+    //             isValid = false
+    //         } else {
+    //             isValid = true
+    //         }
+    //     });
 
     Object.keys(required).forEach((lab) => {
 
@@ -15,8 +15,6 @@ export const formValid = ({ isError, required, hasValid, fieldLabel, values }, s
             isError[lab] = hasValid[lab].inValidMsg
             isValid = false
             setState({ isError, hasValid, required, fieldLabel, values })
-        } else {
-            isValid = true
         }
     });
     return isValid
@@ -24,108 +22,137 @@ export const formValid = ({ isError, required, hasValid, fieldLabel, values }, s
 
 
 export const formValChange = ({ event, state, setState }) => {
-
-    event.preventDefault();
-    const { name, value } = event.target;
+    debugger
     let isError = { ...state.isError };
     let hasValid = { ...state.hasValid };
     let required = { ...state.required };
     let fieldLabel = { ...state.fieldLabel };
     let values = { ...state.values };
 
-    const regExp = RegExp(hasValid[name].regExp)
-    if (regExp.test(value)) {
-        isError[name] = "";
-        hasValid[name].valid = true
+    if (!(event.target === undefined)) {
+        event.preventDefault();
+        const { name, value, type } = event.target;
+
+        const regExp = RegExp(hasValid[name].regExp)
+        if (regExp.test(value)) {
+            isError[name] = "";
+            hasValid[name].valid = true
+        }
+        else {
+            isError[name] = hasValid[name].inValidMsg;
+            hasValid[name].valid = false
+        }
+        values[name] = value
+        setState({ isError, hasValid, required, fieldLabel, values })
     }
     else {
-        isError[name] = hasValid[name].inValidMsg;
-        hasValid[name].valid = false
+        const { name, value } = event
+        values[name] = value
+        isError[name] =''
+        hasValid[name].valid = true
+        setState({
+            isError, hasValid, required, fieldLabel, values
+        })
     }
-
-    values[name] = value
-    setState({ isError, hasValid, required, fieldLabel, values })
 };
 
 
-export function comAddPageFieldFunc({ state, setState, fieldData }) {
-    var isState = { ...state }
-    // isState['fieldLabel'] = {}
-    // isState['isError'] = {}
-    // isState['hasValid'] = {}
-    // isState['required'] = {}
+    export function comAddPageFieldFunc({ state, setState, fieldData }) {
+        var isState = { ...state }
+        // isState['fieldLabel'] = {}
+        // isState['isError'] = {}
+        // isState['hasValid'] = {}
+        // isState['required'] = {}
 
-    const values = { ...state.values }
+        const values = { ...state.values }
 
-    fieldData.forEach(ele => {
-        debugger
-        Object.keys(values).forEach(lab => {
-            if (lab === ele.controlId) {
-                // isState['hasValid'] = {
-                //     [lab]: {
-                //         regExp: ele.regExp,
-                //         inValidMsg: ele.fieldLabel,
-                //         valid: false
-                //     }
-                // }
-                isState.fieldLabel[lab] = ele.fieldLabel
-                isState.hasValid[lab].regExp = ele.regExp
-                isState.hasValid[lab].inValidMsg = ele.inValidMsg
-                if (ele.isCompulsory) {
-                    isState.required[lab] = true
+        fieldData.forEach(ele => {
+            debugger
+            Object.keys(values).forEach(lab => {
+                if (lab === ele.controlId) {
+                    // isState['hasValid'] = {
+                    //     [lab]: {
+                    //         regExp: ele.regExp,
+                    //         inValidMsg: ele.fieldLabel,
+                    //         valid: false
+                    //     }
+                    // }
+                    isState.fieldLabel[lab] = ele.fieldLabel
+                    isState.hasValid[lab].regExp = ele.regExp
+                    isState.hasValid[lab].inValidMsg = ele.inValidMsg
+                    if (ele.isCompulsory) {
+                        isState.required[lab] = true
+                    }
                 }
-            }
+            });
         });
-    });
-    debugger
-    setState(isState)
 
-}
+        setState(isState)
 
-export const fieldData = [
-    {
-        controlId: 'name',
-        ControlType: 2,
-        ControlTypeName: "Dropdown",
-        fieldLabel: "Name ",
-        isCompulsory: true,
-        defaultSort: true,
-        showInListPage: true,
-        showInDownload: true,
-        downloadDefaultSelect: false,
-        regExp: /^.{4,100}$/,
-        inValidMsg: "Email is invalid",
-    },
-    {
-        controlId: 'address',
-        ControlType: 2,
-        ControlTypeName: "text",
-        fieldLabel: "Address ",
-        isCompulsory: true,
-        defaultSort: true,
-        showInListPage: true,
-        showInDownload: true,
-        downloadDefaultSelect: false,
-        regExp: /^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[A-Za-z]+$/,
-        inValidMsg: "Address  is invalid",
-    },
+    }
 
-    {
-        controlId: 'uid',
-        ControlType: 2,
-        ControlTypeName: "text",
-        fieldLabel: "UID ",
-        isCompulsory: true,
-        defaultSort: true,
-        showInListPage: true,
-        showInDownload: true,
-        downloadDefaultSelect: false,
-        regExp: /^[2-9]{1}[0-9]{3}\\s[0-9]{4}\\s[0-9]{4}$/,
-        inValidMsg: "UID  is invalid",
-    },
+    export const fieldData = [
+        {
+            controlId: 'name',
+            ControlType: 2,
+            ControlTypeName: "Dropdown",
+            fieldLabel: "Driver Name ",
+            isCompulsory: true,
+            defaultSort: true,
+            showInListPage: true,
+            showInDownload: true,
+            downloadDefaultSelect: false,
+            regExp: /^.{4,100}$/,
+            inValidMsg: "Driver Name is invalid",
+        },
+        {
+            controlId: 'address',
+            ControlType: 2,
+            ControlTypeName: "text",
+            fieldLabel: "Address ",
+            isCompulsory: true,
+            defaultSort: true,
+            showInListPage: true,
+            showInDownload: true,
+            downloadDefaultSelect: false,
+            regExp: /^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[A-Za-z]+$/,
+            inValidMsg: "Address  is invalid",
+        },
 
-]
+        {
+            controlId: 'uid',
+            ControlType: 2,
+            ControlTypeName: "text",
+            fieldLabel: "UID ",
+            isCompulsory: true,
+            defaultSort: true,
+            showInListPage: true,
+            showInDownload: true,
+            downloadDefaultSelect: false,
+            regExp: /^.{4,100}$/,
+            inValidMsg: "UID  is invalid",
+        },
+        {
+            controlId: 'party',
+            controlType: 2,
+            controltypeName: "select",
+            fieldLabel: "Party ",
+            isCompulsory: true,
+            defaultSort: true,
+            fieldValidation:4,
+            fieldValidationName:"10 digit Number",
+            showInListPage: true,
+            showInDownload: true,
+            downloadDefaultSelect: false,
+            regExp: /^.{4,100}$/,
+            inValidMsg: "Party is invalid",
+        },
 
+    ]
+
+
+
+   
 
 // const [state1, setState1] = useState(
 //     {

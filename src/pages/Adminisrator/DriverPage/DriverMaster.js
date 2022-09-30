@@ -57,20 +57,20 @@ const DriverMaster = (props) => {
                 name: "",
                 address: "",
                 uid: "",
-                party:''
+                party: ''
             },
             fieldLabel: {
                 name: '',
                 address: '',
                 uid: '',
-                party:''
+                party: ''
             },
 
             isError: {
                 name: "",
                 address: "",
                 uid: "",
-                party:''
+                party: ''
             },
 
             hasValid: {
@@ -236,33 +236,24 @@ const DriverMaster = (props) => {
     const { isError } = state;
     const { fieldLabel } = state;
 
-
-
-
-
-
     const options = [
         { value: 'active', label: 'Active' },
         { value: 'inactive', label: 'In Active' },
         { value: 'deleted', label: 'Delete' },
     ];
 
-
-
-
-
-    const statusDropdownHandleChange = (e) => {
-        const event={ name :"party", value:e }
-        
+    const statusDropdownHandleChange = (e, v) => {
+        const event = { name: v.name, value: e }
         formValChange({ event, state, setState })
     }
+
     const style = {
         control: base => ({
             ...base,
-            border:  isError.party.length>0?'1px solid red':'',
-           
-         })
-      };
+            border: isError.party.length > 0 ? '1px solid red' : '',
+
+        })
+    };
 
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
     var IsEditMode_Css = ''
@@ -336,7 +327,7 @@ const DriverMaster = (props) => {
                                                         <Row>
                                                             <Col md="4">
                                                                 <FormGroup className="mb-3">
-                                                                    <Label>Date of Birth</Label>
+                                                                <Label htmlFor="validationCustom01">{fieldLabel.party} </Label>
                                                                     <Select
                                                                         defaultValue={options[0]}
                                                                         isSearchable={false}
@@ -344,9 +335,14 @@ const DriverMaster = (props) => {
                                                                         onChange={statusDropdownHandleChange}
                                                                         classNamePrefix="dropdown"
                                                                         options={options}
-                                                                        name="status"
-                                                                        styles={style}
-                                                                        // {...register("status")}
+                                                                        name="party"
+                                                                        styles={{
+                                                                            control: base => ({
+                                                                                ...base,
+                                                                                border: isError.party.length > 0 ? '1px solid red' : '',
+
+                                                                            })
+                                                                        }}
                                                                     />
                                                                 </FormGroup>
                                                             </Col>
