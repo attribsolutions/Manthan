@@ -30,11 +30,12 @@ import { useHistory } from "react-router-dom";
 import Flatpickr from "react-flatpickr"
 import {
     comAddPageFieldFunc,
-    fieldData,
     formValChange,
     formValid,
-} from "./validfiles";
-import { select } from "redux-saga/effects";
+} from "../../../components/Common/CmponentRelatedCommonFile/validationFunction";
+
+import { fieldData } from './validfiles'
+
 
 const DriverMaster = (props) => {
 
@@ -51,55 +52,54 @@ const DriverMaster = (props) => {
     const [DOB_Date_Select, setDOB_Date_Select] = useState("");
 
     // ////////////////////////////////////
-    const [state, setState] = useState(
-        {
-            values: {
-                name: "",
-                address: "",
-                uid: "",
-                party: ''
+    const [state, setState] = useState({
+        values: {
+            name: 0,
+            address: "",
+            uid: "",
+            party: ''
+        },
+        fieldLabel: {
+            name: '',
+            address: '',
+            uid: '',
+            party: ''
+        },
+
+        isError: {
+            name: "",
+            address: "",
+            uid: "",
+            party: ''
+        },
+
+        hasValid: {
+            name: {
+                regExp: '',
+                inValidMsg: "",
+                valid: false
             },
-            fieldLabel: {
-                name: '',
-                address: '',
-                uid: '',
-                party: ''
+            address: {
+                regExp: '',
+                inValidMsg: "",
+                valid: false
             },
 
-            isError: {
-                name: "",
-                address: "",
-                uid: "",
-                party: ''
+            uid: {
+                regExp: '',
+                inValidMsg: "",
+                valid: false
             },
-
-            hasValid: {
-                name: {
-                    regExp: '',
-                    inValidMsg: "",
-                    valid: false
-                },
-                address: {
-                    regExp: '',
-                    inValidMsg: "",
-                    valid: false
-                },
-
-                uid: {
-                    regExp: '',
-                    inValidMsg: "",
-                    valid: false
-                },
-                party: {
-                    regExp: '',
-                    inValidMsg: "",
-                    valid: false
-                }
-            },
-            required: {
-                name: true,
+            party: {
+                regExp: '',
+                inValidMsg: "",
+                valid: false
             }
+        },
+        required: {
+           
         }
+    }
     )
     //////////////////////////
 
@@ -162,7 +162,7 @@ const DriverMaster = (props) => {
         }
     }, [editDataGatingFromList])
 
-    const values = { ...state.values }
+
 
     useEffect(() => {
         if ((PostAPIResponse.Status === true) && (PostAPIResponse.StatusCode === 200)) {
@@ -199,12 +199,27 @@ const DriverMaster = (props) => {
 
 
     // ////////////////////////////////////////////////////////////
+    useEffect(() => {
+        comAddPageFieldFunc({ state, setState, fieldData })
+    }, [])
 
+    const values = { ...state.values }
+    const { isError } = state;
+    const { fieldLabel } = state;
+
+
+    const onChangeDropDown = (e, v) => {
+        const event = { name: v.name, value: e }
+        formValChange({ event, state, setState })
+    }
+    const onChangeText = (event) => {
+        formValChange({ event, state, setState })
+    }
     const formSubmitHandler = (event) => {
-
         event.preventDefault();
         if (formValid(state, setState)) {
-            console.log("isvalid", state)
+
+            console.log("isvalid", values.party.value)
 
             const jsonBody = JSON.stringify({
                 Name: values.name,
@@ -225,16 +240,8 @@ const DriverMaster = (props) => {
 
     };
 
-    useEffect(() => {
-        comAddPageFieldFunc({ state, setState, fieldData })
-    }, [])
 
-    const onChange = (event) => {
-        formValChange({ event, state, setState })
-    }
 
-    const { isError } = state;
-    const { fieldLabel } = state;
 
     const options = [
         { value: 'active', label: 'Active' },
@@ -242,18 +249,8 @@ const DriverMaster = (props) => {
         { value: 'deleted', label: 'Delete' },
     ];
 
-    const statusDropdownHandleChange = (e, v) => {
-        const event = { name: v.name, value: e }
-        formValChange({ event, state, setState })
-    }
 
-    const style = {
-        control: base => ({
-            ...base,
-            border: isError.party.length > 0 ? '1px solid red' : '',
 
-        })
-    };
 
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
     var IsEditMode_Css = ''
@@ -292,7 +289,7 @@ const DriverMaster = (props) => {
                                                                 name="name"
                                                                 placeholder="Please Enter Name"
                                                                 onChange={(e) => {
-                                                                    onChange(e)
+                                                                    onChangeText(e)
                                                                     dispatch(BreadcrumbShow(e.target.value))
                                                                 }}
 
@@ -327,12 +324,12 @@ const DriverMaster = (props) => {
                                                         <Row>
                                                             <Col md="4">
                                                                 <FormGroup className="mb-3">
-                                                                <Label htmlFor="validationCustom01">{fieldLabel.party} </Label>
+                                                                    <Label htmlFor="validationCustom01">{fieldLabel.party} </Label>
                                                                     <Select
                                                                         defaultValue={options[0]}
                                                                         isSearchable={false}
                                                                         className="react-dropdown"
-                                                                        onChange={statusDropdownHandleChange}
+                                                                        onChange={onChangeDropDown}
                                                                         classNamePrefix="dropdown"
                                                                         options={options}
                                                                         name="party"
@@ -361,7 +358,7 @@ const DriverMaster = (props) => {
                                                                     name="address"
                                                                     placeholder="Please Enter Address"
                                                                     autoComplete='off'
-                                                                    onChange={onChange}
+                                                                    onChange={onChangeText}
                                                                 />
                                                                 {isError.address.length > 0 && (
                                                                     <span className="invalid-feedback">{isError.address}</span>
@@ -379,7 +376,7 @@ const DriverMaster = (props) => {
                                                                     placeholder="Please Enter UID"
                                                                     autoComplete='off'
                                                                     className={isError.uid.length > 0 ? "is-invalid form-control" : "form-control"}
-                                                                    onChange={onChange}
+                                                                    onChange={onChangeText}
                                                                 />
                                                                 {isError.name.length > 0 && (
                                                                     <span className="invalid-feedback">{isError.uid}</span>

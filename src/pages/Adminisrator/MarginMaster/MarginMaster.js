@@ -46,7 +46,7 @@ const MarginMaster = (props) => {
     const [effectiveDate, setEffectiveDate] = useState('');
     const [Margin, setMRP] = useState('');
     const [columnsShowUI, setColumnsShowUI] = useState();
-    
+
     //Access redux store Data /  'save_ModuleSuccess' action data
     const { PostAPIResponse,
         TableData,
@@ -169,7 +169,7 @@ const MarginMaster = (props) => {
         }
     }, [PostAPIResponse])
 
-        const pageOptions = {
+    const pageOptions = {
         sizePerPage: 10,
         totalSize: TableData.length,
         custom: true,
@@ -359,43 +359,46 @@ const MarginMaster = (props) => {
                             </AvForm>
                         </CardBody>
                     </Card>
-                    <PaginationProvider pagination={paginationFactory(pageOptions)}>
-                        {({ paginationProps, paginationTableProps }) => (
-                            <ToolkitProvider
-                                keyField="id"
-                                data={TableData}
-                                columns={pagesListColumns}
-                                search
-                            >
-                                {(toolkitProps) => (
-                                    <React.Fragment>
-                                        <Row>
-                                            <Col xl="12">
-                                                <div className="table-responsive">
-                                                    <BootstrapTable
-                                                        keyField={"id"}
-                                                        responsive
-                                                        bordered={false}
-                                                        striped={false}
-                                                        // defaultSorted={defaultSorted}
-                                                        //  cellEdit={ cellEditFactory({ mode: 'click', blurToSave: true }) }
-                                                        classes={"table  table-bordered"}
-                                                        {...toolkitProps.baseProps}
-                                                        {...paginationTableProps}
-                                                    />
-                                                </div>
-                                            </Col>
-                                        </Row>
-                                        <Row className="align-items-md-center mt-30">
-                                            <Col className="pagination pagination-rounded justify-content-end mb-2">
-                                                <PaginationListStandalone {...paginationProps} />
-                                            </Col>
-                                        </Row>
-                                    </React.Fragment>
-                                )}
-                            </ToolkitProvider>
-                        )}
-                    </PaginationProvider>
+                    {TableData.length>0 ?
+                        <PaginationProvider pagination={paginationFactory(pageOptions)}>
+                            {({ paginationProps, paginationTableProps }) => (
+                                <ToolkitProvider
+                                    keyField="id"
+                                    data={TableData}
+                                    columns={pagesListColumns}
+                                    search
+                                >
+                                    {(toolkitProps) => (
+                                        <React.Fragment>
+                                            <Row>
+                                                <Col xl="12">
+                                                    <div className="table-responsive">
+                                                        <BootstrapTable
+                                                            keyField={"id"}
+                                                            responsive
+                                                            bordered={false}
+                                                            striped={false}
+                                                            // defaultSorted={defaultSorted}
+                                                            //  cellEdit={ cellEditFactory({ mode: 'click', blurToSave: true }) }
+                                                            classes={"table  table-bordered"}
+                                                            {...toolkitProps.baseProps}
+                                                            {...paginationTableProps}
+                                                        />
+                                                    </div>
+                                                </Col>
+                                            </Row>
+                                            <Row className="align-items-md-center mt-30">
+                                                <Col className="pagination pagination-rounded justify-content-end mb-2">
+                                                    <PaginationListStandalone {...paginationProps} />
+                                                </Col>
+                                            </Row>
+                                        </React.Fragment>
+                                    )}
+                                </ToolkitProvider>
+                            )}
+                        </PaginationProvider>
+                        : null}
+
                 </Container>
             </div>
         </React.Fragment>
