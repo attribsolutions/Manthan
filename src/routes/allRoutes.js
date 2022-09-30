@@ -73,7 +73,7 @@ import MRPList from "../pages/Adminisrator/MRPMaster/MRPList";
 import MarginList from "../pages/Adminisrator/MarginMaster/MarginList";
 
 
-import Index from "../pages/Adminisrator/customValidation/index";
+import Index from "../pages/Adminisrator/CustomValidation/index";
 
 
 
