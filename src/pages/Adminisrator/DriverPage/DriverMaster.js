@@ -34,6 +34,7 @@ import {
     formValChange,
     formValid,
 } from "./validfiles";
+import { select } from "redux-saga/effects";
 
 const DriverMaster = (props) => {
 
@@ -48,25 +49,30 @@ const DriverMaster = (props) => {
     const [userPageAccessState, setUserPageAccessState] = useState("");
     const [EditData, setEditData] = useState([]);
     const [DOB_Date_Select, setDOB_Date_Select] = useState("");
+
+    // ////////////////////////////////////
     const [state, setState] = useState(
         {
             values: {
                 name: "",
                 address: "",
                 uid: "",
+                party:''
             },
             fieldLabel: {
                 name: '',
                 address: '',
                 uid: '',
+                party:''
             },
-    
+
             isError: {
                 name: "",
                 address: "",
                 uid: "",
+                party:''
             },
-    
+
             hasValid: {
                 name: {
                     regExp: '',
@@ -78,19 +84,26 @@ const DriverMaster = (props) => {
                     inValidMsg: "",
                     valid: false
                 },
-    
+
                 uid: {
                     regExp: '',
                     inValidMsg: "",
                     valid: false
                 },
+                party: {
+                    regExp: '',
+                    inValidMsg: "",
+                    valid: false
+                }
             },
             required: {
                 name: true,
             }
         }
     )
-    
+    //////////////////////////
+
+
     //Access redux store Data /  'save_ModuleSuccess' action data
     const {
         PostAPIResponse,
@@ -101,7 +114,7 @@ const DriverMaster = (props) => {
         RoleAccessModifiedinSingleArray: state.Login.RoleAccessUpdateData,
         pageFiled: state.CommonPageFieldReducer.pageField
     }));
- 
+
 
     useEffect(() => {
         // dispatch(getMethodForDriverList());
@@ -111,6 +124,7 @@ const DriverMaster = (props) => {
 
     //userAccess useEffect
     useEffect(() => {
+        debugger
         let userAcc = undefined
         if ((editDataGatingFromList === undefined)) {
 
@@ -182,6 +196,10 @@ const DriverMaster = (props) => {
         }
     }, [PostAPIResponse])
 
+
+
+    // ////////////////////////////////////////////////////////////
+
     const formSubmitHandler = (event) => {
 
         event.preventDefault();
@@ -214,17 +232,43 @@ const DriverMaster = (props) => {
     const onChange = (event) => {
         formValChange({ event, state, setState })
     }
-        ;
-
 
     const { isError } = state;
     const { fieldLabel } = state;
+
+
+
+
+
+
+    const options = [
+        { value: 'active', label: 'Active' },
+        { value: 'inactive', label: 'In Active' },
+        { value: 'deleted', label: 'Delete' },
+    ];
+
+
+
+
+
+    const statusDropdownHandleChange = (e) => {
+        const event={ name :"party", value:e }
+        
+        formValChange({ event, state, setState })
+    }
+    const style = {
+        control: base => ({
+            ...base,
+            border:  isError.party.length>0?'1px solid red':'',
+           
+         })
+      };
 
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
     var IsEditMode_Css = ''
     if ((pageMode === "edit") || (pageMode === "copy") || (pageMode === "dropdownAdd")) { IsEditMode_Css = "-5.5%" };
 
-    if (!(userPageAccessState ==='')) {
+    if (!(userPageAccessState === '')) {
         return (
             <React.Fragment>
                 <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
@@ -232,7 +276,7 @@ const DriverMaster = (props) => {
                         <MetaTags>
                             <title>DriverMaster | FoodERP-React FrontEnd</title>
                         </MetaTags>
-                        <Breadcrumb breadcrumbItem={userPageAccessState.PageHeading} />
+                        {/* <Breadcrumb breadcrumbItem={userPageAccessState.PageHeading} /> */}
 
                         <Card className="text-black">
                             <CardHeader className="card-header   text-black" style={{ backgroundColor: "#dddddd" }} >
@@ -242,7 +286,7 @@ const DriverMaster = (props) => {
 
                             <CardBody className=" vh-10 0 text-black" style={{ backgroundColor: "#whitesmoke" }} >
 
-                                <form onSubmit={formSubmitHandler} noValidate>
+                                <form onSubmit={formSubmitHandler} ref={formRef} noValidate>
 
                                     <Row className="">
                                         <Col md={12}>
@@ -289,6 +333,27 @@ const DriverMaster = (props) => {
                                                                 </FormGroup>
                                                             </Col>
                                                         </Row>
+                                                        <Row>
+                                                            <Col md="4">
+                                                                <FormGroup className="mb-3">
+                                                                    <Label>Date of Birth</Label>
+                                                                    <Select
+                                                                        defaultValue={options[0]}
+                                                                        isSearchable={false}
+                                                                        className="react-dropdown"
+                                                                        onChange={statusDropdownHandleChange}
+                                                                        classNamePrefix="dropdown"
+                                                                        options={options}
+                                                                        name="status"
+                                                                        styles={style}
+                                                                        // {...register("status")}
+                                                                    />
+                                                                </FormGroup>
+                                                            </Col>
+                                                        </Row>
+
+
+
 
                                                         <Row>
                                                             <FormGroup className="mb-2 col col-sm-4 ">
