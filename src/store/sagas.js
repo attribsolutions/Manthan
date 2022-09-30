@@ -11,6 +11,8 @@ import Spinner_Saga from "./Utilites/Spinner/saga"
 //import AlertSagas 
 import Alert_Saga from "./Utilites/CustomAlertRedux/saga"
 import CustomSearch_Saga from "./Utilites/CustomSearchRedux/saga"
+import CommonPageField_Saga from "./Utilites/PageFiled/saga"
+
 
 // import  Module saga
 import ModulesSaga from "./Administrator/ModulesRedux/saga"
@@ -44,7 +46,10 @@ export default function* rootSaga() {
     fork(LayoutSaga),
     fork(Spinner_Saga),
     fork(CustomSearch_Saga),
+    fork(CommonPageField_Saga),
     fork(Alert_Saga),
+
+
     fork(ModulesSaga),
     fork(CompanySaga),
     fork(HPageSaga),

@@ -1,3 +1,10 @@
+import React from 'react'
+
+export const commonListPage = () => {
+  return (
+    <div>commonListPage</div>
+  )
+}
 import React, { useEffect, useState } from "react";
 import Breadcrumbs from "../../../components/Common/Breadcrumb";
 import { Col, Modal, Row } from "reactstrap";
@@ -37,8 +44,8 @@ const DriverList = (props) => {
     editData,
     updateMessage,
     deleteMessage,
-    PostAPIResponse,
     RoleAccessModifiedinSingleArray,
+    PostAPIResponse
   } = useSelector(
     (state) => ({
       TableListData: state.DriverReducer.DriverList,
@@ -199,14 +206,79 @@ const DriverList = (props) => {
     })
   ];
 
-
-  
-
-
+  if (!(userPageAccessState === '')) {
     return (
       <React.Fragment>
-        </React.Fragment>
-       )
+        <MetaTags>
+          <title>DriverList| FoodERP-React FrontEnd</title>
+        </MetaTags>
+        <div className="page-content">
+          <PaginationProvider pagination={paginationFactory(pageOptions)}>
+            {({ paginationProps, paginationTableProps }) => (
+              <ToolkitProvider
+                keyField="id"
+                defaultSorted={defaultSorted}
+                data={TableListData}
+                columns={pagesListColumns}
+                search
+              >
+                {(toolkitProps) => (
+                  <React.Fragment>
+                    <Breadcrumbs
+                      title={"Count :"}
+                      breadcrumbItem={userPageAccessState.PageHeading}
+                      IsButtonVissible={(userPageAccessState.RoleAccess_IsSave) ? true : false}
+                      SearchProps={toolkitProps.searchProps}
+                      breadcrumbCount={`Product Count: ${TableListData.length}`}
+                      IsSearchVissible={true}
+                      RedirctPath={`/DriverMaster`}
+                      isExcelButtonVisible={true}
+                      ExcelData={TableListData}
+                    />
+                    <Row>
+                      <Col xl="12">
+                        <div className="table-responsive">
+                          <BootstrapTable
+                            keyField={"id"}
+                            responsive
+                            bordered={false}
+                            striped={false}
+                            classes={"table  table-bordered"}
+                            {...toolkitProps.baseProps}
+                            {...paginationTableProps}
+                          />
+                        </div>
+                      </Col>
+                    </Row>
+                    <Row className="align-items-md-center mt-30">
+                      <Col className="pagination pagination-rounded justify-content-end mb-2">
+                        <PaginationListStandalone {...paginationProps} />
+                      </Col>
+                    </Row>
+                  </React.Fragment>
+                )}
+              </ToolkitProvider>
+            )}
+          </PaginationProvider>
+          <Modal
+            isOpen={modal_center}
+            toggle={() => {
+              tog_center();
+            }}
+            size="xl"
+          >
+            
+            <DriverMaster state={editData.Data} relatatedPage={"/DriverMaster"} pageMode={editData.pageMode} />
+          </Modal>
+        </div>
+      </React.Fragment>
+    );
+  }
+  else {
+    return (
+      <React.Fragment></React.Fragment>
+    )
+  }
 }
 
 export default DriverList;
