@@ -15,13 +15,13 @@ import cellEditFactory, { Type } from 'react-bootstrap-table2-editor';
 import { MetaTags } from "react-meta-tags";
 import { useHistory } from "react-router-dom";
 import {
-  delete_MRPList,
-  delete_MRPListSuccess,
-  editMRPList,
-  getMRPListPage,
-  postMRPMasterDataSuccess,
-  updateMRPListSuccess
-} from "../../../store/Administrator/MRPMasterRedux/action";
+  delete_MarginList,
+  delete_MarginListSuccess,
+  editMarginList,
+  getMarginListPage,
+  postMarginMasterDataSuccess,
+  updateMarginListSuccess
+} from "../../../store/Administrator/MarginMasterRedux/action";
 import MarginMaster from "./MarginMaster"
 
 
@@ -37,12 +37,12 @@ const MarginList = (props) => {
   // get Access redux data
   const { TableListData, editData, updateMessage, deleteMessage, RoleAccessModifiedinSingleArray, PostAPIResponse } = useSelector(
     (state) => ({
-      TableListData: state.MRPMasterReducer.MarginList,
-      editData: state.MRPMasterReducer.editData,
-      updateMessage: state.MRPMasterReducer.updateMessage,
-      deleteMessage: state.MRPMasterReducer.deleteMsg,
+      TableListData: state.MarginMasterReducer.MarginList,
+      editData: state.MarginMasterReducer.editData,
+      updateMessage: state.MarginMasterReducer.updateMessage,
+      deleteMessage: state.MarginMasterReducer.deleteMsg,
       RoleAccessModifiedinSingleArray: state.Login.RoleAccessUpdateData,
-      PostAPIResponse: state.MRPMasterReducer.PostData,
+      PostAPIResponse: state.MarginMasterReducer.PostData,
     })
   );
 
@@ -58,25 +58,25 @@ const MarginList = (props) => {
 
   //  This UseEffect => Featch Modules List data  First Rendering
   useEffect(() => {
-    dispatch(getMRPListPage());
+    dispatch(getMarginListPage());
   }, []);
 
   // This UseEffect => UpadateModal Success/Unsucces  Show and Hide Control Alert_modal
   useEffect(() => {
 
     if (updateMessage.Status === true && updateMessage.StatusCode === 200) {
-      dispatch(updateMRPListSuccess({ Status: false }));
+      dispatch(updateMarginListSuccess({ Status: false }));
       dispatch(
         AlertState({
           Type: 1,
           Status: true,
           Message: updateMessage.Message,
-          AfterResponseAction: getMRPListPage,
+          AfterResponseAction: getMarginListPage,
         })
       );
       tog_center();
     } else if (updateMessage.Status === true) {
-      dispatch(updateMRPListSuccess({ Status: false }));
+      dispatch(updateMarginListSuccess({ Status: false }));
       dispatch(
         AlertState({
           Type: 3,
@@ -89,17 +89,17 @@ const MarginList = (props) => {
 
   useEffect(() => {
     if (deleteMessage.Status === true && deleteMessage.StatusCode === 200) {
-      dispatch(delete_MRPListSuccess({ Status: false }));
+      dispatch(delete_MarginListSuccess({ Status: false }));
       dispatch(
         AlertState({
           Type: 1,
           Status: true,
           Message: deleteMessage.Message,
-          AfterResponseAction: getMRPListPage,
+          AfterResponseAction: getMarginListPage,
         })
       );
     } else if (deleteMessage.Status === true) {
-      dispatch(delete_MRPListSuccess({ Status: false }));
+      dispatch(delete_MarginListSuccess({ Status: false }));
       dispatch(
         AlertState({
           Type: 3,
@@ -113,9 +113,9 @@ const MarginList = (props) => {
   useEffect(() => {
 
     if ((PostAPIResponse.Status === true) && (PostAPIResponse.StatusCode === 200)) {
-      dispatch(postMRPMasterDataSuccess({ Status: false }))
+      dispatch(postMarginMasterDataSuccess({ Status: false }))
       tog_center();
-      dispatch(getMRPListPage());
+      dispatch(getMarginListPage());
       dispatch(AlertState({
         Type: 1,
         Status: true,
@@ -124,7 +124,7 @@ const MarginList = (props) => {
     }
 
     else if ((PostAPIResponse.Status === true)) {
-      dispatch(postMRPMasterDataSuccess({ Status: false }))
+      dispatch(postMarginMasterDataSuccess({ Status: false }))
       dispatch(AlertState({
         Type: 4,
         Status: true,
@@ -154,7 +154,7 @@ const MarginList = (props) => {
         Status: true,
         Message: `Are you sure you want to delete this Margin List : "${name}"`,
         RedirectPath: false,
-        PermissionAction: delete_MRPList,
+        PermissionAction: delete_MarginList,
         ID: id,
       })
     );
@@ -162,7 +162,7 @@ const MarginList = (props) => {
 
   // edit Buutton Handller
   const EditPageHandler = (id) => {
-    dispatch(editMRPList(id));
+    dispatch(editMarginList(id));
   };
 
   const defaultSorted = [
@@ -185,24 +185,17 @@ const MarginList = (props) => {
       sort: true,
     },
 
-    // {
-    //     text: "CompanyName",
-    //     dataField: "CompanyName",
-    //     sort: true,
-    //   },
-
     {
-      text: "DivisionName",
-      dataField: "DivisionName",
-      sort: true,
-    },
+        text: "PriceListName",
+        dataField: "PriceListName",
+        sort: true,
+      },
 
     {
       text: "PartyName",
       dataField: "PartyName",
       sort: true,
     },
-
 
 
     {

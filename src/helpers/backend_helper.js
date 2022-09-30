@@ -291,23 +291,23 @@ export const update_DriverType_List_Api = (data, id) =>put(`${url. DRIVER_API}/$
 export const Post_PriceList_API = (data) => post(url.PRICE_LIST, data)// post api
 export const get_PriceListByPartyType_API = (partyType) => get(`${url. PRICE_LIST}/${partyType}`)// post api
 export const GetPriceList_For_Listpage = () => get(url.PRICELIST)//  get priceList
-export const delete_PriceList_API = (id) => del(`${url. PRICE_LIST}/${id}`)// post api
+export const delete_PriceList_API = (id) => del(`${url. PRICE_LIST}/${id}`)// delete api
 export const edit_PriceList = (id) =>get(`${url. PRICE_LIST}/${id}`) // edit api
 export const update_PriceList = (data, id) =>put(`${url. PRICE_LIST}/${id}`, data)// update
 
 
 // MRP Master 
 export const Post_MRPMaster_API = (data) => post(url.MRP_MASTER_LIST, data)// post api
-export const GetMRPList_For_Listpage = (data) => post(url.MRP_MASTER_LIST, data)// getapi
-export const update_MRPList = (data) => post(url.MRP_MASTER_LIST, data)// update_MRPList
-export const edit_MRPList = (data) => post(url.MRP_MASTER_LIST, data)// edit api
-export const delete_MRPList_API = (data) => post(url.MRP_MASTER_LIST, data)// delete api
+export const GetMRPList_For_Listpage = () => get(url.MRP_MASTER_LIST)// getapi
+export const update_MRPList = (data,id) => put(`${url. MRP_MASTER_LIST}/${id}`,data)// update_MRPList
+export const edit_MRPList = (id) => get(`${url. MRP_MASTER_LIST}/${id}`)// edit api
+export const delete_MRPList_API = (id) =>  del(`${url. MRP_MASTER_LIST}/${id}`)// delete api
 export const GoButton_Post_API = (data) => post(url.GO_BUTTON_POST_API, data)// go button postapi
 
 
 // Margin Master
 export const Post_MarginMaster_API = (data) => post(url.MARGIN_MASTER_LIST, data)// post api
-export const GetMarginList_For_Listpage = () => get(url.MARGIN_MASTER_LIST)//  get priceList
+export const GetMarginList_For_Listpage = () => get(url.MARGIN_MASTER_LIST)//  get List
 export const delete_MarginList_API = (id) => del(`${url. MARGIN_MASTER_LIST}/${id}`)// post api
 export const edit_MarginList = (id) =>get(`${url. MARGIN_MASTER_LIST}/${id}`) // edit api
 export const update_MarginList = (data, id) =>put(`${url.MARGIN_MASTER_LIST}/${id}`, data)// update

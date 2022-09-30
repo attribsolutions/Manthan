@@ -204,8 +204,6 @@ const DriverMaster = (props) => {
 
 
 
-   
-
     useEffect(() => {
         comAddPageFieldFunc({ state, setState, fieldData })
     }, [])
@@ -384,14 +382,13 @@ export default DriverMaster
 
 
 
+// const Email = RegExp(
+//     /^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[A-Za-z]+$/
+// )
 
-const Email = RegExp(
-    /^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[A-Za-z]+$/
-)
-
-const Mobile = RegExp(
-    /^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[A-Za-z]+$/
-)
-const NotNull = RegExp(
-    /^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[A-Za-z]+$/
-)
+// const Mobile = RegExp(
+//     /^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[A-Za-z]+$/
+// )
+// const NotNull = RegExp(
+//     /^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[A-Za-z]+$/
+// )
