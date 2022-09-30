@@ -130,16 +130,25 @@ const MRPMaster = (props) => {
     }
 
     const GoButton_Handler = (event, values) => {
+        
+        let division={...division_dropdown_Select}
+        let party={...party_dropdown_Select}
 
         const jsonBody = JSON.stringify({
-            Division: division_dropdown_Select.value,
-            Party: party_dropdown_Select.value,
+            Division: division.value ? division.value:" ",
+            Party: party.value ?  party.value:0,
             EffectiveDate: effectiveDate
-
         });
+
+        if (!(division.value )) {
+            alert("DiviSion value not select")
+        }
+       else if (!(effectiveDate)) {
+            alert("EffectiveDate not select")
+        }
         dispatch(postGoButtonData(jsonBody))
-        setColumnsShowUI(true)
-        console.log("jsonBody", jsonBody)
+       
+
     };
 
     useEffect(() => {

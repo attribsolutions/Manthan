@@ -119,11 +119,13 @@ function* GoButton_post_GenratorFunction({ data }) {
     yield put(postGoButtonDataSuccess(response.Data));
     console.log("response", response)
   } catch (error) {
+    console.log("error")
     yield put(SpinnerState(false))
     yield put(AlertState({
       Type: 4,
       Status: true, Message: "500 Error Message",
     }));
+
   }
 }
 
