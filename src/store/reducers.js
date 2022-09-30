@@ -14,6 +14,7 @@ import SpinnerReducer from './Utilites/Spinner/reducer'
 import AlertReducer from './Utilites/CustomAlertRedux/reducer'
 import CustomSearchReducer from './Utilites/CustomSearchRedux/reducer'
 import BreadcrumbReducer from './Utilites/Breadcrumb/reducer'
+import CommonPageFieldReducer from './Utilites/PageFiled/reducer'
 
 import Modules from './Administrator/ModulesRedux/reducer'
 import Company from './Administrator/CompanyRedux/reducer'
@@ -29,7 +30,7 @@ import PartyMasterReducer from "./Administrator/PartyRedux/reducer"
 import RoleAccessReducer from "./Administrator/RoleAccessRedux/reducer"
 import EmployeeTypeReducer from "./Administrator/EmployeeTypeRedux/reducer"
 import PartyTypeReducer    from "./Administrator/PartyTypeRedux/reducer"
-import categoryTypeMasterReducer from "./Administrator/CategoryTypeRedux/reducer"
+import categoryType from "./Administrator/CategoryTypeRedux/reducer"
 import CategoryMasterReducer from "./Administrator/CategoryRedux/reducer"
 import SubCategoryReducer from "./Administrator/SubCategoryRedux/reducer"
 import VehicleReducer from "./Administrator/VehicleRedux/reducer"
@@ -48,6 +49,7 @@ const rootReducer = combineReducers({
   AlertReducer,
   CustomSearchReducer,
   BreadcrumbReducer,
+  CommonPageFieldReducer,
   // Administator
   Modules,
   Company,
@@ -65,7 +67,7 @@ const rootReducer = combineReducers({
   RoleAccessReducer,
   EmployeeTypeReducer,
   PartyTypeReducer,
-  categoryTypeMasterReducer,
+  categoryType,
    CategoryMasterReducer,
    SubCategoryReducer,
    VehicleReducer,

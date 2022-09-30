@@ -102,7 +102,7 @@ export const RoleAccessApi_url = (id1,id2,) => get(`${url.ROLE_ACCESS}/${id1}/${
 export const post_SuperAdmin = (data) => post(url.SUPER_ADMIN_API, data) //save And Update
 
 //  common pages get data for page filed and validation
-export const commonPageFiled_API = (data) => get(url.SUPER_ADMIN_API, data) //save And Update
+export const commonPageFiled_API =(pageId) => get(`${url.PAGE_FIELD}/${pageId}`)
 
 
 // Employees  Component All Api 
