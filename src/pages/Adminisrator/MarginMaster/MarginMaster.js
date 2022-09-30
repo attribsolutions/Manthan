@@ -24,17 +24,19 @@ import paginationFactory, {
 } from "react-bootstrap-table2-paginator";
 import ToolkitProvider, { Search } from "react-bootstrap-table2-toolkit";
 import { getPartyTypes } from "../../../store/Administrator/PartyRedux/action";
-import { get_PriceList_ForDropDown } from "../../../store/Administrator/ItemsRedux/action";
+import { get_Party_ForDropDown, get_PriceList_ForDropDown } from "../../../store/Administrator/ItemsRedux/action";
 import BootstrapTable from "react-bootstrap-table-next";
-import { postGoButtonData, postMarginMasterData, postMarginMasterDataSuccess } from "../../../store/Administrator/MarginMasterRedux/action";
+import {
+    postGoButtonData,
+    postMarginMasterData,
+    postMarginMasterDataSuccess
+} from "../../../store/Administrator/MarginMasterRedux/action";
 import { AvForm } from "availity-reactstrap-validation";
 
 const MarginMaster = (props) => {
-
     const dispatch = useDispatch();
     const history = useHistory();
     const formRef = useRef(null);
-
     //*** "isEditdata get all data from ModuleID for Binding  Form controls
     let editDataGatingFromList = props.state;
 
@@ -45,18 +47,16 @@ const MarginMaster = (props) => {
     const [priceList_dropdown_Select, setpriceList_dropdown_Select] = useState("");
     const [effectiveDate, setEffectiveDate] = useState('');
     const [Margin, setMRP] = useState('');
-    const [columnsShowUI, setColumnsShowUI] = useState();
-    
     //Access redux store Data /  'save_ModuleSuccess' action data
     const { PostAPIResponse,
         TableData,
-        PartyTypes,
+        Party,
         PriceList,
         RoleAccessModifiedinSingleArray
     } = useSelector((state) => ({
         TableData: state.MarginMasterReducer.GoButtonPostData,
         PostAPIResponse: state.MarginMasterReducer.PostData,
-        PartyTypes: state.PartyMasterReducer.PartyTypes,
+        Party: state.ItemMastersReducer.Party,
         PriceList: state.ItemMastersReducer.PriceList,
         RoleAccessModifiedinSingleArray: state.Login.RoleAccessUpdateData,
     }));
@@ -81,13 +81,11 @@ const MarginMaster = (props) => {
     }, [RoleAccessModifiedinSingleArray]);
 
     useEffect(() => {
-        dispatch(getPartyTypes());
         dispatch(get_PriceList_ForDropDown());
-        // dispatch(getItemList());
-
+        dispatch(get_Party_ForDropDown());
     }, [dispatch]);
 
-    const PartyTypeDropdown_Options = PartyTypes.map((Data) => ({
+    const PartyTypeDropdown_Options = Party.map((Data) => ({
         value: Data.id,
         label: Data.Name
     }));
@@ -119,15 +117,22 @@ const MarginMaster = (props) => {
     }
 
     const GoButton_Handler = (event, values) => {
+        
+        let priceList = { ...priceList_dropdown_Select }
+        let party = { ...partyName_dropdown_Select }
 
         const jsonBody = JSON.stringify({
-            PriceList: priceList_dropdown_Select.value,
-            Party: partyName_dropdown_Select.value,
+            PriceList: priceList.value ? priceList.value : " ",
+            Party: party.value ? party.value : 0,
             EffectiveDate: effectiveDate
-
         });
+        if (!(priceList.value)) {
+            alert("PriceList not select")
+        }
+       else if (!(effectiveDate)) {
+            alert("EffectiveDate not select")
+        }
         dispatch(postGoButtonData(jsonBody))
-        console.log("jsonBody", jsonBody)
     };
 
     useEffect(() => {
@@ -169,7 +174,7 @@ const MarginMaster = (props) => {
         }
     }, [PostAPIResponse])
 
-        const pageOptions = {
+    const pageOptions = {
         sizePerPage: 10,
         totalSize: TableData.length,
         custom: true,

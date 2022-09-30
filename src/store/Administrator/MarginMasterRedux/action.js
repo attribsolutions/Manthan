@@ -68,9 +68,9 @@ export const updateMarginListSuccess = (updateMessage) => ({
 })
 
 // Go Button Post API
-export const postGoButtonData = (data,) => ({
+export const postGoButtonData = (data) => ({
     type: POST_GO_BUTTON_DATA,
-    data,
+    data
 });
 
 export const postGoButtonDataSuccess = (data) => ({

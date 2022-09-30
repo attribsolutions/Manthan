@@ -117,7 +117,6 @@ function* Update_MRPListPage_GenratorFunction({ updateData, ID }) {
 
 function* GoButton_post_GenratorFunction({ data }) {
 
-
   yield put(SpinnerState(true))
   try {
     const response = yield call(GoButton_Post_API, data);
