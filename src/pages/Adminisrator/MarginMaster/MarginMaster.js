@@ -350,24 +350,29 @@ const MarginMaster = (props) => {
                                                             </Col>
                                                         </FormGroup>
                                                     </Col>
-                                                    <Col md="3" className="mt- ">
-                                                        <Button type="button" color="primary" onClick={() => { GoButton_Handler() }} >Go</Button>
+                                                    <Col md="3" >
+                                                        <Button type="button" color="btn btn-outline-success border-2 font-size-12 " onClick={() => { GoButton_Handler() }} >Go</Button>
+                                                        {TableData.length > 0 ?
+                                                    <button
+                                                        type="submit"
+                                                        data-mdb-toggle="tooltip" data-mdb-placement="top" title="Save MRP"
+
+                                                        className="btn btn-primary w-md float-end"
+                                                    > <i className="fas fa-save me-2"></i> Save
+                                                    </button>
+                                                    : null}
                                                     </Col>
+
 
                                                 </Row>
                                             </CardHeader>
                                         </Card>
                                     </Col>
                                 </Row>
-                                <button
-                                    type="submit"
-                                    data-mdb-toggle="tooltip" data-mdb-placement="top" title="Save MRP"
-                                    className="btn btn-primary w-md mt-2 float-end"
-                                > <i className="fas fa-save me-2"></i> Save
-                                </button>
                             </AvForm>
                         </CardBody>
                     </Card>
+                    
                     {TableData.length>0 ?
                         <PaginationProvider pagination={paginationFactory(pageOptions)}>
                             {({ paginationProps, paginationTableProps }) => (
