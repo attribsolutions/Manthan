@@ -73,7 +73,7 @@ import MRPList from "../pages/Adminisrator/MRPMaster/MRPList";
 import MarginList from "../pages/Adminisrator/MarginMaster/MarginList";
 
 
-import Index from "../pages/Adminisrator/customValidation/index";
+// import Index from "../pages/Adminisrator/customValidation/index";
 
 
 
@@ -202,7 +202,7 @@ const userRoutes = [
   // { path: "/AddItemMaster", component: AddItemMaster },
   { path: "/SearchBox2", component: SearchBoxSecond },
   { path: "/SearchBox3", component: SerachBox3 },
-  { path: "/valid", component: Index },
+  // { path: "/valid", component: Index },
 
   // this route should be at the end of all other routes
   { path: "/", exact: true, component: () => <Redirect to="/dashboard" /> },
