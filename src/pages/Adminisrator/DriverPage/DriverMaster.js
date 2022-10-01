@@ -241,8 +241,6 @@ const DriverMaster = (props) => {
     };
 
 
-
-
     const options = [
         { value: 'active', label: 'Active' },
         { value: 'inactive', label: 'In Active' },

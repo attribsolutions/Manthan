@@ -30,8 +30,8 @@ import PartyMasterReducer from "./Administrator/PartyRedux/reducer"
 import RoleAccessReducer from "./Administrator/RoleAccessRedux/reducer"
 import EmployeeTypeReducer from "./Administrator/EmployeeTypeRedux/reducer"
 import PartyTypeReducer    from "./Administrator/PartyTypeRedux/reducer"
-import categoryType from "./Administrator/CategoryTypeRedux/reducer"
-import CategoryMasterReducer from "./Administrator/CategoryRedux/reducer"
+import categoryTypeReducer from "./Administrator/CategoryTypeRedux/reducer"
+import CategoryReducer from "./Administrator/CategoryRedux/reducer"
 import SubCategoryReducer from "./Administrator/SubCategoryRedux/reducer"
 import VehicleReducer from "./Administrator/VehicleRedux/reducer"
 import DriverReducer from "./Administrator/DriverRedux/reducer"
@@ -67,8 +67,8 @@ const rootReducer = combineReducers({
   RoleAccessReducer,
   EmployeeTypeReducer,
   PartyTypeReducer,
-  categoryType,
-   CategoryMasterReducer,
+  categoryTypeReducer,
+   CategoryReducer,
    SubCategoryReducer,
    VehicleReducer,
    DriverReducer,

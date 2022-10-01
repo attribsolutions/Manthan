@@ -31,13 +31,13 @@ const CategoryTypeList = (props) => {
   const [userPageAccessState, setUserPageAccessState] = useState('');
   const [modal_center, setmodal_center] = useState(false);
 
-  const { TableListData, editData, updateMessage, deleteMessage, RoleAccessModifiedinSingleArray ,PostAPIResponse} = useSelector(
+  const { TableListData, editData, updateMessage, deleteMessage, RoleAccessModifiedinSingleArray, PostAPIResponse } = useSelector(
     (state) => ({
-      PostAPIResponse: state.categoryTypeMasterReducer.PostData,
-      TableListData: state.categoryTypeMasterReducer.categoryTypeListData,
-      editData: state.categoryTypeMasterReducer.editData,
-      updateMessage: state.categoryTypeMasterReducer.updateMessage,
-      deleteMessage: state.categoryTypeMasterReducer.deleteMessage,
+      PostAPIResponse: state.categoryTypeReducer.PostData,
+      TableListData: state.categoryTypeReducer.categoryTypeListData,
+      editData: state.categoryTypeReducer.editData,
+      updateMessage: state.categoryTypeReducer.updateMessage,
+      deleteMessage: state.categoryTypeReducer.deleteMessage,
       RoleAccessModifiedinSingleArray: state.Login.RoleAccessUpdateData,
 
     })
@@ -109,7 +109,7 @@ const CategoryTypeList = (props) => {
 
 
   useEffect(() => {
-   
+
     if ((PostAPIResponse.Status === true) && (PostAPIResponse.StatusCode === 200)) {
       dispatch(PostMethod_ForCategoryTypeMasterAPISuccess({ Status: false }))
       tog_center();

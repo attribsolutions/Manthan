@@ -27,8 +27,8 @@ import PartyMasterSaga from "./Administrator/PartyRedux/saga"
 import RoleAccessSaga from "./Administrator/RoleAccessRedux/saga"
 import EmployeeTypeSaga from "./Administrator/EmployeeTypeRedux/saga"
 import PartyTypeSaga from "./Administrator/PartyTypeRedux/saga"
-import CategoryTypeMasterSaga from "./Administrator/CategoryTypeRedux/saga"
-import CategoryMasterSaga from "./Administrator/CategoryRedux/saga"
+import CategoryTypeSaga from "./Administrator/CategoryTypeRedux/saga"
+import CategorySaga from "./Administrator/CategoryRedux/saga"
 import SubCategorySaga from "./Administrator/SubCategoryRedux/saga"
 import VehicleSaga from "./Administrator/VehicleRedux/saga"
 import DriverSaga from "./Administrator/DriverRedux/saga"
@@ -62,8 +62,8 @@ export default function* rootSaga() {
     fork(RoleAccessSaga),
     fork(EmployeeTypeSaga),
     fork(PartyTypeSaga),
-    fork(CategoryTypeMasterSaga),
-    fork(CategoryMasterSaga),
+    fork(CategoryTypeSaga),
+    fork(CategorySaga),
     fork(SubCategorySaga),
     fork(VehicleSaga),
     fork(DriverSaga),

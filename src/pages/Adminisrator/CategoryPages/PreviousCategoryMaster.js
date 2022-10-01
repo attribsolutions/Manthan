@@ -7,120 +7,44 @@ import {
     Col,
     Container,
     FormGroup,
-    Input,
     Label,
     Row,
 } from "reactstrap";
 import { AvField, AvForm, } from "availity-reactstrap-validation";
 import Select from "react-select";
 import { MetaTags } from "react-meta-tags";
+import { BreadcrumbShow, getCategoryTypelist } from "../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
 import {
-    editSubCategoryIDSuccess,
-    PostMethodForSubCategory,
-    PostMethod_ForSubCategoryAPISuccess,
-    updateSubCategoryID
-} from "../../../store/Administrator/SubCategoryRedux/action";
-import { AlertState, BreadcrumbShow } from "../../../store/actions";
+    editCategoryIDSuccess, getMethodForCategory,
+    PostMethodForCategory,
+    PostMethod_ForCategoryAPISuccess,
+    updateCategoryID
+} from "../../../store/Administrator/CategoryRedux/action";
+import { AlertState } from "../../../store/actions";
 import { CommonGetRoleAccessFunction } from "../../../components/Common/CommonGetRoleAccessFunction";
 import { useHistory } from "react-router-dom";
-import { getCategorylist } from "../../../store/Administrator/CategoryRedux/action";
-import {
-    comAddPageFieldFunc,
-    formValChange,
-    formValid,
-} from "../../../components/Common/CmponentRelatedCommonFile/validationFunction";
 
-import { fieldData } from '../SubCategoryPages/FieldData';
+const CategoryMaster = (props) => {
 
-
-const SubCategoryMaster = (props) => {
-
-    //*** "isEditdata get all data from ModuleID for Binding  Form controls
     let editDataGatingFromList = props.state;
     let pageModeProps = props.pageMode;
 
     const formRef = useRef(null);
+    const [EditData, setEditData] = useState([]);
+    const [pageMode, setPageMode] = useState("");
+    const [CategoryTypes_dropdown_Select, setCategoryTypes_dropdown_Select] = useState("");
     const dispatch = useDispatch();
+    const [userPageAccessState, setUserPageAccessState] = useState(123);
+    const [CategoryTypes, setCategoryTypes] = useState("");
     const history = useHistory()
 
-    const [pageMode, setPageMode] = useState("");
-    const [EditData, setEditData] = useState([]);
-    const [category_dropdown_Select, setCategory_dropdown_Select] = useState("");
-    const [userPageAccessState, setUserPageAccessState] = useState(123);
-
-
-
     //Access redux store Data /  'save_ModuleSuccess' action data
-    const {
-        PostAPIResponse,
-        CategoryAPI,
-        pageFiled,
-        RoleAccessModifiedinSingleArray
-    } = useSelector((state) => ({
-        PostAPIResponse: state.SubCategoryReducer.PostDataMessage,
-        CategoryAPI: state.CategoryReducer.CategoryListData,
-        pageFiled: state.CommonPageFieldReducer.pageField,
+    const { PostAPIResponse, CategoryAPI, RoleAccessModifiedinSingleArray } = useSelector((state) => ({
+        PostAPIResponse: state.CategoryMasterReducer.PostDataMessage,
+        CategoryAPI: state.categoryTypeReducer.categoryTypeListData,
         RoleAccessModifiedinSingleArray: state.Login.RoleAccessUpdateData,
-
     }));
-
-
-    {/** Dyanamic Page access state and OnChange function */ }
-    {/*start */ }
-    const [state, setState] = useState({
-        values: {
-            Name: "",
-            ProductCategoryName: ""
-        },
-        fieldLabel: {
-            Name: '',
-
-        },
-
-        isError: {
-            Name: "",
-
-        },
-
-        hasValid: {
-            Name: {
-                regExp: '',
-                inValidMsg: "",
-                valid: false
-            },
-            ProductCategoryName: {
-                regExp: '',
-                inValidMsg: "",
-                valid: false
-            },
-        },
-        required: {
-
-        }
-    })
-    const values = { ...state.values }
-    const { isError } = state;
-    const { fieldLabel } = state;
-
-
-
-    const onChangeText = (event) => {
-        formValChange({ event, state, setState })
-    }
-
-    const onChangeDropDown = (e, v) => {
-        const event = { name: v.name, value: e }
-        formValChange({ event, state, setState })
-    }
-
-    useEffect(() => {
-        comAddPageFieldFunc({ state, setState, fieldData })
-    }, [fieldData])
-    {/*End */ }
-
-
-
     //userAccess useEffect
     useEffect(() => {
 
@@ -145,21 +69,19 @@ const SubCategoryMaster = (props) => {
 
     }, [RoleAccessModifiedinSingleArray])
 
-    useEffect(() => {
-        dispatch(getCategorylist());
-    }, [dispatch]);
-
     // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
     useEffect(() => {
+
         if (!(userPageAccessState === '')) { document.getElementById("txtName").focus(); }
         if (!(editDataGatingFromList === undefined)) {
             setEditData(editDataGatingFromList);
             setPageMode(pageModeProps);
-            setCategory_dropdown_Select({
-                value: editDataGatingFromList.ProductCategory_id,
-                label: editDataGatingFromList.ProductCategoryName
+            setCategoryTypes_dropdown_Select({
+
+                value: editDataGatingFromList.ProductCategoryType_id,
+                label: editDataGatingFromList.ProductCategoryTypeName
             })
-            dispatch(editSubCategoryIDSuccess({ Status: false }))
+            dispatch(editCategoryIDSuccess({ Status: false }))
             dispatch(BreadcrumbShow(editDataGatingFromList.Name))
             return
         }
@@ -167,12 +89,11 @@ const SubCategoryMaster = (props) => {
 
 
     useEffect(() => {
-
         if ((PostAPIResponse.Status === true) && (PostAPIResponse.StatusCode === 200)) {
-            setCategory_dropdown_Select('')
-            dispatch(PostMethod_ForSubCategoryAPISuccess({ Status: false }))
+            setCategoryTypes_dropdown_Select('')
+            dispatch(PostMethod_ForCategoryAPISuccess({ Status: false }))
             formRef.current.reset();
-            if (pageMode === "dropdownAdd") {
+            if (pageMode === "other") {
                 dispatch(AlertState({
                     Type: 1,
                     Status: true,
@@ -184,47 +105,48 @@ const SubCategoryMaster = (props) => {
                     Type: 1,
                     Status: true,
                     Message: PostAPIResponse.Message,
-                    RedirectPath: '/SubCategoryList',
+                    RedirectPath: '/CategoryList',
                 }))
             }
         }
         else if (PostAPIResponse.Status === true) {
-            dispatch(PostMethod_ForSubCategoryAPISuccess({ Status: false }))
+            dispatch(PostMethod_ForCategoryAPISuccess({ Status: false }))
             dispatch(AlertState({
                 Type: 4,
                 Status: true,
-                Message: JSON.stringify(PostAPIResponse.Message),
+                Message: JSON.stringify(postMessage.Message),
                 RedirectPath: false,
                 AfterResponseAction: false
             }));
         }
     }, [PostAPIResponse])
 
+    //get method for dropdown
+    useEffect(() => {
+        dispatch(getCategoryTypelist());
+    }, [dispatch]);
 
-    const CategoryDropdownOptions = CategoryAPI.map((Data) => ({
+
+    function handllerCategoryTypes(e) {
+        setCategoryTypes_dropdown_Select(e)
+    }
+
+    const CategoryTypesValues = CategoryAPI.map((Data) => ({
         value: Data.id,
         label: Data.Name
     }));
 
-    function handllerCategoryDropdown(e) {
-        setCategory_dropdown_Select(e)
-    }
+    const FormSubmitButton_Handler = (event, values) => {
+        const jsonBody = JSON.stringify({
+            Name: values.Name,
+            ProductCategoryType: CategoryTypes_dropdown_Select.value,
+        });
 
-
-    const formSubmitHandler = (event) => {
-        event.preventDefault();
-        if (formValid(state, setState)) {
-            const jsonBody = JSON.stringify({
-                Name: values.Name,
-                ProductCategory: values.ProductCategoryName.value,
-            });
-
-            if (pageMode === "edit") {
-                dispatch(updateSubCategoryID(jsonBody, EditData.id));
-            }
-            else {
-                dispatch(PostMethodForSubCategory(jsonBody));
-            }
+        if (pageMode === "edit") {
+            dispatch(updateCategoryID(jsonBody, EditData.id));
+        }
+        else {
+            dispatch(PostMethodForCategory(jsonBody));
         }
     };
 
@@ -239,9 +161,9 @@ const SubCategoryMaster = (props) => {
                 <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
                     <Container fluid>
                         <MetaTags>
-                            <title>{userPageAccessState.PageHeading}| FoodERP-React FrontEnd</title>
+                            <title>CategoryMaster | FoodERP-React FrontEnd</title>
                         </MetaTags>
-                        <Breadcrumb breadcrumbItem={userPageAccessState.PageHeading} />
+                        <Breadcrumb breadcrumbItem={"Category Master"} />
 
                         <Card className="text-black">
                             <CardHeader className="card-header   text-black" style={{ backgroundColor: "#dddddd" }} >
@@ -250,46 +172,39 @@ const SubCategoryMaster = (props) => {
                             </CardHeader>
 
                             <CardBody className=" vh-10 0 text-black" style={{ backgroundColor: "#whitesmoke" }} >
-                                <form onSubmit={formSubmitHandler} ref={formRef} noValidate>
+                                <AvForm onValidSubmit={(e, v) => { FormSubmitButton_Handler(e, v) }}
+                                    ref={formRef}
+                                >
                                     <Row className="">
                                         <Col md={12}>
                                             <Card>
                                                 <CardBody style={{ backgroundColor: "whitesmoke" }}>
                                                     <Row>
                                                         <FormGroup className="mb-2 col col-sm-4 ">
-                                                            <Label htmlFor="validationCustom01">{fieldLabel.Name} </Label>
-                                                            <Input
+                                                            <Label htmlFor="validationCustom01">Name </Label>
+                                                            <AvField
                                                                 name="Name"
                                                                 id="txtName"
                                                                 value={EditData.Name}
                                                                 type="text"
-                                                                className={isError.Name.length > 0 ? "is-invalid form-control" : "form-control"}
                                                                 placeholder="Please Enter Name"
                                                                 autoComplete='off'
-                                                                onChange={(e) => {
-                                                                    onChangeText(e)
-                                                                    dispatch(BreadcrumbShow(e.target.value))
+                                                                validate={{
+                                                                    required: { value: true, errorMessage: 'Please Enter Name' },
                                                                 }}
+                                                                onChange={(e) => { dispatch(BreadcrumbShow(e.target.value)) }}
                                                             />
-                                                            {isError.Name.length > 0 && (
-                                                                <span className="invalid-feedback">{isError.Name}</span>
-                                                            )}
                                                         </FormGroup>
 
                                                         <Row>
                                                             <Col md="4">
                                                                 <FormGroup className="mb-3">
-                                                                    <Label htmlFor="validationCustom01"> {fieldLabel.ProductCategoryName}</Label>
+                                                                    <Label htmlFor="validationCustom01"> Category Type </Label>
                                                                     <Col sm={12}>
                                                                         <Select
-                                                                            name="ProductCategoryName"
-                                                                            Value={values.category}
-                                                                            isSearchable={false}
-                                                                            className="react-dropdown"
-                                                                            classNamePrefix="dropdown"
-                                                                            onChange={onChangeDropDown}
-                                                                            options={CategoryDropdownOptions}
-
+                                                                            value={CategoryTypes_dropdown_Select}
+                                                                            options={CategoryTypesValues}
+                                                                            onChange={(e) => { handllerCategoryTypes(e) }}
                                                                         />
                                                                     </Col>
                                                                 </FormGroup>
@@ -305,7 +220,7 @@ const SubCategoryMaster = (props) => {
                                                                                 userPageAccessState.RoleAccess_IsEdit ?
                                                                                     <button
                                                                                         type="submit"
-                                                                                        data-mdb-toggle="tooltip" data-mdb-placement="top" title="Update Party Type"
+                                                                                        data-mdb-toggle="tooltip" data-mdb-placement="top" title="Update Category"
                                                                                         className="btn btn-success w-md"
                                                                                     >
                                                                                         <i class="fas fa-edit me-2"></i>Update
@@ -316,7 +231,7 @@ const SubCategoryMaster = (props) => {
                                                                                     userPageAccessState.RoleAccess_IsSave ?
                                                                                         <button
                                                                                             type="submit"
-                                                                                            data-mdb-toggle="tooltip" data-mdb-placement="top" title="Save ProductCategory Types"
+                                                                                            data-mdb-toggle="tooltip" data-mdb-placement="top" title="Save Category"
                                                                                             className="btn btn-primary w-sm">
                                                                                             <i className="fas fa-save me-2"></i>
                                                                                             Save
@@ -336,10 +251,8 @@ const SubCategoryMaster = (props) => {
                                             </Card>
                                         </Col>
                                     </Row>
-                                </form>
+                                </AvForm>
                             </CardBody>
-
-
 
                         </Card>
 
@@ -355,5 +268,5 @@ const SubCategoryMaster = (props) => {
     }
 };
 
-export default SubCategoryMaster
+export default CategoryMaster
 
