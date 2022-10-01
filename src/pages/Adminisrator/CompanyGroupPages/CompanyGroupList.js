@@ -13,16 +13,16 @@ import CompanyGroupMaster from "./CompanyGroupMaster";
 import { MetaTags } from "react-meta-tags";
 import { useHistory } from "react-router-dom";
 import {
-    deleteCompanyGroupTypeIDSuccess,
-    updateCompanyGroupTypeIDSuccess,
-    getMethodForCompanyGroupList,
-    editCompanyGroupTypeId,
-    delete_CompanyGroupType_ID,
-    PostMethod_ForCompanyGroupMasterSuccess,
+  deleteCompanyGroupTypeIDSuccess,
+  updateCompanyGroupTypeIDSuccess,
+  getMethodForCompanyGroupList,
+  editCompanyGroupTypeId,
+  delete_CompanyGroupType_ID,
+  PostMethod_ForCompanyGroupMasterSuccess,
 } from "../../../store/Administrator/CompanyGroupRedux/action";
 import { AlertState } from "../../../store/actions";
-import { listPageCommonButtonFunction } 
-from "../../../components/Common/CmponentRelatedCommonFile/listPageCommonButtons";
+import { listPageCommonButtonFunction }
+  from "../../../components/Common/CmponentRelatedCommonFile/listPageCommonButtons";
 
 const CompanyGroupList = (props) => {
 
@@ -32,17 +32,17 @@ const CompanyGroupList = (props) => {
   const [userPageAccessState, setUserPageAccessState] = useState('');
   const [modal_center, setmodal_center] = useState(false);
 
-  const { TableListData, editData, updateMessage, deleteMessage, RoleAccessModifiedinSingleArray,PostAPIResponse } = useSelector(
+  const { TableListData, editData, updateMessage, deleteMessage, RoleAccessModifiedinSingleArray, PostAPIResponse } = useSelector(
     (state) => ({
       TableListData: state.CompanyGroupReducer.CompanyGroupList,
       editData: state.CompanyGroupReducer.editData,
       updateMessage: state.CompanyGroupReducer.updateMessage,
-       deleteMessage: state.CompanyGroupReducer.deleteMessage,
+      deleteMessage: state.CompanyGroupReducer.deleteMessage,
       RoleAccessModifiedinSingleArray: state.Login.RoleAccessUpdateData,
       PostAPIResponse: state.CompanyGroupReducer.PostDataMessage,
     })
   );
-console.log("TableListData",TableListData)
+  console.log("TableListData", TableListData)
   useEffect(() => {
     const locationPath = history.location.pathname
     let userAcc = RoleAccessModifiedinSingleArray.find((inx) => {
@@ -109,7 +109,7 @@ console.log("TableListData",TableListData)
 
 
   useEffect(() => {
-   
+
     if ((PostAPIResponse.Status === true) && (PostAPIResponse.StatusCode === 200)) {
       dispatch(PostMethod_ForCompanyGroupMasterSuccess({ Status: false }))
       tog_center();
@@ -164,7 +164,7 @@ console.log("TableListData",TableListData)
       dataField: "Name",
       sort: true,
     },
-   
+
     {
       text: "IsSCM",
       dataField: "IsSCM",

@@ -7,6 +7,7 @@ import {
     Col,
     Container,
     FormGroup,
+    Input,
     Label,
     Row,
 } from "reactstrap";
@@ -16,7 +17,6 @@ import { MetaTags } from "react-meta-tags";
 import { BreadcrumbShow } from "../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
 import {
-    
     PostMethod_ForCompanyGroupMasterSuccess,
     editCompanyGroupTypeSuccess,
     updateCompanyGroupTypeID,
@@ -26,29 +26,76 @@ import {
 import { AlertState } from "../../../store/actions";
 import { CommonGetRoleAccessFunction } from "../../../components/Common/CommonGetRoleAccessFunction";
 import { useHistory } from "react-router-dom";
+import {
+    comAddPageFieldFunc,
+    formValChange,
+    formValid,
+} from "../../../components/Common/CmponentRelatedCommonFile/validationFunction";
+
+import { fieldData } from '../CompanyGroupPages/FieldData';
+
 
 const CompanyGroupMaster = (props) => {
 
     //*** "isEditdata get all data from ModuleID for Binding  Form controls
     let editDataGatingFromList = props.state;
-    let pageModeProps=props.pageMode;
+    let pageModeProps = props.pageMode;
 
     const formRef = useRef(null);
-    const [EditData, setEditData] = useState([]);
-    const [pageMode, setPageMode] = useState("");
     const dispatch = useDispatch();
-    const [userPageAccessState, setUserPageAccessState] = useState(123);
     const history = useHistory()
 
+    const [EditData, setEditData] = useState([]);
+    const [pageMode, setPageMode] = useState("");
+    const [userPageAccessState, setUserPageAccessState] = useState(123);
 
     //Access redux store Data /  'save_ModuleSuccess' action data
-    const { PostAPIResponse, CompanyGroupList, RoleAccessModifiedinSingleArray } = useSelector((state) => ({
+    const { PostAPIResponse, RoleAccessModifiedinSingleArray } = useSelector((state) => ({
         PostAPIResponse: state.CompanyGroupReducer.PostDataMessage,
-        CompanyGroupList: state.CompanyGroupReducer.CompanyGroupList,
         RoleAccessModifiedinSingleArray: state.Login.RoleAccessUpdateData,
 
     }));
 
+    {/** Dyanamic Page access state and OnChange function */ }
+    {/*start */ }
+    const [state, setState] = useState({
+        values: {
+            Name: "",
+        },
+
+        fieldLabel: {
+            Name: '',
+        },
+
+        isError: {
+            Name: "",
+        },
+
+        hasValid: {
+            Name: {
+                regExp: '',
+                inValidMsg: "",
+                valid: false
+            },
+
+        },
+        required: {
+
+        }
+    })
+    const values = { ...state.values }
+    const { isError } = state;
+    const { fieldLabel } = state;
+
+
+    const onChangeText = (event) => {
+        formValChange({ event, state, setState })
+    }
+
+    useEffect(() => {
+        comAddPageFieldFunc({ state, setState, fieldData })
+    }, [fieldData])
+    {/*End */ }
 
     useEffect(() => {
         dispatch(getMethodForCompanyGroupList());
@@ -58,7 +105,7 @@ const CompanyGroupMaster = (props) => {
 
     //userAccess useEffect
     useEffect(() => {
-       
+
         let userAcc = undefined
         if ((editDataGatingFromList === undefined)) {
 
@@ -80,6 +127,8 @@ const CompanyGroupMaster = (props) => {
 
     }, [RoleAccessModifiedinSingleArray])
 
+
+
     // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
     useEffect(() => {
         if (!(userPageAccessState === '')) { document.getElementById("txtName").focus(); }
@@ -93,10 +142,12 @@ const CompanyGroupMaster = (props) => {
     }, [editDataGatingFromList])
 
 
+
+
     useEffect(() => {
-        
+
         if ((PostAPIResponse.Status === true) && (PostAPIResponse.StatusCode === 200)) {
-            // setCategoryTypes_dropdown_Select('')
+
             dispatch(PostMethod_ForCompanyGroupMasterSuccess({ Status: false }))
             formRef.current.reset();
             if (pageMode === "dropdownAdd") {
@@ -128,27 +179,40 @@ const CompanyGroupMaster = (props) => {
     }, [PostAPIResponse])
 
 
+    const formSubmitHandler = (event) => {
+        event.preventDefault();
+        if (formValid(state, setState)) {
+            const jsonBody = JSON.stringify({
+                Name: values.Name,
+                IsSCM: values.IsSCM,
+                CreatedBy: 1,
+                UpdatedBy: 1
+            });
 
-    const FormSubmitButton_Handler = (event, values) => {
-        const jsonBody = JSON.stringify({
-            Name: values.Name,
-            IsSCM:values.IsSCM,
-            CreatedBy:1,
-            UpdatedBy:1
-        });
-
-        if (pageMode === "edit") {
-            dispatch(updateCompanyGroupTypeID(jsonBody, EditData.id));
-        }
-        else {
-            dispatch(PostMethodForCompanyGroupMaster(jsonBody));
+            if (pageMode === "edit") {
+                dispatch(updateCompanyGroupTypeID(jsonBody, EditData.id));
+            }
+            else {
+                dispatch(PostMethodForCompanyGroupMaster(jsonBody));
+            }
         }
     };
 
 
+    useEffect(() => {
+        comAddPageFieldFunc({ state, setState, fieldData })
+    }, [])
+
+    const onChange = (event) => {
+        formValChange({ event, state, setState })
+    };
+
+
+
+
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
     var IsEditMode_Css = ''
-    if ((pageMode === "edit")||(pageMode==="copy")||(pageMode==="dropdownAdd")) { IsEditMode_Css = "-5.5%" };
+    if ((pageMode === "edit") || (pageMode === "copy") || (pageMode === "dropdownAdd")) { IsEditMode_Css = "-5.5%" };
 
     if (!(userPageAccessState === '')) {
         return (
@@ -156,9 +220,9 @@ const CompanyGroupMaster = (props) => {
                 <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
                     <Container fluid>
                         <MetaTags>
-                            <title>CompanyGroupMaster | FoodERP-React FrontEnd</title>
+                            <title>{userPageAccessState.PageHeading} | FoodERP-React FrontEnd</title>
                         </MetaTags>
-                        <Breadcrumb breadcrumbItem={"CompanyGroupMaster"} />
+                        <Breadcrumb breadcrumbItem={userPageAccessState.PageHeading} />
 
                         <Card className="text-black">
                             <CardHeader className="card-header   text-black" style={{ backgroundColor: "#dddddd" }} >
@@ -167,49 +231,52 @@ const CompanyGroupMaster = (props) => {
                             </CardHeader>
 
                             <CardBody className=" vh-10 0 text-black" style={{ backgroundColor: "#whitesmoke" }} >
-                                <AvForm onValidSubmit={(e, v) => { FormSubmitButton_Handler(e, v) }}
-                                    ref={formRef}
-                                >
+
+                                <form onSubmit={formSubmitHandler} ref={formRef} noValidate>
+
                                     <Row className="">
                                         <Col md={12}>
                                             <Card>
                                                 <CardBody style={{ backgroundColor: "whitesmoke" }}>
                                                     <Row>
                                                         <FormGroup className="mb-2 col col-sm-4 ">
-                                                            <Label htmlFor="validationCustom01">Name </Label>
-                                                            <AvField
+                                                            <Label htmlFor="validationCustom01"> {fieldLabel.Name}</Label>
+                                                            <Input
                                                                 name="Name"
                                                                 id="txtName"
+                                                                className={isError.Name.length > 0 ? "is-invalid form-control" : "form-control"}
                                                                 value={EditData.Name}
                                                                 type="text"
                                                                 placeholder="Please Enter Name"
                                                                 autoComplete='off'
-                                                                validate={{
-                                                                    required: { value: true, errorMessage: 'Please Enter Name' },
+                                                                onChange={(e) => {
+                                                                    onChangeText(e)
+                                                                    dispatch(BreadcrumbShow(e.target.value))
                                                                 }}
-                                                                onChange={(e) => { dispatch(BreadcrumbShow(e.target.value)) }}
-                                                            />
-                                                        </FormGroup>
-                                                         
 
-                                                        
-                                                        <Row>
-                                                        <FormGroup className="mb-2 col col-sm-5">
-                                                            <Row className="justify-content-md-left">
-                                                                <Label htmlFor="horizontal-firstname-input" className="col-sm-3 col-form-label" >IsSCM </Label>
-                                                                <Col md={2} style={{ marginTop: '9px' }} >
-                                                                    <div className="form-check form-switch form-switch-md mb-3" dir="ltr">
-                                                                        <AvInput type="checkbox" className="form-check-input" id="customSwitchsizemd"
-                                                                            defaultChecked={EditData.IsSCM}
-                                                                            name="IsSCM"
-                                                                        // defaultChecked
-                                                                        />
-                                                                        <label className="form-check-label" htmlFor="customSwitchsizemd"></label>
-                                                                    </div>
-                                                                </Col>
-                                                            </Row>
+                                                            />
+                                                            {isError.Name.length > 0 && (
+                                                                <span className="invalid-feedback">{isError.Name}</span>
+                                                            )}
                                                         </FormGroup>
-                                                    </Row>
+
+                                                        <Row>
+                                                            <FormGroup className="mb-2 col col-sm-5">
+                                                                <Row className="justify-content-md-left">
+                                                                    <Label htmlFor="horizontal-firstname-input" className="col-sm-3 col-form-label" >IsSCM </Label>
+                                                                    <Col md={2} style={{ marginTop: '9px' }} >
+                                                                        <div className="form-check form-switch form-switch-md mb-3" dir="ltr">
+                                                                            <Input type="checkbox" className="form-check-input" id="customSwitchsizemd"
+                                                                                defaultChecked={EditData.IsSCM}
+                                                                                name="IsSCM"
+                                                                            // defaultChecked
+                                                                            />
+                                                                            <label className="form-check-label" htmlFor="customSwitchsizemd"></label>
+                                                                        </div>
+                                                                    </Col>
+                                                                </Row>
+                                                            </FormGroup>
+                                                        </Row>
 
                                                         <FormGroup>
                                                             <Row>
@@ -251,7 +318,7 @@ const CompanyGroupMaster = (props) => {
                                             </Card>
                                         </Col>
                                     </Row>
-                                </AvForm>
+                                </form>
                             </CardBody>
 
 
