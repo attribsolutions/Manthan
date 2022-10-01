@@ -1,0 +1,31 @@
+export const fieldData = [
+    {
+        controlId: 'Name',
+        ControlType: 2,
+        ControlTypeName: "text",
+        fieldLabel: "Name ",
+        isCompulsory: true,
+        defaultSort: true,
+        showInListPage: true,
+        showInDownload: true,
+        downloadDefaultSelect: false,
+        regExp: /^.{4,100}$/,
+        inValidMsg: "Name is invalid",
+
+    },
+    {
+        controlId: 'ProductCategoryTypeName',
+        controlType: 2,
+        controltypeName: "select",
+        fieldLabel: "Category Type",
+        isCompulsory: true,
+        defaultSort: true,
+        fieldValidation: 4,
+        fieldValidationName: "10 digit Number",
+        showInListPage: true,
+        showInDownload: true,
+        downloadDefaultSelect: false,
+        regExp: /^.{4,100}$/,
+        inValidMsg: "Category Type is invalid",
+    },
+]

@@ -34,12 +34,12 @@ const CategoryList = (props) => {
 
   const { TableListData, editData, updateMessage, deleteMessage, RoleAccessModifiedinSingleArray, PostAPIResponse } = useSelector(
     (state) => ({
-      TableListData: state.CategoryMasterReducer.CategoryListData,
-      editData: state.CategoryMasterReducer.editData,
-      updateMessage: state.CategoryMasterReducer.updateMessage,
-      deleteMessage: state.CategoryMasterReducer.deleteMessage,
+      TableListData: state.CategoryReducer.CategoryListData,
+      editData: state.CategoryReducer.editData,
+      updateMessage: state.CategoryReducer.updateMessage,
+      deleteMessage: state.CategoryReducer.deleteMessage,
       RoleAccessModifiedinSingleArray: state.Login.RoleAccessUpdateData,
-      PostAPIResponse: state.CategoryMasterReducer.PostDataMessage,
+      PostAPIResponse: state.CategoryReducer.PostDataMessage,
     })
   );
 
@@ -132,7 +132,7 @@ const CategoryList = (props) => {
     }
 
   }, [PostAPIResponse.Status])
-  
+
   // Edit Modal Show When Edit Data is true
   useEffect(() => {
     if (editData.Status === true) {

@@ -7,10 +7,11 @@ import {
     Col,
     Container,
     FormGroup,
+    Input,
     Label,
     Row,
 } from "reactstrap";
-import { AvField, AvForm, } from "availity-reactstrap-validation";
+
 import { MetaTags } from "react-meta-tags";
 import { AlertState } from "../../../store/actions";
 import { useHistory } from "react-router-dom";
@@ -22,25 +23,79 @@ import {
     PostMethod_ForCategoryTypeMasterAPISuccess,
     editCategoryTypeIDSuccess,
     updateCategoryTypeID,
+    getCategoryTypelistSuccess,
 } from "../../../store/Administrator/CategoryTypeRedux/actions";
+import {
+    comAddPageFieldFunc,
+    formValChange,
+    formValid,
+} from "../../../components/Common/CmponentRelatedCommonFile/validationFunction";
+
+import { fieldData } from '../CategoryTypePages/FieldData';
 
 const CategoryTypeMaster = (props) => {
     const formRef = useRef(null);
-    const [EditData, setEditData] = useState([]);
-    const [pageMode, setPageMode] = useState("");
     const history = useHistory()
     const dispatch = useDispatch();
+
+    const [EditData, setEditData] = useState([]);
+    const [pageMode, setPageMode] = useState("");
     const [userPageAccessState, setUserPageAccessState] = useState(123);
+
 
     //*** "isEditdata get all data from ModuleID for Binding  Form controls
     let editDataGatingFromList = props.state;
-    let pageModeProps=props.pageMode;
+    let pageModeProps = props.pageMode;
 
     //Access redux store Data /  'save_ModuleSuccess' action data
-    const { PostAPIResponse, RoleAccessModifiedinSingleArray } = useSelector((state) => ({
-        PostAPIResponse: state.categoryTypeMasterReducer.PostData,
+    const { PostAPIResponse, pageFiled, RoleAccessModifiedinSingleArray } = useSelector((state) => ({
+        PostAPIResponse: state.categoryTypeReducer.PostData,
         RoleAccessModifiedinSingleArray: state.Login.RoleAccessUpdateData,
+        pageFiled: state.CommonPageFieldReducer.pageField
     }));
+
+    {/** Dyanamic Page access state and OnChange function */ }
+    {/*start */ }
+    const [state, setState] = useState({
+        values: {
+            Name: "",
+
+        },
+        fieldLabel: {
+            Name: '',
+
+        },
+
+        isError: {
+            Name: "",
+
+        },
+
+        hasValid: {
+            Name: {
+                regExp: '',
+                inValidMsg: "",
+                valid: false
+            },
+        },
+        required: {
+
+        }
+    })
+    const values = { ...state.values }
+    const { isError } = state;
+    const { fieldLabel } = state;
+
+
+    const onChangeText = (event) => {
+        formValChange({ event, state, setState })
+    }
+
+    useEffect(() => {
+        comAddPageFieldFunc({ state, setState, fieldData })
+    }, [fieldData])
+    {/*End */ }
+
 
 
     //userAccess useEffect
@@ -103,11 +158,11 @@ const CategoryTypeMaster = (props) => {
             }
         }
         else if (PostAPIResponse.Status === true) {
-            dispatch(PostMethod_ForCategoryTypeMasterAPISuccess({ Status: false }))
+            dispatch(getCategoryTypelistSuccess({ Status: false }))
             dispatch(AlertState({
                 Type: 4,
                 Status: true,
-                Message: JSON.stringify(postMessage.Message),
+                Message: JSON.stringify(PostAPIResponse.Message),
                 RedirectPath: false,
                 AfterResponseAction: false
             }));
@@ -116,24 +171,28 @@ const CategoryTypeMaster = (props) => {
 
 
 
-    const FormSubmitButton_Handler = (event, values) => {
-        const jsonBody = JSON.stringify({
-            Name: values.Name,
+    const formSubmitHandler = (event) => {
+        event.preventDefault();
 
-        });
-        if (pageMode === "edit") {
-            dispatch(updateCategoryTypeID(jsonBody, EditData.id));
-        }
-        else {
-            dispatch(PostMethodForCategoryTypeMaster(jsonBody))
-        }
+        if (formValid(state, setState)) {
+            const jsonBody = JSON.stringify({
+                Name: values.Name,
 
+
+            });
+            if (pageMode === "edit") {
+                dispatch(updateCategoryTypeID(jsonBody, EditData.id));
+            }
+            else {
+                dispatch(PostMethodForCategoryTypeMaster(jsonBody))
+            }
+
+        }
     };
-
 
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
     var IsEditMode_Css = ''
-    if ((pageMode === "edit")||(pageMode==="copy")||(pageMode==="dropdownAdd")) { IsEditMode_Css = "-5.5%" };
+    if ((pageMode === "edit") || (pageMode === "copy") || (pageMode === "dropdownAdd")) { IsEditMode_Css = "-5.5%" };
 
     if (!(userPageAccessState === '')) {
         return (
@@ -141,7 +200,7 @@ const CategoryTypeMaster = (props) => {
                 <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
                     <Container fluid>
                         <MetaTags>
-                            <title>CategoryTypeMaster| FoodERP-React FrontEnd</title>
+                            <title>{userPageAccessState.PageHeading}| FoodERP-React FrontEnd</title>
                         </MetaTags>
                         <Breadcrumb breadcrumbItem={userPageAccessState.PageHeading} />
 
@@ -152,29 +211,30 @@ const CategoryTypeMaster = (props) => {
                             </CardHeader>
 
                             <CardBody className=" vh-10 0 text-black" style={{ backgroundColor: "#whitesmoke" }} >
-                                <AvForm onValidSubmit={(e, v) => { FormSubmitButton_Handler(e, v) }}
-                                    ref={formRef}
-                                >
+                                <form onSubmit={formSubmitHandler} ref={formRef} noValidate>
                                     <Row className="">
                                         <Col md={12}>
                                             <Card>
                                                 <CardBody style={{ backgroundColor: "whitesmoke" }}>
                                                     <Row>
                                                         <FormGroup className="mb-2 col col-sm-4 ">
-                                                            <Label htmlFor="validationCustom01">Name </Label>
-                                                            <AvField
+                                                            <Label htmlFor="validationCustom01">{fieldLabel.Name}</Label>
+                                                            <Input
                                                                 name="Name"
                                                                 id="txtName"
                                                                 value={EditData.Name}
                                                                 type="text"
+                                                                className={isError.Name.length > 0 ? "is-invalid form-control" : "form-control"}
                                                                 placeholder="Please Enter Name"
-                                                                autoComplete='off'
-                                                                validate={{
-                                                                    required: { value: true, errorMessage: 'Please Enter Name' },
+                                                                autoComplete="off"
+                                                                onChange={(e) => {
+                                                                    onChangeText(e)
+                                                                    dispatch(BreadcrumbShow(e.target.value))
                                                                 }}
-                                                                onChange={(e) => { dispatch(BreadcrumbShow(e.target.value)) }}
                                                             />
-
+                                                            {isError.Name.length > 0 && (
+                                                                <span className="invalid-feedback">{isError.Name}</span>
+                                                            )}
                                                         </FormGroup>
 
                                                         <FormGroup>
@@ -217,7 +277,7 @@ const CategoryTypeMaster = (props) => {
                                             </Card>
                                         </Col>
                                     </Row>
-                                </AvForm>
+                                </form>
                             </CardBody>
 
 
