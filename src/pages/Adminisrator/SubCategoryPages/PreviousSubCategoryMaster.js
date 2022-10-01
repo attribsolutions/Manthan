@@ -7,7 +7,6 @@ import {
     Col,
     Container,
     FormGroup,
-    Input,
     Label,
     Row,
 } from "reactstrap";
@@ -25,14 +24,6 @@ import { AlertState, BreadcrumbShow } from "../../../store/actions";
 import { CommonGetRoleAccessFunction } from "../../../components/Common/CommonGetRoleAccessFunction";
 import { useHistory } from "react-router-dom";
 import { getCategorylist } from "../../../store/Administrator/CategoryRedux/action";
-import {
-    comAddPageFieldFunc,
-    formValChange,
-    formValid,
-} from "../../../components/Common/CmponentRelatedCommonFile/validationFunction";
-
-import { fieldData } from '../SubCategoryPages/FieldData';
-
 
 const SubCategoryMaster = (props) => {
 
@@ -41,85 +32,25 @@ const SubCategoryMaster = (props) => {
     let pageModeProps = props.pageMode;
 
     const formRef = useRef(null);
-    const dispatch = useDispatch();
-    const history = useHistory()
-
-    const [pageMode, setPageMode] = useState("");
     const [EditData, setEditData] = useState([]);
+    const [pageMode, setPageMode] = useState("");
     const [category_dropdown_Select, setCategory_dropdown_Select] = useState("");
+    const dispatch = useDispatch();
     const [userPageAccessState, setUserPageAccessState] = useState(123);
-
-
-
+    const history = useHistory()
     //Access redux store Data /  'save_ModuleSuccess' action data
+
+
     const {
         PostAPIResponse,
         CategoryAPI,
-        pageFiled,
         RoleAccessModifiedinSingleArray
     } = useSelector((state) => ({
         PostAPIResponse: state.SubCategoryReducer.PostDataMessage,
         CategoryAPI: state.CategoryReducer.CategoryListData,
-        pageFiled: state.CommonPageFieldReducer.pageField,
         RoleAccessModifiedinSingleArray: state.Login.RoleAccessUpdateData,
 
     }));
-
-
-    {/** Dyanamic Page access state and OnChange function */ }
-    {/*start */ }
-    const [state, setState] = useState({
-        values: {
-            Name: "",
-            ProductCategoryName: ""
-        },
-        fieldLabel: {
-            Name: '',
-
-        },
-
-        isError: {
-            Name: "",
-
-        },
-
-        hasValid: {
-            Name: {
-                regExp: '',
-                inValidMsg: "",
-                valid: false
-            },
-            ProductCategoryName: {
-                regExp: '',
-                inValidMsg: "",
-                valid: false
-            },
-        },
-        required: {
-
-        }
-    })
-    const values = { ...state.values }
-    const { isError } = state;
-    const { fieldLabel } = state;
-
-
-
-    const onChangeText = (event) => {
-        formValChange({ event, state, setState })
-    }
-
-    const onChangeDropDown = (e, v) => {
-        const event = { name: v.name, value: e }
-        formValChange({ event, state, setState })
-    }
-
-    useEffect(() => {
-        comAddPageFieldFunc({ state, setState, fieldData })
-    }, [fieldData])
-    {/*End */ }
-
-
 
     //userAccess useEffect
     useEffect(() => {
@@ -143,6 +74,30 @@ const SubCategoryMaster = (props) => {
             setUserPageAccessState(userAcc)
         }
 
+    }, [RoleAccessModifiedinSingleArray])
+
+
+    // userAccess useEffect
+    useEffect(() => {
+
+        let userAcc = undefined
+        if ((editDataGatingFromList === undefined)) {
+
+            const locationPath = history.location.pathname
+            userAcc = RoleAccessModifiedinSingleArray.find((inx) => {
+                return (`/${inx.ActualPagePath}` === locationPath)
+            })
+        }
+        else if (!(editDataGatingFromList === undefined)) {
+            const relatatedPage = props.relatatedPage
+            userAcc = RoleAccessModifiedinSingleArray.find((inx) => {
+                return (`/${inx.ActualPagePath}` === relatatedPage)
+            })
+
+        }
+        if (!(userAcc === undefined)) {
+            setUserPageAccessState(userAcc)
+        }
     }, [RoleAccessModifiedinSingleArray])
 
     useEffect(() => {
@@ -210,21 +165,17 @@ const SubCategoryMaster = (props) => {
         setCategory_dropdown_Select(e)
     }
 
+    const FormSubmitButton_Handler = (event, values) => {
+        const jsonBody = JSON.stringify({
+            Name: values.Name,
+            ProductCategory: category_dropdown_Select.value,
+        });
 
-    const formSubmitHandler = (event) => {
-        event.preventDefault();
-        if (formValid(state, setState)) {
-            const jsonBody = JSON.stringify({
-                Name: values.Name,
-                ProductCategory: values.ProductCategoryName.value,
-            });
-
-            if (pageMode === "edit") {
-                dispatch(updateSubCategoryID(jsonBody, EditData.id));
-            }
-            else {
-                dispatch(PostMethodForSubCategory(jsonBody));
-            }
+        if (pageMode === "edit") {
+            dispatch(updateSubCategoryID(jsonBody, EditData.id));
+        }
+        else {
+            dispatch(PostMethodForSubCategory(jsonBody));
         }
     };
 
@@ -239,7 +190,7 @@ const SubCategoryMaster = (props) => {
                 <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
                     <Container fluid>
                         <MetaTags>
-                            <title>{userPageAccessState.PageHeading}| FoodERP-React FrontEnd</title>
+                            <title>SubCategoryMaster | FoodERP-React FrontEnd</title>
                         </MetaTags>
                         <Breadcrumb breadcrumbItem={userPageAccessState.PageHeading} />
 
@@ -250,46 +201,39 @@ const SubCategoryMaster = (props) => {
                             </CardHeader>
 
                             <CardBody className=" vh-10 0 text-black" style={{ backgroundColor: "#whitesmoke" }} >
-                                <form onSubmit={formSubmitHandler} ref={formRef} noValidate>
+                                <AvForm onValidSubmit={(e, v) => { FormSubmitButton_Handler(e, v) }}
+                                    ref={formRef}
+                                >
                                     <Row className="">
                                         <Col md={12}>
                                             <Card>
                                                 <CardBody style={{ backgroundColor: "whitesmoke" }}>
                                                     <Row>
                                                         <FormGroup className="mb-2 col col-sm-4 ">
-                                                            <Label htmlFor="validationCustom01">{fieldLabel.Name} </Label>
-                                                            <Input
+                                                            <Label htmlFor="validationCustom01">Name </Label>
+                                                            <AvField
                                                                 name="Name"
                                                                 id="txtName"
                                                                 value={EditData.Name}
                                                                 type="text"
-                                                                className={isError.Name.length > 0 ? "is-invalid form-control" : "form-control"}
                                                                 placeholder="Please Enter Name"
                                                                 autoComplete='off'
-                                                                onChange={(e) => {
-                                                                    onChangeText(e)
-                                                                    dispatch(BreadcrumbShow(e.target.value))
+                                                                validate={{
+                                                                    required: { value: true, errorMessage: 'Please Enter Name' },
                                                                 }}
+                                                                onChange={(e) => { dispatch(BreadcrumbShow(e.target.value)) }}
                                                             />
-                                                            {isError.Name.length > 0 && (
-                                                                <span className="invalid-feedback">{isError.Name}</span>
-                                                            )}
                                                         </FormGroup>
 
                                                         <Row>
                                                             <Col md="4">
                                                                 <FormGroup className="mb-3">
-                                                                    <Label htmlFor="validationCustom01"> {fieldLabel.ProductCategoryName}</Label>
+                                                                    <Label htmlFor="validationCustom01"> Category  </Label>
                                                                     <Col sm={12}>
                                                                         <Select
-                                                                            name="ProductCategoryName"
-                                                                            Value={values.category}
-                                                                            isSearchable={false}
-                                                                            className="react-dropdown"
-                                                                            classNamePrefix="dropdown"
-                                                                            onChange={onChangeDropDown}
+                                                                            value={category_dropdown_Select}
                                                                             options={CategoryDropdownOptions}
-
+                                                                            onChange={(e) => { handllerCategoryDropdown(e) }}
                                                                         />
                                                                     </Col>
                                                                 </FormGroup>
@@ -336,7 +280,7 @@ const SubCategoryMaster = (props) => {
                                             </Card>
                                         </Col>
                                     </Row>
-                                </form>
+                                </AvForm>
                             </CardBody>
 
 
