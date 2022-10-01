@@ -50,18 +50,18 @@ export const formValChange = ({ event, state, setState }) => {
 };
 
 
-    export function comAddPageFieldFunc({ state, setState, fieldData }) {
+    export function comAddPageFieldFunc({ state, setState, pageFiled }) {
         var isState = { ...state }
         const values = { ...state.values }
-
-        fieldData.forEach(ele => {
+        debugger
+        pageFiled.forEach(ele => {
             debugger
             Object.keys(values).forEach(lab => {
-                if (lab === ele.controlId) {
-                    isState.fieldLabel[lab] = ele.fieldLabel
-                    isState.hasValid[lab].regExp = ele.regExp
-                    isState.hasValid[lab].inValidMsg = ele.inValidMsg
-                    if (ele.isCompulsory) {
+                if (lab === ele.ControlID) {
+                    isState.fieldLabel[lab] = ele.FieldLabel
+                    isState.hasValid[lab].regExp = ele.RegularExpression
+                    isState.hasValid[lab].inValidMsg = ele.InValidMsg
+                    if (ele.IsCompulsory) {
                         isState.required[lab] = true
                     }
                 }

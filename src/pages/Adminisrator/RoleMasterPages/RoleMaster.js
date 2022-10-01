@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import Breadcrumb from "../../../components/Common/Breadcrumb";
-import { Card, CardBody, Col, Container, Row, Label, CardHeader, FormGroup, } from "reactstrap";
-import { AvForm, AvField, AvInput } from "availity-reactstrap-validation";
+import { Card, CardBody, Col, Container, Row, Label, CardHeader, FormGroup, Input, } from "reactstrap";
+import { AvInput } from "availity-reactstrap-validation";
 import { useDispatch, useSelector } from "react-redux";
 import {
   editSuccess,
@@ -12,10 +12,13 @@ import Select from "react-select";
 import { BreadcrumbShow } from "../../../store/Utilites/Breadcrumb/actions";
 import { MetaTags } from "react-meta-tags";
 import { useHistory } from "react-router-dom";
-import { CommonGetRoleAccessFunction } from "../../../components/Common/CommonGetRoleAccessFunction";
 import { getEmployeeTypelist } from "../../../store/Administrator/EmployeeTypeRedux/action";
-import BreadcrumbDemo from "../../../components/Common/CmponentRelatedCommonFile/BreadcrumbDemo";
-
+import {
+  comAddPageFieldFunc,
+  formValChange,
+  formValid,
+} from "../../../components/Common/CmponentRelatedCommonFile/validationFunction";
+import { fieldData } from './FieldData'
 const RoleMaster = (props) => {
 
   const formRef = useRef(null);
@@ -26,12 +29,66 @@ const RoleMaster = (props) => {
   let editDataGatingFromList = props.state;
   let propsPageMode = props.pageMode;
   let pageModeProps = props.pageMode;
-
+console.log("editDataGatingFromList",editDataGatingFromList)
   //SetState  Edit data Geting From Modules List component
   const [EditData, setEditData] = useState([]);
   const [pageMode, setPageMode] = useState("save");
   const [userPageAccessState, setUserPageAccessState] = useState('');
   const [employeeType_DropdownSelect, setEmployeeType_DropdownSelect] = useState('');
+
+  // ////////////////////////////////////
+  const [state, setState] = useState({
+    values: {
+      name: "",
+      description: "",
+      dashboard: "",
+      employeeType: ""
+
+    },
+    fieldLabel: {
+      name: "",
+      description: "",
+      dashboard: "",
+      employeeType: ""
+    },
+
+    isError: {
+      name: "",
+      description: "",
+      dashboard: "",
+      employeeType: ""
+    },
+
+    hasValid: {
+      name: {
+        regExp: '',
+        inValidMsg: "",
+        valid: false
+      },
+      description: {
+        regExp: '',
+        inValidMsg: "",
+        valid: false
+      },
+
+      dashboard: {
+        regExp: '',
+        inValidMsg: "",
+        valid: false
+      },
+      employeeType: {
+        regExp: '',
+        inValidMsg: "",
+        valid: false
+      }
+    },
+    required: {
+
+    }
+  }
+  )
+  //////////////////////////
+
   //Access redux store Data /  'save_ModuleSuccess' action data
   const { PostAPIResponse, RoleAccessModifiedinSingleArray, EmployeeType } = useSelector((state) => ({
     PostAPIResponse: state.RoleMaster_Reducer.AddUserMessage,
@@ -43,9 +100,8 @@ const RoleMaster = (props) => {
     dispatch(getEmployeeTypelist());
   }, []);
 
-  // userAccess useEffect
+  //userAccess useEffect
   useEffect(() => {
-
     let userAcc = undefined
     if ((editDataGatingFromList === undefined)) {
 
@@ -67,7 +123,6 @@ const RoleMaster = (props) => {
 
   }, [RoleAccessModifiedinSingleArray])
 
-
   const EmployeeType_DropdownOptions = EmployeeType.map((data) => ({
     value: data.id,
     label: data.Name
@@ -79,7 +134,7 @@ const RoleMaster = (props) => {
   // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
   useEffect(() => {
     debugger
-    if (!(userPageAccessState === '')) { document.getElementById("txtName").focus(); }
+    // if (!(userPageAccessState === '')) { document.getElementById("txtName").focus(); }
     if (!(editDataGatingFromList === undefined)) {
       setEditData(editDataGatingFromList);
       setPageMode(pageModeProps);
@@ -90,7 +145,15 @@ const RoleMaster = (props) => {
         label: data.EmployeeTypeName
       }))
 
-      setEmployeeType_DropdownSelect(listItems)
+     state.values.employeeType=listItems
+     state.values.dashboard=editDataGatingFromList.Dashboard
+     state.values.description=editDataGatingFromList.Description
+     state.values.name=editDataGatingFromList.Name
+     state.hasValid.employeeType.valid=true
+     state.hasValid.name.valid=true
+     state.hasValid.dashboard.valid=true
+     state.hasValid.description.valid=true
+
     }
     else if (!(propsPageMode === undefined)) {
       setPageMode(propsPageMode)
@@ -131,28 +194,55 @@ const RoleMaster = (props) => {
     }
   }, [PostAPIResponse.Status])
 
+  // // ////////////////////////////////////////////////////////////
+  useEffect(() => {
+    comAddPageFieldFunc({ state, setState, fieldData })
+  }, [])
 
-  //'Save' And 'Update' Button Handller
-  const FormSubmitButton_Handler = (event, values) => {
-    const jsonBody = JSON.stringify({
-      Name: values.Name,
-      Description: values.Description,
-      isActive: values.isActive,
-      Dashboard: values.Dashboard,
-      isSCMRole: values.isSCMRole,
-      IsPartyConnection: values.IsPartyConnection,
-      RoleEmployeeTypes: employeeType_DropdownSelect.map((i) => { return ({ EmployeeType: i.value }) }),
-      CreatedBy: 1,
-      CreatedOn: "2022-05-20T11:22:55.711483Z",
-      UpdatedBy: 1,
-      UpdatedOn: "2022-05-20T11:22:55.711483Z"
-    })
+  const values = { ...state.values }
+  const { isError } = state;
+  const { fieldLabel } = state;
 
-    if (pageMode === "edit") {
-      dispatch(updateID(jsonBody, EditData.id));
-    }
-    else {
-      dispatch(postRole(jsonBody));
+
+  const onChangeDropDown = (e, v) => {
+    
+    const event = { name: "employeeType", value: e }
+    formValChange({ event, state, setState })
+  }
+  const onChangeText = (event) => {
+    formValChange({ event, state, setState })
+  }
+
+  const formSubmitHandler = (event) => {
+    debugger
+    event.preventDefault();
+    if (formValid(state, setState)) {
+
+      // console.log("isvalid", values.party.value)
+
+      const jsonBody = JSON.stringify({
+        Name: values.name,
+        Description: values.description,
+        Dashboard: values.dashboard,
+        isActive: values.isActive,
+        isSCMRole: values.isSCMRole,
+        IsPartyConnection: values.IsPartyConnection,
+        RoleEmployeeTypes: values.employeeType.map((i) => { return ({ EmployeeType: i.value }) }),
+        CreatedBy: 1,
+        CreatedOn: "2022-05-20T11:22:55.711483Z",
+        UpdatedBy: 1,
+        UpdatedOn: "2022-05-20T11:22:55.711483Z"
+      });
+
+      if (pageMode === 'edit') {
+        dispatch(updateID(jsonBody, EditData.id));
+        console.log("update jsonBody",jsonBody)
+      }
+
+      else {
+        dispatch(postRole(jsonBody));
+        console.log("jsonBody",jsonBody)
+      }
     }
   };
 
@@ -164,175 +254,205 @@ const RoleMaster = (props) => {
     return (
       <React.Fragment>
         <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
-          <MetaTags>
-            <title>Role Master| FoodERP-React FrontEnd</title>
-          </MetaTags>
-          <Breadcrumb breadcrumbItem={userPageAccessState.PageHeading} />
-
           <Container fluid>
-            <Card className="text-black" >
+            <MetaTags>
+              <title>DriverMaster | FoodERP-React FrontEnd</title>
+            </MetaTags>
+            <Breadcrumb breadcrumbItem={userPageAccessState.PageHeading} />
+
+            <Card className="text-black">
               <CardHeader className="card-header   text-black" style={{ backgroundColor: "#dddddd" }} >
                 <h4 className="card-title text-black">{userPageAccessState.PageDescription}</h4>
                 <p className="card-title-desc text-black">{userPageAccessState.PageDescriptionDetails}</p>
               </CardHeader>
+
               <CardBody className=" vh-10 0 text-black" style={{ backgroundColor: "#whitesmoke" }} >
-                <AvForm onValidSubmit={(e, v) => { FormSubmitButton_Handler(e, v) }}
-                  ref={formRef}
-                >
-                  <Row>
-                    <Col md={12}  >
-                      <Card >
+
+                <form onSubmit={formSubmitHandler} ref={formRef} noValidate>
+
+                  <Row className="">
+                    <Col md={12}>
+                      <Card>
                         <CardBody style={{ backgroundColor: "whitesmoke" }}>
                           <Row>
-                            <FormGroup className="mb-3 col col-sm-4 " >
-                              <Label htmlFor="validationCustom01">Name </Label>
-                              <AvField name="Name" id="txtName"
-                                value={EditData.Name}
+                            <FormGroup className="mb-2 col col-sm-4 ">
+                              <Label htmlFor="validationCustom01">{fieldLabel.name} </Label>
+                              <Input
                                 type="text"
+                                className={isError.name.length > 0 ? "is-invalid form-control" : "form-control"}
+                                name="name"
+                                defaultValue={EditData.Name}
                                 placeholder="Please Enter Name"
-                                autoComplete='off'
-                                validate={{
-                                  required: { value: true, errorMessage: 'Please Enter Name' },
+                                onChange={(e) => {
+                                  onChangeText(e)
+                                  dispatch(BreadcrumbShow(e.target.value))
                                 }}
-                                onChange={(e) => { dispatch(BreadcrumbShow(e.target.value)) }}
+
                               />
+                              {isError.name.length > 0 && (
+                                <span className="invalid-feedback">{isError.name}</span>
+                              )}
                             </FormGroup>
 
-                            <Col md="1">  </Col>
+                            <Col md="1"> </Col>
+
                             <div className="col-lg-4 col-md-6">
                               <div className="mb-3">
-                                <Label className="form-label font-size-13 ">Employee Type</Label>
+                                <Label htmlFor="validationCustom01">{fieldLabel.employeeType} </Label>
                                 <Select
-                                  defaultValue={employeeType_DropdownSelect}
+                                  name="employeeType"
+                                  // defaultValue={EmployeeType_DropdownOptions[0]}
+                                  value={values.employeeType}
+                                  isSearchable={false}
                                   isMulti={true}
-                                  className="basic-multi-select"
+                                  className="react-dropdown"
                                   options={EmployeeType_DropdownOptions}
-                                  onChange={(e) => { EmployeeType_Dropdown_Handler(e) }}
-                                  classNamePrefix="select2-selection"
+                                  onChange={(e) => { onChangeDropDown(e) }}
+                                  classNamePrefix="dropdown"
+                                  styles={{
+                                    control: base => ({
+                                      ...base,
+                                      border: isError.employeeType.length > 0 ? '1px solid red' : '',
+
+                                    })
+                                  }}
                                 />
+                                {isError.employeeType.length > 0 && (
+                                  <span className="text-danger f-8"><small>{isError.employeeType}</small></span>
+                                )}
                               </div>
                             </div>
-                          </Row>
 
-                          <Row>
-                            <FormGroup className="mb-3 col col-sm-4 " >
-                              <Label htmlFor="validationCustom01">Description </Label>
-                              <AvField name="Description" id="txtName"
-                                value={EditData.Description}
-                                type="text"
-                                placeholder="Please Enter Description"
-                                autoComplete='off'
-                                validate={{
-                                  required: { value: true, errorMessage: 'Please Enter Description' },
-                                }} />
-                            </FormGroup>
+                            <Row>
+                              <FormGroup className="mb-2 col col-sm-4 ">
+                                <Label htmlFor="validationCustom01">{fieldLabel.description} </Label>
+                                <Input
+                                  type="text"
+                                  value={EditData.Description}
+                                  className={isError.description.length > 0 ? "is-invalid form-control" : "form-control"}
+                                  name="description"
+                                  placeholder="Please Enter description"
+                                  onChange={(e) => {
+                                    onChangeText(e)
+                                    dispatch(BreadcrumbShow(e.target.value))
+                                  }}
+                                />
+                                {isError.description.length > 0 && (
+                                  <span className="invalid-feedback">{isError.description}</span>
+                                )}
+                              </FormGroup>
 
-                            <Col md="1">  </Col>
-                            <FormGroup className="mb-3 col col-sm-4 " >
-                              <Label htmlFor="validationCustom01">Dashboard </Label>
-                              <AvField name="Dashboard" id="txtName"
-                                value={EditData.Dashboard}
-                                type="text"
-                                placeholder="Please Enter Dashboard"
-                                autoComplete='off'
-                                validate={{
-                                  required: { value: true, errorMessage: 'Please Enter Dashboard' },
-                                }} />
-                            </FormGroup>
-                          </Row>
-
-                          <Row>
-                          <FormGroup className="mb-2 col col-sm-5">
-                            <Row className="justify-content-md-left">
-                              <Label className="col-sm-4 col-form-label" >Is SCM Role </Label>
-                              <Col md={2} style={{ marginTop: '9px' }} >
-
-                                <div className="form-check form-switch form-switch-md mb-3" >
-                                  <AvInput type="checkbox" className="form-check-input"
-                                    defaultChecked={EditData.isSCMRole}
-                                    name="isSCMRole"
-                                  />
-                                </div>
-                              </Col>
+                              <Col md="1">  </Col>
+                              <FormGroup className="mb-2 col col-sm-4 ">
+                                <Label htmlFor="validationCustom01">{fieldLabel.dashboard} </Label>
+                                <Input
+                                  type="text"
+                                  value={EditData.Dashboard}
+                                  className={isError.dashboard.length > 0 ? "is-invalid form-control" : "form-control"}
+                                  name="dashboard"
+                                  placeholder="Please Enter dashboard"
+                                  onChange={(e) => {
+                                    onChangeText(e)
+                                    dispatch(BreadcrumbShow(e.target.value))
+                                  }}
+                                />
+                                {isError.dashboard.length > 0 && (
+                                  <span className="invalid-feedback">{isError.dashboard}</span>
+                                )}
+                              </FormGroup>
                             </Row>
-                          </FormGroup>
 
-                          
-                          <FormGroup className="mb-2 col col-sm-5">
-                            <Row className="justify-content-md-left">
-                              <Label className="col-sm-3 col-form-label" >Active</Label>
-                              <Col md={2} style={{ marginTop: '9px' }} >
+                            <Row>
+                              <FormGroup className="mb-2 col col-sm-5">
+                                <Row className="justify-content-md-left">
+                                  <Label className="col-sm-4 col-form-label" >Is SCM Role </Label>
+                                  <Col md={2} style={{ marginTop: '9px' }} >
 
-                                <div className="form-check form-switch form-switch-md mb-3" dir="ltr">
-                                  <AvInput type="checkbox" className="form-check-input" id="customSwitchsizemd"
-                                    checked={EditData.isActive}
-                                    defaultChecked={true}
-                                    name="isActive"
-                                  />
-                                </div>
-                              </Col>
+                                    <div className="form-check form-switch form-switch-md mb-3" >
+                                      <Input type="checkbox" className="form-check-input"
+                                        value={EditData.isSCMRole}
+                                        name="isSCMRole"
+                                      />
+                                    </div>
+                                  </Col>
+                                </Row>
+                              </FormGroup>
+
+                              <FormGroup className="mb-2 col col-sm-5">
+                                <Row className="justify-content-md-left">
+                                  <Label className="col-sm-3 col-form-label" >Active</Label>
+                                  <Col md={2} style={{ marginTop: '9px' }} >
+
+                                    <div className="form-check form-switch form-switch-md mb-3" dir="ltr">
+                                      <Input type="checkbox" className="form-check-input" id="customSwitchsizemd"
+                                        checked={EditData.isActive}
+                                        defaultChecked={true}
+                                        name="isActive"
+                                      />
+                                    </div>
+                                  </Col>
+                                </Row>
+                              </FormGroup>
+
+                              <FormGroup className="mb-2 col col-sm-5">
+                                <Row className="justify-content-md-left">
+                                  <Label className="col-sm-4 col-form-label" >Is PartyConnection </Label>
+                                  <Col md={2} style={{ marginTop: '9px' }} >
+
+                                    <div className="form-check form-switch form-switch-md mb-3" dir="ltr">
+                                      <Input type="checkbox" className="form-check-input" id="customSwitchsizemd"
+                                        defaultChecked={EditData.IsPartyConnection}
+                                        name="IsPartyConnection"
+                                      />
+                                    </div>
+                                  </Col>
+                                </Row>
+                              </FormGroup>
                             </Row>
-                          </FormGroup>
 
-                          <FormGroup className="mb-2 col col-sm-5">
-                            <Row className="justify-content-md-left">
-                              <Label className="col-sm-4 col-form-label" >Is PartyConnection </Label>
-                              <Col md={2} style={{ marginTop: '9px' }} >
-
-                                <div className="form-check form-switch form-switch-md mb-3" dir="ltr">
-                                  <AvInput type="checkbox" className="form-check-input" id="customSwitchsizemd"
-                                    defaultChecked={EditData.IsPartyConnection}
-                                    name="IsPartyConnection"
-                                  />
-                                </div>
-                              </Col>
-                            </Row>
-                          </FormGroup>
-                          </Row>
-                         
-
-                      
-
-                          <FormGroup >
-                            <Row >
-                              <Col sm={2}>
-                                <div>
-                                  {
-                                    pageMode === "edit" ?
-                                      userPageAccessState.RoleAccess_IsEdit ?
-                                        <button
-                                          type="submit"
-                                          data-mdb-toggle="tooltip" data-mdb-placement="top" title="Update Role"
-                                          className="btn btn-success w-md"
-                                        >
-                                          <i class="fas fa-edit me-2"></i>Update
-                                        </button>
-                                        :
-                                        <></>
-                                      : (
-                                        userPageAccessState.RoleAccess_IsSave ?
+                            <FormGroup>
+                              <Row>
+                                <Col sm={2}>
+                                  <div>
+                                    {
+                                      pageMode === "edit" ?
+                                        userPageAccessState.RoleAccess_IsEdit ?
                                           <button
                                             type="submit"
-                                            data-mdb-toggle="tooltip" data-mdb-placement="top" title="Save Role"
-                                            className="btn btn-primary w-md"
-                                          > <i className="fas fa-save me-2"></i> Save
+                                            data-mdb-toggle="tooltip" data-mdb-placement="top" title="Update Party Type"
+                                            className="btn btn-success w-md mt-3"
+                                          >
+                                            <i class="fas fa-edit me-2"></i>Update
                                           </button>
                                           :
                                           <></>
-                                      )
-                                  }
-                                </div>
-                              </Col>
-                            </Row>
-                          </FormGroup >
+                                        : (
+
+                                          userPageAccessState.RoleAccess_IsSave ?
+                                            <button
+                                              type="submit"
+                                              data-mdb-toggle="tooltip" data-mdb-placement="top" title="Save Party Type"
+                                              className="btn btn-primary w-md mt-3 "
+                                            > <i className="fas fa-save me-2"></i> Save
+                                            </button>
+                                            :
+                                            <></>
+                                        )
+                                    }
+                                  </div>
+                                </Col>
+                              </Row>
+                            </FormGroup>
+                          </Row>
 
                         </CardBody>
                       </Card>
                     </Col>
                   </Row>
-                </AvForm>
+                </form>
               </CardBody>
             </Card>
+
           </Container>
         </div>
       </React.Fragment>
