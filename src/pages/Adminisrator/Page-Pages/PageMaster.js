@@ -169,7 +169,7 @@ const PageMaster = (props) => {
         setRelatedPageListShowUI(true)
       }
       setrelatedPage_DropdownSelect({
-        value: editDataGatingFromList.RelatedPageID,
+        value: editDataGatingFromList.RelatedPageId,
         label: editDataGatingFromList.RelatedPageName,
       });
 
