@@ -29,9 +29,13 @@ export default function PageList() {
 
   const [userPageAccessState, setUserPageAccessState] = useState('');
   const [modal_center, setmodal_center] = useState(false);
+  const [modal_fullscreen, setmodal_fullscreen] = useState(false);
 
+  function removeBodyCss() {
+    document.body.classList.add("no_padding");
+  }
   // var HPageListData = [];
-  const { HPageListData, editData, updateMessage, deleteModuleID,RoleAccessModifiedinSingleArray,PostAPIResponse} =
+  const { HPageListData, editData, updateMessage, deleteModuleID, RoleAccessModifiedinSingleArray, PostAPIResponse } =
     useSelector((state) => ({
       HPageListData: state.H_Pages.HPagesListData,
       editData: state.H_Pages.editData,
@@ -41,22 +45,23 @@ export default function PageList() {
       PostAPIResponse: state.H_Pages.saveMessage,
     }));
 
-    useEffect(() => {
-      const locationPath = history.location.pathname
-      let userAcc = RoleAccessModifiedinSingleArray.find((inx) => {
-        return (`/${inx.ActualPagePath}` === locationPath)
-      })
-      if (!(userAcc === undefined)) {
-        setUserPageAccessState(userAcc)
-      }
-    }, [RoleAccessModifiedinSingleArray])
+  useEffect(() => {
+    const locationPath = history.location.pathname
+    let userAcc = RoleAccessModifiedinSingleArray.find((inx) => {
+      return (`/${inx.ActualPagePath}` === locationPath)
+    })
+    if (!(userAcc === undefined)) {
+      setUserPageAccessState(userAcc)
+    }
+  }, [RoleAccessModifiedinSingleArray])
 
   useEffect(() => {
     dispatch(dispatch(GetHpageListData()));
   }, []);
 
-  function tog_center() {
-    setmodal_center(!modal_center);
+  function tog_fullscreen() {
+    setmodal_fullscreen(!modal_fullscreen);
+    removeBodyCss();
   }
 
   useEffect(() => {
@@ -70,7 +75,7 @@ export default function PageList() {
           AfterResponseAction: GetHpageListData,
         })
       );
-      tog_center();
+      tog_fullscreen();
     } else if (updateMessage.Status === true) {
       dispatch(updateHPagesSuccess({ Status: false }));
       dispatch(
@@ -111,31 +116,31 @@ export default function PageList() {
   useEffect(() => {
 
     if ((PostAPIResponse.Status === true) && (PostAPIResponse.StatusCode === 200)) {
-        dispatch(saveHPagesSuccess({ Status: false }))
-        tog_center();
-        dispatch(GetHpageListData());
-        dispatch(AlertState({
-            Type: 1,
-            Status: true,
-            Message: PostAPIResponse.Message,
-        }))
+      dispatch(saveHPagesSuccess({ Status: false }))
+      tog_fullscreen();
+      dispatch(GetHpageListData());
+      dispatch(AlertState({
+        Type: 1,
+        Status: true,
+        Message: PostAPIResponse.Message,
+      }))
     }
 
     else if ((PostAPIResponse.Status === true)) {
-        dispatch(saveHPagesSuccess({ Status: false }))
-        dispatch(AlertState({
-            Type: 4,
-            Status: true,
-            Message: JSON.stringify(PostAPIResponse.Message),
-            RedirectPath: false,
-            AfterResponseAction: false
-        }));
+      dispatch(saveHPagesSuccess({ Status: false }))
+      dispatch(AlertState({
+        Type: 4,
+        Status: true,
+        Message: JSON.stringify(PostAPIResponse.Message),
+        RedirectPath: false,
+        AfterResponseAction: false
+      }));
     }
-}, [PostAPIResponse.Status])
+  }, [PostAPIResponse.Status])
 
   useEffect(() => {
     if (editData.Status === true) {
-      tog_center();
+      tog_fullscreen();
     }
   }, [editData]);
 
@@ -197,16 +202,16 @@ export default function PageList() {
       dataField: "isActive",
       sort: true,
     },
-      // For Edit, Delete ,and View Button Common Code function
-      listPageCommonButtonFunction({
-        dispatchHook: dispatch,
-        ButtonMsgLable: "Page ",
-        deleteName:"Name",
-        userPageAccessState: userPageAccessState,
-        editActionFun: editHPagesID,
-        deleteActionFun: deleteHpagesUsingID
+    // For Edit, Delete ,and View Button Common Code function
+    listPageCommonButtonFunction({
+      dispatchHook: dispatch,
+      ButtonMsgLable: "Page ",
+      deleteName: "Name",
+      userPageAccessState: userPageAccessState,
+      editActionFun: editHPagesID,
+      deleteActionFun: deleteHpagesUsingID
     })
-  
+
   ];
 
   if (!(userPageAccessState === '')) {
@@ -268,13 +273,28 @@ export default function PageList() {
         </div>
 
         <Modal
-          isOpen={modal_center}
+          isOpen={modal_fullscreen}
           toggle={() => {
-            tog_center();
+            tog_fullscreen();
           }}
-          size="xl"
+          size="fullscreen"
         >
-          <HPageMaster state={editData.Data} relatatedPage={"/PageMaster"} pageMode={editData.pageMode}/>
+          <div className="modal-body">
+            <HPageMaster state={editData.Data} relatatedPage={"/PageMaster"} pageMode={editData.pageMode} />
+          </div>
+          <div className="modal-footer">
+            <button
+              type="button"
+              onClick={() => {
+                tog_fullscreen();
+              }}
+              className="btn btn-secondary "
+              data-dismiss="modal"
+            >
+              Close
+            </button>
+          </div>
+
 
         </Modal>
 
