@@ -10,8 +10,8 @@ function* commonPageFiled_GenFunc({ pageId }) {
   yield put(SpinnerState(true))
   try {
     const response = yield call(commonPageFiled_API, pageId);
-
-    yield put(commonPageFieldSuccess(response.Data));
+debugger
+    yield put(commonPageFieldSuccess(response.Data.PageFieldMaster));
     yield put(SpinnerState(false))
   } catch (error) {
     yield put(SpinnerState(false))

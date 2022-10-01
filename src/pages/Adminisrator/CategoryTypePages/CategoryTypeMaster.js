@@ -13,7 +13,7 @@ import {
 } from "reactstrap";
 
 import { MetaTags } from "react-meta-tags";
-import { AlertState } from "../../../store/actions";
+import { AlertState, commonPageField } from "../../../store/actions";
 import { useHistory } from "react-router-dom";
 
 import { BreadcrumbShow } from "../../../store/Utilites/Breadcrumb/actions";
@@ -30,8 +30,6 @@ import {
     formValChange,
     formValid,
 } from "../../../components/Common/CmponentRelatedCommonFile/validationFunction";
-
-import { fieldData } from '../CategoryTypePages/FieldData';
 
 const CategoryTypeMaster = (props) => {
     const formRef = useRef(null);
@@ -53,6 +51,10 @@ const CategoryTypeMaster = (props) => {
         RoleAccessModifiedinSingleArray: state.Login.RoleAccessUpdateData,
         pageFiled: state.CommonPageFieldReducer.pageField
     }));
+
+    useEffect(() => {
+        dispatch(commonPageField(16))
+    }, []);
 
     {/** Dyanamic Page access state and OnChange function */ }
     {/*start */ }
@@ -92,8 +94,8 @@ const CategoryTypeMaster = (props) => {
     }
 
     useEffect(() => {
-        comAddPageFieldFunc({ state, setState, fieldData })
-    }, [fieldData])
+        comAddPageFieldFunc({ state, setState, pageFiled })
+    }, [pageFiled])
     {/*End */ }
 
 
