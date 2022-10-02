@@ -118,7 +118,7 @@ const DriverMaster = (props) => {
 
     useEffect(() => {
         // dispatch(getMethodForDriverList());
-        // dispatch(commonPageField(89))
+        dispatch(commonPageField(89))
 
     }, []);
 
@@ -200,7 +200,7 @@ const DriverMaster = (props) => {
 
     // ////////////////////////////////////////////////////////////
     useEffect(() => {
-        comAddPageFieldFunc({ state, setState, fieldData })
+        comAddPageFieldFunc({ state, setState, pageFiled })
     }, [])
 
     const values = { ...state.values }

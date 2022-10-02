@@ -20,7 +20,6 @@ export const formValid = ({ isError, required, hasValid, fieldLabel, values }, s
     return isValid
 };
 
-
 export const formValChange = ({ event, state, setState }) => {
     debugger
     let isError = { ...state.isError };
@@ -55,7 +54,6 @@ export const formValChange = ({ event, state, setState }) => {
         })
     }
 };
-
 
     export function comAddPageFieldFunc({ state, setState, fieldData }) {
         var isState = { ...state }
