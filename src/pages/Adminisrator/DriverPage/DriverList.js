@@ -12,7 +12,7 @@ import {
 } from "../../../store/Administrator/DriverRedux/action";
 
 import CommonListPage from "../../../components/Common/CmponentRelatedCommonFile/commonListPage";
-import { commonPageField } from "../../../store/actions";
+import { commonPageField, commonPageFieldSuccess } from "../../../store/actions";
 
 const DriverList = (props) => {
   const dispatch = useDispatch();
@@ -41,12 +41,14 @@ const DriverList = (props) => {
 
   }
   useEffect(() => {
+    
+    dispatch(commonPageFieldSuccess([]))
     dispatch(commonPageField(90))
     dispatch(getMethodForDriverList())
 
   }, []);
 
-  const { pageField = [] } = reducers
+  const { pageField } = reducers
 
   return (
     <React.Fragment>
