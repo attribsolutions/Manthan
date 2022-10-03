@@ -71,6 +71,7 @@ import MarginMaster from "../pages/Adminisrator/MarginMaster/MarginMaster";
 
 import MRPList from "../pages/Adminisrator/MRPMaster/MRPList";
 import MarginList from "../pages/Adminisrator/MarginMaster/MarginList";
+import TermsAndCondtionsMaster from "../pages/Adminisrator/TermsAndCondtions/TermsAndCondtionsMaster";
 
 
 // import Index from "../pages/Adminisrator/customValidation/index";
@@ -182,6 +183,8 @@ const userRoutes = [
   { path: "/CompanyGroupMaster", component: CompanyGroupMaster },
   { path: "/CompanyGroupList", component: CompanyGroupList },
 
+  { path: '/TermsAndCondtionsMaster', component: TermsAndCondtionsMaster },
+  
 
   
 
