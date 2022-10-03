@@ -1,10 +1,4 @@
-import React from 'react'
 
-export const commonListPage = () => {
-  return (
-    <div>commonListPage</div>
-  )
-}
 import React, { useEffect, useState } from "react";
 import Breadcrumbs from "../../../components/Common/Breadcrumb";
 import { Col, Modal, Row } from "reactstrap";
@@ -15,8 +9,8 @@ import paginationFactory, {
 import ToolkitProvider, { Search } from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 import { useSelector, useDispatch } from "react-redux";
-import "../../../assets/scss/CustomeTable/datatables.scss";
-import DriverMaster from "./DriverMaster";
+// import "../../../assets/scss/CustomeTable/datatables.scss";
+import DriverMaster from "../../../pages/Adminisrator/DriverPage/DriverMaster";
 import { MetaTags } from "react-meta-tags";
 import { useHistory } from "react-router-dom";
 import {
@@ -31,7 +25,7 @@ import { AlertState } from "../../../store/actions";
 import { listPageCommonButtonFunction }
   from "../../../components/Common/CmponentRelatedCommonFile/listPageCommonButtons";
 
-const DriverList = (props) => {
+const CommonListPage = (props) => {
 
   const dispatch = useDispatch();
   const history = useHistory()
@@ -40,114 +34,122 @@ const DriverList = (props) => {
   const [modal_center, setmodal_center] = useState(false);
 
   const {
-    TableListData,
+    tableList,
     editData,
-    updateMessage,
-    deleteMessage,
-    RoleAccessModifiedinSingleArray,
-    PostAPIResponse
-  } = useSelector(
-    (state) => ({
-      TableListData: state.DriverReducer.DriverList,
-      editData: state.DriverReducer.editData,
-      updateMessage: state.DriverReducer.updateMessage,
-      deleteMessage: state.DriverReducer.deleteMessage,
-      RoleAccessModifiedinSingleArray: state.Login.RoleAccessUpdateData,
-      PostAPIResponse: state.DriverReducer.PostDataMessage,
-    })
-  );
-  console.log("TableListData", TableListData)
+    updateMsg,
+    deleteMsg,
+    userAccess,
+    postMsg,
+    pageField = []
+
+  } = props.reducers;
+
+  const {
+    getList,
+    editId,
+    deleteId,
+    postSucc,
+    updateSucc,
+    deleteSucc
+
+
+  } = props.action
+
+  const {
+    MasterModal,
+    masterPath,
+  } = props;
+debugger
   useEffect(() => {
     const locationPath = history.location.pathname
-    let userAcc = RoleAccessModifiedinSingleArray.find((inx) => {
+    let userAcc = userAccess.find((inx) => {
       return (`/${inx.ActualPagePath}` === locationPath)
     })
     if (!(userAcc === undefined)) {
       setUserPageAccessState(userAcc)
     }
-  }, [RoleAccessModifiedinSingleArray])
+  }, [userAccess])
 
   //  This UseEffect => Featch Modules List data  First Rendering
-  useEffect(() => {
-    dispatch(getMethodForDriverList());
-  }, []);
+ 
 
   // This UseEffect => UpadateModal Success/Unsucces  Show and Hide Control Alert_modal
   useEffect(() => {
 
-    if (updateMessage.Status === true && updateMessage.StatusCode === 200) {
-      dispatch(updateDriverTypeIDSuccess({ Status: false }));
+    if (updateMsg.Status === true && updateMsg.StatusCode === 200) {
+      dispatch(updateSucc({ Status: false }));
       dispatch(
         AlertState({
           Type: 1,
           Status: true,
-          Message: updateMessage.Message,
-          AfterResponseAction: getMethodForDriverList,
+          Message: updateMsg.Message,
+          AfterResponseAction: getList,
         })
       );
       tog_center();
-    } else if (updateMessage.Status === true) {
-      dispatch(updateDriverTypeIDSuccess({ Status: false }));
+    } else if (updateMsg.Status === true) {
+      dispatch(updateSucc({ Status: false }));
       dispatch(
         AlertState({
           Type: 3,
           Status: true,
-          Message: JSON.stringify(updateMessage.Message),
+          Message: JSON.stringify(updateMsg.Message),
         })
       );
     }
-  }, [updateMessage]);
+  }, [updateMsg]);
 
   useEffect(() => {
-    if (deleteMessage.Status === true && deleteMessage.StatusCode === 200) {
-      dispatch(deleteDriverTypeIDSuccess({ Status: false }));
+    if (deleteMsg.Status === true && deleteMsg.StatusCode === 200) {
+      dispatch(deleteSucc({ Status: false }));
       dispatch(
         AlertState({
           Type: 1,
           Status: true,
-          Message: deleteMessage.Message,
-          AfterResponseAction: getMethodForDriverList,
+          Message: deleteMsg.Message,
+          AfterResponseAction: getList,
         })
       );
-    } else if (deleteMessage.Status === true) {
-      dispatch(deleteDriverTypeIDSuccess({ Status: false }));
+    } else if (deleteMsg.Status === true) {
+      dispatch(deleteSucc({ Status: false }));
       dispatch(
         AlertState({
           Type: 3,
           Status: true,
-          Message: JSON.stringify(deleteMessage.Message),
+          Message: JSON.stringify(deleteMsg.Message),
         })
       );
     }
-  }, [deleteMessage]);
+  }, [deleteMsg]);
 
 
   useEffect(() => {
 
-    if ((PostAPIResponse.Status === true) && (PostAPIResponse.StatusCode === 200)) {
-      dispatch(PostMethod_ForDriverMasterSuccess({ Status: false }))
+    if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
+      dispatch(postSucc({ Status: false }))
       tog_center();
-      dispatch(getMethodForDriverList());
+      dispatch(getList());
       dispatch(AlertState({
         Type: 1,
         Status: true,
-        Message: PostAPIResponse.Message,
+        Message: postMsg.Message,
       }))
     }
 
-    else if ((PostAPIResponse.Status === true)) {
-      dispatch(PostMethod_ForDriverMasterSuccess({ Status: false }))
+    else if ((postMsg.Status === true)) {
+      dispatch(postSucc({ Status: false }))
       dispatch(AlertState({
         Type: 4,
         Status: true,
-        Message: JSON.stringify(PostAPIResponse.Message),
+        Message: JSON.stringify(postMsg.Message),
         RedirectPath: false,
         AfterResponseAction: false
       }));
     }
 
 
-  }, [PostAPIResponse.Status])
+  }, [postMsg])
+
   // Edit Modal Show When Edit Data is true
   useEffect(() => {
     if (editData.Status === true) {
@@ -159,20 +161,45 @@ const DriverList = (props) => {
     setmodal_center(!modal_center);
   }
 
+
+  let sortLabel = ""
+  const columns = []
+  pageField.forEach((i, k) => {
+    if (i.ShowInListPage) {
+      columns.push({
+        text: i.FieldLabel,
+        dataField: i.ControlID,
+        sort: true,
+      })
+      if (i.DefaultSort) {
+        sortLabel = i.ControlID
+      }
+    }
+    if (pageField.length - 1 === k) {
+      columns.push(listPageCommonButtonFunction({
+        dispatchHook: dispatch,
+        ButtonMsgLable: "DriverType",
+        deleteName: "Name",
+        userPageAccessState: userPageAccessState,
+        editActionFun: editId,
+        deleteActionFun: deleteId
+      })
+      )
+    }
+  })
   const defaultSorted = [
     {
-      dataField: "Name", // if dataField is not match to any column you defined, it will be ignored.
+      dataField: sortLabel, // if dataField is not match to any column you defined, it will be ignored.
       order: "asc", // desc or asc
     },
   ];
-
+  debugger
   const pageOptions = {
     sizePerPage: 10,
-    totalSize: TableListData.length,
+    totalSize: tableList.length,
     custom: true,
   };
-
-  const pagesListColumns = [
+  const columns1 = [
     {
       text: "Name",
       dataField: "Name",
@@ -201,8 +228,8 @@ const DriverList = (props) => {
       ButtonMsgLable: "DriverType",
       deleteName: "Name",
       userPageAccessState: userPageAccessState,
-      editActionFun: editDriverTypeId,
-      deleteActionFun: delete_DriverType_ID
+      editActionFun: editId,
+      deleteActionFun: deleteId
     })
   ];
 
@@ -218,8 +245,8 @@ const DriverList = (props) => {
               <ToolkitProvider
                 keyField="id"
                 defaultSorted={defaultSorted}
-                data={TableListData}
-                columns={pagesListColumns}
+                data={tableList}
+                columns={columns}
                 search
               >
                 {(toolkitProps) => (
@@ -229,11 +256,11 @@ const DriverList = (props) => {
                       breadcrumbItem={userPageAccessState.PageHeading}
                       IsButtonVissible={(userPageAccessState.RoleAccess_IsSave) ? true : false}
                       SearchProps={toolkitProps.searchProps}
-                      breadcrumbCount={`Product Count: ${TableListData.length}`}
+                      breadcrumbCount={`Product Count: ${tableList.length}`}
                       IsSearchVissible={true}
-                      RedirctPath={`/DriverMaster`}
+                      RedirctPath={masterPath}
                       isExcelButtonVisible={true}
-                      ExcelData={TableListData}
+                      ExcelData={tableList}
                     />
                     <Row>
                       <Col xl="12">
@@ -267,8 +294,8 @@ const DriverList = (props) => {
             }}
             size="xl"
           >
-            
-            <DriverMaster state={editData.Data} relatatedPage={"/DriverMaster"} pageMode={editData.pageMode} />
+
+            <MasterModal state={editData.Data} relatatedPage={masterPath} pageMode={editData.pageMode} />
           </Modal>
         </div>
       </React.Fragment>
@@ -281,4 +308,4 @@ const DriverList = (props) => {
   }
 }
 
-export default DriverList;
+export default CommonListPage;

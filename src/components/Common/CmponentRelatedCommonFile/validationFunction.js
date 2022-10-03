@@ -1,7 +1,7 @@
 export const formValid = ({ isError, required, hasValid, fieldLabel, values }, setState) => {
 
     let isValid = true;
-   
+
     Object.keys(required).forEach((lab) => {
 
         if (!(hasValid[lab].valid)) {
@@ -13,7 +13,6 @@ export const formValid = ({ isError, required, hasValid, fieldLabel, values }, s
     return isValid
 };
 
-
 export const formValChange = ({ event, state, setState }) => {
     debugger
     let isError = { ...state.isError };
@@ -24,52 +23,105 @@ export const formValChange = ({ event, state, setState }) => {
 
     if (!(event.target === undefined)) {
         event.preventDefault();
-        const { name, value, type } = event.target;
+        const { name, value, type, checked } = event.target;
+        switch (type) {
+            case "text":
+                const regExp = RegExp(hasValid[name].regExp)
+                if (regExp.test(value)) {
+                    isError[name] = "";
+                    hasValid[name].valid = true
+                }
+                else {
+                    isError[name] = hasValid[name].inValidMsg;
+                    hasValid[name].valid = false
+                }
+                values[name] = value
+                break;
+            case "checkbox":
+                if (!(required[name] === undefined)) {
+                    if (checked) {
+                        isError[name] = "";
+                        hasValid[name].valid = true
+                        values[name] = checked
+                    }
+                    else {
+                        isError[name] = hasValid[name].inValidMsg;
+                        hasValid[name].valid = true
+                        values[name] = checked
+                    }
+                }
+                else {
+                    isError[name] = "";
+                    hasValid[name].valid = true
+                    values[name] = checked
+                }
+                break;
 
-        const regExp = RegExp(hasValid[name].regExp)
-        if (regExp.test(value)) {
-            isError[name] = "";
-            hasValid[name].valid = true
+            default:
+                break;
         }
-        else {
-            isError[name] = hasValid[name].inValidMsg;
-            hasValid[name].valid = false
-        }
-        values[name] = value
+
         setState({ isError, hasValid, required, fieldLabel, values })
     }
     else {
-        const { name, value } = event
-        values[name] = value
-        isError[name] =''
-        hasValid[name].valid = true
+        const { name, value, } = event.change
+        const { type } = event
+
+        switch (type) {
+
+            case "select":
+                if (value.value === undefined) {
+                    if (!(required[name] === undefined && value.value > 0)) {
+                        isError[name] = "";
+                        hasValid[name].valid = true
+                    }
+                    else {
+                        isError[name] = hasValid[name].inValidMsg;
+                        hasValid[name].valid = false
+                    }
+                }
+                else {
+                    isError[name] = hasValid[name].inValidMsg;
+                    hasValid[name].valid = false
+                }
+                values[name] = value
+                break;
+
+            case "date":
+                isError[name] = "";
+                hasValid[name].valid = true
+                values[name] = value
+                break;
+
+            default:
+                break;
+
+        }
         setState({
             isError, hasValid, required, fieldLabel, values
         })
     }
 };
 
-
-    export function comAddPageFieldFunc({ state, setState, pageFiled }) {
-        var isState = { ...state }
-        const values = { ...state.values }
+export function comAddPageFieldFunc({ state, setState, pageField }) {
+    var isState = { ...state }
+    const values = { ...state.values }
+    debugger
+    pageField.forEach(ele => {
         debugger
-        pageFiled.forEach(ele => {
-            debugger
-            Object.keys(values).forEach(lab => {
-                if (lab === ele.ControlID) {
-                    isState.fieldLabel[lab] = ele.FieldLabel
-                    isState.hasValid[lab].regExp = ele.RegularExpression
-                    isState.hasValid[lab].inValidMsg = ele.InValidMsg
-                    if (ele.IsCompulsory) {
-                        isState.required[lab] = true
-                    }
+        Object.keys(values).forEach(lab => {
+            if (lab === ele.ControlID) {
+                isState.fieldLabel[lab] = ele.FieldLabel
+                isState.hasValid[lab].regExp = ele.RegularExpression
+                isState.hasValid[lab].inValidMsg = ele.InValidMsg
+                if (ele.IsCompulsory) {
+                    isState.required[lab] = true
                 }
-            });
+            }
         });
+    });
 
-        setState(isState)
+    setState(isState)
 
-    }
+}
 
-   

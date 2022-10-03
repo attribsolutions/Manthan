@@ -30,8 +30,8 @@ import { useHistory } from "react-router-dom";
 import Flatpickr from "react-flatpickr"
 import {
     comAddPageFieldFunc,
-    formValChange,
     formValid,
+    formValChange
 } from "../../../components/Common/CmponentRelatedCommonFile/validationFunction";
 
 import { fieldData } from './validfiles'
@@ -42,7 +42,7 @@ const DriverMaster = (props) => {
     const dispatch = useDispatch();
     const history = useHistory()
 
-    let editDataGatingFromList = props.state;
+    let editDataGetingFromList = props.state;
     let pageModeProps = props.pageMode;
 
     const formRef = useRef(null);
@@ -54,27 +54,27 @@ const DriverMaster = (props) => {
     // ////////////////////////////////////
     const [state, setState] = useState({
         values: {
-            name: 0,
+            Name: '',
             address: "",
             uid: "",
             party: ''
         },
         fieldLabel: {
-            name: '',
+            Name: '',
             address: '',
             uid: '',
             party: ''
         },
 
         isError: {
-            name: "",
+            Name: "",
             address: "",
             uid: "",
             party: ''
         },
 
         hasValid: {
-            name: {
+            Name: {
                 regExp: '',
                 inValidMsg: "",
                 valid: false
@@ -97,7 +97,7 @@ const DriverMaster = (props) => {
             }
         },
         required: {
-           
+
         }
     }
     )
@@ -107,33 +107,32 @@ const DriverMaster = (props) => {
     //Access redux store Data /  'save_ModuleSuccess' action data
     const {
         PostAPIResponse,
-        pageFiled,
+        pageField,
         RoleAccessModifiedinSingleArray
     } = useSelector((state) => ({
         PostAPIResponse: state.DriverReducer.PostDataMessage,
         RoleAccessModifiedinSingleArray: state.Login.RoleAccessUpdateData,
-        pageFiled: state.CommonPageFieldReducer.pageField
+        pageField: state.CommonPageFieldReducer.pageField
     }));
 
 
     useEffect(() => {
         // dispatch(getMethodForDriverList());
-        // dispatch(commonPageField(89))
+        dispatch(commonPageField(90))
 
     }, []);
 
     //userAccess useEffect
     useEffect(() => {
-        debugger
         let userAcc = undefined
-        if ((editDataGatingFromList === undefined)) {
+        if ((editDataGetingFromList === undefined)) {
 
             let locationPath = history.location.pathname
             userAcc = RoleAccessModifiedinSingleArray.find((inx) => {
                 return (`/${inx.ActualPagePath}` === locationPath)
             })
         }
-        else if (!(editDataGatingFromList === undefined)) {
+        else if (!(editDataGetingFromList === undefined)) {
             let relatatedPage = props.relatatedPage
             userAcc = RoleAccessModifiedinSingleArray.find((inx) => {
                 return (`/${inx.ActualPagePath}` === relatatedPage)
@@ -150,17 +149,17 @@ const DriverMaster = (props) => {
     useEffect(() => {
 
         // if (!(userPageAccessState === '')) { document.getElementById("txtName").focus(); }
-        if (!(editDataGatingFromList === undefined)) {
+        if (!(editDataGetingFromList === undefined)) {
 
-            setEditData(editDataGatingFromList);
+            setEditData(editDataGetingFromList);
             setPageMode(pageModeProps);
-            setDOB_Date_Select(editDataGatingFromList.DOB)
+            setDOB_Date_Select(editDataGetingFromList.DOB)
 
             dispatch(editDriverTypeSuccess({ Status: false }))
-            dispatch(BreadcrumbShow(editDataGatingFromList.DriverMaster))
+            dispatch(BreadcrumbShow(editDataGetingFromList.DriverMaster))
             return
         }
-    }, [editDataGatingFromList])
+    }, [editDataGetingFromList])
 
 
 
@@ -200,21 +199,31 @@ const DriverMaster = (props) => {
 
     // ////////////////////////////////////////////////////////////
     useEffect(() => {
-        comAddPageFieldFunc({ state, setState, fieldData })
-    }, [])
+        debugger
+        if (pageField.length >0) {
+            comAddPageFieldFunc({ state, setState, pageField })
+        }
+    }, [pageField])
+
+    const onChangeSelect = (e, v) => {
+        const event = { change: { name: v.name, value: e }, type: "select" }
+        formValChange({ event, state, setState })
+    }
+
+    const onChangeDate = (e, v) => {
+        const event = { change: { name: v.name, value: e }, type: "date" }
+        formValChange({ event, state, setState })
+    }
+    const onChangeText = (event) => {
+        formValChange({ event, state, setState })
+    }
 
     const values = { ...state.values }
     const { isError } = state;
     const { fieldLabel } = state;
 
 
-    const onChangeDropDown = (e, v) => {
-        const event = { name: v.name, value: e }
-        formValChange({ event, state, setState })
-    }
-    const onChangeText = (event) => {
-        formValChange({ event, state, setState })
-    }
+
     const formSubmitHandler = (event) => {
         event.preventDefault();
         if (formValid(state, setState)) {
@@ -222,7 +231,7 @@ const DriverMaster = (props) => {
             console.log("isvalid", values.party.value)
 
             const jsonBody = JSON.stringify({
-                Name: values.name,
+                Name: values.Name,
                 Address: values.address,
                 DOB: DOB_Date_Select,
                 UID: values.uid
@@ -280,11 +289,11 @@ const DriverMaster = (props) => {
                                                 <CardBody style={{ backgroundColor: "whitesmoke" }}>
                                                     <Row>
                                                         <FormGroup className="mb-2 col col-sm-4 ">
-                                                            <Label htmlFor="validationCustom01">{fieldLabel.name} </Label>
+                                                            <Label htmlFor="validationCustom01">{fieldLabel.Name} </Label>
                                                             <Input
                                                                 type="text"
-                                                                className={isError.name.length > 0 ? "is-invalid form-control" : "form-control"}
-                                                                name="name"
+                                                                className={isError.Name.length > 0 ? "is-invalid form-control" : "form-control"}
+                                                                name="Name"
                                                                 placeholder="Please Enter Name"
                                                                 onChange={(e) => {
                                                                     onChangeText(e)
@@ -312,9 +321,7 @@ const DriverMaster = (props) => {
                                                                             altFormat: "F j, Y",
                                                                             dateFormat: "Y-m-d"
                                                                         }}
-                                                                        onChange={(selectedDates, dateStr, instance) => {
-                                                                            setDOB_Date_Select(dateStr)
-                                                                        }}
+                                                                        onChange={onChangeSelect}
                                                                     />
                                                                 </FormGroup>
                                                             </Col>
@@ -327,7 +334,7 @@ const DriverMaster = (props) => {
                                                                         defaultValue={options[0]}
                                                                         isSearchable={false}
                                                                         className="react-dropdown"
-                                                                        onChange={onChangeDropDown}
+                                                                        onChange={onChangeSelect}
                                                                         classNamePrefix="dropdown"
                                                                         options={options}
                                                                         name="party"
