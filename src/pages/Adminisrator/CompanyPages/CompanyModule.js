@@ -25,6 +25,7 @@ import { MetaTags } from "react-meta-tags";
 import { AlertState } from "../../../store/actions";
 import { BreadcrumbShow } from "../../../store/Utilites/Breadcrumb/actions";
 import { useHistory } from "react-router-dom";
+import { SaveButton } from "../../../components/CommonSaveButton";
 
 const CompanyModule = (props) => {
 
@@ -167,7 +168,7 @@ const CompanyModule = (props) => {
   };
 
   var IsEditMode_Css = ''
-  if ((pageMode === "edit")||(pageMode==="copy")||(pageMode==="dropdownAdd")) { IsEditMode_Css = "-5.5%" };
+  if ((pageMode === "edit") || (pageMode === "copy") || (pageMode === "dropdownAdd")) { IsEditMode_Css = "-5.5%" };
 
   if (!(userPageAccessState === '')) {
     return (
@@ -302,32 +303,7 @@ const CompanyModule = (props) => {
                           <FormGroup >
                             <Row >
                               <Col sm={2}>
-                                <div>
-                                  {
-                                    pageMode === "edit" ?
-                                      userPageAccessState.RoleAccess_IsEdit ?
-                                        <button
-                                          type="submit"
-                                          data-mdb-toggle="tooltip" data-mdb-placement="top" title="Update Module"
-                                          className="btn btn-success w-md"
-                                        >
-                                          <i class="fas fa-edit me-2"></i>Update
-                                        </button>
-                                        :
-                                        <></>
-                                      : (
-                                        userPageAccessState.RoleAccess_IsSave ?
-                                          <button
-                                            type="submit"
-                                            data-mdb-toggle="tooltip" data-mdb-placement="top" title="Save Module"
-                                            className="btn btn-primary w-md"
-                                          > <i className="fas fa-save me-2"></i> Save
-                                          </button>
-                                          :
-                                          <></>
-                                      )
-                                  }
-                                </div>
+                              {SaveButton({pageMode,userPageAccessState,module:"Company"})}
                               </Col>
                             </Row>
                           </FormGroup >
@@ -350,3 +326,5 @@ const CompanyModule = (props) => {
   }
 };
 export default CompanyModule;
+
+
