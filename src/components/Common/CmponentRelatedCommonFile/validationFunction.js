@@ -14,7 +14,7 @@ export const formValid = ({ isError, required, hasValid, fieldLabel, values }, s
 };
 
 export const formValChange = ({ event, state, setState }) => {
-    debugger
+    
     let isError = { ...state.isError };
     let hasValid = { ...state.hasValid };
     let required = { ...state.required };
@@ -70,7 +70,7 @@ export const formValChange = ({ event, state, setState }) => {
         switch (type) {
 
             case "select":
-                if (value.value === undefined) {
+                if (!(value.value === undefined)) {
                     if (!(required[name] === undefined && value.value > 0)) {
                         isError[name] = "";
                         hasValid[name].valid = true
@@ -125,3 +125,17 @@ export function comAddPageFieldFunc({ state, setState, pageField }) {
 
 }
 
+
+
+export const onChangeSelect = ({ e, v, state, setState }) => {
+    const event = { change: { name: e.name, value: v }, type: "select" }
+    formValChange({ event, state, setState })
+}
+
+export const onChangeDate = ({ v, e, state, setState }) => {
+    const event = { change: { name: e.input.name, value: v }, type: "date" }
+    formValChange({ event, state, setState })
+}
+export const onChangeText = ({ event, state, setState }) => {
+    formValChange({ event, state, setState })
+}
