@@ -1,45 +1,49 @@
 import { call, put, takeEvery } from "redux-saga/effects";
-import { delete_MarginList_API,
-       edit_MarginList, 
-      GetMarginList_For_Listpage,
-      GoButton_Post_API_For_MarginMaster,
-      Post_MarginMaster_API,
-       update_MarginList
-     } from "../../../helpers/backend_helper";
+import {
+  delete_MarginList_API,
+  edit_MarginList,
+  GetMarginList_For_Listpage,
+  GoButton_Post_API_For_MarginMaster,
+  Post_MarginMaster_API,
+  update_MarginList
+} from "../../../helpers/backend_helper";
 import { AlertState } from "../../Utilites/CustomAlertRedux/actions";
 import { SpinnerState } from "../../Utilites/Spinner/actions";
-import {delete_MarginListSuccess, 
-        editMarginListSuccess,
-        getMarginListPageSuccess,
-        postGoButtonDataSuccess,
-        postMarginMasterDataSuccess,
-         updateMarginListSuccess,
+import {
+  delete_MarginListSuccess,
+  editMarginListSuccess,
+  getMarginListPageSuccess,
+  postGoButtonForMargin_Master_Success,
+  postMarginMasterDataSuccess,
+  updateMarginListSuccess,
 } from "./action";
-import { DELETE_MARGIN_LIST_PAGE,
-       EDIT_MARGIN_LIST_PAGE,
-       GET_MARGIN_LIST_PAGE,
-       POST_GO_BUTTON_DATA,
-       POST_MARGIN_MASTER_DATA,
-        UPDATE_MARGIN_LIST_PAGE 
-      
-       } from "./actionType";
+import {
+  DELETE_MARGIN_LIST_PAGE,
+  EDIT_MARGIN_LIST_PAGE,
+  GET_MARGIN_LIST_PAGE,
+  POST_GO_BUTTON_FOR_MARGIN_MASTER,
+  POST_MARGIN_MASTER_DATA,
+  UPDATE_MARGIN_LIST_PAGE
+
+} from "./actionType";
 
 
 function* Post_MarginMaster_GenratorFunction({ Data }) {
-  
-    yield put(SpinnerState(true))
-    try {
-      const response = yield call(Post_MarginMaster_API, Data);
-      yield put(SpinnerState(false))
-      yield put(postMarginMasterDataSuccess(response));
-      console.log("response",response)
-    } catch (error) {
-      yield put(SpinnerState(false))
-      yield put(AlertState({ Type: 4, 
-        Status: true, Message: "500 Error Message",
-      }));
-    }
+
+  yield put(SpinnerState(true))
+  try {
+    const response = yield call(Post_MarginMaster_API, Data);
+    yield put(SpinnerState(false))
+    yield put(postMarginMasterDataSuccess(response));
+    console.log("response", response)
+  } catch (error) {
+    yield put(SpinnerState(false))
+    yield put(AlertState({
+      Type: 4,
+      Status: true, Message: "500 Error Message",
+    }));
   }
+}
 
 
 //listpage
@@ -109,14 +113,14 @@ function* Update_MarginListPage_GenratorFunction({ updateData, ID }) {
   }
 }
 
-function* GoButton_post_GenratorFunction({ data }) {
+function* MarginGoButton_post_GenratorFunction({ data }) {
 
 
   yield put(SpinnerState(true))
   try {
     const response = yield call(GoButton_Post_API_For_MarginMaster, data);
     yield put(SpinnerState(false))
-    yield put(postGoButtonDataSuccess(response.Data));
+    yield put(postGoButtonForMargin_Master_Success(response.Data));
     console.log("response", response)
   } catch (error) {
     console.log("error")
@@ -130,13 +134,13 @@ function* GoButton_post_GenratorFunction({ data }) {
 }
 
 
-  
-  function* MarginMasterSaga() {
-    yield takeEvery(POST_MARGIN_MASTER_DATA, Post_MarginMaster_GenratorFunction);
-    yield takeEvery(GET_MARGIN_LIST_PAGE,   get_MarginListPage_GenratorFunction);
-    yield takeEvery(DELETE_MARGIN_LIST_PAGE, delete_MarginListPage_GenratorFunction);
-    yield takeEvery(EDIT_MARGIN_LIST_PAGE, Edit_MarginListPage_GenratorFunction);
-    yield takeEvery(UPDATE_MARGIN_LIST_PAGE, Update_MarginListPage_GenratorFunction);
-    yield takeEvery(POST_GO_BUTTON_DATA, GoButton_post_GenratorFunction);
-  }
-  export default MarginMasterSaga;
+
+function* MarginMasterSaga() {
+  yield takeEvery(POST_MARGIN_MASTER_DATA, Post_MarginMaster_GenratorFunction);
+  yield takeEvery(GET_MARGIN_LIST_PAGE, get_MarginListPage_GenratorFunction);
+  yield takeEvery(DELETE_MARGIN_LIST_PAGE, delete_MarginListPage_GenratorFunction);
+  yield takeEvery(EDIT_MARGIN_LIST_PAGE, Edit_MarginListPage_GenratorFunction);
+  yield takeEvery(UPDATE_MARGIN_LIST_PAGE, Update_MarginListPage_GenratorFunction);
+  yield takeEvery(POST_GO_BUTTON_FOR_MARGIN_MASTER, MarginGoButton_post_GenratorFunction);
+}
+export default MarginMasterSaga;

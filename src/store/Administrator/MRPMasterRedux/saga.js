@@ -4,12 +4,12 @@ import { AlertState } from "../../Utilites/CustomAlertRedux/actions";
 import { SpinnerState } from "../../Utilites/Spinner/actions";
 
 import {
-  POST_GO_BUTTON_DATA,
   POST_MRP_MASTER_DATA,
   GET_MRP_LIST_PAGE,
   DELETE_MRP_LIST_PAGE,
   EDIT_MRP_LIST_PAGE,
-  UPDATE_MRP_LIST_PAGE
+  UPDATE_MRP_LIST_PAGE,
+  POST_GO_BUTTON_FOR_MRP_MASTER
 } from "./actionTypes";
 import {
   delete_MRPList_API,
@@ -19,12 +19,12 @@ import {
 } from "../../../helpers/backend_helper";
 
 import {
-  postGoButtonDataSuccess,
   postMRPMasterDataSuccess,
   getMRPListPageSuccess,
   delete_MRPListSuccess,
   editMRPListSuccess,
-  updateMRPListSuccess
+  updateMRPListSuccess,
+  postGoButtonForMRP_MasterSuccess
 } from "./action";
 
 
@@ -115,13 +115,13 @@ function* Update_MRPListPage_GenratorFunction({ updateData, ID }) {
 
 
 
-function* GoButton_post_GenratorFunction({ data }) {
+function* MRPGoButton_post_GenratorFunction({ data }) {
 
   yield put(SpinnerState(true))
   try {
     const response = yield call(GoButton_Post_API, data);
     yield put(SpinnerState(false))
-    yield put(postGoButtonDataSuccess(response.Data));
+    yield put(postGoButtonForMRP_MasterSuccess(response.Data));
     console.log("response", response)
   } catch (error) {
     yield put(SpinnerState(false))
@@ -134,7 +134,7 @@ function* GoButton_post_GenratorFunction({ data }) {
 
 function* MRPMasterSaga() {
   yield takeEvery(POST_MRP_MASTER_DATA, Post_MRPMaster_GenratorFunction);
-  yield takeEvery(POST_GO_BUTTON_DATA, GoButton_post_GenratorFunction);
+  yield takeEvery(POST_GO_BUTTON_FOR_MRP_MASTER, MRPGoButton_post_GenratorFunction);
   yield takeEvery(GET_MRP_LIST_PAGE, get_MRPListPage_GenratorFunction);
   yield takeEvery(DELETE_MRP_LIST_PAGE, delete_MRPListPage_GenratorFunction);
   yield takeEvery(EDIT_MRP_LIST_PAGE, Edit_MRPListPage_GenratorFunction);

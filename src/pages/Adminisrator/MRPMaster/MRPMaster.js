@@ -24,17 +24,13 @@ import paginationFactory, {
 } from "react-bootstrap-table2-paginator";
 import ToolkitProvider, { Search } from "react-bootstrap-table2-toolkit";
 import {
-    getItemList,
     get_Division_ForDropDown,
     get_Party_ForDropDown
 } from "../../../store/Administrator/ItemsRedux/action";
 import BootstrapTable from "react-bootstrap-table-next";
 import { AvForm } from "availity-reactstrap-validation";
-import {
-    postGoButtonData,
-    postMRPMasterData,
-    postMRPMasterDataSuccess
-} from "../../../store/Administrator/MRPMasterRedux/action";
+import { postGoButtonForMRP_Master, postGoButtonForMRP_MasterSuccess, postMRPMasterData, postMRPMasterDataSuccess } from "../../../store/Administrator/MRPMasterRedux/action";
+
 
 const MRPMaster = (props) => {
     const dispatch = useDispatch();
@@ -62,7 +58,7 @@ const MRPMaster = (props) => {
         // TableData: state.ItemMastersReducer.pages,
         // TableData: state.CategoryMasterReducer.CategoryListData,
         PostAPIResponse: state.MRPMasterReducer.PostData,
-        TableData: state.MRPMasterReducer.GoButtonPostData,
+        TableData: state.MRPMasterReducer.MRPGoButton,
         Party: state.ItemMastersReducer.Party,
         Division: state.ItemMastersReducer.Division,
         RoleAccessModifiedinSingleArray: state.Login.RoleAccessUpdateData,
@@ -94,7 +90,8 @@ const MRPMaster = (props) => {
     useEffect(() => {
         dispatch(get_Party_ForDropDown());
         dispatch(get_Division_ForDropDown());
-        // dispatch(getItemList());
+        dispatch(postGoButtonForMRP_MasterSuccess([]));
+        
 
     }, [dispatch]);
 
@@ -146,7 +143,7 @@ const MRPMaster = (props) => {
         else if (!(effectiveDate)) {
             alert("EffectiveDate not select")
         }
-        dispatch(postGoButtonData(jsonBody))
+        dispatch(postGoButtonForMRP_Master(jsonBody))
 
 
     };
@@ -173,7 +170,7 @@ const MRPMaster = (props) => {
                     Type: 1,
                     Status: true,
                     Message: PostAPIResponse.Message,
-                    //   RedirectPath: '/EmployeeList',
+                    RedirectPath: '/MRPList',
                 }))
             }
         }
@@ -368,18 +365,18 @@ const MRPMaster = (props) => {
                                                     <Col md="3" >
                                                         <Button type="button" color="btn btn-outline-success border-2 font-size-12" onClick={() => { GoButton_Handler() }} >Go</Button>
                                                         {TableData.length > 0 ?
-                                                    <button
-                                                        type="submit"
-                                                        data-mdb-toggle="tooltip" data-mdb-placement="top" title="Save MRP"
+                                                            <button
+                                                                type="submit"
+                                                                data-mdb-toggle="tooltip" data-mdb-placement="top" title="Save MRP"
 
-                                                        className="btn btn-primary w-md float-end"
-                                                    > <i className="fas fa-save me-2"></i> Save
-                                                    </button>
-                                                    : null}
+                                                                className="btn btn-primary w-md float-end"
+                                                            > <i className="fas fa-save me-2"></i> Save
+                                                            </button>
+                                                            : null}
                                                     </Col>
 
                                                 </Row>
-                                               
+
                                             </CardHeader>
                                         </Card>
                                     </Col>
