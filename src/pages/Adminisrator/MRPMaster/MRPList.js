@@ -274,7 +274,7 @@ const MRPList = (props) => {
                         breadcrumbItem={userPageAccessState.PageHeading}
                         IsButtonVissible={(userPageAccessState.RoleAccess_IsSave) ? true : false}
                         SearchProps={toolkitProps.searchProps}
-                        breadcrumbCount={`Module Count: ${TableListData.length}`}
+                        breadcrumbCount={`MRP Count: ${TableListData.length}`}
                         IsSearchVissible={true}
                         isExcelButtonVisible={true}
                         ExcelData={TableListData}

@@ -118,9 +118,9 @@ function AddressDetails_Tab(props) {
                                     <Label htmlFor="validationCustom01">Address </Label>
                                     <AvField name="Address" value={address} type="text"
                                         placeholder=" Please Enter Address "
-                                        validate={{
-                                            required: { value: true, errorMessage: 'Please Enter your Address' },
-                                        }}
+                                        // validate={{
+                                        //     required: { value: true, errorMessage: 'Please Enter your Address' },
+                                        // }}
                                         onChange={AddressHandler}
                                     />
                                 </FormGroup>
@@ -151,13 +151,13 @@ function AddressDetails_Tab(props) {
 
                                         errorMessage="Please Enter FSSAI Number."
                                         className="form-control"
-                                        validate={{
-                                            required: { value: true },
-                                            tel: {
-                                                pattern: /^(?:\d[- ]*){14}$/,
-                                                errorMessage: 'FSSAINo Should be Fourteen Digit Only.'
-                                            }
-                                        }}
+                                        // validate={{
+                                        //     required: { value: true },
+                                        //     tel: {
+                                        //         pattern: /^(?:\d[- ]*){14}$/,
+                                        //         errorMessage: 'FSSAINo Should be Fourteen Digit Only.'
+                                        //     }
+                                        // }}
                                         onChange={FSSAINoHandler}
                                     />
                                 </FormGroup>
@@ -189,14 +189,14 @@ function AddressDetails_Tab(props) {
                                     <AvField name="PIN" type="text"
                                         value={PIN}
                                         placeholder=" PIN No. "
-                                        validate={{
-                                            required: { value: true, errorMessage: 'Please Enter your PIN No.' },
-                                            tel: {
-                                                pattern: "^[1-9][0-9]{5}$",
-                                                errorMessage: 'PIN Should be Six Digit Only.'
-                                            }
-                                        }
-                                        }
+                                        // validate={{
+                                        //     required: { value: true, errorMessage: 'Please Enter your PIN No.' },
+                                        //     tel: {
+                                        //         pattern: "^[1-9][0-9]{5}$",
+                                        //         errorMessage: 'PIN Should be Six Digit Only.'
+                                        //     }
+                                        // }
+                                        // }
                                         onChange={PINHandler}
                                     />
                                 </FormGroup>
