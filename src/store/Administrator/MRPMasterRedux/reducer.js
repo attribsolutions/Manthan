@@ -1,15 +1,16 @@
 
 import {
-    POST_GO_BUTTON_DATA_SUCCESS,
     POST_MRP_MASTER_DATA_SUCCESS,
     GET_MRP_LIST_PAGE_SUCCESS,
     DELETE_MRP_LIST_PAGE_SUCCESS,
     EDIT_MRP_LIST_PAGE_SUCCESS,
-    UPDATE_MRP_LIST_PAGE_SUCCESS
+    UPDATE_MRP_LIST_PAGE_SUCCESS,
+    POST_GO_BUTTON_FOR_MRP_MASTER_SUCCESS,
+   
 } from "./actionTypes";
 
 const INIT_STATE = {
-    GoButtonPostData: [],
+    MRPGoButton: [],
     PostData: [],
     MRPList: [],
     deleteMsg: { Status: false },
@@ -28,10 +29,10 @@ const MRPMasterReducer = (state = INIT_STATE, action) => {
             };
 
         // Go Button post api
-        case POST_GO_BUTTON_DATA_SUCCESS:
+        case POST_GO_BUTTON_FOR_MRP_MASTER_SUCCESS:
             return {
                 ...state,
-                GoButtonPostData: action.payload,
+                MRPGoButton: action.payload,
             };
 
         // GET api
