@@ -106,9 +106,9 @@ export const formValChange = ({ event, state, setState }) => {
 export function comAddPageFieldFunc({ state, setState, pageField }) {
     var isState = { ...state }
     const values = { ...state.values }
-    debugger
+    // debugger
     pageField.forEach(ele => {
-        debugger
+        // debugger
         Object.keys(values).forEach(lab => {
             if (lab === ele.ControlID) {
                 isState.fieldLabel[lab] = ele.FieldLabel

@@ -59,7 +59,7 @@ const CommonListPage = (props) => {
     MasterModal,
     masterPath,
   } = props;
-debugger
+
   useEffect(() => {
     const locationPath = history.location.pathname
     let userAcc = userAccess.find((inx) => {
@@ -193,7 +193,7 @@ debugger
       order: "asc", // desc or asc
     },
   ];
-  debugger
+
   const pageOptions = {
     sizePerPage: 10,
     totalSize: tableList.length,
