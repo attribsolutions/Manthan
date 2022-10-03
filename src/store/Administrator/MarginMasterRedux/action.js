@@ -1,21 +1,22 @@
-import { POST_MARGIN_MASTER_DATA,
-     POST_MARGIN_MASTER_DATA_SUCCESS,
-     GET_MARGIN_LIST_PAGE,
-     GET_MARGIN_LIST_PAGE_SUCCESS,
-     DELETE_MARGIN_LIST_PAGE,
-     DELETE_MARGIN_LIST_PAGE_SUCCESS,
-     EDIT_MARGIN_LIST_PAGE,
-     EDIT_MARGIN_LIST_PAGE_SUCCESS,
-     UPDATE_MARGIN_LIST_PAGE,
-     UPDATE_MARGIN_LIST_PAGE_SUCCESS,
-     POST_GO_BUTTON_DATA,
-     POST_GO_BUTTON_DATA_SUCCESS
-    } from "./actionType";
+import {
+    POST_MARGIN_MASTER_DATA,
+    POST_MARGIN_MASTER_DATA_SUCCESS,
+    GET_MARGIN_LIST_PAGE,
+    GET_MARGIN_LIST_PAGE_SUCCESS,
+    DELETE_MARGIN_LIST_PAGE,
+    DELETE_MARGIN_LIST_PAGE_SUCCESS,
+    EDIT_MARGIN_LIST_PAGE,
+    EDIT_MARGIN_LIST_PAGE_SUCCESS,
+    UPDATE_MARGIN_LIST_PAGE,
+    UPDATE_MARGIN_LIST_PAGE_SUCCESS,
+    POST_GO_BUTTON_FOR_MARGIN_MASTER,
+    POST_GO_BUTTON_FOR_MARGIN_MASTER_SUCCESS
+} from "./actionType";
 
 // post api
 export const postMarginMasterData = (Data,) => ({
     type: POST_MARGIN_MASTER_DATA,
-    Data, 
+    Data,
 });
 
 export const postMarginMasterDataSuccess = (data) => ({
@@ -68,12 +69,12 @@ export const updateMarginListSuccess = (updateMessage) => ({
 })
 
 // Go Button Post API
-export const postGoButtonData = (data) => ({
-    type: POST_GO_BUTTON_DATA,
+export const postGoButtonForMargin_Master = (data) => ({
+    type: POST_GO_BUTTON_FOR_MARGIN_MASTER,
     data
 });
 
-export const postGoButtonDataSuccess = (data) => ({
-    type: POST_GO_BUTTON_DATA_SUCCESS,
+export const postGoButtonForMargin_Master_Success = (data) => ({
+    type: POST_GO_BUTTON_FOR_MARGIN_MASTER_SUCCESS,
     payload: data,
 });

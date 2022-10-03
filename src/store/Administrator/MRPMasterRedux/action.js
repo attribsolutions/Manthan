@@ -1,8 +1,4 @@
-
-
 import {
-    POST_GO_BUTTON_DATA,
-    POST_GO_BUTTON_DATA_SUCCESS,
     POST_MRP_MASTER_DATA,
     POST_MRP_MASTER_DATA_SUCCESS,
     GET_MRP_LIST_PAGE,
@@ -13,6 +9,8 @@ import {
     EDIT_MRP_LIST_PAGE_SUCCESS,
     UPDATE_MRP_LIST_PAGE,
     UPDATE_MRP_LIST_PAGE_SUCCESS,
+    POST_GO_BUTTON_FOR_MRP_MASTER,
+    POST_GO_BUTTON_FOR_MRP_MASTER_SUCCESS,
 
 } from "./actionTypes";
 
@@ -30,13 +28,13 @@ export const postMRPMasterDataSuccess = (data) => ({
 
 
 // Go Button Post API
-export const postGoButtonData = (data,) => ({
-    type: POST_GO_BUTTON_DATA,
+export const postGoButtonForMRP_Master = (data,) => ({
+    type: POST_GO_BUTTON_FOR_MRP_MASTER,
     data,
 });
 
-export const postGoButtonDataSuccess = (data) => ({
-    type: POST_GO_BUTTON_DATA_SUCCESS,
+export const postGoButtonForMRP_MasterSuccess = (data) => ({
+    type: POST_GO_BUTTON_FOR_MRP_MASTER_SUCCESS,
     payload: data,
 });
 

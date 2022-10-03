@@ -1,7 +1,7 @@
 import { DELETE_MARGIN_LIST_PAGE_SUCCESS, 
        EDIT_MARGIN_LIST_PAGE_SUCCESS,
       GET_MARGIN_LIST_PAGE_SUCCESS,
-      POST_GO_BUTTON_DATA_SUCCESS,
+      POST_GO_BUTTON_FOR_MARGIN_MASTER_SUCCESS,
       POST_MARGIN_MASTER_DATA_SUCCESS,
        UPDATE_MARGIN_LIST_PAGE_SUCCESS 
     } from "./actionType";
@@ -12,7 +12,7 @@ const INIT_STATE = {
     deleteMsg: { Status: false },
     editData: { Status: false },
     updateMessage: { Status: false },
-    GoButtonPostData:[]
+    MarginGoButton:[]
 };
 
 const MarginMasterReducer = (state = INIT_STATE, action) => {
@@ -55,10 +55,10 @@ case UPDATE_MARGIN_LIST_PAGE_SUCCESS:
     };
 
  // Go Button post api
- case POST_GO_BUTTON_DATA_SUCCESS:
+ case POST_GO_BUTTON_FOR_MARGIN_MASTER_SUCCESS:
     return {
         ...state,
-        GoButtonPostData: action.payload,
+        MarginGoButton: action.payload,
     };
 
 
