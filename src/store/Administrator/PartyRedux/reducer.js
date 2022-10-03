@@ -22,7 +22,6 @@ const INIT_STATE = {
     updateMessage: { Status: false },
     DistrictOnState:[],
     PartyTypes:[],
-    PriceList:[],
     Company:[],
     AddressTypes:[]
 };

@@ -299,6 +299,7 @@ export const update_DriverType_List_Api = (data, id) =>put(`${url. DRIVER_API}/$
 //PriceList api
 export const Post_PriceList_API = (data) => post(url.PRICE_LIST, data)// post api
 export const get_PriceListByPartyType_API = (partyType) => get(`${url. PRICE_LIST}/${partyType}`)// post api
+export const GetPriceList_For_Listpage = () => get(url.PRICELIST)//  get priceList
 export const delete_PriceList_API = (id) => del(`${url. PRICE_LIST}/${id}`)// post api
 export const edit_PriceList = (id) =>get(`${url. PRICE_LIST}/${id}`) // edit api
 export const update_PriceList = (data, id) =>put(`${url. PRICE_LIST}/${id}`, data)// update
@@ -306,6 +307,17 @@ export const update_PriceList = (data, id) =>put(`${url. PRICE_LIST}/${id}`, dat
 
 // MRP Master 
 export const Post_MRPMaster_API = (data) => post(url.MRP_MASTER_LIST, data)// post api
+
+export const GoButton_Post_API = (data) => post(url.GO_BUTTON_POST_API, data)// post api
+
+// Margin Master
+export const Post_MarginMaster_API = (data) => post(url.MARGIN_MASTER_LIST, data)// post api
+
+export const GetMRPList_For_Listpage = () => get(url.MRP_MASTER_LIST)//  get priceList
+export const delete_MRPList_API = (id) => del(`${url. MRP_MASTER_LIST}/${id}`)// post api
+export const edit_MRPList = (id) =>get(`${url. MRP_MASTER_LIST}/${id}`) // edit api
+export const update_MRPList = (data, id) =>put(`${url.MRP_MASTER_LIST}/${id}`, data)// update
+
 
 export {  
   getLoggedInUser,
