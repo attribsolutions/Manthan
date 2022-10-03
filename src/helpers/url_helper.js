@@ -131,3 +131,6 @@ export const GO_BUTTON_POST_API = '/GetMRP'
 // Margin Master
 export const MARGIN_MASTER_LIST = '/Margins'
 export const GO_BUTTON_POST_API_FOR_MARGIN_MASTER = '/GetMargin'
+
+//TermsAndCondtions API
+export const TERMSANDCONDITIONS_API = '/TermsAndCondtions'
