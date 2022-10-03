@@ -46,7 +46,6 @@ const MRPMaster = (props) => {
     const [division_dropdown_Select, setDivision_dropdown_Select] = useState("");
     const [effectiveDate, setEffectiveDate] = useState('');
     const [MRP, setMRP] = useState('');
-    const [columnsShowUI, setColumnsShowUI] = useState(false);
 
     //Access redux store Data /  'save_ModuleSuccess' action data
     const { PostAPIResponse,
@@ -55,15 +54,13 @@ const MRPMaster = (props) => {
         Division,
         RoleAccessModifiedinSingleArray
     } = useSelector((state) => ({
-        // TableData: state.ItemMastersReducer.pages,
-        // TableData: state.CategoryMasterReducer.CategoryListData,
         PostAPIResponse: state.MRPMasterReducer.PostData,
         TableData: state.MRPMasterReducer.MRPGoButton,
         Party: state.ItemMastersReducer.Party,
         Division: state.ItemMastersReducer.Division,
         RoleAccessModifiedinSingleArray: state.Login.RoleAccessUpdateData,
     }));
-    console.log("TableData", TableData)
+
     // userAccess useEffect
     useEffect(() => {
         let userAcc = undefined
@@ -91,8 +88,6 @@ const MRPMaster = (props) => {
         dispatch(get_Party_ForDropDown());
         dispatch(get_Division_ForDropDown());
         dispatch(postGoButtonForMRP_MasterSuccess([]));
-        
-
     }, [dispatch]);
 
     const PartyDropdown_Options = Party.map((Data) => ({
@@ -104,49 +99,6 @@ const MRPMaster = (props) => {
         value: data.id,
         label: data.Name
     }));
-
-    function PartyType_Dropdown_OnChange_Handller(e) {
-        setParty_dropdown_Select(e)
-
-    }
-
-    function Division_Dropdown_OnChange_Handller(e) {
-        setDivision_dropdown_Select(e)
-
-    }
-    const EffectiveDateHandler = (e, date) => {
-        setEffectiveDate(date)
-    }
-
-    const MRPHandler = (e, cellContent, user, abd) => {
-        user["MRP"] = e.target.value
-    }
-
-    const CurrentMRPHandler = (e, cellContent, user, key) => {
-        user["CurrentMRP"] = e.target.value
-    }
-
-    const GoButton_Handler = (event, values) => {
-
-        let division = { ...division_dropdown_Select }
-        let party = { ...party_dropdown_Select }
-
-        const jsonBody = JSON.stringify({
-            Division: division.value ? division.value : " ",
-            Party: party.value ? party.value : 0,
-            EffectiveDate: effectiveDate
-        });
-
-        if (!(division.value)) {
-            alert("DiviSion value not select")
-        }
-        else if (!(effectiveDate)) {
-            alert("EffectiveDate not select")
-        }
-        dispatch(postGoButtonForMRP_Master(jsonBody))
-
-
-    };
 
     useEffect(() => {
 
@@ -187,6 +139,47 @@ const MRPMaster = (props) => {
         }
     }, [PostAPIResponse])
 
+    function PartyType_Dropdown_OnChange_Handller(e) {
+        setParty_dropdown_Select(e)
+    }
+
+    function Division_Dropdown_OnChange_Handller(e) {
+        setDivision_dropdown_Select(e)
+    }
+
+    const EffectiveDateHandler = (e, date) => {
+        setEffectiveDate(date)
+    }
+
+    const MRPHandler = (e, cellContent, user, abd) => {
+        user["MRP"] = e.target.value
+    }
+
+    const CurrentMRPHandler = (e, cellContent, user, key) => {
+        user["CurrentMRP"] = e.target.value
+    }
+
+    const GoButton_Handler = (event, values) => {
+
+        let division = { ...division_dropdown_Select }
+        let party = { ...party_dropdown_Select }
+
+        const jsonBody = JSON.stringify({
+            Division: division.value ? division.value : " ",
+            Party: party.value ? party.value : 0,
+            EffectiveDate: effectiveDate
+        });
+
+        if (!(division.value)) {
+            alert("DiviSion value not select")
+        }
+        else if (!(effectiveDate)) {
+            alert("EffectiveDate not select")
+        }
+        dispatch(postGoButtonForMRP_Master(jsonBody))
+
+
+    };
     const pageOptions = {
         sizePerPage: 10,
         totalSize: TableData.length,
@@ -249,7 +242,6 @@ const MRPMaster = (props) => {
     ]
 
 
-
     //'Save' And 'Update' Button Handller
     const handleValidSubmit = (event, values) => {
         debugger
@@ -288,19 +280,21 @@ const MRPMaster = (props) => {
                 </MetaTags>
                 <Breadcrumb breadcrumbItem={userPageAccessState.PageHeading} />
                 <Container fluid>
-                    <Card className="text-black">
-                        <CardHeader className="card-header   text-black" style={{ backgroundColor: "#dddddd" }} >
-                            <h4 className="card-title text-black">{userPageAccessState.PageDescription}</h4>
-                            <p className="card-title-desc text-black">{userPageAccessState.PageDescriptionDetails}</p>
-                        </CardHeader>
+                    <AvForm
+                        onValidSubmit={(e, v) => {
+                            handleValidSubmit(e, v);
+                        }}
+                        ref={formRef}
+                    >
 
-                        <CardBody>
-                            <AvForm
-                                onValidSubmit={(e, v) => {
-                                    handleValidSubmit(e, v);
-                                }}
-                                ref={formRef}
-                            >
+                        <Card className="text-black">
+                            <CardHeader className="card-header   text-black" style={{ backgroundColor: "#dddddd" }} >
+                                <h4 className="card-title text-black">{userPageAccessState.PageDescription}</h4>
+                                <p className="card-title-desc text-black">{userPageAccessState.PageDescriptionDetails}</p>
+                            </CardHeader>
+
+                            <CardBody>
+
                                 <Row className="">
                                     <Col md={12}>
                                         <Card style={{ backgroundColor: "whitesmoke" }}>
@@ -364,15 +358,7 @@ const MRPMaster = (props) => {
                                                     </Col>
                                                     <Col md="3" >
                                                         <Button type="button" color="btn btn-outline-success border-2 font-size-12" onClick={() => { GoButton_Handler() }} >Go</Button>
-                                                        {TableData.length > 0 ?
-                                                            <button
-                                                                type="submit"
-                                                                data-mdb-toggle="tooltip" data-mdb-placement="top" title="Save MRP"
 
-                                                                className="btn btn-primary w-md float-end"
-                                                            > <i className="fas fa-save me-2"></i> Save
-                                                            </button>
-                                                            : null}
                                                     </Col>
 
                                                 </Row>
@@ -381,55 +367,61 @@ const MRPMaster = (props) => {
                                         </Card>
                                     </Col>
                                 </Row>
+                                {TableData.length > 0 ?
+                                    <PaginationProvider pagination={paginationFactory(pageOptions)}>
+                                        {({ paginationProps, paginationTableProps }) => (
+                                            <ToolkitProvider
+                                                keyField="id"
+                                                data={TableData}
+                                                columns={pagesListColumns}
+                                                search
+                                            >
+                                                {(toolkitProps) => (
+                                                    <React.Fragment>
+                                                        <Row>
+                                                            <Col xl="12">
+                                                                <div className="table-responsive">
+                                                                    <BootstrapTable
+                                                                        keyField={"id"}
+                                                                        responsive
+                                                                        bordered={false}
+                                                                        striped={false}
+                                                                        // defaultSorted={defaultSorted}
+                                                                        classes={"table  table-bordered"}
+                                                                        {...toolkitProps.baseProps}
+                                                                        {...paginationTableProps}
+                                                                    />
+                                                                </div>
+                                                            </Col>
+                                                        </Row>
+                                                        <Row className="align-items-md-center mt-30">
+                                                            <Col className="pagination pagination-rounded justify-content-end mb-2">
+                                                                <PaginationListStandalone {...paginationProps} />
+                                                            </Col>
+                                                        </Row>
+                                                    </React.Fragment>
+                                                )}
+                                            </ToolkitProvider>
+                                        )}
 
-                            </AvForm>
-                        </CardBody>
-                    </Card>
+                                    </PaginationProvider>
+                                    : null}
+                                {TableData.length > 0 ?
+                                    <button
+                                        type="submit"
+                                        data-mdb-toggle="tooltip" data-mdb-placement="top" title="Save MRP"
 
-                    {TableData.length > 0 ?
-                        <PaginationProvider pagination={paginationFactory(pageOptions)}>
-                            {({ paginationProps, paginationTableProps }) => (
-                                <ToolkitProvider
-                                    keyField="id"
-                                    data={TableData}
-                                    columns={pagesListColumns}
-                                    search
-                                >
-                                    {(toolkitProps) => (
-                                        <React.Fragment>
-                                            <Row>
-                                                <Col xl="12">
-                                                    <div className="table-responsive">
-                                                        <BootstrapTable
-                                                            keyField={"id"}
-                                                            responsive
-                                                            bordered={false}
-                                                            striped={false}
-                                                            // defaultSorted={defaultSorted}
-                                                            classes={"table  table-bordered"}
-                                                            {...toolkitProps.baseProps}
-                                                            {...paginationTableProps}
-                                                        />
-                                                    </div>
-                                                </Col>
-                                            </Row>
-                                            <Row className="align-items-md-center mt-30">
-                                                <Col className="pagination pagination-rounded justify-content-end mb-2">
-                                                    <PaginationListStandalone {...paginationProps} />
-                                                </Col>
-                                            </Row>
-                                        </React.Fragment>
-                                    )}
-                                </ToolkitProvider>
-                            )}
+                                        className="btn btn-primary w-md "
+                                    > <i className="fas fa-save me-2"></i> Save
+                                    </button>
+                                    : null}
 
-                        </PaginationProvider>
-                        : null}
-
-
+                            </CardBody>
+                        </Card>
+                    </AvForm>
                 </Container>
             </div>
-        </React.Fragment>
+        </React.Fragment >
     )
 }
 
