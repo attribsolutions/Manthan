@@ -37,7 +37,7 @@ import {
     onChangeDate
 } from "../../../components/Common/CmponentRelatedCommonFile/validationFunction";
 
-import { fieldData } from './validfiles'
+// import { pageField } from './validfiles'
 
 
 const DriverMaster = (props) => {
@@ -60,20 +60,20 @@ const DriverMaster = (props) => {
             Name: "",
             Address: "",
             UID: "",
-            DOD: ''
+            DOB: ''
         },
         fieldLabel: {
             Name: "",
             Address: "",
             UID: "",
-            DOD: ''
+            DOB: ''
         },
 
         isError: {
             Name: "",
             Address: "",
             UID: "",
-            DOD: ''
+            DOB: ''
         },
 
         hasValid: {
@@ -93,7 +93,7 @@ const DriverMaster = (props) => {
                 inValidMsg: "",
                 valid: false
             },
-            BOD: {
+            DOB: {
                 regExp: '',
                 inValidMsg: "",
                 valid: false
@@ -150,10 +150,18 @@ const DriverMaster = (props) => {
     // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
     useEffect(() => {
 
-        // if (!(userPageAccessState === '')) { document.getElementById("txtName").focus(); }
+        if (!(userPageAccessState === '')) { document.getElementById("txtName").focus(); }
         if (!(editDataGetingFromList === undefined)) {
+            const { Name, DOB, UID, Address } = editDataGetingFromList
+            const { values, fieldLabel, hasValid, required, isError } = { ...state }
+            values.Name = Name;
+            values.DOB = DOB;
+            values.UID = UID;
+            values.Address = Address;
 
-            setEditData(editDataGetingFromList);
+            setState({ values, fieldLabel, hasValid, required, isError })
+
+            // setEditData(editDataGetingFromList);
             setPageMode(pageModeProps);
             setDOB_Date_Select(editDataGetingFromList.DOB)
 
@@ -259,7 +267,7 @@ const DriverMaster = (props) => {
                         <MetaTags>
                             <title>DriverMaster | FoodERP-React FrontEnd</title>
                         </MetaTags>
-                        {/* <Breadcrumb breadcrumbItem={userPageAccessState.PageHeading} /> */}
+                        <Breadcrumb breadcrumbItem={userPageAccessState.PageHeading} />
 
                         <Card className="text-black">
                             <CardHeader className="card-header   text-black" style={{ backgroundColor: "#dddddd" }} >
@@ -279,9 +287,11 @@ const DriverMaster = (props) => {
                                                         <FormGroup className="mb-2 col col-sm-4 ">
                                                             <Label htmlFor="validationCustom01">{fieldLabel.Name} </Label>
                                                             <Input
-                                                                type="text"
-                                                                className={isError.Name.length > 0 ? "is-invalid form-control" : "form-control"}
+                                                                id="txtName"
                                                                 name="Name"
+                                                                type="text"
+                                                                value={values.Name}
+                                                                className={isError.Name.length > 0 ? "is-invalid form-control" : "form-control"}
                                                                 placeholder="Please Enter Name"
                                                                 onChange={(event) => {
                                                                     onChangeText({ event, state, setState })
@@ -298,9 +308,8 @@ const DriverMaster = (props) => {
                                                                 <FormGroup className="mb-3">
                                                                     <Label>Date of Birth</Label>
                                                                     <Flatpickr
-                                                                        id="FSSAIExipry"
-                                                                        name="BOD"
-                                                                        value={DOB_Date_Select}
+                                                                        name="DOB"
+                                                                        value={values.DOB}
                                                                         className="form-control d-block p-2 bg-white text-dark"
                                                                         placeholder="YYYY-MM-DD"
                                                                         autoComplete='off'
@@ -309,12 +318,12 @@ const DriverMaster = (props) => {
                                                                             altFormat: "F j, Y",
                                                                             dateFormat: "Y-m-d"
                                                                         }}
-                                                                        onChange={(y,v,e)=>{onChangeDate({e,v,state,setState})}}
+                                                                        onChange={(y, v, e) => { onChangeDate({ e, v, state, setState }) }}
                                                                     />
                                                                 </FormGroup>
                                                             </Col>
                                                         </Row>
-                                                        <Row>
+                                                        {/* <Row>
                                                             <Col md="4">
                                                                 <FormGroup className="mb-3">
                                                                     <Label htmlFor="validationCustom01">{fieldLabel.Address} </Label>
@@ -339,7 +348,7 @@ const DriverMaster = (props) => {
                                                             )}
                                                                 </FormGroup>
                                                             </Col>
-                                                        </Row>
+                                                        </Row> */}
 
 
 
@@ -348,13 +357,13 @@ const DriverMaster = (props) => {
                                                             <FormGroup className="mb-2 col col-sm-4 ">
                                                                 <Label htmlFor="validationCustom01">{fieldLabel.Address} </Label>
                                                                 <Input
-                                                                    type="text"
-                                                                    value={EditData.Address}
-                                                                    className={isError.Address.length > 0 ? "is-invalid form-control" : "form-control"}
                                                                     name="Address"
+                                                                    value={values.Address}
+                                                                    type="text"
+                                                                    className={isError.Address.length > 0 ? "is-invalid form-control" : "form-control"}
                                                                     placeholder="Please Enter Address"
                                                                     autoComplete='off'
-                                                                    onChange={( event) => onChangeText({ event, state, setState })}
+                                                                    onChange={(event) => onChangeText({ event, state, setState })}
                                                                 />
                                                                 {isError.Address.length > 0 && (
                                                                     <span className="invalid-feedback">{isError.Address}</span>
@@ -367,12 +376,12 @@ const DriverMaster = (props) => {
                                                                 <Label htmlFor="validationCustom01">{fieldLabel.UID}</Label>
                                                                 <Input
                                                                     name="UID"
-                                                                    value={EditData.UID}
+                                                                    value={values.UID}
                                                                     type="text"
                                                                     placeholder="Please Enter UID"
                                                                     autoComplete='off'
                                                                     className={isError.UID.length > 0 ? "is-invalid form-control" : "form-control"}
-                                                                    onChange={(event)=>onChangeText({ event, state, setState })}
+                                                                    onChange={(event) => onChangeText({ event, state, setState })}
                                                                 />
                                                                 {isError.UID.length > 0 && (
                                                                     <span className="invalid-feedback">{isError.UID}</span>
