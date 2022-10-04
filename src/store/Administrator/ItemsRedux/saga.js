@@ -10,11 +10,13 @@ import {
   getItemListSuccess, get_CategoryTypes_ForDropDown_Success,
   get_Category_By_CategoryType_ForDropDown_Success,
   get_Division_ForDropDown_Success,
+  get_Group_By_GroupType_ForDropDown_Success,
   get_ImageType_ForDropDown_Success,
   get_MRPTypes_ForDropDown_Success,
   get_Party_ForDropDown_Success,
   get_PriceList_ForDropDown_Success,
   get_Sub_Category_By_CategoryType_ForDropDown_Success,
+  get_Sub_Group_By_Group_ForDropDown_Success,
   PostItemDataSuccess,
   updateItemSuccess
 } from "./action";
@@ -25,6 +27,7 @@ import {
   GET_CATEGORY_BY_CATEGORYTYPE_FOR_DROPDOWN,
   GET_CATEGORY_FOR_DROPDOWN,
   GET_DIVISION_FOR_DROPDOWN,
+  GET_GROUP_BY_GROUPTYPE_FOR_DROPDOWN,
   GET_IMAGETYPE_FOR_DROPDOWN,
   GET_ITEM_GROUP_FOR_DROPDOWN,
   GET_ITEM_LIST_API,
@@ -32,6 +35,7 @@ import {
   GET_PARTY_FOR_DROPDOWN,
   GET_PRICE_LIST_FOR_DROPDOWN,
   GET_SUB_CATEGORY_BY_CATEGORYTYPE_FOR_DROPDOWN,
+  GET_SUB_GROUP_BY_GROUP_FOR_DROPDOWN,
   POST_ITEM_DATA,
   UPDATE_ITEM_ID
 } from "./actionType";
@@ -219,6 +223,23 @@ function* PriceList_DropDown_GenratorFunction() {
   }
 }
 
+function* Group_DropDown_GenratorFunction({id}) {
+  try {
+    const response = yield call(apiCall.Group_By_GroupTypes_DropDown_API,id);
+    yield put(get_Group_By_GroupType_ForDropDown_Success(response.Data));
+  } catch (error) {
+    console.log("Group saga page error", error);
+  }
+}
+
+function* SubGroup_DropDown_GenratorFunction({id}) {
+  try {
+    const response = yield call(apiCall.SubGroup_By_Group_DropDown_API,id);
+    yield put(get_Sub_Group_By_Group_ForDropDown_Success(response.Data));
+  } catch (error) {
+    console.log("sub Group saga page error", error);
+  }
+}
 function* ItemsMastersSaga() {
   yield takeEvery(GET_ITEM_LIST_API, Get_Items_GenratorFunction);
   yield takeEvery(GET_ITEM_GROUP_FOR_DROPDOWN, Items_Group_GenratorFunction);
@@ -235,6 +256,9 @@ function* ItemsMastersSaga() {
   yield takeEvery(GET_DIVISION_FOR_DROPDOWN, Division_DropDown_GenratorFunction);
   yield takeEvery(GET_PARTY_FOR_DROPDOWN, Party_DropDown_GenratorFunction);
   yield takeEvery(GET_PRICE_LIST_FOR_DROPDOWN, PriceList_DropDown_GenratorFunction);
+  yield takeEvery(GET_GROUP_BY_GROUPTYPE_FOR_DROPDOWN, Group_DropDown_GenratorFunction);
+  yield takeEvery(GET_SUB_GROUP_BY_GROUP_FOR_DROPDOWN, SubGroup_DropDown_GenratorFunction);
+
 
 }
 
