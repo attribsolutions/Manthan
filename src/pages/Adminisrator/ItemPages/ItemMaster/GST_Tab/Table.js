@@ -15,7 +15,7 @@ function GSTTable(props) {
     };
 
     const tableRows = props.tableData.map((info) => {
-        debugger
+      
         return (
             <tr>
                 {/* <td>{info.id}</td> */}

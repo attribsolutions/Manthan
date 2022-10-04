@@ -171,7 +171,7 @@ const ItemsMaster = (props) => {
     }, [RoleAccessModifiedinSingleArray])
 
     useEffect(() => {
-        
+
         if (!(userPageAccessState === '')) { document.getElementById("txtName0").focus(); }
 
         if (!(editDataGatingFromList === undefined)) {
@@ -282,6 +282,7 @@ const ItemsMaster = (props) => {
             setMRP_Tab_TableData(editMode_Data.ItemMRPDetails)
             setMarginMaster(editMode_Data.ItemMarginDetails)
             setGStDetailsMaster(editMode_Data.ItemGSTHSNDetails)
+            setGroup_Tab_TableData(editMode_Data.ItemGroupDetails)
             setIsValidate([])
 
             dispatch(editItemSuccess({ Status: false }))
@@ -977,7 +978,7 @@ const ItemsMaster = (props) => {
         // }
     }
     const handleValidSubmit = (event, values) => {
-
+        debugger
         const itemCategoryDetails = categoryTabTable.map((index) => ({
             CategoryType: index.CategoryType.value,
             Category: index.Category.value,
@@ -1133,9 +1134,10 @@ const ItemsMaster = (props) => {
             ItemMRPDetails: MRP_Tab_TableData,
             ItemMarginDetails: marginMaster,
             ItemGSTHSNDetails: GStDetailsMaster,
+            ItemGroupDetails: Group_Tab_TableData,
 
         });
-        debugger
+
         if (pageMode === 'edit') {
             dispatch(updateItemID(jsonBody, EditData.id));
             console.log("edit json", jsonBody)
@@ -1346,9 +1348,9 @@ const ItemsMaster = (props) => {
                                                             <i className="fas fa-home"></i>
                                                         </span>
                                                         {/* <span className="d-none d-sm-block">Tab7</span> */}
-                                                        {/* <Button type="submit"> save</Button> */}
+                                                {/* <Button type="submit"> save</Button> */}
 
-                                                    {/* </NavLink>
+                                                {/* </NavLink>
                                                 </NavItem>  */}
                                             </Nav>
 
@@ -1551,7 +1553,7 @@ const ItemsMaster = (props) => {
                                                             </CardBody>
                                                         </Card>
                                                     </Col>
-                                                   
+
                                                 </TabPane>
 
                                                 <TabPane tabId="3">
@@ -1859,7 +1861,7 @@ const ItemsMaster = (props) => {
 
                                                 <TabPane tabId="9">
                                                     <Row>
-                                                    <Col md={12}  >
+                                                        <Col md={12}  >
                                                             <Row className="mt-3">
                                                                 <Col className=" col col-12 ">
                                                                     <GSTTab tableData={GStDetailsMaster} func={setGStDetailsMaster} />
