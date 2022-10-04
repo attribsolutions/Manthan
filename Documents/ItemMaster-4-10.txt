@@ -994,6 +994,123 @@ const ItemsMaster = (props) => {
             Division: index.value
         }))
 
+        const iteMarginDetails = marginMaster.map((index) => ({
+            PriceList: index.priceListid,
+            EffectiveDate: index.effectiveDate,
+            Party: index.partyid,
+            Margin: index.margin,
+            CreatedBy: 1,
+            UpdatedBy: 1,
+            Company: 1,
+        }))
+
+        const itemMRPDetails = MRP_Tab_TableData.map((index) => ({
+            Division: index.Divisionid,
+            EffectiveDate: index.effectiveDate,
+            Party: index.partyid,
+            MRP: index.MRP,
+            CreatedBy: 1,
+            UpdatedBy: 1,
+            Company: 1,
+        }))
+
+        const ItemGSTHSNDetails = GStDetailsMaster.map((index) => ({
+            EffectiveDate: index.effectiveDate,
+            GSTPercentage: index.GST,
+            HSNCode: index.HSNCode,
+            CreatedBy: 1,
+            UpdatedBy: 1,
+        }))
+
+        let submitValid1 = true;
+        let submitValid2 = true
+        let submitValid3 = true
+        let submitValid4 = true;
+        let submitValid5 = true
+        let submitValid6 = true
+        let submitValid7 = true
+
+        // isValidate.map((ind) => {
+        //     document.getElementById(ind).className = "form-control is-invalid"
+        // })
+
+        // categoryTabTable.map((ind, key) => {
+
+        //     let return1 = Common_Drop_Validation(ind.CategoryType, "CategoryType", key);
+        //     if (return1 === false) submitValid2 = return1;
+
+        //     let return2 = Common_Drop_Validation(ind.Category, "Category", key);
+        //     if (return2 === false) submitValid2 = return2;
+
+        //     // let return3 = Common_Drop_Validation(ind.SubCategory, "SubCategory", key);
+        //     // if (return3 === false) submitValid2 = return3;
+        // })
+
+        // if (formValue.BaseUnit.value > 0) {
+        //     baseUnitTableData.map((ind, key) => {
+        //         let return1 = Common_Text_INPUT_Validation(ind.Conversion, "Conversion", key);
+        //         if (return1 === false) submitValid3 = return1;
+
+        //         let return2 = Common_Drop_Validation(ind.Unit, "Unit", key);
+        //         if (return2 === false) submitValid3 = return2;
+
+        //     })
+        // }
+
+        // MRP_Tab_TableData.map((ind, key) => {
+
+        //     let return1 = Common_Drop_Validation(ind.MRPType, "MRPType", key);
+        //     if (return1 === false) submitValid6 = return1;
+
+        //     let return2 = Common_Text_INPUT_Validation(ind.MRP, "MRP", key);
+        //     if (return2 === false) submitValid6 = return2;
+
+        //     let return3 = Common_Text_INPUT_Validation(ind.GSTPercentage, "GSTPercentage", key);
+        //     if (return3 === false) submitValid6 = return3;
+
+        //     let return4 = Common_Text_INPUT_Validation(ind.HSNCode, "HSNCode", key);
+        //     if (return4 === false) submitValid6 = return4;
+
+        // })
+
+        // marginTabTable.map((ind, key) => {
+
+        //     let return1 = Common_Text_INPUT_Validation(ind.Margin, "Margin", key);
+        //     if (return1 === false) submitValid7 = return1;
+
+        //     let return2 = Common_Drop_Validation(ind.PriceList, "PriceList", key);
+        //     if (return2 === false) submitValid7 = return2;
+        // })
+
+        // if (!(isValidate.length === 0)) {
+        //     setactiveTab1('1');
+        //     return
+        // };
+
+        // if (!submitValid2) {
+        //     setactiveTab1('2');
+        //     return
+        // };
+        // if (!submitValid3) {
+        //     setactiveTab1('3');
+        //     return
+        // };
+        // if ((divisionTableData.length < 1)) {
+        //     setactiveTab1('5');
+        //     document.getElementById("dropDivisionType-0").className = "form-control is-invalid"
+        //     return
+        // };
+
+        // if (!submitValid6) {
+        //     setactiveTab1('6');
+        //     return
+        // };
+
+        // if (!submitValid7) {
+        //     setactiveTab1('7');
+        //     return
+        // };
+
         const jsonBody = JSON.stringify({
             Name: formValue.Name,
             ShortName: formValue.ShortName,
@@ -1021,39 +1138,16 @@ const ItemsMaster = (props) => {
 
         });
 
-        if (!Group_Tab_TableData.length > 0) {
+        if(Group_Tab_TableData.length <= 0)
+        {
             dispatch(AlertState({
-                Type: 4, Status: true,
-                Message: "Please Select ItemGroup Details",
-                RedirectPath: false,
-                PermissionAction: false,
+              Type: 4, Status: true,
+              Message: "Please Select ItemGroup Details",
+              RedirectPath: false,
+              PermissionAction: false,
             }));
-        }
-        else if (!MRP_Tab_TableData.length > 0) {
-            dispatch(AlertState({
-                Type: 4, Status: true,
-                Message: "Please Select MRP Details",
-                RedirectPath: false,
-                PermissionAction: false,
-            }));
-        }
-        else if (!marginMaster.length > 0) {
-            dispatch(AlertState({
-                Type: 4, Status: true,
-                Message: "Please Select Margin Details",
-                RedirectPath: false,
-                PermissionAction: false,
-            }));
-        }
-        else if (!GStDetailsMaster.length > 0) {
-            dispatch(AlertState({
-                Type: 4, Status: true,
-                Message: "Please Select GST Details",
-                RedirectPath: false,
-                PermissionAction: false,
-            }));
-        }
-        else if (pageMode === 'edit') {
+          }
+        if (pageMode === 'edit') {
             dispatch(updateItemID(jsonBody, EditData.id));
             console.log("edit json", jsonBody)
         }
