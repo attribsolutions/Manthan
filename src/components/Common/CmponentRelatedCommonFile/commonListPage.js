@@ -12,7 +12,7 @@ import { useSelector, useDispatch } from "react-redux";
 // import "../../../assets/scss/CustomeTable/datatables.scss";
 import DriverMaster from "../../../pages/Adminisrator/DriverPage/DriverMaster";
 import { MetaTags } from "react-meta-tags";
-import { useHistory } from "react-router-dom";
+import { useHistory ,Redirect} from "react-router-dom";
 import {
   deleteDriverTypeIDSuccess,
   updateDriverTypeIDSuccess,
@@ -32,6 +32,7 @@ const CommonListPage = (props) => {
 
   const [userPageAccessState, setUserPageAccessState] = useState('');
   const [modal_center, setmodal_center] = useState(false);
+  const [isRedirect, setIsRedirect] = useState(false);
 
   const {
     tableList,
@@ -71,7 +72,7 @@ const CommonListPage = (props) => {
   }, [userAccess])
 
   //  This UseEffect => Featch Modules List data  First Rendering
- 
+
 
   // This UseEffect => UpadateModal Success/Unsucces  Show and Hide Control Alert_modal
   useEffect(() => {
@@ -153,7 +154,13 @@ const CommonListPage = (props) => {
   // Edit Modal Show When Edit Data is true
   useEffect(() => {
     if (editData.Status === true) {
-      tog_center();
+      // tog_center();
+      // setIsRedirect(true)
+      debugger
+      history.push({
+        pathname: masterPath,
+        state:editData.Data, relatatedPage:masterPath, pageMode:editData.pageMode
+      })
     }
   }, [editData]);
 
@@ -298,6 +305,10 @@ const CommonListPage = (props) => {
             <MasterModal state={editData.Data} relatatedPage={masterPath} pageMode={editData.pageMode} />
           </Modal>
         </div>
+        {/* {(isRedirect) ? <Redirect to={{
+          pathname: masterPath,
+          state: editData.Data, relatatedPage: masterPath, pageMode: editData.pageMode
+        }} /> : null} */}
       </React.Fragment>
     );
   }
