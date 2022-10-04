@@ -602,14 +602,14 @@ const ItemsMaster = (props) => {
         const foundDublicate = categoryTabTable.find((element) => {
             return (element[type].value === event.value)
         });
-        if (!(foundDublicate === undefined)) {
-            dispatch(AlertState({
-                Type: 4,
-                Status: true,
-                Message: "Category alredy Select",
-            }))
-            return
-        }
+        // if (!(foundDublicate === undefined)) {
+        //     dispatch(AlertState({
+        //         Type: 4,
+        //         Status: true,
+        //         Message: "Category alredy Select",
+        //     }))
+        //     return
+        // }
 
 
         let validateReturn = Common_Drop_Validation(event, type, key);
