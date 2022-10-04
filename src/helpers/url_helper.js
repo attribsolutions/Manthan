@@ -104,7 +104,7 @@ export const DIVISION_TYPES_API = '/DivisionTypes'
 //Category API
 export const CATEGORY_TYPES_API = '/CategoryTypes'
 export const CATEGORY_API = '/Category'
-export const SUB_CATEGORY_API = '/SubCategorys'
+export const SUB_CATEGORY_API = '/SubCategory'
 
 //Vehicle api
 export const VEHICLE_API = '/Vehicle'
