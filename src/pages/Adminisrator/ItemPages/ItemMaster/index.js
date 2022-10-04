@@ -270,7 +270,7 @@ const ItemsMaster = (props) => {
                     EffectiveDate: index.EffectiveDate,
                 }
             })
-           
+
             setFormValue(initialFormValue);
             setCategoryTabTable(initialCategory)
             setImageTabTable(ItemImagesDetails)
@@ -1132,7 +1132,7 @@ const ItemsMaster = (props) => {
             ItemGSTHSNDetails: GStDetailsMaster,
 
         });
-debugger
+        debugger
         if (pageMode === 'edit') {
             dispatch(updateItemID(jsonBody, EditData.id));
             console.log("edit json", jsonBody)
@@ -1144,58 +1144,6 @@ debugger
         }
 
     };
-
-    const pageOptionsForMarginTable = {
-        sizePerPage: 10,
-        totalSize: marginMaster.length,
-        custom: true,
-    };
-
-    const pageOptions = {
-        sizePerPage: 10,
-        totalSize: GStDetailsTabTable.length,
-        custom: true,
-    };
-
-    const pagesListColumns = [
-
-        {
-            text: "EffectiveDate",
-            dataField: "EffectiveDate",
-            sort: true,
-        },
-        {
-            text: "GST",
-            dataField: "GST",
-            sort: true,
-        },
-        {
-            text: "HSNCode",
-            dataField: "HSNCode",
-            sort: true,
-        },
-        {
-            text: " ",
-            dataField: "buttons",
-
-            formatter: (cellContent, ele, k) => (
-                <>
-                    <div class="d-flex gap-3" style={{ display: 'flex', justifyContent: 'center' }} >
-                        <buton
-                            className="badge badge-soft-danger font-size-12"
-                            onClick={() => {
-                                GSTDetails_Delete_Handller(cellContent, ele, k)
-                            }}
-                        >
-                            <i class="mdi mdi-delete font-size-18" ></i>
-                        </buton>
-
-                    </div>
-                </>
-            )
-        }
-
-    ];
 
     var IsEditMode_Css = ''
     if ((pageMode === "edit") || (pageMode === "copy") || (pageMode === "dropdownAdd")) { IsEditMode_Css = "-5.5%" };
@@ -1378,7 +1326,7 @@ debugger
                                                         </span>
                                                         {/* <span className="d-none d-sm-block">Tab7</span> */}
                                                         {/* <Button type="submit"> save</Button> */}
-                                                        
+
                                                     </NavLink>
                                                 </NavItem>
                                             </Nav>
@@ -1465,6 +1413,27 @@ debugger
                                                                         />
 
                                                                     </FormGroup>
+
+                                                                    {/* <FormGroup className=" col col-sm-4 " >
+                                                                        <Label htmlFor="validationCustom21">Category Type</Label>
+                                                                        <Select
+                                                                            id='dropCompany-0'
+                                                                            value={formValue.Company}
+                                                                            options={CategoryType_DropdownOptions}
+                                                                            onChange={(event) => CategoryType_Dropdown_Handler(event, "Company", 0)}
+                                                                        />
+                                                                    </FormGroup> */}
+
+                                                                    {/* <FormGroup className=" col col-sm-4 " >
+                                                                        <Label htmlFor="validationCustom21">Category</Label>
+                                                                        <Select
+                                                                            id='dropCompany-0'
+                                                                            value={formValue.Company}
+                                                                            options={CategoryType_DropdownOptions}
+                                                                            onChange={(event) => Category_Dropdown_Handler(event, "Company", 0)}
+                                                                        />
+                                                                    </FormGroup> */}
+
                                                                     <FormGroup className="mb-2 col col-sm-5">
                                                                         <Row className="justify-content-md-left">
                                                                             <Label htmlFor="horizontal-firstname-input" className="col-sm-2 col-form-label" >Active </Label>
@@ -1489,101 +1458,79 @@ debugger
                                                 </TabPane>
 
                                                 <TabPane tabId="2">
-                                                    <Col md={12}  >
+                                                    <Col md={12} >
                                                         <Card className="text-black">
                                                             <CardBody style={{ backgroundColor: "whitesmoke" }}>
 
                                                                 {categoryTabTable.map((index, key) => {
+                                                                    return <Row className=" col col-sm-11" >
+                                                                        <FormGroup className="mb-3 col col-sm-4 " >
+                                                                            <Label htmlFor="validationCustom21">Category Type</Label>
+                                                                            <Select
+                                                                                id={`dropCategoryType-${key}`}
+                                                                                value={categoryTabTable[key].CategoryType}
 
-                                                                    return <Row className="mt-3">
-                                                                        <Col className=" col col-11 ">
-                                                                            <Row>
-                                                                                <FormGroup className=" col col-sm-4 " >
-                                                                                    <Label htmlFor="validationCustom21">Category Type</Label>
-                                                                                    <Select
-                                                                                        id={`dropCategoryType-${key}`}
-                                                                                        value={categoryTabTable[key].CategoryType}
+                                                                                options={CategoryType_DropdownOptions}
+                                                                                onChange={(e) => {
+                                                                                    CategoryType_Dropdown_Handler(e, key, "CategoryType")
+                                                                                }}
+                                                                            />
+                                                                        </FormGroup>
 
-                                                                                        options={CategoryType_DropdownOptions}
-                                                                                        onChange={(e) => {
-                                                                                            CategoryType_Dropdown_Handler(e, key, "CategoryType")
-                                                                                        }}
-                                                                                    />
-                                                                                </FormGroup>
+                                                                        <FormGroup className="mb-3 col col-sm-4 " >
+                                                                            <Label htmlFor="validationCustom21">Category</Label>
+                                                                            <Select
+                                                                                id={`dropCategory-${key}`}
+                                                                                // styles={customStyles}
+                                                                                value={categoryTabTable[key].Category}
+                                                                                options={categoryTabTable[key].Category_DropdownOptions}
 
-                                                                                <FormGroup className=" col col-sm-4 " >
-                                                                                    <Label htmlFor="validationCustom21">Category</Label>
-                                                                                    <Select
-                                                                                        id={`dropCategory-${key}`}
-                                                                                        // styles={customStyles}
-                                                                                        value={categoryTabTable[key].Category}
-                                                                                        options={categoryTabTable[key].Category_DropdownOptions}
+                                                                                onChange={(e) => {
+                                                                                    Category_Dropdown_Handler(e, key, "Category")
 
-                                                                                        onChange={(e) => {
-                                                                                            Category_Dropdown_Handler(e, key, "Category")
+                                                                                }}
+                                                                            />
+                                                                        </FormGroup>
 
-                                                                                        }}
-                                                                                    />
-                                                                                </FormGroup>
+                                                                        <Col md={1}>
+                                                                            {(categoryTabTable.length === key + 1) ?
+                                                                                <Row className=" mt-3">
+                                                                                    <Col md={6} className=" mt-3">
+                                                                                        {(categoryTabTable.length > 1)
+                                                                                            ?
+                                                                                            < i className="mdi mdi-trash-can d-block text-danger font-size-20" onClick={() => {
+                                                                                                CategoryTab_DeleteRow_Handler(key)
+                                                                                            }} >
+                                                                                            </i>
+                                                                                            : <Col md={6} ></Col>
+                                                                                        }
 
-                                                                                <FormGroup className=" col col-sm-4 " >
-                                                                                    <Label htmlFor="validationCustom21">Sub Category</Label>
-                                                                                    <Select
-                                                                                        // styles={customStyles}
-                                                                                        id={`dropSubCategory-${key}`}
-                                                                                        value={categoryTabTable[key].SubCategory}
-                                                                                        options={categoryTabTable[key].SubCategory_DropdownOptions}
-                                                                                        onChange={(e) => { CategoryTab_Common_onChange_Handller(e, "SubCategory", key) }}
-                                                                                    />
-                                                                                </FormGroup>
-                                                                            </Row>
-                                                                        </Col>
-
-                                                                        {(categoryTabTable.length === key + 1) ?
-                                                                            <Col className="  col col-1 mt-3">
-                                                                                <Row>
-                                                                                    <Col md={6}>
-                                                                                        {(categoryTabTable.length > 1) ? <>
-                                                                                            <i
-                                                                                                className="mdi mdi-trash-can d-block text-danger font-size-20 mt-3"
-                                                                                                onClick={() => {
-                                                                                                    CategoryTab_DeleteRow_Handler(key);
-                                                                                                }}
-                                                                                            ></i>
-
-
-                                                                                        </> : null}
                                                                                     </Col>
+
                                                                                     <Col md={6}>
-                                                                                        <Button className="btn btn-sm btn-light mt-3 "
+                                                                                        <Button className="btn btn-sm btn-light mt-3   align-items-sm-end"
                                                                                             type="button"
-                                                                                            onClick={() => { CategoryTab_AddRow_Handler() }} >
+                                                                                            onClick={() => { CategoryTab_AddRow_Handler(key) }} >
                                                                                             <i className="dripicons-plus"></i>
                                                                                         </Button>
                                                                                     </Col>
-
                                                                                 </Row>
-                                                                            </Col>
-                                                                            : <Col className="col col-1 mt-3">
+                                                                                :
+                                                                                <Row className="mt-3">
+                                                                                    < i className="mdi mdi-trash-can d-block text-danger font-size-20 mt-3" onClick={() => {
+                                                                                        CategoryTab_DeleteRow_Handler(key)
+                                                                                    }} >
+                                                                                    </i>
+                                                                                </Row>
+                                                                            }
 
-                                                                                <i
-                                                                                    className="mdi mdi-trash-can d-block text-danger font-size-20 mt-3"
-                                                                                    onClick={() => {
-                                                                                        CategoryTab_DeleteRow_Handler(key);
-                                                                                    }}
-                                                                                ></i>
-
-                                                                            </Col>}
+                                                                        </Col>
                                                                     </Row>
-
-
                                                                 })}
-
                                                             </CardBody>
                                                         </Card>
-
                                                     </Col>
-
+                                                   
                                                 </TabPane>
 
 
@@ -1892,35 +1839,35 @@ debugger
                                                 </TabPane>
                                             </TabContent>
                                             <Row >
-                                                            <Col sm={2}>
-                                                                <div className="">
-                                                                    {
-                                                                        pageMode === "edit" ?
-                                                                            userPageAccessState.RoleAccess_IsEdit ?
-                                                                                <button
-                                                                                    type="submit"
-                                                                                    data-mdb-toggle="tooltip" data-mdb-placement="top" title="Update Role"
-                                                                                    className="btn btn-success w-md"
-                                                                                >
-                                                                                    <i class="fas fa-edit me-2"></i>Update
-                                                                                </button>
-                                                                                :
-                                                                                <></>
-                                                                            : (
-                                                                                userPageAccessState.RoleAccess_IsSave ?
-                                                                                    <button
-                                                                                        type="submit"
-                                                                                        data-mdb-toggle="tooltip" data-mdb-placement="top" title="Save Role"
-                                                                                        className="btn btn-primary w-md"
-                                                                                    > <i className="fas fa-save me-2"></i> Save
-                                                                                    </button>
-                                                                                    :
-                                                                                    <></>
-                                                                            )
-                                                                    }
-                                                                </div>
-                                                            </Col>
-                                                        </Row>
+                                                <Col sm={2}>
+                                                    <div className="">
+                                                        {
+                                                            pageMode === "edit" ?
+                                                                userPageAccessState.RoleAccess_IsEdit ?
+                                                                    <button
+                                                                        type="submit"
+                                                                        data-mdb-toggle="tooltip" data-mdb-placement="top" title="Update Role"
+                                                                        className="btn btn-success w-md"
+                                                                    >
+                                                                        <i class="fas fa-edit me-2"></i>Update
+                                                                    </button>
+                                                                    :
+                                                                    <></>
+                                                                : (
+                                                                    userPageAccessState.RoleAccess_IsSave ?
+                                                                        <button
+                                                                            type="submit"
+                                                                            data-mdb-toggle="tooltip" data-mdb-placement="top" title="Save Role"
+                                                                            className="btn btn-primary w-md"
+                                                                        > <i className="fas fa-save me-2"></i> Save
+                                                                        </button>
+                                                                        :
+                                                                        <></>
+                                                                )
+                                                        }
+                                                    </div>
+                                                </Col>
+                                            </Row>
                                         </CardBody>
                                     </Card>
                                 </Col>
