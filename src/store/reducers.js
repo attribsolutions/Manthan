@@ -40,7 +40,7 @@ import PriceListReducer from "./Administrator/PriceList/reducer"
 import MRPMasterReducer from "./Administrator/MRPMasterRedux/reducer"
 import MarginMasterReducer from "./Administrator/MarginMasterRedux/reducer"
 import TermsAndCondtionsReducer from "./Administrator/TermsAndCondtionsRedux/reducer"
-import GroupTypeReducer from "./Administrator/TermsAndCondtionsRedux/reducer"
+import GroupTypeReducer from "./Administrator/GroupTypeRedux/reducer"
 const rootReducer = combineReducers({
   Layout,
   Login,

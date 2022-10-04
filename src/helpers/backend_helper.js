@@ -296,7 +296,6 @@ export const delete_PriceList_API = (id) => del(`${url. PRICE_LIST}/${id}`)// de
 export const edit_PriceList = (id) =>get(`${url. PRICE_LIST}/${id}`) // edit api
 export const update_PriceList = (data, id) =>put(`${url. PRICE_LIST}/${id}`, data)// update
 
-
 // MRP Master 
 export const Post_MRPMaster_API = (data) => post(url.MRP_MASTER_LIST, data)// post api
 export const GetMRPList_For_Listpage = () => get(url.MRP_MASTER_LIST)// getapi
@@ -314,7 +313,7 @@ export const update_MarginList = (data, id) =>put(`${url.MARGIN_MASTER_LIST}/${i
 export const GoButton_Post_API_For_MarginMaster = (data) => post(url.GO_BUTTON_POST_API_FOR_MARGIN_MASTER, data)// go button postapi
 
 // GroupTypes API
-export const GroupTypes_API = (data) => post(url.GROUP_TYPE_API, data)// post api
+export const GroupTypes_API = () => get(url.GROUP_TYPE_API)
 
 // TermsAndCondtions API
 export const Post_TermsAndCondtions_Master_API = (data) => post(url.TERMSANDCONDITIONS_API, data)// post api

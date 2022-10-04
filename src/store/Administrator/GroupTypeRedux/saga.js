@@ -7,8 +7,10 @@ import { GET_GROUP_TYPES_LIST } from "./actionType";
 
 // get api
 function* Get_GropuTypeList_GenratorFunction() {
+    
     yield put(SpinnerState(true))
     try {
+        
         const response = yield call(GroupTypes_API);
         yield put(getGroupTypeslistSuccess(response.Data));
         yield put(SpinnerState(false))

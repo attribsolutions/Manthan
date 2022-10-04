@@ -47,6 +47,7 @@ import { getPartyListAPI } from "../../../../store/Administrator/PartyRedux/acti
 import GSTTab from "./GST_Tab";
 import MRPTab from "./MRP_Tab";
 import Margin_Tab from "./MarginTab/index";
+import GroupTab from "./Group_Tab";
 
 const ItemsMaster = (props) => {
     const dispatch = useDispatch();
@@ -110,6 +111,8 @@ const ItemsMaster = (props) => {
     }]);
     const [MRP_Tab_TableData, setMRP_Tab_TableData] = useState([]);
 
+    const [Group_Tab_TableData, setGroup_Tab_TableData] = useState([]);
+
     const [GStDetailsTabTable, setGSTDetailsTabTable] = useState([]);
 
     const [GStDetailsMaster, setGStDetailsMaster] = useState([]);
@@ -168,7 +171,7 @@ const ItemsMaster = (props) => {
     }, [RoleAccessModifiedinSingleArray])
 
     useEffect(() => {
-        debugger
+        
         if (!(userPageAccessState === '')) { document.getElementById("txtName0").focus(); }
 
         if (!(editDataGatingFromList === undefined)) {
@@ -1218,7 +1221,8 @@ const ItemsMaster = (props) => {
                                                         <span className="d-block d-sm-none">
                                                             <i className="fas fa-home"></i>
                                                         </span>
-                                                        <span className="d-none d-sm-block">Unit Conversions</span>
+                                                        <span className="d-none d-sm-block">Item Group</span>
+
                                                     </NavLink>
                                                 </NavItem>
                                                 <NavItem>
@@ -1235,7 +1239,7 @@ const ItemsMaster = (props) => {
                                                         <span className="d-block d-sm-none">
                                                             <i className="fas fa-home"></i>
                                                         </span>
-                                                        <span className="d-none d-sm-block">Image</span>
+                                                        <span className="d-none d-sm-block">Unit Conversions</span>
                                                     </NavLink>
                                                 </NavItem>
                                                 <NavItem>
@@ -1252,7 +1256,7 @@ const ItemsMaster = (props) => {
                                                         <span className="d-block d-sm-none">
                                                             <i className="fas fa-home"></i>
                                                         </span>
-                                                        <span className="d-none d-sm-block">Division</span>
+                                                        <span className="d-none d-sm-block">Image</span>
                                                     </NavLink>
                                                 </NavItem>
                                                 <NavItem>
@@ -1269,11 +1273,9 @@ const ItemsMaster = (props) => {
                                                         <span className="d-block d-sm-none">
                                                             <i className="fas fa-home"></i>
                                                         </span>
-                                                        <span className="d-none d-sm-block">MRP</span>
+                                                        <span className="d-none d-sm-block">Division</span>
                                                     </NavLink>
                                                 </NavItem>
-
-
                                                 <NavItem>
                                                     <NavLink
                                                         id="nave-link-7"
@@ -1288,9 +1290,10 @@ const ItemsMaster = (props) => {
                                                         <span className="d-block d-sm-none">
                                                             <i className="fas fa-home"></i>
                                                         </span>
-                                                        <span className="d-none d-sm-block">Margin</span>
+                                                        <span className="d-none d-sm-block">MRP</span>
                                                     </NavLink>
                                                 </NavItem>
+
 
                                                 <NavItem>
                                                     <NavLink
@@ -1306,11 +1309,29 @@ const ItemsMaster = (props) => {
                                                         <span className="d-block d-sm-none">
                                                             <i className="fas fa-home"></i>
                                                         </span>
-                                                        <span className="d-none d-sm-block">GST Details</span>
+                                                        <span className="d-none d-sm-block">Margin</span>
                                                     </NavLink>
                                                 </NavItem>
 
                                                 <NavItem>
+                                                    <NavLink
+                                                        id="nave-link-9"
+                                                        style={{ cursor: "pointer" }}
+                                                        className={classnames({
+                                                            active: activeTab1 === "9",
+                                                        })}
+                                                        onClick={() => {
+                                                            toggle1("9")
+                                                        }}
+                                                    >
+                                                        <span className="d-block d-sm-none">
+                                                            <i className="fas fa-home"></i>
+                                                        </span>
+                                                        <span className="d-none d-sm-block">GST Details</span>
+                                                    </NavLink>
+                                                </NavItem>
+
+                                                {/* <NavItem>
 
                                                     <NavLink
                                                         style={{ cursor: "pointer" }}
@@ -1327,8 +1348,8 @@ const ItemsMaster = (props) => {
                                                         {/* <span className="d-none d-sm-block">Tab7</span> */}
                                                         {/* <Button type="submit"> save</Button> */}
 
-                                                    </NavLink>
-                                                </NavItem>
+                                                    {/* </NavLink>
+                                                </NavItem>  */}
                                             </Nav>
 
                                             <TabContent activeTab={activeTab1} className="p-3 text-muted">
@@ -1533,8 +1554,18 @@ const ItemsMaster = (props) => {
                                                    
                                                 </TabPane>
 
-
                                                 <TabPane tabId="3">
+                                                    <Row>
+                                                        <Col md={12}  >
+                                                            <Row className="mt-3">
+                                                                <Col className=" col col-12 ">
+                                                                    <GroupTab tableData={Group_Tab_TableData} func={setGroup_Tab_TableData} />
+                                                                </Col>
+                                                            </Row>
+                                                        </Col>
+                                                    </Row>
+                                                </TabPane>
+                                                <TabPane tabId="4">
                                                     <Col md={12}>
                                                         <Row>
                                                             <Col md={12}  >
@@ -1647,7 +1678,7 @@ const ItemsMaster = (props) => {
                                                     </Col>
                                                 </TabPane>
 
-                                                <TabPane tabId="4">
+                                                <TabPane tabId="5">
                                                     <Col md={12} >
                                                         <Card className="text-black">
                                                             <CardBody style={{ backgroundColor: "whitesmoke" }}>
@@ -1730,7 +1761,7 @@ const ItemsMaster = (props) => {
                                                     </Row>
                                                 </TabPane>
 
-                                                <TabPane tabId="5">
+                                                <TabPane tabId="6">
                                                     <Row>
                                                         <Col md={12}  >
                                                             <Card className="text-black">
@@ -1800,11 +1831,11 @@ const ItemsMaster = (props) => {
                                                     </Row>
                                                 </TabPane>
 
-                                                <TabPane tabId="6">
+                                                <TabPane tabId="7">
                                                     <Row>
                                                         <Col md={12}  >
                                                             <Row className="mt-3">
-                                                                <Col className=" col col-11 ">
+                                                                <Col className=" col col-12 ">
                                                                     <MRPTab tableData={MRP_Tab_TableData} func={setMRP_Tab_TableData} />
                                                                 </Col>
                                                             </Row>
@@ -1812,12 +1843,12 @@ const ItemsMaster = (props) => {
                                                     </Row>
                                                 </TabPane>
 
-                                                <TabPane tabId="7">
+                                                <TabPane tabId="8">
 
                                                     <Row>
                                                         <Col md={12}  >
                                                             <Row className="mt-3">
-                                                                <Col className=" col col-11 ">
+                                                                <Col className=" col col-12 ">
                                                                     <Margin_Tab tableData={marginMaster} func={setMarginMaster} />
                                                                 </Col>
                                                             </Row>
@@ -1826,11 +1857,11 @@ const ItemsMaster = (props) => {
 
                                                 </TabPane>
 
-                                                <TabPane tabId="8">
+                                                <TabPane tabId="9">
                                                     <Row>
-                                                        <Col md={12}  >
+                                                    <Col md={12}  >
                                                             <Row className="mt-3">
-                                                                <Col className=" col col-11 ">
+                                                                <Col className=" col col-12 ">
                                                                     <GSTTab tableData={GStDetailsMaster} func={setGStDetailsMaster} />
                                                                 </Col>
                                                             </Row>
