@@ -36,8 +36,8 @@ const INIT_STATE = {
     Division: [],
     Party: [],
     PriceList: [],
-    Group:[],
-    SubGroup:[],
+    GroupList:[],
+    SubGroupList:[],
 };
 
 const ItemMastersReducer = (state = INIT_STATE, action) => {
@@ -136,13 +136,13 @@ const ItemMastersReducer = (state = INIT_STATE, action) => {
         case GET_GROUP_BY_GROUPTYPE_FOR_DROPDOWN_SUCCESS:
             return {
                 ...state,
-                Group: action.payload,
+                GroupList: action.payload,
             }
 
         case GET_SUB_GROUP_BY_GROUP_FOR_DROPDOWN_SUCCESS:
             return {
                 ...state,
-                SubGroup: action.payload,
+                SubGroupList: action.payload,
             }
         default:
             return state;
