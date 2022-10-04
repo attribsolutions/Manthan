@@ -63,9 +63,6 @@ const Breadcrumb = props => {
 
   }
 
-debugger
-
-
   // Onfocus Search Box
   useEffect(() => {
     // document.getElementById("search-bar-0").focus();
