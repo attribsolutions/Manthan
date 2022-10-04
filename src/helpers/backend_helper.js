@@ -313,6 +313,10 @@ export const edit_MarginList = (id) =>get(`${url. MARGIN_MASTER_LIST}/${id}`) //
 export const update_MarginList = (data, id) =>put(`${url.MARGIN_MASTER_LIST}/${id}`, data)// update
 export const GoButton_Post_API_For_MarginMaster = (data) => post(url.GO_BUTTON_POST_API_FOR_MARGIN_MASTER, data)// go button postapi
 
+
+// TermsAndCondtions API
+export const Post_TermsAndCondtions_Master_API = (data) => post(url.TERMSANDCONDITIONS_API, data)// post api
+
 export {  
   getLoggedInUser,
   isUserAuthenticated,
