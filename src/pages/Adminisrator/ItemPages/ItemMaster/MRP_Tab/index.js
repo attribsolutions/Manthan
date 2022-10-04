@@ -62,7 +62,7 @@ function MRPTab(props) {
   };
 
   const addRowsHandler = (e) => {
-    debugger;
+   
     const val = {
       Division: division === "" ? "" : division.value,
       DivisionName: division.label,

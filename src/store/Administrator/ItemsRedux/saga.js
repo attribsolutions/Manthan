@@ -227,8 +227,7 @@ function* Group_DropDown_GenratorFunction({ id }) {
   try {
     const response = yield call(apiCall.Group_By_GroupTypes_DropDown_API, id);
     yield put(get_Group_By_GroupType_ForDropDown_Success(response.Data));
-    console.log("response", response)
-  } catch (error) {
+   } catch (error) {
     console.log("Group saga page error", error);
   }
 }

@@ -26,8 +26,6 @@ function GroupTab(props) {
         SubGroupList: state.ItemMastersReducer.SubGroupList,
     }));
 
-    console.log("GroupList",GroupList)
-    
     useEffect(() => {
         dispatch(getGroupTypeslist());
         dispatch(get_Group_By_GroupType_ForDropDown());
