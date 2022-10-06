@@ -59,7 +59,8 @@ const DriverList = (props) => {
             reducers={reducers}
             MasterModal={DriverMaster}
             masterPath={"/DriverMaster"}
-
+            ButtonMsgLable={"Driver"}
+            deleteName={"Name"}
           />
           : null
       }

@@ -22,11 +22,11 @@ function* Get_GropuTypeList_GenratorFunction() {
 }
 
 //post api
-function* Submit_GroupType_GenratorFunction({ Data }) {
+function* Submit_GroupType_GenratorFunction({ data }) {
+   
     yield put(SpinnerState(true))
     try {
-        const response = yield call(GroupTypes_Post_API, Data);
-        console.log("post response in saga file", response)
+        const response = yield call(GroupTypes_Post_API, data);
         yield put(SpinnerState(false))
         yield put(PostGroupTypeSubmitSuccess(response));
     } catch (error) {

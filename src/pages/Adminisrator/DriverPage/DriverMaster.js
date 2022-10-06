@@ -47,7 +47,7 @@ const DriverMaster = (props) => {
 
     let editDataGetingFromList = props.state;
     let pageModeProps = props.pageMode;
-
+console.log("editDataGetingFromList",editDataGetingFromList)
     const formRef = useRef(null);
     const [pageMode, setPageMode] = useState("");
     const [userPageAccessState, setUserPageAccessState] = useState("");

@@ -14,19 +14,22 @@ import {
 import { AvField, AvForm, } from "availity-reactstrap-validation";
 import Select from "react-select";
 import { MetaTags } from "react-meta-tags";
-import { BreadcrumbShow, commonPageFieldSuccess } from "../../../store/actions";
+import { BreadcrumbShow } from "../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
 import { AlertState, commonPageField } from "../../../store/actions";
-
 import { useHistory } from "react-router-dom";
-import Flatpickr from "react-flatpickr"
 import {
     comAddPageFieldFunc,
     formValid,
     onChangeText,
-    onChangeDate
 } from "../../../components/Common/CmponentRelatedCommonFile/validationFunction";
-import { editGroupTypeIdSuccess, getGroupTypeslistSuccess, PostGroupTypeSubmit, PostGroupTypeSubmitSuccess, updateGroupTypeID } from "../../../store/Administrator/GroupTypeRedux/action";
+import {
+    editGroupTypeIdSuccess,
+    getGroupTypeslistSuccess,
+    PostGroupTypeSubmit,
+    PostGroupTypeSubmitSuccess,
+    updateGroupTypeID
+} from "../../../store/Administrator/GroupTypeRedux/action";
 
 const GroupTypeMaster = (props) => {
 
@@ -35,13 +38,13 @@ const GroupTypeMaster = (props) => {
 
     let editDataGetingFromList = props.state;
     let pageModeProps = props.pageMode;
+    console.log("editDataGetingFromList", editDataGetingFromList)
 
     const formRef = useRef(null);
     const [pageMode, setPageMode] = useState("");
     const [userPageAccessState, setUserPageAccessState] = useState("");
     const [EditData, setEditData] = useState([]);
-    const [DOB_Date_Select, setDOB_Date_Select] = useState("");
-    // ////////////////////////////////////
+
     const [state, setState] = useState({
         values: {
             Name: "",
@@ -66,8 +69,6 @@ const GroupTypeMaster = (props) => {
         }
     }
     )
-    //////////////////////////
-
 
     //Access redux store Data /  'save_ModuleSuccess' action data
     const {
@@ -75,16 +76,14 @@ const GroupTypeMaster = (props) => {
         pageField,
         RoleAccessModifiedinSingleArray
     } = useSelector((state) => ({
-        PostAPIResponse: state.DriverReducer.PostDataMessage,
+        PostAPIResponse: state.GroupTypeReducer.PostData,
         RoleAccessModifiedinSingleArray: state.Login.RoleAccessUpdateData,
         pageField: state.CommonPageFieldReducer.pageField
     }));
 
-    console.log("pageField", pageField)
-
     useEffect(() => {
         // dispatch(commonPageFieldSuccess([]));
-        dispatch(commonPageField(91))
+        dispatch(commonPageField(105))
     }, []);
 
     //userAccess useEffect
@@ -102,37 +101,28 @@ const GroupTypeMaster = (props) => {
             userAcc = RoleAccessModifiedinSingleArray.find((inx) => {
                 return (`/${inx.ActualPagePath}` === relatatedPage)
             })
-
         }
         if (!(userAcc === undefined)) {
             setUserPageAccessState(userAcc)
         }
-
     }, [RoleAccessModifiedinSingleArray])
 
     // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
     useEffect(() => {
-
+debugger
         if (!(userPageAccessState === '')) { document.getElementById("txtName").focus(); }
         if (!(editDataGetingFromList === undefined)) {
             const { Name } = editDataGetingFromList
             const { values, fieldLabel, hasValid, required, isError } = { ...state }
             values.Name = Name;
-
-
             setState({ values, fieldLabel, hasValid, required, isError })
-
-            // setEditData(editDataGetingFromList);
+            setEditData(editDataGetingFromList);
             setPageMode(pageModeProps);
-            // setDOB_Date_Select(editDataGetingFromList.DOB)
-
             dispatch(editGroupTypeIdSuccess({ Status: false }))
-            dispatch(BreadcrumbShow(editDataGetingFromList.DriverMaster))
+            dispatch(BreadcrumbShow(editDataGetingFromList.GroupTypeMaster))
             return
         }
     }, [editDataGetingFromList])
-
-
 
     useEffect(() => {
         if ((PostAPIResponse.Status === true) && (PostAPIResponse.StatusCode === 200)) {
@@ -150,7 +140,7 @@ const GroupTypeMaster = (props) => {
                     Type: 1,
                     Status: true,
                     Message: PostAPIResponse.Message,
-                    RedirectPath: '/DriverList',
+                    RedirectPath: '/GroupTypeList',
                 }))
             }
         }
@@ -166,27 +156,20 @@ const GroupTypeMaster = (props) => {
         }
     }, [PostAPIResponse])
 
-
-
-    // ////////////////////////////////////////////////////////////
     useEffect(() => {
         if (pageField.length > 0) {
             comAddPageFieldFunc({ state, setState, pageField })
         }
     }, [pageField])
 
-
     const values = { ...state.values }
     const { isError } = state;
     const { fieldLabel } = state;
-
-
 
     const formSubmitHandler = (event) => {
         debugger
         event.preventDefault();
         if (formValid(state, setState)) {
-
             const jsonBody = JSON.stringify({
                 Name: values.Name,
                 CreatedBy: 1,
@@ -202,11 +185,9 @@ const GroupTypeMaster = (props) => {
 
             else {
                 dispatch(PostGroupTypeSubmit(jsonBody));
-                console.log("jsonBody",jsonBody)
+                console.log("jsonBody", jsonBody)
             }
         }
-
-
     };
 
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)

@@ -35,7 +35,7 @@ export const formValChange = ({ event, state, setState }) => {
                     isError[name] = hasValid[name].inValidMsg;
                     hasValid[name].valid = false
                 }
-                values[name] = value
+                values[name] = value;
                 break;
             case "checkbox":
                 if (!(required[name] === undefined)) {

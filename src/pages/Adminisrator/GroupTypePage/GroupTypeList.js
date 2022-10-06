@@ -1,16 +1,17 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  deleteDriverTypeIDSuccess,
-  updateDriverTypeIDSuccess,
-  getMethodForDriverList,
-  editDriverTypeId,
-  delete_DriverType_ID,
-  PostMethod_ForDriverMasterSuccess,
-} from "../../../store/Administrator/DriverRedux/action";
 
 import CommonListPage from "../../../components/Common/CmponentRelatedCommonFile/commonListPage";
 import { commonPageField, commonPageFieldSuccess } from "../../../store/actions";
+import {
+  deleteGroupType_ID,
+  deleteGroupType_IDSuccess,
+  editGroupTypeId,
+  getGroupTypeslist,
+  PostGroupTypeSubmitSuccess,
+  updateGroupTypeIDSuccess
+} from "../../../store/Administrator/GroupTypeRedux/action";
+import GroupTypeMaster from "./GroupTypeMaster";
 
 const GroupTypeList = (props) => {
   const dispatch = useDispatch();
@@ -18,30 +19,30 @@ const GroupTypeList = (props) => {
 
   const reducers = useSelector(
     (state) => ({
-      tableList: state.DriverReducer.DriverList,
-      editData: state.DriverReducer.editData,
-      updateMsg: state.DriverReducer.updateMessage,
-      deleteMsg: state.DriverReducer.deleteMessage,
-      postMsg: state.DriverReducer.PostDataMessage,
+      tableList: state.GroupTypeReducer.GroupType,
+      editData: state.GroupTypeReducer.editData,
+      updateMsg: state.GroupTypeReducer.updateMessage,
+      deleteMsg: state.GroupTypeReducer.deleteMessage,
+      postMsg: state.GroupTypeReducer.PostData,
       userAccess: state.Login.RoleAccessUpdateData,
       pageField: state.CommonPageFieldReducer.pageField
     })
   );
 
   const action = {
-    getList: getMethodForDriverList,
-    editId: editDriverTypeId,
-    deleteId: delete_DriverType_ID,
-    postSucc: PostMethod_ForDriverMasterSuccess,
-    updateSucc: updateDriverTypeIDSuccess,
-    deleteSucc: deleteDriverTypeIDSuccess
+    getList: getGroupTypeslist,
+    editId: editGroupTypeId,
+    deleteId: deleteGroupType_ID,
+    postSucc: PostGroupTypeSubmitSuccess,
+    updateSucc: updateGroupTypeIDSuccess,
+    deleteSucc: deleteGroupType_IDSuccess
 
   }
   useEffect(() => {
-    
+
     dispatch(commonPageFieldSuccess([]))
-    dispatch(commonPageField(90))
-    dispatch(getMethodForDriverList())
+    dispatch(commonPageField(107))
+    dispatch(getGroupTypeslist())
 
   }, []);
 
@@ -54,8 +55,8 @@ const GroupTypeList = (props) => {
           <CommonListPage
             action={action}
             reducers={reducers}
-            // MasterModal={DriverMaster}
-            masterPath={"/DriverMaster"}
+            MasterModal={GroupTypeMaster}
+            masterPath={"/GroupTypeMaster"}
 
           />
           : null

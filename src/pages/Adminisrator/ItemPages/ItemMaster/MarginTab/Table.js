@@ -259,7 +259,7 @@ import {
   
     const defaultSorted = [
       {
-        dataField: "Name", // if dataField is not match to any column you defined, it will be ignored.
+        dataField: "PriceList", // if dataField is not match to any column you defined, it will be ignored.
         order: "asc", // desc or asc
       },
     ];
