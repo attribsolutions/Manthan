@@ -75,6 +75,7 @@ import TermsAndCondtionsMaster from "../pages/Adminisrator/TermsAndCondtions/Ter
 
 import GroupList from "../pages/Adminisrator/GroupPage/GroupList";
 import GroupTypeList from "../pages/Adminisrator/GroupTypePage/GroupTypeList";
+import GroupTypeMaster from "../pages/Adminisrator/GroupTypePage/GroupTypeMaster";
 
 import EditTabaleTable from "../pages/Adminisrator/DriverPage/editabale table";
 
@@ -189,6 +190,9 @@ const userRoutes = [
   { path: "/CompanyGroupMaster", component: CompanyGroupMaster },
   { path: "/CompanyGroupList", component: CompanyGroupList },
 
+  { path: "/GroupTypeMaster", component: GroupTypeMaster },
+  { path: "/GroupTypeList", component: GroupTypeList },
+
   { path: '/TermsAndCondtionsMaster', component: TermsAndCondtionsMaster },
 
 
@@ -202,7 +206,6 @@ const userRoutes = [
   { path: "/MarginMaster", component: MarginMaster },
   { path: "/MarginList", component: MarginList },
   { path: "/GroupList", component: GroupList },
-  { path: "/GroupTypeList", component: GroupTypeList },
 
 
   // { path: "/AddItemMaster", component: AddItemMaster },
