@@ -1,7 +1,5 @@
 import React, { useEffect } from "react";
-
 import { useDispatch, useSelector } from "react-redux";
-import DriverMaster from "./DriverMaster";
 import {
   deleteDriverTypeIDSuccess,
   updateDriverTypeIDSuccess,
@@ -14,7 +12,7 @@ import {
 import CommonListPage from "../../../components/Common/CmponentRelatedCommonFile/commonListPage";
 import { commonPageField, commonPageFieldSuccess } from "../../../store/actions";
 
-const DriverList = (props) => {
+const GroupTypeList = (props) => {
   const dispatch = useDispatch();
 
 
@@ -30,7 +28,6 @@ const DriverList = (props) => {
     })
   );
 
-
   const action = {
     getList: getMethodForDriverList,
     editId: editDriverTypeId,
@@ -40,10 +37,10 @@ const DriverList = (props) => {
     deleteSucc: deleteDriverTypeIDSuccess
 
   }
-
   useEffect(() => {
+    
     dispatch(commonPageFieldSuccess([]))
-    dispatch(commonPageField(106))
+    dispatch(commonPageField(90))
     dispatch(getMethodForDriverList())
 
   }, []);
@@ -57,7 +54,7 @@ const DriverList = (props) => {
           <CommonListPage
             action={action}
             reducers={reducers}
-            MasterModal={DriverMaster}
+            // MasterModal={DriverMaster}
             masterPath={"/DriverMaster"}
 
           />
@@ -68,4 +65,4 @@ const DriverList = (props) => {
   )
 }
 
-export default DriverList;
+export default GroupTypeList;

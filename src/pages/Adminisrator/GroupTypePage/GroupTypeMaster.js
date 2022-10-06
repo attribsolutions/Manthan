@@ -18,29 +18,17 @@ import { BreadcrumbShow, commonPageFieldSuccess } from "../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
 import { AlertState, commonPageField } from "../../../store/actions";
 
-import {
-    PostMethodForDriverMaster,
-    getMethodForDriverList,
-    PostMethod_ForDriverMasterSuccess,
-    getMethod_ForDriverListSuccess,
-    editDriverTypeSuccess,
-    updateDriverTypeID
-} from "../../../store/Administrator/DriverRedux/action";
 import { useHistory } from "react-router-dom";
 import Flatpickr from "react-flatpickr"
 import {
     comAddPageFieldFunc,
     formValid,
-    formValChange,
-    onChangeSelect,
     onChangeText,
     onChangeDate
 } from "../../../components/Common/CmponentRelatedCommonFile/validationFunction";
+import { editGroupTypeIdSuccess, getGroupTypeslistSuccess, PostGroupTypeSubmit, PostGroupTypeSubmitSuccess, updateGroupTypeID } from "../../../store/Administrator/GroupTypeRedux/action";
 
-// import { pageField } from './validfiles'
-
-
-const DriverMaster = (props) => {
+const GroupTypeMaster = (props) => {
 
     const dispatch = useDispatch();
     const history = useHistory()
@@ -53,27 +41,17 @@ const DriverMaster = (props) => {
     const [userPageAccessState, setUserPageAccessState] = useState("");
     const [EditData, setEditData] = useState([]);
     const [DOB_Date_Select, setDOB_Date_Select] = useState("");
-
     // ////////////////////////////////////
     const [state, setState] = useState({
         values: {
             Name: "",
-            Address: "",
-            UID: "",
-            DOB: ''
         },
         fieldLabel: {
             Name: "",
-            Address: "",
-            UID: "",
-            DOB: ''
         },
 
         isError: {
             Name: "",
-            Address: "",
-            UID: "",
-            DOB: ''
         },
 
         hasValid: {
@@ -82,22 +60,6 @@ const DriverMaster = (props) => {
                 inValidMsg: "",
                 valid: false
             },
-            Address: {
-                regExp: '',
-                inValidMsg: "",
-                valid: false
-            },
-
-            UID: {
-                regExp: '',
-                inValidMsg: "",
-                valid: false
-            },
-            DOB: {
-                regExp: '',
-                inValidMsg: "",
-                valid: false
-            }
         },
         required: {
 
@@ -111,16 +73,14 @@ const DriverMaster = (props) => {
     const {
         PostAPIResponse,
         pageField,
-        RoleAccessModifiedinSingleArray,
-        editData = []
+        RoleAccessModifiedinSingleArray
     } = useSelector((state) => ({
         PostAPIResponse: state.DriverReducer.PostDataMessage,
         RoleAccessModifiedinSingleArray: state.Login.RoleAccessUpdateData,
-        editData: state.DriverReducer.editData,
         pageField: state.CommonPageFieldReducer.pageField
     }));
 
-console.log("pageField",pageField)
+    console.log("pageField", pageField)
 
     useEffect(() => {
         // dispatch(commonPageFieldSuccess([]));
@@ -129,7 +89,6 @@ console.log("pageField",pageField)
 
     //userAccess useEffect
     useEffect(() => {
-        debugger
         let userAcc = undefined
         if ((editDataGetingFromList === undefined)) {
 
@@ -155,27 +114,19 @@ console.log("pageField",pageField)
     useEffect(() => {
 
         if (!(userPageAccessState === '')) { document.getElementById("txtName").focus(); }
-        if (!(editDataGetingFromList === undefined || (editData.length > 0))) {
-            let editvalue = {}
-            if (editData.length > 0) {
-                editvalue = editData
-            } else {
-
-            }
-            const { Name, DOB, UID, Address } = editDataGetingFromList
+        if (!(editDataGetingFromList === undefined)) {
+            const { Name } = editDataGetingFromList
             const { values, fieldLabel, hasValid, required, isError } = { ...state }
             values.Name = Name;
-            values.DOB = DOB;
-            values.UID = UID;
-            values.Address = Address;
+
 
             setState({ values, fieldLabel, hasValid, required, isError })
 
             // setEditData(editDataGetingFromList);
             setPageMode(pageModeProps);
-            setDOB_Date_Select(editDataGetingFromList.DOB)
+            // setDOB_Date_Select(editDataGetingFromList.DOB)
 
-            dispatch(editDriverTypeSuccess({ Status: false }))
+            dispatch(editGroupTypeIdSuccess({ Status: false }))
             dispatch(BreadcrumbShow(editDataGetingFromList.DriverMaster))
             return
         }
@@ -185,7 +136,7 @@ console.log("pageField",pageField)
 
     useEffect(() => {
         if ((PostAPIResponse.Status === true) && (PostAPIResponse.StatusCode === 200)) {
-            dispatch(PostMethod_ForDriverMasterSuccess({ Status: false }))
+            dispatch(PostGroupTypeSubmitSuccess({ Status: false }))
             formRef.current.reset();
             if (pageMode === "dropdownAdd") {
                 dispatch(AlertState({
@@ -204,7 +155,7 @@ console.log("pageField",pageField)
             }
         }
         else if (PostAPIResponse.Status === true) {
-            dispatch(getMethod_ForDriverListSuccess({ Status: false }))
+            dispatch(getGroupTypeslistSuccess({ Status: false }))
             dispatch(AlertState({
                 Type: 4,
                 Status: true,
@@ -238,32 +189,25 @@ console.log("pageField",pageField)
 
             const jsonBody = JSON.stringify({
                 Name: values.Name,
-                Address: values.Address,
-                DOB: values.DOB,
-                UID: values.UID
+                CreatedBy: 1,
+                CreatedOn: "0002-10-03T12:48:14.910491",
+                UpdatedBy: 1,
+                UpdatedOn: "0002-10-03T12:48:14.910491"
+
             });
 
             if (pageMode === 'edit') {
-                dispatch(updateDriverTypeID(jsonBody, EditData.id));
+                dispatch(updateGroupTypeID(jsonBody, EditData.id));
             }
 
             else {
-                dispatch(PostMethodForDriverMaster(jsonBody));
+                dispatch(PostGroupTypeSubmit(jsonBody));
+                console.log("jsonBody",jsonBody)
             }
         }
 
 
     };
-
-
-    const options = [
-        { value: 'active', label: 'Active' },
-        { value: 'inactive', label: 'In Active' },
-        { value: 'deleted', label: 'Delete' },
-    ];
-
-
-
 
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
     var IsEditMode_Css = ''
@@ -275,7 +219,7 @@ console.log("pageField",pageField)
                 <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
                     <Container fluid>
                         <MetaTags>
-                            <title>DriverMaster | FoodERP-React FrontEnd</title>
+                            <title>GroupTypeMaster | FoodERP-React FrontEnd</title>
                         </MetaTags>
                         <Breadcrumb breadcrumbItem={userPageAccessState.PageHeading} />
 
@@ -313,94 +257,7 @@ console.log("pageField",pageField)
                                                                 <span className="invalid-feedback">{isError.Name}</span>
                                                             )}
                                                         </FormGroup>
-                                                        <Row>
-                                                            <Col md="4">
-                                                                <FormGroup className="mb-3">
-                                                                    <Label>Date of Birth</Label>
-                                                                    <Flatpickr
-                                                                        name="DOB"
-                                                                        value={values.DOB}
-                                                                        className="form-control d-block p-2 bg-white text-dark"
-                                                                        placeholder="YYYY-MM-DD"
-                                                                        autoComplete="0,''"
-                                                                        options={{
-                                                                            altInput: true,
-                                                                            altFormat: "F j, Y",
-                                                                            dateFormat: "Y-m-d",
-                                                                            minDate: new Date().fp_incr("n"),
-                                                                            maxDate: new Date().fp_incr(0) // 14 days from now"0,''"
-                                                                        }}
-                                                                        onChange={(y, v, e) => { onChangeDate({ e, v, state, setState }) }}
-                                                                    />
-                                                                </FormGroup>
-                                                            </Col>
-                                                        </Row>
-                                                        {/* <Row>
-                                                            <Col md="4">
-                                                                <FormGroup className="mb-3">
-                                                                    <Label htmlFor="validationCustom01">{fieldLabel.Address} </Label>
-                                                                    <Select
-                                                                        defaultValue={options[0]}
-                                                                        isSearchable={false}
-                                                                        className="react-dropdown"
-                                                                        onChange={(v, e) => onChangeSelect({ e, v, state, setState })}
-                                                                        classNamePrefix="dropdown"
-                                                                        options={options}
-                                                                        name="Address"
-                                                                        styles={{
-                                                                            control: base => ({
-                                                                                ...base,
-                                                                                border: isError.Address.length > 0 ? '1px solid red' : '',
 
-                                                                            })
-                                                                        }}
-                                                                    />
-                                                                     {isError.Name.length > 0 && (
-                                                                <span className="tex">{isError.Name}</span>
-                                                            )}
-                                                                </FormGroup>
-                                                            </Col>
-                                                        </Row> */}
-
-
-
-
-                                                        <Row>
-                                                            <FormGroup className="mb-2 col col-sm-4 ">
-                                                                <Label htmlFor="validationCustom01">{fieldLabel.Address} </Label>
-                                                                <Input
-                                                                    name="Address"
-                                                                    value={values.Address}
-                                                                    type="text"
-                                                                    className={isError.Address.length > 0 ? "is-invalid form-control" : "form-control"}
-                                                                    placeholder="Please Enter Address"
-                                                                    autoComplete='off'
-                                                                    onChange={(event) => onChangeText({ event, state, setState })}
-                                                                />
-                                                                {isError.Address.length > 0 && (
-                                                                    <span className="invalid-feedback">{isError.Address}</span>
-                                                                )}
-                                                            </FormGroup>
-                                                        </Row>
-
-                                                        <Row>
-                                                            <FormGroup className="mb-2 col col-sm-4 ">
-                                                                <Label htmlFor="validationCustom01">{fieldLabel.UID}</Label>
-                                                                <Input
-                                                                    name="UID"
-                                                                    value={values.UID}
-                                                                    type="text"
-                                                                    placeholder="Please Enter UID"
-                                                                    autoComplete='off'
-                                                                    className={isError.UID.length > 0 ? "is-invalid form-control" : "form-control"}
-                                                                    onChange={(event) => onChangeText({ event, state, setState })}
-                                                                />
-                                                                {isError.UID.length > 0 && (
-                                                                    <span className="invalid-feedback">{isError.UID}</span>
-                                                                )}
-                                                            </FormGroup>
-
-                                                        </Row>
                                                         <FormGroup>
                                                             <Row>
                                                                 <Col sm={2}>
@@ -456,18 +313,4 @@ console.log("pageField",pageField)
     }
 };
 
-export default DriverMaster
-
-
-
-
-const Email = RegExp(
-    /^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[A-Za-z]+$/
-)
-
-const Mobile = RegExp(
-    /^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[A-Za-z]+$/
-)
-const NotNull = RegExp(
-    /^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[A-Za-z]+$/
-)
+export default GroupTypeMaster
