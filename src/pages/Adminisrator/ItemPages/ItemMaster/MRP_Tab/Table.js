@@ -297,7 +297,8 @@ function MRPTable(props) {
                       // options = {
                       //  { noDataText: (<i className="fa fa-circle-o-notch fa-spin" style={{'fontSize': '24px'}}></i>)
                       // }}
-                      noDataIndication={ <div className="text-danger ">"Please Add One Row In Table"</div>}
+                      noDataIndication={ <div className="text-danger 
+                      ">"Please Add One Row In Table"</div>}
                       {...toolkitProps.baseProps}
                       {...paginationTableProps}
                     />
