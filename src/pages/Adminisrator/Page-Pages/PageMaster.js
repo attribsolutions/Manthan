@@ -554,6 +554,7 @@ const PageMaster = (props) => {
       ControlType: index.ControlType.value,
       FieldValidation: index.FieldValidation.value,
       DownloadDefaultSelect: index.DownloadDefaultSelect,
+      InValidMsg:"This Field is required..."
     }))
 
     if (

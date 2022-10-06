@@ -14,7 +14,7 @@ import {
 import { AvField, AvForm, } from "availity-reactstrap-validation";
 import Select from "react-select";
 import { MetaTags } from "react-meta-tags";
-import { BreadcrumbShow, getCategoryTypelist } from "../../../store/actions";
+import { BreadcrumbShow, commonPageField, getCategoryTypelist } from "../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
 import {
     editCategoryIDSuccess, getMethodForCategory,
@@ -29,14 +29,18 @@ import {
     comAddPageFieldFunc,
     formValChange,
     formValid,
+    onChangeSelect,
+    onChangeText,
+
 } from "../../../components/Common/CmponentRelatedCommonFile/validationFunction";
 
-import { fieldData } from '../CategoryPages/FieldData';
+
+import { SaveButton } from "../../../components/CommonSaveButton";
 
 
 const CategoryMaster = (props) => {
 
-    let editDataGatingFromList = props.state;
+    let editDataGetingFromList = props.state;
     let pageModeProps = props.pageMode;
 
     const formRef = useRef(null);
@@ -50,11 +54,11 @@ const CategoryMaster = (props) => {
 
 
     //Access redux store Data /  'save_ModuleSuccess' action data
-    const { PostAPIResponse, CategoryAPI, pageFiled, RoleAccessModifiedinSingleArray } = useSelector((state) => ({
+    const { PostAPIResponse, CategoryAPI, pageField, RoleAccessModifiedinSingleArray } = useSelector((state) => ({
         PostAPIResponse: state.CategoryReducer.PostDataMessage,
         CategoryAPI: state.categoryTypeReducer.categoryTypeListData,
         RoleAccessModifiedinSingleArray: state.Login.RoleAccessUpdateData,
-        pageFiled: state.CommonPageFieldReducer.pageField
+        pageField: state.CommonPageFieldReducer.pageField
     }));
 
     {/** Dyanamic Page access state and OnChange function */ }
@@ -62,16 +66,16 @@ const CategoryMaster = (props) => {
     const [state, setState] = useState({
         values: {
             Name: "",
-            ProductCategoryTypeName: ""
+            CategoryTypeName: ""
         },
         fieldLabel: {
             Name: '',
-
+            CategoryTypeName: '',
         },
 
         isError: {
             Name: "",
-
+            CategoryTypeName: ""
         },
 
         hasValid: {
@@ -80,7 +84,7 @@ const CategoryMaster = (props) => {
                 inValidMsg: "",
                 valid: false
             },
-            ProductCategoryTypeName: {
+            CategoryTypeName: {
                 regExp: '',
                 inValidMsg: "",
                 valid: false
@@ -95,35 +99,25 @@ const CategoryMaster = (props) => {
     const { fieldLabel } = state;
 
 
-
-    const onChangeText = (event) => {
-        formValChange({ event, state, setState })
-    }
-
-    const onChangeDropDown = (e, v) => {
-        const event = { name: v.name, value: e }
-        formValChange({ event, state, setState })
-    }
-
-    useEffect(() => {
-        comAddPageFieldFunc({ state, setState, fieldData })
-    }, [fieldData])
     {/*End */ }
 
-
+    useEffect(() => {
+        // dispatch(commonPageFieldSuccess([]));
+        dispatch(commonPageField(18))
+    }, []);
 
     //userAccess useEffect
     useEffect(() => {
 
         let userAcc = undefined
-        if ((editDataGatingFromList === undefined)) {
+        if ((editDataGetingFromList === undefined)) {
 
             let locationPath = history.location.pathname
             userAcc = RoleAccessModifiedinSingleArray.find((inx) => {
                 return (`/${inx.ActualPagePath}` === locationPath)
             })
         }
-        else if (!(editDataGatingFromList === undefined)) {
+        else if (!(editDataGetingFromList === undefined)) {
             let relatatedPage = props.relatatedPage
             userAcc = RoleAccessModifiedinSingleArray.find((inx) => {
                 return (`/${inx.ActualPagePath}` === relatatedPage)
@@ -140,19 +134,19 @@ const CategoryMaster = (props) => {
     useEffect(() => {
 
         if (!(userPageAccessState === '')) { document.getElementById("txtName").focus(); }
-        if (!(editDataGatingFromList === undefined)) {
-            setEditData(editDataGatingFromList);
+        if (!(editDataGetingFromList === undefined)) {
+            setEditData(editDataGetingFromList);
             setPageMode(pageModeProps);
             setCategoryTypes_dropdown_Select({
 
-                value: editDataGatingFromList.ProductCategoryType_id,
-                label: editDataGatingFromList.ProductCategoryTypeName
+                value: editDataGetingFromList.CategoryType_id,
+                label: editDataGetingFromList.CategoryTypeName
             })
             dispatch(editCategoryIDSuccess({ Status: false }))
-            dispatch(BreadcrumbShow(editDataGatingFromList.Name))
+            dispatch(BreadcrumbShow(editDataGetingFromList.Name))
             return
         }
-    }, [editDataGatingFromList])
+    }, [editDataGetingFromList])
 
 
     useEffect(() => {
@@ -189,6 +183,12 @@ const CategoryMaster = (props) => {
         }
     }, [PostAPIResponse])
 
+    useEffect(() => {
+        if (pageField.length > 0) {
+            comAddPageFieldFunc({ state, setState, pageField })
+        }
+    }, [pageField])
+
     //get method for dropdown
     useEffect(() => {
         dispatch(getCategoryTypelist());
@@ -209,7 +209,7 @@ const CategoryMaster = (props) => {
         if (formValid(state, setState)) {
             const jsonBody = JSON.stringify({
                 Name: values.Name,
-                ProductCategoryType: values.ProductCategoryTypeName.value,
+                CategoryType: values.CategoryTypeName.value,
             });
 
             if (pageMode === "edit") {
@@ -217,7 +217,7 @@ const CategoryMaster = (props) => {
             }
             else {
                 dispatch(PostMethodForCategory(jsonBody));
-                console.log("jsonBody", jsonBody)
+
             }
         }
     };
@@ -260,10 +260,11 @@ const CategoryMaster = (props) => {
                                                                 className={isError.Name.length > 0 ? "is-invalid form-control" : "form-control"}
                                                                 placeholder="Please Enter Name"
                                                                 autoComplete='off'
-                                                                onChange={(e) => {
-                                                                    onChangeText(e)
-                                                                    dispatch(BreadcrumbShow(e.target.value))
+                                                                onChange={(event) => {
+                                                                    onChangeText({ event, state, setState })
+                                                                    dispatch(BreadcrumbShow(event.target.value))
                                                                 }}
+
                                                             />
                                                             {isError.Name.length > 0 && (
                                                                 <span className="invalid-feedback">{isError.Name}</span>
@@ -273,20 +274,27 @@ const CategoryMaster = (props) => {
                                                         <Row>
                                                             <Col md="4">
                                                                 <FormGroup className="mb-3">
-                                                                    <Label htmlFor="validationCustom01"> {fieldLabel.ProductCategoryTypeName} </Label>
+                                                                    <Label htmlFor="validationCustom01"> {fieldLabel.CategoryTypeName} </Label>
                                                                     <Col sm={12}>
-                                                                        <Select
-                                                                            name="ProductCategoryTypeName"
-                                                                            Value={values.categorytype}
+                                                                        <Select   
+                                                                            name="CategoryTypeName"
+                                                                            Value={values.CategoryType}
                                                                             isSearchable={false}
                                                                             className="react-dropdown"
                                                                             classNamePrefix="dropdown"
-                                                                            onChange={onChangeDropDown}
+                                                                            onChange={(v, e) => onChangeSelect({ e, v, state, setState })}
                                                                             options={CategoryTypesValues}
+                                                                            styles={{
+                                                                                control: base => ({
+                                                                                    ...base,
+                                                                                    border: isError.CategoryTypeName.length > 0 ? '1px solid red' : '',
 
+                                                                                })
+                                                                            }}
                                                                         />
-
-
+                                                                        {isError.CategoryTypeName.length > 0 && (
+                                                                            <span className="text-danger f-8"><small>{isError.CategoryTypeName}</small></span>
+                                                                        )}
                                                                     </Col>
                                                                 </FormGroup>
                                                             </Col>
@@ -295,34 +303,7 @@ const CategoryMaster = (props) => {
                                                         <FormGroup>
                                                             <Row>
                                                                 <Col sm={2}>
-                                                                    <div>
-                                                                        {
-                                                                            pageMode === "edit" ?
-                                                                                userPageAccessState.RoleAccess_IsEdit ?
-                                                                                    <button
-                                                                                        type="submit"
-                                                                                        data-mdb-toggle="tooltip" data-mdb-placement="top" title="Update Category"
-                                                                                        className="btn btn-success w-md"
-                                                                                    >
-                                                                                        <i class="fas fa-edit me-2"></i>Update
-                                                                                    </button>
-                                                                                    :
-                                                                                    <></>
-                                                                                : (
-                                                                                    userPageAccessState.RoleAccess_IsSave ?
-                                                                                        <button
-                                                                                            type="submit"
-                                                                                            data-mdb-toggle="tooltip" data-mdb-placement="top" title="Save Category"
-                                                                                            className="btn btn-primary w-sm">
-                                                                                            <i className="fas fa-save me-2"></i>
-                                                                                            Save
-
-                                                                                        </button>
-                                                                                        :
-                                                                                        <></>
-                                                                                )
-                                                                        }
-                                                                    </div>
+                                                                    {SaveButton({ pageMode, userPageAccessState, module: "CategoryMaster" })}
                                                                 </Col>
                                                             </Row>
                                                         </FormGroup >
