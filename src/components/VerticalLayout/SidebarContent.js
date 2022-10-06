@@ -96,7 +96,7 @@ const SidebarContent = (props) => {
   useEffect(() => {
     // debugger
     let pathName = props.location.pathname
-
+debugger
     let userAcc = RoleAccessModifiedinSingleArray.find((inx) => {
       return (`/${inx.ActualPagePath}` === pathName)
     })
@@ -151,12 +151,12 @@ const SidebarContent = (props) => {
         <div id="sidebar-menu">
           <ul className="metismenu list-unstyled" id="side-menu">
 
-            <li>
+            {/* <li>
               <Link to="/dashboard" className="">
                 <FeatherIcon icon="home" />
                 <span>{props.t("Dashboard")}</span>
               </Link>
-            </li>
+            </li> */}
             {/* <li>
               <Link to= {`/${btoa("RoleAccess")}`} State={ "occupation" }>
                 Next Step
