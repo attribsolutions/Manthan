@@ -56,23 +56,24 @@ function MRPTable(props) {
     row["ispty"] = true
   }
 
-  const divisionOnchange = (e, row) => {
+  const divisionOnchange = (e, row,editorProps, value, column, rowIndex, columnIndex) => {
+    debugger
     row["DivisionName"] = e.label
     row["Division"] = e.value;
     row["ispty"] = true
+    row.onUpdate=true
 
   }
 
   const effectiveDateOnchange = (e, row) => {
-    row["PartyName"] = e.label
-    row["Party"] = e.value;
+    
+    row["EffectiveDate"] = e
     row["ispty"] = true
   }
 
   const MRP_onChange = (e, row, v) => {
     debugger
-    row["PartyName"] = e.label
-    row["Party"] = e.value;
+    row["MRP"] = e.target.value
     row["ispty"] = true
 
   }
@@ -92,7 +93,7 @@ function MRPTable(props) {
       editorRenderer: (editorProps, value, row, column, rowIndex, columnIndex) => (
         <>
           <Select
-            value={{
+            defaultValue={{
               label: row.DivisionName,
               value: row.Division
             }}
@@ -109,7 +110,7 @@ function MRPTable(props) {
 
               })
             }}
-            onChange={(e) => divisionOnchange(e, row)}
+            onChange={(e) => divisionOnchange(e, row,editorProps, value, column, rowIndex, columnIndex)}
           />
         </>
 
@@ -131,7 +132,7 @@ function MRPTable(props) {
       editorRenderer: (editorProps, value, row, column, rowIndex, columnIndex) => (
         <>
           <Select
-            value={{
+            defaultValue={{
               label: row.PartyName,
               value: row.Party
             }}
@@ -172,7 +173,7 @@ function MRPTable(props) {
 
           <Flatpickr
             name="DOB"
-            value={value}
+            defaultValue={value}
             className="form-control d-block p-2 bg-white text-dark"
             placeholder="YYYY-MM-DD"
             autoComplete="0,''"
@@ -293,6 +294,10 @@ function MRPTable(props) {
                       cellEdit={cellEditFactory({ mode: 'dbclick', blurToSave: true })}
 
                       classes={"table  table-bordered"}
+                      // options = {
+                      //  { noDataText: (<i className="fa fa-circle-o-notch fa-spin" style={{'fontSize': '24px'}}></i>)
+                      // }}
+                      noDataIndication={ <div className="text-danger ">"Please Add One Row In Table"</div>}
                       {...toolkitProps.baseProps}
                       {...paginationTableProps}
                     />
