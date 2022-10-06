@@ -73,6 +73,7 @@ import MRPList from "../pages/Adminisrator/MRPMaster/MRPList";
 import MarginList from "../pages/Adminisrator/MarginMaster/MarginList";
 import TermsAndCondtionsMaster from "../pages/Adminisrator/TermsAndCondtions/TermsAndCondtionsMaster";
 import GroupList from "../pages/Adminisrator/GroupPage/GroupList";
+import GroupTypeList from "../pages/Adminisrator/GroupTypePage/GroupTypeList";
 
 
 // import Index from "../pages/Adminisrator/customValidation/index";
@@ -200,7 +201,7 @@ const userRoutes = [
   { path: "/MarginMaster", component: MarginMaster },
   { path: "/MarginList", component: MarginList },
   { path: "/GroupList", component: GroupList },
-
+  { path: "/GroupTypeList", component: GroupTypeList },
 
 
   // { path: "/AddItemMaster", component: AddItemMaster },
