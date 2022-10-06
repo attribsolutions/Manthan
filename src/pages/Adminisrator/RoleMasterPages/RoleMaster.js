@@ -304,7 +304,7 @@ const RoleMaster = (props) => {
                       <Card>
                         <CardBody style={{ backgroundColor: "whitesmoke" }}>
                           <Row>
-                            <FormGroup className="mb-2 col col-sm-4 ">
+                            <FormGroup className="mb-2 col col-md-4 ">
                               <Label htmlFor="validationCustom01">{fieldLabel.Name} </Label>
                               <Input
                                 type="text"

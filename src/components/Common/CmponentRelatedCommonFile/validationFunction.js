@@ -14,7 +14,7 @@ export const formValid = ({ isError, required, hasValid, fieldLabel, values }, s
 };
 
 export const formValChange = ({ event, state, setState }) => {
-    
+
     let isError = { ...state.isError };
     let hasValid = { ...state.hasValid };
     let required = { ...state.required };
@@ -67,13 +67,20 @@ export const formValChange = ({ event, state, setState }) => {
         const { name, value, } = event.change
         const { type } = event
 
+        debugger
         switch (type) {
-
             case "select":
-                if (!(value.value === undefined)) {
-                    if (!(required[name] === undefined && value.value > 0)) {
-                        isError[name] = "";
-                        hasValid[name].valid = true
+                const result = Array.isArray(value);
+                if (!result) {
+                    if (!(value.value === undefined)) {
+                        if (!(required[name] === undefined && value.value > 0)) {
+                            isError[name] = "";
+                            hasValid[name].valid = true
+                        }
+                        else {
+                            isError[name] = hasValid[name].inValidMsg;
+                            hasValid[name].valid = false
+                        }
                     }
                     else {
                         isError[name] = hasValid[name].inValidMsg;
@@ -81,8 +88,14 @@ export const formValChange = ({ event, state, setState }) => {
                     }
                 }
                 else {
-                    isError[name] = hasValid[name].inValidMsg;
-                    hasValid[name].valid = false
+                    if (!(required[name] === undefined) && (value.length > 0)) {
+                        isError[name] = "";
+                        hasValid[name].valid = true
+                    }
+                    else {
+                        isError[name] = hasValid[name].inValidMsg;
+                        hasValid[name].valid = false
+                    }
                 }
                 values[name] = value
                 break;

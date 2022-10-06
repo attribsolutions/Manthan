@@ -17,11 +17,11 @@ debugger
   const dispatch = useDispatch();
   const reducers = useSelector(
     (state) => ({
-      tableList: state.RoleMaster_Reducer.pages,
+      tableList: state.RoleMaster_Reducer.roleList,
       editData: state.RoleMaster_Reducer.editData,
-      updateMsg: state.RoleMaster_Reducer.updateMessage,
-      deleteMsg: state.RoleMaster_Reducer.deleteMessage,
-      postMsg: state.RoleMaster_Reducer.AddUserMessage,
+      updateMsg: state.RoleMaster_Reducer.updateMsg,
+      deleteMsg: state.RoleMaster_Reducer.deleteMsg,
+      postMsg: state.RoleMaster_Reducer.postMsg,
       userAccess: state.Login.RoleAccessUpdateData,
       pageField: state.CommonPageFieldReducer.pageField
     })

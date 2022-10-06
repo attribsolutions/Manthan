@@ -1,65 +1,64 @@
+import { UPDATE_H_PAGES_SUCCESS } from "../HPagesRedux/actionType";
+import { DELETE_MODULE_ID_SUCCESS, EDIT_MODULE_ID_SUCCESS } from "../ModulesRedux/actionType";
 import {
-    GET_Role_API,
-    GET_Role_API_SUCCESS,
-    POST_ROLE,
-    POST_SUCCESS,
-    DELETE_ROLE,
-    DELETE_SUCCESS,
-    EDIT_ROLE,
-    EDIT_SUCCESS,
-    UPDATE_SUCCESS,
-    UPDATE_ROLE,
+    POST_ROLE_MASTER,
+    POST_ROLE_MASTER_SUCCESS,
+    DELETE_ROLE_LIST_ID,
+    EDIT_ROLE_LIST_ID,
+    UPDATE_ROLE_LIST_ID,
+    GET_ROLE_LIST_API,
+    GET_ROLE_LIST_API_SUCCESS,
 } from "./actionTypes"
 
 // get api
 export const getRole = () => ({
-    type: GET_Role_API,
+    type: GET_ROLE_LIST_API,
 });
 
-export const getRoleSuccess = (pages) => ({
-    type: GET_Role_API_SUCCESS,
-    payload:pages,
+export const getRoleSuccess = (data) => ({
+    type: GET_ROLE_LIST_API_SUCCESS,
+    payload:data,
 });
 
 // post api
 export const postRole = (Data,id) => ({
-    type: POST_ROLE,
+    type: POST_ROLE_MASTER,
     Data,id
   });
   
   export const PostSuccess = (AddUserMessage) => ({
-    type: POST_SUCCESS,
+    type: POST_ROLE_MASTER_SUCCESS,
     payload: AddUserMessage,
   });
 
   // delete api
   export const deleteRole = (id) => ({
-    type: DELETE_ROLE,
+    type: DELETE_ROLE_LIST_ID,
     id ,
     
   } );
   export const deleteSuccess = (deleteMessage) => ({
-    type: DELETE_SUCCESS,
+    type: DELETE_MODULE_ID_SUCCESS,
     payload:deleteMessage
   });
   
   // edit api
   export const editRoleId =(id,pageMode)=>({
-    type:EDIT_ROLE,
+    type:EDIT_ROLE_LIST_ID,
     id,pageMode
   })
   export const editSuccess =(editData)=>({
-    type:EDIT_SUCCESS,
+    type:EDIT_MODULE_ID_SUCCESS,
    payload:editData,
   })
 
   // update api
   export const updateID=(updateData,ID)=>({
-    type:UPDATE_ROLE,
+    type:UPDATE_ROLE_LIST_ID,
     updateData,ID,
   })
   export const updateSuccess =(updateMessage)=>({
-    type:UPDATE_SUCCESS,
+    type:UPDATE_H_PAGES_SUCCESS,
    payload:updateMessage,
   })
 
