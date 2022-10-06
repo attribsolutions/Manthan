@@ -314,6 +314,10 @@ export const GoButton_Post_API_For_MarginMaster = (data) => post(url.GO_BUTTON_P
 
 // GroupTypes API
 export const GroupTypes_API = () => get(url.GROUP_TYPE_API)
+export const GroupTypes_Post_API = (data) => post(url.GROUP_TYPE_API, data)// post api
+export const GroupTypes_Delete_API = (id) => del(`${url.GROUP_TYPE_API}/${id}`)// delete api
+export const GroupTypes_Edit_API = (id) => get(`${url.GROUP_TYPE_API}/${id}`)// edit api
+export const GroupTypes_Update_API = (data, id) => put(`${url.GROUP_TYPE_API}/${id}`, data)// update api
 
 // TermsAndCondtions API
 export const Post_TermsAndCondtions_Master_API = (data) => post(url.TERMSANDCONDITIONS_API, data)// post api
