@@ -10,8 +10,6 @@ import ToolkitProvider, { Search } from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 import { useSelector, useDispatch } from "react-redux";
 import { MetaTags } from "react-meta-tags";
-import { useHistory } from "react-router-dom";
-
 import { useHistory ,Redirect} from "react-router-dom";
 import {
   deleteDriverTypeIDSuccess,
