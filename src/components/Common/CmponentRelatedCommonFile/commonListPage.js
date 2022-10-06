@@ -9,18 +9,8 @@ import paginationFactory, {
 import ToolkitProvider, { Search } from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 import { useSelector, useDispatch } from "react-redux";
-// import "../../../assets/scss/CustomeTable/datatables.scss";
-import DriverMaster from "../../../pages/Adminisrator/DriverPage/DriverMaster";
 import { MetaTags } from "react-meta-tags";
 import { useHistory } from "react-router-dom";
-import {
-  deleteDriverTypeIDSuccess,
-  updateDriverTypeIDSuccess,
-  getMethodForDriverList,
-  editDriverTypeId,
-  delete_DriverType_ID,
-  PostMethod_ForDriverMasterSuccess,
-} from "../../../store/Administrator/DriverRedux/action";
 import { AlertState } from "../../../store/actions";
 import { listPageCommonButtonFunction }
   from "../../../components/Common/CmponentRelatedCommonFile/listPageCommonButtons";
@@ -52,7 +42,6 @@ const CommonListPage = (props) => {
     updateSucc,
     deleteSucc
 
-
   } = props.action
 
   const {
@@ -69,9 +58,6 @@ const CommonListPage = (props) => {
       setUserPageAccessState(userAcc)
     }
   }, [userAccess])
-
-  //  This UseEffect => Featch Modules List data  First Rendering
- 
 
   // This UseEffect => UpadateModal Success/Unsucces  Show and Hide Control Alert_modal
   useEffect(() => {
@@ -199,40 +185,7 @@ const CommonListPage = (props) => {
     totalSize: tableList.length,
     custom: true,
   };
-  const columns1 = [
-    {
-      text: "Name",
-      dataField: "Name",
-      sort: true,
-    },
-
-    {
-      text: "Date Of Birth",
-      dataField: "DOB",
-      sort: true,
-    },
-    {
-      text: "Address",
-      dataField: "Address",
-      sort: true,
-    },
-    {
-      text: "UID",
-      dataField: "UID",
-      sort: true,
-    },
-
-    // For Edit, Delete ,and View Button Common Code function
-    listPageCommonButtonFunction({
-      dispatchHook: dispatch,
-      ButtonMsgLable: "DriverType",
-      deleteName: "Name",
-      userPageAccessState: userPageAccessState,
-      editActionFun: editId,
-      deleteActionFun: deleteId
-    })
-  ];
-
+  
   if (!(userPageAccessState === '')) {
     return (
       <React.Fragment>
