@@ -11,6 +11,17 @@ import BootstrapTable from "react-bootstrap-table-next";
 import { useSelector, useDispatch } from "react-redux";
 import { MetaTags } from "react-meta-tags";
 import { useHistory } from "react-router-dom";
+
+import { useHistory ,Redirect} from "react-router-dom";
+import {
+  deleteDriverTypeIDSuccess,
+  updateDriverTypeIDSuccess,
+  getMethodForDriverList,
+  editDriverTypeId,
+  delete_DriverType_ID,
+  PostMethod_ForDriverMasterSuccess,
+} from "../../../store/Administrator/DriverRedux/action";
+
 import { AlertState } from "../../../store/actions";
 import { listPageCommonButtonFunction }
   from "../../../components/Common/CmponentRelatedCommonFile/listPageCommonButtons";
@@ -22,6 +33,7 @@ const CommonListPage = (props) => {
 
   const [userPageAccessState, setUserPageAccessState] = useState('');
   const [modal_center, setmodal_center] = useState(false);
+  const [isRedirect, setIsRedirect] = useState(false);
 
   const {
     tableList,
@@ -58,6 +70,7 @@ const CommonListPage = (props) => {
       setUserPageAccessState(userAcc)
     }
   }, [userAccess])
+
 
   // This UseEffect => UpadateModal Success/Unsucces  Show and Hide Control Alert_modal
   useEffect(() => {
@@ -139,7 +152,13 @@ const CommonListPage = (props) => {
   // Edit Modal Show When Edit Data is true
   useEffect(() => {
     if (editData.Status === true) {
-      tog_center();
+      // tog_center();
+      // setIsRedirect(true)
+      debugger
+      history.push({
+        pathname: masterPath,
+        state:editData.Data, relatatedPage:masterPath, pageMode:editData.pageMode
+      })
     }
   }, [editData]);
 
@@ -251,6 +270,10 @@ const CommonListPage = (props) => {
             <MasterModal state={editData.Data} relatatedPage={masterPath} pageMode={editData.pageMode} />
           </Modal>
         </div>
+        {/* {(isRedirect) ? <Redirect to={{
+          pathname: masterPath,
+          state: editData.Data, relatatedPage: masterPath, pageMode: editData.pageMode
+        }} /> : null} */}
       </React.Fragment>
     );
   }

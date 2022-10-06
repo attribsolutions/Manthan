@@ -40,8 +40,8 @@ const DriverList = (props) => {
     deleteSucc: deleteDriverTypeIDSuccess
 
   }
+
   useEffect(() => {
-    
     dispatch(commonPageFieldSuccess([]))
     dispatch(commonPageField(106))
     dispatch(getMethodForDriverList())

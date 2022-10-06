@@ -111,10 +111,12 @@ console.log("editDataGetingFromList",editDataGetingFromList)
     const {
         PostAPIResponse,
         pageField,
-        RoleAccessModifiedinSingleArray
+        RoleAccessModifiedinSingleArray,
+        editData = []
     } = useSelector((state) => ({
         PostAPIResponse: state.DriverReducer.PostDataMessage,
         RoleAccessModifiedinSingleArray: state.Login.RoleAccessUpdateData,
+        editData: state.DriverReducer.editData,
         pageField: state.CommonPageFieldReducer.pageField
     }));
 
@@ -127,6 +129,7 @@ console.log("pageField",pageField)
 
     //userAccess useEffect
     useEffect(() => {
+        debugger
         let userAcc = undefined
         if ((editDataGetingFromList === undefined)) {
 
@@ -152,7 +155,13 @@ console.log("pageField",pageField)
     useEffect(() => {
 
         if (!(userPageAccessState === '')) { document.getElementById("txtName").focus(); }
-        if (!(editDataGetingFromList === undefined)) {
+        if (!(editDataGetingFromList === undefined || (editData.length > 0))) {
+            let editvalue = {}
+            if (editData.length > 0) {
+                editvalue = editData
+            } else {
+
+            }
             const { Name, DOB, UID, Address } = editDataGetingFromList
             const { values, fieldLabel, hasValid, required, isError } = { ...state }
             values.Name = Name;
@@ -313,11 +322,13 @@ console.log("pageField",pageField)
                                                                         value={values.DOB}
                                                                         className="form-control d-block p-2 bg-white text-dark"
                                                                         placeholder="YYYY-MM-DD"
-                                                                        autoComplete='off'
+                                                                        autoComplete="0,''"
                                                                         options={{
                                                                             altInput: true,
                                                                             altFormat: "F j, Y",
-                                                                            dateFormat: "Y-m-d"
+                                                                            dateFormat: "Y-m-d",
+                                                                            minDate: new Date().fp_incr("n"),
+                                                                            maxDate: new Date().fp_incr(0) // 14 days from now"0,''"
                                                                         }}
                                                                         onChange={(y, v, e) => { onChangeDate({ e, v, state, setState }) }}
                                                                     />
