@@ -96,12 +96,12 @@ const SidebarContent = (props) => {
   useEffect(() => {
     // debugger
     let pathName = props.location.pathname
-debugger
+// debugger
     let userAcc = RoleAccessModifiedinSingleArray.find((inx) => {
       return (`/${inx.ActualPagePath}` === pathName)
     })
     if (userAcc === undefined) {
-      return
+      pathName="Dashbord"
     }
     else if (!userAcc.RoleAccess_IsShowOnMenu) {
       let listPagePath = RoleAccessModifiedinSingleArray.find((inx) => {
@@ -152,7 +152,7 @@ debugger
           <ul className="metismenu list-unstyled" id="side-menu">
 
             {/* <li>
-              <Link to="/dashboard" className="">
+              <Link to="/Dashboard" className="">
                 <FeatherIcon icon="home" />
                 <span>{props.t("Dashboard")}</span>
               </Link>

@@ -57,6 +57,8 @@ const CommonListPage = (props) => {
   const {
     MasterModal,
     masterPath,
+    ButtonMsgLable,
+    deleteName
   } = props;
 
   useEffect(() => {
@@ -181,8 +183,8 @@ const CommonListPage = (props) => {
     if (pageField.length - 1 === k) {
       columns.push(listPageCommonButtonFunction({
         dispatchHook: dispatch,
-        ButtonMsgLable: "DriverType",
-        deleteName: "Name",
+        ButtonMsgLable: ButtonMsgLable,
+        deleteName: deleteName,
         userPageAccessState: userPageAccessState,
         editActionFun: editId,
         deleteActionFun: deleteId
