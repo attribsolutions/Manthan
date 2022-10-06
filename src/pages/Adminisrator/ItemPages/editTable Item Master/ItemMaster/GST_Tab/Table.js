@@ -2,8 +2,10 @@ import React, { useState } from 'react';
 import { Button, Table, } from 'reactstrap';
 import { Tbody, Thead } from 'react-super-responsive-table';
 
-function MarginTable(props) {
+function GSTTable(props) {
+
     const ondeleteHandeler = (ele) => {
+
         if (!(ele === 0)) {
             var fil = props.tableData.filter((i) => {
                 return !(i.id === ele);
@@ -13,14 +15,13 @@ function MarginTable(props) {
     };
 
     const tableRows = props.tableData.map((info) => {
-        
+      
         return (
             <tr>
                 {/* <td>{info.id}</td> */}
-                <td>{info.PriceListName}</td>
-                <td>{info.PartyName}</td>
                 <td>{info.EffectiveDate}</td>
-                <td>{info.Margin}</td>
+                <td>{info.GSTPercentage}</td>
+                <td>{info.HSNCode}</td>
                 <td>
                     <Button
                         className="badge badge-soft-danger font-size-12 btn btn-danger waves-effect waves-light w-xxs border border-light"
@@ -35,7 +36,6 @@ function MarginTable(props) {
             </tr>
         );
     });
-
     return (
         <>
             <div>
@@ -43,10 +43,9 @@ function MarginTable(props) {
                     <Table className="table table-bordered table-hover">
                         <Thead>
                             <tr>
-                                <th className="col col-sm-3">Price List</th>
-                                <th className="col col-sm-3">Party Name</th>
-                                <th className="col col-sm-3">EffectiveDate</th>
-                                <th className="col col-sm-3">Margin</th>
+                                <th className="col col-sm-3">Effective Date</th>
+                                <th className="col col-sm-3">GST</th>
+                                <th className="col col-sm-3">HSN Code</th>
                                 <th className="col col-sm-3">{"Action"}</th>
                             </tr>
                         </Thead>
@@ -58,4 +57,4 @@ function MarginTable(props) {
     );
 }
 
-export default MarginTable;
+export default GSTTable;
