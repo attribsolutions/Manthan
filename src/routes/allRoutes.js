@@ -74,6 +74,7 @@ import MarginList from "../pages/Adminisrator/MarginMaster/MarginList";
 import TermsAndCondtionsMaster from "../pages/Adminisrator/TermsAndCondtions/TermsAndCondtionsMaster";
 
 import GroupList from "../pages/Adminisrator/GroupPage/GroupList";
+import GroupTypeList from "../pages/Adminisrator/GroupTypePage/GroupTypeList";
 
 import EditTabaleTable from "../pages/Adminisrator/DriverPage/editabale table";
 
@@ -201,7 +202,7 @@ const userRoutes = [
   { path: "/MarginMaster", component: MarginMaster },
   { path: "/MarginList", component: MarginList },
   { path: "/GroupList", component: GroupList },
-
+  { path: "/GroupTypeList", component: GroupTypeList },
 
 
   // { path: "/AddItemMaster", component: AddItemMaster },

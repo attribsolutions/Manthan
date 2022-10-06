@@ -52,7 +52,6 @@ const PageMaster = (props) => {
   const [relatedPage_DropdownSelect, setrelatedPage_DropdownSelect] = useState("");
   const [pageAccessDropDownView, setPageAccessDropDownView] = useState(false);
   const [modal_center, setmodal_center] = useState(false);
-  const [PageFieldShowUI, setPageFieldShowUI] = useState(false);
   const [pageAccess_DropDownSelect, setPageAccess_DropDownSelect] =
     useState("");
 
@@ -62,6 +61,7 @@ const PageMaster = (props) => {
     FieldLabel: '',
     ControlType: { label: "select", value: 0 },
     FieldValidation: { label: "select", value: 0 },
+    InValidMsg:'',
     ListPageSeq: '',
     IsCompulsory: false,
     DefaultSort: false,
@@ -153,6 +153,7 @@ const PageMaster = (props) => {
           },
           ControlID: index.ControlID,
           FieldLabel: index.FieldLabel,
+          InValidMsg:index.InValidMsg,
           IsCompulsory: index.IsCompulsory,
           DefaultSort: index.DefaultSort,
           ListPageSeq: index.ListPageSeq,
@@ -301,6 +302,7 @@ const PageMaster = (props) => {
       FieldLabel: '',
       ControlType: { label: "select", value: 0 },
       FieldValidation: { label: "select", value: 0 },
+      InValidMsg:'',
       IsCompulsory: '',
       DefaultSort: '',
       FieldSequence: '',
@@ -336,6 +338,7 @@ const PageMaster = (props) => {
         FieldLabel: found.FieldLabel,
         ControlType: found.ControlType,
         FieldValidation: found.FieldValidation,
+        InValidMsg:found.InValidMsg,
         IsCompulsory: found.IsCompulsory,
         DefaultSort: found.DefaultSort,
         ShowInListPage: found.ShowInListPage,
@@ -353,6 +356,7 @@ const PageMaster = (props) => {
         FieldLabel: event,
         ControlType: found.ControlType,
         FieldValidation: found.FieldValidation,
+        InValidMsg:found.InValidMsg,
         IsCompulsory: found.IsCompulsory,
         DefaultSort: found.DefaultSort,
         ShowInListPage: found.ShowInListPage,
@@ -369,6 +373,7 @@ const PageMaster = (props) => {
         FieldLabel: found.FieldLabel,
         ControlType: event,
         FieldValidation: found.FieldValidation,
+        InValidMsg:found.InValidMsg,
         IsCompulsory: found.IsCompulsory,
         DefaultSort: found.DefaultSort,
         ShowInListPage: found.ShowInListPage,
@@ -386,6 +391,24 @@ const PageMaster = (props) => {
         FieldLabel: found.FieldLabel,
         ControlType: found.ControlType,
         FieldValidation: event,
+        InValidMsg:found.InValidMsg,
+        IsCompulsory: found.IsCompulsory,
+        DefaultSort: found.DefaultSort,
+        ShowInListPage: found.ShowInListPage,
+        ListPageSeq: found.ListPageSeq,
+        ShowInDownload: found.ShowInDownload,
+        DownloadDefaultSelect: found.DownloadDefaultSelect,
+
+      }
+    }
+    else if (type === 'InValidMsg') {
+
+      newSelectValue = {
+        ControlID: found.ControlID,
+        FieldLabel: found.FieldLabel,
+        ControlType: found.ControlType,
+        FieldValidation: found.FieldValidation,
+        InValidMsg:event,
         IsCompulsory: found.IsCompulsory,
         DefaultSort: found.DefaultSort,
         ShowInListPage: found.ShowInListPage,
@@ -402,6 +425,7 @@ const PageMaster = (props) => {
         FieldLabel: found.FieldLabel,
         ControlType: found.ControlType,
         FieldValidation: found.FieldValidation,
+        InValidMsg:found.InValidMsg,
         IsCompulsory: event,
         DefaultSort: found.DefaultSort,
         ShowInListPage: found.ShowInListPage,
@@ -419,6 +443,7 @@ const PageMaster = (props) => {
         FieldLabel: found.FieldLabel,
         ControlType: found.ControlType,
         FieldValidation: found.FieldValidation,
+        InValidMsg:found.InValidMsg,
         IsCompulsory: found.IsCompulsory,
         DefaultSort: event,
         ShowInListPage: found.ShowInListPage,
@@ -436,6 +461,7 @@ const PageMaster = (props) => {
         FieldLabel: found.FieldLabel,
         ControlType: found.ControlType,
         FieldValidation: found.FieldValidation,
+        InValidMsg:found.InValidMsg,
         IsCompulsory: found.IsCompulsory,
         DefaultSort: found.DefaultSort,
         ShowInListPage: event,
@@ -452,6 +478,7 @@ const PageMaster = (props) => {
         FieldLabel: found.FieldLabel,
         ControlType: found.ControlType,
         FieldValidation: found.FieldValidation,
+        InValidMsg:found.InValidMsg,
         IsCompulsory: found.IsCompulsory,
         DefaultSort: found.DefaultSort,
         ShowInListPage: found.ShowInListPage,
@@ -468,6 +495,7 @@ const PageMaster = (props) => {
         FieldLabel: found.FieldLabel,
         ControlType: found.ControlType,
         FieldValidation: found.FieldValidation,
+        InValidMsg:found.InValidMsg,
         IsCompulsory: found.IsCompulsory,
         DefaultSort: found.DefaultSort,
         ShowInListPage: found.ShowInListPage,
@@ -484,6 +512,7 @@ const PageMaster = (props) => {
         FieldLabel: found.FieldLabel,
         ControlType: found.ControlType,
         FieldValidation: found.FieldValidation,
+        InValidMsg:found.InValidMsg,
         IsCompulsory: found.IsCompulsory,
         DefaultSort: found.DefaultSort,
         ShowInListPage: found.ShowInListPage,
@@ -516,6 +545,7 @@ const PageMaster = (props) => {
     const PageFieldMaster = pageFieldTabTable.map((index) => ({
       ControlID: index.ControlID,
       FieldLabel: index.FieldLabel,
+      InValidMsg:index.InValidMsg,
       IsCompulsory: index.IsCompulsory,
       DefaultSort: index.DefaultSort,
       ListPageSeq: index.ListPageSeq,
@@ -1272,6 +1302,7 @@ const PageMaster = (props) => {
                                   <th>Field Label</th>
                                   <th className="col col-sm-2">Control Type</th>
                                   <th className="col col-sm-2" >Field Validation</th>
+                                  <th className="col col-sm-2" >InValid Msg</th>
                                   <th>List Page Seq</th>
                                   <th>Is Compulsory</th>
                                   <th>Default Sort</th>
@@ -1328,6 +1359,17 @@ const PageMaster = (props) => {
                                         options={FieldValidations_DropdownOptions}
                                         onChange={(e) => { PageField_onChange_Handler(e, "FieldValidation", key); }}
                                       />
+                                    </td>
+                                    <td>
+                                      <Input
+
+                                        type="text"
+                                        id={`InValidMsg${key}`}
+                                        defaultValue={EditData.InValidMsg}
+                                        value={pageFieldTabTable[key].InValidMsg}
+                                        onChange={(e) => PageField_onChange_Handler(e.target.value, "InValidMsg", key)}>
+
+                                      </Input>
                                     </td>
                                     <td>
                                       <Input
