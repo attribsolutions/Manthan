@@ -29,6 +29,7 @@ const GroupTypeList = (props) => {
     })
   );
 
+
   const action = {
     getList: getGroupTypeslist,
     editId: editGroupTypeId,
