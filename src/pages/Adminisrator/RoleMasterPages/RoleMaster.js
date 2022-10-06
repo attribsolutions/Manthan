@@ -20,8 +20,7 @@ import {
   onChangeSelect,
   onChangeText,
 } from "../../../components/Common/CmponentRelatedCommonFile/validationFunction";
-import "../../Adminisrator/RoleMasterPages/demo.scss";
-import { fieldData } from './FieldData'
+
 const RoleMaster = (props) => {
 
   const formRef = useRef(null);
