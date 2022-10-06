@@ -29,7 +29,9 @@ import {
     comAddPageFieldFunc,
     formValChange,
     formValid,
+    onChangeText
 } from "../../../components/Common/CmponentRelatedCommonFile/validationFunction";
+import { SaveButton } from "../../../components/CommonSaveButton";
 
 const CategoryTypeMaster = (props) => {
     const formRef = useRef(null);
@@ -42,14 +44,14 @@ const CategoryTypeMaster = (props) => {
 
 
     //*** "isEditdata get all data from ModuleID for Binding  Form controls
-    let editDataGatingFromList = props.state;
+    let editDataGetingFromList = props.state;
     let pageModeProps = props.pageMode;
 
     //Access redux store Data /  'save_ModuleSuccess' action data
-    const { PostAPIResponse, pageFiled, RoleAccessModifiedinSingleArray } = useSelector((state) => ({
+    const { PostAPIResponse, pageField, RoleAccessModifiedinSingleArray } = useSelector((state) => ({
         PostAPIResponse: state.categoryTypeReducer.PostData,
         RoleAccessModifiedinSingleArray: state.Login.RoleAccessUpdateData,
-        pageFiled: state.CommonPageFieldReducer.pageField
+        pageField: state.CommonPageFieldReducer.pageField
     }));
 
     useEffect(() => {
@@ -88,29 +90,17 @@ const CategoryTypeMaster = (props) => {
     const { isError } = state;
     const { fieldLabel } = state;
 
-
-    const onChangeText = (event) => {
-        formValChange({ event, state, setState })
-    }
-
-    useEffect(() => {
-        comAddPageFieldFunc({ state, setState, pageFiled })
-    }, [pageFiled])
-    {/*End */ }
-
-
-
     //userAccess useEffect
     useEffect(() => {
         let userAcc = undefined
-        if ((editDataGatingFromList === undefined)) {
+        if ((editDataGetingFromList === undefined)) {
 
             let locationPath = history.location.pathname
             userAcc = RoleAccessModifiedinSingleArray.find((inx) => {
                 return (`/${inx.ActualPagePath}` === locationPath)
             })
         }
-        else if (!(editDataGatingFromList === undefined)) {
+        else if (!(editDataGetingFromList === undefined)) {
             let relatatedPage = props.relatatedPage
             userAcc = RoleAccessModifiedinSingleArray.find((inx) => {
                 return (`/${inx.ActualPagePath}` === relatatedPage)
@@ -127,14 +117,14 @@ const CategoryTypeMaster = (props) => {
     //This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
     useEffect(() => {
         if (!(userPageAccessState === '')) { document.getElementById("txtName").focus(); }
-        if (!(editDataGatingFromList === undefined)) {
-            setEditData(editDataGatingFromList);
+        if (!(editDataGetingFromList === undefined)) {
+            setEditData(editDataGetingFromList);
             setPageMode(pageModeProps);
             dispatch(editCategoryTypeIDSuccess({ Status: false }))
-            dispatch(BreadcrumbShow(editDataGatingFromList.Name))
+            dispatch(BreadcrumbShow(editDataGetingFromList.Name))
             return
         }
-    }, [editDataGatingFromList])
+    }, [editDataGetingFromList])
 
     useEffect(() => {
 
@@ -171,11 +161,14 @@ const CategoryTypeMaster = (props) => {
         }
     }, [PostAPIResponse])
 
-
+    useEffect(() => {
+        if (pageField.length > 0) {
+            comAddPageFieldFunc({ state, setState, pageField })
+        }
+    }, [pageField])
 
     const formSubmitHandler = (event) => {
         event.preventDefault();
-
         if (formValid(state, setState)) {
             const jsonBody = JSON.stringify({
                 Name: values.Name,
@@ -229,10 +222,11 @@ const CategoryTypeMaster = (props) => {
                                                                 className={isError.Name.length > 0 ? "is-invalid form-control" : "form-control"}
                                                                 placeholder="Please Enter Name"
                                                                 autoComplete="off"
-                                                                onChange={(e) => {
-                                                                    onChangeText(e)
-                                                                    dispatch(BreadcrumbShow(e.target.value))
+                                                                onChange={(event) => {
+                                                                    onChangeText({ event, state, setState })
+                                                                    dispatch(BreadcrumbShow(event.target.value))
                                                                 }}
+
                                                             />
                                                             {isError.Name.length > 0 && (
                                                                 <span className="invalid-feedback">{isError.Name}</span>
@@ -242,34 +236,7 @@ const CategoryTypeMaster = (props) => {
                                                         <FormGroup>
                                                             <Row>
                                                                 <Col sm={2}>
-                                                                    <div>
-                                                                        {
-                                                                            pageMode === "edit" ?
-                                                                                userPageAccessState.RoleAccess_IsEdit ?
-                                                                                    <button
-                                                                                        type="submit"
-                                                                                        data-mdb-toggle="tooltip" data-mdb-placement="top" title="Update Party Type"
-                                                                                        className="btn btn-success w-md"
-                                                                                    >
-                                                                                        <i class="fas fa-edit me-2"></i>Update
-                                                                                    </button>
-                                                                                    :
-                                                                                    <></>
-                                                                                : (
-                                                                                    userPageAccessState.RoleAccess_IsSave ?
-                                                                                        <button
-                                                                                            type="submit"
-                                                                                            data-mdb-toggle="tooltip" data-mdb-placement="top" title="Save ProductCategory Type"
-                                                                                            className="btn btn-primary w-sm">
-                                                                                            <i className="fas fa-save me-2"></i>
-                                                                                            Save
-
-                                                                                        </button>
-                                                                                        :
-                                                                                        <></>
-                                                                                )
-                                                                        }
-                                                                    </div>
+                                                                    {SaveButton({ pageMode, userPageAccessState, module: "CategoryTypeMaster" })}
                                                                 </Col>
                                                             </Row>
                                                         </FormGroup>
@@ -281,8 +248,6 @@ const CategoryTypeMaster = (props) => {
                                     </Row>
                                 </form>
                             </CardBody>
-
-
 
                         </Card>
 
