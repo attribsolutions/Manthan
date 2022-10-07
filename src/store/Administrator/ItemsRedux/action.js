@@ -5,6 +5,8 @@ import { DELETE_ITEM_ID, DELETE_ITEM_ID_SUCCESS,
      GET_CATEGORYTYPE_FOR_DROPDOWN, 
      GET_CATEGORYTYPE_FOR_DROPDOWN_SUCCESS, 
      GET_CATEGORY_BY_CATEGORYTYPE_FOR_DROPDOWN, 
+     GET_CATEGORY_BY_CATEGORYTYPE_FOR_DROPDOWN_API, 
+     GET_CATEGORY_BY_CATEGORYTYPE_FOR_DROPDOWN_API_SUCCESS, 
      GET_CATEGORY_BY_CATEGORYTYPE_FOR_DROPDOWN_SUCCESS, 
      GET_DIVISION_FOR_DROPDOWN, 
      GET_DIVISION_FOR_DROPDOWN_SUCCESS, 
@@ -207,5 +209,16 @@ export const get_CategoryTypes_ForDropDown_Success = (data) => ({
   
   export const get_Sub_Group_By_Group_ForDropDown_Success = (data) => ({
     type: GET_SUB_GROUP_BY_GROUP_FOR_DROPDOWN_SUCCESS,
+    payload:data,
+  });
+
+  // Category  API dependent on CategoryType api
+  export const get_Category_By_CategoryType_ForDropDownAPI = (id) => ({
+    type: GET_CATEGORY_BY_CATEGORYTYPE_FOR_DROPDOWN_API,
+    id
+  });
+  
+  export const get_Category_By_CategoryType_ForDropDownAPI_Success = (data) => ({
+    type: GET_CATEGORY_BY_CATEGORYTYPE_FOR_DROPDOWN_API_SUCCESS,
     payload:data,
   });

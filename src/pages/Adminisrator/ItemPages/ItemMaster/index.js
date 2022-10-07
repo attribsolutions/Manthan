@@ -48,6 +48,8 @@ import GSTTab from "./GST_Tab";
 import MRPTab from "./MRP_Tab";
 import Margin_Tab from "./MarginTab/index";
 import GroupTab from "./Group_Tab";
+import CategoryTab from "./Category_Tab";
+import DivisionTab from "./Division_Tab";
 
 const ItemsMaster = (props) => {
     const dispatch = useDispatch();
@@ -109,9 +111,14 @@ const ItemsMaster = (props) => {
         Conversion: '',
         Unit: { label: "", value: 0 },
     }]);
+
+    const [Division_Tab_TableData, setDivision_Tab_TableData] = useState([]);
+
     const [MRP_Tab_TableData, setMRP_Tab_TableData] = useState([]);
 
     const [Group_Tab_TableData, setGroup_Tab_TableData] = useState([]);
+
+    const [Category_Tab_TableData, setCategory_Tab_TableData] = useState([]);
 
     const [GStDetailsTabTable, setGSTDetailsTabTable] = useState([]);
 
@@ -283,6 +290,8 @@ const ItemsMaster = (props) => {
             setMarginMaster(editMode_Data.ItemMarginDetails)
             setGStDetailsMaster(editMode_Data.ItemGSTHSNDetails)
             setGroup_Tab_TableData(editMode_Data.ItemGroupDetails)
+            setDivision_Tab_TableData(editMode_Data.ItemDivisionDetails)
+            setCategory_Tab_TableData(editMode_Data.ItemCategoryDetails)
             setIsValidate([])
 
             dispatch(editItemSuccess({ Status: false }))
@@ -341,64 +350,64 @@ const ItemsMaster = (props) => {
     }, [dispatch]);
 
 
-    useEffect(() => {
+    // useEffect(() => {
 
-        let key = Category.key
-        if ((key === null)) return;
+    //     let key = Category.key
+    //     if ((key === null)) return;
 
-        let Category_DropdownOptions = Category.Data.map((data) => ({
-            value: data.id,
-            label: data.Name
-        }));
+    //     let Category_DropdownOptions = Category.Data.map((data) => ({
+    //         value: data.id,
+    //         label: data.Name
+    //     }));
 
-        var found = categoryTabTable.find((i, k) => {
-            return (k === key)
-        })
+    //     var found = categoryTabTable.find((i, k) => {
+    //         return (k === key)
+    //     })
 
-        let newSelectValue = {
-            CategoryType: found.CategoryType,
-            Category: found.Category,
-            SubCategory: found.SubCategory,
-            Category_DropdownOptions: Category_DropdownOptions,
-            SubCategory_DropdownOptions: []
-        }
+    //     let newSelectValue = {
+    //         CategoryType: found.CategoryType,
+    //         Category: found.Category,
+    //         SubCategory: found.SubCategory,
+    //         Category_DropdownOptions: Category_DropdownOptions,
+    //         SubCategory_DropdownOptions: []
+    //     }
 
-        let newTabArr = categoryTabTable.map((index, k) => {
-            return (k === key) ? newSelectValue : index
-        })
-        setCategoryTabTable(newTabArr)
-        dispatch(get_Category_By_CategoryType_ForDropDown_Success({ Data: [], key: null }))
-    }, [Category]);
+    //     let newTabArr = categoryTabTable.map((index, k) => {
+    //         return (k === key) ? newSelectValue : index
+    //     })
+    //     setCategoryTabTable(newTabArr)
+    //     dispatch(get_Category_By_CategoryType_ForDropDown_Success({ Data: [], key: null }))
+    // }, [Category]);
 
-    useEffect(() => {
+    // useEffect(() => {
 
-        let key = SubCategory.key
-        if ((key === null)) return;
+    //     let key = SubCategory.key
+    //     if ((key === null)) return;
 
-        let SubCategory_DropdownOptions = SubCategory.Data.map((data) => ({
-            value: data.id,
-            label: data.Name
-        }));
+    //     let SubCategory_DropdownOptions = SubCategory.Data.map((data) => ({
+    //         value: data.id,
+    //         label: data.Name
+    //     }));
 
-        var found = categoryTabTable.find((i, k) => {
-            return (k === key)
-        })
+    //     var found = categoryTabTable.find((i, k) => {
+    //         return (k === key)
+    //     })
 
-        let newSelectValue = {
-            CategoryType: found.CategoryType,
-            Category: found.Category,
-            SubCategory: found.SubCategory,
-            Category_DropdownOptions: found.Category_DropdownOptions,
-            SubCategory_DropdownOptions: SubCategory_DropdownOptions,
-        }
+    //     let newSelectValue = {
+    //         CategoryType: found.CategoryType,
+    //         Category: found.Category,
+    //         SubCategory: found.SubCategory,
+    //         Category_DropdownOptions: found.Category_DropdownOptions,
+    //         SubCategory_DropdownOptions: SubCategory_DropdownOptions,
+    //     }
 
-        let newTabArr = categoryTabTable.map((index, k) => {
-            return (k === key) ? newSelectValue : index
-        })
-        setCategoryTabTable(newTabArr)
-        dispatch(get_Sub_Category_By_CategoryType_ForDropDown_Success({ Data: [], key: null }))
+    //     let newTabArr = categoryTabTable.map((index, k) => {
+    //         return (k === key) ? newSelectValue : index
+    //     })
+    //     setCategoryTabTable(newTabArr)
+    //     dispatch(get_Sub_Category_By_CategoryType_ForDropDown_Success({ Data: [], key: null }))
 
-    }, [SubCategory]);
+    // }, [SubCategory]);
 
     const toggle1 = tab => {
         if (activeTab1 !== tab) {
@@ -551,17 +560,17 @@ const ItemsMaster = (props) => {
         setrefresh(event)
     }
 
-    function CategoryType_Dropdown_Handler(e, key) {
+    // function CategoryType_Dropdown_Handler(e, key) {
 
-        CategoryTab_Common_onChange_Handller(e, "CategoryType", key,);
-        dispatch(get_Category_By_CategoryType_ForDropDown(e.value, key))
-    }
+    //     CategoryTab_Common_onChange_Handller(e, "CategoryType", key,);
+    //     dispatch(get_Category_By_CategoryType_ForDropDown(e.value, key))
+    // }
 
-    function Category_Dropdown_Handler(e, key) {
-        CategoryTab_Common_onChange_Handller(e, "Category", key,);
-        dispatch(get_Sub_Category_By_CategoryType_ForDropDown(e.value, key))
+    // function Category_Dropdown_Handler(e, key) {
+    //     CategoryTab_Common_onChange_Handller(e, "Category", key,);
+    //     dispatch(get_Sub_Category_By_CategoryType_ForDropDown(e.value, key))
 
-    }
+    // }
 
     function CategoryTab_AddRow_Handler() {
 
@@ -597,64 +606,64 @@ const ItemsMaster = (props) => {
         setCategoryTabTable(removeElseArrray)
 
     }
-    function CategoryTab_Common_onChange_Handller(event, type, key) {
+    // function CategoryTab_Common_onChange_Handller(event, type, key) {
 
-        const foundDublicate = categoryTabTable.find((element) => {
-            return (element[type].value === event.value)
-        });
-        // if (!(foundDublicate === undefined)) {
-        //     dispatch(AlertState({
-        //         Type: 4,
-        //         Status: true,
-        //         Message: "Category alredy Select",
-        //     }))
-        //     return
-        // }
-
-
-        let validateReturn = Common_Drop_Validation(event, type, key);
-        if (validateReturn === false) return;
+    //     const foundDublicate = categoryTabTable.find((element) => {
+    //         return (element[type].value === event.value)
+    //     });
+    //     // if (!(foundDublicate === undefined)) {
+    //     //     dispatch(AlertState({
+    //     //         Type: 4,
+    //     //         Status: true,
+    //     //         Message: "Category alredy Select",
+    //     //     }))
+    //     //     return
+    //     // }
 
 
-        var found = categoryTabTable.find((i, k) => {
-            return (k === key)
-        })
+    //     let validateReturn = Common_Drop_Validation(event, type, key);
+    //     if (validateReturn === false) return;
 
-        let newSelectValue = ''
 
-        if (type === "CategoryType") {
-            newSelectValue = {
-                CategoryType: event,
-                Category: { label: 'select', value: 0 },
-                SubCategory: { label: 'select', value: 0 },
-                Category_DropdownOptions: [],
-                SubCategoryOption: []
-            }
-        }
-        else if (type === 'Category') {
-            newSelectValue = {
-                CategoryType: found.CategoryType,
-                Category: event,
-                SubCategory: { label: 'select', value: 0 },
-                Category_DropdownOptions: found.Category_DropdownOptions,
-                SubCategory_DropdownOptions: []
-            }
-        }
-        else {
-            newSelectValue = {
-                CategoryType: found.CategoryType,
-                Category: found.Category,
-                SubCategory: event,
-                Category_DropdownOptions: found.Category_DropdownOptions,
-                SubCategory_DropdownOptions: found.SubCategory_DropdownOptions
-            }
-        }
+    //     var found = categoryTabTable.find((i, k) => {
+    //         return (k === key)
+    //     })
 
-        let newTabArr = categoryTabTable.map((index, k) => {
-            return (k === key) ? newSelectValue : index
-        })
-        setCategoryTabTable(newTabArr)
-    }
+    //     let newSelectValue = ''
+
+    //     if (type === "CategoryType") {
+    //         newSelectValue = {
+    //             CategoryType: event,
+    //             Category: { label: 'select', value: 0 },
+    //             SubCategory: { label: 'select', value: 0 },
+    //             Category_DropdownOptions: [],
+    //             SubCategoryOption: []
+    //         }
+    //     }
+    //     else if (type === 'Category') {
+    //         newSelectValue = {
+    //             CategoryType: found.CategoryType,
+    //             Category: event,
+    //             SubCategory: { label: 'select', value: 0 },
+    //             Category_DropdownOptions: found.Category_DropdownOptions,
+    //             SubCategory_DropdownOptions: []
+    //         }
+    //     }
+    //     else {
+    //         newSelectValue = {
+    //             CategoryType: found.CategoryType,
+    //             Category: found.Category,
+    //             SubCategory: event,
+    //             Category_DropdownOptions: found.Category_DropdownOptions,
+    //             SubCategory_DropdownOptions: found.SubCategory_DropdownOptions
+    //         }
+    //     }
+
+    //     let newTabArr = categoryTabTable.map((index, k) => {
+    //         return (k === key) ? newSelectValue : index
+    //     })
+    //     setCategoryTabTable(newTabArr)
+    // }
 
     function UnitConversionsTab_AddRow_Handle() {
 
@@ -1004,7 +1013,7 @@ const ItemsMaster = (props) => {
             BaseUnitID: formValue.BaseUnit.value,
             CreatedBy: 1,
             UpdatedBy: 1,
-            ItemCategoryDetails: itemCategoryDetails,
+            ItemCategoryDetails: Category_Tab_TableData,
             ItemUnitDetails: itemUnitDetails,
 
             ItemImagesDetails: [
@@ -1013,7 +1022,7 @@ const ItemsMaster = (props) => {
                     Item_pic: "sadsadasdas"
                 }
             ],
-            ItemDivisionDetails: itemDivisionDetails,
+            ItemDivisionDetails: Division_Tab_TableData,
             ItemMRPDetails: MRP_Tab_TableData,
             ItemMarginDetails: marginMaster,
             ItemGSTHSNDetails: GStDetailsMaster,
@@ -1394,7 +1403,7 @@ const ItemsMaster = (props) => {
                                                     </Col>
 
                                                 </TabPane>
-
+                                                {/* 
                                                 <TabPane tabId="2">
                                                     <Col md={12} >
                                                         <Card className="text-black">
@@ -1469,6 +1478,18 @@ const ItemsMaster = (props) => {
                                                         </Card>
                                                     </Col>
 
+                                                </TabPane> */}
+
+                                                <TabPane tabId="2">
+                                                    <Row>
+                                                        <Col md={12}  >
+                                                            <Row className="mt-3">
+                                                                <Col className=" col col-12 ">
+                                                                    <CategoryTab tableData={Category_Tab_TableData} func={setCategory_Tab_TableData} />
+                                                                </Col>
+                                                            </Row>
+                                                        </Col>
+                                                    </Row>
                                                 </TabPane>
 
                                                 <TabPane tabId="3">
@@ -1652,10 +1673,10 @@ const ItemsMaster = (props) => {
                                                                                     </Col>
 
                                                                                     <Col md={6}>
-                                                                                        <Button className="btn btn-sm btn-light mt-3   align-items-sm-end"
+                                                                                        <Button className="btn btn-sm mt-3 btn-light  btn-outline-primary  align-items-sm-end"
                                                                                             type="button"
                                                                                             onClick={() => { ImageTab_AddRow_Handler(key) }} >
-                                                                                            <i className="dripicons-plus"></i>
+                                                                                            <i className="dripicons-plus"></i>Add
                                                                                         </Button>
                                                                                     </Col>
                                                                                 </Row>
@@ -1678,7 +1699,7 @@ const ItemsMaster = (props) => {
                                                     </Row>
                                                 </TabPane>
 
-                                                <TabPane tabId="6">
+                                                {/* <TabPane tabId="6">
                                                     <Row>
                                                         <Col md={12}  >
                                                             <Card className="text-black">
@@ -1744,6 +1765,18 @@ const ItemsMaster = (props) => {
 
                                                                 </CardBody>
                                                             </Card>
+                                                        </Col>
+                                                    </Row>
+                                                </TabPane> */}
+
+                                                <TabPane tabId="6">
+                                                    <Row>
+                                                        <Col md={12}  >
+                                                            <Row className="mt-3">
+                                                                <Col className=" col col-12 ">
+                                                                    <DivisionTab tableData={Division_Tab_TableData} func={setDivision_Tab_TableData} />
+                                                                </Col>
+                                                            </Row>
                                                         </Col>
                                                     </Row>
                                                 </TabPane>
