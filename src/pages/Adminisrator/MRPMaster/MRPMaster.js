@@ -177,6 +177,7 @@ const MRPMaster = (props) => {
             alert("EffectiveDate not select")
         }
         dispatch(postGoButtonForMRP_Master(jsonBody))
+        console.log("Go button Post Json",jsonBody)
 
 
     };
