@@ -18,13 +18,12 @@ const CompanyList = () => {
     const reducers = useSelector(
         (state) => ({
             tableList: state.Company.companyList,
-            postMsg: state.Company.companySubmitSuccesss,
+            postMsg: state.Company.postMsg,
             userAccess: state.Login.RoleAccessUpdateData,
             editData: state.Company.editData,
-            updateMsg: state.Company.updateMessage,
-            deleteMsg: state.Company.deleteCompanyID,
+            updateMsg: state.Company.updateMsg,
+            deleteMsg: state.Company.deleteId,
             pageField: state.CommonPageFieldReducer.pageField
-
         })
     );
 
@@ -46,7 +45,7 @@ const CompanyList = () => {
         dispatch(fetchCompanyList());
     }, []);
 
-    const { pageField } = reducers
+    const { pageField } = reducers;
 
     return (
         <React.Fragment>
@@ -56,7 +55,7 @@ const CompanyList = () => {
                         action={action}
                         reducers={reducers}
                         MasterModal={CompanyModule}
-                        masterPath={"/CompanyModule"}
+                        masterPath={"/CompanyMaster"}
                         ButtonMsgLable={"Company"}
                         deleteName={"Name"}
                     />

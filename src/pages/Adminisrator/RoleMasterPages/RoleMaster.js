@@ -120,7 +120,7 @@ const RoleMaster = (props) => {
     pageField,
     RoleAccessModifiedinSingleArray,
     EmployeeType } = useSelector((state) => ({
-      PostAPIResponse: state.RoleMaster_Reducer.AddUserMessage,
+      PostAPIResponse: state.RoleMaster_Reducer.postMsg,
       EmployeeType: state.EmployeeTypeReducer.EmployeeTypeList,
       RoleAccessModifiedinSingleArray: state.Login.RoleAccessUpdateData,
       pageField: state.CommonPageFieldReducer.pageField

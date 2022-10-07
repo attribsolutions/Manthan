@@ -10,9 +10,9 @@ import {
 const INIT_STATE = {
   companyList: [],
   editData: { Status: false },
-  deleteCompanyID: { Status: false },
-  companySubmitSuccesss: { Status: false },
-  updateMessage:{ Status: false },
+  deleteId: { Status: false },
+  postMsg: { Status: false },
+  updateMsg:{ Status: false },
   CompanyGroup:[],
 }
 
@@ -28,7 +28,7 @@ const Company = (state = INIT_STATE, action) => {
     case POST_COMPANY_SUBMIT_SUCCESS:
       return {
         ...state,
-        companySubmitSuccesss: action.payload,
+        postMsg: action.payload,
       }
 
     case DELETE_COMPANY_ID_SUCCESS:

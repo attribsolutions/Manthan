@@ -32,8 +32,11 @@ const CompanyModule = (props) => {
   const formRef = useRef(null);
   const dispatch = useDispatch();
   const history = useHistory()
-
+debugger
   //*** "isEditdata get all data from ModuleID for Binding  Form controls
+ var aa=history.location.hasOwnProperty("editData")
+
+
   var editDataGatingFromList = props.state;
   let propsPageMode = props.pageMode;
   let pageModeProps = props.pageMode;
@@ -45,9 +48,9 @@ const CompanyModule = (props) => {
   const [CompanyGroupselect, setCompanyGroup] = useState("");
 
   //Access redux store Data /  'save_ModuleSuccess' action data
-  const { PostAPIResponse, RoleAccessModifiedinSingleArray } = useSelector((state) => ({
-    PostAPIResponse: state.Company.companySubmitSuccesss,
-    RoleAccessModifiedinSingleArray: state.Login.RoleAccessUpdateData,
+  const { PostAPIResponse, userAccess } = useSelector((state) => ({
+    PostAPIResponse: state.Company.postMsg,
+    userAccess: state.Login.RoleAccessUpdateData,
   }));
 
   // userAccess useEffect
@@ -56,13 +59,13 @@ const CompanyModule = (props) => {
     if ((editDataGatingFromList === undefined)) {
 
       let locationPath = history.location.pathname
-      userAcc = RoleAccessModifiedinSingleArray.find((inx) => {
+      userAcc = userAccess.find((inx) => {
         return (`/${inx.ActualPagePath}` === locationPath)
       })
     }
     else if (!(editDataGatingFromList === undefined)) {
       let relatatedPage = props.relatatedPage
-      userAcc = RoleAccessModifiedinSingleArray.find((inx) => {
+      userAcc = userAccess.find((inx) => {
         return (`/${inx.ActualPagePath}` === relatatedPage)
       })
 
@@ -71,7 +74,7 @@ const CompanyModule = (props) => {
       setUserPageAccessState(userAcc)
     }
 
-  }, [RoleAccessModifiedinSingleArray])
+  }, [userAccess])
 
   // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
   useEffect(() => {

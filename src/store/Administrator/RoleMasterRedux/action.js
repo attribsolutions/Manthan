@@ -1,5 +1,4 @@
 import { UPDATE_H_PAGES_SUCCESS } from "../HPagesRedux/actionType";
-import { DELETE_MODULE_ID_SUCCESS, EDIT_MODULE_ID_SUCCESS } from "../ModulesRedux/actionType";
 import {
     POST_ROLE_MASTER,
     POST_ROLE_MASTER_SUCCESS,
@@ -8,6 +7,9 @@ import {
     UPDATE_ROLE_LIST_ID,
     GET_ROLE_LIST_API,
     GET_ROLE_LIST_API_SUCCESS,
+    UPDATE_ROLE_LIST_ID_SUCCESS,
+    DELETE_ROLE_LIST_ID_SUCCESS,
+    EDIT_ROLE_LIST_ID_SUCCESS,
 } from "./actionTypes"
 
 // get api
@@ -38,7 +40,7 @@ export const postRole = (Data,id) => ({
     
   } );
   export const deleteSuccess = (deleteMessage) => ({
-    type: DELETE_MODULE_ID_SUCCESS,
+    type: DELETE_ROLE_LIST_ID_SUCCESS,
     payload:deleteMessage
   });
   
@@ -48,7 +50,7 @@ export const postRole = (Data,id) => ({
     id,pageMode
   })
   export const editSuccess =(editData)=>({
-    type:EDIT_MODULE_ID_SUCCESS,
+    type:EDIT_ROLE_LIST_ID_SUCCESS,
    payload:editData,
   })
 
@@ -58,7 +60,7 @@ export const postRole = (Data,id) => ({
     updateData,ID,
   })
   export const updateSuccess =(updateMessage)=>({
-    type:UPDATE_H_PAGES_SUCCESS,
+    type:UPDATE_ROLE_LIST_ID_SUCCESS,
    payload:updateMessage,
   })
 
