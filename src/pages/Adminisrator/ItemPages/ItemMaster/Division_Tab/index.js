@@ -45,48 +45,19 @@ function DivisionTab(props) {
             DivisionName: divisionDropdownSelect.label,
         };
 
-        const totalTableData = props.tableData.length;
-        val.id = totalTableData + 1;
-        const updatedTableData = [...props.tableData];
-        updatedTableData.push(val);
-        props.func(updatedTableData);
-        clearState();
-        //     if (!(divisionDropdownSelect === "")) {
-        //         const totalTableData = props.tableData.length;
-        //         val.id = totalTableData + 1;
-        //         const updatedTableData = [...props.tableData];
-        //         updatedTableData.push(val);
-        //         props.func(updatedTableData);
-        //         clearState();
-        //     }
-        //     else {
-        //         alert("Please select value");
-        //     }
-        // };
-        const find = updatedTableData.find((element) => {
-            return element.value === e.Division
-        });
-        console.log("find", find)
-        if (divisionDropdownSelect.length <= 0) {
-
-            dispatch(AlertState({
-                Type: 3, Status: true,
-                Message: "Select One Role",
-            }));
-        }
-        else if (find === undefined) {
-            // document.getElementById("dropDivision-0").className = ""
-            // setDivisionTableData([...props.tableData, divisionDropdownSelect]);
-          
-        }
-        else {
-            document.getElementById("dropDivision-0").className = ""
-            dispatch(AlertState({
-                Type: 4, Status: true,
-                Message: "DivisionType already Exists ",
-            }));
-        }
-    }
+            if (!(divisionDropdownSelect === "")) {
+                const totalTableData = props.tableData.length;
+                val.id = totalTableData + 1;
+                const updatedTableData = [...props.tableData];
+                updatedTableData.push(val);
+                props.func(updatedTableData);
+                clearState();
+            }
+            else {
+                alert("Please select value");
+            }
+        };
+    
     const clearState = () => {
         setDivisionDropdownSelect("");
 
