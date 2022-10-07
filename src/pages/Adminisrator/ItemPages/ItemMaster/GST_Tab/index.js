@@ -105,17 +105,18 @@ function GSTTab(props) {
 
                             </FormGroup>
                             <Col md={1}>
+
                                 <Row className=" mt-3">
-                                    <Col md={6}>
-                                        <Button className="btn btn-sm btn-light mt-3   align-items-sm-end"
+                                    <Col >
+                                        <Button
+                                            className="btn btn-sm mt-1 mt-3 btn-light  btn-outline-primary  "
                                             type="button"
-                                            onClick={addRowsHandler}>
-                                            <i className="dripicons-plus"></i>
+                                            onClick={addRowsHandler}
+                                        >
+                                            <i className="dripicons-plus mt-3"> </i> Add
                                         </Button>
                                     </Col>
                                 </Row>
-
-
                             </Col>
                         </Row>
                     </CardBody>

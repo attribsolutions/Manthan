@@ -62,6 +62,7 @@ const CommonListPage = (props) => {
   } = props;
 
   useEffect(() => {
+    debugger
     const locationPath = history.location.pathname
     let userAcc = userAccess.find((inx) => {
       return (`/${inx.ActualPagePath}` === locationPath)
@@ -166,7 +167,7 @@ const CommonListPage = (props) => {
     setmodal_center(!modal_center);
   }
 
-
+debugger
   let sortLabel = ""
   const columns = []
   pageField.forEach((i, k) => {

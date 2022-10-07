@@ -130,14 +130,15 @@ function GroupTab(props) {
                                 </Row>
                             </Col>
                             <Col md={1}>
+
                                 <Row className=" mt-3">
-                                    <Col md={6}>
+                                    <Col >
                                         <Button
-                                            className="btn btn-sm btn-light mt-3   align-items-sm-end"
+                                            className="btn btn-sm mt-1 mt-3 btn-light  btn-outline-primary  "
                                             type="button"
                                             onClick={addRowsHandler}
                                         >
-                                            <i className="dripicons-plus"></i>
+                                            <i className="dripicons-plus mt-3"> </i> Add
                                         </Button>
                                     </Col>
                                 </Row>

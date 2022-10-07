@@ -8,6 +8,7 @@ import {
   getBaseUnit_ForDropDownSuccess,
   getItemGroup_ForDropDownSuccess,
   getItemListSuccess, get_CategoryTypes_ForDropDown_Success,
+  get_Category_By_CategoryType_ForDropDownAPI_Success,
   get_Category_By_CategoryType_ForDropDown_Success,
   get_Division_ForDropDown_Success,
   get_Group_By_GroupType_ForDropDown_Success,
@@ -25,6 +26,7 @@ import {
   GET_BASEUNIT_FOR_DROPDOWN,
   GET_CATEGORYTYPE_FOR_DROPDOWN,
   GET_CATEGORY_BY_CATEGORYTYPE_FOR_DROPDOWN,
+  GET_CATEGORY_BY_CATEGORYTYPE_FOR_DROPDOWN_API,
   GET_CATEGORY_FOR_DROPDOWN,
   GET_DIVISION_FOR_DROPDOWN,
   GET_GROUP_BY_GROUPTYPE_FOR_DROPDOWN,
@@ -241,6 +243,16 @@ function* SubGroup_DropDown_GenratorFunction({ id }) {
   }
 }
 
+// Category  API dependent on CategoryType api
+function* Category_DropDown_API_GenratorFunction({ id}) {
+  try {
+    const response = yield call(apiCall.Category_By_CategoryTypes_DropDown_API, id);
+    yield put(get_Category_By_CategoryType_ForDropDownAPI_Success(response.Data));
+  } catch (error) {
+    console.log("Category saga Page error", error);
+  }
+}
+
 function* ItemsMastersSaga() {
   yield takeEvery(GET_ITEM_LIST_API, Get_Items_GenratorFunction);
   yield takeEvery(GET_ITEM_GROUP_FOR_DROPDOWN, Items_Group_GenratorFunction);
@@ -259,7 +271,7 @@ function* ItemsMastersSaga() {
   yield takeEvery(GET_PRICE_LIST_FOR_DROPDOWN, PriceList_DropDown_GenratorFunction);
   yield takeEvery(GET_GROUP_BY_GROUPTYPE_FOR_DROPDOWN, Group_DropDown_GenratorFunction);
   yield takeEvery(GET_SUB_GROUP_BY_GROUP_FOR_DROPDOWN, SubGroup_DropDown_GenratorFunction);
-
+  yield takeEvery(GET_CATEGORY_BY_CATEGORYTYPE_FOR_DROPDOWN_API, Category_DropDown_API_GenratorFunction);
 }
 
 export default ItemsMastersSaga;
