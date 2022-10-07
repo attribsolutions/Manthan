@@ -53,6 +53,8 @@ const MarginList = (props) => {
             reducers={reducers}
             MasterModal={MarginMaster}
             masterPath={"/MarginMaster"}
+            ButtonMsgLable={"Margin"}
+            deleteName={"EffectiveDate"}
           />
           : null
       }
