@@ -193,7 +193,8 @@ export const Party_Get_DropDown_API  = (id) => get(`${url.DIVISION_DROPDOWN_API}
 export const PriceList_Get_DropDown_API = () => get(url.PRICE_LIST)// PriceList DropDown api
 export const Category_By_CategoryTypes_DropDown_API = (id) => get(`${url.CATEGORY_DROPDOWN_API}/${id}`)//  GetCategoryByCategoryTypeID DropDown API
 export const SubCategory_By_CategoryTypes_DropDown_API = (id) => get(`${url.SUBCATEGORY_DROPDOWN_API}/${id}`)//  GetSubCategoryByCategoryID DropDown API
-
+export const Group_By_GroupTypes_DropDown_API = (id) => get(`${url.GET_GROUP_BY_GROUPTYPES_ID}/${id}`)//  GetGroupByGroupTypeID DropDown API
+export const SubGroup_By_Group_DropDown_API = (id) => get(`${url.GET_SUBGROUP_BY_GROUP_ID}/${id}`)// GetSubGroupByGroupID DropDown API
 
 // Party Master
 export const Party_Master_Get_API = () => get(url.PARTY_MASTER_API)//get api
@@ -295,7 +296,6 @@ export const delete_PriceList_API = (id) => del(`${url. PRICE_LIST}/${id}`)// de
 export const edit_PriceList = (id) =>get(`${url. PRICE_LIST}/${id}`) // edit api
 export const update_PriceList = (data, id) =>put(`${url. PRICE_LIST}/${id}`, data)// update
 
-
 // MRP Master 
 export const Post_MRPMaster_API = (data) => post(url.MRP_MASTER_LIST, data)// post api
 export const GetMRPList_For_Listpage = () => get(url.MRP_MASTER_LIST)// getapi
@@ -303,7 +303,6 @@ export const update_MRPList = (data,id) => put(`${url. MRP_MASTER_LIST}/${id}`,d
 export const edit_MRPList = (id) => get(`${url. MRP_MASTER_LIST}/${id}`)// edit api
 export const delete_MRPList_API = (id) =>  del(`${url. MRP_MASTER_LIST}/${id}`)// delete api
 export const GoButton_Post_API = (data) => post(url.GO_BUTTON_POST_API, data)// go button postapi
-
 
 // Margin Master
 export const Post_MarginMaster_API = (data) => post(url.MARGIN_MASTER_LIST, data)// post api
@@ -313,6 +312,12 @@ export const edit_MarginList = (id) =>get(`${url. MARGIN_MASTER_LIST}/${id}`) //
 export const update_MarginList = (data, id) =>put(`${url.MARGIN_MASTER_LIST}/${id}`, data)// update
 export const GoButton_Post_API_For_MarginMaster = (data) => post(url.GO_BUTTON_POST_API_FOR_MARGIN_MASTER, data)// go button postapi
 
+// GroupTypes API
+export const GroupTypes_API = () => get(url.GROUP_TYPE_API)
+export const GroupTypes_Post_API = (data) => post(url.GROUP_TYPE_API, data)// post api
+export const GroupTypes_Delete_API = (id) => del(`${url.GROUP_TYPE_API}/${id}`)// delete api
+export const GroupTypes_Edit_API = (id) => get(`${url.GROUP_TYPE_API}/${id}`)// edit api
+export const GroupTypes_Update_API = (data, id) => put(`${url.GROUP_TYPE_API}/${id}`, data)// update api
 
 // TermsAndCondtions API
 export const Post_TermsAndCondtions_Master_API = (data) => post(url.TERMSANDCONDITIONS_API, data)// post api

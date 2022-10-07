@@ -1,271 +1,69 @@
-import React, { useEffect, useState } from "react";
-import Breadcrumbs from "../../../components/Common/Breadcrumb";
-import { Col, Modal, Row } from "reactstrap";
-import paginationFactory, {
-  PaginationListStandalone,
-  PaginationProvider,
-} from "react-bootstrap-table2-paginator";
-import ToolkitProvider, { Search } from "react-bootstrap-table2-toolkit";
-import BootstrapTable from "react-bootstrap-table-next";
+import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import "../../../assets/scss/CustomeTable/datatables.scss";
 import VehicleMaster from "./VehicleMaster";
-import { MetaTags } from "react-meta-tags";
-import { useHistory } from "react-router-dom";
 import {
-    deleteVehicleTypeIDSuccess,
-    updateVehicleTypeIDSuccess,
-    getMethodForVehicleList,
-    editVehicleTypeId,
-    delete_VehicleType_ID,
-    PostMethod_ForVehicleMasterSuccess,
+  deleteVehicleTypeIDSuccess,
+  updateVehicleTypeIDSuccess,
+  getMethodForVehicleList,
+  editVehicleTypeId,
+  delete_VehicleType_ID,
+  PostMethod_ForVehicleMasterSuccess,
 } from "../../../store/Administrator/VehicleRedux/action";
-import { AlertState } from "../../../store/actions";
-import { listPageCommonButtonFunction } 
-from "../../../components/Common/CmponentRelatedCommonFile/listPageCommonButtons";
+import CommonListPage from "../../../components/Common/CmponentRelatedCommonFile/commonListPage";
+import { commonPageField, commonPageFieldSuccess } from "../../../store/actions";
 
 const VehicleList = (props) => {
 
   const dispatch = useDispatch();
-  const history = useHistory()
-
-  const [userPageAccessState, setUserPageAccessState] = useState('');
-  const [modal_center, setmodal_center] = useState(false);
-
-  const { TableListData, editData, updateMessage, deleteMessage, RoleAccessModifiedinSingleArray ,PostAPIResponse} = useSelector(
+  const reducers = useSelector(
     (state) => ({
-      TableListData: state.VehicleReducer.VehicleList,
+      tableList: state.VehicleReducer.VehicleList,
       editData: state.VehicleReducer.editData,
-      updateMessage: state.VehicleReducer.updateMessage,
-      deleteMessage: state.VehicleReducer.deleteMessage,
-      RoleAccessModifiedinSingleArray: state.Login.RoleAccessUpdateData,
-      PostAPIResponse: state.VehicleReducer.PostDataMessage,
+      updateMsg: state.VehicleReducer.updateMessage,
+      deleteMsg: state.VehicleReducer.deleteMessage,
+      userAccess: state.Login.RoleAccessUpdateData,
+      postMsg: state.VehicleReducer.PostDataMessage,
+      pageField: state.CommonPageFieldReducer.pageField
     })
   );
 
-  useEffect(() => {
-    const locationPath = history.location.pathname
-    let userAcc = RoleAccessModifiedinSingleArray.find((inx) => {
-      return (`/${inx.ActualPagePath}` === locationPath)
-    })
-    if (!(userAcc === undefined)) {
-      setUserPageAccessState(userAcc)
-    }
-  }, [RoleAccessModifiedinSingleArray])
+  const action = {
+    getList: getMethodForVehicleList,
+    editId: editVehicleTypeId,
+    deleteId: deleteVehicleTypeIDSuccess,
+    postSucc: PostMethod_ForVehicleMasterSuccess,
+    updateSucc: updateVehicleTypeIDSuccess,
+    deleteSucc: delete_VehicleType_ID
+  }
+
 
   //  This UseEffect => Featch Modules List data  First Rendering
   useEffect(() => {
+    dispatch(commonPageFieldSuccess([]))
+    dispatch(commonPageField(31))
     dispatch(getMethodForVehicleList());
   }, []);
 
-  // This UseEffect => UpadateModal Success/Unsucces  Show and Hide Control Alert_modal
-  useEffect(() => {
+  const { pageField } = reducers
 
-    if (updateMessage.Status === true && updateMessage.StatusCode === 200) {
-      dispatch(updateVehicleTypeIDSuccess({ Status: false }));
-      dispatch(
-        AlertState({
-          Type: 1,
-          Status: true,
-          Message: updateMessage.Message,
-          AfterResponseAction: getMethodForVehicleList,
-        })
-      );
-      tog_center();
-    } else if (updateMessage.Status === true) {
-      dispatch(updateVehicleTypeIDSuccess({ Status: false }));
-      dispatch(
-        AlertState({
-          Type: 3,
-          Status: true,
-          Message: JSON.stringify(updateMessage.Message),
-        })
-      );
-    }
-  }, [updateMessage]);
-
-  useEffect(() => {
-    if (deleteMessage.Status === true && deleteMessage.StatusCode === 200) {
-      dispatch(deleteVehicleTypeIDSuccess({ Status: false }));
-      dispatch(
-        AlertState({
-          Type: 1,
-          Status: true,
-          Message: deleteMessage.Message,
-          AfterResponseAction: getMethodForVehicleList,
-        })
-      );
-    } else if (deleteMessage.Status === true) {
-      dispatch(deleteVehicleTypeIDSuccess({ Status: false}));
-      dispatch(
-        AlertState({
-          Type: 3,
-          Status: true,
-          Message: JSON.stringify(deleteMessage.Message),
-        })
-      );
-    }
-  }, [deleteMessage]);
-
-
-  useEffect(() => {
-
-    if ((PostAPIResponse.Status === true) && (PostAPIResponse.StatusCode === 200)) {
-        dispatch(PostMethod_ForVehicleMasterSuccess({ Status: false }))
-        tog_center();
-        dispatch(getMethodForVehicleList());
-        dispatch(AlertState({
-            Type: 1,
-            Status: true,
-            Message: PostAPIResponse.Message,
-        }))
-    }
-
-    else if ((PostAPIResponse.Status === true)) {
-        dispatch(PostMethod_ForVehicleMasterSuccess({ Status: false }))
-        dispatch(AlertState({
-            Type: 4,
-            Status: true,
-            Message: JSON.stringify(PostAPIResponse.Message),
-            RedirectPath: false,
-            AfterResponseAction:false
-        }));
-    }
-}, [PostAPIResponse.Status])
-  // Edit Modal Show When Edit Data is true
-  useEffect(() => {
-    if (editData.Status === true) {
-      tog_center();
-    }
-  }, [editData]);
-
-  function tog_center() {
-    setmodal_center(!modal_center);
-  }
-
-  const defaultSorted = [
-    {
-      dataField: "Name", // if dataField is not match to any column you defined, it will be ignored.
-      order: "asc", // desc or asc
-    },
-  ];
-
-  const pageOptions = {
-    sizePerPage: 10,
-    totalSize: TableListData.length,
-    custom: true,
-  };
-
-  const pagesListColumns = [
-    {
-      text: "Vehicle Number",
-      dataField: "VehicleNumber",
-      sort: true,
-    },
-    {
-        text: "Description",
-        dataField: "Description",
-        sort: true,
-      },
+  return (
+    <React.Fragment>
       {
-        text: "Driver Name",
-        dataField: "DriverName",
-        sort: true,
-      },
-      {
-        text: "Vehicle Type",
-        dataField: "Vehicletype",
-        sort: true,
-      },
-      // {
-      //   text: "Division",
-      //   dataField: "DivisionName",
-      //   sort: true,
-      // },
+        (pageField.length > 0) ?
+          <CommonListPage
+            action={action}
+            reducers={reducers}
+            MasterModal={VehicleMaster}
+            masterPath={"/VehicleMaster"}
+            ButtonMsgLable={"Vehicle"}
+            deleteName={"VehicleNumber"}
 
-    // For Edit, Delete ,and View Button Common Code function
-    listPageCommonButtonFunction({
-      dispatchHook: dispatch,
-      ButtonMsgLable: "vehicle Type",
-      deleteName: "Name",
-      userPageAccessState: userPageAccessState,
-      editActionFun: editVehicleTypeId,
-      deleteActionFun: delete_VehicleType_ID
-    })
-  ];
+          />
+          : null
+      }
 
-  if (!(userPageAccessState === '')) {
-    return (
-      <React.Fragment>
-        <MetaTags>
-          <title>VehicleList| FoodERP-React FrontEnd</title>
-        </MetaTags>
-        <div className="page-content">
-          <PaginationProvider pagination={paginationFactory(pageOptions)}>
-            {({ paginationProps, paginationTableProps }) => (
-              <ToolkitProvider
-                keyField="id"
-                defaultSorted={defaultSorted}
-                data={TableListData}
-                columns={pagesListColumns}
-                search
-              >
-                {(toolkitProps) => (
-                  <React.Fragment>
-                    <Breadcrumbs
-                      title={"Count :"}
-                      breadcrumbItem={userPageAccessState.PageHeading}
-                      IsButtonVissible={(userPageAccessState.RoleAccess_IsSave) ? true : false}
-                      SearchProps={toolkitProps.searchProps}
-                      breadcrumbCount={`Product Count: ${TableListData.length}`}
-                      IsSearchVissible={true}
-                      RedirctPath={`/VehicleMaster`}
-                      isExcelButtonVisible={true}
-                      ExcelData={TableListData}
-                    />
-                    <Row>
-                      <Col xl="12">
-                        <div className="table-responsive">
-                          <BootstrapTable
-                            keyField={"id"}
-                            responsive
-                            bordered={false}
-                            striped={false}
-                            classes={"table  table-bordered"}
-                            {...toolkitProps.baseProps}
-                            {...paginationTableProps}
-                          />
-                        </div>
-                      </Col>
-                    </Row>
-                    <Row className="align-items-md-center mt-30">
-                      <Col className="pagination pagination-rounded justify-content-end mb-2">
-                        <PaginationListStandalone {...paginationProps} />
-                      </Col>
-                    </Row>
-                  </React.Fragment>
-                )}
-              </ToolkitProvider>
-            )}
-          </PaginationProvider>
-          <Modal
-            isOpen={modal_center}
-            toggle={() => {
-              tog_center();
-            }}
-            size="xl"
-          >
-            <VehicleMaster state={editData.Data} relatatedPage={"/VehicleMaster"} pageMode={editData.pageMode} />
-          </Modal>
-        </div>
-      </React.Fragment>
-    );
-  }
-  else {
-    return (
-      <React.Fragment></React.Fragment>
-    )
-  }
+    </React.Fragment>
+  )
 }
 
 export default VehicleList;

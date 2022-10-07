@@ -62,7 +62,7 @@ const SelectDivisionPage = props => {
 
       localStorage.setItem("roleId", JSON.stringify(value))
       dispatch(roleAceessAction(party, employee))
-      history.push("/dashboard")
+      history.push("/Dashboard")
     }
   }, [divisionDropdown_redux])
 
@@ -87,7 +87,7 @@ const SelectDivisionPage = props => {
 
     localStorage.setItem("roleId", JSON.stringify(value))
     dispatch(roleAceessAction(party, employee))
-    history.push("/dashboard")
+    history.push("/Dashboard")
 
   }
   return (

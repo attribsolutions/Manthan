@@ -30,6 +30,7 @@ import {
     getBaseUnit_ForDropDown,
     get_CategoryTypes_ForDropDown,
     get_Category_By_CategoryType_ForDropDown,
+    get_Category_By_CategoryType_ForDropDownAPI,
     get_Category_By_CategoryType_ForDropDown_Success,
     get_Division_ForDropDown,
     get_ImageType_ForDropDown,
@@ -41,12 +42,15 @@ import {
     PostItemDataSuccess,
     updateItemID
 } from "../../../../store/Administrator/ItemsRedux/action";
-import { AlertState, BreadcrumbShow } from "../../../../store/actions";
+import { AlertState, BreadcrumbShow, getCategoryTypelist } from "../../../../store/actions";
 import { Tbody, Thead } from "react-super-responsive-table";
 import { getPartyListAPI } from "../../../../store/Administrator/PartyRedux/action";
 import GSTTab from "./GST_Tab";
 import MRPTab from "./MRP_Tab";
 import Margin_Tab from "./MarginTab/index";
+import GroupTab from "./Group_Tab";
+import CategoryTab from "./Category_Tab";
+import DivisionTab from "./Division_Tab";
 
 const ItemsMaster = (props) => {
     const dispatch = useDispatch();
@@ -62,6 +66,8 @@ const ItemsMaster = (props) => {
     const [userPageAccessState, setUserPageAccessState] = useState(11);
     const [activeTab1, setactiveTab1] = useState("1")
     const [division_dropdown_Select, setDivision_dropdown_Select] = useState("");
+    const [CategoryTypeDropdownSelect, setCategoryTypeDropdownSelect] = useState("");
+    const [categoryDropdownSelect, setcategoryDropdownSelect] = useState("");
 
     let initial = {
         Name: "",
@@ -108,7 +114,14 @@ const ItemsMaster = (props) => {
         Conversion: '',
         Unit: { label: "", value: 0 },
     }]);
+
+    const [Division_Tab_TableData, setDivision_Tab_TableData] = useState([]);
+
     const [MRP_Tab_TableData, setMRP_Tab_TableData] = useState([]);
+
+    const [Group_Tab_TableData, setGroup_Tab_TableData] = useState([]);
+
+    const [Category_Tab_TableData, setCategory_Tab_TableData] = useState([]);
 
     const [GStDetailsTabTable, setGSTDetailsTabTable] = useState([]);
 
@@ -126,7 +139,9 @@ const ItemsMaster = (props) => {
         MRPType,
         Division,
         Party,
-        PriceList
+        PriceList,
+        CategoryTypeList,
+        CategoryList
     } = useSelector((state) => ({
         companyList: state.Company.companyList,
         BaseUnit: state.ItemMastersReducer.BaseUnit,
@@ -141,6 +156,8 @@ const ItemsMaster = (props) => {
         Division: state.ItemMastersReducer.Division,
         Party: state.ItemMastersReducer.Party,
         PriceList: state.ItemMastersReducer.PriceList,
+        CategoryTypeList: state.categoryTypeReducer.categoryTypeListData,
+        CategoryList: state.ItemMastersReducer.Category,
     }));
 
 
@@ -168,7 +185,7 @@ const ItemsMaster = (props) => {
     }, [RoleAccessModifiedinSingleArray])
 
     useEffect(() => {
-        debugger
+
         if (!(userPageAccessState === '')) { document.getElementById("txtName0").focus(); }
 
         if (!(editDataGatingFromList === undefined)) {
@@ -270,7 +287,7 @@ const ItemsMaster = (props) => {
                     EffectiveDate: index.EffectiveDate,
                 }
             })
-           
+
             setFormValue(initialFormValue);
             setCategoryTabTable(initialCategory)
             setImageTabTable(ItemImagesDetails)
@@ -279,6 +296,9 @@ const ItemsMaster = (props) => {
             setMRP_Tab_TableData(editMode_Data.ItemMRPDetails)
             setMarginMaster(editMode_Data.ItemMarginDetails)
             setGStDetailsMaster(editMode_Data.ItemGSTHSNDetails)
+            setGroup_Tab_TableData(editMode_Data.ItemGroupDetails)
+            setDivision_Tab_TableData(editMode_Data.ItemDivisionDetails)
+            setCategory_Tab_TableData(editMode_Data.ItemCategoryDetails)
             setIsValidate([])
 
             dispatch(editItemSuccess({ Status: false }))
@@ -334,67 +354,69 @@ const ItemsMaster = (props) => {
         dispatch(get_Division_ForDropDown());
         dispatch(get_Party_ForDropDown());
         dispatch(get_PriceList_ForDropDown());
+        dispatch(getCategoryTypelist());
+        dispatch(get_Category_By_CategoryType_ForDropDownAPI());
     }, [dispatch]);
 
 
-    useEffect(() => {
+    // useEffect(() => {
 
-        let key = Category.key
-        if ((key === null)) return;
+    //     let key = Category.key
+    //     if ((key === null)) return;
 
-        let Category_DropdownOptions = Category.Data.map((data) => ({
-            value: data.id,
-            label: data.Name
-        }));
+    //     let Category_DropdownOptions = Category.Data.map((data) => ({
+    //         value: data.id,
+    //         label: data.Name
+    //     }));
 
-        var found = categoryTabTable.find((i, k) => {
-            return (k === key)
-        })
+    //     var found = categoryTabTable.find((i, k) => {
+    //         return (k === key)
+    //     })
 
-        let newSelectValue = {
-            CategoryType: found.CategoryType,
-            Category: found.Category,
-            SubCategory: found.SubCategory,
-            Category_DropdownOptions: Category_DropdownOptions,
-            SubCategory_DropdownOptions: []
-        }
+    //     let newSelectValue = {
+    //         CategoryType: found.CategoryType,
+    //         Category: found.Category,
+    //         SubCategory: found.SubCategory,
+    //         Category_DropdownOptions: Category_DropdownOptions,
+    //         SubCategory_DropdownOptions: []
+    //     }
 
-        let newTabArr = categoryTabTable.map((index, k) => {
-            return (k === key) ? newSelectValue : index
-        })
-        setCategoryTabTable(newTabArr)
-        dispatch(get_Category_By_CategoryType_ForDropDown_Success({ Data: [], key: null }))
-    }, [Category]);
+    //     let newTabArr = categoryTabTable.map((index, k) => {
+    //         return (k === key) ? newSelectValue : index
+    //     })
+    //     setCategoryTabTable(newTabArr)
+    //     dispatch(get_Category_By_CategoryType_ForDropDown_Success({ Data: [], key: null }))
+    // }, [Category]);
 
-    useEffect(() => {
+    // useEffect(() => {
 
-        let key = SubCategory.key
-        if ((key === null)) return;
+    //     let key = SubCategory.key
+    //     if ((key === null)) return;
 
-        let SubCategory_DropdownOptions = SubCategory.Data.map((data) => ({
-            value: data.id,
-            label: data.Name
-        }));
+    //     let SubCategory_DropdownOptions = SubCategory.Data.map((data) => ({
+    //         value: data.id,
+    //         label: data.Name
+    //     }));
 
-        var found = categoryTabTable.find((i, k) => {
-            return (k === key)
-        })
+    //     var found = categoryTabTable.find((i, k) => {
+    //         return (k === key)
+    //     })
 
-        let newSelectValue = {
-            CategoryType: found.CategoryType,
-            Category: found.Category,
-            SubCategory: found.SubCategory,
-            Category_DropdownOptions: found.Category_DropdownOptions,
-            SubCategory_DropdownOptions: SubCategory_DropdownOptions,
-        }
+    //     let newSelectValue = {
+    //         CategoryType: found.CategoryType,
+    //         Category: found.Category,
+    //         SubCategory: found.SubCategory,
+    //         Category_DropdownOptions: found.Category_DropdownOptions,
+    //         SubCategory_DropdownOptions: SubCategory_DropdownOptions,
+    //     }
 
-        let newTabArr = categoryTabTable.map((index, k) => {
-            return (k === key) ? newSelectValue : index
-        })
-        setCategoryTabTable(newTabArr)
-        dispatch(get_Sub_Category_By_CategoryType_ForDropDown_Success({ Data: [], key: null }))
+    //     let newTabArr = categoryTabTable.map((index, k) => {
+    //         return (k === key) ? newSelectValue : index
+    //     })
+    //     setCategoryTabTable(newTabArr)
+    //     dispatch(get_Sub_Category_By_CategoryType_ForDropDown_Success({ Data: [], key: null }))
 
-    }, [SubCategory]);
+    // }, [SubCategory]);
 
     const toggle1 = tab => {
         if (activeTab1 !== tab) {
@@ -446,6 +468,16 @@ const ItemsMaster = (props) => {
     const CategoryType_DropdownOptions = CategoryType.map((data) => ({
         value: data.id,
         label: data.Name
+    }));
+
+    const CategoryTypeList_DropdownOptions = CategoryTypeList.map((data) => ({
+        value: data.id,
+        label: data.Name,
+    }));
+
+    const CategoryList_DropdownOptions = CategoryList.map((data) => ({
+        value: data.id,
+        label: data.Name,
     }));
 
     const DivisionType_DropdownOptions = DivisionType.map((data) => ({
@@ -598,18 +630,18 @@ const ItemsMaster = (props) => {
         const foundDublicate = categoryTabTable.find((element) => {
             return (element[type].value === event.value)
         });
-        if (!(foundDublicate === undefined)) {
-            dispatch(AlertState({
-                Type: 4,
-                Status: true,
-                Message: "Category alredy Select",
-            }))
-            return
-        }
+        // if (!(foundDublicate === undefined)) {
+        //     dispatch(AlertState({
+        //         Type: 4,
+        //         Status: true,
+        //         Message: "Category alredy Select",
+        //     }))
+        //     return
+        // }
 
 
-        let validateReturn = Common_Drop_Validation(event, type, key);
-        if (validateReturn === false) return;
+        //     let validateReturn = Common_Drop_Validation(event, type, key);
+        //     if (validateReturn === false) return;
 
 
         var found = categoryTabTable.find((i, k) => {
@@ -973,8 +1005,18 @@ const ItemsMaster = (props) => {
         //     setGSTDetailsTabTable([])
         // }
     }
-    const handleValidSubmit = (event, values) => {
 
+    const CategoryType_Handler = (event) => {
+        setCategoryTypeDropdownSelect(event);
+        dispatch(get_Category_By_CategoryType_ForDropDownAPI(event.value))
+    };
+
+    const Category_Handler = (event) => {
+        setcategoryDropdownSelect(event);
+
+    };
+    const handleValidSubmit = (event, values) => {
+        debugger
         const itemCategoryDetails = categoryTabTable.map((index) => ({
             CategoryType: index.CategoryType.value,
             Category: index.Category.value,
@@ -990,123 +1032,6 @@ const ItemsMaster = (props) => {
             Division: index.value
         }))
 
-        const iteMarginDetails = marginMaster.map((index) => ({
-            PriceList: index.priceListid,
-            EffectiveDate: index.effectiveDate,
-            Party: index.partyid,
-            Margin: index.margin,
-            CreatedBy: 1,
-            UpdatedBy: 1,
-            Company: 1,
-        }))
-
-        const itemMRPDetails = MRP_Tab_TableData.map((index) => ({
-            Division: index.Divisionid,
-            EffectiveDate: index.effectiveDate,
-            Party: index.partyid,
-            MRP: index.MRP,
-            CreatedBy: 1,
-            UpdatedBy: 1,
-            Company: 1,
-        }))
-
-        const ItemGSTHSNDetails = GStDetailsMaster.map((index) => ({
-            EffectiveDate: index.effectiveDate,
-            GSTPercentage: index.GST,
-            HSNCode: index.HSNCode,
-            CreatedBy: 1,
-            UpdatedBy: 1,
-        }))
-
-        let submitValid1 = true;
-        let submitValid2 = true
-        let submitValid3 = true
-        let submitValid4 = true;
-        let submitValid5 = true
-        let submitValid6 = true
-        let submitValid7 = true
-
-        // isValidate.map((ind) => {
-        //     document.getElementById(ind).className = "form-control is-invalid"
-        // })
-
-        // categoryTabTable.map((ind, key) => {
-
-        //     let return1 = Common_Drop_Validation(ind.CategoryType, "CategoryType", key);
-        //     if (return1 === false) submitValid2 = return1;
-
-        //     let return2 = Common_Drop_Validation(ind.Category, "Category", key);
-        //     if (return2 === false) submitValid2 = return2;
-
-        //     // let return3 = Common_Drop_Validation(ind.SubCategory, "SubCategory", key);
-        //     // if (return3 === false) submitValid2 = return3;
-        // })
-
-        // if (formValue.BaseUnit.value > 0) {
-        //     baseUnitTableData.map((ind, key) => {
-        //         let return1 = Common_Text_INPUT_Validation(ind.Conversion, "Conversion", key);
-        //         if (return1 === false) submitValid3 = return1;
-
-        //         let return2 = Common_Drop_Validation(ind.Unit, "Unit", key);
-        //         if (return2 === false) submitValid3 = return2;
-
-        //     })
-        // }
-
-        // MRP_Tab_TableData.map((ind, key) => {
-
-        //     let return1 = Common_Drop_Validation(ind.MRPType, "MRPType", key);
-        //     if (return1 === false) submitValid6 = return1;
-
-        //     let return2 = Common_Text_INPUT_Validation(ind.MRP, "MRP", key);
-        //     if (return2 === false) submitValid6 = return2;
-
-        //     let return3 = Common_Text_INPUT_Validation(ind.GSTPercentage, "GSTPercentage", key);
-        //     if (return3 === false) submitValid6 = return3;
-
-        //     let return4 = Common_Text_INPUT_Validation(ind.HSNCode, "HSNCode", key);
-        //     if (return4 === false) submitValid6 = return4;
-
-        // })
-
-        // marginTabTable.map((ind, key) => {
-
-        //     let return1 = Common_Text_INPUT_Validation(ind.Margin, "Margin", key);
-        //     if (return1 === false) submitValid7 = return1;
-
-        //     let return2 = Common_Drop_Validation(ind.PriceList, "PriceList", key);
-        //     if (return2 === false) submitValid7 = return2;
-        // })
-
-        // if (!(isValidate.length === 0)) {
-        //     setactiveTab1('1');
-        //     return
-        // };
-
-        // if (!submitValid2) {
-        //     setactiveTab1('2');
-        //     return
-        // };
-        // if (!submitValid3) {
-        //     setactiveTab1('3');
-        //     return
-        // };
-        // if ((divisionTableData.length < 1)) {
-        //     setactiveTab1('5');
-        //     document.getElementById("dropDivisionType-0").className = "form-control is-invalid"
-        //     return
-        // };
-
-        // if (!submitValid6) {
-        //     setactiveTab1('6');
-        //     return
-        // };
-
-        // if (!submitValid7) {
-        //     setactiveTab1('7');
-        //     return
-        // };
-
         const jsonBody = JSON.stringify({
             Name: formValue.Name,
             ShortName: formValue.ShortName,
@@ -1117,7 +1042,7 @@ const ItemsMaster = (props) => {
             BaseUnitID: formValue.BaseUnit.value,
             CreatedBy: 1,
             UpdatedBy: 1,
-            ItemCategoryDetails: itemCategoryDetails,
+            ItemCategoryDetails: Category_Tab_TableData,
             ItemUnitDetails: itemUnitDetails,
 
             ItemImagesDetails: [
@@ -1126,14 +1051,47 @@ const ItemsMaster = (props) => {
                     Item_pic: "sadsadasdas"
                 }
             ],
-            ItemDivisionDetails: itemDivisionDetails,
+            ItemDivisionDetails: Division_Tab_TableData,
             ItemMRPDetails: MRP_Tab_TableData,
             ItemMarginDetails: marginMaster,
             ItemGSTHSNDetails: GStDetailsMaster,
+            ItemGroupDetails: Group_Tab_TableData,
 
         });
-debugger
-        if (pageMode === 'edit') {
+
+        if (!Group_Tab_TableData.length > 0) {
+            dispatch(AlertState({
+                Type: 4, Status: true,
+                Message: "Please Select ItemGroup Details",
+                RedirectPath: false,
+                PermissionAction: false,
+            }));
+        }
+        else if (!MRP_Tab_TableData.length > 0) {
+            dispatch(AlertState({
+                Type: 4, Status: true,
+                Message: "Please Select MRP Details",
+                RedirectPath: false,
+                PermissionAction: false,
+            }));
+        }
+        else if (!marginMaster.length > 0) {
+            dispatch(AlertState({
+                Type: 4, Status: true,
+                Message: "Please Select Margin Details",
+                RedirectPath: false,
+                PermissionAction: false,
+            }));
+        }
+        else if (!GStDetailsMaster.length > 0) {
+            dispatch(AlertState({
+                Type: 4, Status: true,
+                Message: "Please Select GST Details",
+                RedirectPath: false,
+                PermissionAction: false,
+            }));
+        }
+        else if (pageMode === 'edit') {
             dispatch(updateItemID(jsonBody, EditData.id));
             console.log("edit json", jsonBody)
         }
@@ -1144,58 +1102,6 @@ debugger
         }
 
     };
-
-    const pageOptionsForMarginTable = {
-        sizePerPage: 10,
-        totalSize: marginMaster.length,
-        custom: true,
-    };
-
-    const pageOptions = {
-        sizePerPage: 10,
-        totalSize: GStDetailsTabTable.length,
-        custom: true,
-    };
-
-    const pagesListColumns = [
-
-        {
-            text: "EffectiveDate",
-            dataField: "EffectiveDate",
-            sort: true,
-        },
-        {
-            text: "GST",
-            dataField: "GST",
-            sort: true,
-        },
-        {
-            text: "HSNCode",
-            dataField: "HSNCode",
-            sort: true,
-        },
-        {
-            text: " ",
-            dataField: "buttons",
-
-            formatter: (cellContent, ele, k) => (
-                <>
-                    <div class="d-flex gap-3" style={{ display: 'flex', justifyContent: 'center' }} >
-                        <buton
-                            className="badge badge-soft-danger font-size-12"
-                            onClick={() => {
-                                GSTDetails_Delete_Handller(cellContent, ele, k)
-                            }}
-                        >
-                            <i class="mdi mdi-delete font-size-18" ></i>
-                        </buton>
-
-                    </div>
-                </>
-            )
-        }
-
-    ];
 
     var IsEditMode_Css = ''
     if ((pageMode === "edit") || (pageMode === "copy") || (pageMode === "dropdownAdd")) { IsEditMode_Css = "-5.5%" };
@@ -1238,7 +1144,7 @@ debugger
                                                         <span className="d-none d-sm-block">Basic Info</span>
                                                     </NavLink>
                                                 </NavItem>
-                                                <NavItem>
+                                                {/* <NavItem>
                                                     <NavLink
                                                         id="nave-link-2"
                                                         style={{ cursor: "pointer" }}
@@ -1255,7 +1161,7 @@ debugger
                                                         <span className="d-none d-sm-block">Category</span>
 
                                                     </NavLink>
-                                                </NavItem>
+                                                </NavItem> */}
                                                 <NavItem>
                                                     <NavLink
                                                         id="nave-link-3"
@@ -1270,7 +1176,8 @@ debugger
                                                         <span className="d-block d-sm-none">
                                                             <i className="fas fa-home"></i>
                                                         </span>
-                                                        <span className="d-none d-sm-block">Unit Conversions</span>
+                                                        <span className="d-none d-sm-block">Item Group</span>
+
                                                     </NavLink>
                                                 </NavItem>
                                                 <NavItem>
@@ -1287,7 +1194,7 @@ debugger
                                                         <span className="d-block d-sm-none">
                                                             <i className="fas fa-home"></i>
                                                         </span>
-                                                        <span className="d-none d-sm-block">Image</span>
+                                                        <span className="d-none d-sm-block">Unit Conversions</span>
                                                     </NavLink>
                                                 </NavItem>
                                                 <NavItem>
@@ -1304,10 +1211,10 @@ debugger
                                                         <span className="d-block d-sm-none">
                                                             <i className="fas fa-home"></i>
                                                         </span>
-                                                        <span className="d-none d-sm-block">Division</span>
+                                                        <span className="d-none d-sm-block">Image</span>
                                                     </NavLink>
                                                 </NavItem>
-                                                <NavItem>
+                                                {/* <NavItem>
                                                     <NavLink
                                                         id="nave-link-6"
                                                         style={{ cursor: "pointer" }}
@@ -1321,11 +1228,9 @@ debugger
                                                         <span className="d-block d-sm-none">
                                                             <i className="fas fa-home"></i>
                                                         </span>
-                                                        <span className="d-none d-sm-block">MRP</span>
+                                                        <span className="d-none d-sm-block">Division</span>
                                                     </NavLink>
-                                                </NavItem>
-
-
+                                                </NavItem> */}
                                                 <NavItem>
                                                     <NavLink
                                                         id="nave-link-7"
@@ -1340,9 +1245,10 @@ debugger
                                                         <span className="d-block d-sm-none">
                                                             <i className="fas fa-home"></i>
                                                         </span>
-                                                        <span className="d-none d-sm-block">Margin</span>
+                                                        <span className="d-none d-sm-block">MRP</span>
                                                     </NavLink>
                                                 </NavItem>
+
 
                                                 <NavItem>
                                                     <NavLink
@@ -1358,11 +1264,29 @@ debugger
                                                         <span className="d-block d-sm-none">
                                                             <i className="fas fa-home"></i>
                                                         </span>
-                                                        <span className="d-none d-sm-block">GST Details</span>
+                                                        <span className="d-none d-sm-block">Margin</span>
                                                     </NavLink>
                                                 </NavItem>
 
                                                 <NavItem>
+                                                    <NavLink
+                                                        id="nave-link-9"
+                                                        style={{ cursor: "pointer" }}
+                                                        className={classnames({
+                                                            active: activeTab1 === "9",
+                                                        })}
+                                                        onClick={() => {
+                                                            toggle1("9")
+                                                        }}
+                                                    >
+                                                        <span className="d-block d-sm-none">
+                                                            <i className="fas fa-home"></i>
+                                                        </span>
+                                                        <span className="d-none d-sm-block">GST Details</span>
+                                                    </NavLink>
+                                                </NavItem>
+
+                                                {/* <NavItem>
 
                                                     <NavLink
                                                         style={{ cursor: "pointer" }}
@@ -1377,39 +1301,10 @@ debugger
                                                             <i className="fas fa-home"></i>
                                                         </span>
                                                         {/* <span className="d-none d-sm-block">Tab7</span> */}
-                                                        {/* <Button type="submit"> save</Button> */}
-                                                        <Row >
-                                                            <Col sm={2}>
-                                                                <div>
-                                                                    {
-                                                                        pageMode === "edit" ?
-                                                                            userPageAccessState.RoleAccess_IsEdit ?
-                                                                                <button
-                                                                                    type="submit"
-                                                                                    data-mdb-toggle="tooltip" data-mdb-placement="top" title="Update Role"
-                                                                                    className="btn btn-success w-md"
-                                                                                >
-                                                                                    <i class="fas fa-edit me-2"></i>Update
-                                                                                </button>
-                                                                                :
-                                                                                <></>
-                                                                            : (
-                                                                                userPageAccessState.RoleAccess_IsSave ?
-                                                                                    <button
-                                                                                        type="submit"
-                                                                                        data-mdb-toggle="tooltip" data-mdb-placement="top" title="Save Role"
-                                                                                        className="btn btn-primary w-md"
-                                                                                    > <i className="fas fa-save me-2"></i> Save
-                                                                                    </button>
-                                                                                    :
-                                                                                    <></>
-                                                                            )
-                                                                    }
-                                                                </div>
-                                                            </Col>
-                                                        </Row>
-                                                    </NavLink>
-                                                </NavItem>
+                                                {/* <Button type="submit"> save</Button> */}
+
+                                                {/* </NavLink>
+                                                </NavItem>  */}
                                             </Nav>
 
                                             <TabContent activeTab={activeTab1} className="p-3 text-muted">
@@ -1494,129 +1389,179 @@ debugger
                                                                         />
 
                                                                     </FormGroup>
-                                                                    <FormGroup className="mb-2 col col-sm-5">
-                                                                        <Row className="justify-content-md-left">
-                                                                            <Label htmlFor="horizontal-firstname-input" className="col-sm-2 col-form-label" >Active </Label>
-                                                                            <Col md={2} style={{ marginTop: '9px' }} >
 
-                                                                                <div className="form-check form-switch form-switch-md mb-3" dir="ltr">
-                                                                                    <Input type="checkbox" className="form-check-input" id="customSwitchsizemd"
-                                                                                        defaultChecked={formValue.isActive}
-                                                                                        // defaultChecked={true}
-                                                                                        onChange={(e) => { formValue.isActive = e.target.checked }}
-
-                                                                                    />
-                                                                                </div>
-                                                                            </Col>
-                                                                        </Row>
+                                                                    <FormGroup className="mb-3 col col-sm-4 ">
+                                                                        <Label>Category Type</Label>
+                                                                        <Select
+                                                                            id={`dropCategoryType-${0}`}
+                                                                            value={CategoryTypeDropdownSelect}
+                                                                            options={CategoryTypeList_DropdownOptions}
+                                                                            onChange={CategoryType_Handler}
+                                                                        />
                                                                     </FormGroup>
+
+                                                                    {/* <FormGroup className="mb-3 col col-sm-4 ">
+                                                                        <Label>Category</Label>
+                                                                        <Select
+                                                                            id={`dropCategory-${0}`}
+                                                                            value={categoryDropdownSelect}
+                                                                            options={CategoryList_DropdownOptions}
+                                                                            onChange={Category_Handler}
+                                                                        />
+                                                                    </FormGroup> */}
+                                                                    <div className="col-lg-4 col-md-6">
+                                                                        <div className="mb-3">
+                                                                            <Label className="form-label font-size-13 ">Category</Label>
+                                                                            <Select
+                                                                                defaultValue={categoryDropdownSelect}
+                                                                                isMulti={true}
+                                                                                className="basic-multi-select"
+                                                                                options={CategoryList_DropdownOptions}
+                                                                                onChange={(e) => { Category_Handler(e) }}
+                                                                                classNamePrefix="select2-selection"
+                                                                            />
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <div className="col-lg-4 col-md-6">
+                                                                        <div className="mb-3">
+                                                                            <Label className="form-label font-size-13 ">Division</Label>
+                                                                            <Select
+                                                                                defaultValue={division_dropdown_Select}
+                                                                                isMulti={true}
+                                                                                className="basic-multi-select"
+                                                                                options={Division_DropdownOptions}
+                                                                                onChange={(e) => { Category_Handler(e) }}
+                                                                                classNamePrefix="select2-selection"
+                                                                            />
+                                                                        </div>
+                                                                    </div>
+                                                                    <Row>
+                                                                        <FormGroup className="mb-2 col col-sm-5">
+                                                                            <Row className="justify-content-md-left">
+                                                                                <Label htmlFor="horizontal-firstname-input" className="col-sm-2 col-form-label" >Active </Label>
+                                                                                <Col md={2} style={{ marginTop: '9px' }} >
+
+                                                                                    <div className="form-check form-switch form-switch-md mb-3" dir="ltr">
+                                                                                        <Input type="checkbox" className="form-check-input" id="customSwitchsizemd"
+                                                                                            defaultChecked={formValue.isActive}
+                                                                                            // defaultChecked={true}
+                                                                                            onChange={(e) => { formValue.isActive = e.target.checked }}
+
+                                                                                        />
+                                                                                    </div>
+                                                                                </Col>
+                                                                            </Row>
+                                                                        </FormGroup>
+                                                                    </Row>
+
                                                                 </Row>
                                                             </CardBody>
                                                         </Card>
                                                     </Col>
 
                                                 </TabPane>
-
+                                                {/* 
                                                 <TabPane tabId="2">
-                                                    <Col md={12}  >
+                                                    <Col md={12} >
                                                         <Card className="text-black">
                                                             <CardBody style={{ backgroundColor: "whitesmoke" }}>
 
                                                                 {categoryTabTable.map((index, key) => {
+                                                                    return <Row className=" col col-sm-11" >
+                                                                        <FormGroup className="mb-3 col col-sm-4 " >
+                                                                            <Label htmlFor="validationCustom21">Category Type</Label>
+                                                                            <Select
+                                                                                id={`dropCategoryType-${key}`}
+                                                                                value={categoryTabTable[key].CategoryType}
 
-                                                                    return <Row className="mt-3">
-                                                                        <Col className=" col col-11 ">
-                                                                            <Row>
-                                                                                <FormGroup className=" col col-sm-4 " >
-                                                                                    <Label htmlFor="validationCustom21">Category Type</Label>
-                                                                                    <Select
-                                                                                        id={`dropCategoryType-${key}`}
-                                                                                        value={categoryTabTable[key].CategoryType}
+                                                                                options={CategoryType_DropdownOptions}
+                                                                                onChange={(e) => {
+                                                                                    CategoryType_Dropdown_Handler(e, key, "CategoryType")
+                                                                                }}
+                                                                            />
+                                                                        </FormGroup>
 
-                                                                                        options={CategoryType_DropdownOptions}
-                                                                                        onChange={(e) => {
-                                                                                            CategoryType_Dropdown_Handler(e, key, "CategoryType")
-                                                                                        }}
-                                                                                    />
-                                                                                </FormGroup>
+                                                                        <FormGroup className="mb-3 col col-sm-4 " >
+                                                                            <Label htmlFor="validationCustom21">Category</Label>
+                                                                            <Select
+                                                                                id={`dropCategory-${key}`}
+                                                                                // styles={customStyles}
+                                                                                value={categoryTabTable[key].Category}
+                                                                                options={categoryTabTable[key].Category_DropdownOptions}
 
-                                                                                <FormGroup className=" col col-sm-4 " >
-                                                                                    <Label htmlFor="validationCustom21">Category</Label>
-                                                                                    <Select
-                                                                                        id={`dropCategory-${key}`}
-                                                                                        // styles={customStyles}
-                                                                                        value={categoryTabTable[key].Category}
-                                                                                        options={categoryTabTable[key].Category_DropdownOptions}
+                                                                                onChange={(e) => {
+                                                                                    Category_Dropdown_Handler(e, key, "Category")
 
-                                                                                        onChange={(e) => {
-                                                                                            Category_Dropdown_Handler(e, key, "Category")
+                                                                                }}
+                                                                            />
+                                                                        </FormGroup>
 
-                                                                                        }}
-                                                                                    />
-                                                                                </FormGroup>
+                                                                        <Col md={1}>
+                                                                            {(categoryTabTable.length === key + 1) ?
+                                                                                <Row className=" mt-3">
+                                                                                    <Col md={6} className=" mt-3">
+                                                                                        {(categoryTabTable.length > 1)
+                                                                                            ?
+                                                                                            < i className="mdi mdi-trash-can d-block text-danger font-size-20" onClick={() => {
+                                                                                                CategoryTab_DeleteRow_Handler(key)
+                                                                                            }} >
+                                                                                            </i>
+                                                                                            : <Col md={6} ></Col>
+                                                                                        }
 
-                                                                                <FormGroup className=" col col-sm-4 " >
-                                                                                    <Label htmlFor="validationCustom21">Sub Category</Label>
-                                                                                    <Select
-                                                                                        // styles={customStyles}
-                                                                                        id={`dropSubCategory-${key}`}
-                                                                                        value={categoryTabTable[key].SubCategory}
-                                                                                        options={categoryTabTable[key].SubCategory_DropdownOptions}
-                                                                                        onChange={(e) => { CategoryTab_Common_onChange_Handller(e, "SubCategory", key) }}
-                                                                                    />
-                                                                                </FormGroup>
-                                                                            </Row>
-                                                                        </Col>
-
-                                                                        {(categoryTabTable.length === key + 1) ?
-                                                                            <Col className="  col col-1 mt-3">
-                                                                                <Row>
-                                                                                    <Col md={6}>
-                                                                                        {(categoryTabTable.length > 1) ? <>
-                                                                                            <i
-                                                                                                className="mdi mdi-trash-can d-block text-danger font-size-20 mt-3"
-                                                                                                onClick={() => {
-                                                                                                    CategoryTab_DeleteRow_Handler(key);
-                                                                                                }}
-                                                                                            ></i>
-
-
-                                                                                        </> : null}
                                                                                     </Col>
+
                                                                                     <Col md={6}>
-                                                                                        <Button className="btn btn-sm btn-light mt-3 "
+                                                                                        <Button className="btn btn-sm btn-light mt-3   align-items-sm-end"
                                                                                             type="button"
-                                                                                            onClick={() => { CategoryTab_AddRow_Handler() }} >
+                                                                                            onClick={() => { CategoryTab_AddRow_Handler(key) }} >
                                                                                             <i className="dripicons-plus"></i>
                                                                                         </Button>
                                                                                     </Col>
-
                                                                                 </Row>
-                                                                            </Col>
-                                                                            : <Col className="col col-1 mt-3">
+                                                                                :
+                                                                                <Row className="mt-3">
+                                                                                    < i className="mdi mdi-trash-can d-block text-danger font-size-20 mt-3" onClick={() => {
+                                                                                        CategoryTab_DeleteRow_Handler(key)
+                                                                                    }} >
+                                                                                    </i>
+                                                                                </Row>
+                                                                            }
 
-                                                                                <i
-                                                                                    className="mdi mdi-trash-can d-block text-danger font-size-20 mt-3"
-                                                                                    onClick={() => {
-                                                                                        CategoryTab_DeleteRow_Handler(key);
-                                                                                    }}
-                                                                                ></i>
-
-                                                                            </Col>}
+                                                                        </Col>
                                                                     </Row>
-
-
                                                                 })}
-
                                                             </CardBody>
                                                         </Card>
-
                                                     </Col>
 
+                                                </TabPane> */}
+
+                                                <TabPane tabId="2">
+                                                    <Row>
+                                                        <Col md={12}  >
+                                                            <Row className="mt-3">
+                                                                <Col className=" col col-12 ">
+                                                                    <CategoryTab tableData={Category_Tab_TableData} func={setCategory_Tab_TableData} />
+                                                                </Col>
+                                                            </Row>
+                                                        </Col>
+                                                    </Row>
                                                 </TabPane>
 
-
                                                 <TabPane tabId="3">
+                                                    <Row>
+                                                        <Col md={12}  >
+                                                            <Row className="mt-3">
+                                                                <Col className=" col col-12 ">
+                                                                    <GroupTab tableData={Group_Tab_TableData} func={setGroup_Tab_TableData} />
+                                                                </Col>
+                                                            </Row>
+                                                        </Col>
+                                                    </Row>
+                                                </TabPane>
+                                                <TabPane tabId="4">
                                                     <Col md={12}>
                                                         <Row>
                                                             <Col md={12}  >
@@ -1729,7 +1674,7 @@ debugger
                                                     </Col>
                                                 </TabPane>
 
-                                                <TabPane tabId="4">
+                                                <TabPane tabId="5">
                                                     <Col md={12} >
                                                         <Card className="text-black">
                                                             <CardBody style={{ backgroundColor: "whitesmoke" }}>
@@ -1786,10 +1731,10 @@ debugger
                                                                                     </Col>
 
                                                                                     <Col md={6}>
-                                                                                        <Button className="btn btn-sm btn-light mt-3   align-items-sm-end"
+                                                                                        <Button className="btn btn-sm mt-3 btn-light  btn-outline-primary  align-items-sm-end"
                                                                                             type="button"
                                                                                             onClick={() => { ImageTab_AddRow_Handler(key) }} >
-                                                                                            <i className="dripicons-plus"></i>
+                                                                                            <i className="dripicons-plus"></i>Add
                                                                                         </Button>
                                                                                     </Col>
                                                                                 </Row>
@@ -1812,7 +1757,7 @@ debugger
                                                     </Row>
                                                 </TabPane>
 
-                                                <TabPane tabId="5">
+                                                {/* <TabPane tabId="6">
                                                     <Row>
                                                         <Col md={12}  >
                                                             <Card className="text-black">
@@ -1880,14 +1825,14 @@ debugger
                                                             </Card>
                                                         </Col>
                                                     </Row>
-                                                </TabPane>
+                                                </TabPane> */}
 
                                                 <TabPane tabId="6">
                                                     <Row>
                                                         <Col md={12}  >
                                                             <Row className="mt-3">
-                                                                <Col className=" col col-11 ">
-                                                                    <MRPTab tableData={MRP_Tab_TableData} func={setMRP_Tab_TableData} />
+                                                                <Col className=" col col-12 ">
+                                                                    <DivisionTab tableData={Division_Tab_TableData} func={setDivision_Tab_TableData} />
                                                                 </Col>
                                                             </Row>
                                                         </Col>
@@ -1895,11 +1840,23 @@ debugger
                                                 </TabPane>
 
                                                 <TabPane tabId="7">
+                                                    <Row>
+                                                        <Col md={12}  >
+                                                            <Row className="mt-3">
+                                                                <Col className=" col col-12 ">
+                                                                    <MRPTab tableData={MRP_Tab_TableData} func={setMRP_Tab_TableData} />
+                                                                </Col>
+                                                            </Row>
+                                                        </Col>
+                                                    </Row>
+                                                </TabPane>
+
+                                                <TabPane tabId="8">
 
                                                     <Row>
                                                         <Col md={12}  >
                                                             <Row className="mt-3">
-                                                                <Col className=" col col-11 ">
+                                                                <Col className=" col col-12 ">
                                                                     <Margin_Tab tableData={marginMaster} func={setMarginMaster} />
                                                                 </Col>
                                                             </Row>
@@ -1908,11 +1865,11 @@ debugger
 
                                                 </TabPane>
 
-                                                <TabPane tabId="8">
+                                                <TabPane tabId="9">
                                                     <Row>
                                                         <Col md={12}  >
                                                             <Row className="mt-3">
-                                                                <Col className=" col col-11 ">
+                                                                <Col className=" col col-12 ">
                                                                     <GSTTab tableData={GStDetailsMaster} func={setGStDetailsMaster} />
                                                                 </Col>
                                                             </Row>
@@ -1920,6 +1877,36 @@ debugger
                                                     </Row>
                                                 </TabPane>
                                             </TabContent>
+                                            <Row >
+                                                <Col sm={2}>
+                                                    <div className="">
+                                                        {
+                                                            pageMode === "edit" ?
+                                                                userPageAccessState.RoleAccess_IsEdit ?
+                                                                    <button
+                                                                        type="submit"
+                                                                        data-mdb-toggle="tooltip" data-mdb-placement="top" title="Update Role"
+                                                                        className="btn btn-success w-md"
+                                                                    >
+                                                                        <i class="fas fa-edit me-2"></i>Update
+                                                                    </button>
+                                                                    :
+                                                                    <></>
+                                                                : (
+                                                                    userPageAccessState.RoleAccess_IsSave ?
+                                                                        <button
+                                                                            type="submit"
+                                                                            data-mdb-toggle="tooltip" data-mdb-placement="top" title="Save Role"
+                                                                            className="btn btn-primary w-md"
+                                                                        > <i className="fas fa-save me-2"></i> Save
+                                                                        </button>
+                                                                        :
+                                                                        <></>
+                                                                )
+                                                        }
+                                                    </div>
+                                                </Col>
+                                            </Row>
                                         </CardBody>
                                     </Card>
                                 </Col>

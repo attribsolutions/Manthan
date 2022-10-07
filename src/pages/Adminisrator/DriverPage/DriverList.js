@@ -40,10 +40,10 @@ const DriverList = (props) => {
     deleteSucc: deleteDriverTypeIDSuccess
 
   }
+
   useEffect(() => {
-    
     dispatch(commonPageFieldSuccess([]))
-    dispatch(commonPageField(90))
+    dispatch(commonPageField(106))
     dispatch(getMethodForDriverList())
 
   }, []);
@@ -59,7 +59,8 @@ const DriverList = (props) => {
             reducers={reducers}
             MasterModal={DriverMaster}
             masterPath={"/DriverMaster"}
-
+            ButtonMsgLable={"Driver"}
+            deleteName={"Name"}
           />
           : null
       }

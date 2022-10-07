@@ -73,6 +73,12 @@ import MRPList from "../pages/Adminisrator/MRPMaster/MRPList";
 import MarginList from "../pages/Adminisrator/MarginMaster/MarginList";
 import TermsAndCondtionsMaster from "../pages/Adminisrator/TermsAndCondtions/TermsAndCondtionsMaster";
 
+import GroupList from "../pages/Adminisrator/GroupPage/GroupList";
+import GroupTypeList from "../pages/Adminisrator/GroupTypePage/GroupTypeList";
+import GroupTypeMaster from "../pages/Adminisrator/GroupTypePage/GroupTypeMaster";
+
+import EditTabaleTable from "../pages/Adminisrator/DriverPage/editabale table";
+
 
 // import Index from "../pages/Adminisrator/customValidation/index";
 
@@ -135,7 +141,7 @@ const userRoutes = [
 
   { path: `/PageList`, component: PageList },
   { path: `/PageMaster`, component: PageMaster },
-  {path:'/PageMasterTab',component: PageMasterTab},
+  { path: '/PageMasterTab', component: PageMasterTab },
 
   { path: `/Order`, component: OrderPage },
   { path: `/Orders`, component: OrderList },
@@ -170,36 +176,36 @@ const userRoutes = [
 
   { path: "/CategoryMaster", component: CategoryMaster },
   { path: "/CategoryList", component: CategoryList },
-  
+
   { path: "/SubCategoryMaster", component: SubCategoryMaster },
   { path: "/SubCategoryList", component: SubCategoryList },
-  
+
   { path: "/VehicleMaster", component: VehicleMaster },
   { path: "/VehicleList", component: VehicleList },
 
   { path: "/DriverMaster", component: DriverMaster },
   { path: "/DriverList", component: DriverList },
+  { path: "/editTable", component: EditTabaleTable },
 
   { path: "/CompanyGroupMaster", component: CompanyGroupMaster },
   { path: "/CompanyGroupList", component: CompanyGroupList },
 
-  { path: '/TermsAndCondtionsMaster', component: TermsAndCondtionsMaster },
-  
+  { path: "/GroupTypeMaster", component: GroupTypeMaster },
+  { path: "/GroupTypeList", component: GroupTypeList },
 
-  
+  { path: '/TermsAndCondtionsMaster', component: TermsAndCondtionsMaster },
+
 
   // { path: "/PartyMasterTab", component: PartyMasterTab },
- 
-  
-  { path: "/PriceList", component: PriceList},
+
+  { path: "/PriceList", component: PriceList },
   // { path: "/PriceList", component: PartyMasterTab },
   { path: "/PriceMaster", component: PriceMaster },
   { path: "/MRPMaster", component: MRPMaster },
-  { path: "/MRPList", component: MRPList},
+  { path: "/MRPList", component: MRPList },
   { path: "/MarginMaster", component: MarginMaster },
   { path: "/MarginList", component: MarginList },
-
-
+  { path: "/GroupList", component: GroupList },
 
 
   // { path: "/AddItemMaster", component: AddItemMaster },
@@ -208,7 +214,7 @@ const userRoutes = [
   // { path: "/valid", component: Index },
 
   // this route should be at the end of all other routes
-  { path: "/", exact: true, component: () => <Redirect to="/dashboard" /> },
+  { path: "/", exact: true, component: () => <Redirect to="/Dashboard" /> },
 
 ]
 

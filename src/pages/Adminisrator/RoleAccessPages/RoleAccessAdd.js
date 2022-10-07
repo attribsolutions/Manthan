@@ -18,7 +18,7 @@ import { fetchModelsList } from "../../../store/actions";
 
 import { useHistory, useLocation, useParams } from "react-router-dom";
 import { CommonGetRoleAccessFunction } from "../../../components/Common/CommonGetRoleAccessFunction";
-
+import "./table-fixed.scss"
 const RoleAccessAdd = (props) => {
 
     const formRef = useRef(null);
@@ -693,7 +693,7 @@ const RoleAccessAdd = (props) => {
                                                 {tableListData.length > 0
                                                     ?
                                                     <>
-                                                        <Table className="table-responsive table-bordered  mt-2 ">
+                                                        <Table className="table-responsive table-bordered  table-fixed mt-2 ">
                                                             {/* <thead> */}
                                                             <tr>
                                                                 {tableHederList.map((indx) => {

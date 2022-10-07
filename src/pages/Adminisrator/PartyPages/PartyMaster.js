@@ -40,7 +40,6 @@ const PartyMaster = (props) => {
     let editDataGatingFromList = props.state;
     let propsPageMode = props.pageMode;
     let pageModeProps = props.pageMode;
-    console.log("editDataGatingFromList", editDataGatingFromList)
 
     const [EditData, setEditData] = useState([]);
     const [pageMode, setPageMode] = useState("save");
@@ -51,7 +50,6 @@ const PartyMaster = (props) => {
     const [companyList_dropdown_Select, setCompanyList_dropdown_Select] = useState("");
     const [partyType_dropdown_Select, setPartyType_dropdown_Select] = useState("");
     const [PriceList_dropdown_Select, setPriceList_dropdown_Select] = useState("");
-    // const [MKupMkdown_DropdownSelect, setMKupMkdown_DropdownSelect] = useState("");
     const [dropOpen, setDropOpen] = useState(false);
     const [AddressDetailsMaster, setAddressDetailsMaster] = useState([]);
 
@@ -81,12 +79,12 @@ const PartyMaster = (props) => {
         priceListByPartyType: state.PriceListReducer.priceListByPartyType,
 
     }));
-    console.log("PartyTypes",PartyTypes)
+
     useEffect(() => {
-        
+
         let userAcc = undefined
         if ((editDataGatingFromList === undefined)) {
-            
+
             let locationPath = history.location.pathname
             userAcc = RoleAccessModifiedinSingleArray.find((inx) => {
                 return (`/${inx.ActualPagePath}` === locationPath)
@@ -97,15 +95,13 @@ const PartyMaster = (props) => {
             userAcc = RoleAccessModifiedinSingleArray.find((inx) => {
                 return (`/${inx.ActualPagePath}` === relatatedPage)
             })
-            
+
         }
         if (!(userAcc === undefined)) {
             setUserPageAccessState(userAcc)
         }
-        
+
     }, [RoleAccessModifiedinSingleArray])
-    
-   
 
     useEffect(() => {
         dispatch(getState());
@@ -117,19 +113,6 @@ const PartyMaster = (props) => {
 
 
     }, [dispatch]);
-
-
-    // // MkupMkdown  Dropdown
-    // const MkupMkdown_DropdownOption = [
-    //     {
-    //         value: 1,
-    //         label: "MKUp",
-    //     },
-    //     {
-    //         value: 2,
-    //         label: "MkDown",
-    //     },
-    // ];
 
     useEffect(() => {
 
@@ -213,62 +196,47 @@ const PartyMaster = (props) => {
         }
     }, [PostAPIResponse.Status])
 
-    const StateValues = State.map((Data) => ({
-        value: Data.id,
-        label: Data.Name
+    const StateValues = State.map((index) => ({
+        value: index.id,
+        label: index.Name
     }));
 
-    const DistrictOnStateValues = DistrictOnState.map((Data) => ({
-        value: Data.id,
-        label: Data.Name
+    const DistrictOnStateValues = DistrictOnState.map((index) => ({
+        value: index.id,
+        label: index.Name
     }));
 
-    const companyListValues = Company.map((Data) => ({
-        value: Data.id,
-        label: Data.Name
+    const companyListValues = Company.map((index) => ({
+        value: index.id,
+        label: index.Name
     }));
 
-    const PartyTypeDropdown_Options = PartyTypes.map((Data) => ({
-        value: Data.id,
-        label: Data.Name
+    const PartyTypeDropdown_Options = PartyTypes.map((index) => ({
+        value: index.id,
+        label: index.Name,
+        division: index.IsDivision
     }));
 
     function handllerState(e) {
         setState_DropDown_select(e)
         dispatch(getDistrictOnState(e.value))
         setDistrict_dropdown_Select('')
-
     }
 
     function handllerDistrictOnState(e) {
         setDistrict_dropdown_Select(e)
-
     }
 
     function handllercompanyList(e) {
         setCompanyList_dropdown_Select(e)
-
     }
 
     function PartyType_Dropdown_OnChange_Handller(e) {
-        const IsDivision = PartyTypes.filter((element) => {
-            return element.IsDivision === true
-          });
-        console.log("IsDivision", IsDivision)
-
         setPartyType_dropdown_Select(e)
-        // dispatch(GetPartyTypeByDivisionTypeID(e.value))
-        // dispatch(GetCompanyByDivisionTypeID(e.value))
         setPriceList_dropdown_Select({ label: '' })
         setCompanyList_dropdown_Select('')
         dispatch(getPriceListData(e.value))
-
     }
-
-    // //for MKupMKdown dropdown
-    // const MKupMkdown_DropdownSelectHandller = (e) => {
-    //     setMKupMkdown_DropdownSelect(e);
-    // };
 
     const test1 = () => {
         return (
@@ -304,7 +272,7 @@ const PartyMaster = (props) => {
     }
 
     const FormSubmitButton_Handler = (event, values) => {
-
+        debugger
         const jsonBody = JSON.stringify({
             Name: values.Name,
             PriceList: PriceList_dropdown_Select.value,
@@ -321,7 +289,7 @@ const PartyMaster = (props) => {
             GSTIN: values.GSTIN,
             MkUpMkDn: values.MkUpMkDn,
             isActive: values.isActive,
-            IsDivision: false,
+            IsDivision: partyType_dropdown_Select.division,
             CreatedBy: 1,
             CreatedOn: "2022-06-24T11:16:53.165483Z",
             UpdatedBy: 1,
