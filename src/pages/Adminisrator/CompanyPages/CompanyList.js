@@ -23,6 +23,8 @@ const CompanyList = () => {
             editData: state.Company.editData,
             updateMsg: state.Company.updateMessage,
             deleteMsg: state.Company.deleteCompanyID,
+            pageField: state.CommonPageFieldReducer.pageField
+
         })
     );
 

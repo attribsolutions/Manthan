@@ -13,7 +13,7 @@ import CommonListPage from "../../../components/Common/CmponentRelatedCommonFile
 import { commonPageField, commonPageFieldSuccess } from "../../../store/actions";
 
 const RoleList = (props) => {
-debugger
+
   const dispatch = useDispatch();
   const reducers = useSelector(
     (state) => ({
