@@ -290,6 +290,8 @@ const ItemsMaster = (props) => {
             setMarginMaster(editMode_Data.ItemMarginDetails)
             setGStDetailsMaster(editMode_Data.ItemGSTHSNDetails)
             setGroup_Tab_TableData(editMode_Data.ItemGroupDetails)
+            setDivision_Tab_TableData(editMode_Data.ItemDivisionDetails)
+            setCategory_Tab_TableData(editMode_Data.ItemCategoryDetails)
             setIsValidate([])
 
             dispatch(editItemSuccess({ Status: false }))
