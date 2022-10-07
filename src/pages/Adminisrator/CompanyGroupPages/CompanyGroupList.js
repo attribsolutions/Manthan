@@ -54,6 +54,8 @@ const CompanyGroupList = (props) => {
             reducers={reducers}
             MasterModal={CompanyGroupMaster}
             masterPath={"/CompanyGroupMaster"}
+            ButtonMsgLable={"CompanyGroup"}
+            deleteName={"Name"}
           />
           : null
       }

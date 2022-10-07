@@ -2,7 +2,6 @@ import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import PriceMaster from "./PriceMaster";
 import {
-  getPriceListData,
   delete_PriceListSuccess,
   postPriceListDataSuccess,
   delete_PriceList,
@@ -21,7 +20,7 @@ const PriceList = (props) => {
       editData: state.PriceListReducer.editData,
       updateMsg: state.PriceListReducer.updateMessage,
       deleteMsg: state.PriceListReducer.deleteMsg,
-      postMsg: state.PriceListReducer.PostDataMessage,
+      postMsg: state.PriceListReducer.postMsg,
       userAccess: state.Login.RoleAccessUpdateData,
       pageField: state.CommonPageFieldReducer.pageField
     })
@@ -54,6 +53,8 @@ const PriceList = (props) => {
             reducers={reducers}
             MasterModal={PriceMaster}
             masterPath={"/PriceMaster"}
+            ButtonMsgLable={"price"}
+            deleteName={"Name"}
           />
           : null
       }

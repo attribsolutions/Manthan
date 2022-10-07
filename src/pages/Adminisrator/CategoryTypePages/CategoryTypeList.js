@@ -54,6 +54,8 @@ debugger
             reducers={reducers}
             MasterModal={CategoryTypeMaster}
             masterPath={"/CategoryTypeMaster"}
+            ButtonMsgLable={"CategoryType"}
+            deleteName={"Name"}
           />
           : null
       }

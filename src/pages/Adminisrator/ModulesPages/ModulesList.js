@@ -17,23 +17,24 @@ const ModulesList = () => {
     const dispatch = useDispatch();
     const reducers = useSelector(
         (state) => ({
-        tableList: state.Modules.modulesList,
-        updateMsg: state.Modules.updateMessage,
-        editData: state.Modules.editData,
-        deleteMsg: state.Modules.deleteModuleIDSuccess,
-        userAccess: state.Login.RoleAccessUpdateData,
-        postMsg: state.Modules.PostData,
-        pageField: state.CommonPageFieldReducer.pageField
+            tableList: state.Modules.modulesList,
+            updateMsg: state.Modules.updateMessage,
+            editData: state.Modules.editData,
+            deleteMsg: state.Modules.deleteModuleIDSuccess,
+            postMsg: state.Modules.modulesSubmitSuccesss,
+            userAccess: state.Login.RoleAccessUpdateData,
+            pageField: state.CommonPageFieldReducer.pageField
 
-    })
+        })
     );
+
     const action = {
         getList: fetchModelsList,
         editId: editModuleID,
         deleteId: deleteModuleID,
-        postSucc: PostModelsSubmitSuccess,
         updateSucc: updateModuleIDSuccess,
-        deleteSucc:  deleteModuleIDSuccess,
+        deleteSucc: deleteModuleIDSuccess,
+        postSucc: PostModelsSubmitSuccess
     }
 
     //  This UseEffect => Featch Modules List data  First Rendering
