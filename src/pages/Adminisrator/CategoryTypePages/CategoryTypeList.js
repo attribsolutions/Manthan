@@ -2,8 +2,6 @@ import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import CategoryTypeMaster from "./CategoryTypeMaster";
 import {
-  commonPageFieldList,
-  commonPageFieldListSuccess,
   deleteCategoryTypeIDSuccess,
   delete_CategoryType_ID,
   editCategoryTypeID,
@@ -12,7 +10,8 @@ import {
   updateCategoryTypeIDSuccess
 } from "../../../store/actions";
 import CommonListPage from "../../../components/Common/CmponentRelatedCommonFile/commonListPage";
-import {  } from "../../../store/actions";
+import {  commonPageFieldList, commonPageFieldListSuccess } from "../../../store/actions";
+import { CATEGORYTYPE } from "../../../routes/route_url";
 
 const CategoryTypeList = (props) => {
 
@@ -25,7 +24,7 @@ const CategoryTypeList = (props) => {
       updateMsg: state.categoryTypeReducer.updateMessage,
       deleteMsg: state.categoryTypeReducer.deleteMessage,
       userAccess: state.Login.RoleAccessUpdateData,
-      pageField: state.CommonPageFieldReducer.pageField
+      pageField: state.CommonPageFieldReducer.pageFieldList
     })
   );
 
@@ -40,7 +39,7 @@ const CategoryTypeList = (props) => {
 
   //  This UseEffect => Featch Modules List data  First Rendering
   useEffect(() => {
-    dispatch(commonPageFieldListSuccess())
+    dispatch(commonPageFieldListSuccess(null))
     dispatch(commonPageFieldList(17))
     dispatch(getCategoryTypelist());
   }, []);
@@ -55,7 +54,7 @@ debugger
             action={action}
             reducers={reducers}
             MasterModal={CategoryTypeMaster}
-            masterPath={"/CategoryTypeMaster"}
+            masterPath={CATEGORYTYPE}
             ButtonMsgLable={"CategoryType"}
             deleteName={"Name"}
           />
