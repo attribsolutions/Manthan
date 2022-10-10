@@ -3,7 +3,7 @@ import { Button, Table } from "reactstrap";
 import { Tbody, Thead } from "react-super-responsive-table";
 
 function GroupTable(props) {
-    
+   
   const ondeleteHandeler = (ele) => {
     if (!(ele === 0)) {
       var fil = props.tableData.filter((i) => {

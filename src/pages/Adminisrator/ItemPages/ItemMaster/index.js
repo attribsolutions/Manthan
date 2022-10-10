@@ -58,16 +58,15 @@ const ItemsMaster = (props) => {
 
     //*** "isEditdata get all data from ModuleID for Binding  Form controls
     let editDataGatingFromList = props.state;
-    console.log("editDataGatingFromList", editDataGatingFromList)
     let pageModeProps = props.pageMode
 
     const [EditData, setEditData] = useState([]);
     const [pageMode, setPageMode] = useState("save");
     const [userPageAccessState, setUserPageAccessState] = useState(11);
     const [activeTab1, setactiveTab1] = useState("1")
-    const [division_dropdown_Select, setDivision_dropdown_Select] = useState("");
-    const [CategoryTypeDropdownSelect, setCategoryTypeDropdownSelect] = useState("");
-    const [categoryDropdownSelect, setcategoryDropdownSelect] = useState("");
+    const [division_dropdown_Select, setDivision_dropdown_Select] = useState('');
+    const [CategoryTypeDropdownSelect, setCategoryTypeDropdownSelect] = useState('');
+    const [categoryDropdownSelect, setcategoryDropdownSelect] = useState('');
 
     let initial = {
         Name: "",
@@ -125,7 +124,7 @@ const ItemsMaster = (props) => {
 
     const [GStDetailsTabTable, setGSTDetailsTabTable] = useState([]);
 
-    const [GStDetailsMaster, setGStDetailsMaster] = useState([]);
+    const [GStDetailsMaster, setGStDetailsMaster] = useState([{ CommonId: 0 }]);
 
     const { companyList,
         BaseUnit,
@@ -257,36 +256,6 @@ const ItemsMaster = (props) => {
                 }
             })
 
-            let ItemMRPDetails = editMode_Data.ItemMRPDetails.map((index) => {
-                return {
-                    MRPType: {
-                        label: index.MRPTypeName,
-                        value: index.MRPType
-                    },
-                    MRP: index.MRP,
-                    GSTPercentage: index.GSTPercentage,
-                    HSNCode: index.HSNCode,
-                }
-            })
-
-            let ItemMarginDetails = editMode_Data.ItemMarginDetails.map((index) => {
-                return {
-                    PriceList: index.PriceList,
-                    Party: index.Party,
-                    EffectiveDate: index.EffectiveDate,
-                    Margin: index.Margin
-
-                }
-            })
-
-            let ItemGSTDetails = editMode_Data.ItemGSTHSNDetails.map((index) => {
-
-                return {
-                    GST: index.GSTPercentage,
-                    HSNCode: index.HSNCode,
-                    EffectiveDate: index.EffectiveDate,
-                }
-            })
 
             setFormValue(initialFormValue);
             setCategoryTabTable(initialCategory)
@@ -346,11 +315,8 @@ const ItemsMaster = (props) => {
         dispatch(fetchCompanyList());
         dispatch(getBaseUnit_ForDropDown());
         dispatch(get_CategoryTypes_ForDropDown());
-        // dispatch(get_Category_By_CategoryType_ForDropDown());
-        // dispatch(get_Sub_Category_By_CategoryType_ForDropDown());
         dispatch(getPartyListAPI());
         dispatch(get_ImageType_ForDropDown());
-        // dispatch(get_MRPTypes_ForDropDown());
         dispatch(get_Division_ForDropDown());
         dispatch(get_Party_ForDropDown());
         dispatch(get_PriceList_ForDropDown());
@@ -358,65 +324,6 @@ const ItemsMaster = (props) => {
         dispatch(get_Category_By_CategoryType_ForDropDownAPI());
     }, [dispatch]);
 
-
-    // useEffect(() => {
-
-    //     let key = Category.key
-    //     if ((key === null)) return;
-
-    //     let Category_DropdownOptions = Category.Data.map((data) => ({
-    //         value: data.id,
-    //         label: data.Name
-    //     }));
-
-    //     var found = categoryTabTable.find((i, k) => {
-    //         return (k === key)
-    //     })
-
-    //     let newSelectValue = {
-    //         CategoryType: found.CategoryType,
-    //         Category: found.Category,
-    //         SubCategory: found.SubCategory,
-    //         Category_DropdownOptions: Category_DropdownOptions,
-    //         SubCategory_DropdownOptions: []
-    //     }
-
-    //     let newTabArr = categoryTabTable.map((index, k) => {
-    //         return (k === key) ? newSelectValue : index
-    //     })
-    //     setCategoryTabTable(newTabArr)
-    //     dispatch(get_Category_By_CategoryType_ForDropDown_Success({ Data: [], key: null }))
-    // }, [Category]);
-
-    // useEffect(() => {
-
-    //     let key = SubCategory.key
-    //     if ((key === null)) return;
-
-    //     let SubCategory_DropdownOptions = SubCategory.Data.map((data) => ({
-    //         value: data.id,
-    //         label: data.Name
-    //     }));
-
-    //     var found = categoryTabTable.find((i, k) => {
-    //         return (k === key)
-    //     })
-
-    //     let newSelectValue = {
-    //         CategoryType: found.CategoryType,
-    //         Category: found.Category,
-    //         SubCategory: found.SubCategory,
-    //         Category_DropdownOptions: found.Category_DropdownOptions,
-    //         SubCategory_DropdownOptions: SubCategory_DropdownOptions,
-    //     }
-
-    //     let newTabArr = categoryTabTable.map((index, k) => {
-    //         return (k === key) ? newSelectValue : index
-    //     })
-    //     setCategoryTabTable(newTabArr)
-    //     dispatch(get_Sub_Category_By_CategoryType_ForDropDown_Success({ Data: [], key: null }))
-
-    // }, [SubCategory]);
 
     const toggle1 = tab => {
         if (activeTab1 !== tab) {
@@ -433,10 +340,6 @@ const ItemsMaster = (props) => {
         value: data.id,
         label: data.Name
     }));
-    // const BaseUnit_DropdownOptions2 = BaseUnit.map((data) => ({
-    //     value: data.id,
-    //     label: data.Name
-    // }))
 
     let BaseUnit_DropdownOptions2 = []
     BaseUnit.forEach(myFunction);
@@ -449,27 +352,6 @@ const ItemsMaster = (props) => {
         }
     }
 
-    const PriceList_DropdownOptions = BaseUnit.map((data) => ({
-        value: data.id,
-        label: data.Name
-    }));
-
-    //   const PriceList_DropdownOptions = [
-    //     {
-    //       value: 1,
-    //       label: "ABC",
-    //     },
-    //     {
-    //       value: 2,
-    //       label: "XYZ",
-    //     },
-    //   ];
-
-    const CategoryType_DropdownOptions = CategoryType.map((data) => ({
-        value: data.id,
-        label: data.Name
-    }));
-
     const CategoryTypeList_DropdownOptions = CategoryTypeList.map((data) => ({
         value: data.id,
         label: data.Name,
@@ -480,10 +362,6 @@ const ItemsMaster = (props) => {
         label: data.Name,
     }));
 
-    const DivisionType_DropdownOptions = DivisionType.map((data) => ({
-        value: data.id,
-        label: data.Name
-    }));
 
     const ImageType_DropdownOptions = ImageType.map((data) => ({
         value: data.id,
@@ -495,15 +373,7 @@ const ItemsMaster = (props) => {
         label: data.Name
     }));
 
-    const Party_DropdownOptions = Party.map((data) => ({
-        value: data.id,
-        label: data.Name
-    }));
 
-    const PriceList_DropdownOptions_In_MarginTab = PriceList.map((data) => ({
-        value: data.id,
-        label: data.Name
-    }));
     function Common_Drop_Validation(event, type, key) {
 
         let OnchangeControl = document.getElementById(`drop${type}-${key}`)
@@ -546,20 +416,6 @@ const ItemsMaster = (props) => {
 
     }
 
-    function CommonTab_DatePicker_handller_ForAll(event, type, key) {
-
-
-        let OnchangeControl = document.getElementById(`txt${type}${key}`)
-
-        if (event === '') {
-            OnchangeControl.className = 'form-control is-invalid'
-            return false
-        } else {
-            OnchangeControl.className = 'form-control';
-            return true
-        }
-
-    }
 
     function Common_DropDown_handller_ForAll(event, type, key) {
 
@@ -577,111 +433,6 @@ const ItemsMaster = (props) => {
         }
 
         setrefresh(event)
-    }
-
-    function CategoryType_Dropdown_Handler(e, key) {
-
-        CategoryTab_Common_onChange_Handller(e, "CategoryType", key,);
-        dispatch(get_Category_By_CategoryType_ForDropDown(e.value, key))
-    }
-
-    function Category_Dropdown_Handler(e, key) {
-        CategoryTab_Common_onChange_Handller(e, "Category", key,);
-        dispatch(get_Sub_Category_By_CategoryType_ForDropDown(e.value, key))
-
-    }
-
-    function CategoryTab_AddRow_Handler() {
-
-        let key = categoryTabTable.length - 1
-        let cat_TableElement = categoryTabTable[key];
-        let valid = true;
-
-        let arr = ["CategoryType", "Category",];
-        arr.map((label) => {
-            var valid11 = Common_Drop_Validation(cat_TableElement[label], label, key,)
-            if (!valid11) { valid = valid11 }
-        })
-
-        if (valid === false) {
-            return
-        }
-
-        var newarr = [...categoryTabTable, {
-            CategoryType: { value: 0, label: "select" },
-            Category: { value: 0, label: "select" },
-            SubCategory: { value: 0, label: "select" },
-            Category_DropdownOptions: [],
-            SubCategory_DropdownOptions: []
-        }]
-        setCategoryTabTable(newarr)
-    }
-    function CategoryTab_DeleteRow_Handler(key) {
-
-        var removeElseArrray = categoryTabTable.filter((i, k) => {
-            return !(k === key)
-        })
-
-        setCategoryTabTable(removeElseArrray)
-
-    }
-    function CategoryTab_Common_onChange_Handller(event, type, key) {
-
-        const foundDublicate = categoryTabTable.find((element) => {
-            return (element[type].value === event.value)
-        });
-        // if (!(foundDublicate === undefined)) {
-        //     dispatch(AlertState({
-        //         Type: 4,
-        //         Status: true,
-        //         Message: "Category alredy Select",
-        //     }))
-        //     return
-        // }
-
-
-        //     let validateReturn = Common_Drop_Validation(event, type, key);
-        //     if (validateReturn === false) return;
-
-
-        var found = categoryTabTable.find((i, k) => {
-            return (k === key)
-        })
-
-        let newSelectValue = ''
-
-        if (type === "CategoryType") {
-            newSelectValue = {
-                CategoryType: event,
-                Category: { label: 'select', value: 0 },
-                SubCategory: { label: 'select', value: 0 },
-                Category_DropdownOptions: [],
-                SubCategoryOption: []
-            }
-        }
-        else if (type === 'Category') {
-            newSelectValue = {
-                CategoryType: found.CategoryType,
-                Category: event,
-                SubCategory: { label: 'select', value: 0 },
-                Category_DropdownOptions: found.Category_DropdownOptions,
-                SubCategory_DropdownOptions: []
-            }
-        }
-        else {
-            newSelectValue = {
-                CategoryType: found.CategoryType,
-                Category: found.Category,
-                SubCategory: event,
-                Category_DropdownOptions: found.Category_DropdownOptions,
-                SubCategory_DropdownOptions: found.SubCategory_DropdownOptions
-            }
-        }
-
-        let newTabArr = categoryTabTable.map((index, k) => {
-            return (k === key) ? newSelectValue : index
-        })
-        setCategoryTabTable(newTabArr)
     }
 
     function UnitConversionsTab_AddRow_Handle() {
@@ -754,42 +505,6 @@ const ItemsMaster = (props) => {
         // setBaseUnit_dropdown_Select2(e)
     }
 
-    function DivisionTab_AddRow_Handle() {
-
-        const find = divisionTableData.find((element) => {
-            return element.value === division_dropdown_Select.value
-        });
-
-        if (division_dropdown_Select.length <= 0) {
-
-            dispatch(AlertState({
-                Type: 3, Status: true,
-                Message: "Select One Role",
-            }));
-        }
-        else if (find === undefined) {
-            document.getElementById("dropDivisionType-0").className = ""
-            setDivisionTableData([...divisionTableData, division_dropdown_Select]);
-        }
-        else {
-            document.getElementById("dropDivisionType-0").className = ""
-            dispatch(AlertState({
-                Type: 4, Status: true,
-                Message: "DivisionType already Exists ",
-            }));
-        }
-    }
-    function DivisionTab_Dropdown_onChange_Handler(e) {
-
-        setDivision_dropdown_Select(e)
-    }
-    function DivisionTab_DeleteRow_Handler(tableValue) {
-        setDivisionTableData(divisionTableData.filter(
-            (item) => !(item.value === tableValue)
-        )
-        )
-    }
-
     function ImageTab_AddRow_Handler(key) {
 
 
@@ -842,169 +557,6 @@ const ItemsMaster = (props) => {
         setImageTabTable(newTabArr)
     }
 
-    function GSTDetails_Tab_AddRow_Handler(key) {
-
-
-        let validateReturn1 = CommonTab_DatePicker_handller_ForAll(GStDetailsMaster.EffectiveDate, "EffectiveDate", 0)
-        let validateReturn2 = Common_Text_INPUT_Validation(GStDetailsMaster.GST, "GST", 0);
-        let validateReturn3 = Common_Text_INPUT_Validation(GStDetailsMaster.HSNCode, "HSNCode", 0);
-
-        if ((validateReturn1 === false)
-            || (validateReturn2 === false)
-            || (validateReturn3 === false)) return;
-
-        var length = GStDetailsTabTable.length
-        var newArr = {
-            id: length,
-            EffectiveDate: GStDetailsMaster.EffectiveDate,
-            GST: GStDetailsMaster.GST,
-            HSNCode: GStDetailsMaster.HSNCode
-        }
-        setGSTDetailsTabTable([...GStDetailsTabTable, newArr])
-
-    }
-
-    function MarginTab_AddRow_Handler(key) {
-
-        let validateReturn = Common_Drop_Validation(marginMaster.PriceList, "PriceList", 0);
-        let validateReturn1 = CommonTab_DatePicker_handller_ForAll(marginMaster.EffectiveDate, "EffectiveDate", 0)
-        let validateReturn2 = Common_Drop_Validation(marginMaster.PartyName, "PartyName", 0)
-        let validateReturn3 = Common_Text_INPUT_Validation(marginMaster.Margin, "Margin", 0)
-
-        if ((validateReturn1 === false) || (validateReturn === false) || (validateReturn2 === false) || (validateReturn3 === false)) return;
-        // if ((validateReturn === false) || (validateReturn2 === false) || (validateReturn3 === false)) return;
-
-        var length = marginTabTable.length
-        var newArr = {
-            id: length,
-            PriceList: { label: "select", value: 0 },
-            EffectiveDate: marginMaster.EffectiveDate,
-            PartyName: { label: "select", value: 0 },
-            Margin: marginMaster.Margin,
-
-        }
-        setMarginTabTable([...GStDetailsTabTable, newArr])
-    }
-    function MarginTab_DeleteRow_Handler(key) {
-        var removeElseArrray1 = marginTabTable.filter((i, k) => {
-            return !(k === key)
-        })
-        setMarginTabTable(removeElseArrray1)
-    }
-    function MarginTab_onChange_Handler(event, type, key) {
-
-        if (type === "PriceList") {
-            marginMaster.EffectiveDate = event
-        }
-        else if (type === "EffectiveDate") {
-            marginMaster.GST = event
-        }
-        else if (type === "PartyName") {
-            marginMaster.HSNCode = event
-        }
-        else if (type === "Margin") {
-            marginMaster.HSNCode = event
-        }
-    }
-
-    function MRP_Tab_Tab_AddRow_Handler(key) {
-
-        let rate_TableElement = MRP_Tab_TableData[key];
-
-        let validateReturn1 = Common_Drop_Validation(rate_TableElement.Division, "Division", key)
-        let validateReturn2 = CommonTab_DatePicker_handller_ForAll(rate_TableElement.EffectiveDate, "EffectiveDate", key);
-
-        let validateReturn3 = Common_Drop_Validation(rate_TableElement.PartyName, "PartyName", key);
-        let validateReturn4 = Common_Text_INPUT_Validation(rate_TableElement.MRP, "MRP", key);
-
-        if (
-            (validateReturn1 === false)
-            || (validateReturn2 === false)
-            || (validateReturn3 === false)
-            || (validateReturn4 === false)) return;
-
-        var newarr = [...MRP_Tab_TableData, {
-            Division: { label: "select", value: 0 },
-            EffectiveDate: '',
-            PartyName: { label: "select", value: 0 },
-            MRP: '',
-        }]
-        setMRP_Tab_TableData(newarr)
-    }
-    function MRP_Tab_Tab_DeleteRow_Handler(key) {
-
-        var removeElseArrray = MRP_Tab_TableData.filter((i, k) => {
-            return !(k === key)
-        })
-
-        setMRP_Tab_TableData(removeElseArrray)
-
-    }
-    function MRP_Tab__Common_onChange_Handller(event, type, key) {
-
-        if (type === "PriceList") {
-            marginMaster.EffectiveDate = event
-        }
-        else if (type === "EffectiveDate") {
-            marginMaster.GST = event
-        }
-        else if (type === "PartyName") {
-            marginMaster.HSNCode = event
-        }
-        else if (type === "Margin") {
-            marginMaster.HSNCode = event
-        }
-    }
-
-    function GSTDetails_onChange_Handller(event, type, key) {
-
-
-        if (type === "EffectiveDate") {
-            GStDetailsMaster.EffectiveDate = event
-        }
-        else if (type === "GST") {
-            GStDetailsMaster.GST = event
-        }
-        else if (type === "HSNCode") {
-            GStDetailsMaster.HSNCode = event
-        }
-    }
-
-    function GSTDetails_Tab_AddRow_Handler(key) {
-
-
-        let validateReturn1 = CommonTab_DatePicker_handller_ForAll(GStDetailsMaster.EffectiveDate, "EffectiveDate", 0)
-        let validateReturn2 = Common_Text_INPUT_Validation(GStDetailsMaster.GST, "GST", 0);
-        let validateReturn3 = Common_Text_INPUT_Validation(GStDetailsMaster.HSNCode, "HSNCode", 0);
-
-        if ((validateReturn1 === false)
-            || (validateReturn2 === false)
-            || (validateReturn3 === false)) return;
-
-        var length = GStDetailsTabTable.length
-        var newArr = {
-            id: length,
-            EffectiveDate: GStDetailsMaster.EffectiveDate,
-            GST: GStDetailsMaster.GST,
-            HSNCode: GStDetailsMaster.HSNCode
-        }
-        setGSTDetailsTabTable([...GStDetailsTabTable, newArr])
-
-    }
-
-    function GSTDetails_Delete_Handller(event, v, k) {
-
-        var filter = GStDetailsTabTable
-        // .filter(i => {
-
-        //    return !(i.id === event.id)
-        // })
-        // if (!(filter === undefined)) {
-        //     setGSTDetailsTabTable(filter)
-        // } else {
-        //     setGSTDetailsTabTable([])
-        // }
-    }
 
     const CategoryType_Handler = (event) => {
         setCategoryTypeDropdownSelect(event);
@@ -1015,22 +567,39 @@ const ItemsMaster = (props) => {
         setcategoryDropdownSelect(event);
 
     };
+
+    const Division_Handler = (event) => {
+        setDivision_dropdown_Select(event);
+
+    };
     const handleValidSubmit = (event, values) => {
         debugger
-        const itemCategoryDetails = categoryTabTable.map((index) => ({
-            CategoryType: index.CategoryType.value,
-            Category: index.Category.value,
-            SubCategory: index.SubCategory.value
-        }))
 
-        const itemUnitDetails = baseUnitTableData.map((index) => ({
+        //  if (!Group_Tab_TableData.length > 0) {
+        //     Group_Tab_TableData.unshift
+        //         ({
+        //             GroupType: 1,
+        //             GroupTypeName: "Primary",
+        //             Group: 1,
+        //             GroupName: "Shrikhand",
+        //           })
+        //         }
+
+        let itemUnitDetails = baseUnitTableData.map((index) => ({
             BaseUnitQuantity: index.Conversion,
             UnitID: index.Unit.value,
         }))
 
-        const itemDivisionDetails = divisionTableData.map((index) => ({
-            Division: index.value
+        itemUnitDetails.unshift({
+            BaseUnitQuantity: 1,
+            UnitID: formValue.BaseUnit.value,
+        })
+
+        const ItemCategoryDetails = categoryDropdownSelect.map((index) => ({
+            CategoryType: index.value,
+            Category: index.value
         }))
+        console.log("ItemCategoryDetails1", ItemCategoryDetails)
 
         const jsonBody = JSON.stringify({
             Name: formValue.Name,
@@ -1042,16 +611,17 @@ const ItemsMaster = (props) => {
             BaseUnitID: formValue.BaseUnit.value,
             CreatedBy: 1,
             UpdatedBy: 1,
-            ItemCategoryDetails: Category_Tab_TableData,
+            ItemCategoryDetails: ItemCategoryDetails,
+            // ItemUnitDetails: itemUnitDetails,
             ItemUnitDetails: itemUnitDetails,
-
+            // ItemDivisionDetails:division_dropdown_Select.value,
+            ItemDivisionDetails: division_dropdown_Select.map((i) => { return ({ division: i.value }) }),
             ItemImagesDetails: [
                 {
                     ImageType: "1",
                     Item_pic: "sadsadasdas"
                 }
             ],
-            ItemDivisionDetails: Division_Tab_TableData,
             ItemMRPDetails: MRP_Tab_TableData,
             ItemMarginDetails: marginMaster,
             ItemGSTHSNDetails: GStDetailsMaster,
@@ -1059,39 +629,39 @@ const ItemsMaster = (props) => {
 
         });
 
-        if (!Group_Tab_TableData.length > 0) {
-            dispatch(AlertState({
-                Type: 4, Status: true,
-                Message: "Please Select ItemGroup Details",
-                RedirectPath: false,
-                PermissionAction: false,
-            }));
-        }
-        else if (!MRP_Tab_TableData.length > 0) {
-            dispatch(AlertState({
-                Type: 4, Status: true,
-                Message: "Please Select MRP Details",
-                RedirectPath: false,
-                PermissionAction: false,
-            }));
-        }
-        else if (!marginMaster.length > 0) {
-            dispatch(AlertState({
-                Type: 4, Status: true,
-                Message: "Please Select Margin Details",
-                RedirectPath: false,
-                PermissionAction: false,
-            }));
-        }
-        else if (!GStDetailsMaster.length > 0) {
-            dispatch(AlertState({
-                Type: 4, Status: true,
-                Message: "Please Select GST Details",
-                RedirectPath: false,
-                PermissionAction: false,
-            }));
-        }
-        else if (pageMode === 'edit') {
+        // if (!Group_Tab_TableData.length > 0) {
+        //     dispatch(AlertState({
+        //         Type: 4, Status: true,
+        //         Message: "Please Select ItemGroup Details",
+        //         RedirectPath: false,
+        //         PermissionAction: false,
+        //     }));
+        // }
+        // else if (!MRP_Tab_TableData.length > 0) {
+        //     dispatch(AlertState({
+        //         Type: 4, Status: true,
+        //         Message: "Please Select MRP Details",
+        //         RedirectPath: false,
+        //         PermissionAction: false,
+        //     }));
+        // }
+        // else if (!marginMaster.length > 0) {
+        //     dispatch(AlertState({
+        //         Type: 4, Status: true,
+        //         Message: "Please Select Margin Details",
+        //         RedirectPath: false,
+        //         PermissionAction: false,
+        //     }));
+        // }
+        // else if (!GStDetailsMaster.length > 0) {
+        //     dispatch(AlertState({
+        //         Type: 4, Status: true,
+        //         Message: "Please Select GST Details",
+        //         RedirectPath: false,
+        //         PermissionAction: false,
+        //     }));
+        // }
+        if (pageMode === 'edit') {
             dispatch(updateItemID(jsonBody, EditData.id));
             console.log("edit json", jsonBody)
         }
@@ -1396,7 +966,8 @@ const ItemsMaster = (props) => {
                                                                             id={`dropCategoryType-${0}`}
                                                                             value={CategoryTypeDropdownSelect}
                                                                             options={CategoryTypeList_DropdownOptions}
-                                                                            onChange={CategoryType_Handler}
+                                                                            // onChange={CategoryType_Handler}
+                                                                            onChange={(e) => { CategoryType_Handler(e) }}
                                                                         />
                                                                     </FormGroup>
 
@@ -1431,7 +1002,7 @@ const ItemsMaster = (props) => {
                                                                                 isMulti={true}
                                                                                 className="basic-multi-select"
                                                                                 options={Division_DropdownOptions}
-                                                                                onChange={(e) => { Category_Handler(e) }}
+                                                                                onChange={(e) => { Division_Handler(e) }}
                                                                                 classNamePrefix="select2-selection"
                                                                             />
                                                                         </div>
