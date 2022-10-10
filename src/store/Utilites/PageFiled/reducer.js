@@ -1,7 +1,7 @@
 import { COMMON_PAGE_FILED_SUCCESS } from "./actionType"
 
  const INIT_STATE={
-  pageField: {},
+  pageField: null,
  }
 
 const CommonPageFieldReducer = (state = INIT_STATE, action) => {

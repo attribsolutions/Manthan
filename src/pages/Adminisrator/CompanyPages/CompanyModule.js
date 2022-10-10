@@ -54,8 +54,8 @@ const CompanyModule = (props) => {
   }));
 
   const location = { ...history.location }
-  const hasShowloction = location.hasOwnProperty("editData")
-  const hasShowModal = props.hasOwnProperty("pageMode")
+  const hasShowloction = location.hasOwnProperty("editValue")
+  const hasShowModal = props.hasOwnProperty("editValue")
 
   // userAccess useEffect
   useEffect(() => {
@@ -74,8 +74,6 @@ const CompanyModule = (props) => {
       setUserPageAccessState(userAcc)
     };
   }, [userAccess])
-
-
 
   useEffect(() => {
  

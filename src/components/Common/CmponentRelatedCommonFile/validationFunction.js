@@ -116,11 +116,11 @@ export const formValChange = ({ event, state, setState }) => {
     }
 };
 
-export function comAddPageFieldFunc({ state, setState, pageField }) {
+export function comAddPageFieldFunc({ state, setState, fieldArr }) {
     var isState = { ...state }
     const values = { ...state.values }
     // debugger
-    pageField.forEach(ele => {
+    fieldArr.forEach(ele => {
         // debugger
         Object.keys(values).forEach(lab => {
             if (lab === ele.ControlID) {

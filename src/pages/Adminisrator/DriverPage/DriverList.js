@@ -13,6 +13,7 @@ import {
 
 import CommonListPage from "../../../components/Common/CmponentRelatedCommonFile/commonListPage";
 import { commonPageField, commonPageFieldSuccess } from "../../../store/actions";
+import { DRIVER } from "../../../routes/route_url";
 
 const DriverList = (props) => {
   const dispatch = useDispatch();
@@ -58,7 +59,7 @@ const DriverList = (props) => {
             action={action}
             reducers={reducers}
             MasterModal={DriverMaster}
-            masterPath={"/DriverMaster"}
+            masterPath={DRIVER}
             ButtonMsgLable={"Driver"}
             deleteName={"Name"}
           />
