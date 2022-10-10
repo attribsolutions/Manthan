@@ -220,7 +220,6 @@ const AddUser = (props) => {
 
   function RoleDropdownHandler(e) {
     setRoleDropDown(e)
-
   }
 
   /// Role dopdown

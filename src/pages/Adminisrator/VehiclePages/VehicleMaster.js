@@ -37,15 +37,16 @@ const VehicleMaster = (props) => {
     const history = useHistory()
     const formRef = useRef(null);
 
+    //*** "isEditdata get all data from ModuleID for Binding  Form controls
+    const [EditData, setEditData] = useState({});
+    const [modalCss, setModalCss] = useState(false);
+    const [pageMode, setPageMode] = useState("save");
+    const [userPageAccessState, setUserPageAccessState] = useState('');
+
     const [divisionData, setDivisionData] = useState([]);
     const [divisionType_dropdown_Select, setDivisionType_dropdown_Select] = useState("");
     const [DriverList_dropdown_Select, setDriverList_dropdown_Select] = useState("");
     const [VehicleType_dropdown_Select, setVehicleType_dropdown_Select] = useState("");
-    //  const [VehicleList_dropdown_Select, setVehicleList_dropdown_Select] = useState("");
-    const [pageMode, setPageMode] = useState("");
-    const [userPageAccessState, setUserPageAccessState] = useState(123);
-    const [EditData, setEditData] = useState([]);
-
 
     //Access redux store Data /  'save_ModuleSuccess' action data
     const { PostAPIResponse,
@@ -53,13 +54,13 @@ const VehicleMaster = (props) => {
         Divisions,
         VehicleTypes,
         DriverList_redux,
-        RoleAccessModifiedinSingleArray } = useSelector((state) => ({
+        userAccess } = useSelector((state) => ({
             PostAPIResponse: state.VehicleReducer.PostDataMessage,
             VehicleList: state.VehicleReducer.VehicleList,
             Divisions: state.ItemMastersReducer.Division,
             VehicleTypes: state.VehicleReducer.VehicleTypes,
             DriverList_redux: state.VehicleReducer.DriverList,
-            RoleAccessModifiedinSingleArray: state.Login.RoleAccessUpdateData,
+            userAccess: state.Login.RoleAccessUpdateData,
 
         }));
 
@@ -72,61 +73,69 @@ const VehicleMaster = (props) => {
         dispatch(get_Division_ForDropDown());
     }, [dispatch]);
 
-    //userAccess useEffect
+    const location = { ...history.location }
+    const hasShowloction = location.hasOwnProperty("editValue")
+    const hasShowModal = props.hasOwnProperty("editValue")
+
+    // userAccess useEffect
     useEffect(() => {
+        let userAcc = null;
+        let locationPath = location.pathname;
 
-        let userAcc = undefined
-        if ((editDataGatingFromList === undefined)) {
+        if (hasShowModal) {
+            locationPath = props.masterPath;
+        };
 
-            let locationPath = history.location.pathname
-            userAcc = RoleAccessModifiedinSingleArray.find((inx) => {
-                return (`/${inx.ActualPagePath}` === locationPath)
-            })
-        }
-        else if (!(editDataGatingFromList === undefined)) {
-            let relatatedPage = props.relatatedPage
-            userAcc = RoleAccessModifiedinSingleArray.find((inx) => {
-                return (`/${inx.ActualPagePath}` === relatatedPage)
-            })
+        userAcc = userAccess.find((inx) => {
+            return (`/${inx.ActualPagePath}` === locationPath)
+        })
 
-        }
-        if (!(userAcc === undefined)) {
+        if (userAcc) {
             setUserPageAccessState(userAcc)
-        }
-
-    }, [RoleAccessModifiedinSingleArray])
+        };
+    }, [userAccess])
 
     // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
     useEffect(() => {
 
-        //   if (!(userPageAccessState === '')) { document.getElementById("txtName").focus(); }
-        if (!(editDataGatingFromList === undefined)) {
-            setEditData(editDataGatingFromList);
-            setPageMode(pageModeProps);
-            setDriverList_dropdown_Select({
-                value: editDataGatingFromList.Driver,
-                label: editDataGatingFromList.DriverName
-            });
-            setVehicleType_dropdown_Select({
-                value: editDataGatingFromList.VehicleType,
-                label: editDataGatingFromList.VehicleTypeName
-            });
-            let division = editDataGatingFromList.VehicleDivisions.map((index) => {
-                return {
-                    label: index.DivisionName,
-                    value: index.Division
-                }
-            })
-            setDivisionData(division)
-            dispatch(editVehicleTypeSuccess({ Status: false }))
-            dispatch(BreadcrumbShow(editDataGatingFromList.VehicleTypeName))
-            return
+        // if (!(userPageAccessState === '')) { document.getElementById("txtName").focus(); }
+        if ((hasShowloction || hasShowModal)) {
+
+            let hasEditVal = null
+            if (hasShowloction) {
+                setPageMode(location.pageMode)
+                hasEditVal = location.editValue
+            }
+            else if (hasShowModal) {
+                hasEditVal = props.editValue
+                setPageMode(props.pageMode)
+                setModalCss(true)
+            }
+
+            if (hasEditVal) {
+                setEditData(hasEditVal)
+                setDriverList_dropdown_Select({
+                    value: hasEditVal.Driver,
+                    label: hasEditVal.DriverName
+                });
+                setVehicleType_dropdown_Select({
+                    value: hasEditVal.VehicleType,
+                    label: hasEditVal.VehicleTypeName
+                });
+                let division = hasEditVal.VehicleDivisions.map((index) => {
+                    return {
+                        label: index.DivisionName,
+                        value: index.Division
+                    }
+                })
+                setDivisionData(division)
+                dispatch(editVehicleTypeSuccess({ Status: false }))
+                dispatch(BreadcrumbShow(hasEditVal.VehicleTypeName))
+
+            }
         }
 
-        else if (!(propsPageMode === undefined)) {
-            setPageMode(propsPageMode)
-        }
-    }, [editDataGatingFromList, propsPageMode]);
+    }, []);
 
 
     useEffect(() => {
@@ -202,7 +211,7 @@ const VehicleMaster = (props) => {
 
     const FormSubmitButton_Handler = (event, values) => {
         var division = divisionData.map(i => ({ Division: i.value }))
-          const jsonBody = JSON.stringify({
+        const jsonBody = JSON.stringify({
             VehicleNumber: values.VehicleNumber,
             Description: values.Description,
             Driver: DriverList_dropdown_Select.value,
@@ -417,7 +426,7 @@ const VehicleMaster = (props) => {
                                                         <FormGroup>
                                                             <Row>
                                                                 <Col sm={2}>
-                                                                {SaveButton({ pageMode, userPageAccessState, module: "VehicleMaster" })}
+                                                                    {SaveButton({ pageMode, userPageAccessState, module: "VehicleMaster" })}
                                                                 </Col>
                                                             </Row>
                                                         </FormGroup >
