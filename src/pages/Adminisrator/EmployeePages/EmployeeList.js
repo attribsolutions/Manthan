@@ -10,7 +10,7 @@ import {
 import { useSelector, useDispatch } from "react-redux";
 import AddEmployee from "./EmployeeMaster";
 import CommonListPage from "../../../components/Common/CmponentRelatedCommonFile/commonListPage";
-import { commonPageField, commonPageFieldSuccess } from "../../../store/actions";
+import { commonPageFieldList, commonPageFieldListSuccess } from "../../../store/actions";
 
 const Employee_List = () => {
   const dispatch = useDispatch();
@@ -22,7 +22,7 @@ const Employee_List = () => {
       deleteMsg: state.M_EmployeesReducer.deleteMessage,
       userAccess: state.Login.RoleAccessUpdateData,
       postMsg: state.M_EmployeesReducer.postMessage,
-      pageField: state.CommonPageFieldReducer.pageField
+      pageField: state.CommonPageFieldReducer.pageFieldList
 
     })
     );
@@ -38,8 +38,8 @@ const Employee_List = () => {
 
   //  This UseEffect => Featch Modules List data  First Rendering
   useEffect(() => {
-    dispatch(commonPageFieldSuccess([]))
-    dispatch(commonPageField(9))
+    dispatch(commonPageFieldListSuccess(null))
+    dispatch(commonPageFieldList(9))
     dispatch(getEmployeelist());
   }, []);
 
@@ -48,7 +48,7 @@ const Employee_List = () => {
   return (
     <React.Fragment>
       {
-        (pageField.length > 0) ?
+        (pageField) ?
           <CommonListPage
             action={action}
             reducers={reducers}

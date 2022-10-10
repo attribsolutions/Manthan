@@ -10,7 +10,7 @@ import {
   PostMethod_ForCompanyGroupMasterSuccess,
 } from "../../../store/Administrator/CompanyGroupRedux/action";
 import CommonListPage from "../../../components/Common/CmponentRelatedCommonFile/commonListPage";
-import { commonPageField, commonPageFieldSuccess } from "../../../store/actions";
+import { commonPageField, commonPageFieldList, commonPageFieldListSuccess, commonPageFieldSuccess } from "../../../store/actions";
 
 const CompanyGroupList = (props) => {
 
@@ -23,7 +23,7 @@ const CompanyGroupList = (props) => {
       deleteMsg: state.CompanyGroupReducer.deleteMessage,
       userAccess: state.Login.RoleAccessUpdateData,
       postMsg: state.CompanyGroupReducer.PostDataMessage,
-      pageField: state.CommonPageFieldReducer.pageField
+      pageField: state.CommonPageFieldReducer.pageFieldList
     })
   );
 
@@ -38,8 +38,8 @@ const CompanyGroupList = (props) => {
 
   //  This UseEffect => Featch Modules List data  First Rendering
   useEffect(() => {
-    dispatch(commonPageFieldSuccess([]))
-    dispatch(commonPageField(33))
+    dispatch(commonPageFieldListSuccess(null))
+    dispatch(commonPageFieldList(33))
     dispatch(getMethodForCompanyGroupList());
   }, []);
 
@@ -48,7 +48,7 @@ const CompanyGroupList = (props) => {
   return (
     <React.Fragment>
       {
-        (pageField.length > 0) ?
+        (pageField) ?
           <CommonListPage
             action={action}
             reducers={reducers}

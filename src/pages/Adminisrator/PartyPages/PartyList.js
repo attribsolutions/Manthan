@@ -10,7 +10,7 @@ import {
 } from '../../../store/Administrator/PartyRedux/action';
 import PartyMaster from './PartyMaster';
 import CommonListPage from "../../../components/Common/CmponentRelatedCommonFile/commonListPage";
-import { commonPageField, commonPageFieldSuccess } from "../../../store/actions";
+import { commonPageField, commonPageFieldList, commonPageFieldListSuccess, commonPageFieldSuccess } from "../../../store/actions";
 
 const PartyList = () => {
     const dispatch = useDispatch();
@@ -22,7 +22,7 @@ const PartyList = () => {
             deleteMsg: state.PartyMasterReducer.deleteMessage,
             userAccess: state.Login.RoleAccessUpdateData,
             postMsg: state.PartyMasterReducer.PartySaveSuccess,
-            pageField: state.CommonPageFieldReducer.pageField
+            pageField: state.CommonPageFieldReducer.pageFieldList
         })
     );
     const action = {
@@ -38,8 +38,8 @@ const PartyList = () => {
 
     //  This UseEffect => Featch Modules List data  First Rendering
     useEffect(() => {
-        dispatch(commonPageFieldSuccess([]))
-        dispatch(commonPageField(11))
+        dispatch(commonPageFieldListSuccess(null))
+        dispatch(commonPageFieldList(11))
         dispatch(getPartyListAPI());
     }, []);
 
@@ -48,7 +48,7 @@ const PartyList = () => {
     return (
         <React.Fragment>
             {
-                (pageField.length > 0) ?
+                (pageField) ?
                     <CommonListPage
                         action={action}
                         reducers={reducers}
