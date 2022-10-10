@@ -9,9 +9,10 @@ import {
   updateMRPListSuccess
 } from "../../../store/Administrator/MRPMasterRedux/action";
 import MRPMaster from "./MRPMaster"
+import { commonPageFieldList, commonPageFieldListSuccess } from "../../../store/actions";
 import CommonListPage from "../../../components/Common/CmponentRelatedCommonFile/commonListPage";
-import {  commonPageFieldList, commonPageFieldListSuccess } from "../../../store/actions";
 import { MRP } from "../../../routes/route_url";
+
 
 const MRPList = (props) => {
 
