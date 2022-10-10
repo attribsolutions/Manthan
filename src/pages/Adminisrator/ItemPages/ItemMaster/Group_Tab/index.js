@@ -25,26 +25,27 @@ function GroupTab(props) {
         GroupList: state.ItemMastersReducer.GroupList,
         SubGroupList: state.ItemMastersReducer.SubGroupList,
     }));
-
+   
     useEffect(() => {
         dispatch(getGroupTypeslist());
         dispatch(get_Group_By_GroupType_ForDropDown());
         dispatch(get_Sub_Group_By_Group_ForDropDown());
     }, [dispatch]);
 
-    const GroupType_DropdownOptions = GroupType.map((data) => ({
-        value: data.id,
-        label: data.Name,
+    const GroupType_DropdownOptions = GroupType.map((index) => ({
+        value: index.id,
+        label: index.Name,
+        IsReserved:index.IsReserved
     }));
 
-    const Group_DropdownOptions = GroupList.map((data) => ({
-        value: data.id,
-        label: data.Name,
+    const Group_DropdownOptions = GroupList.map((index) => ({
+        value: index.id,
+        label: index.Name,
     }));
 
-    const SubGroup_DropdownOptions = SubGroupList.map((data) => ({
-        value: data.id,
-        label: data.Name,
+    const SubGroup_DropdownOptions = SubGroupList.map((index) => ({
+        value: index.id,
+        label: index.Name,
     }));
 
     const GroupType_Handler = (event) => {
@@ -61,8 +62,29 @@ function GroupTab(props) {
         setSubGroupDropdownSelect(event);
     };
 
+    useEffect(() => {
+
+            GroupType.map(element => {
+            if (element.IsReserved)
+            {
+                let val = {
+                    GroupType: element.id,
+                    GroupTypeName:element.Name,
+                    Group: "",
+                    GroupName: "",
+                };
+                let totalTableData = props.tableData.length;
+                val.id = totalTableData + 1;
+                let updatedTableData = [...props.tableData];
+                updatedTableData.push(val);
+                props.func(updatedTableData);
+            }
+        })
+    }, [GroupType]);
+    
+
     const addRowsHandler = (e) => {
-        debugger;
+        
         const val = {
             GroupType: groupTypeDropdownSelect === "" ? "" : groupTypeDropdownSelect.value,
             GroupTypeName: groupTypeDropdownSelect.label,
@@ -72,17 +94,16 @@ function GroupTab(props) {
             SubGroupName: subGroupDropdownSelect.label,
         };
 
-        if (!(groupTypeDropdownSelect === "")) {
+        
             const totalTableData = props.tableData.length;
             val.id = totalTableData + 1;
             const updatedTableData = [...props.tableData];
             updatedTableData.push(val);
             props.func(updatedTableData);
             clearState();
-        } else {
-            alert("Please select value");
-        }
+       
     };
+
     const clearState = () => {
         setGroupTypeDropdownSelect("");
         setGroupDropdownSelect("");

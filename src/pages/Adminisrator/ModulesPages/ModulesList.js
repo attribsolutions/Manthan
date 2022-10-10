@@ -9,8 +9,8 @@ import {
     updateModuleIDSuccess
 } from "../../../store/actions";
 import Modules from "./Modules";
+import { commonPageFieldList, commonPageFieldListSuccess } from "../../../store/actions";
 import CommonListPage from "../../../components/Common/CmponentRelatedCommonFile/commonListPage";
-import {  commonPageFieldList, commonPageFieldListSuccess } from "../../../store/actions";
 import { MODULE } from "../../../routes/route_url";
 const ModulesList = () => {
 
@@ -23,8 +23,7 @@ const ModulesList = () => {
             deleteMsg: state.Modules.deleteModuleIDSuccess,
             postMsg: state.Modules.modulesSubmitSuccesss,
             userAccess: state.Login.RoleAccessUpdateData,
-            pageField: state.CommonPageFieldReducer.PageFieldList
-
+            pageField: state.CommonPageFieldReducer.pageFieldList
         })
     );
 
@@ -39,7 +38,7 @@ const ModulesList = () => {
 
     //  This UseEffect => Featch Modules List data  First Rendering
     useEffect(() => {
-        dispatch(commonPageFieldListSuccess([]))
+        dispatch(commonPageFieldListSuccess(null))
         dispatch(commonPageFieldList(15))
         dispatch(fetchModelsList());
     }, []);
@@ -49,7 +48,7 @@ const ModulesList = () => {
     return (
         <React.Fragment>
             {
-                 (pageField) ?
+                (pageField) ?
                     <CommonListPage
                         action={action}
                         reducers={reducers}
