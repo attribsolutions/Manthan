@@ -78,7 +78,7 @@ import GroupTypeList from "../pages/Adminisrator/GroupTypePage/GroupTypeList";
 import GroupTypeMaster from "../pages/Adminisrator/GroupTypePage/GroupTypeMaster";
 
 import EditTabaleTable from "../pages/Adminisrator/DriverPage/editabale table";
-
+import TermsAndCondtionsList from "../pages/Adminisrator/TermsAndCondtions/TermsAndCondtionsList";
 
 // import Index from "../pages/Adminisrator/customValidation/index";
 
@@ -194,7 +194,7 @@ const userRoutes = [
   { path: "/GroupTypeList", component: GroupTypeList },
 
   { path: '/TermsAndCondtionsMaster', component: TermsAndCondtionsMaster },
-
+  { path: '/TermsAndCondtionsList', component: TermsAndCondtionsList },
 
   // { path: "/PartyMasterTab", component: PartyMasterTab },
 
