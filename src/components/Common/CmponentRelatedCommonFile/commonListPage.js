@@ -10,7 +10,7 @@ import ToolkitProvider, { Search } from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 import { useSelector, useDispatch } from "react-redux";
 import { MetaTags } from "react-meta-tags";
-import { useHistory ,Redirect} from "react-router-dom";
+import { useHistory, Redirect } from "react-router-dom";
 import {
   deleteDriverTypeIDSuccess,
   updateDriverTypeIDSuccess,
@@ -40,7 +40,7 @@ const CommonListPage = (props) => {
     deleteMsg,
     userAccess,
     postMsg,
-    pageField = []
+    pageField
 
   } = props.reducers;
 
@@ -153,13 +153,17 @@ const CommonListPage = (props) => {
   // Edit Modal Show When Edit Data is true
   useEffect(() => {
     if (editData.Status === true) {
-      // tog_center();
-      // setIsRedirect(true)
-      debugger
-      history.push({
-        pathname: masterPath,
-        state:editData.Data, relatatedPage:masterPath, pageMode:editData.pageMode
-      })
+      if (pageField.IsEditPopuporComponent) {
+        history.push({
+          pathname: masterPath,
+          editValue: editData.Data,
+          pageMode: editData.pageMode,
+
+        })
+      }
+      else {
+        tog_center();
+      }
     }
   }, [editData]);
 
@@ -167,10 +171,16 @@ const CommonListPage = (props) => {
     setmodal_center(!modal_center);
   }
 
-debugger
   let sortLabel = ""
+  let pageFiledColumn = []
   const columns = []
-  pageField.forEach((i, k) => {
+
+  // const hasfield = false
+  // if (hasfield) {
+  //   pageFiledColumn = pageField.PageFieldMaster
+  // }
+
+  pageField.PageFieldMaster.forEach((i, k) => {
     if (i.ShowInListPage) {
       columns.push({
         text: i.FieldLabel,
@@ -181,7 +191,7 @@ debugger
         sortLabel = i.ControlID
       }
     }
-    if (pageField.length - 1 === k) {
+    if (pageField.PageFieldMaster.length - 1 === k) {
       columns.push(listPageCommonButtonFunction({
         dispatchHook: dispatch,
         ButtonMsgLable: ButtonMsgLable,
@@ -201,16 +211,16 @@ debugger
   ];
 
   const pageOptions = {
-    sizePerPage: 10,
-    totalSize: tableList.length,
+    sizePerPage: 15,
+    // totalSize: tableList.length,
     custom: true,
   };
-  
+
   if (!(userPageAccessState === '')) {
     return (
       <React.Fragment>
         <MetaTags>
-          <title>DriverList| FoodERP-React FrontEnd</title>
+          <title>{userPageAccessState.PageHeading}| FoodERP-React FrontEnd</title>
         </MetaTags>
         <div className="page-content">
           <PaginationProvider pagination={paginationFactory(pageOptions)}>
@@ -268,7 +278,7 @@ debugger
             size="xl"
           >
 
-            <MasterModal state={editData.Data} relatatedPage={masterPath} pageMode={editData.pageMode} />
+            <MasterModal editValue={editData.Data} masterPath={masterPath} pageMode={editData.pageMode} />
           </Modal>
         </div>
         {/* {(isRedirect) ? <Redirect to={{

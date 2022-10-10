@@ -32,16 +32,16 @@ const CompanyModule = (props) => {
   const formRef = useRef(null);
   const dispatch = useDispatch();
   const history = useHistory()
-debugger
+
+
+
+
+
   //*** "isEditdata get all data from ModuleID for Binding  Form controls
- var aa=history.location.hasOwnProperty("editData")
 
 
-  var editDataGatingFromList = props.state;
-  let propsPageMode = props.pageMode;
-  let pageModeProps = props.pageMode;
-
-  const [EditData, setEditData] = useState([]);
+  const [EditData, setEditData] = useState({});
+  const [modalCss, setModalCss] = useState(false);
   const [pageMode, setPageMode] = useState("save");
   const [userPageAccessState, setUserPageAccessState] = useState('');
 
@@ -53,47 +53,64 @@ debugger
     userAccess: state.Login.RoleAccessUpdateData,
   }));
 
+  const location = { ...history.location }
+  const hasShowloction = location.hasOwnProperty("editData")
+  const hasShowModal = props.hasOwnProperty("pageMode")
+
   // userAccess useEffect
   useEffect(() => {
-    let userAcc = undefined
-    if ((editDataGatingFromList === undefined)) {
+    let userAcc = null;
+    let locationPath = location.pathname;
 
-      let locationPath = history.location.pathname
-      userAcc = userAccess.find((inx) => {
-        return (`/${inx.ActualPagePath}` === locationPath)
-      })
-    }
-    else if (!(editDataGatingFromList === undefined)) {
-      let relatatedPage = props.relatatedPage
-      userAcc = userAccess.find((inx) => {
-        return (`/${inx.ActualPagePath}` === relatatedPage)
-      })
+    if (hasShowModal) {
+      locationPath = props.masterPath;
+    };
 
-    }
-    if (!(userAcc === undefined)) {
+    userAcc = userAccess.find((inx) => {
+      return (`/${inx.ActualPagePath}` === locationPath)
+    })
+
+    if (userAcc) {
       setUserPageAccessState(userAcc)
-    }
-
+    };
   }, [userAccess])
 
-  // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
-  useEffect(() => {
 
-    if (!(userPageAccessState === '')) { document.getElementById("txtName").focus(); }
-    if (!(editDataGatingFromList === undefined)) {
-      setEditData(editDataGatingFromList);
-      setPageMode(pageModeProps);
-      setCompanyGroup({
-        value: editDataGatingFromList.CompanyGroup_id,
-        label: editDataGatingFromList.CompanyGroupName
-      })
-      dispatch(editCompanyIDSuccess({ Status: false }))
-      dispatch(BreadcrumbShow(editDataGatingFromList.Name))
+
+  useEffect(() => {
+ 
+    // if (!(userPageAccessState === '')) { document.getElementById("txtName").focus(); }
+    if ((hasShowloction || hasShowModal)) {
+
+      let hasEditVal = null
+      if (hasShowloction) {
+        setPageMode(location.pageMode)
+        hasEditVal = location.editValue
+      }
+      else if (hasShowModal) {
+        hasEditVal = props.editValue
+        setPageMode(props.pageMode)
+        setModalCss(true)
+      }
+
+      if (hasEditVal) {
+        setEditData(hasEditVal);
+        const {
+          CompanyGroup_id,
+          CompanyGroupName,
+          Name } = { ...hasEditVal };
+
+        setCompanyGroup({
+          value: CompanyGroup_id,
+          label: CompanyGroupName
+        })
+        dispatch(editCompanyIDSuccess({ Status: false }))
+        dispatch(BreadcrumbShow(Name))
+      }
     }
-    else if (!(propsPageMode === undefined)) {
-      setPageMode(propsPageMode)
-    }
-  }, [editDataGatingFromList, propsPageMode]);
+
+  }, []);
+
 
   useEffect(() => {
     if ((PostAPIResponse.Status === true) && (PostAPIResponse.StatusCode === 200) && !(pageMode === "dropdownAdd")) {
@@ -171,7 +188,7 @@ debugger
   };
 
   var IsEditMode_Css = ''
-  if ((pageMode === "edit") || (pageMode === "copy") || (pageMode === "dropdownAdd")) { IsEditMode_Css = "-5.5%" };
+  if ((modalCss) || (pageMode === "dropdownAdd")) { IsEditMode_Css = "-5.5%" };
 
   if (!(userPageAccessState === '')) {
     return (
@@ -306,7 +323,7 @@ debugger
                           <FormGroup >
                             <Row >
                               <Col sm={2}>
-                              {SaveButton({pageMode,userPageAccessState,module:"Company"})}
+                                {SaveButton({ pageMode, userPageAccessState, module: "Company" })}
                               </Col>
                             </Row>
                           </FormGroup >

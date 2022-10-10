@@ -50,7 +50,7 @@ const CompanyList = () => {
     return (
         <React.Fragment>
             {
-                (pageField.length > 0) ?
+                (pageField.hasOwnProperty("PageFieldMaster")) ?
                     <CommonListPage
                         action={action}
                         reducers={reducers}
