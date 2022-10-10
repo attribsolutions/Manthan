@@ -78,7 +78,14 @@ import GroupTypeList from "../pages/Adminisrator/GroupTypePage/GroupTypeList";
 import GroupTypeMaster from "../pages/Adminisrator/GroupTypePage/GroupTypeMaster";
 
 import EditTabaleTable from "../pages/Adminisrator/DriverPage/editabale table";
-import { DRIVER, DRIVER_lIST } from "./route_url";
+import { COMPANY, COMPANY_lIST,
+        DRIVER, DRIVER_lIST,
+         MODULE, MODULE_lIST,
+          USER,  USER_lIST,
+         
+         
+
+        } from "./route_url";
 
 
 // import Index from "../pages/Adminisrator/customValidation/index";
@@ -130,15 +137,15 @@ const userRoutes = [
 
 
 
-  { path: '/ModuleMaster', component: Modules },
-  { path: '/ModuleList', component: ModulesList },
+  { path: MODULE, component: Modules },
+  { path: MODULE_lIST, component: ModulesList },
 
   // { path: "/subModuleMaster", component: SubModules },
   // { path: "/subModuleList", component: SubModulesList },
 
   // Administrator : Company Path and List
-  { path: '/CompanyMaster', component: CompanyModule },
-  { path: '/CompanyList', component: CompanyList },
+  { path: COMPANY, component: CompanyModule },
+  { path: COMPANY_lIST, component: CompanyList },
 
   { path: `/PageList`, component: PageList },
   { path: `/PageMaster`, component: PageMaster },
@@ -147,8 +154,8 @@ const userRoutes = [
   { path: `/Order`, component: OrderPage },
   { path: `/Orders`, component: OrderList },
 
-  { path: `/UserMaster`, component: AddUser },
-  { path: `/UserList`, component: UserList },
+  { path: USER, component: AddUser },
+  { path: USER_lIST, component: UserList },
 
   { path: '/EmployeeMaster', component: AddEmployee },
   { path: '/EmployeeList', component: Employee_List },
