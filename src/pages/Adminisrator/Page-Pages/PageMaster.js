@@ -37,10 +37,9 @@ const PageMaster = (props) => {
   const history = useHistory()
 
   //*** "isEditdata get all data from ModuleID for Binding  Form controls
-  let editDataGatingFromList = props.state;
-  let pageModeProps = props.pageMode
-  console.log("editDataGatingFromList", editDataGatingFromList)
+
   const [EditData, setEditData] = useState([]);
+  const [modalCss, setModalCss] = useState(false);
   const [pageMode, setPageMode] = useState("save");
   const [userPageAccessState, setUserPageAccessState] = useState('');
 
@@ -76,7 +75,7 @@ const PageMaster = (props) => {
     ControlTypes,
     FieldValidations,
     PostAPIResponse,
-    RoleAccessModifiedinSingleArray,
+    userAccess,
     ModuleData,
     PageAccess,
     modulePostAPIResponse,
@@ -84,36 +83,36 @@ const PageMaster = (props) => {
       ControlTypes: state.H_Pages.ControlTypes,
       FieldValidations: state.H_Pages.FieldValidations,
       PostAPIResponse: state.H_Pages.saveMessage,
-      RoleAccessModifiedinSingleArray: state.Login.RoleAccessUpdateData,
+      userAccess: state.Login.RoleAccessUpdateData,
       ModuleData: state.Modules.modulesList,
       PageAccess: state.H_Pages.PageAccess,
       modulePostAPIResponse: state.Modules.modulesSubmitSuccesss,
       PageList: state.H_Pages.PageList,
     }));
 
+  const location = { ...history.location }
+  const hasShowloction = location.hasOwnProperty("editValue")
+  const hasShowModal = props.hasOwnProperty("editValue")
+
+  // userAccess useEffect
   useEffect(() => {
+    debugger
+    let userAcc = null;
+    let locationPath = location.pathname;
 
-    let userAcc = undefined
-    if ((editDataGatingFromList === undefined)) {
+    if (hasShowModal) {
+      locationPath = props.masterPath;
+    };
 
-      let locationPath = history.location.pathname
-      userAcc = RoleAccessModifiedinSingleArray.find((inx) => {
-        return (`/${inx.ActualPagePath}` === locationPath)
-      })
-    }
-    else if (!(editDataGatingFromList === undefined)) {
-      let relatatedPage = props.relatatedPage
-      userAcc = RoleAccessModifiedinSingleArray.find((inx) => {
-        return (`/${inx.ActualPagePath}` === relatatedPage)
-      })
+    userAcc = userAccess.find((inx) => {
+      return (`/${inx.ActualPagePath}` === locationPath)
+    })
 
-    }
-    if (!(userAcc === undefined)) {
+    if (userAcc) {
       setUserPageAccessState(userAcc)
-    }
+    };
+  }, [userAccess])
 
-
-  }, [RoleAccessModifiedinSingleArray])
 
   useEffect(() => {
     dispatch(fetchModelsList());
@@ -124,73 +123,85 @@ const PageMaster = (props) => {
 
   // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
   useEffect(() => {
+debugger
+    // if (!(userPageAccessState === '')) { document.getElementById("txtName").focus(); }
+    if ((hasShowloction || hasShowModal)) {
 
-    if (!(userPageAccessState === '')) { document.getElementById("txtName").focus(); }
+      let hasEditVal = null
+      if (hasShowloction) {
+        setPageMode(location.pageMode)
+        hasEditVal = location.editValue
+      }
+      else if (hasShowModal) {
+        hasEditVal = props.editValue
+        setPageMode(props.pageMode)
+        setModalCss(true)
+      }
 
-    if (!(editDataGatingFromList === undefined)) {
+      if (hasEditVal) {
+        setEditData(hasEditVal);
 
-      setPageMode(pageModeProps);
+        dispatch(BreadcrumbShow(hasEditVal.Name))
 
-      dispatch(BreadcrumbShow(editDataGatingFromList.Name))
-      setEditData(editDataGatingFromList);
-      setTablePageAccessDataState(editDataGatingFromList.PagePageAccess);
+        setTablePageAccessDataState(hasEditVal.PagePageAccess);
 
-      setModule_DropdownSelect({
-        label: editDataGatingFromList.ModuleName,
-        value: editDataGatingFromList.Module,
-      });
-      let PageFieldMaster = editDataGatingFromList.PageFieldMaster.map((index) => {
-        debugger
-        return {
-          ControlType: {
-            label: index.ControlTypeName,
-            value: index.ControlType
-          },
-          FieldValidation: {
-            label: index.FieldValidationName,
-            value: index.FieldValidation
-          },
-          ControlID: index.ControlID,
-          FieldLabel: index.FieldLabel,
-          InValidMsg: index.InValidMsg,
-          IsCompulsory: index.IsCompulsory,
-          DefaultSort: index.DefaultSort,
-          ListPageSeq: index.ListPageSeq,
-          ShowInListPage: index.ShowInListPage,
-          ShowInDownload: index.ShowInDownload,
+        setModule_DropdownSelect({
+          label: hasEditVal.ModuleName,
+          value: hasEditVal.Module,
+        });
+
+        let PageFieldMaster = hasEditVal.PageFieldMaster.map((index) => {
+         
+          return {
+            ControlType: {
+              label: index.ControlTypeName,
+              value: index.ControlType
+            },
+            FieldValidation: {
+              label: index.FieldValidationName,
+              value: index.FieldValidation
+            },
+            ControlID: index.ControlID,
+            FieldLabel: index.FieldLabel,
+            InValidMsg: index.InValidMsg,
+            IsCompulsory: index.IsCompulsory,
+            DefaultSort: index.DefaultSort,
+            ListPageSeq: index.ListPageSeq,
+            ShowInListPage: index.ShowInListPage,
+            ShowInDownload: index.ShowInDownload,
+          }
+        })
+
+        if (!(PageFieldMaster.length === 0)) {
+          setPageFieldTabTable(PageFieldMaster)
         }
-      })
-      if (!(PageFieldMaster.length === 0)) {
-        setPageFieldTabTable(PageFieldMaster)
+
+        if (hasEditVal.PageType === 2) {
+          setRelatedPageListShowUI(true)
+        }
+        setrelatedPage_DropdownSelect({
+          value: hasEditVal.RelatedPageId,
+          label: hasEditVal.RelatedPageName,
+        });
+
+        // When value 2 is get then DropDown lable is "ListPage" and ShowMenu is disabled Otherwise DropDown lable is "AddPage" and ShowMenu is enabled
+        let pageType_ID = hasEditVal.PageType;
+
+        if (pageType_ID === 2) {
+          setPageAccessDropDownView(true);
+          dispatch(getPageList(pageType_ID));
+          setPageType_DropdownSelect({ value: 2, label: "ListPage" });
+
+        } else if (pageType_ID === 1) {
+          dispatch(getPageListSuccess([]));
+          setrelatedPage_DropdownSelect({ value: 0 });
+          setPageType_DropdownSelect({ value: 1, label: "AddPage" });
+        }
+
+        dispatch(editHPagesIDSuccess({ Status: false }));
       }
-
-
-      if (editDataGatingFromList.PageType === 2) {
-        setRelatedPageListShowUI(true)
-      }
-      setrelatedPage_DropdownSelect({
-        value: editDataGatingFromList.RelatedPageId,
-        label: editDataGatingFromList.RelatedPageName,
-      });
-
-      // When value 2 is get then DropDown lable is "ListPage" and ShowMenu is disabled Otherwise DropDown lable is "AddPage" and ShowMenu is enabled
-      let pageType_ID = editDataGatingFromList.PageType;
-
-      if (pageType_ID === 2) {
-        setPageAccessDropDownView(true);
-        dispatch(getPageList(pageType_ID));
-        setPageType_DropdownSelect({ value: 2, label: "ListPage" });
-
-      } else if (pageType_ID === 1) {
-        dispatch(getPageListSuccess([]));
-        setrelatedPage_DropdownSelect({ value: 0 });
-        setPageType_DropdownSelect({ value: 1, label: "AddPage" });
-      }
-
-      // setPageFieldTabTable(PageFieldMaster)
-      dispatch(editHPagesIDSuccess({ Status: false }));
     }
-  }, [editDataGatingFromList]);
+  }, []);
 
 
   // This UseEffect clear Form Data and when modules Save Successfully.

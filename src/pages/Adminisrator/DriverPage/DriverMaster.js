@@ -11,8 +11,6 @@ import {
     Label,
     Row
 } from "reactstrap";
-import { AvField, AvForm, } from "availity-reactstrap-validation";
-import Select from "react-select";
 import { MetaTags } from "react-meta-tags";
 import { BreadcrumbShow, commonPageFieldSuccess } from "../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
@@ -20,7 +18,6 @@ import { AlertState, commonPageField } from "../../../store/actions";
 
 import {
     PostMethodForDriverMaster,
-    getMethodForDriverList,
     PostMethod_ForDriverMasterSuccess,
     getMethod_ForDriverListSuccess,
     editDriverTypeSuccess,
@@ -31,8 +28,6 @@ import Flatpickr from "react-flatpickr"
 import {
     comAddPageFieldFunc,
     formValid,
-    formValChange,
-    onChangeSelect,
     onChangeText,
     onChangeDate
 } from "../../../components/Common/CmponentRelatedCommonFile/validationFunction";
@@ -45,18 +40,15 @@ const DriverMaster = (props) => {
     const dispatch = useDispatch();
     const history = useHistory()
 
-    let editDataGetingFromList = props.state;
-    let pageModeProps = props.pageMode;
-console.log("editDataGetingFromList",editDataGetingFromList)
     const formRef = useRef(null);
     const [pageMode, setPageMode] = useState("");
     const [userPageAccessState, setUserPageAccessState] = useState("");
-    const [EditData, setEditData] = useState([]);
-    const [DOB_Date_Select, setDOB_Date_Select] = useState("");
+    const [modalCss, setModalCss] = useState(false);
 
     // ////////////////////////////////////
     const [state, setState] = useState({
         values: {
+            id: "",
             Name: "",
             Address: "",
             UID: "",
@@ -111,75 +103,75 @@ console.log("editDataGetingFromList",editDataGetingFromList)
     const {
         PostAPIResponse,
         pageField,
-        RoleAccessModifiedinSingleArray,
-        editData = []
+        userAccess,
     } = useSelector((state) => ({
         PostAPIResponse: state.DriverReducer.PostDataMessage,
-        RoleAccessModifiedinSingleArray: state.Login.RoleAccessUpdateData,
-        editData: state.DriverReducer.editData,
+        userAccess: state.Login.RoleAccessUpdateData,
         pageField: state.CommonPageFieldReducer.pageField
     }));
 
-console.log("pageField",pageField)
+    const location = { ...history.location }
+    const hasShowloction = location.hasOwnProperty("editValue")
+    const hasShowModal = props.hasOwnProperty("editValue")
+
 
     useEffect(() => {
-        // dispatch(commonPageFieldSuccess([]));
+        dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(91))
     }, []);
 
-    //userAccess useEffect
+    // userAccess useEffect
     useEffect(() => {
-        debugger
-        let userAcc = undefined
-        if ((editDataGetingFromList === undefined)) {
+        let userAcc = null;
+        let locationPath = location.pathname;
 
-            let locationPath = history.location.pathname
-            userAcc = RoleAccessModifiedinSingleArray.find((inx) => {
-                return (`/${inx.ActualPagePath}` === locationPath)
-            })
-        }
-        else if (!(editDataGetingFromList === undefined)) {
-            let relatatedPage = props.relatatedPage
-            userAcc = RoleAccessModifiedinSingleArray.find((inx) => {
-                return (`/${inx.ActualPagePath}` === relatatedPage)
-            })
+        if (hasShowModal) {
+            locationPath = props.masterPath;
+        };
 
-        }
-        if (!(userAcc === undefined)) {
+        userAcc = userAccess.find((inx) => {
+            return (`/${inx.ActualPagePath}` === locationPath)
+        })
+
+        if (userAcc) {
             setUserPageAccessState(userAcc)
-        }
+        };
+    }, [userAccess])
 
-    }, [RoleAccessModifiedinSingleArray])
 
     // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
     useEffect(() => {
 
         if (!(userPageAccessState === '')) { document.getElementById("txtName").focus(); }
-        if (!(editDataGetingFromList === undefined || (editData.length > 0))) {
-            let editvalue = {}
-            if (editData.length > 0) {
-                editvalue = editData
-            } else {
+        // if (!(userPageAccessState === '')) { document.getElementById("txtName").focus(); }
+        if ((hasShowloction || hasShowModal)) {
 
+            let hasEditVal = null
+            if (hasShowloction) {
+                setPageMode(location.pageMode)
+                hasEditVal = location.editValue
             }
-            const { Name, DOB, UID, Address } = editDataGetingFromList
-            const { values, fieldLabel, hasValid, required, isError } = { ...state }
-            values.Name = Name;
-            values.DOB = DOB;
-            values.UID = UID;
-            values.Address = Address;
+            else if (hasShowModal) {
+                hasEditVal = props.editValue
+                setPageMode(props.pageMode)
+                setModalCss(true)
+            }
 
-            setState({ values, fieldLabel, hasValid, required, isError })
+            if (hasEditVal) {
+                const { id, Name, DOB, UID, Address } = hasEditVal
+                const { values, fieldLabel, hasValid, required, isError } = { ...state }
+                values.Name = Name;
+                values.DOB = DOB;
+                values.UID = UID;
+                values.Address = Address;
+                values.id = id
 
-            // setEditData(editDataGetingFromList);
-            setPageMode(pageModeProps);
-            setDOB_Date_Select(editDataGetingFromList.DOB)
-
+                setState({ values, fieldLabel, hasValid, required, isError })
+                dispatch(BreadcrumbShow(hasEditVal.DriverMaster))
+            }
             dispatch(editDriverTypeSuccess({ Status: false }))
-            dispatch(BreadcrumbShow(editDataGetingFromList.DriverMaster))
-            return
         }
-    }, [editDataGetingFromList])
+    }, [])
 
 
 
@@ -219,8 +211,10 @@ console.log("pageField",pageField)
 
     // ////////////////////////////////////////////////////////////
     useEffect(() => {
-        if (pageField.length > 0) {
-            comAddPageFieldFunc({ state, setState, pageField })
+        debugger
+        if (pageField) {
+            const fieldArr = pageField.PageFieldMaster
+            comAddPageFieldFunc({ state, setState, fieldArr })
         }
     }, [pageField])
 
@@ -244,7 +238,7 @@ console.log("pageField",pageField)
             });
 
             if (pageMode === 'edit') {
-                dispatch(updateDriverTypeID(jsonBody, EditData.id));
+                dispatch(updateDriverTypeID(jsonBody, values.id));
             }
 
             else {
@@ -256,18 +250,9 @@ console.log("pageField",pageField)
     };
 
 
-    const options = [
-        { value: 'active', label: 'Active' },
-        { value: 'inactive', label: 'In Active' },
-        { value: 'deleted', label: 'Delete' },
-    ];
-
-
-
-
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
     var IsEditMode_Css = ''
-    if ((pageMode === "edit") || (pageMode === "copy") || (pageMode === "dropdownAdd")) { IsEditMode_Css = "-5.5%" };
+    if ((modalCss) || (pageMode === "dropdownAdd")) { IsEditMode_Css = "-5.5%" };
 
     if (!(userPageAccessState === '')) {
         return (

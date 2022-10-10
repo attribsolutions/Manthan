@@ -78,7 +78,8 @@ import GroupTypeList from "../pages/Adminisrator/GroupTypePage/GroupTypeList";
 import GroupTypeMaster from "../pages/Adminisrator/GroupTypePage/GroupTypeMaster";
 
 import EditTabaleTable from "../pages/Adminisrator/DriverPage/editabale table";
-import TermsAndCondtionsList from "../pages/Adminisrator/TermsAndCondtions/TermsAndCondtionsList";
+import { DRIVER, DRIVER_lIST } from "./route_url";
+
 
 // import Index from "../pages/Adminisrator/customValidation/index";
 
@@ -183,8 +184,8 @@ const userRoutes = [
   { path: "/VehicleMaster", component: VehicleMaster },
   { path: "/VehicleList", component: VehicleList },
 
-  { path: "/DriverMaster", component: DriverMaster },
-  { path: "/DriverList", component: DriverList },
+  { path: DRIVER, component: DriverMaster },
+  { path: DRIVER_lIST, component: DriverList },
   { path: "/editTable", component: EditTabaleTable },
 
   { path: "/CompanyGroupMaster", component: CompanyGroupMaster },
@@ -194,7 +195,7 @@ const userRoutes = [
   { path: "/GroupTypeList", component: GroupTypeList },
 
   { path: '/TermsAndCondtionsMaster', component: TermsAndCondtionsMaster },
-  { path: '/TermsAndCondtionsList', component: TermsAndCondtionsList },
+
 
   // { path: "/PartyMasterTab", component: PartyMasterTab },
 
