@@ -11,7 +11,7 @@ function* commonPageFiled_GenFunc({ pageId }) {
   try {
     const response = yield call(commonPageFiled_API, pageId);
 
-    yield put(commonPageFieldSuccess(response.Data.PageFieldMaster));
+    yield put(commonPageFieldSuccess(response.Data));
     yield put(SpinnerState(false))
   } catch (error) {
     yield put(SpinnerState(false))

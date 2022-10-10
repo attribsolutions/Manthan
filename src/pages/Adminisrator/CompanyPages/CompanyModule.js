@@ -33,64 +33,82 @@ const CompanyModule = (props) => {
   const dispatch = useDispatch();
   const history = useHistory()
 
-  //*** "isEditdata get all data from ModuleID for Binding  Form controls
-  var editDataGatingFromList = props.state;
-  let propsPageMode = props.pageMode;
-  let pageModeProps = props.pageMode;
 
-  const [EditData, setEditData] = useState([]);
+
+
+
+  //*** "isEditdata get all data from ModuleID for Binding  Form controls
+
+
+  const [EditData, setEditData] = useState({});
+  const [modalCss, setModalCss] = useState(false);
   const [pageMode, setPageMode] = useState("save");
   const [userPageAccessState, setUserPageAccessState] = useState('');
 
   const [CompanyGroupselect, setCompanyGroup] = useState("");
 
   //Access redux store Data /  'save_ModuleSuccess' action data
-  const { PostAPIResponse, RoleAccessModifiedinSingleArray } = useSelector((state) => ({
-    PostAPIResponse: state.Company.companySubmitSuccesss,
-    RoleAccessModifiedinSingleArray: state.Login.RoleAccessUpdateData,
+  const { PostAPIResponse, userAccess } = useSelector((state) => ({
+    PostAPIResponse: state.Company.postMsg,
+    userAccess: state.Login.RoleAccessUpdateData,
   }));
+
+  const location = { ...history.location }
+  const hasShowloction = location.hasOwnProperty("editValue")
+  const hasShowModal = props.hasOwnProperty("editValue")
 
   // userAccess useEffect
   useEffect(() => {
-    let userAcc = undefined
-    if ((editDataGatingFromList === undefined)) {
+    let userAcc = null;
+    let locationPath = location.pathname;
 
-      let locationPath = history.location.pathname
-      userAcc = RoleAccessModifiedinSingleArray.find((inx) => {
-        return (`/${inx.ActualPagePath}` === locationPath)
-      })
-    }
-    else if (!(editDataGatingFromList === undefined)) {
-      let relatatedPage = props.relatatedPage
-      userAcc = RoleAccessModifiedinSingleArray.find((inx) => {
-        return (`/${inx.ActualPagePath}` === relatatedPage)
-      })
+    if (hasShowModal) {
+      locationPath = props.masterPath;
+    };
 
-    }
-    if (!(userAcc === undefined)) {
+    userAcc = userAccess.find((inx) => {
+      return (`/${inx.ActualPagePath}` === locationPath)
+    })
+
+    if (userAcc) {
       setUserPageAccessState(userAcc)
-    }
+    };
+  }, [userAccess])
 
-  }, [RoleAccessModifiedinSingleArray])
-
-  // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
   useEffect(() => {
+ 
+    // if (!(userPageAccessState === '')) { document.getElementById("txtName").focus(); }
+    if ((hasShowloction || hasShowModal)) {
 
-    if (!(userPageAccessState === '')) { document.getElementById("txtName").focus(); }
-    if (!(editDataGatingFromList === undefined)) {
-      setEditData(editDataGatingFromList);
-      setPageMode(pageModeProps);
-      setCompanyGroup({
-        value: editDataGatingFromList.CompanyGroup_id,
-        label: editDataGatingFromList.CompanyGroupName
-      })
-      dispatch(editCompanyIDSuccess({ Status: false }))
-      dispatch(BreadcrumbShow(editDataGatingFromList.Name))
+      let hasEditVal = null
+      if (hasShowloction) {
+        setPageMode(location.pageMode)
+        hasEditVal = location.editValue
+      }
+      else if (hasShowModal) {
+        hasEditVal = props.editValue
+        setPageMode(props.pageMode)
+        setModalCss(true)
+      }
+
+      if (hasEditVal) {
+        setEditData(hasEditVal);
+        const {
+          CompanyGroup_id,
+          CompanyGroupName,
+          Name } = { ...hasEditVal };
+
+        setCompanyGroup({
+          value: CompanyGroup_id,
+          label: CompanyGroupName
+        })
+        dispatch(editCompanyIDSuccess({ Status: false }))
+        dispatch(BreadcrumbShow(Name))
+      }
     }
-    else if (!(propsPageMode === undefined)) {
-      setPageMode(propsPageMode)
-    }
-  }, [editDataGatingFromList, propsPageMode]);
+
+  }, []);
+
 
   useEffect(() => {
     if ((PostAPIResponse.Status === true) && (PostAPIResponse.StatusCode === 200) && !(pageMode === "dropdownAdd")) {
@@ -168,7 +186,7 @@ const CompanyModule = (props) => {
   };
 
   var IsEditMode_Css = ''
-  if ((pageMode === "edit") || (pageMode === "copy") || (pageMode === "dropdownAdd")) { IsEditMode_Css = "-5.5%" };
+  if ((modalCss) || (pageMode === "dropdownAdd")) { IsEditMode_Css = "-5.5%" };
 
   if (!(userPageAccessState === '')) {
     return (
@@ -303,7 +321,7 @@ const CompanyModule = (props) => {
                           <FormGroup >
                             <Row >
                               <Col sm={2}>
-                              {SaveButton({pageMode,userPageAccessState,module:"Company"})}
+                                {SaveButton({ pageMode, userPageAccessState, module: "Company" })}
                               </Col>
                             </Row>
                           </FormGroup >
