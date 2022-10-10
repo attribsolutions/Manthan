@@ -11,6 +11,8 @@ import {
 } from "../../../store/Administrator/UserRegistrationRedux/actions";
 import CommonListPage from "../../../components/Common/CmponentRelatedCommonFile/commonListPage";
 import {  commonPageFieldList, commonPageFieldListSuccess, } from "../../../store/actions";
+import { USER } from "../../../routes/route_url";
+
 
 const UserList = () => {
 
@@ -54,7 +56,7 @@ const UserList = () => {
                         action={action}
                         reducers={reducers}
                         MasterModal={AddUser}
-                        masterPath={"/UserRegistration"}
+                        masterPath={USER}
                         ButtonMsgLable={"User"}
                         deleteName={"ID"}
                     />

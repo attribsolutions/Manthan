@@ -11,7 +11,7 @@ import {
 import Modules from "./Modules";
 import CommonListPage from "../../../components/Common/CmponentRelatedCommonFile/commonListPage";
 import { commonPageField, commonPageFieldSuccess } from "../../../store/actions";
-
+import { MODULE } from "../../../routes/route_url";
 const ModulesList = () => {
 
     const dispatch = useDispatch();
@@ -54,7 +54,7 @@ const ModulesList = () => {
                         action={action}
                         reducers={reducers}
                         MasterModal={Modules}
-                        masterPath={"/Modules"}
+                        masterPath={MODULE}
                         ButtonMsgLable={"Module"}
                         deleteName={"Name"}
                     />
