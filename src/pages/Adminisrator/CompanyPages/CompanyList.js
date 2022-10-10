@@ -10,7 +10,7 @@ import {
 import { useSelector, useDispatch } from "react-redux";
 import CompanyModule from "./CompanyModule";
 import CommonListPage from "../../../components/Common/CmponentRelatedCommonFile/commonListPage";
-import { commonPageField, commonPageFieldSuccess } from "../../../store/actions";
+import { commonPageField, commonPageFieldList, commonPageFieldListSuccess, commonPageFieldSuccess } from "../../../store/actions";
 
 const CompanyList = () => {
 
@@ -23,7 +23,7 @@ const CompanyList = () => {
             editData: state.Company.editData,
             updateMsg: state.Company.updateMsg,
             deleteMsg: state.Company.deleteId,
-            pageField: state.CommonPageFieldReducer.pageField
+            pageField: state.CommonPageFieldReducer.pageFieldList
         })
     );
 
@@ -40,8 +40,8 @@ const CompanyList = () => {
 
     // Featch Modules List data  First Rendering
     useEffect(() => {
-        dispatch(commonPageFieldSuccess([]))
-        dispatch(commonPageField(1))
+        dispatch(commonPageFieldListSuccess(null))
+        dispatch(commonPageFieldList(1))
         dispatch(fetchCompanyList());
     }, []);
 
@@ -50,7 +50,7 @@ const CompanyList = () => {
     return (
         <React.Fragment>
             {
-                (pageField.hasOwnProperty("PageFieldMaster")) ?
+                (pageField) ?
                     <CommonListPage
                         action={action}
                         reducers={reducers}
