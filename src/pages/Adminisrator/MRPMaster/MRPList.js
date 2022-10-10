@@ -9,8 +9,8 @@ import {
   updateMRPListSuccess
 } from "../../../store/Administrator/MRPMasterRedux/action";
 import MRPMaster from "./MRPMaster"
+import { commonPageFieldList, commonPageFieldListSuccess } from "../../../store/actions";
 import CommonListPage from "../../../components/Common/CmponentRelatedCommonFile/commonListPage";
-import { commonPageField, commonPageFieldSuccess } from "../../../store/actions";
 
 const MRPList = (props) => {
 
@@ -23,7 +23,8 @@ const MRPList = (props) => {
       deleteMsg: state.MRPMasterReducer.deleteMsg,
       userAccess: state.Login.RoleAccessUpdateData,
       postMsg: state.MRPMasterReducer.PostData,
-      pageField: state.CommonPageFieldReducer.pageField
+      pageField: state.CommonPageFieldReducer.pageFieldList
+
     })
     );
 
@@ -39,8 +40,8 @@ const MRPList = (props) => {
 
   //  This UseEffect => Featch Modules List data  First Rendering
   useEffect(() => {
-    dispatch(commonPageFieldSuccess([]))
-    dispatch(commonPageField(96))
+    dispatch(commonPageFieldListSuccess(null))
+    dispatch(commonPageFieldList(96))
     dispatch(getMRPListPage());
   }, []);
 
@@ -49,7 +50,7 @@ const MRPList = (props) => {
   return (
     <React.Fragment>
       {
-        (pageField.length > 0) ?
+        (pageField) ?
           <CommonListPage
             action={action}
             reducers={reducers}
