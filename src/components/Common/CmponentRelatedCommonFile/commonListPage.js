@@ -153,18 +153,18 @@ const CommonListPage = (props) => {
   useEffect(() => {
     debugger
     if (editData.Status === true) {
-      // if (pageField.IsEditPopuporComponent) {
-      //   history.push({
-      //     pathname: masterPath,
-      //     editValue: editData.Data,
-      //     pageMode: editData.pageMode,
+      if (pageField.IsEditPopuporComponent) {
+        history.push({
+          pathname: masterPath,
+          editValue: editData.Data,
+          pageMode: editData.pageMode,
 
-      //   })
-      // }
-      // else {
+        })
+      }
+      else {
         tog_center();
       }
-    // }
+    }
   }, [editData]);
 
   function tog_center() {
