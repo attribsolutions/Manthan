@@ -54,7 +54,7 @@ const ItemsList = (props) => {
             action={action}
             reducers={reducers}
             MasterModal={ItemsMaster}
-            masterPath={"/ItemMaster/index"}
+            masterPath={"/ItemMaster"}
             ButtonMsgLable={"Item"}
             deleteName={"id"}
           />
