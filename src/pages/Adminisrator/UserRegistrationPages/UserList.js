@@ -10,7 +10,7 @@ import {
     addUserSuccess
 } from "../../../store/Administrator/UserRegistrationRedux/actions";
 import CommonListPage from "../../../components/Common/CmponentRelatedCommonFile/commonListPage";
-import { commonPageField, commonPageFieldSuccess } from "../../../store/actions";
+import {  commonPageFieldList, commonPageFieldListSuccess, } from "../../../store/actions";
 
 const UserList = () => {
 
@@ -23,7 +23,7 @@ const UserList = () => {
             deleteMsg: state.User_Registration_Reducer.deleteSuccessRole,
             userAccess: state.Login.RoleAccessUpdateData,
             postMsg: state.User_Registration_Reducer.AddUserMessage,
-            pageField: state.CommonPageFieldReducer.pageField
+            pageField: state.CommonPageFieldReducer.pageFieldList
 
         })
     );
@@ -39,8 +39,8 @@ const UserList = () => {
 
     //  This UseEffect => Featch Modules List data  First Rendering
     useEffect(() => {
-        dispatch(commonPageFieldSuccess([]))
-        dispatch(commonPageField(3))
+        dispatch(commonPageFieldListSuccess(null))
+        dispatch(commonPageFieldList(3))
         dispatch(getUser());
     }, []);
 
@@ -49,7 +49,7 @@ const UserList = () => {
     return (
         <React.Fragment>
             {
-                (pageField.length > 0) ?
+                (pageField) ?
                     <CommonListPage
                         action={action}
                         reducers={reducers}
