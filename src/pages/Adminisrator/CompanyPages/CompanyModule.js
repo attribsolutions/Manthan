@@ -176,7 +176,7 @@ const CompanyModule = (props) => {
       CreatedBy: 1,
       UpdatedBy: 1,
     });
-debugger
+
     if (pageMode === 'edit') {
       dispatch(updateCompanyID(jsonBody, EditData.id));
     }
