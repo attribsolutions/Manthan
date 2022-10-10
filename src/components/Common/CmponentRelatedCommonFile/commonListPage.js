@@ -31,7 +31,6 @@ const CommonListPage = (props) => {
 
   const [userPageAccessState, setUserPageAccessState] = useState('');
   const [modal_center, setmodal_center] = useState(false);
-  const [isRedirect, setIsRedirect] = useState(false);
 
   const {
     tableList,
@@ -62,7 +61,7 @@ const CommonListPage = (props) => {
   } = props;
 
   useEffect(() => {
-    debugger
+    
     const locationPath = history.location.pathname
     let userAcc = userAccess.find((inx) => {
       return (`/${inx.ActualPagePath}` === locationPath)
@@ -152,19 +151,20 @@ const CommonListPage = (props) => {
 
   // Edit Modal Show When Edit Data is true
   useEffect(() => {
+    debugger
     if (editData.Status === true) {
-      if (pageField.IsEditPopuporComponent) {
-        history.push({
-          pathname: masterPath,
-          editValue: editData.Data,
-          pageMode: editData.pageMode,
+      // if (pageField.IsEditPopuporComponent) {
+      //   history.push({
+      //     pathname: masterPath,
+      //     editValue: editData.Data,
+      //     pageMode: editData.pageMode,
 
-        })
-      }
-      else {
+      //   })
+      // }
+      // else {
         tog_center();
       }
-    }
+    // }
   }, [editData]);
 
   function tog_center() {

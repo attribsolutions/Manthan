@@ -43,12 +43,12 @@ const DriverMaster = (props) => {
     const formRef = useRef(null);
     const [pageMode, setPageMode] = useState("");
     const [userPageAccessState, setUserPageAccessState] = useState("");
-    const [modalCss, setModalCss] = useState(false);
+    const [modalCss, setModalCss] = useState(false);// new change
 
     // ////////////////////////////////////
     const [state, setState] = useState({
         values: {
-            id: "",
+            id: "",// new change
             Name: "",
             Address: "",
             UID: "",
@@ -110,18 +110,21 @@ const DriverMaster = (props) => {
         pageField: state.CommonPageFieldReducer.pageField
     }));
 
+    // new change
     const location = { ...history.location }
     const hasShowloction = location.hasOwnProperty("editValue")
     const hasShowModal = props.hasOwnProperty("editValue")
 
 
     useEffect(() => {
-        dispatch(commonPageFieldSuccess(null));
+        dispatch(commonPageFieldSuccess(null));// new change
         dispatch(commonPageField(91))
     }, []);
 
+    // new change
     // userAccess useEffect
     useEffect(() => {
+        debugger
         let userAcc = null;
         let locationPath = location.pathname;
 
@@ -138,7 +141,7 @@ const DriverMaster = (props) => {
         };
     }, [userAccess])
 
-
+// new change
     // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
     useEffect(() => {
 
@@ -158,7 +161,7 @@ const DriverMaster = (props) => {
             }
 
             if (hasEditVal) {
-                const { id, Name, DOB, UID, Address } = hasEditVal
+                const { id, Name, DOB, UID, Address } = hasEditVal// new change
                 const { values, fieldLabel, hasValid, required, isError } = { ...state }
                 values.Name = Name;
                 values.DOB = DOB;
@@ -207,14 +210,13 @@ const DriverMaster = (props) => {
         }
     }, [PostAPIResponse])
 
-
-
+// new change
     // ////////////////////////////////////////////////////////////
     useEffect(() => {
         debugger
         if (pageField) {
             const fieldArr = pageField.PageFieldMaster
-            comAddPageFieldFunc({ state, setState, fieldArr })
+            comAddPageFieldFunc({ state, setState, fieldArr })// new change
         }
     }, [pageField])
 
@@ -226,7 +228,7 @@ const DriverMaster = (props) => {
 
 
     const formSubmitHandler = (event) => {
-        debugger
+        
         event.preventDefault();
         if (formValid(state, setState)) {
 
@@ -238,7 +240,7 @@ const DriverMaster = (props) => {
             });
 
             if (pageMode === 'edit') {
-                dispatch(updateDriverTypeID(jsonBody, values.id));
+                dispatch(updateDriverTypeID(jsonBody, values.id));// new change
             }
 
             else {
@@ -252,7 +254,7 @@ const DriverMaster = (props) => {
 
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
     var IsEditMode_Css = ''
-    if ((modalCss) || (pageMode === "dropdownAdd")) { IsEditMode_Css = "-5.5%" };
+    if ((modalCss) || (pageMode === "dropdownAdd")) { IsEditMode_Css = "-5.5%" };// new change
 
     if (!(userPageAccessState === '')) {
         return (
