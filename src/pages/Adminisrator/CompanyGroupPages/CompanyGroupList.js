@@ -10,7 +10,9 @@ import {
   PostMethod_ForCompanyGroupMasterSuccess,
 } from "../../../store/Administrator/CompanyGroupRedux/action";
 import CommonListPage from "../../../components/Common/CmponentRelatedCommonFile/commonListPage";
-import { commonPageField, commonPageFieldList, commonPageFieldListSuccess, commonPageFieldSuccess } from "../../../store/actions";
+import {  commonPageFieldList, commonPageFieldListSuccess } from "../../../store/actions";
+import { COMPANYGROUP } from "../../../routes/route_url";
+
 
 const CompanyGroupList = (props) => {
 
@@ -53,7 +55,7 @@ const CompanyGroupList = (props) => {
             action={action}
             reducers={reducers}
             MasterModal={CompanyGroupMaster}
-            masterPath={"/CompanyGroupMaster"}
+            masterPath={COMPANYGROUP}
             ButtonMsgLable={"CompanyGroup"}
             deleteName={"Name"}
           />

@@ -78,14 +78,33 @@ import GroupTypeList from "../pages/Adminisrator/GroupTypePage/GroupTypeList";
 import GroupTypeMaster from "../pages/Adminisrator/GroupTypePage/GroupTypeMaster";
 
 import EditTabaleTable from "../pages/Adminisrator/DriverPage/editabale table";
-import { COMPANY, COMPANY_lIST,
-        DRIVER, DRIVER_lIST,
-         MODULE, MODULE_lIST,
-          USER,  USER_lIST,
-         
-         
+import {
+  COMPANY, COMPANY_lIST,
+  COMPANYGROUP, COMPANYGROUP_lIST,
+  DRIVER, DRIVER_lIST,
+  MODULE, MODULE_lIST,
+  USER, USER_lIST,
+  EMPLOYEE_lIST, EMPLOYEE,
+  ROLE_lIST, ROLE,
+  ITEM_lIST, ITEM,
+  PARTY_lIST, PARTY,
+  ROLEACCESS_lIST, ROLEACCESS,
+  EMPLOYEETYPE_lIST, EMPLOYEETYPE,
+  CATEGORYTYPE_lIST, CATEGORYTYPE,
+  PARTYTYPE_lIST, PARTYTYPE,
+  CATEGORY_lIST, CATEGORY,
+  VEHICLE, VEHICLE_lIST,
+  GROUPTYPE_lIST, GROUPTYPE,
+  PRICE_lIST, PRICE,
+  MRP_lIST, MRP,
+  MARGIN_lIST, MARGIN,
+  PAGE_lIST, PAGE,
+  GROUP_lIST,
+  ORDER_lIST,ORDER,
 
-        } from "./route_url";
+
+
+} from "./route_url";
 
 
 // import Index from "../pages/Adminisrator/customValidation/index";
@@ -147,73 +166,73 @@ const userRoutes = [
   { path: COMPANY, component: CompanyModule },
   { path: COMPANY_lIST, component: CompanyList },
 
-  { path: `/PageList`, component: PageList },
-  { path: `/PageMaster`, component: PageMaster },
+  { path: PAGE_lIST, component: PageList },
+  { path: PAGE, component: PageMaster },
   { path: '/PageMasterTab', component: PageMasterTab },
 
-  { path: `/Order`, component: OrderPage },
-  { path: `/Orders`, component: OrderList },
+  { path: ORDER, component: OrderPage },
+  { path: ORDER_lIST,component: OrderList },
 
   { path: USER, component: AddUser },
   { path: USER_lIST, component: UserList },
 
-  { path: '/EmployeeMaster', component: AddEmployee },
-  { path: '/EmployeeList', component: Employee_List },
+  { path: EMPLOYEE, component: AddEmployee },
+  { path: EMPLOYEE_lIST, component: Employee_List },
 
-  { path: `/RoleMaster`, component: RoleMaster },
-  { path: `/RoleList`, component: RoleList },
+  { path: ROLE, component: RoleMaster },
+  { path: ROLE_lIST, component: RoleList },
 
-  { path: '/ItemMaster', component: ItemsMaster },
-  { path: '/ItemList', component: ItemsList },
+  { path: ITEM, component: ItemsMaster },
+  { path: ITEM_lIST, component: ItemsList },
 
-  { path: `/PartyList`, component: PartyList },
-  { path: `/PartyMaster`, component: PartyMaster },
+  { path: PARTY_lIST, component: PartyList },
+  { path: PARTY, component: PartyMaster },
 
-  { path: `/RoleAccess`, component: RoleAccessAdd },
-  { path: '/RoleAccessList', component: RoleAccessListPage },
+  { path: ROLEACCESS, component: RoleAccessAdd },
+  { path: ROLEACCESS_lIST, component: RoleAccessListPage },
   { path: `/CopyRoleAccess`, component: RoleAccessCopyFunctionality },
 
-  { path: "/EmployeeType", component: EmployeeTypesMaster },
-  { path: "/EmployeeTypeList", component: EmployeeTypeList },
+  { path: EMPLOYEETYPE, component: EmployeeTypesMaster },
+  { path: EMPLOYEETYPE_lIST, component: EmployeeTypeList },
 
-  { path: "/PartyType", component: PartyType },
-  { path: "/PartyTypeList", component: PartyTypeList },
+  { path: PARTYTYPE, component: PartyType },
+  { path: PARTYTYPE_lIST, component: PartyTypeList },
 
-  { path: "/CategoryTypeMaster", component: CategoryTypeMaster },
-  { path: "/CategoryTypeList", component: CategoryTypeList },
+  { path: CATEGORYTYPE, component: CategoryTypeMaster },
+  { path: CATEGORYTYPE_lIST, component: CategoryTypeList },
 
-  { path: "/CategoryMaster", component: CategoryMaster },
-  { path: "/CategoryList", component: CategoryList },
+  { path: CATEGORY, component: CategoryMaster },
+  { path: CATEGORY_lIST, component: CategoryList },
 
   { path: "/SubCategoryMaster", component: SubCategoryMaster },
   { path: "/SubCategoryList", component: SubCategoryList },
 
-  { path: "/VehicleMaster", component: VehicleMaster },
-  { path: "/VehicleList", component: VehicleList },
+  { path: VEHICLE, component: VehicleMaster },
+  { path: VEHICLE_lIST, component: VehicleList },
 
   { path: DRIVER, component: DriverMaster },
   { path: DRIVER_lIST, component: DriverList },
   { path: "/editTable", component: EditTabaleTable },
 
-  { path: "/CompanyGroupMaster", component: CompanyGroupMaster },
-  { path: "/CompanyGroupList", component: CompanyGroupList },
+  { path: COMPANYGROUP, component: CompanyGroupMaster },
+  { path: COMPANYGROUP_lIST, component: CompanyGroupList },
 
-  { path: "/GroupTypeMaster", component: GroupTypeMaster },
-  { path: "/GroupTypeList", component: GroupTypeList },
+  { path: GROUPTYPE, component: GroupTypeMaster },
+  { path: GROUPTYPE_lIST, component: GroupTypeList },
 
   { path: '/TermsAndCondtionsMaster', component: TermsAndCondtionsMaster },
 
 
   // { path: "/PartyMasterTab", component: PartyMasterTab },
 
-  { path: "/PriceList", component: PriceList },
+  { path: PRICE_lIST, component: PriceList },
   // { path: "/PriceList", component: PartyMasterTab },
-  { path: "/PriceMaster", component: PriceMaster },
-  { path: "/MRPMaster", component: MRPMaster },
-  { path: "/MRPList", component: MRPList },
-  { path: "/MarginMaster", component: MarginMaster },
-  { path: "/MarginList", component: MarginList },
-  { path: "/GroupList", component: GroupList },
+  { path: PRICE, component: PriceMaster },
+  { path: MRP, component: MRPMaster },
+  { path: MRP_lIST, component: MRPList },
+  { path: MARGIN, component: MarginMaster },
+  { path: MARGIN_lIST, component: MarginList },
+  { path: GROUP_lIST, component: GroupList },
 
 
   // { path: "/AddItemMaster", component: AddItemMaster },

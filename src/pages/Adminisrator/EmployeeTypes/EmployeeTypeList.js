@@ -10,7 +10,8 @@ import {
 } from "../../../store/Administrator/EmployeeTypeRedux/action";
 import EmployeeTypesMaster from "./EmployeeTypesMaster";
 import CommonListPage from "../../../components/Common/CmponentRelatedCommonFile/commonListPage";
-import { commonPageField, commonPageFieldList, commonPageFieldListSuccess, commonPageFieldSuccess } from "../../../store/actions";
+import {  commonPageFieldList, commonPageFieldListSuccess } from "../../../store/actions";
+import { EMPLOYEETYPE } from "../../../routes/route_url";
 
 
 const EmployeeTypeList = (props) => {
@@ -51,12 +52,12 @@ const EmployeeTypeList = (props) => {
   return (
     <React.Fragment>
       {
-        (pageField.length > 0) ?
+        (pageField) ?
           <CommonListPage
             action={action}
             reducers={reducers}
             MasterModal={EmployeeTypesMaster}
-            masterPath={"/EmployeeTypesMaster"}
+            masterPath={EMPLOYEETYPE}
             ButtonMsgLable={"EmployeeType"}
             deleteName={"Name"}
           />

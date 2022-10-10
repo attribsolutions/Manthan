@@ -53,7 +53,7 @@ const CategoryList = (props) => {
             action={action}
             reducers={reducers}
             MasterModal={CategoryMaster}
-            masterPath={"/CategoryMaster"}
+            masterPath={CATEGORY}
             ButtonMsgLable={"Category"}
             deleteName={"Name"}
           />

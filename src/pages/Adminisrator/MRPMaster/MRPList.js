@@ -23,6 +23,11 @@ import {
   updateMRPListSuccess
 } from "../../../store/Administrator/MRPMasterRedux/action";
 import MRPMaster from "./MRPMaster"
+import { commonPageFieldList, commonPageFieldListSuccess } from "../../../store/actions";
+import CommonListPage from "../../../components/Common/CmponentRelatedCommonFile/commonListPage";
+import { MRP } from "../../../routes/route_url";
+
+
 const MRPList = (props) => {
 
   const dispatch = useDispatch();
@@ -36,10 +41,11 @@ const MRPList = (props) => {
     (state) => ({
       TableListData: state.MRPMasterReducer.MRPList,
       editData: state.MRPMasterReducer.editData,
-      updateMessage: state.MRPMasterReducer.updateMessage,
-      deleteMessage: state.MRPMasterReducer.deleteMsg,
-      RoleAccessModifiedinSingleArray: state.Login.RoleAccessUpdateData,
-      PostAPIResponse: state.MRPMasterReducer.PostData,
+      updateMsg: state.MRPMasterReducer.updateMessage,
+      deleteMsg: state.MRPMasterReducer.deleteMsg,
+      userAccess: state.Login.RoleAccessUpdateData,
+      postMsg: state.MRPMasterReducer.PostData,
+      pageField: state.CommonPageFieldReducer.pageFieldList
     })
   );
 

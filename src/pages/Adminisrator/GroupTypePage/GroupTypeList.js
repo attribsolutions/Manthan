@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import CommonListPage from "../../../components/Common/CmponentRelatedCommonFile/commonListPage";
+import { GROUPTYPE } from "../../../routes/route_url";
 import { commonPageFieldList, commonPageFieldListSuccess } from "../../../store/actions";
 import {
   deleteGroupType_ID,
@@ -51,12 +52,12 @@ const GroupTypeList = (props) => {
   return (
     <React.Fragment>
       {
-        (pageField.length > 0) ?
+        (pageField) ?
           <CommonListPage
             action={action}
             reducers={reducers}
             MasterModal={GroupTypeMaster}
-            masterPath={"/GroupTypeMaster"}
+            masterPath={GROUPTYPE}
 
           />
           : null
