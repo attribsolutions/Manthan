@@ -1,14 +1,13 @@
 import React, { useState, useRef, useEffect } from "react";
 import Select from "react-select";
-import { Card, CardBody, Col, Container, Row, CardHeader, Label,  FormGroup,  } from "reactstrap";
+import { Card, CardBody, Col, Container, Row, CardHeader, Label, FormGroup, } from "reactstrap";
 import { AvForm, AvInput } from "availity-reactstrap-validation";
 import { useDispatch, useSelector } from "react-redux";
-import {  getRoles, addUser, updateID, addUserSuccess, GetUserPartiesForUserMastePage, getEmployeeForUseRegistration }
+import { getRoles, addUser, updateID, addUserSuccess, GetUserPartiesForUserMastePage, getEmployeeForUseRegistration, editSuccess }
   from "../../../store/Administrator/UserRegistrationRedux/actions";
 import Breadcrumb from "../../../components/Common/Breadcrumb";
 import AvField from "availity-reactstrap-validation/lib/AvField";
 import { AlertState } from "../../../store/Utilites/CustomAlertRedux/actions";
-import { editSuccess } from "../../../store/Administrator/RoleMasterRedux/action";
 import { Tbody, Thead } from "react-super-responsive-table";
 import { BreadcrumbShow } from "../../../store/Utilites/Breadcrumb/actions";
 import { MetaTags } from "react-meta-tags";
@@ -23,16 +22,16 @@ const AddUser = (props) => {
   //*** "isEditdata get all data from ModuleID for Binding  Form controls
   let editDataGatingFromList = props.state;
   let pageModeProps = props.pageMode;
-  
+
   //SetState  Edit data Geting From Modules List component
   const [EditData, setEditData] = useState([]);
+  const [modalCss, setModalCss] = useState(false);
   const [pageMode, setPageMode] = useState("save");
   const [userPageAccessState, setUserPageAccessState] = useState('');
 
   const [partyRoleData, setPartyRoleData] = useState([]);
   const [EmployeeSelect, setEmployeeSelect] = useState("");
   const [userPartiesForUserMaster, setUserPartiesForUserMaster] = useState([]);
-console.log(editDataGatingFromList,"editDataGatingFromList")
   // M_Roles DropDown
   const [RoleDropDown, setRoleDropDown] = useState([]);
 
@@ -68,37 +67,37 @@ console.log(editDataGatingFromList,"editDataGatingFromList")
     employeelistForDropdown,
     Roles,
     userPartiesForUserMaster_redux,
-    RoleAccessModifiedinSingleArray
+    userAccess
   } = useSelector((state) => ({
     PostAPIResponse: state.User_Registration_Reducer.AddUserMessage,
     userPartiesForUserMaster_redux: state.User_Registration_Reducer.userPartiesForUserMaster,
     employeelistForDropdown: state.User_Registration_Reducer.employeelistForDropdown,
     Roles: state.User_Registration_Reducer.Roles,
-    RoleAccessModifiedinSingleArray: state.Login.RoleAccessUpdateData,
+    userAccess: state.Login.RoleAccessUpdateData,
+    pageField: state.CommonPageFieldReducer.pageField
   }));
+
+  const location = { ...history.location }
+  const hasShowloction = location.hasOwnProperty("editValue")
+  const hasShowModal = props.hasOwnProperty("editValue")
 
   // userAccess useEffect
   useEffect(() => {
+    let userAcc = null;
+    let locationPath = location.pathname;
 
-    let userAcc = undefined
-    if ((editDataGatingFromList === undefined)) {
+    if (hasShowModal) {
+      locationPath = props.masterPath;
+    };
 
-      const locationPath = history.location.pathname
-      userAcc = RoleAccessModifiedinSingleArray.find((inx) => {
-        return (`/${inx.ActualPagePath}` === locationPath)
-      })
-    }
-    else if (!(editDataGatingFromList === undefined)) {
-      const relatatedPage = props.relatatedPage
-      userAcc = RoleAccessModifiedinSingleArray.find((inx) => {
-        return (`/${inx.ActualPagePath}` === relatatedPage)
-      })
+    userAcc = userAccess.find((inx) => {
+      return (`/${inx.ActualPagePath}` === locationPath)
+    })
 
-    }
-    if (!(userAcc === undefined)) {
+    if (userAcc) {
       setUserPageAccessState(userAcc)
-    }
-  }, [RoleAccessModifiedinSingleArray])
+    };
+  }, [userAccess])
 
   const FindPartyID = userPartiesForUserMaster_redux.find((index) => {
     return index.Party_id === null
@@ -120,37 +119,45 @@ console.log(editDataGatingFromList,"editDataGatingFromList")
   // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
   useEffect(() => {
 
-    if (!(userPageAccessState === '')) { document.getElementById("txtName").focus();
-    //  document.getElementById("EmployeeDropDown").disabled = true
-     document.getElementById("txtName").disabled = true }
+   // if (!(userPageAccessState === '')) { document.getElementById("txtName").focus(); }
+    if ((hasShowloction || hasShowModal)) {
 
-    if (!(editDataGatingFromList === undefined)) {
-     
-      setEditData(editDataGatingFromList);
-      dispatch(BreadcrumbShow(editDataGatingFromList.LoginName))
-      setPageMode(pageModeProps);
-      dispatch(editSuccess({ Status: false }))
-      setEmployeeSelect({
-        value: editDataGatingFromList.Employee,
-        label: editDataGatingFromList.EmployeeName,
-      })
-    
-      setUserPartiesForUserMaster(editDataGatingFromList.UserRole)
+      let hasEditVal = null
+      if (hasShowloction) {
+        setPageMode(location.pageMode)
+        hasEditVal = location.editValue
+      }
+      else if (hasShowModal) {
+        hasEditVal = props.editValue
+        setPageMode(props.pageMode)
+        setModalCss(true)
+      }
 
-
-      let arraynew = []
-      editDataGatingFromList.UserRole.map((i) => {
-        i.PartyRoles.map((i2) => {
-          arraynew.push({ Party: i.Party, Role: i2.Role })
+      if (hasEditVal) {
+        dispatch(BreadcrumbShow(hasEditVal.LoginName))
+        setEditData(hasEditVal)
+        
+        setEmployeeSelect({
+          value: hasEditVal.Employee,
+          label: hasEditVal.EmployeeName,
         })
-      })
-    
-      setPartyRoleData(editDataGatingFromList.UserRole)
-      // setRoleDropDown(editDataGatingFromList.UserRole)
-      return
+
+        setUserPartiesForUserMaster(hasEditVal.UserRole)
+
+
+        let arraynew = []
+        hasEditVal.UserRole.map((i) => {
+          i.PartyRoles.map((i2) => {
+            arraynew.push({ Party: i.Party, Role: i2.Role })
+          })
+        })
+
+        setPartyRoleData(hasEditVal.UserRole)
+        dispatch(editSuccess({ Status: false }))
+      }
     }
- 
-  }, [editDataGatingFromList])
+
+  }, [])
 
   useEffect(() => {
 
@@ -262,7 +269,7 @@ console.log(editDataGatingFromList,"editDataGatingFromList")
       }));
     }
     else if (pageMode === 'edit') {
-     
+
       dispatch(updateID(jsonBody, EditData.id));
       setEditData([]);
       console.log("Update jsonBody", jsonBody)
@@ -314,7 +321,7 @@ console.log(editDataGatingFromList,"editDataGatingFromList")
 
   // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
   var IsEditMode_Css = ''
-  if ((pageMode === "edit") || (pageMode === "copy") || (pageMode === "dropdownAdd")) { IsEditMode_Css = "-5.5%" };
+  if (modalCss || (pageMode === "dropdownAdd")) { IsEditMode_Css = "-5.5%" };
 
   if (!(userPageAccessState === '')) {
     return (
@@ -342,20 +349,20 @@ console.log(editDataGatingFromList,"editDataGatingFromList")
                       <Card className=" text-black">
                         <CardBody style={{ backgroundColor: "whitesmoke" }}>
                           <Row >
-                           
+
                             <div>
-                            <FormGroup className="mb-2 col col-sm-4 " >
-                              <Label htmlFor="validationCustom01">Employee</Label>
-                              <Select
-                                id="EmployeeDropDown "
-                                // disabled={true}
-                                value={EmployeeSelect}
-                                options={EmployeeValues}
-                                onChange={(e) => { handllerEmployeeID(e) }}
-                              />
-                            </FormGroup>
+                              <FormGroup className="mb-2 col col-sm-4 " >
+                                <Label htmlFor="validationCustom01">Employee</Label>
+                                <Select
+                                  id="EmployeeDropDown "
+                                  // disabled={true}
+                                  value={EmployeeSelect}
+                                  options={EmployeeValues}
+                                  onChange={(e) => { handllerEmployeeID(e) }}
+                                />
+                              </FormGroup>
                             </div>
-                            
+
                           </Row>
                           <Row >
 
@@ -511,7 +518,7 @@ console.log(editDataGatingFromList,"editDataGatingFromList")
                                 <i className="dripicons-plus "></i>
                               </Button>
                             </Col> */}
-                            {!(userPartiesForUserMaster.length === 0) ? userPartiesForUserMaster[0].Party>0 ?
+                            {!(userPartiesForUserMaster.length === 0) ? userPartiesForUserMaster[0].Party > 0 ?
                               <Col sm={6} style={{ marginTop: '28px' }}>
 
                                 {partyRoleData ? (
@@ -521,20 +528,20 @@ console.log(editDataGatingFromList,"editDataGatingFromList")
                                 ) :
                                   null
                                 }
-                              </Col> :<div className="col-lg-3 col-md-6">
-                              <div className="mb-3">
-                                <Label className="form-label font-size-13 ">Role name</Label>
-                               
-                  <Select
-                    defaultValue={pageMode === "edit" ? userPartiesForUserMaster[0].PartyRoles.map((i) => ({ value: i.Role, label: i.RoleName })) : null}
-                    options={RolesValues}
-                    isMulti={true}
-                    className="basic-multi-select"
-                    onChange={(event) => { RoleDropDown_select_handler(event, userPartiesForUserMaster[0], 0) }}
-                    classNamePrefix="select2-selection"
-                  />
-                              </div>
-                            </div> : <></>}
+                              </Col> : <div className="col-lg-3 col-md-6">
+                                <div className="mb-3">
+                                  <Label className="form-label font-size-13 ">Role name</Label>
+
+                                  <Select
+                                    defaultValue={pageMode === "edit" ? userPartiesForUserMaster[0].PartyRoles.map((i) => ({ value: i.Role, label: i.RoleName })) : null}
+                                    options={RolesValues}
+                                    isMulti={true}
+                                    className="basic-multi-select"
+                                    onChange={(event) => { RoleDropDown_select_handler(event, userPartiesForUserMaster[0], 0) }}
+                                    classNamePrefix="select2-selection"
+                                  />
+                                </div>
+                              </div> : <></>}
 
                             {/* {FindPartyID ? <div className="col-lg-3 col-md-6">
                               <div className="mb-3">
@@ -555,9 +562,9 @@ console.log(editDataGatingFromList,"editDataGatingFromList")
                                 <div>
                                   {
                                     pageMode === "edit" ?
-                                    
+
                                       userPageAccessState.RoleAccess_IsEdit ?
-                                      
+
                                         <button
                                           type="submit"
                                           data-mdb-toggle="tooltip" data-mdb-placement="top" title="Update User"

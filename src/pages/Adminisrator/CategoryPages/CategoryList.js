@@ -10,7 +10,7 @@ import {
   updateCategoryIDSuccess
 } from "../../../store/Administrator/CategoryRedux/action";
 import CommonListPage from "../../../components/Common/CmponentRelatedCommonFile/commonListPage";
-import { commonPageField, commonPageFieldList, commonPageFieldListSuccess, commonPageFieldSuccess } from "../../../store/actions";
+import {  commonPageFieldList, commonPageFieldListSuccess } from "../../../store/actions";
 
 const CategoryList = (props) => {
 
