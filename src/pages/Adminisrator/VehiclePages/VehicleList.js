@@ -10,7 +10,7 @@ import {
   PostMethod_ForVehicleMasterSuccess,
 } from "../../../store/Administrator/VehicleRedux/action";
 import CommonListPage from "../../../components/Common/CmponentRelatedCommonFile/commonListPage";
-import { commonPageField, commonPageFieldSuccess } from "../../../store/actions";
+import { commonPageFieldList, commonPageFieldListSuccess, } from "../../../store/actions";
 
 const VehicleList = (props) => {
 
@@ -23,7 +23,7 @@ const VehicleList = (props) => {
       deleteMsg: state.VehicleReducer.deleteMessage,
       userAccess: state.Login.RoleAccessUpdateData,
       postMsg: state.VehicleReducer.PostDataMessage,
-      pageField: state.CommonPageFieldReducer.pageField
+      pageField: state.CommonPageFieldReducer.pageFieldList
     })
   );
 
@@ -39,8 +39,8 @@ const VehicleList = (props) => {
 
   //  This UseEffect => Featch Modules List data  First Rendering
   useEffect(() => {
-    dispatch(commonPageFieldSuccess([]))
-    dispatch(commonPageField(31))
+    dispatch(commonPageFieldListSuccess(null))
+    dispatch(commonPageFieldList(31))
     dispatch(getMethodForVehicleList());
   }, []);
 
@@ -49,7 +49,7 @@ const VehicleList = (props) => {
   return (
     <React.Fragment>
       {
-        (pageField.length > 0) ?
+        (pageField) ?
           <CommonListPage
             action={action}
             reducers={reducers}
