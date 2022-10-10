@@ -14,7 +14,7 @@ import {
 import { AvField, AvForm, } from "availity-reactstrap-validation";
 import Select from "react-select";
 import { MetaTags } from "react-meta-tags";
-import { BreadcrumbShow } from "../../../store/actions";
+import { BreadcrumbShow, commonPageFieldListSuccess, commonPageFieldSuccess } from "../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
 import { AlertState, commonPageField } from "../../../store/actions";
 import { useHistory } from "react-router-dom";
@@ -30,6 +30,7 @@ import {
     PostGroupTypeSubmitSuccess,
     updateGroupTypeID
 } from "../../../store/Administrator/GroupTypeRedux/action";
+import { GROUPTYPE_lIST } from "../../../routes/route_url";
 
 const GroupTypeMaster = (props) => {
 
@@ -41,9 +42,10 @@ const GroupTypeMaster = (props) => {
     console.log("editDataGetingFromList", editDataGetingFromList)
 
     const formRef = useRef(null);
-    const [pageMode, setPageMode] = useState("");
-    const [userPageAccessState, setUserPageAccessState] = useState("");
-    const [EditData, setEditData] = useState([]);
+    const [EditData, setEditData] = useState({});
+    const [modalCss, setModalCss] = useState(false);
+    const [pageMode, setPageMode] = useState("save");
+    const [userPageAccessState, setUserPageAccessState] = useState('');
 
     const [state, setState] = useState({
         values: {
@@ -72,79 +74,91 @@ const GroupTypeMaster = (props) => {
 
     //Access redux store Data /  'save_ModuleSuccess' action data
     const {
-        PostAPIResponse,
+        postMsg,
         pageField,
-        RoleAccessModifiedinSingleArray
+        userAccess
     } = useSelector((state) => ({
-        PostAPIResponse: state.GroupTypeReducer.PostData,
-        RoleAccessModifiedinSingleArray: state.Login.RoleAccessUpdateData,
+        postMsg: state.GroupTypeReducer.PostData,
+        userAccess: state.Login.RoleAccessUpdateData,
         pageField: state.CommonPageFieldReducer.pageField
     }));
 
     useEffect(() => {
-        // dispatch(commonPageFieldSuccess([]));
+        dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(105))
     }, []);
 
-    //userAccess useEffect
-    useEffect(() => {
-        let userAcc = undefined
-        if ((editDataGetingFromList === undefined)) {
+    const location = { ...history.location }
+    const hasShowloction = location.hasOwnProperty("editValue")
+    const hasShowModal = props.hasOwnProperty("editValue")
 
-            let locationPath = history.location.pathname
-            userAcc = RoleAccessModifiedinSingleArray.find((inx) => {
-                return (`/${inx.ActualPagePath}` === locationPath)
-            })
-        }
-        else if (!(editDataGetingFromList === undefined)) {
-            let relatatedPage = props.relatatedPage
-            userAcc = RoleAccessModifiedinSingleArray.find((inx) => {
-                return (`/${inx.ActualPagePath}` === relatatedPage)
-            })
-        }
-        if (!(userAcc === undefined)) {
+    // userAccess useEffect
+    useEffect(() => {
+        let userAcc = null;
+        let locationPath = location.pathname;
+
+        if (hasShowModal) {
+            locationPath = props.masterPath;
+        };
+
+        userAcc = userAccess.find((inx) => {
+            return (`/${inx.ActualPagePath}` === locationPath)
+        })
+
+        if (userAcc) {
             setUserPageAccessState(userAcc)
-        }
-    }, [RoleAccessModifiedinSingleArray])
+        };
+    }, [userAccess])
 
     // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
     useEffect(() => {
-debugger
-        if (!(userPageAccessState === '')) { document.getElementById("txtName").focus(); }
-        if (!(editDataGetingFromList === undefined)) {
-            const { Name } = editDataGetingFromList
-            const { values, fieldLabel, hasValid, required, isError } = { ...state }
-            values.Name = Name;
-            setState({ values, fieldLabel, hasValid, required, isError })
-            setEditData(editDataGetingFromList);
-            setPageMode(pageModeProps);
-            dispatch(editGroupTypeIdSuccess({ Status: false }))
-            dispatch(BreadcrumbShow(editDataGetingFromList.GroupTypeMaster))
-            return
+
+        if ((hasShowloction || hasShowModal)) {
+
+            let hasEditVal = null
+            if (hasShowloction) {
+                setPageMode(location.pageMode)
+                hasEditVal = location.editValue
+            }
+            else if (hasShowModal) {
+                hasEditVal = props.editValue
+                setPageMode(props.pageMode)
+                setModalCss(true)
+            }
+
+            if (hasEditVal) {
+                setEditData(hasEditVal);
+                const { Name } = hasEditVal
+                const { values, fieldLabel, hasValid, required, isError } = { ...state }
+                values.Name = Name;
+                setState({ values, fieldLabel, hasValid, required, isError })
+                dispatch(editGroupTypeIdSuccess({ Status: false }))
+                dispatch(BreadcrumbShow(hasEditVal.GroupTypeMaster))
+            }
         }
-    }, [editDataGetingFromList])
+    }, [])
 
     useEffect(() => {
-        if ((PostAPIResponse.Status === true) && (PostAPIResponse.StatusCode === 200)) {
+        if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(PostGroupTypeSubmitSuccess({ Status: false }))
             formRef.current.reset();
             if (pageMode === "dropdownAdd") {
                 dispatch(AlertState({
                     Type: 1,
                     Status: true,
-                    Message: PostAPIResponse.Message,
+                    Message: postMsg.Message,
                 }))
             }
             else {
                 dispatch(AlertState({
                     Type: 1,
                     Status: true,
-                    Message: PostAPIResponse.Message,
-                    RedirectPath: '/GroupTypeList',
+                    Message: postMsg.Message,
+                    RedirectPath: GROUPTYPE_lIST,
                 }))
             }
         }
-        else if (PostAPIResponse.Status === true) {
+        else if (postMsg.Status === true) {
             dispatch(getGroupTypeslistSuccess({ Status: false }))
             dispatch(AlertState({
                 Type: 4,
@@ -154,11 +168,13 @@ debugger
                 AfterResponseAction: false
             }));
         }
-    }, [PostAPIResponse])
+    }, [postMsg])
 
+    // ////////////////////////////////////////////////////////////
     useEffect(() => {
-        if (pageField.length > 0) {
-            comAddPageFieldFunc({ state, setState, pageField })
+        if (pageField) {
+            const fieldArr = pageField.PageFieldMaster
+            comAddPageFieldFunc({ state, setState, fieldArr })// new change
         }
     }, [pageField])
 
@@ -167,7 +183,7 @@ debugger
     const { fieldLabel } = state;
 
     const formSubmitHandler = (event) => {
-        debugger
+
         event.preventDefault();
         if (formValid(state, setState)) {
             const jsonBody = JSON.stringify({
@@ -190,9 +206,9 @@ debugger
         }
     };
 
-    // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
+
     var IsEditMode_Css = ''
-    if ((pageMode === "edit") || (pageMode === "copy") || (pageMode === "dropdownAdd")) { IsEditMode_Css = "-5.5%" };
+    if ((modalCss) || (pageMode === "dropdownAdd")) { IsEditMode_Css = "-5.5%" };
 
     if (!(userPageAccessState === '')) {
         return (
