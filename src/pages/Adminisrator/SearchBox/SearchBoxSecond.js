@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux';
-// import './style.css'
+import './Search.scss'
 export default function SearchBoxSecond() {
 
     const [searchRoleData, setSearchRoleData] = useState([])
@@ -240,6 +240,7 @@ export default function SearchBoxSecond() {
             <div className="position-relative">
                 <input type="text" id="myInput" className="form-control" placeholder="Search..." name="myCountry" />
                 <button className="btn btn-primary" type="submit"><i className="bx bx-search-alt align-middle"></i></button>
+                {/* <div id="myinputautocomplet-list" class="Autocomplet"></div> */}
             </div>
         </form>
         // </div>

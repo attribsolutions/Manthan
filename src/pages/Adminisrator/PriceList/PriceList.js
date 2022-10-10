@@ -42,6 +42,7 @@ const PriceList = (props) => {
     dispatch(getPriceListPage());
   }, []);
 
+
   const { pageField } = reducers
 
   return (
@@ -61,6 +62,5 @@ const PriceList = (props) => {
 
     </React.Fragment>
   )
-}
-
-export default PriceList;
+    }
+  export default PriceList;
