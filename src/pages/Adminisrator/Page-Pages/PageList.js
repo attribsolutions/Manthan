@@ -17,7 +17,7 @@ import {
   updateHPagesSuccess,
 } from "../../../store/Administrator/HPagesRedux/actions";
 import HPageMaster from "./PageMaster";
-import { commonPageField, commonPageFieldSuccess } from "../../../store/actions";
+import {  commonPageFieldList, commonPageFieldListSuccess, } from "../../../store/actions";
 import { useHistory } from "react-router-dom";
 import CommonListPage from "../../../components/Common/CmponentRelatedCommonFile/commonListPage";
 
@@ -49,7 +49,7 @@ export default function PageList() {
       deleteMsg: state.H_Pages.deleteModuleID,
       postMsg: state.H_Pages.saveMessage,
       userAccess: state.Login.RoleAccessUpdateData,
-      pageField: state.CommonPageFieldReducer.pageField
+      pageField: state.CommonPageFieldReducer.pageFieldList
     })
   );
 
@@ -64,8 +64,8 @@ export default function PageList() {
 
   // Featch Modules List data  First Rendering
   useEffect(() => {
-    dispatch(commonPageFieldSuccess([]))
-    dispatch(commonPageField(5))
+    dispatch(commonPageFieldListSuccess(null))
+    dispatch(commonPageFieldList(5))
     dispatch(GetHpageListData());
   }, []);
 
@@ -74,7 +74,7 @@ export default function PageList() {
   return (
     <React.Fragment>
       {
-        (pageField.hasOwnProperty("PageFieldMaster")) ?
+        (pageField) ?
           <CommonListPage
             action={action}
             reducers={reducers}

@@ -96,7 +96,7 @@ const PageMaster = (props) => {
 
   // userAccess useEffect
   useEffect(() => {
-    debugger
+
     let userAcc = null;
     let locationPath = location.pathname;
 
@@ -123,7 +123,7 @@ const PageMaster = (props) => {
 
   // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
   useEffect(() => {
-debugger
+
     // if (!(userPageAccessState === '')) { document.getElementById("txtName").focus(); }
     if ((hasShowloction || hasShowModal)) {
 
@@ -151,7 +151,7 @@ debugger
         });
 
         let PageFieldMaster = hasEditVal.PageFieldMaster.map((index) => {
-         
+
           return {
             ControlType: {
               label: index.ControlTypeName,

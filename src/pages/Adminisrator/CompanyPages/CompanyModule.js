@@ -48,8 +48,8 @@ const CompanyModule = (props) => {
   const [CompanyGroupselect, setCompanyGroup] = useState("");
 
   //Access redux store Data /  'save_ModuleSuccess' action data
-  const { PostAPIResponse, userAccess } = useSelector((state) => ({
-    PostAPIResponse: state.Company.postMsg,
+  const { postMsg, userAccess } = useSelector((state) => ({
+    postMsg: state.Company.postMsg,
     userAccess: state.Login.RoleAccessUpdateData,
   }));
 
@@ -111,7 +111,8 @@ const CompanyModule = (props) => {
 
 
   useEffect(() => {
-    if ((PostAPIResponse.Status === true) && (PostAPIResponse.StatusCode === 200) && !(pageMode === "dropdownAdd")) {
+    debugger
+    if ((postMsg.Status === true) && (postMsg.StatusCode === 200) && !(pageMode === "dropdownAdd")) {
       dispatch(PostCompanySubmitSuccess({ Status: false }))
       setCompanyGroup('')
       formRef.current.reset();
@@ -119,19 +120,19 @@ const CompanyModule = (props) => {
         dispatch(AlertState({
           Type: 1,
           Status: true,
-          Message: PostAPIResponse.Message,
+          Message: postMsg.Message,
         }))
       }
       else {
         dispatch(AlertState({
           Type: 1,
           Status: true,
-          Message: PostAPIResponse.Message,
+          Message: postMsg.Message,
           RedirectPath: '/CompanyList',
         }))
       }
     }
-    else if ((PostAPIResponse.Status === true) && !(pageMode === "dropdownAdd")) {
+    else if ((postMsg.Status === true) && !(pageMode === "dropdownAdd")) {
       dispatch(PostCompanySubmitSuccess({ Status: false }))
       dispatch(AlertState({
         Type: 4,
@@ -141,7 +142,7 @@ const CompanyModule = (props) => {
         AfterResponseAction: false
       }));
     }
-  }, [PostAPIResponse])
+  }, [postMsg])
 
   /// CompanyGroupDropDown
   useEffect(() => {
@@ -175,7 +176,7 @@ const CompanyModule = (props) => {
       CreatedBy: 1,
       UpdatedBy: 1,
     });
-
+debugger
     if (pageMode === 'edit') {
       dispatch(updateCompanyID(jsonBody, EditData.id));
     }

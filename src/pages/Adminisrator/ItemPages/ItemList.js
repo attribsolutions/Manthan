@@ -10,7 +10,7 @@ import {
 } from "../../../store/Administrator/ItemsRedux/action";
 import ItemsMaster from "./ItemMaster/index";
 import CommonListPage from "../../../components/Common/CmponentRelatedCommonFile/commonListPage";
-import { commonPageField, commonPageFieldSuccess } from "../../../store/actions";
+import { commonPageFieldList, commonPageFieldListSuccess, } from "../../../store/actions";
 
 
 const ItemsList = (props) => {
@@ -24,23 +24,23 @@ const ItemsList = (props) => {
       deleteMsg: state.ItemMastersReducer.deleteMessage,
       userAccess: state.Login.RoleAccessUpdateData,
       postMsg: state.ItemMastersReducer.postMessage,
-      pageField: state.CommonPageFieldReducer.pageField
+      pageField: state.CommonPageFieldReducer.pageFieldList
     })
-    );
+  );
 
-    const action = {
-      getList: getItemList,
-      editId: editItemId,
-      deleteId: deleteItemID,
-      postSucc: PostItemDataSuccess,
-      updateSucc: updateItemSuccess,
-      deleteSucc: deleteItemIdSuccess
-    }
-  
+  const action = {
+    getList: getItemList,
+    editId: editItemId,
+    deleteId: deleteItemID,
+    postSucc: PostItemDataSuccess,
+    updateSucc: updateItemSuccess,
+    deleteSucc: deleteItemIdSuccess
+  }
+
   //  This UseEffect => Featch Modules List data  First Rendering
   useEffect(() => {
-    dispatch(commonPageFieldSuccess([]))
-    dispatch(commonPageField(21))
+    dispatch(commonPageFieldListSuccess(null))
+    dispatch(commonPageFieldList(21))
     dispatch(getItemList());
   }, []);
 
@@ -49,7 +49,7 @@ const ItemsList = (props) => {
   return (
     <React.Fragment>
       {
-        (pageField.length > 0) ?
+        (pageField) ?
           <CommonListPage
             action={action}
             reducers={reducers}
@@ -64,5 +64,5 @@ const ItemsList = (props) => {
     </React.Fragment>
   )
 }
- 
+
 export default ItemsList;
