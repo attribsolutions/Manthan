@@ -5,9 +5,13 @@ import { DELETE_ITEM_ID, DELETE_ITEM_ID_SUCCESS,
      GET_CATEGORYTYPE_FOR_DROPDOWN, 
      GET_CATEGORYTYPE_FOR_DROPDOWN_SUCCESS, 
      GET_CATEGORY_BY_CATEGORYTYPE_FOR_DROPDOWN, 
+     GET_CATEGORY_BY_CATEGORYTYPE_FOR_DROPDOWN_API, 
+     GET_CATEGORY_BY_CATEGORYTYPE_FOR_DROPDOWN_API_SUCCESS, 
      GET_CATEGORY_BY_CATEGORYTYPE_FOR_DROPDOWN_SUCCESS, 
      GET_DIVISION_FOR_DROPDOWN, 
      GET_DIVISION_FOR_DROPDOWN_SUCCESS, 
+     GET_GROUP_BY_GROUPTYPE_FOR_DROPDOWN, 
+     GET_GROUP_BY_GROUPTYPE_FOR_DROPDOWN_SUCCESS, 
      GET_IMAGETYPE_FOR_DROPDOWN, 
      GET_IMAGETYPE_FOR_DROPDOWN_SUCCESS, 
      GET_ITEM_GROUP_FOR_DROPDOWN, 
@@ -21,6 +25,8 @@ import { DELETE_ITEM_ID, DELETE_ITEM_ID_SUCCESS,
      GET_PRICE_LIST_FOR_DROPDOWN_SUCCESS, 
      GET_SUB_CATEGORY_BY_CATEGORYTYPE_FOR_DROPDOWN, 
      GET_SUB_CATEGORY_BY_CATEGORYTYPE_FOR_DROPDOWN_SUCCESS, 
+     GET_SUB_GROUP_BY_GROUP_FOR_DROPDOWN, 
+     GET_SUB_GROUP_BY_GROUP_FOR_DROPDOWN_SUCCESS, 
      POST_ITEM_DATA, POST_ITEM_DATA_SUCCESS, 
      UPDATE_ITEM_ID, UPDATE_ITEM_ID_SUCCESS } from "./actionType";
 
@@ -183,3 +189,36 @@ export const get_CategoryTypes_ForDropDown_Success = (data) => ({
       type: GET_PRICE_LIST_FOR_DROPDOWN_SUCCESS,
       payload:data,
     });
+
+    // Group API dependent on GroupType api
+  export const get_Group_By_GroupType_ForDropDown = (id) => ({
+    type: GET_GROUP_BY_GROUPTYPE_FOR_DROPDOWN,
+    id
+  });
+  
+  export const get_Group_By_GroupType_ForDropDown_Success = (data) => ({
+    type: GET_GROUP_BY_GROUPTYPE_FOR_DROPDOWN_SUCCESS,
+    payload:data,
+  });
+
+  //Sub-Group API dependent on Group api 
+   export const get_Sub_Group_By_Group_ForDropDown = (id) => ({
+    type: GET_SUB_GROUP_BY_GROUP_FOR_DROPDOWN,
+    id
+  });
+  
+  export const get_Sub_Group_By_Group_ForDropDown_Success = (data) => ({
+    type: GET_SUB_GROUP_BY_GROUP_FOR_DROPDOWN_SUCCESS,
+    payload:data,
+  });
+
+  // Category  API dependent on CategoryType api
+  export const get_Category_By_CategoryType_ForDropDownAPI = (id) => ({
+    type: GET_CATEGORY_BY_CATEGORYTYPE_FOR_DROPDOWN_API,
+    id
+  });
+  
+  export const get_Category_By_CategoryType_ForDropDownAPI_Success = (data) => ({
+    type: GET_CATEGORY_BY_CATEGORYTYPE_FOR_DROPDOWN_API_SUCCESS,
+    payload:data,
+  });

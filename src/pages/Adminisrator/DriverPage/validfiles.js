@@ -47,7 +47,7 @@ export const formValChange = ({ event, state, setState }) => {
     else {
         const { name, value } = event
         values[name] = value
-        isError[name] =''
+        isError[name] = ''
         hasValid[name].valid = true
         setState({
             isError, hasValid, required, fieldLabel, values
@@ -55,102 +55,110 @@ export const formValChange = ({ event, state, setState }) => {
     }
 };
 
-    export function comAddPageFieldFunc({ state, setState, fieldData }) {
-        var isState = { ...state }
-        // isState['fieldLabel'] = {}
-        // isState['isError'] = {}
-        // isState['hasValid'] = {}
-        // isState['required'] = {}
+export function comAddPageFieldFunc({ state, setState, fieldData }) {
+    var isState = { ...state }
+    // isState['fieldLabel'] = {}
+    // isState['isError'] = {}
+    // isState['hasValid'] = {}
+    // isState['required'] = {}
 
-        const values = { ...state.values }
+    const values = { ...state.values }
 
-        fieldData.forEach(ele => {
-            debugger
-            Object.keys(values).forEach(lab => {
-                if (lab === ele.controlId) {
-                    // isState['hasValid'] = {
-                    //     [lab]: {
-                    //         regExp: ele.regExp,
-                    //         inValidMsg: ele.fieldLabel,
-                    //         valid: false
-                    //     }
-                    // }
-                    isState.fieldLabel[lab] = ele.fieldLabel
-                    isState.hasValid[lab].regExp = ele.regExp
-                    isState.hasValid[lab].inValidMsg = ele.inValidMsg
-                    if (ele.isCompulsory) {
-                        isState.required[lab] = true
-                    }
+    fieldData.forEach(ele => {
+        debugger
+        Object.keys(values).forEach(lab => {
+            if (lab === ele.controlId) {
+                // isState['hasValid'] = {
+                //     [lab]: {
+                //         regExp: ele.regExp,
+                //         inValidMsg: ele.fieldLabel,
+                //         valid: false
+                //     }
+                // }
+                isState.fieldLabel[lab] = ele.fieldLabel
+                isState.hasValid[lab].regExp = ele.regExp
+                isState.hasValid[lab].inValidMsg = ele.inValidMsg
+                if (ele.isCompulsory) {
+                    isState.required[lab] = true
                 }
-            });
+            }
         });
+    });
 
-        setState(isState)
+    setState(isState)
 
+}
+
+export const pageField = [
+    {
+        ControlID: "Name",
+        ControlType: 1,
+        ControlTypeName: "TextBox",
+        FieldLabel: "Name",
+        IsCompulsory: true,
+        DefaultSort: false,
+        FieldValidation: 2,
+        FieldValidationName: "Length(100)",
+        ListPageSeq: 3,
+        ShowInListPage: false,
+        ShowInDownload: true,
+        ShownloadDefaultSelect: false,
+        RegularExpression: /^.{4,100}$/,
+        InValidMsg: "InValidMsg"
+    },
+    {
+        ControlID: "DOB",
+        ControlType: 1,
+        ControlTypeName: "TextBox",
+        FieldLabel: "DOB",
+        IsCompulsory: true,
+        DefaultSort: true,
+        FieldValidation: 2,
+        FieldValidationName: "Length(100)",
+        ListPageSeq: 2,
+        ShowInListPage: true,
+        ShowInDownload: false,
+        ShownloadDefaultSelect: false,
+        RegularExpression: /^.{4,100}$/,
+        InValidMsg: "InValidMsg"
+    },
+    {
+        ControlID: "Address",
+        ControlType: 1,
+        ControlTypeName: "TextBox",
+        FieldLabel: "Address",
+        IsCompulsory: true,
+        DefaultSort: false,
+        FieldValidation: 2,
+        FieldValidationName: "Length(100)",
+        ListPageSeq: 1,
+        ShowInListPage: true,
+        ShowInDownload: true,
+        ShownloadDefaultSelect: false,
+        RegularExpression: /^.{4,100}$/,
+        InValidMsg: "InValidMsg"
+    },
+    {
+        ControlID: "UID",
+        ControlType: 1,
+        ControlTypeName: "TextBox",
+        FieldLabel: "UID",
+        IsCompulsory: true,
+        DefaultSort: false,
+        FieldValidation: 2,
+        FieldValidationName: "Length(100)",
+        ListPageSeq: 4,
+        ShowInListPage: false,
+        ShowInDownload: true,
+        ShownloadDefaultSelect: false,
+        RegularExpression: /^.{4,100}$/,
+        InValidMsg: "InValidMsg"
     }
-
-    export const fieldData = [
-        {
-            controlId: 'name',
-            ControlType: 2,
-            ControlTypeName: "Dropdown",
-            fieldLabel: "Driver Name111 ",
-            isCompulsory: false,
-            defaultSort: true,
-            showInListPage: true,
-            showInDownload: true,
-            downloadDefaultSelect: false,
-            regExp: /^.{4,100}$/,
-            inValidMsg: "Driver Name is invalid",
-        },
-        {
-            controlId: 'address',
-            ControlType: 2,
-            ControlTypeName: "text",
-            fieldLabel: "Address ",
-            isCompulsory: false,
-            defaultSort: true,
-            showInListPage: true,
-            showInDownload: true,
-            downloadDefaultSelect: false,
-            regExp: /^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[A-Za-z]+$/,
-            inValidMsg: "Address  is invalid",
-        },
-
-        {
-            controlId: 'uid',
-            ControlType: 2,
-            ControlTypeName: "text",
-            fieldLabel: "UID ",
-            isCompulsory: false,
-            defaultSort: true,
-            showInListPage: true,
-            showInDownload: true,
-            downloadDefaultSelect: false,
-            regExp: /^.{4,100}$/,
-            inValidMsg: "UID  is invalid",
-        },
-        {
-            controlId: 'party',
-            controlType: 2,
-            controltypeName: "select",
-            fieldLabel: "Party ",
-            isCompulsory: true,
-            defaultSort: true,
-            fieldValidation:4,
-            fieldValidationName:"10 digit Number",
-            showInListPage: true,
-            showInDownload: true,
-            downloadDefaultSelect: false,
-            regExp: /^.{4,100}$/,
-            inValidMsg: "Party is invalid",
-        },
-
-    ]
+]
 
 
 
-   
+
 
 // const [state1, setState1] = useState(
 //     {

@@ -19,7 +19,7 @@ const Breadcrumb = props => {
   const [modal_scroll, setmodal_scroll] = useState(false);
   const [ListData, setListData] = useState([]);
 
-  const { bredcrumbName, RoleAccessModifiedinSingleArray } = useSelector((state) => ({
+  const { bredcrumbName='', RoleAccessModifiedinSingleArray } = useSelector((state) => ({
     bredcrumbName: state.BreadcrumbReducer.bredcrumbName,
     RoleAccessModifiedinSingleArray: state.Login.RoleAccessUpdateData,
 
@@ -62,9 +62,6 @@ const Breadcrumb = props => {
 
 
   }
-
-
-
 
   // Onfocus Search Box
   useEffect(() => {
@@ -225,12 +222,11 @@ const Breadcrumb = props => {
                     {/* {bredcrumbName.length > 0 ? <label className="font-size-24 form-label  text-nowrap bd-highlight text-secondary" style={{ paddingLeft: "7px" }} >&nbsp;/ <kbd className="bg-light text-secondary">{bredcrumbName}</kbd></label>
                     : <></>} */}
 
-                    {!(bredcrumbName === "") ?
-                     ( bredcrumbName.length > 0 )?
-                        <label className="font-size-24 form-label  text-nowrap bd-highlight text-primary"
-                          style={{ paddingLeft: "7px", color: "#5156be" }} >&nbsp;/&nbsp;{bredcrumbName}</label>
-                        : <></>
-                      : null
+                   
+                    {( bredcrumbName.length > 0 )?
+                      <label className="font-size-24 form-label  text-nowrap bd-highlight text-primary"
+                        style={{ paddingLeft: "7px", color: "#5156be" }} >&nbsp;/&nbsp;{bredcrumbName}</label>
+                      : <></>
                     }
                   </Col>
                 </Row>

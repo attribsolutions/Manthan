@@ -44,7 +44,6 @@ function* Post_Method_ForCategoryTypeMaster_GenFun({ data }) {
 function* Get_CategoryType_List_GenratorFunction() {
   yield put(SpinnerState(true))
   try {
-    debugger
     const response = yield call(get_CategoryType_List_Api);
     yield put(getCategoryTypelistSuccess(response.Data));
     yield put(SpinnerState(false))

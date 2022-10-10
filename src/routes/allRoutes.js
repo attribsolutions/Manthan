@@ -71,6 +71,21 @@ import MarginMaster from "../pages/Adminisrator/MarginMaster/MarginMaster";
 
 import MRPList from "../pages/Adminisrator/MRPMaster/MRPList";
 import MarginList from "../pages/Adminisrator/MarginMaster/MarginList";
+import TermsAndCondtionsMaster from "../pages/Adminisrator/TermsAndCondtions/TermsAndCondtionsMaster";
+
+import GroupList from "../pages/Adminisrator/GroupPage/GroupList";
+import GroupTypeList from "../pages/Adminisrator/GroupTypePage/GroupTypeList";
+import GroupTypeMaster from "../pages/Adminisrator/GroupTypePage/GroupTypeMaster";
+
+import EditTabaleTable from "../pages/Adminisrator/DriverPage/editabale table";
+import { COMPANY, COMPANY_lIST,
+        DRIVER, DRIVER_lIST,
+         MODULE, MODULE_lIST,
+          USER,  USER_lIST,
+         
+         
+
+        } from "./route_url";
 
 
 // import Index from "../pages/Adminisrator/customValidation/index";
@@ -122,25 +137,25 @@ const userRoutes = [
 
 
 
-  { path: '/ModuleMaster', component: Modules },
-  { path: '/ModuleList', component: ModulesList },
+  { path: MODULE, component: Modules },
+  { path: MODULE_lIST, component: ModulesList },
 
   // { path: "/subModuleMaster", component: SubModules },
   // { path: "/subModuleList", component: SubModulesList },
 
   // Administrator : Company Path and List
-  { path: '/CompanyMaster', component: CompanyModule },
-  { path: '/CompanyList', component: CompanyList },
+  { path: COMPANY, component: CompanyModule },
+  { path: COMPANY_lIST, component: CompanyList },
 
   { path: `/PageList`, component: PageList },
   { path: `/PageMaster`, component: PageMaster },
-  {path:'/PageMasterTab',component: PageMasterTab},
+  { path: '/PageMasterTab', component: PageMasterTab },
 
   { path: `/Order`, component: OrderPage },
   { path: `/Orders`, component: OrderList },
 
-  { path: `/UserMaster`, component: AddUser },
-  { path: `/UserList`, component: UserList },
+  { path: USER, component: AddUser },
+  { path: USER_lIST, component: UserList },
 
   { path: '/EmployeeMaster', component: AddEmployee },
   { path: '/EmployeeList', component: Employee_List },
@@ -169,34 +184,36 @@ const userRoutes = [
 
   { path: "/CategoryMaster", component: CategoryMaster },
   { path: "/CategoryList", component: CategoryList },
-  
+
   { path: "/SubCategoryMaster", component: SubCategoryMaster },
   { path: "/SubCategoryList", component: SubCategoryList },
-  
+
   { path: "/VehicleMaster", component: VehicleMaster },
   { path: "/VehicleList", component: VehicleList },
 
-  { path: "/DriverMaster", component: DriverMaster },
-  { path: "/DriverList", component: DriverList },
+  { path: DRIVER, component: DriverMaster },
+  { path: DRIVER_lIST, component: DriverList },
+  { path: "/editTable", component: EditTabaleTable },
 
   { path: "/CompanyGroupMaster", component: CompanyGroupMaster },
   { path: "/CompanyGroupList", component: CompanyGroupList },
 
+  { path: "/GroupTypeMaster", component: GroupTypeMaster },
+  { path: "/GroupTypeList", component: GroupTypeList },
 
-  
+  { path: '/TermsAndCondtionsMaster', component: TermsAndCondtionsMaster },
+
 
   // { path: "/PartyMasterTab", component: PartyMasterTab },
- 
-  
-  { path: "/PriceList", component: PriceList},
+
+  { path: "/PriceList", component: PriceList },
   // { path: "/PriceList", component: PartyMasterTab },
   { path: "/PriceMaster", component: PriceMaster },
   { path: "/MRPMaster", component: MRPMaster },
-  { path: "/MRPList", component: MRPList},
+  { path: "/MRPList", component: MRPList },
   { path: "/MarginMaster", component: MarginMaster },
   { path: "/MarginList", component: MarginList },
-
-
+  { path: "/GroupList", component: GroupList },
 
 
   // { path: "/AddItemMaster", component: AddItemMaster },
@@ -205,7 +222,7 @@ const userRoutes = [
   // { path: "/valid", component: Index },
 
   // this route should be at the end of all other routes
-  { path: "/", exact: true, component: () => <Redirect to="/dashboard" /> },
+  { path: "/", exact: true, component: () => <Redirect to="/Dashboard" /> },
 
 ]
 

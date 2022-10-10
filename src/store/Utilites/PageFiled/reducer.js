@@ -1,7 +1,8 @@
-import { COMMON_PAGE_FILED_SUCCESS } from "./actionType"
+import { COMMON_PAGE_FILED_lIST_SUCCESS, COMMON_PAGE_FILED_SUCCESS } from "./actionType"
 
  const INIT_STATE={
-  pageField: [],
+  pageField: null,
+  pageFieldList: null,
  }
 
 const CommonPageFieldReducer = (state = INIT_STATE, action) => {
@@ -11,6 +12,11 @@ const CommonPageFieldReducer = (state = INIT_STATE, action) => {
       return {
         ...state,
         pageField: action.payload,
+      }
+      case COMMON_PAGE_FILED_lIST_SUCCESS:
+      return {
+        ...state,
+        pageFieldList: action.payload,
       }
     
     default:

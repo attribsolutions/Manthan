@@ -36,6 +36,8 @@ import CompanyGroupSaga from "./Administrator/CompanyGroupRedux/saga"
 import PriceListSaga from "./Administrator/PriceList/saga"
 import MRPMasterSaga from "./Administrator/MRPMasterRedux/saga"
 import MarginMasterSaga from "./Administrator/MarginMasterRedux/saga"
+import TermsAndCondtionsSaga from "./Administrator/TermsAndCondtionsRedux/saga"
+import GroupTypeSaga from "./Administrator/GroupTypeRedux/saga"
 
 export default function* rootSaga() {
   yield all([
@@ -71,5 +73,7 @@ export default function* rootSaga() {
     fork(PriceListSaga),
     fork(MRPMasterSaga),
     fork(MarginMasterSaga),
+    fork(TermsAndCondtionsSaga),
+    fork(GroupTypeSaga,)
   ])
 }

@@ -1,5 +1,5 @@
 import { call, put, takeEvery } from "redux-saga/effects";
-import * as  apiCall  from "../../../helpers/backend_helper";
+import * as  apiCall from "../../../helpers/backend_helper";
 import { AlertState } from "../../Utilites/CustomAlertRedux/actions";
 import { SpinnerState } from "../../Utilites/Spinner/actions";
 import {
@@ -8,13 +8,16 @@ import {
   getBaseUnit_ForDropDownSuccess,
   getItemGroup_ForDropDownSuccess,
   getItemListSuccess, get_CategoryTypes_ForDropDown_Success,
+  get_Category_By_CategoryType_ForDropDownAPI_Success,
   get_Category_By_CategoryType_ForDropDown_Success,
   get_Division_ForDropDown_Success,
+  get_Group_By_GroupType_ForDropDown_Success,
   get_ImageType_ForDropDown_Success,
   get_MRPTypes_ForDropDown_Success,
   get_Party_ForDropDown_Success,
   get_PriceList_ForDropDown_Success,
   get_Sub_Category_By_CategoryType_ForDropDown_Success,
+  get_Sub_Group_By_Group_ForDropDown_Success,
   PostItemDataSuccess,
   updateItemSuccess
 } from "./action";
@@ -23,8 +26,10 @@ import {
   GET_BASEUNIT_FOR_DROPDOWN,
   GET_CATEGORYTYPE_FOR_DROPDOWN,
   GET_CATEGORY_BY_CATEGORYTYPE_FOR_DROPDOWN,
+  GET_CATEGORY_BY_CATEGORYTYPE_FOR_DROPDOWN_API,
   GET_CATEGORY_FOR_DROPDOWN,
   GET_DIVISION_FOR_DROPDOWN,
+  GET_GROUP_BY_GROUPTYPE_FOR_DROPDOWN,
   GET_IMAGETYPE_FOR_DROPDOWN,
   GET_ITEM_GROUP_FOR_DROPDOWN,
   GET_ITEM_LIST_API,
@@ -32,6 +37,7 @@ import {
   GET_PARTY_FOR_DROPDOWN,
   GET_PRICE_LIST_FOR_DROPDOWN,
   GET_SUB_CATEGORY_BY_CATEGORYTYPE_FOR_DROPDOWN,
+  GET_SUB_GROUP_BY_GROUP_FOR_DROPDOWN,
   POST_ITEM_DATA,
   UPDATE_ITEM_ID
 } from "./actionType";
@@ -102,11 +108,11 @@ function* Delete_Items_GenratorFunction({ id }) {
   }
 }
 
-function* Edit_Items_GenratorFunction({ id ,pageMode}) {
- 
+function* Edit_Items_GenratorFunction({ id, pageMode }) {
+
   try {
     const response = yield call(apiCall.Items_Master_Edit_API, id);
-    response.pageMode=pageMode
+    response.pageMode = pageMode
     yield put(editItemSuccess(response));
   } catch (error) {
     yield put(AlertState({
@@ -118,13 +124,13 @@ function* Edit_Items_GenratorFunction({ id ,pageMode}) {
 
 
 function* Update_Items_GenratorFunction({ updateData, ID }) {
-  
+
   try {
     yield put(SpinnerState(true))
     const response = yield call(apiCall.Items_Master_Update_API, updateData, ID);
     yield put(SpinnerState(false))
     yield put(updateItemSuccess(response))
-    console.log("response",response)
+    console.log("response", response)
   }
   catch (error) {
     yield put(SpinnerState(false))
@@ -192,18 +198,18 @@ function* MRPType_DropDown_GenratorFunction() {
   }
 }
 
-function* Division_DropDown_GenratorFunction({id=1}) {
+function* Division_DropDown_GenratorFunction({ id = 1 }) {
   try {
-    const response = yield call(apiCall.Division_Get_DropDown_API,id);
+    const response = yield call(apiCall.Division_Get_DropDown_API, id);
     yield put(get_Division_ForDropDown_Success(response.Data));
   } catch (error) {
     console.log("Division saga page error", error);
   }
 }
 
-function* Party_DropDown_GenratorFunction({id=0}) {
+function* Party_DropDown_GenratorFunction({ id = 0 }) {
   try {
-    const response = yield call(apiCall.Party_Get_DropDown_API,id);
+    const response = yield call(apiCall.Party_Get_DropDown_API, id);
     yield put(get_Party_ForDropDown_Success(response.Data));
   } catch (error) {
     console.log("Party saga page error", error);
@@ -216,6 +222,34 @@ function* PriceList_DropDown_GenratorFunction() {
     yield put(get_PriceList_ForDropDown_Success(response.Data));
   } catch (error) {
     console.log("MRP Type saga page error", error);
+  }
+}
+
+function* Group_DropDown_GenratorFunction({ id }) {
+  try {
+    const response = yield call(apiCall.Group_By_GroupTypes_DropDown_API, id);
+    yield put(get_Group_By_GroupType_ForDropDown_Success(response.Data));
+   } catch (error) {
+    console.log("Group saga page error", error);
+  }
+}
+
+function* SubGroup_DropDown_GenratorFunction({ id }) {
+  try {
+    const response = yield call(apiCall.SubGroup_By_Group_DropDown_API, id);
+    yield put(get_Sub_Group_By_Group_ForDropDown_Success(response.Data));
+  } catch (error) {
+    console.log("sub Group saga page error", error);
+  }
+}
+
+// Category  API dependent on CategoryType api
+function* Category_DropDown_API_GenratorFunction({ id}) {
+  try {
+    const response = yield call(apiCall.Category_By_CategoryTypes_DropDown_API, id);
+    yield put(get_Category_By_CategoryType_ForDropDownAPI_Success(response.Data));
+  } catch (error) {
+    console.log("Category saga Page error", error);
   }
 }
 
@@ -235,7 +269,9 @@ function* ItemsMastersSaga() {
   yield takeEvery(GET_DIVISION_FOR_DROPDOWN, Division_DropDown_GenratorFunction);
   yield takeEvery(GET_PARTY_FOR_DROPDOWN, Party_DropDown_GenratorFunction);
   yield takeEvery(GET_PRICE_LIST_FOR_DROPDOWN, PriceList_DropDown_GenratorFunction);
-
+  yield takeEvery(GET_GROUP_BY_GROUPTYPE_FOR_DROPDOWN, Group_DropDown_GenratorFunction);
+  yield takeEvery(GET_SUB_GROUP_BY_GROUP_FOR_DROPDOWN, SubGroup_DropDown_GenratorFunction);
+  yield takeEvery(GET_CATEGORY_BY_CATEGORYTYPE_FOR_DROPDOWN_API, Category_DropDown_API_GenratorFunction);
 }
 
 export default ItemsMastersSaga;

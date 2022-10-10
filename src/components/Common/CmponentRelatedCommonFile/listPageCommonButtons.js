@@ -58,7 +58,7 @@ export const listPageCommonButtonFunction = (props) => {
                             <Button
                                 type="button"
                                 data-mdb-toggle="tooltip" data-mdb-placement="top" title={`View ${ButtonMsgLable}`}
-                                onClick={() => { dispatch(editActionFun(rowData.id, 'copy')); }}
+                                onClick={() => { dispatch(editActionFun(rowData.id, 'edit')); }}
                                 className="badge badge-soft-primary font-size-12 btn btn-primary waves-effect waves-light w-xxs border border-light"
                             >
                                 <i className="bx bxs-show font-size-18 "></i>

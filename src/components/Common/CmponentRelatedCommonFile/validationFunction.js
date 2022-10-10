@@ -14,7 +14,7 @@ export const formValid = ({ isError, required, hasValid, fieldLabel, values }, s
 };
 
 export const formValChange = ({ event, state, setState }) => {
-    debugger
+
     let isError = { ...state.isError };
     let hasValid = { ...state.hasValid };
     let required = { ...state.required };
@@ -35,7 +35,7 @@ export const formValChange = ({ event, state, setState }) => {
                     isError[name] = hasValid[name].inValidMsg;
                     hasValid[name].valid = false
                 }
-                values[name] = value
+                values[name] = value;
                 break;
             case "checkbox":
                 if (!(required[name] === undefined)) {
@@ -67,13 +67,20 @@ export const formValChange = ({ event, state, setState }) => {
         const { name, value, } = event.change
         const { type } = event
 
+        debugger
         switch (type) {
-
             case "select":
-                if (value.value === undefined) {
-                    if (!(required[name] === undefined && value.value > 0)) {
-                        isError[name] = "";
-                        hasValid[name].valid = true
+                const result = Array.isArray(value);
+                if (!result) {
+                    if (!(value.value === undefined)) {
+                        if (!(required[name] === undefined && value.value > 0)) {
+                            isError[name] = "";
+                            hasValid[name].valid = true
+                        }
+                        else {
+                            isError[name] = hasValid[name].inValidMsg;
+                            hasValid[name].valid = false
+                        }
                     }
                     else {
                         isError[name] = hasValid[name].inValidMsg;
@@ -81,8 +88,14 @@ export const formValChange = ({ event, state, setState }) => {
                     }
                 }
                 else {
-                    isError[name] = hasValid[name].inValidMsg;
-                    hasValid[name].valid = false
+                    if (!(required[name] === undefined) && (value.length > 0)) {
+                        isError[name] = "";
+                        hasValid[name].valid = true
+                    }
+                    else {
+                        isError[name] = hasValid[name].inValidMsg;
+                        hasValid[name].valid = false
+                    }
                 }
                 values[name] = value
                 break;
@@ -103,12 +116,12 @@ export const formValChange = ({ event, state, setState }) => {
     }
 };
 
-export function comAddPageFieldFunc({ state, setState, pageField }) {
+export function comAddPageFieldFunc({ state, setState, fieldArr }) {
     var isState = { ...state }
     const values = { ...state.values }
-    debugger
-    pageField.forEach(ele => {
-        debugger
+    // debugger
+    fieldArr.forEach(ele => {
+        // debugger
         Object.keys(values).forEach(lab => {
             if (lab === ele.ControlID) {
                 isState.fieldLabel[lab] = ele.FieldLabel
@@ -125,3 +138,17 @@ export function comAddPageFieldFunc({ state, setState, pageField }) {
 
 }
 
+
+
+export const onChangeSelect = ({ e, v, state, setState }) => {
+    const event = { change: { name: e.name, value: v }, type: "select" }
+    formValChange({ event, state, setState })
+}
+
+export const onChangeDate = ({ v, e, state, setState }) => {
+    const event = { change: { name: e.input.name, value: v }, type: "date" }
+    formValChange({ event, state, setState })
+}
+export const onChangeText = ({ event, state, setState }) => {
+    formValChange({ event, state, setState })
+}

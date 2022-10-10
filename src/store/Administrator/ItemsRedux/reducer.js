@@ -3,8 +3,10 @@ import {
     EDIT_ITEM_ID_SUCCESS,
     GET_BASEUNIT_FOR_DROPDOWN_SUCCESS,
     GET_CATEGORYTYPE_FOR_DROPDOWN_SUCCESS,
+    GET_CATEGORY_BY_CATEGORYTYPE_FOR_DROPDOWN_API_SUCCESS,
     GET_CATEGORY_BY_CATEGORYTYPE_FOR_DROPDOWN_SUCCESS,
     GET_DIVISION_FOR_DROPDOWN_SUCCESS,
+    GET_GROUP_BY_GROUPTYPE_FOR_DROPDOWN_SUCCESS,
     GET_IMAGETYPE_FOR_DROPDOWN_SUCCESS,
     GET_ITEM_GROUP_FOR_DROPDOWN_SUCCESS,
     GET_ITEM_LIST_API_SUCCESS,
@@ -12,6 +14,7 @@ import {
     GET_PARTY_FOR_DROPDOWN_SUCCESS,
     GET_PRICE_LIST_FOR_DROPDOWN_SUCCESS,
     GET_SUB_CATEGORY_BY_CATEGORYTYPE_FOR_DROPDOWN_SUCCESS,
+    GET_SUB_GROUP_BY_GROUP_FOR_DROPDOWN_SUCCESS,
     POST_ITEM_DATA_SUCCESS,
     UPDATE_ITEM_ID_SUCCESS
 } from "./actionType";
@@ -27,13 +30,16 @@ const INIT_STATE = {
     ItemGroupList: [],
     BaseUnit: [],
     CategoryType: [],
-    CategoryByCategoryType: { Data: [], key: null },
+    CategoryByCategoryType:[],
     SubCategoryByCategoryType: { Data: [], key: null },
     ImageType: [],
     MRPType: [],
     Division: [],
-    Party:[],
-    PriceList:[],
+    Party: [],
+    PriceList: [],
+    GroupList:[],
+    SubGroupList:[],
+    Category:[]
 };
 
 const ItemMastersReducer = (state = INIT_STATE, action) => {
@@ -119,16 +125,32 @@ const ItemMastersReducer = (state = INIT_STATE, action) => {
                 ...state,
                 Division: action.payload,
             }
-            case GET_PARTY_FOR_DROPDOWN_SUCCESS:
+        case GET_PARTY_FOR_DROPDOWN_SUCCESS:
+            return {
+                ...state,
+                Party: action.payload,
+            }
+        case GET_PRICE_LIST_FOR_DROPDOWN_SUCCESS:
+            return {
+                ...state,
+                PriceList: action.payload,
+            }
+        case GET_GROUP_BY_GROUPTYPE_FOR_DROPDOWN_SUCCESS:
+            return {
+                ...state,
+                GroupList: action.payload,
+            }
+
+        case GET_SUB_GROUP_BY_GROUP_FOR_DROPDOWN_SUCCESS:
+            return {
+                ...state,
+                SubGroupList: action.payload,
+            }
+            case GET_CATEGORY_BY_CATEGORYTYPE_FOR_DROPDOWN_API_SUCCESS:
                 return {
                     ...state,
-                    Party: action.payload,
+                    Category: action.payload,
                 }
-                case GET_PRICE_LIST_FOR_DROPDOWN_SUCCESS:
-                    return {
-                        ...state,
-                        PriceList: action.payload,
-                    }
         default:
             return state;
     }

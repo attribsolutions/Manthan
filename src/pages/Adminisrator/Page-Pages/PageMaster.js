@@ -37,10 +37,9 @@ const PageMaster = (props) => {
   const history = useHistory()
 
   //*** "isEditdata get all data from ModuleID for Binding  Form controls
-  let editDataGatingFromList = props.state;
-  let pageModeProps = props.pageMode
-  console.log("editDataGatingFromList", editDataGatingFromList)
+
   const [EditData, setEditData] = useState([]);
+  const [modalCss, setModalCss] = useState(false);
   const [pageMode, setPageMode] = useState("save");
   const [userPageAccessState, setUserPageAccessState] = useState('');
 
@@ -52,7 +51,6 @@ const PageMaster = (props) => {
   const [relatedPage_DropdownSelect, setrelatedPage_DropdownSelect] = useState("");
   const [pageAccessDropDownView, setPageAccessDropDownView] = useState(false);
   const [modal_center, setmodal_center] = useState(false);
-  const [PageFieldShowUI, setPageFieldShowUI] = useState(false);
   const [pageAccess_DropDownSelect, setPageAccess_DropDownSelect] =
     useState("");
 
@@ -62,6 +60,7 @@ const PageMaster = (props) => {
     FieldLabel: '',
     ControlType: { label: "select", value: 0 },
     FieldValidation: { label: "select", value: 0 },
+    InValidMsg: '',
     ListPageSeq: '',
     IsCompulsory: false,
     DefaultSort: false,
@@ -76,7 +75,7 @@ const PageMaster = (props) => {
     ControlTypes,
     FieldValidations,
     PostAPIResponse,
-    RoleAccessModifiedinSingleArray,
+    userAccess,
     ModuleData,
     PageAccess,
     modulePostAPIResponse,
@@ -84,36 +83,36 @@ const PageMaster = (props) => {
       ControlTypes: state.H_Pages.ControlTypes,
       FieldValidations: state.H_Pages.FieldValidations,
       PostAPIResponse: state.H_Pages.saveMessage,
-      RoleAccessModifiedinSingleArray: state.Login.RoleAccessUpdateData,
+      userAccess: state.Login.RoleAccessUpdateData,
       ModuleData: state.Modules.modulesList,
       PageAccess: state.H_Pages.PageAccess,
       modulePostAPIResponse: state.Modules.modulesSubmitSuccesss,
       PageList: state.H_Pages.PageList,
     }));
 
+  const location = { ...history.location }
+  const hasShowloction = location.hasOwnProperty("editValue")
+  const hasShowModal = props.hasOwnProperty("editValue")
+
+  // userAccess useEffect
   useEffect(() => {
 
-    let userAcc = undefined
-    if ((editDataGatingFromList === undefined)) {
+    let userAcc = null;
+    let locationPath = location.pathname;
 
-      let locationPath = history.location.pathname
-      userAcc = RoleAccessModifiedinSingleArray.find((inx) => {
-        return (`/${inx.ActualPagePath}` === locationPath)
-      })
-    }
-    else if (!(editDataGatingFromList === undefined)) {
-      let relatatedPage = props.relatatedPage
-      userAcc = RoleAccessModifiedinSingleArray.find((inx) => {
-        return (`/${inx.ActualPagePath}` === relatatedPage)
-      })
+    if (hasShowModal) {
+      locationPath = props.masterPath;
+    };
 
-    }
-    if (!(userAcc === undefined)) {
+    userAcc = userAccess.find((inx) => {
+      return (`/${inx.ActualPagePath}` === locationPath)
+    })
+
+    if (userAcc) {
       setUserPageAccessState(userAcc)
-    }
+    };
+  }, [userAccess])
 
-
-  }, [RoleAccessModifiedinSingleArray])
 
   useEffect(() => {
     dispatch(fetchModelsList());
@@ -125,72 +124,84 @@ const PageMaster = (props) => {
   // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
   useEffect(() => {
 
-    if (!(userPageAccessState === '')) { document.getElementById("txtName").focus(); }
+    // if (!(userPageAccessState === '')) { document.getElementById("txtName").focus(); }
+    if ((hasShowloction || hasShowModal)) {
 
-    if (!(editDataGatingFromList === undefined)) {
-      debugger
+      let hasEditVal = null
+      if (hasShowloction) {
+        setPageMode(location.pageMode)
+        hasEditVal = location.editValue
+      }
+      else if (hasShowModal) {
+        hasEditVal = props.editValue
+        setPageMode(props.pageMode)
+        setModalCss(true)
+      }
 
-      setPageMode(pageModeProps);
+      if (hasEditVal) {
+        setEditData(hasEditVal);
 
-      dispatch(BreadcrumbShow(editDataGatingFromList.Name))
-      setEditData(editDataGatingFromList);
-      setTablePageAccessDataState(editDataGatingFromList.PagePageAccess);
+        dispatch(BreadcrumbShow(hasEditVal.Name))
 
-      setModule_DropdownSelect({
-        label: editDataGatingFromList.ModuleName,
-        value: editDataGatingFromList.Module,
-      });
-      let PageFieldMaster = editDataGatingFromList.PageFieldMaster.map((index) => {
-        debugger
-        return {
-          ControlType: {
-            label: index.ControlTypeName,
-            value: index.ControlType
-          },
-          FieldValidation: {
-            label: index.FieldValidationName,
-            value: index.FieldValidation
-          },
-          ControlID: index.ControlID,
-          FieldLabel: index.FieldLabel,
-          IsCompulsory: index.IsCompulsory,
-          DefaultSort: index.DefaultSort,
-          ListPageSeq: index.ListPageSeq,
-          ShowInListPage: index.ShowInListPage,
-          ShowInDownload: index.ShowInDownload,
+        setTablePageAccessDataState(hasEditVal.PagePageAccess);
+
+        setModule_DropdownSelect({
+          label: hasEditVal.ModuleName,
+          value: hasEditVal.Module,
+        });
+
+        let PageFieldMaster = hasEditVal.PageFieldMaster.map((index) => {
+
+          return {
+            ControlType: {
+              label: index.ControlTypeName,
+              value: index.ControlType
+            },
+            FieldValidation: {
+              label: index.FieldValidationName,
+              value: index.FieldValidation
+            },
+            ControlID: index.ControlID,
+            FieldLabel: index.FieldLabel,
+            InValidMsg: index.InValidMsg,
+            IsCompulsory: index.IsCompulsory,
+            DefaultSort: index.DefaultSort,
+            ListPageSeq: index.ListPageSeq,
+            ShowInListPage: index.ShowInListPage,
+            ShowInDownload: index.ShowInDownload,
+          }
+        })
+
+        if (!(PageFieldMaster.length === 0)) {
+          setPageFieldTabTable(PageFieldMaster)
         }
-      })
-      if (!(PageFieldMaster.length === 0)) {
-        setPageFieldTabTable(PageFieldMaster)
+
+        if (hasEditVal.PageType === 2) {
+          setRelatedPageListShowUI(true)
+        }
+        setrelatedPage_DropdownSelect({
+          value: hasEditVal.RelatedPageId,
+          label: hasEditVal.RelatedPageName,
+        });
+
+        // When value 2 is get then DropDown lable is "ListPage" and ShowMenu is disabled Otherwise DropDown lable is "AddPage" and ShowMenu is enabled
+        let pageType_ID = hasEditVal.PageType;
+
+        if (pageType_ID === 2) {
+          setPageAccessDropDownView(true);
+          dispatch(getPageList(pageType_ID));
+          setPageType_DropdownSelect({ value: 2, label: "ListPage" });
+
+        } else if (pageType_ID === 1) {
+          dispatch(getPageListSuccess([]));
+          setrelatedPage_DropdownSelect({ value: 0 });
+          setPageType_DropdownSelect({ value: 1, label: "AddPage" });
+        }
+
+        dispatch(editHPagesIDSuccess({ Status: false }));
       }
-      
-
-      if (editDataGatingFromList.PageType === 2) {
-        setRelatedPageListShowUI(true)
-      }
-      setrelatedPage_DropdownSelect({
-        value: editDataGatingFromList.RelatedPageId,
-        label: editDataGatingFromList.RelatedPageName,
-      });
-
-      // When value 2 is get then DropDown lable is "ListPage" and ShowMenu is disabled Otherwise DropDown lable is "AddPage" and ShowMenu is enabled
-      let pageType_ID = editDataGatingFromList.PageType;
-
-      if (pageType_ID === 2) {
-        setPageAccessDropDownView(true);
-        dispatch(getPageList(pageType_ID));
-        setPageType_DropdownSelect({ value: 2, label: "ListPage" });
-
-      } else if (pageType_ID === 1) {
-        dispatch(getPageListSuccess([]));
-        setrelatedPage_DropdownSelect({ value: 0 });
-        setPageType_DropdownSelect({ value: 1, label: "AddPage" });
-      }
-     
-      // setPageFieldTabTable(PageFieldMaster)
-      dispatch(editHPagesIDSuccess({ Status: false }));
     }
-  }, [editDataGatingFromList]);
+  }, []);
 
 
   // This UseEffect clear Form Data and when modules Save Successfully.
@@ -301,6 +312,7 @@ const PageMaster = (props) => {
       FieldLabel: '',
       ControlType: { label: "select", value: 0 },
       FieldValidation: { label: "select", value: 0 },
+      InValidMsg: '',
       IsCompulsory: '',
       DefaultSort: '',
       FieldSequence: '',
@@ -336,6 +348,7 @@ const PageMaster = (props) => {
         FieldLabel: found.FieldLabel,
         ControlType: found.ControlType,
         FieldValidation: found.FieldValidation,
+        InValidMsg: found.InValidMsg,
         IsCompulsory: found.IsCompulsory,
         DefaultSort: found.DefaultSort,
         ShowInListPage: found.ShowInListPage,
@@ -353,6 +366,7 @@ const PageMaster = (props) => {
         FieldLabel: event,
         ControlType: found.ControlType,
         FieldValidation: found.FieldValidation,
+        InValidMsg: found.InValidMsg,
         IsCompulsory: found.IsCompulsory,
         DefaultSort: found.DefaultSort,
         ShowInListPage: found.ShowInListPage,
@@ -369,6 +383,7 @@ const PageMaster = (props) => {
         FieldLabel: found.FieldLabel,
         ControlType: event,
         FieldValidation: found.FieldValidation,
+        InValidMsg: found.InValidMsg,
         IsCompulsory: found.IsCompulsory,
         DefaultSort: found.DefaultSort,
         ShowInListPage: found.ShowInListPage,
@@ -386,6 +401,24 @@ const PageMaster = (props) => {
         FieldLabel: found.FieldLabel,
         ControlType: found.ControlType,
         FieldValidation: event,
+        InValidMsg: found.InValidMsg,
+        IsCompulsory: found.IsCompulsory,
+        DefaultSort: found.DefaultSort,
+        ShowInListPage: found.ShowInListPage,
+        ListPageSeq: found.ListPageSeq,
+        ShowInDownload: found.ShowInDownload,
+        DownloadDefaultSelect: found.DownloadDefaultSelect,
+
+      }
+    }
+    else if (type === 'InValidMsg') {
+
+      newSelectValue = {
+        ControlID: found.ControlID,
+        FieldLabel: found.FieldLabel,
+        ControlType: found.ControlType,
+        FieldValidation: found.FieldValidation,
+        InValidMsg: event,
         IsCompulsory: found.IsCompulsory,
         DefaultSort: found.DefaultSort,
         ShowInListPage: found.ShowInListPage,
@@ -402,6 +435,7 @@ const PageMaster = (props) => {
         FieldLabel: found.FieldLabel,
         ControlType: found.ControlType,
         FieldValidation: found.FieldValidation,
+        InValidMsg: found.InValidMsg,
         IsCompulsory: event,
         DefaultSort: found.DefaultSort,
         ShowInListPage: found.ShowInListPage,
@@ -419,6 +453,7 @@ const PageMaster = (props) => {
         FieldLabel: found.FieldLabel,
         ControlType: found.ControlType,
         FieldValidation: found.FieldValidation,
+        InValidMsg: found.InValidMsg,
         IsCompulsory: found.IsCompulsory,
         DefaultSort: event,
         ShowInListPage: found.ShowInListPage,
@@ -436,6 +471,7 @@ const PageMaster = (props) => {
         FieldLabel: found.FieldLabel,
         ControlType: found.ControlType,
         FieldValidation: found.FieldValidation,
+        InValidMsg: found.InValidMsg,
         IsCompulsory: found.IsCompulsory,
         DefaultSort: found.DefaultSort,
         ShowInListPage: event,
@@ -452,6 +488,7 @@ const PageMaster = (props) => {
         FieldLabel: found.FieldLabel,
         ControlType: found.ControlType,
         FieldValidation: found.FieldValidation,
+        InValidMsg: found.InValidMsg,
         IsCompulsory: found.IsCompulsory,
         DefaultSort: found.DefaultSort,
         ShowInListPage: found.ShowInListPage,
@@ -468,6 +505,7 @@ const PageMaster = (props) => {
         FieldLabel: found.FieldLabel,
         ControlType: found.ControlType,
         FieldValidation: found.FieldValidation,
+        InValidMsg: found.InValidMsg,
         IsCompulsory: found.IsCompulsory,
         DefaultSort: found.DefaultSort,
         ShowInListPage: found.ShowInListPage,
@@ -484,6 +522,7 @@ const PageMaster = (props) => {
         FieldLabel: found.FieldLabel,
         ControlType: found.ControlType,
         FieldValidation: found.FieldValidation,
+        InValidMsg: found.InValidMsg,
         IsCompulsory: found.IsCompulsory,
         DefaultSort: found.DefaultSort,
         ShowInListPage: found.ShowInListPage,
@@ -516,6 +555,7 @@ const PageMaster = (props) => {
     const PageFieldMaster = pageFieldTabTable.map((index) => ({
       ControlID: index.ControlID,
       FieldLabel: index.FieldLabel,
+      InValidMsg: index.InValidMsg,
       IsCompulsory: index.IsCompulsory,
       DefaultSort: index.DefaultSort,
       ListPageSeq: index.ListPageSeq,
@@ -555,6 +595,7 @@ const PageMaster = (props) => {
       PageDescriptionDetails: values.pageheadingdescription,
       RelatedPageID: relatedPage_DropdownSelect.value,
       IsDivisionRequired: values.IsDivisionRequired,
+      IsEditPopuporComponent: values.IsEditPopuporComponent,
       CreatedBy: 1,
       UpdatedBy: 1,
       PagePageAccess: tablePageAccessDataState.map((d) => ({
@@ -562,7 +603,6 @@ const PageMaster = (props) => {
       })),
       PageFieldMaster: PageFieldMaster,
     })
-
 
     if (pageMode === "edit") {
       dispatch(updateHPages(jsonBody, EditData.id));
@@ -1134,11 +1174,9 @@ const PageMaster = (props) => {
                                 </Col>
                               </Row>
 
-                              <Row>
-
-                                <FormGroup className="mb-1 col col-sm-6">
+                              <Row Col sm="12">
+                                <FormGroup className="mb-1 col col-sm-4">
                                   <Row className="justify-content-md-left">
-
                                     <Label
                                       htmlFor="horizontal-firstname-input"
                                       className="col-sm-2 col-form-label mt-4"
@@ -1167,15 +1205,15 @@ const PageMaster = (props) => {
                                   </Row>
                                 </FormGroup>
 
-                                <Col md="1"> </Col>
-                                <FormGroup className="mb-1 col col-sm-6">
+                                {/* <Col md="1"> </Col> */}
+                                <FormGroup className="mb-1 col col-sm-4">
                                   <Row className="justify-content-md-left">
 
                                     <Label
                                       htmlFor="horizontal-firstname-input"
                                       className="col-sm-4 col-form-label mt-4"
                                     >
-                                      Is DivisionRequired{" "}
+                                      Division Req*{" "}
                                     </Label>
                                     <Col md={5} style={{ marginTop: "15px" }}>
                                       <div
@@ -1188,6 +1226,37 @@ const PageMaster = (props) => {
                                           id="customSwitchsizemd"
                                           defaultChecked={EditData.IsDivisionRequired}
                                           name="IsDivisionRequired"
+                                        />
+                                        <label
+                                          className="form-check-label"
+                                          htmlFor="customSwitchsizemd"
+                                        ></label>
+                                      </div>
+                                    </Col>
+                                  </Row>
+                                </FormGroup>
+
+                                {/* <Col md="1"> </Col> */}
+                                <FormGroup className="mb-1 col col-sm-4">
+                                  <Row className="justify-content-md-left">
+
+                                    <Label
+                                      htmlFor="horizontal-firstname-input"
+                                      className="col-sm-4 col-form-label mt-4"
+                                    >
+                                      IsEdit PopUp/Comp.{" "}
+                                    </Label>
+                                    <Col md={5} style={{ marginTop: "15px" }}>
+                                      <div
+                                        className="form-check form-switch form-switch-md mb-1"
+                                        dir="ltr"
+                                      >
+                                        <AvInput
+                                          type="checkbox"
+                                          className="form-check-input mt-4"
+                                          id="customSwitchsizemd"
+                                          defaultChecked={EditData.IsEditPopuporComponent}
+                                          name="IsEditPopuporComponent"
                                         />
                                         <label
                                           className="form-check-label"
@@ -1272,6 +1341,7 @@ const PageMaster = (props) => {
                                   <th>Field Label</th>
                                   <th className="col col-sm-2">Control Type</th>
                                   <th className="col col-sm-2" >Field Validation</th>
+                                  <th className="col col-sm-2" >InValid Msg</th>
                                   <th>List Page Seq</th>
                                   <th>Is Compulsory</th>
                                   <th>Default Sort</th>
@@ -1328,6 +1398,17 @@ const PageMaster = (props) => {
                                         options={FieldValidations_DropdownOptions}
                                         onChange={(e) => { PageField_onChange_Handler(e, "FieldValidation", key); }}
                                       />
+                                    </td>
+                                    <td>
+                                      <Input
+
+                                        type="text"
+                                        id={`InValidMsg${key}`}
+                                        defaultValue={EditData.InValidMsg}
+                                        value={pageFieldTabTable[key].InValidMsg}
+                                        onChange={(e) => PageField_onChange_Handler(e.target.value, "InValidMsg", key)}>
+
+                                      </Input>
                                     </td>
                                     <td>
                                       <Input

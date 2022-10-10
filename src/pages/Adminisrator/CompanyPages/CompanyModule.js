@@ -25,6 +25,7 @@ import { MetaTags } from "react-meta-tags";
 import { AlertState } from "../../../store/actions";
 import { BreadcrumbShow } from "../../../store/Utilites/Breadcrumb/actions";
 import { useHistory } from "react-router-dom";
+import { SaveButton } from "../../../components/CommonSaveButton";
 
 const CompanyModule = (props) => {
 
@@ -32,67 +33,86 @@ const CompanyModule = (props) => {
   const dispatch = useDispatch();
   const history = useHistory()
 
-  //*** "isEditdata get all data from ModuleID for Binding  Form controls
-  var editDataGatingFromList = props.state;
-  let propsPageMode = props.pageMode;
-  let pageModeProps = props.pageMode;
 
-  const [EditData, setEditData] = useState([]);
+
+
+
+  //*** "isEditdata get all data from ModuleID for Binding  Form controls
+
+
+  const [EditData, setEditData] = useState({});
+  const [modalCss, setModalCss] = useState(false);
   const [pageMode, setPageMode] = useState("save");
   const [userPageAccessState, setUserPageAccessState] = useState('');
 
   const [CompanyGroupselect, setCompanyGroup] = useState("");
 
   //Access redux store Data /  'save_ModuleSuccess' action data
-  const { PostAPIResponse, RoleAccessModifiedinSingleArray } = useSelector((state) => ({
-    PostAPIResponse: state.Company.companySubmitSuccesss,
-    RoleAccessModifiedinSingleArray: state.Login.RoleAccessUpdateData,
+  const { postMsg, userAccess } = useSelector((state) => ({
+    postMsg: state.Company.postMsg,
+    userAccess: state.Login.RoleAccessUpdateData,
   }));
+
+  const location = { ...history.location }
+  const hasShowloction = location.hasOwnProperty("editValue")
+  const hasShowModal = props.hasOwnProperty("editValue")
 
   // userAccess useEffect
   useEffect(() => {
-    let userAcc = undefined
-    if ((editDataGatingFromList === undefined)) {
+    let userAcc = null;
+    let locationPath = location.pathname;
 
-      let locationPath = history.location.pathname
-      userAcc = RoleAccessModifiedinSingleArray.find((inx) => {
-        return (`/${inx.ActualPagePath}` === locationPath)
-      })
-    }
-    else if (!(editDataGatingFromList === undefined)) {
-      let relatatedPage = props.relatatedPage
-      userAcc = RoleAccessModifiedinSingleArray.find((inx) => {
-        return (`/${inx.ActualPagePath}` === relatatedPage)
-      })
+    if (hasShowModal) {
+      locationPath = props.masterPath;
+    };
 
-    }
-    if (!(userAcc === undefined)) {
+    userAcc = userAccess.find((inx) => {
+      return (`/${inx.ActualPagePath}` === locationPath)
+    })
+
+    if (userAcc) {
       setUserPageAccessState(userAcc)
-    }
-
-  }, [RoleAccessModifiedinSingleArray])
-
-  // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
-  useEffect(() => {
-
-    if (!(userPageAccessState === '')) { document.getElementById("txtName").focus(); }
-    if (!(editDataGatingFromList === undefined)) {
-      setEditData(editDataGatingFromList);
-      setPageMode(pageModeProps);
-      setCompanyGroup({
-        value: editDataGatingFromList.CompanyGroup_id,
-        label: editDataGatingFromList.CompanyGroupName
-      })
-      dispatch(editCompanyIDSuccess({ Status: false }))
-      dispatch(BreadcrumbShow(editDataGatingFromList.Name))
-    }
-    else if (!(propsPageMode === undefined)) {
-      setPageMode(propsPageMode)
-    }
-  }, [editDataGatingFromList, propsPageMode]);
+    };
+  }, [userAccess])
 
   useEffect(() => {
-    if ((PostAPIResponse.Status === true) && (PostAPIResponse.StatusCode === 200) && !(pageMode === "dropdownAdd")) {
+ 
+    // if (!(userPageAccessState === '')) { document.getElementById("txtName").focus(); }
+    if ((hasShowloction || hasShowModal)) {
+
+      let hasEditVal = null
+      if (hasShowloction) {
+        setPageMode(location.pageMode)
+        hasEditVal = location.editValue
+      }
+      else if (hasShowModal) {
+        hasEditVal = props.editValue
+        setPageMode(props.pageMode)
+        setModalCss(true)
+      }
+
+      if (hasEditVal) {
+        setEditData(hasEditVal);
+        const {
+          CompanyGroup_id,
+          CompanyGroupName,
+          Name } = { ...hasEditVal };
+
+        setCompanyGroup({
+          value: CompanyGroup_id,
+          label: CompanyGroupName
+        })
+        dispatch(editCompanyIDSuccess({ Status: false }))
+        dispatch(BreadcrumbShow(Name))
+      }
+    }
+
+  }, []);
+
+
+  useEffect(() => {
+    debugger
+    if ((postMsg.Status === true) && (postMsg.StatusCode === 200) && !(pageMode === "dropdownAdd")) {
       dispatch(PostCompanySubmitSuccess({ Status: false }))
       setCompanyGroup('')
       formRef.current.reset();
@@ -100,19 +120,19 @@ const CompanyModule = (props) => {
         dispatch(AlertState({
           Type: 1,
           Status: true,
-          Message: PostAPIResponse.Message,
+          Message: postMsg.Message,
         }))
       }
       else {
         dispatch(AlertState({
           Type: 1,
           Status: true,
-          Message: PostAPIResponse.Message,
+          Message: postMsg.Message,
           RedirectPath: '/CompanyList',
         }))
       }
     }
-    else if ((PostAPIResponse.Status === true) && !(pageMode === "dropdownAdd")) {
+    else if ((postMsg.Status === true) && !(pageMode === "dropdownAdd")) {
       dispatch(PostCompanySubmitSuccess({ Status: false }))
       dispatch(AlertState({
         Type: 4,
@@ -122,7 +142,7 @@ const CompanyModule = (props) => {
         AfterResponseAction: false
       }));
     }
-  }, [PostAPIResponse])
+  }, [postMsg])
 
   /// CompanyGroupDropDown
   useEffect(() => {
@@ -156,7 +176,7 @@ const CompanyModule = (props) => {
       CreatedBy: 1,
       UpdatedBy: 1,
     });
-
+debugger
     if (pageMode === 'edit') {
       dispatch(updateCompanyID(jsonBody, EditData.id));
     }
@@ -167,7 +187,7 @@ const CompanyModule = (props) => {
   };
 
   var IsEditMode_Css = ''
-  if ((pageMode === "edit")||(pageMode==="copy")||(pageMode==="dropdownAdd")) { IsEditMode_Css = "-5.5%" };
+  if ((modalCss) || (pageMode === "dropdownAdd")) { IsEditMode_Css = "-5.5%" };
 
   if (!(userPageAccessState === '')) {
     return (
@@ -302,32 +322,7 @@ const CompanyModule = (props) => {
                           <FormGroup >
                             <Row >
                               <Col sm={2}>
-                                <div>
-                                  {
-                                    pageMode === "edit" ?
-                                      userPageAccessState.RoleAccess_IsEdit ?
-                                        <button
-                                          type="submit"
-                                          data-mdb-toggle="tooltip" data-mdb-placement="top" title="Update Module"
-                                          className="btn btn-success w-md"
-                                        >
-                                          <i class="fas fa-edit me-2"></i>Update
-                                        </button>
-                                        :
-                                        <></>
-                                      : (
-                                        userPageAccessState.RoleAccess_IsSave ?
-                                          <button
-                                            type="submit"
-                                            data-mdb-toggle="tooltip" data-mdb-placement="top" title="Save Module"
-                                            className="btn btn-primary w-md"
-                                          > <i className="fas fa-save me-2"></i> Save
-                                          </button>
-                                          :
-                                          <></>
-                                      )
-                                  }
-                                </div>
+                                {SaveButton({ pageMode, userPageAccessState, module: "Company" })}
                               </Col>
                             </Row>
                           </FormGroup >
@@ -350,3 +345,5 @@ const CompanyModule = (props) => {
   }
 };
 export default CompanyModule;
+
+

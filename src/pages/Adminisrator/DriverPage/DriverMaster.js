@@ -11,8 +11,6 @@ import {
     Label,
     Row
 } from "reactstrap";
-import { AvField, AvForm, } from "availity-reactstrap-validation";
-import Select from "react-select";
 import { MetaTags } from "react-meta-tags";
 import { BreadcrumbShow, commonPageFieldSuccess } from "../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
@@ -20,7 +18,6 @@ import { AlertState, commonPageField } from "../../../store/actions";
 
 import {
     PostMethodForDriverMaster,
-    getMethodForDriverList,
     PostMethod_ForDriverMasterSuccess,
     getMethod_ForDriverListSuccess,
     editDriverTypeSuccess,
@@ -31,10 +28,11 @@ import Flatpickr from "react-flatpickr"
 import {
     comAddPageFieldFunc,
     formValid,
-    formValChange
+    onChangeText,
+    onChangeDate
 } from "../../../components/Common/CmponentRelatedCommonFile/validationFunction";
 
-import { fieldData } from './validfiles'
+// import { pageField } from './validfiles'
 
 
 const DriverMaster = (props) => {
@@ -42,35 +40,32 @@ const DriverMaster = (props) => {
     const dispatch = useDispatch();
     const history = useHistory()
 
-    let editDataGetingFromList = props.state;
-    let pageModeProps = props.pageMode;
-
     const formRef = useRef(null);
     const [pageMode, setPageMode] = useState("");
     const [userPageAccessState, setUserPageAccessState] = useState("");
-    const [EditData, setEditData] = useState([]);
-    const [DOB_Date_Select, setDOB_Date_Select] = useState("");
+    const [modalCss, setModalCss] = useState(false);// new change
 
     // ////////////////////////////////////
     const [state, setState] = useState({
         values: {
-            Name: '',
-            address: "",
-            uid: "",
-            party: ''
+            id: "",// new change
+            Name: "",
+            Address: "",
+            UID: "",
+            DOB: ''
         },
         fieldLabel: {
-            Name: '',
-            address: '',
-            uid: '',
-            party: ''
+            Name: "",
+            Address: "",
+            UID: "",
+            DOB: ''
         },
 
         isError: {
             Name: "",
-            address: "",
-            uid: "",
-            party: ''
+            Address: "",
+            UID: "",
+            DOB: ''
         },
 
         hasValid: {
@@ -79,18 +74,18 @@ const DriverMaster = (props) => {
                 inValidMsg: "",
                 valid: false
             },
-            address: {
+            Address: {
                 regExp: '',
                 inValidMsg: "",
                 valid: false
             },
 
-            uid: {
+            UID: {
                 regExp: '',
                 inValidMsg: "",
                 valid: false
             },
-            party: {
+            DOB: {
                 regExp: '',
                 inValidMsg: "",
                 valid: false
@@ -108,58 +103,78 @@ const DriverMaster = (props) => {
     const {
         PostAPIResponse,
         pageField,
-        RoleAccessModifiedinSingleArray
+        userAccess,
     } = useSelector((state) => ({
         PostAPIResponse: state.DriverReducer.PostDataMessage,
-        RoleAccessModifiedinSingleArray: state.Login.RoleAccessUpdateData,
+        userAccess: state.Login.RoleAccessUpdateData,
         pageField: state.CommonPageFieldReducer.pageField
     }));
 
+    // new change
+    const location = { ...history.location }
+    const hasShowloction = location.hasOwnProperty("editValue")
+    const hasShowModal = props.hasOwnProperty("editValue")
+
 
     useEffect(() => {
-        // dispatch(getMethodForDriverList());
-        dispatch(commonPageField(90))
-
+        dispatch(commonPageFieldSuccess(null));// new change
+        dispatch(commonPageField(91))
     }, []);
 
-    //userAccess useEffect
+    // new change
+    // userAccess useEffect
     useEffect(() => {
-        let userAcc = undefined
-        if ((editDataGetingFromList === undefined)) {
+        debugger
+        let userAcc = null;
+        let locationPath = location.pathname;
 
-            let locationPath = history.location.pathname
-            userAcc = RoleAccessModifiedinSingleArray.find((inx) => {
-                return (`/${inx.ActualPagePath}` === locationPath)
-            })
-        }
-        else if (!(editDataGetingFromList === undefined)) {
-            let relatatedPage = props.relatatedPage
-            userAcc = RoleAccessModifiedinSingleArray.find((inx) => {
-                return (`/${inx.ActualPagePath}` === relatatedPage)
-            })
+        if (hasShowModal) {
+            locationPath = props.masterPath;
+        };
 
-        }
-        if (!(userAcc === undefined)) {
+        userAcc = userAccess.find((inx) => {
+            return (`/${inx.ActualPagePath}` === locationPath)
+        })
+
+        if (userAcc) {
             setUserPageAccessState(userAcc)
-        }
+        };
+    }, [userAccess])
 
-    }, [RoleAccessModifiedinSingleArray])
-
+// new change
     // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
     useEffect(() => {
 
+        if (!(userPageAccessState === '')) { document.getElementById("txtName").focus(); }
         // if (!(userPageAccessState === '')) { document.getElementById("txtName").focus(); }
-        if (!(editDataGetingFromList === undefined)) {
+        if ((hasShowloction || hasShowModal)) {
 
-            setEditData(editDataGetingFromList);
-            setPageMode(pageModeProps);
-            setDOB_Date_Select(editDataGetingFromList.DOB)
+            let hasEditVal = null
+            if (hasShowloction) {
+                setPageMode(location.pageMode)
+                hasEditVal = location.editValue
+            }
+            else if (hasShowModal) {
+                hasEditVal = props.editValue
+                setPageMode(props.pageMode)
+                setModalCss(true)
+            }
 
+            if (hasEditVal) {
+                const { id, Name, DOB, UID, Address } = hasEditVal// new change
+                const { values, fieldLabel, hasValid, required, isError } = { ...state }
+                values.Name = Name;
+                values.DOB = DOB;
+                values.UID = UID;
+                values.Address = Address;
+                values.id = id
+
+                setState({ values, fieldLabel, hasValid, required, isError })
+                dispatch(BreadcrumbShow(hasEditVal.DriverMaster))
+            }
             dispatch(editDriverTypeSuccess({ Status: false }))
-            dispatch(BreadcrumbShow(editDataGetingFromList.DriverMaster))
-            return
         }
-    }, [editDataGetingFromList])
+    }, [])
 
 
 
@@ -195,28 +210,16 @@ const DriverMaster = (props) => {
         }
     }, [PostAPIResponse])
 
-
-
+// new change
     // ////////////////////////////////////////////////////////////
     useEffect(() => {
         debugger
-        if (pageField.length >0) {
-            comAddPageFieldFunc({ state, setState, pageField })
+        if (pageField) {
+            const fieldArr = pageField.PageFieldMaster
+            comAddPageFieldFunc({ state, setState, fieldArr })// new change
         }
     }, [pageField])
 
-    const onChangeSelect = (e, v) => {
-        const event = { change: { name: v.name, value: e }, type: "select" }
-        formValChange({ event, state, setState })
-    }
-
-    const onChangeDate = (e, v) => {
-        const event = { change: { name: v.name, value: e }, type: "date" }
-        formValChange({ event, state, setState })
-    }
-    const onChangeText = (event) => {
-        formValChange({ event, state, setState })
-    }
 
     const values = { ...state.values }
     const { isError } = state;
@@ -225,20 +228,19 @@ const DriverMaster = (props) => {
 
 
     const formSubmitHandler = (event) => {
+        
         event.preventDefault();
         if (formValid(state, setState)) {
 
-            console.log("isvalid", values.party.value)
-
             const jsonBody = JSON.stringify({
                 Name: values.Name,
-                Address: values.address,
-                DOB: DOB_Date_Select,
-                UID: values.uid
+                Address: values.Address,
+                DOB: values.DOB,
+                UID: values.UID
             });
 
             if (pageMode === 'edit') {
-                dispatch(updateDriverTypeID(jsonBody, EditData.id));
+                dispatch(updateDriverTypeID(jsonBody, values.id));// new change
             }
 
             else {
@@ -250,18 +252,9 @@ const DriverMaster = (props) => {
     };
 
 
-    const options = [
-        { value: 'active', label: 'Active' },
-        { value: 'inactive', label: 'In Active' },
-        { value: 'deleted', label: 'Delete' },
-    ];
-
-
-
-
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
     var IsEditMode_Css = ''
-    if ((pageMode === "edit") || (pageMode === "copy") || (pageMode === "dropdownAdd")) { IsEditMode_Css = "-5.5%" };
+    if ((modalCss) || (pageMode === "dropdownAdd")) { IsEditMode_Css = "-5.5%" };// new change
 
     if (!(userPageAccessState === '')) {
         return (
@@ -271,7 +264,7 @@ const DriverMaster = (props) => {
                         <MetaTags>
                             <title>DriverMaster | FoodERP-React FrontEnd</title>
                         </MetaTags>
-                        {/* <Breadcrumb breadcrumbItem={userPageAccessState.PageHeading} /> */}
+                        <Breadcrumb breadcrumbItem={userPageAccessState.PageHeading} />
 
                         <Card className="text-black">
                             <CardHeader className="card-header   text-black" style={{ backgroundColor: "#dddddd" }} >
@@ -291,18 +284,20 @@ const DriverMaster = (props) => {
                                                         <FormGroup className="mb-2 col col-sm-4 ">
                                                             <Label htmlFor="validationCustom01">{fieldLabel.Name} </Label>
                                                             <Input
-                                                                type="text"
-                                                                className={isError.Name.length > 0 ? "is-invalid form-control" : "form-control"}
+                                                                id="txtName"
                                                                 name="Name"
+                                                                type="text"
+                                                                value={values.Name}
+                                                                className={isError.Name.length > 0 ? "is-invalid form-control" : "form-control"}
                                                                 placeholder="Please Enter Name"
-                                                                onChange={(e) => {
-                                                                    onChangeText(e)
-                                                                    dispatch(BreadcrumbShow(e.target.value))
+                                                                onChange={(event) => {
+                                                                    onChangeText({ event, state, setState })
+                                                                    dispatch(BreadcrumbShow(event.target.value))
                                                                 }}
 
                                                             />
-                                                            {isError.name.length > 0 && (
-                                                                <span className="invalid-feedback">{isError.name}</span>
+                                                            {isError.Name.length > 0 && (
+                                                                <span className="invalid-feedback">{isError.Name}</span>
                                                             )}
                                                         </FormGroup>
                                                         <Row>
@@ -310,81 +305,85 @@ const DriverMaster = (props) => {
                                                                 <FormGroup className="mb-3">
                                                                     <Label>Date of Birth</Label>
                                                                     <Flatpickr
-                                                                        id="FSSAIExipry"
-                                                                        name="FSSAIExipry"
-                                                                        value={DOB_Date_Select}
+                                                                        name="DOB"
+                                                                        value={values.DOB}
                                                                         className="form-control d-block p-2 bg-white text-dark"
                                                                         placeholder="YYYY-MM-DD"
-                                                                        autoComplete='off'
+                                                                        autoComplete="0,''"
                                                                         options={{
                                                                             altInput: true,
                                                                             altFormat: "F j, Y",
-                                                                            dateFormat: "Y-m-d"
+                                                                            dateFormat: "Y-m-d",
+                                                                            minDate: new Date().fp_incr("n"),
+                                                                            maxDate: new Date().fp_incr(0) // 14 days from now"0,''"
                                                                         }}
-                                                                        onChange={onChangeSelect}
+                                                                        onChange={(y, v, e) => { onChangeDate({ e, v, state, setState }) }}
                                                                     />
                                                                 </FormGroup>
                                                             </Col>
                                                         </Row>
-                                                        <Row>
+                                                        {/* <Row>
                                                             <Col md="4">
                                                                 <FormGroup className="mb-3">
-                                                                    <Label htmlFor="validationCustom01">{fieldLabel.party} </Label>
+                                                                    <Label htmlFor="validationCustom01">{fieldLabel.Address} </Label>
                                                                     <Select
                                                                         defaultValue={options[0]}
                                                                         isSearchable={false}
                                                                         className="react-dropdown"
-                                                                        onChange={onChangeSelect}
+                                                                        onChange={(v, e) => onChangeSelect({ e, v, state, setState })}
                                                                         classNamePrefix="dropdown"
                                                                         options={options}
-                                                                        name="party"
+                                                                        name="Address"
                                                                         styles={{
                                                                             control: base => ({
                                                                                 ...base,
-                                                                                border: isError.party.length > 0 ? '1px solid red' : '',
+                                                                                border: isError.Address.length > 0 ? '1px solid red' : '',
 
                                                                             })
                                                                         }}
                                                                     />
+                                                                     {isError.Name.length > 0 && (
+                                                                <span className="tex">{isError.Name}</span>
+                                                            )}
                                                                 </FormGroup>
                                                             </Col>
-                                                        </Row>
+                                                        </Row> */}
 
 
 
 
                                                         <Row>
                                                             <FormGroup className="mb-2 col col-sm-4 ">
-                                                                <Label htmlFor="validationCustom01">{fieldLabel.address} </Label>
+                                                                <Label htmlFor="validationCustom01">{fieldLabel.Address} </Label>
                                                                 <Input
+                                                                    name="Address"
+                                                                    value={values.Address}
                                                                     type="text"
-                                                                    value={EditData.Address}
-                                                                    className={isError.address.length > 0 ? "is-invalid form-control" : "form-control"}
-                                                                    name="address"
+                                                                    className={isError.Address.length > 0 ? "is-invalid form-control" : "form-control"}
                                                                     placeholder="Please Enter Address"
                                                                     autoComplete='off'
-                                                                    onChange={onChangeText}
+                                                                    onChange={(event) => onChangeText({ event, state, setState })}
                                                                 />
-                                                                {isError.address.length > 0 && (
-                                                                    <span className="invalid-feedback">{isError.address}</span>
+                                                                {isError.Address.length > 0 && (
+                                                                    <span className="invalid-feedback">{isError.Address}</span>
                                                                 )}
                                                             </FormGroup>
                                                         </Row>
 
                                                         <Row>
                                                             <FormGroup className="mb-2 col col-sm-4 ">
-                                                                <Label htmlFor="validationCustom01">{fieldLabel.uid}</Label>
+                                                                <Label htmlFor="validationCustom01">{fieldLabel.UID}</Label>
                                                                 <Input
-                                                                    name="uid"
-                                                                    value={EditData.UID}
+                                                                    name="UID"
+                                                                    value={values.UID}
                                                                     type="text"
                                                                     placeholder="Please Enter UID"
                                                                     autoComplete='off'
-                                                                    className={isError.uid.length > 0 ? "is-invalid form-control" : "form-control"}
-                                                                    onChange={onChangeText}
+                                                                    className={isError.UID.length > 0 ? "is-invalid form-control" : "form-control"}
+                                                                    onChange={(event) => onChangeText({ event, state, setState })}
                                                                 />
-                                                                {isError.name.length > 0 && (
-                                                                    <span className="invalid-feedback">{isError.uid}</span>
+                                                                {isError.UID.length > 0 && (
+                                                                    <span className="invalid-feedback">{isError.UID}</span>
                                                                 )}
                                                             </FormGroup>
 

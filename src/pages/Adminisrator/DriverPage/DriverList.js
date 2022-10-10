@@ -12,7 +12,8 @@ import {
 } from "../../../store/Administrator/DriverRedux/action";
 
 import CommonListPage from "../../../components/Common/CmponentRelatedCommonFile/commonListPage";
-import { commonPageField, commonPageFieldSuccess } from "../../../store/actions";
+import { commonPageField, commonPageFieldList, commonPageFieldListSuccess, commonPageFieldSuccess } from "../../../store/actions";
+import { DRIVER } from "../../../routes/route_url";
 
 const DriverList = (props) => {
   const dispatch = useDispatch();
@@ -26,7 +27,7 @@ const DriverList = (props) => {
       deleteMsg: state.DriverReducer.deleteMessage,
       postMsg: state.DriverReducer.PostDataMessage,
       userAccess: state.Login.RoleAccessUpdateData,
-      pageField: state.CommonPageFieldReducer.pageField
+      pageField: state.CommonPageFieldReducer.pageFieldList
     })
   );
 
@@ -40,10 +41,10 @@ const DriverList = (props) => {
     deleteSucc: deleteDriverTypeIDSuccess
 
   }
+
   useEffect(() => {
-    
-    dispatch(commonPageFieldSuccess([]))
-    dispatch(commonPageField(90))
+    dispatch(commonPageFieldListSuccess(null))
+    dispatch(commonPageFieldList(106))
     dispatch(getMethodForDriverList())
 
   }, []);
@@ -53,13 +54,14 @@ const DriverList = (props) => {
   return (
     <React.Fragment>
       {
-        (pageField.length > 0) ?
+        (pageField) ?
           <CommonListPage
             action={action}
             reducers={reducers}
             MasterModal={DriverMaster}
             masterPath={"/DriverMaster"}
-
+            ButtonMsgLable={"Driver"}
+            deleteName={"Name"}
           />
           : null
       }

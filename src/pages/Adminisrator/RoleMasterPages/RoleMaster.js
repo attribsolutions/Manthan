@@ -7,7 +7,7 @@ import {
   editSuccess,
   postRole, updateID, PostSuccess
 } from "../../../store/Administrator/RoleMasterRedux/action";
-import { AlertState } from "../../../store/actions";
+import { AlertState, commonPageField } from "../../../store/actions";
 import Select from "react-select";
 import { BreadcrumbShow } from "../../../store/Utilites/Breadcrumb/actions";
 import { MetaTags } from "react-meta-tags";
@@ -17,8 +17,10 @@ import {
   comAddPageFieldFunc,
   formValChange,
   formValid,
+  onChangeSelect,
+  onChangeText,
 } from "../../../components/Common/CmponentRelatedCommonFile/validationFunction";
-import { fieldData } from './FieldData'
+
 const RoleMaster = (props) => {
 
   const formRef = useRef(null);
@@ -29,7 +31,7 @@ const RoleMaster = (props) => {
   let editDataGatingFromList = props.state;
   let propsPageMode = props.pageMode;
   let pageModeProps = props.pageMode;
-console.log("editDataGatingFromList",editDataGatingFromList)
+
   //SetState  Edit data Geting From Modules List component
   const [EditData, setEditData] = useState([]);
   const [pageMode, setPageMode] = useState("save");
@@ -39,65 +41,99 @@ console.log("editDataGatingFromList",editDataGatingFromList)
   // ////////////////////////////////////
   const [state, setState] = useState({
     values: {
-      name: "",
-      description: "",
-      dashboard: "",
-      employeeType: ""
+      Name: "",
+      Description: "",
+      Dashboard: "",
+      RoleEmployeeTypes: "",
+      isActive: false,
+      isSCMRole: false,
+      IsPartyConnection: false
 
     },
     fieldLabel: {
-      name: "",
-      description: "",
-      dashboard: "",
-      employeeType: ""
+      Name: "",
+      Description: "",
+      Dashboard: "",
+      RoleEmployeeTypes: "",
+      isActive: false,
+      isSCMRole: false,
+      IsPartyConnection: false
     },
 
     isError: {
-      name: "",
-      description: "",
-      dashboard: "",
-      employeeType: ""
+      Name: "",
+      Description: "",
+      Dashboard: "",
+      RoleEmployeeTypes: "",
+      isActive: false,
+      isSCMRole: false,
+      IsPartyConnection: false
     },
 
     hasValid: {
-      name: {
+      Name: {
         regExp: '',
         inValidMsg: "",
         valid: false
       },
-      description: {
+      Description: {
         regExp: '',
         inValidMsg: "",
         valid: false
       },
 
-      dashboard: {
+      Dashboard: {
         regExp: '',
         inValidMsg: "",
         valid: false
       },
-      employeeType: {
+      RoleEmployeeTypes: {
         regExp: '',
         inValidMsg: "",
         valid: false
-      }
+      },
+      isActive: {
+        regExp: '',
+        inValidMsg: "",
+        valid: false
+      },
+      isSCMRole: {
+        regExp: '',
+        inValidMsg: "",
+        valid: false
+      },
+      IsPartyConnection: {
+        regExp: '',
+        inValidMsg: "",
+        valid: false
+      },
     },
     required: {
 
     }
   }
   )
-  //////////////////////////
 
   //Access redux store Data /  'save_ModuleSuccess' action data
-  const { PostAPIResponse, RoleAccessModifiedinSingleArray, EmployeeType } = useSelector((state) => ({
-    PostAPIResponse: state.RoleMaster_Reducer.AddUserMessage,
-    EmployeeType: state.EmployeeTypeReducer.EmployeeTypeList,
-    RoleAccessModifiedinSingleArray: state.Login.RoleAccessUpdateData,
-  }));
+  const {
+    PostAPIResponse,
+    pageField,
+    RoleAccessModifiedinSingleArray,
+    EmployeeType } = useSelector((state) => ({
+      PostAPIResponse: state.RoleMaster_Reducer.postMsg,
+      EmployeeType: state.EmployeeTypeReducer.EmployeeTypeList,
+      RoleAccessModifiedinSingleArray: state.Login.RoleAccessUpdateData,
+      pageField: state.CommonPageFieldReducer.pageField
+
+    }));
 
   useEffect(() => {
     dispatch(getEmployeeTypelist());
+  }, []);
+
+  useEffect(() => {
+    // dispatch(commonPageFieldSuccess([]));
+    dispatch(commonPageField(12))
   }, []);
 
   //userAccess useEffect
@@ -131,29 +167,30 @@ console.log("editDataGatingFromList",editDataGatingFromList)
   function EmployeeType_Dropdown_Handler(e) {
     setEmployeeType_DropdownSelect(e)
   }
+
   // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
   useEffect(() => {
-    debugger
     // if (!(userPageAccessState === '')) { document.getElementById("txtName").focus(); }
     if (!(editDataGatingFromList === undefined)) {
       setEditData(editDataGatingFromList);
       setPageMode(pageModeProps);
       dispatch(editSuccess({ Status: false }))
-      dispatch(BreadcrumbShow(editDataGatingFromList.Name))
       const listItems = editDataGatingFromList.RoleEmployeeTypes.map((data) => ({
         value: data.EmployeeType,
         label: data.EmployeeTypeName
       }))
 
-     state.values.employeeType=listItems
-     state.values.dashboard=editDataGatingFromList.Dashboard
-     state.values.description=editDataGatingFromList.Description
-     state.values.name=editDataGatingFromList.Name
-     state.hasValid.employeeType.valid=true
-     state.hasValid.name.valid=true
-     state.hasValid.dashboard.valid=true
-     state.hasValid.description.valid=true
-
+      const { Name, Description, Dashboard, RoleEmployeeTypes, isActive, isSCMRole, IsPartyConnection } = editDataGatingFromList
+      const { values, fieldLabel, hasValid, required, isError } = { ...state }
+      values.RoleEmployeeTypes = listItems
+      values.Name = Name
+      values.Name = Description
+      values.Name = Dashboard
+      values.Name = isActive
+      values.Name = isSCMRole
+      values.Name = IsPartyConnection
+      setState({ values, fieldLabel, hasValid, required, isError })
+      dispatch(BreadcrumbShow(editDataGatingFromList.RoleMaster))
     }
     else if (!(propsPageMode === undefined)) {
       setPageMode(propsPageMode)
@@ -196,22 +233,14 @@ console.log("editDataGatingFromList",editDataGatingFromList)
 
   // // ////////////////////////////////////////////////////////////
   useEffect(() => {
-    comAddPageFieldFunc({ state, setState, fieldData })
-  }, [])
+    if (pageField.length > 0) {
+      comAddPageFieldFunc({ state, setState, pageField })
+    }
+  }, [pageField])
 
   const values = { ...state.values }
   const { isError } = state;
   const { fieldLabel } = state;
-
-
-  const onChangeDropDown = (e, v) => {
-    
-    const event = { name: "employeeType", value: e }
-    formValChange({ event, state, setState })
-  }
-  const onChangeText = (event) => {
-    formValChange({ event, state, setState })
-  }
 
   const formSubmitHandler = (event) => {
     debugger
@@ -221,9 +250,9 @@ console.log("editDataGatingFromList",editDataGatingFromList)
       // console.log("isvalid", values.party.value)
 
       const jsonBody = JSON.stringify({
-        Name: values.name,
-        Description: values.description,
-        Dashboard: values.dashboard,
+        Name: values.Name,
+        Description: values.Description,
+        Dashboard: values.Dashboard,
         isActive: values.isActive,
         isSCMRole: values.isSCMRole,
         IsPartyConnection: values.IsPartyConnection,
@@ -236,12 +265,12 @@ console.log("editDataGatingFromList",editDataGatingFromList)
 
       if (pageMode === 'edit') {
         dispatch(updateID(jsonBody, EditData.id));
-        console.log("update jsonBody",jsonBody)
+        console.log("update jsonBody", jsonBody)
       }
 
       else {
         dispatch(postRole(jsonBody));
-        console.log("jsonBody",jsonBody)
+        console.log("jsonBody", jsonBody)
       }
     }
   };
@@ -275,22 +304,21 @@ console.log("editDataGatingFromList",editDataGatingFromList)
                       <Card>
                         <CardBody style={{ backgroundColor: "whitesmoke" }}>
                           <Row>
-                            <FormGroup className="mb-2 col col-sm-4 ">
-                              <Label htmlFor="validationCustom01">{fieldLabel.name} </Label>
+                            <FormGroup className="mb-2 col col-md-4 ">
+                              <Label htmlFor="validationCustom01">{fieldLabel.Name} </Label>
                               <Input
                                 type="text"
-                                className={isError.name.length > 0 ? "is-invalid form-control" : "form-control"}
-                                name="name"
-                                defaultValue={EditData.Name}
+                                className={isError.Name.length > 0 ? "is-invalid form-control" : "form-control"}
+                                name="Name"
+                                defaultValue={values.Name}
                                 placeholder="Please Enter Name"
-                                onChange={(e) => {
-                                  onChangeText(e)
-                                  dispatch(BreadcrumbShow(e.target.value))
+                                onChange={(event) => {
+                                  onChangeText({ event, state, setState })
+                                  dispatch(BreadcrumbShow(event.target.value))
                                 }}
-
                               />
-                              {isError.name.length > 0 && (
-                                <span className="invalid-feedback">{isError.name}</span>
+                              {isError.Name.length > 0 && (
+                                <span className="invalid-feedback">{isError.Name}</span>
                               )}
                             </FormGroup>
 
@@ -298,66 +326,60 @@ console.log("editDataGatingFromList",editDataGatingFromList)
 
                             <div className="col-lg-4 col-md-6">
                               <div className="mb-3">
-                                <Label htmlFor="validationCustom01">{fieldLabel.employeeType} </Label>
+                                <Label htmlFor="validationCustom01">{fieldLabel.RoleEmployeeTypes} </Label>
                                 <Select
-                                  name="employeeType"
+                                  name="RoleEmployeeTypes"
                                   // defaultValue={EmployeeType_DropdownOptions[0]}
-                                  value={values.employeeType}
+                                  value={values.employeeType_DropdownSelect}
                                   isSearchable={false}
                                   isMulti={true}
                                   className="react-dropdown"
                                   options={EmployeeType_DropdownOptions}
-                                  onChange={(e) => { onChangeDropDown(e) }}
+                                  onChange={(v, e) => onChangeSelect({ e, v, state, setState })}
                                   classNamePrefix="dropdown"
                                   styles={{
                                     control: base => ({
                                       ...base,
-                                      border: isError.employeeType.length > 0 ? '1px solid red' : '',
+                                      border: isError.RoleEmployeeTypes.length > 0 ? '1px solid red' : '',
 
                                     })
                                   }}
                                 />
-                                {isError.employeeType.length > 0 && (
-                                  <span className="text-danger f-8"><small>{isError.employeeType}</small></span>
+                                {isError.RoleEmployeeTypes.length > 0 && (
+                                  <span className="text-danger f-8"><small>{isError.RoleEmployeeTypes}</small></span>
                                 )}
                               </div>
                             </div>
 
                             <Row>
                               <FormGroup className="mb-2 col col-sm-4 ">
-                                <Label htmlFor="validationCustom01">{fieldLabel.description} </Label>
+                                <Label htmlFor="validationCustom01">{fieldLabel.Description} </Label>
                                 <Input
                                   type="text"
                                   value={EditData.Description}
-                                  className={isError.description.length > 0 ? "is-invalid form-control" : "form-control"}
-                                  name="description"
+                                  className={isError.Description.length > 0 ? "is-invalid form-control" : "form-control"}
+                                  name="Description"
                                   placeholder="Please Enter description"
-                                  onChange={(e) => {
-                                    onChangeText(e)
-                                    dispatch(BreadcrumbShow(e.target.value))
-                                  }}
+                                  onChange={(event) => onChangeText({ event, state, setState })}
                                 />
-                                {isError.description.length > 0 && (
-                                  <span className="invalid-feedback">{isError.description}</span>
+                                {isError.Description.length > 0 && (
+                                  <span className="invalid-feedback">{isError.Description}</span>
                                 )}
                               </FormGroup>
 
                               <Col md="1">  </Col>
                               <FormGroup className="mb-2 col col-sm-4 ">
-                                <Label htmlFor="validationCustom01">{fieldLabel.dashboard} </Label>
+                                <Label htmlFor="validationCustom01">{fieldLabel.Dashboard} </Label>
                                 <Input
                                   type="text"
                                   value={EditData.Dashboard}
-                                  className={isError.dashboard.length > 0 ? "is-invalid form-control" : "form-control"}
-                                  name="dashboard"
+                                  className={isError.Dashboard.length > 0 ? "is-invalid form-control" : "form-control"}
+                                  name="Dashboard"
                                   placeholder="Please Enter dashboard"
-                                  onChange={(e) => {
-                                    onChangeText(e)
-                                    dispatch(BreadcrumbShow(e.target.value))
-                                  }}
+                                  onChange={(event) => onChangeText({ event, state, setState })}
                                 />
-                                {isError.dashboard.length > 0 && (
-                                  <span className="invalid-feedback">{isError.dashboard}</span>
+                                {isError.Dashboard.length > 0 && (
+                                  <span className="invalid-feedback">{isError.Dashboard}</span>
                                 )}
                               </FormGroup>
                             </Row>
@@ -365,13 +387,14 @@ console.log("editDataGatingFromList",editDataGatingFromList)
                             <Row>
                               <FormGroup className="mb-2 col col-sm-5">
                                 <Row className="justify-content-md-left">
-                                  <Label className="col-sm-4 col-form-label" >Is SCM Role </Label>
+                                  <Label className="col-sm-4 col-form-label" >{fieldLabel.isSCMRole}</Label>
                                   <Col md={2} style={{ marginTop: '9px' }} >
 
                                     <div className="form-check form-switch form-switch-md mb-3" >
                                       <Input type="checkbox" className="form-check-input"
                                         value={EditData.isSCMRole}
                                         name="isSCMRole"
+                                        onChange={(event) => onChangeText({ event, state, setState })}
                                       />
                                     </div>
                                   </Col>
@@ -380,7 +403,7 @@ console.log("editDataGatingFromList",editDataGatingFromList)
 
                               <FormGroup className="mb-2 col col-sm-5">
                                 <Row className="justify-content-md-left">
-                                  <Label className="col-sm-3 col-form-label" >Active</Label>
+                                  <Label className="col-sm-3 col-form-label" >{fieldLabel.isActive}</Label>
                                   <Col md={2} style={{ marginTop: '9px' }} >
 
                                     <div className="form-check form-switch form-switch-md mb-3" dir="ltr">
@@ -388,6 +411,7 @@ console.log("editDataGatingFromList",editDataGatingFromList)
                                         checked={EditData.isActive}
                                         defaultChecked={true}
                                         name="isActive"
+                                        onChange={(event) => onChangeText({ event, state, setState })}
                                       />
                                     </div>
                                   </Col>
@@ -396,13 +420,14 @@ console.log("editDataGatingFromList",editDataGatingFromList)
 
                               <FormGroup className="mb-2 col col-sm-5">
                                 <Row className="justify-content-md-left">
-                                  <Label className="col-sm-4 col-form-label" >Is PartyConnection </Label>
+                                  <Label className="col-sm-4 col-form-label" >{fieldLabel.IsPartyConnection}</Label>
                                   <Col md={2} style={{ marginTop: '9px' }} >
 
                                     <div className="form-check form-switch form-switch-md mb-3" dir="ltr">
                                       <Input type="checkbox" className="form-check-input" id="customSwitchsizemd"
                                         defaultChecked={EditData.IsPartyConnection}
                                         name="IsPartyConnection"
+                                        onChange={(event) => onChangeText({ event, state, setState })}
                                       />
                                     </div>
                                   </Col>
@@ -449,6 +474,7 @@ console.log("editDataGatingFromList",editDataGatingFromList)
                       </Card>
                     </Col>
                   </Row>
+
                 </form>
               </CardBody>
             </Card>

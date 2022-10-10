@@ -63,6 +63,8 @@ export const ROLE_MASTER_API = "/Roles" // role get api
 
 // M_Items Api
 export const Items_MASTER_API = "/Items"
+export const GET_GROUP_BY_GROUPTYPES_ID = "/GetGroupByGroupTypeID"
+export const GET_SUBGROUP_BY_GROUP_ID= "/GetSubGroupByGroupID"
 
 // M_Items_group Api
 export const ITEMS_GROUP_API = "/ItemGroups"
@@ -102,7 +104,7 @@ export const DIVISION_TYPES_API = '/DivisionTypes'
 //Category API
 export const CATEGORY_TYPES_API = '/CategoryTypes'
 export const CATEGORY_API = '/Category'
-export const SUB_CATEGORY_API = '/SubCategorys'
+export const SUB_CATEGORY_API = '/SubCategory'
 
 //Vehicle api
 export const VEHICLE_API = '/Vehicle'
@@ -131,3 +133,9 @@ export const GO_BUTTON_POST_API = '/GetMRP'
 // Margin Master
 export const MARGIN_MASTER_LIST = '/Margins'
 export const GO_BUTTON_POST_API_FOR_MARGIN_MASTER = '/GetMargin'
+
+//TermsAndCondtions API
+export const TERMSANDCONDITIONS_API = '/TermsAndCondtions'
+
+// GroupType API
+export const GROUP_TYPE_API = '/GroupTypes'

@@ -19,9 +19,9 @@ export const PostCompanySubmit = (data) => ({
   data,
 });
 
-export const PostCompanySubmitSuccess = (companySubmitSuccesss) => ({
+export const PostCompanySubmitSuccess = (data) => ({
   type: POST_COMPANY_SUBMIT_SUCCESS,
-  payload: companySubmitSuccesss,
+  payload: data,
 });
 
 // Fetch Modules get Data Actions 

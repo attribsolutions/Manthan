@@ -14,7 +14,7 @@ import {
 import { AvField, AvForm, AvInput, } from "availity-reactstrap-validation";
 import Select from "react-select";
 import { MetaTags } from "react-meta-tags";
-import { BreadcrumbShow } from "../../../store/actions";
+import { BreadcrumbShow, commonPageField } from "../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
 import {
     PostMethod_ForCompanyGroupMasterSuccess,
@@ -30,15 +30,15 @@ import {
     comAddPageFieldFunc,
     formValChange,
     formValid,
+    onChangeText
 } from "../../../components/Common/CmponentRelatedCommonFile/validationFunction";
-
-import { fieldData } from '../CompanyGroupPages/FieldData';
+import { SaveButton } from "../../../components/CommonSaveButton";
 
 
 const CompanyGroupMaster = (props) => {
 
     //*** "isEditdata get all data from ModuleID for Binding  Form controls
-    let editDataGatingFromList = props.state;
+    let editDataGetingFromList = props.state;
     let pageModeProps = props.pageMode;
 
     const formRef = useRef(null);
@@ -50,25 +50,33 @@ const CompanyGroupMaster = (props) => {
     const [userPageAccessState, setUserPageAccessState] = useState(123);
 
     //Access redux store Data /  'save_ModuleSuccess' action data
-    const { PostAPIResponse, RoleAccessModifiedinSingleArray } = useSelector((state) => ({
+    const { PostAPIResponse, pageField, RoleAccessModifiedinSingleArray } = useSelector((state) => ({
         PostAPIResponse: state.CompanyGroupReducer.PostDataMessage,
         RoleAccessModifiedinSingleArray: state.Login.RoleAccessUpdateData,
+        pageField: state.CommonPageFieldReducer.pageField
 
     }));
+
+    useEffect(() => {
+        dispatch(commonPageField(32))
+    }, []);
 
     {/** Dyanamic Page access state and OnChange function */ }
     {/*start */ }
     const [state, setState] = useState({
         values: {
             Name: "",
+           
         },
 
         fieldLabel: {
             Name: '',
+         
         },
 
         isError: {
             Name: "",
+            
         },
 
         hasValid: {
@@ -78,6 +86,7 @@ const CompanyGroupMaster = (props) => {
                 valid: false
             },
 
+            
         },
         required: {
 
@@ -87,14 +96,6 @@ const CompanyGroupMaster = (props) => {
     const { isError } = state;
     const { fieldLabel } = state;
 
-
-    const onChangeText = (event) => {
-        formValChange({ event, state, setState })
-    }
-
-    useEffect(() => {
-        comAddPageFieldFunc({ state, setState, fieldData })
-    }, [fieldData])
     {/*End */ }
 
     useEffect(() => {
@@ -102,19 +103,18 @@ const CompanyGroupMaster = (props) => {
     }, [dispatch]);
 
 
-
     //userAccess useEffect
     useEffect(() => {
 
         let userAcc = undefined
-        if ((editDataGatingFromList === undefined)) {
+        if ((editDataGetingFromList === undefined)) {
 
             let locationPath = history.location.pathname;
             userAcc = RoleAccessModifiedinSingleArray.find((inx) => {
                 return (`/${inx.ActualPagePath}` === locationPath)
             })
         }
-        else if (!(editDataGatingFromList === undefined)) {
+        else if (!(editDataGetingFromList === undefined)) {
             let relatatedPage = props.relatatedPage
             userAcc = RoleAccessModifiedinSingleArray.find((inx) => {
                 return (`/${inx.ActualPagePath}` === relatatedPage)
@@ -132,15 +132,14 @@ const CompanyGroupMaster = (props) => {
     // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
     useEffect(() => {
         if (!(userPageAccessState === '')) { document.getElementById("txtName").focus(); }
-        if (!(editDataGatingFromList === undefined)) {
-            setEditData(editDataGatingFromList);
+        if (!(editDataGetingFromList === undefined)) {
+            setEditData(editDataGetingFromList);
             setPageMode(pageModeProps);
             dispatch(editCompanyGroupTypeSuccess({ Status: false }))
-            dispatch(BreadcrumbShow(editDataGatingFromList.Name))
+            dispatch(BreadcrumbShow(editDataGetingFromList.Name))
             return
         }
-    }, [editDataGatingFromList])
-
+    }, [editDataGetingFromList])
 
 
 
@@ -179,6 +178,12 @@ const CompanyGroupMaster = (props) => {
     }, [PostAPIResponse])
 
 
+    useEffect(() => {
+        if (pageField.length > 0) {
+            comAddPageFieldFunc({ state, setState, pageField })
+        }
+    }, [pageField])
+
     const formSubmitHandler = (event) => {
         event.preventDefault();
         if (formValid(state, setState)) {
@@ -197,17 +202,6 @@ const CompanyGroupMaster = (props) => {
             }
         }
     };
-
-
-    useEffect(() => {
-        comAddPageFieldFunc({ state, setState, fieldData })
-    }, [])
-
-    const onChange = (event) => {
-        formValChange({ event, state, setState })
-    };
-
-
 
 
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
@@ -245,13 +239,13 @@ const CompanyGroupMaster = (props) => {
                                                                 name="Name"
                                                                 id="txtName"
                                                                 className={isError.Name.length > 0 ? "is-invalid form-control" : "form-control"}
-                                                                value={EditData.Name}
                                                                 type="text"
+                                                                value={EditData.Name}
                                                                 placeholder="Please Enter Name"
                                                                 autoComplete='off'
-                                                                onChange={(e) => {
-                                                                    onChangeText(e)
-                                                                    dispatch(BreadcrumbShow(e.target.value))
+                                                                onChange={(event) => {
+                                                                    onChangeText({ event, state, setState })
+                                                                    dispatch(BreadcrumbShow(event.target.value))
                                                                 }}
 
                                                             />
@@ -281,34 +275,7 @@ const CompanyGroupMaster = (props) => {
                                                         <FormGroup>
                                                             <Row>
                                                                 <Col sm={2}>
-                                                                    <div>
-                                                                        {
-                                                                            pageMode === "edit" ?
-                                                                                userPageAccessState.RoleAccess_IsEdit ?
-                                                                                    <button
-                                                                                        type="submit"
-                                                                                        data-mdb-toggle="tooltip" data-mdb-placement="top" title="Update Company Group Type"
-                                                                                        className="btn btn-success w-md"
-                                                                                    >
-                                                                                        <i class="fas fa-edit me-2"></i>Update
-                                                                                    </button>
-                                                                                    :
-                                                                                    <></>
-                                                                                : (
-                                                                                    userPageAccessState.RoleAccess_IsSave ?
-                                                                                        <button
-                                                                                            type="submit"
-                                                                                            data-mdb-toggle="tooltip" data-mdb-placement="top" title="Save Company group "
-                                                                                            className="btn btn-primary w-sm">
-                                                                                            <i className="fas fa-save me-2"></i>
-                                                                                            Save
-
-                                                                                        </button>
-                                                                                        :
-                                                                                        <></>
-                                                                                )
-                                                                        }
-                                                                    </div>
+                                                                    {SaveButton({ pageMode, userPageAccessState, module: "CompanyGroupMaster" })}
                                                                 </Col>
                                                             </Row>
                                                         </FormGroup >
@@ -320,8 +287,6 @@ const CompanyGroupMaster = (props) => {
                                     </Row>
                                 </form>
                             </CardBody>
-
-
 
                         </Card>
 
