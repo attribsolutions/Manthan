@@ -10,7 +10,8 @@ import {
 } from "../../../store/Administrator/MarginMasterRedux/action";
 import MarginMaster from "./MarginMaster"
 import CommonListPage from "../../../components/Common/CmponentRelatedCommonFile/commonListPage";
-import { commonPageField, commonPageFieldSuccess } from "../../../store/actions";
+import {  commonPageFieldList, commonPageFieldListSuccess } from "../../../store/actions";
+import { MARGIN } from "../../../routes/route_url";
 
 const MarginList = (props) => {
 
@@ -23,7 +24,7 @@ const MarginList = (props) => {
       deleteMsg: state.MarginMasterReducer.deleteMsg,
       userAccess: state.Login.RoleAccessUpdateData,
       postMsg: state.MarginMasterReducer.PostData,
-      pageField: state.CommonPageFieldReducer.pageField
+      pageField: state.CommonPageFieldReducer.pageFieldList
     })
     );
     const action = {
@@ -37,9 +38,10 @@ const MarginList = (props) => {
 
   //  This UseEffect => Featch Modules List data  First Rendering
   useEffect(() => {
+    dispatch(commonPageFieldListSuccess(null))
+    dispatch(commonPageFieldList(97))
     dispatch(getMarginListPage());
-    dispatch(commonPageField(97))
-    dispatch(commonPageFieldSuccess([]))
+    
   }, []);
 
   const { pageField } = reducers
@@ -47,12 +49,12 @@ const MarginList = (props) => {
   return (
     <React.Fragment>
       {
-        (pageField.length > 0) ?
+         (pageField) ?
           <CommonListPage
             action={action}
             reducers={reducers}
             MasterModal={MarginMaster}
-            masterPath={"/MarginMaster"}
+            masterPath={MARGIN}
             ButtonMsgLable={"Margin"}
             deleteName={"EffectiveDate"}
           />

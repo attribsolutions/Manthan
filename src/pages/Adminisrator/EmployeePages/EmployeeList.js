@@ -11,6 +11,7 @@ import { useSelector, useDispatch } from "react-redux";
 import AddEmployee from "./EmployeeMaster";
 import CommonListPage from "../../../components/Common/CmponentRelatedCommonFile/commonListPage";
 import { commonPageFieldList, commonPageFieldListSuccess } from "../../../store/actions";
+import { EMPLOYEE } from "../../../routes/route_url";
 
 const Employee_List = () => {
   const dispatch = useDispatch();
@@ -53,7 +54,7 @@ const Employee_List = () => {
             action={action}
             reducers={reducers}
             MasterModal={AddEmployee}
-            masterPath={"/EmployeeMaster"}
+            masterPath={EMPLOYEE}
             ButtonMsgLable={"Employee"}
             deleteName={"ID"}
           />

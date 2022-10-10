@@ -10,7 +10,8 @@ import {
 } from "../../../store/Administrator/MRPMasterRedux/action";
 import MRPMaster from "./MRPMaster"
 import CommonListPage from "../../../components/Common/CmponentRelatedCommonFile/commonListPage";
-import { commonPageField, commonPageFieldSuccess } from "../../../store/actions";
+import {  commonPageFieldList, commonPageFieldListSuccess } from "../../../store/actions";
+import { MRP } from "../../../routes/route_url";
 
 const MRPList = (props) => {
 
@@ -23,7 +24,7 @@ const MRPList = (props) => {
       deleteMsg: state.MRPMasterReducer.deleteMsg,
       userAccess: state.Login.RoleAccessUpdateData,
       postMsg: state.MRPMasterReducer.PostData,
-      pageField: state.CommonPageFieldReducer.pageField
+      pageField: state.CommonPageFieldReducer.pageFieldList
     })
     );
 
@@ -39,8 +40,8 @@ const MRPList = (props) => {
 
   //  This UseEffect => Featch Modules List data  First Rendering
   useEffect(() => {
-    dispatch(commonPageFieldSuccess([]))
-    dispatch(commonPageField(96))
+    dispatch(commonPageFieldListSuccess(null))
+    dispatch(commonPageFieldList(96))
     dispatch(getMRPListPage());
   }, []);
 
@@ -49,12 +50,12 @@ const MRPList = (props) => {
   return (
     <React.Fragment>
       {
-        (pageField.length > 0) ?
+        (pageField) ?
           <CommonListPage
             action={action}
             reducers={reducers}
             MasterModal={MRPMaster}
-            masterPath={"/MRPMaster"}
+            masterPath={MRP}
             ButtonMsgLable={"MRP"}
             deleteName={"EffectiveDate"}
           />
