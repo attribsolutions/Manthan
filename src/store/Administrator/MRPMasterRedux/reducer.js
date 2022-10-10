@@ -11,7 +11,7 @@ import {
 
 const INIT_STATE = {
     MRPGoButton: [],
-    PostData: [],
+    postMsg: { Status: false },
     MRPList: [],
     deleteMsg: { Status: false },
     editData: { Status: false },
@@ -25,7 +25,7 @@ const MRPMasterReducer = (state = INIT_STATE, action) => {
         case POST_MRP_MASTER_DATA_SUCCESS:
             return {
                 ...state,
-                PostData: action.payload,
+                postMsg: action.payload,
             };
 
         // Go Button post api

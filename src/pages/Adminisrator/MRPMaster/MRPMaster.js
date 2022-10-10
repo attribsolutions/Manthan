@@ -30,6 +30,7 @@ import {
 import BootstrapTable from "react-bootstrap-table-next";
 import { AvForm } from "availity-reactstrap-validation";
 import { postGoButtonForMRP_Master, postGoButtonForMRP_MasterSuccess, postMRPMasterData, postMRPMasterDataSuccess } from "../../../store/Administrator/MRPMasterRedux/action";
+import { MRP_lIST } from "../../../routes/route_url";
 
 
 const MRPMaster = (props) => {
@@ -48,41 +49,42 @@ const MRPMaster = (props) => {
     const [MRP, setMRP] = useState('');
 
     //Access redux store Data /  'save_ModuleSuccess' action data
-    const { PostAPIResponse,
+    const {
+        postMsg,
         TableData,
         Party,
         Division,
-        RoleAccessModifiedinSingleArray
+        userAccess,
     } = useSelector((state) => ({
-        PostAPIResponse: state.MRPMasterReducer.PostData,
+        postMsg: state.MRPMasterReducer.postMsg,
         TableData: state.MRPMasterReducer.MRPGoButton,
         Party: state.ItemMastersReducer.Party,
         Division: state.ItemMastersReducer.Division,
-        RoleAccessModifiedinSingleArray: state.Login.RoleAccessUpdateData,
+        userAccess: state.Login.RoleAccessUpdateData,
     }));
+
+    const location = { ...history.location }
+    const hasShowloction = location.hasOwnProperty("editValue")
+    const hasShowModal = props.hasOwnProperty("editValue")
 
     // userAccess useEffect
     useEffect(() => {
-        let userAcc = undefined
-        if ((editDataGatingFromList === undefined)) {
+        let userAcc = null;
+        let locationPath = location.pathname;
 
-            let locationPath = history.location.pathname
-            userAcc = RoleAccessModifiedinSingleArray.find((inx) => {
-                return (`/${inx.ActualPagePath}` === locationPath)
-            })
-        }
-        else if (!(editDataGatingFromList === undefined)) {
-            let relatatedPage = props.relatatedPage
-            userAcc = RoleAccessModifiedinSingleArray.find((inx) => {
-                return (`/${inx.ActualPagePath}` === relatatedPage)
-            })
+        if (hasShowModal) {
+            locationPath = props.masterPath;
+        };
 
-        }
-        if (!(userAcc === undefined)) {
+        userAcc = userAccess.find((inx) => {
+            return (`/${inx.ActualPagePath}` === locationPath)
+        })
+
+        if (userAcc) {
             setUserPageAccessState(userAcc)
-        }
+        };
+    }, [userAccess])
 
-    }, [RoleAccessModifiedinSingleArray])
 
     useEffect(() => {
         dispatch(get_Party_ForDropDown());
@@ -102,7 +104,7 @@ const MRPMaster = (props) => {
 
     useEffect(() => {
 
-        if ((PostAPIResponse.Status === true) && (PostAPIResponse.StatusCode === 200) && !(pageMode === "dropdownAdd")) {
+        if ((postMsg.Status === true) && (postMsg.StatusCode === 200) && !(pageMode === "dropdownAdd")) {
             dispatch(postMRPMasterDataSuccess({ Status: false }))
             formRef.current.reset();
             setDivision_dropdown_Select('')
@@ -114,30 +116,30 @@ const MRPMaster = (props) => {
                 dispatch(AlertState({
                     Type: 1,
                     Status: true,
-                    Message: PostAPIResponse.Message,
+                    Message: postMsg.Message,
                 }))
             }
             else {
                 dispatch(AlertState({
                     Type: 1,
                     Status: true,
-                    Message: PostAPIResponse.Message,
-                    RedirectPath: '/MRPList',
+                    Message: postMsg.Message,
+                    RedirectPath: MRP_lIST,
                 }))
             }
         }
 
-        else if (PostAPIResponse.Status === true) {
+        else if (postMsg.Status === true) {
             dispatch(postMRPMasterDataSuccess({ Status: false }))
             dispatch(AlertState({
                 Type: 4,
                 Status: true,
-                Message: JSON.stringify(PostAPIResponse.Message),
+                Message: JSON.stringify(postMsg.Message),
                 RedirectPath: false,
                 AfterResponseAction: false
             }));
         }
-    }, [PostAPIResponse])
+    }, [postMsg])
 
     function PartyType_Dropdown_OnChange_Handller(e) {
         setParty_dropdown_Select(e)
@@ -177,7 +179,7 @@ const MRPMaster = (props) => {
             alert("EffectiveDate not select")
         }
         dispatch(postGoButtonForMRP_Master(jsonBody))
-        console.log("Go button Post Json",jsonBody)
+        console.log("Go button Post Json", jsonBody)
 
 
     };
