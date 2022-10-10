@@ -10,7 +10,7 @@ import {
 } from "../../../store/Administrator/EmployeeTypeRedux/action";
 import EmployeeTypesMaster from "./EmployeeTypesMaster";
 import CommonListPage from "../../../components/Common/CmponentRelatedCommonFile/commonListPage";
-import { commonPageField, commonPageFieldSuccess } from "../../../store/actions";
+import { commonPageField, commonPageFieldList, commonPageFieldListSuccess, commonPageFieldSuccess } from "../../../store/actions";
 
 
 const EmployeeTypeList = (props) => {
@@ -24,7 +24,7 @@ const EmployeeTypeList = (props) => {
       deleteMsg: state.EmployeeTypeReducer.deleteMessage,
       userAccess: state.Login.RoleAccessUpdateData,
       postMsg: state.EmployeeTypeReducer.PostEmployeeType,
-      pageField: state.CommonPageFieldReducer.pageField
+      pageField: state.CommonPageFieldReducer.pageFieldList
 
     })
   );
@@ -41,8 +41,8 @@ const EmployeeTypeList = (props) => {
 
   //  This UseEffect => Featch Modules List data  First Rendering
   useEffect(() => {
-    dispatch(commonPageFieldSuccess([]))
-    dispatch(commonPageField(116))
+    dispatch(commonPageFieldListSuccess(null))
+    dispatch(commonPageFieldList(116))
     dispatch(getEmployeeTypelist());
   }, []);
 

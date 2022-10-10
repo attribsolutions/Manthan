@@ -10,7 +10,7 @@ import {
 } from "../../../store/Administrator/PartyTypeRedux/action";
 import PartyType from "./PartyType";
 import CommonListPage from "../../../components/Common/CmponentRelatedCommonFile/commonListPage";
-import { commonPageField, commonPageFieldSuccess } from "../../../store/actions";
+import { commonPageField, commonPageFieldList, commonPageFieldListSuccess, commonPageFieldSuccess } from "../../../store/actions";
 
 const PartyTypeList = (props) => {
 
@@ -23,7 +23,7 @@ const PartyTypeList = (props) => {
       deleteMsg: state.PartyTypeReducer.deleteMessage,
       userAccess: state.Login.RoleAccessUpdateData,
       postMsg: state.PartyTypeReducer.PostData,
-      pageField: state.CommonPageFieldReducer.pageField
+      pageField: state.CommonPageFieldReducer.pageFieldList
 
     })
     );
@@ -39,8 +39,8 @@ const PartyTypeList = (props) => {
 
   //  This UseEffect => Featch Modules List data  First Rendering
   useEffect(() => {
-    dispatch(commonPageFieldSuccess([]))
-    dispatch(commonPageField(54))
+    dispatch(commonPageFieldListSuccess([]))
+    dispatch(commonPageFieldList(54))
     dispatch(getPartyTypelist());
   }, []);
 

@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import CommonListPage from "../../../components/Common/CmponentRelatedCommonFile/commonListPage";
-import { commonPageField, commonPageFieldSuccess } from "../../../store/actions";
+import { commonPageFieldList, commonPageFieldListSuccess } from "../../../store/actions";
 import {
   deleteGroupType_ID,
   deleteGroupType_IDSuccess,
@@ -24,7 +24,7 @@ const GroupTypeList = (props) => {
       deleteMsg: state.GroupTypeReducer.deleteMessage,
       postMsg: state.GroupTypeReducer.PostData,
       userAccess: state.Login.RoleAccessUpdateData,
-      pageField: state.CommonPageFieldReducer.pageField
+      pageField: state.CommonPageFieldReducer.pageFieldList
     })
   );
 
@@ -40,8 +40,8 @@ const GroupTypeList = (props) => {
   }
   useEffect(() => {
 
-    dispatch(commonPageFieldSuccess([]))
-    dispatch(commonPageField(107))
+    dispatch(commonPageFieldListSuccess(null))
+    dispatch(commonPageFieldList(107))
     dispatch(getGroupTypeslist())
 
   }, []);

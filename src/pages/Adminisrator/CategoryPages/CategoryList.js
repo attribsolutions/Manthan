@@ -10,7 +10,7 @@ import {
   updateCategoryIDSuccess
 } from "../../../store/Administrator/CategoryRedux/action";
 import CommonListPage from "../../../components/Common/CmponentRelatedCommonFile/commonListPage";
-import { commonPageField, commonPageFieldSuccess } from "../../../store/actions";
+import { commonPageField, commonPageFieldList, commonPageFieldListSuccess, commonPageFieldSuccess } from "../../../store/actions";
 
 const CategoryList = (props) => {
 
@@ -23,7 +23,7 @@ const CategoryList = (props) => {
       deleteMsg: state.CategoryReducer.deleteMessage,
       userAccess: state.Login.RoleAccessUpdateData,
       postMsg:state.CategoryReducer.PostDataMessage,
-      pageField: state.CommonPageFieldReducer.pageField
+      pageField: state.CommonPageFieldReducer.pageFieldList
     })
   );
 
@@ -38,8 +38,8 @@ const CategoryList = (props) => {
 
   //  This UseEffect => Featch Modules List data  First Rendering
   useEffect(() => {
-    dispatch(commonPageFieldSuccess([]))
-    dispatch(commonPageField(19))
+    dispatch(commonPageFieldListSuccess(null))
+    dispatch(commonPageFieldList(19))
     dispatch(getCategorylist());
   }, []);
 
@@ -48,7 +48,7 @@ const CategoryList = (props) => {
   return (
     <React.Fragment>
       {
-        (pageField.length > 0) ?
+        (pageField) ?
           <CommonListPage
             action={action}
             reducers={reducers}

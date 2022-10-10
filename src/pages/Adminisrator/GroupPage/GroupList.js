@@ -10,7 +10,7 @@ import {
 } from "../../../store/Administrator/DriverRedux/action";
 
 import CommonListPage from "../../../components/Common/CmponentRelatedCommonFile/commonListPage";
-import { commonPageField, commonPageFieldSuccess } from "../../../store/actions";
+import { commonPageFieldList, commonPageFieldListSuccess } from "../../../store/actions";
 
 const GroupList = (props) => {
   const dispatch = useDispatch();
@@ -24,7 +24,7 @@ const GroupList = (props) => {
       deleteMsg: state.DriverReducer.deleteMessage,
       postMsg: state.DriverReducer.PostDataMessage,
       userAccess: state.Login.RoleAccessUpdateData,
-      pageField: state.CommonPageFieldReducer.pageField
+      pageField: state.CommonPageFieldReducer.pageFieldList
     })
   );
 
@@ -39,8 +39,8 @@ const GroupList = (props) => {
   }
   useEffect(() => {
     
-    dispatch(commonPageFieldSuccess([]))
-    dispatch(commonPageField(90))
+    dispatch(commonPageFieldListSuccess(null))
+    dispatch(commonPageFieldList(90))
     dispatch(getMethodForDriverList())
 
   }, []);

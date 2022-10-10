@@ -2,6 +2,8 @@ import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import CategoryTypeMaster from "./CategoryTypeMaster";
 import {
+  commonPageFieldList,
+  commonPageFieldListSuccess,
   deleteCategoryTypeIDSuccess,
   delete_CategoryType_ID,
   editCategoryTypeID,
@@ -10,7 +12,7 @@ import {
   updateCategoryTypeIDSuccess
 } from "../../../store/actions";
 import CommonListPage from "../../../components/Common/CmponentRelatedCommonFile/commonListPage";
-import { commonPageField, commonPageFieldSuccess } from "../../../store/actions";
+import {  } from "../../../store/actions";
 
 const CategoryTypeList = (props) => {
 
@@ -38,8 +40,8 @@ const CategoryTypeList = (props) => {
 
   //  This UseEffect => Featch Modules List data  First Rendering
   useEffect(() => {
-    dispatch(commonPageFieldSuccess([]))
-    dispatch(commonPageField(17))
+    dispatch(commonPageFieldListSuccess())
+    dispatch(commonPageFieldList(17))
     dispatch(getCategoryTypelist());
   }, []);
 
@@ -48,7 +50,7 @@ debugger
   return (
     <React.Fragment>
       {
-        (pageField.length > 0) ?
+        (pageField) ?
           <CommonListPage
             action={action}
             reducers={reducers}
