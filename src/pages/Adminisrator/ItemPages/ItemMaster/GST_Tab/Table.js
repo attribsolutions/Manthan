@@ -5,7 +5,7 @@ import { Tbody, Thead } from 'react-super-responsive-table';
 function GSTTable(props) {
 
     const ondeleteHandeler = (ele) => {
-
+        debugger
         if (!(ele === 0)) {
             var fil = props.tableData.filter((i) => {
                 return !(i.id === ele);
