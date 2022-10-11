@@ -29,7 +29,7 @@ import {
 } from "../../../store/Administrator/ItemsRedux/action";
 import BootstrapTable from "react-bootstrap-table-next";
 import { AvForm } from "availity-reactstrap-validation";
-import { postGoButtonForMRP_Master, postGoButtonForMRP_MasterSuccess, postMRPMasterData, postMRPMasterDataSuccess } from "../../../store/Administrator/MRPMasterRedux/action";
+import { deleteID_In_MasterPage, deleteID_In_MasterPageSuccess, postGoButtonForMRP_Master, postGoButtonForMRP_MasterSuccess, postMRPMasterData, postMRPMasterDataSuccess } from "../../../store/Administrator/MRPMasterRedux/action";
 import { MRP_lIST } from "../../../routes/route_url";
 
 
@@ -47,16 +47,20 @@ const MRPMaster = (props) => {
     const [division_dropdown_Select, setDivision_dropdown_Select] = useState("");
     const [effectiveDate, setEffectiveDate] = useState('');
     const [MRP, setMRP] = useState('');
+    const [tableData, setTableData] = useState([]);
+
 
     //Access redux store Data /  'save_ModuleSuccess' action data
     const {
         postMsg,
+        deleteMessage,
         TableData,
         Party,
         Division,
         userAccess,
     } = useSelector((state) => ({
         postMsg: state.MRPMasterReducer.postMsg,
+        deleteMessage: state.MRPMasterReducer.deleteIdForMRPMaster,
         TableData: state.MRPMasterReducer.MRPGoButton,
         Party: state.ItemMastersReducer.Party,
         Division: state.ItemMastersReducer.Division,
@@ -85,6 +89,43 @@ const MRPMaster = (props) => {
         };
     }, [userAccess])
 
+    useEffect(() => {
+
+
+        const editDataGatingFromList = history.location.state
+
+        const locationPath = history.location.pathname
+        let userAcc = userAccess.find((inx) => {
+            return (`/${inx.ActualPagePath}` === locationPath)
+        })
+
+        if (!(editDataGatingFromList === undefined)) {
+            debugger
+            var divisionid = editDataGatingFromList.Division_id
+            var divisionName = editDataGatingFromList.DivisionName
+            var partyId = editDataGatingFromList.Party_id
+            var partyName = editDataGatingFromList.PartyName
+            var effectiveDate = editDataGatingFromList.EffectiveDate
+
+            // let division = { ...division_dropdown_Select }
+            // let party = { ...party_dropdown_Select }
+
+            const jsonBody = JSON.stringify({
+                Division: divisionid,
+                Party: partyId,
+                EffectiveDate: effectiveDate
+            });
+            dispatch(postGoButtonForMRP_Master(jsonBody))
+            // dispatch(postGoButtonForMRP_MasterSuccess(divisionid, partyId, effectiveDate));
+            setDivision_dropdown_Select({ label: divisionName, value: divisionid })
+            setParty_dropdown_Select({ label: partyName, value: partyId })
+            setEffectiveDate(effectiveDate)
+
+        }
+        if (!(userAcc === undefined)) {
+            setUserPageAccessState(userAcc)
+        }
+    }, [userAccess])
 
     useEffect(() => {
         dispatch(get_Party_ForDropDown());
@@ -141,6 +182,29 @@ const MRPMaster = (props) => {
         }
     }, [postMsg])
 
+    useEffect(() => {
+        if (deleteMessage.Status === true && deleteMessage.StatusCode === 200) {
+            dispatch(deleteID_In_MasterPageSuccess({ Status: false }));
+            GoButton_Handler()
+            dispatch(
+                AlertState({
+                    Type: 1,
+                    Status: true,
+                    Message: deleteMessage.Message,
+                    //   AfterResponseAction: getMRPListPage,
+                })
+            );
+        } else if (deleteMessage.Status === true) {
+            dispatch(deleteID_In_MasterPageSuccess({ Status: false }));
+            dispatch(
+                AlertState({
+                    Type: 3,
+                    Status: true,
+                    Message: JSON.stringify(deleteMessage.Message),
+                })
+            );
+        }
+    }, [deleteMessage]);
     function PartyType_Dropdown_OnChange_Handller(e) {
         setParty_dropdown_Select(e)
     }
@@ -160,6 +224,24 @@ const MRPMaster = (props) => {
     const CurrentMRPHandler = (e, cellContent, user, key) => {
         user["CurrentMRP"] = e.target.value
     }
+
+    const CurrentDateHandler = (e, cellContent, user, key) => {
+        user["CurrentDate"] = e.target.value
+    }
+
+    //select id for delete row
+    const deleteHandeler = (id, name) => {
+        dispatch(
+            AlertState({
+                Type: 5,
+                Status: true,
+                Message: `Are you sure you want to delete this Item : "${name}"`,
+                RedirectPath: false,
+                PermissionAction: deleteID_In_MasterPage,
+                ID: id,
+            })
+        );
+    };
 
     const GoButton_Handler = (event, values) => {
 
@@ -183,6 +265,7 @@ const MRPMaster = (props) => {
 
 
     };
+
     const pageOptions = {
         sizePerPage: 10,
         totalSize: TableData.length,
@@ -202,20 +285,29 @@ const MRPMaster = (props) => {
             formatter: (cellContent, user, key) => (
                 <>
                     <div style={{ justifyContent: 'center' }} >
-                        <Col>
-                            <FormGroup className=" col col-sm-4 ">
-                                <Input
-                                    id=""
-                                    type="text"
-                                    disabled={true}
-                                    defaultValue={TableData[key].CurrentMRP}
-                                    className="col col-sm text-center"
-                                    onChange={(e) => CurrentMRPHandler(e, cellContent, user, key)}
-                                />
-                            </FormGroup>
-                        </Col>
+                        <Row >
+                            <Col md="6">
+                                <FormGroup className=" col col-sm-6 ">
+                                    <Input
+                                        id=""
+                                        type="text"
+                                        disabled={true}
+                                        defaultValue={TableData[key].CurrentMRP}
+                                        className="col col-sm text-center"
+                                        onChange={(e) => CurrentMRPHandler(e, cellContent, user, key)}
+                                    />
+                                </FormGroup>
+                            </Col>
 
+                            <Col md="6">
+                                <FormGroup className=" col col-sm-6 ">
+                                    <Label style={{color:"red" }}>{TableData[key].CurrentDate}</Label>
+                                   
+                                </FormGroup>
+                            </Col>
+                        </Row>
                     </div>
+
                 </>
             ),
         },
@@ -224,22 +316,54 @@ const MRPMaster = (props) => {
             text: "MRP ",
             dataField: "MRP",
             sort: true,
-            formatter: (cellContent, user, abd) => (
+            formatter: (cellContent, user, key) => (
                 <>
                     <div style={{ justifyContent: 'center' }} >
                         <Col>
                             <FormGroup className=" col col-sm-4 ">
                                 <Input
                                     type="text"
-                                    defaultValue={MRP}
+                                    defaultValue={TableData[key].MRP}
+                                    disabled={!(user.MRP === '') ? true : false}
                                     className="col col-sm text-center"
-                                    onChange={(e) => MRPHandler(e, cellContent, user, abd)}
+                                    onChange={(e) => MRPHandler(e, cellContent, user, key)}
                                 />
+                            </FormGroup>
+                        </Col>
+                    </div>
+
+
+                    {console.log("user", user)}
+                </>
+            ),
+        },
+        {
+
+            text: "Action ",
+            dataField: "",
+
+            formatter: (cellContent, user) => (
+
+                <>
+                    <div style={{ justifyContent: 'center' }} >
+                        <Col>
+                            <FormGroup className=" col col-sm-4 ">
+                                {!(user.id === '') ?
+                                    <Button
+                                        id={"deleteid"}
+                                        type="button"
+                                        className="badge badge-soft-danger font-size-12 btn btn-danger waves-effect waves-light w-xxs "
+                                        data-mdb-toggle="tooltip" data-mdb-placement="top" title='Delete MRP'
+                                        onClick={() => { deleteHandeler(user.id, user.Name); }}
+                                    >
+                                        <i className="mdi mdi-delete font-size-18"></i>
+                                    </Button> : <></>}
                             </FormGroup>
                         </Col>
 
                     </div>
                 </>
+
             ),
         },
     ]
@@ -255,15 +379,15 @@ const MRPMaster = (props) => {
             Company: 1,
             CreatedBy: 1,
             UpdatedBy: 1,
-            Item: index.id,
+            Item: index.Item,
             MRP: index.MRP
         }))
+        console.log("ItemData", ItemData)
 
         const Find = ItemData.filter((index) => {
             return !(index.MRP === '')
         })
 
-        console.log("Find", Find)
         const jsonBody = JSON.stringify(Find)
 
         dispatch(postMRPMasterData(jsonBody));
