@@ -133,8 +133,6 @@ const AddUser = (props) => {
     pageField: state.CommonPageFieldReducer.pageField
   }));
 
-
-  
   const location = { ...history.location }
   const hasShowloction = location.hasOwnProperty("editValue")
   const hasShowModal = props.hasOwnProperty("editValue")
@@ -168,7 +166,7 @@ const AddUser = (props) => {
 
   // userAccess useEffect
   useEffect(() => {
-    debugger
+
     let userAcc = null;
     let locationPath = location.pathname;
 
@@ -290,16 +288,15 @@ const AddUser = (props) => {
     }
   }, [pageField])
 
-  const values = { ...state.values }
-  const { isError } = state;
-  const { fieldLabel } = state;
-
-
   useEffect(() => {
     dispatch(getEmployeeForUseRegistration());
     dispatch(getRoles());
   }, [dispatch]);
 
+
+  const values = { ...state.values }
+  const { isError } = state;
+  const { fieldLabel } = state;
 
   const EmployeeValues = employeelistForDropdown.map((Data) => ({
     value: Data.id,
@@ -350,7 +347,7 @@ const AddUser = (props) => {
         LoginName: values.LoginName,
         password: "1234",
         AdminPassword: "1234",
-        Employee: EmployeeSelect.values,
+        Employee: values.EmployeeName,
         isActive: values.isActive,
         isSendOTP: values.isSendOTP,
         isLoginUsingMobile: values.isLoginUsingMobile,
@@ -427,11 +424,11 @@ const AddUser = (props) => {
   if (!(userPageAccessState === '')) {
     return (
       <React.Fragment>
-        {/* <MetaTags>
+        <MetaTags>
           <title>{userPageAccessState.PageHeading}| FoodERP-React FrontEnd</title>
-        </MetaTags> */}
+        </MetaTags>
         <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
-          {/* <Breadcrumb breadcrumbItem={userPageAccessState.PageHeading} /> */}
+          <Breadcrumb breadcrumbItem={userPageAccessState.PageHeading} />
           <Container fluid>
             <Row>
               <Col lg={12}>
@@ -449,27 +446,38 @@ const AddUser = (props) => {
                             <div>
                               <FormGroup className="mb-2 col col-sm-4 " >
                                 <Label htmlFor="validationCustom01">{fieldLabel.EmployeeName}</Label>
-                                <Select
+
+                                <Input name="EmployeeName" id="txtName"
+                                type="text"
+                                placeholder="Please Enter Name"
+                                defaultvalue=''
+                                value={EditData.EmployeeName}
+                                className={isError.EmployeeName.length > 0 ? "is-invalid form-control" : "form-control"}
+                                autoComplete='off'
+                                onChange={(event) => {
+                                  onChangeText({ event, state, setState })
+                                  dispatch(BreadcrumbShow(event.target.value))
+                                }}
+                              />
+                              {isError.EmployeeName.length > 0 && (
+                                <span className="invalid-feedback">{isError.EmployeeName}</span>
+                              )}
+
+                                {/* <Select
                                   id="EmployeeDropDown "
                                   // disabled={true}
                                   name="EmployeeName"
-                                  value={values.EmployeeSelect}
+                                  value={values.Employee}
                                   isSearchable={false}
                                   className="react-dropdown"
                                   classNamePrefix="dropdown"
                                   options={EmployeeValues}
                                   onChange={(v, e) => onChangeSelect({ e, v, state, setState })}
-                                  // // styles={{
-                                  // //   control: base => ({
-                                  // //     ...base,
-                                  // //     border: isError.CategoryTypeName.length > 0 ? '1px solid red' : '',
-
-                                  // //   })
-                                  // }}
+                                
                                 />
                                 {isError.EmployeeName.length > 0 && (
                                   <span className="text-danger f-8"><small>{isError.EmployeeName}</small></span>
-                                )}
+                                )} */}
                               </FormGroup>
                             </div>
 
@@ -502,16 +510,11 @@ const AddUser = (props) => {
                               <Row>
                                 <FormGroup className="mb-1 col col-sm-4 " >
                                   <Label htmlFor="validationCustom01">Password</Label>
-                                  <AvField name="password" id="password"
+                                  <Input name="password" id="password"
                                     type="password"
-                                    // value={EditData.password}
                                     placeholder="Please Enter Password"
                                     autoComplete="new-password"
                                     className="form-control"
-                                    // validate={{
-                                    //   required: { value: true, errorMessage: 'Please Enter Password' },
-                                    // }}
-
                                     value={password}
                                     onChange={(e) => { setPassword(e.target.value) }} />
 
@@ -521,19 +524,15 @@ const AddUser = (props) => {
                               <Row>
                                 <FormGroup className="mb-1 col col-sm-4 " >
                                   <Label htmlFor="validationCustom01">Confirm Password</Label>
-                                  <AvField name="password" id="password"
+                                  <Input name="password" id="password"
                                     type="password"
-                                    // value={EditData.password}
                                     placeholder="Please Enter Password"
                                     autoComplete="new-password"
                                     className={cPasswordClass}
-                                    // validate={{
-                                    //   required: { value: true, errorMessage: 'Please Enter Password' },
-                                    // }}
                                     value={cPassword}
                                     onChange={handleCPassword} />
                                   {showErrorMessage && isCPassword ? <div> Passwords did not match </div> : ''}
-                                  {/* <AvFeedback> Passwords did not match </AvFeedback> */}
+
                                 </FormGroup>
                               </Row>
                             </Row>
@@ -547,7 +546,7 @@ const AddUser = (props) => {
                                 <Label htmlFor="horizontal-firstname-input" className=" col-sm-2 col-form-label" >Enable Mobile Login</Label>
                                 <Col md="1" style={{ marginTop: '9px' }} >
                                   <div className="form-check form-switch form-switch-md ml-4 " dir="ltr">
-                                    <AvInput type="checkbox" className="form-check-input" id="customSwitchsizemd"
+                                    <Input type="checkbox" className="form-check-input" id="customSwitchsizemd"
                                       checked={EditData.isLoginUsingMobile}
                                       name="isLoginUsingMobile"
                                       defaultChecked={true}
@@ -560,7 +559,7 @@ const AddUser = (props) => {
                                 <Label htmlFor="horizontal-firstname-input" className="col-sm-1 col-form-label " >Active </Label>
                                 <Col md="1" style={{ marginTop: '9px' }} >
                                   <div className="form-check form-switch form-switch-md " dir="ltr">
-                                    <AvInput type="checkbox" className="form-check-input" id="customSwitchsizemd"
+                                    <Input type="checkbox" className="form-check-input" id="customSwitchsizemd"
                                       checked={EditData.isActive}
                                       defaultChecked={true}
                                       name="isActive"
@@ -572,14 +571,13 @@ const AddUser = (props) => {
                               </Row>
                             </FormGroup>
                           </Row>
-
                           <Row >
                             <FormGroup className="col col-sm-12  " >
                               <Row className="justify-content-md-left">
                                 <Label htmlFor="horizontal-firstname-input" className="col-sm-2 col-form-label" >Enable Email Login</Label>
                                 <Col md={1} style={{ marginTop: '10px' }} >
                                   <div className="form-check form-switch form-switch-md" dir="ltr">
-                                    <AvInput type="checkbox" className="form-check-input" id="customSwitchsizemd"
+                                    <Input type="checkbox" className="form-check-input" id="customSwitchsizemd"
                                       checked={EditData.isLoginUsingEmail}
                                       name="isLoginUsingEmail"
                                       defaultChecked={true}
@@ -592,7 +590,7 @@ const AddUser = (props) => {
                                 <Label htmlFor="horizontal-firstname-input" className="col-sm-1 col-form-label " >Send OTP </Label>
                                 <Col md={1} style={{ marginTop: '10px' }} >
                                   <div className="form-check form-switch form-switch-md" dir="ltr">
-                                    <AvInput type="checkbox" className="form-check-input" id="customSwitchsizemd"
+                                    <Input type="checkbox" className="form-check-input" id="customSwitchsizemd"
                                       defaultChecked={EditData.isSendOTP}
                                       name="isSendOTP"
                                     />
@@ -606,32 +604,11 @@ const AddUser = (props) => {
                         </CardBody>
                       </Card>
 
+
                       <Card className="mt-n2">
                         <CardBody style={{ backgroundColor: "whitesmoke" }}>
                           <Row className="">
-                            {/* <FormGroup className=" ml-3 col col-sm-4 " >
-                              <Label htmlFor="validationCustom01">Roles </Label>
-                              <Select
-                                value={RoleDropDown}
-                                options={RolesValues}
-                                onChange={(e) => { RoleDropDown_select_handler(e) }}
-                                classNamePrefix="select2-selection"
-                              />
-
-                            </FormGroup> */}
-
-                            {/* <Col className="text-center" sm={1} style={{ marginTop: '28px' }} >
-                              {" "}
-                              <Button
-                                type="button"
-                                className="btn btn-sm mt-1 mb-0 btn-light  btn-outline-primary  "
-                                onClick={() =>
-                                  AddRoleHandler()
-                                }
-                              >
-                                <i className="dripicons-plus "></i>
-                              </Button>
-                            </Col> */}
+                           
                             {!(userPartiesForUserMaster.length === 0) ? userPartiesForUserMaster[0].Party > 0 ?
                               <Col sm={6} style={{ marginTop: '28px' }}>
 
@@ -657,19 +634,7 @@ const AddUser = (props) => {
                                 </div>
                               </div> : <></>}
 
-                            {/* {FindPartyID ? <div className="col-lg-3 col-md-6">
-                              <div className="mb-3">
-                                <Label className="form-label font-size-13 ">Role name</Label>
-                                <Select
-                                  defaultValue={RoleDropDown}
-                                  isMulti={true}
-                                  className="basic-multi-select"
-                                  options={RolesValues}
-                                  onChange={(e) => { RoleDropdownHandler(e) }}
-                                  classNamePrefix="select2-selection"
-                                />
-                              </div>
-                            </div> : <></>} */}
+                           
 
                             <Row >
                               <Col sm={2}>

@@ -229,7 +229,7 @@ const CategoryMaster = (props) => {
         if (formValid(state, setState)) {
             const jsonBody = JSON.stringify({
                 Name: values.Name,
-                CategoryType: values.CategoryTypeName.value,
+                CategoryType: values.CategoryTypeName.values,
             });
 
             if (pageMode === "edit") {
