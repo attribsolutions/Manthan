@@ -25,6 +25,7 @@ import generate from "../../Reports/InvioceReport/Page";
 import { InvoiceFakeData } from "./InvioceFakedata";
 
 export const topFunction = () => {
+  debugger
   document.body.scrollTop = 0;
   document.documentElement.scrollTop = 0;
 }
