@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import Select from "react-select";
-import { Card, CardBody, Col, Container, Row, CardHeader, Label, FormGroup, Input, } from "reactstrap";
+import { Card, CardBody, Col, Container, Row, CardHeader, Label, FormGroup, } from "reactstrap";
 import { AvForm, AvInput } from "availity-reactstrap-validation";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -20,14 +20,6 @@ import { Tbody, Thead } from "react-super-responsive-table";
 import { BreadcrumbShow } from "../../../store/Utilites/Breadcrumb/actions";
 import { MetaTags } from "react-meta-tags";
 import { useHistory } from "react-router-dom";
-import {
-  comAddPageFieldFunc,
-  formValid,
-  onChangeText,
-  onChangeSelect,
-  onChangeDate
-} from "../../../components/Common/CmponentRelatedCommonFile/validationFunction";
-import { commonPageField, commonPageFieldSuccess } from "../../../store/actions";
 
 const AddUser = (props) => {
 
@@ -57,95 +49,6 @@ const AddUser = (props) => {
   const [cPasswordClass, setCPasswordClass] = useState('form-control');
   const [isCPassword, setisCPassword] = useState(false);
 
-  const [state, setState] = useState({
-    values: {
-      ID: "",
-      LoginName: "",
-      EmployeeName: "",
-      isActive: "",
-      isSendOTP: ""
-    },
-    fieldLabel: {
-      ID: '',
-      LoginName: '',
-      EmployeeName: '',
-      isActive: '',
-      isSendOTP: ''
-    },
-
-    isError: {
-      ID: "",
-      LoginName: "",
-      EmployeeName: "",
-      isActive: '',
-      isSendOTP: ''
-    },
-
-    hasValid: {
-      ID: {
-        regExp: '',
-        inValidMsg: "",
-        valid: false
-      },
-      LoginName: {
-        regExp: '',
-        inValidMsg: "",
-        valid: false
-      },
-
-      EmployeeName: {
-        regExp: '',
-        inValidMsg: "",
-        valid: false
-      },
-      isActive: {
-        regExp: '',
-        inValidMsg: "",
-        valid: false
-      },
-
-      isSendOTP: {
-        regExp: '',
-        inValidMsg: "",
-        valid: false
-      }
-    },
-    required: {
-
-    }
-  }
-  )
-
-  //Access redux store Data /  'save_ModuleSuccess' action data
-  const {
-    PostAPIResponse,
-    employeelistForDropdown,
-    Roles,
-    pageField,
-    userPartiesForUserMaster_redux,
-    userAccess
-  } = useSelector((state) => ({
-    PostAPIResponse: state.User_Registration_Reducer.AddUserMessage,
-    userPartiesForUserMaster_redux: state.User_Registration_Reducer.userPartiesForUserMaster,
-    employeelistForDropdown: state.User_Registration_Reducer.employeelistForDropdown,
-    Roles: state.User_Registration_Reducer.Roles,
-    userAccess: state.Login.RoleAccessUpdateData,
-    pageField: state.CommonPageFieldReducer.pageField
-  }));
-
-
-  
-  const location = { ...history.location }
-  const hasShowloction = location.hasOwnProperty("editValue")
-  const hasShowModal = props.hasOwnProperty("editValue")
-
-  useEffect(() => {
-    dispatch(commonPageFieldSuccess(null));
-    dispatch(commonPageField(4))
-  }, []);
-
-
-
 
   useEffect(() => {
     if (isCPassword) {
@@ -166,9 +69,28 @@ const AddUser = (props) => {
   }
 
 
+  //Access redux store Data /  'save_ModuleSuccess' action data
+  const {
+    PostAPIResponse,
+    employeelistForDropdown,
+    Roles,
+    userPartiesForUserMaster_redux,
+    userAccess
+  } = useSelector((state) => ({
+    PostAPIResponse: state.User_Registration_Reducer.AddUserMessage,
+    userPartiesForUserMaster_redux: state.User_Registration_Reducer.userPartiesForUserMaster,
+    employeelistForDropdown: state.User_Registration_Reducer.employeelistForDropdown,
+    Roles: state.User_Registration_Reducer.Roles,
+    userAccess: state.Login.RoleAccessUpdateData,
+    pageField: state.CommonPageFieldReducer.pageField
+  }));
+
+  const location = { ...history.location }
+  const hasShowloction = location.hasOwnProperty("editValue")
+  const hasShowModal = props.hasOwnProperty("editValue")
+
   // userAccess useEffect
   useEffect(() => {
-    debugger
     let userAcc = null;
     let locationPath = location.pathname;
 
@@ -205,7 +127,7 @@ const AddUser = (props) => {
   // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
   useEffect(() => {
 
-    if (!(userPageAccessState === '')) { document.getElementById("txtName").focus(); }
+    // if (!(userPageAccessState === '')) { document.getElementById("txtName").focus(); }
     if ((hasShowloction || hasShowModal)) {
 
       let hasEditVal = null
@@ -283,19 +205,6 @@ const AddUser = (props) => {
   }, [PostAPIResponse.Status])
 
   useEffect(() => {
-
-    if (pageField) {
-      const fieldArr = pageField.PageFieldMaster
-      comAddPageFieldFunc({ state, setState, fieldArr })
-    }
-  }, [pageField])
-
-  const values = { ...state.values }
-  const { isError } = state;
-  const { fieldLabel } = state;
-
-
-  useEffect(() => {
     dispatch(getEmployeeForUseRegistration());
     dispatch(getRoles());
   }, [dispatch]);
@@ -341,43 +250,40 @@ const AddUser = (props) => {
     }
   };
 
-  const formSubmitHandler = (event) => {
+  const handleValidSubmit = (event, values) => {
+    debugger
+    const jsonBody = JSON.stringify({
+      email: values.email,
+      LoginName: values.loginName,
+      password: "1234",
+      AdminPassword: "1234",
+      Employee: EmployeeSelect.value,
+      isActive: values.isActive,
+      isSendOTP: values.isSendOTP,
+      isLoginUsingMobile: values.isLoginUsingMobile,
+      isLoginUsingEmail: values.isLoginUsingEmail,
+      CreatedBy: 1,
+      UpdatedBy: 1,
+      UserRole: partyRoleData
+    })
 
-    event.preventDefault();
-    if (formValid(state, setState)) {
-      const jsonBody = JSON.stringify({
-        email: values.email,
-        LoginName: values.LoginName,
-        password: "1234",
-        AdminPassword: "1234",
-        Employee: EmployeeSelect.values,
-        isActive: values.isActive,
-        isSendOTP: values.isSendOTP,
-        isLoginUsingMobile: values.isLoginUsingMobile,
-        isLoginUsingEmail: values.isLoginUsingEmail,
-        CreatedBy: 1,
-        UpdatedBy: 1,
-        UserRole: partyRoleData
-      })
+    if (partyRoleData.length <= 0 && !(FindPartyID)) {
+      dispatch(AlertState({
+        Type: 4, Status: true,
+        Message: "At Least One Role Data Add in the Table",
+        RedirectPath: false,
+        PermissionAction: false,
+      }));
+    }
+    else if (pageMode === 'edit') {
 
-      if (partyRoleData.length <= 0 && !(FindPartyID)) {
-        dispatch(AlertState({
-          Type: 4, Status: true,
-          Message: "At Least One Role Data Add in the Table",
-          RedirectPath: false,
-          PermissionAction: false,
-        }));
-      }
-      else if (pageMode === 'edit') {
-
-        dispatch(updateID(jsonBody, EditData.id));
-        setEditData([]);
-        console.log("Update jsonBody", jsonBody)
-      }
-      else {
-        dispatch(addUser(jsonBody));
-        console.log("Post jsonBody", jsonBody)
-      }
+      dispatch(updateID(jsonBody, EditData.id));
+      setEditData([]);
+      console.log("Update jsonBody", jsonBody)
+    }
+    else {
+      dispatch(addUser(jsonBody));
+      console.log("Post jsonBody", jsonBody)
     }
   };
 
@@ -427,11 +333,11 @@ const AddUser = (props) => {
   if (!(userPageAccessState === '')) {
     return (
       <React.Fragment>
-        {/* <MetaTags>
-          <title>{userPageAccessState.PageHeading}| FoodERP-React FrontEnd</title>
-        </MetaTags> */}
+        <MetaTags>
+          <title>User Registration| FoodERP-React FrontEnd</title>
+        </MetaTags>
         <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
-          {/* <Breadcrumb breadcrumbItem={userPageAccessState.PageHeading} /> */}
+          <Breadcrumb breadcrumbItem={userPageAccessState.PageHeading} />
           <Container fluid>
             <Row>
               <Col lg={12}>
@@ -441,35 +347,26 @@ const AddUser = (props) => {
                     <p className="card-title-desc text-black">{userPageAccessState.PageDescriptionDetails}</p>
                   </CardHeader>
                   <CardBody className="text-black">
-                    <form onSubmit={formSubmitHandler} ref={formRef} noValidate>
+                    <AvForm
+                      onValidSubmit={(e, v) => {
+                        handleValidSubmit(e, v);
+                      }}
+                      ref={formRef}
+                    >
                       <Card className=" text-black">
                         <CardBody style={{ backgroundColor: "whitesmoke" }}>
                           <Row >
 
                             <div>
                               <FormGroup className="mb-2 col col-sm-4 " >
-                                <Label htmlFor="validationCustom01">{fieldLabel.EmployeeName}</Label>
+                                <Label htmlFor="validationCustom01">Employee</Label>
                                 <Select
                                   id="EmployeeDropDown "
                                   // disabled={true}
-                                  name="EmployeeName"
-                                  value={values.EmployeeSelect}
-                                  isSearchable={false}
-                                  className="react-dropdown"
-                                  classNamePrefix="dropdown"
+                                  value={EmployeeSelect}
                                   options={EmployeeValues}
-                                  onChange={(v, e) => onChangeSelect({ e, v, state, setState })}
-                                  // // styles={{
-                                  // //   control: base => ({
-                                  // //     ...base,
-                                  // //     border: isError.CategoryTypeName.length > 0 ? '1px solid red' : '',
-
-                                  // //   })
-                                  // }}
+                                  onChange={(e) => { handllerEmployeeID(e) }}
                                 />
-                                {isError.EmployeeName.length > 0 && (
-                                  <span className="text-danger f-8"><small>{isError.EmployeeName}</small></span>
-                                )}
                               </FormGroup>
                             </div>
 
@@ -477,22 +374,18 @@ const AddUser = (props) => {
                           <Row >
 
                             <FormGroup className="mb-1 col col-sm-4 " >
-                              <Label htmlFor="validationCustom01">{fieldLabel.LoginName}</Label>
-                              <Input name="LoginName" id="txtName"
+                              <Label htmlFor="validationCustom01">Login Name</Label>
+                              <AvField name="loginName" id="txtName"
                                 type="text"
                                 placeholder="Please Enter Name"
                                 defaultvalue=''
                                 value={EditData.LoginName}
-                                className={isError.LoginName.length > 0 ? "is-invalid form-control" : "form-control"}
                                 autoComplete='off'
-                                onChange={(event) => {
-                                  onChangeText({ event, state, setState })
-                                  dispatch(BreadcrumbShow(event.target.value))
+                                validate={{
+                                  required: { value: true, errorMessage: 'Please Enter Name' },
                                 }}
+                                onChange={(e) => { dispatch(BreadcrumbShow(e.target.value)) }}
                               />
-                              {isError.LoginName.length > 0 && (
-                                <span className="invalid-feedback">{isError.LoginName}</span>
-                              )}
                             </FormGroup>
                           </Row>
 
@@ -707,7 +600,7 @@ const AddUser = (props) => {
                           </Row>
                         </CardBody>
                       </Card>
-                    </form>
+                    </AvForm>
                   </CardBody>
                   <br></br>
                   <br></br>
