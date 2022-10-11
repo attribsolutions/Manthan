@@ -185,6 +185,7 @@ const MRPMaster = (props) => {
     useEffect(() => {
         if (deleteMessage.Status === true && deleteMessage.StatusCode === 200) {
             dispatch(deleteID_In_MasterPageSuccess({ Status: false }));
+            dispatch(postGoButtonForMRP_MasterSuccess([]))
             GoButton_Handler()
             dispatch(
                 AlertState({
