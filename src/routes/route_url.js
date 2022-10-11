@@ -8,7 +8,7 @@
  export const COMPANY="/CompanyMaster"
  export const COMPANY_lIST="/CompanyList"
 
- export const USER="/UserRegistration"
+ export const USER="/UserMaster"
  export const USER_lIST="/UserList"
 
  export const COMPANYGROUP="/CompanyGroupMaster"

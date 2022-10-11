@@ -45,7 +45,7 @@ const CategoryTypeList = (props) => {
   }, []);
 
   const { pageField } = reducers
-debugger
+
   return (
     <React.Fragment>
       {

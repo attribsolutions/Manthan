@@ -25,7 +25,7 @@ function GroupTab(props) {
         GroupList: state.ItemMastersReducer.GroupList,
         SubGroupList: state.ItemMastersReducer.SubGroupList,
     }));
-   
+
     useEffect(() => {
         dispatch(getGroupTypeslist());
         dispatch(get_Group_By_GroupType_ForDropDown());
@@ -35,7 +35,7 @@ function GroupTab(props) {
     const GroupType_DropdownOptions = GroupType.map((index) => ({
         value: index.id,
         label: index.Name,
-        IsReserved:index.IsReserved
+        IsReserved: index.IsReserved
     }));
 
     const Group_DropdownOptions = GroupList.map((index) => ({
@@ -49,59 +49,58 @@ function GroupTab(props) {
     }));
 
     const GroupType_Handler = (event) => {
-        setGroupTypeDropdownSelect(event);
-        dispatch(get_Group_By_GroupType_ForDropDown(event.value))
+        const found = props.tableData.find(element => {
+            return element.GroupType == event.value
+        });
+        if (found == undefined) {
+            setGroupTypeDropdownSelect(event);
+            dispatch(get_Group_By_GroupType_ForDropDown(event.value))
+        }
+        else {
+            alert("alerady selected")
+        }
+
     };
 
     const Group_Handler = (event) => {
-        setGroupDropdownSelect(event);
-        dispatch(get_Sub_Group_By_Group_ForDropDown(event.value))
+        const found = props.tableData.find(element => {
+            return element.Group == event.value
+        });
+        if (found == undefined) {
+            setGroupDropdownSelect(event);
+            dispatch(get_Sub_Group_By_Group_ForDropDown(event.value))
+        }
+        else {
+            alert("Already Selected")
+        }
     };
 
     const SubGroup_Handler = (event) => {
         setSubGroupDropdownSelect(event);
     };
 
-    useEffect(() => {
-
-            GroupType.map(element => {
-            if (element.IsReserved)
-            {
-                let val = {
-                    GroupType: element.id,
-                    GroupTypeName:element.Name,
-                    Group: "",
-                    GroupName: "",
-                };
-                let totalTableData = props.tableData.length;
-                val.id = totalTableData + 1;
-                let updatedTableData = [...props.tableData];
-                updatedTableData.push(val);
-                props.func(updatedTableData);
-            }
-        })
-    }, [GroupType]);
-    
-
     const addRowsHandler = (e) => {
-        
+
         const val = {
-            GroupType: groupTypeDropdownSelect === "" ? "" : groupTypeDropdownSelect.value,
+            GroupType: groupTypeDropdownSelect.value,
             GroupTypeName: groupTypeDropdownSelect.label,
             Group: groupDropdownSelect === "" ? "" : groupDropdownSelect.value,
             GroupName: groupDropdownSelect.label,
             SubGroup: subGroupDropdownSelect === "" ? "" : subGroupDropdownSelect.value,
             SubGroupName: subGroupDropdownSelect.label,
         };
-
-        
+        if (val.Group == '') {
+            alert("Select Groups values")
+        }
+        else {
             const totalTableData = props.tableData.length;
             val.id = totalTableData + 1;
             const updatedTableData = [...props.tableData];
             updatedTableData.push(val);
             props.func(updatedTableData);
             clearState();
-       
+        }
+
     };
 
     const clearState = () => {
