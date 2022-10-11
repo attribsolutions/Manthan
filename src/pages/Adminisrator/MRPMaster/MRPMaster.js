@@ -301,8 +301,15 @@ const MRPMaster = (props) => {
 
                             <Col md="6">
                                 <FormGroup className=" col col-sm-6 ">
-                                    <Label style={{color:"red" }}>{TableData[key].CurrentDate}</Label>
-                                   
+                                    {/* <Label style={{ color: "#F0A4BA" }}>{TableData[key].CurrentDate}</Label> */}
+                                  {!(user.CurrentDate==='') ?
+                                  <label 
+                                        style={{ paddingLeft: "7px", color: "#F0A4BA"  }} >&nbsp;
+                                        <kbd className="bg-light text-danger font-size-14 ">{TableData[key].CurrentDate}</kbd></label>
+
+                                  :null}
+                                    
+
                                 </FormGroup>
                             </Col>
                         </Row>
@@ -352,11 +359,11 @@ const MRPMaster = (props) => {
                                     <Button
                                         id={"deleteid"}
                                         type="button"
-                                        className="badge badge-soft-danger font-size-12 btn btn-danger waves-effect waves-light w-xxs "
+                                        className="badge badge-soft-danger font-size-12 btn btn-danger waves-effect waves-light w-xxs border border-light"
                                         data-mdb-toggle="tooltip" data-mdb-placement="top" title='Delete MRP'
                                         onClick={() => { deleteHandeler(user.id, user.Name); }}
                                     >
-                                        <i className="mdi mdi-delete font-size-18"></i>
+                                      <i className="mdi mdi-delete font-size-18"></i>
                                     </Button> : <></>}
                             </FormGroup>
                         </Col>

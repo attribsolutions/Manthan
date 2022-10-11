@@ -242,7 +242,7 @@ const MRPList = (props) => {
 
       formatter: (cellContent, Role) => (
         <div className="d-flex gap-3" style={{ display: 'flex', justifyContent: 'center' }} >
-          {((userPageAccessState.RoleAccess_IsEdit)) ?
+          {((userPageAccessState.RoleAccess_IsEdit ) && (Role.CommonID >0) ) ?
             <Button
               type="button"
               data-mdb-toggle="tooltip" data-mdb-placement="top" title="Edit MRP List"
@@ -250,9 +250,11 @@ const MRPList = (props) => {
               className="badge badge-soft-success font-size-12 btn btn-success waves-effect waves-light w-xxs border border-light"
             > 
               <i className="mdi mdi-pencil font-size-18" id="edittooltip"></i>
-            </Button> : null}
+            </Button> 
+            :
+            null }
 
-          {(!(userPageAccessState.RoleAccess_IsEdit) && (userPageAccessState.RoleAccess_IsView)) ?
+          {(!(userPageAccessState.RoleAccess_IsEdit) &&  (Role.CommonID >0)&& (userPageAccessState.RoleAccess_IsView)) ?
             <Button
               type="button"
               data-mdb-toggle="tooltip" data-mdb-placement="top" title="View MRP List"
