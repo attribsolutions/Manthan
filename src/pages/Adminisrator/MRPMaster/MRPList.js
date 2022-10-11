@@ -37,27 +37,33 @@ const MRPList = (props) => {
   const [modal_center, setmodal_center] = useState(false);
 
   // get Access redux data
-  const { TableListData, editData, updateMessage, deleteMessage, RoleAccessModifiedinSingleArray, PostAPIResponse } = useSelector(
-    (state) => ({
-      TableListData: state.MRPMasterReducer.MRPList,
-      editData: state.MRPMasterReducer.editData,
-      updateMsg: state.MRPMasterReducer.updateMessage,
-      deleteMsg: state.MRPMasterReducer.deleteMsg,
-      userAccess: state.Login.RoleAccessUpdateData,
-      postMsg: state.MRPMasterReducer.PostData,
-      pageField: state.CommonPageFieldReducer.pageFieldList
-    })
-  );
+  const {
+    tableList,
+    editData,
+    postMsg,
+    updateMsg,
+    deleteMsg,
+    userAccess, } = useSelector(
+      (state) => ({
+        tableList: state.MRPMasterReducer.MRPList,
+        editData: state.MRPMasterReducer.editData,
+        updateMsg: state.MRPMasterReducer.updateMessage,
+        deleteMsg: state.MRPMasterReducer.deleteMsg,
+        userAccess: state.Login.RoleAccessUpdateData,
+        postMsg: state.MRPMasterReducer.postMsg,
+        pageField: state.CommonPageFieldReducer.pageFieldList
+      })
+    );
 
   useEffect(() => {
     const locationPath = history.location.pathname
-    let userAcc = RoleAccessModifiedinSingleArray.find((inx) => {
+    let userAcc = userAccess.find((inx) => {
       return (`/${inx.ActualPagePath}` === locationPath)
     })
     if (!(userAcc === undefined)) {
       setUserPageAccessState(userAcc)
     }
-  }, [RoleAccessModifiedinSingleArray])
+  }, [userAccess])
 
   //  This UseEffect => Featch Modules List data  First Rendering
   useEffect(() => {
@@ -67,76 +73,76 @@ const MRPList = (props) => {
   // This UseEffect => UpadateModal Success/Unsucces  Show and Hide Control Alert_modal
   useEffect(() => {
 
-    if (updateMessage.Status === true && updateMessage.StatusCode === 200) {
+    if (updateMsg.Status === true && updateMsg.StatusCode === 200) {
       dispatch(updateMRPListSuccess({ Status: false }));
       dispatch(
         AlertState({
           Type: 1,
           Status: true,
-          Message: updateMessage.Message,
+          Message: updateMsg.Message,
           AfterResponseAction: getMRPListPage,
         })
       );
       tog_center();
-    } else if (updateMessage.Status === true) {
+    } else if (updateMsg.Status === true) {
       dispatch(updateMRPListSuccess({ Status: false }));
       dispatch(
         AlertState({
           Type: 3,
           Status: true,
-          Message: JSON.stringify(updateMessage.Message),
+          Message: JSON.stringify(updateMsg.Message),
         })
       );
     }
-  }, [updateMessage]);
+  }, [updateMsg]);
 
   useEffect(() => {
-    if (deleteMessage.Status === true && deleteMessage.StatusCode === 200) {
+    if (deleteMsg.Status === true && deleteMsg.StatusCode === 200) {
       dispatch(delete_MRPListSuccess({ Status: false }));
       dispatch(
         AlertState({
           Type: 1,
           Status: true,
-          Message: deleteMessage.Message,
+          Message: deleteMsg.Message,
           AfterResponseAction: getMRPListPage,
         })
       );
-    } else if (deleteMessage.Status === true) {
+    } else if (deleteMsg.Status === true) {
       dispatch(delete_MRPListSuccess({ Status: false }));
       dispatch(
         AlertState({
           Type: 3,
           Status: true,
-          Message: JSON.stringify(deleteMessage.Message),
+          Message: JSON.stringify(deleteMsg.Message),
         })
       );
     }
-  }, [deleteMessage]);
+  }, [deleteMsg]);
 
   useEffect(() => {
 
-    if ((PostAPIResponse.Status === true) && (PostAPIResponse.StatusCode === 200)) {
+    if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
       dispatch(postMRPMasterDataSuccess({ Status: false }))
       tog_center();
       dispatch(getMRPListPage());
       dispatch(AlertState({
         Type: 1,
         Status: true,
-        Message: PostAPIResponse.Message,
+        Message: postMsg.Message,
       }))
     }
 
-    else if ((PostAPIResponse.Status === true)) {
+    else if ((postMsg.Status === true)) {
       dispatch(postMRPMasterDataSuccess({ Status: false }))
       dispatch(AlertState({
         Type: 4,
         Status: true,
-        Message: JSON.stringify(PostAPIResponse.Message),
+        Message: JSON.stringify(postMsg.Message),
         RedirectPath: false,
         AfterResponseAction: false
       }));
     }
-  }, [PostAPIResponse.Status])
+  }, [postMsg])
 
   // Edit Modal Show When Edit Data is true
   useEffect(() => {
@@ -177,7 +183,7 @@ const MRPList = (props) => {
 
   const pageOptions = {
     sizePerPage: 10,
-    totalSize: TableListData.length,
+    // totalSize: tableList.length,
     custom: true,
   };
 
@@ -270,7 +276,7 @@ const MRPList = (props) => {
                 <ToolkitProvider
                   keyField='id'
                   columns={pagesListColumns}
-                  data={TableListData}
+                  data={tableList}
                   search
                 >
                   {toolkitProps => (
@@ -280,10 +286,10 @@ const MRPList = (props) => {
                         breadcrumbItem={userPageAccessState.PageHeading}
                         IsButtonVissible={(userPageAccessState.RoleAccess_IsSave) ? true : false}
                         SearchProps={toolkitProps.searchProps}
-                        breadcrumbCount={`MRP Count: ${TableListData.length}`}
+                        breadcrumbCount={`MRP Count: ${tableList.length}`}
                         IsSearchVissible={true}
                         isExcelButtonVisible={true}
-                        ExcelData={TableListData}
+                        ExcelData={tableList}
                         RedirctPath={"/MRPMaster"}
                       />
 
