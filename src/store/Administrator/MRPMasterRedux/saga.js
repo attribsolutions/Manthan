@@ -65,10 +65,11 @@ function* get_MRPListPage_GenratorFunction() {
 }
 
 //delete
-function* delete_MRPListPage_GenratorFunction({ id }) {
+function* delete_MRPListPage_GenratorFunction({ CommonID }) {
+  debugger
   yield put(SpinnerState(true))
   try {
-    const response = yield call(delete_MRPList_API, id);
+    const response = yield call(delete_MRPList_API, CommonID);
     yield put(SpinnerState(false))
     yield put(delete_MRPListSuccess(response));
   } catch (error) {

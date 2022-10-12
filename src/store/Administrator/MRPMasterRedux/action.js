@@ -52,9 +52,9 @@ export const getMRPListPageSuccess = (data) => ({
 });
 
 //delete
-export const delete_MRPList = (id) => ({
+export const delete_MRPList = (CommonID) => ({
     type: DELETE_MRP_LIST_PAGE,
-    id,
+    CommonID,
 });
 
 export const delete_MRPListSuccess = (data) => ({

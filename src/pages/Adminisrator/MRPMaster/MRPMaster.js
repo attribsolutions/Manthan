@@ -205,6 +205,7 @@ const MRPMaster = (props) => {
             );
         }
     }, [deleteMessage]);
+
     function PartyType_Dropdown_OnChange_Handller(e) {
         setParty_dropdown_Select(e)
     }
@@ -223,10 +224,6 @@ const MRPMaster = (props) => {
 
     const CurrentMRPHandler = (e, cellContent, user, key) => {
         user["CurrentMRP"] = e.target.value
-    }
-
-    const CurrentDateHandler = (e, cellContent, user, key) => {
-        user["CurrentDate"] = e.target.value
     }
 
     //select id for delete row
@@ -262,8 +259,6 @@ const MRPMaster = (props) => {
         }
         dispatch(postGoButtonForMRP_Master(jsonBody))
         console.log("Go button Post Json", jsonBody)
-
-
     };
 
     const pageOptions = {
