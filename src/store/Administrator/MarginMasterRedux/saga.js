@@ -66,12 +66,14 @@ function* get_MarginListPage_GenratorFunction() {
 }
 
 //delete
-function* delete_MarginListPage_GenratorFunction({ id }) {
+function* delete_MarginListPage_GenratorFunction({ CommonID }) {
+  debugger
   yield put(SpinnerState(true))
   try {
-    const response = yield call(delete_MarginList_API, id);
+    const response = yield call(delete_MarginList_API, CommonID);
     yield put(SpinnerState(false))
     yield put(delete_MarginListSuccess(response));
+    console.log("response",response)
   } catch (error) {
     yield put(SpinnerState(false))
     yield put(AlertState({

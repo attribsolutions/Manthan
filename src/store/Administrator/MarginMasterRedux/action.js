@@ -39,9 +39,9 @@ export const getMarginListPageSuccess = (data) => ({
 });
 
 //delete
-export const delete_MarginList = (id) => ({
+export const delete_MarginList = (CommonID) => ({
     type: DELETE_MARGIN_LIST_PAGE,
-    id,
+    CommonID,
 });
 
 export const delete_MarginListSuccess = (data) => ({
