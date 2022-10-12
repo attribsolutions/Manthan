@@ -15,7 +15,7 @@ import { USER } from "../../../routes/route_url";
 
 
 const UserList = () => {
-debugger
+    
     const dispatch = useDispatch();
     const reducers = useSelector(
         (state) => ({

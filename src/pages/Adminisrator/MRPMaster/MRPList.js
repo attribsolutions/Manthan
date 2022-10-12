@@ -169,10 +169,29 @@ const MRPList = (props) => {
     );
   };
 
-  // edit Buutton Handller
-  const EditPageHandler = (id) => {
-    dispatch(editMRPList(id));
-  };
+  // // edit Buutton Handller
+  // const EditPageHandler = (id) => {
+  //   dispatch(editMRPList(id));
+  // };
+
+  const EditPageHandler = (rowData) => {
+    debugger
+      // if(rowData.Division_id===null) {
+      //  rowData.Division_id=0
+      // }
+       let  RelatedPageID = userPageAccessState.RelatedPageID
+
+       const found = userAccess.find((element) => {
+           return element.id === RelatedPageID
+       })
+
+       if (!(found === undefined)) {
+           history.push({
+               pathname: `/${found.ActualPagePath}`,
+               state:  rowData ,
+           })
+       }
+   }
 
   const defaultSorted = [
     {
@@ -223,21 +242,23 @@ const MRPList = (props) => {
 
       formatter: (cellContent, Role) => (
         <div className="d-flex gap-3" style={{ display: 'flex', justifyContent: 'center' }} >
-          {((userPageAccessState.RoleAccess_IsEdit)) ?
+          {((userPageAccessState.RoleAccess_IsEdit ) && (Role.CommonID >0) ) ?
             <Button
               type="button"
               data-mdb-toggle="tooltip" data-mdb-placement="top" title="Edit MRP List"
-              onClick={() => { EditPageHandler(Role.id); }}
+              onClick={() => { EditPageHandler(Role); }}
               className="badge badge-soft-success font-size-12 btn btn-success waves-effect waves-light w-xxs border border-light"
-            >
+            > 
               <i className="mdi mdi-pencil font-size-18" id="edittooltip"></i>
-            </Button> : null}
+            </Button> 
+            :
+            null }
 
-          {(!(userPageAccessState.RoleAccess_IsEdit) && (userPageAccessState.RoleAccess_IsView)) ?
+          {(!(userPageAccessState.RoleAccess_IsEdit) &&  (Role.CommonID >0)&& (userPageAccessState.RoleAccess_IsView)) ?
             <Button
               type="button"
               data-mdb-toggle="tooltip" data-mdb-placement="top" title="View MRP List"
-              onClick={() => { EditPageHandler(Role.id); }}
+              onClick={() => { EditPageHandler(Role); }}
               className="badge badge-soft-primary font-size-12 btn btn-primary waves-effect waves-light w-xxs border border-light"
 
             >

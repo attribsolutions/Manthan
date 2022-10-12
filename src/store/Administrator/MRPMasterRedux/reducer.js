@@ -6,6 +6,7 @@ import {
     EDIT_MRP_LIST_PAGE_SUCCESS,
     UPDATE_MRP_LIST_PAGE_SUCCESS,
     POST_GO_BUTTON_FOR_MRP_MASTER_SUCCESS,
+    DELETE_ID_IN_MASTERPAGE_SUCCESS,
    
 } from "./actionTypes";
 
@@ -16,6 +17,7 @@ const INIT_STATE = {
     deleteMsg: { Status: false },
     editData: { Status: false },
     updateMessage: { Status: false },
+    deleteIdForMRPMaster:{ Status: false },
 };
 
 const MRPMasterReducer = (state = INIT_STATE, action) => {
@@ -64,6 +66,12 @@ const MRPMasterReducer = (state = INIT_STATE, action) => {
                 updateMessage: action.payload,
             };
 
+            // delete api MRP Master Page
+            case DELETE_ID_IN_MASTERPAGE_SUCCESS:
+                return {
+                    ...state,
+                    deleteIdForMRPMaster: action.payload,
+                };
         default:
             return state;
     }

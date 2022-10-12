@@ -28,6 +28,7 @@ import {
   onChangeDate
 } from "../../../components/Common/CmponentRelatedCommonFile/validationFunction";
 import { commonPageField, commonPageFieldSuccess } from "../../../store/actions";
+import { SaveButton } from "../../../components/CommonSaveButton";
 
 const AddUser = (props) => {
 
@@ -339,7 +340,7 @@ const AddUser = (props) => {
   };
 
   const formSubmitHandler = (event) => {
-
+debugger
     event.preventDefault();
     if (formValid(state, setState)) {
       const jsonBody = JSON.stringify({
@@ -348,15 +349,15 @@ const AddUser = (props) => {
         password: "1234",
         AdminPassword: "1234",
         Employee: values.EmployeeName,
-        isActive: values.isActive,
-        isSendOTP: values.isSendOTP,
-        isLoginUsingMobile: values.isLoginUsingMobile,
-        isLoginUsingEmail: values.isLoginUsingEmail,
+         isActive: values.isActive,
+         isSendOTP: values.isSendOTP,
+         isLoginUsingMobile: values.isLoginUsingMobile,
+         isLoginUsingEmail: values.isLoginUsingEmail,
         CreatedBy: 1,
         UpdatedBy: 1,
         UserRole: partyRoleData
       })
-
+    
       if (partyRoleData.length <= 0 && !(FindPartyID)) {
         dispatch(AlertState({
           Type: 4, Status: true,
@@ -373,7 +374,8 @@ const AddUser = (props) => {
       }
       else {
         dispatch(addUser(jsonBody));
-        console.log("Post jsonBody", jsonBody)
+        console.log("post jsonBody", jsonBody)
+        
       }
     }
   };
@@ -447,7 +449,7 @@ const AddUser = (props) => {
                               <FormGroup className="mb-2 col col-sm-4 " >
                                 <Label htmlFor="validationCustom01">{fieldLabel.EmployeeName}</Label>
 
-                                <Input name="EmployeeName" id="txtName"
+                                {/* <Input name="EmployeeName" id="txtName"
                                 type="text"
                                 placeholder="Please Enter Name"
                                 defaultvalue=''
@@ -461,9 +463,9 @@ const AddUser = (props) => {
                               />
                               {isError.EmployeeName.length > 0 && (
                                 <span className="invalid-feedback">{isError.EmployeeName}</span>
-                              )}
+                              )} */}
 
-                                {/* <Select
+                                <Select
                                   id="EmployeeDropDown "
                                   // disabled={true}
                                   name="EmployeeName"
@@ -477,7 +479,7 @@ const AddUser = (props) => {
                                 />
                                 {isError.EmployeeName.length > 0 && (
                                   <span className="text-danger f-8"><small>{isError.EmployeeName}</small></span>
-                                )} */}
+                                )}
                               </FormGroup>
                             </div>
 
@@ -638,34 +640,7 @@ const AddUser = (props) => {
 
                             <Row >
                               <Col sm={2}>
-                                <div>
-                                  {
-                                    pageMode === "edit" ?
-
-                                      userPageAccessState.RoleAccess_IsEdit ?
-
-                                        <button
-                                          type="submit"
-                                          data-mdb-toggle="tooltip" data-mdb-placement="top" title="Update User"
-                                          className="btn btn-success w-md"
-                                        >
-                                          <i class="fas fa-edit me-2"></i>Update
-                                        </button>
-                                        :
-                                        <></>
-                                      : (
-                                        userPageAccessState.RoleAccess_IsSave ?
-                                          <button
-                                            type="submit"
-                                            data-mdb-toggle="tooltip" data-mdb-placement="top" title="Save User"
-                                            className="btn btn-primary w-md"
-                                          > <i className="fas fa-save me-2"></i> Save
-                                          </button>
-                                          :
-                                          <></>
-                                      )
-                                  }
-                                </div>
+                              {SaveButton({ pageMode, userPageAccessState, module: "AddUser" })}
                               </Col>
                             </Row>
                             {/* </FormGroup > */}

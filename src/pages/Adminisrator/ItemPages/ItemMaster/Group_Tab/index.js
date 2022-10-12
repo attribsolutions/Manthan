@@ -12,7 +12,10 @@ import Select from "react-select";
 import { useDispatch, useSelector } from "react-redux";
 import { getGroupTypeslist } from "../../../../../store/Administrator/GroupTypeRedux/action";
 import GroupTable from "./Table";
-import { get_Group_By_GroupType_ForDropDown, get_Sub_Group_By_Group_ForDropDown } from "../../../../../store/Administrator/ItemsRedux/action";
+import {
+    get_Group_By_GroupType_ForDropDown,
+    get_Sub_Group_By_Group_ForDropDown
+} from "../../../../../store/Administrator/ItemsRedux/action";
 
 function GroupTab(props) {
     const dispatch = useDispatch();
@@ -31,6 +34,7 @@ function GroupTab(props) {
         dispatch(get_Group_By_GroupType_ForDropDown());
         dispatch(get_Sub_Group_By_Group_ForDropDown());
     }, [dispatch]);
+
 
     const GroupType_DropdownOptions = GroupType.map((index) => ({
         value: index.id,

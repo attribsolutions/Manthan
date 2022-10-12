@@ -303,6 +303,7 @@ export const update_MRPList = (data,id) => put(`${url. MRP_MASTER_LIST}/${id}`,d
 export const edit_MRPList = (id) => get(`${url. MRP_MASTER_LIST}/${id}`)// edit api
 export const delete_MRPList_API = (id) =>  del(`${url. MRP_MASTER_LIST}/${id}`)// delete api
 export const GoButton_Post_API = (data) => post(url.GO_BUTTON_POST_API, data)// go button postapi
+export const MRP_MasterPage_delete_API = (id) =>  del(`${url. MRP_MASTER_LIST}/${id}`)// delete api MRP Master Page
 
 // Margin Master
 export const Post_MarginMaster_API = (data) => post(url.MARGIN_MASTER_LIST, data)// post api

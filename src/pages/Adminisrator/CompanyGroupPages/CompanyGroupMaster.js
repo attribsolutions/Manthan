@@ -14,7 +14,7 @@ import {
 import { AvField, AvForm, AvInput, } from "availity-reactstrap-validation";
 import Select from "react-select";
 import { MetaTags } from "react-meta-tags";
-import { BreadcrumbShow, commonPageField } from "../../../store/actions";
+import { BreadcrumbShow, commonPageField, commonPageFieldSuccess } from "../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
 import {
     PostMethod_ForCompanyGroupMasterSuccess,
@@ -33,6 +33,7 @@ import {
     onChangeText
 } from "../../../components/Common/CmponentRelatedCommonFile/validationFunction";
 import { SaveButton } from "../../../components/CommonSaveButton";
+import { COMPANYGROUP_lIST } from "../../../routes/route_url";
 
 
 const CompanyGroupMaster = (props) => {
@@ -48,16 +49,21 @@ const CompanyGroupMaster = (props) => {
     const [EditData, setEditData] = useState([]);
     const [pageMode, setPageMode] = useState("");
     const [userPageAccessState, setUserPageAccessState] = useState(123);
-
+    const [modalCss, setModalCss] = useState(false);
     //Access redux store Data /  'save_ModuleSuccess' action data
-    const { PostAPIResponse, pageField, RoleAccessModifiedinSingleArray } = useSelector((state) => ({
+    const { PostAPIResponse, pageField, userAccess, } = useSelector((state) => ({
         PostAPIResponse: state.CompanyGroupReducer.PostDataMessage,
-        RoleAccessModifiedinSingleArray: state.Login.RoleAccessUpdateData,
+        userAccess: state.Login.RoleAccessUpdateData,
         pageField: state.CommonPageFieldReducer.pageField
 
     }));
 
+    const location = { ...history.location }
+    const hasShowloction = location.hasOwnProperty("editValue")
+    const hasShowModal = props.hasOwnProperty("editValue")
+
     useEffect(() => {
+        dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(32))
     }, []);
 
@@ -65,18 +71,19 @@ const CompanyGroupMaster = (props) => {
     {/*start */ }
     const [state, setState] = useState({
         values: {
+            id: "",
             Name: "",
-           
+
         },
 
         fieldLabel: {
             Name: '',
-         
+
         },
 
         isError: {
             Name: "",
-            
+
         },
 
         hasValid: {
@@ -86,7 +93,7 @@ const CompanyGroupMaster = (props) => {
                 valid: false
             },
 
-            
+
         },
         required: {
 
@@ -103,44 +110,55 @@ const CompanyGroupMaster = (props) => {
     }, [dispatch]);
 
 
-    //userAccess useEffect
     useEffect(() => {
+        let userAcc = null;
+        let locationPath = location.pathname;
 
-        let userAcc = undefined
-        if ((editDataGetingFromList === undefined)) {
+        if (hasShowModal) {
+            locationPath = props.masterPath;
+        };
 
-            let locationPath = history.location.pathname;
-            userAcc = RoleAccessModifiedinSingleArray.find((inx) => {
-                return (`/${inx.ActualPagePath}` === locationPath)
-            })
-        }
-        else if (!(editDataGetingFromList === undefined)) {
-            let relatatedPage = props.relatatedPage
-            userAcc = RoleAccessModifiedinSingleArray.find((inx) => {
-                return (`/${inx.ActualPagePath}` === relatatedPage)
-            })
+        userAcc = userAccess.find((inx) => {
+            return (`/${inx.ActualPagePath}` === locationPath)
+        })
 
-        }
-        if (!(userAcc === undefined)) {
+        if (userAcc) {
             setUserPageAccessState(userAcc)
-        }
-
-    }, [RoleAccessModifiedinSingleArray])
+        };
+    }, [userAccess])
 
 
 
     // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
     useEffect(() => {
-        if (!(userPageAccessState === '')) { document.getElementById("txtName").focus(); }
-        if (!(editDataGetingFromList === undefined)) {
-            setEditData(editDataGetingFromList);
-            setPageMode(pageModeProps);
-            dispatch(editCompanyGroupTypeSuccess({ Status: false }))
-            dispatch(BreadcrumbShow(editDataGetingFromList.Name))
-            return
-        }
-    }, [editDataGetingFromList])
 
+        if (!(userPageAccessState === '')) { document.getElementById("txtName").focus(); }
+        // if (!(userPageAccessState === '')) { document.getElementById("txtName").focus(); }
+        if ((hasShowloction || hasShowModal)) {
+
+            let hasEditVal = null
+            if (hasShowloction) {
+                setPageMode(location.pageMode)
+                hasEditVal = location.editValue
+            }
+            else if (hasShowModal) {
+                hasEditVal = props.editValue
+                setPageMode(props.pageMode)
+                setModalCss(true)
+            }
+
+            if (hasEditVal) {
+                const { id, Name, IsSCM } = hasEditVal
+                const { values, fieldLabel, hasValid, required, isError } = { ...state }
+                values.Name = Name;
+                values.id = id;
+                values.IsSCM = IsSCM
+                setState({ values, fieldLabel, hasValid, required, isError })
+                dispatch(BreadcrumbShow(hasEditVal.CompanyGroupMaster))
+            }
+            dispatch(editCompanyGroupTypeSuccess({ Status: false }))
+        }
+    }, [])
 
 
     useEffect(() => {
@@ -161,7 +179,7 @@ const CompanyGroupMaster = (props) => {
                     Type: 1,
                     Status: true,
                     Message: PostAPIResponse.Message,
-                    RedirectPath: '/CompanyGroupList',
+                    RedirectPath: COMPANYGROUP_lIST,
                 }))
             }
         }
@@ -179,10 +197,13 @@ const CompanyGroupMaster = (props) => {
 
 
     useEffect(() => {
-        if (pageField.length > 0) {
-            comAddPageFieldFunc({ state, setState, pageField })
+
+        if (pageField) {
+            const fieldArr = pageField.PageFieldMaster
+            comAddPageFieldFunc({ state, setState, fieldArr })
         }
     }, [pageField])
+
 
     const formSubmitHandler = (event) => {
         event.preventDefault();
@@ -206,7 +227,7 @@ const CompanyGroupMaster = (props) => {
 
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
     var IsEditMode_Css = ''
-    if ((pageMode === "edit") || (pageMode === "copy") || (pageMode === "dropdownAdd")) { IsEditMode_Css = "-5.5%" };
+    if ((modalCss) || (pageMode === "dropdownAdd")) { IsEditMode_Css = "-5.5%" };
 
     if (!(userPageAccessState === '')) {
         return (
