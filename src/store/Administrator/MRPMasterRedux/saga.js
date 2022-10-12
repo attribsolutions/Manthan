@@ -72,7 +72,6 @@ function* delete_MRPListPage_GenratorFunction({ CommonID }) {
     const response = yield call(delete_MRPList_API, CommonID);
     yield put(SpinnerState(false))
     yield put(delete_MRPListSuccess(response));
-    console.log("response", response)
   } catch (error) {
     yield put(SpinnerState(false))
     yield put(AlertState({
