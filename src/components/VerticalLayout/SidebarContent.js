@@ -202,7 +202,7 @@ const SidebarContent = (props) => {
             <li>
               <Link to={'/validationTest'}>{props.t('validationTest')}</Link>
             </li> */}
-          </ul>
+          </ul >
         </div>
       </SimpleBar>
     </React.Fragment>
