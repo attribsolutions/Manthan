@@ -72,7 +72,7 @@ function* delete_MRPListPage_GenratorFunction({ CommonID }) {
     const response = yield call(delete_MRPList_API, CommonID);
     yield put(SpinnerState(false))
     yield put(delete_MRPListSuccess(response));
-    console.log("response",response)
+    console.log("response", response)
   } catch (error) {
     yield put(SpinnerState(false))
     yield put(AlertState({
@@ -122,7 +122,6 @@ function* MRPGoButton_post_GenratorFunction({ data }) {
     const response = yield call(GoButton_Post_API, data);
     yield put(SpinnerState(false))
     yield put(postGoButtonForMRP_MasterSuccess(response.Data));
-    console.log("response", response)
   } catch (error) {
     yield put(SpinnerState(false))
     yield put(AlertState({
@@ -135,12 +134,12 @@ function* MRPGoButton_post_GenratorFunction({ data }) {
 
 // delete api MRP Master Page
 function* deleteId_for_MasterPage_GenratorFunction({ id }) {
+
   yield put(SpinnerState(true))
   try {
-    const response = yield call(MRP_MasterPage_delete_API, id);
-    yield put(SpinnerState(false))
+    let response = yield call(MRP_MasterPage_delete_API, id);
+    response["deletedId"] = id
     yield put(deleteID_In_MasterPageSuccess(response));
-    console.log("response",response)
   } catch (error) {
     yield put(SpinnerState(false))
     yield put(AlertState({
@@ -158,5 +157,5 @@ function* MRPMasterSaga() {
   yield takeEvery(EDIT_MRP_LIST_PAGE, Edit_MRPListPage_GenratorFunction);
   yield takeEvery(UPDATE_MRP_LIST_PAGE, Update_MRPListPage_GenratorFunction);
   yield takeEvery(DELETE_ID_IN_MASTERPAGE, deleteId_for_MasterPage_GenratorFunction);
-  }
+}
 export default MRPMasterSaga;
