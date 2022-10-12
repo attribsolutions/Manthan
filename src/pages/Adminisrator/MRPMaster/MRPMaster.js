@@ -303,13 +303,13 @@ const MRPMaster = (props) => {
                             <Col md="6">
                                 <FormGroup className=" col col-sm-6 ">
                                     {/* <Label style={{ color: "#F0A4BA" }}>{TableData[key].CurrentDate}</Label> */}
-                                  {!(user.CurrentDate==='') ?
-                                  <label 
-                                        style={{ paddingLeft: "7px", color: "#F0A4BA"  }} >&nbsp;
-                                        <kbd className="bg-light text-danger font-size-14 ">{TableData[key].CurrentDate}</kbd></label>
+                                    {!(user.CurrentDate === '') ?
+                                        <label
+                                            style={{ paddingLeft: "7px", color: "#F0A4BA" }} >&nbsp;
+                                            <kbd className="bg-light text-danger font-size-14 ">{TableData[key].CurrentDate}</kbd></label>
 
-                                  :null}
-                                    
+                                        : null}
+
 
                                 </FormGroup>
                             </Col>
@@ -346,10 +346,8 @@ const MRPMaster = (props) => {
             ),
         },
         {
-
             text: "Action ",
             dataField: "",
-
             formatter: (cellContent, user) => (
 
                 <>
@@ -364,7 +362,7 @@ const MRPMaster = (props) => {
                                         data-mdb-toggle="tooltip" data-mdb-placement="top" title='Delete MRP'
                                         onClick={() => { deleteHandeler(user.id, user.Name); }}
                                     >
-                                      <i className="mdi mdi-delete font-size-18"></i>
+                                        <i className="mdi mdi-delete font-size-18"></i>
                                     </Button> : <></>}
                             </FormGroup>
                         </Col>
@@ -379,7 +377,6 @@ const MRPMaster = (props) => {
 
     //'Save' And 'Update' Button Handller
     const handleValidSubmit = (event, values) => {
-        debugger
         var ItemData = TableData.map((index) => ({
             Division: division_dropdown_Select.value,
             Party: party_dropdown_Select.value,
@@ -390,7 +387,6 @@ const MRPMaster = (props) => {
             Item: index.Item,
             MRP: index.MRP
         }))
-        console.log("ItemData", ItemData)
 
         const Find = ItemData.filter((index) => {
             return !(index.MRP === '')
@@ -399,7 +395,6 @@ const MRPMaster = (props) => {
         const jsonBody = JSON.stringify(Find)
 
         dispatch(postMRPMasterData(jsonBody));
-        console.log("jsonBody", jsonBody)
     };
 
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
