@@ -11,6 +11,7 @@ import {
 import PartyMaster from './PartyMaster';
 import CommonListPage from "../../../components/Common/CmponentRelatedCommonFile/commonListPage";
 import { commonPageField, commonPageFieldList, commonPageFieldListSuccess, commonPageFieldSuccess } from "../../../store/actions";
+import { PARTY } from '../../../routes/route_url';
 
 const PartyList = () => {
     const dispatch = useDispatch();
@@ -53,7 +54,7 @@ const PartyList = () => {
                         action={action}
                         reducers={reducers}
                         MasterModal={PartyMaster}
-                        masterPath={"/PartyMaster"}
+                        masterPath={PARTY}
                         ButtonMsgLable={"Party"}
                         deleteName={"Name"}
                     />

@@ -11,6 +11,7 @@ import {
 
 import CommonListPage from "../../../components/Common/CmponentRelatedCommonFile/commonListPage";
 import { commonPageFieldList, commonPageFieldListSuccess } from "../../../store/actions";
+import { DRIVER } from "../../../routes/route_url";
 
 const GroupList = (props) => {
   const dispatch = useDispatch();
@@ -55,7 +56,7 @@ const GroupList = (props) => {
             action={action}
             reducers={reducers}
             // MasterModal={DriverMaster}
-            masterPath={"/DriverMaster"}
+            masterPath={DRIVER}
 
           />
           : null

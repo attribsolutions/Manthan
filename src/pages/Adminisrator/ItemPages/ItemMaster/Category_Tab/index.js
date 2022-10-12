@@ -59,7 +59,6 @@ function CategoryTab(props) {
         const find =  props.tableData.find((element) => {
             return element.value === categoryDropdownSelect.value
         });
-        console.log("find", find)
 
         if (!(find === undefined)) {
             dispatch(AlertState({

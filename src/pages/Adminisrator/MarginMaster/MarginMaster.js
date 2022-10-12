@@ -137,6 +137,7 @@ const MarginMaster = (props) => {
             alert("EffectiveDate not select")
         }
         dispatch(postGoButtonForMargin_Master(jsonBody))
+        console.log(jsonBody)
     };
 
     useEffect(() => {

@@ -10,7 +10,8 @@ import {
 import { useSelector, useDispatch } from "react-redux";
 import RoleMaster from "./RoleMaster";
 import CommonListPage from "../../../components/Common/CmponentRelatedCommonFile/commonListPage";
-import { commonPageField, commonPageFieldSuccess } from "../../../store/actions";
+import { commonPageFieldList, commonPageFieldListSuccess } from "../../../store/actions";
+import { ROLE } from "../../../routes/route_url";
 
 const RoleList = (props) => {
 
@@ -23,7 +24,7 @@ const RoleList = (props) => {
       deleteMsg: state.RoleMaster_Reducer.deleteMsg,
       postMsg: state.RoleMaster_Reducer.postMsg,
       userAccess: state.Login.RoleAccessUpdateData,
-      pageField: state.CommonPageFieldReducer.pageField
+      pageField: state.CommonPageFieldReducer.pageFieldList
     })
   );
 
@@ -38,8 +39,8 @@ const RoleList = (props) => {
 
   //  This UseEffect => Featch Modules List data  First Rendering
   useEffect(() => {
-    dispatch(commonPageFieldSuccess([]))
-    dispatch(commonPageField(13))
+    dispatch(commonPageFieldListSuccess(null))
+    dispatch(commonPageFieldList(13))
     dispatch(getRole());
   }, []);
 
@@ -48,12 +49,12 @@ const RoleList = (props) => {
   return (
     <React.Fragment>
       {
-        (pageField.length > 0) ?
+        (pageField) ?
           <CommonListPage
             action={action}
             reducers={reducers}
             MasterModal={RoleMaster}
-            masterPath={"/RoleMaster"}
+            masterPath={ROLE}
             ButtonMsgLable={"Role"}
             deleteName={"Name"}
           />

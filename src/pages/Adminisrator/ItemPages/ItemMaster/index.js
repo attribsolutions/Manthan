@@ -56,55 +56,48 @@ const ItemsMaster = (props) => {
     const dispatch = useDispatch();
     const history = useHistory()
 
-    //*** "isEditdata get all data from ModuleID for Binding  Form controls
-    let editDataGatingFromList = props.state;
-    console.log("editDataGatingFromList", editDataGatingFromList)
-    let pageModeProps = props.pageMode
 
-    const [EditData, setEditData] = useState([]);
+    const [EditData, setEditData] = useState({});
+    const [modalCss, setModalCss] = useState(false);
     const [pageMode, setPageMode] = useState("save");
-    const [userPageAccessState, setUserPageAccessState] = useState(11);
+    const [userPageAccessState, setUserPageAccessState] = useState('');
+
     const [activeTab1, setactiveTab1] = useState("1")
-    const [division_dropdown_Select, setDivision_dropdown_Select] = useState("");
-    const [CategoryTypeDropdownSelect, setCategoryTypeDropdownSelect] = useState("");
-    const [categoryDropdownSelect, setcategoryDropdownSelect] = useState("");
+
 
     let initial = {
         Name: "",
         Sequence: "",
         ShortName: "",
         BarCode: '',
-        Company: "",
-        BaseUnit: { value: 0, label: "select" },
+        Company: [],
+        BaseUnit: [],
+        Category: [],
+        CategoryType: [],
+        Division: [],
         MRP: '',
         GST: '',
         HSN: '',
         isActive: true,
     }
 
-    const initialInValid = ["txtName0", "txtShortName0", "txtBarCode0", "dropBaseUnit-0", "dropCompany-0", "txtSequence0"]
+    const initialInValid = ["txtName0", "txtShortName0",]
+    const [inValidDrop, setInValidDrop] = useState({
+        BaseUnit: false,
+        Company: false,
+        CategoryType: false,
+        Category: false,
+        Division: false
+    })
     let [isValidate, setIsValidate] = useState(initialInValid);
-    let [refresh, setrefresh] = useState('');
 
     const [formValue, setFormValue] = useState(initial);
+    const [pageRefresh, setpageRefresh] = useState(false);
 
 
-    // categoryTabTable
-    const [categoryTabTable, setCategoryTabTable] = useState([{
-        CategoryType: { label: 'select', value: 0 },
-        CategoryTypeOption: [],
-        Category: { label: 'select', value: 0 },
-        SubCategory: { label: 'select', value: 0 },
-
-        Category_DropdownOptions: [],
-        SubCategory_DropdownOptions: []
-    }]);
-
-    const [marginTabTable, setMarginTabTable] = useState([])
 
     const [marginMaster, setMarginMaster] = useState([]);
 
-    const [divisionTableData, setDivisionTableData] = useState([]);
 
     const [imageTabTable, setImageTabTable] = useState([{
         ImageType: '',
@@ -112,7 +105,7 @@ const ItemsMaster = (props) => {
     }]);
     const [baseUnitTableData, setBaseUnitTableData] = useState([{
         Conversion: '',
-        Unit: { label: "", value: 0 },
+        Unit: '',
     }]);
 
     const [Division_Tab_TableData, setDivision_Tab_TableData] = useState([]);
@@ -123,189 +116,138 @@ const ItemsMaster = (props) => {
 
     const [Category_Tab_TableData, setCategory_Tab_TableData] = useState([]);
 
-    const [GStDetailsTabTable, setGSTDetailsTabTable] = useState([]);
-
     const [GStDetailsMaster, setGStDetailsMaster] = useState([]);
 
-    const { companyList,
+    const {
+        companyList,
         BaseUnit,
-        CategoryType,
-        Category,
-        SubCategory,
-        DivisionType,
         PostAPIResponse,
-        RoleAccessModifiedinSingleArray,
+        userAccess,
         ImageType,
-        MRPType,
         Division,
-        Party,
-        PriceList,
         CategoryTypeList,
         CategoryList
     } = useSelector((state) => ({
         companyList: state.Company.companyList,
         BaseUnit: state.ItemMastersReducer.BaseUnit,
-        CategoryType: state.ItemMastersReducer.CategoryType,
-        Category: state.ItemMastersReducer.CategoryByCategoryType,
-        SubCategory: state.ItemMastersReducer.SubCategoryByCategoryType,
-        DivisionType: state.PartyMasterReducer.partyList,
-        RoleAccessModifiedinSingleArray: state.Login.RoleAccessUpdateData,
+        userAccess: state.Login.RoleAccessUpdateData,
         PostAPIResponse: state.ItemMastersReducer.postMessage,
         ImageType: state.ItemMastersReducer.ImageType,
-        MRPType: state.ItemMastersReducer.MRPType,
         Division: state.ItemMastersReducer.Division,
-        Party: state.ItemMastersReducer.Party,
-        PriceList: state.ItemMastersReducer.PriceList,
         CategoryTypeList: state.categoryTypeReducer.categoryTypeListData,
         CategoryList: state.ItemMastersReducer.Category,
     }));
 
 
+    const location = { ...history.location }
+    const hasShowloction = location.hasOwnProperty("editValue")
+    const hasShowModal = props.hasOwnProperty("editValue")
+
+
+    // userAccess useEffect
     useEffect(() => {
+        let userAcc = null;
+        let locationPath = location.pathname;
 
-        let userAcc = undefined
-        if ((editDataGatingFromList === undefined)) {
+        if (hasShowModal) {
+            locationPath = props.masterPath;
+        };
 
-            let locationPath = history.location.pathname
-            userAcc = RoleAccessModifiedinSingleArray.find((inx) => {
-                return (`/${inx.ActualPagePath}` === locationPath)
-            })
-        }
-        else if (!(editDataGatingFromList === undefined)) {
-            let relatatedPage = props.relatatedPage
-            userAcc = RoleAccessModifiedinSingleArray.find((inx) => {
-                return (`/${inx.ActualPagePath}` === relatatedPage)
-            })
+        userAcc = userAccess.find((inx) => {
+            return (`/${inx.ActualPagePath}` === locationPath)
+        })
 
-        }
-        if (!(userAcc === undefined)) {
+        if (userAcc) {
             setUserPageAccessState(userAcc)
-        }
-
-    }, [RoleAccessModifiedinSingleArray])
+        };
+    }, [userAccess])
 
     useEffect(() => {
 
-        if (!(userPageAccessState === '')) { document.getElementById("txtName0").focus(); }
+        // if (!(userPageAccessState === '')) { document.getElementById("txtName").focus(); }
+        if ((hasShowloction || hasShowModal)) {
 
-        if (!(editDataGatingFromList === undefined)) {
-
-            setEditData(editDataGatingFromList);
-            let editMode_Data = editDataGatingFromList
-            setPageMode(pageModeProps);
-            dispatch(BreadcrumbShow(editMode_Data.Name))
-
-            let initialFormValue = {
-                Name: editMode_Data.Name,
-                Sequence: editMode_Data.Sequence,
-                ShortName: editMode_Data.ShortName,
-                BarCode: editMode_Data.BarCode,
-                Company: { label: editMode_Data.CompanyName, value: editMode_Data.Company },
-                BaseUnit: { label: editMode_Data.BaseUnitName, value: editMode_Data.BaseUnitID },
-                isActive: editMode_Data.isActive,
+            let hasEditVal = null
+            if (hasShowloction) {
+                setPageMode(location.pageMode)
+                hasEditVal = location.editValue
             }
-            let initialCategory = editMode_Data.ItemCategoryDetails.map((indx, key) => {
+            else if (hasShowModal) {
+                hasEditVal = props.editValue
+                setPageMode(props.pageMode)
+                setModalCss(true)
+            }
 
-                dispatch(get_Category_By_CategoryType_ForDropDown(indx.CategoryType, key))
-                dispatch(get_Sub_Category_By_CategoryType_ForDropDown(indx.Category, key))
-                return {
-                    CategoryType: {
-                        label: indx.CategoryTypeName,
-                        value: indx.CategoryType
-                    },
-                    CategoryTypeOption: [],
-                    Category: {
-                        label: indx.CategoryName,
-                        value: indx.Category
-                    },
-                    SubCategory: {
-                        label: indx.SubCategoryName,
-                        value: indx.SubCategory
-                    },
+            if (hasEditVal) {
 
-                    Category_DropdownOptions: [],
-                    SubCategory_DropdownOptions: []
+                setEditData(hasEditVal);
+
+                dispatch(BreadcrumbShow(hasEditVal.Name))
+
+                const editDivision = hasEditVal.ItemDivisionDetails.map(index => ({
+                    value: index.Division,
+                    label: index.DivisionName
+                }))
+
+                const editCategoryType = {
+                    value: hasEditVal.ItemCategoryDetails[0].CategoryType,
+                    label: hasEditVal.ItemCategoryDetails[0].CategoryTypeName
                 }
-            })
 
-            let ItemImagesDetails = editMode_Data.ItemImagesDetails.map((index) => {
+                const editCategory = hasEditVal.ItemCategoryDetails.map(index => ({
+                    value: index.Category,
+                    label: index.CategoryName
+                }))
 
-                return {
-                    ImageType: {
-                        label: index.ImageTypeName,
-                        value: index.ImageType
-                    },
-                    ImageUpload: index.Item_pic
-
+                let initialFormValue = {
+                    Name: hasEditVal.Name,
+                    Sequence: hasEditVal.Sequence,
+                    ShortName: hasEditVal.ShortName,
+                    BarCode: hasEditVal.BarCode,
+                    Company: { label: hasEditVal.CompanyName, value: hasEditVal.Company },
+                    CategoryType: editCategoryType,
+                    Category: editCategory,
+                    Division: editDivision,
+                    BaseUnit: { label: hasEditVal.BaseUnitName, value: hasEditVal.BaseUnitID },
+                    isActive: hasEditVal.isActive,
                 }
-            })
 
-            let itemDivisionDetails = editMode_Data.ItemDivisionDetails.map((index) => {
-                return {
-                    label: index.DivisionName,
-                    value: index.Division
-                }
-            })
+                let ItemImagesDetails = hasEditVal.ItemImagesDetails.map((index) => {
+                    return {
+                        ImageType: {
+                            label: index.ImageTypeName,
+                            value: index.ImageType
+                        },
+                        ImageUpload: index.Item_pic
+                    }
+                })
 
-            let ItemUnitDetails = editMode_Data.ItemUnitDetails.map((index) => {
-                return {
-                    Unit: {
-                        label: index.UnitName,
-                        value: index.UnitID,
-                    },
-                    Conversion: index.BaseUnitQuantity,
-                }
-            })
+                let ItemUnitDetails = hasEditVal.ItemUnitDetails.map((index) => {
+                    return {
+                        Unit: {
+                            label: index.UnitName,
+                            value: index.UnitID,
+                        },
+                        Conversion: index.BaseUnitQuantity,
+                    }
+                })
 
-            let ItemMRPDetails = editMode_Data.ItemMRPDetails.map((index) => {
-                return {
-                    MRPType: {
-                        label: index.MRPTypeName,
-                        value: index.MRPType
-                    },
-                    MRP: index.MRP,
-                    GSTPercentage: index.GSTPercentage,
-                    HSNCode: index.HSNCode,
-                }
-            })
 
-            let ItemMarginDetails = editMode_Data.ItemMarginDetails.map((index) => {
-                return {
-                    PriceList: index.PriceList,
-                    Party: index.Party,
-                    EffectiveDate: index.EffectiveDate,
-                    Margin: index.Margin
+                setFormValue(initialFormValue);
+                setImageTabTable(ItemImagesDetails)
+                setBaseUnitTableData(ItemUnitDetails)
+                setMRP_Tab_TableData(hasEditVal.ItemMRPDetails)
+                setMarginMaster(hasEditVal.ItemMarginDetails)
+                setGStDetailsMaster(hasEditVal.ItemGSTHSNDetails)
+                setGroup_Tab_TableData(hasEditVal.ItemGroupDetails)
+                setCategory_Tab_TableData(hasEditVal.ItemCategoryDetails)
 
-                }
-            })
+                dispatch(editItemSuccess({ Status: false }))
 
-            let ItemGSTDetails = editMode_Data.ItemGSTHSNDetails.map((index) => {
-
-                return {
-                    GST: index.GSTPercentage,
-                    HSNCode: index.HSNCode,
-                    EffectiveDate: index.EffectiveDate,
-                }
-            })
-
-            setFormValue(initialFormValue);
-            setCategoryTabTable(initialCategory)
-            setImageTabTable(ItemImagesDetails)
-            setDivisionTableData(itemDivisionDetails)
-            setBaseUnitTableData(ItemUnitDetails)
-            setMRP_Tab_TableData(editMode_Data.ItemMRPDetails)
-            setMarginMaster(editMode_Data.ItemMarginDetails)
-            setGStDetailsMaster(editMode_Data.ItemGSTHSNDetails)
-            setGroup_Tab_TableData(editMode_Data.ItemGroupDetails)
-            setDivision_Tab_TableData(editMode_Data.ItemDivisionDetails)
-            setCategory_Tab_TableData(editMode_Data.ItemCategoryDetails)
-            setIsValidate([])
-
-            dispatch(editItemSuccess({ Status: false }))
-
+            }
         }
 
-    }, [editDataGatingFromList])
+    }, [])
 
 
     useEffect(() => {
@@ -346,11 +288,8 @@ const ItemsMaster = (props) => {
         dispatch(fetchCompanyList());
         dispatch(getBaseUnit_ForDropDown());
         dispatch(get_CategoryTypes_ForDropDown());
-        // dispatch(get_Category_By_CategoryType_ForDropDown());
-        // dispatch(get_Sub_Category_By_CategoryType_ForDropDown());
         dispatch(getPartyListAPI());
         dispatch(get_ImageType_ForDropDown());
-        // dispatch(get_MRPTypes_ForDropDown());
         dispatch(get_Division_ForDropDown());
         dispatch(get_Party_ForDropDown());
         dispatch(get_PriceList_ForDropDown());
@@ -358,65 +297,6 @@ const ItemsMaster = (props) => {
         dispatch(get_Category_By_CategoryType_ForDropDownAPI());
     }, [dispatch]);
 
-
-    // useEffect(() => {
-
-    //     let key = Category.key
-    //     if ((key === null)) return;
-
-    //     let Category_DropdownOptions = Category.Data.map((data) => ({
-    //         value: data.id,
-    //         label: data.Name
-    //     }));
-
-    //     var found = categoryTabTable.find((i, k) => {
-    //         return (k === key)
-    //     })
-
-    //     let newSelectValue = {
-    //         CategoryType: found.CategoryType,
-    //         Category: found.Category,
-    //         SubCategory: found.SubCategory,
-    //         Category_DropdownOptions: Category_DropdownOptions,
-    //         SubCategory_DropdownOptions: []
-    //     }
-
-    //     let newTabArr = categoryTabTable.map((index, k) => {
-    //         return (k === key) ? newSelectValue : index
-    //     })
-    //     setCategoryTabTable(newTabArr)
-    //     dispatch(get_Category_By_CategoryType_ForDropDown_Success({ Data: [], key: null }))
-    // }, [Category]);
-
-    // useEffect(() => {
-
-    //     let key = SubCategory.key
-    //     if ((key === null)) return;
-
-    //     let SubCategory_DropdownOptions = SubCategory.Data.map((data) => ({
-    //         value: data.id,
-    //         label: data.Name
-    //     }));
-
-    //     var found = categoryTabTable.find((i, k) => {
-    //         return (k === key)
-    //     })
-
-    //     let newSelectValue = {
-    //         CategoryType: found.CategoryType,
-    //         Category: found.Category,
-    //         SubCategory: found.SubCategory,
-    //         Category_DropdownOptions: found.Category_DropdownOptions,
-    //         SubCategory_DropdownOptions: SubCategory_DropdownOptions,
-    //     }
-
-    //     let newTabArr = categoryTabTable.map((index, k) => {
-    //         return (k === key) ? newSelectValue : index
-    //     })
-    //     setCategoryTabTable(newTabArr)
-    //     dispatch(get_Sub_Category_By_CategoryType_ForDropDown_Success({ Data: [], key: null }))
-
-    // }, [SubCategory]);
 
     const toggle1 = tab => {
         if (activeTab1 !== tab) {
@@ -433,10 +313,6 @@ const ItemsMaster = (props) => {
         value: data.id,
         label: data.Name
     }));
-    // const BaseUnit_DropdownOptions2 = BaseUnit.map((data) => ({
-    //     value: data.id,
-    //     label: data.Name
-    // }))
 
     let BaseUnit_DropdownOptions2 = []
     BaseUnit.forEach(myFunction);
@@ -449,27 +325,6 @@ const ItemsMaster = (props) => {
         }
     }
 
-    const PriceList_DropdownOptions = BaseUnit.map((data) => ({
-        value: data.id,
-        label: data.Name
-    }));
-
-    //   const PriceList_DropdownOptions = [
-    //     {
-    //       value: 1,
-    //       label: "ABC",
-    //     },
-    //     {
-    //       value: 2,
-    //       label: "XYZ",
-    //     },
-    //   ];
-
-    const CategoryType_DropdownOptions = CategoryType.map((data) => ({
-        value: data.id,
-        label: data.Name
-    }));
-
     const CategoryTypeList_DropdownOptions = CategoryTypeList.map((data) => ({
         value: data.id,
         label: data.Name,
@@ -480,10 +335,6 @@ const ItemsMaster = (props) => {
         label: data.Name,
     }));
 
-    const DivisionType_DropdownOptions = DivisionType.map((data) => ({
-        value: data.id,
-        label: data.Name
-    }));
 
     const ImageType_DropdownOptions = ImageType.map((data) => ({
         value: data.id,
@@ -495,15 +346,22 @@ const ItemsMaster = (props) => {
         label: data.Name
     }));
 
-    const Party_DropdownOptions = Party.map((data) => ({
-        value: data.id,
-        label: data.Name
-    }));
 
-    const PriceList_DropdownOptions_In_MarginTab = PriceList.map((data) => ({
-        value: data.id,
-        label: data.Name
-    }));
+
+    function dropDownValidation(event, type,) {
+
+        let returnVal = event.value === ''
+        if (returnVal) {
+            inValidDrop[type] = true
+            return
+        } else {
+            formValue[type] = event
+            inValidDrop[type] = false
+
+        }
+        setpageRefresh(!pageRefresh)
+    }
+
     function Common_Drop_Validation(event, type, key) {
 
         let OnchangeControl = document.getElementById(`drop${type}-${key}`)
@@ -546,21 +404,6 @@ const ItemsMaster = (props) => {
 
     }
 
-    function CommonTab_DatePicker_handller_ForAll(event, type, key) {
-
-
-        let OnchangeControl = document.getElementById(`txt${type}${key}`)
-
-        if (event === '') {
-            OnchangeControl.className = 'form-control is-invalid'
-            return false
-        } else {
-            OnchangeControl.className = 'form-control';
-            return true
-        }
-
-    }
-
     function Common_DropDown_handller_ForAll(event, type, key) {
 
         let returnVal = Common_Drop_Validation(event, type, key)
@@ -576,112 +419,6 @@ const ItemsMaster = (props) => {
             setIsValidate(isValidate)
         }
 
-        setrefresh(event)
-    }
-
-    function CategoryType_Dropdown_Handler(e, key) {
-
-        CategoryTab_Common_onChange_Handller(e, "CategoryType", key,);
-        dispatch(get_Category_By_CategoryType_ForDropDown(e.value, key))
-    }
-
-    function Category_Dropdown_Handler(e, key) {
-        CategoryTab_Common_onChange_Handller(e, "Category", key,);
-        dispatch(get_Sub_Category_By_CategoryType_ForDropDown(e.value, key))
-
-    }
-
-    function CategoryTab_AddRow_Handler() {
-
-        let key = categoryTabTable.length - 1
-        let cat_TableElement = categoryTabTable[key];
-        let valid = true;
-
-        let arr = ["CategoryType", "Category",];
-        arr.map((label) => {
-            var valid11 = Common_Drop_Validation(cat_TableElement[label], label, key,)
-            if (!valid11) { valid = valid11 }
-        })
-
-        if (valid === false) {
-            return
-        }
-
-        var newarr = [...categoryTabTable, {
-            CategoryType: { value: 0, label: "select" },
-            Category: { value: 0, label: "select" },
-            SubCategory: { value: 0, label: "select" },
-            Category_DropdownOptions: [],
-            SubCategory_DropdownOptions: []
-        }]
-        setCategoryTabTable(newarr)
-    }
-    function CategoryTab_DeleteRow_Handler(key) {
-
-        var removeElseArrray = categoryTabTable.filter((i, k) => {
-            return !(k === key)
-        })
-
-        setCategoryTabTable(removeElseArrray)
-
-    }
-    function CategoryTab_Common_onChange_Handller(event, type, key) {
-
-        const foundDublicate = categoryTabTable.find((element) => {
-            return (element[type].value === event.value)
-        });
-        // if (!(foundDublicate === undefined)) {
-        //     dispatch(AlertState({
-        //         Type: 4,
-        //         Status: true,
-        //         Message: "Category alredy Select",
-        //     }))
-        //     return
-        // }
-
-
-        //     let validateReturn = Common_Drop_Validation(event, type, key);
-        //     if (validateReturn === false) return;
-
-
-        var found = categoryTabTable.find((i, k) => {
-            return (k === key)
-        })
-
-        let newSelectValue = ''
-
-        if (type === "CategoryType") {
-            newSelectValue = {
-                CategoryType: event,
-                Category: { label: 'select', value: 0 },
-                SubCategory: { label: 'select', value: 0 },
-                Category_DropdownOptions: [],
-                SubCategoryOption: []
-            }
-        }
-        else if (type === 'Category') {
-            newSelectValue = {
-                CategoryType: found.CategoryType,
-                Category: event,
-                SubCategory: { label: 'select', value: 0 },
-                Category_DropdownOptions: found.Category_DropdownOptions,
-                SubCategory_DropdownOptions: []
-            }
-        }
-        else {
-            newSelectValue = {
-                CategoryType: found.CategoryType,
-                Category: found.Category,
-                SubCategory: event,
-                Category_DropdownOptions: found.Category_DropdownOptions,
-                SubCategory_DropdownOptions: found.SubCategory_DropdownOptions
-            }
-        }
-
-        let newTabArr = categoryTabTable.map((index, k) => {
-            return (k === key) ? newSelectValue : index
-        })
-        setCategoryTabTable(newTabArr)
     }
 
     function UnitConversionsTab_AddRow_Handle() {
@@ -754,42 +491,6 @@ const ItemsMaster = (props) => {
         // setBaseUnit_dropdown_Select2(e)
     }
 
-    function DivisionTab_AddRow_Handle() {
-
-        const find = divisionTableData.find((element) => {
-            return element.value === division_dropdown_Select.value
-        });
-
-        if (division_dropdown_Select.length <= 0) {
-
-            dispatch(AlertState({
-                Type: 3, Status: true,
-                Message: "Select One Role",
-            }));
-        }
-        else if (find === undefined) {
-            document.getElementById("dropDivisionType-0").className = ""
-            setDivisionTableData([...divisionTableData, division_dropdown_Select]);
-        }
-        else {
-            document.getElementById("dropDivisionType-0").className = ""
-            dispatch(AlertState({
-                Type: 4, Status: true,
-                Message: "DivisionType already Exists ",
-            }));
-        }
-    }
-    function DivisionTab_Dropdown_onChange_Handler(e) {
-
-        setDivision_dropdown_Select(e)
-    }
-    function DivisionTab_DeleteRow_Handler(tableValue) {
-        setDivisionTableData(divisionTableData.filter(
-            (item) => !(item.value === tableValue)
-        )
-        )
-    }
-
     function ImageTab_AddRow_Handler(key) {
 
 
@@ -842,269 +543,139 @@ const ItemsMaster = (props) => {
         setImageTabTable(newTabArr)
     }
 
-    function GSTDetails_Tab_AddRow_Handler(key) {
-
-
-        let validateReturn1 = CommonTab_DatePicker_handller_ForAll(GStDetailsMaster.EffectiveDate, "EffectiveDate", 0)
-        let validateReturn2 = Common_Text_INPUT_Validation(GStDetailsMaster.GST, "GST", 0);
-        let validateReturn3 = Common_Text_INPUT_Validation(GStDetailsMaster.HSNCode, "HSNCode", 0);
-
-        if ((validateReturn1 === false)
-            || (validateReturn2 === false)
-            || (validateReturn3 === false)) return;
-
-        var length = GStDetailsTabTable.length
-        var newArr = {
-            id: length,
-            EffectiveDate: GStDetailsMaster.EffectiveDate,
-            GST: GStDetailsMaster.GST,
-            HSNCode: GStDetailsMaster.HSNCode
-        }
-        setGSTDetailsTabTable([...GStDetailsTabTable, newArr])
-
-    }
-
-    function MarginTab_AddRow_Handler(key) {
-
-        let validateReturn = Common_Drop_Validation(marginMaster.PriceList, "PriceList", 0);
-        let validateReturn1 = CommonTab_DatePicker_handller_ForAll(marginMaster.EffectiveDate, "EffectiveDate", 0)
-        let validateReturn2 = Common_Drop_Validation(marginMaster.PartyName, "PartyName", 0)
-        let validateReturn3 = Common_Text_INPUT_Validation(marginMaster.Margin, "Margin", 0)
-
-        if ((validateReturn1 === false) || (validateReturn === false) || (validateReturn2 === false) || (validateReturn3 === false)) return;
-        // if ((validateReturn === false) || (validateReturn2 === false) || (validateReturn3 === false)) return;
-
-        var length = marginTabTable.length
-        var newArr = {
-            id: length,
-            PriceList: { label: "select", value: 0 },
-            EffectiveDate: marginMaster.EffectiveDate,
-            PartyName: { label: "select", value: 0 },
-            Margin: marginMaster.Margin,
-
-        }
-        setMarginTabTable([...GStDetailsTabTable, newArr])
-    }
-    function MarginTab_DeleteRow_Handler(key) {
-        var removeElseArrray1 = marginTabTable.filter((i, k) => {
-            return !(k === key)
-        })
-        setMarginTabTable(removeElseArrray1)
-    }
-    function MarginTab_onChange_Handler(event, type, key) {
-
-        if (type === "PriceList") {
-            marginMaster.EffectiveDate = event
-        }
-        else if (type === "EffectiveDate") {
-            marginMaster.GST = event
-        }
-        else if (type === "PartyName") {
-            marginMaster.HSNCode = event
-        }
-        else if (type === "Margin") {
-            marginMaster.HSNCode = event
-        }
-    }
-
-    function MRP_Tab_Tab_AddRow_Handler(key) {
-
-        let rate_TableElement = MRP_Tab_TableData[key];
-
-        let validateReturn1 = Common_Drop_Validation(rate_TableElement.Division, "Division", key)
-        let validateReturn2 = CommonTab_DatePicker_handller_ForAll(rate_TableElement.EffectiveDate, "EffectiveDate", key);
-
-        let validateReturn3 = Common_Drop_Validation(rate_TableElement.PartyName, "PartyName", key);
-        let validateReturn4 = Common_Text_INPUT_Validation(rate_TableElement.MRP, "MRP", key);
-
-        if (
-            (validateReturn1 === false)
-            || (validateReturn2 === false)
-            || (validateReturn3 === false)
-            || (validateReturn4 === false)) return;
-
-        var newarr = [...MRP_Tab_TableData, {
-            Division: { label: "select", value: 0 },
-            EffectiveDate: '',
-            PartyName: { label: "select", value: 0 },
-            MRP: '',
-        }]
-        setMRP_Tab_TableData(newarr)
-    }
-    function MRP_Tab_Tab_DeleteRow_Handler(key) {
-
-        var removeElseArrray = MRP_Tab_TableData.filter((i, k) => {
-            return !(k === key)
-        })
-
-        setMRP_Tab_TableData(removeElseArrray)
-
-    }
-    function MRP_Tab__Common_onChange_Handller(event, type, key) {
-
-        if (type === "PriceList") {
-            marginMaster.EffectiveDate = event
-        }
-        else if (type === "EffectiveDate") {
-            marginMaster.GST = event
-        }
-        else if (type === "PartyName") {
-            marginMaster.HSNCode = event
-        }
-        else if (type === "Margin") {
-            marginMaster.HSNCode = event
-        }
-    }
-
-    function GSTDetails_onChange_Handller(event, type, key) {
-
-
-        if (type === "EffectiveDate") {
-            GStDetailsMaster.EffectiveDate = event
-        }
-        else if (type === "GST") {
-            GStDetailsMaster.GST = event
-        }
-        else if (type === "HSNCode") {
-            GStDetailsMaster.HSNCode = event
-        }
-    }
-
-    function GSTDetails_Tab_AddRow_Handler(key) {
-
-
-        let validateReturn1 = CommonTab_DatePicker_handller_ForAll(GStDetailsMaster.EffectiveDate, "EffectiveDate", 0)
-        let validateReturn2 = Common_Text_INPUT_Validation(GStDetailsMaster.GST, "GST", 0);
-        let validateReturn3 = Common_Text_INPUT_Validation(GStDetailsMaster.HSNCode, "HSNCode", 0);
-
-        if ((validateReturn1 === false)
-            || (validateReturn2 === false)
-            || (validateReturn3 === false)) return;
-
-        var length = GStDetailsTabTable.length
-        var newArr = {
-            id: length,
-            EffectiveDate: GStDetailsMaster.EffectiveDate,
-            GST: GStDetailsMaster.GST,
-            HSNCode: GStDetailsMaster.HSNCode
-        }
-        setGSTDetailsTabTable([...GStDetailsTabTable, newArr])
-
-    }
-
-    function GSTDetails_Delete_Handller(event, v, k) {
-
-        var filter = GStDetailsTabTable
-        // .filter(i => {
-
-        //    return !(i.id === event.id)
-        // })
-        // if (!(filter === undefined)) {
-        //     setGSTDetailsTabTable(filter)
-        // } else {
-        //     setGSTDetailsTabTable([])
-        // }
-    }
 
     const CategoryType_Handler = (event) => {
-        setCategoryTypeDropdownSelect(event);
+        dropDownValidation(event, "CategoryType")
+        // setCategoryTypeDropdownSelect(event);
         dispatch(get_Category_By_CategoryType_ForDropDownAPI(event.value))
     };
 
     const Category_Handler = (event) => {
-        setcategoryDropdownSelect(event);
+        // setcategoryDropdownSelect(event);
+        dropDownValidation(event, "Category")
 
     };
+
+    const Division_Handler = (event) => {
+        dropDownValidation(event, "Division")
+        // setDivision_dropdown_Select(event);
+
+    };
+
     const handleValidSubmit = (event, values) => {
-        debugger
-        const itemCategoryDetails = categoryTabTable.map((index) => ({
-            CategoryType: index.CategoryType.value,
-            Category: index.Category.value,
-            SubCategory: index.SubCategory.value
-        }))
 
-        const itemUnitDetails = baseUnitTableData.map((index) => ({
-            BaseUnitQuantity: index.Conversion,
-            UnitID: index.Unit.value,
-        }))
+        let isvalid = true
+        if (formValue.Name === '') {
+            document.getElementById("txtName0").className = "form-control is-invalid"
+            isvalid = false
+        }
+        if (formValue.ShortName === '') {
+            document.getElementById("txtShortName0").className = "form-control is-invalid"
+            isvalid = false
+        }
+        if (formValue.Company.length < 1) {
+            inValidDrop.Company = true
+            isvalid = false
+        }
+        if (formValue.BaseUnit.length < 1) {
+            inValidDrop.BaseUnit = true
+            isvalid = false
+        }
+        if (formValue.CategoryType.length < 1) {
+            inValidDrop.CategoryType = true
+            isvalid = false
+        }
+        if (formValue.Category.length < 1) {
+            inValidDrop.Category = true
+            isvalid = false
+        }
 
-        const itemDivisionDetails = divisionTableData.map((index) => ({
-            Division: index.value
-        }))
-
-        const jsonBody = JSON.stringify({
-            Name: formValue.Name,
-            ShortName: formValue.ShortName,
-            Sequence: formValue.Sequence,
-            BarCode: formValue.BarCode,
-            isActive: formValue.isActive,
-            Company: formValue.Company.value,
-            BaseUnitID: formValue.BaseUnit.value,
-            CreatedBy: 1,
-            UpdatedBy: 1,
-            ItemCategoryDetails: Category_Tab_TableData,
-            ItemUnitDetails: itemUnitDetails,
-
-            ItemImagesDetails: [
-                {
-                    ImageType: "1",
-                    Item_pic: "sadsadasdas"
-                }
-            ],
-            ItemDivisionDetails: Division_Tab_TableData,
-            ItemMRPDetails: MRP_Tab_TableData,
-            ItemMarginDetails: marginMaster,
-            ItemGSTHSNDetails: GStDetailsMaster,
-            ItemGroupDetails: Group_Tab_TableData,
-
-        });
-
+        if (formValue.Division.length < 1) {
+            inValidDrop.Division = true
+            isvalid = false
+        }
         if (!Group_Tab_TableData.length > 0) {
-            dispatch(AlertState({
-                Type: 4, Status: true,
-                Message: "Please Select ItemGroup Details",
-                RedirectPath: false,
-                PermissionAction: false,
-            }));
+            isvalid = false
         }
-        else if (!MRP_Tab_TableData.length > 0) {
-            dispatch(AlertState({
-                Type: 4, Status: true,
-                Message: "Please Select MRP Details",
-                RedirectPath: false,
-                PermissionAction: false,
-            }));
-        }
-        else if (!marginMaster.length > 0) {
-            dispatch(AlertState({
-                Type: 4, Status: true,
-                Message: "Please Select Margin Details",
-                RedirectPath: false,
-                PermissionAction: false,
-            }));
-        }
-        else if (!GStDetailsMaster.length > 0) {
-            dispatch(AlertState({
-                Type: 4, Status: true,
-                Message: "Please Select GST Details",
-                RedirectPath: false,
-                PermissionAction: false,
-            }));
-        }
-        else if (pageMode === 'edit') {
-            dispatch(updateItemID(jsonBody, EditData.id));
-            console.log("edit json", jsonBody)
-        }
+        if (isvalid) {
+            debugger
 
+            const itemUnitDetails = baseUnitTableData.map((index) => ({
+                BaseUnitQuantity: index.Conversion,
+                UnitID: index.Unit.value,
+            }))
+            const islastIndex = itemUnitDetails.length
+
+            if (islastIndex === 1) {
+                itemUnitDetails[itemUnitDetails.length - 1] = {
+                    BaseUnitQuantity: 1,
+                    UnitID: formValue.BaseUnit.value,
+                }
+            } else if (islastIndex === 0) {
+                itemUnitDetails.unshift({
+                    BaseUnitQuantity: 1,
+                    UnitID: formValue.BaseUnit.value,
+                })
+            }
+            const ItemCategoryDetails = formValue.Category.map((index) => ({
+                CategoryType: formValue.CategoryType.value,
+                Category: index.value
+            }))
+
+            const jsonBody = JSON.stringify({
+                Name: formValue.Name,
+                ShortName: formValue.ShortName,
+                Sequence: formValue.Sequence,
+                BarCode: formValue.BarCode,
+                isActive: formValue.isActive,
+                Company: formValue.Company.value,
+                BaseUnitID: formValue.BaseUnit.value,
+                CreatedBy: 1,
+                UpdatedBy: 1,
+                ItemCategoryDetails: ItemCategoryDetails,
+
+                ItemUnitDetails: itemUnitDetails,
+
+                ItemDivisionDetails: formValue.Division.map((i) => {
+                    return ({ Division: i.value })
+                }),
+                ItemImagesDetails: [
+                    {
+                        ImageType: "1",
+                        Item_pic: "sadsadasdas"
+                    }
+                ],
+                ItemMRPDetails: MRP_Tab_TableData,
+                ItemMarginDetails: marginMaster,
+                ItemGSTHSNDetails: GStDetailsMaster,
+                ItemGroupDetails: Group_Tab_TableData,
+
+            });
+
+            if (pageMode === 'edit') {
+                dispatch(updateItemID(jsonBody, EditData.id));
+                console.log("edit json", jsonBody)
+            }
+
+            else {
+                dispatch(postItemData(jsonBody));
+                console.log("post json", jsonBody)
+            }
+        }
         else {
-            dispatch(postItemData(jsonBody));
-            console.log("post json", jsonBody)
+            dispatch(AlertState({
+                Type: 4, Status: true,
+                Message: "Please Select Value and Group",
+                RedirectPath: false,
+                PermissionAction: false,
+            }));
         }
 
     };
 
     var IsEditMode_Css = ''
-    if ((pageMode === "edit") || (pageMode === "copy") || (pageMode === "dropdownAdd")) { IsEditMode_Css = "-5.5%" };
+    if ((modalCss) || (pageMode === "dropdownAdd")) { IsEditMode_Css = "-5.5%" };
+
     if (!(userPageAccessState === '')) {
         return (
             <React.Fragment>
@@ -1144,7 +715,8 @@ const ItemsMaster = (props) => {
                                                         <span className="d-none d-sm-block">Basic Info</span>
                                                     </NavLink>
                                                 </NavItem>
-                                                {/* <NavItem>
+
+                                                <NavItem>
                                                     <NavLink
                                                         id="nave-link-2"
                                                         style={{ cursor: "pointer" }}
@@ -1158,10 +730,10 @@ const ItemsMaster = (props) => {
                                                         <span className="d-block d-sm-none">
                                                             <i className="fas fa-home"></i>
                                                         </span>
-                                                        <span className="d-none d-sm-block">Category</span>
+                                                        <span className="d-none d-sm-block">Item Group</span>
 
                                                     </NavLink>
-                                                </NavItem> */}
+                                                </NavItem>
                                                 <NavItem>
                                                     <NavLink
                                                         id="nave-link-3"
@@ -1176,27 +748,27 @@ const ItemsMaster = (props) => {
                                                         <span className="d-block d-sm-none">
                                                             <i className="fas fa-home"></i>
                                                         </span>
-                                                        <span className="d-none d-sm-block">Item Group</span>
-
+                                                        <span className="d-none d-sm-block">Unit Conversions</span>
                                                     </NavLink>
                                                 </NavItem>
                                                 <NavItem>
                                                     <NavLink
-                                                        id="nave-link-4"
+                                                        id="nave-link-5"
                                                         style={{ cursor: "pointer" }}
                                                         className={classnames({
                                                             active: activeTab1 === "4",
                                                         })}
                                                         onClick={() => {
-                                                            toggle1("4")
+                                                            toggle1("5")
                                                         }}
                                                     >
                                                         <span className="d-block d-sm-none">
                                                             <i className="fas fa-home"></i>
                                                         </span>
-                                                        <span className="d-none d-sm-block">Unit Conversions</span>
+                                                        <span className="d-none d-sm-block">Image</span>
                                                     </NavLink>
                                                 </NavItem>
+
                                                 <NavItem>
                                                     <NavLink
                                                         id="nave-link-5"
@@ -1211,10 +783,11 @@ const ItemsMaster = (props) => {
                                                         <span className="d-block d-sm-none">
                                                             <i className="fas fa-home"></i>
                                                         </span>
-                                                        <span className="d-none d-sm-block">Image</span>
+                                                        <span className="d-none d-sm-block">MRP</span>
                                                     </NavLink>
                                                 </NavItem>
-                                                {/* <NavItem>
+
+                                                <NavItem>
                                                     <NavLink
                                                         id="nave-link-6"
                                                         style={{ cursor: "pointer" }}
@@ -1228,9 +801,10 @@ const ItemsMaster = (props) => {
                                                         <span className="d-block d-sm-none">
                                                             <i className="fas fa-home"></i>
                                                         </span>
-                                                        <span className="d-none d-sm-block">Division</span>
+                                                        <span className="d-none d-sm-block">Margin</span>
                                                     </NavLink>
-                                                </NavItem> */}
+                                                </NavItem>
+
                                                 <NavItem>
                                                     <NavLink
                                                         id="nave-link-7"
@@ -1245,66 +819,10 @@ const ItemsMaster = (props) => {
                                                         <span className="d-block d-sm-none">
                                                             <i className="fas fa-home"></i>
                                                         </span>
-                                                        <span className="d-none d-sm-block">MRP</span>
-                                                    </NavLink>
-                                                </NavItem>
-
-
-                                                <NavItem>
-                                                    <NavLink
-                                                        id="nave-link-8"
-                                                        style={{ cursor: "pointer" }}
-                                                        className={classnames({
-                                                            active: activeTab1 === "8",
-                                                        })}
-                                                        onClick={() => {
-                                                            toggle1("8")
-                                                        }}
-                                                    >
-                                                        <span className="d-block d-sm-none">
-                                                            <i className="fas fa-home"></i>
-                                                        </span>
-                                                        <span className="d-none d-sm-block">Margin</span>
-                                                    </NavLink>
-                                                </NavItem>
-
-                                                <NavItem>
-                                                    <NavLink
-                                                        id="nave-link-9"
-                                                        style={{ cursor: "pointer" }}
-                                                        className={classnames({
-                                                            active: activeTab1 === "9",
-                                                        })}
-                                                        onClick={() => {
-                                                            toggle1("9")
-                                                        }}
-                                                    >
-                                                        <span className="d-block d-sm-none">
-                                                            <i className="fas fa-home"></i>
-                                                        </span>
                                                         <span className="d-none d-sm-block">GST Details</span>
                                                     </NavLink>
                                                 </NavItem>
 
-                                                {/* <NavItem>
-
-                                                    <NavLink
-                                                        style={{ cursor: "pointer" }}
-                                                    // className={classnames({
-                                                    //     active: activeTab1 === "7",
-                                                    // })}
-                                                    // onClick={() => {
-                                                    //     toggle1("7")
-                                                    // }}
-                                                    >
-                                                        <span className="d-block d-sm-none">
-                                                            <i className="fas fa-home"></i>
-                                                        </span>
-                                                        {/* <span className="d-none d-sm-block">Tab7</span> */}
-                                                {/* <Button type="submit"> save</Button> */}
-
-                                                {/* </NavLink>
-                                                </NavItem>  */}
                                             </Nav>
 
                                             <TabContent activeTab={activeTab1} className="p-3 text-muted">
@@ -1348,17 +866,34 @@ const ItemsMaster = (props) => {
                                                                             id='dropCompany-0'
                                                                             value={formValue.Company}
                                                                             options={Company_DropdownOptions}
-                                                                            onChange={(event) => Common_DropDown_handller_ForAll(event, "Company", 0)}
+                                                                            styles={{
+                                                                                control: base => ({
+                                                                                    ...base,
+                                                                                    border: inValidDrop.Company ? '1px solid red' : '',
+
+                                                                                })
+                                                                            }}
+                                                                            onChange={(event) => dropDownValidation(event, "Company")}
                                                                         />
                                                                     </FormGroup>
 
+                                                                </Row>
+
+                                                                <Row>
                                                                     <FormGroup className=" col col-sm-4 " >
                                                                         <Label htmlFor="validationCustom21">Base Unit</Label>
                                                                         <Select
                                                                             id='dropBaseUnit-0'
                                                                             value={formValue.BaseUnit}
                                                                             options={BaseUnit_DropdownOptions}
-                                                                            onChange={(event) => Common_DropDown_handller_ForAll(event, "BaseUnit", 0)}
+                                                                            styles={{
+                                                                                control: base => ({
+                                                                                    ...base,
+                                                                                    border: inValidDrop.BaseUnit ? '1px solid red' : '',
+
+                                                                                })
+                                                                            }}
+                                                                            onChange={(event) => dropDownValidation(event, "BaseUnit")}
                                                                         />
                                                                     </FormGroup>
 
@@ -1369,10 +904,6 @@ const ItemsMaster = (props) => {
                                                                             placeholder=" Please Enter BarCode "
                                                                             defaultValue={EditData.BarCode}
                                                                             autoComplete="off"
-                                                                            // validate={{
-                                                                            //     required: { value: true, errorMessage: 'Please Enter BarCode' },
-                                                                            // }}
-                                                                            // onChange={(e) => { formValue.BarCode = e.target.value }}
                                                                             onChange={(e) => { CommonTab_SimpleText_INPUT_handller_ForAll(e.target.value, "BarCode") }}
                                                                         />
                                                                     </FormGroup>
@@ -1389,168 +920,96 @@ const ItemsMaster = (props) => {
                                                                         />
 
                                                                     </FormGroup>
+                                                                </Row>
 
+                                                                <Row>
                                                                     <FormGroup className="mb-3 col col-sm-4 ">
                                                                         <Label>Category Type</Label>
                                                                         <Select
                                                                             id={`dropCategoryType-${0}`}
-                                                                            value={CategoryTypeDropdownSelect}
+                                                                            value={formValue.CategoryType}
                                                                             options={CategoryTypeList_DropdownOptions}
-                                                                            onChange={CategoryType_Handler}
+                                                                            styles={{
+                                                                                control: base => ({
+                                                                                    ...base,
+                                                                                    border: inValidDrop.CategoryType ? '1px solid red' : '',
+
+                                                                                })
+                                                                            }}
+                                                                            onChange={(e) => { CategoryType_Handler(e) }}
                                                                         />
                                                                     </FormGroup>
 
-                                                                    {/* <FormGroup className="mb-3 col col-sm-4 ">
-                                                                        <Label>Category</Label>
-                                                                        <Select
-                                                                            id={`dropCategory-${0}`}
-                                                                            value={categoryDropdownSelect}
-                                                                            options={CategoryList_DropdownOptions}
-                                                                            onChange={Category_Handler}
-                                                                        />
-                                                                    </FormGroup> */}
-                                                                    <div className="col-lg-4 col-md-6">
-                                                                        <div className="mb-3">
-                                                                            <Label className="form-label font-size-13 ">Category</Label>
-                                                                            <Select
-                                                                                defaultValue={categoryDropdownSelect}
-                                                                                isMulti={true}
-                                                                                className="basic-multi-select"
-                                                                                options={CategoryList_DropdownOptions}
-                                                                                onChange={(e) => { Category_Handler(e) }}
-                                                                                classNamePrefix="select2-selection"
-                                                                            />
-                                                                        </div>
-                                                                    </div>
 
-                                                                    <div className="col-lg-4 col-md-6">
+                                                                    <FormGroup className="mb-3 col col-sm-4 ">
+
+                                                                        <Label className="form-label font-size-13 ">Category</Label>
+                                                                        <Select
+                                                                            defaultValue={formValue.Category}
+                                                                            isMulti={true}
+                                                                            className="basic-multi-select"
+                                                                            options={CategoryList_DropdownOptions}
+                                                                            styles={{
+                                                                                control: base => ({
+                                                                                    ...base,
+                                                                                    border: inValidDrop.Category ? '1px solid red' : '',
+
+                                                                                })
+                                                                            }}
+                                                                            onChange={(e) => { Category_Handler(e) }}
+                                                                            classNamePrefix="select2-selection"
+                                                                        />
+                                                                    </FormGroup>
+
+                                                                </Row>
+
+                                                                <Row>
+                                                                    <FormGroup className="mb-3 col col-sm-4 ">
                                                                         <div className="mb-3">
                                                                             <Label className="form-label font-size-13 ">Division</Label>
                                                                             <Select
-                                                                                defaultValue={division_dropdown_Select}
+                                                                                defaultValue={formValue.Division}
                                                                                 isMulti={true}
                                                                                 className="basic-multi-select"
                                                                                 options={Division_DropdownOptions}
-                                                                                onChange={(e) => { Category_Handler(e) }}
+                                                                                styles={{
+                                                                                    control: base => ({
+                                                                                        ...base,
+                                                                                        border: (inValidDrop.Division) ? '1px solid red' : '',
+
+                                                                                    })
+                                                                                }}
+                                                                                onChange={(e) => { Division_Handler(e) }}
                                                                                 classNamePrefix="select2-selection"
                                                                             />
                                                                         </div>
-                                                                    </div>
-                                                                    <Row>
-                                                                        <FormGroup className="mb-2 col col-sm-5">
-                                                                            <Row className="justify-content-md-left">
-                                                                                <Label htmlFor="horizontal-firstname-input" className="col-sm-2 col-form-label" >Active </Label>
-                                                                                <Col md={2} style={{ marginTop: '9px' }} >
+                                                                    </FormGroup>
+                                                                    <FormGroup className="mt-4 col col-md-5">
+                                                                        <Row className="justify-content-ml-left ">
+                                                                            <Label htmlFor="horizontal-firstname-input"
+                                                                                className="col-md-2 col-form-label" >Active </Label>
+                                                                            <Col md={6} style={{ marginTop: '9px' }} >
 
-                                                                                    <div className="form-check form-switch form-switch-md mb-3" dir="ltr">
-                                                                                        <Input type="checkbox" className="form-check-input" id="customSwitchsizemd"
-                                                                                            defaultChecked={formValue.isActive}
-                                                                                            // defaultChecked={true}
-                                                                                            onChange={(e) => { formValue.isActive = e.target.checked }}
+                                                                                <div className="form-check form-switch form-switch-md mb-3" dir="ltr">
+                                                                                    <Input type="checkbox" className="form-check-input" id="customSwitchsizemd"
+                                                                                        defaultChecked={formValue.isActive}
+                                                                                        onChange={(e) => { formValue.isActive = e.target.checked }}
 
-                                                                                        />
-                                                                                    </div>
-                                                                                </Col>
-                                                                            </Row>
-                                                                        </FormGroup>
-                                                                    </Row>
-
+                                                                                    />
+                                                                                </div>
+                                                                            </Col>
+                                                                        </Row>
+                                                                    </FormGroup>
                                                                 </Row>
+
+
                                                             </CardBody>
                                                         </Card>
                                                     </Col>
 
                                                 </TabPane>
-                                                {/* 
-                                                <TabPane tabId="2">
-                                                    <Col md={12} >
-                                                        <Card className="text-black">
-                                                            <CardBody style={{ backgroundColor: "whitesmoke" }}>
-
-                                                                {categoryTabTable.map((index, key) => {
-                                                                    return <Row className=" col col-sm-11" >
-                                                                        <FormGroup className="mb-3 col col-sm-4 " >
-                                                                            <Label htmlFor="validationCustom21">Category Type</Label>
-                                                                            <Select
-                                                                                id={`dropCategoryType-${key}`}
-                                                                                value={categoryTabTable[key].CategoryType}
-
-                                                                                options={CategoryType_DropdownOptions}
-                                                                                onChange={(e) => {
-                                                                                    CategoryType_Dropdown_Handler(e, key, "CategoryType")
-                                                                                }}
-                                                                            />
-                                                                        </FormGroup>
-
-                                                                        <FormGroup className="mb-3 col col-sm-4 " >
-                                                                            <Label htmlFor="validationCustom21">Category</Label>
-                                                                            <Select
-                                                                                id={`dropCategory-${key}`}
-                                                                                // styles={customStyles}
-                                                                                value={categoryTabTable[key].Category}
-                                                                                options={categoryTabTable[key].Category_DropdownOptions}
-
-                                                                                onChange={(e) => {
-                                                                                    Category_Dropdown_Handler(e, key, "Category")
-
-                                                                                }}
-                                                                            />
-                                                                        </FormGroup>
-
-                                                                        <Col md={1}>
-                                                                            {(categoryTabTable.length === key + 1) ?
-                                                                                <Row className=" mt-3">
-                                                                                    <Col md={6} className=" mt-3">
-                                                                                        {(categoryTabTable.length > 1)
-                                                                                            ?
-                                                                                            < i className="mdi mdi-trash-can d-block text-danger font-size-20" onClick={() => {
-                                                                                                CategoryTab_DeleteRow_Handler(key)
-                                                                                            }} >
-                                                                                            </i>
-                                                                                            : <Col md={6} ></Col>
-                                                                                        }
-
-                                                                                    </Col>
-
-                                                                                    <Col md={6}>
-                                                                                        <Button className="btn btn-sm btn-light mt-3   align-items-sm-end"
-                                                                                            type="button"
-                                                                                            onClick={() => { CategoryTab_AddRow_Handler(key) }} >
-                                                                                            <i className="dripicons-plus"></i>
-                                                                                        </Button>
-                                                                                    </Col>
-                                                                                </Row>
-                                                                                :
-                                                                                <Row className="mt-3">
-                                                                                    < i className="mdi mdi-trash-can d-block text-danger font-size-20 mt-3" onClick={() => {
-                                                                                        CategoryTab_DeleteRow_Handler(key)
-                                                                                    }} >
-                                                                                    </i>
-                                                                                </Row>
-                                                                            }
-
-                                                                        </Col>
-                                                                    </Row>
-                                                                })}
-                                                            </CardBody>
-                                                        </Card>
-                                                    </Col>
-
-                                                </TabPane> */}
 
                                                 <TabPane tabId="2">
-                                                    <Row>
-                                                        <Col md={12}  >
-                                                            <Row className="mt-3">
-                                                                <Col className=" col col-12 ">
-                                                                    <CategoryTab tableData={Category_Tab_TableData} func={setCategory_Tab_TableData} />
-                                                                </Col>
-                                                            </Row>
-                                                        </Col>
-                                                    </Row>
-                                                </TabPane>
-
-                                                <TabPane tabId="3">
                                                     <Row>
                                                         <Col md={12}  >
                                                             <Row className="mt-3">
@@ -1561,7 +1020,7 @@ const ItemsMaster = (props) => {
                                                         </Col>
                                                     </Row>
                                                 </TabPane>
-                                                <TabPane tabId="4">
+                                                <TabPane tabId="3">
                                                     <Col md={12}>
                                                         <Row>
                                                             <Col md={12}  >
@@ -1573,6 +1032,7 @@ const ItemsMaster = (props) => {
                                                                                 <Label >Base Unit</Label>
                                                                                 <Select
                                                                                     id={`dropBaseUnit-0`}
+                                                                                    placeholder="Select..."
                                                                                     value={formValue.BaseUnit}
                                                                                     options={BaseUnit_DropdownOptions}
                                                                                     onChange={(e) => Common_DropDown_handller_ForAll(e, "BaseUnit", 0)}
@@ -1600,8 +1060,8 @@ const ItemsMaster = (props) => {
                                                                                                         <Col md={7}>
                                                                                                             <Select
                                                                                                                 id={`dropUnit-${key}`}
-                                                                                                                placeholder="select unit"
-                                                                                                                value={baseUnitTableData[key].Unit}
+                                                                                                                placeholder={"Select Unit"}
+                                                                                                                defaultValue={baseUnitTableData[key].Unit}
                                                                                                                 options={BaseUnit_DropdownOptions2}
                                                                                                                 onChange={(e) => UnitConversionsTab_BaseUnit2_onChange_Handller(e, "Unit", key)}
                                                                                                             />
@@ -1674,7 +1134,7 @@ const ItemsMaster = (props) => {
                                                     </Col>
                                                 </TabPane>
 
-                                                <TabPane tabId="5">
+                                                <TabPane tabId="4">
                                                     <Col md={12} >
                                                         <Card className="text-black">
                                                             <CardBody style={{ backgroundColor: "whitesmoke" }}>
@@ -1698,23 +1158,7 @@ const ItemsMaster = (props) => {
                                                                                 onChange={(e) => ImageTab_onChange_Handler(e, key, "ImageUpload")} />
                                                                         </FormGroup>
 
-                                                                        {/* {(imageTabTable.length === key + 1) ?
-                                                                            <Col className="col col-1 mt-3">
-                                                                                <Button
-                                                                                    className="btn btn-sm mt-3 mb-0 btn-light  btn-outline-primary  "
-                                                                                    type="button"
-                                                                                    onClick={() => { ImageTab_AddRow_Handler(key) }} >
-                                                                                    <i className="dripicons-plus"></i></Button>
-                                                                            </Col>
-                                                                            : <Col className="col col-1 mt-3">
-                                                                                <i
-                                                                                    className="mdi mdi-trash-can d-block text-danger font-size-20 mt-3"
-                                                                                    onClick={() => {
-                                                                                        ImageTab_DeleteRow_Handler(key);
-                                                                                    }}
-                                                                                ></i>
 
-                                                                            </Col>} */}
                                                                         <Col md={1}>
                                                                             {(imageTabTable.length === key + 1) ?
                                                                                 <Row className=" mt-3">
@@ -1757,89 +1201,7 @@ const ItemsMaster = (props) => {
                                                     </Row>
                                                 </TabPane>
 
-                                                {/* <TabPane tabId="6">
-                                                    <Row>
-                                                        <Col md={12}  >
-                                                            <Card className="text-black">
-                                                                <CardBody style={{ backgroundColor: "whitesmoke" }}>
-
-                                                                    <Row>
-                                                                        <FormGroup className=" col col-sm-4 " >
-                                                                            <Label htmlFor="validationCustom21">Division</Label>
-                                                                            <Select
-                                                                                id={"dropDivisionType-0"}
-                                                                                value={division_dropdown_Select}
-                                                                                options={Division_DropdownOptions}
-                                                                                onChange={(e) => { DivisionTab_Dropdown_onChange_Handler(e) }}
-                                                                            />
-                                                                        </FormGroup>
-                                                                        <Col sm={1} style={{ marginTop: '28px' }} >
-                                                                            {" "}
-                                                                            <Button
-                                                                                type="button"
-                                                                                className="btn btn-sm mt-1 mb-0 btn-light  btn-outline-primary  "
-                                                                                onClick={() =>
-                                                                                    DivisionTab_AddRow_Handle()
-                                                                                }
-                                                                            >
-                                                                                <i className="dripicons-plus "></i>
-                                                                            </Button>
-                                                                        </Col>
-                                                                        <Col sm={3} style={{ marginTop: '28px' }}>
-                                                                            {divisionTableData.length > 0 ? (
-
-                                                                                <div className="table-responsive">
-                                                                                    <Table className="table table-bordered  text-center">
-                                                                                        <Thead >
-                                                                                            <tr>
-                                                                                                <th>Division Type</th>
-
-                                                                                                <th>Action</th>
-                                                                                            </tr>
-                                                                                        </Thead>
-                                                                                        <Tbody  >
-                                                                                            {divisionTableData.map((TableValue) => (
-                                                                                                <tr >
-                                                                                                    <td>
-                                                                                                        {TableValue.label}
-                                                                                                    </td>
-                                                                                                    <td>
-                                                                                                        <i className="mdi mdi-trash-can d-block text-danger font-size-20" onClick={() => {
-                                                                                                            DivisionTab_DeleteRow_Handler(TableValue.value)
-                                                                                                        }} >
-                                                                                                        </i>
-                                                                                                    </td>
-                                                                                                </tr>
-                                                                                            ))}
-                                                                                        </Tbody>
-                                                                                    </Table>
-                                                                                </div>
-                                                                            ) : (
-                                                                                <>
-                                                                                </>
-                                                                            )}
-                                                                        </Col>
-                                                                    </Row>
-
-                                                                </CardBody>
-                                                            </Card>
-                                                        </Col>
-                                                    </Row>
-                                                </TabPane> */}
-
-                                                <TabPane tabId="6">
-                                                    <Row>
-                                                        <Col md={12}  >
-                                                            <Row className="mt-3">
-                                                                <Col className=" col col-12 ">
-                                                                    <DivisionTab tableData={Division_Tab_TableData} func={setDivision_Tab_TableData} />
-                                                                </Col>
-                                                            </Row>
-                                                        </Col>
-                                                    </Row>
-                                                </TabPane>
-
-                                                <TabPane tabId="7">
+                                                <TabPane tabId="5">
                                                     <Row>
                                                         <Col md={12}  >
                                                             <Row className="mt-3">
@@ -1851,7 +1213,7 @@ const ItemsMaster = (props) => {
                                                     </Row>
                                                 </TabPane>
 
-                                                <TabPane tabId="8">
+                                                <TabPane tabId="6">
 
                                                     <Row>
                                                         <Col md={12}  >
@@ -1865,7 +1227,7 @@ const ItemsMaster = (props) => {
 
                                                 </TabPane>
 
-                                                <TabPane tabId="9">
+                                                <TabPane tabId="7">
                                                     <Row>
                                                         <Col md={12}  >
                                                             <Row className="mt-3">

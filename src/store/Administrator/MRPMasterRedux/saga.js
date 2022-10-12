@@ -1,5 +1,5 @@
 import { call, put, takeEvery } from "redux-saga/effects";
-import { GoButton_Post_API, Post_MRPMaster_API } from "../../../helpers/backend_helper";
+import { GoButton_Post_API, MRP_MasterPage_delete_API, Post_MRPMaster_API } from "../../../helpers/backend_helper";
 import { AlertState } from "../../Utilites/CustomAlertRedux/actions";
 import { SpinnerState } from "../../Utilites/Spinner/actions";
 
@@ -9,7 +9,8 @@ import {
   DELETE_MRP_LIST_PAGE,
   EDIT_MRP_LIST_PAGE,
   UPDATE_MRP_LIST_PAGE,
-  POST_GO_BUTTON_FOR_MRP_MASTER
+  POST_GO_BUTTON_FOR_MRP_MASTER,
+  DELETE_ID_IN_MASTERPAGE
 } from "./actionTypes";
 import {
   delete_MRPList_API,
@@ -24,7 +25,8 @@ import {
   delete_MRPListSuccess,
   editMRPListSuccess,
   updateMRPListSuccess,
-  postGoButtonForMRP_MasterSuccess
+  postGoButtonForMRP_MasterSuccess,
+  deleteID_In_MasterPageSuccess
 } from "./action";
 
 
@@ -63,12 +65,14 @@ function* get_MRPListPage_GenratorFunction() {
 }
 
 //delete
-function* delete_MRPListPage_GenratorFunction({ id }) {
+function* delete_MRPListPage_GenratorFunction({ CommonID }) {
+  debugger
   yield put(SpinnerState(true))
   try {
-    const response = yield call(delete_MRPList_API, id);
+    const response = yield call(delete_MRPList_API, CommonID);
     yield put(SpinnerState(false))
     yield put(delete_MRPListSuccess(response));
+    console.log("response",response)
   } catch (error) {
     yield put(SpinnerState(false))
     yield put(AlertState({
@@ -77,8 +81,6 @@ function* delete_MRPListPage_GenratorFunction({ id }) {
     }));
   }
 }
-
-
 
 // edit api
 function* Edit_MRPListPage_GenratorFunction({ id, pageMode }) {
@@ -113,8 +115,6 @@ function* Update_MRPListPage_GenratorFunction({ updateData, ID }) {
   }
 }
 
-
-
 function* MRPGoButton_post_GenratorFunction({ data }) {
 
   yield put(SpinnerState(true))
@@ -132,6 +132,24 @@ function* MRPGoButton_post_GenratorFunction({ data }) {
   }
 }
 
+
+// delete api MRP Master Page
+function* deleteId_for_MasterPage_GenratorFunction({ id }) {
+  yield put(SpinnerState(true))
+  try {
+    const response = yield call(MRP_MasterPage_delete_API, id);
+    yield put(SpinnerState(false))
+    yield put(deleteID_In_MasterPageSuccess(response));
+    console.log("response",response)
+  } catch (error) {
+    yield put(SpinnerState(false))
+    yield put(AlertState({
+      Type: 4,
+      Status: true, Message: "500 Error Message",
+    }));
+  }
+}
+
 function* MRPMasterSaga() {
   yield takeEvery(POST_MRP_MASTER_DATA, Post_MRPMaster_GenratorFunction);
   yield takeEvery(POST_GO_BUTTON_FOR_MRP_MASTER, MRPGoButton_post_GenratorFunction);
@@ -139,5 +157,6 @@ function* MRPMasterSaga() {
   yield takeEvery(DELETE_MRP_LIST_PAGE, delete_MRPListPage_GenratorFunction);
   yield takeEvery(EDIT_MRP_LIST_PAGE, Edit_MRPListPage_GenratorFunction);
   yield takeEvery(UPDATE_MRP_LIST_PAGE, Update_MRPListPage_GenratorFunction);
-}
+  yield takeEvery(DELETE_ID_IN_MASTERPAGE, deleteId_for_MasterPage_GenratorFunction);
+  }
 export default MRPMasterSaga;

@@ -29,7 +29,8 @@ import {
 } from "../../../store/Administrator/ItemsRedux/action";
 import BootstrapTable from "react-bootstrap-table-next";
 import { AvForm } from "availity-reactstrap-validation";
-import { postGoButtonForMRP_Master, postGoButtonForMRP_MasterSuccess, postMRPMasterData, postMRPMasterDataSuccess } from "../../../store/Administrator/MRPMasterRedux/action";
+import { deleteID_In_MasterPage, deleteID_In_MasterPageSuccess, postGoButtonForMRP_Master, postGoButtonForMRP_MasterSuccess, postMRPMasterData, postMRPMasterDataSuccess } from "../../../store/Administrator/MRPMasterRedux/action";
+import { MRP_lIST } from "../../../routes/route_url";
 
 
 const MRPMaster = (props) => {
@@ -46,43 +47,85 @@ const MRPMaster = (props) => {
     const [division_dropdown_Select, setDivision_dropdown_Select] = useState("");
     const [effectiveDate, setEffectiveDate] = useState('');
     const [MRP, setMRP] = useState('');
+    const [tableData, setTableData] = useState([]);
+
 
     //Access redux store Data /  'save_ModuleSuccess' action data
-    const { PostAPIResponse,
+    const {
+        postMsg,
+        deleteMessage,
         TableData,
         Party,
         Division,
-        RoleAccessModifiedinSingleArray
+        userAccess,
     } = useSelector((state) => ({
-        PostAPIResponse: state.MRPMasterReducer.PostData,
+        postMsg: state.MRPMasterReducer.postMsg,
+        deleteMessage: state.MRPMasterReducer.deleteIdForMRPMaster,
         TableData: state.MRPMasterReducer.MRPGoButton,
         Party: state.ItemMastersReducer.Party,
         Division: state.ItemMastersReducer.Division,
-        RoleAccessModifiedinSingleArray: state.Login.RoleAccessUpdateData,
+        userAccess: state.Login.RoleAccessUpdateData,
     }));
+
+    const location = { ...history.location }
+    const hasShowloction = location.hasOwnProperty("editValue")
+    const hasShowModal = props.hasOwnProperty("editValue")
 
     // userAccess useEffect
     useEffect(() => {
-        let userAcc = undefined
-        if ((editDataGatingFromList === undefined)) {
+        let userAcc = null;
+        let locationPath = location.pathname;
 
-            let locationPath = history.location.pathname
-            userAcc = RoleAccessModifiedinSingleArray.find((inx) => {
-                return (`/${inx.ActualPagePath}` === locationPath)
-            })
-        }
-        else if (!(editDataGatingFromList === undefined)) {
-            let relatatedPage = props.relatatedPage
-            userAcc = RoleAccessModifiedinSingleArray.find((inx) => {
-                return (`/${inx.ActualPagePath}` === relatatedPage)
-            })
+        if (hasShowModal) {
+            locationPath = props.masterPath;
+        };
+
+        userAcc = userAccess.find((inx) => {
+            return (`/${inx.ActualPagePath}` === locationPath)
+        })
+
+        if (userAcc) {
+            setUserPageAccessState(userAcc)
+        };
+    }, [userAccess])
+
+    useEffect(() => {
+
+
+        const editDataGatingFromList = history.location.state
+
+        const locationPath = history.location.pathname
+        let userAcc = userAccess.find((inx) => {
+            return (`/${inx.ActualPagePath}` === locationPath)
+        })
+
+        if (!(editDataGatingFromList === undefined)) {
+            debugger
+            var divisionid = editDataGatingFromList.Division_id
+            var divisionName = editDataGatingFromList.DivisionName
+            var partyId = editDataGatingFromList.Party_id
+            var partyName = editDataGatingFromList.PartyName
+            var effectiveDate = editDataGatingFromList.EffectiveDate
+
+            // let division = { ...division_dropdown_Select }
+            // let party = { ...party_dropdown_Select }
+
+            const jsonBody = JSON.stringify({
+                Division: divisionid,
+                Party: partyId,
+                EffectiveDate: effectiveDate
+            });
+            dispatch(postGoButtonForMRP_Master(jsonBody))
+            // dispatch(postGoButtonForMRP_MasterSuccess(divisionid, partyId, effectiveDate));
+            setDivision_dropdown_Select({ label: divisionName, value: divisionid })
+            setParty_dropdown_Select({ label: partyName, value: partyId })
+            setEffectiveDate(effectiveDate)
 
         }
         if (!(userAcc === undefined)) {
             setUserPageAccessState(userAcc)
         }
-
-    }, [RoleAccessModifiedinSingleArray])
+    }, [userAccess])
 
     useEffect(() => {
         dispatch(get_Party_ForDropDown());
@@ -102,7 +145,7 @@ const MRPMaster = (props) => {
 
     useEffect(() => {
 
-        if ((PostAPIResponse.Status === true) && (PostAPIResponse.StatusCode === 200) && !(pageMode === "dropdownAdd")) {
+        if ((postMsg.Status === true) && (postMsg.StatusCode === 200) && !(pageMode === "dropdownAdd")) {
             dispatch(postMRPMasterDataSuccess({ Status: false }))
             formRef.current.reset();
             setDivision_dropdown_Select('')
@@ -114,30 +157,55 @@ const MRPMaster = (props) => {
                 dispatch(AlertState({
                     Type: 1,
                     Status: true,
-                    Message: PostAPIResponse.Message,
+                    Message: postMsg.Message,
                 }))
             }
             else {
                 dispatch(AlertState({
                     Type: 1,
                     Status: true,
-                    Message: PostAPIResponse.Message,
-                    RedirectPath: '/MRPList',
+                    Message: postMsg.Message,
+                    RedirectPath: MRP_lIST,
                 }))
             }
         }
 
-        else if (PostAPIResponse.Status === true) {
+        else if (postMsg.Status === true) {
             dispatch(postMRPMasterDataSuccess({ Status: false }))
             dispatch(AlertState({
                 Type: 4,
                 Status: true,
-                Message: JSON.stringify(PostAPIResponse.Message),
+                Message: JSON.stringify(postMsg.Message),
                 RedirectPath: false,
                 AfterResponseAction: false
             }));
         }
-    }, [PostAPIResponse])
+    }, [postMsg])
+
+    useEffect(() => {
+        if (deleteMessage.Status === true && deleteMessage.StatusCode === 200) {
+            dispatch(deleteID_In_MasterPageSuccess({ Status: false }));
+            dispatch(postGoButtonForMRP_MasterSuccess([]))
+            GoButton_Handler()
+            dispatch(
+                AlertState({
+                    Type: 1,
+                    Status: true,
+                    Message: deleteMessage.Message,
+                    //   AfterResponseAction: getMRPListPage,
+                })
+            );
+        } else if (deleteMessage.Status === true) {
+            dispatch(deleteID_In_MasterPageSuccess({ Status: false }));
+            dispatch(
+                AlertState({
+                    Type: 3,
+                    Status: true,
+                    Message: JSON.stringify(deleteMessage.Message),
+                })
+            );
+        }
+    }, [deleteMessage]);
 
     function PartyType_Dropdown_OnChange_Handller(e) {
         setParty_dropdown_Select(e)
@@ -159,6 +227,20 @@ const MRPMaster = (props) => {
         user["CurrentMRP"] = e.target.value
     }
 
+    //select id for delete row
+    const deleteHandeler = (id, name) => {
+        dispatch(
+            AlertState({
+                Type: 5,
+                Status: true,
+                Message: `Are you sure you want to delete this Item : "${name}"`,
+                RedirectPath: false,
+                PermissionAction: deleteID_In_MasterPage,
+                ID: id,
+            })
+        );
+    };
+
     const GoButton_Handler = (event, values) => {
 
         let division = { ...division_dropdown_Select }
@@ -177,10 +259,9 @@ const MRPMaster = (props) => {
             alert("EffectiveDate not select")
         }
         dispatch(postGoButtonForMRP_Master(jsonBody))
-        console.log("Go button Post Json",jsonBody)
-
-
+        console.log("Go button Post Json", jsonBody)
     };
+
     const pageOptions = {
         sizePerPage: 10,
         totalSize: TableData.length,
@@ -200,20 +281,36 @@ const MRPMaster = (props) => {
             formatter: (cellContent, user, key) => (
                 <>
                     <div style={{ justifyContent: 'center' }} >
-                        <Col>
-                            <FormGroup className=" col col-sm-4 ">
-                                <Input
-                                    id=""
-                                    type="text"
-                                    disabled={true}
-                                    defaultValue={TableData[key].CurrentMRP}
-                                    className="col col-sm text-center"
-                                    onChange={(e) => CurrentMRPHandler(e, cellContent, user, key)}
-                                />
-                            </FormGroup>
-                        </Col>
+                        <Row >
+                            <Col md="6">
+                                <FormGroup className=" col col-sm-6 ">
+                                    <Input
+                                        id=""
+                                        type="text"
+                                        disabled={true}
+                                        defaultValue={TableData[key].CurrentMRP}
+                                        className="col col-sm text-center"
+                                        onChange={(e) => CurrentMRPHandler(e, cellContent, user, key)}
+                                    />
+                                </FormGroup>
+                            </Col>
 
+                            <Col md="6">
+                                <FormGroup className=" col col-sm-6 ">
+                                    {/* <Label style={{ color: "#F0A4BA" }}>{TableData[key].CurrentDate}</Label> */}
+                                    {!(user.CurrentDate === '') ?
+                                        <label
+                                            style={{ paddingLeft: "7px", color: "#F0A4BA" }} >&nbsp;
+                                            <kbd className="bg-light text-danger font-size-14 ">{TableData[key].CurrentDate}</kbd></label>
+
+                                        : null}
+
+
+                                </FormGroup>
+                            </Col>
+                        </Row>
                     </div>
+
                 </>
             ),
         },
@@ -222,22 +319,52 @@ const MRPMaster = (props) => {
             text: "MRP ",
             dataField: "MRP",
             sort: true,
-            formatter: (cellContent, user, abd) => (
+            formatter: (cellContent, user, key) => (
                 <>
                     <div style={{ justifyContent: 'center' }} >
                         <Col>
                             <FormGroup className=" col col-sm-4 ">
                                 <Input
                                     type="text"
-                                    defaultValue={MRP}
+                                    defaultValue={TableData[key].MRP}
+                                    disabled={!(user.MRP === '') ? true : false}
                                     className="col col-sm text-center"
-                                    onChange={(e) => MRPHandler(e, cellContent, user, abd)}
+                                    onChange={(e) => MRPHandler(e, cellContent, user, key)}
                                 />
+                            </FormGroup>
+                        </Col>
+                    </div>
+
+
+                    {console.log("user", user)}
+                </>
+            ),
+        },
+        {
+            text: "Action ",
+            dataField: "",
+            formatter: (cellContent, user) => (
+
+                <>
+                    <div style={{ justifyContent: 'center' }} >
+                        <Col>
+                            <FormGroup className=" col col-sm-4 ">
+                                {!(user.id === '') ?
+                                    <Button
+                                        id={"deleteid"}
+                                        type="button"
+                                        className="badge badge-soft-danger font-size-12 btn btn-danger waves-effect waves-light w-xxs border border-light"
+                                        data-mdb-toggle="tooltip" data-mdb-placement="top" title='Delete MRP'
+                                        onClick={() => { deleteHandeler(user.id, user.Name); }}
+                                    >
+                                        <i className="mdi mdi-delete font-size-18"></i>
+                                    </Button> : <></>}
                             </FormGroup>
                         </Col>
 
                     </div>
                 </>
+
             ),
         },
     ]
@@ -245,7 +372,6 @@ const MRPMaster = (props) => {
 
     //'Save' And 'Update' Button Handller
     const handleValidSubmit = (event, values) => {
-        debugger
         var ItemData = TableData.map((index) => ({
             Division: division_dropdown_Select.value,
             Party: party_dropdown_Select.value,
@@ -253,7 +379,7 @@ const MRPMaster = (props) => {
             Company: 1,
             CreatedBy: 1,
             UpdatedBy: 1,
-            Item: index.id,
+            Item: index.Item,
             MRP: index.MRP
         }))
 
@@ -261,11 +387,9 @@ const MRPMaster = (props) => {
             return !(index.MRP === '')
         })
 
-        console.log("Find", Find)
         const jsonBody = JSON.stringify(Find)
 
         dispatch(postMRPMasterData(jsonBody));
-        console.log("jsonBody", jsonBody)
     };
 
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)

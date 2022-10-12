@@ -10,7 +10,8 @@ import {
   getPriceListPage
 } from "../../../store/Administrator/PriceList/action";
 import CommonListPage from "../../../components/Common/CmponentRelatedCommonFile/commonListPage";
-import { commonPageField, commonPageFieldSuccess } from "../../../store/actions";
+import { commonPageFieldList, commonPageFieldListSuccess } from "../../../store/actions";
+import { PRICE } from "../../../routes/route_url";
 
 const PriceList = (props) => {
   const dispatch = useDispatch();
@@ -22,7 +23,7 @@ const PriceList = (props) => {
       deleteMsg: state.PriceListReducer.deleteMsg,
       postMsg: state.PriceListReducer.postMsg,
       userAccess: state.Login.RoleAccessUpdateData,
-      pageField: state.CommonPageFieldReducer.pageField
+      pageField: state.CommonPageFieldReducer.pageFieldList
     })
   );
 
@@ -37,8 +38,8 @@ const PriceList = (props) => {
 
   //  This UseEffect => Featch Modules List data  First Rendering
   useEffect(() => {
-    dispatch(commonPageFieldSuccess([]))
-    dispatch(commonPageField(94))
+    dispatch(commonPageFieldListSuccess(null))
+    dispatch(commonPageFieldList(94))
     dispatch(getPriceListPage());
   }, []);
 
@@ -48,12 +49,12 @@ const PriceList = (props) => {
   return (
     <React.Fragment>
       {
-        (pageField.length > 0) ?
+        (pageField) ?
           <CommonListPage
             action={action}
             reducers={reducers}
             MasterModal={PriceMaster}
-            masterPath={"/PriceMaster"}
+            masterPath={PRICE}
             ButtonMsgLable={"price"}
             deleteName={"Name"}
           />

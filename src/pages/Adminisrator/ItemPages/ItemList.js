@@ -11,6 +11,7 @@ import {
 import ItemsMaster from "./ItemMaster/index";
 import CommonListPage from "../../../components/Common/CmponentRelatedCommonFile/commonListPage";
 import { commonPageFieldList, commonPageFieldListSuccess, } from "../../../store/actions";
+import { ITEM } from "../../../routes/route_url";
 
 
 const ItemsList = (props) => {
@@ -54,7 +55,7 @@ const ItemsList = (props) => {
             action={action}
             reducers={reducers}
             MasterModal={ItemsMaster}
-            masterPath={"/ItemMaster"}
+            masterPath={ITEM}
             ButtonMsgLable={"Item"}
             deleteName={"id"}
           />

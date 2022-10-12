@@ -12,7 +12,10 @@ import Select from "react-select";
 import { useDispatch, useSelector } from "react-redux";
 import { getGroupTypeslist } from "../../../../../store/Administrator/GroupTypeRedux/action";
 import GroupTable from "./Table";
-import { get_Group_By_GroupType_ForDropDown, get_Sub_Group_By_Group_ForDropDown } from "../../../../../store/Administrator/ItemsRedux/action";
+import {
+    get_Group_By_GroupType_ForDropDown,
+    get_Sub_Group_By_Group_ForDropDown
+} from "../../../../../store/Administrator/ItemsRedux/action";
 
 function GroupTab(props) {
     const dispatch = useDispatch();
@@ -32,29 +35,48 @@ function GroupTab(props) {
         dispatch(get_Sub_Group_By_Group_ForDropDown());
     }, [dispatch]);
 
-    const GroupType_DropdownOptions = GroupType.map((data) => ({
-        value: data.id,
-        label: data.Name,
+
+    const GroupType_DropdownOptions = GroupType.map((index) => ({
+        value: index.id,
+        label: index.Name,
+        IsReserved: index.IsReserved
     }));
 
-    const Group_DropdownOptions = GroupList.map((data) => ({
-        value: data.id,
-        label: data.Name,
+    const Group_DropdownOptions = GroupList.map((index) => ({
+        value: index.id,
+        label: index.Name,
     }));
 
-    const SubGroup_DropdownOptions = SubGroupList.map((data) => ({
-        value: data.id,
-        label: data.Name,
+    const SubGroup_DropdownOptions = SubGroupList.map((index) => ({
+        value: index.id,
+        label: index.Name,
     }));
 
     const GroupType_Handler = (event) => {
-        setGroupTypeDropdownSelect(event);
-        dispatch(get_Group_By_GroupType_ForDropDown(event.value))
+        const found = props.tableData.find(element => {
+            return element.GroupType == event.value
+        });
+        if (found == undefined) {
+            setGroupTypeDropdownSelect(event);
+            dispatch(get_Group_By_GroupType_ForDropDown(event.value))
+        }
+        else {
+            alert("alerady selected")
+        }
+
     };
 
     const Group_Handler = (event) => {
-        setGroupDropdownSelect(event);
-        dispatch(get_Sub_Group_By_Group_ForDropDown(event.value))
+        const found = props.tableData.find(element => {
+            return element.Group == event.value
+        });
+        if (found == undefined) {
+            setGroupDropdownSelect(event);
+            dispatch(get_Sub_Group_By_Group_ForDropDown(event.value))
+        }
+        else {
+            alert("Already Selected")
+        }
     };
 
     const SubGroup_Handler = (event) => {
@@ -62,27 +84,29 @@ function GroupTab(props) {
     };
 
     const addRowsHandler = (e) => {
-        debugger;
+
         const val = {
-            GroupType: groupTypeDropdownSelect === "" ? "" : groupTypeDropdownSelect.value,
+            GroupType: groupTypeDropdownSelect.value,
             GroupTypeName: groupTypeDropdownSelect.label,
             Group: groupDropdownSelect === "" ? "" : groupDropdownSelect.value,
             GroupName: groupDropdownSelect.label,
             SubGroup: subGroupDropdownSelect === "" ? "" : subGroupDropdownSelect.value,
             SubGroupName: subGroupDropdownSelect.label,
         };
-
-        if (!(groupTypeDropdownSelect === "")) {
+        if (val.Group == '') {
+            alert("Select Groups values")
+        }
+        else {
             const totalTableData = props.tableData.length;
             val.id = totalTableData + 1;
             const updatedTableData = [...props.tableData];
             updatedTableData.push(val);
             props.func(updatedTableData);
             clearState();
-        } else {
-            alert("Please select value");
         }
+
     };
+
     const clearState = () => {
         setGroupTypeDropdownSelect("");
         setGroupDropdownSelect("");

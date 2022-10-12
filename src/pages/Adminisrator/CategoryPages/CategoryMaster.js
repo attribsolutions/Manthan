@@ -14,7 +14,7 @@ import {
 import { AvField, AvForm, } from "availity-reactstrap-validation";
 import Select from "react-select";
 import { MetaTags } from "react-meta-tags";
-import { BreadcrumbShow, commonPageField, getCategoryTypelist } from "../../../store/actions";
+import { BreadcrumbShow, commonPageField, commonPageFieldSuccess, getCategoryTypelist } from "../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
 import {
     editCategoryIDSuccess, getMethodForCategory,
@@ -49,17 +49,24 @@ const CategoryMaster = (props) => {
 
     const [EditData, setEditData] = useState([]);
     const [pageMode, setPageMode] = useState("");
+    const [modalCss, setModalCss] = useState(false);
+
     const [CategoryTypes_dropdown_Select, setCategoryTypes_dropdown_Select] = useState("");
     const [userPageAccessState, setUserPageAccessState] = useState(123);
 
 
     //Access redux store Data /  'save_ModuleSuccess' action data
-    const { PostAPIResponse, CategoryAPI, pageField, RoleAccessModifiedinSingleArray } = useSelector((state) => ({
-        PostAPIResponse: state.CategoryReducer.PostDataMessage,
-        CategoryAPI: state.categoryTypeReducer.categoryTypeListData,
-        RoleAccessModifiedinSingleArray: state.Login.RoleAccessUpdateData,
-        pageField: state.CommonPageFieldReducer.pageField
-    }));
+    const {
+        PostAPIResponse,
+        CategoryAPI,
+        pageField,
+        userAccess } = useSelector((state) => ({
+            PostAPIResponse: state.CategoryReducer.PostDataMessage,
+            CategoryAPI: state.categoryTypeReducer.categoryTypeListData,
+            userAccess: state.Login.RoleAccessUpdateData,
+            pageField: state.CommonPageFieldReducer.pageField
+        }));
+
 
     {/** Dyanamic Page access state and OnChange function */ }
     {/*start */ }
@@ -102,51 +109,61 @@ const CategoryMaster = (props) => {
     {/*End */ }
 
     useEffect(() => {
-        // dispatch(commonPageFieldSuccess([]));
+        dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(18))
     }, []);
 
-    //userAccess useEffect
+    const location = { ...history.location }
+    const hasShowloction = location.hasOwnProperty("editValue")
+    const hasShowModal = props.hasOwnProperty("editValue")
+
+    // userAccess useEffect
     useEffect(() => {
+        let userAcc = null;
+        let locationPath = location.pathname;
 
-        let userAcc = undefined
-        if ((editDataGetingFromList === undefined)) {
+        if (hasShowModal) {
+            locationPath = props.masterPath;
+        };
 
-            let locationPath = history.location.pathname
-            userAcc = RoleAccessModifiedinSingleArray.find((inx) => {
-                return (`/${inx.ActualPagePath}` === locationPath)
-            })
-        }
-        else if (!(editDataGetingFromList === undefined)) {
-            let relatatedPage = props.relatatedPage
-            userAcc = RoleAccessModifiedinSingleArray.find((inx) => {
-                return (`/${inx.ActualPagePath}` === relatatedPage)
-            })
+        userAcc = userAccess.find((inx) => {
+            return (`/${inx.ActualPagePath}` === locationPath)
+        })
 
-        }
-        if (!(userAcc === undefined)) {
+        if (userAcc) {
             setUserPageAccessState(userAcc)
-        }
-
-    }, [RoleAccessModifiedinSingleArray])
+        };
+    }, [userAccess])
 
     // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
     useEffect(() => {
 
-        if (!(userPageAccessState === '')) { document.getElementById("txtName").focus(); }
-        if (!(editDataGetingFromList === undefined)) {
-            setEditData(editDataGetingFromList);
-            setPageMode(pageModeProps);
-            setCategoryTypes_dropdown_Select({
+        // if (!(userPageAccessState === '')) { document.getElementById("txtName").focus(); }
+        if ((hasShowloction || hasShowModal)) {
 
-                value: editDataGetingFromList.CategoryType_id,
-                label: editDataGetingFromList.CategoryTypeName
-            })
-            dispatch(editCategoryIDSuccess({ Status: false }))
-            dispatch(BreadcrumbShow(editDataGetingFromList.Name))
-            return
+            let hasEditVal = null
+            if (hasShowloction) {
+                setPageMode(location.pageMode)
+                hasEditVal = location.editValue
+            }
+            else if (hasShowModal) {
+                hasEditVal = props.editValue
+                setPageMode(props.pageMode)
+                setModalCss(true)
+            }
+
+            if (hasEditVal) {
+                setCategoryTypes_dropdown_Select({
+
+                    value: hasEditVal.CategoryType_id,
+                    label: hasEditVal.CategoryTypeName
+                })
+                dispatch(editCategoryIDSuccess({ Status: false }))
+                dispatch(BreadcrumbShow(hasEditVal.Name))
+                return
+            }
         }
-    }, [editDataGetingFromList])
+    }, [])
 
 
     useEffect(() => {
@@ -184,10 +201,13 @@ const CategoryMaster = (props) => {
     }, [PostAPIResponse])
 
     useEffect(() => {
-        if (pageField.length > 0) {
-            comAddPageFieldFunc({ state, setState, pageField })
+      
+        if (pageField) {
+            const fieldArr = pageField.PageFieldMaster
+            comAddPageFieldFunc({ state, setState, fieldArr })// new change
         }
     }, [pageField])
+
 
     //get method for dropdown
     useEffect(() => {
@@ -209,7 +229,7 @@ const CategoryMaster = (props) => {
         if (formValid(state, setState)) {
             const jsonBody = JSON.stringify({
                 Name: values.Name,
-                CategoryType: values.CategoryTypeName.value,
+                CategoryType: values.CategoryTypeName.values,
             });
 
             if (pageMode === "edit") {
@@ -225,7 +245,7 @@ const CategoryMaster = (props) => {
 
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
     var IsEditMode_Css = ''
-    if ((pageMode === "edit") || (pageMode === "copy") || (pageMode === "dropdownAdd")) { IsEditMode_Css = "-5.5%" };
+    if ((modalCss) || (pageMode === "dropdownAdd")) { IsEditMode_Css = "-5.5%" };
 
     if (!(userPageAccessState === '')) {
         return (
@@ -276,7 +296,7 @@ const CategoryMaster = (props) => {
                                                                 <FormGroup className="mb-3">
                                                                     <Label htmlFor="validationCustom01"> {fieldLabel.CategoryTypeName} </Label>
                                                                     <Col sm={12}>
-                                                                        <Select   
+                                                                        <Select
                                                                             name="CategoryTypeName"
                                                                             Value={values.CategoryType}
                                                                             isSearchable={false}

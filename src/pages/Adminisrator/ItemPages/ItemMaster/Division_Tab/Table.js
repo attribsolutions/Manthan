@@ -5,6 +5,7 @@ import { Tbody, Thead } from "react-super-responsive-table";
 function DivisionTable(props) {
     
   const ondeleteHandeler = (ele) => {
+    
     if (!(ele === 0)) {
       var fil = props.tableData.filter((i) => {
         return !(i.id === ele);

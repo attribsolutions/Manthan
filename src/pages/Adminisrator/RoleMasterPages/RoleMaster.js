@@ -7,7 +7,7 @@ import {
   editSuccess,
   postRole, updateID, PostSuccess
 } from "../../../store/Administrator/RoleMasterRedux/action";
-import { AlertState, commonPageField } from "../../../store/actions";
+import { AlertState, commonPageField, commonPageFieldSuccess } from "../../../store/actions";
 import Select from "react-select";
 import { BreadcrumbShow } from "../../../store/Utilites/Breadcrumb/actions";
 import { MetaTags } from "react-meta-tags";
@@ -15,7 +15,6 @@ import { useHistory } from "react-router-dom";
 import { getEmployeeTypelist } from "../../../store/Administrator/EmployeeTypeRedux/action";
 import {
   comAddPageFieldFunc,
-  formValChange,
   formValid,
   onChangeSelect,
   onChangeText,
@@ -27,16 +26,12 @@ const RoleMaster = (props) => {
   const dispatch = useDispatch();
   const history = useHistory()
 
-  //*** "isEditdata get all data from ModuleID for Binding  Form controls
-  let editDataGatingFromList = props.state;
-  let propsPageMode = props.pageMode;
-  let pageModeProps = props.pageMode;
-
   //SetState  Edit data Geting From Modules List component
   const [EditData, setEditData] = useState([]);
   const [pageMode, setPageMode] = useState("save");
+  const [modalCss, setModalCss] = useState(false);
+
   const [userPageAccessState, setUserPageAccessState] = useState('');
-  const [employeeType_DropdownSelect, setEmployeeType_DropdownSelect] = useState('');
 
   // ////////////////////////////////////
   const [state, setState] = useState({
@@ -118,85 +113,93 @@ const RoleMaster = (props) => {
   const {
     PostAPIResponse,
     pageField,
-    RoleAccessModifiedinSingleArray,
+    userAccess,
     EmployeeType } = useSelector((state) => ({
       PostAPIResponse: state.RoleMaster_Reducer.postMsg,
       EmployeeType: state.EmployeeTypeReducer.EmployeeTypeList,
-      RoleAccessModifiedinSingleArray: state.Login.RoleAccessUpdateData,
+      userAccess: state.Login.RoleAccessUpdateData,
       pageField: state.CommonPageFieldReducer.pageField
 
     }));
 
+  const location = { ...history.location }
+  const hasShowloction = location.hasOwnProperty("editValue")
+  const hasShowModal = props.hasOwnProperty("editValue")
+
+
   useEffect(() => {
+    dispatch(commonPageFieldSuccess());
+    dispatch(commonPageField(12))
     dispatch(getEmployeeTypelist());
   }, []);
 
+  // userAccess useEffect
   useEffect(() => {
-    // dispatch(commonPageFieldSuccess([]));
-    dispatch(commonPageField(12))
-  }, []);
+    let userAcc = null;
+    let locationPath = location.pathname;
 
-  //userAccess useEffect
-  useEffect(() => {
-    let userAcc = undefined
-    if ((editDataGatingFromList === undefined)) {
+    if (hasShowModal) {
+      locationPath = props.masterPath;
+    };
 
-      let locationPath = history.location.pathname
-      userAcc = RoleAccessModifiedinSingleArray.find((inx) => {
-        return (`/${inx.ActualPagePath}` === locationPath)
-      })
-    }
-    else if (!(editDataGatingFromList === undefined)) {
-      let relatatedPage = props.relatatedPage
-      userAcc = RoleAccessModifiedinSingleArray.find((inx) => {
-        return (`/${inx.ActualPagePath}` === relatatedPage)
-      })
+    userAcc = userAccess.find((inx) => {
+      return (`/${inx.ActualPagePath}` === locationPath)
+    })
 
-    }
-    if (!(userAcc === undefined)) {
+    if (userAcc) {
       setUserPageAccessState(userAcc)
-    }
+    };
+  }, [userAccess])
 
-  }, [RoleAccessModifiedinSingleArray])
-
-  const EmployeeType_DropdownOptions = EmployeeType.map((data) => ({
-    value: data.id,
-    label: data.Name
-  }));
-
-  function EmployeeType_Dropdown_Handler(e) {
-    setEmployeeType_DropdownSelect(e)
-  }
-
-  // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
   useEffect(() => {
+
+    if (pageField) {
+      const fieldArr = pageField.PageFieldMaster
+      comAddPageFieldFunc({ state, setState, fieldArr })// new change
+    }
+  }, [pageField])
+
+  useEffect(() => {
+
     // if (!(userPageAccessState === '')) { document.getElementById("txtName").focus(); }
-    if (!(editDataGatingFromList === undefined)) {
-      setEditData(editDataGatingFromList);
-      setPageMode(pageModeProps);
+    if ((hasShowloction || hasShowModal)) {
+
+      let hasEditVal = null
+      if (hasShowloction) {
+        setPageMode(location.pageMode)
+        hasEditVal = location.editValue
+      }
+      else if (hasShowModal) {
+        hasEditVal = props.editValue
+        setPageMode(props.pageMode)
+        setModalCss(true)
+      }
+
+      if (hasEditVal) {
+
+        const listItems = hasEditVal.RoleEmployeeTypes.map((data) => ({
+          value: data.EmployeeType,
+          label: data.EmployeeTypeName
+        }))
+
+        const { Name, Description, Dashboard, isActive, isSCMRole, IsPartyConnection } = hasEditVal
+        const { values, fieldLabel, hasValid, required, isError } = { ...state }
+        values.RoleEmployeeTypes = listItems
+        values.Name = Name
+        values.Description = Description
+        values.Dashboard = Dashboard
+        values.isActive = isActive
+        values.isSCMRole = isSCMRole
+        values.IsPartyConnection = IsPartyConnection
+        setState({ values, fieldLabel, hasValid, required, isError })
+        dispatch(BreadcrumbShow(hasEditVal.RoleMaster))
+
+      }
       dispatch(editSuccess({ Status: false }))
-      const listItems = editDataGatingFromList.RoleEmployeeTypes.map((data) => ({
-        value: data.EmployeeType,
-        label: data.EmployeeTypeName
-      }))
 
-      const { Name, Description, Dashboard, RoleEmployeeTypes, isActive, isSCMRole, IsPartyConnection } = editDataGatingFromList
-      const { values, fieldLabel, hasValid, required, isError } = { ...state }
-      values.RoleEmployeeTypes = listItems
-      values.Name = Name
-      values.Name = Description
-      values.Name = Dashboard
-      values.Name = isActive
-      values.Name = isSCMRole
-      values.Name = IsPartyConnection
-      setState({ values, fieldLabel, hasValid, required, isError })
-      dispatch(BreadcrumbShow(editDataGatingFromList.RoleMaster))
-    }
-    else if (!(propsPageMode === undefined)) {
-      setPageMode(propsPageMode)
     }
 
-  }, [editDataGatingFromList, propsPageMode])
+  }, [])
 
   useEffect(() => {
     if ((PostAPIResponse.Status === true) && (PostAPIResponse.StatusCode === 200) && !(pageMode === "dropdownAdd")) {
@@ -231,12 +234,11 @@ const RoleMaster = (props) => {
     }
   }, [PostAPIResponse.Status])
 
-  // // ////////////////////////////////////////////////////////////
-  useEffect(() => {
-    if (pageField.length > 0) {
-      comAddPageFieldFunc({ state, setState, pageField })
-    }
-  }, [pageField])
+  const EmployeeType_DropdownOptions = EmployeeType.map((data) => ({
+    value: data.id,
+    label: data.Name
+  }));
+
 
   const values = { ...state.values }
   const { isError } = state;
@@ -277,7 +279,7 @@ const RoleMaster = (props) => {
 
   // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
   var IsEditMode_Css = ''
-  if ((pageMode === "edit") || (pageMode === "copy") || (pageMode === "dropdownAdd")) { IsEditMode_Css = "-5.5%" };
+  if (modalCss || (pageMode === "dropdownAdd")) { IsEditMode_Css = "-5.5%" };
 
   if (!(userPageAccessState === '')) {
     return (
@@ -330,7 +332,7 @@ const RoleMaster = (props) => {
                                 <Select
                                   name="RoleEmployeeTypes"
                                   // defaultValue={EmployeeType_DropdownOptions[0]}
-                                  value={values.employeeType_DropdownSelect}
+                                  value={values.RoleEmployeeTypes}
                                   isSearchable={false}
                                   isMulti={true}
                                   className="react-dropdown"
@@ -356,7 +358,7 @@ const RoleMaster = (props) => {
                                 <Label htmlFor="validationCustom01">{fieldLabel.Description} </Label>
                                 <Input
                                   type="text"
-                                  value={EditData.Description}
+                                  defaultValue={values.Description}
                                   className={isError.Description.length > 0 ? "is-invalid form-control" : "form-control"}
                                   name="Description"
                                   placeholder="Please Enter description"
@@ -372,7 +374,7 @@ const RoleMaster = (props) => {
                                 <Label htmlFor="validationCustom01">{fieldLabel.Dashboard} </Label>
                                 <Input
                                   type="text"
-                                  value={EditData.Dashboard}
+                                  value={values.Dashboard}
                                   className={isError.Dashboard.length > 0 ? "is-invalid form-control" : "form-control"}
                                   name="Dashboard"
                                   placeholder="Please Enter dashboard"
@@ -392,7 +394,7 @@ const RoleMaster = (props) => {
 
                                     <div className="form-check form-switch form-switch-md mb-3" >
                                       <Input type="checkbox" className="form-check-input"
-                                        value={EditData.isSCMRole}
+                                        value={values.isSCMRole}
                                         name="isSCMRole"
                                         onChange={(event) => onChangeText({ event, state, setState })}
                                       />
@@ -408,7 +410,7 @@ const RoleMaster = (props) => {
 
                                     <div className="form-check form-switch form-switch-md mb-3" dir="ltr">
                                       <Input type="checkbox" className="form-check-input" id="customSwitchsizemd"
-                                        checked={EditData.isActive}
+                                        checked={values.isActive}
                                         defaultChecked={true}
                                         name="isActive"
                                         onChange={(event) => onChangeText({ event, state, setState })}
@@ -425,7 +427,7 @@ const RoleMaster = (props) => {
 
                                     <div className="form-check form-switch form-switch-md mb-3" dir="ltr">
                                       <Input type="checkbox" className="form-check-input" id="customSwitchsizemd"
-                                        defaultChecked={EditData.IsPartyConnection}
+                                        defaultChecked={values.IsPartyConnection}
                                         name="IsPartyConnection"
                                         onChange={(event) => onChangeText({ event, state, setState })}
                                       />
