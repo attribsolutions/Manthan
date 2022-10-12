@@ -650,10 +650,9 @@ const ItemsMaster = (props) => {
             marginMaster.forEach((index) => {
                 if (index.IsAdd === true) { hasAdd_Margin.push(index) }
             })
-debugger
+
             let hasAdd_GST = []
             GStDetailsMaster.forEach((index) => {
-                debugger
                 if (index.IsAdd === true) { hasAdd_GST.push(index) }
             })
 
@@ -690,18 +689,19 @@ debugger
 
             if (pageMode === 'edit') {
                 dispatch(updateItemID(jsonBody, EditData.id));
-                console.log("edit json", jsonBody)
+                // console.log("edit json", jsonBody)
             }
 
             else {
                 dispatch(postItemData(jsonBody));
-                console.log("post json", jsonBody)
+                // console.log("post json", jsonBody)
             }
         }
         else {
             dispatch(AlertState({
                 Type: 4, Status: true,
                 Message: JSON.stringify(inValidMsg),
+                // Message: (inValidMsg),
                 RedirectPath: false,
                 PermissionAction: false,
             }));
