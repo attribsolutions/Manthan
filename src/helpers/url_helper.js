@@ -129,7 +129,7 @@ export const PRICE_LIST = '/PriceList'
 // MRP Master Api
 export const MRP_MASTER_LIST = '/Mrps'
 export const GO_BUTTON_POST_API = '/GetMRP'
-export const DELETE_API_FOR_LIST_PAGE='/DeleteMrpOnList'
+export const DELETE_API_FOR_MRP_LIST_PAGE='/DeleteMrpOnList'
 
 // Margin Master
 export const MARGIN_MASTER_LIST = '/Margins'
