@@ -41,6 +41,7 @@ import MRPMasterReducer from "./Administrator/MRPMasterRedux/reducer"
 import MarginMasterReducer from "./Administrator/MarginMasterRedux/reducer"
 import TermsAndCondtionsReducer from "./Administrator/TermsAndCondtionsRedux/reducer"
 import GroupTypeReducer from "./Administrator/GroupTypeRedux/reducer"
+import GSTReducer from "./Administrator/GSTRedux/reducer"
 const rootReducer = combineReducers({
   Layout,
   Login,
@@ -79,7 +80,8 @@ const rootReducer = combineReducers({
    MRPMasterReducer,
    MarginMasterReducer,
    TermsAndCondtionsReducer,
-   GroupTypeReducer
+   GroupTypeReducer,
+   GSTReducer,
 })
 
 export default rootReducer
