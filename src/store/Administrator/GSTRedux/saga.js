@@ -9,8 +9,9 @@ function* deleteGST_ID({ id }) {
   try {
     yield put(SpinnerState(true))
     const response = yield call(GSTList_Delete_API, id);
-    yield put(SpinnerState(false))
+    response["deletedId"] = id
     yield put(deleteGSTForMasterPageSuccess(response))
+    yield put(SpinnerState(false))
   } catch (error) {
     yield put(SpinnerState(false))
     yield put(AlertState({ Type: 4, 
