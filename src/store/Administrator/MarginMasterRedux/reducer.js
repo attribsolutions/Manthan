@@ -1,4 +1,5 @@
 import {
+    DELETE_ID_IN_MARGIN_MASTERPAGE_SUCCESS,
     DELETE_MARGIN_LIST_PAGE_SUCCESS,
     EDIT_MARGIN_LIST_PAGE_SUCCESS,
     GET_MARGIN_LIST_PAGE_SUCCESS,
@@ -13,7 +14,8 @@ const INIT_STATE = {
     deleteMsg: { Status: false },
     editData: { Status: false },
     updateMessage: { Status: false },
-    MarginGoButton: []
+    MarginGoButton: [],
+    deleteId_For_MarginMaster:{ Status: false },
 };
 
 const MarginMasterReducer = (state = INIT_STATE, action) => {
@@ -62,6 +64,12 @@ const MarginMasterReducer = (state = INIT_STATE, action) => {
                 MarginGoButton: action.payload,
             };
 
+        // delete api Margin Master Page
+        case DELETE_ID_IN_MARGIN_MASTERPAGE_SUCCESS:
+            return {
+                ...state,
+                deleteId_For_MarginMaster: action.payload,
+            };
 
         default:
             return state;
