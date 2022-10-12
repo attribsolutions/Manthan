@@ -312,6 +312,7 @@ export const delete_MarginList_API = (id) => del(`${url. MARGIN_MASTER_LIST}/${i
 export const edit_MarginList = (id) =>get(`${url. MARGIN_MASTER_LIST}/${id}`) // edit api
 export const update_MarginList = (data, id) =>put(`${url.MARGIN_MASTER_LIST}/${id}`, data)// update
 export const GoButton_Post_API_For_MarginMaster = (data) => post(url.GO_BUTTON_POST_API_FOR_MARGIN_MASTER, data)// go button postapi
+export const Margin_MasterPage_delete_API = (id) =>  del(`${url. MARGIN_MASTER_LIST}/${id}`)// delete api Margin Master Page
 
 // GroupTypes API
 export const GroupTypes_API = () => get(url.GROUP_TYPE_API)

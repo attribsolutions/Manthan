@@ -4,12 +4,14 @@ import {
   edit_MarginList,
   GetMarginList_For_Listpage,
   GoButton_Post_API_For_MarginMaster,
+  Margin_MasterPage_delete_API,
   Post_MarginMaster_API,
   update_MarginList
 } from "../../../helpers/backend_helper";
 import { AlertState } from "../../Utilites/CustomAlertRedux/actions";
 import { SpinnerState } from "../../Utilites/Spinner/actions";
 import {
+  deleteID_In_Margin_MasterPageSuccess,
   delete_MarginListSuccess,
   editMarginListSuccess,
   getMarginListPageSuccess,
@@ -18,6 +20,7 @@ import {
   updateMarginListSuccess,
 } from "./action";
 import {
+  DELETE_ID_IN_MARGIN_MASTERPAGE,
   DELETE_MARGIN_LIST_PAGE,
   EDIT_MARGIN_LIST_PAGE,
   GET_MARGIN_LIST_PAGE,
@@ -133,6 +136,22 @@ function* MarginGoButton_post_GenratorFunction({ data }) {
   }
 }
 
+// delete api Margin Master Page
+function* deleteId_for_MarginMaster_GenratorFunction({ id }) {
+  yield put(SpinnerState(true))
+  try {
+    const response = yield call(Margin_MasterPage_delete_API, id);
+    yield put(SpinnerState(false))
+    yield put(deleteID_In_Margin_MasterPageSuccess(response));
+    console.log("response",response)
+  } catch (error) {
+    yield put(SpinnerState(false))
+    yield put(AlertState({
+      Type: 4,
+      Status: true, Message: "500 Error Message",
+    }));
+  }
+}
 
 
 function* MarginMasterSaga() {
@@ -142,5 +161,6 @@ function* MarginMasterSaga() {
   yield takeEvery(EDIT_MARGIN_LIST_PAGE, Edit_MarginListPage_GenratorFunction);
   yield takeEvery(UPDATE_MARGIN_LIST_PAGE, Update_MarginListPage_GenratorFunction);
   yield takeEvery(POST_GO_BUTTON_FOR_MARGIN_MASTER, MarginGoButton_post_GenratorFunction);
+  yield takeEvery(DELETE_ID_IN_MARGIN_MASTERPAGE, deleteId_for_MarginMaster_GenratorFunction);
 }
 export default MarginMasterSaga;

@@ -117,7 +117,7 @@ const MRPList = (props) => {
         })
       );
     }
-  }, [deleteMsg]);
+  }, [deleteMsg.Status]);
 
   useEffect(() => {
 
