@@ -130,8 +130,7 @@ function* MRPGoButton_post_GenratorFunction({ data }) {
   }
 }
 
-
-// delete api MRP Master Page
+// delete api MRP Master PageL
 function* deleteId_for_MasterPage_GenratorFunction({ id }) {
 
   yield put(SpinnerState(true))
