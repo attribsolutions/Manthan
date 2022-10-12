@@ -598,19 +598,20 @@ const ItemsMaster = (props) => {
             isvalid = false
         }
         if (isvalid) {
-
+            debugger
 
             const itemUnitDetails = baseUnitTableData.map((index) => ({
                 BaseUnitQuantity: index.Conversion,
                 UnitID: index.Unit.value,
             }))
-            const islastIndex = itemUnitDetails[itemUnitDetails.length - 1]
-            if (islastIndex.UnitID === undefined) {
+            const islastIndex = itemUnitDetails.length
+
+            if (islastIndex === 1) {
                 itemUnitDetails[itemUnitDetails.length - 1] = {
                     BaseUnitQuantity: 1,
                     UnitID: formValue.BaseUnit.value,
                 }
-            } else {
+            } else if (islastIndex === 0) {
                 itemUnitDetails.unshift({
                     BaseUnitQuantity: 1,
                     UnitID: formValue.BaseUnit.value,
