@@ -301,7 +301,7 @@ export const GetMRPList_For_Listpage = () => get(url.MRP_MASTER_LIST)// getapi
 export const update_MRPList = (data,id) => put(`${url. MRP_MASTER_LIST}/${id}`,data)// update_MRPList
 export const edit_MRPList = (id) => get(`${url. MRP_MASTER_LIST}/${id}`)// edit api
 export const delete_MRPList_API = (CommonID) =>  del(`${url. DELETE_API_FOR_MRP_LIST_PAGE}/${CommonID}`)// delete api
-export const GoButton_Post_API = (data) => post(url.GO_BUTTON_POST_API, data)// go button postapi
+export const GoButton_Post_API = (data) => post(url.GO_BUTTON_POST_API_FOR_MRP_MASTER, data)// go button postapi
 export const MRP_MasterPage_delete_API = (id) =>  del(`${url. MRP_MASTER_LIST}/${id}`)// delete api MRP Master Page
 
 // Margin Master
@@ -325,7 +325,11 @@ export const Post_TermsAndCondtions_Master_API = (data) => post(url.TERMSANDCOND
 export const get_TermsAndCondtionsList_API = (data) => get(url.TERMSANDCONDITIONS_API)// get api
 
 // GST API
-export const GSTList_Delete_API = (id) => del(`${url.GST_API}/${id}`)// delete api
+export const Post_GSTMaster_API = (data) => post(url.GST_LIST_API, data)// post api
+export const GetGSTList_For_Listpage = () => get(url.GST_LIST_API)//  get List
+export const delete_GSTList_API = (CommonID) => del(`${url. DELETE_API_FOR_LIST_GST_PAGE}/${CommonID}`)// post api
+export const GoButton_Post_API_For_GSTMaster = (data) => post(url.GO_BUTTON_POST_API_FOR_GST_MASTER, data)// go button postapi
+export const GST_MasterPage_delete_API = (id) => del(`${url.GST_LIST_API}/${id}`)// delete api
 
 export {  
   getLoggedInUser,
