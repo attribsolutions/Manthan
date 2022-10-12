@@ -4,6 +4,7 @@ import { Tbody, Thead } from 'react-super-responsive-table';
 import { useDispatch, useSelector } from 'react-redux';
 import { deleteID_In_MasterPage, deleteID_In_MasterPageSuccess } from '../../../../../store/Administrator/MRPMasterRedux/action';
 import { AlertState } from '../../../../../store/actions';
+import { deleteID_In_Margin_MasterPage, deleteID_In_Margin_MasterPageSuccess } from '../../../../../store/Administrator/MarginMasterRedux/action';
 
 function MarginTable(props) {
     const dispatch = useDispatch();
@@ -11,7 +12,7 @@ function MarginTable(props) {
     const {
       deleteMsg,
     } = useSelector((state) => ({
-      deleteMsg: state.MRPMasterReducer.deleteIdForMRPMaster,
+      deleteMsg: state.MarginMasterReducer.deleteId_For_MarginMaster,
     }));
   
     const onDeleteHandeler = (id) => {
@@ -22,7 +23,7 @@ function MarginTable(props) {
           Status: true,
           Message: `Are you sure you want to delete this MRP"`,
           RedirectPath: false,
-          PermissionAction: deleteID_In_MasterPage,
+          PermissionAction: deleteID_In_Margin_MasterPage,
           ID: id,
         })
       );
@@ -30,7 +31,7 @@ function MarginTable(props) {
   
     useEffect(() => {
       if (deleteMsg.Status === true && deleteMsg.StatusCode === 200) {
-        dispatch(deleteID_In_MasterPageSuccess({ Status: false }));
+        dispatch(deleteID_In_Margin_MasterPageSuccess({ Status: false }));
   
         var fil = props.tableData.filter((i) => {
           return !(i.id === deleteMsg.deletedId);
@@ -45,7 +46,7 @@ function MarginTable(props) {
           })
         );
       } else if (deleteMsg.Status === true) {
-        dispatch(deleteID_In_MasterPageSuccess({ Status: false }));
+        dispatch(deleteID_In_Margin_MasterPageSuccess({ Status: false }));
         dispatch(
           AlertState({
             Type: 3,

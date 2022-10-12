@@ -135,9 +135,10 @@ function* deleteId_for_MasterPage_GenratorFunction({ id }) {
 
   yield put(SpinnerState(true))
   try {
-    let response = yield call(MRP_MasterPage_delete_API, id);
+    const response = yield call(MRP_MasterPage_delete_API, id);
     response["deletedId"] = id
     yield put(deleteID_In_MasterPageSuccess(response));
+    yield put(SpinnerState(false))
   } catch (error) {
     yield put(SpinnerState(false))
     yield put(AlertState({
