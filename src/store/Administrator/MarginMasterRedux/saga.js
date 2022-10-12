@@ -126,9 +126,7 @@ function* MarginGoButton_post_GenratorFunction({ data }) {
     const response = yield call(GoButton_Post_API_For_MarginMaster, data);
     yield put(SpinnerState(false))
     yield put(postGoButtonForMargin_Master_Success(response.Data));
-    console.log("response", response)
   } catch (error) {
-    console.log("error")
     yield put(SpinnerState(false))
     yield put(AlertState({
       Type: 4,
@@ -143,9 +141,10 @@ function* deleteId_for_MarginMaster_GenratorFunction({ id }) {
   yield put(SpinnerState(true))
   try {
     const response = yield call(Margin_MasterPage_delete_API, id);
-    yield put(SpinnerState(false))
+    response["deletedId"] = id
     yield put(deleteID_In_Margin_MasterPageSuccess(response));
-    console.log("response",response)
+    yield put(SpinnerState(false))
+
   } catch (error) {
     yield put(SpinnerState(false))
     yield put(AlertState({
