@@ -1,61 +1,19 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Button, Table } from "reactstrap";
 import { Tbody, Thead } from "react-super-responsive-table";
-import { deleteID_In_MasterPage, deleteID_In_MasterPageSuccess } from "../../../../../store/Administrator/MRPMasterRedux/action";
-import { AlertState } from "../../../../../store/actions";
-import { useDispatch, useSelector } from "react-redux";
+
 
 function GroupTable(props) {
    
-  const dispatch = useDispatch();
-
-  const {
-    deleteMsg,
-  } = useSelector((state) => ({
-    deleteMsg: state.MRPMasterReducer.deleteIdForMRPMaster,
-  }));
-
-  const onDeleteHandeler = (id) => {
-
-    dispatch(
-      AlertState({
-        Type: 5,
-        Status: true,
-        Message: `Are you sure you want to delete this MRP"`,
-        RedirectPath: false,
-        PermissionAction: deleteID_In_MasterPage,
-        ID: id,
-      })
-    );
-  };
-
-  useEffect(() => {
-    if (deleteMsg.Status === true && deleteMsg.StatusCode === 200) {
-      dispatch(deleteID_In_MasterPageSuccess({ Status: false }));
-
-      var fil = props.tableData.filter((i) => {
-        return !(i.id === deleteMsg.deletedId);
-      });
-      props.func(fil);
-
-      dispatch(
-        AlertState({
-          Type: 1,
-          Status: true,
-          Message: deleteMsg.Message,
-        })
-      );
-    } else if (deleteMsg.Status === true) {
-      dispatch(deleteID_In_MasterPageSuccess ({ Status: false }));
-      dispatch(
-        AlertState({
-          Type: 3,
-          Status: true,
-          Message: JSON.stringify(deleteMsg.Message),
-        })
-      );
+  const onDeleteHandeler = (ele) => {
+    
+    if (!(ele === 0)) {
+        var fil = props.tableData.filter((i) => {
+            return !(i.id === ele);
+        });
+        props.func(fil);
     }
-  }, [deleteMsg]);
+};
 
   const tableRows = props.tableData.map((info) => {
     return (

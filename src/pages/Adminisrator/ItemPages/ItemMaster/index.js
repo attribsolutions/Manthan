@@ -650,9 +650,10 @@ const ItemsMaster = (props) => {
             marginMaster.forEach((index) => {
                 if (index.IsAdd === true) { hasAdd_Margin.push(index) }
             })
-
+debugger
             let hasAdd_GST = []
             GStDetailsMaster.forEach((index) => {
+                debugger
                 if (index.IsAdd === true) { hasAdd_GST.push(index) }
             })
 

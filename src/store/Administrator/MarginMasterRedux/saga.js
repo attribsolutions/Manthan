@@ -142,8 +142,8 @@ function* deleteId_for_MarginMaster_GenratorFunction({ id }) {
   try {
     const response = yield call(Margin_MasterPage_delete_API, id);
     response["deletedId"] = id
-    yield put(deleteID_In_Margin_MasterPageSuccess(response));
     yield put(SpinnerState(false))
+    yield put(deleteID_In_Margin_MasterPageSuccess(response));
 
   } catch (error) {
     yield put(SpinnerState(false))
