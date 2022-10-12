@@ -166,7 +166,6 @@ export const showPagesListOnPageType_DropDown_List = () => get(url.SHOW_PAGESLIS
 export const showPagesListOnPageAccess_DropDown_List = (id) => get(url.SHOW_PAGESLIST_ON_PAGEACCESS_FOR_DROPDOWN)
 export const ControlTypes_DropDown_Api = () => get(url.GET_CONTROLTYPES_DROPDOWN_API)
 
-
 //H_pages
 export const get_Module_HPages = () => get(url.H_MODULES_API_URL)// Get subModule For H_pages
 export const Fetch_HPagesListApi = () => get(url.H_PAGES_API_URL)//get H_Pages List 
@@ -324,6 +323,10 @@ export const GroupTypes_Update_API = (data, id) => put(`${url.GROUP_TYPE_API}/${
 // TermsAndCondtions API
 export const Post_TermsAndCondtions_Master_API = (data) => post(url.TERMSANDCONDITIONS_API, data)// post api
 export const get_TermsAndCondtionsList_API = (data) => get(url.TERMSANDCONDITIONS_API)// get api
+
+// GST API
+export const GSTList_Delete_API = (id) => del(`${url.GST_API}/${id}`)// delete api
+
 export {  
   getLoggedInUser,
   isUserAuthenticated,
