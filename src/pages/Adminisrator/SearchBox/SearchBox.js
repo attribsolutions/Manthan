@@ -3,13 +3,10 @@ import React, { useEffect } from 'react'
 export default function SearchBox() {
 
     useEffect(() => {
-
         const searchInput = document.querySelector('#search');
 
         const list = document.getElementById('list')
         const clearButton = document.getElementById('clear')
-
-    
         function clearList() {
             // looping through each child of the search results list and remove each child
             while (list.firstChild) {
