@@ -23,8 +23,6 @@ import {
 } from "../../../store/Administrator/MarginMasterRedux/action";
 import MarginMaster from "./MarginMaster"
 
-
-
 const MarginList = (props) => {
 
   const dispatch = useDispatch();
@@ -146,15 +144,16 @@ const MarginList = (props) => {
   }
   
   //select id for delete row
-  const deleteHandeler = (id, name) => {
+  const deleteHandeler = (CommonID) => {
+    debugger
     dispatch(
       AlertState({
         Type: 5,
         Status: true,
-        Message: `Are you sure you want to delete this Margin List : "${name}"`,
+        Message: `Are you sure you want to delete this Margin List `,
         RedirectPath: false,
         PermissionAction: delete_MarginList,
-        ID: id,
+        ID: CommonID,
       })
     );
   };
