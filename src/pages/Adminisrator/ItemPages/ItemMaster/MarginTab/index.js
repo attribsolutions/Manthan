@@ -68,6 +68,7 @@ function Margin_Tab(props) {
             CreatedBy: 1,
             UpdatedBy: 1,
             Company: 1,
+            IsAdd:true
         };
 
         if (!(priceList === "")

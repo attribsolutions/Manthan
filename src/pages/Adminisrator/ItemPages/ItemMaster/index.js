@@ -565,40 +565,60 @@ const ItemsMaster = (props) => {
     const handleValidSubmit = (event, values) => {
 
         let isvalid = true
+        let inValidMsg=[]
+
         if (formValue.Name === '') {
             document.getElementById("txtName0").className = "form-control is-invalid"
+            inValidMsg.push("Name: Is Requried")
             isvalid = false
         }
         if (formValue.ShortName === '') {
             document.getElementById("txtShortName0").className = "form-control is-invalid"
             isvalid = false
+            inValidMsg.push("ShortName: Is Requried")
         }
         if (formValue.Company.length < 1) {
             inValidDrop.Company = true
             isvalid = false
+            inValidMsg.push("Company: Is Requried")
         }
         if (formValue.BaseUnit.length < 1) {
             inValidDrop.BaseUnit = true
             isvalid = false
+            inValidMsg.push("BaseUnit: Is Requried")
+
         }
         if (formValue.CategoryType.length < 1) {
             inValidDrop.CategoryType = true
             isvalid = false
+            inValidMsg.push("CategoryType: Is Requried")
         }
         if (formValue.Category.length < 1) {
             inValidDrop.Category = true
             isvalid = false
+            inValidMsg.push("Category: Is Requried")
+
         }
 
         if (formValue.Division.length < 1) {
             inValidDrop.Division = true
             isvalid = false
+            inValidMsg.push("Division:Is Requried")
         }
         if (!Group_Tab_TableData.length > 0) {
             isvalid = false
+            inValidMsg.push(" GroupType Primary:Is Requried")
+        }
+        else{
+              const found=Group_Tab_TableData.find(element => {
+             return  element.GroupTypeName==="Primary"
+            });
+            if(found===undefined){
+                isvalid = false;
+                inValidMsg.push(" GroupType Primary:Is Requried")
+            }
         }
         if (isvalid) {
-            debugger
 
             const itemUnitDetails = baseUnitTableData.map((index) => ({
                 BaseUnitQuantity: index.Conversion,
@@ -621,7 +641,22 @@ const ItemsMaster = (props) => {
                 CategoryType: formValue.CategoryType.value,
                 Category: index.value
             }))
+     
+            let hasAdd_MRP =[]
+             MRP_Tab_TableData.forEach((index) => {
+                    if(index.IsAdd===true){hasAdd_MRP.push(index) }
+            })
+            let hasAdd_MRP1 =[]
+            MRP_Tab_TableData.forEach((index) => {
+                   if(index.IsAdd===true){hasAdd_MRP.push(index) }
+           })
 
+           let hasAdd_MRP2 =[]
+           MRP_Tab_TableData.forEach((index) => {
+                  if(index.IsAdd===true){hasAdd_MRP.push(index) }
+          })
+     
+      
             const jsonBody = JSON.stringify({
                 Name: formValue.Name,
                 ShortName: formValue.ShortName,
@@ -645,7 +680,7 @@ const ItemsMaster = (props) => {
                         Item_pic: "sadsadasdas"
                     }
                 ],
-                ItemMRPDetails: MRP_Tab_TableData,
+                ItemMRPDetails: hasAdd_MRP,
                 ItemMarginDetails: marginMaster,
                 ItemGSTHSNDetails: GStDetailsMaster,
                 ItemGroupDetails: Group_Tab_TableData,
@@ -665,7 +700,7 @@ const ItemsMaster = (props) => {
         else {
             dispatch(AlertState({
                 Type: 4, Status: true,
-                Message: "Please Select Value and Group",
+                Message: JSON.stringify(inValidMsg),
                 RedirectPath: false,
                 PermissionAction: false,
             }));

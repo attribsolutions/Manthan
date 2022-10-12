@@ -92,6 +92,7 @@ function GroupTab(props) {
             GroupName: groupDropdownSelect.label,
             SubGroup: subGroupDropdownSelect === "" ? "" : subGroupDropdownSelect.value,
             SubGroupName: subGroupDropdownSelect.label,
+            IsAdd:true
         };
         if (val.Group == '') {
             alert("Select Groups values")
