@@ -301,17 +301,18 @@ export const Post_MRPMaster_API = (data) => post(url.MRP_MASTER_LIST, data)// po
 export const GetMRPList_For_Listpage = () => get(url.MRP_MASTER_LIST)// getapi
 export const update_MRPList = (data,id) => put(`${url. MRP_MASTER_LIST}/${id}`,data)// update_MRPList
 export const edit_MRPList = (id) => get(`${url. MRP_MASTER_LIST}/${id}`)// edit api
-export const delete_MRPList_API = (id) =>  del(`${url. MRP_MASTER_LIST}/${id}`)// delete api
+export const delete_MRPList_API = (CommonID) =>  del(`${url. DELETE_API_FOR_LIST_PAGE}/${CommonID}`)// delete api
 export const GoButton_Post_API = (data) => post(url.GO_BUTTON_POST_API, data)// go button postapi
 export const MRP_MasterPage_delete_API = (id) =>  del(`${url. MRP_MASTER_LIST}/${id}`)// delete api MRP Master Page
 
 // Margin Master
 export const Post_MarginMaster_API = (data) => post(url.MARGIN_MASTER_LIST, data)// post api
 export const GetMarginList_For_Listpage = () => get(url.MARGIN_MASTER_LIST)//  get List
-export const delete_MarginList_API = (id) => del(`${url. MARGIN_MASTER_LIST}/${id}`)// post api
+export const delete_MarginList_API = (CommonID) => del(`${url. DELETE_API_FOR_LIST_MARGIN_PAGE}/${CommonID}`)// post api
 export const edit_MarginList = (id) =>get(`${url. MARGIN_MASTER_LIST}/${id}`) // edit api
 export const update_MarginList = (data, id) =>put(`${url.MARGIN_MASTER_LIST}/${id}`, data)// update
 export const GoButton_Post_API_For_MarginMaster = (data) => post(url.GO_BUTTON_POST_API_FOR_MARGIN_MASTER, data)// go button postapi
+export const Margin_MasterPage_delete_API = (id) =>  del(`${url. MARGIN_MASTER_LIST}/${id}`)// delete api Margin Master Page
 
 // GroupTypes API
 export const GroupTypes_API = () => get(url.GROUP_TYPE_API)

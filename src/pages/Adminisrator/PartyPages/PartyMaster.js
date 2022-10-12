@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react"
 import MetaTags from "react-meta-tags"
+import './partymaster.scss'
 import {
     Button,
     Card,
@@ -62,6 +63,7 @@ const PartyMaster = (props) => {
     //Access redux store Data /  'save_ModuleSuccess' action data
     const { PostAPIResponse,
         State,
+        // PriceList,
         DistrictOnState,
         Company,
         PartyTypes,
@@ -217,6 +219,12 @@ const PartyMaster = (props) => {
         division: index.IsDivision
     }));
 
+    // party drop down option
+    // const PriceList_DropdownOptions = PriceList.map((data) => ({
+    //     value: data.id,
+    //     label: data.Name
+    // }));
+
     function handllerState(e) {
         setState_DropDown_select(e)
         dispatch(getDistrictOnState(e.value))
@@ -243,7 +251,7 @@ const PartyMaster = (props) => {
             <>
                 <Modal
                     isOpen={dropOpen}
-                    toggle={() => { setDropOpen(!dropOpen) }}
+                    toggle={() =>{ setDropOpen(!dropOpen) }}
                     size="sm"
                     centered={true}
                 // backdrop={'static'}
@@ -518,15 +526,20 @@ const PartyMaster = (props) => {
                                                                         {/* <Select
                                                                         value={PriceList_dropdown_Select}
                                                                         options={PriceList_DropdownOptions}
-                                                                        onChange={(e) => { handllerPriceList(e) }}
+                                                                        // onChange={(e) =>{ handllerPriceList(e)}}
+                                                                        onChange={(e) =>{setPriceList_dropdown_Select(e)}}
+
+
+
                                                                     /> */}
 
-                                                                        <Input
+                                                                         <Input
                                                                             value={PriceList_dropdown_Select.label}
                                                                             placeholder="Select..."
-                                                                            onClick={(e) => setDropOpen(!dropOpen)}>
-                                                                        </Input>
-                                                                        {test1()}
+                                                                            onClick={(e) => setDropOpen(!dropOpen)} 
+                                                                            >
+                                                                        </Input> 
+                                                                         {test1()} 
 
 
 

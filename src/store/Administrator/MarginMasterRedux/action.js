@@ -10,7 +10,9 @@ import {
     UPDATE_MARGIN_LIST_PAGE,
     UPDATE_MARGIN_LIST_PAGE_SUCCESS,
     POST_GO_BUTTON_FOR_MARGIN_MASTER,
-    POST_GO_BUTTON_FOR_MARGIN_MASTER_SUCCESS
+    POST_GO_BUTTON_FOR_MARGIN_MASTER_SUCCESS,
+    DELETE_ID_IN_MARGIN_MASTERPAGE,
+    DELETE_ID_IN_MARGIN_MASTERPAGE_SUCCESS
 } from "./actionType";
 
 // post api
@@ -37,9 +39,9 @@ export const getMarginListPageSuccess = (data) => ({
 });
 
 //delete
-export const delete_MarginList = (id) => ({
+export const delete_MarginList = (CommonID) => ({
     type: DELETE_MARGIN_LIST_PAGE,
-    id,
+    CommonID,
 });
 
 export const delete_MarginListSuccess = (data) => ({
@@ -76,5 +78,16 @@ export const postGoButtonForMargin_Master = (data) => ({
 
 export const postGoButtonForMargin_Master_Success = (data) => ({
     type: POST_GO_BUTTON_FOR_MARGIN_MASTER_SUCCESS,
+    payload: data,
+});
+
+// delete api Margin Master Page
+export const deleteID_In_Margin_MasterPage = (id) => ({
+    type: DELETE_ID_IN_MARGIN_MASTERPAGE,
+    id,
+});
+
+export const deleteID_In_Margin_MasterPageSuccess = (data) => ({
+    type: DELETE_ID_IN_MARGIN_MASTERPAGE_SUCCESS,
     payload: data,
 });

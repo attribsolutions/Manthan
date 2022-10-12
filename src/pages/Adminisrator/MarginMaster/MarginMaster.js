@@ -28,6 +28,8 @@ import { get_Party_ForDropDown, get_PriceList_ForDropDown } from "../../../store
 import BootstrapTable from "react-bootstrap-table-next";
 import {
 
+    deleteID_In_Margin_MasterPage,
+    deleteID_In_Margin_MasterPageSuccess,
     postGoButtonForMargin_Master,
     postGoButtonForMargin_Master_Success,
     postMarginMasterData,
@@ -53,11 +55,13 @@ const MarginMaster = (props) => {
     //Access redux store Data /  'save_ModuleSuccess' action data
     const { PostAPIResponse,
         TableData,
+        deleteMessage,
         Party,
         PriceList,
         RoleAccessModifiedinSingleArray
     } = useSelector((state) => ({
         TableData: state.MarginMasterReducer.MarginGoButton,
+        deleteMessage: state.MarginMasterReducer.deleteId_For_MarginMaster,
         PostAPIResponse: state.MarginMasterReducer.PostData,
         Party: state.ItemMastersReducer.Party,
         PriceList: state.ItemMastersReducer.PriceList,
@@ -84,10 +88,72 @@ const MarginMaster = (props) => {
     }, [RoleAccessModifiedinSingleArray]);
 
     useEffect(() => {
+        debugger
+        const editDataGatingFromList = history.location.state
+
+        const locationPath = history.location.pathname
+        let userAcc = RoleAccessModifiedinSingleArray.find((inx) => {
+            return (`/${inx.ActualPagePath}` === locationPath)
+        })
+
+        if (!(editDataGatingFromList === undefined)) {
+            debugger
+            var PriceListid = editDataGatingFromList.PriceList_id
+            var priceListName = editDataGatingFromList.PriceListName
+            var partyId = editDataGatingFromList.Party_id
+            var partyName = editDataGatingFromList.PartyName
+            var effectiveDate = editDataGatingFromList.EffectiveDate
+
+            // let division = { ...division_dropdown_Select }
+            // let party = { ...party_dropdown_Select }
+
+            const jsonBody = JSON.stringify({
+                PriceList: PriceListid,
+                Party: partyId,
+                EffectiveDate: effectiveDate
+            });
+            dispatch(postGoButtonForMargin_Master(jsonBody))
+            // dispatch(postGoButtonForMRP_MasterSuccess(divisionid, partyId, effectiveDate));
+            setPartyName_dropdown_Select({ label: partyName, value: partyId })
+            setpriceList_dropdown_Select({ label: priceListName, value: PriceListid })
+            setEffectiveDate(effectiveDate)
+
+        }
+        if (!(userAcc === undefined)) {
+            setUserPageAccessState(userAcc)
+        }
+    }, [RoleAccessModifiedinSingleArray])
+
+    useEffect(() => {
         dispatch(get_PriceList_ForDropDown());
         dispatch(get_Party_ForDropDown());
         dispatch(postGoButtonForMargin_Master_Success([]));
     }, [dispatch]);
+
+    useEffect(() => {
+        if (deleteMessage.Status === true && deleteMessage.StatusCode === 200) {
+            dispatch(deleteID_In_Margin_MasterPageSuccess({ Status: false }));
+            dispatch(postGoButtonForMargin_Master_Success([]))
+            GoButton_Handler()
+            dispatch(
+                AlertState({
+                    Type: 1,
+                    Status: true,
+                    Message: deleteMessage.Message,
+                    //   AfterResponseAction: getMRPListPage,
+                })
+            );
+        } else if (deleteMessage.Status === true) {
+            dispatch(deleteID_In_Margin_MasterPageSuccess({ Status: false }));
+            dispatch(
+                AlertState({
+                    Type: 3,
+                    Status: true,
+                    Message: JSON.stringify(deleteMessage.Message),
+                })
+            );
+        }
+    }, [deleteMessage]);
 
     const PartyTypeDropdown_Options = Party.map((Data) => ({
         value: Data.id,
@@ -101,18 +167,17 @@ const MarginMaster = (props) => {
 
     function PartyType_Dropdown_OnChange_Handller(e) {
         setPartyName_dropdown_Select(e)
-
     }
 
     function PriceList_Dropdown_OnChange_Handller(e) {
         setpriceList_dropdown_Select(e)
-
     }
+    
     const EffectiveDateHandler = (e, date) => {
         setEffectiveDate(date)
     }
 
-    const MRPHandler = (e, cellContent, user, abd) => {
+    const MRPHandler = (e, cellContent, user, key) => {
         user["Margin"] = e.target.value
     }
 
@@ -137,6 +202,21 @@ const MarginMaster = (props) => {
             alert("EffectiveDate not select")
         }
         dispatch(postGoButtonForMargin_Master(jsonBody))
+        console.log(jsonBody)
+    };
+
+     //select id for delete row
+     const deleteHandeler = (id, name) => {
+        dispatch(
+            AlertState({
+                Type: 5,
+                Status: true,
+                Message: `Are you sure you want to delete this Item : "${name}"`,
+                RedirectPath: false,
+                PermissionAction: deleteID_In_Margin_MasterPage,
+                ID: id,
+            })
+        );
     };
 
     useEffect(() => {
@@ -216,25 +296,76 @@ const MarginMaster = (props) => {
         },
         {
 
+            text: "Effective from ",
+            dataField: "CurrentDate",
+            sort: true,
+            formatter: (cellContent, user, key) => (
+                <>
+                    <div style={{ justifyContent: 'center' }} >
+                        <Col>
+                            <FormGroup className=" col col-sm-6 ">
+                            <Label style={{ color: "#B0290B" }}>{TableData[key].CurrentDate}</Label>
+                                {/* <Input
+                                    type="text"
+                                    defaultValue={TableData[key].MRP}
+                                    disabled={!(user.MRP === '') ? true : false}
+                                    className="col col-sm text-center"
+                                    onChange={(e) => MRPHandler(e, cellContent, user, key)}
+                                /> */}
+                            </FormGroup>
+                        </Col>
+                    </div>
+                </>
+            ),
+        },
+        {
+
             text: "Margin ",
             dataField: "",
             sort: true,
-            formatter: (cellContent, user, abd) => (
+            formatter: (cellContent, user, key) => (
                 <>
                     <div style={{ justifyContent: 'center' }} >
                         <Col>
                             <FormGroup className=" col col-sm-4 ">
                                 <Input
                                     type="text"
-                                    defaultValue={Margin}
+                                    defaultValue={TableData[key].Margin}
+                                    disabled={!(user.Margin === '') ? true : false}
                                     className="col col-sm text-center"
-                                    onChange={(e) => MRPHandler(e, cellContent, user, abd)}
+                                    onChange={(e) => MRPHandler(e, cellContent, user, key)}
                                 />
+                            </FormGroup>
+                        </Col>
+                    </div>
+                </>
+            ),
+        },
+        {
+            text: "Action ",
+            dataField: "",
+            formatter: (cellContent, user) => (
+
+                <>
+                    <div style={{ justifyContent: 'center' }} >
+                        <Col>
+                            <FormGroup className=" col col-sm-4 ">
+                                {!(user.id === '') ?
+                                    <Button
+                                        id={"deleteid"}
+                                        type="button"
+                                        className="badge badge-soft-danger font-size-12 btn btn-danger waves-effect waves-light w-xxs border border-light"
+                                        data-mdb-toggle="tooltip" data-mdb-placement="top" title='Delete MRP'
+                                        onClick={() => { deleteHandeler(user.id, user.Name); }}
+                                    >
+                                        <i className="mdi mdi-delete font-size-18"></i>
+                                    </Button> : <></>}
                             </FormGroup>
                         </Col>
 
                     </div>
                 </>
+
             ),
         },
     ]
@@ -249,7 +380,7 @@ const MarginMaster = (props) => {
             Company: 1,
             CreatedBy: 1,
             UpdatedBy: 1,
-            Item: index.id,
+            Item: index.Item,
             Margin: index.Margin
         }))
 

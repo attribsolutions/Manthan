@@ -4,26 +4,19 @@ import { Tbody, Td, Thead, Tr } from 'react-super-responsive-table'
 import { Col, Input, Label, Row, Table } from 'reactstrap'
 
 export default function SerachBox3() {
-
     const [list,setList]=useState([])
-
      function searchHandeler(e){
         let value = e.target.value
-
         if (value && value.trim().length > 0) {
             value = value.trim().toLowerCase()
-
             //returning only the results of setList if the value of the search is included in the person's name
             setList(people.filter(person => {
                 return (person.Name.trim().toLowerCase()).includes(value)
             })
-
             )
-
         }
      }
      
-
     return (
         <div className="page-content" >
             <body>

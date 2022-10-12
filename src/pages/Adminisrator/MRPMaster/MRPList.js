@@ -23,10 +23,7 @@ import {
   updateMRPListSuccess
 } from "../../../store/Administrator/MRPMasterRedux/action";
 import MRPMaster from "./MRPMaster"
-import { commonPageFieldList, commonPageFieldListSuccess } from "../../../store/actions";
-import CommonListPage from "../../../components/Common/CmponentRelatedCommonFile/commonListPage";
-import { MRP } from "../../../routes/route_url";
-
+import { deburr } from "lodash";
 
 const MRPList = (props) => {
 
@@ -55,6 +52,8 @@ const MRPList = (props) => {
       })
     );
 
+    console.log("tableList",tableList)
+     
   useEffect(() => {
     const locationPath = history.location.pathname
     let userAcc = userAccess.find((inx) => {
@@ -97,7 +96,8 @@ const MRPList = (props) => {
   }, [updateMsg]);
 
   useEffect(() => {
-    if (deleteMsg.Status === true && deleteMsg.StatusCode === 200) {
+    debugger
+    if ((deleteMsg.Status === true )&&( deleteMsg.StatusCode === 200)) {
       dispatch(delete_MRPListSuccess({ Status: false }));
       dispatch(
         AlertState({
@@ -117,7 +117,7 @@ const MRPList = (props) => {
         })
       );
     }
-  }, [deleteMsg]);
+  }, [deleteMsg.Status]);
 
   useEffect(() => {
 
@@ -156,42 +156,37 @@ const MRPList = (props) => {
   }
 
   //select id for delete row
-  const deleteHandeler = (id, name) => {
+  const deleteHandeler = (CommonID) => {
+    debugger
     dispatch(
       AlertState({
         Type: 5,
         Status: true,
-        Message: `Are you sure you want to delete this MRP List : "${name}"`,
+        Message: `Are you sure you want to delete this MRP List `,
         RedirectPath: false,
         PermissionAction: delete_MRPList,
-        ID: id,
+        ID: CommonID,
       })
     );
   };
 
-  // // edit Buutton Handller
-  // const EditPageHandler = (id) => {
-  //   dispatch(editMRPList(id));
-  // };
-
   const EditPageHandler = (rowData) => {
-    debugger
-      // if(rowData.Division_id===null) {
-      //  rowData.Division_id=0
-      // }
-       let  RelatedPageID = userPageAccessState.RelatedPageID
+    // if(rowData.Division_id===null) {
+    //  rowData.Division_id=0
+    // }
+    let RelatedPageID = userPageAccessState.RelatedPageID
 
-       const found = userAccess.find((element) => {
-           return element.id === RelatedPageID
-       })
+    const found = userAccess.find((element) => {
+      return element.id === RelatedPageID
+    })
 
-       if (!(found === undefined)) {
-           history.push({
-               pathname: `/${found.ActualPagePath}`,
-               state:  rowData ,
-           })
-       }
-   }
+    if (!(found === undefined)) {
+      history.push({
+        pathname: `/${found.ActualPagePath}`,
+        state: rowData,
+      })
+    }
+  }
 
   const defaultSorted = [
     {
@@ -212,27 +207,16 @@ const MRPList = (props) => {
       dataField: "EffectiveDate",
       sort: true,
     },
-
-    // {
-    //     text: "CompanyName",
-    //     dataField: "CompanyName",
-    //     sort: true,
-    //   },
-
     {
       text: "DivisionName",
       dataField: "DivisionName",
       sort: true,
     },
-
     {
       text: "PartyName",
       dataField: "PartyName",
       sort: true,
     },
-
-
-
     {
       text: "Action",
       hidden: (
@@ -242,19 +226,19 @@ const MRPList = (props) => {
 
       formatter: (cellContent, Role) => (
         <div className="d-flex gap-3" style={{ display: 'flex', justifyContent: 'center' }} >
-          {((userPageAccessState.RoleAccess_IsEdit ) && (Role.CommonID >0) ) ?
+          {((userPageAccessState.RoleAccess_IsEdit) && (Role.CommonID > 0)) ?
             <Button
               type="button"
               data-mdb-toggle="tooltip" data-mdb-placement="top" title="Edit MRP List"
               onClick={() => { EditPageHandler(Role); }}
               className="badge badge-soft-success font-size-12 btn btn-success waves-effect waves-light w-xxs border border-light"
-            > 
+            >
               <i className="mdi mdi-pencil font-size-18" id="edittooltip"></i>
-            </Button> 
+            </Button>
             :
-            null }
+            null}
 
-          {(!(userPageAccessState.RoleAccess_IsEdit) &&  (Role.CommonID >0)&& (userPageAccessState.RoleAccess_IsView)) ?
+          {(!(userPageAccessState.RoleAccess_IsEdit) && (Role.CommonID > 0) && (userPageAccessState.RoleAccess_IsView)) ?
             <Button
               type="button"
               data-mdb-toggle="tooltip" data-mdb-placement="top" title="View MRP List"
@@ -265,12 +249,12 @@ const MRPList = (props) => {
               <i className="bx bxs-show font-size-18 "></i>
             </Button> : null}
 
-          {(userPageAccessState.RoleAccess_IsDelete)
+          {((userPageAccessState.RoleAccess_IsDelete) && (Role.CommonID > 0))
             ?
             <Button
               className="badge badge-soft-danger font-size-12 btn btn-danger waves-effect waves-light w-xxs border border-light"
               data-mdb-toggle="tooltip" data-mdb-placement="top" title="Delete MRP List"
-              onClick={() => { deleteHandeler(Role.id, Role.Name); }}
+              onClick={() => { deleteHandeler(Role.CommonID) }}
             >
               <i className="mdi mdi-delete font-size-18"></i>
             </Button>

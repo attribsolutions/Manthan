@@ -39,7 +39,6 @@ const SidebarContent = (props) => {
   }));
 
   useEffect(() => {
-
     if (RoleAccessData.length <= 0) {
       var role = JSON.parse(localStorage.getItem("roleId"))
       if (!(role===undefined) &&!(role===null)) {
@@ -142,6 +141,7 @@ const SidebarContent = (props) => {
         ref.current.getScrollElement().scrollTop = currentPosition - 300
       }
     }
+    
   }
 
 
