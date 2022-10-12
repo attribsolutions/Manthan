@@ -96,7 +96,8 @@ const MRPList = (props) => {
   }, [updateMsg]);
 
   useEffect(() => {
-    if (deleteMsg.Status === true && deleteMsg.StatusCode === 200) {
+    debugger
+    if ((deleteMsg.Status === true )&&( deleteMsg.StatusCode === 200)) {
       dispatch(delete_MRPListSuccess({ Status: false }));
       dispatch(
         AlertState({
@@ -155,7 +156,7 @@ const MRPList = (props) => {
   }
 
   //select id for delete row
-  const deleteHandeler = (CommonID, name) => {
+  const deleteHandeler = (CommonID) => {
     debugger
     dispatch(
       AlertState({
