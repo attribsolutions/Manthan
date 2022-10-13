@@ -17,7 +17,7 @@ import { MetaTags } from "react-meta-tags";
 import { BreadcrumbShow, commonPageField, commonPageFieldSuccess, getCategoryTypelist } from "../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
 import {
-    editCategoryIDSuccess, getMethodForCategory,
+    editCategoryIDSuccess,
     PostMethodForCategory,
     PostMethod_ForCategoryAPISuccess,
     updateCategoryID
@@ -36,6 +36,7 @@ import {
 
 
 import { SaveButton } from "../../../components/CommonSaveButton";
+import { CATEGORY_lIST } from "../../../routes/route_url";
 
 
 const CategoryMaster = (props) => {
@@ -72,17 +73,21 @@ const CategoryMaster = (props) => {
     {/*start */ }
     const [state, setState] = useState({
         values: {
+            id: "",
             Name: "",
-            CategoryTypeName: ""
+            CategoryTypeName: "",
+
         },
         fieldLabel: {
             Name: '',
             CategoryTypeName: '',
+
         },
 
         isError: {
             Name: "",
-            CategoryTypeName: ""
+            CategoryTypeName: "",
+
         },
 
         hasValid: {
@@ -137,7 +142,7 @@ const CategoryMaster = (props) => {
 
     // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
     useEffect(() => {
-
+        debugger
         // if (!(userPageAccessState === '')) { document.getElementById("txtName").focus(); }
         if ((hasShowloction || hasShowModal)) {
 
@@ -153,15 +158,17 @@ const CategoryMaster = (props) => {
             }
 
             if (hasEditVal) {
-                setCategoryTypes_dropdown_Select({
+                debugger
+                const { id, Name, CategoryTypeName} = hasEditVal
+                const { values, fieldLabel, hasValid, required, isError } = { ...state }
+                values.Name = Name;
+                values.CategoryTypeName = CategoryTypeName;
+                values.id= id
+                setState({ values, fieldLabel, hasValid, required, isError })
+                dispatch(BreadcrumbShow(hasEditVal.CategoryMaster))
 
-                    value: hasEditVal.CategoryType_id,
-                    label: hasEditVal.CategoryTypeName
-                })
-                dispatch(editCategoryIDSuccess({ Status: false }))
-                dispatch(BreadcrumbShow(hasEditVal.Name))
-                return
             }
+            dispatch(editCategoryIDSuccess({ Status: false }))
         }
     }, [])
 
@@ -184,7 +191,7 @@ const CategoryMaster = (props) => {
                     Type: 1,
                     Status: true,
                     Message: PostAPIResponse.Message,
-                    RedirectPath: '/CategoryList',
+                    RedirectPath: CATEGORY_lIST,
                 }))
             }
         }
@@ -201,10 +208,10 @@ const CategoryMaster = (props) => {
     }, [PostAPIResponse])
 
     useEffect(() => {
-      
+
         if (pageField) {
             const fieldArr = pageField.PageFieldMaster
-            comAddPageFieldFunc({ state, setState, fieldArr })// new change
+            comAddPageFieldFunc({ state, setState, fieldArr })
         }
     }, [pageField])
 
@@ -225,18 +232,20 @@ const CategoryMaster = (props) => {
     }));
 
     const formSubmitHandler = (event) => {
+
         event.preventDefault();
         if (formValid(state, setState)) {
             const jsonBody = JSON.stringify({
                 Name: values.Name,
-                CategoryType: values.CategoryTypeName.values,
+                CategoryType: values.CategoryTypeName.value,
             });
 
             if (pageMode === "edit") {
-                dispatch(updateCategoryID(jsonBody, EditData.id));
+                dispatch(updateCategoryID(jsonBody, values.id,));
             }
             else {
                 dispatch(PostMethodForCategory(jsonBody));
+                console.log("jsonBody", jsonBody)
 
             }
         }
@@ -275,7 +284,7 @@ const CategoryMaster = (props) => {
                                                             <Input
                                                                 name="Name"
                                                                 id="txtName"
-                                                                value={EditData.Name}
+                                                                value={values.Name}
                                                                 type="text"
                                                                 className={isError.Name.length > 0 ? "is-invalid form-control" : "form-control"}
                                                                 placeholder="Please Enter Name"
