@@ -148,6 +148,7 @@ function Margin_Tab(props) {
                                             id={`txtMargin${0}`}
                                             value={margin}
                                             placeholder="Please Enter Margin"
+                                            autoComplete="off"
                                             onChange={MarginHandler}
 
                                         />

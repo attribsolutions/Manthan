@@ -61,7 +61,7 @@ const CommonListPage = (props) => {
   } = props;
 
   useEffect(() => {
-    
+
     const locationPath = history.location.pathname
     let userAcc = userAccess.find((inx) => {
       return (`/${inx.ActualPagePath}` === locationPath)
@@ -151,7 +151,6 @@ const CommonListPage = (props) => {
 
   // Edit Modal Show When Edit Data is true
   useEffect(() => {
-    debugger
     if (editData.Status === true) {
       if (pageField.IsEditPopuporComponent) {
         history.push({
