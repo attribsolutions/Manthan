@@ -24,7 +24,6 @@ const GSTList = (props) => {
     const history = useHistory()
 
     const [userPageAccessState, setUserPageAccessState] = useState('');
-    console.log("userPageAccessState", userPageAccessState)
 
     // get Access redux data
     const {
