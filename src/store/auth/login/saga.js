@@ -87,8 +87,8 @@ function* afterLoginUserDetails_genFun({ id }) {
 
 
     var employee = response.Data.EmployeeID;
-    var company = response.Data.CompanyID;
-    var companyGroup = response.Data.CompanyGroup;
+    // var company = response.Data.CompanyID;
+    // var companyGroup = response.Data.CompanyGroup;
 
     const response2 = yield call(divisionDropdown_Forlogin_ChangeDivisionPage_ApiCall, employee,)
     yield put(divisionDropdownSelectSuccess(response2.Data))

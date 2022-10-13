@@ -266,7 +266,7 @@ import {
   
     const pageOptions = {
       sizePerPage: 10,
-      totalSize: props.tableData.length,
+      // totalSize: props.tableData.length,
       custom: true,
     };
   

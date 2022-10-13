@@ -90,8 +90,6 @@ const MRPMaster = (props) => {
     }, [userAccess])
 
     useEffect(() => {
-
-
         const editDataGatingFromList = history.location.state
 
         const locationPath = history.location.pathname
@@ -185,6 +183,7 @@ const MRPMaster = (props) => {
     useEffect(() => {
         if (deleteMessage.Status === true && deleteMessage.StatusCode === 200) {
             dispatch(deleteID_In_MasterPageSuccess({ Status: false }));
+            dispatch(postGoButtonForMRP_MasterSuccess([]))
             GoButton_Handler()
             dispatch(
                 AlertState({
@@ -205,6 +204,7 @@ const MRPMaster = (props) => {
             );
         }
     }, [deleteMessage]);
+
     function PartyType_Dropdown_OnChange_Handller(e) {
         setParty_dropdown_Select(e)
     }
@@ -223,10 +223,6 @@ const MRPMaster = (props) => {
 
     const CurrentMRPHandler = (e, cellContent, user, key) => {
         user["CurrentMRP"] = e.target.value
-    }
-
-    const CurrentDateHandler = (e, cellContent, user, key) => {
-        user["CurrentDate"] = e.target.value
     }
 
     //select id for delete row
@@ -262,8 +258,6 @@ const MRPMaster = (props) => {
         }
         dispatch(postGoButtonForMRP_Master(jsonBody))
         console.log("Go button Post Json", jsonBody)
-
-
     };
 
     const pageOptions = {
@@ -285,9 +279,9 @@ const MRPMaster = (props) => {
             formatter: (cellContent, user, key) => (
                 <>
                     <div style={{ justifyContent: 'center' }} >
-                        <Row >
-                            <Col md="6">
-                                <FormGroup className=" col col-sm-6 ">
+                        
+                            <Col>
+                                <FormGroup className=" col col-sm-4 ">
                                     <Input
                                         id=""
                                         type="text"
@@ -299,15 +293,46 @@ const MRPMaster = (props) => {
                                 </FormGroup>
                             </Col>
 
-                            <Col md="6">
+                            {/* <Col md="6">
                                 <FormGroup className=" col col-sm-6 ">
-                                    <Label style={{color:"red" }}>{TableData[key].CurrentDate}</Label>
-                                   
+                                    {/* <Label style={{ color: "#F0A4BA" }}>{TableData[key].CurrentDate}</Label> */}
+                                    {/* {!(user.CurrentDate === '') ?
+                                        <label
+                                            style={{ paddingLeft: "7px", color: "#F0A4BA" }} >&nbsp;
+                                            <kbd className="bg-light text-danger font-size-14 ">{TableData[key].CurrentDate}</kbd></label>
+
+                                        : null}
+
+
                                 </FormGroup>
                             </Col>
-                        </Row>
+                        </Row> */}
                     </div>
 
+                </>
+            ),
+        },
+        {
+
+            text: "Effective from ",
+            dataField: "CurrentDate",
+            sort: true,
+            formatter: (cellContent, user, key) => (
+                <>
+                    <div style={{ justifyContent: 'center' }} >
+                        <Col>
+                            <FormGroup className=" col col-sm-6 ">
+                            <Label style={{ color: "#B0290B" }}>{TableData[key].CurrentDate}</Label>
+                                {/* <Input
+                                    type="text"
+                                    defaultValue={TableData[key].MRP}
+                                    disabled={!(user.MRP === '') ? true : false}
+                                    className="col col-sm text-center"
+                                    onChange={(e) => MRPHandler(e, cellContent, user, key)}
+                                /> */}
+                            </FormGroup>
+                        </Col>
+                    </div>
                 </>
             ),
         },
@@ -338,10 +363,8 @@ const MRPMaster = (props) => {
             ),
         },
         {
-
             text: "Action ",
             dataField: "",
-
             formatter: (cellContent, user) => (
 
                 <>
@@ -352,7 +375,7 @@ const MRPMaster = (props) => {
                                     <Button
                                         id={"deleteid"}
                                         type="button"
-                                        className="badge badge-soft-danger font-size-12 btn btn-danger waves-effect waves-light w-xxs "
+                                        className="badge badge-soft-danger font-size-12 btn btn-danger waves-effect waves-light w-xxs border border-light"
                                         data-mdb-toggle="tooltip" data-mdb-placement="top" title='Delete MRP'
                                         onClick={() => { deleteHandeler(user.id, user.Name); }}
                                     >
@@ -371,7 +394,6 @@ const MRPMaster = (props) => {
 
     //'Save' And 'Update' Button Handller
     const handleValidSubmit = (event, values) => {
-        debugger
         var ItemData = TableData.map((index) => ({
             Division: division_dropdown_Select.value,
             Party: party_dropdown_Select.value,
@@ -382,7 +404,6 @@ const MRPMaster = (props) => {
             Item: index.Item,
             MRP: index.MRP
         }))
-        console.log("ItemData", ItemData)
 
         const Find = ItemData.filter((index) => {
             return !(index.MRP === '')
@@ -391,7 +412,6 @@ const MRPMaster = (props) => {
         const jsonBody = JSON.stringify(Find)
 
         dispatch(postMRPMasterData(jsonBody));
-        console.log("jsonBody", jsonBody)
     };
 
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)

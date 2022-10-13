@@ -128,14 +128,21 @@ export const PRICE_LIST = '/PriceList'
 
 // MRP Master Api
 export const MRP_MASTER_LIST = '/Mrps'
-export const GO_BUTTON_POST_API = '/GetMRP'
+export const GO_BUTTON_POST_API_FOR_MRP_MASTER = '/GetMRP'
+export const DELETE_API_FOR_MRP_LIST_PAGE='/DeleteMrpOnList'
 
 // Margin Master
 export const MARGIN_MASTER_LIST = '/Margins'
 export const GO_BUTTON_POST_API_FOR_MARGIN_MASTER = '/GetMargin'
+export const DELETE_API_FOR_LIST_MARGIN_PAGE='/DeleteMarginOnList'
 
 //TermsAndCondtions API
 export const TERMSANDCONDITIONS_API = '/TermsAndCondtions'
 
 // GroupType API
 export const GROUP_TYPE_API = '/GroupTypes'
+
+// GST API
+export const GST_LIST_API = '/GstHsnCode' // for list page
+export const GO_BUTTON_POST_API_FOR_GST_MASTER = '/GetGstHsncode' // for go button
+export const DELETE_API_FOR_LIST_GST_PAGE = '/DeleteGstHsnCodeOnList' // for delete 

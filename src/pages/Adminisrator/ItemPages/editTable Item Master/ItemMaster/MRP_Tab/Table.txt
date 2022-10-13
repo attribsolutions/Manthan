@@ -266,7 +266,7 @@ function MRPTable(props) {
 
   const pageOptions = {
     sizePerPage: 10,
-    totalSize: props.tableData.length,
+    // totalSize: props.tableData.length,
     custom: true,
   };
 
@@ -288,10 +288,10 @@ function MRPTable(props) {
                   <div className="table">
                     <BootstrapTable
                       keyField={"id"}
-                      responsive
+                      // responsive
                       bordered={false}
                       striped={true}
-                      cellEdit={cellEditFactory({ mode: 'dbclick', blurToSave: true })}
+                      // cellEdit={cellEditFactory({ mode: 'dbclick', blurToSave: true })}
 
                       classes={"table  table-bordered"}
                       // options = {

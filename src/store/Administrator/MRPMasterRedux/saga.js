@@ -1,5 +1,5 @@
 import { call, put, takeEvery } from "redux-saga/effects";
-import { GoButton_Post_API, Post_MRPMaster_API } from "../../../helpers/backend_helper";
+import { GoButton_Post_API, MRP_MasterPage_delete_API, Post_MRPMaster_API } from "../../../helpers/backend_helper";
 import { AlertState } from "../../Utilites/CustomAlertRedux/actions";
 import { SpinnerState } from "../../Utilites/Spinner/actions";
 
@@ -65,10 +65,11 @@ function* get_MRPListPage_GenratorFunction() {
 }
 
 //delete
-function* delete_MRPListPage_GenratorFunction({ id }) {
+function* delete_MRPListPage_GenratorFunction({ CommonID }) {
+  debugger
   yield put(SpinnerState(true))
   try {
-    const response = yield call(delete_MRPList_API, id);
+    const response = yield call(delete_MRPList_API, CommonID);
     yield put(SpinnerState(false))
     yield put(delete_MRPListSuccess(response));
   } catch (error) {
@@ -79,8 +80,6 @@ function* delete_MRPListPage_GenratorFunction({ id }) {
     }));
   }
 }
-
-
 
 // edit api
 function* Edit_MRPListPage_GenratorFunction({ id, pageMode }) {
@@ -122,7 +121,6 @@ function* MRPGoButton_post_GenratorFunction({ data }) {
     const response = yield call(GoButton_Post_API, data);
     yield put(SpinnerState(false))
     yield put(postGoButtonForMRP_MasterSuccess(response.Data));
-    console.log("response", response)
   } catch (error) {
     yield put(SpinnerState(false))
     yield put(AlertState({
@@ -132,14 +130,15 @@ function* MRPGoButton_post_GenratorFunction({ data }) {
   }
 }
 
-
-// delete api MRP Master Page
+// delete api MRP Master PageL
 function* deleteId_for_MasterPage_GenratorFunction({ id }) {
+
   yield put(SpinnerState(true))
   try {
-    const response = yield call(delete_MRPList_API, id);
-    yield put(SpinnerState(false))
+    const response = yield call(MRP_MasterPage_delete_API, id);
+    response["deletedId"] = id
     yield put(deleteID_In_MasterPageSuccess(response));
+    yield put(SpinnerState(false))
   } catch (error) {
     yield put(SpinnerState(false))
     yield put(AlertState({
@@ -157,5 +156,5 @@ function* MRPMasterSaga() {
   yield takeEvery(EDIT_MRP_LIST_PAGE, Edit_MRPListPage_GenratorFunction);
   yield takeEvery(UPDATE_MRP_LIST_PAGE, Update_MRPListPage_GenratorFunction);
   yield takeEvery(DELETE_ID_IN_MASTERPAGE, deleteId_for_MasterPage_GenratorFunction);
-  }
+}
 export default MRPMasterSaga;

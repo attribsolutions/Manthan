@@ -1,17 +1,19 @@
-import React, { useState } from "react";
+import React from "react";
 import { Button, Table } from "reactstrap";
 import { Tbody, Thead } from "react-super-responsive-table";
 
+
 function GroupTable(props) {
    
-  const ondeleteHandeler = (ele) => {
+  const onDeleteHandeler = (ele) => {
+    
     if (!(ele === 0)) {
-      var fil = props.tableData.filter((i) => {
-        return !(i.id === ele);
-      });
-      props.func(fil);
+        var fil = props.tableData.filter((i) => {
+            return !(i.id === ele);
+        });
+        props.func(fil);
     }
-  };
+};
 
   const tableRows = props.tableData.map((info) => {
     return (
@@ -27,7 +29,7 @@ function GroupTable(props) {
             data-mdb-placement="top"
             title="Delete Party Type"
             onClick={(e) => {
-              ondeleteHandeler(info.id);
+              onDeleteHandeler(info.id);
             }}
           >
             <i className="mdi mdi-delete font-size-18"></i>

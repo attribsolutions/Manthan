@@ -169,6 +169,7 @@ const PageMaster = (props) => {
             ListPageSeq: index.ListPageSeq,
             ShowInListPage: index.ShowInListPage,
             ShowInDownload: index.ShowInDownload,
+            DownloadDefaultSelect: index.DownloadDefaultSelect
           }
         })
 
@@ -306,7 +307,7 @@ const PageMaster = (props) => {
   }));
 
   function PageField_Tab_AddRow_Handler() {
-
+    debugger
     var newarr1 = [...pageFieldTabTable, {
       ControlID: '',
       FieldLabel: '',
@@ -318,8 +319,8 @@ const PageMaster = (props) => {
       FieldSequence: '',
       ShowInListPage: '',
       ListPageSeq: '',
-      ShowInDownload: '',
-      DownloadDefaultSelect: '',
+      ShowInDownload: false,
+      DownloadDefaultSelect: false,
 
     }]
     setPageFieldTabTable(newarr1)
@@ -334,7 +335,7 @@ const PageMaster = (props) => {
   }
 
   function PageField_onChange_Handler(event, type, key) {
-
+    debugger
 
     var found = pageFieldTabTable.find((i, k) => {
       return (k === key)
@@ -551,7 +552,7 @@ const PageMaster = (props) => {
   };
 
   const FormSubmitButton_Handler = (event, values) => {
-
+    debugger
     const PageFieldMaster = pageFieldTabTable.map((index) => ({
       ControlID: index.ControlID,
       FieldLabel: index.FieldLabel,
@@ -1445,34 +1446,28 @@ const PageMaster = (props) => {
 
                                     <td>
                                       <Input
-
                                         type="checkbox"
                                         id={`ShowInListPage${key}`}
                                         checked={pageFieldTabTable[key].ShowInListPage}
                                         onChange={(e) => PageField_onChange_Handler(e.target.checked, "ShowInListPage", key)}>
-
                                       </Input>
                                     </td>
 
                                     <td>
                                       <Input
-
                                         type="checkbox"
                                         id={`ShowInDownload${key}`}
-                                        checked={pageFieldTabTable[key].ShowInDownload}
+                                        defaultChecked={pageFieldTabTable[key].ShowInDownload}
                                         onChange={(e) => PageField_onChange_Handler(e.target.checked, "ShowInDownload", key)}>
-
                                       </Input>
                                     </td>
 
                                     <td>
                                       <Input
-
                                         type="checkbox"
                                         id={`DownloadDefaultSelect${key}`}
                                         defaultChecked={pageFieldTabTable[key].DownloadDefaultSelect}
                                         onChange={(e) => PageField_onChange_Handler(e.target.checked, "DownloadDefaultSelect", key)}>
-
                                       </Input>
                                     </td>
 

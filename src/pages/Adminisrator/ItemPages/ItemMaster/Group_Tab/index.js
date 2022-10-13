@@ -12,7 +12,10 @@ import Select from "react-select";
 import { useDispatch, useSelector } from "react-redux";
 import { getGroupTypeslist } from "../../../../../store/Administrator/GroupTypeRedux/action";
 import GroupTable from "./Table";
-import { get_Group_By_GroupType_ForDropDown, get_Sub_Group_By_Group_ForDropDown } from "../../../../../store/Administrator/ItemsRedux/action";
+import {
+    get_Group_By_GroupType_ForDropDown,
+    get_Sub_Group_By_Group_ForDropDown
+} from "../../../../../store/Administrator/ItemsRedux/action";
 
 function GroupTab(props) {
     const dispatch = useDispatch();
@@ -31,6 +34,7 @@ function GroupTab(props) {
         dispatch(get_Group_By_GroupType_ForDropDown());
         dispatch(get_Sub_Group_By_Group_ForDropDown());
     }, [dispatch]);
+
 
     const GroupType_DropdownOptions = GroupType.map((index) => ({
         value: index.id,
@@ -57,7 +61,7 @@ function GroupTab(props) {
             dispatch(get_Group_By_GroupType_ForDropDown(event.value))
         }
         else {
-            alert("alerady selected")
+            alert(`${event.label} Is Already Selected...!`)
         }
 
     };
@@ -71,7 +75,7 @@ function GroupTab(props) {
             dispatch(get_Sub_Group_By_Group_ForDropDown(event.value))
         }
         else {
-            alert("Already Selected")
+            alert(`${event.label} Is Already Selected...!`)
         }
     };
 
@@ -88,9 +92,10 @@ function GroupTab(props) {
             GroupName: groupDropdownSelect.label,
             SubGroup: subGroupDropdownSelect === "" ? "" : subGroupDropdownSelect.value,
             SubGroupName: subGroupDropdownSelect.label,
+            CommonID:0
         };
         if (val.Group == '') {
-            alert("Select Groups values")
+            alert("Please Select GroupType or Group value...!")
         }
         else {
             const totalTableData = props.tableData.length;
@@ -120,7 +125,7 @@ function GroupTab(props) {
                                     <FormGroup className=" col col-sm-4 ">
                                         <Label>Group Type</Label>
                                         <Select
-                                            id={`dropGroupType-${0}`}
+                                            // id={`dropGroupType-${0}`}
                                             value={groupTypeDropdownSelect}
                                             options={GroupType_DropdownOptions}
                                             onChange={GroupType_Handler}
@@ -130,7 +135,7 @@ function GroupTab(props) {
                                     <FormGroup className="mb-3 col col-sm-4 ">
                                         <Label>Group</Label>
                                         <Select
-                                            id={`dropGroup-${0}`}
+                                            // id={`dropGroup-${0}`}
                                             value={groupDropdownSelect}
                                             options={Group_DropdownOptions}
                                             onChange={Group_Handler}
@@ -140,7 +145,7 @@ function GroupTab(props) {
                                     <FormGroup className="mb-3 col col-sm-4 ">
                                         <Label>Sub Group</Label>
                                         <Select
-                                            id={`dropSubGroup-${0}`}
+                                            // id={`dropSubGroup-${0}`}
                                             value={subGroupDropdownSelect}
                                             options={SubGroup_DropdownOptions}
                                             onChange={SubGroup_Handler}

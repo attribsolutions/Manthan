@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Card, CardBody, CardHeader, Col, Dropdown, DropdownItem, DropdownMenu, DropdownToggle, Input, Label, Modal, Row, UncontrolledDropdown } from 'reactstrap';
-
+import './Tree.scss'
 
 
 
@@ -16,7 +16,10 @@ export default function Tree(props) {
             <li >
                 <div
                     //  className='d-flex'
-                    className="mt-1"
+                    // className="mt-1"
+                    className="classmt"
+
+
                 //  onClick={e => {
                 //     // setTreeValue(node.Name)
                 //     setchildVisible(v => !v)}}
@@ -35,12 +38,15 @@ export default function Tree(props) {
                         onClick={(e) => { props.func1(node) }
                         }
                     > */}
-                    <span className="align-middle text-black list-group-ite  form-select"
+                     <span className="align-middle text-black list-group-ite  form-control" 
+                     
+                 /* <span className="treeclass"  */
+
                         onClick={(e) => {
                             props.func1(node);
                             props.func2(false)
                         }
-                        } >{node.label}</span>
+                        }>{node.label}</span>
                     {/* </DropdownItem> */}
                 </div>
                 {/* {
@@ -61,7 +67,7 @@ export default function Tree(props) {
     const tree = (tree1) => {
         
         return (
-            <ul className='list-group '>
+            <ul className='list-group'>
                 {tree1.map((tree) => (
                     // <TreeNode node={tree} func1={props.func1} />
                     TreeNode(tree)
@@ -73,8 +79,9 @@ export default function Tree(props) {
 
     
     return (
-        <>
+        <><ul className='treestructure'>
             {tree(props.data)}
+            </ul>
         </>
     )
 }
