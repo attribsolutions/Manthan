@@ -29,7 +29,7 @@ import RoleList from "../pages/Adminisrator/RoleMasterPages/RoleList"
 import Error404 from "../pages/Utility/Error404";
 import Error500 from "../pages/Utility/Error500";
 import ItemsList from "../pages/Adminisrator/ItemPages/ItemList";
-import ItemsMaster from "../pages/Adminisrator/ItemPages/ItemMaster/itemIndex";
+import ItemsMaster from "../pages/Adminisrator/ItemPages/ItemMaster/itemIndex"
 
 import SearchBoxSecond from "../pages/Adminisrator/SearchBox/SearchBoxSecond";
 import SerachBox3 from "../pages/Adminisrator/SearchBox/SerachBox3";
