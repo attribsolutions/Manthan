@@ -180,7 +180,6 @@ const ItemsMaster = (props) => {
             if (hasEditVal) {
 
                 setEditData(hasEditVal);
-
                 dispatch(BreadcrumbShow(hasEditVal.Name))
 
                 const editDivision = hasEditVal.ItemDivisionDetails.map(index => ({
@@ -454,7 +453,6 @@ const ItemsMaster = (props) => {
 
     }
     function UnitConversionsTab_BaseUnit2_onChange_Handller(event, type, key,) {
-debugger
         let newSelectValue = ''
 
         var found = baseUnitTableData.find((i, k) => {
@@ -632,19 +630,21 @@ debugger
                 BaseUnitQuantity: index.Conversion,
                 UnitID: index.Unit.value,
             }))
-            // const islastIndex = itemUnitDetails.length
+            const islastIndex = itemUnitDetails.length
 
-            // if (islastIndex === 1) {
-            //     itemUnitDetails[itemUnitDetails.length - 1] = {
-            //         BaseUnitQuantity: 1,
-            //         UnitID: formValue.BaseUnit.value,
-            //     }
-            // } else if (islastIndex === 0) {
+            if ((islastIndex === 1)&&( itemUnitDetails[0].BaseUnitQuantity==="")) {
+                itemUnitDetails[0] = {
+                    BaseUnitQuantity: 1,
+                    UnitID: formValue.BaseUnit.value,
+                }
+            } 
+            else if (islastIndex >0) {
+
                 itemUnitDetails.unshift({
                     BaseUnitQuantity: 1,
                     UnitID: formValue.BaseUnit.value,
                 })
-            // }
+            }
             debugger
             const ItemCategoryDetails = formValue.Category.map((index) => ({
                 CategoryType: formValue.CategoryType.value,
