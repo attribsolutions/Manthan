@@ -55,6 +55,7 @@ const MRPList = (props) => {
   }, []);
 
   useEffect(() => {
+    debugger
     if ((deleteMsg.Status === true) && (deleteMsg.StatusCode === 200)) {
       dispatch(delete_MRPListSuccess({ Status: false }));
       dispatch(
@@ -62,7 +63,7 @@ const MRPList = (props) => {
           Type: 1,
           Status: true,
           Message: deleteMsg.Message,
-          AfterResponseAction: getMRPListPage,
+          // AfterResponseAction: getMRPListPage,
         })
       );
     } else if (deleteMsg.Status === true) {

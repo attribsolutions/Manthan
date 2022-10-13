@@ -37,8 +37,6 @@ const GSTMaster = (props) => {
     //SetState  Edit data Geting From Modules List component
     const [pageMode, setPageMode] = useState("save");
     const [userPageAccessState, setUserPageAccessState] = useState("");
-    const [HSNCode, setHSNCode] = useState("");
-    const [GSTPercentage, setGSTPercentage] = useState("");
     const [effectiveDate, setEffectiveDate] = useState('');
 
     //Access redux store Data /  'save_ModuleSuccess' action data
@@ -87,23 +85,14 @@ const GSTMaster = (props) => {
 
         if (!(editDataGatingFromList === undefined)) {
             document.getElementById("EffectiveDateid").disabled = true;
-            document.getElementById("GSTid").disabled = true;
-            document.getElementById("HSNid").disabled = true;
 
             var effectiveDate = editDataGatingFromList.EffectiveDate
-            var HSNCode = editDataGatingFromList.HSNCode
-            var GST = editDataGatingFromList.GSTPercentage
 
             const jsonBody = JSON.stringify({
-                GSTPercentage: GST,
-                HSNCode: HSNCode,
                 EffectiveDate: effectiveDate,
             });
             dispatch(postGoButtonForGST_Master(jsonBody));
             setEffectiveDate(effectiveDate)
-            setHSNCode(HSNCode)
-            setGSTPercentage(GST)
-
         }
         if (!(userAcc === undefined)) {
             setUserPageAccessState(userAcc)
@@ -191,7 +180,7 @@ const GSTMaster = (props) => {
     }
 
     const HSNCodeHandler = (e, cellContent, user, key) => {
-        user["CurrentGSTPercentage"] = e.target.value
+        user["HSNCode"] = e.target.value
     }
     //select id for delete row
     const deleteHandeler = (id, name) => {
@@ -211,8 +200,6 @@ const GSTMaster = (props) => {
 
         const jsonBody = JSON.stringify({
             EffectiveDate: effectiveDate,
-            GSTPercentage: GSTPercentage,
-            HSNCode: HSNCode
 
         });
         if (!(effectiveDate)) {
@@ -360,21 +347,22 @@ const GSTMaster = (props) => {
 
     //'Save' And 'Update' Button Handller
     const handleValidSubmit = (event, values) => {
+        
         var ItemData = TableData.map((index) => ({
-            GSTPercentage: values.GSTPercentage,
-            HSNCode: values.HSNCode,
             EffectiveDate: effectiveDate,
             Company: 1,
             CreatedBy: 1,
             UpdatedBy: 1,
             Item: index.Item,
+            GSTPercentage: index.GSTPercentage,
+            HSNCode: index.HSNCode,
         }))
 
         const Find = ItemData.filter((index) => {
-            return !(index.MRP === '')
+            return (!(index.GSTPercentage === '') && !(index.HSNCode === ''))
         })
-
         const jsonBody = JSON.stringify(Find)
+
         dispatch(postGSTMasterData(jsonBody));
         console.log("jsonBody", jsonBody)
     };
@@ -433,48 +421,7 @@ const GSTMaster = (props) => {
                                                             </Col>
                                                         </FormGroup>
                                                     </Col>
-                                                    <Col md="3">
-                                                        <FormGroup className="mb-3 row ">
-                                                            <Label className="col-sm-3 p-2 ml-n4 ">GST</Label>
-                                                            <Col md="9">
-                                                                <AvField
-                                                                    id="GSTid"
-                                                                    name="GSTPercentage"
-                                                                    value={GSTPercentage}
-                                                                    type="text"
-                                                                    placeholder="Please Enter Working Hours"
-                                                                    autoComplete='off'
-                                                                    validate={{
-                                                                        number: true,
-                                                                        required: { value: true, errorMessage: 'GSTPercentage is Required' },
-                                                                    }}
-                                                                    onChange={(event) => setGSTPercentage(event.target.value)}
-                                                                />
-                                                            </Col>
-                                                        </FormGroup>
-                                                    </Col>
-
-                                                    <Col md="3">
-                                                        <FormGroup className="mb-3 row ">
-                                                            <Label className="col-sm-3 p-1 ml-n5 ">HSNCode</Label>
-                                                            <Col md="9">
-                                                                <AvField
-                                                                    id="HSNid"
-                                                                    name="HSNCode"
-                                                                    value={HSNCode}
-                                                                    type="text"
-                                                                    placeholder="Please Enter Working Hours"
-                                                                    autoComplete='off'
-                                                                    validate={{
-                                                                        number: true,
-                                                                        required: { value: true, errorMessage: 'HSNCode is Required' },
-                                                                    }}
-                                                                    onChange={(event) => setHSNCode(event.target.value)}
-
-                                                                />
-                                                            </Col>
-                                                        </FormGroup>
-                                                    </Col>
+                                                  
                                                     <Col md="3" >
                                                         <Button type="button" color="btn btn-outline-success border-2 font-size-12" onClick={() => { GoButton_Handler() }} >Go</Button>
 

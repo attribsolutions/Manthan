@@ -169,6 +169,7 @@ const MRPMaster = (props) => {
     }, [postMsg])
 
     useEffect(() => {
+        debugger
         if (deleteMessage.Status === true && deleteMessage.StatusCode === 200) {
             dispatch(deleteID_In_MasterPageSuccess({ Status: false }));
             dispatch(postGoButtonForMRP_MasterSuccess([]))
@@ -178,7 +179,7 @@ const MRPMaster = (props) => {
                     Type: 1,
                     Status: true,
                     Message: deleteMessage.Message,
-                    AfterResponseAction: getMRPListPage,
+                    // AfterResponseAction: getMRPListPage,
                 })
             );
         } else if (deleteMessage.Status === true) {
@@ -368,6 +369,7 @@ const MRPMaster = (props) => {
 
     //'Save' And 'Update' Button Handller
     const handleValidSubmit = (event, values) => {
+        debugger
         var ItemData = TableData.map((index) => ({
             Division: division_dropdown_Select.value,
             Party: party_dropdown_Select.value,
