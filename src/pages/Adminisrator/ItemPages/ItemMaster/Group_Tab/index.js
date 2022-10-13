@@ -92,6 +92,7 @@ function GroupTab(props) {
             GroupName: groupDropdownSelect.label,
             SubGroup: subGroupDropdownSelect === "" ? "" : subGroupDropdownSelect.value,
             SubGroupName: subGroupDropdownSelect.label,
+            CommonID:0
         };
         if (val.Group == '') {
             alert("Please Select GroupType or Group value...!")
