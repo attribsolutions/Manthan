@@ -215,7 +215,9 @@ const GSTMaster = (props) => {
             HSNCode: HSNCode
 
         });
-
+        if (!(effectiveDate)) {
+            alert("EffectiveDate not select")
+        }
         dispatch(postGoButtonForGST_Master(jsonBody))
         console.log("Go button Post Json", jsonBody)
     };
@@ -367,9 +369,7 @@ const GSTMaster = (props) => {
             UpdatedBy: 1,
             Item: index.Item,
         }))
-        if (!(effectiveDate)) {
-            alert("Please select EffectiveDate")
-        }
+
         const Find = ItemData.filter((index) => {
             return !(index.MRP === '')
         })
