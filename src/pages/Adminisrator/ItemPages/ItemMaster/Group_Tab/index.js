@@ -61,7 +61,7 @@ function GroupTab(props) {
             dispatch(get_Group_By_GroupType_ForDropDown(event.value))
         }
         else {
-            alert("alerady selected")
+            alert(`${event.label} Is Already Selected...!`)
         }
 
     };
@@ -75,7 +75,7 @@ function GroupTab(props) {
             dispatch(get_Sub_Group_By_Group_ForDropDown(event.value))
         }
         else {
-            alert("Already Selected")
+            alert(`${event.label} Is Already Selected...!`)
         }
     };
 
@@ -92,10 +92,9 @@ function GroupTab(props) {
             GroupName: groupDropdownSelect.label,
             SubGroup: subGroupDropdownSelect === "" ? "" : subGroupDropdownSelect.value,
             SubGroupName: subGroupDropdownSelect.label,
-            IsAdd:true
         };
         if (val.Group == '') {
-            alert("Select Groups values")
+            alert("Please Select GroupType or Group value...!")
         }
         else {
             const totalTableData = props.tableData.length;
