@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Breadcrumb from "../../../components/Common/Breadcrumb"
-import { Button, Col, Modal, Row } from "reactstrap";
+import { Button, Col, Row } from "reactstrap";
 import paginationFactory, {
   PaginationListStandalone,
   PaginationProvider,
@@ -10,18 +10,13 @@ import BootstrapTable from "react-bootstrap-table-next";
 import { useSelector, useDispatch } from "react-redux";
 import { AlertState } from "../../../store/actions";
 import "../../../assets/scss/CustomeTable/datatables.scss";
-import cellEditFactory, { Type } from 'react-bootstrap-table2-editor';
 import { MetaTags } from "react-meta-tags";
 import { useHistory } from "react-router-dom";
 import {
   delete_MarginList,
   delete_MarginListSuccess,
-  editMarginList,
   getMarginListPage,
-  postMarginMasterDataSuccess,
-  updateMarginListSuccess
 } from "../../../store/Administrator/MarginMasterRedux/action";
-import MarginMaster from "./MarginMaster"
 
 const MarginList = (props) => {
 
@@ -29,17 +24,17 @@ const MarginList = (props) => {
   const history = useHistory()
 
   const [userPageAccessState, setUserPageAccessState] = useState('');
-  const [modal_center, setmodal_center] = useState(false);
 
   // get Access redux data
-  const { TableListData, editData, updateMessage, deleteMessage, RoleAccessModifiedinSingleArray, PostAPIResponse } = useSelector(
+  const {
+    TableListData,
+    deleteMessage,
+    RoleAccessModifiedinSingleArray,
+  } = useSelector(
     (state) => ({
       TableListData: state.MarginMasterReducer.MarginList,
-      editData: state.MarginMasterReducer.editData,
-      updateMessage: state.MarginMasterReducer.updateMessage,
       deleteMessage: state.MarginMasterReducer.deleteMsg,
       RoleAccessModifiedinSingleArray: state.Login.RoleAccessUpdateData,
-      PostAPIResponse: state.MarginMasterReducer.PostData,
     })
   );
 
@@ -57,32 +52,6 @@ const MarginList = (props) => {
   useEffect(() => {
     dispatch(getMarginListPage());
   }, []);
-
-  // This UseEffect => UpadateModal Success/Unsucces  Show and Hide Control Alert_modal
-  useEffect(() => {
-
-    if (updateMessage.Status === true && updateMessage.StatusCode === 200) {
-      dispatch(updateMarginListSuccess({ Status: false }));
-      dispatch(
-        AlertState({
-          Type: 1,
-          Status: true,
-          Message: updateMessage.Message,
-          AfterResponseAction: getMarginListPage,
-        })
-      );
-      tog_center();
-    } else if (updateMessage.Status === true) {
-      dispatch(updateMarginListSuccess({ Status: false }));
-      dispatch(
-        AlertState({
-          Type: 3,
-          Status: true,
-          Message: JSON.stringify(updateMessage.Message),
-        })
-      );
-    }
-  }, [updateMessage]);
 
   useEffect(() => {
     if (deleteMessage.Status === true && deleteMessage.StatusCode === 200) {
@@ -107,45 +76,8 @@ const MarginList = (props) => {
     }
   }, [deleteMessage]);
 
-  useEffect(() => {
-
-    if ((PostAPIResponse.Status === true) && (PostAPIResponse.StatusCode === 200)) {
-      dispatch(postMarginMasterDataSuccess({ Status: false }))
-      tog_center();
-      dispatch(getMarginListPage());
-      dispatch(AlertState({
-        Type: 1,
-        Status: true,
-        Message: PostAPIResponse.Message,
-      }))
-    }
-
-    else if ((PostAPIResponse.Status === true)) {
-      dispatch(postMarginMasterDataSuccess({ Status: false }))
-      dispatch(AlertState({
-        Type: 4,
-        Status: true,
-        Message: JSON.stringify(PostAPIResponse.Message),
-        RedirectPath: false,
-        AfterResponseAction: false
-      }));
-    }
-  }, [PostAPIResponse.Status])
-
-  // Edit Modal Show When Edit Data is true
-  useEffect(() => {
-    if (editData.Status === true) {
-      tog_center();
-    }
-  }, [editData]);
-
-  function tog_center() {
-    setmodal_center(!modal_center);
-  }
-  
   //select id for delete row
   const deleteHandeler = (CommonID) => {
-    debugger
     dispatch(
       AlertState({
         Type: 5,
@@ -159,9 +91,7 @@ const MarginList = (props) => {
   };
 
   const EditPageHandler = (rowData) => {
-    // if(rowData.Division_id===null) {
-    //  rowData.Division_id=0
-    // }
+
     let RelatedPageID = userPageAccessState.RelatedPageID
 
     const found = RoleAccessModifiedinSingleArray.find((element) => {
@@ -171,17 +101,11 @@ const MarginList = (props) => {
     if (!(found === undefined)) {
       history.push({
         pathname: `/${found.ActualPagePath}`,
-        state: rowData,
+        editValue: rowData,
+        pageMode: 'edit'
       })
     }
   }
-
-  const defaultSorted = [
-    {
-      dataField: "Name", // if dataField is not match to any column you defined, it will be ignored.
-      order: "asc", // desc or asc
-    },
-  ];
 
   const pageOptions = {
     sizePerPage: 10,
@@ -195,20 +119,16 @@ const MarginList = (props) => {
       dataField: "EffectiveDate",
       sort: true,
     },
-
     {
-        text: "PriceListName",
-        dataField: "PriceListName",
-        sort: true,
-      },
-
+      text: "PriceListName",
+      dataField: "PriceListName",
+      sort: true,
+    },
     {
       text: "PartyName",
       dataField: "PartyName",
       sort: true,
     },
-
-
     {
       text: "Action",
       hidden: (
@@ -216,45 +136,45 @@ const MarginList = (props) => {
         && !(userPageAccessState.RoleAccess_IsView)
         && !(userPageAccessState.RoleAccess_IsDelete)) ? true : false,
 
-        formatter: (cellContent, Role) => (
-          <div className="d-flex gap-3" style={{ display: 'flex', justifyContent: 'center' }} >
-            {((userPageAccessState.RoleAccess_IsEdit) && (Role.CommonID > 0)) ?
-              <Button
-                type="button"
-                data-mdb-toggle="tooltip" data-mdb-placement="top" title="Edit MRP List"
-                onClick={() => { EditPageHandler(Role); }}
-                className="badge badge-soft-success font-size-12 btn btn-success waves-effect waves-light w-xxs border border-light"
-              >
-                <i className="mdi mdi-pencil font-size-18" id="edittooltip"></i>
-              </Button>
-              :
-              null}
-  
-            {(!(userPageAccessState.RoleAccess_IsEdit) && (Role.CommonID > 0) && (userPageAccessState.RoleAccess_IsView)) ?
-              <Button
-                type="button"
-                data-mdb-toggle="tooltip" data-mdb-placement="top" title="View MRP List"
-                onClick={() => { EditPageHandler(Role); }}
-                className="badge badge-soft-primary font-size-12 btn btn-primary waves-effect waves-light w-xxs border border-light"
-  
-              >
-                <i className="bx bxs-show font-size-18 "></i>
-              </Button> : null}
-  
-            {((userPageAccessState.RoleAccess_IsDelete) && (Role.CommonID > 0))
-              ?
-              <Button
-                className="badge badge-soft-danger font-size-12 btn btn-danger waves-effect waves-light w-xxs border border-light"
-                data-mdb-toggle="tooltip" data-mdb-placement="top" title="Delete MRP List"
-                onClick={() => { deleteHandeler(Role.CommonID) }}
-              >
-                <i className="mdi mdi-delete font-size-18"></i>
-              </Button>
-              : null
-            }
-  
-          </div>
-        ),
+      formatter: (cellContent, Role) => (
+        <div className="d-flex gap-3" style={{ display: 'flex', justifyContent: 'center' }} >
+          {((userPageAccessState.RoleAccess_IsEdit) && (Role.CommonID > 0)) ?
+            <Button
+              type="button"
+              data-mdb-toggle="tooltip" data-mdb-placement="top" title="Edit MRP List"
+              onClick={() => { EditPageHandler(Role); }}
+              className="badge badge-soft-success font-size-12 btn btn-success waves-effect waves-light w-xxs border border-light"
+            >
+              <i className="mdi mdi-pencil font-size-18" id="edittooltip"></i>
+            </Button>
+            :
+            null}
+
+          {(!(userPageAccessState.RoleAccess_IsEdit) && (Role.CommonID > 0) && (userPageAccessState.RoleAccess_IsView)) ?
+            <Button
+              type="button"
+              data-mdb-toggle="tooltip" data-mdb-placement="top" title="View MRP List"
+              onClick={() => { EditPageHandler(Role); }}
+              className="badge badge-soft-primary font-size-12 btn btn-primary waves-effect waves-light w-xxs border border-light"
+
+            >
+              <i className="bx bxs-show font-size-18 "></i>
+            </Button> : null}
+
+          {((userPageAccessState.RoleAccess_IsDelete) && (Role.CommonID > 0))
+            ?
+            <Button
+              className="badge badge-soft-danger font-size-12 btn btn-danger waves-effect waves-light w-xxs border border-light"
+              data-mdb-toggle="tooltip" data-mdb-placement="top" title="Delete MRP List"
+              onClick={() => { deleteHandeler(Role.CommonID) }}
+            >
+              <i className="mdi mdi-delete font-size-18"></i>
+            </Button>
+            : null
+          }
+
+        </div>
+      ),
     },
   ];
 
@@ -290,7 +210,6 @@ const MarginList = (props) => {
                         RedirctPath={"/MarginMaster"}
                       />
 
-
                       <Row>
                         <Col xl="12">
                           <div className="table-responsive">
@@ -299,14 +218,11 @@ const MarginList = (props) => {
                               responsive
                               bordered={true}
                               striped={false}
-                              // cellEdit={cellEditFactory({ mode: 'dbclick' ,blurToSave: true})}
-                              // defaultSorted={commonDefaultSorted("Name")}
                               classes={"table align-middle table-nowrap table-hover"}
                               headerWrapperClasses={"thead-light"}
                               {...toolkitProps.baseProps}
                               {...paginationTableProps}
                             />
-
                           </div>
                         </Col>
                       </Row>
@@ -324,17 +240,7 @@ const MarginList = (props) => {
                 </ToolkitProvider>
               )
               }
-
             </PaginationProvider>
-            <Modal
-              isOpen={modal_center}
-              toggle={() => { tog_center() }}
-              size="xl"
-            >
-              {/* <PartyUIDemo state={editData.Data} /> */}
-              <MarginMaster state={editData.Data} relatatedPage={"/MarginMaster"} />
-            </Modal>
-
           </div>
         </div>
       </React.Fragment>

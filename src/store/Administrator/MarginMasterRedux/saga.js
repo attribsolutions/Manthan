@@ -55,7 +55,11 @@ function* get_MarginListPage_GenratorFunction() {
   try {
     const response = yield call(GetMarginList_For_Listpage);
     yield put(SpinnerState(false))
-    yield put(getMarginListPageSuccess(response.Data));
+    if (response.StatusCode === 200) yield put(getMarginListPageSuccess(response.Data))
+    else yield put(AlertState({
+      Type: 4,
+      Status: true, Message: JSON.stringify(response.Message),
+    }));
   } catch (error) {
     yield put(SpinnerState(false))
     yield put(AlertState({
