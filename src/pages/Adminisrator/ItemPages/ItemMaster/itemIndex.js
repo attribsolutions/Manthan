@@ -220,10 +220,10 @@ const ItemsMaster = (props) => {
                         ImageUpload: index.Item_pic
                     }
                 })
-debugger
+
                 const ItemUnitDetails = []
                 hasEditVal.ItemUnitDetails.forEach((index) => {
-                    debugger
+                    
                     if (!(hasEditVal.BaseUnitID === index.UnitID)) {
                         ItemUnitDetails.push({
                             Unit: {
