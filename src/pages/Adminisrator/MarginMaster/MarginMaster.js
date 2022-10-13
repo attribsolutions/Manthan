@@ -23,13 +23,12 @@ import paginationFactory, {
     PaginationProvider,
 } from "react-bootstrap-table2-paginator";
 import ToolkitProvider, { Search } from "react-bootstrap-table2-toolkit";
-import { getPartyTypes } from "../../../store/Administrator/PartyRedux/action";
 import { get_Party_ForDropDown, get_PriceList_ForDropDown } from "../../../store/Administrator/ItemsRedux/action";
 import BootstrapTable from "react-bootstrap-table-next";
 import {
-
     deleteID_In_Margin_MasterPage,
     deleteID_In_Margin_MasterPageSuccess,
+    getMarginListPage,
     postGoButtonForMargin_Master,
     postGoButtonForMargin_Master_Success,
     postMarginMasterData,
@@ -41,8 +40,9 @@ const MarginMaster = (props) => {
     const dispatch = useDispatch();
     const history = useHistory();
     const formRef = useRef(null);
+
     //*** "isEditdata get all data from ModuleID for Binding  Form controls
-    let editDataGatingFromList = props.state;
+    let editMode =history.location.pageMode;
 
     //SetState  Edit data Geting From Modules List component
     const [pageMode, setPageMode] = useState("save");
@@ -50,7 +50,6 @@ const MarginMaster = (props) => {
     const [partyName_dropdown_Select, setPartyName_dropdown_Select] = useState("");
     const [priceList_dropdown_Select, setpriceList_dropdown_Select] = useState("");
     const [effectiveDate, setEffectiveDate] = useState('');
-    const [Margin, setMRP] = useState('');
 
     //Access redux store Data /  'save_ModuleSuccess' action data
     const { PostAPIResponse,
@@ -58,54 +57,75 @@ const MarginMaster = (props) => {
         deleteMessage,
         Party,
         PriceList,
-        RoleAccessModifiedinSingleArray
+        userAccess
     } = useSelector((state) => ({
         TableData: state.MarginMasterReducer.MarginGoButton,
         deleteMessage: state.MarginMasterReducer.deleteId_For_MarginMaster,
         PostAPIResponse: state.MarginMasterReducer.PostData,
         Party: state.ItemMastersReducer.Party,
         PriceList: state.ItemMastersReducer.PriceList,
-        RoleAccessModifiedinSingleArray: state.Login.RoleAccessUpdateData,
+        userAccess: state.Login.RoleAccessUpdateData,
     }));
 
     // userAccess useEffect
+    // useEffect(() => {
+    //     let userAcc = undefined;
+    //     if (editDataGatingFromList === undefined) {
+    //         let locationPath = history.location.pathname;
+    //         userAcc = RoleAccessModifiedinSingleArray.find((inx) => {
+    //             return `/${inx.ActualPagePath}` === locationPath;
+    //         });
+    //     } else if (!(editDataGatingFromList === undefined)) {
+    //         let relatatedPage = props.relatatedPage;
+    //         userAcc = RoleAccessModifiedinSingleArray.find((inx) => {
+    //             return `/${inx.ActualPagePath}` === relatatedPage;
+    //         });
+    //     }
+    //     if (!(userAcc === undefined)) {
+    //         setUserPageAccessState(userAcc);
+    //     }
+    // }, [RoleAccessModifiedinSingleArray]);
+
+    const location = { ...history.location }
+    const hasShowModal = props.hasOwnProperty("editValue")
+
+    // userAccess useEffect
     useEffect(() => {
-        let userAcc = undefined;
-        if (editDataGatingFromList === undefined) {
-            let locationPath = history.location.pathname;
-            userAcc = RoleAccessModifiedinSingleArray.find((inx) => {
-                return `/${inx.ActualPagePath}` === locationPath;
-            });
-        } else if (!(editDataGatingFromList === undefined)) {
-            let relatatedPage = props.relatatedPage;
-            userAcc = RoleAccessModifiedinSingleArray.find((inx) => {
-                return `/${inx.ActualPagePath}` === relatatedPage;
-            });
-        }
-        if (!(userAcc === undefined)) {
-            setUserPageAccessState(userAcc);
-        }
-    }, [RoleAccessModifiedinSingleArray]);
+        let userAcc = null;
+        let locationPath = location.pathname;
+
+        if (hasShowModal) {
+            locationPath = props.masterPath;
+        };
+
+        userAcc = userAccess.find((inx) => {
+            return (`/${inx.ActualPagePath}` === locationPath)
+        })
+
+        if (userAcc) {
+            setUserPageAccessState(userAcc)
+        };
+    }, [userAccess])
 
     useEffect(() => {
-        debugger
-        const editDataGatingFromList = history.location.state
+
+        const editDataGatingFromList = history.location.editValue
 
         const locationPath = history.location.pathname
-        let userAcc = RoleAccessModifiedinSingleArray.find((inx) => {
+        let userAcc = userAccess.find((inx) => {
             return (`/${inx.ActualPagePath}` === locationPath)
         })
 
         if (!(editDataGatingFromList === undefined)) {
-            debugger
+            document.getElementById("EffectiveDateid").disabled = true;
+            document.getElementById("priceListid").disabled = true;
+            document.getElementById("partyNameid").disabled = true;
+
             var PriceListid = editDataGatingFromList.PriceList_id
             var priceListName = editDataGatingFromList.PriceListName
             var partyId = editDataGatingFromList.Party_id
             var partyName = editDataGatingFromList.PartyName
             var effectiveDate = editDataGatingFromList.EffectiveDate
-
-            // let division = { ...division_dropdown_Select }
-            // let party = { ...party_dropdown_Select }
 
             const jsonBody = JSON.stringify({
                 PriceList: PriceListid,
@@ -113,7 +133,6 @@ const MarginMaster = (props) => {
                 EffectiveDate: effectiveDate
             });
             dispatch(postGoButtonForMargin_Master(jsonBody))
-            // dispatch(postGoButtonForMRP_MasterSuccess(divisionid, partyId, effectiveDate));
             setPartyName_dropdown_Select({ label: partyName, value: partyId })
             setpriceList_dropdown_Select({ label: priceListName, value: PriceListid })
             setEffectiveDate(effectiveDate)
@@ -122,7 +141,7 @@ const MarginMaster = (props) => {
         if (!(userAcc === undefined)) {
             setUserPageAccessState(userAcc)
         }
-    }, [RoleAccessModifiedinSingleArray])
+    }, [userAccess])
 
     useEffect(() => {
         dispatch(get_PriceList_ForDropDown());
@@ -140,7 +159,7 @@ const MarginMaster = (props) => {
                     Type: 1,
                     Status: true,
                     Message: deleteMessage.Message,
-                    //   AfterResponseAction: getMRPListPage,
+                    AfterResponseAction: getMarginListPage,
                 })
             );
         } else if (deleteMessage.Status === true) {
@@ -172,7 +191,7 @@ const MarginMaster = (props) => {
     function PriceList_Dropdown_OnChange_Handller(e) {
         setpriceList_dropdown_Select(e)
     }
-    
+
     const EffectiveDateHandler = (e, date) => {
         setEffectiveDate(date)
     }
@@ -205,8 +224,8 @@ const MarginMaster = (props) => {
         console.log(jsonBody)
     };
 
-     //select id for delete row
-     const deleteHandeler = (id, name) => {
+    //select id for delete row
+    const deleteHandeler = (id, name) => {
         dispatch(
             AlertState({
                 Type: 5,
@@ -227,7 +246,6 @@ const MarginMaster = (props) => {
             setPartyName_dropdown_Select('')
             setEffectiveDate('')
             setpriceList_dropdown_Select('')
-            setMRP('')
 
             if (pageMode === "dropdownAdd") {
                 dispatch(AlertState({
@@ -295,7 +313,6 @@ const MarginMaster = (props) => {
             ),
         },
         {
-
             text: "Effective from ",
             dataField: "CurrentDate",
             sort: true,
@@ -304,14 +321,7 @@ const MarginMaster = (props) => {
                     <div style={{ justifyContent: 'center' }} >
                         <Col>
                             <FormGroup className=" col col-sm-6 ">
-                            <Label style={{ color: "#B0290B" }}>{TableData[key].CurrentDate}</Label>
-                                {/* <Input
-                                    type="text"
-                                    defaultValue={TableData[key].MRP}
-                                    disabled={!(user.MRP === '') ? true : false}
-                                    className="col col-sm text-center"
-                                    onChange={(e) => MRPHandler(e, cellContent, user, key)}
-                                /> */}
+                                <Label style={{ color: "#B0290B" }}>{TableData[key].CurrentDate}</Label>
                             </FormGroup>
                         </Col>
                     </div>
@@ -362,10 +372,8 @@ const MarginMaster = (props) => {
                                     </Button> : <></>}
                             </FormGroup>
                         </Col>
-
                     </div>
                 </>
-
             ),
         },
     ]
@@ -394,6 +402,7 @@ const MarginMaster = (props) => {
         dispatch(postMarginMasterData(jsonBody));
         console.log("jsonBody", jsonBody)
     };
+
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
     var IsEditMode_Css = ''
     if ((pageMode === "edit") || (pageMode === "copy") || (pageMode === "dropdownAdd")) { IsEditMode_Css = "-5.5%" };
@@ -432,8 +441,10 @@ const MarginMaster = (props) => {
                                                             <Label className="col-sm-3 p-2 ml-n4 ">PriceList</Label>
                                                             <Col md="9">
                                                                 <Select
+                                                                    id="priceListid"
                                                                     value={priceList_dropdown_Select}
                                                                     options={PriceList_DropdownOptions}
+                                                                    isDisabled={editMode === "edit" ? true : false}
                                                                     className="rounded-bottom"
                                                                     placeholder="select"
                                                                     onChange={(e) => { PriceList_Dropdown_OnChange_Handller(e) }}
@@ -449,8 +460,10 @@ const MarginMaster = (props) => {
                                                             <Label className="col-sm-3 p-2 ml-n4 ">Party Name</Label>
                                                             <Col md="9">
                                                                 <Select
+                                                                    id="partyNameid"
                                                                     value={partyName_dropdown_Select}
                                                                     options={PartyTypeDropdown_Options}
+                                                                    isDisabled={editMode === "edit" ? true : false}
                                                                     className="rounded-bottom"
                                                                     placeholder="select"
                                                                     onChange={(e) => { PartyType_Dropdown_OnChange_Handller(e) }}
@@ -466,9 +479,10 @@ const MarginMaster = (props) => {
                                                             <Label className="col-sm-3 p-2 ml-n4 ">EffectiveDate</Label>
                                                             <Col md="9">
                                                                 <Flatpickr
-                                                                    id="effectiveDate"
+                                                                    id="EffectiveDateid"
                                                                     name="effectiveDate"
                                                                     value={effectiveDate}
+                                                                    isDisabled={editMode === "edit" ? true : false}
                                                                     className="form-control d-block p-2 bg-white text-dark"
                                                                     placeholder=" Please Enter FSSAI Exipry"
                                                                     options={{
@@ -509,8 +523,6 @@ const MarginMaster = (props) => {
                                                                         responsive
                                                                         bordered={false}
                                                                         striped={false}
-                                                                        // defaultSorted={defaultSorted}
-                                                                        //  cellEdit={ cellEditFactory({ mode: 'click', blurToSave: true }) }
                                                                         classes={"table  table-bordered"}
                                                                         {...toolkitProps.baseProps}
                                                                         {...paginationTableProps}
@@ -530,13 +542,24 @@ const MarginMaster = (props) => {
                                     </PaginationProvider>
                                     : null}
                                 {TableData.length > 0 ?
-                                    <button
-                                        type="submit"
-                                        data-mdb-toggle="tooltip" data-mdb-placement="top" title="Save MRP"
-
-                                        className="btn btn-primary w-md "
-                                    > <i className="fas fa-save me-2"></i> Save
-                                    </button>
+                                    <div>
+                                        {
+                                            (editMode) ?
+                                                <button
+                                                    type="submit"
+                                                    data-mdb-toggle="tooltip" data-mdb-placement="top" title="Update Party Type"
+                                                    className="btn btn-success w-md mt-3"
+                                                >
+                                                    <i class="fas fa-edit me-2"></i>Update
+                                                </button>
+                                                : <button
+                                                    type="submit"
+                                                    data-mdb-toggle="tooltip" data-mdb-placement="top" title="Save Party Type"
+                                                    className="btn btn-primary w-md mt-3 "
+                                                > <i className="fas fa-save me-2"></i> Save
+                                                </button>
+                                        }
+                                    </div>
                                     : null}
                             </CardBody>
                         </Card>
@@ -546,7 +569,6 @@ const MarginMaster = (props) => {
         </React.Fragment>
     )
 }
-
 
 export default MarginMaster
 

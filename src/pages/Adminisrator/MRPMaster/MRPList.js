@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
-
 import Breadcrumb from "../../../components/Common/Breadcrumb"
-import { Button, Col, Modal, Row } from "reactstrap";
+import { Button, Col, Row } from "reactstrap";
 import paginationFactory, {
   PaginationListStandalone,
   PaginationProvider,
@@ -11,19 +10,13 @@ import BootstrapTable from "react-bootstrap-table-next";
 import { useSelector, useDispatch } from "react-redux";
 import { AlertState } from "../../../store/actions";
 import "../../../assets/scss/CustomeTable/datatables.scss";
-import cellEditFactory, { Type } from 'react-bootstrap-table2-editor';
 import { MetaTags } from "react-meta-tags";
 import { useHistory } from "react-router-dom";
 import {
   delete_MRPList,
   delete_MRPListSuccess,
-  editMRPList,
   getMRPListPage,
-  postMRPMasterDataSuccess,
-  updateMRPListSuccess
 } from "../../../store/Administrator/MRPMasterRedux/action";
-import MRPMaster from "./MRPMaster"
-import { deburr } from "lodash";
 
 const MRPList = (props) => {
 
@@ -31,20 +24,14 @@ const MRPList = (props) => {
   const history = useHistory()
 
   const [userPageAccessState, setUserPageAccessState] = useState('');
-  const [modal_center, setmodal_center] = useState(false);
 
   // get Access redux data
   const {
     tableList,
-    editData,
-    postMsg,
-    updateMsg,
     deleteMsg,
     userAccess, } = useSelector(
       (state) => ({
         tableList: state.MRPMasterReducer.MRPList,
-        editData: state.MRPMasterReducer.editData,
-        updateMsg: state.MRPMasterReducer.updateMessage,
         deleteMsg: state.MRPMasterReducer.deleteMsg,
         userAccess: state.Login.RoleAccessUpdateData,
         postMsg: state.MRPMasterReducer.postMsg,
@@ -52,8 +39,6 @@ const MRPList = (props) => {
       })
     );
 
-    console.log("tableList",tableList)
-     
   useEffect(() => {
     const locationPath = history.location.pathname
     let userAcc = userAccess.find((inx) => {
@@ -69,35 +54,8 @@ const MRPList = (props) => {
     dispatch(getMRPListPage());
   }, []);
 
-  // This UseEffect => UpadateModal Success/Unsucces  Show and Hide Control Alert_modal
   useEffect(() => {
-
-    if (updateMsg.Status === true && updateMsg.StatusCode === 200) {
-      dispatch(updateMRPListSuccess({ Status: false }));
-      dispatch(
-        AlertState({
-          Type: 1,
-          Status: true,
-          Message: updateMsg.Message,
-          AfterResponseAction: getMRPListPage,
-        })
-      );
-      tog_center();
-    } else if (updateMsg.Status === true) {
-      dispatch(updateMRPListSuccess({ Status: false }));
-      dispatch(
-        AlertState({
-          Type: 3,
-          Status: true,
-          Message: JSON.stringify(updateMsg.Message),
-        })
-      );
-    }
-  }, [updateMsg]);
-
-  useEffect(() => {
-    debugger
-    if ((deleteMsg.Status === true )&&( deleteMsg.StatusCode === 200)) {
+    if ((deleteMsg.Status === true) && (deleteMsg.StatusCode === 200)) {
       dispatch(delete_MRPListSuccess({ Status: false }));
       dispatch(
         AlertState({
@@ -119,42 +77,6 @@ const MRPList = (props) => {
     }
   }, [deleteMsg]);
 
-  useEffect(() => {
-
-    if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
-      dispatch(postMRPMasterDataSuccess({ Status: false }))
-      tog_center();
-      dispatch(getMRPListPage());
-      dispatch(AlertState({
-        Type: 1,
-        Status: true,
-        Message: postMsg.Message,
-      }))
-    }
-
-    else if ((postMsg.Status === true)) {
-      dispatch(postMRPMasterDataSuccess({ Status: false }))
-      dispatch(AlertState({
-        Type: 4,
-        Status: true,
-        Message: JSON.stringify(postMsg.Message),
-        RedirectPath: false,
-        AfterResponseAction: false
-      }));
-    }
-  }, [postMsg])
-
-  // Edit Modal Show When Edit Data is true
-  useEffect(() => {
-    if (editData.Status === true) {
-      tog_center();
-    }
-  }, [editData]);
-
-  function tog_center() {
-    setmodal_center(!modal_center);
-  }
-
   //select id for delete row
   const deleteHandeler = (CommonID) => {
     debugger
@@ -171,9 +93,6 @@ const MRPList = (props) => {
   };
 
   const EditPageHandler = (rowData) => {
-    // if(rowData.Division_id===null) {
-    //  rowData.Division_id=0
-    // }
     let RelatedPageID = userPageAccessState.RelatedPageID
 
     const found = userAccess.find((element) => {
@@ -183,21 +102,15 @@ const MRPList = (props) => {
     if (!(found === undefined)) {
       history.push({
         pathname: `/${found.ActualPagePath}`,
-        state: rowData,
+        editValue: rowData,
+        pageMode: 'edit'
       })
     }
   }
 
-  const defaultSorted = [
-    {
-      dataField: "Name", // if dataField is not match to any column you defined, it will be ignored.
-      order: "asc", // desc or asc
-    },
-  ];
-
   const pageOptions = {
     sizePerPage: 10,
-    // totalSize: tableList.length,
+    totalSize: tableList.length,
     custom: true,
   };
 
@@ -307,8 +220,6 @@ const MRPList = (props) => {
                               responsive
                               bordered={true}
                               striped={false}
-                              // cellEdit={cellEditFactory({ mode: 'dbclick' ,blurToSave: true})}
-                              // defaultSorted={commonDefaultSorted("Name")}
                               classes={"table align-middle table-nowrap table-hover"}
                               headerWrapperClasses={"thead-light"}
                               {...toolkitProps.baseProps}
@@ -334,15 +245,6 @@ const MRPList = (props) => {
               }
 
             </PaginationProvider>
-            <Modal
-              isOpen={modal_center}
-              toggle={() => { tog_center() }}
-              size="xl"
-            >
-              {/* <PartyUIDemo state={editData.Data} /> */}
-              <MRPMaster editValue={editData.Data} masterPath={"/MRPMaster"} pageMode={editData.pageMode} />
-            </Modal>
-
           </div>
         </div>
       </React.Fragment>

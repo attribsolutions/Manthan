@@ -100,11 +100,13 @@ import {
   MARGIN_lIST, MARGIN,
   PAGE_lIST, PAGE,
   GROUP_lIST,
-  ORDER_lIST,ORDER,
+  ORDER_lIST, ORDER,
 
 
 
 } from "./route_url";
+import GSTMaster from "../pages/Adminisrator/GSTPages/GSTMaster";
+import GSTList from "../pages/Adminisrator/GSTPages/GSTList";
 
 
 // import Index from "../pages/Adminisrator/customValidation/index";
@@ -171,7 +173,7 @@ const userRoutes = [
   { path: '/PageMasterTab', component: PageMasterTab },
 
   { path: ORDER, component: OrderPage },
-  { path: ORDER_lIST,component: OrderList },
+  { path: ORDER_lIST, component: OrderList },
 
   { path: USER, component: AddUser },
   { path: USER_lIST, component: UserList },
@@ -225,15 +227,20 @@ const userRoutes = [
 
   // { path: "/PartyMasterTab", component: PartyMasterTab },
 
-  { path: PRICE_lIST, component: PriceList },
   // { path: "/PriceList", component: PartyMasterTab },
+  { path: PRICE_lIST, component: PriceList },
   { path: PRICE, component: PriceMaster },
+
   { path: MRP, component: MRPMaster },
   { path: MRP_lIST, component: MRPList },
+
   { path: MARGIN, component: MarginMaster },
   { path: MARGIN_lIST, component: MarginList },
+
   { path: GROUP_lIST, component: GroupList },
 
+  { path: '/GSTMaster', component: GSTMaster },
+  { path: '/GSTList', component: GSTList },
 
   // { path: "/AddItemMaster", component: AddItemMaster },
   { path: "/SearchBox2", component: SearchBoxSecond },
