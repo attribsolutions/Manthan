@@ -14,8 +14,15 @@ function MRPTable(props) {
     deleteMsg: state.MRPMasterReducer.deleteIdForMRPMaster,
   }));
 
-  const onDeleteHandeler = (id) => {
 
+  const onDeleteHandeler = (info) => {
+    if (info.IsAdd) {
+      var fil = props.tableData.filter((i) => {
+        return !(i.id === info.id);
+      });
+      props.func(fil);
+    }
+    else {
     dispatch(
       AlertState({
         Type: 5,
@@ -23,10 +30,12 @@ function MRPTable(props) {
         Message: `Are you sure you want to delete this MRP"`,
         RedirectPath: false,
         PermissionAction: deleteID_In_MasterPage,
-        ID: id,
+        ID: info.id,
       })
     );
+    }
   };
+
 
   useEffect(() => {
     if (deleteMsg.Status === true && deleteMsg.StatusCode === 200) {
@@ -71,7 +80,7 @@ function MRPTable(props) {
             data-mdb-placement="top"
             title="Delete Party Type"
             onClick={(e) => {
-              onDeleteHandeler(info.id);
+              onDeleteHandeler(info);
             }}
           >
             <i className="mdi mdi-delete font-size-18"></i>

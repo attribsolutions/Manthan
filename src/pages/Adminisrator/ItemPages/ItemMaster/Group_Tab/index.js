@@ -124,7 +124,7 @@ function GroupTab(props) {
                                     <FormGroup className=" col col-sm-4 ">
                                         <Label>Group Type</Label>
                                         <Select
-                                            id={`dropGroupType-${0}`}
+                                            // id={`dropGroupType-${0}`}
                                             value={groupTypeDropdownSelect}
                                             options={GroupType_DropdownOptions}
                                             onChange={GroupType_Handler}
@@ -134,7 +134,7 @@ function GroupTab(props) {
                                     <FormGroup className="mb-3 col col-sm-4 ">
                                         <Label>Group</Label>
                                         <Select
-                                            id={`dropGroup-${0}`}
+                                            // id={`dropGroup-${0}`}
                                             value={groupDropdownSelect}
                                             options={Group_DropdownOptions}
                                             onChange={Group_Handler}
@@ -144,7 +144,7 @@ function GroupTab(props) {
                                     <FormGroup className="mb-3 col col-sm-4 ">
                                         <Label>Sub Group</Label>
                                         <Select
-                                            id={`dropSubGroup-${0}`}
+                                            // id={`dropSubGroup-${0}`}
                                             value={subGroupDropdownSelect}
                                             options={SubGroup_DropdownOptions}
                                             onChange={SubGroup_Handler}
