@@ -42,7 +42,7 @@ const MarginMaster = (props) => {
     const formRef = useRef(null);
 
     //*** "isEditdata get all data from ModuleID for Binding  Form controls
-    let editMode =history.location.pageMode;
+    let editMode = history.location.pageMode;
 
     //SetState  Edit data Geting From Modules List component
     const [pageMode, setPageMode] = useState("save");
@@ -380,7 +380,7 @@ const MarginMaster = (props) => {
 
     //'Save' And 'Update' Button Handller
     const handleValidSubmit = (event, values) => {
-
+        debugger
         var ItemData = TableData.map((index) => ({
             PriceList: priceList_dropdown_Select.value,
             Party: partyName_dropdown_Select.value,
@@ -393,7 +393,7 @@ const MarginMaster = (props) => {
         }))
 
         const Find = ItemData.find((index) => {
-            return !(index.Margin === undefined)
+            return !(index.Margin === '')
         })
 
         console.log("Find", Find)

@@ -63,7 +63,7 @@ const MRPList = (props) => {
           Type: 1,
           Status: true,
           Message: deleteMsg.Message,
-          // AfterResponseAction: getMRPListPage,
+          AfterResponseAction: getMRPListPage,
         })
       );
     } else if (deleteMsg.Status === true) {
@@ -76,7 +76,7 @@ const MRPList = (props) => {
         })
       );
     }
-  }, [deleteMsg]);
+  }, [deleteMsg.Status]);
 
   //select id for delete row
   const deleteHandeler = (CommonID) => {
