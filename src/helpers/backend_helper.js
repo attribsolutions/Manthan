@@ -327,7 +327,7 @@ export const get_TermsAndCondtionsList_API = (data) => get(url.TERMSANDCONDITION
 // GST API
 export const Post_GSTMaster_API = (data) => post(url.GST_LIST_API, data)// post api
 export const GetGSTList_For_Listpage = () => get(url.GST_LIST_API)//  get List
-export const delete_GSTList_API = (CommonID) => del(`${url. DELETE_API_FOR_LIST_GST_PAGE}/${CommonID}`)// post api
+export const delete_GSTList_API = (CommonID) => del(`${url. DELETE_API_FOR_LIST_GST_PAGE}/${CommonID}`)// Delete api
 export const GoButton_Post_API_For_GSTMaster = (data) => post(url.GO_BUTTON_POST_API_FOR_GST_MASTER, data)// go button postapi
 export const GST_MasterPage_delete_API = (id) => del(`${url.GST_LIST_API}/${id}`)// delete api
 

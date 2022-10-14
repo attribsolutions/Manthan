@@ -75,6 +75,7 @@ function* GSTGoButton_post_GenratorFunction({ data }) {
     const response = yield call(GoButton_Post_API_For_GSTMaster, data);
     yield put(SpinnerState(false))
     yield put(postGoButtonForGST_Master_Success(response.Data));
+    console.log("response",response)
   } catch (error) {
     yield put(SpinnerState(false))
     yield put(AlertState({

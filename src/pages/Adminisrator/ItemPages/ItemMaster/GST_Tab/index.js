@@ -30,6 +30,7 @@ function GSTTab(props) {
             CreatedBy: 1,
             UpdatedBy: 1,
             Company: 1,
+            CommonID:0,
             IsAdd:true
         };
 
@@ -90,6 +91,7 @@ function GSTTab(props) {
                                     id={`txtGST${0}`}
                                     value={GST}
                                     placeholder="Please Enter Margin"
+                                    autoComplete="off"
                                     onChange={(event) => setGST(event.target.value)}
                                 />
 
@@ -101,6 +103,7 @@ function GSTTab(props) {
                                     id={`txtHSNCode${0}`}
                                     value={HSNCode}
                                     placeholder="Please Enter Margin"
+                                    autoComplete="off"
                                     onChange={(event) => setHSNCode(event.target.value)}
                                 />
 

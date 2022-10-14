@@ -15,18 +15,25 @@ function MarginTable(props) {
       deleteMsg: state.MarginMasterReducer.deleteId_For_MarginMaster,
     }));
   
-    const onDeleteHandeler = (id) => {
-  
-      dispatch(
-        AlertState({
-          Type: 5,
-          Status: true,
-          Message: `Are you sure you want to delete this MRP"`,
-          RedirectPath: false,
-          PermissionAction: deleteID_In_Margin_MasterPage,
-          ID: id,
-        })
-      );
+   const onDeleteHandeler = (info) => {
+      if (info.IsAdd) {
+        var fil = props.tableData.filter((i) => {
+          return !(i.id === info.id);
+        });
+        props.func(fil);
+      }
+      else {
+        dispatch(
+          AlertState({
+            Type: 5,
+            Status: true,
+            Message: `Are you sure you want to delete this Margin"`,
+            RedirectPath: false,
+            PermissionAction: deleteID_In_Margin_MasterPage,
+            ID: info.id,
+          })
+        );
+      }
     };
   
     useEffect(() => {
@@ -71,7 +78,7 @@ function MarginTable(props) {
                         className="badge badge-soft-danger font-size-12 btn btn-danger waves-effect waves-light w-xxs border border-light"
                         data-mdb-toggle="tooltip" data-mdb-placement="top" title="Delete Party Type"
                         onClick={(e) => {
-                            onDeleteHandeler(info.id);
+                            onDeleteHandeler(info);
                         }}
                     >
                         <i className="mdi mdi-delete font-size-18"></i>

@@ -68,6 +68,7 @@ function Margin_Tab(props) {
             CreatedBy: 1,
             UpdatedBy: 1,
             Company: 1,
+            CommonID:0,
             IsAdd:true
         };
 
@@ -147,6 +148,7 @@ function Margin_Tab(props) {
                                             id={`txtMargin${0}`}
                                             value={margin}
                                             placeholder="Please Enter Margin"
+                                            autoComplete="off"
                                             onChange={MarginHandler}
 
                                         />
