@@ -611,7 +611,7 @@ const PartyMaster = (props) => {
                                                                             errorMessage="Please Enter GSTIN Number."
                                                                             className="form-control"
                                                                             validate={{
-                                                                                required: { value: true },
+                                                                                required:{ value: true },
                                                                                 tel: {
                                                                                     pattern: /^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$/,
                                                                                     errorMessage: 'Please Enter valid GSTIN number.(Ex:27AAAAA0000A1Z5).'
