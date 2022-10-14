@@ -334,7 +334,7 @@ export const GST_MasterPage_delete_API = (id) => del(`${url.GST_LIST_API}/${id}`
 
 // PartySubParty API
 
-// export const Post_PartySubParty_API= (data) => post(url.PARTY_SUBPARTY_API, data)// post api
+ export const Post_PartySubParty_API= (data) => post(url.PARTY_SUBPARTY_API, data)// post api
 
 export {  
   getLoggedInUser,
