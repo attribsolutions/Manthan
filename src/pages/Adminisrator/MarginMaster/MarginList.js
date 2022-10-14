@@ -54,6 +54,7 @@ const MarginList = (props) => {
   }, []);
 
   useEffect(() => {
+    
     if (deleteMessage.Status === true && deleteMessage.StatusCode === 200) {
       dispatch(delete_MarginListSuccess({ Status: false }));
       dispatch(
