@@ -14,7 +14,8 @@ import { getGroupTypeslist } from "../../../../../store/Administrator/GroupTypeR
 import GroupTable from "./Table";
 import {
     get_Group_By_GroupType_ForDropDown,
-    get_Sub_Group_By_Group_ForDropDown
+    get_Sub_Group_By_Group_ForDropDown,
+    get_Sub_Group_By_Group_ForDropDown_Success
 } from "../../../../../store/Administrator/ItemsRedux/action";
 
 function GroupTab(props) {
@@ -59,11 +60,14 @@ function GroupTab(props) {
         if (found == undefined) {
             setGroupTypeDropdownSelect(event);
             dispatch(get_Group_By_GroupType_ForDropDown(event.value))
+            dispatch(get_Sub_Group_By_Group_ForDropDown_Success([]))
+            setGroupDropdownSelect([]);
+            setSubGroupDropdownSelect([]);
+
         }
         else {
             alert(`${event.label} Is Already Selected...!`)
         }
-
     };
 
     const Group_Handler = (event) => {
@@ -73,6 +77,7 @@ function GroupTab(props) {
         if (found == undefined) {
             setGroupDropdownSelect(event);
             dispatch(get_Sub_Group_By_Group_ForDropDown(event.value))
+            setSubGroupDropdownSelect([]);
         }
         else {
             alert(`${event.label} Is Already Selected...!`)
@@ -92,7 +97,7 @@ function GroupTab(props) {
             GroupName: groupDropdownSelect.label,
             SubGroup: subGroupDropdownSelect === "" ? "" : subGroupDropdownSelect.value,
             SubGroupName: subGroupDropdownSelect.label,
-            CommonID:0
+            CommonID: 0
         };
         if (val.Group == '') {
             alert("Please Select GroupType or Group value...!")

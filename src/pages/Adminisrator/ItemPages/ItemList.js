@@ -8,7 +8,7 @@ import {
   PostItemDataSuccess,
   updateItemSuccess,
 } from "../../../store/Administrator/ItemsRedux/action";
-import ItemsMaster from "./ItemMaster/index";
+import ItemsMaster from "./ItemMaster/itemIndex";
 import CommonListPage from "../../../components/Common/CmponentRelatedCommonFile/commonListPage";
 import { commonPageFieldList, commonPageFieldListSuccess, } from "../../../store/actions";
 import { ITEM } from "../../../routes/route_url";

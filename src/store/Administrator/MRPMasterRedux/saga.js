@@ -47,14 +47,17 @@ function* Post_MRPMaster_GenratorFunction({ Data }) {
   }
 }
 
-
-//listpage
+// List Page API
 function* get_MRPListPage_GenratorFunction() {
   yield put(SpinnerState(true))
   try {
     const response = yield call(GetMRPList_For_Listpage);
     yield put(SpinnerState(false))
-    yield put(getMRPListPageSuccess(response.Data));
+    if (response.StatusCode === 200) yield put(getMRPListPageSuccess(response.Data))
+    else yield put(AlertState({
+      Type: 4,
+      Status: true, Message: JSON.stringify(response.Message),
+    }));
   } catch (error) {
     yield put(SpinnerState(false))
     yield put(AlertState({

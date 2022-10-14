@@ -6,18 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { AlertState } from '../../../../../store/actions';
 
 function GSTTable(props) {
-
-  const ondeleteHandeler = (ele) => {
-    debugger
-    if (!(ele === 0)) {
-      var fil = props.tableData.filter((i) => {
-        return !(i.id === ele);
-      });
-      props.func(fil);
-    }
-  };
-
-
+  
   const dispatch = useDispatch();
 
   const {

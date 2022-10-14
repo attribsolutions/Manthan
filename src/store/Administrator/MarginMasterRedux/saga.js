@@ -51,11 +51,18 @@ function* Post_MarginMaster_GenratorFunction({ Data }) {
 
 //listpage
 function* get_MarginListPage_GenratorFunction() {
+  
   yield put(SpinnerState(true))
   try {
     const response = yield call(GetMarginList_For_Listpage);
     yield put(SpinnerState(false))
-    yield put(getMarginListPageSuccess(response.Data));
+    if (response.StatusCode === 200) yield put(getMarginListPageSuccess(response.Data))
+    else{yield put(getMarginListPageSuccess(response.Data))
+      yield put(AlertState({
+        Type: 4,
+        Status: true, Message: JSON.stringify(response.Message),
+      }));
+    }
   } catch (error) {
     yield put(SpinnerState(false))
     yield put(AlertState({
@@ -67,7 +74,7 @@ function* get_MarginListPage_GenratorFunction() {
 
 //delete
 function* delete_MarginListPage_GenratorFunction({ CommonID }) {
-  debugger
+  
   yield put(SpinnerState(true))
   try {
     const response = yield call(delete_MarginList_API, CommonID);
