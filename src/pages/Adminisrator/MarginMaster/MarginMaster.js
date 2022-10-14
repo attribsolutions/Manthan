@@ -357,7 +357,7 @@ const MarginMaster = (props) => {
 
     //'Save' And 'Update' Button Handller
     const handleValidSubmit = (event, values) => {
-        debugger
+     
         var ItemData = TableData.map((index) => ({
             PriceList: priceList_dropdown_Select.value,
             Party: partyName_dropdown_Select.value,
@@ -365,6 +365,7 @@ const MarginMaster = (props) => {
             Company: 1,
             CreatedBy: 1,
             UpdatedBy: 1,
+            IsDeleted:0,
             Item: index.Item,
             Margin: index.Margin
         }))
