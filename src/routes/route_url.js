@@ -48,7 +48,7 @@
  export const GROUPTYPE="/GroupTypeMaster"
  export const GROUPTYPE_lIST="/GroupTypeList"
 
- export const GROUPMASTER="/GroupMaster"
+ export const GROUP="/GroupMaster"
  export const GROUP_lIST="/GroupList"
 
  export const PRICE="/PriceMaster"

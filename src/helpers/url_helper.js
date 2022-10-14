@@ -143,7 +143,7 @@ export const TERMSANDCONDITIONS_API = '/TermsAndCondtions'
 export const GROUP_TYPE_API = '/GroupTypes'
 
 // Group Api
-export const GROUPMASTER_API = '/Group'
+export const GROUP_API = '/Group'
 
 // GST API
 export const GST_LIST_API = '/GstHsnCode' // for list page
