@@ -185,7 +185,6 @@ const PartySubParty = (props) => {
         label: Data.Name
     }));
 
-
     const formSubmitHandler = (event) => {
         event.preventDefault();
         if (formValid(state, setState)) {

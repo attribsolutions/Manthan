@@ -78,6 +78,6 @@ export default function* rootSaga() {
     fork(TermsAndCondtionsSaga),
     fork(GroupTypeSaga),
     fork(GSTSaga),
-     fork(PartySubPartysaga),
+   fork(PartySubPartysaga),
   ])
 }
