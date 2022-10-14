@@ -67,25 +67,6 @@ const MarginMaster = (props) => {
         userAccess: state.Login.RoleAccessUpdateData,
     }));
 
-    // userAccess useEffect
-    // useEffect(() => {
-    //     let userAcc = undefined;
-    //     if (editDataGatingFromList === undefined) {
-    //         let locationPath = history.location.pathname;
-    //         userAcc = RoleAccessModifiedinSingleArray.find((inx) => {
-    //             return `/${inx.ActualPagePath}` === locationPath;
-    //         });
-    //     } else if (!(editDataGatingFromList === undefined)) {
-    //         let relatatedPage = props.relatatedPage;
-    //         userAcc = RoleAccessModifiedinSingleArray.find((inx) => {
-    //             return `/${inx.ActualPagePath}` === relatatedPage;
-    //         });
-    //     }
-    //     if (!(userAcc === undefined)) {
-    //         setUserPageAccessState(userAcc);
-    //     }
-    // }, [RoleAccessModifiedinSingleArray]);
-
     const location = { ...history.location }
     const hasShowModal = props.hasOwnProperty("editValue")
 
@@ -117,10 +98,6 @@ const MarginMaster = (props) => {
         })
 
         if (!(editDataGatingFromList === undefined)) {
-            document.getElementById("EffectiveDateid").disabled = true;
-            document.getElementById("priceListid").disabled = true;
-            document.getElementById("partyNameid").disabled = true;
-
             var PriceListid = editDataGatingFromList.PriceList_id
             var priceListName = editDataGatingFromList.PriceListName
             var partyId = editDataGatingFromList.Party_id
@@ -392,12 +369,12 @@ const MarginMaster = (props) => {
             Margin: index.Margin
         }))
 
-        const Find = ItemData.find((index) => {
+        const Find = ItemData.filter((index) => {
             return !(index.Margin === '')
         })
 
         console.log("Find", Find)
-        const jsonBody = JSON.stringify([Find])
+        const jsonBody = JSON.stringify(Find)
 
         dispatch(postMarginMasterData(jsonBody));
         console.log("jsonBody", jsonBody)
@@ -441,7 +418,6 @@ const MarginMaster = (props) => {
                                                             <Label className="col-sm-3 p-2 ml-n4 ">PriceList</Label>
                                                             <Col md="9">
                                                                 <Select
-                                                                    id="priceListid"
                                                                     value={priceList_dropdown_Select}
                                                                     options={PriceList_DropdownOptions}
                                                                     isDisabled={editMode === "edit" ? true : false}
@@ -460,7 +436,6 @@ const MarginMaster = (props) => {
                                                             <Label className="col-sm-3 p-2 ml-n4 ">Party Name</Label>
                                                             <Col md="9">
                                                                 <Select
-                                                                    id="partyNameid"
                                                                     value={partyName_dropdown_Select}
                                                                     options={PartyTypeDropdown_Options}
                                                                     isDisabled={editMode === "edit" ? true : false}
