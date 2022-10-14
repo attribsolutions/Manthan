@@ -379,7 +379,7 @@ const VehicleMaster = (props) => {
                                                                 {" "}
                                                                 <Button
                                                                     type="button"
-                                                                    className="btn btn-sm mt-1 mb-0 btn-light  btn-outline-primary  "
+                                                                    className="btn btn-sm mt-1 mb-0 btn-light  btn-outline-primary"
                                                                     onClick={() =>
                                                                         AddDivisionHandler()
                                                                     }

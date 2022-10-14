@@ -76,6 +76,7 @@ import TermsAndCondtionsMaster from "../pages/Adminisrator/TermsAndCondtions/Ter
 import GroupList from "../pages/Adminisrator/GroupPage/GroupList";
 import GroupTypeList from "../pages/Adminisrator/GroupTypePage/GroupTypeList";
 import GroupTypeMaster from "../pages/Adminisrator/GroupTypePage/GroupTypeMaster";
+import PartySubParty from "../pages/Adminisrator/PartySubPartyPages/PartySubParty";
 
 import EditTabaleTable from "../pages/Adminisrator/DriverPage/editabale table";
 import {
@@ -241,6 +242,9 @@ const userRoutes = [
 
   { path: '/GSTMaster', component: GSTMaster },
   { path: '/GSTList', component: GSTList },
+
+  {path:"/PartySubParty",component:PartySubParty},
+
 
   // { path: "/AddItemMaster", component: AddItemMaster },
   { path: "/SearchBox2", component: SearchBoxSecond },
