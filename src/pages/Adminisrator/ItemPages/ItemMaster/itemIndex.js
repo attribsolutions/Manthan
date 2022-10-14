@@ -703,7 +703,7 @@ const ItemsMaster = (props) => {
 
             else {
                 dispatch(postItemData(jsonBody));
-                // console.log("post json", jsonBody)
+                console.log("post json", jsonBody)
             }
         }
         else {

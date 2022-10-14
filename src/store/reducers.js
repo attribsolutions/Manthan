@@ -42,7 +42,7 @@ import MarginMasterReducer from "./Administrator/MarginMasterRedux/reducer"
 import TermsAndCondtionsReducer from "./Administrator/TermsAndCondtionsRedux/reducer"
 import GroupTypeReducer from "./Administrator/GroupTypeRedux/reducer"
 import GSTReducer from "./Administrator/GSTRedux/reducer"
-import PartySubPartyReducer from "./Administrator/PartySubPartyRedux/reducer"
+// import PartySubPartyReducer from "./Administrator/PartySubPartyRedux/reducer"
 
 const rootReducer = combineReducers({
   Layout,
@@ -84,7 +84,7 @@ const rootReducer = combineReducers({
    TermsAndCondtionsReducer,
    GroupTypeReducer,
    GSTReducer,
-   PartySubPartyReducer,
+  //  PartySubPartyReducer,
 })
 
 export default rootReducer
