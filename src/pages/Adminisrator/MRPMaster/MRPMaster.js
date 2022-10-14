@@ -169,7 +169,6 @@ const MRPMaster = (props) => {
     }, [postMsg])
 
     useEffect(() => {
-        debugger
         if (deleteMessage.Status === true && deleteMessage.StatusCode === 200) {
             dispatch(deleteID_In_MasterPageSuccess({ Status: false }));
             dispatch(postGoButtonForMRP_MasterSuccess([]))
@@ -332,9 +331,6 @@ const MRPMaster = (props) => {
                             </FormGroup>
                         </Col>
                     </div>
-
-
-                    {console.log("user", user)}
                 </>
             ),
         },
@@ -369,7 +365,7 @@ const MRPMaster = (props) => {
 
     //'Save' And 'Update' Button Handller
     const handleValidSubmit = (event, values) => {
-        debugger
+        
         var ItemData = TableData.map((index) => ({
             Division: division_dropdown_Select.value,
             Party: party_dropdown_Select.value,
@@ -377,8 +373,10 @@ const MRPMaster = (props) => {
             Company: 1,
             CreatedBy: 1,
             UpdatedBy: 1,
+            IsDeleted:0,
             Item: index.Item,
-            MRP: index.MRP
+            MRP: index.MRP,
+            
         }))
 
         const Find = ItemData.filter((index) => {
@@ -387,6 +385,8 @@ const MRPMaster = (props) => {
 
         const jsonBody = JSON.stringify(Find)
         dispatch(postMRPMasterData(jsonBody));
+        console.log("postMRPMasterData", jsonBody)
+
     };
 
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)

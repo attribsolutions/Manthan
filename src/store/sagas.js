@@ -39,7 +39,10 @@ import MarginMasterSaga from "./Administrator/MarginMasterRedux/saga"
 import TermsAndCondtionsSaga from "./Administrator/TermsAndCondtionsRedux/saga"
 import GroupTypeSaga from "./Administrator/GroupTypeRedux/saga"
 import GSTSaga from "./Administrator/GSTRedux/saga"
+
 import GroupSaga from "./Administrator/GroupRedux/saga"
+
+import PartySubPartysaga from "./Administrator/PartySubPartyRedux/saga"
 
 export default function* rootSaga() {
   yield all([
@@ -52,7 +55,6 @@ export default function* rootSaga() {
     fork(CustomSearch_Saga),
     fork(CommonPageField_Saga),
     fork(Alert_Saga),
-
 
     fork(ModulesSaga),
     fork(CompanySaga),
@@ -78,6 +80,8 @@ export default function* rootSaga() {
     fork(TermsAndCondtionsSaga),
     fork(GroupTypeSaga),
     fork(GroupSaga),
-    fork(GSTSaga)
+    fork(GSTSaga),
+    fork(PartySubPartysaga),
+
   ])
 }

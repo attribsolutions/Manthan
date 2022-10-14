@@ -1335,7 +1335,7 @@ const PageMaster = (props) => {
                         {/* {!(PageFieldShowUI) ? */}
                         < Row className="mt-3">
                           <Col md={12}>
-                            <Table className="table table-bordered">
+                            <Table className="table table-bordered table-responsive">
                               <Thead >
                                 <tr>
                                   <th>Control ID</th>

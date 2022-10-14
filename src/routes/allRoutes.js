@@ -79,12 +79,15 @@ import GroupTypeList from "../pages/Adminisrator/GroupTypePage/GroupTypeList";
 
 
 import GroupTypeMaster from "../pages/Adminisrator/GroupTypePage/GroupTypeMaster";
-
+import PartySubParty from "../pages/Adminisrator/PartySubPartyPages/PartySubParty";
 import EditTabaleTable from "../pages/Adminisrator/DriverPage/editabale table";
-import * as path from "./route_url";
+
+
+
 import GSTMaster from "../pages/Adminisrator/GSTPages/GSTMaster";
 import GSTList from "../pages/Adminisrator/GSTPages/GSTList";
 
+import * as path from "./route_url";
 
 // import Index from "../pages/Adminisrator/customValidation/index";
 
@@ -93,46 +96,11 @@ import GSTList from "../pages/Adminisrator/GSTPages/GSTList";
 // import AddItemMaster from "../pages/Adminisrator/MasterPages/AddItemMaster";
 
 const userRoutes = [
-
-  //dashboard
+ 
   { path: "/dashboard", component: Dashboard },
 
-  // Administrator : Modules Path and List
   // { path: `/${btoa("ModuleMaster")}`, component: Modules },
   // { path: `/${btoa("ModuleList")}`, component: ModulesList },
-
-  // { path: "/subModuleMaster", component: SubModules },
-  // { path: "/subModuleList", component: SubModulesList },
-
-  // // Administrator : Company Path and List
-  // { path: `/${btoa("CompanyMaster")}`, component: CompanyModule },
-  // { path: `/${btoa("CompanyList")}`, component: CompanyList },
-
-  // { path: `/${btoa("PageList")}`, component: HPageList },
-  // { path: `/${btoa("PageMaster")}`, component: HPageMaster },
-
-  // { path: `/${btoa("Order")}`, component: OrderPage },
-  // { path:`/${btoa("Orders")}`, component: OrderList },
-
-  // { path: `/${btoa("UserMaster")}`, component: AddUser },
-  // { path: `/${btoa("UserList")}`, component: UserList },
-
-  // { path: `/${btoa("EmployeeMaster")}`, component: AddEmployee },
-  // { path: `/${btoa("EmployeeList")}`, component: Employee_List },
-
-  // { path: `/${btoa("RoleMaster")}`, component: RoleMaster },
-  // { path: `/${btoa("RoleList")}`, component: RoleList },
-
-  // { path: `/${btoa("ItemMaster")}`, component: ItemsMaster },
-  // { path: `/${btoa("ItemList")}`, component: ItemsList },
-
-  // { path: `/${btoa("PartyList")}`, component: PartyList },
-  // { path: `/${btoa("PartyMaster")}`, component: PartyMaster },
-
-  // { path: `/${btoa("RoleAccess")}`, component: RoleAccessList },
-  // { path: "/RoleAccess", component: RoleAccessList },
-
-
 
 
   { path: path.MODULE, component: Modules },
@@ -222,6 +190,8 @@ const userRoutes = [
 
   { path: '/GSTMaster', component: GSTMaster },
   { path: '/GSTList', component: GSTList },
+
+  { path: "/PartySubParty", component: PartySubParty },
 
   // { path: "/AddItemMaster", component: AddItemMaster },
   { path: "/SearchBox2", component: SearchBoxSecond },
