@@ -7,6 +7,7 @@ import {
     UPDATE_MRP_LIST_PAGE_SUCCESS,
     POST_GO_BUTTON_FOR_MRP_MASTER_SUCCESS,
     DELETE_ID_IN_MASTERPAGE_SUCCESS,
+    POST_GO_BUTTON_FOR_MRP_MASTER,
    
 } from "./actionTypes";
 
@@ -22,12 +23,18 @@ const INIT_STATE = {
 
 const MRPMasterReducer = (state = INIT_STATE, action) => {
     switch (action.type) {
-
+        
         // post api
         case POST_MRP_MASTER_DATA_SUCCESS:
             return {
                 ...state,
                 postMsg: action.payload,
+            };
+
+            case POST_GO_BUTTON_FOR_MRP_MASTER:
+            return {
+                ...state,
+                MRPGoButton: [],
             };
 
         // Go Button post api
