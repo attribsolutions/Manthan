@@ -69,6 +69,7 @@ function Margin_Tab(props) {
             UpdatedBy: 1,
             Company: 1,
             CommonID:0,
+            IsDeleted:0,
             IsAdd:true
         };
 
