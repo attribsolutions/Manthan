@@ -48,6 +48,9 @@
  export const GROUPTYPE="/GroupTypeMaster"
  export const GROUPTYPE_lIST="/GroupTypeList"
 
+ export const GROUPMASTER="/GroupMaster"
+ export const GROUP_lIST="/GroupList"
+
  export const PRICE="/PriceMaster"
  export const PRICE_lIST="/PriceList"
 
@@ -59,8 +62,6 @@
 
  export const PAGE="/PageMaster"
  export const PAGE_lIST="/PageList"
-
- export const GROUP_lIST="/GroupList"
 
  export const ORDER="/Order"
  export const ORDER_lIST="/Orders"

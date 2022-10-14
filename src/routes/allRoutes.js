@@ -73,8 +73,11 @@ import MRPList from "../pages/Adminisrator/MRPMaster/MRPList";
 import MarginList from "../pages/Adminisrator/MarginMaster/MarginList";
 import TermsAndCondtionsMaster from "../pages/Adminisrator/TermsAndCondtions/TermsAndCondtionsMaster";
 
+import GroupMaster  from "../pages/Adminisrator/GroupPage/GroupMaster"
 import GroupList from "../pages/Adminisrator/GroupPage/GroupList";
 import GroupTypeList from "../pages/Adminisrator/GroupTypePage/GroupTypeList";
+
+
 import GroupTypeMaster from "../pages/Adminisrator/GroupTypePage/GroupTypeMaster";
 
 import EditTabaleTable from "../pages/Adminisrator/DriverPage/editabale table";
@@ -95,10 +98,12 @@ import {
   CATEGORY_lIST, CATEGORY,
   VEHICLE, VEHICLE_lIST,
   GROUPTYPE_lIST, GROUPTYPE,
+
   PRICE_lIST, PRICE,
   MRP_lIST, MRP,
   MARGIN_lIST, MARGIN,
   PAGE_lIST, PAGE,
+  GROUPMASTER,
   GROUP_lIST,
   ORDER_lIST, ORDER,
 
@@ -219,8 +224,10 @@ const userRoutes = [
   { path: COMPANYGROUP, component: CompanyGroupMaster },
   { path: COMPANYGROUP_lIST, component: CompanyGroupList },
 
-  { path: GROUPTYPE, component: GroupTypeMaster },
-  { path: GROUPTYPE_lIST, component: GroupTypeList },
+  { path: GROUPTYPE, component: GroupTypeMaster},
+  { path: GROUPTYPE_lIST, component: GroupTypeList},
+  // group list
+  
 
   { path: '/TermsAndCondtionsMaster', component: TermsAndCondtionsMaster },
 
@@ -237,6 +244,8 @@ const userRoutes = [
   { path: MARGIN, component: MarginMaster },
   { path: MARGIN_lIST, component: MarginList },
 
+
+  { path: GROUPMASTER, component: GroupMaster},
   { path: GROUP_lIST, component: GroupList },
 
   { path: '/GSTMaster', component: GSTMaster },

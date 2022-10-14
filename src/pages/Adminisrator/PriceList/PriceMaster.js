@@ -209,7 +209,7 @@ const PriceMaster = (props) => {
                 BasePriceListID: currentPrice.value,
                 PLPartyType: partyType_dropdown_Select.value,
                 MkUpMkDn: mkup,
-                // PriceList:PriceList.value,
+                PriceList:PriceList.value,
                 Company: 1,
                 CreatedBy: 1,
                 CreatedOn: "2022-07-18T00:00:00",
@@ -239,7 +239,7 @@ const PriceMaster = (props) => {
                 CreatedOn: "2022-07-18T00:00:00",
                 UpdatedBy: 1,
                 UpdatedOn: "2022-07-18T00:00:00",
-                // PermissionAction:delete_PriceList,
+                
             });
             dispatch(updatePriceList(jsonBody));
         }
