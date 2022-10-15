@@ -103,7 +103,7 @@ const GSTList = (props) => {
             history.push({
                 pathname: `/${found.ActualPagePath}`,
                 editValue: rowData,
-                pageMode:'edit'
+                pageMode: 'edit'
             })
         }
     }
@@ -118,16 +118,6 @@ const GSTList = (props) => {
         {
             text: "EffectiveDate",
             dataField: "EffectiveDate",
-            sort: true,
-        },
-        {
-            text: "GST Percentage",
-            dataField: "GSTPercentage",
-            sort: true,
-        },
-        {
-            text: "HSNCode",
-            dataField: "HSNCode",
             sort: true,
         },
         {
