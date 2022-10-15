@@ -16,8 +16,6 @@ import Select from "react-select";
 import { MetaTags } from "react-meta-tags";
 import { useDispatch, useSelector } from "react-redux";
 import {
-    PostMethodForPartySubParty,
-    PostMethod_ForPartySubPartyAPISuccess,
     postPartySubParty,
     postPartySubPartySuccess
 } from "../../../store/Administrator/PartySubPartyRedux/action";
@@ -32,9 +30,7 @@ import { SaveButton } from "../../../components/CommonSaveButton";
 import { Tbody, Thead } from "react-super-responsive-table";
 
 const PartySubParty = (props) => {
-
-
-    const formRef = useRef(null);
+    
     const [EditData, setEditData] = useState([]);
     const [pageMode, setPageMode] = useState("save");
     const [PartyData, setPartyData] = useState([]);
