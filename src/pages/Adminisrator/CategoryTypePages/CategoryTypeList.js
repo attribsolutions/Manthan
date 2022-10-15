@@ -31,10 +31,10 @@ const CategoryTypeList = (props) => {
   const action = {
     getList: getCategoryTypelist,
     editId: editCategoryTypeID,
-    deleteId: deleteCategoryTypeIDSuccess,
+    deleteId:  delete_CategoryType_ID,
     postSucc: PostMethod_ForCategoryTypeMasterAPISuccess,
     updateSucc: updateCategoryTypeIDSuccess,
-    deleteSucc: delete_CategoryType_ID
+    deleteSucc: deleteCategoryTypeIDSuccess,
   }
 
   //  This UseEffect => Featch Modules List data  First Rendering

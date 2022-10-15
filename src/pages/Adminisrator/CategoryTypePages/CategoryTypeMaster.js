@@ -32,11 +32,13 @@ import {
     onChangeText
 } from "../../../components/Common/CmponentRelatedCommonFile/validationFunction";
 import { SaveButton } from "../../../components/CommonSaveButton";
+import { CATEGORYTYPE_lIST } from "../../../routes/route_url";
 
 const CategoryTypeMaster = (props) => {
     const formRef = useRef(null);
     const history = useHistory()
     const dispatch = useDispatch();
+    const [modalCss, setModalCss] = useState(false);
 
     const [EditData, setEditData] = useState([]);
     const [pageMode, setPageMode] = useState("");
@@ -48,9 +50,9 @@ const CategoryTypeMaster = (props) => {
     let pageModeProps = props.pageMode;
 
     //Access redux store Data /  'save_ModuleSuccess' action data
-    const { PostAPIResponse, pageField, RoleAccessModifiedinSingleArray } = useSelector((state) => ({
+    const { PostAPIResponse, pageField, userAccess } = useSelector((state) => ({
         PostAPIResponse: state.categoryTypeReducer.PostData,
-        RoleAccessModifiedinSingleArray: state.Login.RoleAccessUpdateData,
+        userAccess: state.Login.RoleAccessUpdateData,
         pageField: state.CommonPageFieldReducer.pageField
     }));
 
@@ -63,6 +65,7 @@ const CategoryTypeMaster = (props) => {
     const [state, setState] = useState({
         values: {
             Name: "",
+            id: ""
 
         },
         fieldLabel: {
@@ -90,41 +93,59 @@ const CategoryTypeMaster = (props) => {
     const { isError } = state;
     const { fieldLabel } = state;
 
+    const location = { ...history.location }
+    const hasShowloction = location.hasOwnProperty("editValue")
+    const hasShowModal = props.hasOwnProperty("editValue")
+
     //userAccess useEffect
+    // userAccess useEffect
     useEffect(() => {
-        let userAcc = undefined
-        if ((editDataGetingFromList === undefined)) {
+        let userAcc = null;
+        let locationPath = location.pathname;
 
-            let locationPath = history.location.pathname
-            userAcc = RoleAccessModifiedinSingleArray.find((inx) => {
-                return (`/${inx.ActualPagePath}` === locationPath)
-            })
-        }
-        else if (!(editDataGetingFromList === undefined)) {
-            let relatatedPage = props.relatatedPage
-            userAcc = RoleAccessModifiedinSingleArray.find((inx) => {
-                return (`/${inx.ActualPagePath}` === relatatedPage)
-            })
+        if (hasShowModal) {
+            locationPath = props.masterPath;
+        };
 
-        }
-        if (!(userAcc === undefined)) {
+        userAcc = userAccess.find((inx) => {
+            return (`/${inx.ActualPagePath}` === locationPath)
+        })
+
+        if (userAcc) {
             setUserPageAccessState(userAcc)
-        }
-
-    }, [RoleAccessModifiedinSingleArray])
-
+        };
+    }, [userAccess])
 
     //This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
     useEffect(() => {
-        if (!(userPageAccessState === '')) { document.getElementById("txtName").focus(); }
-        if (!(editDataGetingFromList === undefined)) {
-            setEditData(editDataGetingFromList);
-            setPageMode(pageModeProps);
+        debugger
+        // if (!(userPageAccessState === '')) { document.getElementById("txtName").focus(); }
+        if ((hasShowloction || hasShowModal)) {
+
+            let hasEditVal = null
+            if (hasShowloction) {
+                setPageMode(location.pageMode)
+                hasEditVal = location.editValue
+            }
+            else if (hasShowModal) {
+                hasEditVal = props.editValue
+                setPageMode(props.pageMode)
+                setModalCss(true)
+            }
+
+            if (hasEditVal) {
+
+                const { id, Name } = hasEditVal
+                const { values, fieldLabel, hasValid, required, isError } = { ...state }
+                values.Name = Name;
+                values.id = id
+                setState({ values, fieldLabel, hasValid, required, isError })
+                dispatch(BreadcrumbShow(hasEditVal.CategoryTypeMaster))
+
+            }
             dispatch(editCategoryTypeIDSuccess({ Status: false }))
-            dispatch(BreadcrumbShow(editDataGetingFromList.Name))
-            return
         }
-    }, [editDataGetingFromList])
+    }, [])
 
     useEffect(() => {
 
@@ -145,7 +166,7 @@ const CategoryTypeMaster = (props) => {
                     Type: 1,
                     Status: true,
                     Message: PostAPIResponse.Message,
-                    RedirectPath: '/CategoryTypeList',
+                    RedirectPath: CATEGORYTYPE_lIST,
                 }))
             }
         }
@@ -162,8 +183,10 @@ const CategoryTypeMaster = (props) => {
     }, [PostAPIResponse])
 
     useEffect(() => {
-        if (pageField.length > 0) {
-            comAddPageFieldFunc({ state, setState, pageField })
+
+        if (pageField) {
+            const fieldArr = pageField.PageFieldMaster
+            comAddPageFieldFunc({ state, setState, fieldArr })
         }
     }, [pageField])
 
@@ -172,11 +195,9 @@ const CategoryTypeMaster = (props) => {
         if (formValid(state, setState)) {
             const jsonBody = JSON.stringify({
                 Name: values.Name,
-
-
             });
             if (pageMode === "edit") {
-                dispatch(updateCategoryTypeID(jsonBody, EditData.id));
+                dispatch(updateCategoryTypeID(jsonBody, values.id));
             }
             else {
                 dispatch(PostMethodForCategoryTypeMaster(jsonBody))
@@ -217,7 +238,7 @@ const CategoryTypeMaster = (props) => {
                                                             <Input
                                                                 name="Name"
                                                                 id="txtName"
-                                                                value={EditData.Name}
+                                                                value={values.Name}
                                                                 type="text"
                                                                 className={isError.Name.length > 0 ? "is-invalid form-control" : "form-control"}
                                                                 placeholder="Please Enter Name"
@@ -226,7 +247,6 @@ const CategoryTypeMaster = (props) => {
                                                                     onChangeText({ event, state, setState })
                                                                     dispatch(BreadcrumbShow(event.target.value))
                                                                 }}
-
                                                             />
                                                             {isError.Name.length > 0 && (
                                                                 <span className="invalid-feedback">{isError.Name}</span>
