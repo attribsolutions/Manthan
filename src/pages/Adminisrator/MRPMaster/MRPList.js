@@ -196,6 +196,7 @@ const MRPList = (props) => {
                   keyField='id'
                   columns={pagesListColumns}
                   data={tableList}
+                 
                   search
                 >
                   {toolkitProps => (
@@ -210,6 +211,7 @@ const MRPList = (props) => {
                         isExcelButtonVisible={true}
                         ExcelData={tableList}
                         RedirctPath={"/MRPMaster"}
+                       
                       />
 
 
@@ -221,13 +223,17 @@ const MRPList = (props) => {
                               responsive
                               bordered={true}
                               striped={false}
+                              noDataIndication={<div className="text-danger text-center ">Items Not available</div>}
                               classes={"table align-middle table-nowrap table-hover"}
                               headerWrapperClasses={"thead-light"}
+                              
                               {...toolkitProps.baseProps}
                               {...paginationTableProps}
+                             
                             />
 
                           </div>
+                         
                         </Col>
                       </Row>
 
@@ -235,6 +241,7 @@ const MRPList = (props) => {
                         <Col className="pagination pagination-rounded justify-content-end mb-2">
                           <PaginationListStandalone
                             {...paginationProps}
+                          
                           />
                         </Col>
                       </Row>

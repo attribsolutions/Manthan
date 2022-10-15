@@ -53,11 +53,8 @@ function* get_MRPListPage_GenratorFunction() {
   try {
     const response = yield call(GetMRPList_For_Listpage);
     yield put(SpinnerState(false))
-    if (response.StatusCode === 200) yield put(getMRPListPageSuccess(response.Data))
-    else yield put(AlertState({
-      Type: 4,
-      Status: true, Message: JSON.stringify(response.Message),
-    }));
+    yield put(getMRPListPageSuccess(response.Data))
+  
   } catch (error) {
     yield put(SpinnerState(false))
     yield put(AlertState({
@@ -124,7 +121,6 @@ function* MRPGoButton_post_GenratorFunction({ data }) {
     const response = yield call(GoButton_Post_API, data);
     yield put(SpinnerState(false))
     yield put(postGoButtonForMRP_MasterSuccess(response.Data));
-
   } catch (error) {
     yield put(SpinnerState(false))
     yield put(AlertState({
