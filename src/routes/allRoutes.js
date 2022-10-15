@@ -84,6 +84,33 @@ import EditTabaleTable from "../pages/Adminisrator/DriverPage/editabale table";
 
 
 
+
+import {
+  COMPANY, COMPANY_lIST,
+  COMPANYGROUP, COMPANYGROUP_lIST,
+  DRIVER, DRIVER_lIST,
+  MODULE, MODULE_lIST,
+  USER, USER_lIST,
+  EMPLOYEE_lIST, EMPLOYEE,
+  ROLE_lIST, ROLE,
+  ITEM_lIST, ITEM,
+  PARTY_lIST, PARTY,
+  ROLEACCESS_lIST, ROLEACCESS,
+  EMPLOYEETYPE_lIST, EMPLOYEETYPE,
+  CATEGORYTYPE_lIST, CATEGORYTYPE,
+  PARTYTYPE_lIST, PARTYTYPE,
+  CATEGORY_lIST, CATEGORY,
+  VEHICLE, VEHICLE_lIST,
+  GROUPTYPE_lIST, GROUPTYPE,
+  PRICE_lIST, PRICE,
+  MRP_lIST, MRP,
+  MARGIN_lIST, MARGIN,
+  PAGE_lIST, PAGE,
+  GROUP_lIST,
+  ORDER_lIST, ORDER,
+
+} from "./route_url";
+
 import GSTMaster from "../pages/Adminisrator/GSTPages/GSTMaster";
 import GSTList from "../pages/Adminisrator/GSTPages/GSTList";
 
