@@ -33,6 +33,7 @@ import {
     onChangeText
 } from "../../../components/Common/CmponentRelatedCommonFile/validationFunction";
 import { SaveButton } from "../../../components/CommonSaveButton";
+import { PARTYTYPE_lIST } from "../../../routes/route_url";
 
 
 const PartyType = (props) => {
@@ -169,7 +170,7 @@ const PartyType = (props) => {
                     Type: 1,
                     Status: true,
                     Message: PostAPIResponse.Message,
-                    RedirectPath: '/PartyTypeList',
+                    RedirectPath: PARTYTYPE_lIST,
 
                 }))
             }
@@ -187,11 +188,12 @@ const PartyType = (props) => {
     }, [PostAPIResponse])
 
     useEffect(() => {
-        if (pageField.length > 0) {
-            comAddPageFieldFunc({ state, setState, pageField })
+
+        if (pageField) {
+            const fieldArr = pageField.PageFieldMaster
+            comAddPageFieldFunc({ state, setState, fieldArr })
         }
     }, [pageField])
-
 
     const formSubmitHandler = (event) => {
         event.preventDefault();
@@ -205,7 +207,7 @@ const PartyType = (props) => {
             UpdatedBy: 1,
             UpdatedOn: "2022-07-18T00:00:00"
         });
-
+      console.log("jsonBody",jsonBody)
 
         if (pageMode === "edit") {
             dispatch(updatePartyTypeID(jsonBody, EditData.id));
@@ -215,7 +217,6 @@ const PartyType = (props) => {
         }
     }
 };
-
 
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
     var IsEditMode_Css = ''

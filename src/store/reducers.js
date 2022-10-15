@@ -29,7 +29,7 @@ import ItemMastersReducer from "./Administrator/ItemsRedux/reducer"
 import PartyMasterReducer from "./Administrator/PartyRedux/reducer"
 import RoleAccessReducer from "./Administrator/RoleAccessRedux/reducer"
 import EmployeeTypeReducer from "./Administrator/EmployeeTypeRedux/reducer"
-import PartyTypeReducer    from "./Administrator/PartyTypeRedux/reducer"
+import PartyTypeReducer from "./Administrator/PartyTypeRedux/reducer"
 import categoryTypeReducer from "./Administrator/CategoryTypeRedux/reducer"
 import CategoryReducer from "./Administrator/CategoryRedux/reducer"
 import SubCategoryReducer from "./Administrator/SubCategoryRedux/reducer"
@@ -42,12 +42,12 @@ import MarginMasterReducer from "./Administrator/MarginMasterRedux/reducer"
 import TermsAndCondtionsReducer from "./Administrator/TermsAndCondtionsRedux/reducer"
 import GroupTypeReducer from "./Administrator/GroupTypeRedux/reducer"
 import  GroupReducer from "./Administrator/GroupRedux/reducer"
-
 import GSTReducer from "./Administrator/GSTRedux/reducer"
-
- import PartySubPartyReducer from "./Administrator/PartySubPartyRedux/reducer"
+import PartySubPartyReducer from "./Administrator/PartySubPartyRedux/reducer"
 
  
+
+
 
 const rootReducer = combineReducers({
 
@@ -91,7 +91,19 @@ const rootReducer = combineReducers({
    GroupTypeReducer,
    GroupReducer,
    GSTReducer,
-    PartySubPartyReducer,
+  PartySubPartyReducer,
+  SubCategoryReducer,
+  VehicleReducer,
+  DriverReducer,
+  CompanyGroupReducer,
+  PriceListReducer,
+  MRPMasterReducer,
+  MarginMasterReducer,
+  TermsAndCondtionsReducer,
+  GroupTypeReducer,
+  GSTReducer,
+
+
 })
 
 export default rootReducer
