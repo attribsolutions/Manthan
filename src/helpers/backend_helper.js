@@ -321,12 +321,7 @@ export const GroupTypes_Edit_API = (id) => get(`${url.GROUP_TYPE_API}/${id}`)// 
 export const GroupTypes_Update_API = (data, id) => put(`${url.GROUP_TYPE_API}/${id}`, data)// update api
 
 // GroupMaster
-export const Post_GroupMaster_API = (data) => post(url. CATEGORY_API,data)// post api
-// export const get_GroupMaster_API = () => get(url. CATEGORY_TYPES_API)// Product Category DropDown Api api
-export const get_GroupMaster_List_Api = () => get(url. CATEGORY_API) // get api
-export const detelet_GroupMaster_List_Api = (id) =>del(`${url. CATEGORY_API}/${id}`) // delete api
-export const edit_GroupMaster_List_Api = (id) =>get(`${url. CATEGORY_API}/${id}`) // edit api
-export const update_GroupMaster_List_Api = (data, id) =>put(`${url. CATEGORY_API}/${id}`, data)// update
+export const get_Group_List_Api = () => get(url. GROUP_API)// post api
 
 
 // TermsAndCondtions API

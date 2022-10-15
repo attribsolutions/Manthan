@@ -38,10 +38,7 @@ import {
 import { SaveButton } from "../../../components/CommonSaveButton";
 
 
-const CategoryMaster = (props) => {
-
-    let editDataGetingFromList = props.state;
-    let pageModeProps = props.pageMode;
+const GroupMaster = (props) => {
 
     const formRef = useRef(null);
     const history = useHistory()
@@ -110,7 +107,7 @@ const CategoryMaster = (props) => {
 
     useEffect(() => {
         dispatch(commonPageFieldSuccess(null));
-        dispatch(commonPageField(18))
+        dispatch(commonPageField(119))
     }, []);
 
     const location = { ...history.location }
@@ -350,5 +347,5 @@ const CategoryMaster = (props) => {
     }
 };
 
-export default CategoryMaster
+export default GroupMaster
 

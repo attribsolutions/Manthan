@@ -73,7 +73,7 @@ import MRPList from "../pages/Adminisrator/MRPMaster/MRPList";
 import MarginList from "../pages/Adminisrator/MarginMaster/MarginList";
 import TermsAndCondtionsMaster from "../pages/Adminisrator/TermsAndCondtions/TermsAndCondtionsMaster";
 
-import GroupMaster  from "../pages/Adminisrator/GroupPage/GroupMaster"
+import GroupMaster from "../pages/Adminisrator/GroupPage/GroupMaster"
 import GroupList from "../pages/Adminisrator/GroupPage/GroupList";
 import GroupTypeList from "../pages/Adminisrator/GroupTypePage/GroupTypeList";
 
@@ -81,37 +81,13 @@ import GroupTypeList from "../pages/Adminisrator/GroupTypePage/GroupTypeList";
 import GroupTypeMaster from "../pages/Adminisrator/GroupTypePage/GroupTypeMaster";
 import PartySubParty from "../pages/Adminisrator/PartySubPartyPages/PartySubParty";
 import EditTabaleTable from "../pages/Adminisrator/DriverPage/editabale table";
-import {
-  COMPANY, COMPANY_lIST,
-  COMPANYGROUP, COMPANYGROUP_lIST,
-  DRIVER, DRIVER_lIST,
-  MODULE, MODULE_lIST,
-  USER, USER_lIST,
-  EMPLOYEE_lIST, EMPLOYEE,
-  ROLE_lIST, ROLE,
-  ITEM_lIST, ITEM,
-  PARTY_lIST, PARTY,
-  ROLEACCESS_lIST, ROLEACCESS,
-  EMPLOYEETYPE_lIST, EMPLOYEETYPE,
-  CATEGORYTYPE_lIST, CATEGORYTYPE,
-  PARTYTYPE_lIST, PARTYTYPE,
-  CATEGORY_lIST, CATEGORY,
-  VEHICLE, VEHICLE_lIST,
-  GROUPTYPE_lIST, GROUPTYPE,
-
-  PRICE_lIST, PRICE,
-  MRP_lIST, MRP,
-  MARGIN_lIST, MARGIN,
-  PAGE_lIST, PAGE,
-  GROUPMASTER,
-  GROUP_lIST,
-  ORDER_lIST, ORDER,
 
 
-} from "./route_url";
+
 import GSTMaster from "../pages/Adminisrator/GSTPages/GSTMaster";
 import GSTList from "../pages/Adminisrator/GSTPages/GSTList";
 
+import * as path from "./route_url";
 
 // import Index from "../pages/Adminisrator/customValidation/index";
 
@@ -120,113 +96,78 @@ import GSTList from "../pages/Adminisrator/GSTPages/GSTList";
 // import AddItemMaster from "../pages/Adminisrator/MasterPages/AddItemMaster";
 
 const userRoutes = [
-
-  //dashboard
+ 
   { path: "/dashboard", component: Dashboard },
 
-  // Administrator : Modules Path and List
   // { path: `/${btoa("ModuleMaster")}`, component: Modules },
   // { path: `/${btoa("ModuleList")}`, component: ModulesList },
 
-  // { path: "/subModuleMaster", component: SubModules },
-  // { path: "/subModuleList", component: SubModulesList },
 
-  // // Administrator : Company Path and List
-  // { path: `/${btoa("CompanyMaster")}`, component: CompanyModule },
-  // { path: `/${btoa("CompanyList")}`, component: CompanyList },
-
-  // { path: `/${btoa("PageList")}`, component: HPageList },
-  // { path: `/${btoa("PageMaster")}`, component: HPageMaster },
-
-  // { path: `/${btoa("Order")}`, component: OrderPage },
-  // { path:`/${btoa("Orders")}`, component: OrderList },
-
-  // { path: `/${btoa("UserMaster")}`, component: AddUser },
-  // { path: `/${btoa("UserList")}`, component: UserList },
-
-  // { path: `/${btoa("EmployeeMaster")}`, component: AddEmployee },
-  // { path: `/${btoa("EmployeeList")}`, component: Employee_List },
-
-  // { path: `/${btoa("RoleMaster")}`, component: RoleMaster },
-  // { path: `/${btoa("RoleList")}`, component: RoleList },
-
-  // { path: `/${btoa("ItemMaster")}`, component: ItemsMaster },
-  // { path: `/${btoa("ItemList")}`, component: ItemsList },
-
-  // { path: `/${btoa("PartyList")}`, component: PartyList },
-  // { path: `/${btoa("PartyMaster")}`, component: PartyMaster },
-
-  // { path: `/${btoa("RoleAccess")}`, component: RoleAccessList },
-  // { path: "/RoleAccess", component: RoleAccessList },
-
-
-
-
-  { path: MODULE, component: Modules },
-  { path: MODULE_lIST, component: ModulesList },
+  { path: path.MODULE, component: Modules },
+  { path: path.MODULE_lIST, component: ModulesList },
 
   // { path: "/subModuleMaster", component: SubModules },
   // { path: "/subModuleList", component: SubModulesList },
 
   // Administrator : Company Path and List
-  { path: COMPANY, component: CompanyModule },
-  { path: COMPANY_lIST, component: CompanyList },
+  { path: path.COMPANY, component: CompanyModule },
+  { path: path.COMPANY_lIST, component: CompanyList },
 
-  { path: PAGE_lIST, component: PageList },
-  { path: PAGE, component: PageMaster },
+  { path: path.PAGE_lIST, component: PageList },
+  { path: path.PAGE, component: PageMaster },
   { path: '/PageMasterTab', component: PageMasterTab },
 
-  { path: ORDER, component: OrderPage },
-  { path: ORDER_lIST, component: OrderList },
+  { path: path.ORDER, component: OrderPage },
+  { path: path.ORDER_lIST, component: OrderList },
 
-  { path: USER, component: AddUser },
-  { path: USER_lIST, component: UserList },
+  { path: path.USER, component: AddUser },
+  { path: path.USER_lIST, component: UserList },
 
-  { path: EMPLOYEE, component: AddEmployee },
-  { path: EMPLOYEE_lIST, component: Employee_List },
+  { path: path.EMPLOYEE, component: AddEmployee },
+  { path: path.EMPLOYEE_lIST, component: Employee_List },
 
-  { path: ROLE, component: RoleMaster },
-  { path: ROLE_lIST, component: RoleList },
+  { path: path.ROLE, component: RoleMaster },
+  { path: path.ROLE_lIST, component: RoleList },
 
-  { path: ITEM, component: ItemsMaster },
-  { path: ITEM_lIST, component: ItemsList },
+  { path: path.ITEM, component: ItemsMaster },
+  { path: path.ITEM_lIST, component: ItemsList },
 
-  { path: PARTY_lIST, component: PartyList },
-  { path: PARTY, component: PartyMaster },
+  { path: path.PARTY_lIST, component: PartyList },
+  { path: path.PARTY, component: PartyMaster },
 
-  { path: ROLEACCESS, component: RoleAccessAdd },
-  { path: ROLEACCESS_lIST, component: RoleAccessListPage },
+  { path: path.ROLEACCESS, component: RoleAccessAdd },
+  { path: path.ROLEACCESS_lIST, component: RoleAccessListPage },
   { path: `/CopyRoleAccess`, component: RoleAccessCopyFunctionality },
 
-  { path: EMPLOYEETYPE, component: EmployeeTypesMaster },
-  { path: EMPLOYEETYPE_lIST, component: EmployeeTypeList },
+  { path: path.EMPLOYEETYPE, component: EmployeeTypesMaster },
+  { path: path.EMPLOYEETYPE_lIST, component: EmployeeTypeList },
 
-  { path: PARTYTYPE, component: PartyType },
-  { path: PARTYTYPE_lIST, component: PartyTypeList },
+  { path: path.PARTYTYPE, component: PartyType },
+  { path: path.PARTYTYPE_lIST, component: PartyTypeList },
 
-  { path: CATEGORYTYPE, component: CategoryTypeMaster },
-  { path: CATEGORYTYPE_lIST, component: CategoryTypeList },
+  { path: path.CATEGORYTYPE, component: CategoryTypeMaster },
+  { path: path.CATEGORYTYPE_lIST, component: CategoryTypeList },
 
-  { path: CATEGORY, component: CategoryMaster },
-  { path: CATEGORY_lIST, component: CategoryList },
+  { path: path.CATEGORY, component: CategoryMaster },
+  { path: path.CATEGORY_lIST, component: CategoryList },
 
   { path: "/SubCategoryMaster", component: SubCategoryMaster },
   { path: "/SubCategoryList", component: SubCategoryList },
 
-  { path: VEHICLE, component: VehicleMaster },
-  { path: VEHICLE_lIST, component: VehicleList },
+  { path: path.VEHICLE, component: VehicleMaster },
+  { path: path.VEHICLE_lIST, component: VehicleList },
 
-  { path: DRIVER, component: DriverMaster },
-  { path: DRIVER_lIST, component: DriverList },
+  { path: path.DRIVER, component: DriverMaster },
+  { path: path.DRIVER_lIST, component: DriverList },
   { path: "/editTable", component: EditTabaleTable },
 
-  { path: COMPANYGROUP, component: CompanyGroupMaster },
-  { path: COMPANYGROUP_lIST, component: CompanyGroupList },
+  { path: path.COMPANYGROUP, component: CompanyGroupMaster },
+  { path: path.COMPANYGROUP_lIST, component: CompanyGroupList },
 
-  { path: GROUPTYPE, component: GroupTypeMaster},
-  { path: GROUPTYPE_lIST, component: GroupTypeList},
+  { path: path.GROUPTYPE, component: GroupTypeMaster },
+  { path: path.GROUPTYPE_lIST, component: GroupTypeList },
   // group list
-  
+
 
   { path: '/TermsAndCondtionsMaster', component: TermsAndCondtionsMaster },
 
@@ -234,18 +175,18 @@ const userRoutes = [
   // { path: "/PartyMasterTab", component: PartyMasterTab },
 
   // { path: "/PriceList", component: PartyMasterTab },
-  { path: PRICE_lIST, component: PriceList },
-  { path: PRICE, component: PriceMaster },
+  { path: path.PRICE_lIST, component: PriceList },
+  { path: path.PRICE, component: PriceMaster },
 
-  { path: MRP, component: MRPMaster },
-  { path: MRP_lIST, component: MRPList },
+  { path: path.MRP, component: MRPMaster },
+  { path: path.MRP_lIST, component: MRPList },
 
-  { path: MARGIN, component: MarginMaster },
-  { path: MARGIN_lIST, component: MarginList },
+  { path: path.MARGIN, component: MarginMaster },
+  { path: path.MARGIN_lIST, component: MarginList },
 
 
-  { path: GROUPMASTER, component: GroupMaster},
-  { path: GROUP_lIST, component: GroupList },
+  { path: path.GROUP, component: GroupMaster },
+  { path: path.GROUP_lIST, component: GroupList },
 
   { path: '/GSTMaster', component: GSTMaster },
   { path: '/GSTList', component: GSTList },
