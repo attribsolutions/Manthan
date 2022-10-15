@@ -40,6 +40,10 @@ import TermsAndCondtionsSaga from "./Administrator/TermsAndCondtionsRedux/saga"
 import GroupTypeSaga from "./Administrator/GroupTypeRedux/saga"
 import GSTSaga from "./Administrator/GSTRedux/saga"
 
+import GroupSaga from "./Administrator/GroupRedux/saga"
+
+import PartySubPartysaga from "./Administrator/PartySubPartyRedux/saga"
+
 export default function* rootSaga() {
   yield all([
     fork(AccountSaga),
@@ -51,7 +55,6 @@ export default function* rootSaga() {
     fork(CustomSearch_Saga),
     fork(CommonPageField_Saga),
     fork(Alert_Saga),
-
 
     fork(ModulesSaga),
     fork(CompanySaga),
@@ -76,6 +79,9 @@ export default function* rootSaga() {
     fork(MarginMasterSaga),
     fork(TermsAndCondtionsSaga),
     fork(GroupTypeSaga),
-    fork(GSTSaga)
+    fork(GroupSaga),
+    fork(GSTSaga),
+    fork(PartySubPartysaga),
+
   ])
 }

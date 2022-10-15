@@ -320,6 +320,10 @@ export const GroupTypes_Delete_API = (id) => del(`${url.GROUP_TYPE_API}/${id}`)/
 export const GroupTypes_Edit_API = (id) => get(`${url.GROUP_TYPE_API}/${id}`)// edit api
 export const GroupTypes_Update_API = (data, id) => put(`${url.GROUP_TYPE_API}/${id}`, data)// update api
 
+// GroupMaster
+export const get_Group_List_Api = () => get(url. GROUP_API)// post api
+
+
 // TermsAndCondtions API
 export const Post_TermsAndCondtions_Master_API = (data) => post(url.TERMSANDCONDITIONS_API, data)// post api
 export const get_TermsAndCondtionsList_API = (data) => get(url.TERMSANDCONDITIONS_API)// get api
@@ -331,6 +335,10 @@ export const delete_GSTList_API = (CommonID) => del(`${url. DELETE_API_FOR_LIST_
 export const GoButton_Post_API_For_GSTMaster = (data) => post(url.GO_BUTTON_POST_API_FOR_GST_MASTER, data)// go button postapi
 export const GST_MasterPage_delete_API = (id) => del(`${url.GST_LIST_API}/${id}`)// delete api
 
+
+// PartySubParty API
+ export const Post_PartySubParty_API= (data) => post(url.PARTY_SUBPARTY_API, data)// post api
+
 export {  
   getLoggedInUser,
   isUserAuthenticated,
@@ -341,9 +349,6 @@ export {
   postJwtRegister,
   postJwtProfile,
 
-
-
-  
 }
 
 
