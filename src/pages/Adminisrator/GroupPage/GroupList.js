@@ -3,15 +3,19 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   deleteDriverTypeIDSuccess,
   updateDriverTypeIDSuccess,
-  getMethodForDriverList,
   editDriverTypeId,
   delete_DriverType_ID,
   PostMethod_ForDriverMasterSuccess,
 } from "../../../store/Administrator/DriverRedux/action";
 
 import CommonListPage from "../../../components/Common/CmponentRelatedCommonFile/commonListPage";
-import { commonPageFieldList, commonPageFieldListSuccess } from "../../../store/actions";
-import { DRIVER } from "../../../routes/route_url";
+import {
+  commonPageFieldList,
+  commonPageFieldListSuccess,
+  getGroupList
+} from "../../../store/actions";
+import { GROUP } from "../../../routes/route_url";
+import GroupMaster from "./GroupMaster";
 
 const GroupList = (props) => {
   const dispatch = useDispatch();
@@ -19,7 +23,7 @@ const GroupList = (props) => {
 
   const reducers = useSelector(
     (state) => ({
-      tableList: state.DriverReducer.DriverList,
+      tableList: state.GroupReducer.groupList,
       editData: state.DriverReducer.editData,
       updateMsg: state.DriverReducer.updateMessage,
       deleteMsg: state.DriverReducer.deleteMessage,
@@ -30,7 +34,7 @@ const GroupList = (props) => {
   );
 
   const action = {
-    getList: getMethodForDriverList,
+    getList: getGroupList,
     editId: editDriverTypeId,
     deleteId: delete_DriverType_ID,
     postSucc: PostMethod_ForDriverMasterSuccess,
@@ -39,10 +43,10 @@ const GroupList = (props) => {
 
   }
   useEffect(() => {
-    
+
     dispatch(commonPageFieldListSuccess(null))
-    dispatch(commonPageFieldList(90))
-    dispatch(getMethodForDriverList())
+    dispatch(commonPageFieldList(120))
+    dispatch(getGroupList())
 
   }, []);
 
@@ -51,12 +55,12 @@ const GroupList = (props) => {
   return (
     <React.Fragment>
       {
-        (pageField.length > 0) ?
+        (pageField) ?
           <CommonListPage
             action={action}
             reducers={reducers}
-            // MasterModal={DriverMaster}
-            masterPath={DRIVER}
+            MasterModal={GroupMaster}
+            masterPath={GROUP}
 
           />
           : null

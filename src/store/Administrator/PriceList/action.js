@@ -58,7 +58,7 @@ export const delete_PriceListSuccess = (data) => ({
 });
 
 //edit api
-export const editPriceList = (id,pageMode) => ({
+export const  editPriceList = (id,pageMode) => ({
  type: EDIT_PRICE_LIST,
  id,pageMode
 })

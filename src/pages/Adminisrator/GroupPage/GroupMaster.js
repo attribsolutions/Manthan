@@ -9,54 +9,77 @@ import {
     FormGroup,
     Input,
     Label,
-    Row
+    Row,
 } from "reactstrap";
 import { AvField, AvForm, } from "availity-reactstrap-validation";
 import Select from "react-select";
 import { MetaTags } from "react-meta-tags";
-import { BreadcrumbShow, commonPageFieldListSuccess, commonPageFieldSuccess } from "../../../store/actions";
+import { BreadcrumbShow, commonPageField, commonPageFieldSuccess, getCategoryTypelist } from "../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
-import { AlertState, commonPageField } from "../../../store/actions";
+import {
+    editCategoryIDSuccess, getMethodForCategory,
+    PostMethodForCategory,
+    PostMethod_ForCategoryAPISuccess,
+    updateCategoryID
+} from "../../../store/Administrator/CategoryRedux/action";
+import { AlertState } from "../../../store/actions";
+import { CommonGetRoleAccessFunction } from "../../../components/Common/CommonGetRoleAccessFunction";
 import { useHistory } from "react-router-dom";
 import {
     comAddPageFieldFunc,
+    formValChange,
     formValid,
+    onChangeSelect,
     onChangeText,
+
 } from "../../../components/Common/CmponentRelatedCommonFile/validationFunction";
-import {
-    editGroupTypeIdSuccess,
-    getGroupTypeslistSuccess,
-    PostGroupTypeSubmit,
-    PostGroupTypeSubmitSuccess,
-    updateGroupTypeID
-} from "../../../store/Administrator/GroupTypeRedux/action";
-import {GROUPTYPE_lIST } from "../../../routes/route_url";
 
-const GroupTypeMaster = (props) => {
 
-    const dispatch = useDispatch();
-    const history = useHistory()
+import { SaveButton } from "../../../components/CommonSaveButton";
 
-    let editDataGetingFromList = props.state;
-    let pageModeProps = props.pageMode;
-    console.log("editDataGetingFromList", editDataGetingFromList)
+
+const GroupMaster = (props) => {
 
     const formRef = useRef(null);
-    const [EditData, setEditData] = useState({});
-    const [modalCss, setModalCss] = useState(false);
-    const [pageMode, setPageMode] = useState("save");
-    const [userPageAccessState, setUserPageAccessState] = useState('');
+    const history = useHistory()
+    const dispatch = useDispatch();
 
+    const [EditData, setEditData] = useState([]);
+    const [pageMode, setPageMode] = useState("");
+    const [modalCss, setModalCss] = useState(false);
+
+    const [CategoryTypes_dropdown_Select, setCategoryTypes_dropdown_Select] = useState("");
+    const [userPageAccessState, setUserPageAccessState] = useState(123);
+
+
+    //Access redux store Data /  'save_ModuleSuccess' action data
+    const {
+        PostAPIResponse,
+        CategoryAPI,
+        pageField,
+        userAccess } = useSelector((state) => ({
+            PostAPIResponse: state.CategoryReducer.PostDataMessage,
+            CategoryAPI: state.categoryTypeReducer.categoryTypeListData,
+            userAccess: state.Login.RoleAccessUpdateData,
+            pageField: state.CommonPageFieldReducer.pageField
+        }));
+
+
+    {/** Dyanamic Page access state and OnChange function */ }
+    {/*start */ }
     const [state, setState] = useState({
         values: {
             Name: "",
+            GroupMasterName: ""
         },
         fieldLabel: {
-            Name: "",
+            Name: '',
+            GroupMasterName: '',
         },
 
         isError: {
             Name: "",
+            GroupMasterName: ""
         },
 
         hasValid: {
@@ -65,27 +88,26 @@ const GroupTypeMaster = (props) => {
                 inValidMsg: "",
                 valid: false
             },
+            CategoryTypeName: {
+                regExp: '',
+                inValidMsg: "",
+                valid: false
+            },
         },
         required: {
 
         }
-    }
-    )
+    })
+    const values = { ...state.values }
+    const { isError } = state;
+    const { fieldLabel } = state;
 
-    //Access redux store Data /  'save_ModuleSuccess' action data
-    const {
-        postMsg,
-        pageField,
-        userAccess
-    } = useSelector((state) => ({
-        postMsg: state.GroupTypeReducer.PostData,
-        userAccess: state.Login.RoleAccessUpdateData,
-        pageField: state.CommonPageFieldReducer.pageField
-    }));
+
+    {/*End */ }
 
     useEffect(() => {
         dispatch(commonPageFieldSuccess(null));
-        dispatch(commonPageField(105))
+        dispatch(commonPageField(119))
     }, []);
 
     const location = { ...history.location }
@@ -113,6 +135,7 @@ const GroupTypeMaster = (props) => {
     // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
     useEffect(() => {
 
+        // if (!(userPageAccessState === '')) { document.getElementById("txtName").focus(); }
         if ((hasShowloction || hasShowModal)) {
 
             let hasEditVal = null
@@ -127,39 +150,43 @@ const GroupTypeMaster = (props) => {
             }
 
             if (hasEditVal) {
-                setEditData(hasEditVal);
-                const { Name } = hasEditVal
-                const { values, fieldLabel, hasValid, required, isError } = { ...state }
-                values.Name = Name;
-                setState({ values, fieldLabel, hasValid, required, isError })
-                dispatch(editGroupTypeIdSuccess({ Status: false }))
-                dispatch(BreadcrumbShow(hasEditVal.GroupTypeMaster))
+                setCategoryTypes_dropdown_Select({
+
+                    value: hasEditVal.CategoryType_id,
+                    label: hasEditVal.CategoryTypeName
+                })
+                dispatch(editCategoryIDSuccess({ Status: false }))
+                dispatch(BreadcrumbShow(hasEditVal.Name))
+                return
             }
         }
     }, [])
 
+
     useEffect(() => {
-        if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
-            dispatch(PostGroupTypeSubmitSuccess({ Status: false }))
+
+        if ((PostAPIResponse.Status === true) && (PostAPIResponse.StatusCode === 200)) {
+            setCategoryTypes_dropdown_Select('')
+            dispatch(PostMethod_ForCategoryAPISuccess({ Status: false }))
             formRef.current.reset();
-            if (pageMode === "dropdownAdd") {
+            if (pageMode === "other") {
                 dispatch(AlertState({
                     Type: 1,
                     Status: true,
-                    Message: postMsg.Message,
+                    Message: PostAPIResponse.Message,
                 }))
             }
             else {
                 dispatch(AlertState({
                     Type: 1,
                     Status: true,
-                    Message: postMsg.Message,
-                    RedirectPath: GROUPTYPE_lIST,
+                    Message: PostAPIResponse.Message,
+                    RedirectPath: '/CategoryList',
                 }))
             }
         }
-        else if (postMsg.Status === true) {
-            dispatch(getGroupTypeslistSuccess({ Status: false }))
+        else if (PostAPIResponse.Status === true) {
+            dispatch(PostMethod_ForCategoryAPISuccess({ Status: false }))
             dispatch(AlertState({
                 Type: 4,
                 Status: true,
@@ -168,47 +195,54 @@ const GroupTypeMaster = (props) => {
                 AfterResponseAction: false
             }));
         }
-    }, [postMsg])
+    }, [PostAPIResponse])
 
-    
     useEffect(() => {
+      
         if (pageField) {
             const fieldArr = pageField.PageFieldMaster
             comAddPageFieldFunc({ state, setState, fieldArr })// new change
         }
     }, [pageField])
 
-    const values = { ...state.values }
-    const { isError } = state;
-    const { fieldLabel } = state;
+
+    //get method for dropdown
+    useEffect(() => {
+        dispatch(getCategoryTypelist());
+    }, [dispatch]);
+
+
+    function handllerCategoryTypes(e) {
+        setCategoryTypes_dropdown_Select(e)
+    }
+
+    const CategoryTypesValues = CategoryAPI.map((Data) => ({
+        value: Data.id,
+        label: Data.Name
+    }));
 
     const formSubmitHandler = (event) => {
-
         event.preventDefault();
         if (formValid(state, setState)) {
             const jsonBody = JSON.stringify({
                 Name: values.Name,
-                CreatedBy: 1,
-                CreatedOn: "0002-10-03T12:48:14.910491",
-                UpdatedBy: 1,
-                UpdatedOn: "0002-10-03T12:48:14.910491"
-
+                CategoryType: values.CategoryTypeName.values,
             });
 
-            if (pageMode === 'edit') {
-                dispatch(updateGroupTypeID(jsonBody, EditData.id));
+            if (pageMode === "edit") {
+                dispatch(updateCategoryID(jsonBody, EditData.id));
             }
-
             else {
-                dispatch(PostGroupTypeSubmit(jsonBody));
-                console.log("jsonBody", jsonBody)
+                dispatch(PostMethodForCategory(jsonBody));
+
             }
         }
     };
 
 
+    // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
     var IsEditMode_Css = ''
-    if ((modalCss) || (pageMode === "dropdownAdd")) { IsEditMode_Css = "-5.5%" };
+    if ((modalCss) || (pageMode ==="dropdownAdd")) {IsEditMode_Css = "-5.5%" };
 
     if (!(userPageAccessState === '')) {
         return (
@@ -216,7 +250,7 @@ const GroupTypeMaster = (props) => {
                 <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
                     <Container fluid>
                         <MetaTags>
-                            <title>GroupTypeMaster | FoodERP-React FrontEnd</title>
+                            <title>{userPageAccessState.PageHeading} | FoodERP-React FrontEnd</title>
                         </MetaTags>
                         <Breadcrumb breadcrumbItem={userPageAccessState.PageHeading} />
 
@@ -227,9 +261,7 @@ const GroupTypeMaster = (props) => {
                             </CardHeader>
 
                             <CardBody className=" vh-10 0 text-black" style={{ backgroundColor: "#whitesmoke" }} >
-
                                 <form onSubmit={formSubmitHandler} ref={formRef} noValidate>
-
                                     <Row className="">
                                         <Col md={12}>
                                             <Card>
@@ -238,12 +270,13 @@ const GroupTypeMaster = (props) => {
                                                         <FormGroup className="mb-2 col col-sm-4 ">
                                                             <Label htmlFor="validationCustom01">{fieldLabel.Name} </Label>
                                                             <Input
-                                                                id="txtName"
                                                                 name="Name"
+                                                                id="txtName"
+                                                                value={EditData.Name}
                                                                 type="text"
-                                                                value={values.Name}
                                                                 className={isError.Name.length > 0 ? "is-invalid form-control" : "form-control"}
                                                                 placeholder="Please Enter Name"
+                                                                autoComplete='off'
                                                                 onChange={(event) => {
                                                                     onChangeText({ event, state, setState })
                                                                     dispatch(BreadcrumbShow(event.target.value))
@@ -255,39 +288,42 @@ const GroupTypeMaster = (props) => {
                                                             )}
                                                         </FormGroup>
 
+                                                        <Row>
+                                                            <Col md="4">
+                                                                <FormGroup className="mb-3">
+                                                                    <Label htmlFor="validationCustom01"> {fieldLabel.GroupMasterName} </Label>
+                                                                    <Col sm={12}>
+                                                                        <Select
+                                                                            name="GroupMasterName"
+                                                                            Value={values.GroupMaster}
+                                                                            isSearchable={false}
+                                                                            className="react-dropdown"
+                                                                            classNamePrefix="dropdown"
+                                                                            onChange={(v, e) => onChangeSelect({ e, v, state, setState })}
+                                                                            options={CategoryTypesValues}
+                                                                            styles={{
+                                                                                control: base => ({
+                                                                                    ...base,
+                                                                                    border: isError.GroupMasterName.length > 0 ? '1px solid red' : '',
+
+                                                                                })
+                                                                            }}
+                                                                        />
+                                                                        {isError.GroupMasterName.length > 0 && (
+                                                                            <span className="text-danger f-8"><small>{isError.GroupMasterName}</small></span>
+                                                                        )}
+                                                                    </Col>
+                                                                </FormGroup>
+                                                            </Col>
+                                                        </Row>
+
                                                         <FormGroup>
                                                             <Row>
                                                                 <Col sm={2}>
-                                                                    <div>
-                                                                        {
-                                                                            pageMode === "edit" ?
-                                                                                userPageAccessState.RoleAccess_IsEdit ?
-                                                                                    <button
-                                                                                        type="submit"
-                                                                                        data-mdb-toggle="tooltip" data-mdb-placement="top" title="Update Party Type"
-                                                                                        className="btn btn-success w-md mt-3"
-                                                                                    >
-                                                                                        <i class="fas fa-edit me-2"></i>Update
-                                                                                    </button>
-                                                                                    :
-                                                                                    <></>
-                                                                                : (
-
-                                                                                    userPageAccessState.RoleAccess_IsSave ?
-                                                                                        <button
-                                                                                            type="submit"
-                                                                                            data-mdb-toggle="tooltip" data-mdb-placement="top" title="Save Party Type"
-                                                                                            className="btn btn-primary w-md mt-3 "
-                                                                                        > <i className="fas fa-save me-2"></i> Save
-                                                                                        </button>
-                                                                                        :
-                                                                                        <></>
-                                                                                )
-                                                                        }
-                                                                    </div>
+                                                                    {SaveButton({ pageMode, userPageAccessState, module: "GroupMaster" })}
                                                                 </Col>
                                                             </Row>
-                                                        </FormGroup>
+                                                        </FormGroup >
                                                     </Row>
 
                                                 </CardBody>
@@ -296,11 +332,12 @@ const GroupTypeMaster = (props) => {
                                     </Row>
                                 </form>
                             </CardBody>
+
                         </Card>
 
                     </Container>
                 </div>
-            </React.Fragment>
+            </React.Fragment >
         );
     }
     else {
@@ -310,4 +347,5 @@ const GroupTypeMaster = (props) => {
     }
 };
 
-export default GroupTypeMaster
+export default GroupMaster
+
