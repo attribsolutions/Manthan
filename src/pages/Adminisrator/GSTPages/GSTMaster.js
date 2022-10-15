@@ -25,7 +25,7 @@ import paginationFactory, {
 import ToolkitProvider, { Search } from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 import { AvField, AvForm } from "availity-reactstrap-validation";
-import { deleteGSTForMasterPage, deleteGSTForMasterPageSuccess, postGoButtonForGST_Master, postGoButtonForGST_Master_Success, postGSTMasterData, postGSTMasterDataSuccess } from "../../../store/Administrator/GSTRedux/action";
+import { deleteGSTForMasterPage, deleteGSTForMasterPageSuccess, getGSTListPage, postGoButtonForGST_Master, postGoButtonForGST_Master_Success, postGSTMasterData, postGSTMasterDataSuccess } from "../../../store/Administrator/GSTRedux/action";
 
 const GSTMaster = (props) => {
     const dispatch = useDispatch();
@@ -75,7 +75,7 @@ const GSTMaster = (props) => {
     }, [userAccess])
 
     useEffect(() => {
-        debugger
+
         const editDataGatingFromList = history.location.editValue
 
         const locationPath = history.location.pathname
@@ -148,7 +148,7 @@ const GSTMaster = (props) => {
                     Type: 1,
                     Status: true,
                     Message: deleteMessage.Message,
-                    //   AfterResponseAction: getMRPListPage,
+                    AfterResponseAction: getGSTListPage,
                 })
             );
         } else if (deleteMessage.Status === true) {
@@ -347,26 +347,42 @@ const GSTMaster = (props) => {
 
     //'Save' And 'Update' Button Handller
     const handleValidSubmit = (event, values) => {
-        
+debugger
         var ItemData = TableData.map((index) => ({
             EffectiveDate: effectiveDate,
             Company: 1,
             CreatedBy: 1,
-            IsDeleted:0,
+            IsDeleted: 0,
             UpdatedBy: 1,
             Item: index.Item,
             GSTPercentage: index.GSTPercentage,
             HSNCode: index.HSNCode,
-            id:index.id
+            id: index.id
         }))
+
 
         const Find = ItemData.filter((index) => {
             return (!(index.GSTPercentage === '') && !(index.HSNCode === '') && (index.id === ''))
         })
+
+
         const jsonBody = JSON.stringify(Find)
 
-        dispatch(postGSTMasterData(jsonBody));
-        console.log("jsonBody", jsonBody)
+        if (!(Find.length > 0) && !(editMode)) {
+            // dispatch(AlertState({
+            //     Type: 4, Status: true,
+            //     Message: "At Least one MRP add",
+            //     RedirectPath: false,
+            //     PermissionAction: false,
+            // }));
+            alert("At Least one MRP add")
+        }
+
+        else {
+            dispatch(postGSTMasterData(jsonBody));
+            console.log("jsonBody", jsonBody)
+        }
+
     };
 
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
@@ -423,7 +439,7 @@ const GSTMaster = (props) => {
                                                             </Col>
                                                         </FormGroup>
                                                     </Col>
-                                                  
+
                                                     <Col md="3" >
                                                         <Button type="button" color="btn btn-outline-success border-2 font-size-12" onClick={() => { GoButton_Handler() }} >Go</Button>
 
@@ -456,6 +472,7 @@ const GSTMaster = (props) => {
                                                                         striped={false}
                                                                         // defaultSorted={defaultSorted}
                                                                         classes={"table  table-bordered"}
+                                                                        noDataIndication={<div className="text-danger text-center ">Items Not available</div>}
                                                                         {...toolkitProps.baseProps}
                                                                         {...paginationTableProps}
                                                                     />

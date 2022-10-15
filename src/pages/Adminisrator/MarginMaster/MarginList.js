@@ -220,6 +220,7 @@ const MarginList = (props) => {
                               bordered={true}
                               striped={false}
                               classes={"table align-middle table-nowrap table-hover"}
+                              // noDataIndication={<div className="text-danger text-center ">Items Not available</div>}
                               headerWrapperClasses={"thead-light"}
                               {...toolkitProps.baseProps}
                               {...paginationTableProps}

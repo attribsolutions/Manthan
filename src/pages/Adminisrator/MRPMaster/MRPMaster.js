@@ -70,7 +70,7 @@ const MRPMaster = (props) => {
         Division: state.ItemMastersReducer.Division,
         userAccess: state.Login.RoleAccessUpdateData,
     }));
-    console.log("Go button List Data",TableData)
+    console.log("Go button List Data", TableData)
     const location = { ...history.location }
     const hasShowModal = props.hasOwnProperty("editValue")
 
@@ -178,7 +178,7 @@ const MRPMaster = (props) => {
                     Type: 1,
                     Status: true,
                     Message: deleteMessage.Message,
-                    // AfterResponseAction: getMRPListPage,
+                    AfterResponseAction: getMRPListPage,
                 })
             );
         } else if (deleteMessage.Status === true) {
@@ -216,7 +216,7 @@ const MRPMaster = (props) => {
     }
 
     const MRPHandler = (e, cellContent, user, abd) => {
-        
+
         user["MRP"] = e.target.value
     }
 
@@ -249,7 +249,7 @@ const MRPMaster = (props) => {
             EffectiveDate: effectiveDate
         });
 
-         if (!(effectiveDate)) {
+        if (!(effectiveDate)) {
             alert("EffectiveDate not select")
         }
         dispatch(postGoButtonForMRP_Master(jsonBody))
@@ -376,7 +376,7 @@ const MRPMaster = (props) => {
             IsAdd: true,
             Item: index.Item,
             MRP: index.MRP,
-            id:index.id
+            id: index.id
 
         }))
 
@@ -510,6 +510,7 @@ const MRPMaster = (props) => {
                                                                         striped={false}
                                                                         // defaultSorted={defaultSorted}
                                                                         classes={"table  table-bordered"}
+                                                                        // noDataIndication={<div className="text-danger text-center ">Items Not available</div>}
                                                                         {...toolkitProps.baseProps}
                                                                         {...paginationTableProps}
                                                                     />
