@@ -158,7 +158,7 @@ const CategoryMaster = (props) => {
             }
 
             if (hasEditVal) {
-                debugger
+            
                 const { id, Name, CategoryTypeName} = hasEditVal
                 const { values, fieldLabel, hasValid, required, isError } = { ...state }
                 values.Name = Name;
@@ -293,7 +293,6 @@ const CategoryMaster = (props) => {
                                                                     onChangeText({ event, state, setState })
                                                                     dispatch(BreadcrumbShow(event.target.value))
                                                                 }}
-
                                                             />
                                                             {isError.Name.length > 0 && (
                                                                 <span className="invalid-feedback">{isError.Name}</span>
