@@ -70,7 +70,7 @@ const MRPMaster = (props) => {
         Division: state.ItemMastersReducer.Division,
         userAccess: state.Login.RoleAccessUpdateData,
     }));
-
+    console.log("Go button List Data",TableData)
     const location = { ...history.location }
     const hasShowModal = props.hasOwnProperty("editValue")
 

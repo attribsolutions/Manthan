@@ -3,6 +3,7 @@ import {
     DELETE_MARGIN_LIST_PAGE_SUCCESS,
     EDIT_MARGIN_LIST_PAGE_SUCCESS,
     GET_MARGIN_LIST_PAGE_SUCCESS,
+    POST_GO_BUTTON_FOR_MARGIN_MASTER,
     POST_GO_BUTTON_FOR_MARGIN_MASTER_SUCCESS,
     POST_MARGIN_MASTER_DATA_SUCCESS,
     UPDATE_MARGIN_LIST_PAGE_SUCCESS
@@ -15,7 +16,7 @@ const INIT_STATE = {
     editData: { Status: false },
     updateMessage: { Status: false },
     MarginGoButton: [],
-    deleteId_For_MarginMaster:{ Status: false },
+    deleteId_For_MarginMaster: { Status: false },
 };
 
 const MarginMasterReducer = (state = INIT_STATE, action) => {
@@ -52,6 +53,12 @@ const MarginMasterReducer = (state = INIT_STATE, action) => {
             return {
                 ...state,
                 updateMessage: action.payload,
+            };
+
+        case POST_GO_BUTTON_FOR_MARGIN_MASTER:
+            return {
+                ...state,
+                MarginGoButton: [],
             };
 
         // Go Button post api
