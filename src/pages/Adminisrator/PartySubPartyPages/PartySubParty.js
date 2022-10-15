@@ -57,12 +57,12 @@ const PartySubParty = (props) => {
             PostAPIResponse: state.PartySubPartyReducer.PostDataMessage,
             Divisions: state.ItemMastersReducer.Division,
             Party: state.ItemMastersReducer.Party,
-            // pageField: state.CommonPageFieldReducer.pageField,
+           pageField: state.CommonPageFieldReducer.pageField,
             userAccess: state.Login.RoleAccessUpdateData,
         }));
-    // useEffect(() => {
-    //     dispatch(commonPageField(121))
-    // }, []);
+    useEffect(() => {
+        dispatch(commonPageField(121))
+    }, []);
 
 
     {/*start */ }
@@ -186,23 +186,26 @@ const PartySubParty = (props) => {
     }));
 
     const formSubmitHandler = (event) => {
+     
         event.preventDefault();
         if (formValid(state, setState)) {
-            const jsonBody = JSON.stringify({
+            const jsonBody = JSON.stringify([{
                 Party: Division_dropdown_Select.values,
-                SubParty: Party_dropdown_Select.values,
+               SubParty: Party_dropdown_Select.values,
                 CreatedBy: 1,
                 UpdatedBy: 1,
                 
-            });
-            console.log(" jsonBody", jsonBody)
+        }]);
+         
             if (pageMode === "edit") {
                 // dispatch(updateCategoryID(jsonBody, EditData.id));
             }
             else {
                 dispatch(PostMethodForPartySubParty(jsonBody));
             }
+       
         }
+      
     };
 
 
@@ -312,7 +315,7 @@ const PartySubParty = (props) => {
                                                                 <Col sm={3} style={{ marginTop: '28px' }}>
                                                                     {PartyData.length > 0 ? (
 
-                                                                        <div className="table-responsive">
+                                                                        <div>
                                                                             <Table className="table table-bordered  text-center">
                                                                                 <Thead>
                                                                                     <tr>
