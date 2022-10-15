@@ -189,14 +189,11 @@ const PartySubParty = (props) => {
         event.preventDefault();
         if (formValid(state, setState)) {
             const jsonBody = JSON.stringify({
-                Party: values.Party,
-                SubParty: values.SubParty,
-                Division: Division_dropdown_Select.values,
-                Party: Party_dropdown_Select.values,
+                Party: Division_dropdown_Select.values,
+                SubParty: Party_dropdown_Select.values,
                 CreatedBy: 1,
-                CreatedOn: "2022-08-29T12:48:14.956465",
                 UpdatedBy: 1,
-                UpdatedOn: "2022-08-29T12:48:14.956465"
+                
             });
             console.log(" jsonBody", jsonBody)
             if (pageMode === "edit") {
@@ -212,7 +209,7 @@ const PartySubParty = (props) => {
     /// Role Table Validation
     function AddPartyHandler() {
         const find = PartyData.find((element) => {
-            return element.value === Party_dropdown_Select.value
+            return element.value === Party_dropdown_Select.values
         });
 
         if (Party_dropdown_Select.length <= 0) {
