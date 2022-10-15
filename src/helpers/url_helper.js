@@ -149,3 +149,7 @@ export const GROUPMASTER_API = '/Group'
 export const GST_LIST_API = '/GstHsnCode' // for list page
 export const GO_BUTTON_POST_API_FOR_GST_MASTER = '/GetGstHsncode' // for go button
 export const DELETE_API_FOR_LIST_GST_PAGE = '/DeleteGstHsnCodeOnList' // for delete 
+
+//PartySubParty
+export const PARTY_SUBPARTY_API = '/PartySubParty' // FOR POST
+

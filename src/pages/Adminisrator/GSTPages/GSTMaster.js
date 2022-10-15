@@ -352,6 +352,7 @@ const GSTMaster = (props) => {
             EffectiveDate: effectiveDate,
             Company: 1,
             CreatedBy: 1,
+            IsDeleted:0,
             UpdatedBy: 1,
             Item: index.Item,
             GSTPercentage: index.GSTPercentage,

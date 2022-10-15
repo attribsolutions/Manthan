@@ -31,7 +31,8 @@ function GSTTab(props) {
             UpdatedBy: 1,
             Company: 1,
             CommonID:0,
-            IsAdd:true
+            IsDeleted:0,
+            IsAdd:true,
         };
 
         if (!(GST === "")

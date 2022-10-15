@@ -73,6 +73,8 @@ function MRPTab(props) {
       CreatedBy: 1,
       UpdatedBy: 1,
       Company: 1,
+      IsDeleted:0,
+      CommonID:0,
       IsAdd:true
     };
 
