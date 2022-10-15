@@ -42,14 +42,11 @@ const MarginMasterReducer = (state = INIT_STATE, action) => {
                 deleteMsg: action.payload,
             };
 
-
-
         case EDIT_MARGIN_LIST_PAGE_SUCCESS:
             return {
                 ...state,
                 editData: action.payload,
             };
-
 
         case UPDATE_MARGIN_LIST_PAGE_SUCCESS:
             return {

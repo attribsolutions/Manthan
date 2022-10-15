@@ -357,10 +357,11 @@ const GSTMaster = (props) => {
             Item: index.Item,
             GSTPercentage: index.GSTPercentage,
             HSNCode: index.HSNCode,
+            id:index.id
         }))
 
         const Find = ItemData.filter((index) => {
-            return (!(index.GSTPercentage === '') && !(index.HSNCode === ''))
+            return (!(index.GSTPercentage === '') && !(index.HSNCode === '') && (index.id === ''))
         })
         const jsonBody = JSON.stringify(Find)
 

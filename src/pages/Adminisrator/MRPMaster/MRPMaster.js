@@ -107,7 +107,7 @@ const MRPMaster = (props) => {
         })
 
         if (!(editDataGatingFromList === undefined)) {
-            
+
             var divisionid = editDataGatingFromList.Division_id
             var divisionName = editDataGatingFromList.DivisionName
             var partyId = editDataGatingFromList.Party_id
@@ -216,6 +216,7 @@ const MRPMaster = (props) => {
     }
 
     const MRPHandler = (e, cellContent, user, abd) => {
+        
         user["MRP"] = e.target.value
     }
 
@@ -322,6 +323,7 @@ const MRPMaster = (props) => {
                         <Col>
                             <FormGroup className=" col col-sm-4 ">
                                 <Input
+                                    id="MRPid"
                                     type="text"
                                     defaultValue={TableData[key].MRP}
                                     disabled={!(user.MRP === '') ? true : false}
@@ -365,7 +367,7 @@ const MRPMaster = (props) => {
 
     //'Save' And 'Update' Button Handller
     const handleValidSubmit = (event, values) => {
-        
+
         var ItemData = TableData.map((index) => ({
             Division: division_dropdown_Select.value,
             Party: party_dropdown_Select.value,
@@ -373,19 +375,21 @@ const MRPMaster = (props) => {
             Company: 1,
             CreatedBy: 1,
             UpdatedBy: 1,
-            IsDeleted:0,
+            IsDeleted: 0,
+            IsAdd: true,
             Item: index.Item,
             MRP: index.MRP,
-            
+            id:index.id
+
         }))
 
         const Find = ItemData.filter((index) => {
-            return !(index.MRP === '')
+            return (!(index.MRP === '') && (index.id === ''))
         })
 
         const jsonBody = JSON.stringify(Find)
         dispatch(postMRPMasterData(jsonBody));
-        console.log("postMRPMasterData", jsonBody)
+        console.log("post Data", jsonBody)
 
     };
 
