@@ -249,10 +249,7 @@ const MRPMaster = (props) => {
             EffectiveDate: effectiveDate
         });
 
-        if (!(division.value)) {
-            alert("Division value not select")
-        }
-        else if (!(effectiveDate)) {
+         if (!(effectiveDate)) {
             alert("EffectiveDate not select")
         }
         dispatch(postGoButtonForMRP_Master(jsonBody))
