@@ -31,11 +31,11 @@ const MRPMasterReducer = (state = INIT_STATE, action) => {
                 postMsg: action.payload,
             };
 
-            case POST_GO_BUTTON_FOR_MRP_MASTER:
-            return {
-                ...state,
-                MRPGoButton: [],
-            };
+            // case POST_GO_BUTTON_FOR_MRP_MASTER:
+            // return {
+            //     ...state,
+            //     MRPGoButton: [],
+            // };
 
         // Go Button post api
         case POST_GO_BUTTON_FOR_MRP_MASTER_SUCCESS:

@@ -198,7 +198,7 @@ const MarginMaster = (props) => {
             alert("EffectiveDate not select")
         }
         dispatch(postGoButtonForMargin_Master(jsonBody))
-        console.log(jsonBody)
+        console.log("Go Button Post Json", jsonBody)
     };
 
     //select id for delete row
@@ -357,7 +357,7 @@ const MarginMaster = (props) => {
 
     //'Save' And 'Update' Button Handller
     const handleValidSubmit = (event, values) => {
-     
+        debugger
         var ItemData = TableData.map((index) => ({
             PriceList: priceList_dropdown_Select.value,
             Party: partyName_dropdown_Select.value,
@@ -365,16 +365,16 @@ const MarginMaster = (props) => {
             Company: 1,
             CreatedBy: 1,
             UpdatedBy: 1,
-            IsDeleted:0,
+            IsDeleted: 0,
             Item: index.Item,
-            Margin: index.Margin
+            Margin: index.Margin,
+            id:index.id
         }))
 
         const Find = ItemData.filter((index) => {
-            return !(index.Margin === '')
+            return (!(index.Margin === '') && (index.id === ''))
         })
 
-        console.log("Find", Find)
         const jsonBody = JSON.stringify(Find)
 
         dispatch(postMarginMasterData(jsonBody));
