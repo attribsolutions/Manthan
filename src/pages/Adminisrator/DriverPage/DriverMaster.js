@@ -124,7 +124,7 @@ const DriverMaster = (props) => {
     // new change
     // userAccess useEffect
     useEffect(() => {
-        debugger
+       
         let userAcc = null;
         let locationPath = location.pathname;
 
