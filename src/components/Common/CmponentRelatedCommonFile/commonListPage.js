@@ -71,7 +71,7 @@ const CommonListPage = (props) => {
     }
   }, [userAccess])
 
-
+debugger
   // This UseEffect => UpadateModal Success/Unsucces  Show and Hide Control Alert_modal
   useEffect(() => {
 
@@ -226,14 +226,14 @@ const CommonListPage = (props) => {
             {({ paginationProps, paginationTableProps }) => (
               <ToolkitProvider
                 keyField="id"
-                defaultSorted={defaultSorted}
+                // defaultSorted={defaultSorted}
                 data={tableList}
                 columns={columns}
                 search
               >
                 {(toolkitProps) => (
                   <React.Fragment>
-                    <Breadcrumbs
+                    {/* <Breadcrumbs
                       title={"Count :"}
                       breadcrumbItem={userPageAccessState.PageHeading}
                       IsButtonVissible={(userPageAccessState.RoleAccess_IsSave) ? true : false}
@@ -243,7 +243,7 @@ const CommonListPage = (props) => {
                       RedirctPath={masterPath}
                       isExcelButtonVisible={true}
                       ExcelData={tableList}
-                    />
+                    /> */}
                     <Row>
                       <Col xl="12">
                         <div className="table-responsive">
