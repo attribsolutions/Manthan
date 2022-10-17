@@ -500,6 +500,7 @@ const MarginMaster = (props) => {
                                                                         bordered={false}
                                                                         striped={false}
                                                                         classes={"table  table-bordered"}
+                                                                        noDataIndication={<div className="text-danger text-center ">Items Not available</div>}
                                                                         {...toolkitProps.baseProps}
                                                                         {...paginationTableProps}
                                                                     />

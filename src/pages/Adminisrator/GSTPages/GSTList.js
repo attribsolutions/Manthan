@@ -54,7 +54,7 @@ const GSTList = (props) => {
     }, []);
 
     useEffect(() => {
-        debugger
+        
         if ((deleteMsg.Status === true) && (deleteMsg.StatusCode === 200)) {
             dispatch(deleteGSTListPageSuccess({ Status: false }));
             dispatch(
@@ -62,7 +62,7 @@ const GSTList = (props) => {
                     Type: 1,
                     Status: true,
                     Message: deleteMsg.Message,
-                    // AfterResponseAction: getGSTListPage,
+                    AfterResponseAction: getGSTListPage,
                 })
             );
         } else if (deleteMsg.Status === true) {
@@ -213,6 +213,7 @@ const GSTList = (props) => {
                                                             // cellEdit={cellEditFactory({ mode: 'dbclick' ,blurToSave: true})}
                                                             // defaultSorted={commonDefaultSorted("Name")}
                                                             classes={"table align-middle table-nowrap table-hover"}
+                                                            noDataIndication={<div className="text-danger text-center ">Items Not available</div>}
                                                             headerWrapperClasses={"thead-light"}
                                                             {...toolkitProps.baseProps}
                                                             {...paginationTableProps}

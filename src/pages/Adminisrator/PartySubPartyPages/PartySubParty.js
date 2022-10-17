@@ -12,36 +12,27 @@ import {
     Row,
     Table,
 } from "reactstrap";
-import { AvField, AvForm, } from "availity-reactstrap-validation";
 import Select from "react-select";
 import { MetaTags } from "react-meta-tags";
-import { BreadcrumbShow, commonPageField } from "../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
 import {
-    PostMethodForPartySubParty,
-    PostMethod_ForPartySubPartyAPISuccess
+    postPartySubParty,
+    postPartySubPartySuccess
 } from "../../../store/Administrator/PartySubPartyRedux/action";
 import { AlertState } from "../../../store/actions";
-import { CommonGetRoleAccessFunction } from "../../../components/Common/CommonGetRoleAccessFunction";
 import { useHistory } from "react-router-dom";
-import { get_Division_ForDropDown, get_Party_ForDropDown } from "../../../store/Administrator/ItemsRedux/action";
 import {
-    comAddPageFieldFunc,
-    formValChange,
-    formValid,
-    onChangeText
-} from "../../../components/Common/CmponentRelatedCommonFile/validationFunction";
+    get_Division_ForDropDown,
+    get_Party_ForDropDown
+} from "../../../store/Administrator/ItemsRedux/action";
+
 import { SaveButton } from "../../../components/CommonSaveButton";
 import { Tbody, Thead } from "react-super-responsive-table";
 
 const PartySubParty = (props) => {
-
-    let editDataGatingFromList = props.state;
-    let pageModeProps = props.pageMode;
-
-    const formRef = useRef(null);
+    
     const [EditData, setEditData] = useState([]);
-    const [pageMode, setPageMode] = useState("");
+    const [pageMode, setPageMode] = useState("save");
     const [PartyData, setPartyData] = useState([]);
     const [Division_dropdown_Select, setDivision_dropdown_Select] = useState("");
     const dispatch = useDispatch();
@@ -50,19 +41,20 @@ const PartySubParty = (props) => {
     const history = useHistory()
 
     //Access redux store Data /  'save_ModuleSuccess' action data
-    const { PostAPIResponse,
+    const { postMsg,
         Divisions,
         Party,
         userAccess } = useSelector((state) => ({
-            PostAPIResponse: state.PartySubPartyReducer.PostDataMessage,
+            postMsg: state.PartySubPartyReducer.postMsg,
             Divisions: state.ItemMastersReducer.Division,
             Party: state.ItemMastersReducer.Party,
-           pageField: state.CommonPageFieldReducer.pageField,
+            // pageField: state.CommonPageFieldReducer.pageField,
             userAccess: state.Login.RoleAccessUpdateData,
         }));
-    useEffect(() => {
-        dispatch(commonPageField(121))
-    }, []);
+
+    // useEffect(() => {
+    //     dispatch(commonPageField(121))
+    // }, []);
 
 
     {/*start */ }
@@ -124,32 +116,30 @@ const PartySubParty = (props) => {
             setUserPageAccessState(userAcc)
         };
     }, [userAccess])
-
     useEffect(() => {
-
-        if ((PostAPIResponse.Status === true) && (PostAPIResponse.StatusCode === 200)) {
-            setDivision_dropdown_Select('')
-            setParty_dropdown_Select('')
-            dispatch(PostMethod_ForPartySubPartyAPISuccess({ Status: false }))
-            formRef.current.reset();
-            if (pageMode === "other") {
+        debugger
+        if ((postMsg.Status === true) && (postMsg.StatusCode === 200) && !(pageMode === "dropdownAdd")) {
+            // setDivision_dropdown_Select('')
+            // setParty_dropdown_Select('')
+            dispatch(postPartySubPartySuccess({ Status: false }))
+            if (pageMode === "dropdownAdd") {
                 dispatch(AlertState({
                     Type: 1,
                     Status: true,
-                    Message: PostAPIResponse.Message,
+                    Message: postMsg.Message,
                 }))
             }
             else {
                 dispatch(AlertState({
                     Type: 1,
                     Status: true,
-                    Message: PostAPIResponse.Message,
-                    //     RedirectPath: CATEGORY_lIST,
+                    Message: postMsg.Message,
+                    RedirectPath: false,
                 }))
             }
         }
-        else if (PostAPIResponse.Status === true) {
-            dispatch(PostMethod_ForPartySubPartyAPISuccess({ Status: false }))
+        else if ((postMsg.Status === true) && !(pageMode === "dropdownAdd")) {
+            dispatch(postPartySubPartySuccess({ Status: false }))
             dispatch(AlertState({
                 Type: 4,
                 Status: true,
@@ -158,7 +148,9 @@ const PartySubParty = (props) => {
                 AfterResponseAction: false
             }));
         }
-    }, [PostAPIResponse])
+    }, [postMsg])
+
+
 
     //get method for dropdown
     useEffect(() => {
@@ -186,33 +178,44 @@ const PartySubParty = (props) => {
     }));
 
     const formSubmitHandler = (event) => {
-     
+
         event.preventDefault();
-        if (formValid(state, setState)) {
-            const jsonBody = JSON.stringify([{
-                Party: Division_dropdown_Select.values,
-               SubParty: Party_dropdown_Select.values,
-                CreatedBy: 1,
-                UpdatedBy: 1,
-                
-        }]);
-         
-            if (pageMode === "edit") {
-                // dispatch(updateCategoryID(jsonBody, EditData.id));
-            }
-            else {
-                dispatch(PostMethodForPartySubParty(jsonBody));
-            }
-       
-        }
-      
+        // if (formValid(state, setState)) {
+        //     const arr = PartyData.map(i => ({
+        //         Party: Division_dropdown_Select.value,
+        //         SubParty: i.value,
+        //         CreatedBy: 1,
+        //         UpdatedBy: 1,
+
+        //     }))
+        //     const jsonBody = JSON.stringify(arr);
+        //     console.log(" jsonBody", jsonBody)
+        //     if (pageMode === "edit") {
+        //         // dispatch(updateCategoryID(jsonBody, EditData.id));
+        //     }
+        //     else {
+        //         dispatch(PostMethodForPartySubParty(jsonBody));
+        //     }
+        // }
+
+        const arr = PartyData.map(i => ({
+            Party: Division_dropdown_Select.value,
+            SubParty: i.value,
+            CreatedBy: 1,
+            UpdatedBy: 1,
+
+        }))
+        const jsonBody = JSON.stringify(arr);
+        console.log(" jsonBody", jsonBody)
+        dispatch(postPartySubParty(jsonBody));
     };
 
 
     /// Role Table Validation
     function AddPartyHandler() {
+        debugger
         const find = PartyData.find((element) => {
-            return element.value === Party_dropdown_Select.values
+            return element.value === Party_dropdown_Select.value
         });
 
         if (Party_dropdown_Select.length <= 0) {
@@ -262,7 +265,7 @@ const PartySubParty = (props) => {
                             </CardHeader>
 
                             <CardBody className=" vh-10 0 text-black" style={{ backgroundColor: "#whitesmoke" }} >
-                                <form onSubmit={formSubmitHandler} ref={formRef} noValidate>
+                                <form onSubmit={formSubmitHandler} noValidate>
                                     <Row className="">
                                         <Col md={12}>
                                             <Card>
@@ -289,66 +292,65 @@ const PartySubParty = (props) => {
                                                             <Col md="4">
                                                                 <FormGroup className="mb-3">
                                                                     <Label htmlFor="validationCustom01"> Party</Label>
-                                                                    <Col sm={12}>
-                                                                        <Select
-                                                                            value={Party_dropdown_Select}
-                                                                            options={PartyValues}
-                                                                            onChange={(e) => { handllerParty(e) }}
+                                                                    <Select
+                                                                        value={Party_dropdown_Select}
+                                                                        options={PartyValues}
+                                                                        onChange={(e) => { handllerParty(e) }}
 
-                                                                        />
-                                                                         <Col sm={12} style={{ marginTop: '28px' }} >
+                                                                    />
 
-
-                                                                        <Button
-                                                                            type="button"
-                                                                            className="btn btn-sm mt-1 mb-0 btn-light  btn-outline-primary text-center"
-                                                                            onClick={() =>
-                                                                                AddPartyHandler()
-                                                                            }
-                                                                        >
-                                                                            <i className="dripicons-plus "></i>
-                                                                        </Button>
-                                                                    </Col> 
-                                                                    </Col>
                                                                 </FormGroup>
-                                                            
-                                                                <Col sm={3} style={{ marginTop: '28px' }}>
-                                                                    {PartyData.length > 0 ? (
-
-                                                                        <div>
-                                                                            <Table className="table table-bordered  text-center">
-                                                                                <Thead>
-                                                                                    <tr>
-                                                                                        <th>Party</th>
-
-                                                                                        <th>Action</th>
-                                                                                    </tr>
-                                                                                </Thead>
-                                                                                <Tbody>
-                                                                                    {PartyData.map((TableValue) => (
-                                                                                        <tr>
-                                                                                            <td>
-                                                                                                {TableValue.label}
-                                                                                            </td>
-                                                                                            <td>
-                                                                                                <i className="mdi mdi-trash-can d-block text-danger font-size-20" onClick={() => {
-                                                                                                    UserRoles_DeleteButton_Handller(TableValue.value)
-                                                                                                }} >
-                                                                                                </i>
-                                                                                            </td>
-                                                                                        </tr>
-                                                                                    ))}
-                                                                                </Tbody>
-                                                                            </Table>
-                                                                        </div>
-                                                                    ) : (
-                                                                        <>
-                                                                        </>
-                                                                    )}
-                                                                </Col>
-
 
                                                             </Col>
+                                                            <Col sm={2} style={{ marginTop: '28px' }} >
+                                                                <Button
+                                                                    type="button"
+                                                                    className="btn btn-sm mt-1 mb-0 btn-light  btn-outline-primary text-center"
+                                                                    onClick={() =>
+                                                                        AddPartyHandler()
+                                                                    }
+                                                                >
+                                                                    <i className="dripicons-plus "></i>
+                                                                </Button>
+                                                            </Col>
+
+                                                        </Row>
+                                                        <Row>
+                                                            <Col sm={3} style={{ marginTop: '28px' }}>
+                                                                {PartyData.length > 0 ? (
+
+                                                                    <div className="table">
+                                                                        <Table className="table table-bordered  text-center">
+                                                                            <Thead>
+                                                                                <tr>
+                                                                                    <th>Party</th>
+
+                                                                                    <th>Action</th>
+                                                                                </tr>
+                                                                            </Thead>
+                                                                            <Tbody>
+                                                                                {PartyData.map((TableValue) => (
+                                                                                    <tr>
+                                                                                        <td>
+                                                                                            {TableValue.label}
+                                                                                        </td>
+                                                                                        <td>
+                                                                                            <i className="mdi mdi-trash-can d-block text-danger font-size-20" onClick={() => {
+                                                                                                UserRoles_DeleteButton_Handller(TableValue.value)
+                                                                                            }} >
+                                                                                            </i>
+                                                                                        </td>
+                                                                                    </tr>
+                                                                                ))}
+                                                                            </Tbody>
+                                                                        </Table>
+                                                                    </div>
+                                                                ) : (
+                                                                    <>
+                                                                    </>
+                                                                )}
+                                                            </Col>
+
                                                         </Row>
 
                                                         <FormGroup>

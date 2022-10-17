@@ -2,6 +2,7 @@ import {
   DELETE_GST_FOR_MASTER_PAGE_SUCCESS,
   DELETE_GST_LIST_PAGE_SUCCESS,
   GET_GST_LIST_PAGE_SUCCESS,
+  POST_GO_BUTTON_FOR_GST_MASTER,
   POST_GO_BUTTON_FOR_GST_MASTER_SUCCESS,
   POST_GST_MASTER_DATA_SUCCESS
 } from "./actionType"
@@ -22,6 +23,12 @@ const GSTReducer = (state = INIT_STATE, action) => {
         ...state,
         postMsg: action.payload,
       };
+
+      case  POST_GO_BUTTON_FOR_GST_MASTER:
+            return {
+                ...state,
+                GSTGoButton: [],
+            };
 
     // Go Button post api
     case POST_GO_BUTTON_FOR_GST_MASTER_SUCCESS:
