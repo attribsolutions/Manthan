@@ -11,6 +11,7 @@ import {
 } from "../../../store/Administrator/VehicleRedux/action";
 import CommonListPage from "../../../components/Common/CmponentRelatedCommonFile/commonListPage";
 import { commonPageFieldList, commonPageFieldListSuccess, } from "../../../store/actions";
+import { VEHICLE } from "../../../routes/route_url";
 
 const VehicleList = (props) => {
 
@@ -30,10 +31,10 @@ const VehicleList = (props) => {
   const action = {
     getList: getMethodForVehicleList,
     editId: editVehicleTypeId,
-    deleteId: deleteVehicleTypeIDSuccess,
+    deleteId: delete_VehicleType_ID,
     postSucc: PostMethod_ForVehicleMasterSuccess,
     updateSucc: updateVehicleTypeIDSuccess,
-    deleteSucc: delete_VehicleType_ID
+    deleteSucc: deleteVehicleTypeIDSuccess,
   }
 
 
@@ -54,7 +55,7 @@ const VehicleList = (props) => {
             action={action}
             reducers={reducers}
             MasterModal={VehicleMaster}
-            masterPath={"/VehicleMaster"}
+            masterPath={VEHICLE}
             ButtonMsgLable={"Vehicle"}
             deleteName={"VehicleNumber"}
 
