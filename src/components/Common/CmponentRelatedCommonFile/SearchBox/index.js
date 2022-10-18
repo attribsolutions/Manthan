@@ -1,14 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux';
-import './Search.scss'
-import { Search } from "react-bootstrap-table2-toolkit";
-let view = false;
-const onchange = (e) => {
-    e.preventDefault();
-    view = e.target.value.length
-}
-export default function SearchBoxSecond() {
-    const { SearchBar } = Search;
+import '../../../../assets/searchBox/search.scss'
+import { MySearch } from './MySearch';
+
+export const MainSearchBox = () => {
 
     const [searchRoleData, setSearchRoleData] = useState([])
     // const  RoleAccessData=demoRolleAcess
@@ -148,94 +143,6 @@ export default function SearchBoxSecond() {
             });
         }
 
-        /*An array containing all the country names in the world:*/
-
-
-
-        var countries = [
-            {
-                ID: 2,
-                Name: "Module List",
-                DisplayIndex: 2,
-                Icon: "Module List",
-                ActualPagePath: "/ModulesList"
-            },
-            {
-                ID: 3,
-                Name: "Modules Master",
-                DisplayIndex: 1,
-                Icon: "Modules Master",
-                ActualPagePath: "ModulesMaster"
-            },
-            {
-                ID: 4,
-                Name: "Company Master",
-                DisplayIndex: 3,
-                Icon: "Companys Master",
-                ActualPagePath: "companyMaster"
-            },
-            {
-                ID: 5,
-                Name: "Company List",
-                DisplayIndex: 3,
-                Icon: "CompanyList",
-                ActualPagePath: "companyList"
-            },
-            {
-                ID: 6,
-                Name: "Pages Master",
-                DisplayIndex: 5,
-                Icon: "pagesMaster",
-                ActualPagePath: "pagesMaster"
-            },
-            {
-                ID: 7,
-                Name: "Pages List",
-                DisplayIndex: 3,
-                Icon: "Pages List",
-                ActualPagePath: "PagesList"
-            },
-            {
-                ID: 8,
-                Name: "Users List",
-                DisplayIndex: 8,
-                Icon: "Users List",
-                ActualPagePath: "usersList"
-            },
-            {
-                ID: 9,
-                Name: "Users Master",
-                DisplayIndex: 7,
-                Icon: "Users Master",
-                ActualPagePath: "usersMaster"
-            },
-            {
-                ID: 2,
-                Name: "Module List1",
-                DisplayIndex: 2,
-                Icon: "Module List",
-                ActualPagePath: "/ModulesList"
-            }, {
-                ID: 2,
-                Name: "Module List2",
-                DisplayIndex: 2,
-                Icon: "Module List",
-                ActualPagePath: "/ModulesList"
-            }, {
-                ID: 2,
-                Name: "Module List3",
-                DisplayIndex: 2,
-                Icon: "Module List",
-                ActualPagePath: "/ModulesList"
-            }, {
-                ID: 2,
-                Name: "Module List4",
-                DisplayIndex: 2,
-                Icon: "Module List",
-                ActualPagePath: "/ModulesList"
-            },
-        ]
-
 
         /*initiate the autocomplete function on the "myInput" element, and pass along the countries array as possible autocomplete values:*/
         autocomplete(document.getElementById("myInput"), searchRoleData);
@@ -253,67 +160,3 @@ export default function SearchBoxSecond() {
     )
 }
 
-let props2 = function onSearch() { }
-
-export const mySearchProps = (props1) => {
-    props2 = props1;
-};
-
-let input;
-const handleClick = () => {
-    props2.onSearch(input.value);
-};
-function onChange2() {
-    debugger
-    var a = input.value
-
-    if (!(a[0] === "/")) {
-        const str = a.substring(1);
-        props2.onSearch(str);
-    }
-}
-
-
-
-
-
-
-
-const MySearch = () => {
-
-    let input;
-    const handleClick = (e) => {
-        debugger
-        var a = e.target.value
-
-    if (!(a[0] === "/")) {
-        const str = a.substring(1);
-        props2.onSearch(str);
-    }
-    };
-    function onChange() {
-       
-    }
-    return (
-        <div className="app-search d-none d-lg-block " style={{ marginTop: "-3px" }} autocomplete="off">
-            <div className="position-relative">
-                <input
-                    id="myInput"
-                    className="form-control"
-                    placeholder="Search..."
-                    // style={{ backgroundColor: 'pink' }}
-                    // ref={n => input = n}
-                    type="text"
-                    onChange={handleClick}
-                    name="myCountry"
-                />
-                <button className="btn btn-primary"
-                    onClick={handleClick}
-                    type="butten">
-                    <i className="bx bx-search-alt align-middle" />
-                </button>
-
-            </div>
-        </div>
-    );
-}

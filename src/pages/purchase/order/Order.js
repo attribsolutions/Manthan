@@ -30,6 +30,7 @@ import { getOrderItems_ForOrderPage, getOrderItems_ForOrderPageSuccess } from ".
 import { useHistory } from "react-router-dom";
 import { BreadcrumbFilterSize, BreadcrumbSearchProps } from "../../../store/actions";
 import { test } from "../../../components/Common/CmponentRelatedCommonFile/commonListPage";
+import { mySearchProps } from "../../Adminisrator/SearchBox/SearchBoxSecond";
 
 
 function Order() {
@@ -496,7 +497,7 @@ function Order() {
                                                     {...paginationTableProps}
                                                 />
                                                 {/* <MySearch {...toolkitProps.searchProps} /> */}
-                                                {MySearch(toolkitProps.searchProps)  }
+                                                {mySearchProps(toolkitProps.searchProps)  }
                                             </div>
                                         </Col>
                                     </Row>

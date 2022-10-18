@@ -41,6 +41,7 @@ import {
 } from "../../store/actions"
 import { CustomSearchInput } from '../../store/Utilites/CustomSearchRedux/actions';
 import SearchBoxSecond from '../../pages/Adminisrator/SearchBox/SearchBoxSecond';
+import { MainSearchBox, } from '../Common/CmponentRelatedCommonFile/searchBox/index';
 // import initialDetails from '../../pages/Adminisrator/SearchBox/initialDetails.js';
 
 
@@ -115,9 +116,10 @@ const Header = props => {
               type="button" className="btn btn-sm px-2 font-size-16 header-item" id="vertical-menu-btn">
               <i className="fa fa-fw fa-bars"></i>
             </button>
-            <SearchBoxSecond>
+            {/* <SearchBoxSecond/> */}
+            <MainSearchBox/>
              
-            </SearchBoxSecond>
+           
             {/* <form className="app-search d-none d-lg-block">
               <div className="position-relative">
                 <input type="text" className="form-control" placeholder="Search..." onChange={(e) => {searchFunctionHandller(e)}} />
