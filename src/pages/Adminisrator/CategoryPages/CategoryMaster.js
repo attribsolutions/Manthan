@@ -306,7 +306,7 @@ const CategoryMaster = (props) => {
                                                                     <Col sm={12}>
                                                                         <Select
                                                                             name="CategoryTypeName"
-                                                                            Value={values.CategoryType}
+                                                                            Value={values.CategoryTypeName}
                                                                             isSearchable={false}
                                                                             className="react-dropdown"
                                                                             classNamePrefix="dropdown"
