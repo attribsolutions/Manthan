@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import Select from "react-select";
-import { Card, CardBody, Col, Container, Row, CardHeader, Label, FormGroup, Input, } from "reactstrap";
+import { Card, CardBody, Col, Container, Row, CardHeader, Label, FormGroup, } from "reactstrap";
 import { AvForm, AvInput } from "availity-reactstrap-validation";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -20,15 +20,6 @@ import { Tbody, Thead } from "react-super-responsive-table";
 import { BreadcrumbShow } from "../../../store/Utilites/Breadcrumb/actions";
 import { MetaTags } from "react-meta-tags";
 import { useHistory } from "react-router-dom";
-import {
-  comAddPageFieldFunc,
-  formValid,
-  onChangeText,
-  onChangeSelect,
-  onChangeDate
-} from "../../../components/Common/CmponentRelatedCommonFile/validationFunction";
-import { commonPageField, commonPageFieldSuccess } from "../../../store/actions";
-import { SaveButton } from "../../../components/CommonSaveButton";
 
 const AddUser = (props) => {
 
@@ -58,93 +49,6 @@ const AddUser = (props) => {
   const [cPasswordClass, setCPasswordClass] = useState('form-control');
   const [isCPassword, setisCPassword] = useState(false);
 
-  const [state, setState] = useState({
-    values: {
-      ID: "",
-      LoginName: "",
-      EmployeeName: "",
-      isActive: "",
-      isSendOTP: ""
-    },
-    fieldLabel: {
-      ID: '',
-      LoginName: '',
-      EmployeeName: '',
-      isActive: '',
-      isSendOTP: ''
-    },
-
-    isError: {
-      ID: "",
-      LoginName: "",
-      EmployeeName: "",
-      isActive: '',
-      isSendOTP: ''
-    },
-
-    hasValid: {
-      ID: {
-        regExp: '',
-        inValidMsg: "",
-        valid: false
-      },
-      LoginName: {
-        regExp: '',
-        inValidMsg: "",
-        valid: false
-      },
-
-      EmployeeName: {
-        regExp: '',
-        inValidMsg: "",
-        valid: false
-      },
-      isActive: {
-        regExp: '',
-        inValidMsg: "",
-        valid: false
-      },
-
-      isSendOTP: {
-        regExp: '',
-        inValidMsg: "",
-        valid: false
-      }
-    },
-    required: {
-
-    }
-  }
-  )
-
-  //Access redux store Data /  'save_ModuleSuccess' action data
-  const {
-    PostAPIResponse,
-    employeelistForDropdown,
-    Roles,
-    pageField,
-    userPartiesForUserMaster_redux,
-    userAccess
-  } = useSelector((state) => ({
-    PostAPIResponse: state.User_Registration_Reducer.AddUserMessage,
-    userPartiesForUserMaster_redux: state.User_Registration_Reducer.userPartiesForUserMaster,
-    employeelistForDropdown: state.User_Registration_Reducer.employeelistForDropdown,
-    Roles: state.User_Registration_Reducer.Roles,
-    userAccess: state.Login.RoleAccessUpdateData,
-    pageField: state.CommonPageFieldReducer.pageField
-  }));
-
-  const location = { ...history.location }
-  const hasShowloction = location.hasOwnProperty("editValue")
-  const hasShowModal = props.hasOwnProperty("editValue")
-
-  useEffect(() => {
-    dispatch(commonPageFieldSuccess(null));
-    dispatch(commonPageField(4))
-  }, []);
-
-
-
 
   useEffect(() => {
     if (isCPassword) {
@@ -165,9 +69,28 @@ const AddUser = (props) => {
   }
 
 
+  //Access redux store Data /  'save_ModuleSuccess' action data
+  const {
+    PostAPIResponse,
+    employeelistForDropdown,
+    Roles,
+    userPartiesForUserMaster_redux,
+    userAccess
+  } = useSelector((state) => ({
+    PostAPIResponse: state.User_Registration_Reducer.AddUserMessage,
+    userPartiesForUserMaster_redux: state.User_Registration_Reducer.userPartiesForUserMaster,
+    employeelistForDropdown: state.User_Registration_Reducer.employeelistForDropdown,
+    Roles: state.User_Registration_Reducer.Roles,
+    userAccess: state.Login.RoleAccessUpdateData,
+    pageField: state.CommonPageFieldReducer.pageField
+  }));
+
+  const location = { ...history.location }
+  const hasShowloction = location.hasOwnProperty("editValue")
+  const hasShowModal = props.hasOwnProperty("editValue")
+
   // userAccess useEffect
   useEffect(() => {
-
     let userAcc = null;
     let locationPath = location.pathname;
 
@@ -204,7 +127,7 @@ const AddUser = (props) => {
   // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
   useEffect(() => {
 
-    if (!(userPageAccessState === '')) { document.getElementById("txtName").focus(); }
+    // if (!(userPageAccessState === '')) { document.getElementById("txtName").focus(); }
     if ((hasShowloction || hasShowModal)) {
 
       let hasEditVal = null
@@ -282,22 +205,10 @@ const AddUser = (props) => {
   }, [PostAPIResponse.Status])
 
   useEffect(() => {
-
-    if (pageField) {
-      const fieldArr = pageField.PageFieldMaster
-      comAddPageFieldFunc({ state, setState, fieldArr })
-    }
-  }, [pageField])
-
-  useEffect(() => {
     dispatch(getEmployeeForUseRegistration());
     dispatch(getRoles());
   }, [dispatch]);
 
-
-  const values = { ...state.values }
-  const { isError } = state;
-  const { fieldLabel } = state;
 
   const EmployeeValues = employeelistForDropdown.map((Data) => ({
     value: Data.id,
@@ -339,43 +250,40 @@ const AddUser = (props) => {
     }
   };
 
-  const formSubmitHandler = (event) => {
-    event.preventDefault();
-    if (formValid(state, setState)) {
-      const jsonBody = JSON.stringify({
-        email: values.email,
-        LoginName: values.LoginName,
-        password: "1234",
-        AdminPassword: "1234",
-        Employee: values.EmployeeName,
-         isActive: values.isActive,
-         isSendOTP: values.isSendOTP,
-         isLoginUsingMobile: values.isLoginUsingMobile,
-         isLoginUsingEmail: values.isLoginUsingEmail,
-        CreatedBy: 1,
-        UpdatedBy: 1,
-        UserRole: partyRoleData
-      })
-    
-      if (partyRoleData.length <= 0 && !(FindPartyID)) {
-        dispatch(AlertState({
-          Type: 4, Status: true,
-          Message: "At Least One Role Data Add in the Table",
-          RedirectPath: false,
-          PermissionAction: false,
-        }));
-      }
-      else if (pageMode === 'edit') {
+  const handleValidSubmit = (event, values) => {
+    debugger
+    const jsonBody = JSON.stringify({
+      email: values.email,
+      LoginName: values.loginName,
+      password: "1234",
+      AdminPassword: "1234",
+      Employee: EmployeeSelect.value,
+      isActive: values.isActive,
+      isSendOTP: values.isSendOTP,
+      isLoginUsingMobile: values.isLoginUsingMobile,
+      isLoginUsingEmail: values.isLoginUsingEmail,
+      CreatedBy: 1,
+      UpdatedBy: 1,
+      UserRole: partyRoleData
+    })
 
-        dispatch(updateID(jsonBody, EditData.id));
-        setEditData([]);
-        console.log("Update jsonBody", jsonBody)
-      }
-      else {
-        dispatch(addUser(jsonBody));
-        console.log("post jsonBody", jsonBody)
-        
-      }
+    if (partyRoleData.length <= 0 && !(FindPartyID)) {
+      dispatch(AlertState({
+        Type: 4, Status: true,
+        Message: "At Least One Role Data Add in the Table",
+        RedirectPath: false,
+        PermissionAction: false,
+      }));
+    }
+    else if (pageMode === 'edit') {
+
+      dispatch(updateID(jsonBody, EditData.id));
+      setEditData([]);
+      console.log("Update jsonBody", jsonBody)
+    }
+    else {
+      dispatch(addUser(jsonBody));
+      console.log("Post jsonBody", jsonBody)
     }
   };
 
@@ -426,7 +334,7 @@ const AddUser = (props) => {
     return (
       <React.Fragment>
         <MetaTags>
-          <title>{userPageAccessState.PageHeading}| FoodERP-React FrontEnd</title>
+          <title>User Registration| FoodERP-React FrontEnd</title>
         </MetaTags>
         <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
           <Breadcrumb breadcrumbItem={userPageAccessState.PageHeading} />
@@ -439,46 +347,26 @@ const AddUser = (props) => {
                     <p className="card-title-desc text-black">{userPageAccessState.PageDescriptionDetails}</p>
                   </CardHeader>
                   <CardBody className="text-black">
-                    <form onSubmit={formSubmitHandler} ref={formRef} noValidate>
+                    <AvForm
+                      onValidSubmit={(e, v) => {
+                        handleValidSubmit(e, v);
+                      }}
+                      ref={formRef}
+                    >
                       <Card className=" text-black">
                         <CardBody style={{ backgroundColor: "whitesmoke" }}>
                           <Row >
 
                             <div>
                               <FormGroup className="mb-2 col col-sm-4 " >
-                                <Label htmlFor="validationCustom01">{fieldLabel.EmployeeName}</Label>
-
-                                {/* <Input name="EmployeeName" id="txtName"
-                                type="text"
-                                placeholder="Please Enter Name"
-                                defaultvalue=''
-                                value={EditData.EmployeeName}
-                                className={isError.EmployeeName.length > 0 ? "is-invalid form-control" : "form-control"}
-                                autoComplete='off'
-                                onChange={(event) => {
-                                  onChangeText({ event, state, setState })
-                                  dispatch(BreadcrumbShow(event.target.value))
-                                }}
-                              />
-                              {isError.EmployeeName.length > 0 && (
-                                <span className="invalid-feedback">{isError.EmployeeName}</span>
-                              )} */}
-
+                                <Label htmlFor="validationCustom01">Employee</Label>
                                 <Select
                                   id="EmployeeDropDown "
                                   // disabled={true}
-                                  name="EmployeeName"
-                                  value={values.Employee}
-                                  isSearchable={false}
-                                  className="react-dropdown"
-                                  classNamePrefix="dropdown"
+                                  value={EmployeeSelect}
                                   options={EmployeeValues}
-                                  onChange={(v, e) => onChangeSelect({ e, v, state, setState })}
-                                
+                                  onChange={(e) => { handllerEmployeeID(e) }}
                                 />
-                                {isError.EmployeeName.length > 0 && (
-                                  <span className="text-danger f-8"><small>{isError.EmployeeName}</small></span>
-                                )}
                               </FormGroup>
                             </div>
 
@@ -486,22 +374,18 @@ const AddUser = (props) => {
                           <Row >
 
                             <FormGroup className="mb-1 col col-sm-4 " >
-                              <Label htmlFor="validationCustom01">{fieldLabel.LoginName}</Label>
-                              <Input name="LoginName" id="txtName"
+                              <Label htmlFor="validationCustom01">Login Name</Label>
+                              <AvField name="loginName" id="txtName"
                                 type="text"
                                 placeholder="Please Enter Name"
                                 defaultvalue=''
-                                value={values.LoginName}
-                                className={isError.LoginName.length > 0 ? "is-invalid form-control" : "form-control"}
+                                value={EditData.LoginName}
                                 autoComplete='off'
-                                onChange={(event) => {
-                                  onChangeText({ event, state, setState })
-                                  dispatch(BreadcrumbShow(event.target.value))
+                                validate={{
+                                  required: { value: true, errorMessage: 'Please Enter Name' },
                                 }}
+                                onChange={(e) => { dispatch(BreadcrumbShow(e.target.value)) }}
                               />
-                              {isError.LoginName.length > 0 && (
-                                <span className="invalid-feedback">{isError.LoginName}</span>
-                              )}
                             </FormGroup>
                           </Row>
 
@@ -511,11 +395,16 @@ const AddUser = (props) => {
                               <Row>
                                 <FormGroup className="mb-1 col col-sm-4 " >
                                   <Label htmlFor="validationCustom01">Password</Label>
-                                  <Input name="password" id="password"
+                                  <AvField name="password" id="password"
                                     type="password"
+                                    // value={EditData.password}
                                     placeholder="Please Enter Password"
                                     autoComplete="new-password"
                                     className="form-control"
+                                    // validate={{
+                                    //   required: { value: true, errorMessage: 'Please Enter Password' },
+                                    // }}
+
                                     value={password}
                                     onChange={(e) => { setPassword(e.target.value) }} />
 
@@ -525,15 +414,19 @@ const AddUser = (props) => {
                               <Row>
                                 <FormGroup className="mb-1 col col-sm-4 " >
                                   <Label htmlFor="validationCustom01">Confirm Password</Label>
-                                  <Input name="password" id="password"
+                                  <AvField name="password" id="password"
                                     type="password"
+                                    // value={EditData.password}
                                     placeholder="Please Enter Password"
                                     autoComplete="new-password"
                                     className={cPasswordClass}
+                                    // validate={{
+                                    //   required: { value: true, errorMessage: 'Please Enter Password' },
+                                    // }}
                                     value={cPassword}
                                     onChange={handleCPassword} />
                                   {showErrorMessage && isCPassword ? <div> Passwords did not match </div> : ''}
-
+                                  {/* <AvFeedback> Passwords did not match </AvFeedback> */}
                                 </FormGroup>
                               </Row>
                             </Row>
@@ -547,8 +440,8 @@ const AddUser = (props) => {
                                 <Label htmlFor="horizontal-firstname-input" className=" col-sm-2 col-form-label" >Enable Mobile Login</Label>
                                 <Col md="1" style={{ marginTop: '9px' }} >
                                   <div className="form-check form-switch form-switch-md ml-4 " dir="ltr">
-                                    <Input type="checkbox" className="form-check-input" id="customSwitchsizemd"
-                                      checked={values.isLoginUsingMobile}
+                                    <AvInput type="checkbox" className="form-check-input" id="customSwitchsizemd"
+                                      checked={EditData.isLoginUsingMobile}
                                       name="isLoginUsingMobile"
                                       defaultChecked={true}
                                     />
@@ -560,8 +453,8 @@ const AddUser = (props) => {
                                 <Label htmlFor="horizontal-firstname-input" className="col-sm-1 col-form-label " >Active </Label>
                                 <Col md="1" style={{ marginTop: '9px' }} >
                                   <div className="form-check form-switch form-switch-md " dir="ltr">
-                                    <Input type="checkbox" className="form-check-input" id="customSwitchsizemd"
-                                      checked={values.isActive}
+                                    <AvInput type="checkbox" className="form-check-input" id="customSwitchsizemd"
+                                      checked={EditData.isActive}
                                       defaultChecked={true}
                                       name="isActive"
                                     />
@@ -572,14 +465,15 @@ const AddUser = (props) => {
                               </Row>
                             </FormGroup>
                           </Row>
+
                           <Row >
                             <FormGroup className="col col-sm-12  " >
                               <Row className="justify-content-md-left">
                                 <Label htmlFor="horizontal-firstname-input" className="col-sm-2 col-form-label" >Enable Email Login</Label>
                                 <Col md={1} style={{ marginTop: '10px' }} >
                                   <div className="form-check form-switch form-switch-md" dir="ltr">
-                                    <Input type="checkbox" className="form-check-input" id="customSwitchsizemd"
-                                      checked={values.isLoginUsingEmail}
+                                    <AvInput type="checkbox" className="form-check-input" id="customSwitchsizemd"
+                                      checked={EditData.isLoginUsingEmail}
                                       name="isLoginUsingEmail"
                                       defaultChecked={true}
                                     />
@@ -591,8 +485,8 @@ const AddUser = (props) => {
                                 <Label htmlFor="horizontal-firstname-input" className="col-sm-1 col-form-label " >Send OTP </Label>
                                 <Col md={1} style={{ marginTop: '10px' }} >
                                   <div className="form-check form-switch form-switch-md" dir="ltr">
-                                    <Input type="checkbox" className="form-check-input" id="customSwitchsizemd"
-                                      defaultChecked={values.isSendOTP}
+                                    <AvInput type="checkbox" className="form-check-input" id="customSwitchsizemd"
+                                      defaultChecked={EditData.isSendOTP}
                                       name="isSendOTP"
                                     />
                                     <label className="form-check-label" htmlFor="customSwitchsizemd"></label>
@@ -605,11 +499,32 @@ const AddUser = (props) => {
                         </CardBody>
                       </Card>
 
-
                       <Card className="mt-n2">
                         <CardBody style={{ backgroundColor: "whitesmoke" }}>
                           <Row className="">
-                           
+                            {/* <FormGroup className=" ml-3 col col-sm-4 " >
+                              <Label htmlFor="validationCustom01">Roles </Label>
+                              <Select
+                                value={RoleDropDown}
+                                options={RolesValues}
+                                onChange={(e) => { RoleDropDown_select_handler(e) }}
+                                classNamePrefix="select2-selection"
+                              />
+
+                            </FormGroup> */}
+
+                            {/* <Col className="text-center" sm={1} style={{ marginTop: '28px' }} >
+                              {" "}
+                              <Button
+                                type="button"
+                                className="btn btn-sm mt-1 mb-0 btn-light  btn-outline-primary  "
+                                onClick={() =>
+                                  AddRoleHandler()
+                                }
+                              >
+                                <i className="dripicons-plus "></i>
+                              </Button>
+                            </Col> */}
                             {!(userPartiesForUserMaster.length === 0) ? userPartiesForUserMaster[0].Party > 0 ?
                               <Col sm={6} style={{ marginTop: '28px' }}>
 
@@ -635,18 +550,57 @@ const AddUser = (props) => {
                                 </div>
                               </div> : <></>}
 
-                           
+                            {/* {FindPartyID ? <div className="col-lg-3 col-md-6">
+                              <div className="mb-3">
+                                <Label className="form-label font-size-13 ">Role name</Label>
+                                <Select
+                                  defaultValue={RoleDropDown}
+                                  isMulti={true}
+                                  className="basic-multi-select"
+                                  options={RolesValues}
+                                  onChange={(e) => { RoleDropdownHandler(e) }}
+                                  classNamePrefix="select2-selection"
+                                />
+                              </div>
+                            </div> : <></>} */}
 
                             <Row >
                               <Col sm={2}>
-                              {SaveButton({ pageMode, userPageAccessState, module: "AddUser" })}
+                                <div>
+                                  {
+                                    pageMode === "edit" ?
+
+                                      userPageAccessState.RoleAccess_IsEdit ?
+
+                                        <button
+                                          type="submit"
+                                          data-mdb-toggle="tooltip" data-mdb-placement="top" title="Update User"
+                                          className="btn btn-success w-md"
+                                        >
+                                          <i class="fas fa-edit me-2"></i>Update
+                                        </button>
+                                        :
+                                        <></>
+                                      : (
+                                        userPageAccessState.RoleAccess_IsSave ?
+                                          <button
+                                            type="submit"
+                                            data-mdb-toggle="tooltip" data-mdb-placement="top" title="Save User"
+                                            className="btn btn-primary w-md"
+                                          > <i className="fas fa-save me-2"></i> Save
+                                          </button>
+                                          :
+                                          <></>
+                                      )
+                                  }
+                                </div>
                               </Col>
                             </Row>
                             {/* </FormGroup > */}
                           </Row>
                         </CardBody>
                       </Card>
-                    </form>
+                    </AvForm>
                   </CardBody>
                   <br></br>
                   <br></br>

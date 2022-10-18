@@ -34,17 +34,10 @@ import { AlertState } from "../../Utilites/CustomAlertRedux/actions";
 
 
 function* fetchOrderItems_GenratorFunction() {
-  const data =
-  {
-    "Division": 28,
-    "Party": 1,
-    "EffectiveDate": "2022-10-10"
-  }
-
   yield put(SpinnerState(true))
   try {
-    const response = yield call(getOrderItems_forOrderPage_ApiCall, data);
-    if (response.StatusCode === 200) { yield put(getOrderItems_ForOrderPageSuccess(response.Data)); }
+    const response = yield call(getOrderItems_forOrderPage_ApiCall);
+    if(response.StatusCode===200) { yield put(getOrderItems_ForOrderPageSuccess(response.Data));}
     else alert(" response error")
     yield put(SpinnerState(false))
   } catch (error) {
@@ -56,11 +49,11 @@ function* fetchOrderItems_GenratorFunction() {
   }
 }
 
-function* submitOrder_GenratorFunction({ data }) {
+function* submitOrder_GenratorFunction({data}) {
   yield put(SpinnerState(true))
   try {
-    const response = yield call(submitOrder_From_OrderPage_apiCall, data);
-    debugger
+    const response = yield call(submitOrder_From_OrderPage_apiCall,data);
+   debugger
     yield put(submitOrder_fromOrderPage_Success(response));
     yield put(SpinnerState(false))
   } catch (error) {
@@ -76,7 +69,7 @@ function* fetchOrderList(data) {
   yield put(SpinnerState(true))
   try {
     const response = yield call(getOrderList_forOrderPage_ApiCall, data);
-    if (response.StatusCode === 200) yield put(getOrderListSuccess(response.Data));
+    if(response.StatusCode===200)   yield put(getOrderListSuccess(response.Data));
     else alert(" response error")
     yield put(SpinnerState(false))
   } catch (error) {
