@@ -1,6 +1,6 @@
 
 import React, { useEffect, useState } from "react";
-import Breadcrumbs from "../../../components/Common/Breadcrumb";
+import Breadcrumb from "../../../components/Common/Breadcrumb";
 import { Col, Modal, Row } from "reactstrap";
 import paginationFactory, {
   PaginationListStandalone,
@@ -8,19 +8,11 @@ import paginationFactory, {
 } from "react-bootstrap-table2-paginator";
 import ToolkitProvider, { Search } from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 import { MetaTags } from "react-meta-tags";
 import { useHistory, Redirect } from "react-router-dom";
-import {
-  deleteDriverTypeIDSuccess,
-  updateDriverTypeIDSuccess,
-  getMethodForDriverList,
-  editDriverTypeId,
-  delete_DriverType_ID,
-  PostMethod_ForDriverMasterSuccess,
-} from "../../../store/Administrator/DriverRedux/action";
 
-import { AlertState } from "../../../store/actions";
+import { AlertState, BreadcrumbFilterSize, BreadcrumbSearchProps } from "../../../store/actions";
 import { listPageCommonButtonFunction }
   from "../../../components/Common/CmponentRelatedCommonFile/listPageCommonButtons";
 
@@ -71,7 +63,7 @@ const CommonListPage = (props) => {
     }
   }, [userAccess])
 
-debugger
+  debugger
   // This UseEffect => UpadateModal Success/Unsucces  Show and Hide Control Alert_modal
   useEffect(() => {
 
@@ -222,6 +214,17 @@ debugger
           <title>{userPageAccessState.PageHeading}| FoodERP-React FrontEnd</title>
         </MetaTags>
         <div className="page-content">
+          <Breadcrumb
+            title={"Count :"}
+            breadcrumbItem={userPageAccessState.PageHeading}
+            IsButtonVissible={(userPageAccessState.RoleAccess_IsSave) ? true : false}
+            breadcrumbCount={`Product Count: ${searchCount}`}
+            SearchProps={searchProps}
+            IsSearchVissible={true}
+            RedirctPath={"/#"}
+            isExcelButtonVisible={true}
+          // ExcelData={tableList}
+          />
           <PaginationProvider pagination={paginationFactory(pageOptions)}>
             {({ paginationProps, paginationTableProps }) => (
               <ToolkitProvider
@@ -231,19 +234,21 @@ debugger
                 columns={columns}
                 search
               >
-                {(toolkitProps) => (
+                {(toolkitProps,a) => (
                   <React.Fragment>
-                    {/* <Breadcrumbs
+                    {/* <Breadcrumb
                       title={"Count :"}
                       breadcrumbItem={userPageAccessState.PageHeading}
                       IsButtonVissible={(userPageAccessState.RoleAccess_IsSave) ? true : false}
-                      SearchProps={toolkitProps.searchProps}
+                      // SearchProps={toolkitProps.searchProps}
                       breadcrumbCount={`Product Count: ${tableList.length}`}
                       IsSearchVissible={true}
                       RedirctPath={masterPath}
                       isExcelButtonVisible={true}
                       ExcelData={tableList}
                     /> */}
+                    {test(toolkitProps, paginationProps, dispatch,ButtonMsgLable)}
+
                     <Row>
                       <Col xl="12">
                         <div className="table-responsive">
@@ -251,13 +256,15 @@ debugger
                             keyField={"id"}
                             responsive
                             bordered={false}
-                            striped={false}
-                            classes={"table  table-bordered"}
+                            striped={true}
+                            classes={"table  table-bordered table-hover"}
                             {...toolkitProps.baseProps}
                             {...paginationTableProps}
                           />
                         </div>
                       </Col>
+
+
                     </Row>
                     <Row className="align-items-md-center mt-30">
                       <Col className="pagination pagination-rounded justify-content-end mb-2">
@@ -295,3 +302,25 @@ debugger
 }
 
 export default CommonListPage;
+
+let searchCount = 0
+
+let searchProps = {
+  onClear: function onClear() { },
+  onSearch: function onSearch() { },
+  searchText: ""
+}
+ export const test = (toolkitProps, paginationProps,  dispatch,ButtonMsgLable) => {
+  
+  let iscall = 0
+  if (paginationProps.dataSize) {
+    iscall = paginationProps.dataSize
+  }
+
+  if (!(iscall === searchCount)) {
+    dispatch(BreadcrumbSearchProps(toolkitProps.searchProps))
+    dispatch(BreadcrumbFilterSize(`${ButtonMsgLable} count :${iscall}`))
+    searchCount = paginationProps.dataSize
+  }
+  searchProps = toolkitProps.searchProps
+}
