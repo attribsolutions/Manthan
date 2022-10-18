@@ -33,7 +33,6 @@ const Breadcrumb = props => {
 
   }));
 
-
   function tog_scroll() {
     setmodal_scroll(!modal_scroll);
     removeBodyCss();
@@ -45,7 +44,7 @@ const Breadcrumb = props => {
 
   
   const [IsRedirectNewButton, setIsRedirectNewButton] = useState(false);
-debugger
+
   // New Button Handller
   const NewButtonHandeller = () => {
 
