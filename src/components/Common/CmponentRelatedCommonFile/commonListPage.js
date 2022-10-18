@@ -219,7 +219,7 @@ const CommonListPage = (props) => {
             title={"Count :"}
             breadcrumbItem={userPageAccessState.PageHeading}
             IsButtonVissible={(userPageAccessState.RoleAccess_IsSave) ? true : false}
-            breadcrumbCount={`Product Count: ${searchCount}`}
+            showCount={true}
             SearchProps={searchProps}
             IsSearchVissible={true}
             RedirctPath={"/#"}
