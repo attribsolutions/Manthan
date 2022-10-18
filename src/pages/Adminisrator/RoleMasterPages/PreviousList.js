@@ -19,7 +19,7 @@ import BootstrapTable from "react-bootstrap-table-next";
 import { useSelector, useDispatch } from "react-redux";
 import Breadcrumb from "../../../components/Common/Breadcrumb"
 
-import "../../../assets/scss/CustomeTable/datatables.scss";
+import "../../../assets/scss/CustomTable2/datatables.scss";
 import RoleMaster from "./RoleMaster";
 import { MetaTags } from "react-meta-tags";
 import { useHistory } from "react-router-dom";

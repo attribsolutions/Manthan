@@ -11,7 +11,7 @@ import ToolkitProvider from 'react-bootstrap-table2-toolkit';
 
 //Import Breadcrumb
 import Breadcrumb from "../../../components/Common/Breadcrumb"
-import "../../../assets/scss/CustomeTable/datatables.scss"
+import "../../../assets/scss/CustomTable2/datatables.scss";
 import { useDispatch, useSelector } from "react-redux";
 import {
     deleteModuleID, deleteModuleIDSuccess, editModuleID, fetchModelsList,

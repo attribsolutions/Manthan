@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Breadcrumbs from "../../../components/Common/Breadcrumb";
-import { Button, Col, Modal, Row } from "reactstrap";
+import { Col, Modal, Row } from "reactstrap";
 import paginationFactory, {
   PaginationListStandalone,
   PaginationProvider,
@@ -8,19 +8,22 @@ import paginationFactory, {
 import ToolkitProvider, { Search } from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 import { useSelector, useDispatch } from "react-redux";
-import "../../../assets/scss/CustomTable2/datatables.scss";
-// import CategoryMaster from "./CategoryMaster";
-
+import "../../../assets/scss/CustomTable2/CustomTable2";
+import CategoryTypeMaster from "./CategoryTypeMaster";
 import { MetaTags } from "react-meta-tags";
 import { useHistory } from "react-router-dom";
-// import { deleteProductCategoryTypeIDSuccess, delete_ProductCategoryType_ID,  updateProductCategoryTypeIDSuccess } from "../../../store/Administrator/PartyTypeRedux/action";
+import {
+  deleteCategoryTypeIDSuccess,
+  delete_CategoryType_ID,
+  editCategoryTypeID,
+  getCategoryTypelist,
+  PostMethod_ForCategoryTypeMasterAPISuccess,
+  updateCategoryTypeIDSuccess
+} from "../../../store/actions";
 import { AlertState } from "../../../store/actions";
-import { deleteSubCategoryIDSuccess, delete_SubCategory_ID, editSubCategoryID, getSubCategorylist, PostMethod_ForSubCategoryAPISuccess, updateSubCategoryIDSuccess } from "../../../store/Administrator/SubCategoryRedux/action";
-import SubCategoryMaster from "./SubCategoryMaster";
 import { listPageCommonButtonFunction } from "../../../components/Common/CmponentRelatedCommonFile/listPageCommonButtons";
-// import { AlertState } from "../../../store/action";
 
-const SubCategoryList = (props) => {
+const CategoryTypeList = (props) => {
 
   const dispatch = useDispatch();
   const history = useHistory()
@@ -28,17 +31,15 @@ const SubCategoryList = (props) => {
   const [userPageAccessState, setUserPageAccessState] = useState('');
   const [modal_center, setmodal_center] = useState(false);
 
-  // get Access redux data
-  // var  editData=[]
-
-  const { TableListData, editData, updateMessage, deleteMessage, RoleAccessModifiedinSingleArray,PostAPIResponse } = useSelector(
+  const { TableListData, editData, updateMessage, deleteMessage, RoleAccessModifiedinSingleArray, PostAPIResponse } = useSelector(
     (state) => ({
-      TableListData: state.SubCategoryReducer.SubCategoryListData,
-      editData: state.SubCategoryReducer.editData,
-      updateMessage: state.SubCategoryReducer.updateMessage,
-      deleteMessage: state.SubCategoryReducer.deleteMessage,
+      PostAPIResponse: state.categoryTypeReducer.PostData,
+      TableListData: state.categoryTypeReducer.categoryTypeListData,
+      editData: state.categoryTypeReducer.editData,
+      updateMessage: state.categoryTypeReducer.updateMessage,
+      deleteMessage: state.categoryTypeReducer.deleteMessage,
       RoleAccessModifiedinSingleArray: state.Login.RoleAccessUpdateData,
-      PostAPIResponse: state.SubCategoryReducer.PostDataMessage,
+
     })
   );
 
@@ -54,25 +55,25 @@ const SubCategoryList = (props) => {
 
   //  This UseEffect => Featch Modules List data  First Rendering
   useEffect(() => {
-    dispatch(getSubCategorylist());
+    dispatch(getCategoryTypelist());
   }, []);
 
   // This UseEffect => UpadateModal Success/Unsucces  Show and Hide Control Alert_modal
   useEffect(() => {
 
     if (updateMessage.Status === true && updateMessage.StatusCode === 200) {
-      dispatch(updateSubCategoryIDSuccess({ Status: false }));
+      dispatch(updateCategoryTypeIDSuccess({ Status: false }));
       dispatch(
         AlertState({
           Type: 1,
           Status: true,
           Message: updateMessage.Message,
-          AfterResponseAction: getSubCategorylist,
+          AfterResponseAction: getCategoryTypelist,
         })
       );
       tog_center();
     } else if (updateMessage.Status === true) {
-      dispatch(updateSubCategoryIDSuccess({ Status: false }));
+      dispatch(updateCategoryTypeIDSuccess({ Status: false }));
       dispatch(
         AlertState({
           Type: 3,
@@ -85,17 +86,17 @@ const SubCategoryList = (props) => {
 
   useEffect(() => {
     if (deleteMessage.Status === true && deleteMessage.StatusCode === 200) {
-      dispatch(deleteSubCategoryIDSuccess({ Status: false }));
+      dispatch(deleteCategoryTypeIDSuccess({ Status: false }));
       dispatch(
         AlertState({
           Type: 1,
           Status: true,
           Message: deleteMessage.Message,
-          AfterResponseAction: getSubCategorylist,
+          AfterResponseAction: getCategoryTypelist,
         })
       );
     } else if (deleteMessage.Status === true) {
-      dispatch(deleteSubCategoryIDSuccess({ Status: false }));
+      dispatch(deleteCategoryTypeIDSuccess({ Status: false }));
       dispatch(
         AlertState({
           Type: 3,
@@ -106,31 +107,33 @@ const SubCategoryList = (props) => {
     }
   }, [deleteMessage]);
 
+
   useEffect(() => {
 
     if ((PostAPIResponse.Status === true) && (PostAPIResponse.StatusCode === 200)) {
-        dispatch(PostMethod_ForSubCategoryAPISuccess({ Status: false }))
-        tog_center();
-        dispatch(getSubCategorylist());
-        dispatch(AlertState({
-            Type: 1,
-            Status: true,
-            Message: PostAPIResponse.Message,
-        }))
+      dispatch(PostMethod_ForCategoryTypeMasterAPISuccess({ Status: false }))
+      tog_center();
+      dispatch(getCategoryTypelist());
+      dispatch(AlertState({
+        Type: 1,
+        Status: true,
+        Message: PostAPIResponse.Message,
+      }))
     }
 
     else if ((PostAPIResponse.Status === true)) {
-        dispatch(PostMethod_ForSubCategoryAPISuccess({ Status: false }))
-        dispatch(AlertState({
-            Type: 4,
-            Status: true,
-            Message: JSON.stringify(PostAPIResponse.Message),
-            RedirectPath: false,
-            AfterResponseAction: false
-        }));
+      dispatch(PostMethod_ForCategoryTypeMasterAPISuccess({ Status: false }))
+      dispatch(AlertState({
+        Type: 4,
+        Status: true,
+        Message: JSON.stringify(PostAPIResponse.Message),
+        RedirectPath: false,
+        AfterResponseAction: false
+      }));
     }
-}, [PostAPIResponse.Status])
 
+
+  }, [PostAPIResponse.Status])
   // Edit Modal Show When Edit Data is true
   useEffect(() => {
     if (editData.Status === true) {
@@ -162,28 +165,22 @@ const SubCategoryList = (props) => {
       sort: true,
     },
 
-    {
-      text: "Category  ",
-      dataField: "ProductCategoryName",
-      sort: true,
-    },
-
-   // For Edit, Delete ,and View Button Common Code function
-   listPageCommonButtonFunction({
-    dispatchHook: dispatch,
-    ButtonMsgLable: "SubCategory",
-    deleteName:"Name",
-    userPageAccessState: userPageAccessState,
-    editActionFun: editSubCategoryID,
-    deleteActionFun: delete_SubCategory_ID
-})
+    // For Edit, Delete ,and View Button Common Code function
+    listPageCommonButtonFunction({
+      dispatchHook: dispatch,
+      ButtonMsgLable: "Category Type",
+      deleteName: "Name",
+      userPageAccessState: userPageAccessState,
+      editActionFun: editCategoryTypeID,
+      deleteActionFun: delete_CategoryType_ID
+    })
   ];
 
   if (!(userPageAccessState === '')) {
     return (
       <React.Fragment>
         <MetaTags>
-          <title>SubCategoryList| FoodERP-React FrontEnd</title>
+          <title>CategoryTypeList| FoodERP-React FrontEnd</title>
         </MetaTags>
         <div className="page-content">
           <PaginationProvider pagination={paginationFactory(pageOptions)}>
@@ -204,7 +201,7 @@ const SubCategoryList = (props) => {
                       SearchProps={toolkitProps.searchProps}
                       breadcrumbCount={`Product Count: ${TableListData.length}`}
                       IsSearchVissible={true}
-                      RedirctPath={`/SubCategoryMaster`}
+                      RedirctPath={`/CategoryTypeMaster`}
                       isExcelButtonVisible={true}
                       ExcelData={TableListData}
                     />
@@ -240,7 +237,7 @@ const SubCategoryList = (props) => {
             }}
             size="xl"
           >
-            <SubCategoryMaster state={editData.Data} relatatedPage={"/SubCategoryMaster"} pageMode={editData.pageMode}/>
+            <CategoryTypeMaster state={editData.Data} relatatedPage={"/CategoryTypeMaster"} pageMode={editData.pageMode} />
           </Modal>
         </div>
       </React.Fragment>
@@ -253,4 +250,4 @@ const SubCategoryList = (props) => {
   }
 }
 
-export default SubCategoryList;
+export default CategoryTypeList;
