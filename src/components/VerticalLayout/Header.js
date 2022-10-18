@@ -41,7 +41,7 @@ import {
 } from "../../store/actions"
 import { CustomSearchInput } from '../../store/Utilites/CustomSearchRedux/actions';
 import SearchBoxSecond from '../../pages/Adminisrator/SearchBox/SearchBoxSecond';
-import { MainSearchBox, } from '../Common/CmponentRelatedCommonFile/searchBox/index';
+import { MainSearchBox, } from '../Common/CmponentRelatedCommonFile/SearchBox/index';
 // import initialDetails from '../../pages/Adminisrator/SearchBox/initialDetails.js';
 
 

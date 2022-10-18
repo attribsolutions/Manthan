@@ -15,6 +15,7 @@ import { useHistory, Redirect } from "react-router-dom";
 import { AlertState, BreadcrumbFilterSize, BreadcrumbSearchProps } from "../../../store/actions";
 import { listPageCommonButtonFunction }
   from "../../../components/Common/CmponentRelatedCommonFile/listPageCommonButtons";
+import { mySearchProps } from "./SearchBox/MySearch";
 
 const CommonListPage = (props) => {
 
@@ -234,7 +235,7 @@ const CommonListPage = (props) => {
                 columns={columns}
                 search
               >
-                {(toolkitProps,a) => (
+                {(toolkitProps, a) => (
                   <React.Fragment>
                     {/* <Breadcrumb
                       title={"Count :"}
@@ -247,7 +248,7 @@ const CommonListPage = (props) => {
                       isExcelButtonVisible={true}
                       ExcelData={tableList}
                     /> */}
-                    {test(toolkitProps, paginationProps, dispatch,ButtonMsgLable)}
+                    {test(toolkitProps, paginationProps, dispatch, ButtonMsgLable)}
 
                     <Row>
                       <Col xl="12">
@@ -264,7 +265,7 @@ const CommonListPage = (props) => {
                         </div>
                       </Col>
 
-
+                      {mySearchProps(toolkitProps.searchProps)}
                     </Row>
                     <Row className="align-items-md-center mt-30">
                       <Col className="pagination pagination-rounded justify-content-end mb-2">
@@ -310,8 +311,8 @@ let searchProps = {
   onSearch: function onSearch() { },
   searchText: ""
 }
- export const test = (toolkitProps, paginationProps,  dispatch,ButtonMsgLable) => {
-  
+export const test = (toolkitProps, paginationProps, dispatch, ButtonMsgLable) => {
+
   let iscall = 0
   if (paginationProps.dataSize) {
     iscall = paginationProps.dataSize

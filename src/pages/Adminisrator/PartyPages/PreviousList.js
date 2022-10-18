@@ -10,7 +10,7 @@ import BootstrapTable from "react-bootstrap-table-next";
 import { useSelector, useDispatch } from "react-redux";
 import { AlertState } from "../../../store/actions";
 
-import "../../../assets/scss/CustomeTable/datatables.scss"
+import "../../../assets/scss/CustomTable2/datatables.scss";
 import {
     deletePartyID,
     deletePartyIDSuccess,

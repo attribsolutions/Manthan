@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Col, Modal, Row } from "reactstrap";
-import "../../../assets/scss/CustomeTable/datatables.scss"
+import "../../../assets/scss/CustomTable2/datatables.scss";
 import {
     getUser, deleteUser, editUserId, updateSuccess, addUserSuccess
 } from "../../../store/Administrator/UserRegistrationRedux/actions";
@@ -12,7 +12,7 @@ import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 //redux
 import { useSelector, useDispatch } from "react-redux";
-import "../../../assets/scss/CustomeTable/datatables.scss"
+import "../../../assets/scss/CustomTable2/datatables.scss";
 import AddUser from "./UserRegistration";
 import { deleteSuccess } from "../../../store/Administrator/RoleMasterRedux/action";
 import { AlertState } from "../../../store/Utilites/CustomAlertRedux/actions";

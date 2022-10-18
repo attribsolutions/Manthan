@@ -1,12 +1,12 @@
 
 
-let props2 = function onSearch() { }
+let props1 = { onSearch: function onSearch() {} }
 
-export const mySearchProps = (props1) => {
-    props2 = props1;
+export const mySearchProps = (props) => {
+    props1 = props;
 };
 
- export const MySearch = () => {
+export const MySearch = () => {
 
     let input;
     const handleClick = () => {
@@ -14,7 +14,7 @@ export const mySearchProps = (props1) => {
 
         if (!(len[0] === "/")) {
             const str = len.substring(1);
-            props2.onSearch(str);
+            props1.onSearch(str);
         }
     };
     return (

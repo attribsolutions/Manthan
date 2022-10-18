@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux';
-import '../../../../assets/searchBox/search.scss'
+import '../../../../assets/searchBox/searchBox.scss'
 import { MySearch } from './MySearch';
 
 export const MainSearchBox = () => {

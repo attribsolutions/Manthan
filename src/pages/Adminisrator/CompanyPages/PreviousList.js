@@ -26,7 +26,7 @@ import BootstrapTable from "react-bootstrap-table-next";
 //redux
 import { useSelector, useDispatch } from "react-redux";
 import CompanyModule from "./CompanyModule";
-import "../../../assets/scss/CustomeTable/datatables.scss"
+import "../../../assets/scss/CustomTable2/datatables.scss"
 import { AlertState } from "../../../store/actions";
 import { useHistory } from "react-router-dom";
 import { CommonGetRoleAccessFunction } from "../../../components/Common/CommonGetRoleAccessFunction";
