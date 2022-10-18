@@ -158,12 +158,12 @@ const CategoryMaster = (props) => {
             }
 
             if (hasEditVal) {
-            
-                const { id, Name, CategoryTypeName} = hasEditVal
+
+                const { id, Name, CategoryTypeName } = hasEditVal
                 const { values, fieldLabel, hasValid, required, isError } = { ...state }
                 values.Name = Name;
                 values.CategoryTypeName = CategoryTypeName;
-                values.id= id
+                values.id = id
                 setState({ values, fieldLabel, hasValid, required, isError })
                 dispatch(BreadcrumbShow(hasEditVal.CategoryMaster))
 
@@ -232,20 +232,22 @@ const CategoryMaster = (props) => {
     }));
 
     const formSubmitHandler = (event) => {
-
         event.preventDefault();
         if (formValid(state, setState)) {
             const jsonBody = JSON.stringify({
                 Name: values.Name,
                 CategoryType: values.CategoryTypeName.value,
+
+
             });
 
             if (pageMode === "edit") {
                 dispatch(updateCategoryID(jsonBody, values.id,));
+                console.log("jsonBody", jsonBody)
             }
             else {
                 dispatch(PostMethodForCategory(jsonBody));
-                console.log("jsonBody", jsonBody)
+
 
             }
         }
@@ -310,15 +312,8 @@ const CategoryMaster = (props) => {
                                                                             isSearchable={false}
                                                                             className="react-dropdown"
                                                                             classNamePrefix="dropdown"
-                                                                            onChange={(v, e) => onChangeSelect({ e, v, state, setState })}
                                                                             options={CategoryTypesValues}
-                                                                            styles={{
-                                                                                control: base => ({
-                                                                                    ...base,
-                                                                                    border: isError.CategoryTypeName.length > 0 ? '1px solid red' : '',
-
-                                                                                })
-                                                                            }}
+                                                                            onChange={(v, e) => onChangeSelect({ e, v, state, setState })}
                                                                         />
                                                                         {isError.CategoryTypeName.length > 0 && (
                                                                             <span className="text-danger f-8"><small>{isError.CategoryTypeName}</small></span>
