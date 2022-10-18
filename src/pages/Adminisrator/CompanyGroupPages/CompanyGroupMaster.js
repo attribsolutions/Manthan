@@ -11,10 +11,13 @@ import {
     Label,
     Row,
 } from "reactstrap";
-import { AvField, AvForm, AvInput, } from "availity-reactstrap-validation";
-import Select from "react-select";
 import { MetaTags } from "react-meta-tags";
-import { BreadcrumbShow, commonPageField, commonPageFieldSuccess } from "../../../store/actions";
+import { BreadcrumbShow } from "../../../store/actions";
+import {
+    AlertState,
+    commonPageField,
+    commonPageFieldSuccess
+} from "../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
 import {
     PostMethod_ForCompanyGroupMasterSuccess,
@@ -23,12 +26,9 @@ import {
     PostMethodForCompanyGroupMaster,
     getMethodForCompanyGroupList
 } from "../../../store/Administrator/CompanyGroupRedux/action";
-import { AlertState } from "../../../store/actions";
-import { CommonGetRoleAccessFunction } from "../../../components/Common/CommonGetRoleAccessFunction";
 import { useHistory } from "react-router-dom";
 import {
     comAddPageFieldFunc,
-    formValChange,
     formValid,
     onChangeText
 } from "../../../components/Common/CmponentRelatedCommonFile/validationFunction";
@@ -38,20 +38,58 @@ import { COMPANYGROUP_lIST } from "../../../routes/route_url";
 
 const CompanyGroupMaster = (props) => {
 
-    //*** "isEditdata get all data from ModuleID for Binding  Form controls
-    let editDataGetingFromList = props.state;
-    let pageModeProps = props.pageMode;
-
     const formRef = useRef(null);
-    const dispatch = useDispatch();
+    const dispatch= useDispatch();
     const history = useHistory()
 
-    const [EditData, setEditData] = useState([]);
-    const [pageMode, setPageMode] = useState("");
-    const [userPageAccessState, setUserPageAccessState] = useState(123);
+    const [pageMode,setPageMode] = useState();
+    const [userPageAccessState ,setUserPageAccessState] = useState('');
     const [modalCss, setModalCss] = useState(false);
+
+
+{/** Dyanamic Page access state and OnChange function */ }
+    {/*start */ }
+    const [state, setState] = useState({       
+         values: {
+            id: "",
+            Name: "",
+            IsSCM:false
+
+        },
+
+        fieldLabel: {
+            Name: '',
+            IsSCM:false
+        },
+
+        isError: {
+            Name: "",
+            IsSCM:false
+        },
+
+        hasValid: {
+            Name: {
+                regExp: '',
+                inValidMsg: "",
+                valid: false
+            },
+
+          IsSCM: {
+                regExp: '',
+                inValidMsg: "",
+                valid: false
+            }
+
+        },
+        required: {
+
+        }
+    }
+    )
+    {/*End */ }
+
     //Access redux store Data /  'save_ModuleSuccess' action data
-    const { PostAPIResponse, pageField, userAccess, } = useSelector((state) => ({
+    const { PostAPIResponse, pageField, userAccess } = useSelector((state) => ({
         PostAPIResponse: state.CompanyGroupReducer.PostDataMessage,
         userAccess: state.Login.RoleAccessUpdateData,
         pageField: state.CommonPageFieldReducer.pageField
@@ -62,55 +100,17 @@ const CompanyGroupMaster = (props) => {
     const hasShowloction = location.hasOwnProperty("editValue")
     const hasShowModal = props.hasOwnProperty("editValue")
 
+
     useEffect(() => {
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(32))
     }, []);
 
-    {/** Dyanamic Page access state and OnChange function */ }
-    {/*start */ }
-    const [state, setState] = useState({
-        values: {
-            id: "",
-            Name: "",
+    
 
-        },
-
-        fieldLabel: {
-            Name: '',
-
-        },
-
-        isError: {
-            Name: "",
-
-        },
-
-        hasValid: {
-            Name: {
-                regExp: '',
-                inValidMsg: "",
-                valid: false
-            },
-
-
-        },
-        required: {
-
-        }
-    })
-    const values = { ...state.values }
-    const { isError } = state;
-    const { fieldLabel } = state;
-
-    {/*End */ }
-
+    // userAccess useEffect
     useEffect(() => {
-        dispatch(getMethodForCompanyGroupList());
-    }, [dispatch]);
 
-
-    useEffect(() => {
         let userAcc = null;
         let locationPath = location.pathname;
 
@@ -132,7 +132,7 @@ const CompanyGroupMaster = (props) => {
     // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
     useEffect(() => {
 
-        if (!(userPageAccessState === '')) { document.getElementById("txtName").focus(); }
+       
         // if (!(userPageAccessState === '')) { document.getElementById("txtName").focus(); }
         if ((hasShowloction || hasShowModal)) {
 
@@ -151,8 +151,8 @@ const CompanyGroupMaster = (props) => {
                 const { id, Name, IsSCM } = hasEditVal
                 const { values, fieldLabel, hasValid, required, isError } = { ...state }
                 values.Name = Name;
-                values.id = id;
-                values.IsSCM = IsSCM
+                values.IsSCM = IsSCM;
+                values.id = id
                 setState({ values, fieldLabel, hasValid, required, isError })
                 dispatch(BreadcrumbShow(hasEditVal.CompanyGroupMaster))
             }
@@ -204,6 +204,10 @@ const CompanyGroupMaster = (props) => {
         }
     }, [pageField])
 
+    const values = { ...state.values }
+    const { isError } = state;
+    const { fieldLabel } = state;
+
 
     const formSubmitHandler = (event) => {
         event.preventDefault();
@@ -216,7 +220,7 @@ const CompanyGroupMaster = (props) => {
             });
 
             if (pageMode === "edit") {
-                dispatch(updateCompanyGroupTypeID(jsonBody, EditData.id));
+                dispatch(updateCompanyGroupTypeID(jsonBody, values.id));
             }
             else {
                 dispatch(PostMethodForCompanyGroupMaster(jsonBody));
@@ -261,7 +265,7 @@ const CompanyGroupMaster = (props) => {
                                                                 id="txtName"
                                                                 className={isError.Name.length > 0 ? "is-invalid form-control" : "form-control"}
                                                                 type="text"
-                                                                value={EditData.Name}
+                                                                value={values.Name}
                                                                 placeholder="Please Enter Name"
                                                                 autoComplete='off'
                                                                 onChange={(event) => {
@@ -278,15 +282,14 @@ const CompanyGroupMaster = (props) => {
                                                         <Row>
                                                             <FormGroup className="mb-2 col col-sm-5">
                                                                 <Row className="justify-content-md-left">
-                                                                    <Label htmlFor="horizontal-firstname-input" className="col-sm-3 col-form-label" >IsSCM </Label>
+                                                                    <Label htmlFor="horizontal-firstname-input" className="col-sm-3 col-form-label">{fieldLabel.IsSCM}</Label>
                                                                     <Col md={2} style={{ marginTop: '9px' }} >
-                                                                        <div className="form-check form-switch form-switch-md mb-3" dir="ltr">
-                                                                            <Input type="checkbox" className="form-check-input" id="customSwitchsizemd"
-                                                                                defaultChecked={EditData.IsSCM}
+                                                                    <div className="form-check form-switch form-switch-md mb-3" >
+                                                                            <Input type="checkbox" className="form-check-input"
+                                                                                value={values.IsSCM}
                                                                                 name="IsSCM"
-                                                                            // defaultChecked
+                                                                                onChange={(event) => onChangeText({ event, state, setState })}
                                                                             />
-                                                                            <label className="form-check-label" htmlFor="customSwitchsizemd"></label>
                                                                         </div>
                                                                     </Col>
                                                                 </Row>
@@ -301,7 +304,7 @@ const CompanyGroupMaster = (props) => {
                                                             </Row>
                                                         </FormGroup >
                                                     </Row>
-
+ 
                                                 </CardBody>
                                             </Card>
                                         </Col>

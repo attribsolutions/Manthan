@@ -40,7 +40,7 @@ const PartyType = (props) => {
     const formRef = useRef(null);
     const dispatch = useDispatch();
     const history = useHistory();
-
+    const [modalCss, setModalCss] = useState(false);
     const [EditData, setEditData] = useState([]);
     const [pageMode, setPageMode] = useState("save");
     const [userPageAccessState, setUserPageAccessState] = useState("");
@@ -52,13 +52,12 @@ const PartyType = (props) => {
 
     //Access redux store Data /  'save_ModuleSuccess' action data
 
-    const { PostAPIResponse, PartyTypes, pageField, RoleAccessModifiedinSingleArray } =
+    const { PostAPIResponse, PartyTypes, pageField, userAccess } =
         useSelector((state) => ({
             PostAPIResponse: state.PartyTypeReducer.PostData,
             PartyTypes: state.PartyMasterReducer.PartyTypes,
             pageField: state.CommonPageFieldReducer.pageField,
-            RoleAccessModifiedinSingleArray: state.Login.RoleAccessUpdateData,
-        }));
+            userAccess: state.Login.RoleAccessUpdateData,        }));
 
     useEffect(() => {
         dispatch(commonPageField(53))
@@ -68,6 +67,7 @@ const PartyType = (props) => {
     {/*start */ }
     const [state, setState] = useState({
         values: {
+            id:"",
             Name: "",
             IsSCM: "",
             IsDivision: "",
@@ -112,25 +112,28 @@ const PartyType = (props) => {
     const { isError } = state;
     const { fieldLabel } = state;
 
+    const location = { ...history.location }
+    const hasShowloction = location.hasOwnProperty("editValue")
+    const hasShowModal = props.hasOwnProperty("editValue")
+
 
     // userAccess useEffect
     useEffect(() => {
-        let userAcc = undefined;
-        if (editDataGatingFromList === undefined) {
-            let locationPath = history.location.pathname;
-            userAcc = RoleAccessModifiedinSingleArray.find((inx) => {
-                return `/${inx.ActualPagePath}` === locationPath;
-            });
-        } else if (!(editDataGatingFromList === undefined)) {
-            let relatatedPage = props.relatatedPage;
-            userAcc = RoleAccessModifiedinSingleArray.find((inx) => {
-                return `/${inx.ActualPagePath}` === relatatedPage;
-            });
-        }
-        if (!(userAcc === undefined)) {
-            setUserPageAccessState(userAcc);
-        }
-    }, [RoleAccessModifiedinSingleArray]);
+        let userAcc = null;
+        let locationPath = location.pathname;
+
+        if (hasShowModal) {
+            locationPath = props.masterPath;
+        };
+
+        userAcc = userAccess.find((inx) => {
+            return (`/${inx.ActualPagePath}` === locationPath)
+        })
+
+        if (userAcc) {
+            setUserPageAccessState(userAcc)
+        };
+    }, [userAccess])
 
     useEffect(() => {
         dispatch(getPartyTypelist());
@@ -139,18 +142,36 @@ const PartyType = (props) => {
 
     // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
     useEffect(() => {
-        if (!(userPageAccessState === "")) {
-            document.getElementById("txtName").focus();
+        
+        // if (!(userPageAccessState === '')) { document.getElementById("txtName").focus(); }
+        if ((hasShowloction || hasShowModal)) {
+
+            let hasEditVal = null
+            if (hasShowloction) {
+                setPageMode(location.pageMode)
+                hasEditVal = location.editValue
+            }
+            else if (hasShowModal) {
+                hasEditVal = props.editValue
+                setPageMode(props.pageMode)
+                setModalCss(true)
+            }
+
+            if (hasEditVal) {
+
+                const { id, Name,IsSCM,IsDivision } = hasEditVal
+                const { values, fieldLabel, hasValid, required, isError } = { ...state }
+                values.Name = Name;
+                 values.IsSCM = IsSCM;
+                 values.IsDivision = IsDivision;
+                values.id = id
+                setState({ values, fieldLabel, hasValid, required, isError })
+                dispatch(BreadcrumbShow(hasEditVal.PartyType))
+
+            }
+            dispatch(editPartyTypeSuccess({ Status: false }))
         }
-        if (!(editDataGatingFromList === undefined)) {
-            setEditData(editDataGatingFromList);
-            setPageMode("edit");
-            dispatch(editPartyTypeSuccess({ Status: false }));
-            dispatch(BreadcrumbShow(editDataGatingFromList.Name));
-        } else if (!(propsPageMode === undefined)) {
-            setPageMode(propsPageMode);
-        }
-    }, [editDataGatingFromList, propsPageMode]);
+    }, [])
 
 
     useEffect(() => {
@@ -210,7 +231,7 @@ const PartyType = (props) => {
       console.log("jsonBody",jsonBody)
 
         if (pageMode === "edit") {
-            dispatch(updatePartyTypeID(jsonBody, EditData.id));
+            dispatch(updatePartyTypeID(jsonBody, values.id));
         }
         else {
             dispatch(PostPartyTypeAPI(jsonBody));
@@ -249,7 +270,7 @@ const PartyType = (props) => {
                                                             <Input
                                                                 name="Name"
                                                                 id="txtName"
-                                                                value={EditData.Name}
+                                                                value={values.Name}
                                                                 type="text"
                                                                 className={isError.Name.length > 0 ? "is-invalid form-control" : "form-control"}
                                                                 placeholder="Please Enter Name"
@@ -267,11 +288,11 @@ const PartyType = (props) => {
                                                         <Row>
                                                             <FormGroup className="mb-2 col col-sm-5">
                                                                 <Row className="justify-content-md-left">
-                                                                    <Label htmlFor="horizontal-firstname-input" className="col-sm-3 col-form-label" >{fieldLabel.IsSCM} </Label>
+                                                                    <Label htmlFor="horizontal-firstname-input" className="col-sm-3 col-form-label" >IsSCM </Label>
                                                                     <Col md={2} style={{ marginTop: '9px' }} >
                                                                         <div className="form-check form-switch form-switch-md mb-3" dir="ltr">
                                                                             <Input type="checkbox" className="form-check-input" id="customSwitchsizemd"
-                                                                                defaultChecked={EditData.IsSCM}
+                                                                                defaultChecked={values.IsSCM}
                                                                                 name="IsSCM"
                                                                             // defaultChecked
                                                                             />
@@ -285,11 +306,11 @@ const PartyType = (props) => {
                                                         <Row>
                                                             <FormGroup className="mb-2 col col-sm-5">
                                                                 <Row className="justify-content-md-left">
-                                                                    <Label htmlFor="horizontal-firstname-input" className="col-sm-3 col-form-label" >{fieldLabel.IsDivision} </Label>
+                                                                    <Label htmlFor="horizontal-firstname-input" className="col-sm-3 col-form-label" >IsDivision </Label>
                                                                     <Col md={2} style={{ marginTop: '9px' }} >
                                                                         <div className="form-check form-switch form-switch-md mb-3" dir="ltr">
                                                                             <Input type="checkbox" className="form-check-input" id="customSwitchsizemd"
-                                                                                defaultChecked={EditData.IsDivision}
+                                                                                defaultChecked={values.IsDivision}
                                                                                 name="IsDivision"
                                                                             // defaultChecked
                                                                             />

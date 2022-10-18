@@ -340,7 +340,6 @@ const AddUser = (props) => {
   };
 
   const formSubmitHandler = (event) => {
-debugger
     event.preventDefault();
     if (formValid(state, setState)) {
       const jsonBody = JSON.stringify({
@@ -492,7 +491,7 @@ debugger
                                 type="text"
                                 placeholder="Please Enter Name"
                                 defaultvalue=''
-                                value={EditData.LoginName}
+                                value={values.LoginName}
                                 className={isError.LoginName.length > 0 ? "is-invalid form-control" : "form-control"}
                                 autoComplete='off'
                                 onChange={(event) => {
@@ -549,7 +548,7 @@ debugger
                                 <Col md="1" style={{ marginTop: '9px' }} >
                                   <div className="form-check form-switch form-switch-md ml-4 " dir="ltr">
                                     <Input type="checkbox" className="form-check-input" id="customSwitchsizemd"
-                                      checked={EditData.isLoginUsingMobile}
+                                      checked={values.isLoginUsingMobile}
                                       name="isLoginUsingMobile"
                                       defaultChecked={true}
                                     />
@@ -562,7 +561,7 @@ debugger
                                 <Col md="1" style={{ marginTop: '9px' }} >
                                   <div className="form-check form-switch form-switch-md " dir="ltr">
                                     <Input type="checkbox" className="form-check-input" id="customSwitchsizemd"
-                                      checked={EditData.isActive}
+                                      checked={values.isActive}
                                       defaultChecked={true}
                                       name="isActive"
                                     />
@@ -580,7 +579,7 @@ debugger
                                 <Col md={1} style={{ marginTop: '10px' }} >
                                   <div className="form-check form-switch form-switch-md" dir="ltr">
                                     <Input type="checkbox" className="form-check-input" id="customSwitchsizemd"
-                                      checked={EditData.isLoginUsingEmail}
+                                      checked={values.isLoginUsingEmail}
                                       name="isLoginUsingEmail"
                                       defaultChecked={true}
                                     />
@@ -593,7 +592,7 @@ debugger
                                 <Col md={1} style={{ marginTop: '10px' }} >
                                   <div className="form-check form-switch form-switch-md" dir="ltr">
                                     <Input type="checkbox" className="form-check-input" id="customSwitchsizemd"
-                                      defaultChecked={EditData.isSendOTP}
+                                      defaultChecked={values.isSendOTP}
                                       name="isSendOTP"
                                     />
                                     <label className="form-check-label" htmlFor="customSwitchsizemd"></label>
