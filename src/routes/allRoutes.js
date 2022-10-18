@@ -84,6 +84,7 @@ import GSTMaster from "../pages/Adminisrator/GSTPages/GSTMaster";
 import GSTList from "../pages/Adminisrator/GSTPages/GSTList";
 
 import * as path from "./route_url";
+import Order from "../pages/purchase/order/Order";
 
 const userRoutes = [
 
@@ -99,7 +100,7 @@ const userRoutes = [
   { path: path.PAGE, component: PageMaster },
   { path: '/PageMasterTab', component: PageMasterTab },
 
-  { path: path.ORDER, component: OrderPage },
+  { path: path.ORDER, component: Order },
   { path: path.ORDER_lIST, component: OrderList },
 
   { path: path.USER, component: AddUser },

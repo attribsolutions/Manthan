@@ -14,16 +14,23 @@ const Breadcrumb = props => {
   const dispatch = useDispatch();
   const history = useHistory();
 
-
   // for Excel Download
   const [modal_scroll, setmodal_scroll] = useState(false);
   const [ListData, setListData] = useState([]);
 
-  const { bredcrumbName='', RoleAccessModifiedinSingleArray } = useSelector((state) => ({
+  const {
+    bredcrumbName = '',
+    filterSize,
+    searchProps,
+    RoleAccessModifiedinSingleArray
+  } = useSelector((state) => ({
     bredcrumbName: state.BreadcrumbReducer.bredcrumbName,
+    filterSize: state.BreadcrumbReducer.filterSize,
+    searchProps: state.BreadcrumbReducer.searchProps,
     RoleAccessModifiedinSingleArray: state.Login.RoleAccessUpdateData,
 
   }));
+
 
   function tog_scroll() {
     setmodal_scroll(!modal_scroll);
@@ -66,7 +73,7 @@ const Breadcrumb = props => {
   // Onfocus Search Box
   useEffect(() => {
     // document.getElementById("search-bar-0").focus();
-    
+
     if (!(props.IsSearchVissible === undefined)) {
     }
     history.listen(location => dispatch(BreadcrumbShow('')));
@@ -84,7 +91,7 @@ const Breadcrumb = props => {
   }, [props.ExcelData])
 
   const DownloadInExcelButtonHanler = (event, values) => {
-    debugger
+
     var list = []
     var object1 = {}
     var selectedValues = Object.keys(values);
@@ -222,8 +229,8 @@ const Breadcrumb = props => {
                     {/* {bredcrumbName.length > 0 ? <label className="font-size-24 form-label  text-nowrap bd-highlight text-secondary" style={{ paddingLeft: "7px" }} >&nbsp;/ <kbd className="bg-light text-secondary">{bredcrumbName}</kbd></label>
                     : <></>} */}
 
-                   
-                    {( bredcrumbName.length > 0 )?
+
+                    {(bredcrumbName.length > 0) ?
                       <label className="font-size-24 form-label  text-nowrap bd-highlight text-primary"
                         style={{ paddingLeft: "7px", color: "#5156be" }} >&nbsp;/&nbsp;{bredcrumbName}</label>
                       : <></>
@@ -262,27 +269,31 @@ const Breadcrumb = props => {
 
                 (props.IsSearchVissible)
                   ?
-                  <React.Fragment><SearchBar {...props.SearchProps} />
+                  <React.Fragment>
+                    <SearchBar {...searchProps} />
                     <i className="bx bx-search-alt search-icon-search" />
                   </React.Fragment>
                   :
-                  <React.Fragment></React.Fragment>
+                  null
               }
             </div>
           </div>
         </Col>
 
 
-        <Col md={Countsize.length < 10 ? 1 : Countsize.length < 25 ? 2 : 3} className="text-right col-md-2 px-0 justify-content-end">
+        <Col md={Countsize.length < 10 ? 1 : Countsize.length < 25 ? 2 : 3}
+          className="text-right col-md-2 px-0 justify-content-end">
 
           {
-            !(props.breadcrumbCount === undefined)
-              ?
-              <div className="bg-dark text-center text-light external-event  col-form-label  border border-Success rounded-2" style={{ width: "100%" }}>
-                {props.breadcrumbCount}
-              </div>
-              :
-              <React.Fragment></React.Fragment>
+            // !(props.breadcrumbCount === undefined)
+            //   ?
+            <div className="bg-dark text-center text-light external-event 
+               col-form-label  border border-Success rounded-2"
+              style={{ width: "100%" }}>
+              {filterSize}
+            </div>
+            // :
+            // <React.Fragment></React.Fragment>
           }
         </Col>
         {/* Redirct To master Component  */}

@@ -1,26 +1,34 @@
 import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux';
 import './Search.scss'
+import { Search } from "react-bootstrap-table2-toolkit";
+let view = false;
+const onchange = (e) => {
+    e.preventDefault();
+    view = e.target.value.length
+}
 export default function SearchBoxSecond() {
+    const { SearchBar } = Search;
 
     const [searchRoleData, setSearchRoleData] = useState([])
-     // const  RoleAccessData=demoRolleAcess
+    // const  RoleAccessData=demoRolleAcess
 
-  const { RoleAccessData, } = useSelector((state) => ({
-    RoleAccessData: state.Login.RoleData,
-  }));
+    const { RoleAccessData, searchProps } = useSelector((state) => ({
+        RoleAccessData: state.Login.RoleData,
+        searchProps: state.BreadcrumbReducer.searchProps,
+    }));
 
-   useEffect(()=>{
+    useEffect(() => {
 
-    let SearchRoleData_initial =[]
+        let SearchRoleData_initial = []
 
-    RoleAccessData.map((i)=>{
-        i.ModuleData.map((index)=>{
-            SearchRoleData_initial.push(index)
+        RoleAccessData.map((i) => {
+            i.ModuleData.map((index) => {
+                SearchRoleData_initial.push(index)
+            })
         })
-    })
-    setSearchRoleData(SearchRoleData_initial)
-   },[RoleAccessData])
+        setSearchRoleData(SearchRoleData_initial)
+    }, [RoleAccessData])
 
 
     useEffect(() => {
@@ -224,7 +232,7 @@ export default function SearchBoxSecond() {
 
     }, [searchRoleData])
 
-
+    searchProps2 = searchProps
     return (
 
 
@@ -236,13 +244,64 @@ export default function SearchBoxSecond() {
         //         </div>
         //         <input type="submit" />
         //     </form>
-        <form className="app-search d-none d-lg-block " style={{marginTop:"-3px"}} autocomplete="off">
-            <div className="position-relative">
-                <input type="text" id="myInput" className="form-control" placeholder="Search..." name="myCountry" />
-                <button className="btn btn-primary" type="submit"><i className="bx bx-search-alt align-middle"></i></button>
-                {/* <div id="myinputautocomplet-list" class="Autocomplet"></div> */}
-            </div>
-        </form>
-        // </div>
+
+        <>
+            {view ?
+                <form className="app-search d-none d-lg-block " style={{ marginTop: "-3px" }} autocomplete="off">
+                    <div className="position-relative">
+                        <input type="text"
+                            id="myInput"
+                            onChange={onchange}
+                            className="form-control"
+                            placeholder="Search..."
+                            name="myCountry" />
+                        <button className="btn btn-primary"
+                            type="submit">
+                            <i className="bx bx-search-alt align-middle" />
+                        </button>
+                        {/* <div id="myinputautocomplet-list" class="Autocomplet"></div> */}
+
+                    </div>
+                </form>
+                :
+
+                <React.Fragment>
+                    <form className="app-search d-none d-lg-block " style={{ marginTop: "-3px" }} autocomplete="off">
+                        <div className="position-relative">
+                            <input
+                                className="form-control"
+                                  style={ { backgroundColor: 'pink' } }
+                                ref={n => input = n}
+                                type="text"
+                                onChange={onChange1}
+                            />
+                            <i className="bx bx-search-alt search-icon-search" />
+                            <button className="btn btn-warning" onClick={handleClick}>Click to Search!!</button>
+
+                            {/* <div id="myinputautocomplet-list" class="Autocomplet"></div> */}
+
+                        </div>
+                    </form>
+
+                    <i className="bx bx-search-alt search-icon-search" />
+                    <input type="hidden"
+                        id="myInput"
+                        onChange={onchange}
+                        className="form-control"
+                        placeholder="Search..."
+                        name="myCountry" />
+                </React.Fragment>
+            }
+        </>
     )
 }
+let input;
+let searchProps2 = function onSearch() { }
+const handleClick = () => {
+    debugger
+    searchProps2.onSearch(input.value);
+};
+function onChange1() {
+    debugger
+}
+

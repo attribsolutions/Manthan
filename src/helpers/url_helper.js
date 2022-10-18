@@ -12,7 +12,7 @@ export const POST_EDIT_JWT_PROFILE = "/post-jwt-profile"
 export const POST_EDIT_PROFILE = "/post-fake-profile"
 
 //ORDERS
-export const GET_ORDER_ITEM = "Items"
+export const GET_ORDER_ITEM = "demo"
 export const ORDER_PAGE_API = "Orders"
 
 //Python Logic 
