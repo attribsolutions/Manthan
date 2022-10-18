@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from "react";
 import Breadcrumbs from "../../../components/Common/Breadcrumb";
 import { Col, Modal, Row } from "reactstrap";
-import paginationFactory, {
+import paginationwFactory, {
   PaginationListStandalone,
   PaginationProvider,
 } from "react-bootstrap-table2-paginator";
 import ToolkitProvider, { Search } from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 import { useSelector, useDispatch } from "react-redux";
-import "../../../assets/scss/CustomeTable/datatables.scss";
+import "../../../assets/scss/CustomTable2/datatables.scss";
 import CategoryTypeMaster from "./CategoryTypeMaster";
 import { MetaTags } from "react-meta-tags";
 import { useHistory } from "react-router-dom";
