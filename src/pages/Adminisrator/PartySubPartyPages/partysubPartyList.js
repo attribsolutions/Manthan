@@ -14,7 +14,7 @@ import {
 import { PARTY_SUB_PARTY } from "../../../helpers/url_helper";
 import PartySubParty from "./PartySubParty";
 
-const Employee_List = () => {
+const PartySubPartyList = () => {
   const dispatch = useDispatch();
   const reducers = useSelector(
     (state) => ({
@@ -48,7 +48,7 @@ debugger
 
   return (
     <React.Fragment>
-      {
+      {/* {
         (pageField) ?
           <CommonListPage
             action={action}
@@ -59,10 +59,10 @@ debugger
             deleteName={"PartySubParty"}
           />
           : null
-      }
+      } */}
 
     </React.Fragment>
   )
 }
 
-export default Employee_List;
+export default PartySubPartyList;
