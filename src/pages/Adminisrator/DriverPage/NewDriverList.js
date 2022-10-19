@@ -8,7 +8,7 @@ import paginationFactory, {
 import ToolkitProvider, { Search } from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 import { useSelector, useDispatch } from "react-redux";
-import "../../../assets/scss/CustomeTable/datatables.scss";
+import "../../../assets/scss/CustomTable2/datatables.scss";
 import DriverMaster from "./DriverMaster";
 import { MetaTags } from "react-meta-tags";
 import { useHistory } from "react-router-dom";

@@ -27,7 +27,6 @@ import {
 } from "../../../store/Administrator/CategoryTypeRedux/actions";
 import {
     comAddPageFieldFunc,
-    formValChange,
     formValid,
     onChangeText
 } from "../../../components/Common/CmponentRelatedCommonFile/validationFunction";

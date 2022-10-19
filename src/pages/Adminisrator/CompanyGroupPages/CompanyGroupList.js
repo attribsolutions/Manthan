@@ -32,10 +32,10 @@ const CompanyGroupList = (props) => {
   const action = {
     getList: getMethodForCompanyGroupList,
     editId: editCompanyGroupTypeId,
-    deleteId: deleteCompanyGroupTypeIDSuccess,
+    deleteId:delete_CompanyGroupType_ID,
     postSucc: PostMethod_ForCompanyGroupMasterSuccess,
     updateSucc: updateCompanyGroupTypeIDSuccess,
-    deleteSucc: delete_CompanyGroupType_ID
+    deleteSucc: deleteCompanyGroupTypeIDSuccess,
   }
 
   //  This UseEffect => Featch Modules List data  First Rendering

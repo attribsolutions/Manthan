@@ -117,7 +117,7 @@ const PartySubParty = (props) => {
         };
     }, [userAccess])
     useEffect(() => {
-        debugger
+      
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200) && !(pageMode === "dropdownAdd")) {
             // setDivision_dropdown_Select('')
             // setParty_dropdown_Select('')
