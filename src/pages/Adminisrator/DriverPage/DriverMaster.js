@@ -163,6 +163,12 @@ const DriverMaster = (props) => {
             if (hasEditVal) {
                 const { id, Name, DOB, UID, Address } = hasEditVal// new change
                 const { values, fieldLabel, hasValid, required, isError } = { ...state }
+
+                hasValid.Name.valid = true;
+                hasValid.DOB.valid = true;
+                hasValid.UID.valid = true;
+                hasValid.Address.valid = true;
+
                 values.Name = Name;
                 values.DOB = DOB;
                 values.UID = UID;
