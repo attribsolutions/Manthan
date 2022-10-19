@@ -160,7 +160,7 @@ const RoleMaster = (props) => {
   }, [pageField])
 
   useEffect(() => {
-
+    debugger
     // if (!(userPageAccessState === '')) { document.getElementById("txtName").focus(); }
     if ((hasShowloction || hasShowModal)) {
 
@@ -176,21 +176,31 @@ const RoleMaster = (props) => {
       }
 
       if (hasEditVal) {
-
+        debugger
         const listItems = hasEditVal.RoleEmployeeTypes.map((data) => ({
           value: data.EmployeeType,
           label: data.EmployeeTypeName
         }))
 
-        const { Name, Description, Dashboard, isActive, isSCMRole, IsPartyConnection } = hasEditVal
+        const { Name, Description, Dashboard, isActive, isSCMRole, IsPartyConnection, RoleEmployeeTypes } = hasEditVal
         const { values, fieldLabel, hasValid, required, isError } = { ...state }
-        values.RoleEmployeeTypes = listItems
+
+        hasValid.Name.valid = true;
+        hasValid.Description.valid = true;
+        hasValid.Dashboard.valid = true;
+        hasValid.isActive.valid = true;
+        hasValid.isSCMRole.valid = true;
+        hasValid.IsPartyConnection.valid = true;
+        hasValid.RoleEmployeeTypes.valid = true;
+
         values.Name = Name
         values.Description = Description
         values.Dashboard = Dashboard
         values.isActive = isActive
         values.isSCMRole = isSCMRole
         values.IsPartyConnection = IsPartyConnection
+        values.RoleEmployeeTypes =listItems;
+
         setState({ values, fieldLabel, hasValid, required, isError })
         dispatch(BreadcrumbShow(hasEditVal.RoleMaster))
 
