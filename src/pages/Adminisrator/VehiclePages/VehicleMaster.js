@@ -317,7 +317,7 @@ const VehicleMaster = (props) => {
                 Description: values.Description,
                 Driver: DriverList_dropdown_Select.value,
                 VehicleType: VehicleType_dropdown_Select.value,
-                VehicleDivisions: division,
+                Divisions: division,
             });
 
 
@@ -490,21 +490,12 @@ const VehicleMaster = (props) => {
 
                                                         <Row>
                                                             <FormGroup className="col col-sm-3">
-                                                                <Label htmlFor="validationCustom21">{fieldLabel.VehicleDivisions}</Label>
+                                                            <Label htmlFor="validationCustom21">Division</Label>
                                                                 <Select
-                                                                    id="VehicleDivisions "
-                                                                    // disabled={true}
-                                                                    name="VehicleDivisions"
-                                                                    value={values.VehicleDivisions}
-                                                                    isSearchable={false}
-                                                                    className="react-dropdown"
-                                                                    classNamePrefix="dropdown"
+                                                                    value={divisionType_dropdown_Select}
                                                                     options={DivisionType_DropdownOptions}
-                                                                    onChange={(v, e) => onChangeSelect({ e, v, state, setState })}
+                                                                    onChange={(e) => { DivisionType_DropDown_handller(e) }}
                                                                 />
-                                                                {isError.VehicleDivisions.length > 0 && (
-                                                                    <span className="text-danger f-8"><small>{isError.VehicleDivisions}</small></span>
-                                                                )}
                                                             </FormGroup>
                                                             <Col sm={1} style={{ marginTop: '28px' }} >
                                                                 {" "}

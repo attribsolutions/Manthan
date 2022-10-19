@@ -53,18 +53,18 @@ const CompanyGroupMaster = (props) => {
          values: {
             id: "",
             Name: "",
-            IsSCM:false
+            IsSCM:""
 
         },
 
         fieldLabel: {
             Name: '',
-            IsSCM:false
+            IsSCM:''
         },
 
         isError: {
             Name: "",
-            IsSCM:false
+            IsSCM:""
         },
 
         hasValid: {
@@ -152,9 +152,11 @@ const CompanyGroupMaster = (props) => {
                 const { values, fieldLabel, hasValid, required, isError } = { ...state }
                 values.Name = Name;
                 values.IsSCM = IsSCM;
+                hasValid.Name.valid = true;
+                hasValid.IsSCM.valid = true;
                 values.id = id
                 setState({ values, fieldLabel, hasValid, required, isError })
-                dispatch(BreadcrumbShow(hasEditVal.CompanyGroupMaster))
+                dispatch(BreadcrumbShow(hasEditVal.Name))
             }
             dispatch(editCompanyGroupTypeSuccess({ Status: false }))
         }
@@ -284,7 +286,7 @@ const CompanyGroupMaster = (props) => {
                                                                 <Row className="justify-content-md-left">
                                                                     <Label htmlFor="horizontal-firstname-input" className="col-sm-3 col-form-label">{fieldLabel.IsSCM}</Label>
                                                                     <Col md={2} style={{ marginTop: '9px' }} >
-                                                                    <div className="form-check form-switch form-switch-md mb-3" >
+                                                                    <div className="form-check form-switch form-switch-md mb-3">
                                                                             <Input type="checkbox" className="form-check-input"
                                                                                 value={values.IsSCM}
                                                                                 name="IsSCM"
