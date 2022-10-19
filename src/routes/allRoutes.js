@@ -84,6 +84,7 @@ import GSTMaster from "../pages/Adminisrator/GSTPages/GSTMaster";
 import GSTList from "../pages/Adminisrator/GSTPages/GSTList";
 
 import * as path from "./route_url";
+import TermsAndCondtionsList from "../pages/Adminisrator/TermsAndCondtions/TermsAndCondtionsList";
 
 const userRoutes = [
 
@@ -153,6 +154,7 @@ const userRoutes = [
   { path: path.PARTY_SUB_PARTY_lIST, component: PartySubPartyList },
 
   { path: '/TermsAndCondtionsMaster', component: TermsAndCondtionsMaster },
+  { path: '/TermsAndCondtionsList', component: TermsAndCondtionsList },
 
   { path: path.PRICE_lIST, component: PriceList },
   { path: path.PRICE, component: PriceMaster },
