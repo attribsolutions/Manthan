@@ -3,53 +3,54 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import TermsAndCondtionsMaster from "./TermsAndCondtionsMaster";
 import CommonListPage from "../../../components/Common/CmponentRelatedCommonFile/commonListPage";
-import { commonPageField, commonPageFieldSuccess } from "../../../store/actions";
-import { GetTermsAndCondtionsList } from "../../../store/Administrator/TermsAndCondtionsRedux/actions";
+import { commonPageField, commonPageFieldList, commonPageFieldListSuccess, commonPageFieldSuccess } from "../../../store/actions";
+import { PostMethod_ForTermsAndCondtionsMaster_Success,GetTermsAndCondtionsList,EditTermsAndCondtions,DeleteTermsAndCondtions,DeleteTermsAndCondtions_Success ,UpdateTermsAndCondtions_Success} from "../../../store/Administrator/TermsAndCondtionsRedux/actions";
 
 const TermsAndCondtionsList = (props) => {
   
 
   const dispatch = useDispatch();
   //useSelector is used to access the redux store in function component
-  debugger
   const reducers = useSelector(
     (state) => ({
       tableList: state.TermsAndCondtionsReducer.TermsAndCondtionsList,
-      editData: state.DriverReducer.editData,
-      updateMsg: state.DriverReducer.updateMessage,
-      deleteMsg: state.DriverReducer.deleteMessage,
-      postMsg: state.DriverReducer.PostDataMessage,
+      postMsg: state.TermsAndCondtionsReducer.PostData,
+      editData: state.TermsAndCondtionsReducer.TermsAndCondtionseditData,
+      updateMsg: state.TermsAndCondtionsReducer.TermsAndCondtionsupdateMessage,
+      deleteMsg: state.TermsAndCondtionsReducer.TermsAndCondtionsdeleteMessage,
+      
+      
       userAccess: state.Login.RoleAccessUpdateData,
-      pageField: state.CommonPageFieldReducer.pageField
+      pageField: state.CommonPageFieldReducer.pageFieldList
     })
   );
 
 
   const action = {
     getList: GetTermsAndCondtionsList,
-    // editId: editDriverTypeId,
-    // deleteId: delete_DriverType_ID,
-    // postSucc: PostMethod_ForDriverMasterSuccess,
-    // updateSucc: updateDriverTypeIDSuccess,
-    // deleteSucc: deleteDriverTypeIDSuccess
+    editId: EditTermsAndCondtions,
+    deleteId: DeleteTermsAndCondtions,
+    postSucc: PostMethod_ForTermsAndCondtionsMaster_Success,
+    updateSucc: UpdateTermsAndCondtions_Success,
+    deleteSucc: DeleteTermsAndCondtions_Success
 
   }
   
   //useEffect : used for fetching data
   useEffect(() => {
     
-    dispatch(commonPageFieldSuccess([]))
-    dispatch(commonPageField(102))
+    dispatch(commonPageFieldListSuccess(null))
+    dispatch(commonPageFieldList(102))
     dispatch(GetTermsAndCondtionsList())
 
   }, []);
 
   const { pageField } = reducers
-
+debugger
   return (
     <React.Fragment>
       {
-        (pageField.length > 0) ?
+        (pageField) ?
           <CommonListPage
             action={action}
             reducers={reducers}
