@@ -297,7 +297,7 @@ const PartyType = (props) => {
                                                                     <Col md={2} style={{ marginTop: '9px' }} >
                                                                         <div className="form-check form-switch form-switch-md mb-3">
                                                                             <Input type="checkbox" className="form-check-input"
-                                                                                value={values.IsSCM}
+                                                                                 checked={values.IsSCM}
                                                                                 name="IsSCM"
                                                                                 onChange={(event) => onChangeText({ event, state, setState })}
                                                                             />
@@ -314,7 +314,7 @@ const PartyType = (props) => {
                                                                     <Col md={2} style={{ marginTop: '9px' }} >
                                                                         <div className="form-check form-switch form-switch-md mb-3">
                                                                             <Input type="checkbox" className="form-check-input"
-                                                                                value={values.IsDivision}
+                                                                                 checked={values.IsDivision}
                                                                                 name="IsDivision"
                                                                                 onChange={(event) => onChangeText({ event, state, setState })}
                                                                             />

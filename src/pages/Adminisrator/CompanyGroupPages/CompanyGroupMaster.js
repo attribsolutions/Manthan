@@ -39,32 +39,32 @@ import { COMPANYGROUP_lIST } from "../../../routes/route_url";
 const CompanyGroupMaster = (props) => {
 
     const formRef = useRef(null);
-    const dispatch= useDispatch();
+    const dispatch = useDispatch();
     const history = useHistory()
 
-    const [pageMode,setPageMode] = useState();
-    const [userPageAccessState ,setUserPageAccessState] = useState('');
+    const [pageMode, setPageMode] = useState();
+    const [userPageAccessState, setUserPageAccessState] = useState('');
     const [modalCss, setModalCss] = useState(false);
 
 
-{/** Dyanamic Page access state and OnChange function */ }
+    {/** Dyanamic Page access state and OnChange function */ }
     {/*start */ }
-    const [state, setState] = useState({       
-         values: {
+    const [state, setState] = useState({
+        values: {
             id: "",
             Name: "",
-            IsSCM:""
+            IsSCM: ""
 
         },
 
         fieldLabel: {
             Name: '',
-            IsSCM:''
+            IsSCM: ''
         },
 
         isError: {
             Name: "",
-            IsSCM:""
+            IsSCM: ""
         },
 
         hasValid: {
@@ -74,7 +74,7 @@ const CompanyGroupMaster = (props) => {
                 valid: false
             },
 
-          IsSCM: {
+            IsSCM: {
                 regExp: '',
                 inValidMsg: "",
                 valid: false
@@ -106,7 +106,7 @@ const CompanyGroupMaster = (props) => {
         dispatch(commonPageField(32))
     }, []);
 
-    
+
 
     // userAccess useEffect
     useEffect(() => {
@@ -132,7 +132,7 @@ const CompanyGroupMaster = (props) => {
     // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
     useEffect(() => {
 
-       
+
         // if (!(userPageAccessState === '')) { document.getElementById("txtName").focus(); }
         if ((hasShowloction || hasShowModal)) {
 
@@ -286,9 +286,9 @@ const CompanyGroupMaster = (props) => {
                                                                 <Row className="justify-content-md-left">
                                                                     <Label htmlFor="horizontal-firstname-input" className="col-sm-3 col-form-label">{fieldLabel.IsSCM}</Label>
                                                                     <Col md={2} style={{ marginTop: '9px' }} >
-                                                                    <div className="form-check form-switch form-switch-md mb-3">
+                                                                        <div className="form-check form-switch form-switch-md mb-3">
                                                                             <Input type="checkbox" className="form-check-input"
-                                                                                value={values.IsSCM}
+                                                                                checked={values.IsSCM}
                                                                                 name="IsSCM"
                                                                                 onChange={(event) => onChangeText({ event, state, setState })}
                                                                             />
@@ -306,7 +306,7 @@ const CompanyGroupMaster = (props) => {
                                                             </Row>
                                                         </FormGroup >
                                                     </Row>
- 
+
                                                 </CardBody>
                                             </Card>
                                         </Col>
