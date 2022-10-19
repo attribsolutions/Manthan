@@ -151,9 +151,11 @@ const EmployeeTypesMaster = (props) => {
                 values.IsPartyConnection = IsPartyConnection;
                 values.IsSCM = IsSCM;
                 values.id = id
-
+                hasValid.Name.valid = true;
+                hasValid.IsSCM.valid = true;
+                hasValid.IsPartyConnection.valid = true;
                 setState({ values, fieldLabel, hasValid, required, isError })
-                dispatch(BreadcrumbShow(hasEditVal.EmployeeTypesMaster))
+                dispatch(BreadcrumbShow(hasEditVal.Name))
             }
             dispatch(editEmployeeTypeSuccess({ Status: false }))
         }
