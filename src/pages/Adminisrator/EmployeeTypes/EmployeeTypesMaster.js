@@ -209,7 +209,6 @@ const EmployeeTypesMaster = (props) => {
 
 
     const formSubmitHandler = (event) => {
-        debugger
         event.preventDefault();
         if (formValid(state, setState)) {
             const jsonBody = JSON.stringify({
