@@ -297,7 +297,7 @@ const RoleMaster = (props) => {
         <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
           <Container fluid>
             <MetaTags>
-              <title>DriverMaster | FoodERP-React FrontEnd</title>
+              <title>RoleMaster | FoodERP-React FrontEnd</title>
             </MetaTags>
             <Breadcrumb breadcrumbItem={userPageAccessState.PageHeading} />
 
@@ -349,13 +349,7 @@ const RoleMaster = (props) => {
                                   options={EmployeeType_DropdownOptions}
                                   onChange={(v, e) => onChangeSelect({ e, v, state, setState })}
                                   classNamePrefix="dropdown"
-                                  styles={{
-                                    control: base => ({
-                                      ...base,
-                                      border: isError.RoleEmployeeTypes.length > 0 ? '1px solid red' : '',
-
-                                    })
-                                  }}
+                                 
                                 />
                                 {isError.RoleEmployeeTypes.length > 0 && (
                                   <span className="text-danger f-8"><small>{isError.RoleEmployeeTypes}</small></span>
