@@ -255,7 +255,7 @@ export default function SearchBoxSecond() {
 
 let props2 = function onSearch() { }
 
-export const mySearchProps = (props1) => {
+export const mySearchProps1 = (props1) => {
     props2 = props1;
 };
 
