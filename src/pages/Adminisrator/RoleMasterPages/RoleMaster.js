@@ -160,7 +160,7 @@ const RoleMaster = (props) => {
   }, [pageField])
 
   useEffect(() => {
-
+    debugger
     // if (!(userPageAccessState === '')) { document.getElementById("txtName").focus(); }
     if ((hasShowloction || hasShowModal)) {
 
@@ -176,21 +176,31 @@ const RoleMaster = (props) => {
       }
 
       if (hasEditVal) {
-
+        debugger
         const listItems = hasEditVal.RoleEmployeeTypes.map((data) => ({
           value: data.EmployeeType,
           label: data.EmployeeTypeName
         }))
 
-        const { Name, Description, Dashboard, isActive, isSCMRole, IsPartyConnection } = hasEditVal
+        const { Name, Description, Dashboard, isActive, isSCMRole, IsPartyConnection, RoleEmployeeTypes } = hasEditVal
         const { values, fieldLabel, hasValid, required, isError } = { ...state }
-        values.RoleEmployeeTypes = listItems
+
+        hasValid.Name.valid = true;
+        hasValid.Description.valid = true;
+        hasValid.Dashboard.valid = true;
+        hasValid.isActive.valid = true;
+        hasValid.isSCMRole.valid = true;
+        hasValid.IsPartyConnection.valid = true;
+        hasValid.RoleEmployeeTypes.valid = true;
+
         values.Name = Name
         values.Description = Description
         values.Dashboard = Dashboard
         values.isActive = isActive
         values.isSCMRole = isSCMRole
         values.IsPartyConnection = IsPartyConnection
+        values.RoleEmployeeTypes =listItems;
+
         setState({ values, fieldLabel, hasValid, required, isError })
         dispatch(BreadcrumbShow(hasEditVal.RoleMaster))
 
@@ -287,7 +297,7 @@ const RoleMaster = (props) => {
         <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
           <Container fluid>
             <MetaTags>
-              <title>DriverMaster | FoodERP-React FrontEnd</title>
+              <title>RoleMaster | FoodERP-React FrontEnd</title>
             </MetaTags>
             <Breadcrumb breadcrumbItem={userPageAccessState.PageHeading} />
 
@@ -339,13 +349,7 @@ const RoleMaster = (props) => {
                                   options={EmployeeType_DropdownOptions}
                                   onChange={(v, e) => onChangeSelect({ e, v, state, setState })}
                                   classNamePrefix="dropdown"
-                                  styles={{
-                                    control: base => ({
-                                      ...base,
-                                      border: isError.RoleEmployeeTypes.length > 0 ? '1px solid red' : '',
-
-                                    })
-                                  }}
+                                 
                                 />
                                 {isError.RoleEmployeeTypes.length > 0 && (
                                   <span className="text-danger f-8"><small>{isError.RoleEmployeeTypes}</small></span>

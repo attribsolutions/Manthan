@@ -1,6 +1,6 @@
 import { call, put, takeEvery } from "redux-saga/effects";
 
-import { PostMethod_ForTermsAndCondtionsMasterAPISuccess, GetTermsAndCondtionsList} from "./actions";
+import { PostMethod_ForTermsAndCondtionsMaster_Success, GetTermsAndCondtionsList, GetTermsAndCondtionsList_Success} from "./actions";
 
 import {Post_TermsAndCondtions_Master_API,get_TermsAndCondtionsList_API } from "../../../helpers/backend_helper";
 
@@ -17,7 +17,7 @@ function* Post_Method_ForTermsAndCondtionsMaster_GenFun({ data }) {
   try {
     const response = yield call(Post_TermsAndCondtions_Master_API, data);
     yield put(SpinnerState(false))
-    yield put(PostMethod_ForTermsAndCondtionsMasterAPISuccess(response));
+    yield put(PostMethod_ForTermsAndCondtionsMaster_Success(response));
   } catch (error) {
     yield put(SpinnerState(false))
     yield put(AlertState({
@@ -29,10 +29,12 @@ function* Post_Method_ForTermsAndCondtionsMaster_GenFun({ data }) {
 
 // Get List Page API
 function* Get_TermsAndCondtions_GenratorFunction() {
+  
   yield put(SpinnerState(true))
   try {
     const response = yield call(get_TermsAndCondtionsList_API);
-    yield put(GetTermsAndCondtionsList(response.Data));
+    
+    yield put(GetTermsAndCondtionsList_Success(response.Data));
     yield put(SpinnerState(false))
   } catch (error) {
     yield put(SpinnerState(false))
