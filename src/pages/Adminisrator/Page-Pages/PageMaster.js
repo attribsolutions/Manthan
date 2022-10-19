@@ -5,7 +5,6 @@ import {
   CardBody,
   CardHeader,
   CardText,
-  CardTitle,
   Col,
   Container,
   FormGroup,
@@ -23,10 +22,8 @@ import MetaTags from "react-meta-tags"
 //Import Breadcrumb
 import Breadcrumb from "../../../components/Common/Breadcrumb";
 import Select from "react-select";
-
 import classnames from "classnames";
 import { AvField, AvForm, AvInput } from "availity-reactstrap-validation";
-import ReactSelect from "react-select";
 import { Tbody, Thead } from "react-super-responsive-table";
 import { AlertState, BreadcrumbShow, editHPagesIDSuccess, fetchModelsList, getControlTypes, getFieldValidations, getPageAccess_DropDown_API, getPageList, getPageListSuccess, PostModelsSubmitSuccess, saveHPages, saveHPagesSuccess, updateHPages } from "../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
@@ -54,7 +51,6 @@ const PageMaster = (props) => {
   const [pageAccess_DropDownSelect, setPageAccess_DropDownSelect] =
     useState("");
 
-
   const [pageFieldTabTable, setPageFieldTabTable] = useState([{
     ControlID: '',
     FieldLabel: '',
@@ -63,7 +59,7 @@ const PageMaster = (props) => {
     InValidMsg: '',
     ListPageSeq: '',
     IsCompulsory: false,
-    DefaultSort: false,
+    DefaultSort: 0,
     FieldSequence: false,
     ShowInListPage: false,
     ShowInDownload: false,
@@ -113,7 +109,6 @@ const PageMaster = (props) => {
     };
   }, [userAccess])
 
-
   useEffect(() => {
     dispatch(fetchModelsList());
     dispatch(getControlTypes());
@@ -123,7 +118,7 @@ const PageMaster = (props) => {
 
   // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
   useEffect(() => {
-
+    debugger
     // if (!(userPageAccessState === '')) { document.getElementById("txtName").focus(); }
     if ((hasShowloction || hasShowModal)) {
 
@@ -203,7 +198,6 @@ const PageMaster = (props) => {
       }
     }
   }, []);
-
 
   // This UseEffect clear Form Data and when modules Save Successfully.
   useEffect(() => {
@@ -307,7 +301,7 @@ const PageMaster = (props) => {
   }));
 
   function PageField_Tab_AddRow_Handler() {
-    debugger
+
     var newarr1 = [...pageFieldTabTable, {
       ControlID: '',
       FieldLabel: '',
@@ -315,7 +309,7 @@ const PageMaster = (props) => {
       FieldValidation: { label: "select", value: 0 },
       InValidMsg: '',
       IsCompulsory: '',
-      DefaultSort: '',
+      DefaultSort: 0,
       FieldSequence: '',
       ShowInListPage: '',
       ListPageSeq: '',
@@ -334,207 +328,229 @@ const PageMaster = (props) => {
     setPageFieldTabTable(removeElseArrray1)
   }
 
-  function PageField_onChange_Handler(event, type, key) {
+  function arrow_value(key) {
     debugger
+    pageFieldTabTable[key].DefaultSort = 2
 
+    var x = document.getElementById("up");
+    var y = document.getElementById("down");
+
+    y.style.display = "block";
+    x.style.display = "none";
+  }
+
+  function arrow_value1(key) {
+    pageFieldTabTable[key].DefaultSort = 1
+
+    var x = document.getElementById("up");
+    var y = document.getElementById("down");
+
+    x.style.display = "block";
+    y.style.display = "none";
+
+  }
+
+  function PageField_onChange_Handler(event, type = '', key) {
+    debugger
     var found = pageFieldTabTable.find((i, k) => {
       return (k === key)
     })
+
     let newSelectValue = ''
 
-    if (type === "ControlID") {
+    switch (type) {
+      case 'ControlID':
+        newSelectValue = {
+          ControlID: event,
+          FieldLabel: found.FieldLabel,
+          ControlType: found.ControlType,
+          FieldValidation: found.FieldValidation,
+          InValidMsg: found.InValidMsg,
+          IsCompulsory: found.IsCompulsory,
+          DefaultSort: found.DefaultSort,
+          ShowInListPage: found.ShowInListPage,
+          ListPageSeq: found.ListPageSeq,
+          ShowInDownload: found.ShowInDownload,
+          DownloadDefaultSelect: found.DownloadDefaultSelect,
 
-      newSelectValue = {
-        ControlID: event,
-        FieldLabel: found.FieldLabel,
-        ControlType: found.ControlType,
-        FieldValidation: found.FieldValidation,
-        InValidMsg: found.InValidMsg,
-        IsCompulsory: found.IsCompulsory,
-        DefaultSort: found.DefaultSort,
-        ShowInListPage: found.ShowInListPage,
-        ListPageSeq: found.ListPageSeq,
-        ShowInDownload: found.ShowInDownload,
-        DownloadDefaultSelect: found.DownloadDefaultSelect,
+        }
+        break;
 
-      }
-    }
+      case 'FieldLabel':
+        newSelectValue = {
+          ControlID: found.ControlID,
+          FieldLabel: event,
+          ControlType: found.ControlType,
+          FieldValidation: found.FieldValidation,
+          InValidMsg: found.InValidMsg,
+          IsCompulsory: found.IsCompulsory,
+          DefaultSort: found.DefaultSort,
+          ShowInListPage: found.ShowInListPage,
+          ListPageSeq: found.ListPageSeq,
+          ShowInDownload: found.ShowInDownload,
+          DownloadDefaultSelect: found.DownloadDefaultSelect,
 
-    else if (type === "FieldLabel") {
+        }
+        break;
 
-      newSelectValue = {
-        ControlID: found.ControlID,
-        FieldLabel: event,
-        ControlType: found.ControlType,
-        FieldValidation: found.FieldValidation,
-        InValidMsg: found.InValidMsg,
-        IsCompulsory: found.IsCompulsory,
-        DefaultSort: found.DefaultSort,
-        ShowInListPage: found.ShowInListPage,
-        ListPageSeq: found.ListPageSeq,
-        ShowInDownload: found.ShowInDownload,
-        DownloadDefaultSelect: found.DownloadDefaultSelect,
+      case 'ControlType':
+        newSelectValue = {
+          ControlID: found.ControlID,
+          FieldLabel: found.FieldLabel,
+          ControlType: event,
+          FieldValidation: found.FieldValidation,
+          InValidMsg: found.InValidMsg,
+          IsCompulsory: found.IsCompulsory,
+          DefaultSort: found.DefaultSort,
+          ShowInListPage: found.ShowInListPage,
+          ListPageSeq: found.ListPageSeq,
+          ShowInDownload: found.ShowInDownload,
+          DownloadDefaultSelect: found.DownloadDefaultSelect,
 
-      }
-    }
-    else if (type === 'ControlType') {
+        }
+        break;
 
-      newSelectValue = {
-        ControlID: found.ControlID,
-        FieldLabel: found.FieldLabel,
-        ControlType: event,
-        FieldValidation: found.FieldValidation,
-        InValidMsg: found.InValidMsg,
-        IsCompulsory: found.IsCompulsory,
-        DefaultSort: found.DefaultSort,
-        ShowInListPage: found.ShowInListPage,
-        ListPageSeq: found.ListPageSeq,
-        ShowInDownload: found.ShowInDownload,
-        DownloadDefaultSelect: found.DownloadDefaultSelect,
+      case 'FieldValidation':
+        newSelectValue = {
+          ControlID: found.ControlID,
+          FieldLabel: found.FieldLabel,
+          ControlType: found.ControlType,
+          FieldValidation: event,
+          InValidMsg: found.InValidMsg,
+          IsCompulsory: found.IsCompulsory,
+          DefaultSort: found.DefaultSort,
+          ShowInListPage: found.ShowInListPage,
+          ListPageSeq: found.ListPageSeq,
+          ShowInDownload: found.ShowInDownload,
+          DownloadDefaultSelect: found.DownloadDefaultSelect,
+        }
+        break;
 
-      }
-    }
+      case 'InValidMsg':
+        newSelectValue = {
+          ControlID: found.ControlID,
+          FieldLabel: found.FieldLabel,
+          ControlType: found.ControlType,
+          FieldValidation: found.FieldValidation,
+          InValidMsg: event,
+          IsCompulsory: found.IsCompulsory,
+          DefaultSort: found.DefaultSort,
+          ShowInListPage: found.ShowInListPage,
+          ListPageSeq: found.ListPageSeq,
+          ShowInDownload: found.ShowInDownload,
+          DownloadDefaultSelect: found.DownloadDefaultSelect,
 
-    else if (type === 'FieldValidation') {
+        }
+        break;
 
-      newSelectValue = {
-        ControlID: found.ControlID,
-        FieldLabel: found.FieldLabel,
-        ControlType: found.ControlType,
-        FieldValidation: event,
-        InValidMsg: found.InValidMsg,
-        IsCompulsory: found.IsCompulsory,
-        DefaultSort: found.DefaultSort,
-        ShowInListPage: found.ShowInListPage,
-        ListPageSeq: found.ListPageSeq,
-        ShowInDownload: found.ShowInDownload,
-        DownloadDefaultSelect: found.DownloadDefaultSelect,
+      case 'IsCompulsory':
+        newSelectValue = {
+          ControlID: found.ControlID,
+          FieldLabel: found.FieldLabel,
+          ControlType: found.ControlType,
+          FieldValidation: found.FieldValidation,
+          InValidMsg: found.InValidMsg,
+          IsCompulsory: event,
+          DefaultSort: found.DefaultSort,
+          ShowInListPage: found.ShowInListPage,
+          ListPageSeq: found.ListPageSeq,
+          ShowInDownload: found.ShowInDownload,
+          DownloadDefaultSelect: found.DownloadDefaultSelect,
 
-      }
-    }
-    else if (type === 'InValidMsg') {
+        }
+        break;
 
-      newSelectValue = {
-        ControlID: found.ControlID,
-        FieldLabel: found.FieldLabel,
-        ControlType: found.ControlType,
-        FieldValidation: found.FieldValidation,
-        InValidMsg: event,
-        IsCompulsory: found.IsCompulsory,
-        DefaultSort: found.DefaultSort,
-        ShowInListPage: found.ShowInListPage,
-        ListPageSeq: found.ListPageSeq,
-        ShowInDownload: found.ShowInDownload,
-        DownloadDefaultSelect: found.DownloadDefaultSelect,
+      case 'DefaultSort':
+        newSelectValue = {
+          ControlID: found.ControlID,
+          FieldLabel: found.FieldLabel,
+          ControlType: found.ControlType,
+          FieldValidation: found.FieldValidation,
+          InValidMsg: found.InValidMsg,
+          IsCompulsory: found.IsCompulsory,
+          DefaultSort: event ? 1 : 0,
+          ShowInListPage: found.ShowInListPage,
+          ListPageSeq: found.ListPageSeq,
+          ShowInDownload: found.ShowInDownload,
+          DownloadDefaultSelect: found.DownloadDefaultSelect,
 
-      }
-    }
-    else if (type === 'IsCompulsory') {
+        }
+        break;
 
-      newSelectValue = {
-        ControlID: found.ControlID,
-        FieldLabel: found.FieldLabel,
-        ControlType: found.ControlType,
-        FieldValidation: found.FieldValidation,
-        InValidMsg: found.InValidMsg,
-        IsCompulsory: event,
-        DefaultSort: found.DefaultSort,
-        ShowInListPage: found.ShowInListPage,
-        ListPageSeq: found.ListPageSeq,
-        ShowInDownload: found.ShowInDownload,
-        DownloadDefaultSelect: found.DownloadDefaultSelect,
+      case 'ShowInListPage':
+        newSelectValue = {
+          ControlID: found.ControlID,
+          FieldLabel: found.FieldLabel,
+          ControlType: found.ControlType,
+          FieldValidation: found.FieldValidation,
+          InValidMsg: found.InValidMsg,
+          IsCompulsory: found.IsCompulsory,
+          DefaultSort: found.DefaultSort,
+          ShowInListPage: event,
+          ListPageSeq: found.ListPageSeq,
+          ShowInDownload: found.ShowInDownload,
+          DownloadDefaultSelect: found.DownloadDefaultSelect,
 
-      }
-    }
+        }
+        break;
 
-    else if (type === 'DefaultSort') {
+      case 'ListPageSeq':
+        newSelectValue = {
+          ControlID: found.ControlID,
+          FieldLabel: found.FieldLabel,
+          ControlType: found.ControlType,
+          FieldValidation: found.FieldValidation,
+          InValidMsg: found.InValidMsg,
+          IsCompulsory: found.IsCompulsory,
+          DefaultSort: found.DefaultSort,
+          ShowInListPage: found.ShowInListPage,
+          ListPageSeq: event,
+          ShowInDownload: found.ShowInDownload,
+          DownloadDefaultSelect: found.DownloadDefaultSelect,
 
-      newSelectValue = {
-        ControlID: found.ControlID,
-        FieldLabel: found.FieldLabel,
-        ControlType: found.ControlType,
-        FieldValidation: found.FieldValidation,
-        InValidMsg: found.InValidMsg,
-        IsCompulsory: found.IsCompulsory,
-        DefaultSort: event,
-        ShowInListPage: found.ShowInListPage,
-        ListPageSeq: found.ListPageSeq,
-        ShowInDownload: found.ShowInDownload,
-        DownloadDefaultSelect: found.DownloadDefaultSelect,
+        }
+        break;
 
-      }
-    }
+      case 'ShowInDownload':
+        newSelectValue = {
+          ControlID: found.ControlID,
+          FieldLabel: found.FieldLabel,
+          ControlType: found.ControlType,
+          FieldValidation: found.FieldValidation,
+          InValidMsg: found.InValidMsg,
+          IsCompulsory: found.IsCompulsory,
+          DefaultSort: found.DefaultSort,
+          ShowInListPage: found.ShowInListPage,
+          ListPageSeq: found.ListPageSeq,
+          ShowInDownload: event,
+          DownloadDefaultSelect: found.DownloadDefaultSelect,
 
-    else if (type === 'ShowInListPage') {
+        }
+        break;
 
-      newSelectValue = {
-        ControlID: found.ControlID,
-        FieldLabel: found.FieldLabel,
-        ControlType: found.ControlType,
-        FieldValidation: found.FieldValidation,
-        InValidMsg: found.InValidMsg,
-        IsCompulsory: found.IsCompulsory,
-        DefaultSort: found.DefaultSort,
-        ShowInListPage: event,
-        ListPageSeq: found.ListPageSeq,
-        ShowInDownload: found.ShowInDownload,
-        DownloadDefaultSelect: found.DownloadDefaultSelect,
+      case 'DownloadDefaultSelect':
+        newSelectValue = {
+          ControlID: found.ControlID,
+          FieldLabel: found.FieldLabel,
+          ControlType: found.ControlType,
+          FieldValidation: found.FieldValidation,
+          InValidMsg: found.InValidMsg,
+          IsCompulsory: found.IsCompulsory,
+          DefaultSort: found.DefaultSort,
+          ShowInListPage: found.ShowInListPage,
+          ListPageSeq: found.ListPageSeq,
+          ShowInDownload: found.ShowInDownload,
+          DownloadDefaultSelect: event,
 
-      }
-    }
-    else if (type === 'ListPageSeq') {
-
-      newSelectValue = {
-        ControlID: found.ControlID,
-        FieldLabel: found.FieldLabel,
-        ControlType: found.ControlType,
-        FieldValidation: found.FieldValidation,
-        InValidMsg: found.InValidMsg,
-        IsCompulsory: found.IsCompulsory,
-        DefaultSort: found.DefaultSort,
-        ShowInListPage: found.ShowInListPage,
-        ListPageSeq: event,
-        ShowInDownload: found.ShowInDownload,
-        DownloadDefaultSelect: found.DownloadDefaultSelect,
-
-      }
-    }
-    else if (type === 'ShowInDownload') {
-
-      newSelectValue = {
-        ControlID: found.ControlID,
-        FieldLabel: found.FieldLabel,
-        ControlType: found.ControlType,
-        FieldValidation: found.FieldValidation,
-        InValidMsg: found.InValidMsg,
-        IsCompulsory: found.IsCompulsory,
-        DefaultSort: found.DefaultSort,
-        ShowInListPage: found.ShowInListPage,
-        ListPageSeq: found.ListPageSeq,
-        ShowInDownload: event,
-        DownloadDefaultSelect: found.DownloadDefaultSelect,
-
-      }
-    }
-    else if (type === 'DownloadDefaultSelect') {
-
-      newSelectValue = {
-        ControlID: found.ControlID,
-        FieldLabel: found.FieldLabel,
-        ControlType: found.ControlType,
-        FieldValidation: found.FieldValidation,
-        InValidMsg: found.InValidMsg,
-        IsCompulsory: found.IsCompulsory,
-        DefaultSort: found.DefaultSort,
-        ShowInListPage: found.ShowInListPage,
-        ListPageSeq: found.ListPageSeq,
-        ShowInDownload: found.ShowInDownload,
-        DownloadDefaultSelect: event,
-
-      }
+        }
+        break;
     }
 
     let newTabArr = pageFieldTabTable.map((index, k) => {
+
+      if (type === "DefaultSort" && !(k === key)) {
+        index["DefaultSort"] = 0
+      }
       return (k === key) ? newSelectValue : index
     })
     setPageFieldTabTable(newTabArr)
@@ -822,6 +838,8 @@ const PageMaster = (props) => {
       );
     });
   }
+
+
   // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
   var IsEditMode_Css = "";
   if ((pageMode === "edit") || (pageMode === "copy") || (pageMode === "dropdownAdd")) { IsEditMode_Css = "-5.5%" };
@@ -835,7 +853,11 @@ const PageMaster = (props) => {
           </MetaTags>
           <Container fluid>
             {/* Render Breadcrumbs */}
-            <AvForm onValidSubmit={(e, v) => { FormSubmitButton_Handler(e, v); }}>
+            <AvForm
+              id="mainForm"
+              name="mainForm"
+              onValidSubmit={(e, v) => { FormSubmitButton_Handler(e, v); }}>
+
               <Breadcrumb breadcrumbItem={userPageAccessState.PageHeading} />
               <Col lg={12}>
                 <Card className="text-black" >
@@ -892,8 +914,8 @@ const PageMaster = (props) => {
                           </span>
                           <span className="d-none d-sm-block">Messages</span>
                         </NavLink>
-                      </NavItem>
-                      <NavItem>
+                      </NavItem> */}
+                      {/* <NavItem>
                         <NavLink
                           style={{ cursor: "pointer" }}
                           className={classnames({
@@ -1335,179 +1357,216 @@ const PageMaster = (props) => {
                         {/* {!(PageFieldShowUI) ? */}
                         < Row className="mt-3">
                           <Col md={12}>
-                            <Table className="table table-bordered table-responsive">
-                              <Thead >
-                                <tr>
-                                  <th>Control ID</th>
-                                  <th>Field Label</th>
-                                  <th className="col col-sm-2">Control Type</th>
-                                  <th className="col col-sm-2" >Field Validation</th>
-                                  <th className="col col-sm-2" >InValid Msg</th>
-                                  <th>List Page Seq</th>
-                                  <th>Is Compulsory</th>
-                                  <th>Default Sort</th>
-                                  <th>Show In List Page</th>
-                                  <th>Show In Download</th>
-                                  <th>Download Default Select</th>
-                                  <th>Action</th>
+                            <div className="table-rep-plugin ">
+                              <div
+                                className="custom_scroll_div"
+                                data-pattern="priority-columns "
+                              >
+                                <Table className="table table-bordered table-responsive">
+                                  <Thead >
+                                    <tr>
+                                      <th className="col col-sm-2">Control ID</th>
+                                      <th className="col col-sm-2">Field Label</th>
+                                      <th className="col col-sm-2">Control Type</th>
+                                      <th className="col col-sm-2" >Field Validation</th>
+                                      <th className="col col-sm-2" >InValid Msg</th>
+                                      <th className="col col-sm-1">List Page Seq</th>
+                                      <th >Is Compulsory</th>
+                                      <th>Default Sort</th>
+                                      <th>Show In List Page</th>
+                                      <th>Show In Download</th>
+                                      <th>Download Default Select</th>
+                                      <th className="col col-sm-1">Action</th>
 
+                                    </tr>
+                                  </Thead>
+                                  <Tbody  >
+                                    {pageFieldTabTable.map((TableValue, key) => (
+                                      <tr >
+                                        <td>
 
-                                </tr>
-                              </Thead>
-                              <Tbody  >
-                                {pageFieldTabTable.map((TableValue, key) => (
-                                  <tr >
-                                    <td>
-                                      <Col >
-                                        <Input
-                                          type="text"
-                                          id={`ControlID${key}`}
-                                          defaultValue={EditData.ControlID}
-                                          value={pageFieldTabTable[key].ControlID}
-                                          onChange={(e) => PageField_onChange_Handler(e.target.value, "ControlID", key)}>
-                                        </Input>
-                                      </Col>
-                                    </td>
-                                    <td>
-                                      <Col >
-                                        <Input
-                                          type="text"
-                                          id={`FieldLabel${key}`}
-                                          defaultValue={EditData.FieldLabel}
-                                          value={pageFieldTabTable[key].FieldLabel}
-                                          onChange={(e) => PageField_onChange_Handler(e.target.value, "FieldLabel", key)}>
-                                        </Input>
-                                      </Col>
-                                    </td>
-                                    <td>
+                                          <Input
+                                            type="text"
+                                            id={`ControlID${key}`}
+                                            defaultValue={EditData.ControlID}
+                                            value={pageFieldTabTable[key].ControlID}
+                                            onChange={(e) => PageField_onChange_Handler(e.target.value, "ControlID", key)}>
+                                          </Input>
 
-                                      <Select
-                                        id={`ControlType-${key}`}
+                                        </td>
+                                        <td>
 
-                                        // placeholder="select unit"
-                                        value={pageFieldTabTable[key].ControlType}
-                                        options={ControlTypes_DropdownOptions}
-                                        onChange={(e) => { FieldValidation_Dropdown_Handler(e); PageField_onChange_Handler(e, "ControlType", key) }}
-                                      />
-                                    </td>
+                                          <Input
+                                            type="text"
+                                            id={`FieldLabel${key}`}
+                                            defaultValue={EditData.FieldLabel}
+                                            value={pageFieldTabTable[key].FieldLabel}
+                                            onChange={(e) => PageField_onChange_Handler(e.target.value, "FieldLabel", key)}>
+                                          </Input>
 
-                                    <td>
-                                      <Select
-                                        id={`FieldValidation-${key}`}
-                                        // placeholder="select unit"
-                                        value={pageFieldTabTable[key].FieldValidation}
-                                        options={FieldValidations_DropdownOptions}
-                                        onChange={(e) => { PageField_onChange_Handler(e, "FieldValidation", key); }}
-                                      />
-                                    </td>
-                                    <td>
-                                      <Input
+                                        </td>
+                                        <td>
 
-                                        type="text"
-                                        id={`InValidMsg${key}`}
-                                        defaultValue={EditData.InValidMsg}
-                                        value={pageFieldTabTable[key].InValidMsg}
-                                        onChange={(e) => PageField_onChange_Handler(e.target.value, "InValidMsg", key)}>
+                                          <Select
+                                            id={`ControlType-${key}`}
 
-                                      </Input>
-                                    </td>
-                                    <td>
-                                      <Input
+                                            // placeholder="select unit"
+                                            value={pageFieldTabTable[key].ControlType}
+                                            options={ControlTypes_DropdownOptions}
+                                            onChange={(e) => { FieldValidation_Dropdown_Handler(e); PageField_onChange_Handler(e, "ControlType", key) }}
+                                          />
+                                        </td>
+                                        <td>
+                                          <Select
+                                            id={`FieldValidation-${key}`}
+                                            // placeholder="select unit"
+                                            value={pageFieldTabTable[key].FieldValidation}
+                                            options={FieldValidations_DropdownOptions}
+                                            onChange={(e) => { PageField_onChange_Handler(e, "FieldValidation", key); }}
+                                          />
+                                        </td>
+                                        <td>
+                                          <Input
 
-                                        type="text"
-                                        id={`ListPageSeq${key}`}
-                                        defaultValue={EditData.ListPageSeq}
-                                        value={pageFieldTabTable[key].ListPageSeq}
-                                        onChange={(e) => PageField_onChange_Handler(e.target.value, "ListPageSeq", key)}>
+                                            type="text"
+                                            id={`InValidMsg${key}`}
+                                            defaultValue={EditData.InValidMsg}
+                                            value={pageFieldTabTable[key].InValidMsg}
+                                            onChange={(e) => PageField_onChange_Handler(e.target.value, "InValidMsg", key)}>
 
-                                      </Input>
-                                    </td>
-                                    <td>
-                                      <Input
+                                          </Input>
+                                        </td>
+                                        <td>
+                                          <Input
 
-                                        type="checkbox"
-                                        id={`IsCompulsory${key}`}
-                                        checked={pageFieldTabTable[key].IsCompulsory}
-                                        onChange={(e) => PageField_onChange_Handler(e.target.checked, "IsCompulsory", key)}>
+                                            type="text"
+                                            id={`ListPageSeq${key}`}
+                                            defaultValue={EditData.ListPageSeq}
+                                            value={pageFieldTabTable[key].ListPageSeq}
+                                            onChange={(e) => PageField_onChange_Handler(e.target.value, "ListPageSeq", key)}>
 
-                                      </Input>
-                                    </td>
+                                          </Input>
+                                        </td>
+                                        <td>
+                                          <Input
 
-                                    <td>
-                                      <Input
+                                            type="checkbox"
+                                            id={`IsCompulsory${key}`}
+                                            checked={pageFieldTabTable[key].IsCompulsory}
+                                            onChange={(e) => PageField_onChange_Handler(e.target.checked, "IsCompulsory", key)}>
 
-                                        type="checkbox"
-                                        id={`DefaultSort${key}`}
-                                        checked={pageFieldTabTable[key].DefaultSort}
-                                        onChange={(e) => PageField_onChange_Handler(e.target.checked, "DefaultSort", key)}>
+                                          </Input>
+                                        </td>
 
-                                      </Input>
-                                    </td>
+                                        <td >
+                                          <div className="row">
+                                            <Col>
+                                            <Input
+                                           
+                                              type="radio"
+                                              name="btnradio"
+                                              value={`DefaultSort${key}`}
+                                              id={`DefaultSort${key}`}
+                                              checked={pageFieldTabTable[key].DefaultSort}
 
-                                    <td>
-                                      <Input
-                                        type="checkbox"
-                                        id={`ShowInListPage${key}`}
-                                        checked={pageFieldTabTable[key].ShowInListPage}
-                                        onChange={(e) => PageField_onChange_Handler(e.target.checked, "ShowInListPage", key)}>
-                                      </Input>
-                                    </td>
+                                              onChange={(e) => PageField_onChange_Handler(e.target.checked, "DefaultSort", key)}>
+                                            </Input></Col>
+                                            
+                                            {pageFieldTabTable[key].DefaultSort > 0 ?
+                                              <div className="col-6">
+                                                <i className=" bx bx-caret-up font-size-20 text-danger "
 
-                                    <td>
-                                      <Input
-                                        type="checkbox"
-                                        id={`ShowInDownload${key}`}
-                                        defaultChecked={pageFieldTabTable[key].ShowInDownload}
-                                        onChange={(e) => PageField_onChange_Handler(e.target.checked, "ShowInDownload", key)}>
-                                      </Input>
-                                    </td>
+                                                  id="up"
+                                                  style={{ display: "block" }}
+                                                  onClick={(e) => arrow_value(key)}></i>
 
-                                    <td>
-                                      <Input
-                                        type="checkbox"
-                                        id={`DownloadDefaultSelect${key}`}
-                                        defaultChecked={pageFieldTabTable[key].DownloadDefaultSelect}
-                                        onChange={(e) => PageField_onChange_Handler(e.target.checked, "DownloadDefaultSelect", key)}>
-                                      </Input>
-                                    </td>
+                                                <i className=" bx bx-caret-down font-size-20 text-danger "
+                                                  style={{ display: "none" }}
 
-                                    <td>
-                                      {(pageFieldTabTable.length === key + 1) ?
-                                        <Row className="">
-                                          <Col md={6} className=" mt-3">
-                                            {(pageFieldTabTable.length > 1) ? <>
-                                              < i className="mdi mdi-trash-can d-block text-danger font-size-20" onClick={() => {
-                                                PageField_DeleteRow_Handler(key)
-                                              }} >
-                                              </i>
-                                            </> : <Col md={6} ></Col>}
+                                                  id="down"
+                                                  onClick={(e) => arrow_value1(key)}></i>
+                                              </div>
+                                              : null}
 
-                                          </Col>
+                                          </div>
+                                        </td>
 
-                                          <Col md={6} >
-                                            <Button className="btn btn-sm btn-light mt-3   align-items-sm-center text-center"
+                                        <td>
+                                          <Input
+                                            type="checkbox"
+                                            id={`ShowInListPage${key}`}
+                                            checked={pageFieldTabTable[key].ShowInListPage}
+                                            onChange={(e) => PageField_onChange_Handler(e.target.checked, "ShowInListPage", key)}>
+                                          </Input>
+                                        </td>
+                                        <td>
+                                          <Input
+                                            type="checkbox"
+                                            id={`ShowInDownload${key}`}
+                                            defaultChecked={pageFieldTabTable[key].ShowInDownload}
+                                            onChange={(e) => PageField_onChange_Handler(e.target.checked, "ShowInDownload", key)}>
+                                          </Input>
+                                        </td>
+                                        <td>
+                                          <Input
+                                            type="checkbox"
+                                            id={`DownloadDefaultSelect${key}`}
+                                            defaultChecked={pageFieldTabTable[key].DownloadDefaultSelect}
+                                            onChange={(e) => PageField_onChange_Handler(e.target.checked, "DownloadDefaultSelect", key)}>
+                                          </Input>
+                                        </td>
+                                        <td>
+                                          {(pageFieldTabTable.length === key + 1) ?
+                                            <Row className="">
+                                              <Col md={6} className=" mt-3">
+                                                {(pageFieldTabTable.length > 1) ? <>
+                                                  < i className="mdi mdi-trash-can d-block text-danger font-size-20" onClick={() => {
+                                                    PageField_DeleteRow_Handler(key)
+                                                  }} >
+                                                  </i>
+                                                </> : <Col md={6} ></Col>}
+
+                                              </Col>
+
+                                              <Col md={6} >
+                                                {/* <Button className="btn btn-sm btn-light align-items-sm-center text-center mt-3"
                                               type="button"
                                               onClick={() => { PageField_Tab_AddRow_Handler(key) }} >
                                               <i className="dripicons-plus"></i>
-                                            </Button>
-                                          </Col>
-                                        </Row>
-                                        :
+                                            </Button> */}
 
-                                        < i className="mdi mdi-trash-can d-block text-danger font-size-20" onClick={() => {
-                                          PageField_DeleteRow_Handler(key)
-                                        }} >
-                                        </i>
-                                      }
-                                    </td>
+                                                <div className="col border-end d-flex justify-content-center ">
+                                                  <Button
+                                                    className="btn btn-outline-light btn-sm  align-items-sm-center text-center mt-3"
+                                                    type="button"
+                                                    onClick={() => { PageField_Tab_AddRow_Handler(key) }}
+                                                  >
+                                                    <i className="dripicons-plus">
 
-                                  </tr>
-                                ))}
+                                                    </i>
+                                                  </Button>
+                                                </div>
+                                              </Col>
+                                            </Row>
+                                            :
 
-                              </Tbody>
-                            </Table>
+                                            < i className="mdi mdi-trash-can d-block text-danger font-size-20" onClick={() => {
+                                              PageField_DeleteRow_Handler(key)
+                                            }} >
+                                            </i>
+                                          }
+
+                                        </td>
+                                      </tr>
+                                    ))}
+
+                                  </Tbody>
+                                </Table>
+                              </div>
+                            </div>
                           </Col>
                         </Row>
+
                         {/* : <></>} */}
 
                         {/* </CardBody> */}
@@ -1516,22 +1575,7 @@ const PageMaster = (props) => {
                       </TabPane>
                       <TabPane tabId="3">
                         <Row>
-                          <Col sm="12">
-                            <CardText className="mb-0">
-                              Etsy mixtape wayfarers, ethical wes anderson tofu
-                              before they sold out mcsweeney's organic lomo retro
-                              fanny pack lo-fi farm-to-table readymade. Messenger
-                              bag gentrify pitchfork tattooed craft beer, iphone
-                              skateboard locavore carles etsy salvia banksy hoodie
-                              helvetica. DIY synth PBR banksy irony. Leggings
-                              gentrify squid 8-bit cred pitchfork. Williamsburg
-                              banh mi whatever gluten-free, carles pitchfork
-                              biodiesel fixie etsy retro mlkshk vice blog.
-                              Scenester cred you probably haven't heard of them,
-                              vinyl craft beer blog stumptown. Pitchfork
-                              sustainable tofu synth chambray yr.
-                            </CardText>
-                          </Col>
+
                         </Row>
                       </TabPane>
                       <TabPane tabId="4">
