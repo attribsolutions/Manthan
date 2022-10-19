@@ -39,14 +39,15 @@ export const MainSearchBox = () => {
                 var a, b, i, val = this.value;
                 /*close any already open lists of autocompleted values*/
                 closeAllLists();
-                if (!val) { return false; }
+
+                // if (!val) { return false; }
                 // var a = input.value
 
-                if (val[0] === "/") {
-                    val = val.substring(1);
-                } else {
-                    return false;
-                }
+                if (val[0] === "/") { val = val.substring(1); }
+                else { return false }
+
+                if (!val) { return false; }
+
                 currentFocus = -1;
                 /*create a DIV element that will contain the items (values):*/
                 a = document.createElement("DIV");

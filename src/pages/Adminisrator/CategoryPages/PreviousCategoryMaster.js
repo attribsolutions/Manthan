@@ -41,7 +41,7 @@ const CategoryMaster = (props) => {
 
     //Access redux store Data /  'save_ModuleSuccess' action data
     const { PostAPIResponse, CategoryAPI, RoleAccessModifiedinSingleArray } = useSelector((state) => ({
-        PostAPIResponse: state.CategoryMasterReducer.PostDataMessage,
+        PostAPIResponse: state.CategoryReducer.PostDataMessage,
         CategoryAPI: state.categoryTypeReducer.categoryTypeListData,
         RoleAccessModifiedinSingleArray: state.Login.RoleAccessUpdateData,
     }));
