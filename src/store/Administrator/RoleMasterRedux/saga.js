@@ -38,11 +38,13 @@ function* Get_Roles_GenratorFunction() {
 }
 
 function* Submit_Roles_GenratorFunction({ Data }) {
+  debugger
   yield put(SpinnerState(true))
   try {
     const response = yield call(Role_Master_Post_API, Data);
     yield put(SpinnerState(false))
     yield put(PostSuccess(response));
+  
   } catch (error) {
     yield put(SpinnerState(false))
     yield put(AlertState({

@@ -40,9 +40,9 @@ const RoleMaster = (props) => {
       Description: "",
       Dashboard: "",
       RoleEmployeeTypes: "",
-      isActive: false,
-      isSCMRole: false,
-      IsPartyConnection: false
+      isActive: "",
+      isSCMRole: '',
+      IsPartyConnection: ""
 
     },
     fieldLabel: {
@@ -50,9 +50,9 @@ const RoleMaster = (props) => {
       Description: "",
       Dashboard: "",
       RoleEmployeeTypes: "",
-      isActive: false,
-      isSCMRole: false,
-      IsPartyConnection: false
+      isActive: "",
+      isSCMRole: "",
+      IsPartyConnection: ""
     },
 
     isError: {
@@ -60,9 +60,9 @@ const RoleMaster = (props) => {
       Description: "",
       Dashboard: "",
       RoleEmployeeTypes: "",
-      isActive: false,
-      isSCMRole: false,
-      IsPartyConnection: false
+      isActive: "",
+      isSCMRole: "",
+      IsPartyConnection: ""
     },
 
     hasValid: {
@@ -199,7 +199,7 @@ const RoleMaster = (props) => {
         values.isActive = isActive
         values.isSCMRole = isSCMRole
         values.IsPartyConnection = IsPartyConnection
-        values.RoleEmployeeTypes =listItems;
+        values.RoleEmployeeTypes = listItems;
 
         setState({ values, fieldLabel, hasValid, required, isError })
         dispatch(BreadcrumbShow(hasEditVal.RoleMaster))
@@ -259,8 +259,6 @@ const RoleMaster = (props) => {
     event.preventDefault();
     if (formValid(state, setState)) {
 
-      // console.log("isvalid", values.party.value)
-
       const jsonBody = JSON.stringify({
         Name: values.Name,
         Description: values.Description,
@@ -268,7 +266,12 @@ const RoleMaster = (props) => {
         isActive: values.isActive,
         isSCMRole: values.isSCMRole,
         IsPartyConnection: values.IsPartyConnection,
-        RoleEmployeeTypes: values.employeeType.map((i) => { return ({ EmployeeType: i.value }) }),
+        // RoleEmployeeTypes: values.employeeType.map((i) => { return ({ EmployeeType: i.value }) }),
+        RoleEmployeeTypes: [
+          {
+            EmployeeType: 1
+          }
+        ],
         CreatedBy: 1,
         CreatedOn: "2022-05-20T11:22:55.711483Z",
         UpdatedBy: 1,
@@ -276,7 +279,7 @@ const RoleMaster = (props) => {
       });
 
       if (pageMode === 'edit') {
-        dispatch(updateID(jsonBody, EditData.id));
+        dispatch(updateID(jsonBody, values.id));
         console.log("update jsonBody", jsonBody)
       }
 
@@ -297,7 +300,7 @@ const RoleMaster = (props) => {
         <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
           <Container fluid>
             <MetaTags>
-              <title>RoleMaster | FoodERP-React FrontEnd</title>
+              <title>{userPageAccessState.PageHeading}| FoodERP-React FrontEnd</title>
             </MetaTags>
             <Breadcrumb breadcrumbItem={userPageAccessState.PageHeading} />
 
@@ -316,14 +319,17 @@ const RoleMaster = (props) => {
                       <Card>
                         <CardBody style={{ backgroundColor: "whitesmoke" }}>
                           <Row>
-                            <FormGroup className="mb-2 col col-md-4 ">
+
+                            <FormGroup className="mb-2 col col-sm-4 " >
                               <Label htmlFor="validationCustom01">{fieldLabel.Name} </Label>
                               <Input
+                                name="Name"
+                                id="txtName"
+                                value={values.Name}
                                 type="text"
                                 className={isError.Name.length > 0 ? "is-invalid form-control" : "form-control"}
-                                name="Name"
-                                defaultValue={values.Name}
                                 placeholder="Please Enter Name"
+                                autoComplete='off'
                                 onChange={(event) => {
                                   onChangeText({ event, state, setState })
                                   dispatch(BreadcrumbShow(event.target.value))
@@ -333,6 +339,7 @@ const RoleMaster = (props) => {
                                 <span className="invalid-feedback">{isError.Name}</span>
                               )}
                             </FormGroup>
+
 
                             <Col md="1"> </Col>
 
@@ -349,7 +356,7 @@ const RoleMaster = (props) => {
                                   options={EmployeeType_DropdownOptions}
                                   onChange={(v, e) => onChangeSelect({ e, v, state, setState })}
                                   classNamePrefix="dropdown"
-                                 
+
                                 />
                                 {isError.RoleEmployeeTypes.length > 0 && (
                                   <span className="text-danger f-8"><small>{isError.RoleEmployeeTypes}</small></span>
