@@ -13,10 +13,11 @@ export const MySearch = () => {
         var len = input.value
 
         if (!(len[0] === "/")) {
-            const str = len.substring(1);
-            props1.onSearch(str);
+            // const str = len.substring(1);
+            props1.onSearch(len);
         }
     };
+    
     return (
         <div className="app-search d-none d-lg-block " style={{ marginTop: "-3px" }} autocomplete="off">
             <div className="position-relative">
