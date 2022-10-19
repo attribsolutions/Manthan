@@ -142,7 +142,7 @@ const CategoryMaster = (props) => {
 
     // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
     useEffect(() => {
-        debugger
+
         // if (!(userPageAccessState === '')) { document.getElementById("txtName").focus(); }
         if ((hasShowloction || hasShowModal)) {
 
@@ -159,19 +159,23 @@ const CategoryMaster = (props) => {
 
             if (hasEditVal) {
 
-                const { id, Name, CategoryTypeName } = hasEditVal
+                const { id, Name, CategoryTypeName, CategoryType } = hasEditVal
                 const { values, fieldLabel, hasValid, required, isError } = { ...state }
-                values.Name = Name;
-                values.CategoryTypeName = CategoryTypeName;
+                
+                hasValid.Name.valid = true;
+                hasValid.CategoryTypeName.valid = true;
+                
                 values.id = id
+                values.Name = Name;
+                values.CategoryTypeName = { label: CategoryTypeName, value: CategoryType };
+
                 setState({ values, fieldLabel, hasValid, required, isError })
-                dispatch(BreadcrumbShow(hasEditVal.CategoryMaster))
+                dispatch(BreadcrumbShow(hasEditVal.Name))
 
             }
             dispatch(editCategoryIDSuccess({ Status: false }))
         }
     }, [])
-
 
     useEffect(() => {
 
@@ -237,8 +241,6 @@ const CategoryMaster = (props) => {
             const jsonBody = JSON.stringify({
                 Name: values.Name,
                 CategoryType: values.CategoryTypeName.value,
-
-
             });
 
             if (pageMode === "edit") {
@@ -247,7 +249,6 @@ const CategoryMaster = (props) => {
             }
             else {
                 dispatch(PostMethodForCategory(jsonBody));
-
 
             }
         }
@@ -308,7 +309,8 @@ const CategoryMaster = (props) => {
                                                                     <Col sm={12}>
                                                                         <Select
                                                                             name="CategoryTypeName"
-                                                                            Value={values.CategoryTypeName}
+                                                                            value={values.CategoryTypeName}
+                                                                            //   value={{label:"abc",value:1}}//default value set
                                                                             isSearchable={false}
                                                                             className="react-dropdown"
                                                                             classNamePrefix="dropdown"

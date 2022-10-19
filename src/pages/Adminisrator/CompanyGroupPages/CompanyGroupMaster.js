@@ -39,32 +39,32 @@ import { COMPANYGROUP_lIST } from "../../../routes/route_url";
 const CompanyGroupMaster = (props) => {
 
     const formRef = useRef(null);
-    const dispatch= useDispatch();
+    const dispatch = useDispatch();
     const history = useHistory()
 
-    const [pageMode,setPageMode] = useState();
-    const [userPageAccessState ,setUserPageAccessState] = useState('');
+    const [pageMode, setPageMode] = useState();
+    const [userPageAccessState, setUserPageAccessState] = useState('');
     const [modalCss, setModalCss] = useState(false);
 
 
-{/** Dyanamic Page access state and OnChange function */ }
+    {/** Dyanamic Page access state and OnChange function */ }
     {/*start */ }
-    const [state, setState] = useState({       
-         values: {
+    const [state, setState] = useState({
+        values: {
             id: "",
             Name: "",
-            IsSCM:false
+            IsSCM: ""
 
         },
 
         fieldLabel: {
             Name: '',
-            IsSCM:false
+            IsSCM: ''
         },
 
         isError: {
             Name: "",
-            IsSCM:false
+            IsSCM: ""
         },
 
         hasValid: {
@@ -74,7 +74,7 @@ const CompanyGroupMaster = (props) => {
                 valid: false
             },
 
-          IsSCM: {
+            IsSCM: {
                 regExp: '',
                 inValidMsg: "",
                 valid: false
@@ -106,7 +106,7 @@ const CompanyGroupMaster = (props) => {
         dispatch(commonPageField(32))
     }, []);
 
-    
+
 
     // userAccess useEffect
     useEffect(() => {
@@ -132,7 +132,7 @@ const CompanyGroupMaster = (props) => {
     // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
     useEffect(() => {
 
-       
+
         // if (!(userPageAccessState === '')) { document.getElementById("txtName").focus(); }
         if ((hasShowloction || hasShowModal)) {
 
@@ -152,9 +152,11 @@ const CompanyGroupMaster = (props) => {
                 const { values, fieldLabel, hasValid, required, isError } = { ...state }
                 values.Name = Name;
                 values.IsSCM = IsSCM;
+                hasValid.Name.valid = true;
+                hasValid.IsSCM.valid = true;
                 values.id = id
                 setState({ values, fieldLabel, hasValid, required, isError })
-                dispatch(BreadcrumbShow(hasEditVal.CompanyGroupMaster))
+                dispatch(BreadcrumbShow(hasEditVal.Name))
             }
             dispatch(editCompanyGroupTypeSuccess({ Status: false }))
         }
@@ -284,9 +286,9 @@ const CompanyGroupMaster = (props) => {
                                                                 <Row className="justify-content-md-left">
                                                                     <Label htmlFor="horizontal-firstname-input" className="col-sm-3 col-form-label">{fieldLabel.IsSCM}</Label>
                                                                     <Col md={2} style={{ marginTop: '9px' }} >
-                                                                    <div className="form-check form-switch form-switch-md mb-3" >
+                                                                        <div className="form-check form-switch form-switch-md mb-3">
                                                                             <Input type="checkbox" className="form-check-input"
-                                                                                value={values.IsSCM}
+                                                                                checked={values.IsSCM}
                                                                                 name="IsSCM"
                                                                                 onChange={(event) => onChangeText({ event, state, setState })}
                                                                             />
@@ -304,7 +306,7 @@ const CompanyGroupMaster = (props) => {
                                                             </Row>
                                                         </FormGroup >
                                                     </Row>
- 
+
                                                 </CardBody>
                                             </Card>
                                         </Col>

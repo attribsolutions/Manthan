@@ -1,5 +1,5 @@
 export const formValid = ({ isError, required, hasValid, fieldLabel, values }, setState) => {
-
+debugger
     let isValid = true;
 
     Object.keys(required).forEach((lab) => {

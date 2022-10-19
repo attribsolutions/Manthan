@@ -151,9 +151,11 @@ const EmployeeTypesMaster = (props) => {
                 values.IsPartyConnection = IsPartyConnection;
                 values.IsSCM = IsSCM;
                 values.id = id
-
+                hasValid.Name.valid = true;
+                hasValid.IsSCM.valid = true;
+                hasValid.IsPartyConnection.valid = true;
                 setState({ values, fieldLabel, hasValid, required, isError })
-                dispatch(BreadcrumbShow(hasEditVal.EmployeeTypesMaster))
+                dispatch(BreadcrumbShow(hasEditVal.Name))
             }
             dispatch(editEmployeeTypeSuccess({ Status: false }))
         }
@@ -209,7 +211,6 @@ const EmployeeTypesMaster = (props) => {
 
 
     const formSubmitHandler = (event) => {
-        debugger
         event.preventDefault();
         if (formValid(state, setState)) {
             const jsonBody = JSON.stringify({
@@ -285,7 +286,7 @@ const EmployeeTypesMaster = (props) => {
                                                                     <Col md={2} style={{ marginTop: '9px' }}>
                                                                         <div className="form-check form-switch form-switch-md mb-3" >
                                                                             <Input type="checkbox" className="form-check-input"
-                                                                                value={values.IsPartyConnection}
+                                                                                 checked={values.IsPartyConnection}
                                                                                 name="IsPartyConnection"
                                                                                 onChange={(event) => onChangeText({ event, state, setState })}
                                                                             />
@@ -302,7 +303,7 @@ const EmployeeTypesMaster = (props) => {
                                                                     <Col md={2} style={{ marginTop: '9px' }} >
                                                                     <div className="form-check form-switch form-switch-md mb-3" >
                                                                             <Input type="checkbox" className="form-check-input"
-                                                                                value={values.IsSCM}
+                                                                                 checked={values.IsSCM}
                                                                                 name="IsSCM"
                                                                                 onChange={(event) => onChangeText({ event, state, setState })}
                                                                             />

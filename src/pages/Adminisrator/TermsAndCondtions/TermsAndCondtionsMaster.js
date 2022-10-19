@@ -20,8 +20,9 @@ import { useDispatch, useSelector } from "react-redux";
 import {
    
     PostMethod_ForTermsAndCondtionsMaster,
-    PostMethod_ForTermsAndCondtionsMasterAPISuccess,
-    updateCategoryTypeID,
+    PostMethod_ForTermsAndCondtionsMaster_Success,
+    
+    EditTermsAndCondtions,
   
 } from "../../../store/Administrator/TermsAndCondtionsRedux/actions";
 
@@ -85,7 +86,7 @@ const TermsAndCondtionsMaster = (props) => {
     useEffect(() => {
 
         if ((PostAPIResponse.Status === true) && (PostAPIResponse.StatusCode === 200)) {
-            dispatch(PostMethod_ForTermsAndCondtionsMasterAPISuccess({ Status: false }))
+            dispatch(PostMethod_ForTermsAndCondtionsMaster_Success({ Status: false }))
 
 
             if (pageMode === "other") {
@@ -106,7 +107,7 @@ const TermsAndCondtionsMaster = (props) => {
             }
         }
         else if (PostAPIResponse.Status === true) {
-            dispatch(PostMethod_ForTermsAndCondtionsMasterAPISuccess({ Status: false }))
+            dispatch(PostMethod_ForTermsAndCondtionsMaster_Success({ Status: false }))
             dispatch(AlertState({
                 Type: 4,
                 Status: true,
@@ -128,7 +129,7 @@ const TermsAndCondtionsMaster = (props) => {
         });
        
         if (pageMode === "edit") {
-            dispatch(updateCategoryTypeID(jsonBody, EditData.id));
+            dispatch(EditTermsAndCondtions(jsonBody, EditData.id));
         }
         else {
             alert(jsonBody)

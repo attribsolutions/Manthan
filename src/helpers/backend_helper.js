@@ -326,6 +326,7 @@ export const get_Group_List_Api = () => get(url.GROUP_API)// post api
 
 // TermsAndCondtions API
 export const Post_TermsAndCondtions_Master_API = (data) => post(url.TERMSANDCONDITIONS_API, data)// post api
+
 export const get_TermsAndCondtionsList_API = (data) => get(url.TERMSANDCONDITIONS_API)// get api
 
 // GST API
@@ -343,7 +344,10 @@ export const PartySubParty_Delete_API = (id) => del(`${url.PARTY_SUB_PARTY}/${id
 export const PartySubParty_Edit_API = (id) => get(`${url.PARTY_SUB_PARTY}/${id}`)// edit api
 export const PartySubParty_Update_API = (data, id) => put(`${url.PARTY_SUB_PARTY}/${id}`, data)// update api
 
-export {
+
+
+
+export {  
   getLoggedInUser,
   isUserAuthenticated,
   postFakeRegister,

@@ -138,8 +138,11 @@ const CategoryTypeMaster = (props) => {
                 const { values, fieldLabel, hasValid, required, isError } = { ...state }
                 values.Name = Name;
                 values.id = id
+
+                hasValid.Name.valid = true;
+
                 setState({ values, fieldLabel, hasValid, required, isError })
-                dispatch(BreadcrumbShow(hasEditVal.CategoryTypeMaster))
+                dispatch(BreadcrumbShow(hasEditVal.Name))
 
             }
             dispatch(editCategoryTypeIDSuccess({ Status: false }))
