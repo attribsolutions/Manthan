@@ -39,14 +39,7 @@ import {
     postPartyDataSuccess,
     updatePartyID
 } from "../../../store/Administrator/PartyRedux/action"
-import {
-    comAddPageFieldFunc,
-    formValChange,
-    formValid,
-    onChangeSelect,
-    onChangeText,
-} from "../../../components/Common/CmponentRelatedCommonFile/validationFunction";
-import { AlertState, BreadcrumbShow, commonPageField, commonPageFieldSuccess } from "../../../store/actions"
+import { AlertState, BreadcrumbShow } from "../../../store/actions"
 import Tree from "./Tree"
 import AddressDetails_Tab from "."
 
@@ -70,7 +63,6 @@ const PartyMaster = (props) => {
     const [PriceList_dropdown_Select, setPriceList_dropdown_Select] = useState("");
     const [dropOpen, setDropOpen] = useState(false);
     const [AddressDetailsMaster, setAddressDetailsMaster] = useState([]);
-    const [modalCss, setModalCss] = useState(false);
 
     const toggle1 = tab => {
         if (activeTab1 !== tab) {
@@ -86,8 +78,7 @@ const PartyMaster = (props) => {
         Company,
         PartyTypes,
         priceListByPartyType,
-        pageField,
-        userAccess 
+        RoleAccessModifiedinSingleArray
     } = useSelector((state) => ({
         PostAPIResponse: state.PartyMasterReducer.PartySaveSuccess,
         State: state.M_EmployeesReducer.State,
@@ -96,182 +87,33 @@ const PartyMaster = (props) => {
         PartyTypes: state.PartyMasterReducer.PartyTypes,
         PriceList: state.PartyMasterReducer.PriceList,
         AddressTypes: state.PartyMasterReducer.AddressTypes,
-        userAccess: state.Login.RoleAccessUpdateData,
+        RoleAccessModifiedinSingleArray: state.Login.RoleAccessUpdateData,
         priceListByPartyType: state.PriceListReducer.priceListByPartyType,
-        pageField: state.CommonPageFieldReducer.pageField
+
     }));
 
-    const [state, setState] = useState({
-        values: {
-            id: "",
-            Name: "",
-            MobileNo: "",
-            PriceList: "",
-            PartyType: "",
-            Company: "",
-            PAN: "",
-            Email: "",
-            AlternateContactNo: "",
-            State: "",
-            District: "",
-            GSTIN: "",
-            MkUpMkDn: "",
-            isActive: "",
-            IsDivision: "",
-            PartyAddress: ""
-            
+    useEffect(() => {
 
-        },
-        fieldLabel: {
-            Name: '',
-            MobileNo: '',
-            PriceList: '',
-            PartyType: '',
-            Company: '',
-            PAN: '',
-            Email: '',
-            AlternateContactNo: '',
-            State: '',
-            District: '',
-            GSTIN: '',
-            MkUpMkDn: '',
-            isActive: '',
-            IsDivision: '',
-            PartyAddress: ''
+        let userAcc = undefined
+        if ((editDataGatingFromList === undefined)) {
 
-        },
-
-        isError: {
-            Name: "",
-            MobileNo: "",
-            PriceList: "",
-            PartyType: "",
-            Company: "",
-            PAN: "",
-            Email: "",
-            AlternateContactNo: "",
-            State: "",
-            District: "",
-            GSTIN: "",
-            MkUpMkDn: "",
-            isActive: "",
-            IsDivision: "",
-            PartyAddress: ""
-
-        },
-
-        hasValid: {
-            Name: {
-                regExp: '',
-                inValidMsg: "",
-                valid: false
-            },
-            MobileNo: {
-                regExp: '',
-                inValidMsg: "",
-                valid: false
-            },
-            PriceList: {
-                regExp: '',
-                inValidMsg: "",
-                valid: false
-            },
-            PartyType: {
-                regExp: '',
-                inValidMsg: "",
-                valid: false
-            },
-            Company: {
-                regExp: '',
-                inValidMsg: "",
-                valid: false
-            },
-            PAN: {
-                regExp: '',
-                inValidMsg: "",
-                valid: false
-            },
-            Email: {
-                regExp: '',
-                inValidMsg: "",
-                valid: false
-            },
-            AlternateContactNo: {
-                regExp: '',
-                inValidMsg: "",
-                valid: false
-            },
-            State: {
-                regExp: '',
-                inValidMsg: "",
-                valid: false
-            },
-            District: {
-                regExp: '',
-                inValidMsg: "",
-                valid: false
-            },
-            GSTIN: {
-                regExp: '',
-                inValidMsg: "",
-                valid: false
-            },
-            MkUpMkDn: {
-                regExp: '',
-                inValidMsg: "",
-                valid: false
-            },
-            isActive: {
-                regExp: '',
-                inValidMsg: "",
-                valid: false
-            },
-            IsDivision: {
-                regExp: '',
-                inValidMsg: "",
-                valid: false
-            },
-            PartyAddress: {
-                regExp: '',
-                inValidMsg: "",
-                valid: false
-            },
-          
-        },
-        required: {
+            let locationPath = history.location.pathname
+            userAcc = RoleAccessModifiedinSingleArray.find((inx) => {
+                return (`/${inx.ActualPagePath}` === locationPath)
+            })
+        }
+        else if (!(editDataGatingFromList === undefined)) {
+            let relatatedPage = props.relatatedPage
+            userAcc = RoleAccessModifiedinSingleArray.find((inx) => {
+                return (`/${inx.ActualPagePath}` === relatatedPage)
+            })
 
         }
-    })
-    const values = { ...state.values }
-    const { isError } = state;
-    const { fieldLabel } = state;
-
-    useEffect(() => {
-        dispatch(commonPageFieldSuccess(null));
-        dispatch(commonPageField(18))
-    }, []);
-
-    const location = { ...history.location }
-    const hasShowloction = location.hasOwnProperty("editValue")
-    const hasShowModal = props.hasOwnProperty("editValue")
-
-    // userAccess useEffect
-    useEffect(() => {
-        let userAcc = null;
-        let locationPath = location.pathname;
-
-        if (hasShowModal) {
-            locationPath = props.masterPath;
-        };
-
-        userAcc = userAccess.find((inx) => {
-            return (`/${inx.ActualPagePath}` === locationPath)
-        })
-
-        if (userAcc) {
+        if (!(userAcc === undefined)) {
             setUserPageAccessState(userAcc)
-        };
-    }, [userAccess])
+        }
+
+    }, [RoleAccessModifiedinSingleArray])
 
     useEffect(() => {
         dispatch(getState());
@@ -281,44 +123,50 @@ const PartyMaster = (props) => {
         dispatch(getPartyTypes());
         dispatch(getCompany());
 
+
     }, [dispatch]);
 
-  // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
-  useEffect(() => {
+    useEffect(() => {
 
-    // if (!(userPageAccessState === '')) { document.getElementById("txtName").focus(); }
-    if ((hasShowloction || hasShowModal)) {
+        if (!(userPageAccessState === '')) { document.getElementById("txtName").focus(); }
+        if (!(editDataGatingFromList === undefined)) {
+            debugger
+            setEditData(editDataGatingFromList);
+            dispatch(BreadcrumbShow(editDataGatingFromList.Name))
+            setPageMode(pageModeProps);
 
-        let hasEditVal = null
-        if (hasShowloction) {
-            setPageMode(location.pageMode)
-            hasEditVal = location.editValue
+
+            setCompanyList_dropdown_Select({
+                value: editDataGatingFromList.Company,
+                label: editDataGatingFromList.CompanyName
+            })
+
+            setPartyType_dropdown_Select({
+                value: editDataGatingFromList.PartyType,
+                label: editDataGatingFromList.PartyTypeName
+            })
+            setPriceList_dropdown_Select({
+                value: editDataGatingFromList.PriceList,
+                label: editDataGatingFromList.PriceListName
+            })
+            setState_DropDown_select({
+                value: editDataGatingFromList.State,
+                label: editDataGatingFromList.StateName
+            })
+            setDistrict_dropdown_Select({
+                value: editDataGatingFromList.District,
+                label: editDataGatingFromList.DistrictName
+            })
+
+
+            setAddressDetailsMaster(editDataGatingFromList.PartyAddress)
+
+            dispatch(editPartyIDSuccess({ Status: false }))
         }
-        else if (hasShowModal) {
-            hasEditVal = props.editValue
-            setPageMode(props.pageMode)
-            setModalCss(true)
+        else if (!(propsPageMode === undefined)) {
+            setPageMode(propsPageMode)
         }
-
-        if (hasEditVal) {
-
-            const { id, Name, CategoryTypeName, CategoryType } = hasEditVal
-            const { values, fieldLabel, hasValid, required, isError } = { ...state }
-            
-            hasValid.Name.valid = true;
-            hasValid.CategoryTypeName.valid = true;
-            
-            values.id = id
-            values.Name = Name;
-            values.CategoryTypeName = { label: CategoryTypeName, value: CategoryType };
-
-            setState({ values, fieldLabel, hasValid, required, isError })
-            dispatch(BreadcrumbShow(hasEditVal.Name))
-
-        }
-        dispatch(editPartyIDSuccess({ Status: false }))
-    }
-}, [])
+    }, [editDataGatingFromList, propsPageMode])
 
 
     useEffect(() => {

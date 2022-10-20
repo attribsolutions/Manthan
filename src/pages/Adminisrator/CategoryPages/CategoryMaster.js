@@ -33,8 +33,6 @@ import {
     onChangeText,
 
 } from "../../../components/Common/CmponentRelatedCommonFile/validationFunction";
-
-
 import { SaveButton } from "../../../components/CommonSaveButton";
 import { CATEGORY_lIST } from "../../../routes/route_url";
 
@@ -164,7 +162,7 @@ const CategoryMaster = (props) => {
                 
                 hasValid.Name.valid = true;
                 hasValid.CategoryTypeName.valid = true;
-                
+
                 values.id = id
                 values.Name = Name;
                 values.CategoryTypeName = { label: CategoryTypeName, value: CategoryType };
