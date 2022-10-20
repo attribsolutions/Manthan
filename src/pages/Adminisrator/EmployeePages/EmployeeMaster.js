@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import Select from "react-select";
-import { Card, CardBody, Col, Container, Row, Label, CardHeader, FormGroup } from "reactstrap";
-import { AvForm } from "availity-reactstrap-validation";
+import { Card, CardBody, Col, Container, Row, Label, CardHeader, FormGroup, Input } from "reactstrap";
 import { useDispatch, useSelector } from "react-redux";
 import {
   getDesignationID,
@@ -9,20 +8,27 @@ import {
   getState,
   postEmployee,
   updateEmployeeID,
-  editEmployeeSuccess,
   PostEmployeeSuccess,
-  Get_CompanyName_By_EmployeeTypeID
+  Get_CompanyName_By_EmployeeTypeID,
+  editEmployeeSuccess
 } from "../../../store/Administrator/M_EmployeeRedux/action";
-import { AlertState } from "../../../store/actions";
+import { AlertState, commonPageField, commonPageFieldSuccess } from "../../../store/actions";
 import { getDistrictOnState, getPartyListAPI } from "../../../store/Administrator/PartyRedux/action";
 import Breadcrumb from "../../../components/Common/Breadcrumb";
-import AvField from "availity-reactstrap-validation/lib/AvField";
 import Flatpickr from "react-flatpickr"
 import { BreadcrumbShow } from "../../../store/Utilites/Breadcrumb/actions";
 import { MetaTags } from "react-meta-tags";
 import { useHistory } from "react-router-dom";
 import { SaveButton } from "../../../components/CommonSaveButton";
+import { EMPLOYEE_lIST } from "../../../routes/route_url";
+import {
+  comAddPageFieldFunc,
+  formValid,
+  onChangeDate,
+  onChangeSelect,
+  onChangeText,
 
+} from "../../../components/Common/CmponentRelatedCommonFile/validationFunction";
 
 const AddEmployee = (props) => {
 
@@ -34,11 +40,7 @@ const AddEmployee = (props) => {
   const [pageMode, setPageMode] = useState("save");
   const [userPageAccessState, setUserPageAccessState] = useState('');
 
-  //*** "isEditdata get all data from ModuleID for Binding  Form controls
-  var editDataGatingFromList = props.state;
-  let propsPageMode = props.pageMode;
-  let pageModeProps = props.pageMode;
-
+  const [modalCss, setModalCss] = useState(false);
   const [designation_DropdownSelect, setDesignation_DropdownSelect] = useState("");
   const [employeeType_DropdownSelect, setEmployeeType_DropdownSelect] = useState("");
   const [State_DropdownSelect, setState_DropdownSelect] = useState("");
@@ -48,42 +50,166 @@ const AddEmployee = (props) => {
   const [DOB_Date_Select, setDOB_Date_Select] = useState("");
   const [partyDropDownShow_UI, setPartyDropDownShow_UI] = useState(false);
 
-  const { designation, employeeType, State, district, partyList, company, PostAPIResponse, RoleAccessModifiedinSingleArray } = useSelector((state) => ({
-    designation: state.M_EmployeesReducer.designation,
-    employeeType: state.M_EmployeesReducer.employeeType,
-    State: state.M_EmployeesReducer.State,
-    district: state.PartyMasterReducer.DistrictOnState,
-    partyList: state.PartyMasterReducer.partyList,
-    company: state.M_EmployeesReducer.CompanyNames,
-    PostAPIResponse: state.M_EmployeesReducer.postMessage,
-    RoleAccessModifiedinSingleArray: state.Login.RoleAccessUpdateData,
+  const {
+    designation,
+    employeeType,
+    State,
+    district,
+    partyList,
+    company,
+    PostAPIResponse,
+    userAccess,
+    pageField } = useSelector((state) => ({
+      designation: state.M_EmployeesReducer.designation,
+      employeeType: state.M_EmployeesReducer.employeeType,
+      State: state.M_EmployeesReducer.State,
+      district: state.PartyMasterReducer.DistrictOnState,
+      partyList: state.PartyMasterReducer.partyList,
+      company: state.M_EmployeesReducer.CompanyNames,
+      PostAPIResponse: state.M_EmployeesReducer.postMessage,
+      userAccess: state.Login.RoleAccessUpdateData,
+      pageField: state.CommonPageFieldReducer.pageField
 
-  }));
+    }));
 
-  // userAccess useEffect
+  const [state, setState] = useState({
+    values: {
+      id: "",
+      Name: "",
+      Address: "",
+      Mobile: "",
+      email: "",
+      DOB: "",
+      PAN: "",
+      AadharNo: "",
+      working_hours: "",
+      CompanyName: "",
+      DesignationName: "",
+      EmployeeTypeName: "",
+      StateName: "",
+      DistrictName: "",
+      EmployeeParties: ""
+
+    },
+    fieldLabel: {
+      Name: "",
+      Address: "",
+      Mobile: "",
+      email: "",
+      DOB: "",
+      PAN: "",
+      AadharNo: "",
+      working_hours: "",
+      CompanyName: "",
+      DesignationName: "",
+      EmployeeTypeName: "",
+      StateName: "",
+      DistrictName: "",
+      EmployeeParties: ""
+
+    },
+
+    isError: {
+      Name: "",
+      Address: "",
+      Mobile: "",
+      email: "",
+      DOB: "",
+      PAN: "",
+      AadharNo: "",
+      working_hours: "",
+      CompanyName: "",
+      DesignationName: "",
+      EmployeeTypeName: "",
+      StateName: "",
+      DistrictName: "",
+      EmployeeParties: ""
+
+    },
+
+    hasValid: {
+      Name: {
+        regExp: '',
+        inValidMsg: "",
+        valid: false
+      },
+      Address: {
+        regExp: '',
+        inValidMsg: "",
+        valid: false
+      },
+      Mobile: {
+        regExp: '',
+        inValidMsg: "",
+        valid: false
+      },
+      email: {
+        regExp: '',
+        inValidMsg: "",
+        valid: false
+      },
+      DOB: {
+        regExp: '',
+        inValidMsg: "",
+        valid: false
+      },
+      PAN: {
+        regExp: '',
+        inValidMsg: "",
+        valid: false
+      },
+      AadharNo: {
+        regExp: '',
+        inValidMsg: "",
+        valid: false
+      },
+      working_hours: {
+        regExp: '',
+        inValidMsg: "",
+        valid: false
+      },
+      CompanyName: {
+        regExp: '',
+        inValidMsg: "",
+        valid: false
+      },
+      DesignationName: {
+        regExp: '',
+        inValidMsg: "",
+        valid: false
+      },
+      EmployeeTypeName: {
+        regExp: '',
+        inValidMsg: "",
+        valid: false
+      },
+      StateName: {
+        regExp: '',
+        inValidMsg: "",
+        valid: false
+      },
+      DistrictName: {
+        regExp: '',
+        inValidMsg: "",
+        valid: false
+      },
+      EmployeeParties: {
+        regExp: '',
+        inValidMsg: "",
+        valid: false
+      },
+    },
+    required: {
+
+    }
+  })
+  const values = { ...state.values }
+  const { isError } = state;
+  const { fieldLabel } = state;
+
   useEffect(() => {
-    let userAcc = undefined
-    if ((editDataGatingFromList === undefined)) {
-
-      let locationPath = history.location.pathname
-      userAcc = RoleAccessModifiedinSingleArray.find((inx) => {
-        return (`/${inx.ActualPagePath}` === locationPath)
-      })
-    }
-    else if (!(editDataGatingFromList === undefined)) {
-      let relatatedPage = props.relatatedPage
-      userAcc = RoleAccessModifiedinSingleArray.find((inx) => {
-        return (`/${inx.ActualPagePath}` === relatatedPage)
-      })
-
-    }
-    if (!(userAcc === undefined)) {
-      setUserPageAccessState(userAcc)
-    }
-
-  }, [RoleAccessModifiedinSingleArray])
-
-  useEffect(() => {
+    dispatch(commonPageFieldSuccess(null));
+    dispatch(commonPageField(8))
     dispatch(getDesignationID());
     dispatch(getEmployeeType());
     dispatch(getState());
@@ -91,58 +217,106 @@ const AddEmployee = (props) => {
     dispatch(Get_CompanyName_By_EmployeeTypeID());
   }, [dispatch]);
 
+  const location = { ...history.location }
+  const hasShowloction = location.hasOwnProperty("editValue")
+  const hasShowModal = props.hasOwnProperty("editValue")
+
+  // userAccess useEffect
+  useEffect(() => {
+    let userAcc = null;
+    let locationPath = location.pathname;
+
+    if (hasShowModal) {
+      locationPath = props.masterPath;
+    };
+
+    userAcc = userAccess.find((inx) => {
+      return (`/${inx.ActualPagePath}` === locationPath)
+    })
+
+    if (userAcc) {
+      setUserPageAccessState(userAcc)
+    };
+  }, [userAccess])
+
 
   // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
   useEffect(() => {
 
-    if (!(userPageAccessState === '')) { document.getElementById("txtName").focus(); }
-    if (!(editDataGatingFromList === undefined)) {
+    // if (!(userPageAccessState === '')) { document.getElementById("txtName").focus(); }
+    if ((hasShowloction || hasShowModal)) {
 
-      setPageMode(pageModeProps);
-      dispatch(BreadcrumbShow(editDataGatingFromList.Name))
-      setEditData(editDataGatingFromList);
-      // setIsEdit(true);
-      setDesignation_DropdownSelect({
-        value: editDataGatingFromList.Designation_id,
-        label: editDataGatingFromList.DesignationName
-      })
-      setEmployeeType_DropdownSelect({
-        value: editDataGatingFromList.EmployeeType_id,
-        label: editDataGatingFromList.EmployeeTypeName
-      })
-      setState_DropdownSelect({
-        value: editDataGatingFromList.State_id,
-        label: editDataGatingFromList.StateName
-      })
-      setDOB_Date_Select(editDataGatingFromList.DOB)
+      let hasEditVal = null
+      if (hasShowloction) {
+        setPageMode(location.pageMode)
+        hasEditVal = location.editValue
+      }
+      else if (hasShowModal) {
+        hasEditVal = props.editValue
+        setPageMode(props.pageMode)
+        setModalCss(true)
+      }
 
-      setDistrict_DropdownSelect({
-        value: editDataGatingFromList.District_id,
-        label: editDataGatingFromList.DistrictName
-      })
+      if (hasEditVal) {
+        debugger
+        const listItems = hasEditVal.EmployeeParties.map((data) => ({
+          value: data.id,
+          label: data.Name
+        }))
 
-      const listItems = editDataGatingFromList.EmployeeParties.map((data) => ({
-        value: data.id,
-        label: data.Name
-      }))
+        setParty_DropdownSelect(listItems)
 
-      setParty_DropdownSelect(listItems)
+        if ((hasEditVal.EmployeeParties).length > 0) { setPartyDropDownShow_UI(true) };
 
-      if ((editDataGatingFromList.EmployeeParties).length > 0) { setPartyDropDownShow_UI(true) };
 
-      setCompany_DropdownSelect({
-        value: editDataGatingFromList.Company_id,
-        label: editDataGatingFromList.CompanyName
-      })
+        const { id, Name, Address, Mobile, email, DOB, PAN, AadharNo, working_hours,
+          CompanyName, DesignationName, EmployeeTypeName, StateName, DistrictName, EmployeeParties,
+          State_id, District_id, Company_id, EmployeeType_id, Designation_id } = hasEditVal
+        const { values, fieldLabel, hasValid, required, isError } = { ...state }
 
+        hasValid.Name.valid = true;
+        hasValid.Address.valid = true;
+        hasValid.Mobile.valid = true;
+        hasValid.email.valid = true;
+        hasValid.DOB.valid = true;
+        hasValid.PAN.valid = true;
+        hasValid.AadharNo.valid = true;
+        hasValid.working_hours.valid = true;
+        hasValid.CompanyName.valid = true;
+        hasValid.DesignationName.valid = true;
+        hasValid.EmployeeTypeName.valid = true;
+        hasValid.StateName.valid = true;
+        hasValid.DistrictName.valid = true;
+        hasValid.EmployeeParties.valid = true;
+
+
+        values.id = id
+        values.Address = Address;
+        values.Mobile = Mobile
+        values.email = email;
+        values.DOB = DOB
+        values.PAN = PAN;
+        values.AadharNo = AadharNo
+        values.working_hours = working_hours;
+        values.Name = Name;
+        values.DesignationName = { label: DesignationName, value: Designation_id };
+        values.CompanyName = { label: CompanyName, value: Company_id };
+        values.EmployeeTypeName = { label: EmployeeTypeName, value: EmployeeType_id };
+        values.StateName = { label: StateName, value: State_id };
+        values.DistrictName = { label: DistrictName, value: District_id };
+        values.EmployeeParties = listItems;
+
+
+        // values.CategoryTypeName = { label: CategoryTypeName, value: CategoryType };
+
+        setState({ values, fieldLabel, hasValid, required, isError })
+        dispatch(BreadcrumbShow(hasEditVal.Name))
+
+      }
       dispatch(editEmployeeSuccess({ Status: false }))
-      dispatch(BreadcrumbShow(editDataGatingFromList.Name))
     }
-    else if (!(propsPageMode === undefined)) {
-      setPageMode(propsPageMode)
+  }, [])
 
-    }
-  }, [editDataGatingFromList, propsPageMode])
 
   useEffect(() => {
 
@@ -157,7 +331,7 @@ const AddEmployee = (props) => {
       setParty_DropdownSelect('')
       setCompany_DropdownSelect('')
 
-      if (pageMode === "dropdownAdd") {
+      if (pageMode === "other") {
         dispatch(AlertState({
           Type: 1,
           Status: true,
@@ -169,7 +343,7 @@ const AddEmployee = (props) => {
           Type: 1,
           Status: true,
           Message: PostAPIResponse.Message,
-          RedirectPath: '/EmployeeList',
+          RedirectPath: EMPLOYEE_lIST,
         }))
       }
     }
@@ -185,6 +359,14 @@ const AddEmployee = (props) => {
       }));
     }
   }, [PostAPIResponse])
+
+  useEffect(() => {
+
+    if (pageField) {
+      const fieldArr = pageField.PageFieldMaster
+      comAddPageFieldFunc({ state, setState, fieldArr })
+    }
+  }, [pageField])
 
   const Party_DropdownOptions = partyList.map((data) => ({
     value: data.id,
@@ -236,68 +418,75 @@ const AddEmployee = (props) => {
     }
     else {
       setPartyDropDownShow_UI(false)
-      setParty_DropdownSelect([{ value:null }])
+      setParty_DropdownSelect([{ value: null }])
     }
   }
 
-  function State_Dropdown_Handler(e) {
+  function State_Dropdown_Handler(e, v) {
+
+    debugger
     dispatch(getDistrictOnState(e.value))
     setState_DropdownSelect(e)
+
   }
 
-  function District_Dropdown_Handler(e) {
+  function District_Dropdown_Handler(e, v) {
     setDistrict_DropdownSelect(e)
   }
 
-  function Party_Dropdown_Handler(e) {
+  function Party_Dropdown_Handler(e, v) {
     setParty_DropdownSelect(e)
-     }
+  }
 
-  function Company_Dropdown_Handler(e) {
+  function Company_Dropdown_Handler(e, v) {
     setCompany_DropdownSelect(e)
   }
 
-  //'Save' And 'Update' Button Handller
-  const handleValidSubmit = (event, values) => {
-    
-    const jsonBody = JSON.stringify({
-      Name: values.Name,
-      Address: values.Address,
-      Mobile: values.Mobile,
-      email: values.email,
-      DOB: DOB_Date_Select,
-      PAN: values.PAN,
-      AadharNo: values.AadharNo,
-      working_hours: values.working_hours,
-      Designation: designation_DropdownSelect.value,
-      EmployeeType: employeeType_DropdownSelect.value,
-      State: State_DropdownSelect.value,
-      District: district_DropdownSelect.value,
-      EmployeeParties: party_DropdownSelect.map((i) => { return ({ Party: i.value }) }),
-      Company: company_DropdownSelect.value,
-      CreatedBy: 1,
-      UpdatedBy: 1,
-    });
+  const formSubmitHandler = (event) => {
+    debugger
+    event.preventDefault();
+    if (formValid(state, setState)) {
+      const jsonBody = JSON.stringify({
+        Name: values.Name,
+        Address: values.Address,
+        Mobile: values.Mobile,
+        email: values.email,
+        DOB: values.DOB,
+        PAN: values.PAN,
+        AadharNo: values.AadharNo,
+        working_hours: values.working_hours,
+        Designation: values.DesignationName.value,
+        EmployeeType: values.EmployeeTypeName.value,
+        State: values.StateName.value,
+        District: values.DistrictName.value,
+        EmployeeParties: values.EmployeeParties.map((i) => { return ({ Party: i.value }) }),
+        Company: values.CompanyName.value,
+        CreatedBy: 1,
+        UpdatedBy: 1,
+      });
 
-    if (pageMode === 'edit') {
-      dispatch(updateEmployeeID(jsonBody, EditData.id));
-    }
-    else {
-      dispatch(postEmployee(jsonBody));
-      console.log("jsonBody",jsonBody)
+      if (pageMode === "edit") {
+        dispatch(updateEmployeeID(jsonBody, values.id,));
+        console.log("update jsonBody", jsonBody)
+      }
+      else {
+        dispatch(postEmployee(jsonBody));
+        console.log("post jsonBody", jsonBody)
+
+      }
     }
   };
 
   // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
-  let IsEditMode_Css = ''
-  if ((pageMode === "edit") || (pageMode === "copy") || (pageMode === "dropdownAdd")) { IsEditMode_Css = "-5.5%" };
+  var IsEditMode_Css = ''
+  if ((modalCss) || (pageMode === "dropdownAdd")) { IsEditMode_Css = "-5.5%" };
 
   if (!(userPageAccessState === '')) {
     return (
       <React.Fragment>
         <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
           <MetaTags>
-            <title>Employee Master| FoodERP-React FrontEnd</title>
+            <title>{userPageAccessState.PageHeading} | FoodERP-React FrontEnd</title>
           </MetaTags>
           <Breadcrumb breadcrumbItem={userPageAccessState.PageHeading} />
 
@@ -310,172 +499,196 @@ const AddEmployee = (props) => {
               </CardHeader>
 
               <CardBody>
-                <AvForm
-                  onValidSubmit={(e, v) => {
-                    handleValidSubmit(e, v);
-                  }}
-                  ref={formRef}
-                >
+                <form onSubmit={formSubmitHandler} ref={formRef} noValidate>
                   <Card  >
                     <CardBody style={{ backgroundColor: "whitesmoke" }}>
                       <Row >
 
-                        <Col md="3">
-                          <FormGroup className="mb-3">
-                            <Label>Name </Label>
-                            <AvField name="Name" id="txtName" value={EditData.Name}
-                              type="text"
-                              placeholder="Please Enter Name"
-                              autoComplete='off'
-                              validate={{
-                                required: { value: true, errorMessage: 'Please Enter Name' },
-                              }}
-                              onChange={(e) => { dispatch(BreadcrumbShow(e.target.value)) }}
-                            />
-                          </FormGroup>
-                        </Col>
+                        <FormGroup className="mb-2 col col-sm-3 ">
+                          <Label htmlFor="validationCustom01">{fieldLabel.Name} </Label>
+                          <Input
+                            name="Name"
+                            id="txtName"
+                            value={values.Name}
+                            type="text"
+                            className={isError.Name.length > 0 ? "is-invalid form-control" : "form-control"}
+                            placeholder="Please Enter Name"
+                            autoComplete='off'
+                            onChange={(event) => {
+                              onChangeText({ event, state, setState })
+                              dispatch(BreadcrumbShow(event.target.value))
+                            }}
+                          />
+                          {isError.Name.length > 0 && (
+                            <span className="invalid-feedback">{isError.Name}</span>
+                          )}
+                        </FormGroup>
 
                         <Col md="1">  </Col>
-                        <Col md="3">
-                          <FormGroup className="mb-3">
-                            <Label>Email</Label>
-                            <AvField name="email"
-                              id="email"
-                              type="email"
-                              value={EditData.email}
-                              placeholder="Enter your EmailID "
-                              autoComplete='off'
-                              validate={{
-                                required: {
-                                  value: true, errorMessage: "Please Enter valid Email Address."
-                                },
-                                tel: {
-                                  pattern: "/^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/",
-                                  errorMessage: "Please Enter valid Email Address.(Ex:abc@gmail.com)"
-                                }
-                              }}
-                            />
+                        <FormGroup className="mb-2 col col-sm-3 ">
+                          <Label htmlFor="validationCustom01">{fieldLabel.email} </Label>
+                          <Input
+                            name="email"
+                            value={values.email}
+                            type="text"
+                            className={isError.email.length > 0 ? "is-invalid form-control" : "form-control"}
+                            placeholder="Please Enter email"
+                            autoComplete='off'
+                            onChange={(event) => {
+                              onChangeText({ event, state, setState })
+                            }}
+                          />
+                          {isError.email.length > 0 && (
+                            <span className="invalid-feedback">{isError.email}</span>
+                          )}
+                        </FormGroup>
 
-                          </FormGroup>
-                        </Col>
                         <Col md="1">  </Col>
-
-                        <Col md="3">
-                          <FormGroup className="mb-3">
-                            <Label>Mobile No.</Label>
-                            <AvField name="Mobile" type="tel"
-                              value={EditData.Mobile}
-                              placeholder="+91 "
-                              autoComplete='off'
-                              validate={{
-                                required: { value: true, errorMessage: 'Please Enter your Mobile Number' },
-                                tel: {
-                                  pattern: /^(\+\d{1,3}[- ]?)?\d{10}$/
-                                }
-                              }}
-
-                            />
-                          </FormGroup>
-                        </Col>
+                        <FormGroup className="mb-2 col col-sm-3 ">
+                          <Label htmlFor="validationCustom01">{fieldLabel.Mobile} </Label>
+                          <Input
+                            name="Mobile"
+                            value={values.Mobile}
+                            type="text"
+                            className={isError.Mobile.length > 0 ? "is-invalid form-control" : "form-control"}
+                            placeholder="Please Enter Mobile"
+                            autoComplete='off'
+                            onChange={(event) => {
+                              onChangeText({ event, state, setState })
+                            }}
+                          />
+                          {isError.Mobile.length > 0 && (
+                            <span className="invalid-feedback">{isError.Mobile}</span>
+                          )}
+                        </FormGroup>
                       </Row>
 
                       <Row>
-                        <Col md="3">
-                          <FormGroup className="mb-3">
-                            <Label>Date of Birth</Label>
-                            <Flatpickr
-                              id="FSSAIExipry"
-                              name="FSSAIExipry"
-                              value={DOB_Date_Select}
-                              className="form-control d-block p-2 bg-white text-dark"
-                              placeholder="YYYY-MM-DD"
-                              autoComplete='off'
-                              options={{
-                                altInput: true,
-                                altFormat: "F j, Y",
-                                dateFormat: "Y-m-d"
-                              }}
-                              onChange={(selectedDates, dateStr, instance) => {
-                                setDOB_Date_Select(dateStr)
-                              }}
-                            />
-                          </FormGroup>
-                        </Col>
+                        <FormGroup className="mb-2 col col-sm-3 ">
+                          <Label htmlFor="validationCustom01">{fieldLabel.DOB} </Label>
+                          <Flatpickr
+                            name="DOB"
+                            value={values.DOB}
+                            className="form-control d-block p-2 bg-white text-dark"
+                            placeholder="YYYY-MM-DD"
+                            autoComplete="0,''"
+                            options={{
+                              altInput: true,
+                              altFormat: "F j, Y",
+                              dateFormat: "Y-m-d",
+                              minDate: new Date().fp_incr("n"),
+                              maxDate: new Date().fp_incr(0) // 14 days from now"0,''"
+                            }}
+                            onChange={(y, v, e) => { onChangeDate({ e, v, state, setState }) }}
+                          />
+                          {isError.DOB.length > 0 && (
+                            <span className="invalid-feedback">{isError.DOB}</span>
+                          )}
+                        </FormGroup>
 
                         <Col md="1">  </Col>
-                        <Col md="3">
-                          <FormGroup className="mb-3">
-                            <Label> Aadhar No.</Label>
-                            <AvField name="AadharNo" type="text"
-                              value={EditData.AadharNo}
-                              placeholder="Enter your AadharNo. "
-                              autoComplete='off'
-                              validate={{
-                                required: { value: true, errorMessage: 'Please Enter your AadharNo (Ex: 2222 2352 3549)' },
-                                tel: {
-                                  pattern: /^[2-9]{1}[0-9]{3}\s[0-9]{4}\s[0-9]{4}$/,
-                                  errorMessage: 'Please Enter your AadharNo (Ex: 2222 2352 3549)'
-                                }
-                              }}
-                            />
-                          </FormGroup>
-                        </Col>
+                        <FormGroup className="mb-2 col col-sm-3 ">
+                          <Label htmlFor="validationCustom01">{fieldLabel.AadharNo} </Label>
+                          <Input
+                            name="AadharNo"
+                            value={values.AadharNo}
+                            type="text"
+                            className={isError.AadharNo.length > 0 ? "is-invalid form-control" : "form-control"}
+                            placeholder="Please Enter AadharNo"
+                            autoComplete='off'
+                            onChange={(event) => {
+                              onChangeText({ event, state, setState })
+                            }}
+                          />
+                          {isError.AadharNo.length > 0 && (
+                            <span className="invalid-feedback">{isError.AadharNo}</span>
+                          )}
+                        </FormGroup>
+
                         <Col md="1">  </Col>
-                        <Col md="3">
-                          <FormGroup className="mb-3">
-                            <Label> PAN No.</Label>
-                            <AvField name="PAN" type="text"
-                              value={EditData.PAN}
-                              placeholder="Enter your PAN No. "
-                              autoComplete='off'
-                              validate={{
-                                required: { value: true, errorMessage: 'Please Enter your PAN No.(Ex:AAAAA1234A).' },
-                                tel: {
-                                  pattern: /[A-Z]{5}[0-9]{4}[A-Z]{1}/,
-                                  errorMessage: 'Please Enter valid PAN number.(Ex:AAAAA1234A).'
-                                }
-                              }}
-                            />
-                          </FormGroup>
-                        </Col>
+                        <FormGroup className="mb-2 col col-sm-3 ">
+                          <Label htmlFor="validationCustom01">{fieldLabel.PAN} </Label>
+                          <Input
+                            name="PAN"
+                            value={values.PAN}
+                            type="text"
+                            className={isError.PAN.length > 0 ? "is-invalid form-control" : "form-control"}
+                            placeholder="Please Enter PAN"
+                            autoComplete='off'
+                            onChange={(event) => {
+                              onChangeText({ event, state, setState })
+                            }}
+                          />
+                          {isError.PAN.length > 0 && (
+                            <span className="invalid-feedback">{isError.PAN}</span>
+                          )}
+                        </FormGroup>
                       </Row>
 
                       <Row>
-                        <Col md="3">
-                          <FormGroup className="">
-                            <Label>Address</Label>
-                            <AvField name="Address" value={EditData.Address} type="text"
-                              placeholder=" Please Enter Address "
-                              autoComplete='off'
-                              validate={{
-                                required: { value: true, errorMessage: 'Please Enter your Address' },
-                              }}
-                            />
-                          </FormGroup>
-                        </Col>
+                        <FormGroup className="mb-2 col col-sm-3 ">
+                          <Label htmlFor="validationCustom01">{fieldLabel.Address} </Label>
+                          <Input
+                            name="Address"
+                            value={values.Address}
+                            type="text"
+                            className={isError.Address.length > 0 ? "is-invalid form-control" : "form-control"}
+                            placeholder="Please Enter Address"
+                            autoComplete='off'
+                            onChange={(event) => {
+                              onChangeText({ event, state, setState })
+                            }}
+                          />
+                          {isError.Address.length > 0 && (
+                            <span className="invalid-feedback">{isError.Address}</span>
+                          )}
+                        </FormGroup>
+
                         <Col md="1"></Col>
-                        <Col md="3">
-                          <FormGroup >
-                            <Label>State</Label>
+                        <FormGroup className="mb-2 col col-sm-3 ">
+                          <Label htmlFor="validationCustom01"> {fieldLabel.StateName} </Label>
+                          <Col sm={12}>
                             <Select
-                              value={State_DropdownSelect}
+                              name="StateName"
+                              value={values.StateName}
+                              isSearchable={true}
+                              className="react-dropdown"
+                              classNamePrefix="dropdown"
                               options={State_DropdownOptions}
-                              onChange={(e) => { State_Dropdown_Handler(e) }}
+                              onChange={(v, e) => {
+                                onChangeSelect({ e, v, state, setState });
+                                State_Dropdown_Handler(v)
+                              }
+                              }
                             />
-                          </FormGroup>
-                        </Col>
+                            {isError.StateName.length > 0 && (
+                              <span className="text-danger f-8"><small>{isError.StateName}</small></span>
+                            )}
+                          </Col>
+                        </FormGroup>
 
                         <Col md="1"></Col>
-                        <Col md="3">
-                          <FormGroup >
-                            <Label>District</Label>
+                        <FormGroup className="mb-2 col col-sm-3 ">
+                          <Label htmlFor="validationCustom01"> {fieldLabel.DistrictName} </Label>
+                          <Col sm={12}>
                             <Select
-                              value={district_DropdownSelect}
+                              name="DistrictName"
+                              value={values.DistrictName}
+                              isSearchable={true}
+                              className="react-dropdown"
+                              classNamePrefix="dropdown"
                               options={District_DropdownOptions}
-                              onChange={(e) => { District_Dropdown_Handler(e) }}
+                              onChange={(v, e) => {
+                                onChangeSelect({ e, v, state, setState });
+                                District_Dropdown_Handler(v)
+                              }
+                              }
                             />
-                          </FormGroup>
-                        </Col>
+                            {isError.DistrictName.length > 0 && (
+                              <span className="text-danger f-8"><small>{isError.DistrictName}</small></span>
+                            )}
+                          </Col>
+                        </FormGroup>
                       </Row>
                     </CardBody>
                   </Card>
@@ -483,88 +696,134 @@ const AddEmployee = (props) => {
                   <Card className="mt-n2">
                     <CardBody style={{ backgroundColor: "whitesmoke" }}>
                       <Row >
-                        <Col md="3">
-                          <FormGroup className="mb-3">
-                            <Label>Employee Type </Label>
+
+                        <FormGroup className="mb-2 col col-sm-3 ">
+                          <Label htmlFor="validationCustom01"> {fieldLabel.EmployeeTypeName} </Label>
+                          <Col sm={12}>
                             <Select
-                              value={employeeType_DropdownSelect}
+                              name="EmployeeTypeName"
+                              value={values.EmployeeTypeName}
+                              isSearchable={false}
+                              className="react-dropdown"
+                              classNamePrefix="dropdown"
                               options={EmployeeType_DropdownOptions}
-                              onChange={(e) => { EmployeeType_Dropdown_Handler(e) }}
+                              onChange={(v, e) => {
+                                onChangeSelect({ e, v, state, setState });
+                                EmployeeType_Dropdown_Handler(v)
+                              }
+                              }
                             />
-                          </FormGroup>
-                        </Col>
+                            {isError.EmployeeTypeName.length > 0 && (
+                              <span className="text-danger f-8"><small>{isError.EmployeeTypeName}</small></span>
+                            )}
+                          </Col>
+                        </FormGroup>
 
                         <Col md="1">  </Col>
-                        <Col md="3">
-                          <FormGroup className="mb-3">
-                            <Label>Company Name </Label>
+                        <FormGroup className="mb-2 col col-sm-3 ">
+                          <Label htmlFor="validationCustom01"> {fieldLabel.CompanyName} </Label>
+                          <Col sm={12}>
                             <Select
-                              value={company_DropdownSelect}
+                              name="CompanyName"
+                              value={values.CompanyName}
+                              isSearchable={false}
+                              className="react-dropdown"
+                              classNamePrefix="dropdown"
                               options={Company_DropdownOptions}
-                              onChange={(e) => { Company_Dropdown_Handler(e) }}
+                              onChange={(v, e) => {
+                                onChangeSelect({ e, v, state, setState });
+                                Company_Dropdown_Handler(v)
+                              }
+                              }
                             />
-                          </FormGroup>
-                        </Col>
+                            {isError.CompanyName.length > 0 && (
+                              <span className="text-danger f-8"><small>{isError.CompanyName}</small></span>
+                            )}
+                          </Col>
+                        </FormGroup>
+
 
                         <Col md="1">  </Col>
                         {partyDropDownShow_UI ?
-                          <div className="col-lg-3 col-md-6">
+                          <div className="col-lg-3 col-md-4">
                             <div className="mb-3">
-                              <Label className="form-label font-size-13 ">Party name</Label>
+                              <Label htmlFor="validationCustom01">{fieldLabel.EmployeeParties} </Label>
                               <Select
-                                defaultValue={party_DropdownSelect}
+                                name="EmployeeParties"
+                                // defaultValue={EmployeeType_DropdownOptions[0]}
+                                value={values.EmployeeParties}
+                                isSearchable={false}
                                 isMulti={true}
-                                className="basic-multi-select"
+                                className="react-dropdown"
                                 options={Party_DropdownOptions}
-                                onChange={(e) => { Party_Dropdown_Handler(e) }}
-                                classNamePrefix="select2-selection"
+                                onChange={(v, e) => {
+                                  onChangeSelect({ e, v, state, setState });
+                                  Party_Dropdown_Handler(v)
+                                }
+                                }
+                                classNamePrefix="dropdown"
                               />
+                              {isError.EmployeeParties.length > 0 && (
+                                <span className="text-danger f-8"><small>{isError.EmployeeParties}</small></span>
+                              )}
                             </div>
-                          </div> : <></>}
+                          </div>
+                          : <></>}
                       </Row>
-
 
                       <Row>
-
-                        <Col md="3">
-                          <FormGroup className="mb-4">
-                            <Label>Designation</Label>
+                        <FormGroup className="mb-2 col col-sm-3 ">
+                          <Label htmlFor="validationCustom01"> {fieldLabel.DesignationName} </Label>
+                          <Col sm={12}>
                             <Select
-                              value={designation_DropdownSelect}
+                              name="DesignationName"
+                              value={values.DesignationName}
+                              isSearchable={false}
+                              className="react-dropdown"
+                              classNamePrefix="dropdown"
                               options={Designation_DropdownOptions}
-                              onChange={(e) => { Designation_Dropdown_Handler(e) }}
+                              onChange={(v, e) => onChangeSelect({ e, v, state, setState })}
                             />
-                          </FormGroup>
-                        </Col>
+                            {isError.DesignationName.length > 0 && (
+                              <span className="text-danger f-8"><small>{isError.DesignationName}</small></span>
+                            )}
+                          </Col>
+                        </FormGroup>
+
 
                         <Col md="1">  </Col>
-                        <Col md="3">
-                          <FormGroup className="mb-3">
-                            <Label>Working Hours </Label>
-                            <AvField name="working_hours" value={EditData.working_hours}
-                              type="text"
-                              placeholder="Please Enter Working Hours"
-                              autoComplete='off'
-                              validate={{
-                                number: true,
-                                required: { value: true, errorMessage: 'Working Hours is Required' },
-                              }}
-                            />
-                          </FormGroup>
-                        </Col>
+
+                        <FormGroup className="mb-2 col col-sm-3 ">
+                          <Label htmlFor="validationCustom01">{fieldLabel.working_hours} </Label>
+                          <Input
+                            name="working_hours"
+                            value={values.working_hours}
+                            type="text"
+                            className={isError.working_hours.length > 0 ? "is-invalid form-control" : "form-control"}
+                            placeholder="Please Enter working hours"
+                            autoComplete='off'
+                            onChange={(event) => {
+                              onChangeText({ event, state, setState })
+                            }}
+                          />
+                          {isError.working_hours.length > 0 && (
+                            <span className="invalid-feedback">{isError.working_hours}</span>
+                          )}
+                        </FormGroup>
+
                       </Row>
 
-                      <FormGroup >
-                        <Row >
+                      <FormGroup className="mt-3">
+                        <Row>
                           <Col sm={2}>
-                          {SaveButton({ pageMode, userPageAccessState, module: "EmployeeMaster" })}
+                            {SaveButton({ pageMode, userPageAccessState, module: "EmployeeMaster" })}
                           </Col>
                         </Row>
                       </FormGroup >
                     </CardBody>
                   </Card>
 
-                </AvForm>
+                </form>
               </CardBody>
             </Card>
           </Container>

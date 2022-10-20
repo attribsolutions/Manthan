@@ -56,7 +56,7 @@ const Employee_List = () => {
             MasterModal={AddEmployee}
             masterPath={EMPLOYEE}
             ButtonMsgLable={"Employee"}
-            deleteName={"ID"}
+            deleteName={"Name"}
           />
           : null
       }
