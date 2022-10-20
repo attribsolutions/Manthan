@@ -130,6 +130,9 @@ const GroupTypeMaster = (props) => {
                 setEditData(hasEditVal);
                 const { Name } = hasEditVal
                 const { values, fieldLabel, hasValid, required, isError } = { ...state }
+
+                hasValid.Name.valid = true;
+                
                 values.Name = Name;
                 setState({ values, fieldLabel, hasValid, required, isError })
                 dispatch(editGroupTypeIdSuccess({ Status: false }))
