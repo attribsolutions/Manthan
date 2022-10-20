@@ -21,20 +21,24 @@ import ToolkitProvider, { Search } from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 import paginationFactory, { PaginationListStandalone, PaginationProvider } from "react-bootstrap-table2-paginator";
 import { useHistory } from "react-router-dom";
-import { getSupplier, goButton, postOrder, postOrderSuccess } from "../../../store/Purchase/OrderPageRedux/actions";
+import { getSupplier, goButton, goButtonSuccess, postOrder, postOrderSuccess } from "../../../store/Purchase/OrderPageRedux/actions";
 import { mySearchProps } from "../../../components/Common/CmponentRelatedCommonFile/SearchBox/MySearch";
 import { AlertState } from "../../../store/actions";
+import { basicAmount, GstAmount, totalAmount } from "./OrderPageCalulation";
 
-let description = ''
+let description = 'order'
 
 function Order() {
-    const { SearchBar } = Search;
+
     const props = { tableData: [], func: function a() { } }
     const dispatch = useDispatch();
     const history = useHistory()
     const [userPageAccessState, setUserPageAccessState] = useState('');
     const [effectiveDate, setEffectiveDate] = useState('');
     const [customerSelect, setCustomerSelect] = useState('');
+    const [orderAmount, setOrderAmount1] = useState("");
+    const [change, setChange] = useState(false);
+
 
     useEffect(() => {
         // document.getElementById("txtName").focus();
@@ -82,7 +86,7 @@ function Order() {
                 Type: 1,
                 Status: true,
                 Message: postMsg.Message,
-                RedirectPath: '/orderList',
+                RedirectPath: false,
             }))
 
         } else if (postMsg.Status === true) {
@@ -97,14 +101,21 @@ function Order() {
         }
     }, [postMsg])
 
+    function test(e, row,) {
+        row["inpQty"] = e.target.value;
+        row["totalAmount"] = totalAmount(row)
 
+        let sum = 0
+        items.forEach(ind => {
+            sum = sum + ind.totalAmount
+        });
+        setOrderAmount1(sum.toFixed(2))
+    }
 
     const supplierOptions = supplier.map((i) => ({
         value: i.id,
         label: i.Supplier,
     }));
-
-
 
     const pagesListColumns = [
         {
@@ -116,17 +127,29 @@ function Order() {
             text: "Rate",
             dataField: "Rate",
             sort: true,
-            formatter: (value, row) => (
-                <span >
-                    <Input type="text" defaultValue={value} />
-                </span>
-            ),
+            formatter: (value, row, k) => {
+                if (row.inpRate === undefined) { row["inpRate"] = 0 }
+                if (row.totalAmount === undefined) { row["totalAmount"] = 0 }
+                return (
+                    <span className="text-right" >
+                        <Input type="text" defaultValue={row.inpRate}
+                            onChange={e => {
+                                row["inpRate"] = e.target.value;
+                                if (e.target.value > 0) {
+                                    document.getElementById(`inpQty${k}`).disabled = false
+                                } else {
+                                    document.getElementById(`inpQty${k}`).disabled = true
+
+                                }
+                            }} />
+                    </span>
+                )
+            },
 
             headerStyle: (colum, colIndex) => {
                 return { width: '140px', textAlign: 'center' };
             }
         },
-
         {
             text: "GST %",
             dataField: "GST",
@@ -145,12 +168,18 @@ function Order() {
         },
         {
             text: "Quntity",
-            dataField: "Margin",
+            dataField: "",
             sort: true,
-            formatter: (value, row) => (
+            formatter: (value, row, k) => (
 
                 <span >
-                    <Input type="text" defaultValue={value} />
+                    <Input type="text"
+                        id={`inpQty${k}`}
+                        defaultValue={row.inpQty}
+                        disabled={(row.inpRate === 0) ? true : false}
+                        onChange={(e) => {
+                            test(e, row,)
+                        }} />
                 </span>
 
             ),
@@ -162,9 +191,14 @@ function Order() {
         },
         {
             text: "UOM",
-            dataField: "Margin",
+            dataField: "",
             sort: true,
             formatter: (value, row, key) => {
+                if (row.UOMLabel === undefined) {
+                    row["UOM"] = row.UnitDetails[0].UnitID
+                    row["UOMLabel"] = row.UnitDetails[0].UnitName
+                    row["inpBaseUnitQty"] = row.UnitDetails[0].BaseUnitQuantity
+                }
                 return (
                     <Select
                         classNamePrefix="select2-selection"
@@ -172,19 +206,19 @@ function Order() {
                         defaultValue={{ value: row.UOM, label: row.UOMLabel }}
                         // value={{value:row.UOM,label:row.UOMLabel}}
                         options={
-                            [
-                                { value: 1, label: "NO" },
-                                { value: 2, label: "Box" },
-                                { value: 3, label: "Kg" }
-                            ]
+                            row.UnitDetails.map(i => ({
+                                label: i.UnitName,
+                                value: i.UnitID,
+                                baseUnitQty: i.BaseUnitQuantity
+                            }))
                         }
-                        onChange={(e) => {
-                            // debugger;
+                        onChange={e => {
                             row["UOM"] = e.value;
                             row["UOMLabel"] = e.label
+                            row["inpBaseUnitQty"] = e.baseUnitQty
                         }}
                     >
-                    </Select>
+                    </Select >
                 )
             },
             headerStyle: (colum, colIndex) => {
@@ -213,15 +247,21 @@ function Order() {
     }
 
     const GoButton_Handler = () => {
-        debugger
-        var a = description
+
+        if (items.length > 0) {
+            if (window.confirm("Refresh Order Item...!")) {
+                dispatch(goButtonSuccess([]))
+            } else {
+                return
+            }
+        }
+
         let division = 0
         try {
             division = JSON.parse(localStorage.getItem("roleId")).Party_id
         } catch (e) {
             alert(e)
         }
-
         let party = customerSelect.value
         const jsonBody = JSON.stringify({
             Division: division,
@@ -232,6 +272,7 @@ function Order() {
 
         dispatch(goButton(jsonBody))
     };
+
     const saveHandeller = () => {
         let division = 0
         try {
@@ -239,43 +280,48 @@ function Order() {
         } catch (e) {
             alert(e)
         }
+
         let party = customerSelect.value
 
-        const itemArr = items.map(i => ({
-            Item: i.id,
-            Quantity: i.Quantity,
-            MRP: i.MRP,
-            Rate: i.Rate,
-            Unit: 1,
-            BaseUnitQuantity: 1,
-            GST: 119,
-            Margin: 675,
-            BasicAmount: 450,
-            GSTAmount: 1,
-            CGST: 1,
-            SGST: 1,
-            IGST: 1,
-            CGSTPercentage: 0,
-            SGSTPercentage: 0,
-            IGSTPercentage: 0,
-            Amount: 1000,
-
-        }))
+        const itemArr = []
+        items.forEach(i => {
+            if (i.inpQty > 0) {
+                const arr = {
+                    Item: i.id,
+                    Quantity: i.inpQty,
+                    MRP: i.MRP,
+                    Rate: i.inpRate,
+                    Unit: i.UOM,
+                    BaseUnitQuantity: i.inpBaseUnitQty,
+                    GST: i.Gstid,
+                    Margin: "",
+                    BasicAmount: basicAmount(i).toFixed(2),
+                    GSTAmount: GstAmount(i).toFixed(2),
+                    CGST: i.GST,
+                    SGST: (GstAmount(i) / 2).toFixed(2),
+                    IGST: (GstAmount(i) / 2).toFixed(2),
+                    CGSTPercentage: (i.GST / 2),
+                    SGSTPercentage: (i.GST / 2),
+                    IGSTPercentage: (i.GST),
+                    Amount: i.totalAmount,
+                }
+                itemArr.push(arr)
+            };
+        })
 
         const jsonBody = JSON.stringify({
             OrderDate: effectiveDate,
             Customer: division,
             Supplier: party,
-            OrderAmount: "1000",
+            OrderAmount: orderAmount,
             Description: description,
             CreatedBy: 1,
             UpdatedBy: 1,
-
             OrderItem: itemArr
         });
         dispatch(postOrder(jsonBody))
-        debugger
-      
+        console.log(jsonBody)
+
 
     }
 
@@ -298,13 +344,14 @@ function Order() {
                     ExcelData={items}
                 /> */}
 
+
                 <Row><div className="col ">
                     <label className="font-size-18 form-label text-black " style={{ paddingLeft: "13px" }} >
                         {"Order"}</label>
                 </div>
                     <div className=" col col-2 mt-n1 ">
                         <div className=" bg-soft-info text-center text-black  external-event  col-form-label rounded-2 align-right">
-                            Order Amount : &nbsp;&nbsp; {"12410"}&nbsp;
+                            Order Amount : &nbsp;&nbsp; {orderAmount}&nbsp;
                         </div>
                     </div>
                 </Row>
@@ -364,9 +411,7 @@ function Order() {
                         >Go</Button>
                     </Col>
 
-                    <Button type="button" color="btn btn-outline-primary border-2 font-size-12 "
-                            onClick={saveHandeller}
-                        >save</Button>
+
                 </Row>
 
 
@@ -428,6 +473,16 @@ function Order() {
                     )}
 
                 </PaginationProvider>
+                {(items.length > 0) ? <div className="row save1" style={{ paddingBottom: 'center' }}>
+                    <button
+                        type="submit"
+                        data-mdb-toggle="tooltip" data-mdb-placement="top" title="Save Order"
+                        className="btn btn-primary w-md"
+                        onClick={saveHandeller}
+                    > <i className="fas fa-save me-2"></i> Save
+                    </button>
+                </div>
+                    : null}
             </div>
             {/* </div> */}
 

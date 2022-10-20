@@ -141,7 +141,7 @@ export const Role_Master_Update_API = (data, id) => put(`${url.ROLE_MASTER_API}/
 
 export const OrderPage_GetSupplier_API = (perty_id) => get(`${url.SUPPLIER}/${perty_id}`)//get api
 export const OrderPage_GoButton_API = (data) => post(url.GET_ITEM_FOR_ORDER,data)//get api
-export const OrderPage_Post_API = (data) => post(url.GET_ORDER_ITEM,data)//get api
+export const OrderPage_Post_API = (data) => post(url.ORDER_PAGE_API,data)//get api
 export const OrderPage_get_API = (id) => get(`${url.ORDER_PAGE_API}/${id}`)//get api
 
 export const deleteOrderID_forOrderPage_ApiCall = (id) => del(`${url.ORDER_PAGE_API}/${id}`)//Delete Order

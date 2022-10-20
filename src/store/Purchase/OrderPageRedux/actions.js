@@ -35,9 +35,9 @@ export const postOrder = (data) => ({
   type: POST_ORDER_FROM_ORDER_PAGE,
   data
 });
-export const postOrderSuccess = (data) => ({
+export const postOrderSuccess = (msg) => ({
   type: POST_ORDER_FROM_ORDER_PAGE_SUCCESS,
-  payload: data
+  payload: msg
 });
 
 export const getOrderList = (data) => ({
@@ -105,7 +105,7 @@ export const getSupplierSuccess = orders => ({
 
 
 export const goButton = data => ({
-  type:GO_BUTTON_FOR_ORDER_PAGE,
+  type: GO_BUTTON_FOR_ORDER_PAGE,
   data,
 });
 
