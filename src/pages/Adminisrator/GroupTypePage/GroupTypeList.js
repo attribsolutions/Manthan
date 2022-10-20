@@ -58,6 +58,8 @@ const GroupTypeList = (props) => {
             reducers={reducers}
             MasterModal={GroupTypeMaster}
             masterPath={GROUPTYPE}
+            ButtonMsgLable={"Role"}
+            deleteName={"Name"}
 
           />
           : null
