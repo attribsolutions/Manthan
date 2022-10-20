@@ -38,11 +38,13 @@ function* Get_Roles_GenratorFunction() {
 }
 
 function* Submit_Roles_GenratorFunction({ Data }) {
+  debugger
   yield put(SpinnerState(true))
   try {
     const response = yield call(Role_Master_Post_API, Data);
     yield put(SpinnerState(false))
     yield put(PostSuccess(response));
+  
   } catch (error) {
     yield put(SpinnerState(false))
     yield put(AlertState({
@@ -82,11 +84,11 @@ debugger
 }
 
 
-function* Update_Roles_GenratorFunction({ updateData, ID }) {
-  console.log("response in GenratorFunction ", updateData, ID)
+function* Update_Roles_GenratorFunction({ data,ID }) {
+debugger
   try {
     yield put(SpinnerState(true))
-    const response = yield call(Role_Master_Update_API, updateData, ID);
+    const response = yield call(Role_Master_Update_API, data,ID);
     console.log("response in saga file", response)
     yield put(SpinnerState(false))
     yield put(updateSuccess(response))

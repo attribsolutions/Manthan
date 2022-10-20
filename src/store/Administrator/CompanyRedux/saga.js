@@ -48,6 +48,7 @@ function* deleteCompany_ID({ id }) {
     const response = yield call(delete_CompanyID, id);
     yield put(SpinnerState(false))
     yield put(deleteCompanyIDSuccess(response))
+    console.log("delete response",response)
   } catch (error) {
     yield put(SpinnerState(false))
     yield put(AlertState({ Type: 4, 
@@ -68,12 +69,14 @@ function* editCompany_ID({ id,pageMode }) {
   }
 }
 
-function* update_Company({ data, ID }) {
+function* update_Company({ updateData, ID }) {
+  debugger
   try {
     yield put(SpinnerState(true))
-    const response = yield call(updateCompany_ID, data, ID);
+    const response = yield call(updateCompany_ID, updateData, ID);
     yield put(SpinnerState(false))
     yield put(updateCompanyIDSuccess(response))
+    console.log("saga response",response)
   }
   
   catch (error) {

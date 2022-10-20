@@ -22,8 +22,8 @@ const CompanyList = () => {
             postMsg: state.Company.postMsg,
             userAccess: state.Login.RoleAccessUpdateData,
             editData: state.Company.editData,
-            updateMsg: state.Company.updateMsg,
-            deleteMsg: state.Company.deleteId,
+            updateMsg: state.Company.updateMessage,
+            deleteMsg: state.Company.deleteCompanyID,
             pageField: state.CommonPageFieldReducer.pageFieldList
         })
     );

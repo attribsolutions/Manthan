@@ -55,9 +55,9 @@ export const postRole = (Data,id) => ({
   })
 
   // update api
-  export const updateID=(updateData,ID)=>({
+  export const updateID=(data,ID)=>({
     type:UPDATE_ROLE_LIST_ID,
-    updateData,ID,
+    data,ID
   })
   export const updateSuccess =(updateMessage)=>({
     type:UPDATE_ROLE_LIST_ID_SUCCESS,
