@@ -36,6 +36,7 @@ const RoleMaster = (props) => {
   // ////////////////////////////////////
   const [state, setState] = useState({
     values: {
+      id: "",
       Name: "",
       Description: "",
       Dashboard: "",
@@ -182,7 +183,7 @@ const RoleMaster = (props) => {
           label: data.EmployeeTypeName
         }))
 
-        const { Name, Description, Dashboard, isActive, isSCMRole, IsPartyConnection, RoleEmployeeTypes } = hasEditVal
+        const { id,Name, Description, Dashboard, isActive, isSCMRole, IsPartyConnection, RoleEmployeeTypes } = hasEditVal
         const { values, fieldLabel, hasValid, required, isError } = { ...state }
 
         hasValid.Name.valid = true;
@@ -193,6 +194,7 @@ const RoleMaster = (props) => {
         hasValid.IsPartyConnection.valid = true;
         hasValid.RoleEmployeeTypes.valid = true;
 
+        values.id = id
         values.Name = Name
         values.Description = Description
         values.Dashboard = Dashboard
@@ -266,12 +268,12 @@ const RoleMaster = (props) => {
         isActive: values.isActive,
         isSCMRole: values.isSCMRole,
         IsPartyConnection: values.IsPartyConnection,
-        // RoleEmployeeTypes: values.employeeType.map((i) => { return ({ EmployeeType: i.value }) }),
-        RoleEmployeeTypes: [
-          {
-            EmployeeType: 1
-          }
-        ],
+        RoleEmployeeTypes: values.RoleEmployeeTypes.map((i) => { return ({ EmployeeType: i.value }) }),
+        // RoleEmployeeTypes: [
+        //   {
+        //     EmployeeType: 1
+        //   }
+        // ],
         CreatedBy: 1,
         CreatedOn: "2022-05-20T11:22:55.711483Z",
         UpdatedBy: 1,
