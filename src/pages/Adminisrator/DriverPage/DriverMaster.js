@@ -219,7 +219,7 @@ const DriverMaster = (props) => {
 // new change
     // ////////////////////////////////////////////////////////////
     useEffect(() => {
-        debugger
+     
         if (pageField) {
             const fieldArr = pageField.PageFieldMaster
             comAddPageFieldFunc({ state, setState, fieldArr })// new change

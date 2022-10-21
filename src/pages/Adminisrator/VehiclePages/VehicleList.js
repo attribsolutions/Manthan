@@ -37,7 +37,6 @@ const VehicleList = (props) => {
     deleteSucc: deleteVehicleTypeIDSuccess,
   }
 
-
   //  This UseEffect => Featch Modules List data  First Rendering
   useEffect(() => {
     dispatch(commonPageFieldListSuccess(null))
@@ -56,7 +55,7 @@ const VehicleList = (props) => {
             reducers={reducers}
             MasterModal={VehicleMaster}
             masterPath={VEHICLE}
-            ButtonMsgLable={"Vehicle"}
+            ButtonMsgLable={"VehicleNumber"}
             deleteName={"VehicleNumber"}
 
           />
