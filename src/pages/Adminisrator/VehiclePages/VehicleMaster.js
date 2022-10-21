@@ -218,7 +218,6 @@ const VehicleMaster = (props) => {
                 setDivisionData(division)
                 dispatch(editVehicleTypeSuccess({ Status: false }))
                 dispatch(BreadcrumbShow(hasEditVal.VehicleNumber))
-
             }
         }
 
@@ -316,7 +315,7 @@ const VehicleMaster = (props) => {
                 VehicleNumber: values.VehicleNumber,
                 Description: values.Description,
                 Driver: values.DriverName.value,
-                VehicleType : values.Vehicletype.value,
+                VehicleType: values.Vehicletype.value,
                 VehicleDivisions: division,
             });
 
@@ -389,8 +388,6 @@ const VehicleMaster = (props) => {
                                         <Col md={12}>
                                             <Card>
                                                 <CardBody style={{ backgroundColor: "whitesmoke" }}>
-
-
                                                     <Row className="mt-1">
                                                         <Col md="3">
                                                             <FormGroup className="mb-3">
@@ -459,7 +456,6 @@ const VehicleMaster = (props) => {
                                                                         <span className="invalid-feedback">{isError.VehicleNumber}</span>
                                                                     )}
                                                                 </FormGroup>
-
                                                             </Col>
 
                                                             <Col md="3">
@@ -501,7 +497,6 @@ const VehicleMaster = (props) => {
                                                                         onChangeSelect({ e, v, state, setState })
                                                                         DivisionType_DropDown_handller(v)
                                                                     }
-
                                                                     }
                                                                 />
                                                                 {isError.VehicleDivisions.length > 0 && (
