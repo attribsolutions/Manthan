@@ -280,7 +280,6 @@ const PartyMaster = (props) => {
         dispatch(getPriceList());
         dispatch(getPartyTypes());
         dispatch(getCompany());
-
     }, [dispatch]);
 
   // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
@@ -302,15 +301,17 @@ const PartyMaster = (props) => {
 
         if (hasEditVal) {
 
-            const { id, Name, CategoryTypeName, CategoryType } = hasEditVal
+            const { id, Name, MobileNo,PriceList,Price, } = hasEditVal
             const { values, fieldLabel, hasValid, required, isError } = { ...state }
             
             hasValid.Name.valid = true;
-            hasValid.CategoryTypeName.valid = true;
+            hasValid.MobileNo.valid = true;
             
             values.id = id
             values.Name = Name;
-            values.CategoryTypeName = { label: CategoryTypeName, value: CategoryType };
+            values.MobileNo = MobileNo;
+            values.PriceList = { label: PriceList, value: Price };
+            values.PartyType = { label: PriceList, value: Price };
 
             setState({ values, fieldLabel, hasValid, required, isError })
             dispatch(BreadcrumbShow(hasEditVal.Name))
@@ -429,7 +430,6 @@ const PartyMaster = (props) => {
                                 value={PriceList_dropdown_Select.label}
                             />
 
-
                         </div>
                         <Tree data={priceListByPartyType} priceList={PriceList_dropdown_Select}
                             func1={setPriceList_dropdown_Select} func2={setDropOpen} />
@@ -442,7 +442,7 @@ const PartyMaster = (props) => {
     }
 
     const FormSubmitButton_Handler = (event, values) => {
-        debugger
+      
         const jsonBody = JSON.stringify({
             Name: values.Name,
             PriceList: PriceList_dropdown_Select.value,
@@ -485,7 +485,7 @@ const PartyMaster = (props) => {
             <React.Fragment>
                 <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
                     <MetaTags>
-                        <title>Item Master| FoodERP-React FrontEnd</title>
+                        <title>Party Master| FoodERP-React FrontEnd</title>
                     </MetaTags>
                     <Container fluid>
                         <AvForm onValidSubmit={(e, v) => { FormSubmitButton_Handler(e, v); }}>
