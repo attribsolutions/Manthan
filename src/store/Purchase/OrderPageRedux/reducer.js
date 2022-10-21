@@ -8,11 +8,17 @@ import {
   UPDATE_ORDER_ID_FROM_ORDER_PAGE_SUCCESS,
   EDIT_ORDER_FOR_ORDER_PAGE_SUCCESS,
   DELETE_ORDER_FOR_ORDER_PAGE_SUCCESS,
+  GET_SUPPLIER_SUCCESS,
+  GO_BUTTON_FOR_ORDER_PAGE,
+  GO_BUTTON_FOR_ORDER_PAGE_SUCCESS,
+  POST_ORDER_FROM_ORDER_PAGE_SUCCESS,
 } from "./actionType"
 
 const INIT_STATE = {
-  OrderItems: [],
-  submitOrderSuccess: { Status: false },
+  supplier:[],
+  orderItem:[],
+  OrderItemsOld: [],
+  postMsg: { Status: false },
   ordersList: [],
   orderListMessage: [],
   editOrderData: { Status: false, Items: [] },
@@ -26,16 +32,27 @@ const INIT_STATE = {
 const OrderPageReducer = (state = INIT_STATE, action) => {
   switch (action.type) {
 
-    case GET_ORDER_ITEMS_FOR_ORDER_PAGE_SUCCESS:
+    case GET_SUPPLIER_SUCCESS:
       return {
         ...state,
-        OrderItems: action.payload,
+        supplier: action.payload,
       }
-    case SUBMIT_ORDER_FROM_ORDER_PAGE_SUCCESS:
+      case GO_BUTTON_FOR_ORDER_PAGE_SUCCESS:
       return {
         ...state,
-        submitOrderSuccess: action.payload,
+        orderItem: action.payload,
       }
+      case GET_ORDER_ITEMS_FOR_ORDER_PAGE_SUCCESS:
+      return {
+        ...state,
+        OrderItemsOld: action.payload,
+      }
+    case POST_ORDER_FROM_ORDER_PAGE_SUCCESS:
+      return {
+        ...state,
+        postMsg: action.payload,
+      }
+
     case GET_ORDER_LIST_SUCCESS:
       return {
         ...state,

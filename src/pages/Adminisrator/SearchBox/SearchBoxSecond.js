@@ -1,26 +1,34 @@
 import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux';
 import './Search.scss'
+import { Search } from "react-bootstrap-table2-toolkit";
+let view = false;
+const onchange = (e) => {
+    e.preventDefault();
+    view = e.target.value.length
+}
 export default function SearchBoxSecond() {
+    const { SearchBar } = Search;
 
     const [searchRoleData, setSearchRoleData] = useState([])
-     // const  RoleAccessData=demoRolleAcess
+    // const  RoleAccessData=demoRolleAcess
 
-  const { RoleAccessData, } = useSelector((state) => ({
-    RoleAccessData: state.Login.RoleData,
-  }));
+    const { RoleAccessData, searchProps } = useSelector((state) => ({
+        RoleAccessData: state.Login.RoleData,
+        searchProps: state.BreadcrumbReducer.searchProps,
+    }));
 
-   useEffect(()=>{
+    useEffect(() => {
 
-    let SearchRoleData_initial =[]
+        let SearchRoleData_initial = []
 
-    RoleAccessData.map((i)=>{
-        i.ModuleData.map((index)=>{
-            SearchRoleData_initial.push(index)
+        RoleAccessData.map((i) => {
+            i.ModuleData.map((index) => {
+                SearchRoleData_initial.push(index)
+            })
         })
-    })
-    setSearchRoleData(SearchRoleData_initial)
-   },[RoleAccessData])
+        setSearchRoleData(SearchRoleData_initial)
+    }, [RoleAccessData])
 
 
     useEffect(() => {
@@ -30,11 +38,20 @@ export default function SearchBoxSecond() {
             the text field element and an array of possible autocompleted values:*/
             var currentFocus;
             /*execute a function when someone writes in the text field:*/
+
             inp.addEventListener("input", function (e) {
+
                 var a, b, i, val = this.value;
                 /*close any already open lists of autocompleted values*/
                 closeAllLists();
                 if (!val) { return false; }
+                // var a = input.value
+
+                if (val[0] === "/") {
+                    val = val.substring(1);
+                } else {
+                    return false;
+                }
                 currentFocus = -1;
                 /*create a DIV element that will contain the items (values):*/
                 a = document.createElement("DIV");
@@ -75,6 +92,7 @@ export default function SearchBoxSecond() {
             });
             /*execute a function presses a key on the keyboard:*/
             inp.addEventListener("keydown", function (e) {
+                // debugger
                 var x = document.getElementById(this.id + "autocomplete-list");
                 if (x) x = x.getElementsByTagName("div");
                 if (e.keyCode == 40) {
@@ -224,25 +242,78 @@ export default function SearchBoxSecond() {
 
     }, [searchRoleData])
 
+    // searchProps2 = searchProps
 
     return (
+        <React.Fragment>
+            <MySearch />
+        </React.Fragment>
 
 
-        // <div >
-
-        //     <form autocomplete="off" action="/action_page.php">
-        //         <div class="autocomplete" style={{width:"300px"}}>
-        //             <input id="myInput" type="text" name="myCountry" placeholder="Country" />
-        //         </div>
-        //         <input type="submit" />
-        //     </form>
-        <form className="app-search d-none d-lg-block " style={{marginTop:"-3px"}} autocomplete="off">
-            <div className="position-relative">
-                <input type="text" id="myInput" className="form-control" placeholder="Search..." name="myCountry" />
-                <button className="btn btn-primary" type="submit"><i className="bx bx-search-alt align-middle"></i></button>
-                {/* <div id="myinputautocomplet-list" class="Autocomplet"></div> */}
-            </div>
-        </form>
-        // </div>
     )
+}
+
+let props2 = function onSearch() { }
+
+export const mySearchProps1 = (props1) => {
+    props2 = props1;
+};
+
+let input;
+const handleClick = () => {
+    props2.onSearch(input.value);
+};
+function onChange2() {
+    debugger
+    var a = input.value
+
+    if (!(a[0] === "/")) {
+        const str = a.substring(1);
+        props2.onSearch(str);
+    }
+}
+
+
+
+
+
+
+
+const MySearch = () => {
+
+    let input;
+    const handleClick = (e) => {
+        debugger
+        var a = e.target.value
+
+    if (!(a[0] === "/")) {
+        const str = a.substring(1);
+        props2.onSearch(str);
+    }
+    };
+    function onChange() {
+       
+    }
+    return (
+        <div className="app-search d-none d-lg-block " style={{ marginTop: "-3px" }} autocomplete="off">
+            <div className="position-relative">
+                <input
+                    id="myInput"
+                    className="form-control"
+                    placeholder="Search..."
+                    // style={{ backgroundColor: 'pink' }}
+                    // ref={n => input = n}
+                    type="text"
+                    onChange={handleClick}
+                    name="myCountry"
+                />
+                <button className="btn btn-primary"
+                    onClick={handleClick}
+                    type="butten">
+                    <i className="bx bx-search-alt align-middle" />
+                </button>
+
+            </div>
+        </div>
+    );
 }

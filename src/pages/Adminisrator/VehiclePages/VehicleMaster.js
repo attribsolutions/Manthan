@@ -35,7 +35,7 @@ import { get_Division_ForDropDown, } from "../../../store/Administrator/ItemsRed
 import { useHistory } from "react-router-dom";
 // import { actionChannel } from "redux-saga/effects";
 import { SaveButton } from "../../../components/CommonSaveButton";
-import { VEHICLE_lIST } from "../../../routes/route_url";
+import { DRIVER_lIST, VEHICLE_lIST } from "../../../routes/route_url";
 import {
     comAddPageFieldFunc,
     formValid,
@@ -151,7 +151,7 @@ const VehicleMaster = (props) => {
     useEffect(() => {
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(29))
-    }, []);   
+    }, []);
 
 
 
@@ -199,7 +199,6 @@ const VehicleMaster = (props) => {
                 setPageMode(props.pageMode)
                 setModalCss(true)
             }
-
             if (hasEditVal) {
                 setEditData(hasEditVal)
                 setDriverList_dropdown_Select({
@@ -207,7 +206,7 @@ const VehicleMaster = (props) => {
                     label: hasEditVal.DriverName
                 });
                 setVehicleType_dropdown_Select({
-                    value: hasEditVal.VehicleType,
+                    value: hasEditVal.Vehicletype,
                     label: hasEditVal.VehicleTypeName
                 });
                 let division = hasEditVal.VehicleDivisions.map((index) => {
@@ -218,7 +217,7 @@ const VehicleMaster = (props) => {
                 })
                 setDivisionData(division)
                 dispatch(editVehicleTypeSuccess({ Status: false }))
-                dispatch(BreadcrumbShow(hasEditVal.VehicleTypeName))
+                dispatch(BreadcrumbShow(hasEditVal.VehicleNumber))
 
             }
         }
@@ -227,6 +226,7 @@ const VehicleMaster = (props) => {
 
 
     useEffect(() => {
+        debugger
         if ((PostAPIResponse.Status === true) && (PostAPIResponse.StatusCode === 200)) {
 
             dispatch(PostMethod_ForVehicleMasterSuccess({ Status: false }))
@@ -315,9 +315,9 @@ const VehicleMaster = (props) => {
             const jsonBody = JSON.stringify({
                 VehicleNumber: values.VehicleNumber,
                 Description: values.Description,
-                Driver: DriverList_dropdown_Select.value,
-                VehicleType: VehicleType_dropdown_Select.value,
-                Divisions: division,
+                Driver: values.DriverName.value,
+                VehicleType : values.Vehicletype.value,
+                VehicleDivisions: division,
             });
 
 
@@ -391,7 +391,7 @@ const VehicleMaster = (props) => {
                                                 <CardBody style={{ backgroundColor: "whitesmoke" }}>
 
 
-                                                    <Row className="mt-3">
+                                                    <Row className="mt-1">
                                                         <Col md="3">
                                                             <FormGroup className="mb-3">
                                                                 <Label htmlFor="validationCustom01">{fieldLabel.DriverName} </Label>
@@ -424,7 +424,7 @@ const VehicleMaster = (props) => {
                                                                         id="VehicleDropDown "
                                                                         // disabled={true}
                                                                         name="Vehicletype"
-                                                                        value={values.Vehicle}
+                                                                        value={values.Vehicletype}
                                                                         isSearchable={false}
                                                                         className="react-dropdown"
                                                                         classNamePrefix="dropdown"
@@ -438,33 +438,30 @@ const VehicleMaster = (props) => {
                                                             </FormGroup>
                                                         </Col>
 
-
-                                                        <Col md="1">
-                                                        </Col>
-                                                        <Col md="4">
-                                                            <FormGroup className="mb-2 col col-sm-8 ">
-                                                                <Label htmlFor="validationCustom01">{fieldLabel.VehicleNumber} </Label>
-                                                                <Input
-                                                                    name="VehicleNumber"
-                                                                    id="VehicleNumber"
-                                                                    value={values.VehicleNumber}
-                                                                    type="text"
-                                                                    className={isError.VehicleNumber.length > 0 ? "is-invalid form-control" : "form-control"}
-                                                                    placeholder="Please Enter VehicleNumber"
-                                                                    autoComplete='off'
-                                                                    onChange={(event) => {
-                                                                        onChangeText({ event, state, setState })
-                                                                        dispatch(BreadcrumbShow(event.target.value))
-                                                                    }}
-                                                                />
-                                                                {isError.VehicleNumber.length > 0 && (
-                                                                    <span className="invalid-feedback">{isError.VehicleNumber}</span>
-                                                                )}
-                                                            </FormGroup>
-
-                                                        </Col>
-
                                                         <Row>
+                                                            <Col md="4">
+                                                                <FormGroup className="mb-2 col col-sm-8 ">
+                                                                    <Label htmlFor="validationCustom01">{fieldLabel.VehicleNumber} </Label>
+                                                                    <Input
+                                                                        name="VehicleNumber"
+                                                                        id="VehicleNumber"
+                                                                        value={values.VehicleNumber}
+                                                                        type="text"
+                                                                        className={isError.VehicleNumber.length > 0 ? "is-invalid form-control" : "form-control"}
+                                                                        placeholder="Please Enter VehicleNumber"
+                                                                        autoComplete='off'
+                                                                        onChange={(event) => {
+                                                                            onChangeText({ event, state, setState })
+                                                                            dispatch(BreadcrumbShow(event.target.value))
+                                                                        }}
+                                                                    />
+                                                                    {isError.VehicleNumber.length > 0 && (
+                                                                        <span className="invalid-feedback">{isError.VehicleNumber}</span>
+                                                                    )}
+                                                                </FormGroup>
+
+                                                            </Col>
+
                                                             <Col md="3">
                                                                 <FormGroup className="mb-3">
                                                                     <Label htmlFor="validationCustom01"> {fieldLabel.Description} </Label>
@@ -490,12 +487,27 @@ const VehicleMaster = (props) => {
 
                                                         <Row>
                                                             <FormGroup className="col col-sm-3">
-                                                            <Label htmlFor="validationCustom21">Division</Label>
+                                                                <Label htmlFor="validationCustom21">{fieldLabel.VehicleDivisions}</Label>
                                                                 <Select
-                                                                    value={divisionType_dropdown_Select}
+                                                                    id="DivisionDropDown "
+                                                                    // disabled={true}
+                                                                    name="VehicleDivisions"
+                                                                    value={values.VehicleDivisions}
+                                                                    isSearchable={false}
+                                                                    className="react-dropdown"
+                                                                    classNamePrefix="dropdown"
                                                                     options={DivisionType_DropdownOptions}
-                                                                    onChange={(e) => { DivisionType_DropDown_handller(e) }}
+                                                                    onChange={(v, e) => {
+                                                                        onChangeSelect({ e, v, state, setState })
+                                                                        DivisionType_DropDown_handller(v)
+                                                                    }
+
+                                                                    }
                                                                 />
+                                                                {isError.VehicleDivisions.length > 0 && (
+                                                                    <span className="text-danger f-8"><small>{isError.VehicleDivisions}</small></span>
+                                                                )}
+
                                                             </FormGroup>
                                                             <Col sm={1} style={{ marginTop: '28px' }} >
                                                                 {" "}
@@ -547,7 +559,7 @@ const VehicleMaster = (props) => {
 
                                                         <FormGroup>
                                                             <Row>
-                                                                <Col sm={2}>
+                                                                <Col sm={2} className="mt-3">
                                                                     {SaveButton({ pageMode, userPageAccessState, module: "VehicleMaster" })}
                                                                 </Col>
                                                             </Row>
