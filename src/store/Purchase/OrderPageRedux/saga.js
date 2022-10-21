@@ -8,6 +8,7 @@ import {
   getSupplierSuccess,
   goButtonSuccess,
   postOrderSuccess,
+  getOrderListPageSuccess,
 } from "./actions";
 import {
 
@@ -18,6 +19,7 @@ import {
   OrderPage_GetSupplier_API,
   OrderPage_GoButton_API,
   OrderPage_get_API,
+  getOrderList_For_Listpage,
 } from "../../../helpers/backend_helper";
 import {
   GET_ORDER_LIST,
@@ -27,6 +29,7 @@ import {
   GET_SUPPLIER,
   GO_BUTTON_FOR_ORDER_PAGE,
   POST_ORDER_FROM_ORDER_PAGE,
+  GET_ORDER_LIST_PAGE,
 } from "./actionType";
 
 import { SpinnerState } from "../../Utilites/Spinner/actions";
@@ -145,6 +148,22 @@ function* UpdateOrder_ID_GenratorFunction({ data, id }) {
   }
 }
 
+// List Page API
+function* get_OrderListPage_GenratorFunction() {
+  yield put(SpinnerState(true))
+  try {
+    const response = yield call(getOrderList_For_Listpage);
+    yield put(SpinnerState(false))
+    yield put(getOrderListPageSuccess(response.Data))
+  
+  } catch (error) {
+    yield put(SpinnerState(false))
+    yield put(AlertState({
+      Type: 4,
+      Status: true, Message: "500 Error Message",
+    }));
+  }
+}
 
 function* OrderPageSaga() {
   yield takeEvery(GET_SUPPLIER, getSupplierGenFunc);
@@ -153,8 +172,8 @@ function* OrderPageSaga() {
   yield takeEvery(GET_ORDER_LIST, fetchOrderList);
   yield takeEvery(EDIT_ORDER_FOR_ORDER_PAGE, EditOrder_GenratorFunction);
   yield takeEvery(UPDATE_ORDER_ID_FROM_ORDER_PAGE, UpdateOrder_ID_GenratorFunction)
-
   yield takeEvery(DELETE_ORDER_FOR_ORDER_PAGE, DeleteOrder_GenratorFunction);
+  yield takeEvery(GET_ORDER_LIST_PAGE, get_OrderListPage_GenratorFunction);
 }
 
 export default OrderPageSaga;

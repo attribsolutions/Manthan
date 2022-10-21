@@ -149,6 +149,7 @@ export const editOrderID_forOrderPage_ApiCall = (id) => get(`${url.ORDER_PAGE_AP
 export const UpdateOrder_ID_ApiCall = (data, id) => put(`${url.ORDER_PAGE_API}/${id}`, data)// update api
 export const getOrderList_forOrderPage_ApiCall = (data) => get(url.ORDER_PAGE_API)
 export const getDivisionOrders = () => get(`${url.ORDER_PAGE_API}?FromDate=2022-01-25&ToDate=2022-01-25&CustomerID=0&DivisionID=3`)
+export const getOrderList_For_Listpage = () => get(url.ORDER_PAGE_API)// Get subModule For H_pages
 
 //Administrator   Modules submit  
 export const postSubmitModules = (data) => post(url.H_MODULES_API_URL, data)
