@@ -78,6 +78,44 @@ function Order() {
         }
     }, [userAccess])
 
+
+    useEffect(() => {
+        debugger
+        const editDataGatingFromList = history.location.editValue
+
+        const locationPath = history.location.pathname
+        let userAcc = userAccess.find((inx) => {
+            return (`/${inx.ActualPagePath}` === locationPath)
+        })
+
+        if (!(editDataGatingFromList === undefined)) {
+            var CustomerName = editDataGatingFromList.Customer
+            var description = editDataGatingFromList.Description
+            var orderDate = editDataGatingFromList.OrderDate
+
+            // const jsonBody = JSON.stringify({
+            //     PriceList: PriceListid,
+            //     Party: partyId,
+            //     EffectiveDate: effectiveDate
+            // });
+
+            const jsonBody = JSON.stringify({
+                // Division: division,
+                // Party: party,
+                EffectiveDate: orderDate
+            }
+            );
+            dispatch(goButton(jsonBody))
+            // setPartyName_dropdown_Select({ label: partyName, value: partyId })
+            // setpriceList_dropdown_Select({ label: priceListName, value: PriceListid })
+            // setEffectiveDate(effectiveDate)
+
+        }
+        if (!(userAcc === undefined)) {
+            setUserPageAccessState(userAcc)
+        }
+    }, [userAccess])
+
     useEffect(() => {
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(postOrderSuccess({ Status: false }))

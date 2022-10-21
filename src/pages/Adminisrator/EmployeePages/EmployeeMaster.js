@@ -655,7 +655,7 @@ const AddEmployee = (props) => {
                               className="react-dropdown"
                               classNamePrefix="dropdown"
                               options={State_DropdownOptions}
-                              onChange={(v, e) => {
+                              onChange={(e,v) => {
                                 onChangeSelect({ e, v, state, setState });
                                 State_Dropdown_Handler(v)
                               }
@@ -678,7 +678,7 @@ const AddEmployee = (props) => {
                               className="react-dropdown"
                               classNamePrefix="dropdown"
                               options={District_DropdownOptions}
-                              onChange={(v, e) => {
+                              onChange={(e,v) => {
                                 onChangeSelect({ e, v, state, setState });
                                 District_Dropdown_Handler(v)
                               }
@@ -707,7 +707,7 @@ const AddEmployee = (props) => {
                               className="react-dropdown"
                               classNamePrefix="dropdown"
                               options={EmployeeType_DropdownOptions}
-                              onChange={(v, e) => {
+                              onChange={(e,v) => {
                                 onChangeSelect({ e, v, state, setState });
                                 EmployeeType_Dropdown_Handler(v)
                               }
@@ -730,7 +730,7 @@ const AddEmployee = (props) => {
                               className="react-dropdown"
                               classNamePrefix="dropdown"
                               options={Company_DropdownOptions}
-                              onChange={(v, e) => {
+                              onChange={(e,v) => {
                                 onChangeSelect({ e, v, state, setState });
                                 Company_Dropdown_Handler(v)
                               }
@@ -756,7 +756,7 @@ const AddEmployee = (props) => {
                                 isMulti={true}
                                 className="react-dropdown"
                                 options={Party_DropdownOptions}
-                                onChange={(v, e) => {
+                                onChange={(e,v) => {
                                   onChangeSelect({ e, v, state, setState });
                                   Party_Dropdown_Handler(v)
                                 }
@@ -782,7 +782,7 @@ const AddEmployee = (props) => {
                               className="react-dropdown"
                               classNamePrefix="dropdown"
                               options={Designation_DropdownOptions}
-                              onChange={(v, e) => onChangeSelect({ e, v, state, setState })}
+                              onChange={(e,v) => onChangeSelect({ e, v, state, setState })}
                             />
                             {isError.DesignationName.length > 0 && (
                               <span className="text-danger f-8"><small>{isError.DesignationName}</small></span>
