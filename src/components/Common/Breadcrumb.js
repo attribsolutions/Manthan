@@ -13,14 +13,22 @@ const Breadcrumb = props => {
   const { SearchBar } = Search;
   const dispatch = useDispatch();
   const history = useHistory();
+  const { showCount = false } = props
 
 
   // for Excel Download
   const [modal_scroll, setmodal_scroll] = useState(false);
   const [ListData, setListData] = useState([]);
 
-  const { bredcrumbName='', RoleAccessModifiedinSingleArray } = useSelector((state) => ({
+  const {
+    bredcrumbName = '',
+    filterSize,
+    searchProps,
+    RoleAccessModifiedinSingleArray
+  } = useSelector((state) => ({
     bredcrumbName: state.BreadcrumbReducer.bredcrumbName,
+    filterSize: state.BreadcrumbReducer.filterSize,
+    searchProps: state.BreadcrumbReducer.searchProps,
     RoleAccessModifiedinSingleArray: state.Login.RoleAccessUpdateData,
 
   }));
@@ -34,8 +42,7 @@ const Breadcrumb = props => {
     document.body.classList.add("no_padding");
   }
 
-  let Countsize = ''
-  if (props.breadcrumbCount) { Countsize = props.breadcrumbCount; }
+  
   const [IsRedirectNewButton, setIsRedirectNewButton] = useState(false);
 
   // New Button Handller
@@ -234,7 +241,7 @@ const Breadcrumb = props => {
           </div>
         </Col>
 
-        <Col md={Countsize.length < 10 ? 3 : Countsize.length < 25 ? 2 : 1}
+        <Col md={filterSize.length < 10 ? 3 : filterSize.length < 25 ? 2 : 1}
           className='text-end'>
 
           {props.isExcelButtonVisible === true ?
@@ -273,13 +280,13 @@ const Breadcrumb = props => {
         </Col>
 
 
-        <Col md={Countsize.length < 10 ? 1 : Countsize.length < 25 ? 2 : 3} className="text-right col-md-2 px-0 justify-content-end">
+        <Col md={filterSize.length < 10 ? 1 : filterSize.length < 25 ? 2 : 3} className="text-right col-md-2 px-0 justify-content-end">
 
           {
-            !(props.breadcrumbCount === undefined)
+            (showCount)
               ?
               <div className="bg-dark text-center text-light external-event  col-form-label  border border-Success rounded-2" style={{ width: "100%" }}>
-                {props.breadcrumbCount}
+                {filterSize}
               </div>
               :
               <React.Fragment></React.Fragment>

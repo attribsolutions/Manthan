@@ -141,7 +141,8 @@ export function comAddPageFieldFunc({ state, setState, fieldArr }) {
 
 
 export const onChangeSelect = ({ e, v, state, setState }) => {
-    const event = { change: { name: e.name, value: v }, type: "select" }
+    debugger
+    const event = { change: { name: v.name, value: e }, type: "select" }
     formValChange({ event, state, setState })
 }
 
