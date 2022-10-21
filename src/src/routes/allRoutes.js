@@ -83,7 +83,7 @@ import EditTabaleTable from "../pages/Adminisrator/DriverPage/editabale table";
 import GSTMaster from "../pages/Adminisrator/GSTPages/GSTMaster";
 import GSTList from "../pages/Adminisrator/GSTPages/GSTList";
 
-import Order from "../pages/Purchase/order/Order";
+import Order from "../pages/purchase/order/Order";
 
 
 import TermsAndCondtionsList from "../pages/Adminisrator/TermsAndCondtions/TermsAndCondtionsList";
