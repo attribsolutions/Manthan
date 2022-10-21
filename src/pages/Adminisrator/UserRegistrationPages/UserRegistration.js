@@ -126,14 +126,16 @@ const AddUser = (props) => {
 
   // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
   useEffect(() => {
-
+    debugger
     // if (!(userPageAccessState === '')) { document.getElementById("txtName").focus(); }
+   
     if ((hasShowloction || hasShowModal)) {
-
+     
       let hasEditVal = null
       if (hasShowloction) {
         setPageMode(location.pageMode)
         hasEditVal = location.editValue
+        
       }
       else if (hasShowModal) {
         hasEditVal = props.editValue
@@ -144,7 +146,7 @@ const AddUser = (props) => {
       if (hasEditVal) {
         dispatch(BreadcrumbShow(hasEditVal.LoginName))
         setEditData(hasEditVal)
-
+       
         setEmployeeSelect({
           value: hasEditVal.Employee,
           label: hasEditVal.EmployeeName,
@@ -152,15 +154,16 @@ const AddUser = (props) => {
 
         setUserPartiesForUserMaster(hasEditVal.UserRole)
 
-
+        
         let arraynew = []
         hasEditVal.UserRole.map((i) => {
           i.PartyRoles.map((i2) => {
             arraynew.push({ Party: i.Party, Role: i2.Role })
           })
         })
-
-        setPartyRoleData(hasEditVal.UserRole)
+        console.log("arraynew",arraynew)
+        setPartyRoleData(arraynew)
+      
         dispatch(editSuccess({ Status: false }))
       }
     }
@@ -362,7 +365,7 @@ const AddUser = (props) => {
                                 <Label htmlFor="validationCustom01">Employee</Label>
                                 <Select
                                   id="EmployeeDropDown "
-                                  // disabled={true}
+                                  isDisabled={pageMode === "edit" ? true : false}
                                   value={EmployeeSelect}
                                   options={EmployeeValues}
                                   onChange={(e) => { handllerEmployeeID(e) }}
@@ -380,6 +383,7 @@ const AddUser = (props) => {
                                 placeholder="Please Enter Name"
                                 defaultvalue=''
                                 value={EditData.LoginName}
+                               disabled={pageMode === "edit" ? true : false}
                                 autoComplete='off'
                                 validate={{
                                   required: { value: true, errorMessage: 'Please Enter Name' },
