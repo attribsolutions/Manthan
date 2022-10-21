@@ -83,7 +83,7 @@ import EditTabaleTable from "../pages/Adminisrator/DriverPage/editabale table";
 import GSTMaster from "../pages/Adminisrator/GSTPages/GSTMaster";
 import GSTList from "../pages/Adminisrator/GSTPages/GSTList";
 
-import order from "../pages/purchase/order/Order";
+import Order from "../pages/purchase/order/Order";
 
 
 import TermsAndCondtionsList from "../pages/Adminisrator/TermsAndCondtions/TermsAndCondtionsList";
@@ -104,7 +104,7 @@ const userRoutes = [
   { path: path.PAGE, component: PageMaster },
   { path: '/PageMasterTab', component: PageMasterTab },
 
-  { path: path.ORDER, component: order },
+  { path: path.ORDER, component: Order },
   { path: path.ORDER_lIST, component: OrderList },
 
   { path: path.USER, component: AddUser },
