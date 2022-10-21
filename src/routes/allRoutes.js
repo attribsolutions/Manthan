@@ -18,7 +18,7 @@ import CompanyList from "../pages/Adminisrator/CompanyPages/CompanyList";
 // import SubModulesList from "../pages/Adminisrator/SubModulePages/SubModulesList";
 import PageList from "../pages/Adminisrator/Page-Pages/PageList";
 import PageMaster from "../pages/Adminisrator/Page-Pages/PageMaster";
-import OrderPage from "../pages/Order/OrderPage";
+// import OrderPage from "../pages/Order/OrderPage";
 import OrderList from "../pages/Order/OrderList"
 import AddUser from "../pages/Adminisrator/UserRegistrationPages/UserRegistration";
 import UserList from "../pages/Adminisrator/UserRegistrationPages/UserList";
@@ -83,8 +83,9 @@ import EditTabaleTable from "../pages/Adminisrator/DriverPage/editabale table";
 import GSTMaster from "../pages/Adminisrator/GSTPages/GSTMaster";
 import GSTList from "../pages/Adminisrator/GSTPages/GSTList";
 
+import order from "../pages/purchase/order/Order";
 
-import Order from "../pages/purchase/order/Order";
+
 import TermsAndCondtionsList from "../pages/Adminisrator/TermsAndCondtions/TermsAndCondtionsList";
 
 import * as path from "./route_url";
@@ -103,7 +104,7 @@ const userRoutes = [
   { path: path.PAGE, component: PageMaster },
   { path: '/PageMasterTab', component: PageMasterTab },
 
-  { path: path.ORDER, component: Order },
+  { path: path.ORDER, component: order },
   { path: path.ORDER_lIST, component: OrderList },
 
   { path: path.USER, component: AddUser },
