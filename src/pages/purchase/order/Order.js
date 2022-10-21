@@ -24,7 +24,7 @@ import { useHistory } from "react-router-dom";
 import { getSupplier, goButton, goButtonSuccess, postOrder, postOrderSuccess } from "../../../store/Purchase/OrderPageRedux/actions";
 import { mySearchProps } from "../../../components/Common/CmponentRelatedCommonFile/SearchBox/MySearch";
 import { AlertState } from "../../../store/actions";
-import { basicAmount, GstAmount, totalAmount } from "./OrderPageCalulation";
+import { basicAmount, GstAmount, handleKeyDown, totalAmount } from "./OrderPageCalulation";
 
 let description = 'order'
 
@@ -132,16 +132,20 @@ function Order() {
                 if (row.totalAmount === undefined) { row["totalAmount"] = 0 }
                 return (
                     <span className="text-right" >
-                        <Input type="text" defaultValue={row.inpRate}
+                        <Input
+                            type="text"
+                            id={`inpRatey${k}`}
+                            defaultValue={row.inpRate}
                             onChange={e => {
                                 row["inpRate"] = e.target.value;
                                 if (e.target.value > 0) {
                                     document.getElementById(`inpQty${k}`).disabled = false
                                 } else {
                                     document.getElementById(`inpQty${k}`).disabled = true
-
                                 }
-                            }} />
+                            }}
+                            onKeyDown={(e) => handleKeyDown(e, items)}
+                        />
                     </span>
                 )
             },
@@ -179,7 +183,9 @@ function Order() {
                         disabled={(row.inpRate === 0) ? true : false}
                         onChange={(e) => {
                             test(e, row,)
-                        }} />
+                        }}
+                        autoComplete="off"
+                        onKeyDown={(e) => handleKeyDown(e, items)} />
                 </span>
 
             ),
@@ -247,6 +253,12 @@ function Order() {
     }
 
     const GoButton_Handler = () => {
+        let party = customerSelect.value
+        debugger
+        if (!party > 0) {
+            alert("Please Select Customer")
+            return
+        }
 
         if (items.length > 0) {
             if (window.confirm("Refresh Order Item...!")) {
@@ -262,7 +274,6 @@ function Order() {
         } catch (e) {
             alert(e)
         }
-        let party = customerSelect.value
         const jsonBody = JSON.stringify({
             Division: division,
             Party: party,
@@ -345,75 +356,84 @@ function Order() {
                 /> */}
 
 
-                <Row><div className="col ">
-                    <label className="font-size-18 form-label text-black " style={{ paddingLeft: "13px" }} >
-                        {"Order"}</label>
-                </div>
-                    <div className=" col col-2 mt-n1 ">
-                        <div className=" bg-soft-info text-center text-black  external-event  col-form-label rounded-2 align-right">
-                            Order Amount : &nbsp;&nbsp; {orderAmount}&nbsp;
-                        </div>
+
+                <div className="d-flex  justify-content-between">
+                    <div >
+                        <label className="font-size-18 form-label text-black pl-2" >
+                            {"Order"}
+                        </label>
                     </div>
-                </Row>
-                <Row className="mb-1 border border-black text-black mt-2 " style={{ backgroundColor: "#dddddd" }} >
+                    <div >
+                        <label className="font-size-16 form-label  bd-highlight text-primary rounded pr-2" >
+                            Order Amount : &nbsp;
+                            <kbd className="bg-light text-danger font-size-22">{orderAmount}</kbd>
+                        </label>
+                    </div>
+                </div>
+                <div className="px-2">
+                    <Row className="mb-1 border border-black text-black mt-2 "
+                        style={{ backgroundColor: "#dddddd" }} >
 
-                    <Col md="3" className="">
-                        <FormGroup className="mb- row mt-3 " >
-                            <Label className="col-sm-5 p-2">Order Date</Label>
-                            <Col md="7">
-                                <Flatpickr
-                                    id="EffectiveDateid"
-                                    name="effectiveDate"
-                                    // value={effectiveDate}
-                                    // isDisabled={editMode === "edit" ? true : false}
-                                    className="form-control d-block p-2 bg-white text-dark"
-                                    placeholder="Select..."
-                                    options={{
-                                        altInput: true,
-                                        altFormat: "F j, Y",
-                                        dateFormat: "Y-m-d"
-                                    }}
-                                    onChange={EffectiveDateHandler}
-                                />
-                            </Col>
-                        </FormGroup>
-                    </Col>
+                        <Col md="3" className="">
+                            <FormGroup className="mb- row mt-3 " >
+                                <Label className="col-sm-5 p-2"
+                                style={{width:"100px"}}>Order Date</Label>
+                                <Col md="7">
+                                    <Flatpickr
+                                        id="EffectiveDateid"
+                                        name="effectiveDate"
+                                        // value={effectiveDate}
+                                        // isDisabled={editMode === "edit" ? true : false}
+                                        className="form-control d-block p-2 bg-white text-dark"
+                                        placeholder="Select..."
+                                        options={{
+                                            altInput: true,
+                                            altFormat: "F j, Y",
+                                            dateFormat: "Y-m-d",
+                                            minDate: "today",
+                                            defaultDate: "today"
+                                        }}
+                                        onChange={EffectiveDateHandler}
+                                    />
+                                </Col>
+                            </FormGroup>
+                        </Col>
 
-                    <Col md="4">
-                        <FormGroup className="mb-2 row mt-3 " >
-                            <Label className="col-sm-4 p-2">Customer Name</Label>
-                            <Col md="8">
-                                <Select
-                                    // Value={customerName_dropdownSelect}
-                                    classNamePrefix="select2-Customer"
+                        <Col md="3">
+                            <FormGroup className="mb-2 row mt-3 " >
+                                <Label className="col-md-4 p-2"
+                                style={{width:"130px"}}>Customer Name</Label>
+                                <Col md="7">
+                                    <Select
+                                        // Value={customerName_dropdownSelect}
+                                        classNamePrefix="select2-Customer"
 
-                                    options={supplierOptions}
-                                    onChange={(e) => { setCustomerSelect(e) }}
-                                />
-                            </Col>
-                        </FormGroup>
-                    </Col >
-                    <Col md="3">
-
-                        <FormGroup className="mb-2 row mt-3 " >
-                            <Label className="col-sm-4 p-2 ml-n4 ">Descreption</Label>
-                            <Col md="8">
-                                <Input
-                                    placeholder="Enter Description"
-                                    onChange={e => description = e.target.value}
-                                />
-                            </Col>
-                        </FormGroup>
-                    </Col >
-                    <Col md="1" className="mt-3 ">
-                        <Button type="button" color="btn btn-outline-success border-2 font-size-12 "
-                            onClick={GoButton_Handler}
-                        >Go</Button>
-                    </Col>
-
-
-                </Row>
-
+                                        options={supplierOptions}
+                                        onChange={(e) => { setCustomerSelect(e) }}
+                                    />
+                                </Col>
+                            </FormGroup>
+                        </Col >
+                       
+                        <Col md="1" className="mt-3 ">
+                            <Button type="button" color="btn btn-outline-success border-2 font-size-12 "
+                                onClick={GoButton_Handler}
+                            >Go</Button>
+                        </Col>
+                        <Col>
+                            <FormGroup className="mb-2 d-flex  justify-content-end mt-3 " >
+                                <Label className=" p-2 ml-n4 "
+                                style={{width:"100px"}}>Descreption</Label>
+                                <div>
+                                    <Input
+                                        placeholder="Enter Description"
+                                        onChange={e => description = e.target.value}
+                                    />
+                                </div>
+                            </FormGroup>
+                        </Col>
+                    </Row>
+                </div>
 
                 <PaginationProvider pagination={paginationFactory(pageOptions)}>
                     {({ paginationProps, paginationTableProps }) => (
@@ -473,6 +493,7 @@ function Order() {
                     )}
 
                 </PaginationProvider>
+
                 {(items.length > 0) ? <div className="row save1" style={{ paddingBottom: 'center' }}>
                     <button
                         type="submit"
