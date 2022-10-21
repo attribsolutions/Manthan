@@ -58,7 +58,7 @@ const UserList = () => {
                         MasterModal={AddUser}
                         masterPath={USER}
                         ButtonMsgLable={"User"}
-                        deleteName={"ID"}
+                        deleteName={"LoginName"}
                     />
                     : null
             }

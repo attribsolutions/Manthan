@@ -12,8 +12,8 @@ export const POST_EDIT_JWT_PROFILE = "/post-jwt-profile"
 export const POST_EDIT_PROFILE = "/post-fake-profile"
 
 //ORDERS
-export const GET_ORDER_ITEM = "Items"
-export const ORDER_PAGE_API = "Orders"
+export const GET_ORDER_ITEM = "/Items"
+export const ORDER_PAGE_API = "/Orders"
 
 //Python Logic 
 export const FOOD_ERP_POST_JWT_LOGIN = "/Login"
