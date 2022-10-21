@@ -78,10 +78,48 @@ function Order() {
         }
     }, [userAccess])
 
+
+    useEffect(() => {
+        debugger
+        const editDataGatingFromList = history.location.editValue
+
+        const locationPath = history.location.pathname
+        let userAcc = userAccess.find((inx) => {
+            return (`/${inx.ActualPagePath}` === locationPath)
+        })
+
+        if (!(editDataGatingFromList === undefined)) {
+            var CustomerName = editDataGatingFromList.Customer
+            var description = editDataGatingFromList.Description
+            var orderDate = editDataGatingFromList.OrderDate
+
+            // const jsonBody = JSON.stringify({
+            //     PriceList: PriceListid,
+            //     Party: partyId,
+            //     EffectiveDate: effectiveDate
+            // });
+
+            const jsonBody = JSON.stringify({
+                // Division: division,
+                // Party: party,
+                EffectiveDate: orderDate
+            }
+            );
+            dispatch(goButton(jsonBody))
+            // setPartyName_dropdown_Select({ label: partyName, value: partyId })
+            // setpriceList_dropdown_Select({ label: priceListName, value: PriceListid })
+            // setEffectiveDate(effectiveDate)
+
+        }
+        if (!(userAcc === undefined)) {
+            setUserPageAccessState(userAcc)
+        }
+    }, [userAccess])
+
     useEffect(() => {
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(postOrderSuccess({ Status: false }))
-
+            dispatch(goButtonSuccess([]))
             dispatch(AlertState({
                 Type: 1,
                 Status: true,
@@ -286,13 +324,16 @@ function Order() {
 
     const saveHandeller = () => {
         let division = 0
+        let date
+        let party = customerSelect.value
+
         try {
             division = JSON.parse(localStorage.getItem("roleId")).Party_id
+            date = document.getElementById("EffectiveDateid").value;
         } catch (e) {
             alert(e)
+            return
         }
-
-        let party = customerSelect.value
 
         const itemArr = []
         items.forEach(i => {
@@ -319,9 +360,13 @@ function Order() {
                 itemArr.push(arr)
             };
         })
+        if (itemArr.length === 0) {
+            alert("Please Enter one Item Quantity")
+            return
+        }
 
         const jsonBody = JSON.stringify({
-            OrderDate: effectiveDate,
+            OrderDate: date,
             Customer: division,
             Supplier: party,
             OrderAmount: orderAmount,
@@ -377,7 +422,7 @@ function Order() {
                         <Col md="3" className="">
                             <FormGroup className="mb- row mt-3 " >
                                 <Label className="col-sm-5 p-2"
-                                style={{width:"100px"}}>Order Date</Label>
+                                    style={{ width: "100px" }}>Order Date</Label>
                                 <Col md="7">
                                     <Flatpickr
                                         id="EffectiveDateid"
@@ -402,7 +447,7 @@ function Order() {
                         <Col md="3">
                             <FormGroup className="mb-2 row mt-3 " >
                                 <Label className="col-md-4 p-2"
-                                style={{width:"130px"}}>Customer Name</Label>
+                                    style={{ width: "130px" }}>Customer Name</Label>
                                 <Col md="7">
                                     <Select
                                         // Value={customerName_dropdownSelect}
@@ -414,7 +459,7 @@ function Order() {
                                 </Col>
                             </FormGroup>
                         </Col >
-                       
+
                         <Col md="1" className="mt-3 ">
                             <Button type="button" color="btn btn-outline-success border-2 font-size-12 "
                                 onClick={GoButton_Handler}
@@ -423,7 +468,7 @@ function Order() {
                         <Col>
                             <FormGroup className="mb-2 d-flex  justify-content-end mt-3 " >
                                 <Label className=" p-2 ml-n4 "
-                                style={{width:"100px"}}>Descreption</Label>
+                                    style={{ width: "100px" }}>Descreption</Label>
                                 <div>
                                     <Input
                                         placeholder="Enter Description"

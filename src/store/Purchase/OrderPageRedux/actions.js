@@ -20,7 +20,9 @@ import {
   GO_BUTTON_FOR_ORDER_PAGE_SUCCESS,
   GO_BUTTON_FOR_ORDER_PAGE,
   POST_ORDER_FROM_ORDER_PAGE_SUCCESS,
-  POST_ORDER_FROM_ORDER_PAGE
+  POST_ORDER_FROM_ORDER_PAGE,
+  GET_ORDER_LIST_PAGE,
+  GET_ORDER_LIST_PAGE_SUCCESS
 } from './actionType'
 
 export const getOrderItems_ForOrderPage = () => ({
@@ -113,3 +115,14 @@ export const goButtonSuccess = list => ({
   type: GO_BUTTON_FOR_ORDER_PAGE_SUCCESS,
   payload: list,
 })
+
+//get listpage api
+export const getOrderListPage = () => ({
+  type: GET_ORDER_LIST_PAGE,
+
+});
+
+export const getOrderListPageSuccess = (data) => ({
+  type: GET_ORDER_LIST_PAGE_SUCCESS,
+  payload: data,
+});
