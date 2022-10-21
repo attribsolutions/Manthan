@@ -286,22 +286,17 @@ function Order() {
 
     const saveHandeller = () => {
         let division = 0
-        try {
-            division = JSON.parse(localStorage.getItem("roleId")).Party_id
-        } catch (e) {
-            alert(e)
-        }
-
+        let date
         let party = customerSelect.value
 
-        let date = ''
         try {
+            division = JSON.parse(localStorage.getItem("roleId")).Party_id
             date = document.getElementById("EffectiveDateid").value;
-        }
-        catch {
-            alert("date error")
+        } catch (e) {
+            alert(e)
             return
         }
+
         const itemArr = []
         items.forEach(i => {
             if (i.inpQty > 0) {
@@ -327,6 +322,10 @@ function Order() {
                 itemArr.push(arr)
             };
         })
+        if (itemArr.length === 0) {
+            alert("Please Enter one Item Quantity")
+            return
+        }
 
         const jsonBody = JSON.stringify({
             OrderDate: date,
