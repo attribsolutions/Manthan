@@ -1355,217 +1355,223 @@ const PageMaster = (props) => {
                         {/* <CardBody style={{ backgroundColor: "whitesmoke" }}> */}
 
                         {/* {!(PageFieldShowUI) ? */}
-                        < Row className="mt-3">
-                          <Col md={12}>
-                            <div className="table-rep-plugin ">
-                              <div
-                                className="custom_scroll_div"
-                                data-pattern="priority-columns "
-                              >
-                                <Table className="table table-bordered table-responsive">
-                                  <Thead >
-                                    <tr>
-                                      <th className="col col-sm-2">Control ID</th>
-                                      <th className="col col-sm-2">Field Label</th>
-                                      <th className="col col-sm-2">Control Type</th>
-                                      <th className="col col-sm-2" >Field Validation</th>
-                                      <th className="col col-sm-2" >InValid Msg</th>
-                                      <th className="col col-sm-1">List Page Seq</th>
-                                      <th >Is Compulsory</th>
-                                      <th>Default Sort</th>
-                                      <th>Show In List Page</th>
-                                      <th>Show In Download</th>
-                                      <th>Download Default Select</th>
-                                      <th className="col col-sm-1">Action</th>
 
-                                    </tr>
-                                  </Thead>
-                                  <Tbody  >
-                                    {pageFieldTabTable.map((TableValue, key) => (
-                                      <tr >
-                                        <td>
+                        <div className="table-rep-plugin  mx-n4">
+                          <div
+                            className="custom_scroll_div"
+                            data-pattern="priority-columns "
+                          >
+                            <Table className="table table-bordered table-responsive">
+                              <Thead >
+                                <tr>
+                                  <th className="">Control ID</th>
+                                  <th className="">Field Label</th>
+                                  <th className="">Control Type</th>
+                                  <th className="" >Field Validation</th>
+                                  <th className="" >InValid Msg</th>
+                                  <th className="">List Page Seq</th>
+                                  <th >Is Compulsory</th>
+                                  <th>Default Sort</th>
+                                  <th>Show In List Page</th>
+                                  <th>Show In Download</th>
+                                  <th>Download Default Select</th>
+                                  <th className="col col-sm-1">Action</th>
 
+                                </tr>
+                              </Thead>
+                              <Tbody  >
+                                {pageFieldTabTable.map((TableValue, key) => (
+                                  <tr >
+                                    <td>
+
+                                      <div style={{ width: "150px" }}>
+                                        <Input
+                                          type="text"
+                                          id={`ControlID${key}`}
+                                          autoComplete="off"
+                                          defaultValue={EditData.ControlID}
+                                          value={pageFieldTabTable[key].ControlID}
+                                          onChange={(e) => PageField_onChange_Handler(e.target.value, "ControlID", key)}>
+                                        </Input>
+                                      </div>
+                                    </td>
+                                    <td>
+                                      <div style={{ width: "150px" }}>
+                                        <Input
+                                          type="text"
+                                          id={`FieldLabel${key}`}
+                                          autoComplete="off"
+                                          defaultValue={EditData.FieldLabel}
+                                          value={pageFieldTabTable[key].FieldLabel}
+                                          onChange={(e) => PageField_onChange_Handler(e.target.value, "FieldLabel", key)}>
+                                        </Input>
+                                      </div>
+                                    </td>
+                                    <td>
+                                      <div style={{ width: "150px" }}>
+                                        <Select
+                                          id={`ControlType-${key}`}
+                                          // placeholder="select unit"
+                                          value={pageFieldTabTable[key].ControlType}
+                                          options={ControlTypes_DropdownOptions}
+                                          onChange={(e) => { FieldValidation_Dropdown_Handler(e); PageField_onChange_Handler(e, "ControlType", key) }}
+                                        />
+                                      </div>
+                                    </td>
+                                    <td>
+                                      <div style={{ width: "150px" }}>
+                                        <Select
+                                          id={`FieldValidation-${key}`}
+                                          // placeholder="select unit"
+                                          autoComplete="off"
+                                          value={pageFieldTabTable[key].FieldValidation}
+                                          options={FieldValidations_DropdownOptions}
+                                          onChange={(e) => { PageField_onChange_Handler(e, "FieldValidation", key); }}
+                                        />
+                                      </div>
+                                    </td>
+                                    <td>
+                                      <div style={{ width: "150px" }}>
+                                        <Input
+                                          type="text"
+                                          id={`InValidMsg${key}`}
+                                          autoComplete="off"
+                                          defaultValue={EditData.InValidMsg}
+                                          value={pageFieldTabTable[key].InValidMsg}
+                                          onChange={(e) => PageField_onChange_Handler(e.target.value, "InValidMsg", key)}>
+                                        </Input>
+                                      </div>
+                                    </td>
+                                    <td>
+                                      <Input
+                                        autoComplete="off"
+                                        type="text"
+                                        id={`ListPageSeq${key}`}
+                                        defaultValue={EditData.ListPageSeq}
+                                        value={pageFieldTabTable[key].ListPageSeq}
+                                        onChange={(e) => PageField_onChange_Handler(e.target.value, "ListPageSeq", key)}>
+
+                                      </Input>
+                                    </td>
+                                    <td>
+                                      <Input
+                                        autoComplete="off"
+                                        type="checkbox"
+                                        id={`IsCompulsory${key}`}
+                                        checked={pageFieldTabTable[key].IsCompulsory}
+                                        onChange={(e) => PageField_onChange_Handler(e.target.checked, "IsCompulsory", key)}>
+
+                                      </Input>
+                                    </td>
+
+                                    <td >
+                                      <div className="d-flex">
+                                        <div>
                                           <Input
-                                            type="text"
-                                            id={`ControlID${key}`}
-                                            defaultValue={EditData.ControlID}
-                                            value={pageFieldTabTable[key].ControlID}
-                                            onChange={(e) => PageField_onChange_Handler(e.target.value, "ControlID", key)}>
+
+                                            type="radio"
+                                            name="btnradio"
+                                            value={`DefaultSort${key}`}
+                                            id={`DefaultSort${key}`}
+                                            checked={pageFieldTabTable[key].DefaultSort}
+
+                                            onChange={(e) => PageField_onChange_Handler(e.target.checked, "DefaultSort", key)}>
                                           </Input>
+                                        </div>
 
-                                        </td>
-                                        <td>
+                                        {pageFieldTabTable[key].DefaultSort > 0 ?
+                                          <div >
+                                            <i className=" bx bx-caret-up font-size-20 text-danger "
 
-                                          <Input
-                                            type="text"
-                                            id={`FieldLabel${key}`}
-                                            defaultValue={EditData.FieldLabel}
-                                            value={pageFieldTabTable[key].FieldLabel}
-                                            onChange={(e) => PageField_onChange_Handler(e.target.value, "FieldLabel", key)}>
-                                          </Input>
+                                              id="up"
+                                              style={{ display: "block" }}
+                                              onClick={(e) => arrow_value(key)}></i>
 
-                                        </td>
-                                        <td>
+                                            <i className=" bx bx-caret-down font-size-20 text-danger "
+                                              style={{ display: "none" }}
 
-                                          <Select
-                                            id={`ControlType-${key}`}
-
-                                            // placeholder="select unit"
-                                            value={pageFieldTabTable[key].ControlType}
-                                            options={ControlTypes_DropdownOptions}
-                                            onChange={(e) => { FieldValidation_Dropdown_Handler(e); PageField_onChange_Handler(e, "ControlType", key) }}
-                                          />
-                                        </td>
-                                        <td>
-                                          <Select
-                                            id={`FieldValidation-${key}`}
-                                            // placeholder="select unit"
-                                            value={pageFieldTabTable[key].FieldValidation}
-                                            options={FieldValidations_DropdownOptions}
-                                            onChange={(e) => { PageField_onChange_Handler(e, "FieldValidation", key); }}
-                                          />
-                                        </td>
-                                        <td>
-                                          <Input
-
-                                            type="text"
-                                            id={`InValidMsg${key}`}
-                                            defaultValue={EditData.InValidMsg}
-                                            value={pageFieldTabTable[key].InValidMsg}
-                                            onChange={(e) => PageField_onChange_Handler(e.target.value, "InValidMsg", key)}>
-
-                                          </Input>
-                                        </td>
-                                        <td>
-                                          <Input
-
-                                            type="text"
-                                            id={`ListPageSeq${key}`}
-                                            defaultValue={EditData.ListPageSeq}
-                                            value={pageFieldTabTable[key].ListPageSeq}
-                                            onChange={(e) => PageField_onChange_Handler(e.target.value, "ListPageSeq", key)}>
-
-                                          </Input>
-                                        </td>
-                                        <td>
-                                          <Input
-
-                                            type="checkbox"
-                                            id={`IsCompulsory${key}`}
-                                            checked={pageFieldTabTable[key].IsCompulsory}
-                                            onChange={(e) => PageField_onChange_Handler(e.target.checked, "IsCompulsory", key)}>
-
-                                          </Input>
-                                        </td>
-
-                                        <td >
-                                          <div className="row">
-                                            <Col>
-                                            <Input
-                                           
-                                              type="radio"
-                                              name="btnradio"
-                                              value={`DefaultSort${key}`}
-                                              id={`DefaultSort${key}`}
-                                              checked={pageFieldTabTable[key].DefaultSort}
-
-                                              onChange={(e) => PageField_onChange_Handler(e.target.checked, "DefaultSort", key)}>
-                                            </Input></Col>
-                                            
-                                            {pageFieldTabTable[key].DefaultSort > 0 ?
-                                              <div className="col-6">
-                                                <i className=" bx bx-caret-up font-size-20 text-danger "
-
-                                                  id="up"
-                                                  style={{ display: "block" }}
-                                                  onClick={(e) => arrow_value(key)}></i>
-
-                                                <i className=" bx bx-caret-down font-size-20 text-danger "
-                                                  style={{ display: "none" }}
-
-                                                  id="down"
-                                                  onClick={(e) => arrow_value1(key)}></i>
-                                              </div>
-                                              : null}
-
+                                              id="down"
+                                              onClick={(e) => arrow_value1(key)}></i>
                                           </div>
-                                        </td>
+                                          : null}
 
-                                        <td>
-                                          <Input
-                                            type="checkbox"
-                                            id={`ShowInListPage${key}`}
-                                            checked={pageFieldTabTable[key].ShowInListPage}
-                                            onChange={(e) => PageField_onChange_Handler(e.target.checked, "ShowInListPage", key)}>
-                                          </Input>
-                                        </td>
-                                        <td>
-                                          <Input
-                                            type="checkbox"
-                                            id={`ShowInDownload${key}`}
-                                            defaultChecked={pageFieldTabTable[key].ShowInDownload}
-                                            onChange={(e) => PageField_onChange_Handler(e.target.checked, "ShowInDownload", key)}>
-                                          </Input>
-                                        </td>
-                                        <td>
-                                          <Input
-                                            type="checkbox"
-                                            id={`DownloadDefaultSelect${key}`}
-                                            defaultChecked={pageFieldTabTable[key].DownloadDefaultSelect}
-                                            onChange={(e) => PageField_onChange_Handler(e.target.checked, "DownloadDefaultSelect", key)}>
-                                          </Input>
-                                        </td>
-                                        <td>
-                                          {(pageFieldTabTable.length === key + 1) ?
-                                            <Row className="">
-                                              <Col md={6} className=" mt-3">
-                                                {(pageFieldTabTable.length > 1) ? <>
-                                                  < i className="mdi mdi-trash-can d-block text-danger font-size-20" onClick={() => {
-                                                    PageField_DeleteRow_Handler(key)
-                                                  }} >
-                                                  </i>
-                                                </> : <Col md={6} ></Col>}
+                                      </div>
+                                    </td>
 
-                                              </Col>
+                                    <td>
+                                      <Input
+                                        type="checkbox"
+                                        id={`ShowInListPage${key}`}
+                                        checked={pageFieldTabTable[key].ShowInListPage}
+                                        onChange={(e) => PageField_onChange_Handler(e.target.checked, "ShowInListPage", key)}>
+                                      </Input>
+                                    </td>
+                                    <td>
+                                      <Input
+                                        type="checkbox"
+                                        id={`ShowInDownload${key}`}
+                                        defaultChecked={pageFieldTabTable[key].ShowInDownload}
+                                        onChange={(e) => PageField_onChange_Handler(e.target.checked, "ShowInDownload", key)}>
+                                      </Input>
+                                    </td>
+                                    <td>
+                                      <Input
+                                        type="checkbox"
+                                        id={`DownloadDefaultSelect${key}`}
+                                        defaultChecked={pageFieldTabTable[key].DownloadDefaultSelect}
+                                        onChange={(e) => PageField_onChange_Handler(e.target.checked, "DownloadDefaultSelect", key)}>
+                                      </Input>
+                                    </td>
+                                    <td>
+                                      {(pageFieldTabTable.length === key + 1) ?
+                                        <Row className="">
+                                          <Col md={6} className=" mt-3">
+                                            {(pageFieldTabTable.length > 1) ? <>
+                                              < i className="mdi mdi-trash-can d-block text-danger font-size-20" onClick={() => {
+                                                PageField_DeleteRow_Handler(key)
+                                              }} >
+                                              </i>
+                                            </> : <Col md={6} ></Col>}
 
-                                              <Col md={6} >
-                                                {/* <Button className="btn btn-sm btn-light align-items-sm-center text-center mt-3"
+                                          </Col>
+
+                                          <Col md={6} >
+                                            {/* <Button className="btn btn-sm btn-light align-items-sm-center text-center mt-3"
                                               type="button"
                                               onClick={() => { PageField_Tab_AddRow_Handler(key) }} >
                                               <i className="dripicons-plus"></i>
                                             </Button> */}
 
-                                                <div className="col border-end d-flex justify-content-center ">
-                                                  <Button
-                                                    className="btn btn-outline-light btn-sm  align-items-sm-center text-center mt-3"
-                                                    type="button"
-                                                    onClick={() => { PageField_Tab_AddRow_Handler(key) }}
-                                                  >
-                                                    <i className="dripicons-plus">
+                                            <div className="col border-end d-flex justify-content-center ">
+                                              <Button
+                                                className="btn btn-outline-light btn-sm  align-items-sm-center text-center mt-3"
+                                                type="button"
+                                                onClick={() => { PageField_Tab_AddRow_Handler(key) }}
+                                              >
+                                                <i className="dripicons-plus">
 
-                                                    </i>
-                                                  </Button>
-                                                </div>
-                                              </Col>
-                                            </Row>
-                                            :
+                                                </i>
+                                              </Button>
+                                            </div>
+                                          </Col>
+                                        </Row>
+                                        :
 
-                                            < i className="mdi mdi-trash-can d-block text-danger font-size-20" onClick={() => {
-                                              PageField_DeleteRow_Handler(key)
-                                            }} >
-                                            </i>
-                                          }
+                                        < i className="mdi mdi-trash-can d-block text-danger font-size-20" onClick={() => {
+                                          PageField_DeleteRow_Handler(key)
+                                        }} >
+                                        </i>
+                                      }
 
-                                        </td>
-                                      </tr>
-                                    ))}
+                                    </td>
+                                  </tr>
+                                ))}
 
-                                  </Tbody>
-                                </Table>
-                              </div>
-                            </div>
-                          </Col>
-                        </Row>
+                              </Tbody>
+                            </Table>
+                          </div>
+                        </div>
+
 
                         {/* : <></>} */}
 
