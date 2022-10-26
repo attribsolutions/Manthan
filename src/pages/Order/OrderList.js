@@ -80,7 +80,7 @@ const OrderList = (props) => {
             AlertState({
                 Type: 5,
                 Status: true,
-                Message: `Are you sure you want to delete this MRP List `,
+                Message: `Are you sure you want to delete this Order `,
                 RedirectPath: false,
                 // PermissionAction: deleteGSTListPage,
                 ID: id,
@@ -141,7 +141,7 @@ const OrderList = (props) => {
                     {((userPageAccessState.RoleAccess_IsEdit) ) ?
                         <Button
                             type="button"
-                            data-mdb-toggle="tooltip" data-mdb-placement="top" title="Edit MRP List"
+                            data-mdb-toggle="tooltip" data-mdb-placement="top" title="Edit Order"
                             onClick={() => { EditPageHandler(Role); }}
                             className="badge badge-soft-success font-size-12 btn btn-success waves-effect waves-light w-xxs border border-light"
                         >
@@ -153,7 +153,7 @@ const OrderList = (props) => {
                     {(!(userPageAccessState.RoleAccess_IsEdit)&& (userPageAccessState.RoleAccess_IsView)) ?
                         <Button
                             type="button"
-                            data-mdb-toggle="tooltip" data-mdb-placement="top" title="View MRP List"
+                            data-mdb-toggle="tooltip" data-mdb-placement="top" title="View Order"
                             onClick={() => { EditPageHandler(Role); }}
                             className="badge badge-soft-primary font-size-12 btn btn-primary waves-effect waves-light w-xxs border border-light"
 
@@ -165,7 +165,7 @@ const OrderList = (props) => {
                         ?
                         <Button
                             className="badge badge-soft-danger font-size-12 btn btn-danger waves-effect waves-light w-xxs border border-light"
-                            data-mdb-toggle="tooltip" data-mdb-placement="top" title="Delete MRP List"
+                            data-mdb-toggle="tooltip" data-mdb-placement="top" title="Delete Order"
                             onClick={() => { deleteHandeler(Role.id) }}
                         >
                             <i className="mdi mdi-delete font-size-18"></i>
