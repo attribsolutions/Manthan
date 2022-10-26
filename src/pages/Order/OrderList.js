@@ -13,6 +13,7 @@ import { useHistory } from "react-router-dom";
 import { getOrderListPage } from "../../store/Purchase/OrderPageRedux/actions";
 import { AlertState } from "../../store/actions";
 import Breadcrumb from "../../components/Common/Breadcrumb";
+import { mySearchProps } from "../../components/Common/CmponentRelatedCommonFile/SearchBox/MySearch";
 
 const OrderList = (props) => {
 
@@ -127,7 +128,7 @@ const OrderList = (props) => {
             dataField: "OrderDate",
             sort: true,
         },
-        
+
         {
             text: "Action",
             dataField: "",
@@ -138,7 +139,7 @@ const OrderList = (props) => {
 
             formatter: (cellContent, Role) => (
                 <div className="d-flex gap-3" style={{ display: 'flex', justifyContent: 'center' }} >
-                    {((userPageAccessState.RoleAccess_IsEdit) ) ?
+                    {((userPageAccessState.RoleAccess_IsEdit)) ?
                         <Button
                             type="button"
                             data-mdb-toggle="tooltip" data-mdb-placement="top" title="Edit Order"
@@ -150,7 +151,7 @@ const OrderList = (props) => {
                         :
                         null}
 
-                    {(!(userPageAccessState.RoleAccess_IsEdit)&& (userPageAccessState.RoleAccess_IsView)) ?
+                    {(!(userPageAccessState.RoleAccess_IsEdit) && (userPageAccessState.RoleAccess_IsView)) ?
                         <Button
                             type="button"
                             data-mdb-toggle="tooltip" data-mdb-placement="top" title="View Order"
@@ -207,7 +208,7 @@ const OrderList = (props) => {
                                                 IsSearchVissible={true}
                                                 isExcelButtonVisible={true}
                                                 ExcelData={tableList}
-                                                RedirctPath={"/MRPMaster"}
+                                                RedirctPath={"/Order"}
                                             />
 
 
@@ -227,7 +228,7 @@ const OrderList = (props) => {
                                                             {...toolkitProps.baseProps}
                                                             {...paginationTableProps}
                                                         />
-
+                                                        {mySearchProps(toolkitProps.searchProps)}
                                                     </div>
                                                 </Col>
                                             </Row>
