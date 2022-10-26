@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useRef, useState } from "react"
 import MetaTags from "react-meta-tags"
 import './partymaster.scss'
 import {
@@ -39,9 +39,17 @@ import {
     postPartyDataSuccess,
     updatePartyID
 } from "../../../store/Administrator/PartyRedux/action"
-import { AlertState, BreadcrumbShow } from "../../../store/actions"
+import {
+    comAddPageFieldFunc,
+    formValChange,
+    formValid,
+    onChangeSelect,
+    onChangeText,
+} from "../../../components/Common/CmponentRelatedCommonFile/validationFunction";
+import { AlertState, BreadcrumbShow, commonPageField, commonPageFieldSuccess } from "../../../store/actions"
 import Tree from "./Tree"
 import AddressDetails_Tab from "."
+import { PARTY_lIST } from "../../../routes/route_url"
 
 const PartyMaster = (props) => {
     const dispatch = useDispatch();
@@ -51,10 +59,10 @@ const PartyMaster = (props) => {
     let editDataGatingFromList = props.state;
     let propsPageMode = props.pageMode;
     let pageModeProps = props.pageMode;
-
+    const formRef = useRef(null);
     const [EditData, setEditData] = useState([]);
     const [pageMode, setPageMode] = useState("save");
-    const [userPageAccessState, setUserPageAccessState] = useState(11);
+    const [userPageAccessState, setUserPageAccessState] = useState("");
     const [activeTab1, setactiveTab1] = useState("1")
     const [state_DropDown_select, setState_DropDown_select] = useState("");
     const [district_dropdown_Select, setDistrict_dropdown_Select] = useState("");
@@ -63,13 +71,13 @@ const PartyMaster = (props) => {
     const [PriceList_dropdown_Select, setPriceList_dropdown_Select] = useState("");
     const [dropOpen, setDropOpen] = useState(false);
     const [AddressDetailsMaster, setAddressDetailsMaster] = useState([]);
+    const [modalCss, setModalCss] = useState(false);
 
     const toggle1 = tab => {
         if (activeTab1 !== tab) {
             setactiveTab1(tab)
         }
     }
-
     //Access redux store Data /  'save_ModuleSuccess' action data
     const { PostAPIResponse,
         State,
@@ -78,7 +86,8 @@ const PartyMaster = (props) => {
         Company,
         PartyTypes,
         priceListByPartyType,
-        RoleAccessModifiedinSingleArray
+        pageField,
+        userAccess
     } = useSelector((state) => ({
         PostAPIResponse: state.PartyMasterReducer.PartySaveSuccess,
         State: state.M_EmployeesReducer.State,
@@ -87,33 +96,182 @@ const PartyMaster = (props) => {
         PartyTypes: state.PartyMasterReducer.PartyTypes,
         PriceList: state.PartyMasterReducer.PriceList,
         AddressTypes: state.PartyMasterReducer.AddressTypes,
-        RoleAccessModifiedinSingleArray: state.Login.RoleAccessUpdateData,
+        userAccess: state.Login.RoleAccessUpdateData,
         priceListByPartyType: state.PriceListReducer.priceListByPartyType,
-
+        pageField: state.CommonPageFieldReducer.pageField
     }));
 
+    const [state, setState] = useState({
+        values: {
+            id: "",
+            Name: "",
+            MobileNo: "",
+            PriceList: "",
+            PartyType: "",
+            Company: "",
+            PAN: "",
+            Email: "",
+            AlternateContactNo: "",
+            State: "",
+            District: "",
+            GSTIN: "",
+            MkUpMkDn: "",
+            isActive: "",
+            IsDivision: "",
+            PartyAddress: ""
+
+
+        },
+        fieldLabel: {
+            Name: '',
+            MobileNo: '',
+            PriceList: '',
+            PartyType: '',
+            Company: '',
+            PAN: '',
+            Email: '',
+            AlternateContactNo: '',
+            State: '',
+            District: '',
+            GSTIN: '',
+            MkUpMkDn: '',
+            isActive: '',
+            IsDivision: '',
+            PartyAddress: ''
+
+        },
+
+        isError: {
+            Name: "",
+            MobileNo: "",
+            PriceList: "",
+            PartyType: "",
+            Company: "",
+            PAN: "",
+            Email: "",
+            AlternateContactNo: "",
+            State: "",
+            District: "",
+            GSTIN: "",
+            MkUpMkDn: "",
+            isActive: "",
+            IsDivision: "",
+            PartyAddress: ""
+
+        },
+
+        hasValid: {
+            Name: {
+                regExp: '',
+                inValidMsg: "",
+                valid: false
+            },
+            MobileNo: {
+                regExp: '',
+                inValidMsg: "",
+                valid: false
+            },
+            PriceList: {
+                regExp: '',
+                inValidMsg: "",
+                valid: false
+            },
+            PartyType: {
+                regExp: '',
+                inValidMsg: "",
+                valid: false
+            },
+            Company: {
+                regExp: '',
+                inValidMsg: "",
+                valid: false
+            },
+            PAN: {
+                regExp: '',
+                inValidMsg: "",
+                valid: false
+            },
+            Email: {
+                regExp: '',
+                inValidMsg: "",
+                valid: false
+            },
+            AlternateContactNo: {
+                regExp: '',
+                inValidMsg: "",
+                valid: false
+            },
+            State: {
+                regExp: '',
+                inValidMsg: "",
+                valid: false
+            },
+            District: {
+                regExp: '',
+                inValidMsg: "",
+                valid: false
+            },
+            GSTIN: {
+                regExp: '',
+                inValidMsg: "",
+                valid: false
+            },
+            MkUpMkDn: {
+                regExp: '',
+                inValidMsg: "",
+                valid: false
+            },
+            isActive: {
+                regExp: '',
+                inValidMsg: "",
+                valid: false
+            },
+            IsDivision: {
+                regExp: '',
+                inValidMsg: "",
+                valid: false
+            },
+            PartyAddress: {
+                regExp: '',
+                inValidMsg: "",
+                valid: false
+            },
+
+        },
+        required: {
+
+        }
+    })
+    const values = { ...state.values }
+    const { isError } = state;
+    const { fieldLabel } = state;
+
     useEffect(() => {
+        dispatch(commonPageFieldSuccess(null));
+        dispatch(commonPageField(10))
+    }, []);
 
-        let userAcc = undefined
-        if ((editDataGatingFromList === undefined)) {
+    const location = { ...history.location }
+    const hasShowloction = location.hasOwnProperty("editValue")
+    const hasShowModal = props.hasOwnProperty("editValue")
 
-            let locationPath = history.location.pathname
-            userAcc = RoleAccessModifiedinSingleArray.find((inx) => {
-                return (`/${inx.ActualPagePath}` === locationPath)
-            })
-        }
-        else if (!(editDataGatingFromList === undefined)) {
-            let relatatedPage = props.relatatedPage
-            userAcc = RoleAccessModifiedinSingleArray.find((inx) => {
-                return (`/${inx.ActualPagePath}` === relatatedPage)
-            })
+    // userAccess useEffect
+    useEffect(() => {
+        let userAcc = null;
+        let locationPath = location.pathname;
 
-        }
-        if (!(userAcc === undefined)) {
+        if (hasShowModal) {
+            locationPath = props.masterPath;
+        };
+
+        userAcc = userAccess.find((inx) => {
+            return (`/${inx.ActualPagePath}` === locationPath)
+        })
+
+        if (userAcc) {
             setUserPageAccessState(userAcc)
-        }
-
-    }, [RoleAccessModifiedinSingleArray])
+        };
+    }, [userAccess])
 
     useEffect(() => {
         dispatch(getState());
@@ -122,62 +280,80 @@ const PartyMaster = (props) => {
         dispatch(getPriceList());
         dispatch(getPartyTypes());
         dispatch(getCompany());
-
-
     }, [dispatch]);
 
+    // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
     useEffect(() => {
 
-        if (!(userPageAccessState === '')) { document.getElementById("txtName").focus(); }
-        if (!(editDataGatingFromList === undefined)) {
-            debugger
-            setEditData(editDataGatingFromList);
-            dispatch(BreadcrumbShow(editDataGatingFromList.Name))
-            setPageMode(pageModeProps);
+        // if (!(userPageAccessState === '')) { document.getElementById("txtName").focus(); }
+        if ((hasShowloction || hasShowModal)) {
 
+            let hasEditVal = null
+            if (hasShowloction) {
+                setPageMode(location.pageMode)
+                hasEditVal = location.editValue
+            }
+            else if (hasShowModal) {
+                hasEditVal = props.editValue
+                setPageMode(props.pageMode)
+                setModalCss(true)
+            }
 
-            setCompanyList_dropdown_Select({
-                value: editDataGatingFromList.Company,
-                label: editDataGatingFromList.CompanyName
-            })
+            if (hasEditVal) {
 
-            setPartyType_dropdown_Select({
-                value: editDataGatingFromList.PartyType,
-                label: editDataGatingFromList.PartyTypeName
-            })
-            setPriceList_dropdown_Select({
-                value: editDataGatingFromList.PriceList,
-                label: editDataGatingFromList.PriceListName
-            })
-            setState_DropDown_select({
-                value: editDataGatingFromList.State,
-                label: editDataGatingFromList.StateName
-            })
-            setDistrict_dropdown_Select({
-                value: editDataGatingFromList.District,
-                label: editDataGatingFromList.DistrictName
-            })
+                const { id, Name, PriceList, MobileNo, email, Company, PAN, GSTIN, State,MKUpMkDn,
+                    District, PartyAddress, isActive, PartyType, IsDivision, State_id, District_id,
+                    Company_id } = hasEditVal
+                const { values, fieldLabel, hasValid, required, isError } = { ...state }
 
+                hasValid.Name.valid = true;
+                hasValid.Address.valid = true;
+                hasValid.MobileNo.valid = true;
+                hasValid.Email.valid = true;
+                hasValid.PAN.valid = true;
+                hasValid.GSTIN.valid = true;
+                hasValid.Company.valid = true;
+                hasValid.isActive.valid = true;
+                hasValid.PriceList.valid = true;
+                hasValid.State.valid = true;
+                hasValid.District.valid = true;
+                hasValid.IsDivision.valid = true;
+                hasValid.PartyAddress.valid = true;
+                hasValid.PartyType.valid = true;
+                hasValid.MkUpMkDn.valid = true;
 
-            setAddressDetailsMaster(editDataGatingFromList.PartyAddress)
+                values.id = id
+                values.Name = Name;
+                values.MobileNo = MobileNo;
+                values.Email.valid = email;
+                values.PAN.valid = PAN;
+                values.GSTIN.valid = GSTIN;
+                values.MkUpMkDn.valid = MKUpMkDn;
+                values.isActive.valid = isActive;
+                values.PartyAddress.valid = PartyAddress;
+                values.PriceList = { label: PriceList, value: PriceList };
+                values.PartyType = { label: PartyType, value: PartyType };
+                values.State = { label: State, value: State_id };
+                values.District = { label: District, value: District_id };
+                values.Company = { label: Company, value: Company_id };
+                values.IsDivision ={label: IsDivision, value: IsDivision}
+                setState({ values, fieldLabel, hasValid, required, isError })
+                dispatch(BreadcrumbShow(hasEditVal.Name))
 
+            }
             dispatch(editPartyIDSuccess({ Status: false }))
         }
-        else if (!(propsPageMode === undefined)) {
-            setPageMode(propsPageMode)
-        }
-    }, [editDataGatingFromList, propsPageMode])
-
+    }, [])
 
     useEffect(() => {
 
         if ((PostAPIResponse.Status === true) && (PostAPIResponse.StatusCode === 200) && !(pageMode === "dropdownAdd")) {
-            dispatch(postPartyDataSuccess({ Status: false }))
-            setCompanyList_dropdown_Select('')
-            setPartyType_dropdown_Select('')
-            setPriceList_dropdown_Select('')
-            setDistrict_dropdown_Select('')
-            setState_DropDown_select('')
+            // dispatch(postPartyDataSuccess({ Status: false }))
+            // setCompanyList_dropdown_Select('')
+            // setPartyType_dropdown_Select('')
+            // setPriceList_dropdown_Select('')
+            // setDistrict_dropdown_Select('')
+            // setState_DropDown_select('')
             // setMKupMkdown_DropdownSelect('')
             if (pageMode === "dropdownAdd") {
                 dispatch(AlertState({
@@ -191,7 +367,7 @@ const PartyMaster = (props) => {
                     Type: 1,
                     Status: true,
                     Message: PostAPIResponse.Message,
-                    RedirectPath: '/PartyList',
+                    RedirectPath: PARTY_lIST,
                     AfterResponseAction: false
                 }))
             }
@@ -207,6 +383,15 @@ const PartyMaster = (props) => {
             }));
         }
     }, [PostAPIResponse.Status])
+
+
+    useEffect(() => {
+
+        if (pageField) {
+          const fieldArr = pageField.PageFieldMaster
+          comAddPageFieldFunc({ state, setState, fieldArr })
+        }
+      }, [pageField])
 
     const StateValues = State.map((index) => ({
         value: index.id,
@@ -277,7 +462,6 @@ const PartyMaster = (props) => {
                                 value={PriceList_dropdown_Select.label}
                             />
 
-
                         </div>
                         <Tree data={priceListByPartyType} priceList={PriceList_dropdown_Select}
                             func1={setPriceList_dropdown_Select} func2={setDropOpen} />
@@ -289,8 +473,9 @@ const PartyMaster = (props) => {
         )
     }
 
-    const FormSubmitButton_Handler = (event, values) => {
-        debugger
+    const formSubmitHandler = (event) => {
+        event.preventDefault();
+        if (formValid(state, setState)) {
         const jsonBody = JSON.stringify({
             Name: values.Name,
             PriceList: PriceList_dropdown_Select.value,
@@ -313,7 +498,6 @@ const PartyMaster = (props) => {
             UpdatedBy: 1,
             UpdatedOn: "2022-06-24T11:16:53.330888Z",
             PartyAddress: AddressDetailsMaster,
-
         });
 
         if (pageMode === 'edit') {
@@ -324,6 +508,7 @@ const PartyMaster = (props) => {
             dispatch(postPartyData(jsonBody));
             console.log("post jsonBody", jsonBody)
         }
+    }
     };
 
     var IsEditMode_Css = ''
@@ -333,10 +518,10 @@ const PartyMaster = (props) => {
             <React.Fragment>
                 <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
                     <MetaTags>
-                        <title>Item Master| FoodERP-React FrontEnd</title>
+                        <title>{userPageAccessState.PageHeading}| FoodERP-React FrontEnd</title>
                     </MetaTags>
                     <Container fluid>
-                        <AvForm onValidSubmit={(e, v) => { FormSubmitButton_Handler(e, v); }}>
+                    <form onSubmit={formSubmitHandler} ref={formRef} noValidate>
                             {/* Render Breadcrumbs */}
                             <Breadcrumb breadcrumbItem={userPageAccessState.PageHeading} />
 
@@ -444,68 +629,85 @@ const PartyMaster = (props) => {
                                                             <Row className="mt-3 ">
                                                                 <Col md="3">
                                                                     <FormGroup className="mb-3">
-                                                                        <Label htmlFor="validationCustom01">Name </Label>
-                                                                        <AvField name="Name" id="txtName"
-                                                                            value={EditData.Name}
+                                                                        <Label htmlFor="validationCustom01">{fieldLabel.Name} </Label>
+                                                                        <Input
+                                                                            name="Name"
+                                                                            id="txtName"
+                                                                            value={values.Name}
                                                                             type="text"
+                                                                            className={isError.Name.length > 0 ? "is-invalid form-control" : "form-control"}
                                                                             placeholder="Please Enter Name"
-                                                                            // autoComplete='off'
-                                                                            validate={{
-                                                                                required: { value: true, errorMessage: 'Please Enter Name' },
+                                                                            autoComplete='off'
+                                                                            onChange={(event) => {
+                                                                                onChangeText({ event, state, setState })
+                                                                                dispatch(BreadcrumbShow(event.target.value))
                                                                             }}
-                                                                            onChange={(e) => { dispatch(BreadcrumbShow(e.target.value)) }}
                                                                         />
+                                                                        {isError.Name.length > 0 && (
+                                                                            <span className="invalid-feedback">{isError.Name}</span>
+                                                                        )}
                                                                     </FormGroup>
                                                                 </Col>
                                                                 <Col md="1">  </Col>
                                                                 <Col md="3">
                                                                     <FormGroup className="mb-3">
-                                                                        <Label htmlFor="validationCustom01">Mobile Number </Label>
-                                                                        <AvField name="MobileNo" type="tel"
-                                                                            value={EditData.MobileNo}
-                                                                            id="mobileNo"
-                                                                            placeholder="Enter Mobile No."
-                                                                            validate={{
-                                                                                required: { value: true, errorMessage: 'Enter your Mobile Number' },
-                                                                                tel: {
-                                                                                    pattern: /^(\+\d{1,3}[- ]?)?\d{10}$/,
-                                                                                    errorMessage: "Please Enter 10 Digit Mobile Number."
-                                                                                }
+                                                                        <Label htmlFor="validationCustom01">{fieldLabel.MobileNo} </Label>
+                                                                        <Input
+                                                                            name="Mobile"
+                                                                            value={values.MobileNo}
+                                                                            type="text"
+                                                                            className={isError.MobileNo.length > 0 ? "is-invalid form-control" : "form-control"}
+                                                                            placeholder="Please Enter Mobile"
+                                                                            autoComplete='off'
+                                                                            onChange={(event) => {
+                                                                                onChangeText({ event, state, setState })
                                                                             }}
                                                                         />
+                                                                        {isError.MobileNo.length > 0 && (
+                                                                            <span className="invalid-feedback">{isError.MobileNo}</span>
+                                                                        )}
                                                                     </FormGroup>
                                                                 </Col>
                                                                 <Col md="1">  </Col>
 
                                                                 <Col md="3">
                                                                     <FormGroup className="mb-3">
-                                                                        <Label htmlFor="validationCustom01">Alternate Contact Number(s)</Label>
-                                                                        <AvField name="AlternateContactNo" type="tel"
-                                                                            value={EditData.AlternateContactNo}
-                                                                            id="mobileNo"
-                                                                            // defaultValue={''}
-                                                                            placeholder="Alternate Contact Number(s)"
+                                                                        <Label htmlFor="validationCustom01">{fieldLabel.AlternateContactNo}</Label>
+                                                                        <Input
+                                                                            name="AlternateContactNo"
+                                                                            value={values.AlternateContactNo}
+                                                                            type="text"
+                                                                            className={isError.AlternateContactNo.length > 0 ? "is-invalid form-control" : "form-control"}
+                                                                            placeholder="Please AlternateContactNo"
+                                                                            autoComplete='off'
+                                                                            onChange={(event) => {
+                                                                                onChangeText({ event, state, setState })
+                                                                            }}
                                                                         />
+                                                                        {isError.AlternateContactNo.length > 0 && (
+                                                                            <span className="invalid-feedback">{isError.AlternateContactNo}</span>
+                                                                        )}
                                                                     </FormGroup>
                                                                 </Col>
                                                             </Row>
                                                             <Row className="mt-3">
                                                                 <Col md="3">
                                                                     <FormGroup className="mb-3">
-                                                                        <Label htmlFor="validationCustom01">Email </Label>
-                                                                        <AvField name="Email" type="email"
-                                                                            id="email"
-                                                                            value={EditData.Email}
-                                                                            placeholder="Enter your Email"
-                                                                            validate={{
-                                                                                required: { value: true, errorMessage: 'Please Enter your Email' },
-                                                                                tel: {
-                                                                                    pattern: "/^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/",
-                                                                                    errorMessage: "Please Enter valid Email Address.(Ex:abc@gmail.com)"
-                                                                                }
-                                                                            }
-                                                                            }
+                                                                        <Label htmlFor="validationCustom01">{fieldLabel.Email} </Label>
+                                                                        <Input
+                                                                            name="Email"
+                                                                            value={values.Email}
+                                                                            type="text"
+                                                                            className={isError.Email.length > 0 ? "is-invalid form-control" : "form-control"}
+                                                                            placeholder="Please Enter Email"
+                                                                            autoComplete='off'
+                                                                            onChange={(event) => {
+                                                                                onChangeText({ event, state, setState })
+                                                                            }}
                                                                         />
+                                                                        {isError.Email.length > 0 && (
+                                                                            <span className="invalid-feedback">{isError.email}</span>
+                                                                        )}
                                                                     </FormGroup>
                                                                 </Col>
                                                             </Row>
@@ -516,13 +718,24 @@ const PartyMaster = (props) => {
                                                             <Row className="mt-3 ">
                                                                 <Col md="3">
                                                                     <FormGroup className="mb-3">
-                                                                        <Label htmlFor="validationCustom01"> Party Type </Label>
+                                                                        <Label htmlFor="validationCustom01"> {fieldLabel.PartyType}</Label>
                                                                         <Col sm={12}>
                                                                             <Select
-                                                                                value={partyType_dropdown_Select}
+                                                                                name="PartyType"
+                                                                                value={values.PartyType}
+                                                                                isSearchable={true}
+                                                                                className="react-dropdown"
+                                                                                classNamePrefix="dropdown"
                                                                                 options={PartyTypeDropdown_Options}
-                                                                                onChange={(e) => { PartyType_Dropdown_OnChange_Handller(e) }}
+                                                                                onChange={(e, v) => {
+                                                                                    onChangeSelect({ e, v, state, setState });
+                                                                                    PartyType_Dropdown_OnChange_Handller(v)
+                                                                                }
+                                                                                }
                                                                             />
+                                                                            {isError.PartyType.length > 0 && (
+                                                                                <span className="text-danger f-8"><small>{isError.PartyType}</small></span>
+                                                                            )}
 
                                                                         </Col>
                                                                     </FormGroup>
@@ -531,18 +744,7 @@ const PartyMaster = (props) => {
                                                                 <Col md="1">  </Col>
                                                                 <Col md="3">
                                                                     <FormGroup className="mb-3">
-                                                                        <Label htmlFor="validationCustom01">Price List </Label>
-
-                                                                        {/* <Select
-                                                                        value={PriceList_dropdown_Select}
-                                                                        options={PriceList_DropdownOptions}
-                                                                        // onChange={(e) =>{ handllerPriceList(e)}}
-                                                                        onChange={(e) =>{setPriceList_dropdown_Select(e)}}
-
-
-
-                                                                    /> */}
-
+                                                                        <Label htmlFor="validationCustom01">{fieldLabel.PriceList} </Label>
                                                                         <Input
                                                                             value={PriceList_dropdown_Select.label}
                                                                             placeholder="Select..."
@@ -550,119 +752,93 @@ const PartyMaster = (props) => {
                                                                         >
                                                                         </Input>
                                                                         {test1()}
-
-
-
-
-
                                                                     </FormGroup>
                                                                 </Col>
                                                                 <Col md="1">  </Col>
 
                                                                 <Col md="3">
                                                                     <FormGroup className="mb-3">
-                                                                        <Label htmlFor="validationCustom01">Company Name </Label>
+                                                                        <Label htmlFor="validationCustom01"> {fieldLabel.Company} </Label>
                                                                         <Col sm={12}>
                                                                             <Select
-                                                                                value={companyList_dropdown_Select}
+                                                                                name="Company"
+                                                                                value={values.Company}
+                                                                                isSearchable={false}
+                                                                                className="react-dropdown"
+                                                                                classNamePrefix="dropdown"
                                                                                 options={companyListValues}
-                                                                                onChange={(e) => { handllercompanyList(e) }}
+                                                                                onChange={(v, e) => {
+                                                                                    onChangeSelect({ e, v, state, setState });
+                                                                                    handllercompanyList(v)
+                                                                                }
+                                                                                }
                                                                             />
+                                                                            {isError.Company.length > 0 && (
+                                                                                <span className="text-danger f-8"><small>{isError.Company}</small></span>
+                                                                            )}
                                                                         </Col>
                                                                     </FormGroup>
                                                                 </Col>
                                                             </Row>
 
                                                             <Row>
-                                                                {/* <Col md="3">
-                                                        <FormGroup className="mb-3">
-                                                            <Label htmlFor="validationCustom01">CustomerDivision </Label>
-                                                            <Col sm={12}>
-                                                                <Select
-                                                                    value={""}
-                                                                    options={""}
-                                                                // onChange={(e) => { handllerDesignationID(e) }}
-                                                                />
-                                                            </Col>
-                                                        </FormGroup>
-                                                    </Col> */}
-                                                                {/* <Col md="1">  </Col> */}
                                                                 <Col md="3">
                                                                     <FormGroup className="mb-3">
-                                                                        <Label htmlFor="validationCustom01"> PAN </Label>
-                                                                        <AvField
+                                                                        <Label htmlFor="validationCustom01">{fieldLabel.PAN} </Label>
+                                                                        <Input
                                                                             name="PAN"
-                                                                            value={EditData.PAN}
-                                                                            placeholder="Please Enter PAN"
+                                                                            value={values.PAN}
                                                                             type="text"
-                                                                            errorMessage="Please Enter PAN Number."
-                                                                            className="form-control"
-                                                                            validate={{
-                                                                                required: { value: true },
-                                                                                tel: {
-                                                                                    pattern: /[A-Z]{5}[0-9]{4}[A-Z]{1}/,
-                                                                                    errorMessage: 'Please Enter valid PAN Number.(Ex:AAAAA1234A).'
-                                                                                }
+                                                                            className={isError.PAN.length > 0 ? "is-invalid form-control" : "form-control"}
+                                                                            placeholder="Please Enter PAN"
+                                                                            autoComplete='off'
+                                                                            onChange={(event) => {
+                                                                                onChangeText({ event, state, setState })
                                                                             }}
-                                                                            id="validationCustom01"
                                                                         />
+                                                                        {isError.PAN.length > 0 && (
+                                                                            <span className="invalid-feedback">{isError.PAN}</span>
+                                                                        )}
                                                                     </FormGroup>
                                                                 </Col>
 
                                                                 <Col md="1">  </Col>
                                                                 <Col md="3">
                                                                     <FormGroup className="mb-3">
-                                                                        <Label htmlFor="validationCustom01"> GSTIN </Label>
-                                                                        <AvField
+                                                                        <Label htmlFor="validationCustom01"> {fieldLabel.GSTIN} </Label>
+                                                                        <Input
                                                                             name="GSTIN"
-                                                                            value={EditData.GSTIN}
-                                                                            placeholder="Please Enter GSTIN"
+                                                                            value={values.GSTIN}
                                                                             type="text"
-                                                                            errorMessage="Please Enter GSTIN Number."
-                                                                            className="form-control"
-                                                                            validate={{
-                                                                                required: { value: true },
-                                                                                tel: {
-                                                                                    pattern: /^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$/,
-                                                                                    errorMessage: 'Please Enter valid GSTIN number.(Ex:27AAAAA0000A1Z5).'
-                                                                                }
+                                                                            className={isError.GSTIN.length > 0 ? "is-invalid form-control" : "form-control"}
+                                                                            placeholder="Please Enter GSTIN"
+                                                                            autoComplete='off'
+                                                                            onChange={(event) => {
+                                                                                onChangeText({ event, state, setState })
                                                                             }}
-                                                                            id="validationCustom01"
                                                                         />
+                                                                        {isError.GSTIN.length > 0 && (
+                                                                            <span className="invalid-feedback">{isError.GSTIN}</span>
+                                                                        )}
                                                                     </FormGroup>
                                                                 </Col>
 
                                                                 <Col md="1">  </Col>
-                                                                {/* <Col md="3">
-                                                                    <FormGroup className="mb-3">
-                                                                        <Label htmlFor="validationCustom01">MKUp MkDown</Label>
-                                                                        <Select
-                                                                            value={MKupMkdown_DropdownSelect}
-                                                                            options={MkupMkdown_DropdownOption}
-                                                                            autoComplete="off"
-                                                                            onChange={(e) => {
-                                                                                MKupMkdown_DropdownSelectHandller(e);
-                                                                            }}
-                                                                        />
-                                                                    </FormGroup>
-                                                                </Col> */}
                                                                 <Col md="3">
                                                                     <FormGroup className="mb-3">
                                                                         <Row style={{ marginTop: '25px' }}>
                                                                             <Label
                                                                                 htmlFor="horizontal-firstname-input"
-                                                                                className="col-sm-4 col-form-label"
-                                                                            >
-                                                                                MKUpMkDn
+                                                                                className="col-sm-4 col-form-label">
+                                                                                {fieldLabel.MKUpMkDn}
                                                                             </Label>
                                                                             <Col md={4} style={{ marginTop: '7px' }} className=" form-check form-switch form-switch-sm ">
-                                                                                <div className="form-check form-switch form-switch-md mb-3" dir="ltr">
-                                                                                    <AvInput type="checkbox" className="form-check-input " id="inp-MkUpMkDn"
-                                                                                        checked={EditData.MkUpMkDn}
-                                                                                        // defaultChecked={true}
-                                                                                        name="MkUpMkDn"
+                                                                                <div className="form-check form-switch form-switch-md mb-3">
+                                                                                    <Input type="checkbox" className="form-check-input"
+                                                                                        checked={values.MKUpMkDn}
+                                                                                        name="MKUpMkDn"
+                                                                                        onChange={(event) => onChangeText({ event, state, setState })}
                                                                                     />
-                                                                                    <label className="form-check-label" ></label>
                                                                                 </div>
                                                                             </Col>
                                                                         </Row>
@@ -673,13 +849,24 @@ const PartyMaster = (props) => {
                                                             <Row>
                                                                 <Col md="3">
                                                                     <FormGroup className="mb-3">
-                                                                        <Label htmlFor="validationCustom01">State </Label>
+                                                                        <Label htmlFor="validationCustom01"> {fieldLabel.State} </Label>
                                                                         <Col sm={12}>
                                                                             <Select
-                                                                                value={state_DropDown_select}
+                                                                                name="State"
+                                                                                value={values.State}
+                                                                                isSearchable={true}
+                                                                                className="react-dropdown"
+                                                                                classNamePrefix="dropdown"
                                                                                 options={StateValues}
-                                                                                onChange={(e) => { handllerState(e) }}
+                                                                                onChange={(v, e) => {
+                                                                                    onChangeSelect({ e, v, state, setState });
+                                                                                    handllerState(v)
+                                                                                }
+                                                                                }
                                                                             />
+                                                                            {isError.State.length > 0 && (
+                                                                                <span className="text-danger f-8"><small>{isError.State}</small></span>
+                                                                            )}
                                                                         </Col>
                                                                     </FormGroup>
                                                                 </Col>
@@ -687,13 +874,24 @@ const PartyMaster = (props) => {
                                                                 <Col md="1">  </Col>
                                                                 <Col md="3">
                                                                     <FormGroup className="mb-3">
-                                                                        <Label htmlFor="validationCustom01">District </Label>
+                                                                        <Label htmlFor="validationCustom01"> {fieldLabel.District} </Label>
                                                                         <Col sm={12}>
                                                                             <Select
-                                                                                value={district_dropdown_Select}
+                                                                                name="District"
+                                                                                value={values.District}
+                                                                                isSearchable={true}
+                                                                                className="react-dropdown"
+                                                                                classNamePrefix="dropdown"
                                                                                 options={DistrictOnStateValues}
-                                                                                onChange={(e) => { handllerDistrictOnState(e) }}
+                                                                                onChange={(v, e) => {
+                                                                                    onChangeSelect({ e, v, state, setState });
+                                                                                    handllerDistrictOnState(v)
+                                                                                }
+                                                                                }
                                                                             />
+                                                                            {isError.District.length > 0 && (
+                                                                                <span className="text-danger f-8"><small>{isError.District}</small></span>
+                                                                            )}
                                                                         </Col>
                                                                     </FormGroup>
                                                                 </Col>
@@ -704,23 +902,44 @@ const PartyMaster = (props) => {
                                                                         <Row style={{ marginTop: '25px' }}>
                                                                             <Label
                                                                                 htmlFor="horizontal-firstname-input"
-                                                                                className="col-sm-4 col-form-label"
-                                                                            >
-                                                                                Active
+                                                                                className="col-sm-4 col-form-label">
+                                                                                {fieldLabel.isActive}
                                                                             </Label>
                                                                             <Col md={4} style={{ marginTop: '7px' }} className=" form-check form-switch form-switch-sm ">
-                                                                                <div className="form-check form-switch form-switch-md mb-3" dir="ltr">
-                                                                                    <AvInput type="checkbox" className="form-check-input " id="inp-isActive"
-                                                                                        checked={EditData.isActive}
-                                                                                        defaultChecked={true}
+                                                                                <div className="form-check form-switch form-switch-md mb-3">
+                                                                                    <Input type="checkbox" className="form-check-input"
+                                                                                        checked={values.isActive}
                                                                                         name="isActive"
+                                                                                        onChange={(event) => onChangeText({ event, state, setState })}
                                                                                     />
-                                                                                    <label className="form-check-label" htmlFor="customSwitchsizemd"></label>
                                                                                 </div>
                                                                             </Col>
                                                                         </Row>
                                                                     </FormGroup>
                                                                 </Col>
+
+                                                                <Col md="1"></Col>
+                                                                <Col md="3">
+                                                                    <FormGroup className="mb-3">
+                                                                        <Row style={{ marginTop: '25px' }}>
+                                                                            <Label
+                                                                                htmlFor="horizontal-firstname-input"
+                                                                                className="col-sm-4 col-form-label">
+                                                                                {fieldLabel.IsDivision}
+                                                                            </Label>
+                                                                            <Col md={4} style={{ marginTop: '7px' }} className=" form-check form-switch form-switch-sm ">
+                                                                                <div className="form-check form-switch form-switch-md mb-3">
+                                                                                    <Input type="checkbox" className="form-check-input"
+                                                                                        checked={values.IsDivision}
+                                                                                        name="IsDivision"
+                                                                                        onChange={(event) => onChangeText({ event, state, setState })}
+                                                                                    />
+                                                                                </div>
+                                                                            </Col>
+                                                                        </Row>
+                                                                    </FormGroup>
+                                                                </Col>
+
                                                             </Row>
                                                         </Card>
                                                     </Row>
@@ -748,7 +967,7 @@ const PartyMaster = (props) => {
 
                             </Row>
 
-                        </AvForm>
+                        </form>
                     </Container>
                 </div >
             </React.Fragment >

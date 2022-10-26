@@ -1,393 +1,265 @@
 import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { Button, Input, Modal, Row, Col, Label, Container, Card, CardBody, FormGroup } from "reactstrap";
-import Select from "react-select";
-import { useHistory } from "react-router-dom";
-import "react-super-responsive-table/dist/SuperResponsiveTableStyle.css";
-import flatpickr from "flatpickr";
-import {
-  deleteOrderID_From_OrderPage,
-  deleteOrderID_From_OrderPageSuccess,
-  editOrder_forOrderPage, getOrderList,
-  updateOrderID_From_OrderPageSuccess
-} from "../../store/Purchase/OrderPageRedux/actions";
-import { MetaTags } from "react-meta-tags";
-
+import { Button, Col, Modal, Row } from "reactstrap";
+import paginationFactory, {
+    PaginationListStandalone,
+    PaginationProvider,
+} from "react-bootstrap-table2-paginator";
+import ToolkitProvider, { Search } from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
-import paginationFactory, { PaginationListStandalone, PaginationProvider } from "react-bootstrap-table2-paginator";
-import ToolkitProvider from "react-bootstrap-table2-toolkit";
-import Breadcrumbs from "../../components/Common/Breadcrumb";
-// import generate from "../../Reports/Page"
-import './div.css'
-import OrderPage from "./OrderPage";
+import { useSelector, useDispatch } from "react-redux";
+import "../../assets/scss/CustomTable2/datatables.scss"
+import { MetaTags } from "react-meta-tags";
+import { useHistory } from "react-router-dom";
+import { getOrderListPage } from "../../store/Purchase/OrderPageRedux/actions";
 import { AlertState } from "../../store/actions";
-import generate from "../../Reports/InvioceReport/Page";
-import { InvoiceFakeData } from "./InvioceFakedata";
-import { get_Party_ForDropDown } from "../../store/Administrator/ItemsRedux/action";
+import Breadcrumb from "../../components/Common/Breadcrumb";
+import { mySearchProps } from "../../components/Common/CmponentRelatedCommonFile/SearchBox/MySearch";
 
-export const topFunction = () => {
-  document.body.scrollTop = 0;
-  document.documentElement.scrollTop = 0;
-}
 const OrderList = (props) => {
 
-  const [modal_center, setmodal_center] = useState(false);
-  const [partyName_dropdown_Select, setPartyName_dropdown_Select] = useState("");
-  const dispatch = useDispatch();
-  const history = useHistory();
-  const current = new Date();
-  const month = current.getMonth() + 1;
-  const date = current.getDate();
+    const dispatch = useDispatch();
+    const history = useHistory()
 
-  const currentDate = `${current.getFullYear()}-${month < 10 ? `0${month}` : `${month}`
-    }-${date < 10 ? `0${date}` : `${date}`}`;
+    const [userPageAccessState, setUserPageAccessState] = useState('');
 
-  const fromDateIn = `${current.getFullYear()}-${month < 10 ? `0${month}` : `${month}`
-    }-${date < 10 ? `0${date}` : `${date}`}`;
+    // get Access redux data
+    const {
+        tableList,
+        deleteMsg,
+        userAccess, } = useSelector(
+            (state) => ({
+                tableList: state.OrderPageReducer.OrderListPage,
+                deleteMsg: state.OrderPageReducer.deleteMsgForListPage,
+                userAccess: state.Login.RoleAccessUpdateData,
+                pageField: state.CommonPageFieldReducer.pageFieldList
+            })
+        );
 
-  const [fromDate, setFromDate] = useState("");
-  const [toDate, setToDate] = useState("");
-  const [orderDelete, setOrderDelete] = useState(false);
+    useEffect(() => {
+        const locationPath = history.location.pathname
+        let userAcc = userAccess.find((inx) => {
+            return (`/${inx.ActualPagePath}` === locationPath)
+        })
+        if (!(userAcc === undefined)) {
+            setUserPageAccessState(userAcc)
+        }
+    }, [userAccess])
 
-  function tog_center() {
-    setmodal_center(!modal_center)
-  }
+    //  This UseEffect => Featch Modules List data  First Rendering
+    useEffect(() => {
+        dispatch(getOrderListPage());
+    }, []);
 
-  //fetch list Page Function 
-  function fetchOrderList_dispatch_function() {
-    const orderlistInitial = {
-      FromDate: fromDateIn,// !fromDate ? fromDateIn : fromDate,
-      ToDate: currentDate, //!toDate ? currentDate : toDate,
-      CustomerID: 0,
-      DivisionID: 3,
+    // useEffect(() => {
+
+    //     if ((deleteMsg.Status === true) && (deleteMsg.StatusCode === 200)) {
+    //         dispatch(deleteGSTListPageSuccess({ Status: false }));
+    //         dispatch(
+    //             AlertState({
+    //                 Type: 1,
+    //                 Status: true,
+    //                 Message: deleteMsg.Message,
+    //                 AfterResponseAction: getGSTListPage,
+    //             })
+    //         );
+    //     } else if (deleteMsg.Status === true) {
+    //         dispatch(deleteGSTListPageSuccess({ Status: false }));
+    //         dispatch(
+    //             AlertState({
+    //                 Type: 3,
+    //                 Status: true,
+    //                 Message: JSON.stringify(deleteMsg.Message),
+    //             })
+    //         );
+    //     }
+    // }, [deleteMsg]);
+
+    //select id for delete row
+    const deleteHandeler = (id) => {
+        debugger
+        dispatch(
+            AlertState({
+                Type: 5,
+                Status: true,
+                Message: `Are you sure you want to delete this Order `,
+                RedirectPath: false,
+                // PermissionAction: deleteGSTListPage,
+                ID: id,
+            })
+        );
     };
-    dispatch(getOrderList(orderlistInitial));
-    return getOrderList(orderlistInitial)
-  }
 
-  useEffect(() => {
-    fetchOrderList_dispatch_function()
-    dispatch(get_Party_ForDropDown());
-  }, [dispatch, currentDate, fromDateIn, orderDelete]);
+    const EditPageHandler = (rowData) => {
+        debugger
+        let RelatedPageID = userPageAccessState.RelatedPageID
 
+        const found = userAccess.find((element) => {
+            return element.id === RelatedPageID
+        })
 
-  const customerNameOption = props.orderList;
+        if (!(found === undefined)) {
+            history.push({
+                pathname: `/${found.ActualPagePath}`,
+                editValue: rowData,
+                pageMode: 'edit'
+            })
+        }
+    }
 
-  const { editOrderData, TableListData, deleteMessage, updateMessage,Party } = useSelector((state) => ({
-    editOrderData: state.OrderPageReducer.editOrderData,
-    TableListData: state.OrderPageReducer.ordersList,
-    deleteMessage: state.OrderPageReducer.deleteMessage,
-    updateMessage: state.OrderPageReducer.updateMessage,
-    Party: state.ItemMastersReducer.Party,
-  }));
-
-  function goHandeller() {
-    debugger
-    const orderlistInitial = {
-      FromDate: !fromDate ? fromDateIn : fromDate,
-      ToDate: !toDate ? currentDate : toDate,
-      CustomerID: 0,
-      DivisionID: 3,
+    const pageOptions = {
+        sizePerPage: 10,
+        totalSize: tableList.length,
+        custom: true,
     };
-    dispatch(getOrderList(orderlistInitial));
-  }
 
-  useEffect(() => {
+    const pagesListColumns = [
+        {
+            text: "Customer",
+            dataField: "Customer",
+            sort: true,
+        },
+        {
+            text: "OrderAmount",
+            dataField: "OrderAmount",
+            sort: true,
+        },
+        {
+            text: "OrderDate",
+            dataField: "OrderDate",
+            sort: true,
+        },
 
-    if ((updateMessage.Status === true) && (updateMessage.StatusCode === 200)) {
-      dispatch(updateOrderID_From_OrderPageSuccess({ Status: false }))
-      dispatch(AlertState({
-        Type: 1, Status: true,
-        Message: updateMessage.Message,
-        AfterResponseAction: fetchOrderList_dispatch_function,
-      }))
-      tog_center()
+        {
+            text: "Action",
+            dataField: "",
+            hidden: (
+                !(userPageAccessState.RoleAccess_IsEdit)
+                && !(userPageAccessState.RoleAccess_IsView)
+                && !(userPageAccessState.RoleAccess_IsDelete)) ? true : false,
+
+            formatter: (cellContent, Role) => (
+                <div className="d-flex gap-3" style={{ display: 'flex', justifyContent: 'center' }} >
+                    {((userPageAccessState.RoleAccess_IsEdit)) ?
+                        <Button
+                            type="button"
+                            data-mdb-toggle="tooltip" data-mdb-placement="top" title="Edit Order"
+                            onClick={() => { EditPageHandler(Role); }}
+                            className="badge badge-soft-success font-size-12 btn btn-success waves-effect waves-light w-xxs border border-light"
+                        >
+                            <i className="mdi mdi-pencil font-size-18" id="edittooltip"></i>
+                        </Button>
+                        :
+                        null}
+
+                    {(!(userPageAccessState.RoleAccess_IsEdit) && (userPageAccessState.RoleAccess_IsView)) ?
+                        <Button
+                            type="button"
+                            data-mdb-toggle="tooltip" data-mdb-placement="top" title="View Order"
+                            onClick={() => { EditPageHandler(Role); }}
+                            className="badge badge-soft-primary font-size-12 btn btn-primary waves-effect waves-light w-xxs border border-light"
+
+                        >
+                            <i className="bx bxs-show font-size-18 "></i>
+                        </Button> : null}
+
+                    {((userPageAccessState.RoleAccess_IsDelete))
+                        ?
+                        <Button
+                            className="badge badge-soft-danger font-size-12 btn btn-danger waves-effect waves-light w-xxs border border-light"
+                            data-mdb-toggle="tooltip" data-mdb-placement="top" title="Delete Order"
+                            onClick={() => { deleteHandeler(Role.id) }}
+                        >
+                            <i className="mdi mdi-delete font-size-18"></i>
+                        </Button>
+                        : null
+                    }
+
+                </div>
+            ),
+        },
+    ];
+
+    if (!(userPageAccessState === '')) {
+        return (
+            <React.Fragment>
+                <div className="page-content">
+                    <MetaTags>
+                        <title>MRP List| FoodERP-React FrontEnd</title>
+                    </MetaTags>
+                    <div className="container-fluid">
+                        <PaginationProvider
+                            pagination={paginationFactory(pageOptions)}
+                        >
+                            {({ paginationProps, paginationTableProps }) => (
+                                <ToolkitProvider
+                                    keyField='id'
+                                    columns={pagesListColumns}
+                                    data={tableList}
+                                    search
+                                >
+                                    {toolkitProps => (
+                                        <React.Fragment>
+                                            <Breadcrumb
+                                                title={"Count :"}
+                                                breadcrumbItem={userPageAccessState.PageHeading}
+                                                IsButtonVissible={(userPageAccessState.RoleAccess_IsSave) ? true : false}
+                                                SearchProps={toolkitProps.searchProps}
+                                                breadcrumbCount={`GST Count: ${tableList.length}`}
+                                                IsSearchVissible={true}
+                                                isExcelButtonVisible={true}
+                                                ExcelData={tableList}
+                                                RedirctPath={"/Order"}
+                                            />
+
+
+                                            <Row>
+                                                <Col xl="12">
+                                                    <div className="table-responsive">
+                                                        <BootstrapTable
+                                                            keyField={"id"}
+                                                            responsive
+                                                            bordered={true}
+                                                            striped={false}
+                                                            // cellEdit={cellEditFactory({ mode: 'dbclick' ,blurToSave: true})}
+                                                            // defaultSorted={commonDefaultSorted("Name")}
+                                                            classes={"table align-middle table-nowrap table-hover"}
+                                                            noDataIndication={<div className="text-danger text-center ">Items Not available</div>}
+                                                            headerWrapperClasses={"thead-light"}
+                                                            {...toolkitProps.baseProps}
+                                                            {...paginationTableProps}
+                                                        />
+                                                        {mySearchProps(toolkitProps.searchProps)}
+                                                    </div>
+                                                </Col>
+                                            </Row>
+
+                                            <Row className="align-items-md-center mt-30">
+                                                <Col className="pagination pagination-rounded justify-content-end mb-2">
+                                                    <PaginationListStandalone
+                                                        {...paginationProps}
+                                                    />
+                                                </Col>
+                                            </Row>
+                                        </React.Fragment>
+                                    )
+                                    }
+                                </ToolkitProvider>
+                            )
+                            }
+
+                        </PaginationProvider>
+                    </div>
+                </div>
+            </React.Fragment>
+        );
     }
-    else if (updateMessage.Status === true) {
-      dispatch(updateOrderID_From_OrderPageSuccess({ Status: false }))
-      dispatch(AlertState({
-        Type: 3, Status: true,
-        Message: updateMessage.Message,
-      }));
+    else {
+        return (
+            <React.Fragment></React.Fragment>
+        )
     }
-  }, [updateMessage.Status, dispatch]);
-
-  useEffect(() => {
-    if ((deleteMessage.Status === true) && (deleteMessage.StatusCode === 200)) {
-      dispatch(deleteOrderID_From_OrderPageSuccess({ Status: false }))
-      dispatch(AlertState({
-        Type: 1, Status: true,
-        Message: deleteMessage.Message,
-        AfterResponseAction: fetchOrderList_dispatch_function,
-      }))
-    } else if (deleteMessage.Status === true) {
-      dispatch(deleteOrderID_From_OrderPageSuccess({ Status: false }))
-      dispatch(AlertState({
-        Type: 3,
-        Status: true,
-        Message: "error Message",
-      }));
-    }
-  }, [deleteMessage.Status])
-
-  // Edit Modal Show When Edit Data is true
-  useEffect(() => {
-    if (editOrderData.Status === true) {
-      tog_center()
-    }
-  }, [editOrderData]);
-
-
-  function OnPritHandeller(id) {
-    // dispatch(editOrder_forOrderPage(id));
-    // if (!(editOrderData.length === 0)) {
-    //   console.log("datataat", editOrderData)
-    generate(InvoiceFakeData)
-  }
-
-  function EditPageHandler(id) {
-    dispatch(editOrder_forOrderPage(id));
-  }
-
-  //  Delete Button Handller
-  const deleteHandeler = (id, name) => {
-    debugger
-    dispatch(AlertState({
-      Type: 5, Status: true,
-      Message: `Are you sure you want to delete this item : "${name}"`,
-      RedirectPath: false,
-      PermissionAction: deleteOrderID_From_OrderPage,
-      ID: id
-    }));
-  }
-
-  const PartyDropdown_Options = Party.map((Data) => ({
-    value: Data.id,
-    label: Data.Name
-}));
-
-function PartyType_Dropdown_OnChange_Handller(e) {
-  setPartyName_dropdown_Select(e)
 }
 
-  const pageOptions = {
-    sizePerPage: 15,
-    totalSize: TableListData.length, // replace later with size(users),
-    custom: true,
-  };
-  const defaultSorted = [
-    {
-      dataField: "OrderDate", // if dataField is not match to any column you defined, it will be ignored.
-      order: "desc", // desc or asc
-    },
-  ];
-
-  const TableListColumns = [
-    {
-      text: "Customer",
-      dataField: "Customer",
-      sort: true,
-    },
-    {
-      text: "Order Amount",
-      dataField: "OrderAmount",
-      sort: true,
-    },
-    {
-      text: "OrderDate",
-      dataField: "OrderDate",
-      sort: true,
-    },
-
-    {
-      text: "Action",
-      formatter: (cellContent, order) => (
-
-        <div class="d-flex gap-3" style={{ display: 'flex', justifyContent: 'center' }} >
-          <buton
-            type="button"
-            onClick={() => {
-              EditPageHandler(order.ID);
-            }}
-            className="badge badge-soft-primary font-size-12"
-          >
-            <i class="mdi mdi-pencil font-size-18" id="edittooltip"></i>
-          </buton>
-
-          <buton
-            className="badge badge-soft-danger font-size-12"
-            onClick={() => {
-              deleteHandeler(order.id, order.customerName);
-            }}
-          >
-            <i class="mdi mdi-delete font-size-18" ></i>
-          </buton>
-
-          <buton
-            className="badge badge-soft-info font-size-12"
-            onClick={() => {
-              OnPritHandeller()
-            }}
-          >
-            <i class="mdi mdi-shredder font-size-18"></i>
-          </buton>
-        </div>
-      ),
-    },
-  ];
-
-  window.onscroll = function () { scrollFunction() };
-
-  function scrollFunction() {
-    if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
-      // document.getElementById("myBtn").style.display = "block";
-    } else {
-      // document.getElementById("myBtn").style.display = "none";
-    }
-  }
-
-  return (
-    <React.Fragment>
-      <div className="page-content">
-        <MetaTags>
-          <title>Order List| FoodERP-React FrontEnd</title>
-        </MetaTags>
-        {/* 
-        <div class="footer-tools">
-          <button onClick={() => topFunction()} id="myBtn" data-toggle="tooltip" title="Back To Top"><i className="dripicons-arrow-up"></i></button>
-        </div> */}
-        <PaginationProvider
-          pagination={paginationFactory(pageOptions)}
-        >
-          {({ paginationProps, paginationTableProps }) => (
-            <ToolkitProvider
-              keyField="id"
-              data={TableListData}
-              columns={TableListColumns}
-              search
-            >
-              {toolkitProps => (
-                <React.Fragment>
-                  <Breadcrumbs
-                    title={"Count :"}
-                    // breadcrumbItem={"Orders List"}
-                    breadcrumbCount={`Order Count : ${TableListData.length}`}
-                    IsButtonVissible={true}
-                    SearchProps={toolkitProps.searchProps}
-                    // breadcrumbCount={TableListData.length}
-                    RedirctPath={"/order"}
-                  />
-                  <Container fluid>
-                    <Card >
-                      {/* <CardHeader className="card-header   text-dark" style={{ backgroundColor: "#dddddd" }}>
-              <h4 className=" text-center text-black" >React Validation - Normal</h4>
-              <p className=" text-black">Provide valuable, actionable feedback to your users with HTML5 form validation–available in all our supported browsers.</p>
-            </CardHeader> */}
-                      < CardBody>
-                        <Row className="mb-1 border border-black text-black mt-n3" style={{ backgroundColor: "#dddddd" }} >
-
-                          <Col md="4" className="">
-                            <FormGroup className="mb- row mt-3 " >
-                              <Label className="col-sm-3 p-2">To Date</Label>
-                              <Col md="7">
-                                <Input
-                                  // className="form-control"
-                                  type="date"
-                                  defaultValue={fromDateIn}
-                                  onChange={(e) => {
-                                    setFromDate(e.target.value);
-                                  }}
-                                  id="example-date-input1"
-                                />
-                              </Col>
-                            </FormGroup>
-                          </Col>
-                          <Col md="4">
-                            <FormGroup className="mb-2 row mt-3 " >
-                              <Label className="col-sm-3 p-2">From Date</Label>
-                              <Col md="7">
-                                <Input
-                                  // className="form-control"
-                                  type="date"
-                                  defaultValue={currentDate}
-                                  onChange={(e) => {
-                                    setToDate(e.target.value);
-                                  }}
-                                  id="example-date-input2"
-                                />
-                              </Col>
-                            </FormGroup>
-                          </Col >
-
-                          <Col md="3">
-                            <FormGroup className="mb-2 row mt-3" >
-                              <Label className="col-sm-6 p-2">Customer Name</Label>
-                              <Col md="6">
-                                <Select options={PartyDropdown_Options} />
-                              </Col>
-                            </FormGroup>
-                          </Col>
-                          <Col>
-                            <Button
-                              className="btn btn-success align-right mt-3 "
-                              onClick={() => {
-                                goHandeller();
-                              }}
-                            >
-                              Go{" "}
-                            </Button>
-                          </Col>
-                        </Row>
-
-                        <Row>
-                          <Col xl="12">
-                            <div className="table-responsive">
-                              <BootstrapTable
-                                keyField={"id"}
-                                responsive
-                                bordered={false}
-                                striped={false}
-                                defaultSorted={defaultSorted}
-                                classes={"table  table-bordered"}
-                                {...toolkitProps.baseProps}
-                                {...paginationTableProps}
-                              />
-                            </div>
-                          </Col>
-                        </Row>
-
-                        <Row className="align-items-md-center mt-30">
-                          <Col className="pagination pagination-rounded justify-content-end mb-2">
-                            <PaginationListStandalone
-                              {...paginationProps}
-                            />
-                          </Col>
-                        </Row>
-                      </CardBody>
-                    </Card>
-
-                  </Container>
-                </React.Fragment>
-              )}
-            </ToolkitProvider>
-          )}
-        </PaginationProvider>
+export default OrderList;
 
 
-      </div >
-
-      <Modal
-        isOpen={modal_center}
-        toggle={() => { tog_center() }}
-        size="xl"
-        scrollable='off'
-      >
-        <OrderPage state={editOrderData.Data} />
-      </Modal>
-
-    </React.Fragment >
-  );
-};
-
-
-export default OrderList

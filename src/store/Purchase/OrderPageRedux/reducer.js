@@ -12,6 +12,7 @@ import {
   GO_BUTTON_FOR_ORDER_PAGE,
   GO_BUTTON_FOR_ORDER_PAGE_SUCCESS,
   POST_ORDER_FROM_ORDER_PAGE_SUCCESS,
+  GET_ORDER_LIST_PAGE_SUCCESS,
 } from "./actionType"
 
 const INIT_STATE = {
@@ -23,8 +24,8 @@ const INIT_STATE = {
   orderListMessage: [],
   editOrderData: { Status: false, Items: [] },
   updateMessage: { Status: false },
-  deleteMessage: { Status: false }
-
+  deleteMessage: { Status: false },
+  OrderListPage:[]
 
 
 }
@@ -78,6 +79,13 @@ const OrderPageReducer = (state = INIT_STATE, action) => {
         ...state,
         deleteMessage: action.payload,
       }
+
+      // Order List Page 
+      case GET_ORDER_LIST_PAGE_SUCCESS:
+        return {
+          ...state,
+          OrderListPage: action.payload,
+        }
     default:
       return state
   }
