@@ -25,7 +25,7 @@ import { getSupplier, goButton, goButtonSuccess, postOrder, postOrderSuccess } f
 import { mySearchProps } from "../../../components/Common/CmponentRelatedCommonFile/SearchBox/MySearch";
 import { AlertState } from "../../../store/actions";
 import { basicAmount, GstAmount, handleKeyDown, totalAmount } from "./OrderPageCalulation";
-
+import '../../Order/div.css'
 let description = 'order'
 
 function Order() {
@@ -281,7 +281,7 @@ function Order() {
     ];
 
     const pageOptions = {
-        // sizePerPage: 0,
+        sizePerPage: (items.length+2),
         totalSize: 0,
         custom: true,
     };
@@ -548,7 +548,7 @@ function Order() {
                     > <i className="fas fa-save me-2"></i> Save
                     </button>
                 </div>
-                    : null}
+                    : <div className="row save1"></div>}
             </div>
             {/* </div> */}
 
