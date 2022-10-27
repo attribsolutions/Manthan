@@ -39,18 +39,15 @@ import { CATEGORY_lIST } from "../../../routes/route_url";
 
 const CategoryMaster = (props) => {
 
-    let editDataGetingFromList = props.state;
-    let pageModeProps = props.pageMode;
+    
 
     const formRef = useRef(null);
     const history = useHistory()
     const dispatch = useDispatch();
 
-    const [EditData, setEditData] = useState([]);
     const [pageMode, setPageMode] = useState("");
     const [modalCss, setModalCss] = useState(false);
 
-    const [CategoryTypes_dropdown_Select, setCategoryTypes_dropdown_Select] = useState("");
     const [userPageAccessState, setUserPageAccessState] = useState(123);
 
 
@@ -178,7 +175,6 @@ const CategoryMaster = (props) => {
     useEffect(() => {
 
         if ((PostAPIResponse.Status === true) && (PostAPIResponse.StatusCode === 200)) {
-            setCategoryTypes_dropdown_Select('')
             dispatch(PostMethod_ForCategoryAPISuccess({ Status: false }))
             formRef.current.reset();
             if (pageMode === "other") {
@@ -223,10 +219,6 @@ const CategoryMaster = (props) => {
         dispatch(getCategoryTypelist());
     }, [dispatch]);
 
-
-    function handllerCategoryTypes(e) {
-        setCategoryTypes_dropdown_Select(e)
-    }
 
     const CategoryTypesValues = CategoryAPI.map((Data) => ({
         value: Data.id,

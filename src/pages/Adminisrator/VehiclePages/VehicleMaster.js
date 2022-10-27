@@ -45,10 +45,7 @@ import {
 
 
 const VehicleMaster = (props) => {
-    //*** "isEditdata get all data from ModuleID for Binding  Form controls
-    let editDataGatingFromList = props.state;
-    let pageModeProps = props.pageMode;
-    let propsPageMode = props.pageMode;
+
 
     const dispatch = useDispatch();
     const history = useHistory()
@@ -61,6 +58,7 @@ const VehicleMaster = (props) => {
     const [userPageAccessState, setUserPageAccessState] = useState('');
 
     const [divisionData, setDivisionData] = useState([]);
+
     const [divisionType_dropdown_Select, setDivisionType_dropdown_Select] = useState("");
     const [DriverList_dropdown_Select, setDriverList_dropdown_Select] = useState("");
     const [VehicleType_dropdown_Select, setVehicleType_dropdown_Select] = useState("");
@@ -127,14 +125,15 @@ const VehicleMaster = (props) => {
 
 
     //Access redux store Data /  'save_ModuleSuccess' action data
-    const { PostAPIResponse,
+    const {
+        postMsg,
         VehicleList,
         Divisions,
         VehicleTypes,
         pageField,
         DriverList_redux,
         userAccess } = useSelector((state) => ({
-            PostAPIResponse: state.VehicleReducer.PostDataMessage,
+            postMsg: state.VehicleReducer.postMsg,
             VehicleList: state.VehicleReducer.VehicleList,
             Divisions: state.ItemMastersReducer.Division,
             VehicleTypes: state.VehicleReducer.VehicleTypes,
@@ -199,25 +198,37 @@ const VehicleMaster = (props) => {
                 setPageMode(props.pageMode)
                 setModalCss(true)
             }
+
             if (hasEditVal) {
-                setEditData(hasEditVal)
-                setDriverList_dropdown_Select({
-                    value: hasEditVal.Driver,
-                    label: hasEditVal.DriverName
-                });
-                setVehicleType_dropdown_Select({
-                    value: hasEditVal.Vehicletype,
-                    label: hasEditVal.VehicleTypeName
-                });
-                let division = hasEditVal.VehicleDivisions.map((index) => {
-                    return {
-                        label: index.DivisionName,
-                        value: index.Division
-                    }
-                })
-                setDivisionData(division)
+                debugger
+                const divisionTable = hasEditVal.VehicleDivisions.map((data) => ({
+                    value: data.Division,
+                    label: data.DivisionName
+                }))
+
+                const { id, VehicleNumber, Description, Driver, DriverName, VehicleType, VehicleTypeName, VehicleDivisions, } = hasEditVal
+                const { values, fieldLabel, hasValid, required, isError } = { ...state }
+
+                hasValid.VehicleNumber.valid = true;
+                hasValid.DriverName.valid = true;
+                hasValid.Description.valid = true;
+                hasValid.Vehicletype.valid = true;
+                hasValid.VehicleDivisions.valid = true;
+
+
+                values.id = id
+                values.VehicleNumber = VehicleNumber
+                values.Description = Description
+                values.Driver = { label: DriverName, value: Driver };
+                values.Vehicletype = { label: VehicleTypeName, value: VehicleType };
+                values.VehicleDivisions = divisionTable
+
+                setDivisionData(divisionTable)
+                setState({ values, fieldLabel, hasValid, required, isError })
+                dispatch(BreadcrumbShow(hasEditVal.RoleMaster))
                 dispatch(editVehicleTypeSuccess({ Status: false }))
-                dispatch(BreadcrumbShow(hasEditVal.VehicleNumber))
+
+
             }
         }
 
@@ -225,8 +236,8 @@ const VehicleMaster = (props) => {
 
 
     useEffect(() => {
-        debugger
-        if ((PostAPIResponse.Status === true) && (PostAPIResponse.StatusCode === 200)) {
+
+        if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
 
             dispatch(PostMethod_ForVehicleMasterSuccess({ Status: false }))
             formRef.current.reset();
@@ -235,19 +246,19 @@ const VehicleMaster = (props) => {
                 dispatch(AlertState({
                     Type: 1,
                     Status: true,
-                    Message: PostAPIResponse.Message,
+                    Message: postMsg.Message,
                 }))
             }
             else {
                 dispatch(AlertState({
                     Type: 1,
                     Status: true,
-                    Message: PostAPIResponse.Message,
+                    Message: postMsg.Message,
                     RedirectPath: VEHICLE_lIST,
                 }))
             }
         }
-        else if (PostAPIResponse.Status === true) {
+        else if (postMsg.Status === true) {
             dispatch(getMethod_ForVehicleListSuccess({ Status: false }))
             dispatch(AlertState({
                 Type: 4,
@@ -257,7 +268,7 @@ const VehicleMaster = (props) => {
                 AfterResponseAction: false
             }));
         }
-    }, [PostAPIResponse])
+    }, [postMsg])
 
     useEffect(() => {
 
@@ -285,36 +296,31 @@ const VehicleMaster = (props) => {
         label: data.Name
     }));
 
-    function DriverList_DropDown_handller(e) {
-        setDriverList_dropdown_Select(e)
-    }
 
     const VehicleType_DropdownOptions = VehicleTypes.map((data) => ({
         value: data.id,
         label: data.Name
     }));
 
-    function VehicleType_DropDown_handller(e) {
-        setVehicleType_dropdown_Select(e)
-    }
 
-    // const VehicleList_DropdownOptions = VehicleList_redux.map((data) => ({
-    //     value: data.id,
-    //     label: data.Name
-    // }));
-
-    // function VehicleList_DropDown_handller(e) {
-    //     setVehicleList_dropdown_Select(e)
-    // }
 
     const formSubmitHandler = (event) => {
+
         event.preventDefault();
+        const leng = divisionData.length
+        if (leng === 0) {
+            dispatch(AlertState({
+                Type: 3, Status: true,
+                Message: "Select Atleast One Division..!",
+            }));
+            return
+        }
         if (formValid(state, setState)) {
             var division = divisionData.map(i => ({ Division: i.value }))
             const jsonBody = JSON.stringify({
                 VehicleNumber: values.VehicleNumber,
                 Description: values.Description,
-                Driver: values.DriverName.value,
+                Driver: values.Driver.value,
                 VehicleType: values.Vehicletype.value,
                 VehicleDivisions: division,
             });
@@ -322,16 +328,18 @@ const VehicleMaster = (props) => {
 
             if (pageMode === 'edit') {
                 dispatch(updateVehicleTypeID(jsonBody, values.id));
+                console.log("update jsonBody", jsonBody)
             }
             else {
                 dispatch(PostMethodForVehicleMaster(jsonBody));
-
+                console.log("post jsonBody", jsonBody)
             }
         }
     };
 
-    /// Role Table Validation
+
     function AddDivisionHandler() {
+
         const find = divisionData.find((element) => {
             return element.value === divisionType_dropdown_Select.value
         });
@@ -364,7 +372,7 @@ const VehicleMaster = (props) => {
 
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
     var IsEditMode_Css = ''
-    if ((pageMode === "edit") || (pageMode === "copy") || (pageMode === "dropdownAdd")) { IsEditMode_Css = "-5.5%" };
+    if ((modalCss) || (pageMode === "dropdownAdd")) { IsEditMode_Css = "-5.5%" };
 
     if (!(userPageAccessState === '')) {
         return (
@@ -402,7 +410,7 @@ const VehicleMaster = (props) => {
                                                                         className="react-dropdown"
                                                                         classNamePrefix="dropdown"
                                                                         options={DriverList_DropdownOptions}
-                                                                        onChange={(v, e) => onChangeSelect({ e, v, state, setState })}
+                                                                        onChange={(e, v) => onChangeSelect({ e, v, state, setState })}
                                                                     />
                                                                     {isError.DriverName.length > 0 && (
                                                                         <span className="text-danger f-8"><small>{isError.DriverName}</small></span>
@@ -426,7 +434,7 @@ const VehicleMaster = (props) => {
                                                                         className="react-dropdown"
                                                                         classNamePrefix="dropdown"
                                                                         options={VehicleType_DropdownOptions}
-                                                                        onChange={(v, e) => onChangeSelect({ e, v, state, setState })}
+                                                                        onChange={(e, v) => onChangeSelect({ e, v, state, setState })}
                                                                     />
                                                                     {isError.Vehicletype.length > 0 && (
                                                                         <span className="text-danger f-8"><small>{isError.Vehicletype}</small></span>
@@ -493,9 +501,9 @@ const VehicleMaster = (props) => {
                                                                     className="react-dropdown"
                                                                     classNamePrefix="dropdown"
                                                                     options={DivisionType_DropdownOptions}
-                                                                    onChange={(v, e) => {
+                                                                    onChange={(e, v) => {
                                                                         onChangeSelect({ e, v, state, setState })
-                                                                        DivisionType_DropDown_handller(v)
+                                                                        DivisionType_DropDown_handller(e)
                                                                     }
                                                                     }
                                                                 />
@@ -523,7 +531,7 @@ const VehicleMaster = (props) => {
                                                                         <Table className="table table-bordered  text-center">
                                                                             <Thead >
                                                                                 <tr>
-                                                                                    <th>Division Type</th>
+                                                                                    <th>Division Name</th>
 
                                                                                     <th>Action</th>
                                                                                 </tr>
