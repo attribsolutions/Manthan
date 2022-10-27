@@ -16,7 +16,7 @@ import { AlertState, BreadcrumbFilterSize, BreadcrumbSearchProps } from "../../.
 import { listPageCommonButtonFunction }
   from "../../../components/Common/CmponentRelatedCommonFile/listPageCommonButtons";
 import { mySearchProps } from "./SearchBox/MySearch";
-
+let sortType = "asc"
 const CommonListPage = (props) => {
 
   const dispatch = useDispatch();
@@ -24,6 +24,7 @@ const CommonListPage = (props) => {
 
   const [userPageAccessState, setUserPageAccessState] = useState('');
   const [modal_center, setmodal_center] = useState(false);
+  // const [sortType, setSortType] = useState("ase");
 
   const {
     tableList,
@@ -64,7 +65,7 @@ const CommonListPage = (props) => {
     }
   }, [userAccess])
 
-  
+
   // This UseEffect => UpadateModal Success/Unsucces  Show and Hide Control Alert_modal
   useEffect(() => {
 
@@ -171,7 +172,6 @@ const CommonListPage = (props) => {
   // if (hasfield) {
   //   pageFiledColumn = pageField.PageFieldMaster
   // }
-
   pageField.PageFieldMaster.forEach((i, k) => {
     if (i.ShowInListPage) {
       columns.push({
@@ -179,8 +179,13 @@ const CommonListPage = (props) => {
         dataField: i.ControlID,
         sort: true,
       })
-      if (i.DefaultSort) {
+      debugger
+      if (i.DefaultSort === 1) {
         sortLabel = i.ControlID
+        sortType = "asc"
+      } else if (i.DefaultSort === 2) {
+        sortLabel = i.ControlID;
+        sortType = "desc"
       }
     }
     if (pageField.PageFieldMaster.length - 1 === k) {
@@ -198,7 +203,7 @@ const CommonListPage = (props) => {
   const defaultSorted = [
     {
       dataField: sortLabel, // if dataField is not match to any column you defined, it will be ignored.
-      order: "asc", // desc or asc
+      order: sortType, // desc or asc
     },
   ];
 
@@ -257,6 +262,8 @@ const CommonListPage = (props) => {
                             keyField={"id"}
                             responsive
                             bordered={false}
+                            defaultSorted={defaultSorted}
+
                             striped={true}
                             classes={"table  table-bordered table-hover"}
                             {...toolkitProps.baseProps}
