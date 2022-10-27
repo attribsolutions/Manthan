@@ -139,10 +139,16 @@ function Order() {
         }
     }, [postMsg])
 
-    function test(e, row,) {
-        row["inpQty"] = e.target.value;
-        row["totalAmount"] = totalAmount(row)
+    function test(val, row, type) {
 
+        if (type === "qty") {
+            row["inpQty"] = val;
+        }
+        else {
+            row["inpRate"] = val
+        }
+        row["totalAmount"] = totalAmount(row)
+        debugger
         let sum = 0
         items.forEach(ind => {
             sum = sum + ind.totalAmount
@@ -176,10 +182,16 @@ function Order() {
                             defaultValue={row.inpRate}
                             onChange={e => {
                                 row["inpRate"] = e.target.value;
-                                if (e.target.value > 0) {
-                                    document.getElementById(`inpQty${k}`).disabled = false
+                                const qty = document.getElementById(`inpQty${k}`)
+                                const val = e.target.value
+                                if (val > 0) {
+
+                                    test(val, row, "rate")
+                                    qty.disabled = false
                                 } else {
-                                    document.getElementById(`inpQty${k}`).disabled = true
+                                    qty.value = 0
+                                    test(0, row, "rate")
+                                    qty.disabled = true
                                 }
                             }}
                             onKeyDown={(e) => handleKeyDown(e, items)}
@@ -220,7 +232,7 @@ function Order() {
                         defaultValue={row.inpQty}
                         disabled={(row.inpRate === 0) ? true : false}
                         onChange={(e) => {
-                            test(e, row,)
+                            test(e.target.value, row, "qty")
                         }}
                         autoComplete="off"
                         onKeyDown={(e) => handleKeyDown(e, items)} />
@@ -281,7 +293,7 @@ function Order() {
     ];
 
     const pageOptions = {
-        sizePerPage: (items.length+2),
+        sizePerPage: (items.length + 2),
         totalSize: 0,
         custom: true,
     };
