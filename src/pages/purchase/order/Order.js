@@ -30,7 +30,7 @@ let description = 'order'
 
 function Order() {
 
-    const props = { tableData: [], func: function a() { } }
+    // const props = { tableData: [], func: function a() { } }
     const dispatch = useDispatch();
     const history = useHistory()
     const [userPageAccessState, setUserPageAccessState] = useState('');
@@ -139,7 +139,7 @@ function Order() {
         }
     }, [postMsg])
 
-    function test(val, row, type) {
+    function valChange(val, row, type) {
 
         if (type === "qty") {
             row["inpQty"] = val;
@@ -186,11 +186,12 @@ function Order() {
                                 const val = e.target.value
                                 if (val > 0) {
 
-                                    test(val, row, "rate")
+                                    valChange(val, row, "rate")
                                     qty.disabled = false
                                 } else {
-                                    qty.value = 0
-                                    test(0, row, "rate")
+                                    qty.value = ''
+                                    row["inpQty"] = 0;
+                                    valChange(0, row, "rate")
                                     qty.disabled = true
                                 }
                             }}
@@ -232,7 +233,7 @@ function Order() {
                         defaultValue={row.inpQty}
                         disabled={(row.inpRate === 0) ? true : false}
                         onChange={(e) => {
-                            test(e.target.value, row, "qty")
+                            valChange(e.target.value, row, "qty")
                         }}
                         autoComplete="off"
                         onKeyDown={(e) => handleKeyDown(e, items)} />
@@ -349,7 +350,7 @@ function Order() {
 
         const itemArr = []
         items.forEach(i => {
-            if (i.inpQty > 0) {
+            if ((i.inpQty > 0)) {
                 const arr = {
                     Item: i.id,
                     Quantity: i.inpQty,
@@ -372,6 +373,7 @@ function Order() {
                 itemArr.push(arr)
             };
         })
+        debugger
         if (itemArr.length === 0) {
             alert("Please Enter one Item Quantity")
             return
