@@ -2,8 +2,11 @@
 
 export const basicAmount = i => {
 
-    const a = i.inpRate * i.inpQty
-    return a
+    let val = i.inpRate * i.inpQty
+    if (!val) {
+        val = 0
+    }
+    return val
 }
 
 export const GstAmount = (i) => {
@@ -24,7 +27,7 @@ export const totalAmount = (i) => {
 }
 
 export function handleKeyDown(e, item) {
-debugger
+
     const a = ((e.keyCode > 36) && (e.keyCode < 40));
     const b = e.keyCode === 46;
     const c = e.keyCode === 110;
