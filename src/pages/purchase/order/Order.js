@@ -305,7 +305,7 @@ function Order() {
 
     const GoButton_Handler = () => {
         let party = customerSelect.value
-        debugger
+
         if (!party > 0) {
             alert("Please Select Customer")
             return
@@ -395,14 +395,14 @@ function Order() {
 
     }
 
-
-    return (
-        <React.Fragment>
-            <MetaTags>
-                <title>{userPageAccessState.PageHeading}| FoodERP-React FrontEnd</title>
-            </MetaTags>
-            <div className="page-content">
-                {/* <Breadcrumb
+    if (!(userPageAccessState === "")) {
+        return (
+            <React.Fragment>
+                <MetaTags>
+                    <title>{userPageAccessState.PageHeading}| FoodERP-React FrontEnd</title>
+                </MetaTags>
+                <div className="page-content">
+                    {/* <Breadcrumb
                     title={"Count :"}
                     breadcrumbItem={userPageAccessState.PageHeading ? userPageAccessState.PageHeading : "Order"}
                     IsButtonVissible={(userPageAccessState.RoleAccess_IsSave) ? true : false}
@@ -416,97 +416,97 @@ function Order() {
 
 
 
-                <div className="d-flex  justify-content-between">
-                    <div >
-                        <label className="font-size-18 form-label text-black pl-2" >
-                            {"Order"}
-                        </label>
+                    <div className="d-flex  justify-content-between">
+                        <div >
+                            <label className="font-size-18 form-label text-black pl-2" >
+                                {"Order"}
+                            </label>
+                        </div>
+                        <div >
+                            <label className="font-size-16 form-label  bd-highlight text-primary rounded pr-2" >
+                                Order Amount : &nbsp;
+                                <kbd className="bg-light text-danger font-size-22">{orderAmount}</kbd>
+                            </label>
+                        </div>
                     </div>
-                    <div >
-                        <label className="font-size-16 form-label  bd-highlight text-primary rounded pr-2" >
-                            Order Amount : &nbsp;
-                            <kbd className="bg-light text-danger font-size-22">{orderAmount}</kbd>
-                        </label>
+                    <div className="px-2">
+                        <Row className="mb-1 border border-black text-black mt-2 "
+                            style={{ backgroundColor: "#dddddd" }} >
+
+                            <Col md="3" className="">
+                                <FormGroup className="mb- row mt-3 " >
+                                    <Label className="col-sm-5 p-2"
+                                        style={{ width: "100px" }}>Order Date</Label>
+                                    <Col md="7">
+                                        <Flatpickr
+                                            id="EffectiveDateid"
+                                            name="effectiveDate"
+                                            // value={effectiveDate}
+                                            // isDisabled={editMode === "edit" ? true : false}
+                                            className="form-control d-block p-2 bg-white text-dark"
+                                            placeholder="Select..."
+                                            options={{
+                                                altInput: true,
+                                                altFormat: "F j, Y",
+                                                dateFormat: "Y-m-d",
+                                                minDate: "today",
+                                                defaultDate: "today"
+                                            }}
+                                            onChange={EffectiveDateHandler}
+                                        />
+                                    </Col>
+                                </FormGroup>
+                            </Col>
+
+                            <Col md="3">
+                                <FormGroup className="mb-2 row mt-3 " >
+                                    <Label className="col-md-4 p-2"
+                                        style={{ width: "130px" }}>Customer Name</Label>
+                                    <Col md="7">
+                                        <Select
+                                            // Value={customerName_dropdownSelect}
+                                            classNamePrefix="select2-Customer"
+
+                                            options={supplierOptions}
+                                            onChange={(e) => { setCustomerSelect(e) }}
+                                        />
+                                    </Col>
+                                </FormGroup>
+                            </Col >
+
+                            <Col md="1" className="mt-3 ">
+                                <Button type="button" color="btn btn-outline-success border-2 font-size-12 "
+                                    onClick={GoButton_Handler}
+                                >Go</Button>
+                            </Col>
+                            <Col>
+                                <FormGroup className="mb-2 d-flex  justify-content-end mt-3 " >
+                                    <Label className=" p-2 ml-n4 "
+                                        style={{ width: "100px" }}>Descreption</Label>
+                                    <div>
+                                        <Input
+                                            placeholder="Enter Description"
+                                            onChange={e => description = e.target.value}
+                                        />
+                                    </div>
+                                </FormGroup>
+                            </Col>
+                        </Row>
                     </div>
-                </div>
-                <div className="px-2">
-                    <Row className="mb-1 border border-black text-black mt-2 "
-                        style={{ backgroundColor: "#dddddd" }} >
 
-                        <Col md="3" className="">
-                            <FormGroup className="mb- row mt-3 " >
-                                <Label className="col-sm-5 p-2"
-                                    style={{ width: "100px" }}>Order Date</Label>
-                                <Col md="7">
-                                    <Flatpickr
-                                        id="EffectiveDateid"
-                                        name="effectiveDate"
-                                        // value={effectiveDate}
-                                        // isDisabled={editMode === "edit" ? true : false}
-                                        className="form-control d-block p-2 bg-white text-dark"
-                                        placeholder="Select..."
-                                        options={{
-                                            altInput: true,
-                                            altFormat: "F j, Y",
-                                            dateFormat: "Y-m-d",
-                                            minDate: "today",
-                                            defaultDate: "today"
-                                        }}
-                                        onChange={EffectiveDateHandler}
-                                    />
-                                </Col>
-                            </FormGroup>
-                        </Col>
+                    <PaginationProvider pagination={paginationFactory(pageOptions)}>
+                        {({ paginationProps, paginationTableProps }) => (
+                            <ToolkitProvider
+                                keyField="id"
+                                defaultSorted={defaultSorted}
+                                data={items}
+                                columns={pagesListColumns}
+                                search
+                            >
+                                {(toolkitProps,) => (
+                                    <React.Fragment>
 
-                        <Col md="3">
-                            <FormGroup className="mb-2 row mt-3 " >
-                                <Label className="col-md-4 p-2"
-                                    style={{ width: "130px" }}>Customer Name</Label>
-                                <Col md="7">
-                                    <Select
-                                        // Value={customerName_dropdownSelect}
-                                        classNamePrefix="select2-Customer"
-
-                                        options={supplierOptions}
-                                        onChange={(e) => { setCustomerSelect(e) }}
-                                    />
-                                </Col>
-                            </FormGroup>
-                        </Col >
-
-                        <Col md="1" className="mt-3 ">
-                            <Button type="button" color="btn btn-outline-success border-2 font-size-12 "
-                                onClick={GoButton_Handler}
-                            >Go</Button>
-                        </Col>
-                        <Col>
-                            <FormGroup className="mb-2 d-flex  justify-content-end mt-3 " >
-                                <Label className=" p-2 ml-n4 "
-                                    style={{ width: "100px" }}>Descreption</Label>
-                                <div>
-                                    <Input
-                                        placeholder="Enter Description"
-                                        onChange={e => description = e.target.value}
-                                    />
-                                </div>
-                            </FormGroup>
-                        </Col>
-                    </Row>
-                </div>
-
-                <PaginationProvider pagination={paginationFactory(pageOptions)}>
-                    {({ paginationProps, paginationTableProps }) => (
-                        <ToolkitProvider
-                            keyField="id"
-                            defaultSorted={defaultSorted}
-                            data={items}
-                            columns={pagesListColumns}
-                            search
-                        >
-                            {(toolkitProps,) => (
-                                <React.Fragment>
-
-                                    {/* <Breadcrumb
+                                        {/* <Breadcrumb
                                                     title={"Count :"}
                                                     breadcrumbItem={userPageAccessState.PageHeading}
                                                     IsButtonVissible={(userPageAccessState.RoleAccess_IsSave) ? true : false}
@@ -518,56 +518,60 @@ function Order() {
                                                     ExcelData={items}
                                                 /> */}
 
-                                    <Row>
+                                        <Row>
 
-                                        <Col xl="12">
-                                            <div className="table table-unRresponsive">
-                                                <BootstrapTable
-                                                    keyField={"id"}
-                                                    responsive
-                                                    bordered={false}
-                                                    striped={false}
-                                                    classes={"table  table-bordered table-hover"}
-                                                    noDataIndication={
-                                                        <div className="text-danger">
-                                                            "Please Add One Row In Table"
-                                                        </div>
-                                                    }
-                                                    {...toolkitProps.baseProps}
-                                                    {...paginationTableProps}
-                                                />
+                                            <Col xl="12">
+                                                <div className="table table-unRresponsive">
+                                                    <BootstrapTable
+                                                        keyField={"id"}
+                                                        responsive
+                                                        bordered={false}
+                                                        striped={false}
+                                                        classes={"table  table-bordered table-hover"}
+                                                        noDataIndication={
+                                                            <div className="text-danger">
+                                                                "Please Add One Row In Table"
+                                                            </div>
+                                                        }
+                                                        {...toolkitProps.baseProps}
+                                                        {...paginationTableProps}
+                                                    />
 
-                                                {mySearchProps(toolkitProps.searchProps)}
-                                            </div>
-                                        </Col>
-                                    </Row>
-                                    <Row className="align-items-md-center mt-30">
-                                        <Col className="pagination pagination-rounded justify-content-end mb-2">
-                                            <PaginationListStandalone {...paginationProps} />
-                                        </Col>
-                                    </Row>
-                                </React.Fragment>
-                            )}
-                        </ToolkitProvider>
-                    )}
+                                                    {mySearchProps(toolkitProps.searchProps)}
+                                                </div>
+                                            </Col>
+                                        </Row>
+                                        <Row className="align-items-md-center mt-30">
+                                            <Col className="pagination pagination-rounded justify-content-end mb-2">
+                                                <PaginationListStandalone {...paginationProps} />
+                                            </Col>
+                                        </Row>
+                                    </React.Fragment>
+                                )}
+                            </ToolkitProvider>
+                        )}
 
-                </PaginationProvider>
+                    </PaginationProvider>
 
-                {(items.length > 0) ? <div className="row save1" style={{ paddingBottom: 'center' }}>
-                    <button
-                        type="submit"
-                        data-mdb-toggle="tooltip" data-mdb-placement="top" title="Save Order"
-                        className="btn btn-primary w-md"
-                        onClick={saveHandeller}
-                    > <i className="fas fa-save me-2"></i> Save
-                    </button>
+                    {(items.length > 0) ? <div className="row save1" style={{ paddingBottom: 'center' }}>
+                        <button
+                            type="submit"
+                            data-mdb-toggle="tooltip" data-mdb-placement="top" title="Save Order"
+                            className="btn btn-primary w-md"
+                            onClick={saveHandeller}
+                        > <i className="fas fa-save me-2"></i> Save
+                        </button>
+                    </div>
+                        : <div className="row save1"></div>}
                 </div>
-                    : <div className="row save1"></div>}
-            </div>
-            {/* </div> */}
+                {/* </div> */}
 
-        </React.Fragment>
-    )
+            </React.Fragment>
+        )
+    } else {
+        return null
+    }
+
 }
 export default Order
 
