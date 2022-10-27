@@ -64,7 +64,7 @@ const CommonListPage = (props) => {
     }
   }, [userAccess])
 
-  debugger
+  
   // This UseEffect => UpadateModal Success/Unsucces  Show and Hide Control Alert_modal
   useEffect(() => {
 
