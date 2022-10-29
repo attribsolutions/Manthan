@@ -78,7 +78,7 @@ import GroupTypeList from "../pages/Adminisrator/GroupTypePage/GroupTypeList";
 import GroupTypeMaster from "../pages/Adminisrator/GroupTypePage/GroupTypeMaster";
 import PartySubParty from "../pages/Adminisrator/PartySubPartyPages/PartySubParty";
 import PartySubPartyList from "../pages/Adminisrator/PartySubPartyPages/partysubPartyList";
-import EditTabaleTable from "../pages/Adminisrator/DriverPage/editabale table";
+// import EditTabaleTable from "../pages/Adminisrator/DriverPage/editabale table";
 
 import GSTMaster from "../pages/Adminisrator/GSTPages/GSTMaster";
 import GSTList from "../pages/Adminisrator/GSTPages/GSTList";
@@ -146,7 +146,7 @@ const userRoutes = [
 
   { path: path.DRIVER, component: DriverMaster },
   { path: path.DRIVER_lIST, component: DriverList },
-  { path: "/editTable", component: EditTabaleTable },
+  // { path: "/editTable", component: EditTabaleTable },
 
   { path: path.COMPANYGROUP, component: CompanyGroupMaster },
   { path: path.COMPANYGROUP_lIST, component: CompanyGroupList },
