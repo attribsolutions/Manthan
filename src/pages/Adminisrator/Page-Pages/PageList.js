@@ -1,13 +1,5 @@
-import React, { useEffect, useRef, useState } from "react";
-import BootstrapTable from "react-bootstrap-table-next";
-import paginationFactory, {
-  PaginationListStandalone,
-  PaginationProvider,
-} from "react-bootstrap-table2-paginator";
-import ToolkitProvider from "react-bootstrap-table2-toolkit";
-import { MetaTags } from "react-meta-tags";
+import React, { useEffect, } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Button, Col, Modal, Row } from "reactstrap";
 import {
   deleteHpagesUsingID,
   deleteModuleIDSuccess,
@@ -17,29 +9,15 @@ import {
   updateHPagesSuccess,
 } from "../../../store/Administrator/HPagesRedux/actions";
 import HPageMaster from "./PageMaster";
-import {  commonPageFieldList, commonPageFieldListSuccess, } from "../../../store/actions";
+import { commonPageFieldList, commonPageFieldListSuccess, } from "../../../store/actions";
 import { useHistory } from "react-router-dom";
 import CommonListPage from "../../../components/Common/CmponentRelatedCommonFile/commonListPage";
+import { PAGE } from "../../../routes/route_url";
 
 
 export default function PageList() {
 
   const dispatch = useDispatch();
-  const history = useHistory()
-
-
-
-  // const { HPageListData, editData, updateMessage, deleteModuleID, RoleAccessModifiedinSingleArray, PostAPIResponse } =
-  //   useSelector((state) => ({
-  //     HPageListData: state.H_Pages.HPagesListData,
-  //     editData: state.H_Pages.editData,
-  //     updateMessage: state.H_Pages.updateMessage,
-  //     deleteModuleID: state.H_Pages.deleteModuleID,
-  //     RoleAccessModifiedinSingleArray: state.Login.RoleAccessUpdateData,
-  //     PostAPIResponse: state.H_Pages.saveMessage,
-  //   }));
-
-
 
   const reducers = useSelector(
     (state) => ({
@@ -79,7 +57,7 @@ export default function PageList() {
             action={action}
             reducers={reducers}
             MasterModal={HPageMaster}
-            masterPath={'/PageMaster'}
+            masterPath={PAGE}
             ButtonMsgLable={"Page"}
             deleteName={"Name"}
           />
