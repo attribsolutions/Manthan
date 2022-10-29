@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Button,
   Card,
@@ -25,9 +25,25 @@ import Select from "react-select";
 import classnames from "classnames";
 import { AvField, AvForm, AvInput } from "availity-reactstrap-validation";
 import { Tbody, Thead } from "react-super-responsive-table";
-import { AlertState, BreadcrumbShow, editHPagesIDSuccess, fetchModelsList, getControlTypes, getFieldValidations, getPageAccess_DropDown_API, getPageList, getPageListSuccess, PostModelsSubmitSuccess, saveHPages, saveHPagesSuccess, updateHPages } from "../../../store/actions";
+import {
+  AlertState,
+  BreadcrumbShow,
+  editHPagesIDSuccess,
+  fetchModelsList,
+  getControlTypes,
+  getFieldValidations,
+  getPageAccess_DropDown_API,
+  getPageList,
+  getPageListSuccess,
+  PostModelsSubmitSuccess,
+  saveHPages,
+  saveHPagesSuccess,
+  updateHPages,
+  updateHPagesSuccess
+} from "../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
+import { PAGE_lIST } from "../../../routes/route_url";
 
 const PageMaster = (props) => {
   const dispatch = useDispatch();
@@ -48,8 +64,7 @@ const PageMaster = (props) => {
   const [relatedPage_DropdownSelect, setrelatedPage_DropdownSelect] = useState("");
   const [pageAccessDropDownView, setPageAccessDropDownView] = useState(false);
   const [modal_center, setmodal_center] = useState(false);
-  const [pageAccess_DropDownSelect, setPageAccess_DropDownSelect] =
-    useState("");
+  const [pageAccess_DropDownSelect, setPageAccess_DropDownSelect] = useState("");
 
   const [pageFieldTabTable, setPageFieldTabTable] = useState([{
     ControlID: '',
@@ -70,21 +85,24 @@ const PageMaster = (props) => {
   const {
     ControlTypes,
     FieldValidations,
-    PostAPIResponse,
+    postMsg,
+    updateMsg,
     userAccess,
     ModuleData,
     PageAccess,
     modulePostAPIResponse,
-    PageList } = useSelector((state) => ({
-      ControlTypes: state.H_Pages.ControlTypes,
-      FieldValidations: state.H_Pages.FieldValidations,
-      PostAPIResponse: state.H_Pages.saveMessage,
-      userAccess: state.Login.RoleAccessUpdateData,
-      ModuleData: state.Modules.modulesList,
-      PageAccess: state.H_Pages.PageAccess,
-      modulePostAPIResponse: state.Modules.modulesSubmitSuccesss,
-      PageList: state.H_Pages.PageList,
-    }));
+    PageList
+  } = useSelector((state) => ({
+    ControlTypes: state.H_Pages.ControlTypes,
+    FieldValidations: state.H_Pages.FieldValidations,
+    postMsg: state.H_Pages.saveMessage,
+    updateMsg: state.H_Pages.updateMessage,
+    userAccess: state.Login.RoleAccessUpdateData,
+    ModuleData: state.Modules.modulesList,
+    PageAccess: state.H_Pages.PageAccess,
+    modulePostAPIResponse: state.Modules.modulesSubmitSuccesss,
+    PageList: state.H_Pages.PageList,
+  }));
 
   const location = { ...history.location }
   const hasShowloction = location.hasOwnProperty("editValue")
@@ -201,7 +219,7 @@ const PageMaster = (props) => {
 
   // This UseEffect clear Form Data and when modules Save Successfully.
   useEffect(() => {
-    if (PostAPIResponse.Status === true && PostAPIResponse.StatusCode === 200) {
+    if (postMsg.Status === true && postMsg.StatusCode === 200) {
       dispatch(saveHPagesSuccess({ Status: false }));
       setModule_DropdownSelect("");
       setPageAccess_DropDownSelect("");
@@ -212,7 +230,7 @@ const PageMaster = (props) => {
           AlertState({
             Type: 1,
             Status: true,
-            Message: PostAPIResponse.Message,
+            Message: postMsg.Message,
           })
         );
       } else {
@@ -220,25 +238,25 @@ const PageMaster = (props) => {
           AlertState({
             Type: 1,
             Status: true,
-            Message: PostAPIResponse.Message,
-            RedirectPath: `/PageList`,
+            Message: postMsg.Message,
+            RedirectPath: PAGE_lIST,
             AfterResponseAction: false,
           })
         );
       }
-    } else if (PostAPIResponse.Status === true) {
+    } else if (postMsg.Status === true) {
       dispatch(saveHPagesSuccess({ Status: false }));
       dispatch(
         AlertState({
           Type: 4,
           Status: true,
-          Message: JSON.stringify(PostAPIResponse.Message),
+          Message: JSON.stringify(postMsg.Message),
           RedirectPath: false,
           AfterResponseAction: false,
         })
       );
     }
-  }, [PostAPIResponse]);
+  }, [postMsg]);
 
   useEffect(() => {
     if ((modulePostAPIResponse.Status === true) && (modulePostAPIResponse.StatusCode === 200)) {
@@ -261,6 +279,23 @@ const PageMaster = (props) => {
     }
 
   }, [modulePostAPIResponse])
+
+  useEffect(() => {
+    if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
+      history.push({
+        pathname: PAGE_lIST,
+      })
+    } else if (updateMsg.Status === true && !modalCss) {
+      dispatch(updateHPagesSuccess({ Status: false }));
+      dispatch(
+        AlertState({
+          Type: 3,
+          Status: true,
+          Message: JSON.stringify(updateMsg.Message),
+        })
+      );
+    }
+  }, [updateMsg, modalCss]);
 
   const PageAccessValues = PageAccess.map((Data) => ({
     value: Data.id,
@@ -568,7 +603,7 @@ const PageMaster = (props) => {
   };
 
   const FormSubmitButton_Handler = (event, values) => {
-    debugger
+
     const PageFieldMaster = pageFieldTabTable.map((index) => ({
       ControlID: index.ControlID,
       FieldLabel: index.FieldLabel,
@@ -645,20 +680,7 @@ const PageMaster = (props) => {
     if (e.value === 2) {
       relatedPage_DropdownSelectHandller()
       setRelatedPageListShowUI(true)
-      // let showCheckBox = document.getElementById("inp-showOnMenu")
-      // const findShowOnMenu = PageAccessValues.find((element) => {
-      //   return element.label === "IsShowOnMenu";
-      // });
-      // if (!(findShowOnMenu === undefined)) {
-      //   setTablePageAccessDataState([
-      //     {
-      //       AccessID: findShowOnMenu.value,
-      //       AccessName: findShowOnMenu.label,
-      //     },
-      //   ]);
-      // }
 
-      // setisShowPageChecked(true)
       dispatch(getPageList(e.value));
       // showCheckBox.disabled = true
       setPageAccessDropDownView(true);
@@ -843,7 +865,7 @@ const PageMaster = (props) => {
   // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
   var IsEditMode_Css = ''
   if ((modalCss) || (pageMode === "dropdownAdd")) { IsEditMode_Css = "-5.5%" };
-  
+
   if (!(userPageAccessState === '')) {
     return (
       <React.Fragment>
@@ -899,38 +921,7 @@ const PageMaster = (props) => {
                           <span className="d-none d-sm-block">Page Field</span>
                         </NavLink>
                       </NavItem>
-                      {/* <NavItem>
-                        <NavLink
-                          style={{ cursor: "pointer" }}
-                          className={classnames({
-                            active: customActiveTab === "3",
-                          })}
-                          onClick={() => {
-                            toggleCustom("3");
-                          }}
-                        >
-                          <span className="d-block d-sm-none">
-                            <i className="far fa-envelope"></i>
-                          </span>
-                          <span className="d-none d-sm-block">Messages</span>
-                        </NavLink>
-                      </NavItem> */}
-                      {/* <NavItem>
-                        <NavLink
-                          style={{ cursor: "pointer" }}
-                          className={classnames({
-                            active: customActiveTab === "4",
-                          })}
-                          onClick={() => {
-                            toggleCustom("4");
-                          }}
-                        >
-                          <span className="d-block d-sm-none">
-                            <i className="fas fa-cog"></i>
-                          </span>
-                          <span className="d-none d-sm-block">Settings</span>
-                        </NavLink>
-                      </NavItem> */}
+
                       <NavItem>
                         <NavLink
                           style={{ cursor: "pointer" }}
@@ -1228,7 +1219,6 @@ const PageMaster = (props) => {
                                   </Row>
                                 </FormGroup>
 
-                                {/* <Col md="1"> </Col> */}
                                 <FormGroup className="mb-1 col col-sm-4">
                                   <Row className="justify-content-md-left">
 
@@ -1259,7 +1249,6 @@ const PageMaster = (props) => {
                                   </Row>
                                 </FormGroup>
 
-                                {/* <Col md="1"> </Col> */}
                                 <FormGroup className="mb-1 col col-sm-4">
                                   <Row className="justify-content-md-left">
 
@@ -1267,7 +1256,7 @@ const PageMaster = (props) => {
                                       htmlFor="horizontal-firstname-input"
                                       className="col-sm-4 col-form-label mt-4"
                                     >
-                                      IsEdit PopUp/Comp.{" "}
+                                      EditMode showIn PopUp
                                     </Label>
                                     <Col md={5} style={{ marginTop: "15px" }}>
                                       <div
@@ -1579,29 +1568,7 @@ const PageMaster = (props) => {
                         {/* </Card> */}
 
                       </TabPane>
-                      <TabPane tabId="3">
-                        <Row>
 
-                        </Row>
-                      </TabPane>
-                      <TabPane tabId="4">
-                        <Row>
-                          <Col sm="12">
-                            <CardText className="mb-0">
-                              Trust fund seitan letterpress, keytar raw denim
-                              keffiyeh etsy art party before they sold out master
-                              cleanse gluten-free squid scenester freegan cosby
-                              sweater. Fanny pack portland seitan DIY, art party
-                              locavore wolf cliche high life echo park Austin.
-                              Cred vinyl keffiyeh DIY salvia PBR, banh mi before
-                              they sold out farm-to-table VHS viral locavore cosby
-                              sweater. Lomo wolf viral, mustache readymade
-                              thundercats keffiyeh craft beer marfa ethical. Wolf
-                              salvia freegan, sartorial keffiyeh echo park vegan.
-                            </CardText>
-                          </Col>
-                        </Row>
-                      </TabPane>
                     </TabContent>
                   </CardBody>
                 </Card>
