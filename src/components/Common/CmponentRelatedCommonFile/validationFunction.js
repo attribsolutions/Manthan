@@ -1,5 +1,5 @@
 export const formValid = ({ isError, required, hasValid, fieldLabel, values }, setState) => {
-debugger
+    debugger
     let isValid = true;
 
     Object.keys(required).forEach((lab) => {
@@ -140,9 +140,9 @@ export function comAddPageFieldFunc({ state, setState, fieldArr }) {
 
 
 
-export const onChangeSelect = ({ e, v, state, setState }) => {
-    debugger
-    const event = { change: { name: v.name, value: e }, type: "select" }
+export const onChangeSelect = ({ hasSelect, evn, state, setState }) => {
+
+    const event = { change: { name: evn.name, value: hasSelect }, type: "select" }
     formValChange({ event, state, setState })
 }
 
