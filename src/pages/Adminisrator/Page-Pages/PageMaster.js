@@ -1256,7 +1256,7 @@ const PageMaster = (props) => {
                                       htmlFor="horizontal-firstname-input"
                                       className="col-sm-4 col-form-label mt-4"
                                     >
-                                      EditMode showIn PopUp
+                                      EditMode show In Component
                                     </Label>
                                     <Col md={5} style={{ marginTop: "15px" }}>
                                       <div
