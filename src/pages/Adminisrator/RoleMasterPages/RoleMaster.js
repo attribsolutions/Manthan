@@ -186,7 +186,7 @@ const RoleMaster = (props) => {
           label: data.EmployeeTypeName
         }))
 
-        const { id,Name, Description, Dashboard, isActive, isSCMRole, IsPartyConnection, RoleEmployeeTypes } = hasEditVal
+        const { id, Name, Description, Dashboard, isActive, isSCMRole, IsPartyConnection, RoleEmployeeTypes } = hasEditVal
         const { values, fieldLabel, hasValid, required, isError } = { ...state }
 
         hasValid.Name.valid = true;
@@ -376,7 +376,7 @@ const RoleMaster = (props) => {
                                   isMulti={true}
                                   className="react-dropdown"
                                   options={EmployeeType_DropdownOptions}
-                                  onChange={(v, e) => onChangeSelect({ e, v, state, setState })}
+                                  onChange={(hasSelect, evn) => onChangeSelect({ hasSelect, evn, state, setState, })}
                                   classNamePrefix="dropdown"
 
                                 />
