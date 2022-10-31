@@ -21,7 +21,8 @@ import {
     PostMethod_ForDriverMasterSuccess,
     getMethod_ForDriverListSuccess,
     editDriverTypeSuccess,
-    updateDriverTypeID
+    updateDriverTypeID,
+    updateDriverTypeIDSuccess
 } from "../../../store/Administrator/DriverRedux/action";
 import { useHistory } from "react-router-dom";
 import Flatpickr from "react-flatpickr"
@@ -31,6 +32,7 @@ import {
     onChangeText,
     onChangeDate
 } from "../../../components/Common/CmponentRelatedCommonFile/validationFunction";
+import { DRIVER_lIST } from "../../../routes/route_url";
 
 // import { pageField } from './validfiles'
 
@@ -101,12 +103,14 @@ const DriverMaster = (props) => {
 
     //Access redux store Data /  'save_ModuleSuccess' action data
     const {
-        PostAPIResponse,
+        postMsg,
+        updateMsg,
         pageField,
         userAccess,
     } = useSelector((state) => ({
-        PostAPIResponse: state.DriverReducer.PostDataMessage,
+        postMsg: state.DriverReducer.PostDataMessage,
         userAccess: state.Login.RoleAccessUpdateData,
+        updateMsg: state.DriverReducer.updateMessage,
         pageField: state.CommonPageFieldReducer.pageField
     }));
 
@@ -124,7 +128,7 @@ const DriverMaster = (props) => {
     // new change
     // userAccess useEffect
     useEffect(() => {
-        debugger
+
         let userAcc = null;
         let locationPath = location.pathname;
 
@@ -141,7 +145,7 @@ const DriverMaster = (props) => {
         };
     }, [userAccess])
 
-// new change
+    // new change
     // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
     useEffect(() => {
 
@@ -163,6 +167,12 @@ const DriverMaster = (props) => {
             if (hasEditVal) {
                 const { id, Name, DOB, UID, Address } = hasEditVal// new change
                 const { values, fieldLabel, hasValid, required, isError } = { ...state }
+
+                hasValid.Name.valid = true;
+                hasValid.DOB.valid = true;
+                hasValid.UID.valid = true;
+                hasValid.Address.valid = true;
+
                 values.Name = Name;
                 values.DOB = DOB;
                 values.UID = UID;
@@ -179,26 +189,26 @@ const DriverMaster = (props) => {
 
 
     useEffect(() => {
-        if ((PostAPIResponse.Status === true) && (PostAPIResponse.StatusCode === 200)) {
+        if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(PostMethod_ForDriverMasterSuccess({ Status: false }))
             formRef.current.reset();
             if (pageMode === "dropdownAdd") {
                 dispatch(AlertState({
                     Type: 1,
                     Status: true,
-                    Message: PostAPIResponse.Message,
+                    Message: postMsg.Message,
                 }))
             }
             else {
                 dispatch(AlertState({
                     Type: 1,
                     Status: true,
-                    Message: PostAPIResponse.Message,
-                    RedirectPath: '/DriverList',
+                    Message: postMsg.Message,
+                    RedirectPath: DRIVER_lIST,
                 }))
             }
         }
-        else if (PostAPIResponse.Status === true) {
+        else if (postMsg.Status === true) {
             dispatch(getMethod_ForDriverListSuccess({ Status: false }))
             dispatch(AlertState({
                 Type: 4,
@@ -208,12 +218,29 @@ const DriverMaster = (props) => {
                 AfterResponseAction: false
             }));
         }
-    }, [PostAPIResponse])
+    }, [postMsg])
 
-// new change
+    useEffect(() => {
+        if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
+            history.push({
+                pathname: DRIVER_lIST,
+            })
+        } else if (updateMsg.Status === true && !modalCss) {
+            dispatch(updateDriverTypeIDSuccess({ Status: false }));
+            dispatch(
+                AlertState({
+                    Type: 3,
+                    Status: true,
+                    Message: JSON.stringify(updateMsg.Message),
+                })
+            );
+        }
+    }, [updateMsg, modalCss]);
+
+    // new change
     // ////////////////////////////////////////////////////////////
     useEffect(() => {
-        debugger
+
         if (pageField) {
             const fieldArr = pageField.PageFieldMaster
             comAddPageFieldFunc({ state, setState, fieldArr })// new change
@@ -228,7 +255,7 @@ const DriverMaster = (props) => {
 
 
     const formSubmitHandler = (event) => {
-        
+
         event.preventDefault();
         if (formValid(state, setState)) {
 

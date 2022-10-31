@@ -1,11 +1,10 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Button,
   Card,
   CardBody,
   CardHeader,
   CardText,
-  CardTitle,
   Col,
   Container,
   FormGroup,
@@ -23,14 +22,28 @@ import MetaTags from "react-meta-tags"
 //Import Breadcrumb
 import Breadcrumb from "../../../components/Common/Breadcrumb";
 import Select from "react-select";
-
 import classnames from "classnames";
 import { AvField, AvForm, AvInput } from "availity-reactstrap-validation";
-import ReactSelect from "react-select";
 import { Tbody, Thead } from "react-super-responsive-table";
-import { AlertState, BreadcrumbShow, editHPagesIDSuccess, fetchModelsList, getControlTypes, getFieldValidations, getPageAccess_DropDown_API, getPageList, getPageListSuccess, PostModelsSubmitSuccess, saveHPages, saveHPagesSuccess, updateHPages } from "../../../store/actions";
+import {
+  AlertState,
+  BreadcrumbShow,
+  editHPagesIDSuccess,
+  fetchModelsList,
+  getControlTypes,
+  getFieldValidations,
+  getPageAccess_DropDown_API,
+  getPageList,
+  getPageListSuccess,
+  PostModelsSubmitSuccess,
+  saveHPages,
+  saveHPagesSuccess,
+  updateHPages,
+  updateHPagesSuccess
+} from "../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
+import { PAGE_lIST } from "../../../routes/route_url";
 
 const PageMaster = (props) => {
   const dispatch = useDispatch();
@@ -51,9 +64,7 @@ const PageMaster = (props) => {
   const [relatedPage_DropdownSelect, setrelatedPage_DropdownSelect] = useState("");
   const [pageAccessDropDownView, setPageAccessDropDownView] = useState(false);
   const [modal_center, setmodal_center] = useState(false);
-  const [pageAccess_DropDownSelect, setPageAccess_DropDownSelect] =
-    useState("");
-
+  const [pageAccess_DropDownSelect, setPageAccess_DropDownSelect] = useState("");
 
   const [pageFieldTabTable, setPageFieldTabTable] = useState([{
     ControlID: '',
@@ -63,7 +74,7 @@ const PageMaster = (props) => {
     InValidMsg: '',
     ListPageSeq: '',
     IsCompulsory: false,
-    DefaultSort: false,
+    DefaultSort: 0,
     FieldSequence: false,
     ShowInListPage: false,
     ShowInDownload: false,
@@ -74,21 +85,24 @@ const PageMaster = (props) => {
   const {
     ControlTypes,
     FieldValidations,
-    PostAPIResponse,
+    postMsg,
+    updateMsg,
     userAccess,
     ModuleData,
     PageAccess,
     modulePostAPIResponse,
-    PageList } = useSelector((state) => ({
-      ControlTypes: state.H_Pages.ControlTypes,
-      FieldValidations: state.H_Pages.FieldValidations,
-      PostAPIResponse: state.H_Pages.saveMessage,
-      userAccess: state.Login.RoleAccessUpdateData,
-      ModuleData: state.Modules.modulesList,
-      PageAccess: state.H_Pages.PageAccess,
-      modulePostAPIResponse: state.Modules.modulesSubmitSuccesss,
-      PageList: state.H_Pages.PageList,
-    }));
+    PageList
+  } = useSelector((state) => ({
+    ControlTypes: state.H_Pages.ControlTypes,
+    FieldValidations: state.H_Pages.FieldValidations,
+    postMsg: state.H_Pages.saveMessage,
+    updateMsg: state.H_Pages.updateMessage,
+    userAccess: state.Login.RoleAccessUpdateData,
+    ModuleData: state.Modules.modulesList,
+    PageAccess: state.H_Pages.PageAccess,
+    modulePostAPIResponse: state.Modules.modulesSubmitSuccesss,
+    PageList: state.H_Pages.PageList,
+  }));
 
   const location = { ...history.location }
   const hasShowloction = location.hasOwnProperty("editValue")
@@ -113,7 +127,6 @@ const PageMaster = (props) => {
     };
   }, [userAccess])
 
-
   useEffect(() => {
     dispatch(fetchModelsList());
     dispatch(getControlTypes());
@@ -123,7 +136,7 @@ const PageMaster = (props) => {
 
   // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
   useEffect(() => {
-
+    debugger
     // if (!(userPageAccessState === '')) { document.getElementById("txtName").focus(); }
     if ((hasShowloction || hasShowModal)) {
 
@@ -204,10 +217,9 @@ const PageMaster = (props) => {
     }
   }, []);
 
-
   // This UseEffect clear Form Data and when modules Save Successfully.
   useEffect(() => {
-    if (PostAPIResponse.Status === true && PostAPIResponse.StatusCode === 200) {
+    if (postMsg.Status === true && postMsg.StatusCode === 200) {
       dispatch(saveHPagesSuccess({ Status: false }));
       setModule_DropdownSelect("");
       setPageAccess_DropDownSelect("");
@@ -218,7 +230,7 @@ const PageMaster = (props) => {
           AlertState({
             Type: 1,
             Status: true,
-            Message: PostAPIResponse.Message,
+            Message: postMsg.Message,
           })
         );
       } else {
@@ -226,25 +238,25 @@ const PageMaster = (props) => {
           AlertState({
             Type: 1,
             Status: true,
-            Message: PostAPIResponse.Message,
-            RedirectPath: `/PageList`,
+            Message: postMsg.Message,
+            RedirectPath: PAGE_lIST,
             AfterResponseAction: false,
           })
         );
       }
-    } else if (PostAPIResponse.Status === true) {
+    } else if (postMsg.Status === true) {
       dispatch(saveHPagesSuccess({ Status: false }));
       dispatch(
         AlertState({
           Type: 4,
           Status: true,
-          Message: JSON.stringify(PostAPIResponse.Message),
+          Message: JSON.stringify(postMsg.Message),
           RedirectPath: false,
           AfterResponseAction: false,
         })
       );
     }
-  }, [PostAPIResponse]);
+  }, [postMsg]);
 
   useEffect(() => {
     if ((modulePostAPIResponse.Status === true) && (modulePostAPIResponse.StatusCode === 200)) {
@@ -267,6 +279,23 @@ const PageMaster = (props) => {
     }
 
   }, [modulePostAPIResponse])
+
+  useEffect(() => {
+    if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
+      history.push({
+        pathname: PAGE_lIST,
+      })
+    } else if (updateMsg.Status === true && !modalCss) {
+      dispatch(updateHPagesSuccess({ Status: false }));
+      dispatch(
+        AlertState({
+          Type: 3,
+          Status: true,
+          Message: JSON.stringify(updateMsg.Message),
+        })
+      );
+    }
+  }, [updateMsg, modalCss]);
 
   const PageAccessValues = PageAccess.map((Data) => ({
     value: Data.id,
@@ -307,7 +336,7 @@ const PageMaster = (props) => {
   }));
 
   function PageField_Tab_AddRow_Handler() {
-    debugger
+
     var newarr1 = [...pageFieldTabTable, {
       ControlID: '',
       FieldLabel: '',
@@ -315,7 +344,7 @@ const PageMaster = (props) => {
       FieldValidation: { label: "select", value: 0 },
       InValidMsg: '',
       IsCompulsory: '',
-      DefaultSort: '',
+      DefaultSort: 0,
       FieldSequence: '',
       ShowInListPage: '',
       ListPageSeq: '',
@@ -334,207 +363,229 @@ const PageMaster = (props) => {
     setPageFieldTabTable(removeElseArrray1)
   }
 
-  function PageField_onChange_Handler(event, type, key) {
+  function arrow_value(key) {
     debugger
+    pageFieldTabTable[key].DefaultSort = 2
 
+    var x = document.getElementById("up");
+    var y = document.getElementById("down");
+
+    y.style.display = "block";
+    x.style.display = "none";
+  }
+
+  function arrow_value1(key) {
+    pageFieldTabTable[key].DefaultSort = 1
+
+    var x = document.getElementById("up");
+    var y = document.getElementById("down");
+
+    x.style.display = "block";
+    y.style.display = "none";
+
+  }
+
+  function PageField_onChange_Handler(event, type = '', key) {
+    debugger
     var found = pageFieldTabTable.find((i, k) => {
       return (k === key)
     })
+
     let newSelectValue = ''
 
-    if (type === "ControlID") {
+    switch (type) {
+      case 'ControlID':
+        newSelectValue = {
+          ControlID: event,
+          FieldLabel: found.FieldLabel,
+          ControlType: found.ControlType,
+          FieldValidation: found.FieldValidation,
+          InValidMsg: found.InValidMsg,
+          IsCompulsory: found.IsCompulsory,
+          DefaultSort: found.DefaultSort,
+          ShowInListPage: found.ShowInListPage,
+          ListPageSeq: found.ListPageSeq,
+          ShowInDownload: found.ShowInDownload,
+          DownloadDefaultSelect: found.DownloadDefaultSelect,
 
-      newSelectValue = {
-        ControlID: event,
-        FieldLabel: found.FieldLabel,
-        ControlType: found.ControlType,
-        FieldValidation: found.FieldValidation,
-        InValidMsg: found.InValidMsg,
-        IsCompulsory: found.IsCompulsory,
-        DefaultSort: found.DefaultSort,
-        ShowInListPage: found.ShowInListPage,
-        ListPageSeq: found.ListPageSeq,
-        ShowInDownload: found.ShowInDownload,
-        DownloadDefaultSelect: found.DownloadDefaultSelect,
+        }
+        break;
 
-      }
-    }
+      case 'FieldLabel':
+        newSelectValue = {
+          ControlID: found.ControlID,
+          FieldLabel: event,
+          ControlType: found.ControlType,
+          FieldValidation: found.FieldValidation,
+          InValidMsg: found.InValidMsg,
+          IsCompulsory: found.IsCompulsory,
+          DefaultSort: found.DefaultSort,
+          ShowInListPage: found.ShowInListPage,
+          ListPageSeq: found.ListPageSeq,
+          ShowInDownload: found.ShowInDownload,
+          DownloadDefaultSelect: found.DownloadDefaultSelect,
 
-    else if (type === "FieldLabel") {
+        }
+        break;
 
-      newSelectValue = {
-        ControlID: found.ControlID,
-        FieldLabel: event,
-        ControlType: found.ControlType,
-        FieldValidation: found.FieldValidation,
-        InValidMsg: found.InValidMsg,
-        IsCompulsory: found.IsCompulsory,
-        DefaultSort: found.DefaultSort,
-        ShowInListPage: found.ShowInListPage,
-        ListPageSeq: found.ListPageSeq,
-        ShowInDownload: found.ShowInDownload,
-        DownloadDefaultSelect: found.DownloadDefaultSelect,
+      case 'ControlType':
+        newSelectValue = {
+          ControlID: found.ControlID,
+          FieldLabel: found.FieldLabel,
+          ControlType: event,
+          FieldValidation: found.FieldValidation,
+          InValidMsg: found.InValidMsg,
+          IsCompulsory: found.IsCompulsory,
+          DefaultSort: found.DefaultSort,
+          ShowInListPage: found.ShowInListPage,
+          ListPageSeq: found.ListPageSeq,
+          ShowInDownload: found.ShowInDownload,
+          DownloadDefaultSelect: found.DownloadDefaultSelect,
 
-      }
-    }
-    else if (type === 'ControlType') {
+        }
+        break;
 
-      newSelectValue = {
-        ControlID: found.ControlID,
-        FieldLabel: found.FieldLabel,
-        ControlType: event,
-        FieldValidation: found.FieldValidation,
-        InValidMsg: found.InValidMsg,
-        IsCompulsory: found.IsCompulsory,
-        DefaultSort: found.DefaultSort,
-        ShowInListPage: found.ShowInListPage,
-        ListPageSeq: found.ListPageSeq,
-        ShowInDownload: found.ShowInDownload,
-        DownloadDefaultSelect: found.DownloadDefaultSelect,
+      case 'FieldValidation':
+        newSelectValue = {
+          ControlID: found.ControlID,
+          FieldLabel: found.FieldLabel,
+          ControlType: found.ControlType,
+          FieldValidation: event,
+          InValidMsg: found.InValidMsg,
+          IsCompulsory: found.IsCompulsory,
+          DefaultSort: found.DefaultSort,
+          ShowInListPage: found.ShowInListPage,
+          ListPageSeq: found.ListPageSeq,
+          ShowInDownload: found.ShowInDownload,
+          DownloadDefaultSelect: found.DownloadDefaultSelect,
+        }
+        break;
 
-      }
-    }
+      case 'InValidMsg':
+        newSelectValue = {
+          ControlID: found.ControlID,
+          FieldLabel: found.FieldLabel,
+          ControlType: found.ControlType,
+          FieldValidation: found.FieldValidation,
+          InValidMsg: event,
+          IsCompulsory: found.IsCompulsory,
+          DefaultSort: found.DefaultSort,
+          ShowInListPage: found.ShowInListPage,
+          ListPageSeq: found.ListPageSeq,
+          ShowInDownload: found.ShowInDownload,
+          DownloadDefaultSelect: found.DownloadDefaultSelect,
 
-    else if (type === 'FieldValidation') {
+        }
+        break;
 
-      newSelectValue = {
-        ControlID: found.ControlID,
-        FieldLabel: found.FieldLabel,
-        ControlType: found.ControlType,
-        FieldValidation: event,
-        InValidMsg: found.InValidMsg,
-        IsCompulsory: found.IsCompulsory,
-        DefaultSort: found.DefaultSort,
-        ShowInListPage: found.ShowInListPage,
-        ListPageSeq: found.ListPageSeq,
-        ShowInDownload: found.ShowInDownload,
-        DownloadDefaultSelect: found.DownloadDefaultSelect,
+      case 'IsCompulsory':
+        newSelectValue = {
+          ControlID: found.ControlID,
+          FieldLabel: found.FieldLabel,
+          ControlType: found.ControlType,
+          FieldValidation: found.FieldValidation,
+          InValidMsg: found.InValidMsg,
+          IsCompulsory: event,
+          DefaultSort: found.DefaultSort,
+          ShowInListPage: found.ShowInListPage,
+          ListPageSeq: found.ListPageSeq,
+          ShowInDownload: found.ShowInDownload,
+          DownloadDefaultSelect: found.DownloadDefaultSelect,
 
-      }
-    }
-    else if (type === 'InValidMsg') {
+        }
+        break;
 
-      newSelectValue = {
-        ControlID: found.ControlID,
-        FieldLabel: found.FieldLabel,
-        ControlType: found.ControlType,
-        FieldValidation: found.FieldValidation,
-        InValidMsg: event,
-        IsCompulsory: found.IsCompulsory,
-        DefaultSort: found.DefaultSort,
-        ShowInListPage: found.ShowInListPage,
-        ListPageSeq: found.ListPageSeq,
-        ShowInDownload: found.ShowInDownload,
-        DownloadDefaultSelect: found.DownloadDefaultSelect,
+      case 'DefaultSort':
+        newSelectValue = {
+          ControlID: found.ControlID,
+          FieldLabel: found.FieldLabel,
+          ControlType: found.ControlType,
+          FieldValidation: found.FieldValidation,
+          InValidMsg: found.InValidMsg,
+          IsCompulsory: found.IsCompulsory,
+          DefaultSort: event ? 1 : 0,
+          ShowInListPage: found.ShowInListPage,
+          ListPageSeq: found.ListPageSeq,
+          ShowInDownload: found.ShowInDownload,
+          DownloadDefaultSelect: found.DownloadDefaultSelect,
 
-      }
-    }
-    else if (type === 'IsCompulsory') {
+        }
+        break;
 
-      newSelectValue = {
-        ControlID: found.ControlID,
-        FieldLabel: found.FieldLabel,
-        ControlType: found.ControlType,
-        FieldValidation: found.FieldValidation,
-        InValidMsg: found.InValidMsg,
-        IsCompulsory: event,
-        DefaultSort: found.DefaultSort,
-        ShowInListPage: found.ShowInListPage,
-        ListPageSeq: found.ListPageSeq,
-        ShowInDownload: found.ShowInDownload,
-        DownloadDefaultSelect: found.DownloadDefaultSelect,
+      case 'ShowInListPage':
+        newSelectValue = {
+          ControlID: found.ControlID,
+          FieldLabel: found.FieldLabel,
+          ControlType: found.ControlType,
+          FieldValidation: found.FieldValidation,
+          InValidMsg: found.InValidMsg,
+          IsCompulsory: found.IsCompulsory,
+          DefaultSort: found.DefaultSort,
+          ShowInListPage: event,
+          ListPageSeq: found.ListPageSeq,
+          ShowInDownload: found.ShowInDownload,
+          DownloadDefaultSelect: found.DownloadDefaultSelect,
 
-      }
-    }
+        }
+        break;
 
-    else if (type === 'DefaultSort') {
+      case 'ListPageSeq':
+        newSelectValue = {
+          ControlID: found.ControlID,
+          FieldLabel: found.FieldLabel,
+          ControlType: found.ControlType,
+          FieldValidation: found.FieldValidation,
+          InValidMsg: found.InValidMsg,
+          IsCompulsory: found.IsCompulsory,
+          DefaultSort: found.DefaultSort,
+          ShowInListPage: found.ShowInListPage,
+          ListPageSeq: event,
+          ShowInDownload: found.ShowInDownload,
+          DownloadDefaultSelect: found.DownloadDefaultSelect,
 
-      newSelectValue = {
-        ControlID: found.ControlID,
-        FieldLabel: found.FieldLabel,
-        ControlType: found.ControlType,
-        FieldValidation: found.FieldValidation,
-        InValidMsg: found.InValidMsg,
-        IsCompulsory: found.IsCompulsory,
-        DefaultSort: event,
-        ShowInListPage: found.ShowInListPage,
-        ListPageSeq: found.ListPageSeq,
-        ShowInDownload: found.ShowInDownload,
-        DownloadDefaultSelect: found.DownloadDefaultSelect,
+        }
+        break;
 
-      }
-    }
+      case 'ShowInDownload':
+        newSelectValue = {
+          ControlID: found.ControlID,
+          FieldLabel: found.FieldLabel,
+          ControlType: found.ControlType,
+          FieldValidation: found.FieldValidation,
+          InValidMsg: found.InValidMsg,
+          IsCompulsory: found.IsCompulsory,
+          DefaultSort: found.DefaultSort,
+          ShowInListPage: found.ShowInListPage,
+          ListPageSeq: found.ListPageSeq,
+          ShowInDownload: event,
+          DownloadDefaultSelect: found.DownloadDefaultSelect,
 
-    else if (type === 'ShowInListPage') {
+        }
+        break;
 
-      newSelectValue = {
-        ControlID: found.ControlID,
-        FieldLabel: found.FieldLabel,
-        ControlType: found.ControlType,
-        FieldValidation: found.FieldValidation,
-        InValidMsg: found.InValidMsg,
-        IsCompulsory: found.IsCompulsory,
-        DefaultSort: found.DefaultSort,
-        ShowInListPage: event,
-        ListPageSeq: found.ListPageSeq,
-        ShowInDownload: found.ShowInDownload,
-        DownloadDefaultSelect: found.DownloadDefaultSelect,
+      case 'DownloadDefaultSelect':
+        newSelectValue = {
+          ControlID: found.ControlID,
+          FieldLabel: found.FieldLabel,
+          ControlType: found.ControlType,
+          FieldValidation: found.FieldValidation,
+          InValidMsg: found.InValidMsg,
+          IsCompulsory: found.IsCompulsory,
+          DefaultSort: found.DefaultSort,
+          ShowInListPage: found.ShowInListPage,
+          ListPageSeq: found.ListPageSeq,
+          ShowInDownload: found.ShowInDownload,
+          DownloadDefaultSelect: event,
 
-      }
-    }
-    else if (type === 'ListPageSeq') {
-
-      newSelectValue = {
-        ControlID: found.ControlID,
-        FieldLabel: found.FieldLabel,
-        ControlType: found.ControlType,
-        FieldValidation: found.FieldValidation,
-        InValidMsg: found.InValidMsg,
-        IsCompulsory: found.IsCompulsory,
-        DefaultSort: found.DefaultSort,
-        ShowInListPage: found.ShowInListPage,
-        ListPageSeq: event,
-        ShowInDownload: found.ShowInDownload,
-        DownloadDefaultSelect: found.DownloadDefaultSelect,
-
-      }
-    }
-    else if (type === 'ShowInDownload') {
-
-      newSelectValue = {
-        ControlID: found.ControlID,
-        FieldLabel: found.FieldLabel,
-        ControlType: found.ControlType,
-        FieldValidation: found.FieldValidation,
-        InValidMsg: found.InValidMsg,
-        IsCompulsory: found.IsCompulsory,
-        DefaultSort: found.DefaultSort,
-        ShowInListPage: found.ShowInListPage,
-        ListPageSeq: found.ListPageSeq,
-        ShowInDownload: event,
-        DownloadDefaultSelect: found.DownloadDefaultSelect,
-
-      }
-    }
-    else if (type === 'DownloadDefaultSelect') {
-
-      newSelectValue = {
-        ControlID: found.ControlID,
-        FieldLabel: found.FieldLabel,
-        ControlType: found.ControlType,
-        FieldValidation: found.FieldValidation,
-        InValidMsg: found.InValidMsg,
-        IsCompulsory: found.IsCompulsory,
-        DefaultSort: found.DefaultSort,
-        ShowInListPage: found.ShowInListPage,
-        ListPageSeq: found.ListPageSeq,
-        ShowInDownload: found.ShowInDownload,
-        DownloadDefaultSelect: event,
-
-      }
+        }
+        break;
     }
 
     let newTabArr = pageFieldTabTable.map((index, k) => {
+
+      if (type === "DefaultSort" && !(k === key)) {
+        index["DefaultSort"] = 0
+      }
       return (k === key) ? newSelectValue : index
     })
     setPageFieldTabTable(newTabArr)
@@ -552,7 +603,7 @@ const PageMaster = (props) => {
   };
 
   const FormSubmitButton_Handler = (event, values) => {
-    debugger
+
     const PageFieldMaster = pageFieldTabTable.map((index) => ({
       ControlID: index.ControlID,
       FieldLabel: index.FieldLabel,
@@ -629,20 +680,7 @@ const PageMaster = (props) => {
     if (e.value === 2) {
       relatedPage_DropdownSelectHandller()
       setRelatedPageListShowUI(true)
-      // let showCheckBox = document.getElementById("inp-showOnMenu")
-      // const findShowOnMenu = PageAccessValues.find((element) => {
-      //   return element.label === "IsShowOnMenu";
-      // });
-      // if (!(findShowOnMenu === undefined)) {
-      //   setTablePageAccessDataState([
-      //     {
-      //       AccessID: findShowOnMenu.value,
-      //       AccessName: findShowOnMenu.label,
-      //     },
-      //   ]);
-      // }
 
-      // setisShowPageChecked(true)
       dispatch(getPageList(e.value));
       // showCheckBox.disabled = true
       setPageAccessDropDownView(true);
@@ -822,9 +860,11 @@ const PageMaster = (props) => {
       );
     });
   }
+
+
   // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
-  var IsEditMode_Css = "";
-  if ((pageMode === "edit") || (pageMode === "copy") || (pageMode === "dropdownAdd")) { IsEditMode_Css = "-5.5%" };
+  var IsEditMode_Css = ''
+  if ((modalCss) || (pageMode === "dropdownAdd")) { IsEditMode_Css = "-5.5%" };
 
   if (!(userPageAccessState === '')) {
     return (
@@ -835,7 +875,11 @@ const PageMaster = (props) => {
           </MetaTags>
           <Container fluid>
             {/* Render Breadcrumbs */}
-            <AvForm onValidSubmit={(e, v) => { FormSubmitButton_Handler(e, v); }}>
+            <AvForm
+              id="mainForm"
+              name="mainForm"
+              onValidSubmit={(e, v) => { FormSubmitButton_Handler(e, v); }}>
+
               <Breadcrumb breadcrumbItem={userPageAccessState.PageHeading} />
               <Col lg={12}>
                 <Card className="text-black" >
@@ -877,38 +921,7 @@ const PageMaster = (props) => {
                           <span className="d-none d-sm-block">Page Field</span>
                         </NavLink>
                       </NavItem>
-                      {/* <NavItem>
-                        <NavLink
-                          style={{ cursor: "pointer" }}
-                          className={classnames({
-                            active: customActiveTab === "3",
-                          })}
-                          onClick={() => {
-                            toggleCustom("3");
-                          }}
-                        >
-                          <span className="d-block d-sm-none">
-                            <i className="far fa-envelope"></i>
-                          </span>
-                          <span className="d-none d-sm-block">Messages</span>
-                        </NavLink>
-                      </NavItem>
-                      <NavItem>
-                        <NavLink
-                          style={{ cursor: "pointer" }}
-                          className={classnames({
-                            active: customActiveTab === "4",
-                          })}
-                          onClick={() => {
-                            toggleCustom("4");
-                          }}
-                        >
-                          <span className="d-block d-sm-none">
-                            <i className="fas fa-cog"></i>
-                          </span>
-                          <span className="d-none d-sm-block">Settings</span>
-                        </NavLink>
-                      </NavItem> */}
+
                       <NavItem>
                         <NavLink
                           style={{ cursor: "pointer" }}
@@ -1206,7 +1219,6 @@ const PageMaster = (props) => {
                                   </Row>
                                 </FormGroup>
 
-                                {/* <Col md="1"> </Col> */}
                                 <FormGroup className="mb-1 col col-sm-4">
                                   <Row className="justify-content-md-left">
 
@@ -1237,7 +1249,6 @@ const PageMaster = (props) => {
                                   </Row>
                                 </FormGroup>
 
-                                {/* <Col md="1"> </Col> */}
                                 <FormGroup className="mb-1 col col-sm-4">
                                   <Row className="justify-content-md-left">
 
@@ -1245,7 +1256,7 @@ const PageMaster = (props) => {
                                       htmlFor="horizontal-firstname-input"
                                       className="col-sm-4 col-form-label mt-4"
                                     >
-                                      IsEdit PopUp/Comp.{" "}
+                                      EditMode showIn PopUp
                                     </Label>
                                     <Col md={5} style={{ marginTop: "15px" }}>
                                       <div
@@ -1333,24 +1344,27 @@ const PageMaster = (props) => {
                         {/* <CardBody style={{ backgroundColor: "whitesmoke" }}> */}
 
                         {/* {!(PageFieldShowUI) ? */}
-                        < Row className="mt-3">
-                          <Col md={12}>
+
+                        <div className="table-rep-plugin  mx-n4">
+                          <div
+                            className="custom_scroll_div"
+                            data-pattern="priority-columns "
+                          >
                             <Table className="table table-bordered table-responsive">
                               <Thead >
                                 <tr>
-                                  <th>Control ID</th>
-                                  <th>Field Label</th>
-                                  <th className="col col-sm-2">Control Type</th>
-                                  <th className="col col-sm-2" >Field Validation</th>
-                                  <th className="col col-sm-2" >InValid Msg</th>
-                                  <th>List Page Seq</th>
-                                  <th>Is Compulsory</th>
+                                  <th className="">Control ID</th>
+                                  <th className="">Field Label</th>
+                                  <th className="">Control Type</th>
+                                  <th className="" >Field Validation</th>
+                                  <th className="" >InValid Msg</th>
+                                  <th className="">List Page Seq</th>
+                                  <th >Is Compulsory</th>
                                   <th>Default Sort</th>
                                   <th>Show In List Page</th>
                                   <th>Show In Download</th>
                                   <th>Download Default Select</th>
-                                  <th>Action</th>
-
+                                  <th className="col col-sm-1">Action</th>
 
                                 </tr>
                               </Thead>
@@ -1358,62 +1372,68 @@ const PageMaster = (props) => {
                                 {pageFieldTabTable.map((TableValue, key) => (
                                   <tr >
                                     <td>
-                                      <Col >
+
+                                      <div style={{ width: "150px" }}>
                                         <Input
                                           type="text"
                                           id={`ControlID${key}`}
+                                          autoComplete="off"
                                           defaultValue={EditData.ControlID}
                                           value={pageFieldTabTable[key].ControlID}
                                           onChange={(e) => PageField_onChange_Handler(e.target.value, "ControlID", key)}>
                                         </Input>
-                                      </Col>
+                                      </div>
                                     </td>
                                     <td>
-                                      <Col >
+                                      <div style={{ width: "150px" }}>
                                         <Input
                                           type="text"
                                           id={`FieldLabel${key}`}
+                                          autoComplete="off"
                                           defaultValue={EditData.FieldLabel}
                                           value={pageFieldTabTable[key].FieldLabel}
                                           onChange={(e) => PageField_onChange_Handler(e.target.value, "FieldLabel", key)}>
                                         </Input>
-                                      </Col>
+                                      </div>
                                     </td>
                                     <td>
-
-                                      <Select
-                                        id={`ControlType-${key}`}
-
-                                        // placeholder="select unit"
-                                        value={pageFieldTabTable[key].ControlType}
-                                        options={ControlTypes_DropdownOptions}
-                                        onChange={(e) => { FieldValidation_Dropdown_Handler(e); PageField_onChange_Handler(e, "ControlType", key) }}
-                                      />
+                                      <div style={{ width: "150px" }}>
+                                        <Select
+                                          id={`ControlType-${key}`}
+                                          // placeholder="select unit"
+                                          value={pageFieldTabTable[key].ControlType}
+                                          options={ControlTypes_DropdownOptions}
+                                          onChange={(e) => { FieldValidation_Dropdown_Handler(e); PageField_onChange_Handler(e, "ControlType", key) }}
+                                        />
+                                      </div>
                                     </td>
-
                                     <td>
-                                      <Select
-                                        id={`FieldValidation-${key}`}
-                                        // placeholder="select unit"
-                                        value={pageFieldTabTable[key].FieldValidation}
-                                        options={FieldValidations_DropdownOptions}
-                                        onChange={(e) => { PageField_onChange_Handler(e, "FieldValidation", key); }}
-                                      />
+                                      <div style={{ width: "150px" }}>
+                                        <Select
+                                          id={`FieldValidation-${key}`}
+                                          // placeholder="select unit"
+                                          autoComplete="off"
+                                          value={pageFieldTabTable[key].FieldValidation}
+                                          options={FieldValidations_DropdownOptions}
+                                          onChange={(e) => { PageField_onChange_Handler(e, "FieldValidation", key); }}
+                                        />
+                                      </div>
+                                    </td>
+                                    <td>
+                                      <div style={{ width: "150px" }}>
+                                        <Input
+                                          type="text"
+                                          id={`InValidMsg${key}`}
+                                          autoComplete="off"
+                                          defaultValue={EditData.InValidMsg}
+                                          value={pageFieldTabTable[key].InValidMsg}
+                                          onChange={(e) => PageField_onChange_Handler(e.target.value, "InValidMsg", key)}>
+                                        </Input>
+                                      </div>
                                     </td>
                                     <td>
                                       <Input
-
-                                        type="text"
-                                        id={`InValidMsg${key}`}
-                                        defaultValue={EditData.InValidMsg}
-                                        value={pageFieldTabTable[key].InValidMsg}
-                                        onChange={(e) => PageField_onChange_Handler(e.target.value, "InValidMsg", key)}>
-
-                                      </Input>
-                                    </td>
-                                    <td>
-                                      <Input
-
+                                        autoComplete="off"
                                         type="text"
                                         id={`ListPageSeq${key}`}
                                         defaultValue={EditData.ListPageSeq}
@@ -1424,7 +1444,7 @@ const PageMaster = (props) => {
                                     </td>
                                     <td>
                                       <Input
-
+                                        autoComplete="off"
                                         type="checkbox"
                                         id={`IsCompulsory${key}`}
                                         checked={pageFieldTabTable[key].IsCompulsory}
@@ -1433,15 +1453,38 @@ const PageMaster = (props) => {
                                       </Input>
                                     </td>
 
-                                    <td>
-                                      <Input
+                                    <td >
+                                      <div className="d-flex">
+                                        <div>
+                                          <Input
 
-                                        type="checkbox"
-                                        id={`DefaultSort${key}`}
-                                        checked={pageFieldTabTable[key].DefaultSort}
-                                        onChange={(e) => PageField_onChange_Handler(e.target.checked, "DefaultSort", key)}>
+                                            type="radio"
+                                            name="btnradio"
+                                            value={`DefaultSort${key}`}
+                                            id={`DefaultSort${key}`}
+                                            checked={pageFieldTabTable[key].DefaultSort}
 
-                                      </Input>
+                                            onChange={(e) => PageField_onChange_Handler(e.target.checked, "DefaultSort", key)}>
+                                          </Input>
+                                        </div>
+
+                                        {pageFieldTabTable[key].DefaultSort > 0 ?
+                                          <div >
+                                            <i className=" bx bx-caret-up font-size-20 text-danger "
+
+                                              id="up"
+                                              style={{ display: "block" }}
+                                              onClick={(e) => arrow_value(key)}></i>
+
+                                            <i className=" bx bx-caret-down font-size-20 text-danger "
+                                              style={{ display: "none" }}
+
+                                              id="down"
+                                              onClick={(e) => arrow_value1(key)}></i>
+                                          </div>
+                                          : null}
+
+                                      </div>
                                     </td>
 
                                     <td>
@@ -1452,7 +1495,6 @@ const PageMaster = (props) => {
                                         onChange={(e) => PageField_onChange_Handler(e.target.checked, "ShowInListPage", key)}>
                                       </Input>
                                     </td>
-
                                     <td>
                                       <Input
                                         type="checkbox"
@@ -1461,7 +1503,6 @@ const PageMaster = (props) => {
                                         onChange={(e) => PageField_onChange_Handler(e.target.checked, "ShowInDownload", key)}>
                                       </Input>
                                     </td>
-
                                     <td>
                                       <Input
                                         type="checkbox"
@@ -1470,7 +1511,6 @@ const PageMaster = (props) => {
                                         onChange={(e) => PageField_onChange_Handler(e.target.checked, "DownloadDefaultSelect", key)}>
                                       </Input>
                                     </td>
-
                                     <td>
                                       {(pageFieldTabTable.length === key + 1) ?
                                         <Row className="">
@@ -1485,11 +1525,23 @@ const PageMaster = (props) => {
                                           </Col>
 
                                           <Col md={6} >
-                                            <Button className="btn btn-sm btn-light mt-3   align-items-sm-center text-center"
+                                            {/* <Button className="btn btn-sm btn-light align-items-sm-center text-center mt-3"
                                               type="button"
                                               onClick={() => { PageField_Tab_AddRow_Handler(key) }} >
                                               <i className="dripicons-plus"></i>
-                                            </Button>
+                                            </Button> */}
+
+                                            <div className="col border-end d-flex justify-content-center ">
+                                              <Button
+                                                className="btn btn-outline-light btn-sm  align-items-sm-center text-center mt-3"
+                                                type="button"
+                                                onClick={() => { PageField_Tab_AddRow_Handler(key) }}
+                                              >
+                                                <i className="dripicons-plus">
+
+                                                </i>
+                                              </Button>
+                                            </div>
                                           </Col>
                                         </Row>
                                         :
@@ -1499,59 +1551,24 @@ const PageMaster = (props) => {
                                         }} >
                                         </i>
                                       }
-                                    </td>
 
+                                    </td>
                                   </tr>
                                 ))}
 
                               </Tbody>
                             </Table>
-                          </Col>
-                        </Row>
+                          </div>
+                        </div>
+
+
                         {/* : <></>} */}
 
                         {/* </CardBody> */}
                         {/* </Card> */}
 
                       </TabPane>
-                      <TabPane tabId="3">
-                        <Row>
-                          <Col sm="12">
-                            <CardText className="mb-0">
-                              Etsy mixtape wayfarers, ethical wes anderson tofu
-                              before they sold out mcsweeney's organic lomo retro
-                              fanny pack lo-fi farm-to-table readymade. Messenger
-                              bag gentrify pitchfork tattooed craft beer, iphone
-                              skateboard locavore carles etsy salvia banksy hoodie
-                              helvetica. DIY synth PBR banksy irony. Leggings
-                              gentrify squid 8-bit cred pitchfork. Williamsburg
-                              banh mi whatever gluten-free, carles pitchfork
-                              biodiesel fixie etsy retro mlkshk vice blog.
-                              Scenester cred you probably haven't heard of them,
-                              vinyl craft beer blog stumptown. Pitchfork
-                              sustainable tofu synth chambray yr.
-                            </CardText>
-                          </Col>
-                        </Row>
-                      </TabPane>
-                      <TabPane tabId="4">
-                        <Row>
-                          <Col sm="12">
-                            <CardText className="mb-0">
-                              Trust fund seitan letterpress, keytar raw denim
-                              keffiyeh etsy art party before they sold out master
-                              cleanse gluten-free squid scenester freegan cosby
-                              sweater. Fanny pack portland seitan DIY, art party
-                              locavore wolf cliche high life echo park Austin.
-                              Cred vinyl keffiyeh DIY salvia PBR, banh mi before
-                              they sold out farm-to-table VHS viral locavore cosby
-                              sweater. Lomo wolf viral, mustache readymade
-                              thundercats keffiyeh craft beer marfa ethical. Wolf
-                              salvia freegan, sartorial keffiyeh echo park vegan.
-                            </CardText>
-                          </Col>
-                        </Row>
-                      </TabPane>
+
                     </TabContent>
                   </CardBody>
                 </Card>

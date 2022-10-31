@@ -1,6 +1,6 @@
 
 import React, { useEffect, useState } from "react";
-import Breadcrumbs from "../../../components/Common/Breadcrumb";
+import Breadcrumb from "../../../components/Common/Breadcrumb";
 import { Col, Modal, Row } from "reactstrap";
 import paginationFactory, {
   PaginationListStandalone,
@@ -8,29 +8,48 @@ import paginationFactory, {
 } from "react-bootstrap-table2-paginator";
 import ToolkitProvider, { Search } from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 import { MetaTags } from "react-meta-tags";
 import { useHistory, Redirect } from "react-router-dom";
-import {
-  deleteDriverTypeIDSuccess,
-  updateDriverTypeIDSuccess,
-  getMethodForDriverList,
-  editDriverTypeId,
-  delete_DriverType_ID,
-  PostMethod_ForDriverMasterSuccess,
-} from "../../../store/Administrator/DriverRedux/action";
 
-import { AlertState } from "../../../store/actions";
+import { AlertState, BreadcrumbFilterSize, BreadcrumbSearchProps } from "../../../store/actions";
 import { listPageCommonButtonFunction }
   from "../../../components/Common/CmponentRelatedCommonFile/listPageCommonButtons";
+import { mySearchProps } from "./SearchBox/MySearch";
+
+let sortType = "asc"
+let searchCount = 0
+let downList = []
+let listObj = {}
+
+let searchProps = {
+  onClear: function onClear() { },
+  onSearch: function onSearch() { },
+  searchText: ""
+}
+export const test = (toolkitProps, paginationProps, dispatch, ButtonMsgLable) => {
+
+  let iscall = 0
+  if (paginationProps.dataSize) {
+    iscall = paginationProps.dataSize
+  }
+
+  if (!(iscall === searchCount)) {
+    dispatch(BreadcrumbSearchProps(toolkitProps.searchProps))
+    dispatch(BreadcrumbFilterSize(`${ButtonMsgLable} count :${iscall}`))
+    searchCount = paginationProps.dataSize
+  }
+  searchProps = toolkitProps.searchProps
+}
 
 const CommonListPage = (props) => {
 
   const dispatch = useDispatch();
   const history = useHistory()
 
-  const [userPageAccessState, setUserPageAccessState] = useState('');
+  const [userAccState, setUserAccState] = useState('');
   const [modal_center, setmodal_center] = useState(false);
+  // const [sortType, setSortType] = useState("ase");
 
   const {
     tableList,
@@ -67,9 +86,30 @@ const CommonListPage = (props) => {
       return (`/${inx.ActualPagePath}` === locationPath)
     })
     if (!(userAcc === undefined)) {
-      setUserPageAccessState(userAcc)
+      setUserAccState(userAcc)
     }
   }, [userAccess])
+
+  useEffect(() => {
+
+
+    downList = []
+    listObj = {}
+
+    tableList.forEach((index1) => {
+      pageField.PageFieldMaster.forEach((index2) => {
+
+        if (index2.ShowInDownload) {
+          listObj[`$defSelect${index2.ControlID}`] = index2.ShownloadDefaultSelect
+          listObj[index2.ControlID] = index1[index2.ControlID]
+        }
+
+      })
+      downList.push(listObj)
+      listObj = {}
+    })
+
+  }, [tableList])
 
 
   // This UseEffect => UpadateModal Success/Unsucces  Show and Hide Control Alert_modal
@@ -171,13 +211,7 @@ const CommonListPage = (props) => {
   }
 
   let sortLabel = ""
-  let pageFiledColumn = []
   const columns = []
-
-  // const hasfield = false
-  // if (hasfield) {
-  //   pageFiledColumn = pageField.PageFieldMaster
-  // }
 
   pageField.PageFieldMaster.forEach((i, k) => {
     if (i.ShowInListPage) {
@@ -186,8 +220,13 @@ const CommonListPage = (props) => {
         dataField: i.ControlID,
         sort: true,
       })
-      if (i.DefaultSort) {
+
+      if (i.DefaultSort === 1) {
         sortLabel = i.ControlID
+        sortType = "asc"
+      } else if (i.DefaultSort === 2) {
+        sortLabel = i.ControlID;
+        sortType = "desc"
       }
     }
     if (pageField.PageFieldMaster.length - 1 === k) {
@@ -195,17 +234,18 @@ const CommonListPage = (props) => {
         dispatchHook: dispatch,
         ButtonMsgLable: ButtonMsgLable,
         deleteName: deleteName,
-        userPageAccessState: userPageAccessState,
+        userPageAccessState: userAccState,
         editActionFun: editId,
         deleteActionFun: deleteId
       })
       )
     }
   })
+
   const defaultSorted = [
     {
       dataField: sortLabel, // if dataField is not match to any column you defined, it will be ignored.
-      order: "asc", // desc or asc
+      order: sortType, // desc or asc
     },
   ];
 
@@ -215,35 +255,48 @@ const CommonListPage = (props) => {
     custom: true,
   };
 
-  if (!(userPageAccessState === '')) {
+  if (!(userAccState === '')) {
     return (
       <React.Fragment>
         <MetaTags>
-          <title>{userPageAccessState.PageHeading}| FoodERP-React FrontEnd</title>
+          <title>{userAccState.PageHeading}| FoodERP-React FrontEnd</title>
         </MetaTags>
         <div className="page-content">
+          <Breadcrumb
+            title={"Count :"}
+            breadcrumbItem={userAccState.PageHeading}
+            IsButtonVissible={(userAccState.RoleAccess_IsSave) ? true : false}
+            showCount={true}
+            SearchProps={searchProps}
+            IsSearchVissible={true}
+            RedirctPath={"/#"}
+            isExcelButtonVisible={true}
+            ExcelData={downList}
+          />
           <PaginationProvider pagination={paginationFactory(pageOptions)}>
             {({ paginationProps, paginationTableProps }) => (
               <ToolkitProvider
                 keyField="id"
-                defaultSorted={defaultSorted}
+                // defaultSorted={defaultSorted}
                 data={tableList}
                 columns={columns}
                 search
               >
-                {(toolkitProps) => (
+                {(toolkitProps, a) => (
                   <React.Fragment>
-                    <Breadcrumbs
+                    {/* <Breadcrumb
                       title={"Count :"}
                       breadcrumbItem={userPageAccessState.PageHeading}
                       IsButtonVissible={(userPageAccessState.RoleAccess_IsSave) ? true : false}
-                      SearchProps={toolkitProps.searchProps}
+                      // SearchProps={toolkitProps.searchProps}
                       breadcrumbCount={`Product Count: ${tableList.length}`}
                       IsSearchVissible={true}
                       RedirctPath={masterPath}
                       isExcelButtonVisible={true}
                       ExcelData={tableList}
-                    />
+                    /> */}
+                    {test(toolkitProps, paginationProps, dispatch, ButtonMsgLable)}
+
                     <Row>
                       <Col xl="12">
                         <div className="table-responsive">
@@ -251,13 +304,17 @@ const CommonListPage = (props) => {
                             keyField={"id"}
                             responsive
                             bordered={false}
-                            striped={false}
-                            classes={"table  table-bordered"}
+                            defaultSorted={defaultSorted}
+
+                            striped={true}
+                            classes={"table  table-bordered table-hover"}
                             {...toolkitProps.baseProps}
                             {...paginationTableProps}
                           />
                         </div>
                       </Col>
+
+                      {mySearchProps(toolkitProps.searchProps)}
                     </Row>
                     <Row className="align-items-md-center mt-30">
                       <Col className="pagination pagination-rounded justify-content-end mb-2">

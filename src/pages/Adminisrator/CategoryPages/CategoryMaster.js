@@ -33,26 +33,21 @@ import {
     onChangeText,
 
 } from "../../../components/Common/CmponentRelatedCommonFile/validationFunction";
-
-
 import { SaveButton } from "../../../components/CommonSaveButton";
 import { CATEGORY_lIST } from "../../../routes/route_url";
 
 
 const CategoryMaster = (props) => {
 
-    let editDataGetingFromList = props.state;
-    let pageModeProps = props.pageMode;
+    
 
     const formRef = useRef(null);
     const history = useHistory()
     const dispatch = useDispatch();
 
-    const [EditData, setEditData] = useState([]);
     const [pageMode, setPageMode] = useState("");
     const [modalCss, setModalCss] = useState(false);
 
-    const [CategoryTypes_dropdown_Select, setCategoryTypes_dropdown_Select] = useState("");
     const [userPageAccessState, setUserPageAccessState] = useState(123);
 
 
@@ -142,7 +137,7 @@ const CategoryMaster = (props) => {
 
     // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
     useEffect(() => {
-        debugger
+
         // if (!(userPageAccessState === '')) { document.getElementById("txtName").focus(); }
         if ((hasShowloction || hasShowModal)) {
 
@@ -158,25 +153,28 @@ const CategoryMaster = (props) => {
             }
 
             if (hasEditVal) {
-            
-                const { id, Name, CategoryTypeName} = hasEditVal
+
+                const { id, Name, CategoryTypeName, CategoryType } = hasEditVal
                 const { values, fieldLabel, hasValid, required, isError } = { ...state }
+                
+                hasValid.Name.valid = true;
+                hasValid.CategoryTypeName.valid = true;
+
+                values.id = id
                 values.Name = Name;
-                values.CategoryTypeName = CategoryTypeName;
-                values.id= id
+                values.CategoryTypeName = { label: CategoryTypeName, value: CategoryType };
+
                 setState({ values, fieldLabel, hasValid, required, isError })
-                dispatch(BreadcrumbShow(hasEditVal.CategoryMaster))
+                dispatch(BreadcrumbShow(hasEditVal.Name))
 
             }
             dispatch(editCategoryIDSuccess({ Status: false }))
         }
     }, [])
 
-
     useEffect(() => {
 
         if ((PostAPIResponse.Status === true) && (PostAPIResponse.StatusCode === 200)) {
-            setCategoryTypes_dropdown_Select('')
             dispatch(PostMethod_ForCategoryAPISuccess({ Status: false }))
             formRef.current.reset();
             if (pageMode === "other") {
@@ -222,17 +220,12 @@ const CategoryMaster = (props) => {
     }, [dispatch]);
 
 
-    function handllerCategoryTypes(e) {
-        setCategoryTypes_dropdown_Select(e)
-    }
-
     const CategoryTypesValues = CategoryAPI.map((Data) => ({
         value: Data.id,
         label: Data.Name
     }));
 
     const formSubmitHandler = (event) => {
-
         event.preventDefault();
         if (formValid(state, setState)) {
             const jsonBody = JSON.stringify({
@@ -242,10 +235,10 @@ const CategoryMaster = (props) => {
 
             if (pageMode === "edit") {
                 dispatch(updateCategoryID(jsonBody, values.id,));
+                console.log("jsonBody", jsonBody)
             }
             else {
                 dispatch(PostMethodForCategory(jsonBody));
-                console.log("jsonBody", jsonBody)
 
             }
         }
@@ -306,19 +299,13 @@ const CategoryMaster = (props) => {
                                                                     <Col sm={12}>
                                                                         <Select
                                                                             name="CategoryTypeName"
-                                                                            Value={values.CategoryType}
+                                                                            value={values.CategoryTypeName}
+                                                                            //   value={{label:"abc",value:1}}//default value set
                                                                             isSearchable={false}
                                                                             className="react-dropdown"
                                                                             classNamePrefix="dropdown"
-                                                                            onChange={(v, e) => onChangeSelect({ e, v, state, setState })}
                                                                             options={CategoryTypesValues}
-                                                                            styles={{
-                                                                                control: base => ({
-                                                                                    ...base,
-                                                                                    border: isError.CategoryTypeName.length > 0 ? '1px solid red' : '',
-
-                                                                                })
-                                                                            }}
+                                                                            onChange={(v, e) => onChangeSelect({ e, v, state, setState })}
                                                                         />
                                                                         {isError.CategoryTypeName.length > 0 && (
                                                                             <span className="text-danger f-8"><small>{isError.CategoryTypeName}</small></span>

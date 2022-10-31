@@ -9,13 +9,13 @@ import {
 } from "./actionType";
 
 const INIT_STATE = {
-  PostDataMessage: { Status: false },
+  postMsg: { Status: false },
   VehicleList: [],
   DriverList: [],
   VehicleTypes:[],
-  deleteMessage: { Status: false },
+  deleteMsg: { Status: false },
   editData: { Status: false },
-  updateMessage: { Status: false },
+  updateMsg: { Status: false },
 }
 const VehicleReducer = (state = INIT_STATE, action) => {
   switch (action.type) {
@@ -23,7 +23,7 @@ const VehicleReducer = (state = INIT_STATE, action) => {
     case POST_METHOD_FOR_VEHICLE_MASTER_SUCCESS:
       return {
         ...state,
-        PostDataMessage: action.payload,
+        postMsg: action.payload,
       }
 
     case GET_METHOD_FOR_VEHICLE_LIST_SUCCESS:
@@ -47,7 +47,7 @@ const VehicleReducer = (state = INIT_STATE, action) => {
       case DELETE_VEHICLE_TYPE_ID_SUCCESS:
         return {
           ...state,
-          deleteMessage: action.payload,
+          deleteMsg: action.payload,
         };
   
       case EDIT_VEHICLE_TYPE_ID_SUCCESS:
@@ -60,7 +60,7 @@ const VehicleReducer = (state = INIT_STATE, action) => {
       case UPDATE_VEHICLE_TYPE_ID_SUCCESS:
         return {
           ...state,
-          updateMessage: action.payload,
+          updateMsg: action.payload,
         };
 
 

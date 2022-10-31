@@ -11,6 +11,7 @@ import {
 } from "../../../store/Administrator/VehicleRedux/action";
 import CommonListPage from "../../../components/Common/CmponentRelatedCommonFile/commonListPage";
 import { commonPageFieldList, commonPageFieldListSuccess, } from "../../../store/actions";
+import { VEHICLE } from "../../../routes/route_url";
 
 const VehicleList = (props) => {
 
@@ -18,11 +19,11 @@ const VehicleList = (props) => {
   const reducers = useSelector(
     (state) => ({
       tableList: state.VehicleReducer.VehicleList,
+      postMsg: state.VehicleReducer.postMsg,
       editData: state.VehicleReducer.editData,
-      updateMsg: state.VehicleReducer.updateMessage,
-      deleteMsg: state.VehicleReducer.deleteMessage,
+      updateMsg: state.VehicleReducer.updateMsg,
+      deleteMsg: state.VehicleReducer.deleteMsg,
       userAccess: state.Login.RoleAccessUpdateData,
-      postMsg: state.VehicleReducer.PostDataMessage,
       pageField: state.CommonPageFieldReducer.pageFieldList
     })
   );
@@ -30,12 +31,11 @@ const VehicleList = (props) => {
   const action = {
     getList: getMethodForVehicleList,
     editId: editVehicleTypeId,
-    deleteId: deleteVehicleTypeIDSuccess,
+    deleteId: delete_VehicleType_ID,
     postSucc: PostMethod_ForVehicleMasterSuccess,
     updateSucc: updateVehicleTypeIDSuccess,
-    deleteSucc: delete_VehicleType_ID
+    deleteSucc: deleteVehicleTypeIDSuccess,
   }
-
 
   //  This UseEffect => Featch Modules List data  First Rendering
   useEffect(() => {
@@ -54,8 +54,8 @@ const VehicleList = (props) => {
             action={action}
             reducers={reducers}
             MasterModal={VehicleMaster}
-            masterPath={"/VehicleMaster"}
-            ButtonMsgLable={"Vehicle"}
+            masterPath={VEHICLE}
+            ButtonMsgLable={"VehicleNumber"}
             deleteName={"VehicleNumber"}
 
           />

@@ -61,7 +61,7 @@ function* get_VehicleTypes_DropDown_GenFun() {
   try {
     const response = yield call(get_VehicleTypes_API);
     yield put(getMethod_VehicleTypes_ForDropDown_Success(response.Data));
-    console.log("response", response)
+  
   } catch (error) {
     console.log(" Vehicle API page error", error);
   }
@@ -73,7 +73,7 @@ function* get_DriverList_DropDown_GenFun() {
   try {
     const response = yield call(get_DriverListAPI );
     yield put(getMethod_DriverList_ForDropDown_Success(response.Data));
-    console.log("response", response)
+    
   } catch (error) {
     console.log(" Vehicle API page error", error);
   }
@@ -101,7 +101,7 @@ function* Edit_VehicleType_ID_GenratorFunction({ id ,pageMode}) {
     const response = yield call(edit_VehicleType_List_Api, id);
     response.pageMode=pageMode
     yield put(editVehicleTypeSuccess(response));
-    console.log("response in saga", response)
+   
 
   } catch (error) {
     yield put(AlertState({

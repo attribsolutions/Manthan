@@ -8,11 +8,9 @@ import {
     Label,
     CardHeader,
     FormGroup,
+    Input,
 } from "reactstrap";
-import {
-    AvForm,
-    AvInput,
-} from "availity-reactstrap-validation";
+
 import { useDispatch, useSelector } from "react-redux";
 import {
     PostModelsSubmit,
@@ -21,11 +19,13 @@ import {
     editModuleIDSuccess,
 } from "../../../store/Administrator/ModulesRedux/actions";
 import Breadcrumb from "../../../components/Common/Breadcrumb";
-import AvField from "availity-reactstrap-validation/lib/AvField";
 import { MetaTags } from "react-meta-tags";
-import { AlertState } from "../../../store/actions";
+import { AlertState, commonPageField } from "../../../store/actions";
 import { BreadcrumbShow } from "../../../store/Utilites/Breadcrumb/actions";
 import { useHistory } from "react-router-dom";
+import { SaveButton } from "../../../components/CommonSaveButton";
+import { MODULE_lIST } from "../../../routes/route_url";
+import { comAddPageFieldFunc, formValid, onChangeText } from "../../../components/Common/CmponentRelatedCommonFile/validationFunction";
 
 const Modules = (props) => {
 
@@ -33,67 +33,149 @@ const Modules = (props) => {
     const dispatch = useDispatch();
     const history = useHistory()
 
-    let editDataGatingFromList = props.state;
-    let propsPageMode = props.pageMode;
-    let pageModeProps=props.pageMode
-
+    const [modalCss, setModalCss] = useState(false);
     const [EditData, setEditData] = useState([]);
     const [pageMode, setPageMode] = useState("save");
     const [userPageAccessState, setUserPageAccessState] = useState('');
 
     //Access redux store Data /  'save_ModuleSuccess' action data
-    const { PostAPIResponse, RoleAccessModifiedinSingleArray } = useSelector((state) => ({
+    const { PostAPIResponse, pageField, userAccess } = useSelector((state) => ({
         PostAPIResponse: state.Modules.modulesSubmitSuccesss,
-        RoleAccessModifiedinSingleArray: state.Login.RoleAccessUpdateData,
+        userAccess: state.Login.RoleAccessUpdateData,
+        pageField: state.CommonPageFieldReducer.pageField
 
     }));
 
+    useEffect(() => {
+        dispatch(commonPageField(14))
+    }, []);
+
+    {/** Dyanamic Page access state and OnChange function */ }
+    {/*start */ }
+    const [state, setState] = useState({
+        values: {
+            id: "",
+            Name: "",
+            DisplayIndex: "",
+            Icon: "",
+            isActive: false,
+
+        },
+        fieldLabel: {
+            Name: '',
+            DisplayIndex: '',
+            Icon: '',
+            isActive: "",
+        },
+
+        isError: {
+            Name: "",
+            DisplayIndex: "",
+            Icon: "",
+            isActive: "",
+        },
+
+        hasValid: {
+            Name: {
+                regExp: '',
+                inValidMsg: "",
+                valid: false
+            },
+
+            DisplayIndex: {
+                regExp: '',
+                inValidMsg: "",
+                valid: false
+            },
+
+            Icon: {
+                regExp: '',
+                inValidMsg: "",
+                valid: false
+            },
+
+            isActive: {
+                regExp: '',
+                inValidMsg: "",
+                valid: false
+            }
+
+        },
+        required: {
+
+        }
+    })
+    const values = { ...state.values }
+    const { isError } = state;
+    const { fieldLabel } = state;
+
+    const location = { ...history.location }
+    const hasShowloction = location.hasOwnProperty("editValue")
+    const hasShowModal = props.hasOwnProperty("editValue")
+
     // userAccess useEffect
     useEffect(() => {
+        
+        let userAcc = null;
+        let locationPath = location.pathname;
 
-        let userAcc = undefined
-        if ((editDataGatingFromList === undefined)) {
-    
-          let locationPath = history.location.pathname
-          userAcc = RoleAccessModifiedinSingleArray.find((inx) => {
+        if (hasShowModal) {
+            locationPath = props.masterPath;
+        };
+
+        userAcc = userAccess.find((inx) => {
             return (`/${inx.ActualPagePath}` === locationPath)
-          })
-        }
-        else if (!(editDataGatingFromList === undefined)) {
-          let relatatedPage = props.relatatedPage
-          userAcc = RoleAccessModifiedinSingleArray.find((inx) => {
-            return (`/${inx.ActualPagePath}` === relatatedPage)
-          })
-    
-        }
-        if (!(userAcc === undefined)) {
-          setUserPageAccessState(userAcc)
-        }
-    }, [RoleAccessModifiedinSingleArray])
+        })
+
+        if (userAcc) {
+            setUserPageAccessState(userAcc)
+        };
+    }, [userAccess])
 
     // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
     useEffect(() => {
+        debugger
+        // if (!(userPageAccessState === '')) { document.getElementById("txtName").focus(); }
+        if ((hasShowloction || hasShowModal)) {
 
-        if (!(userPageAccessState === '')) { document.getElementById("txtName").focus(); }
+            let hasEditVal = null
+            if (hasShowloction) {
+                setPageMode(location.pageMode)
+                hasEditVal = location.editValue
+            }
+            else if (hasShowModal) {
+                hasEditVal = props.editValue
+                setPageMode(props.pageMode)
+                setModalCss(true)
+            }
 
-        if (!(editDataGatingFromList === undefined)) {
+            if (hasEditVal) {
+                debugger
+                const { id, Name, DisplayIndex, isActive, Icon } = hasEditVal
+                const { values, fieldLabel, hasValid, required, isError } = { ...state }
 
-            setEditData(editDataGatingFromList);
-            setPageMode(pageModeProps);
+                hasValid.Name.valid = true;
+                hasValid.DisplayIndex.valid = true;
+                hasValid.isActive.valid = true;
+                hasValid.Icon.valid = true;
+
+                values.Name = Name;
+                values.DisplayIndex = DisplayIndex;
+                values.isActive = isActive;
+                values.Icon = Icon;
+                values.id = id
+                setState({ values, fieldLabel, hasValid, required, isError })
+                dispatch(BreadcrumbShow(hasEditVal.Modules))
+
+            }
             dispatch(editModuleIDSuccess({ Status: false }))
-            dispatch(BreadcrumbShow(editDataGatingFromList.Name))
-           
         }
-        else if (!(propsPageMode === undefined)) {
-            setPageMode(propsPageMode)
-            
-        }
-    }, [editDataGatingFromList, propsPageMode])
+    }, [])
 
     // This UseEffect clear Form Data and when modules Save Successfully.
     useEffect(() => {
 
-        if ((PostAPIResponse.Status === true) && (PostAPIResponse.StatusCode === 200)&&!(pageMode==="dropdownAdd")) {
+        if ((PostAPIResponse.Status === true) && (PostAPIResponse.StatusCode === 200) && !(pageMode === "dropdownAdd")) {
             dispatch(PostModelsSubmitSuccess({ Status: false }))
             formRef.current.reset();
             if (pageMode === "dropdownAdd") {
@@ -108,11 +190,11 @@ const Modules = (props) => {
                     Type: 1,
                     Status: true,
                     Message: PostAPIResponse.Message,
-                    RedirectPath: '/ModuleList',
+                    RedirectPath: MODULE_lIST,
 
                 }))
             }
-        } else if ((PostAPIResponse.Status === true) && !(pageMode==="dropdownAdd")) {
+        } else if ((PostAPIResponse.Status === true) && !(pageMode === "dropdownAdd")) {
             dispatch(PostModelsSubmitSuccess({ Status: false }))
             dispatch(AlertState({
                 Type: 4,
@@ -124,37 +206,48 @@ const Modules = (props) => {
         }
     }, [PostAPIResponse])
 
+    useEffect(() => {
+
+        if (pageField) {
+            const fieldArr = pageField.PageFieldMaster
+            comAddPageFieldFunc({ state, setState, fieldArr })
+        }
+    }, [pageField])
 
     //'Save' And 'Update' Button Handller
-    const FormSubmitButton_Handler = (event, values) => {
+    const formSubmitHandler = (event) => {
+        event.preventDefault();
+        if (formValid(state, setState)) {
+            const jsonBody = JSON.stringify({
+                Name: values.Name,
+                DisplayIndex: values.DisplayIndex,
+                isActive: values.isActive,
+                Icon: values.Icon,
+                CreatedBy: 9,
+                UpdatedBy: 9
+            });
 
-        const jsonBody = JSON.stringify({
-            Name: values.Name,
-            DisplayIndex: values.DisplayIndex,
-            isActive: values.IsActive,
-            Icon: values.Icon,
-            CreatedBy: 9,
-            UpdatedBy: 9
-        });
-
-        if (pageMode === 'edit') {
-            dispatch(updateModuleID(jsonBody, EditData.id));
-        }
-        else {
-            dispatch(PostModelsSubmit(jsonBody));
+            if (pageMode === 'edit') {
+                dispatch(updateModuleID(jsonBody, values.id));
+                console.log("update jsonBody", jsonBody)
+            }
+            else {
+                dispatch(PostModelsSubmit(jsonBody));
+                console.log("post jsonBody", jsonBody)
+            }
         }
     };
 
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
-    let IsEditMode_Css = ''
-    if ((pageMode === "edit")||(pageMode==="copy")||(pageMode==="dropdownAdd")) { IsEditMode_Css = "-5.5%" };
-
+    var IsEditMode_Css = ''
+    if ((modalCss) || (pageMode === "dropdownAdd")) { IsEditMode_Css = "-5.5%" };
+    
     if (!(userPageAccessState === '')) {
         return (
             <React.Fragment>
                 <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
                     <MetaTags>
-                        <title>Module| FoodERP-React FrontEnd</title>
+                        <title>{userPageAccessState.PageHeading}| FoodERP-React FrontEnd</title>
                     </MetaTags>
                     <Breadcrumb breadcrumbItem={userPageAccessState.PageHeading} />
                     <Container fluid  >
@@ -165,9 +258,7 @@ const Modules = (props) => {
                                 <p className="card-title-desc text-black">{userPageAccessState.PageDescriptionDetails}</p>
                             </CardHeader>
                             <CardBody className=" vh-10 0 text-black" style={{ backgroundColor: "#whitesmoke" }} >
-                                <AvForm onValidSubmit={(e, v) => { FormSubmitButton_Handler(e, v) }}
-                                    ref={formRef}
-                                >
+                                <form onSubmit={formSubmitHandler} ref={formRef} noValidate>
 
                                     <Row className="">
                                         <Col md={12}  >
@@ -175,64 +266,75 @@ const Modules = (props) => {
                                                 <CardBody style={{ backgroundColor: "whitesmoke" }}>
                                                     <Row>
                                                         <FormGroup className="mb-2 col col-sm-4 " >
-                                                            <Label htmlFor="validationCustom01">Name </Label>
-                                                            <AvField
+                                                            <Label htmlFor="validationCustom01">{fieldLabel.Name} </Label>
+                                                            <Input
                                                                 name="Name"
                                                                 id="txtName"
-                                                                value={EditData.Name}
+                                                                value={values.Name}
                                                                 type="text"
+                                                                className={isError.Name.length > 0 ? "is-invalid form-control" : "form-control"}
                                                                 placeholder="Please Enter Name"
                                                                 autoComplete='off'
-                                                                validate={{
-                                                                    required: { value: true, errorMessage: 'Please Enter Name' },
+                                                                onChange={(event) => {
+                                                                    onChangeText({ event, state, setState })
+                                                                    dispatch(BreadcrumbShow(event.target.value))
                                                                 }}
-                                                                onChange={(e) => { dispatch(BreadcrumbShow(e.target.value)) }}
                                                             />
+                                                            {isError.Name.length > 0 && (
+                                                                <span className="invalid-feedback">{isError.Name}</span>
+                                                            )}
                                                         </FormGroup>
                                                     </Row>
 
                                                     <Row>
-                                                        <FormGroup className="mb-2 col col-sm-4 " >
-                                                            <Label htmlFor="validationCustom01">Display Index </Label>
-                                                            <AvField name="DisplayIndex" autoComplete='off'
+                                                        <FormGroup className="mb-2 col col-sm-4 ">
+                                                            <Label htmlFor="validationCustom01">{fieldLabel.DisplayIndex} </Label>
+                                                            <Input name="DisplayIndex" autoComplete='off'
                                                                 placeholder="Please Enter DisplayIndex"
-                                                                value={EditData.DisplayIndex} type="text"
-                                                                validate={{
-                                                                    number: true,
-                                                                    required: { value: true, errorMessage: 'Display Index is Required' },
-                                                                    tel: {
-                                                                        pattern: /^\d{1,4}$/,
-                                                                        errorMessage: 'Only Number is Required (Only Two Digit) '
-                                                                    }
+                                                                value={values.DisplayIndex}
+                                                                type="text"
+                                                                className={isError.DisplayIndex.length > 0 ? "is-invalid form-control" : "form-control"}
+                                                                onChange={(event) => {
+                                                                    onChangeText({ event, state, setState })
+                                                                    dispatch(BreadcrumbShow(event.target.value))
                                                                 }}
                                                             />
+                                                            {isError.DisplayIndex.length > 0 && (
+                                                                <span className="invalid-feedback">{isError.DisplayIndex}</span>
+                                                            )}
                                                         </FormGroup>
                                                     </Row>
 
                                                     <Row>
                                                         <FormGroup className="mb-2 col col-sm-4 " >
-                                                            <Label htmlFor="validationCustom01">Icon </Label>
-                                                            <AvField name="Icon"
+                                                            <Label htmlFor="validationCustom01">{fieldLabel.Icon} </Label>
+                                                            <Input name="Icon"
                                                                 autoComplete='off'
                                                                 placeholder="Please Enter IconPath"
-                                                                value={EditData.Icon} type="text" validate={{
-                                                                    required: { value: true, errorMessage: 'Please Enter Icon' },
+                                                                value={values.Icon}
+                                                                type="text"
+                                                                className={isError.Icon.length > 0 ? "is-invalid form-control" : "form-control"}
+                                                                onChange={(event) => {
+                                                                    onChangeText({ event, state, setState })
+                                                                    dispatch(BreadcrumbShow(event.target.value))
                                                                 }}
                                                             />
+                                                            {isError.Icon.length > 0 && (
+                                                                <span className="invalid-feedback">{isError.Icon}</span>
+                                                            )}
                                                         </FormGroup>
                                                     </Row>
 
                                                     <FormGroup className="mb-2 col col-sm-5">
                                                         <Row className="justify-content-md-left">
-                                                            <Label htmlFor="horizontal-firstname-input" className="col-sm-3 col-form-label" >Active </Label>
+                                                            <Label htmlFor="horizontal-firstname-input" className="col-sm-3 col-form-label" >{fieldLabel.isActive}  </Label>
                                                             <Col md={2} style={{ marginTop: '9px' }} >
-                                                                <div className="form-check form-switch form-switch-md mb-3" dir="ltr">
-                                                                    <AvInput type="checkbox" className="form-check-input" id="customSwitchsizemd"
-                                                                        defaultChecked={EditData.isActive}
-                                                                        name="IsActive"
-                                                                    // defaultChecked
+                                                                <div className="form-check form-switch form-switch-md mb-3" >
+                                                                    <Input type="checkbox" className="form-check-input"
+                                                                        checked={values.isActive}
+                                                                        name="isActive"
+                                                                        onChange={(event) => onChangeText({ event, state, setState })}
                                                                     />
-                                                                    <label className="form-check-label" htmlFor="customSwitchsizemd"></label>
                                                                 </div>
                                                             </Col>
                                                         </Row>
@@ -241,32 +343,7 @@ const Modules = (props) => {
                                                     <FormGroup >
                                                         <Row >
                                                             <Col sm={2}>
-                                                                <div>
-                                                                    {
-                                                                        pageMode === "edit" ?
-                                                                            userPageAccessState.RoleAccess_IsEdit ?
-                                                                                <button
-                                                                                    type="submit"
-                                                                                    data-mdb-toggle="tooltip" data-mdb-placement="top" title="Update Module"
-                                                                                    className="btn btn-success w-md"
-                                                                                >
-                                                                                    <i class="fas fa-edit me-2"></i>Update
-                                                                                </button>
-                                                                                :
-                                                                                <></>
-                                                                            : (
-                                                                                userPageAccessState.RoleAccess_IsSave ?
-                                                                                    <button
-                                                                                        type="submit"
-                                                                                        data-mdb-toggle="tooltip" data-mdb-placement="top" title="Save Module"
-                                                                                        className="btn btn-primary w-md"
-                                                                                    > <i className="fas fa-save me-2"></i> Save
-                                                                                    </button>
-                                                                                    :
-                                                                                    <></>
-                                                                            )
-                                                                    }
-                                                                </div>
+                                                                {SaveButton({ pageMode, userPageAccessState, module: "Modules" })}
                                                             </Col>
                                                         </Row>
                                                     </FormGroup >
@@ -274,7 +351,7 @@ const Modules = (props) => {
                                             </Card>
                                         </Col>
                                     </Row>
-                                </AvForm>
+                                </form>
                             </CardBody>
                         </Card>
 

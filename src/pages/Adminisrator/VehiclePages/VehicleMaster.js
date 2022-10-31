@@ -11,27 +11,41 @@ import {
     Row,
     Table,
     Button,
+    Input,
 } from "reactstrap";
 import { AvField, AvForm, } from "availity-reactstrap-validation";
 import Select from "react-select";
 import { MetaTags } from "react-meta-tags";
-import { BreadcrumbShow } from "../../../store/actions";
+import { BreadcrumbShow, commonPageField, commonPageFieldSuccess } from "../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
 import { Tbody, Thead } from "react-super-responsive-table";
 import { AlertState } from "../../../store/actions";
 import { CommonGetRoleAccessFunction } from "../../../components/Common/CommonGetRoleAccessFunction";
-import { PostMethodForVehicleMaster, getMethodForVehicleList, getMethod_DriverList_ForDropDown, getMethod_VehicleTypes_ForDropDown, PostMethod_ForVehicleMasterSuccess, getMethod_ForVehicleListSuccess, editVehicleTypeSuccess, updateVehicleTypeID } from "../../../store/Administrator/VehicleRedux/action";
+import {
+    PostMethodForVehicleMaster,
+    getMethodForVehicleList,
+    getMethod_DriverList_ForDropDown,
+    getMethod_VehicleTypes_ForDropDown,
+    PostMethod_ForVehicleMasterSuccess,
+    getMethod_ForVehicleListSuccess,
+    editVehicleTypeSuccess,
+    updateVehicleTypeID
+} from "../../../store/Administrator/VehicleRedux/action";
 import { get_Division_ForDropDown, } from "../../../store/Administrator/ItemsRedux/action";
 import { useHistory } from "react-router-dom";
 // import { actionChannel } from "redux-saga/effects";
 import { SaveButton } from "../../../components/CommonSaveButton";
+import { DRIVER_lIST, VEHICLE_lIST } from "../../../routes/route_url";
+import {
+    comAddPageFieldFunc,
+    formValid,
+    onChangeSelect,
+    onChangeText
+} from "../../../components/Common/CmponentRelatedCommonFile/validationFunction";
 
 
 const VehicleMaster = (props) => {
-    //*** "isEditdata get all data from ModuleID for Binding  Form controls
-    let editDataGatingFromList = props.state;
-    let pageModeProps = props.pageMode;
-    let propsPageMode = props.pageMode;
+
 
     const dispatch = useDispatch();
     const history = useHistory()
@@ -44,25 +58,100 @@ const VehicleMaster = (props) => {
     const [userPageAccessState, setUserPageAccessState] = useState('');
 
     const [divisionData, setDivisionData] = useState([]);
+
     const [divisionType_dropdown_Select, setDivisionType_dropdown_Select] = useState("");
     const [DriverList_dropdown_Select, setDriverList_dropdown_Select] = useState("");
     const [VehicleType_dropdown_Select, setVehicleType_dropdown_Select] = useState("");
 
+    const [state, setState] = useState({
+        values: {
+            id: "",
+            VehicleNumber: "",
+            Description: "",
+            DriverName: "",
+            Vehicletype: "",
+            VehicleDivisions: ""
+        },
+        fieldLabel: {
+            VehicleNumber: "",
+            Description: "",
+            DriverName: "",
+            Vehicletype: "",
+            VehicleDivisions: ""
+        },
+
+        isError: {
+            VehicleNumber: "",
+            Description: "",
+            DriverName: "",
+            Vehicletype: "",
+            VehicleDivisions: ""
+        },
+
+        hasValid: {
+            VehicleNumber: {
+                regExp: '',
+                inValidMsg: "",
+                valid: false
+            },
+            Description: {
+                regExp: '',
+                inValidMsg: "",
+                valid: false
+            },
+
+            DriverName: {
+                regExp: '',
+                inValidMsg: "",
+                valid: false
+            },
+            Vehicletype: {
+                regExp: '',
+                inValidMsg: "",
+                valid: false
+            },
+
+            VehicleDivisions: {
+                regExp: '',
+                inValidMsg: "",
+                valid: false
+            }
+        },
+        required: {
+
+        }
+    }
+    )
+
+
     //Access redux store Data /  'save_ModuleSuccess' action data
-    const { PostAPIResponse,
+    const {
+        postMsg,
         VehicleList,
         Divisions,
         VehicleTypes,
+        pageField,
         DriverList_redux,
         userAccess } = useSelector((state) => ({
-            PostAPIResponse: state.VehicleReducer.PostDataMessage,
+            postMsg: state.VehicleReducer.postMsg,
             VehicleList: state.VehicleReducer.VehicleList,
             Divisions: state.ItemMastersReducer.Division,
             VehicleTypes: state.VehicleReducer.VehicleTypes,
             DriverList_redux: state.VehicleReducer.DriverList,
             userAccess: state.Login.RoleAccessUpdateData,
-
+            pageField: state.CommonPageFieldReducer.pageField
         }));
+
+
+    const location = { ...history.location }
+    const hasShowloction = location.hasOwnProperty("editValue")
+    const hasShowModal = props.hasOwnProperty("editValue")
+
+    useEffect(() => {
+        dispatch(commonPageFieldSuccess(null));
+        dispatch(commonPageField(29))
+    }, []);
+
 
 
     useEffect(() => {
@@ -73,9 +162,7 @@ const VehicleMaster = (props) => {
         dispatch(get_Division_ForDropDown());
     }, [dispatch]);
 
-    const location = { ...history.location }
-    const hasShowloction = location.hasOwnProperty("editValue")
-    const hasShowModal = props.hasOwnProperty("editValue")
+
 
     // userAccess useEffect
     useEffect(() => {
@@ -113,24 +200,34 @@ const VehicleMaster = (props) => {
             }
 
             if (hasEditVal) {
-                setEditData(hasEditVal)
-                setDriverList_dropdown_Select({
-                    value: hasEditVal.Driver,
-                    label: hasEditVal.DriverName
-                });
-                setVehicleType_dropdown_Select({
-                    value: hasEditVal.VehicleType,
-                    label: hasEditVal.VehicleTypeName
-                });
-                let division = hasEditVal.VehicleDivisions.map((index) => {
-                    return {
-                        label: index.DivisionName,
-                        value: index.Division
-                    }
-                })
-                setDivisionData(division)
+                debugger
+                const divisionTable = hasEditVal.VehicleDivisions.map((data) => ({
+                    value: data.Division,
+                    label: data.DivisionName
+                }))
+
+                const { id, VehicleNumber, Description, Driver, DriverName, VehicleType, VehicleTypeName, VehicleDivisions, } = hasEditVal
+                const { values, fieldLabel, hasValid, required, isError } = { ...state }
+
+                hasValid.VehicleNumber.valid = true;
+                hasValid.DriverName.valid = true;
+                hasValid.Description.valid = true;
+                hasValid.Vehicletype.valid = true;
+                hasValid.VehicleDivisions.valid = true;
+
+
+                values.id = id
+                values.VehicleNumber = VehicleNumber
+                values.Description = Description
+                values.Driver = { label: DriverName, value: Driver };
+                values.Vehicletype = { label: VehicleTypeName, value: VehicleType };
+                values.VehicleDivisions = divisionTable
+
+                setDivisionData(divisionTable)
+                setState({ values, fieldLabel, hasValid, required, isError })
+                dispatch(BreadcrumbShow(hasEditVal.RoleMaster))
                 dispatch(editVehicleTypeSuccess({ Status: false }))
-                dispatch(BreadcrumbShow(hasEditVal.VehicleTypeName))
+
 
             }
         }
@@ -139,7 +236,8 @@ const VehicleMaster = (props) => {
 
 
     useEffect(() => {
-        if ((PostAPIResponse.Status === true) && (PostAPIResponse.StatusCode === 200)) {
+
+        if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
 
             dispatch(PostMethod_ForVehicleMasterSuccess({ Status: false }))
             formRef.current.reset();
@@ -148,19 +246,19 @@ const VehicleMaster = (props) => {
                 dispatch(AlertState({
                     Type: 1,
                     Status: true,
-                    Message: PostAPIResponse.Message,
+                    Message: postMsg.Message,
                 }))
             }
             else {
                 dispatch(AlertState({
                     Type: 1,
                     Status: true,
-                    Message: PostAPIResponse.Message,
-                    RedirectPath: '/VehicleList',
+                    Message: postMsg.Message,
+                    RedirectPath: VEHICLE_lIST,
                 }))
             }
         }
-        else if (PostAPIResponse.Status === true) {
+        else if (postMsg.Status === true) {
             dispatch(getMethod_ForVehicleListSuccess({ Status: false }))
             dispatch(AlertState({
                 Type: 4,
@@ -170,8 +268,19 @@ const VehicleMaster = (props) => {
                 AfterResponseAction: false
             }));
         }
-    }, [PostAPIResponse])
+    }, [postMsg])
 
+    useEffect(() => {
+
+        if (pageField) {
+            const fieldArr = pageField.PageFieldMaster
+            comAddPageFieldFunc({ state, setState, fieldArr })
+        }
+    }, [pageField])
+
+    const values = { ...state.values }
+    const { isError } = state;
+    const { fieldLabel } = state;
 
     const DivisionType_DropdownOptions = Divisions.map((data) => ({
         value: data.id,
@@ -187,50 +296,50 @@ const VehicleMaster = (props) => {
         label: data.Name
     }));
 
-    function DriverList_DropDown_handller(e) {
-        setDriverList_dropdown_Select(e)
-    }
 
     const VehicleType_DropdownOptions = VehicleTypes.map((data) => ({
         value: data.id,
         label: data.Name
     }));
 
-    function VehicleType_DropDown_handller(e) {
-        setVehicleType_dropdown_Select(e)
-    }
-
-    // const VehicleList_DropdownOptions = VehicleList_redux.map((data) => ({
-    //     value: data.id,
-    //     label: data.Name
-    // }));
-
-    // function VehicleList_DropDown_handller(e) {
-    //     setVehicleList_dropdown_Select(e)
-    // }
-
-    const FormSubmitButton_Handler = (event, values) => {
-        var division = divisionData.map(i => ({ Division: i.value }))
-        const jsonBody = JSON.stringify({
-            VehicleNumber: values.VehicleNumber,
-            Description: values.Description,
-            Driver: DriverList_dropdown_Select.value,
-            VehicleType: VehicleType_dropdown_Select.value,
-            VehicleDivisions: division,
-        });
 
 
-        if (pageMode === 'edit') {
-            dispatch(updateVehicleTypeID(jsonBody, EditData.id));
+    const formSubmitHandler = (event) => {
+
+        event.preventDefault();
+        const leng = divisionData.length
+        if (leng === 0) {
+            dispatch(AlertState({
+                Type: 3, Status: true,
+                Message: "Select Atleast One Division..!",
+            }));
+            return
         }
-        else {
-            dispatch(PostMethodForVehicleMaster(jsonBody));
+        if (formValid(state, setState)) {
+            var division = divisionData.map(i => ({ Division: i.value }))
+            const jsonBody = JSON.stringify({
+                VehicleNumber: values.VehicleNumber,
+                Description: values.Description,
+                Driver: values.Driver.value,
+                VehicleType: values.Vehicletype.value,
+                VehicleDivisions: division,
+            });
 
+
+            if (pageMode === 'edit') {
+                dispatch(updateVehicleTypeID(jsonBody, values.id));
+                console.log("update jsonBody", jsonBody)
+            }
+            else {
+                dispatch(PostMethodForVehicleMaster(jsonBody));
+                console.log("post jsonBody", jsonBody)
+            }
         }
     };
 
-    /// Role Table Validation
+
     function AddDivisionHandler() {
+
         const find = divisionData.find((element) => {
             return element.value === divisionType_dropdown_Select.value
         });
@@ -263,7 +372,7 @@ const VehicleMaster = (props) => {
 
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
     var IsEditMode_Css = ''
-    if ((pageMode === "edit") || (pageMode === "copy") || (pageMode === "dropdownAdd")) { IsEditMode_Css = "-5.5%" };
+    if ((modalCss) || (pageMode === "dropdownAdd")) { IsEditMode_Css = "-5.5%" };
 
     if (!(userPageAccessState === '')) {
         return (
@@ -271,7 +380,7 @@ const VehicleMaster = (props) => {
                 <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
                     <Container fluid>
                         <MetaTags>
-                            <title>VehicleMaster | FoodERP-React FrontEnd</title>
+                            <title>{userPageAccessState.PageHeading}  | FoodERP-React FrontEnd</title>
                         </MetaTags>
                         <Breadcrumb breadcrumbItem={userPageAccessState.PageHeading} />
 
@@ -282,24 +391,30 @@ const VehicleMaster = (props) => {
                             </CardHeader>
 
                             <CardBody className=" vh-10 0 text-black" style={{ backgroundColor: "#whitesmoke" }} >
-                                <AvForm onValidSubmit={(e, v) => { FormSubmitButton_Handler(e, v) }}
-                                    ref={formRef}>
+                                <form onSubmit={formSubmitHandler} ref={formRef} noValidate>
                                     <Row className="">
                                         <Col md={12}>
                                             <Card>
                                                 <CardBody style={{ backgroundColor: "whitesmoke" }}>
-
-
-                                                    <Row className="mt-3">
+                                                    <Row className="mt-1">
                                                         <Col md="3">
                                                             <FormGroup className="mb-3">
-                                                                <Label htmlFor="validationCustom01"> Driver Name </Label>
+                                                                <Label htmlFor="validationCustom01">{fieldLabel.DriverName} </Label>
                                                                 <Col sm={12}>
                                                                     <Select
-                                                                        value={DriverList_dropdown_Select}
+                                                                        id="DriverDropDown "
+                                                                        // disabled={true}
+                                                                        name="DriverName"
+                                                                        value={values.Driver}
+                                                                        isSearchable={false}
+                                                                        className="react-dropdown"
+                                                                        classNamePrefix="dropdown"
                                                                         options={DriverList_DropdownOptions}
-                                                                        onChange={(e) => { DriverList_DropDown_handller(e) }}
+                                                                        onChange={(e, v) => onChangeSelect({ e, v, state, setState })}
                                                                     />
+                                                                    {isError.DriverName.length > 0 && (
+                                                                        <span className="text-danger f-8"><small>{isError.DriverName}</small></span>
+                                                                    )}
                                                                 </Col>
                                                             </FormGroup>
                                                         </Col>
@@ -308,72 +423,94 @@ const VehicleMaster = (props) => {
                                                         <Col md="1">  </Col>
                                                         <Col md="3">
                                                             <FormGroup className="mb-3">
-                                                                <Label htmlFor="validationCustom01"> Vehicle Type </Label>
+                                                                <Label htmlFor="validationCustom01"> {fieldLabel.Vehicletype}</Label>
                                                                 <Col sm={12}>
                                                                     <Select
-                                                                        value={VehicleType_dropdown_Select}
+                                                                        id="VehicleDropDown "
+                                                                        // disabled={true}
+                                                                        name="Vehicletype"
+                                                                        value={values.Vehicletype}
+                                                                        isSearchable={false}
+                                                                        className="react-dropdown"
+                                                                        classNamePrefix="dropdown"
                                                                         options={VehicleType_DropdownOptions}
-                                                                        onChange={(e) => { VehicleType_DropDown_handller(e) }}
+                                                                        onChange={(e, v) => onChangeSelect({ e, v, state, setState })}
                                                                     />
+                                                                    {isError.Vehicletype.length > 0 && (
+                                                                        <span className="text-danger f-8"><small>{isError.Vehicletype}</small></span>
+                                                                    )}
                                                                 </Col>
                                                             </FormGroup>
                                                         </Col>
 
-
-                                                        <Col md="1">
-                                                        </Col>
-                                                        <Col md="4">
-                                                            <FormGroup className="mb-2 col col-sm-8 ">
-                                                                <Label htmlFor="validationCustom01">Vehicle Number </Label>
-                                                                <AvField
-                                                                    name="VehicleNumber"
-                                                                    id="VehicleNumber"
-                                                                    value={EditData.VehicleNumber}
-                                                                    type="text"
-                                                                    placeholder="Please Enter VehicleNumber"
-                                                                    autoComplete='off'
-                                                                    validate={{
-                                                                        required: {
-                                                                            value: true, errorMessage: "Please Enter valid VehicleNumber."
-                                                                        },
-                                                                        tel: {
-                                                                            pattern: /^[A-Z]{2}[ -]{0,1}[0-9]{2}[ -]{0,1}[A-Z]{1,2}[ -]{0,1}[0-9]{1,4}$/,
-                                                                            errorMessage: "Please Enter valid VehicleNumber.(Ex:MH 15 AA 1234)"
-                                                                        }
-                                                                    }}
-
-                                                                />
-                                                            </FormGroup>
-
-                                                        </Col>
-
                                                         <Row>
-                                                            <Col md="3">
-                                                                <FormGroup className="mb-3">
-                                                                    <Label htmlFor="validationCustom01"> Description </Label>
-                                                                    <AvField
-                                                                        name="Description"
-                                                                        id="Description"
-                                                                        value={EditData.Description}
+                                                            <Col md="4">
+                                                                <FormGroup className="mb-2 col col-sm-8 ">
+                                                                    <Label htmlFor="validationCustom01">{fieldLabel.VehicleNumber} </Label>
+                                                                    <Input
+                                                                        name="VehicleNumber"
+                                                                        id="VehicleNumber"
+                                                                        value={values.VehicleNumber}
                                                                         type="text"
-                                                                        placeholder="Please Enter Description"
+                                                                        className={isError.VehicleNumber.length > 0 ? "is-invalid form-control" : "form-control"}
+                                                                        placeholder="Please Enter VehicleNumber"
                                                                         autoComplete='off'
-                                                                        validate={{
-                                                                            required: { value: true, errorMessage: 'Please Enter Description' },
+                                                                        onChange={(event) => {
+                                                                            onChangeText({ event, state, setState })
+                                                                            dispatch(BreadcrumbShow(event.target.value))
                                                                         }}
                                                                     />
+                                                                    {isError.VehicleNumber.length > 0 && (
+                                                                        <span className="invalid-feedback">{isError.VehicleNumber}</span>
+                                                                    )}
+                                                                </FormGroup>
+                                                            </Col>
+
+                                                            <Col md="3">
+                                                                <FormGroup className="mb-3">
+                                                                    <Label htmlFor="validationCustom01"> {fieldLabel.Description} </Label>
+                                                                    <Input
+                                                                        name="Description"
+                                                                        id="Description"
+                                                                        value={values.Description}
+                                                                        type="text"
+                                                                        className={isError.Description.length > 0 ? "is-invalid form-control" : "form-control"}
+                                                                        placeholder="Please Enter Description"
+                                                                        autoComplete='off'
+                                                                        onChange={(event) => {
+                                                                            onChangeText({ event, state, setState })
+                                                                            dispatch(BreadcrumbShow(event.target.value))
+                                                                        }}
+                                                                    />
+                                                                    {isError.Description.length > 0 && (
+                                                                        <span className="invalid-feedback">{isError.Description}</span>
+                                                                    )}
                                                                 </FormGroup>
                                                             </Col>
                                                         </Row>
 
                                                         <Row>
                                                             <FormGroup className="col col-sm-3">
-                                                                <Label htmlFor="validationCustom21">Division</Label>
+                                                                <Label htmlFor="validationCustom21">{fieldLabel.VehicleDivisions}</Label>
                                                                 <Select
-                                                                    value={divisionType_dropdown_Select}
+                                                                    id="DivisionDropDown "
+                                                                    // disabled={true}
+                                                                    name="VehicleDivisions"
+                                                                    value={values.VehicleDivisions}
+                                                                    isSearchable={false}
+                                                                    className="react-dropdown"
+                                                                    classNamePrefix="dropdown"
                                                                     options={DivisionType_DropdownOptions}
-                                                                    onChange={(e) => { DivisionType_DropDown_handller(e) }}
+                                                                    onChange={(e, v) => {
+                                                                        onChangeSelect({ e, v, state, setState })
+                                                                        DivisionType_DropDown_handller(e)
+                                                                    }
+                                                                    }
                                                                 />
+                                                                {isError.VehicleDivisions.length > 0 && (
+                                                                    <span className="text-danger f-8"><small>{isError.VehicleDivisions}</small></span>
+                                                                )}
+
                                                             </FormGroup>
                                                             <Col sm={1} style={{ marginTop: '28px' }} >
                                                                 {" "}
@@ -394,7 +531,7 @@ const VehicleMaster = (props) => {
                                                                         <Table className="table table-bordered  text-center">
                                                                             <Thead >
                                                                                 <tr>
-                                                                                    <th>Division Type</th>
+                                                                                    <th>Division Name</th>
 
                                                                                     <th>Action</th>
                                                                                 </tr>
@@ -425,7 +562,7 @@ const VehicleMaster = (props) => {
 
                                                         <FormGroup>
                                                             <Row>
-                                                                <Col sm={2}>
+                                                                <Col sm={2} className="mt-3">
                                                                     {SaveButton({ pageMode, userPageAccessState, module: "VehicleMaster" })}
                                                                 </Col>
                                                             </Row>
@@ -436,7 +573,7 @@ const VehicleMaster = (props) => {
                                             </Card>
                                         </Col>
                                     </Row>
-                                </AvForm>
+                                </form>
                             </CardBody>
                         </Card>
 

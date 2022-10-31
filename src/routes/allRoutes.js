@@ -14,11 +14,10 @@ import Modules from "../pages/Adminisrator/ModulesPages/Modules";
 import ModulesList from "../pages/Adminisrator/ModulesPages/ModulesList";
 import CompanyModule from "../pages/Adminisrator/CompanyPages/CompanyModule";
 import CompanyList from "../pages/Adminisrator/CompanyPages/CompanyList";
-// import SubModules from "../pages/Adminisrator/SubModulePages/SubModules";
-// import SubModulesList from "../pages/Adminisrator/SubModulePages/SubModulesList";
+
 import PageList from "../pages/Adminisrator/Page-Pages/PageList";
 import PageMaster from "../pages/Adminisrator/Page-Pages/PageMaster";
-import OrderPage from "../pages/Order/OrderPage";
+
 import OrderList from "../pages/Order/OrderList"
 import AddUser from "../pages/Adminisrator/UserRegistrationPages/UserRegistration";
 import UserList from "../pages/Adminisrator/UserRegistrationPages/UserList";
@@ -59,9 +58,6 @@ import DriverMaster from "../pages/Adminisrator/DriverPage/DriverMaster";
 import DriverList from "../pages/Adminisrator/DriverPage/DriverList";
 import CompanyGroupMaster from "../pages/Adminisrator/CompanyGroupPages/CompanyGroupMaster";
 import CompanyGroupList from "../pages/Adminisrator/CompanyGroupPages/CompanyGroupList";
-import PageMasterTab from "../pages/Adminisrator/Page-Pages/PageMasterTab";
-
-// import PartyMasterTab from "../pages/Adminisrator/PartyTab/PartyMasterTab";
 
 import PriceMaster from "../pages/Adminisrator/PriceList/PriceMaster";
 import PriceList from "../pages/Adminisrator/PriceList/PriceList";
@@ -77,74 +73,34 @@ import GroupMaster from "../pages/Adminisrator/GroupPage/GroupMaster"
 import GroupList from "../pages/Adminisrator/GroupPage/GroupList";
 import GroupTypeList from "../pages/Adminisrator/GroupTypePage/GroupTypeList";
 
-
 import GroupTypeMaster from "../pages/Adminisrator/GroupTypePage/GroupTypeMaster";
 import PartySubParty from "../pages/Adminisrator/PartySubPartyPages/PartySubParty";
-import EditTabaleTable from "../pages/Adminisrator/DriverPage/editabale table";
-
-
-
-
-import {
-  COMPANY, COMPANY_lIST,
-  COMPANYGROUP, COMPANYGROUP_lIST,
-  DRIVER, DRIVER_lIST,
-  MODULE, MODULE_lIST,
-  USER, USER_lIST,
-  EMPLOYEE_lIST, EMPLOYEE,
-  ROLE_lIST, ROLE,
-  ITEM_lIST, ITEM,
-  PARTY_lIST, PARTY,
-  ROLEACCESS_lIST, ROLEACCESS,
-  EMPLOYEETYPE_lIST, EMPLOYEETYPE,
-  CATEGORYTYPE_lIST, CATEGORYTYPE,
-  PARTYTYPE_lIST, PARTYTYPE,
-  CATEGORY_lIST, CATEGORY,
-  VEHICLE, VEHICLE_lIST,
-  GROUPTYPE_lIST, GROUPTYPE,
-  PRICE_lIST, PRICE,
-  MRP_lIST, MRP,
-  MARGIN_lIST, MARGIN,
-  PAGE_lIST, PAGE,
-  GROUP_lIST,
-  ORDER_lIST, ORDER,
-
-} from "./route_url";
+import PartySubPartyList from "../pages/Adminisrator/PartySubPartyPages/partysubPartyList";
 
 import GSTMaster from "../pages/Adminisrator/GSTPages/GSTMaster";
 import GSTList from "../pages/Adminisrator/GSTPages/GSTList";
 
+import Order from "../pages/Purchase/order/Order";
+
+
+import TermsAndCondtionsList from "../pages/Adminisrator/TermsAndCondtions/TermsAndCondtionsList";
+
 import * as path from "./route_url";
 
-// import Index from "../pages/Adminisrator/customValidation/index";
-
-
-
-// import AddItemMaster from "../pages/Adminisrator/MasterPages/AddItemMaster";
-
 const userRoutes = [
- 
+
   { path: "/dashboard", component: Dashboard },
-
-  // { path: `/${btoa("ModuleMaster")}`, component: Modules },
-  // { path: `/${btoa("ModuleList")}`, component: ModulesList },
-
 
   { path: path.MODULE, component: Modules },
   { path: path.MODULE_lIST, component: ModulesList },
 
-  // { path: "/subModuleMaster", component: SubModules },
-  // { path: "/subModuleList", component: SubModulesList },
-
-  // Administrator : Company Path and List
   { path: path.COMPANY, component: CompanyModule },
   { path: path.COMPANY_lIST, component: CompanyList },
 
   { path: path.PAGE_lIST, component: PageList },
   { path: path.PAGE, component: PageMaster },
-  { path: '/PageMasterTab', component: PageMasterTab },
 
-  { path: path.ORDER, component: OrderPage },
+  { path: path.ORDER, component: Order },
   { path: path.ORDER_lIST, component: OrderList },
 
   { path: path.USER, component: AddUser },
@@ -186,22 +142,19 @@ const userRoutes = [
 
   { path: path.DRIVER, component: DriverMaster },
   { path: path.DRIVER_lIST, component: DriverList },
-  { path: "/editTable", component: EditTabaleTable },
 
   { path: path.COMPANYGROUP, component: CompanyGroupMaster },
   { path: path.COMPANYGROUP_lIST, component: CompanyGroupList },
 
   { path: path.GROUPTYPE, component: GroupTypeMaster },
   { path: path.GROUPTYPE_lIST, component: GroupTypeList },
-  // group list
 
+  { path: path.PARTY_SUB_PARTY, component: PartySubParty },
+  { path: path.PARTY_SUB_PARTY_lIST, component: PartySubPartyList },
 
   { path: '/TermsAndCondtionsMaster', component: TermsAndCondtionsMaster },
+  { path: '/TermsAndCondtionsList', component: TermsAndCondtionsList },
 
-
-  // { path: "/PartyMasterTab", component: PartyMasterTab },
-
-  // { path: "/PriceList", component: PartyMasterTab },
   { path: path.PRICE_lIST, component: PriceList },
   { path: path.PRICE, component: PriceMaster },
 
@@ -218,14 +171,13 @@ const userRoutes = [
   { path: '/GSTMaster', component: GSTMaster },
   { path: '/GSTList', component: GSTList },
 
-  { path: "/PartySubParty", component: PartySubParty },
+  { path: path.PARTY_SUB_PARTY, component: PartySubParty },
+  { path: path.PARTY_SUB_PARTY_lIST, component: PartySubPartyList },
 
-  // { path: "/AddItemMaster", component: AddItemMaster },
+
   { path: "/SearchBox2", component: SearchBoxSecond },
   { path: "/SearchBox3", component: SerachBox3 },
-  // { path: "/valid", component: Index },
 
-  // this route should be at the end of all other routes
   { path: "/", exact: true, component: () => <Redirect to="/Dashboard" /> },
 
 ]
