@@ -16,6 +16,7 @@ import { getEmployeeTypelist } from "../../../store/Administrator/EmployeeTypeRe
 import {
   comAddPageFieldFunc,
   formValid,
+  initialFiledFunc,
   onChangeSelect,
   onChangeText,
 } from "../../../components/Common/CmponentRelatedCommonFile/validationFunction";
@@ -33,83 +34,18 @@ const RoleMaster = (props) => {
   const [modalCss, setModalCss] = useState(false);
 
   const [userPageAccessState, setUserPageAccessState] = useState('');
-
-  // ////////////////////////////////////
-  const [state, setState] = useState({
-    values: {
-      id: "",
-      Name: "",
-      Description: "",
-      Dashboard: "",
-      RoleEmployeeTypes: "",
-      isActive: "",
-      isSCMRole: '',
-      IsPartyConnection: ""
-
-    },
-    fieldLabel: {
-      Name: "",
-      Description: "",
-      Dashboard: "",
-      RoleEmployeeTypes: "",
-      isActive: "",
-      isSCMRole: "",
-      IsPartyConnection: ""
-    },
-
-    isError: {
-      Name: "",
-      Description: "",
-      Dashboard: "",
-      RoleEmployeeTypes: "",
-      isActive: "",
-      isSCMRole: "",
-      IsPartyConnection: ""
-    },
-
-    hasValid: {
-      Name: {
-        regExp: '',
-        inValidMsg: "",
-        valid: false
-      },
-      Description: {
-        regExp: '',
-        inValidMsg: "",
-        valid: false
-      },
-
-      Dashboard: {
-        regExp: '',
-        inValidMsg: "",
-        valid: false
-      },
-      RoleEmployeeTypes: {
-        regExp: '',
-        inValidMsg: "",
-        valid: false
-      },
-      isActive: {
-        regExp: '',
-        inValidMsg: "",
-        valid: false
-      },
-      isSCMRole: {
-        regExp: '',
-        inValidMsg: "",
-        valid: false
-      },
-      IsPartyConnection: {
-        regExp: '',
-        inValidMsg: "",
-        valid: false
-      },
-    },
-    required: {
-
-    }
+  const initialFiled = {
+    id: "",
+    Name: "",
+    Description: "",
+    Dashboard: "",
+    RoleEmployeeTypes: "",
+    isActive: "",
+    isSCMRole: '',
+    IsPartyConnection: ""
   }
-  )
+
+  const [state, setState] = useState(initialFiledFunc(initialFiled))
 
   //Access redux store Data /  'save_ModuleSuccess' action data
   const {
@@ -251,20 +187,20 @@ const RoleMaster = (props) => {
 
   useEffect(() => {
     if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
-        history.push({
-            pathname: ROLE_lIST,
-        })
+      history.push({
+        pathname: ROLE_lIST,
+      })
     } else if (updateMsg.Status === true && !modalCss) {
-        dispatch(updateSuccess({ Status: false }));
-        dispatch(
-            AlertState({
-                Type: 3,
-                Status: true,
-                Message: JSON.stringify(updateMsg.Message),
-            })
-        );
+      dispatch(updateSuccess({ Status: false }));
+      dispatch(
+        AlertState({
+          Type: 3,
+          Status: true,
+          Message: JSON.stringify(updateMsg.Message),
+        })
+      );
     }
-}, [updateMsg, modalCss]);
+  }, [updateMsg, modalCss]);
 
   const EmployeeType_DropdownOptions = EmployeeType.map((data) => ({
     value: data.id,
