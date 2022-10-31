@@ -14,20 +14,13 @@ import {
 import { AvField, AvForm, } from "availity-reactstrap-validation";
 import Select from "react-select";
 import { MetaTags } from "react-meta-tags";
-import { BreadcrumbShow, commonPageField, commonPageFieldSuccess, getCategoryTypelist } from "../../../store/actions";
+import { BreadcrumbShow, commonPageField, commonPageFieldSuccess, editGroupIDSuccess, getGroupList, postGroupList, PostMethod_GroupList_Success, updateGroupID } from "../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
-import {
-    editCategoryIDSuccess, getMethodForCategory,
-    PostMethodForCategory,
-    PostMethod_ForCategoryAPISuccess,
-    updateCategoryID
-} from "../../../store/Administrator/CategoryRedux/action";
 import { AlertState } from "../../../store/actions";
 import { CommonGetRoleAccessFunction } from "../../../components/Common/CommonGetRoleAccessFunction";
 import { useHistory } from "react-router-dom";
 import {
     comAddPageFieldFunc,
-    formValChange,
     formValid,
     onChangeSelect,
     onChangeText,
@@ -36,6 +29,8 @@ import {
 
 
 import { SaveButton } from "../../../components/CommonSaveButton";
+import { getGroupTypeslist } from "../../../store/Administrator/GroupTypeRedux/action";
+
 
 
 const GroupMaster = (props) => {
@@ -48,18 +43,18 @@ const GroupMaster = (props) => {
     const [pageMode, setPageMode] = useState("");
     const [modalCss, setModalCss] = useState(false);
 
-    const [CategoryTypes_dropdown_Select, setCategoryTypes_dropdown_Select] = useState("");
+    const [GroupTypes_dropdown_Select, setGroupTypes_dropdown_Select] = useState("");
     const [userPageAccessState, setUserPageAccessState] = useState(123);
 
 
     //Access redux store Data /  'save_ModuleSuccess' action data
     const {
-        PostAPIResponse,
-        CategoryAPI,
+        postMessage,
+        GroupTypeAPI,
         pageField,
         userAccess } = useSelector((state) => ({
-            PostAPIResponse: state.CategoryReducer.PostDataMessage,
-            CategoryAPI: state.categoryTypeReducer.categoryTypeListData,
+            postMessage:state.GroupReducer.postMessage,
+            GroupTypeAPI: state.GroupTypeReducer.GroupType,
             userAccess: state.Login.RoleAccessUpdateData,
             pageField: state.CommonPageFieldReducer.pageField
         }));
@@ -69,17 +64,18 @@ const GroupMaster = (props) => {
     {/*start */ }
     const [state, setState] = useState({
         values: {
+            id:"",
             Name: "",
-            GroupMasterName: ""
+            GroupTypeName: ""
         },
         fieldLabel: {
             Name: '',
-            GroupMasterName: '',
+            GroupTypeName: '',
         },
 
         isError: {
             Name: "",
-            GroupMasterName: ""
+            GroupTypeName: ""
         },
 
         hasValid: {
@@ -88,7 +84,7 @@ const GroupMaster = (props) => {
                 inValidMsg: "",
                 valid: false
             },
-            CategoryTypeName: {
+            GroupTypeName: {
                 regExp: '',
                 inValidMsg: "",
                 valid: false
@@ -108,6 +104,7 @@ const GroupMaster = (props) => {
     useEffect(() => {
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(119))
+        dispatch(getGroupTypeslist())
     }, []);
 
     const location = { ...history.location }
@@ -133,8 +130,37 @@ const GroupMaster = (props) => {
     }, [userAccess])
 
     // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
-    useEffect(() => {
+    // useEffect(() => {
 
+    //     if (!(userPageAccessState === '')) { document.getElementById("txtName").focus(); }
+    //     if ((hasShowloction || hasShowModal)) {
+
+    //         let hasEditVal = null
+    //         if (hasShowloction) {
+    //             setPageMode(location.pageMode)
+    //             hasEditVal = location.editValue
+    //         }
+    //         else if (hasShowModal) {
+    //             hasEditVal = props.editValue
+    //             setPageMode(props.pageMode)
+    //             setModalCss(true)
+    //         }
+
+    //         if (hasEditVal) {
+    //             setGroupTypes_dropdown_Select({
+
+    //                 value: hasEditVal.GroupType_id,
+    //                 label: hasEditVal.GroupTypeName
+    //             })
+    //             // dispatch(editCategoryIDSuccess({ Status: false }))
+    //             dispatch(BreadcrumbShow(hasEditVal.Name))
+    //             return
+    //         }
+    //     }
+    // }, [])
+
+    useEffect(() => {
+        debugger
         // if (!(userPageAccessState === '')) { document.getElementById("txtName").focus(); }
         if ((hasShowloction || hasShowModal)) {
 
@@ -150,43 +176,45 @@ const GroupMaster = (props) => {
             }
 
             if (hasEditVal) {
-                setCategoryTypes_dropdown_Select({
+            
+                const { id, Name, GroupTypeName} = hasEditVal
+                const { values, fieldLabel, hasValid, required, isError } = { ...state }
+                values.Name = Name;
+                values.GroupTypeName = GroupTypeName;
+                values.id= id
+                setState({ values, fieldLabel, hasValid, required, isError })
+                dispatch(BreadcrumbShow(hasEditVal.GroupMaster))
 
-                    value: hasEditVal.CategoryType_id,
-                    label: hasEditVal.CategoryTypeName
-                })
-                dispatch(editCategoryIDSuccess({ Status: false }))
-                dispatch(BreadcrumbShow(hasEditVal.Name))
-                return
             }
+            dispatch(editGroupIDSuccess({ Status: false }))
         }
     }, [])
 
 
     useEffect(() => {
 
-        if ((PostAPIResponse.Status === true) && (PostAPIResponse.StatusCode === 200)) {
-            setCategoryTypes_dropdown_Select('')
-            dispatch(PostMethod_ForCategoryAPISuccess({ Status: false }))
+        if ((postMessage.Status === true) && (postMessage.StatusCode === 200)) {
+            setGroupTypes_dropdown_Select('')
+            dispatch(PostMethod_GroupList_Success({ Status: false }))
             formRef.current.reset();
             if (pageMode === "other") {
                 dispatch(AlertState({
                     Type: 1,
                     Status: true,
-                    Message: PostAPIResponse.Message,
+                    Message: postMessage.Message,
                 }))
             }
             else {
                 dispatch(AlertState({
                     Type: 1,
                     Status: true,
-                    Message: PostAPIResponse.Message,
-                    RedirectPath: '/CategoryList',
+                    Message: postMessage.Message,
+                    RedirectPath: '/GroupList',
                 }))
             }
         }
-        else if (PostAPIResponse.Status === true) {
-            dispatch(PostMethod_ForCategoryAPISuccess({ Status: false }))
+        else if (postMessage.Status === true) {
+            dispatch(PostMethod_GroupList_Success({ Status: false }))
             dispatch(AlertState({
                 Type: 4,
                 Status: true,
@@ -195,7 +223,7 @@ const GroupMaster = (props) => {
                 AfterResponseAction: false
             }));
         }
-    }, [PostAPIResponse])
+    }, [postMessage])
 
     useEffect(() => {
       
@@ -206,17 +234,17 @@ const GroupMaster = (props) => {
     }, [pageField])
 
 
-    //get method for dropdown
+    // get method for dropdown
     useEffect(() => {
-        dispatch(getCategoryTypelist());
+        dispatch(getGroupList());
     }, [dispatch]);
 
 
-    function handllerCategoryTypes(e) {
-        setCategoryTypes_dropdown_Select(e)
+    function handllerGroupTypes(e) {
+        setGroupTypes_dropdown_Select(e)
     }
 
-    const CategoryTypesValues = CategoryAPI.map((Data) => ({
+    const GroupTypesValues = GroupTypeAPI.map((Data) => ({
         value: Data.id,
         label: Data.Name
     }));
@@ -226,14 +254,14 @@ const GroupMaster = (props) => {
         if (formValid(state, setState)) {
             const jsonBody = JSON.stringify({
                 Name: values.Name,
-                CategoryType: values.CategoryTypeName.values,
+                GroupTypeName: values.GroupTypeName.values,
             });
 
             if (pageMode === "edit") {
-                dispatch(updateCategoryID(jsonBody, EditData.id));
+                dispatch(updateGroupID(jsonBody, EditData.id));
             }
             else {
-                dispatch(PostMethodForCategory(jsonBody));
+                dispatch(postGroupList(jsonBody));
 
             }
         }
@@ -267,6 +295,36 @@ const GroupMaster = (props) => {
                                             <Card>
                                                 <CardBody style={{ backgroundColor: "whitesmoke" }}>
                                                     <Row>
+                                                        
+                                                    <Col md="4">
+                                                                <FormGroup className="mb-3">
+                                                                    <Label htmlFor="validationCustom01"> {fieldLabel.GroupTypeName} </Label>
+                                                                    <Col sm={12}>
+                                                                        <Select
+                                                                            name="GroupTypename"
+                                                                            Value={values.GroupTypeName}
+                                                                            isSearchable={false}
+                                                                            className="react-dropdown"
+                                                                            classNamePrefix="dropdown"
+                                                                            onChange={(v, e) => onChangeSelect({ e, v, state, setState })}
+                                                                            options={GroupTypesValues}
+                                                                            styles={{
+                                                                                control: base => ({
+                                                                                    ...base,
+                                                                                    border: isError.GroupTypeName.length > 0 ? '1px solid red' : '',
+
+                                                                                })
+                                                                            }}
+                                                                        />
+                                                                        {isError.GroupTypeName.length > 0 && (
+                                                                            <span className="text-danger f-8"><small>{isError.GroupTypeName}</small></span>
+                                                                        )}
+                                                                    </Col>
+                                                                </FormGroup>
+                                                            </Col>
+                                                      
+
+                                                        <Row>
                                                         <FormGroup className="mb-2 col col-sm-4 ">
                                                             <Label htmlFor="validationCustom01">{fieldLabel.Name} </Label>
                                                             <Input
@@ -288,33 +346,12 @@ const GroupMaster = (props) => {
                                                             )}
                                                         </FormGroup>
 
-                                                        <Row>
-                                                            <Col md="4">
-                                                                <FormGroup className="mb-3">
-                                                                    <Label htmlFor="validationCustom01"> {fieldLabel.GroupMasterName} </Label>
-                                                                    <Col sm={12}>
-                                                                        <Select
-                                                                            name="GroupMasterName"
-                                                                            Value={values.GroupMaster}
-                                                                            isSearchable={false}
-                                                                            className="react-dropdown"
-                                                                            classNamePrefix="dropdown"
-                                                                            onChange={(v, e) => onChangeSelect({ e, v, state, setState })}
-                                                                            options={CategoryTypesValues}
-                                                                            styles={{
-                                                                                control: base => ({
-                                                                                    ...base,
-                                                                                    border: isError.GroupMasterName.length > 0 ? '1px solid red' : '',
 
-                                                                                })
-                                                                            }}
-                                                                        />
-                                                                        {isError.GroupMasterName.length > 0 && (
-                                                                            <span className="text-danger f-8"><small>{isError.GroupMasterName}</small></span>
-                                                                        )}
-                                                                    </Col>
-                                                                </FormGroup>
-                                                            </Col>
+
+
+
+
+
                                                         </Row>
 
                                                         <FormGroup>
