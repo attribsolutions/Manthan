@@ -16,7 +16,8 @@ import {
     editEmployeeTypeSuccess,
     PostEmployeeTypeSubmit,
     PostEmployeeTypeSubmitSuccess,
-    updateEmployeeTypeID
+    updateEmployeeTypeID,
+    updateEmployeeTypeIDSuccess
 } from "../../../store/Administrator/EmployeeTypeRedux/action";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
@@ -90,8 +91,9 @@ const EmployeeTypesMaster = (props) => {
     )
 
     //Access redux store Data /  'save_ModuleSuccess' action data
-    const { PostAPIResponse, pageField, userAccess, } = useSelector((state) => ({
-        PostAPIResponse: state.EmployeeTypeReducer.PostEmployeeType,
+    const { postMsg, updateMsg ,pageField, userAccess, } = useSelector((state) => ({
+        postMsg: state.EmployeeTypeReducer.PostEmployeeType,
+        updateMsg: state.EmployeeTypeReducer.updateMessage,
         userAccess: state.Login.RoleAccessUpdateData,
         pageField: state.CommonPageFieldReducer.pageField
     }));
@@ -162,7 +164,7 @@ const EmployeeTypesMaster = (props) => {
     }, [])
 
     useEffect(() => {
-        if ((PostAPIResponse.Status === true) && (PostAPIResponse.StatusCode === 200) && !(pageMode === "dropdownAdd")) {
+        if ((postMsg.Status === true) && (postMsg.StatusCode === 200) && !(pageMode === "dropdownAdd")) {
 
             dispatch(PostEmployeeTypeSubmitSuccess({ Status: false }))
             formRef.current.reset();
@@ -170,31 +172,47 @@ const EmployeeTypesMaster = (props) => {
                 dispatch(AlertState({
                     Type: 1,
                     Status: true,
-                    Message: PostAPIResponse.Message,
+                    Message: postMsg.Message,
                 }))
             }
             else {
                 dispatch(AlertState({
                     Type: 1,
                     Status: true,
-                    Message: PostAPIResponse.Message,
+                    Message: postMsg.Message,
                     RedirectPath: EMPLOYEETYPE_lIST,
 
                 }))
             }
         }
-        else if ((PostAPIResponse.Status === true) && !(pageMode === "dropdownAdd")) {
+        else if ((postMsg.Status === true) && !(pageMode === "dropdownAdd")) {
             dispatch(PostEmployeeTypeSubmitSuccess({ Status: false }))
             dispatch(AlertState({
                 Type: 4,
                 Status: true,
-                Message: JSON.stringify(PostAPIResponse.Message),
+                Message: JSON.stringify(postMsg.Message),
                 RedirectPath: false,
                 AfterResponseAction: false
             }));
         }
-    }, [PostAPIResponse])
+    }, [postMsg])
 
+    useEffect(() => {
+        if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
+            history.push({
+                pathname: EMPLOYEETYPE_lIST,
+            })
+        } else if (updateMsg.Status === true && !modalCss) {
+            dispatch(updateEmployeeTypeIDSuccess({ Status: false }));
+            dispatch(
+                AlertState({
+                    Type: 3,
+                    Status: true,
+                    Message: JSON.stringify(updateMsg.Message),
+                })
+            );
+        }
+    }, [updateMsg, modalCss]);
 
     useEffect(() => {
 

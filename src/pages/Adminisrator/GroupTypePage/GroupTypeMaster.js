@@ -28,7 +28,8 @@ import {
     getGroupTypeslistSuccess,
     PostGroupTypeSubmit,
     PostGroupTypeSubmitSuccess,
-    updateGroupTypeID
+    updateGroupTypeID,
+    updateGroupTypeIDSuccess
 } from "../../../store/Administrator/GroupTypeRedux/action";
 import {GROUPTYPE_lIST } from "../../../routes/route_url";
 
@@ -75,10 +76,12 @@ const GroupTypeMaster = (props) => {
     //Access redux store Data /  'save_ModuleSuccess' action data
     const {
         postMsg,
+        updateMsg,
         pageField,
         userAccess
     } = useSelector((state) => ({
         postMsg: state.GroupTypeReducer.PostData,
+        updateMsg: state.GroupTypeReducer.updateMessage,
         userAccess: state.Login.RoleAccessUpdateData,
         pageField: state.CommonPageFieldReducer.pageField
     }));
@@ -173,7 +176,23 @@ const GroupTypeMaster = (props) => {
         }
     }, [postMsg])
 
-    
+    useEffect(() => {
+        if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
+            history.push({
+                pathname: GROUPTYPE_lIST,
+            })
+        } else if (updateMsg.Status === true && !modalCss) {
+            dispatch(updateGroupTypeIDSuccess({ Status: false }));
+            dispatch(
+                AlertState({
+                    Type: 3,
+                    Status: true,
+                    Message: JSON.stringify(updateMsg.Message),
+                })
+            );
+        }
+    }, [updateMsg, modalCss]);
+
     useEffect(() => {
         if (pageField) {
             const fieldArr = pageField.PageFieldMaster
