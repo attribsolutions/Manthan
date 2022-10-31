@@ -124,13 +124,13 @@ export function comAddPageFieldFunc({ state, setState, fieldArr }) {
         // debugger
         Object.keys(values).forEach(lab => {
             if (lab === ele.ControlID) {
-                isState.fieldLabel[lab] = ele.FieldLabel
-                isState.hasValid[lab].regExp = ele.RegularExpression
-                isState.hasValid[lab].inValidMsg = ele.InValidMsg
+                isState.fieldLabel[lab] = ele.FieldLabel;
+                isState.hasValid[lab].regExp = ele.RegularExpression;
+                isState.hasValid[lab].inValidMsg = ele.InValidMsg;
                 if (ele.IsCompulsory) {
                     isState.required[lab] = true
-                }
-            }
+                };
+            };
         });
     });
 
@@ -153,3 +153,24 @@ export const onChangeDate = ({ v, e, state, setState }) => {
 export const onChangeText = ({ event, state, setState }) => {
     formValChange({ event, state, setState })
 }
+
+
+export const initialFiledFunc = (filed) => {
+    const obj = {}
+    obj["values"] = filed;
+    obj["fieldLabel"] = {}
+    obj["isError"] = {}
+    obj["hasValid"] = {}
+    obj["required"] = {}
+    
+    Object.keys(filed).forEach(label => {
+      
+      obj.fieldLabel[label] = ''
+      obj.isError[label] = ''
+      obj.hasValid[label] = {}
+      obj.hasValid[label]["regExp"] = ""
+      obj.hasValid[label]["inValidMsg"] = ""
+      obj.hasValid[label]["valid"] = false
+    })
+    return obj
+  }
