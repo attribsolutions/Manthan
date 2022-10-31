@@ -10,7 +10,8 @@ import {
   updateEmployeeID,
   PostEmployeeSuccess,
   Get_CompanyName_By_EmployeeTypeID,
-  editEmployeeSuccess
+  editEmployeeSuccess,
+  updateEmployeeIDSuccess
 } from "../../../store/Administrator/M_EmployeeRedux/action";
 import { AlertState, commonPageField, commonPageFieldSuccess } from "../../../store/actions";
 import { getDistrictOnState, getPartyListAPI } from "../../../store/Administrator/PartyRedux/action";
@@ -57,16 +58,18 @@ const AddEmployee = (props) => {
     district,
     partyList,
     company,
-    PostAPIResponse,
+    postMsg,
     userAccess,
-    pageField } = useSelector((state) => ({
+    pageField,
+    updateMsg } = useSelector((state) => ({
       designation: state.M_EmployeesReducer.designation,
       employeeType: state.M_EmployeesReducer.employeeType,
       State: state.M_EmployeesReducer.State,
       district: state.PartyMasterReducer.DistrictOnState,
       partyList: state.PartyMasterReducer.partyList,
       company: state.M_EmployeesReducer.CompanyNames,
-      PostAPIResponse: state.M_EmployeesReducer.postMessage,
+      postMsg: state.M_EmployeesReducer.postMessage,
+      updateMsg: state.M_EmployeesReducer.updateMessage,
       userAccess: state.Login.RoleAccessUpdateData,
       pageField: state.CommonPageFieldReducer.pageField
 
@@ -320,7 +323,7 @@ const AddEmployee = (props) => {
 
   useEffect(() => {
 
-    if ((PostAPIResponse.Status === true) && (PostAPIResponse.StatusCode === 200) && !(pageMode === "dropdownAdd")) {
+    if ((postMsg.Status === true) && (postMsg.StatusCode === 200) && !(pageMode === "dropdownAdd")) {
       dispatch(PostEmployeeSuccess({ Status: false }))
       formRef.current.reset();
       setDesignation_DropdownSelect('')
@@ -335,30 +338,47 @@ const AddEmployee = (props) => {
         dispatch(AlertState({
           Type: 1,
           Status: true,
-          Message: PostAPIResponse.Message,
+          Message: postMsg.Message,
         }))
       }
       else {
         dispatch(AlertState({
           Type: 1,
           Status: true,
-          Message: PostAPIResponse.Message,
+          Message: postMsg.Message,
           RedirectPath: EMPLOYEE_lIST,
         }))
       }
     }
 
-    else if (PostAPIResponse.Status === true) {
+    else if (postMsg.Status === true) {
       dispatch(PostEmployeeSuccess({ Status: false }))
       dispatch(AlertState({
         Type: 4,
         Status: true,
-        Message: JSON.stringify(PostAPIResponse.Message),
+        Message: JSON.stringify(postMsg.Message),
         RedirectPath: false,
         AfterResponseAction: false
       }));
     }
-  }, [PostAPIResponse])
+  }, [postMsg])
+
+  useEffect(() => {
+    if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
+        history.push({
+            pathname: EMPLOYEE_lIST,
+        })
+    } else if (updateMsg.Status === true && !modalCss) {
+        dispatch(updateEmployeeIDSuccess({ Status: false }));
+        dispatch(
+            AlertState({
+                Type: 3,
+                Status: true,
+                Message: JSON.stringify(updateMsg.Message),
+            })
+        );
+    }
+}, [updateMsg, modalCss]);
 
   useEffect(() => {
 

@@ -29,7 +29,8 @@ import {
     PostMethod_ForVehicleMasterSuccess,
     getMethod_ForVehicleListSuccess,
     editVehicleTypeSuccess,
-    updateVehicleTypeID
+    updateVehicleTypeID,
+    updateVehicleTypeIDSuccess
 } from "../../../store/Administrator/VehicleRedux/action";
 import { get_Division_ForDropDown, } from "../../../store/Administrator/ItemsRedux/action";
 import { useHistory } from "react-router-dom";
@@ -127,13 +128,14 @@ const VehicleMaster = (props) => {
     //Access redux store Data /  'save_ModuleSuccess' action data
     const {
         postMsg,
-        VehicleList,
+        updateMsg,
         Divisions,
         VehicleTypes,
         pageField,
         DriverList_redux,
         userAccess } = useSelector((state) => ({
             postMsg: state.VehicleReducer.postMsg,
+            updateMsg: state.VehicleReducer.updateMsg,
             VehicleList: state.VehicleReducer.VehicleList,
             Divisions: state.ItemMastersReducer.Division,
             VehicleTypes: state.VehicleReducer.VehicleTypes,
@@ -269,6 +271,23 @@ const VehicleMaster = (props) => {
             }));
         }
     }, [postMsg])
+
+    useEffect(() => {
+        if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
+            history.push({
+                pathname: VEHICLE_lIST,
+            })
+        } else if (updateMsg.Status === true && !modalCss) {
+            dispatch(updateVehicleTypeIDSuccess({ Status: false }));
+            dispatch(
+                AlertState({
+                    Type: 3,
+                    Status: true,
+                    Message: JSON.stringify(updateMsg.Message),
+                })
+            );
+        }
+    }, [updateMsg, modalCss]);
 
     useEffect(() => {
 

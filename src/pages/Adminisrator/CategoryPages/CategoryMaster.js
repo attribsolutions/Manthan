@@ -20,14 +20,14 @@ import {
     editCategoryIDSuccess,
     PostMethodForCategory,
     PostMethod_ForCategoryAPISuccess,
-    updateCategoryID
+    updateCategoryID,
+    updateCategoryIDSuccess
 } from "../../../store/Administrator/CategoryRedux/action";
 import { AlertState } from "../../../store/actions";
 import { CommonGetRoleAccessFunction } from "../../../components/Common/CommonGetRoleAccessFunction";
 import { useHistory } from "react-router-dom";
 import {
     comAddPageFieldFunc,
-    formValChange,
     formValid,
     onChangeSelect,
     onChangeText,
@@ -36,10 +36,7 @@ import {
 import { SaveButton } from "../../../components/CommonSaveButton";
 import { CATEGORY_lIST } from "../../../routes/route_url";
 
-
 const CategoryMaster = (props) => {
-
-    
 
     const formRef = useRef(null);
     const history = useHistory()
@@ -47,17 +44,17 @@ const CategoryMaster = (props) => {
 
     const [pageMode, setPageMode] = useState("");
     const [modalCss, setModalCss] = useState(false);
-
     const [userPageAccessState, setUserPageAccessState] = useState(123);
-
 
     //Access redux store Data /  'save_ModuleSuccess' action data
     const {
-        PostAPIResponse,
+        postMsg,
         CategoryAPI,
         pageField,
+        updateMsg,
         userAccess } = useSelector((state) => ({
-            PostAPIResponse: state.CategoryReducer.PostDataMessage,
+            postMsg: state.CategoryReducer.PostDataMessage,
+            updateMsg: state.CategoryReducer.updateMessage,
             CategoryAPI: state.categoryTypeReducer.categoryTypeListData,
             userAccess: state.Login.RoleAccessUpdateData,
             pageField: state.CommonPageFieldReducer.pageField
@@ -65,7 +62,7 @@ const CategoryMaster = (props) => {
 
 
     {/** Dyanamic Page access state and OnChange function */ }
-    {/*start */ }
+
     const [state, setState] = useState({
         values: {
             id: "",
@@ -104,9 +101,6 @@ const CategoryMaster = (props) => {
     const values = { ...state.values }
     const { isError } = state;
     const { fieldLabel } = state;
-
-
-    {/*End */ }
 
     useEffect(() => {
         dispatch(commonPageFieldSuccess(null));
@@ -156,7 +150,7 @@ const CategoryMaster = (props) => {
 
                 const { id, Name, CategoryTypeName, CategoryType } = hasEditVal
                 const { values, fieldLabel, hasValid, required, isError } = { ...state }
-                
+
                 hasValid.Name.valid = true;
                 hasValid.CategoryTypeName.valid = true;
 
@@ -174,26 +168,26 @@ const CategoryMaster = (props) => {
 
     useEffect(() => {
 
-        if ((PostAPIResponse.Status === true) && (PostAPIResponse.StatusCode === 200)) {
+        if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(PostMethod_ForCategoryAPISuccess({ Status: false }))
             formRef.current.reset();
             if (pageMode === "other") {
                 dispatch(AlertState({
                     Type: 1,
                     Status: true,
-                    Message: PostAPIResponse.Message,
+                    Message: postMsg.Message,
                 }))
             }
             else {
                 dispatch(AlertState({
                     Type: 1,
                     Status: true,
-                    Message: PostAPIResponse.Message,
+                    Message: postMsg.Message,
                     RedirectPath: CATEGORY_lIST,
                 }))
             }
         }
-        else if (PostAPIResponse.Status === true) {
+        else if (postMsg.Status === true) {
             dispatch(PostMethod_ForCategoryAPISuccess({ Status: false }))
             dispatch(AlertState({
                 Type: 4,
@@ -203,7 +197,24 @@ const CategoryMaster = (props) => {
                 AfterResponseAction: false
             }));
         }
-    }, [PostAPIResponse])
+    }, [postMsg])
+
+    useEffect(() => {
+        if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
+            history.push({
+                pathname: CATEGORY_lIST,
+            })
+        } else if (updateMsg.Status === true && !modalCss) {
+            dispatch(updateCategoryIDSuccess({ Status: false }));
+            dispatch(
+                AlertState({
+                    Type: 3,
+                    Status: true,
+                    Message: JSON.stringify(updateMsg.Message),
+                })
+            );
+        }
+    }, [updateMsg, modalCss]);
 
     useEffect(() => {
 
@@ -213,12 +224,10 @@ const CategoryMaster = (props) => {
         }
     }, [pageField])
 
-
     //get method for dropdown
     useEffect(() => {
         dispatch(getCategoryTypelist());
     }, [dispatch]);
-
 
     const CategoryTypesValues = CategoryAPI.map((Data) => ({
         value: Data.id,
@@ -235,15 +244,12 @@ const CategoryMaster = (props) => {
 
             if (pageMode === "edit") {
                 dispatch(updateCategoryID(jsonBody, values.id,));
-                console.log("jsonBody", jsonBody)
             }
             else {
                 dispatch(PostMethodForCategory(jsonBody));
-
             }
         }
     };
-
 
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
     var IsEditMode_Css = ''
@@ -300,12 +306,11 @@ const CategoryMaster = (props) => {
                                                                         <Select
                                                                             name="CategoryTypeName"
                                                                             value={values.CategoryTypeName}
-                                                                            //   value={{label:"abc",value:1}}//default value set
                                                                             isSearchable={false}
                                                                             className="react-dropdown"
                                                                             classNamePrefix="dropdown"
                                                                             options={CategoryTypesValues}
-                                                                            onChange={(v, e) => onChangeSelect({ e, v, state, setState })}
+                                                                            onChange={(e, v) => onChangeSelect({ e, v, state, setState })}
                                                                         />
                                                                         {isError.CategoryTypeName.length > 0 && (
                                                                             <span className="text-danger f-8"><small>{isError.CategoryTypeName}</small></span>

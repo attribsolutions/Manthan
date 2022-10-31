@@ -10,7 +10,7 @@ import { useSelector, useDispatch } from "react-redux";
 import "../../assets/scss/CustomTable2/datatables.scss"
 import { MetaTags } from "react-meta-tags";
 import { useHistory } from "react-router-dom";
-import { getOrderListPage } from "../../store/Purchase/OrderPageRedux/actions";
+import { deleteOrderID_From_OrderPage, deleteOrderID_From_OrderPageSuccess, getOrderListPage } from "../../store/Purchase/OrderPageRedux/actions";
 import { AlertState } from "../../store/actions";
 import Breadcrumb from "../../components/Common/Breadcrumb";
 import { mySearchProps } from "../../components/Common/CmponentRelatedCommonFile/SearchBox/MySearch";
@@ -31,7 +31,7 @@ const OrderList = (props) => {
         userAccess, } = useSelector(
             (state) => ({
                 tableList: state.OrderPageReducer.OrderListPage,
-                deleteMsg: state.OrderPageReducer.deleteMsgForListPage,
+                deleteMsg: state.OrderPageReducer.deleteMessage,
                 userAccess: state.Login.RoleAccessUpdateData,
                 pageField: state.CommonPageFieldReducer.pageFieldList
             })
@@ -53,40 +53,40 @@ const OrderList = (props) => {
         dispatch(getOrderListPage());
     }, []);
 
-    // useEffect(() => {
+    useEffect(() => {
 
-    //     if ((deleteMsg.Status === true) && (deleteMsg.StatusCode === 200)) {
-    //         dispatch(deleteGSTListPageSuccess({ Status: false }));
-    //         dispatch(
-    //             AlertState({
-    //                 Type: 1,
-    //                 Status: true,
-    //                 Message: deleteMsg.Message,
-    //                 AfterResponseAction: getGSTListPage,
-    //             })
-    //         );
-    //     } else if (deleteMsg.Status === true) {
-    //         dispatch(deleteGSTListPageSuccess({ Status: false }));
-    //         dispatch(
-    //             AlertState({
-    //                 Type: 3,
-    //                 Status: true,
-    //                 Message: JSON.stringify(deleteMsg.Message),
-    //             })
-    //         );
-    //     }
-    // }, [deleteMsg]);
+        if ((deleteMsg.Status === true) && (deleteMsg.StatusCode === 200)) {
+            dispatch(deleteOrderID_From_OrderPageSuccess({ Status: false }));
+            dispatch(
+                AlertState({
+                    Type: 1,
+                    Status: true,
+                    Message: deleteMsg.Message,
+                    AfterResponseAction: getOrderListPage,
+                })
+            );
+        } else if (deleteMsg.Status === true) {
+            dispatch(deleteOrderID_From_OrderPageSuccess({ Status: false }));
+            dispatch(
+                AlertState({
+                    Type: 3,
+                    Status: true,
+                    Message: JSON.stringify(deleteMsg.Message),
+                })
+            );
+        }
+    }, [deleteMsg]);
 
     //select id for delete row
-    const deleteHandeler = (id) => {
+    const deleteHandeler = (id,name) => {
         debugger
         dispatch(
             AlertState({
                 Type: 5,
                 Status: true,
-                Message: `Are you sure you want to delete this Order `,
+                Message: `Are you sure you want to delete this Order : ${name}`,
                 RedirectPath: false,
-                // PermissionAction: deleteGSTListPage,
+                PermissionAction: deleteOrderID_From_OrderPage,
                 ID: id,
             })
         );
@@ -176,7 +176,7 @@ const OrderList = (props) => {
                         <Button
                             className="badge badge-soft-danger font-size-12 btn btn-danger waves-effect waves-light w-xxs border border-light"
                             data-mdb-toggle="tooltip" data-mdb-placement="top" title="Delete Order"
-                            onClick={() => { deleteHandeler(Role.id) }}
+                            onClick={() => { deleteHandeler(Role.id,Role.Customer) }}
                         >
                             <i className="mdi mdi-delete font-size-18"></i>
                         </Button>

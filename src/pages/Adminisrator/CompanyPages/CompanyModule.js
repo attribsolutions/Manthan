@@ -20,7 +20,8 @@ import {
   PostCompanySubmit,
   PostCompanySubmitSuccess,
   updateCompanyID,
-  getCompanyGroup
+  getCompanyGroup,
+  updateCompanyIDSuccess
 } from "../../../store/Administrator/CompanyRedux/actions";
 import { MetaTags } from "react-meta-tags";
 import { AlertState, commonPageField, commonPageFieldSuccess } from "../../../store/actions";
@@ -53,14 +54,15 @@ const CompanyModule = (props) => {
   const [CompanyGroupselect, setCompanyGroup] = useState("");
 
   //Access redux store Data /  'save_ModuleSuccess' action data
-  const { postMsg, userAccess, pageField } = useSelector((state) => ({
+  const { postMsg,updateMsg, userAccess, pageField } = useSelector((state) => ({
     postMsg: state.Company.postMsg,
+    updateMsg: state.Company.updateMessage,
     userAccess: state.Login.RoleAccessUpdateData,
     pageField: state.CommonPageFieldReducer.pageField
   }));
 
   {/** Dyanamic Page access state and OnChange function */ }
-  {/*start */ }
+
   const [state, setState] = useState({
     values: {
       id: "",
@@ -136,6 +138,7 @@ const CompanyModule = (props) => {
 
     }
   })
+
   const values = { ...state.values }
   const { isError } = state;
   const { fieldLabel } = state;
@@ -247,6 +250,22 @@ const CompanyModule = (props) => {
     }
   }, [postMsg])
 
+  useEffect(() => {
+    if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
+        history.push({
+            pathname: COMPANY_lIST,
+        })
+    } else if (updateMsg.Status === true && !modalCss) {
+        dispatch(updateCompanyIDSuccess({ Status: false }));
+        dispatch(
+            AlertState({
+                Type: 3,
+                Status: true,
+                Message: JSON.stringify(updateMsg.Message),
+            })
+        );
+    }
+}, [updateMsg, modalCss]);
 
   const { CompanyGroup } = useSelector((state) => ({
     CompanyGroup: state.Company.CompanyGroup
