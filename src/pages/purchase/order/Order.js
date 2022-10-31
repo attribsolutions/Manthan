@@ -26,6 +26,7 @@ import { mySearchProps } from "../../../components/Common/CmponentRelatedCommonF
 import { AlertState } from "../../../store/actions";
 import { basicAmount, GstAmount, handleKeyDown, totalAmount } from "./OrderPageCalulation";
 import '../../Order/div.css'
+
 let description = 'order'
 
 function Order() {
@@ -33,9 +34,12 @@ function Order() {
     // const props = { tableData: [], func: function a() { } }
     const dispatch = useDispatch();
     const history = useHistory()
+
+    let editMode = history.location.pageMode;
     const [userPageAccessState, setUserPageAccessState] = useState('');
-    const [effectiveDate, setEffectiveDate] = useState('');
+    const [effectiveDate, setEffectiveDate] = useState("");
     const [customerSelect, setCustomerSelect] = useState('');
+    const [Description, setDescription] = useState('');
     const [orderAmount, setOrderAmount1] = useState("");
     const [change, setChange] = useState(false);
 
@@ -88,27 +92,29 @@ function Order() {
             return (`/${inx.ActualPagePath}` === locationPath)
         })
 
+        let division = 0
+        try {
+            division = JSON.parse(localStorage.getItem("roleId")).Party_id
+        } catch (e) {
+            alert(e)
+        }
         if (!(editDataGatingFromList === undefined)) {
-            var CustomerName = editDataGatingFromList.Customer
+            var CustomerName = editDataGatingFromList.Supplier
+            var Customerid = 28
             var description = editDataGatingFromList.Description
             var orderDate = editDataGatingFromList.OrderDate
 
-            // const jsonBody = JSON.stringify({
-            //     PriceList: PriceListid,
-            //     Party: partyId,
-            //     EffectiveDate: effectiveDate
-            // });
-
             const jsonBody = JSON.stringify({
-                // Division: division,
-                // Party: party,
+                Division: division,
+                Party: Customerid,
                 EffectiveDate: orderDate
             }
             );
             dispatch(goButton(jsonBody))
             // setPartyName_dropdown_Select({ label: partyName, value: partyId })
-            // setpriceList_dropdown_Select({ label: priceListName, value: PriceListid })
-            // setEffectiveDate(effectiveDate)
+            setCustomerSelect({ label: CustomerName, value: Customerid })
+            setEffectiveDate(orderDate)
+            setDescription(description)
 
         }
         if (!(userAcc === undefined)) {
@@ -333,6 +339,7 @@ function Order() {
         );
 
         dispatch(goButton(jsonBody))
+        console.log("jsonBody", jsonBody)
     };
 
     const saveHandeller = () => {
@@ -441,16 +448,16 @@ function Order() {
                                         <Flatpickr
                                             id="EffectiveDateid"
                                             name="effectiveDate"
-                                            // value={effectiveDate}
-                                            // isDisabled={editMode === "edit" ? true : false}
+                                            value={effectiveDate}
                                             className="form-control d-block p-2 bg-white text-dark"
                                             placeholder="Select..."
                                             options={{
                                                 altInput: true,
                                                 altFormat: "F j, Y",
                                                 dateFormat: "Y-m-d",
-                                                minDate: "today",
-                                                defaultDate: "today"
+                                                minDate: editMode === "edit" ? effectiveDate : "today",
+                                                maxDate: editMode === "edit" ? effectiveDate : "",
+                                                defaultDate: editMode === "edit" ? "" : "today"
                                             }}
                                             onChange={EffectiveDateHandler}
                                         />
@@ -464,9 +471,9 @@ function Order() {
                                         style={{ width: "130px" }}>Customer Name</Label>
                                     <Col md="7">
                                         <Select
-                                            // Value={customerName_dropdownSelect}
+                                            value={customerSelect}
                                             classNamePrefix="select2-Customer"
-
+                                            isDisabled={editMode === "edit" ? true : false}
                                             options={supplierOptions}
                                             onChange={(e) => { setCustomerSelect(e) }}
                                         />
@@ -485,8 +492,9 @@ function Order() {
                                         style={{ width: "100px" }}>Descreption</Label>
                                     <div>
                                         <Input
+                                            value={description}
                                             placeholder="Enter Description"
-                                            onChange={e => description = e.target.value}
+                                            onChange={(e) => { description = e.target.value }}
                                         />
                                     </div>
                                 </FormGroup>
