@@ -40,6 +40,7 @@ import { DRIVER_lIST, VEHICLE_lIST } from "../../../routes/route_url";
 import {
     comAddPageFieldFunc,
     formValid,
+    initialFiledFunc,
     onChangeSelect,
     onChangeText
 } from "../../../components/Common/CmponentRelatedCommonFile/validationFunction";
@@ -61,70 +62,18 @@ const VehicleMaster = (props) => {
     const [divisionData, setDivisionData] = useState([]);
 
     const [divisionType_dropdown_Select, setDivisionType_dropdown_Select] = useState("");
-    const [DriverList_dropdown_Select, setDriverList_dropdown_Select] = useState("");
-    const [VehicleType_dropdown_Select, setVehicleType_dropdown_Select] = useState("");
-
-    const [state, setState] = useState({
-        values: {
-            id: "",
-            VehicleNumber: "",
-            Description: "",
-            DriverName: "",
-            Vehicletype: "",
-            VehicleDivisions: ""
-        },
-        fieldLabel: {
-            VehicleNumber: "",
-            Description: "",
-            DriverName: "",
-            Vehicletype: "",
-            VehicleDivisions: ""
-        },
-
-        isError: {
-            VehicleNumber: "",
-            Description: "",
-            DriverName: "",
-            Vehicletype: "",
-            VehicleDivisions: ""
-        },
-
-        hasValid: {
-            VehicleNumber: {
-                regExp: '',
-                inValidMsg: "",
-                valid: false
-            },
-            Description: {
-                regExp: '',
-                inValidMsg: "",
-                valid: false
-            },
-
-            DriverName: {
-                regExp: '',
-                inValidMsg: "",
-                valid: false
-            },
-            Vehicletype: {
-                regExp: '',
-                inValidMsg: "",
-                valid: false
-            },
-
-            VehicleDivisions: {
-                regExp: '',
-                inValidMsg: "",
-                valid: false
-            }
-        },
-        required: {
-
-        }
-    }
-    )
-
-
+   
+    const initialFiled = {
+        id: "",
+        VehicleNumber: "",
+        Description: "",
+        DriverName: "",
+        Vehicletype: "",
+        VehicleDivisions: ""
+      }
+    
+    const [state, setState] = useState(initialFiledFunc(initialFiled))
+   
     //Access redux store Data /  'save_ModuleSuccess' action data
     const {
         postMsg,
@@ -429,7 +378,8 @@ const VehicleMaster = (props) => {
                                                                         className="react-dropdown"
                                                                         classNamePrefix="dropdown"
                                                                         options={DriverList_DropdownOptions}
-                                                                        onChange={(e, v) => onChangeSelect({ e, v, state, setState })}
+                                                                        onChange={(hasSelect, evn) => onChangeSelect({ hasSelect, evn, state, setState, })}
+                                                                       
                                                                     />
                                                                     {isError.DriverName.length > 0 && (
                                                                         <span className="text-danger f-8"><small>{isError.DriverName}</small></span>
@@ -453,7 +403,7 @@ const VehicleMaster = (props) => {
                                                                         className="react-dropdown"
                                                                         classNamePrefix="dropdown"
                                                                         options={VehicleType_DropdownOptions}
-                                                                        onChange={(e, v) => onChangeSelect({ e, v, state, setState })}
+                                                                        onChange={(hasSelect, evn) => onChangeSelect({ hasSelect, evn, state, setState, })}
                                                                     />
                                                                     {isError.Vehicletype.length > 0 && (
                                                                         <span className="text-danger f-8"><small>{isError.Vehicletype}</small></span>
@@ -520,11 +470,10 @@ const VehicleMaster = (props) => {
                                                                     className="react-dropdown"
                                                                     classNamePrefix="dropdown"
                                                                     options={DivisionType_DropdownOptions}
-                                                                    onChange={(e, v) => {
-                                                                        onChangeSelect({ e, v, state, setState })
-                                                                        DivisionType_DropDown_handller(e)
-                                                                    }
-                                                                    }
+                                                                    onChange={(hasSelect, evn) => {
+                                                                        onChangeSelect({ hasSelect, evn, state, setState, })
+                                                                        DivisionType_DropDown_handller(evn)
+                                                                    }}
                                                                 />
                                                                 {isError.VehicleDivisions.length > 0 && (
                                                                     <span className="text-danger f-8"><small>{isError.VehicleDivisions}</small></span>
