@@ -25,6 +25,7 @@ import { EMPLOYEE_lIST } from "../../../routes/route_url";
 import {
   comAddPageFieldFunc,
   formValid,
+  initialFiledFunc,
   onChangeDate,
   onChangeSelect,
   onChangeText,
@@ -75,8 +76,7 @@ const AddEmployee = (props) => {
 
     }));
 
-  const [state, setState] = useState({
-    values: {
+    const initialFiled = {
       id: "",
       Name: "",
       Address: "",
@@ -92,120 +92,10 @@ const AddEmployee = (props) => {
       StateName: "",
       DistrictName: "",
       EmployeeParties: ""
-
-    },
-    fieldLabel: {
-      Name: "",
-      Address: "",
-      Mobile: "",
-      email: "",
-      DOB: "",
-      PAN: "",
-      AadharNo: "",
-      working_hours: "",
-      CompanyName: "",
-      DesignationName: "",
-      EmployeeTypeName: "",
-      StateName: "",
-      DistrictName: "",
-      EmployeeParties: ""
-
-    },
-
-    isError: {
-      Name: "",
-      Address: "",
-      Mobile: "",
-      email: "",
-      DOB: "",
-      PAN: "",
-      AadharNo: "",
-      working_hours: "",
-      CompanyName: "",
-      DesignationName: "",
-      EmployeeTypeName: "",
-      StateName: "",
-      DistrictName: "",
-      EmployeeParties: ""
-
-    },
-
-    hasValid: {
-      Name: {
-        regExp: '',
-        inValidMsg: "",
-        valid: false
-      },
-      Address: {
-        regExp: '',
-        inValidMsg: "",
-        valid: false
-      },
-      Mobile: {
-        regExp: '',
-        inValidMsg: "",
-        valid: false
-      },
-      email: {
-        regExp: '',
-        inValidMsg: "",
-        valid: false
-      },
-      DOB: {
-        regExp: '',
-        inValidMsg: "",
-        valid: false
-      },
-      PAN: {
-        regExp: '',
-        inValidMsg: "",
-        valid: false
-      },
-      AadharNo: {
-        regExp: '',
-        inValidMsg: "",
-        valid: false
-      },
-      working_hours: {
-        regExp: '',
-        inValidMsg: "",
-        valid: false
-      },
-      CompanyName: {
-        regExp: '',
-        inValidMsg: "",
-        valid: false
-      },
-      DesignationName: {
-        regExp: '',
-        inValidMsg: "",
-        valid: false
-      },
-      EmployeeTypeName: {
-        regExp: '',
-        inValidMsg: "",
-        valid: false
-      },
-      StateName: {
-        regExp: '',
-        inValidMsg: "",
-        valid: false
-      },
-      DistrictName: {
-        regExp: '',
-        inValidMsg: "",
-        valid: false
-      },
-      EmployeeParties: {
-        regExp: '',
-        inValidMsg: "",
-        valid: false
-      },
-    },
-    required: {
-
     }
-  })
+  
+  const [state, setState] = useState(initialFiledFunc(initialFiled))
+ 
   const values = { ...state.values }
   const { isError } = state;
   const { fieldLabel } = state;
@@ -675,11 +565,11 @@ const AddEmployee = (props) => {
                               className="react-dropdown"
                               classNamePrefix="dropdown"
                               options={State_DropdownOptions}
-                              onChange={(e,v) => {
-                                onChangeSelect({ e, v, state, setState });
-                                State_Dropdown_Handler(v)
-                              }
-                              }
+                              onChange={(hasSelect, evn) =>{
+                                 onChangeSelect({ hasSelect, evn, state, setState, })
+                                 State_Dropdown_Handler(hasSelect)
+                                }}
+                             
                             />
                             {isError.StateName.length > 0 && (
                               <span className="text-danger f-8"><small>{isError.StateName}</small></span>
@@ -698,11 +588,11 @@ const AddEmployee = (props) => {
                               className="react-dropdown"
                               classNamePrefix="dropdown"
                               options={District_DropdownOptions}
-                              onChange={(e,v) => {
-                                onChangeSelect({ e, v, state, setState });
-                                District_Dropdown_Handler(v)
-                              }
-                              }
+                              onChange={(hasSelect, evn) =>{
+                                onChangeSelect({ hasSelect, evn, state, setState, })
+                                District_Dropdown_Handler(hasSelect)
+                               }}
+                            
                             />
                             {isError.DistrictName.length > 0 && (
                               <span className="text-danger f-8"><small>{isError.DistrictName}</small></span>
@@ -727,9 +617,9 @@ const AddEmployee = (props) => {
                               className="react-dropdown"
                               classNamePrefix="dropdown"
                               options={EmployeeType_DropdownOptions}
-                              onChange={(e,v) => {
-                                onChangeSelect({ e, v, state, setState });
-                                EmployeeType_Dropdown_Handler(v)
+                              onChange={(hasSelect,evn) => {
+                                onChangeSelect({hasSelect,evn, state, setState });
+                                EmployeeType_Dropdown_Handler(hasSelect)
                               }
                               }
                             />
@@ -750,9 +640,9 @@ const AddEmployee = (props) => {
                               className="react-dropdown"
                               classNamePrefix="dropdown"
                               options={Company_DropdownOptions}
-                              onChange={(e,v) => {
-                                onChangeSelect({ e, v, state, setState });
-                                Company_Dropdown_Handler(v)
+                              onChange={(hasSelect,evn) => {
+                                onChangeSelect({hasSelect,evn, state, setState });
+                                Company_Dropdown_Handler(hasSelect)
                               }
                               }
                             />
@@ -776,9 +666,9 @@ const AddEmployee = (props) => {
                                 isMulti={true}
                                 className="react-dropdown"
                                 options={Party_DropdownOptions}
-                                onChange={(e,v) => {
-                                  onChangeSelect({ e, v, state, setState });
-                                  Party_Dropdown_Handler(v)
+                                onChange={(hasSelect,evn) => {
+                                  onChangeSelect({ hasSelect,evn, state, setState });
+                                  Party_Dropdown_Handler(hasSelect)
                                 }
                                 }
                                 classNamePrefix="dropdown"
@@ -802,7 +692,7 @@ const AddEmployee = (props) => {
                               className="react-dropdown"
                               classNamePrefix="dropdown"
                               options={Designation_DropdownOptions}
-                              onChange={(e,v) => onChangeSelect({ e, v, state, setState })}
+                              onChange={(hasSelect,evn) => onChangeSelect({ hasSelect,evn, state, setState })}
                             />
                             {isError.DesignationName.length > 0 && (
                               <span className="text-danger f-8"><small>{isError.DesignationName}</small></span>
