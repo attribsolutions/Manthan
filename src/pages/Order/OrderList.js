@@ -14,6 +14,8 @@ import { getOrderListPage } from "../../store/Purchase/OrderPageRedux/actions";
 import { AlertState } from "../../store/actions";
 import Breadcrumb from "../../components/Common/Breadcrumb";
 import { mySearchProps } from "../../components/Common/CmponentRelatedCommonFile/SearchBox/MySearch";
+import { InvoiceFakeData } from "./InvioceFakedata";
+import generate from "../../Reports/InvioceReport/Page";
 
 const OrderList = (props) => {
 
@@ -34,6 +36,7 @@ const OrderList = (props) => {
                 pageField: state.CommonPageFieldReducer.pageFieldList
             })
         );
+    console.log(userAccess)
 
     useEffect(() => {
         const locationPath = history.location.pathname
@@ -106,6 +109,12 @@ const OrderList = (props) => {
         }
     }
 
+    function onPrintHandeler(id) {
+        // dispatch(editOrder_forOrderPage(id));
+        // if (!(editOrderData.length === 0)) {
+        //   console.log("datataat", editOrderData)
+        generate(InvoiceFakeData)
+    }
     const pageOptions = {
         sizePerPage: 10,
         totalSize: tableList.length,
@@ -170,6 +179,17 @@ const OrderList = (props) => {
                             onClick={() => { deleteHandeler(Role.id) }}
                         >
                             <i className="mdi mdi-delete font-size-18"></i>
+                        </Button>
+                        : null
+                    }
+                    {((userPageAccessState.RoleAccess_IsPrint))
+                        ?
+                        <Button
+                            className="badge badge-soft-info font-size-12 btn
+                         btn-info waves-effect waves-light w-xxs border border-light"
+                            onClick={onPrintHandeler}
+                        >
+                            <i class="mdi mdi-shredder font-size-18"></i>
                         </Button>
                         : null
                     }
