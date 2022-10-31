@@ -24,6 +24,7 @@ import {
     editCategoryTypeIDSuccess,
     updateCategoryTypeID,
     getCategoryTypelistSuccess,
+    updateCategoryTypeIDSuccess,
 } from "../../../store/Administrator/CategoryTypeRedux/actions";
 import {
     comAddPageFieldFunc,
@@ -39,18 +40,13 @@ const CategoryTypeMaster = (props) => {
     const dispatch = useDispatch();
     const [modalCss, setModalCss] = useState(false);
 
-    const [EditData, setEditData] = useState([]);
     const [pageMode, setPageMode] = useState("");
     const [userPageAccessState, setUserPageAccessState] = useState(123);
 
-
-    //*** "isEditdata get all data from ModuleID for Binding  Form controls
-    let editDataGetingFromList = props.state;
-    let pageModeProps = props.pageMode;
-
     //Access redux store Data /  'save_ModuleSuccess' action data
-    const { PostAPIResponse, pageField, userAccess } = useSelector((state) => ({
-        PostAPIResponse: state.categoryTypeReducer.PostData,
+    const { postMsg, updateMsg, pageField, userAccess } = useSelector((state) => ({
+        postMsg: state.categoryTypeReducer.PostData,
+        updateMsg: state.categoryTypeReducer.updateMessage,
         userAccess: state.Login.RoleAccessUpdateData,
         pageField: state.CommonPageFieldReducer.pageField
     }));
@@ -60,7 +56,6 @@ const CategoryTypeMaster = (props) => {
     }, []);
 
     {/** Dyanamic Page access state and OnChange function */ }
-    {/*start */ }
     const [state, setState] = useState({
         values: {
             Name: "",
@@ -151,7 +146,7 @@ const CategoryTypeMaster = (props) => {
 
     useEffect(() => {
 
-        if ((PostAPIResponse.Status === true) && (PostAPIResponse.StatusCode === 200)) {
+        if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(PostMethod_ForCategoryTypeMasterAPISuccess({ Status: false }))
 
 
@@ -159,7 +154,7 @@ const CategoryTypeMaster = (props) => {
                 dispatch(AlertState({
                     Type: 1,
                     Status: true,
-                    Message: PostAPIResponse.Message,
+                    Message: postMsg.Message,
                 }))
             }
 
@@ -167,22 +162,39 @@ const CategoryTypeMaster = (props) => {
                 dispatch(AlertState({
                     Type: 1,
                     Status: true,
-                    Message: PostAPIResponse.Message,
+                    Message: postMsg.Message,
                     RedirectPath: CATEGORYTYPE_lIST,
                 }))
             }
         }
-        else if (PostAPIResponse.Status === true) {
+        else if (postMsg.Status === true) {
             dispatch(getCategoryTypelistSuccess({ Status: false }))
             dispatch(AlertState({
                 Type: 4,
                 Status: true,
-                Message: JSON.stringify(PostAPIResponse.Message),
+                Message: JSON.stringify(postMsg.Message),
                 RedirectPath: false,
                 AfterResponseAction: false
             }));
         }
-    }, [PostAPIResponse])
+    }, [postMsg])
+
+    useEffect(() => {
+        if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
+            history.push({
+                pathname: CATEGORYTYPE_lIST,
+            })
+        } else if (updateMsg.Status === true && !modalCss) {
+            dispatch(updateCategoryTypeIDSuccess({ Status: false }));
+            dispatch(
+                AlertState({
+                    Type: 3,
+                    Status: true,
+                    Message: JSON.stringify(updateMsg.Message),
+                })
+            );
+        }
+    }, [updateMsg, modalCss]);
 
     useEffect(() => {
 
@@ -208,9 +220,9 @@ const CategoryTypeMaster = (props) => {
         }
     };
 
-    // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
-    var IsEditMode_Css = ''
-    if ((pageMode === "edit") || (pageMode === "copy") || (pageMode === "dropdownAdd")) { IsEditMode_Css = "-5.5%" };
+     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
+     var IsEditMode_Css = ''
+     if ((modalCss) || (pageMode === "dropdownAdd")) { IsEditMode_Css = "-5.5%" };
 
     if (!(userPageAccessState === '')) {
         return (
