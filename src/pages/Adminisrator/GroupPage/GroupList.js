@@ -15,9 +15,9 @@ const GroupList = (props) => {
     (state) => ({
       tableList: state.GroupReducer.groupList,
       editData: state.GroupReducer.editData,
-      updateMsg: state.GroupReducer.updateMessage,
-      deleteMsg: state.GroupReducer.deleteMessage,
-      postMessage: state.GroupReducer.postMessage,
+      updateMsg: state.GroupReducer.updateMsg,
+      deleteMsg: state.GroupReducer.deleteMsg,
+      postMsg: state.GroupReducer.postMsg,
       userAccess: state.Login.RoleAccessUpdateData,
       pageField: state.CommonPageFieldReducer.pageFieldList
     })
@@ -35,7 +35,7 @@ const GroupList = (props) => {
   useEffect(() => {
     dispatch(commonPageFieldListSuccess(null))
     dispatch(commonPageFieldList(120))
-    dispatch(getGroupList())
+    dispatch(getGroupList());
     
     
 

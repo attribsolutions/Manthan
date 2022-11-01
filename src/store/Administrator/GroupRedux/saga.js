@@ -13,12 +13,11 @@ import {
      } from "../../../helpers/backend_helper";
   
 import { DELETE_GROUP_LIST_ID, EDIT_GROUPMASTER_ID, GET_GROUP_LIST, POST_GROUPLIST, UPDATE_GROUPMASTER_ID } from "./actionType";
-import { deleteGroupType_ID } from "../GroupTypeRedux/action";
-import { updateCategoryIDSuccess } from "../CategoryRedux/action";
 
 
 
 // post api
+debugger
 function* Post_Method_ForGroupMaster_GenFun({ data }) {
   yield put(SpinnerState(true))
   try {
@@ -88,7 +87,7 @@ function* Edit_Grouplist_ID_GenratorFunction({ id,pageMode }) {
 function* Update_Grouplist_ID_GenratorFunction({ updateData, ID }) {
   try {
     yield put(SpinnerState(true))
-    const response = yield call(update_Group_List_Api,ID);
+    const response = yield call(update_Group_List_Api,updateData,ID);
     yield put(SpinnerState(false))
     yield put(updategroupIDSuccess(response))
   }

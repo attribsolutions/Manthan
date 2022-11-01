@@ -5,7 +5,7 @@ import { DELETE_GROUP_LIST_ID_SUCCESS,
   UPDATE_GROUPMASTER_ID_SUCCESS} from "./actionType";
 
 const INIT_STATE = {
-  postMessage: { Status: false },
+  postMsg: { Status: false },
   groupList: [],
   deleteMsg: { Status: false },
   editData: { Status: false },
@@ -18,7 +18,7 @@ const GroupReducer = (state = INIT_STATE, action) => {
     case POST_GROUPLIST_SUCCESS:
       return {
         ...state,
-        postMessage: action.payload,
+        postMsg: action.payload,
       }
 
     // get 

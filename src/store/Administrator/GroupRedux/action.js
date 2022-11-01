@@ -22,13 +22,13 @@ export const getGroupListSuccess = (pages) => ({
 });
 
 // Post 
-export const PostMethod_GroupList_Success = (Data) => ({
+export const PostMethod_GroupList_Success = (data) => ({
   type: POST_GROUPLIST_SUCCESS,
-  payload: Data,
+  payload: data,
 });
-export const postGroupList = (Data) => ({
+export const postGroupList = (data) => ({
   type: POST_GROUPLIST,
-  Data,
+  data,
 });
 
 // Edit
