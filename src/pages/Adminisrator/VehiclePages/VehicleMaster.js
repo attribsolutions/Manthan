@@ -67,8 +67,8 @@ const VehicleMaster = (props) => {
         id: "",
         VehicleNumber: "",
         Description: "",
-        DriverName: "",
-        Vehicletype: "",
+        Driver: "",
+        VehicleType: "",
         VehicleDivisions: ""
       }
     
@@ -157,13 +157,13 @@ const VehicleMaster = (props) => {
                     label: data.DivisionName
                 }))
 
-                const { id, VehicleNumber, Description, Driver, DriverName, VehicleType, VehicleTypeName, VehicleDivisions, } = hasEditVal
+                const { id, VehicleNumber, Description, Driver, DriverName, VehicleType, VehicleTypeName , VehicleDivisions, } = hasEditVal
                 const { values, fieldLabel, hasValid, required, isError } = { ...state }
 
                 hasValid.VehicleNumber.valid = true;
-                hasValid.DriverName.valid = true;
+                hasValid.Driver.valid = true;
                 hasValid.Description.valid = true;
-                hasValid.Vehicletype.valid = true;
+                hasValid.VehicleType.valid = true;
                 hasValid.VehicleDivisions.valid = true;
 
 
@@ -171,7 +171,7 @@ const VehicleMaster = (props) => {
                 values.VehicleNumber = VehicleNumber
                 values.Description = Description
                 values.Driver = { label: DriverName, value: Driver };
-                values.Vehicletype = { label: VehicleTypeName, value: VehicleType };
+                values.VehicleType = { label: VehicleTypeName, value: VehicleType };
                 values.VehicleDivisions = divisionTable
 
                 setDivisionData(divisionTable)
@@ -273,7 +273,7 @@ const VehicleMaster = (props) => {
 
 
     const formSubmitHandler = (event) => {
-
+debugger
         event.preventDefault();
         const leng = divisionData.length
         if (leng === 0) {
@@ -289,7 +289,7 @@ const VehicleMaster = (props) => {
                 VehicleNumber: values.VehicleNumber,
                 Description: values.Description,
                 Driver: values.Driver.value,
-                VehicleType: values.Vehicletype.value,
+                VehicleType: values.VehicleType.value,
                 VehicleDivisions: division,
             });
 
@@ -367,12 +367,12 @@ const VehicleMaster = (props) => {
                                                     <Row className="mt-1">
                                                         <Col md="3">
                                                             <FormGroup className="mb-3">
-                                                                <Label htmlFor="validationCustom01">{fieldLabel.DriverName} </Label>
+                                                                <Label htmlFor="validationCustom01">{fieldLabel.Driver} </Label>
                                                                 <Col sm={12}>
                                                                     <Select
                                                                         id="DriverDropDown "
                                                                         // disabled={true}
-                                                                        name="DriverName"
+                                                                        name="Driver"
                                                                         value={values.Driver}
                                                                         isSearchable={false}
                                                                         className="react-dropdown"
@@ -381,8 +381,8 @@ const VehicleMaster = (props) => {
                                                                         onChange={(hasSelect, evn) => onChangeSelect({ hasSelect, evn, state, setState, })}
                                                                        
                                                                     />
-                                                                    {isError.DriverName.length > 0 && (
-                                                                        <span className="text-danger f-8"><small>{isError.DriverName}</small></span>
+                                                                    {isError.Driver.length > 0 && (
+                                                                        <span className="text-danger f-8"><small>{isError.Driver}</small></span>
                                                                     )}
                                                                 </Col>
                                                             </FormGroup>
@@ -392,21 +392,21 @@ const VehicleMaster = (props) => {
                                                         <Col md="1">  </Col>
                                                         <Col md="3">
                                                             <FormGroup className="mb-3">
-                                                                <Label htmlFor="validationCustom01"> {fieldLabel.Vehicletype}</Label>
+                                                                <Label htmlFor="validationCustom01"> {fieldLabel.VehicleType}</Label>
                                                                 <Col sm={12}>
                                                                     <Select
                                                                         id="VehicleDropDown "
                                                                         // disabled={true}
-                                                                        name="Vehicletype"
-                                                                        value={values.Vehicletype}
+                                                                        name="VehicleType"
+                                                                        value={values.VehicleType}
                                                                         isSearchable={false}
                                                                         className="react-dropdown"
                                                                         classNamePrefix="dropdown"
                                                                         options={VehicleType_DropdownOptions}
                                                                         onChange={(hasSelect, evn) => onChangeSelect({ hasSelect, evn, state, setState, })}
                                                                     />
-                                                                    {isError.Vehicletype.length > 0 && (
-                                                                        <span className="text-danger f-8"><small>{isError.Vehicletype}</small></span>
+                                                                    {isError.VehicleType.length > 0 && (
+                                                                        <span className="text-danger f-8"><small>{isError.VehicleType}</small></span>
                                                                     )}
                                                                 </Col>
                                                             </FormGroup>
@@ -472,7 +472,7 @@ const VehicleMaster = (props) => {
                                                                     options={DivisionType_DropdownOptions}
                                                                     onChange={(hasSelect, evn) => {
                                                                         onChangeSelect({ hasSelect, evn, state, setState, })
-                                                                        DivisionType_DropDown_handller(evn)
+                                                                        DivisionType_DropDown_handller(hasSelect)
                                                                     }}
                                                                 />
                                                                 {isError.VehicleDivisions.length > 0 && (

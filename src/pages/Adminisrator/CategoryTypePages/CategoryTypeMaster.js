@@ -249,7 +249,7 @@ const CategoryTypeMaster = (props) => {
                                                             )}
                                                         </FormGroup>
 
-                                                        <FormGroup>
+                                                        <FormGroup className="mt-2">
                                                             <Row>
                                                                 <Col sm={2}>
                                                                     {SaveButton({ pageMode, userPageAccessState, module: "CategoryTypeMaster" })}

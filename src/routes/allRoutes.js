@@ -80,7 +80,7 @@ import PartySubPartyList from "../pages/Adminisrator/PartySubPartyPages/partysub
 import GSTMaster from "../pages/Adminisrator/GSTPages/GSTMaster";
 import GSTList from "../pages/Adminisrator/GSTPages/GSTList";
 
-import Order from "../pages/Purchase/order/Order.js";
+import Order from "../pages/Purchase/Order/Order.js";
 
 
 import TermsAndCondtionsList from "../pages/Adminisrator/TermsAndCondtions/TermsAndCondtionsList";
