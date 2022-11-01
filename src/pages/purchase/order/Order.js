@@ -29,7 +29,7 @@ import '../../Order/div.css'
 
 let description = 'order'
 
-function Order() {
+const Order=()=> {
 
     // const props = { tableData: [], func: function a() { } }
     const dispatch = useDispatch();
