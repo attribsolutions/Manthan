@@ -135,7 +135,8 @@ const GroupMaster = (props) => {
                 values.Name = Name;
                 values.id = id
                 values.GroupType = GroupType;
-                values.GroupType = { label: GroupTypeName};
+                // values.GroupTypeName =GroupTypeName
+                values.GroupType = { label: GroupTypeName ,value:GroupType};
                 hasValid.Name.valid = true;
                 hasValid.GroupType.valid = true;
 
