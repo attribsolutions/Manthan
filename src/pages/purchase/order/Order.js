@@ -14,7 +14,7 @@ import Select from "react-select";
 import { useDispatch, useSelector } from "react-redux";
 import "flatpickr/dist/themes/material_blue.css"
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { MetaTags } from "react-meta-tags";
 
 import ToolkitProvider, { Search } from "react-bootstrap-table2-toolkit";
@@ -29,25 +29,24 @@ import '../../Order/div.css'
 
 let description = 'order'
 
-const Order=()=> {
+const Order = (props) => {
 
-    // const props = { tableData: [], func: function a() { } }
     const dispatch = useDispatch();
-    const history = useHistory()
+    const history = useHistory();
 
-    let editMode = history.location.pageMode;
-    const [userPageAccessState, setUserPageAccessState] = useState('');
+    const [modalCss, setModalCss] = useState(false);
+    const [EditData, setEditData] = useState([]);
+    const [pageMode, setPageMode] = useState("save");
+    const [userPageAccessState, setUserPageAccessState] = useState("");
+
+    //Access redux store Data /  'save_ModuleSuccess' action data
+
     const [effectiveDate, setEffectiveDate] = useState("");
     const [customerSelect, setCustomerSelect] = useState('');
     const [Description, setDescription] = useState('');
     const [orderAmount, setOrderAmount1] = useState("");
-    const [change, setChange] = useState(false);
-
 
     useEffect(() => {
-        // document.getElementById("txtName").focus();
-        // dispatch(getOrderItems_ForOrderPage());
-        // dispatch(getPartyListAPI())
         dispatch(getSupplier())
     }, [])
 
@@ -55,72 +54,93 @@ const Order=()=> {
         items,
         postMsg,
         supplier,
-        CustomSearchInput,
-        customerNameList,
         userAccess,
         pageField
     } = useSelector((state) => ({
-        items: state.OrderPageReducer.orderItem,
-        supplier: state.OrderPageReducer.supplier,
-        postMsg: state.OrderPageReducer.postMsg,
-        CustomSearchInput: state.CustomSearchReducer.CustomSearchInput,
-        // **customerNameList ==> this is  party list data geting from party list API
-        customerNameList: state.PartyMasterReducer.partyList,
+        items: state.OrderReducer.orderItem,
+        supplier: state.OrderReducer.supplier,
+        postMsg: state.OrderReducer.postMsg,
         userAccess: state.Login.RoleAccessUpdateData,
         pageField: state.CommonPageFieldReducer.pageFieldList
     }));
 
+  
 
+    // userAccess useEffect
     useEffect(() => {
+        let userAcc = null;
+        let locationPath = location.pathname;
 
-        const locationPath = history.location.pathname
-        let userAcc = userAccess.find((inx) => {
+        if (hasShowModal) { locationPath = props.masterPath; };
+
+        userAcc = userAccess.find((inx) => {
             return (`/${inx.ActualPagePath}` === locationPath)
         })
-        if (!(userAcc === undefined)) {
+
+        if (userAcc) {
             setUserPageAccessState(userAcc)
-        }
+        };
     }, [userAccess])
 
-
+    const location = { ...history.location }
+    const hasShowloction = location.hasOwnProperty("editValue")
+    const hasShowModal = props.hasOwnProperty("editValue")
+    debugger
     useEffect(() => {
-        debugger
-        const editDataGatingFromList = history.location.editValue
+        // if (!(userPageAccessState === '')) { document.getElementById("txtName").focus(); }
+        if ((hasShowloction || hasShowModal)) {
 
-        const locationPath = history.location.pathname
-        let userAcc = userAccess.find((inx) => {
-            return (`/${inx.ActualPagePath}` === locationPath)
-        })
-
-        let division = 0
-        try {
-            division = JSON.parse(localStorage.getItem("roleId")).Party_id
-        } catch (e) {
-            alert(e)
-        }
-        if (!(editDataGatingFromList === undefined)) {
-            var CustomerName = editDataGatingFromList.Supplier
-            var Customerid = 28
-            var description = editDataGatingFromList.Description
-            var orderDate = editDataGatingFromList.OrderDate
-
-            const jsonBody = JSON.stringify({
-                Division: division,
-                Party: Customerid,
-                EffectiveDate: orderDate
+            let hasEditVal = null
+            if (hasShowloction) {
+                setPageMode(location.pageMode)
+                hasEditVal = location.editValue
             }
-            );
-            dispatch(goButton(jsonBody))
-            // setPartyName_dropdown_Select({ label: partyName, value: partyId })
-            setCustomerSelect({ label: CustomerName, value: Customerid })
-            setEffectiveDate(orderDate)
-            setDescription(description)
+            else if (hasShowModal) {
+                hasEditVal = props.editValue
+                setPageMode(props.pageMode)
+                setModalCss(true)
+            }
 
+            if (hasEditVal) {
+            }
         }
-        if (!(userAcc === undefined)) {
-            setUserPageAccessState(userAcc)
-        }
-    }, [userAccess])
+
+        // const editDataGatingFromList = history.location.editValue
+
+        // const locationPath = history.location.pathname
+        // let userAcc = userAccess.find((inx) => {
+        //     return (`/${inx.ActualPagePath}` === locationPath)
+        // })
+
+        // let division = 0
+        // try {
+        //     division = JSON.parse(localStorage.getItem("roleId")).Party_id
+        // } catch (e) {
+        //     alert(e)
+        // }
+        // if (!(editDataGatingFromList === undefined)) {
+        //     var CustomerName = editDataGatingFromList.Supplier
+        //     var Customerid = 28
+        //     var description = editDataGatingFromList.Description
+        //     var orderDate = editDataGatingFromList.OrderDate
+
+        //     const jsonBody = JSON.stringify({
+        //         Division: division,
+        //         Party: Customerid,
+        //         EffectiveDate: orderDate
+        //     }
+        //     );
+        //     dispatch(goButton(jsonBody))
+        //     // setPartyName_dropdown_Select({ label: partyName, value: partyId })
+        //     setCustomerSelect({ label: CustomerName, value: Customerid })
+        //     setEffectiveDate(orderDate)
+        //     setDescription(description)
+
+        // }
+        // if (!(userAcc === undefined)) {
+        //     setUserPageAccessState(userAcc)
+        // }
+    }, [])
 
     useEffect(() => {
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
@@ -455,9 +475,9 @@ const Order=()=> {
                                                 altInput: true,
                                                 altFormat: "F j, Y",
                                                 dateFormat: "Y-m-d",
-                                                minDate: editMode === "edit" ? effectiveDate : "today",
-                                                maxDate: editMode === "edit" ? effectiveDate : "",
-                                                defaultDate: editMode === "edit" ? "" : "today"
+                                                minDate: pageMode === "edit" ? effectiveDate : "today",
+                                                maxDate: pageMode === "edit" ? effectiveDate : "",
+                                                defaultDate: pageMode === "edit" ? "" : "today"
                                             }}
                                             onChange={EffectiveDateHandler}
                                         />
@@ -473,7 +493,7 @@ const Order=()=> {
                                         <Select
                                             value={customerSelect}
                                             classNamePrefix="select2-Customer"
-                                            isDisabled={editMode === "edit" ? true : false}
+                                            isDisabled={pageMode === "edit" ? true : false}
                                             options={supplierOptions}
                                             onChange={(e) => { setCustomerSelect(e) }}
                                         />
