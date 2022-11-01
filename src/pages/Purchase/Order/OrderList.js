@@ -4,18 +4,22 @@ import paginationFactory, {
     PaginationListStandalone,
     PaginationProvider,
 } from "react-bootstrap-table2-paginator";
-import ToolkitProvider, { Search } from "react-bootstrap-table2-toolkit";
+import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 import { useSelector, useDispatch } from "react-redux";
-import "../../assets/scss/CustomTable2/datatables.scss"
+import "../../../assets/scss/CustomTable2/datatables.scss"
 import { MetaTags } from "react-meta-tags";
 import { useHistory } from "react-router-dom";
-import { deleteOrderID_From_OrderPage, deleteOrderID_From_OrderPageSuccess, getOrderListPage } from "../../store/Purchase/OrderPageRedux/actions";
-import { AlertState } from "../../store/actions";
-import Breadcrumb from "../../components/Common/Breadcrumb";
-import { mySearchProps } from "../../components/Common/CmponentRelatedCommonFile/SearchBox/MySearch";
-import { InvoiceFakeData } from "./InvioceFakedata";
-import generate from "../../Reports/InvioceReport/Page";
+import {
+    deleteOrderID_From_OrderPage,
+    deleteOrderID_From_OrderPageSuccess,
+    getOrderListPage
+} from "../../../store/Purchase/OrderPageRedux/actions";
+import { AlertState } from "../../../store/actions";
+import Breadcrumb from "../../../components/Common/Breadcrumb";
+import { mySearchProps } from "../../../components/Common/CmponentRelatedCommonFile/SearchBox/MySearch";
+import { InvoiceFakeData } from "../../Order/InvioceFakedata";
+import generate from "../../../Reports/InvioceReport/Page";
 
 const OrderList = (props) => {
 
@@ -78,7 +82,7 @@ const OrderList = (props) => {
     }, [deleteMsg]);
 
     //select id for delete row
-    const deleteHandeler = (id,name) => {
+    const deleteHandeler = (id, name) => {
         debugger
         dispatch(
             AlertState({
@@ -176,7 +180,7 @@ const OrderList = (props) => {
                         <Button
                             className="badge badge-soft-danger font-size-12 btn btn-danger waves-effect waves-light w-xxs border border-light"
                             data-mdb-toggle="tooltip" data-mdb-placement="top" title="Delete Order"
-                            onClick={() => { deleteHandeler(Role.id,Role.Customer) }}
+                            onClick={() => { deleteHandeler(Role.id, Role.Customer) }}
                         >
                             <i className="mdi mdi-delete font-size-18"></i>
                         </Button>
