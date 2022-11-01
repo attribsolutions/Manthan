@@ -489,7 +489,7 @@ function Order() {
                             <Col>
                                 <FormGroup className="mb-2 d-flex  justify-content-end mt-3 " >
                                     <Label className=" p-2 ml-n4 "
-                                        style={{ width: "100px" }}>Descreption</Label>
+                                        style={{ width: "100px" }}>Description</Label>
                                     <div>
                                         <Input
                                             value={description}
@@ -536,9 +536,10 @@ function Order() {
                                                         bordered={false}
                                                         striped={false}
                                                         classes={"table  table-bordered table-hover"}
+
                                                         noDataIndication={
-                                                            <div className="text-danger">
-                                                                "Please Add One Row In Table"
+                                                            <div className="text-danger text-center ">
+                                                                Items Not available
                                                             </div>
                                                         }
                                                         {...toolkitProps.baseProps}
