@@ -192,6 +192,7 @@ const GroupTypeMaster = (props) => {
 
         event.preventDefault();
         if (formValid(state, setState)) {
+            debugger
             const jsonBody = JSON.stringify({
                 Name: values.Name,
                 CreatedBy: 1,
