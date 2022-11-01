@@ -27,7 +27,8 @@ let searchProps = {
   onSearch: function onSearch() { },
   searchText: ""
 }
-export const test = (toolkitProps, paginationProps, dispatch, ButtonMsgLable) => {
+
+export const countlabelFunc = (toolkitProps, paginationProps, dispatch, ButtonMsgLable) => {
 
   let iscall = 0
   if (paginationProps.dataSize) {
@@ -48,8 +49,7 @@ const CommonListPage = (props) => {
   const history = useHistory()
 
   const [userAccState, setUserAccState] = useState('');
-  const [modal_center, setmodal_center] = useState(false);
-  // const [sortType, setSortType] = useState("ase");
+  const [modal_edit, setmodal_edit] = useState(false);
 
   const {
     tableList,
@@ -79,6 +79,8 @@ const CommonListPage = (props) => {
     deleteName
   } = props;
 
+  const fileds = pageField.PageFieldMaster;
+
   useEffect(() => {
 
     const locationPath = history.location.pathname
@@ -91,19 +93,15 @@ const CommonListPage = (props) => {
   }, [userAccess])
 
   useEffect(() => {
-
-
     downList = []
     listObj = {}
 
     tableList.forEach((index1) => {
-      pageField.PageFieldMaster.forEach((index2) => {
-
+      fileds.forEach((index2) => {
         if (index2.ShowInDownload) {
           listObj[`$defSelect${index2.ControlID}`] = index2.ShownloadDefaultSelect
           listObj[index2.ControlID] = index1[index2.ControlID]
         }
-
       })
       downList.push(listObj)
       listObj = {}
@@ -207,13 +205,17 @@ const CommonListPage = (props) => {
   }, [editData]);
 
   function tog_center() {
-    setmodal_center(!modal_center);
+    setmodal_edit(!modal_edit); //when edit mode show in pop up that modal view controle
   }
+
+  fileds.sort(function (a, b) {  //sort function is  sort list page coloumn by asending order by listpage sequense
+    return a.ListPageSeq - b.ListPageSeq
+  });
 
   let sortLabel = ""
   const columns = []
 
-  pageField.PageFieldMaster.forEach((i, k) => {
+  fileds.forEach((i, k) => {
     if (i.ShowInListPage) {
       columns.push({
         text: i.FieldLabel,
@@ -229,7 +231,7 @@ const CommonListPage = (props) => {
         sortType = "desc"
       }
     }
-    if (pageField.PageFieldMaster.length - 1 === k) {
+    if (fileds.length - 1 === k) {
       columns.push(listPageCommonButtonFunction({
         dispatchHook: dispatch,
         ButtonMsgLable: ButtonMsgLable,
@@ -295,7 +297,7 @@ const CommonListPage = (props) => {
                       isExcelButtonVisible={true}
                       ExcelData={tableList}
                     /> */}
-                    {test(toolkitProps, paginationProps, dispatch, ButtonMsgLable)}
+                    {countlabelFunc(toolkitProps, paginationProps, dispatch, ButtonMsgLable)}
 
                     <Row>
                       <Col xl="12">
@@ -327,7 +329,7 @@ const CommonListPage = (props) => {
             )}
           </PaginationProvider>
           <Modal
-            isOpen={modal_center}
+            isOpen={modal_edit}
             toggle={() => {
               tog_center();
             }}
