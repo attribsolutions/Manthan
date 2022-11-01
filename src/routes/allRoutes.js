@@ -18,7 +18,6 @@ import CompanyList from "../pages/Adminisrator/CompanyPages/CompanyList";
 import PageList from "../pages/Adminisrator/Page-Pages/PageList";
 import PageMaster from "../pages/Adminisrator/Page-Pages/PageMaster";
 
-import OrderList from "../pages/Order/OrderList"
 import AddUser from "../pages/Adminisrator/UserRegistrationPages/UserRegistration";
 import UserList from "../pages/Adminisrator/UserRegistrationPages/UserList";
 import AddEmployee from "../pages/Adminisrator/EmployeePages/EmployeeMaster";
@@ -82,6 +81,7 @@ import GSTList from "../pages/Adminisrator/GSTPages/GSTList";
 
 import TermsAndCondtionsList from "../pages/Adminisrator/TermsAndCondtions/TermsAndCondtionsList";
 
+import OrderList from "../pages/Purchase/Order/OrderList.js"
 import Order from "../pages/Purchase/Order/Order.js";
 
 import * as path from "./route_url";
