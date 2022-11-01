@@ -21,6 +21,7 @@ import { useHistory } from "react-router-dom";
 import {
     comAddPageFieldFunc,
     formValid,
+    initialFiledFunc,
     onChangeText,
 } from "../../../components/Common/CmponentRelatedCommonFile/validationFunction";
 import {
@@ -48,31 +49,13 @@ const GroupTypeMaster = (props) => {
     const [pageMode, setPageMode] = useState("save");
     const [userPageAccessState, setUserPageAccessState] = useState('');
 
-    const [state, setState] = useState({
-        values: {
-            Name: "",
-        },
-        fieldLabel: {
-            Name: "",
-        },
-
-        isError: {
-            Name: "",
-        },
-
-        hasValid: {
-            Name: {
-                regExp: '',
-                inValidMsg: "",
-                valid: false
-            },
-        },
-        required: {
-
-        }
-    }
-    )
-
+    const initialFiled = {
+        id:"",
+        Name: "",
+      }
+    
+    const [state, setState] = useState(initialFiledFunc(initialFiled))
+   
     //Access redux store Data /  'save_ModuleSuccess' action data
     const {
         postMsg,
@@ -131,11 +114,12 @@ const GroupTypeMaster = (props) => {
 
             if (hasEditVal) {
                 setEditData(hasEditVal);
-                const { Name } = hasEditVal
+                const {id, Name } = hasEditVal
                 const { values, fieldLabel, hasValid, required, isError } = { ...state }
 
                 hasValid.Name.valid = true;
                 
+                values.id = id
                 values.Name = Name;
                 setState({ values, fieldLabel, hasValid, required, isError })
                 dispatch(editGroupTypeIdSuccess({ Status: false }))

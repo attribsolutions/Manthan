@@ -1,5 +1,4 @@
 export const formValid = ({ isError, required, hasValid, fieldLabel, values }, setState) => {
-    debugger
     let isValid = true;
 
     Object.keys(required).forEach((lab) => {
@@ -119,9 +118,8 @@ export const formValChange = ({ event, state, setState }) => {
 export function comAddPageFieldFunc({ state, setState, fieldArr }) {
     var isState = { ...state }
     const values = { ...state.values }
-    // debugger
+
     fieldArr.forEach(ele => {
-        // debugger
         Object.keys(values).forEach(lab => {
             if (lab === ele.ControlID) {
                 isState.fieldLabel[lab] = ele.FieldLabel;
@@ -162,15 +160,15 @@ export const initialFiledFunc = (filed) => {
     obj["isError"] = {}
     obj["hasValid"] = {}
     obj["required"] = {}
-    
+
     Object.keys(filed).forEach(label => {
-      
-      obj.fieldLabel[label] = ''
-      obj.isError[label] = ''
-      obj.hasValid[label] = {}
-      obj.hasValid[label]["regExp"] = ""
-      obj.hasValid[label]["inValidMsg"] = ""
-      obj.hasValid[label]["valid"] = false
+
+        obj.fieldLabel[label] = ''
+        obj.isError[label] = ''
+        obj.hasValid[label] = {}
+        obj.hasValid[label]["regExp"] = ""
+        obj.hasValid[label]["inValidMsg"] = ""
+        obj.hasValid[label]["valid"] = false
     })
     return obj
-  }
+}

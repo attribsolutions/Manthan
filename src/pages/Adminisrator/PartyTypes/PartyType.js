@@ -30,6 +30,7 @@ import {
     comAddPageFieldFunc,
     formValChange,
     formValid,
+    initialFiledFunc,
     onChangeText
 } from "../../../components/Common/CmponentRelatedCommonFile/validationFunction";
 import { SaveButton } from "../../../components/CommonSaveButton";
@@ -65,50 +66,15 @@ const PartyType = (props) => {
     }, []);
 
     {/** Dyanamic Page access state and OnChange function */ }
-    {/*start */ }
-    const [state, setState] = useState({
-        values: {
-            id: "",
-            Name: "",
-            IsSCM: "",
-            IsDivision: "",
-        },
-        fieldLabel: {
-            Name: '',
-            IsSCM: '',
-            IsDivision: '',
-        },
+    const initialFiled = {
+        id: "",
+        Name: "",
+        IsSCM: "",
+        IsDivision: "",
+    }
 
-        isError: {
-            Name: "",
-            IsSCM: "",
-            IsDivision: "",
-        },
-
-        hasValid: {
-            Name: {
-                regExp: '',
-                inValidMsg: "",
-                valid: false
-            },
-
-            IsSCM: {
-                regExp: '',
-                inValidMsg: "",
-                valid: false
-            },
-
-            IsDivision: {
-                regExp: '',
-                inValidMsg: "",
-                valid: false
-            },
-
-        },
-        required: {
-
-        }
-    })
+    const [state, setState] = useState(initialFiledFunc(initialFiled))
+    
     const values = { ...state.values }
     const { isError } = state;
     const { fieldLabel } = state;
@@ -297,7 +263,7 @@ const PartyType = (props) => {
                                                                     <Col md={2} style={{ marginTop: '9px' }} >
                                                                         <div className="form-check form-switch form-switch-md mb-3">
                                                                             <Input type="checkbox" className="form-check-input"
-                                                                                 checked={values.IsSCM}
+                                                                                checked={values.IsSCM}
                                                                                 name="IsSCM"
                                                                                 onChange={(event) => onChangeText({ event, state, setState })}
                                                                             />
@@ -314,7 +280,7 @@ const PartyType = (props) => {
                                                                     <Col md={2} style={{ marginTop: '9px' }} >
                                                                         <div className="form-check form-switch form-switch-md mb-3">
                                                                             <Input type="checkbox" className="form-check-input"
-                                                                                 checked={values.IsDivision}
+                                                                                checked={values.IsDivision}
                                                                                 name="IsDivision"
                                                                                 onChange={(event) => onChangeText({ event, state, setState })}
                                                                             />

@@ -30,6 +30,7 @@ import { useHistory } from "react-router-dom";
 import {
     comAddPageFieldFunc,
     formValid,
+    initialFiledFunc,
     onChangeText
 } from "../../../components/Common/CmponentRelatedCommonFile/validationFunction";
 import { SaveButton } from "../../../components/CommonSaveButton";
@@ -49,45 +50,15 @@ const CompanyGroupMaster = (props) => {
 
 
     {/** Dyanamic Page access state and OnChange function */ }
-    {/*start */ }
-    const [state, setState] = useState({
-        values: {
-            id: "",
-            Name: "",
-            IsSCM: ""
+    const initialFiled = {
+        id: "",
+        Name: "",
+        IsSCM: ""
+      }
+    
+    const [state, setState] = useState(initialFiledFunc(initialFiled))
 
-        },
-
-        fieldLabel: {
-            Name: '',
-            IsSCM: ''
-        },
-
-        isError: {
-            Name: "",
-            IsSCM: ""
-        },
-
-        hasValid: {
-            Name: {
-                regExp: '',
-                inValidMsg: "",
-                valid: false
-            },
-
-            IsSCM: {
-                regExp: '',
-                inValidMsg: "",
-                valid: false
-            }
-
-        },
-        required: {
-
-        }
-    }
-    )
-    {/*End */ }
+   
 
     //Access redux store Data /  'save_ModuleSuccess' action data
     const { postMsg, updateMsg ,pageField, userAccess } = useSelector((state) => ({

@@ -29,6 +29,7 @@ import {
 import {
     comAddPageFieldFunc,
     formValid,
+    initialFiledFunc,
     onChangeText
 } from "../../../components/Common/CmponentRelatedCommonFile/validationFunction";
 import { SaveButton } from "../../../components/CommonSaveButton";
@@ -56,33 +57,14 @@ const CategoryTypeMaster = (props) => {
     }, []);
 
     {/** Dyanamic Page access state and OnChange function */ }
-    const [state, setState] = useState({
-        values: {
-            Name: "",
-            id: ""
+    const initialFiled = {
+        Name: "",
+        id: ""
+      }
+    
+    const [state, setState] = useState(initialFiledFunc(initialFiled))
 
-        },
-        fieldLabel: {
-            Name: '',
-
-        },
-
-        isError: {
-            Name: "",
-
-        },
-
-        hasValid: {
-            Name: {
-                regExp: '',
-                inValidMsg: "",
-                valid: false
-            },
-        },
-        required: {
-
-        }
-    })
+   
     const values = { ...state.values }
     const { isError } = state;
     const { fieldLabel } = state;

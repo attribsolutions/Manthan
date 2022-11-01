@@ -32,6 +32,7 @@ import {
   comAddPageFieldFunc,
   formValChange,
   formValid,
+  initialFiledFunc,
   onChangeSelect,
   onChangeText,
 
@@ -62,82 +63,19 @@ const CompanyModule = (props) => {
   }));
 
   {/** Dyanamic Page access state and OnChange function */ }
+  const initialFiled = {
+    id: "",
+    Name: "",
+    Address: "",
+    GSTIN: "",
+    PhoneNo: "",
+    CompanyAbbreviation: "",
+    EmailID: "",
+    CompanyGroup: ""
+  }
 
-  const [state, setState] = useState({
-    values: {
-      id: "",
-      Name: "",
-      Address: "",
-      GSTIN: "",
-      PhoneNo: "",
-      CompanyAbbreviation: "",
-      EmailID: "",
-      CompanyGroup: ""
-
-    },
-    fieldLabel: {
-      Name: "",
-      Address: "",
-      GSTIN: "",
-      PhoneNo: "",
-      CompanyAbbreviation: "",
-      EmailID: "",
-      CompanyGroup: ""
-
-    },
-
-    isError: {
-      Name: "",
-      Address: "",
-      GSTIN: "",
-      PhoneNo: "",
-      CompanyAbbreviation: "",
-      EmailID: "",
-      CompanyGroup: "",
-
-    },
-
-    hasValid: {
-      Name: {
-        regExp: '',
-        inValidMsg: "",
-        valid: false
-      },
-      Address: {
-        regExp: '',
-        inValidMsg: "",
-        valid: false
-      },
-      GSTIN: {
-        regExp: '',
-        inValidMsg: "",
-        valid: false
-      },
-      PhoneNo: {
-        regExp: '',
-        inValidMsg: "",
-        valid: false
-      },
-      CompanyAbbreviation: {
-        regExp: '',
-        inValidMsg: "",
-        valid: false
-      },
-      EmailID: {
-        regExp: '',
-        inValidMsg: "",
-        valid: false
-      },
-      CompanyGroup: {
-        regExp: '',
-        inValidMsg: "",
-        valid: false
-      },
-    },
-    required: {
-
-    }
-  })
+const [state, setState] = useState(initialFiledFunc(initialFiled))
+ 
 
   const values = { ...state.values }
   const { isError } = state;
@@ -494,14 +432,14 @@ const CompanyModule = (props) => {
                               <FormGroup className="mb-3 ">
                                 <Label htmlFor="validationCustom01"> {fieldLabel.CompanyGroup} </Label>
                                 <Select
-                                  name="CategoryTypeName"
+                                  name="CompanyGroup"
                                   value={values.CompanyGroup}
                                   //   value={{label:"abc",value:1}}//default value set
                                   isSearchable={false}
                                   className="react-dropdown"
                                   classNamePrefix="dropdown"
                                   options={CompanyGroupValues}
-                                  onChange={(v, e) => onChangeSelect({ e, v, state, setState })}
+                                  onChange={(hasSelect, evn) => onChangeSelect({ hasSelect, evn, state, setState, })}
                                 />
                                 {isError.CompanyGroup.length > 0 && (
                                   <span className="text-danger f-8"><small>{isError.CompanyGroup}</small></span>

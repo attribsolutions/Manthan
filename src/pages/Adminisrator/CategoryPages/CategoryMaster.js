@@ -29,6 +29,7 @@ import { useHistory } from "react-router-dom";
 import {
     comAddPageFieldFunc,
     formValid,
+    initialFiledFunc,
     onChangeSelect,
     onChangeText,
 
@@ -62,42 +63,14 @@ const CategoryMaster = (props) => {
 
 
     {/** Dyanamic Page access state and OnChange function */ }
-
-    const [state, setState] = useState({
-        values: {
-            id: "",
-            Name: "",
-            CategoryTypeName: "",
-
-        },
-        fieldLabel: {
-            Name: '',
-            CategoryTypeName: '',
-
-        },
-
-        isError: {
-            Name: "",
-            CategoryTypeName: "",
-
-        },
-
-        hasValid: {
-            Name: {
-                regExp: '',
-                inValidMsg: "",
-                valid: false
-            },
-            CategoryTypeName: {
-                regExp: '',
-                inValidMsg: "",
-                valid: false
-            },
-        },
-        required: {
-
-        }
-    })
+    const initialFiled = {
+        id: "",
+        Name: "",
+        CategoryTypeName: "",
+      }
+    
+    const [state, setState] = useState(initialFiledFunc(initialFiled))
+ 
     const values = { ...state.values }
     const { isError } = state;
     const { fieldLabel } = state;
@@ -310,7 +283,8 @@ const CategoryMaster = (props) => {
                                                                             className="react-dropdown"
                                                                             classNamePrefix="dropdown"
                                                                             options={CategoryTypesValues}
-                                                                            onChange={(e, v) => onChangeSelect({ e, v, state, setState })}
+                                                                            onChange={(hasSelect, evn) => onChangeSelect({ hasSelect, evn, state, setState, })}
+
                                                                         />
                                                                         {isError.CategoryTypeName.length > 0 && (
                                                                             <span className="text-danger f-8"><small>{isError.CategoryTypeName}</small></span>
