@@ -30,7 +30,8 @@ import {
     comAddPageFieldFunc,
     formValid,
     onChangeText,
-    onChangeDate
+    onChangeDate,
+    initialFiledFunc
 } from "../../../components/Common/CmponentRelatedCommonFile/validationFunction";
 import { DRIVER_lIST } from "../../../routes/route_url";
 
@@ -47,60 +48,16 @@ const DriverMaster = (props) => {
     const [userPageAccessState, setUserPageAccessState] = useState("");
     const [modalCss, setModalCss] = useState(false);// new change
 
-    // ////////////////////////////////////
-    const [state, setState] = useState({
-        values: {
-            id: "",// new change
-            Name: "",
-            Address: "",
-            UID: "",
-            DOB: ''
-        },
-        fieldLabel: {
-            Name: "",
-            Address: "",
-            UID: "",
-            DOB: ''
-        },
-
-        isError: {
-            Name: "",
-            Address: "",
-            UID: "",
-            DOB: ''
-        },
-
-        hasValid: {
-            Name: {
-                regExp: '',
-                inValidMsg: "",
-                valid: false
-            },
-            Address: {
-                regExp: '',
-                inValidMsg: "",
-                valid: false
-            },
-
-            UID: {
-                regExp: '',
-                inValidMsg: "",
-                valid: false
-            },
-            DOB: {
-                regExp: '',
-                inValidMsg: "",
-                valid: false
-            }
-        },
-        required: {
-
-        }
-    }
-    )
-    //////////////////////////
-
-
+    const initialFiled = {
+        id: "",
+        Name: "",
+        Address: "",
+        UID: "",
+        DOB: ''
+      }
+    
+    const [state, setState] = useState(initialFiledFunc(initialFiled))
+  
     //Access redux store Data /  'save_ModuleSuccess' action data
     const {
         postMsg,

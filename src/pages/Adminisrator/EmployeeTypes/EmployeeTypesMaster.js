@@ -31,6 +31,7 @@ import { SaveButton } from "../../../components/CommonSaveButton";
 import {
     comAddPageFieldFunc,
     formValid,
+    initialFiledFunc,
     onChangeText
 } from "../../../components/Common/CmponentRelatedCommonFile/validationFunction";
 import { EMPLOYEETYPE_lIST } from "../../../routes/route_url";
@@ -46,49 +47,15 @@ const EmployeeTypesMaster = (props) => {
     const [userPageAccessState, setUserPageAccessState] = useState('');
     const [modalCss, setModalCss] = useState(false);
 
-
-    const [state, setState] = useState({
-        values: {
-            id: "",
-            Name: "",
-            IsPartyConnection: false,
-            IsSCM: false
-        },
-        fieldLabel: {
-            Name: "",
-            IsPartyConnection: false,
-            IsSCM: false
-        },
-
-        isError: {
-            Name: "",
-            IsPartyConnection: false,
-            IsSCM: false
-        },
-
-        hasValid: {
-            Name: {
-                regExp: '',
-                inValidMsg: "",
-                valid: false
-            },
-            IsPartyConnection: {
-                regExp: '',
-                inValidMsg: "",
-                valid: false
-            },
-
-            IsSCM: {
-                regExp: '',
-                inValidMsg: "",
-                valid: false
-            }
-        },
-        required: {
-
-        }
-    }
-    )
+    const initialFiled = {
+        id: "",
+        Name: "",
+        IsPartyConnection: false,
+        IsSCM: false
+      }
+    
+    const [state, setState] = useState(initialFiledFunc(initialFiled))
+  
 
     //Access redux store Data /  'save_ModuleSuccess' action data
     const { postMsg, updateMsg ,pageField, userAccess, } = useSelector((state) => ({

@@ -26,7 +26,7 @@ import { BreadcrumbShow } from "../../../store/Utilites/Breadcrumb/actions";
 import { useHistory } from "react-router-dom";
 import { SaveButton } from "../../../components/CommonSaveButton";
 import { MODULE_lIST } from "../../../routes/route_url";
-import { comAddPageFieldFunc, formValid, onChangeText } from "../../../components/Common/CmponentRelatedCommonFile/validationFunction";
+import { comAddPageFieldFunc, formValid, initialFiledFunc, onChangeText } from "../../../components/Common/CmponentRelatedCommonFile/validationFunction";
 
 const Modules = (props) => {
 
@@ -53,60 +53,16 @@ const Modules = (props) => {
     }, []);
 
     {/** Dyanamic Page access state and OnChange function */ }
-    {/*start */ }
-    const [state, setState] = useState({
-        values: {
-            id: "",
+    const initialFiled = {
+        id: "",
             Name: "",
             DisplayIndex: "",
             Icon: "",
             isActive: false,
-
-        },
-        fieldLabel: {
-            Name: '',
-            DisplayIndex: '',
-            Icon: '',
-            isActive: "",
-        },
-
-        isError: {
-            Name: "",
-            DisplayIndex: "",
-            Icon: "",
-            isActive: "",
-        },
-
-        hasValid: {
-            Name: {
-                regExp: '',
-                inValidMsg: "",
-                valid: false
-            },
-
-            DisplayIndex: {
-                regExp: '',
-                inValidMsg: "",
-                valid: false
-            },
-
-            Icon: {
-                regExp: '',
-                inValidMsg: "",
-                valid: false
-            },
-
-            isActive: {
-                regExp: '',
-                inValidMsg: "",
-                valid: false
-            }
-
-        },
-        required: {
-
-        }
-    })
+      }
+    
+    const [state, setState] = useState(initialFiledFunc(initialFiled))
+   
     const values = { ...state.values }
     const { isError } = state;
     const { fieldLabel } = state;
