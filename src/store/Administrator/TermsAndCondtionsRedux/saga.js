@@ -46,28 +46,28 @@ function* Get_TermsAndCondtions_GenratorFunction() {
 }
 
 // delete List Page API
-function* Delete_TermsAndCondtions_GenratorFunction({id}) {
-  debugger
-  yield put(SpinnerState(true))
-  try {
-    const response = yield call(delete_TermsAndCondtions_API,id);
+// function* Delete_TermsAndCondtions_GenratorFunction({id}) {
+//   debugger
+//   yield put(SpinnerState(true))
+//   try {
+//     const response = yield call(delete_TermsAndCondtions_API,id);
     
-    yield put(DeleteTermsAndCondtions_Success(response));
-    yield put(SpinnerState(false))
-  } catch (error) {
-    yield put(SpinnerState(false))
-    yield put(AlertState({
-      Type: 4,
-      Status: true, Message: "500 Error Message",
-    }));
-  }
-}
+//     yield put(DeleteTermsAndCondtions_Success(response));
+//     yield put(SpinnerState(false))
+//   } catch (error) {
+//     yield put(SpinnerState(false))
+//     yield put(AlertState({
+//       Type: 4,
+//       Status: true, Message: "500 Error Message",
+//     }));
+//   }
+// }
 
 
 function* TermsAndCondtionsSaga () {
   yield takeEvery(POST_METHOD_HANDLER_FOR_TERMSANDCONDITIONS_MASTER_API, Post_Method_ForTermsAndCondtionsMaster_GenFun)
   yield takeEvery(GET_METHOD_FOR_TERMSANDCONDITIONSLIST_API, Get_TermsAndCondtions_GenratorFunction)
-  yield takeEvery(DELETE_METHOD_FOR_TERMSANDCONDITIONSLIST_API, Delete_TermsAndCondtions_GenratorFunction)
+  // yield takeEvery(DELETE_METHOD_FOR_TERMSANDCONDITIONSLIST_API, Delete_TermsAndCondtions_GenratorFunction)
 
 }
 
