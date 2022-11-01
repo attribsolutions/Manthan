@@ -204,7 +204,7 @@ const OrderList = (props) => {
             <React.Fragment>
                 <div className="page-content">
                     <MetaTags>
-                        <title>MRP List| FoodERP-React FrontEnd</title>
+                        <title>Orders| FoodERP-React FrontEnd</title>
                     </MetaTags>
                     <div className="container-fluid">
                         <PaginationProvider
