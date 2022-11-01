@@ -16,7 +16,8 @@ import {
     editEmployeeTypeSuccess,
     PostEmployeeTypeSubmit,
     PostEmployeeTypeSubmitSuccess,
-    updateEmployeeTypeID
+    updateEmployeeTypeID,
+    updateEmployeeTypeIDSuccess
 } from "../../../store/Administrator/EmployeeTypeRedux/action";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
@@ -30,6 +31,7 @@ import { SaveButton } from "../../../components/CommonSaveButton";
 import {
     comAddPageFieldFunc,
     formValid,
+    initialFiledFunc,
     onChangeText
 } from "../../../components/Common/CmponentRelatedCommonFile/validationFunction";
 import { EMPLOYEETYPE_lIST } from "../../../routes/route_url";
@@ -45,53 +47,20 @@ const EmployeeTypesMaster = (props) => {
     const [userPageAccessState, setUserPageAccessState] = useState('');
     const [modalCss, setModalCss] = useState(false);
 
-
-    const [state, setState] = useState({
-        values: {
-            id: "",
-            Name: "",
-            IsPartyConnection: false,
-            IsSCM: false
-        },
-        fieldLabel: {
-            Name: "",
-            IsPartyConnection: false,
-            IsSCM: false
-        },
-
-        isError: {
-            Name: "",
-            IsPartyConnection: false,
-            IsSCM: false
-        },
-
-        hasValid: {
-            Name: {
-                regExp: '',
-                inValidMsg: "",
-                valid: false
-            },
-            IsPartyConnection: {
-                regExp: '',
-                inValidMsg: "",
-                valid: false
-            },
-
-            IsSCM: {
-                regExp: '',
-                inValidMsg: "",
-                valid: false
-            }
-        },
-        required: {
-
-        }
-    }
-    )
+    const initialFiled = {
+        id: "",
+        Name: "",
+        IsPartyConnection: false,
+        IsSCM: false
+      }
+    
+    const [state, setState] = useState(initialFiledFunc(initialFiled))
+  
 
     //Access redux store Data /  'save_ModuleSuccess' action data
-    const { PostAPIResponse, pageField, userAccess, } = useSelector((state) => ({
-        PostAPIResponse: state.EmployeeTypeReducer.PostEmployeeType,
+    const { postMsg, updateMsg ,pageField, userAccess, } = useSelector((state) => ({
+        postMsg: state.EmployeeTypeReducer.PostEmployeeType,
+        updateMsg: state.EmployeeTypeReducer.updateMessage,
         userAccess: state.Login.RoleAccessUpdateData,
         pageField: state.CommonPageFieldReducer.pageField
     }));
@@ -151,16 +120,18 @@ const EmployeeTypesMaster = (props) => {
                 values.IsPartyConnection = IsPartyConnection;
                 values.IsSCM = IsSCM;
                 values.id = id
-
+                hasValid.Name.valid = true;
+                hasValid.IsSCM.valid = true;
+                hasValid.IsPartyConnection.valid = true;
                 setState({ values, fieldLabel, hasValid, required, isError })
-                dispatch(BreadcrumbShow(hasEditVal.EmployeeTypesMaster))
+                dispatch(BreadcrumbShow(hasEditVal.Name))
             }
             dispatch(editEmployeeTypeSuccess({ Status: false }))
         }
     }, [])
 
     useEffect(() => {
-        if ((PostAPIResponse.Status === true) && (PostAPIResponse.StatusCode === 200) && !(pageMode === "dropdownAdd")) {
+        if ((postMsg.Status === true) && (postMsg.StatusCode === 200) && !(pageMode === "dropdownAdd")) {
 
             dispatch(PostEmployeeTypeSubmitSuccess({ Status: false }))
             formRef.current.reset();
@@ -168,31 +139,47 @@ const EmployeeTypesMaster = (props) => {
                 dispatch(AlertState({
                     Type: 1,
                     Status: true,
-                    Message: PostAPIResponse.Message,
+                    Message: postMsg.Message,
                 }))
             }
             else {
                 dispatch(AlertState({
                     Type: 1,
                     Status: true,
-                    Message: PostAPIResponse.Message,
+                    Message: postMsg.Message,
                     RedirectPath: EMPLOYEETYPE_lIST,
 
                 }))
             }
         }
-        else if ((PostAPIResponse.Status === true) && !(pageMode === "dropdownAdd")) {
+        else if ((postMsg.Status === true) && !(pageMode === "dropdownAdd")) {
             dispatch(PostEmployeeTypeSubmitSuccess({ Status: false }))
             dispatch(AlertState({
                 Type: 4,
                 Status: true,
-                Message: JSON.stringify(PostAPIResponse.Message),
+                Message: JSON.stringify(postMsg.Message),
                 RedirectPath: false,
                 AfterResponseAction: false
             }));
         }
-    }, [PostAPIResponse])
+    }, [postMsg])
 
+    useEffect(() => {
+        if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
+            history.push({
+                pathname: EMPLOYEETYPE_lIST,
+            })
+        } else if (updateMsg.Status === true && !modalCss) {
+            dispatch(updateEmployeeTypeIDSuccess({ Status: false }));
+            dispatch(
+                AlertState({
+                    Type: 3,
+                    Status: true,
+                    Message: JSON.stringify(updateMsg.Message),
+                })
+            );
+        }
+    }, [updateMsg, modalCss]);
 
     useEffect(() => {
 
@@ -284,7 +271,7 @@ const EmployeeTypesMaster = (props) => {
                                                                     <Col md={2} style={{ marginTop: '9px' }}>
                                                                         <div className="form-check form-switch form-switch-md mb-3" >
                                                                             <Input type="checkbox" className="form-check-input"
-                                                                                value={values.IsPartyConnection}
+                                                                                 checked={values.IsPartyConnection}
                                                                                 name="IsPartyConnection"
                                                                                 onChange={(event) => onChangeText({ event, state, setState })}
                                                                             />
@@ -301,7 +288,7 @@ const EmployeeTypesMaster = (props) => {
                                                                     <Col md={2} style={{ marginTop: '9px' }} >
                                                                     <div className="form-check form-switch form-switch-md mb-3" >
                                                                             <Input type="checkbox" className="form-check-input"
-                                                                                value={values.IsSCM}
+                                                                                 checked={values.IsSCM}
                                                                                 name="IsSCM"
                                                                                 onChange={(event) => onChangeText({ event, state, setState })}
                                                                             />

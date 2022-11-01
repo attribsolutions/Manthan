@@ -21,6 +21,7 @@ import { useHistory } from "react-router-dom";
 import {
     comAddPageFieldFunc,
     formValid,
+    initialFiledFunc,
     onChangeText,
 } from "../../../components/Common/CmponentRelatedCommonFile/validationFunction";
 import {
@@ -28,7 +29,8 @@ import {
     getGroupTypeslistSuccess,
     PostGroupTypeSubmit,
     PostGroupTypeSubmitSuccess,
-    updateGroupTypeID
+    updateGroupTypeID,
+    updateGroupTypeIDSuccess
 } from "../../../store/Administrator/GroupTypeRedux/action";
 import {GROUPTYPE_lIST } from "../../../routes/route_url";
 
@@ -47,38 +49,22 @@ const GroupTypeMaster = (props) => {
     const [pageMode, setPageMode] = useState("save");
     const [userPageAccessState, setUserPageAccessState] = useState('');
 
-    const [state, setState] = useState({
-        values: {
-            Name: "",
-        },
-        fieldLabel: {
-            Name: "",
-        },
-
-        isError: {
-            Name: "",
-        },
-
-        hasValid: {
-            Name: {
-                regExp: '',
-                inValidMsg: "",
-                valid: false
-            },
-        },
-        required: {
-
-        }
-    }
-    )
-
+    const initialFiled = {
+        id:"",
+        Name: "",
+      }
+    
+    const [state, setState] = useState(initialFiledFunc(initialFiled))
+   
     //Access redux store Data /  'save_ModuleSuccess' action data
     const {
         postMsg,
+        updateMsg,
         pageField,
         userAccess
     } = useSelector((state) => ({
         postMsg: state.GroupTypeReducer.PostData,
+        updateMsg: state.GroupTypeReducer.updateMessage,
         userAccess: state.Login.RoleAccessUpdateData,
         pageField: state.CommonPageFieldReducer.pageField
     }));
@@ -128,8 +114,12 @@ const GroupTypeMaster = (props) => {
 
             if (hasEditVal) {
                 setEditData(hasEditVal);
-                const { Name } = hasEditVal
+                const {id, Name } = hasEditVal
                 const { values, fieldLabel, hasValid, required, isError } = { ...state }
+
+                hasValid.Name.valid = true;
+                
+                values.id = id
                 values.Name = Name;
                 setState({ values, fieldLabel, hasValid, required, isError })
                 dispatch(editGroupTypeIdSuccess({ Status: false }))
@@ -170,7 +160,23 @@ const GroupTypeMaster = (props) => {
         }
     }, [postMsg])
 
-    
+    useEffect(() => {
+        if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
+            history.push({
+                pathname: GROUPTYPE_lIST,
+            })
+        } else if (updateMsg.Status === true && !modalCss) {
+            dispatch(updateGroupTypeIDSuccess({ Status: false }));
+            dispatch(
+                AlertState({
+                    Type: 3,
+                    Status: true,
+                    Message: JSON.stringify(updateMsg.Message),
+                })
+            );
+        }
+    }, [updateMsg, modalCss]);
+
     useEffect(() => {
         if (pageField) {
             const fieldArr = pageField.PageFieldMaster
@@ -186,6 +192,7 @@ const GroupTypeMaster = (props) => {
 
         event.preventDefault();
         if (formValid(state, setState)) {
+            debugger
             const jsonBody = JSON.stringify({
                 Name: values.Name,
                 CreatedBy: 1,

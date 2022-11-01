@@ -30,6 +30,7 @@ import {
     comAddPageFieldFunc,
     formValChange,
     formValid,
+    initialFiledFunc,
     onChangeText
 } from "../../../components/Common/CmponentRelatedCommonFile/validationFunction";
 import { SaveButton } from "../../../components/CommonSaveButton";
@@ -57,57 +58,23 @@ const PartyType = (props) => {
             PostAPIResponse: state.PartyTypeReducer.PostData,
             PartyTypes: state.PartyMasterReducer.PartyTypes,
             pageField: state.CommonPageFieldReducer.pageField,
-            userAccess: state.Login.RoleAccessUpdateData,        }));
+            userAccess: state.Login.RoleAccessUpdateData,
+        }));
 
     useEffect(() => {
         dispatch(commonPageField(53))
     }, []);
 
     {/** Dyanamic Page access state and OnChange function */ }
-    {/*start */ }
-    const [state, setState] = useState({
-        values: {
-            id:"",
-            Name: "",
-            IsSCM: "",
-            IsDivision: "",
-        },
-        fieldLabel: {
-            Name: '',
-            IsSCM: '',
-            IsDivision: '',
-        },
+    const initialFiled = {
+        id: "",
+        Name: "",
+        IsSCM: "",
+        IsDivision: "",
+    }
 
-        isError: {
-            Name: "",
-            IsSCM: "",
-            IsDivision: "",
-        },
-
-        hasValid: {
-            Name: {
-                regExp: '',
-                inValidMsg: "",
-                valid: false
-            },
-
-            IsSCM: {
-                regExp: '',
-                inValidMsg: "",
-                valid: false
-            },
-
-            IsDivision:{
-                regExp: '',
-                inValidMsg: "",
-                valid: false
-            },
-
-        },
-        required: {
-
-        }
-    })
+    const [state, setState] = useState(initialFiledFunc(initialFiled))
+    
     const values = { ...state.values }
     const { isError } = state;
     const { fieldLabel } = state;
@@ -142,7 +109,7 @@ const PartyType = (props) => {
 
     // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
     useEffect(() => {
-        
+
         // if (!(userPageAccessState === '')) { document.getElementById("txtName").focus(); }
         if ((hasShowloction || hasShowModal)) {
 
@@ -159,14 +126,18 @@ const PartyType = (props) => {
 
             if (hasEditVal) {
 
-                const { id, Name,IsSCM,IsDivision } = hasEditVal
+                const { id, Name, IsSCM, IsDivision } = hasEditVal
                 const { values, fieldLabel, hasValid, required, isError } = { ...state }
                 values.Name = Name;
-                 values.IsSCM = IsSCM;
-                 values.IsDivision = IsDivision;
+                values.IsSCM = IsSCM;
+                values.IsDivision = IsDivision;
                 values.id = id
+                hasValid.Name.valid = true;
+                hasValid.IsSCM.valid = true;
+                hasValid.IsDivision.valid = true;
+
                 setState({ values, fieldLabel, hasValid, required, isError })
-                dispatch(BreadcrumbShow(hasEditVal.PartyType))
+                dispatch(BreadcrumbShow(hasEditVal.Name))
 
             }
             dispatch(editPartyTypeSuccess({ Status: false }))
@@ -219,25 +190,25 @@ const PartyType = (props) => {
     const formSubmitHandler = (event) => {
         event.preventDefault();
         if (formValid(state, setState)) {
-        const jsonBody = JSON.stringify({
-            Name: values.Name,
-            IsSCM: values.IsSCM,
-            IsDivision: values.IsDivision,
-            CreatedBy: 1,
-            CreatedOn: "2022-07-18T00:00:00",
-            UpdatedBy: 1,
-            UpdatedOn: "2022-07-18T00:00:00"
-        });
-      console.log("jsonBody",jsonBody)
+            const jsonBody = JSON.stringify({
+                Name: values.Name,
+                IsSCM: values.IsSCM,
+                IsDivision: values.IsDivision,
+                CreatedBy: 1,
+                CreatedOn: "2022-07-18T00:00:00",
+                UpdatedBy: 1,
+                UpdatedOn: "2022-07-18T00:00:00"
+            });
+            console.log("jsonBody", jsonBody)
 
-        if (pageMode === "edit") {
-            dispatch(updatePartyTypeID(jsonBody, values.id));
+            if (pageMode === "edit") {
+                dispatch(updatePartyTypeID(jsonBody, values.id));
+            }
+            else {
+                dispatch(PostPartyTypeAPI(jsonBody));
+            }
         }
-        else {
-            dispatch(PostPartyTypeAPI(jsonBody));
-        }
-    }
-};
+    };
 
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
     var IsEditMode_Css = ''
@@ -259,7 +230,7 @@ const PartyType = (props) => {
                             </CardHeader>
 
                             <CardBody className=" vh-10 0 text-black" style={{ backgroundColor: "#whitesmoke" }} >
-                            <form onSubmit={formSubmitHandler} ref={formRef} noValidate>
+                                <form onSubmit={formSubmitHandler} ref={formRef} noValidate>
                                     <Row className="">
                                         <Col md={12}>
                                             <Card>
@@ -288,15 +259,14 @@ const PartyType = (props) => {
                                                         <Row>
                                                             <FormGroup className="mb-2 col col-sm-5">
                                                                 <Row className="justify-content-md-left">
-                                                                    <Label htmlFor="horizontal-firstname-input" className="col-sm-3 col-form-label" >IsSCM </Label>
+                                                                    <Label htmlFor="horizontal-firstname-input" className="col-sm-3 col-form-label" >{fieldLabel.IsSCM} </Label>
                                                                     <Col md={2} style={{ marginTop: '9px' }} >
-                                                                        <div className="form-check form-switch form-switch-md mb-3" dir="ltr">
-                                                                            <Input type="checkbox" className="form-check-input" id="customSwitchsizemd"
-                                                                                defaultChecked={values.IsSCM}
+                                                                        <div className="form-check form-switch form-switch-md mb-3">
+                                                                            <Input type="checkbox" className="form-check-input"
+                                                                                checked={values.IsSCM}
                                                                                 name="IsSCM"
-                                                                            // defaultChecked
+                                                                                onChange={(event) => onChangeText({ event, state, setState })}
                                                                             />
-                                                                            <label className="form-check-label" htmlFor="customSwitchsizemd"></label>
                                                                         </div>
                                                                     </Col>
                                                                 </Row>
@@ -306,15 +276,14 @@ const PartyType = (props) => {
                                                         <Row>
                                                             <FormGroup className="mb-2 col col-sm-5">
                                                                 <Row className="justify-content-md-left">
-                                                                    <Label htmlFor="horizontal-firstname-input" className="col-sm-3 col-form-label" >IsDivision </Label>
+                                                                    <Label htmlFor="horizontal-firstname-input" className="col-sm-3 col-form-label" >{fieldLabel.IsDivision} </Label>
                                                                     <Col md={2} style={{ marginTop: '9px' }} >
-                                                                        <div className="form-check form-switch form-switch-md mb-3" dir="ltr">
-                                                                            <Input type="checkbox" className="form-check-input" id="customSwitchsizemd"
-                                                                                defaultChecked={values.IsDivision}
+                                                                        <div className="form-check form-switch form-switch-md mb-3">
+                                                                            <Input type="checkbox" className="form-check-input"
+                                                                                checked={values.IsDivision}
                                                                                 name="IsDivision"
-                                                                            // defaultChecked
+                                                                                onChange={(event) => onChangeText({ event, state, setState })}
                                                                             />
-                                                                            <label className="form-check-label" htmlFor="customSwitchsizemd"></label>
                                                                         </div>
                                                                     </Col>
                                                                 </Row>

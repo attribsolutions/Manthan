@@ -19,11 +19,11 @@ const VehicleList = (props) => {
   const reducers = useSelector(
     (state) => ({
       tableList: state.VehicleReducer.VehicleList,
+      postMsg: state.VehicleReducer.postMsg,
       editData: state.VehicleReducer.editData,
-      updateMsg: state.VehicleReducer.updateMessage,
-      deleteMsg: state.VehicleReducer.deleteMessage,
+      updateMsg: state.VehicleReducer.updateMsg,
+      deleteMsg: state.VehicleReducer.deleteMsg,
       userAccess: state.Login.RoleAccessUpdateData,
-      postMsg: state.VehicleReducer.PostDataMessage,
       pageField: state.CommonPageFieldReducer.pageFieldList
     })
   );
@@ -36,7 +36,6 @@ const VehicleList = (props) => {
     updateSucc: updateVehicleTypeIDSuccess,
     deleteSucc: deleteVehicleTypeIDSuccess,
   }
-
 
   //  This UseEffect => Featch Modules List data  First Rendering
   useEffect(() => {
@@ -56,7 +55,7 @@ const VehicleList = (props) => {
             reducers={reducers}
             MasterModal={VehicleMaster}
             masterPath={VEHICLE}
-            ButtonMsgLable={"Vehicle"}
+            ButtonMsgLable={"VehicleNumber"}
             deleteName={"VehicleNumber"}
 
           />

@@ -13,14 +13,28 @@ const Breadcrumb = props => {
   const { SearchBar } = Search;
   const dispatch = useDispatch();
   const history = useHistory();
+  const { showCount = false } = props
 
 
   // for Excel Download
   const [modal_scroll, setmodal_scroll] = useState(false);
-  const [ListData, setListData] = useState([]);
+  const [downListKey, setDownListKey] = useState([]);
 
-  const { bredcrumbName='', RoleAccessModifiedinSingleArray } = useSelector((state) => ({
+  // const breadcrumbItem = props.userAcc.PageHeading;
+  // const IsButtonVissible = (props.userAcc.RoleAccess_IsSave) ? true : false;
+  // const userAcc = props.userAcc;
+  // const pageField = props.pageField;
+
+
+  const {
+    bredcrumbName = '',
+    filterSize,
+    searchProps,
+    RoleAccessModifiedinSingleArray
+  } = useSelector((state) => ({
     bredcrumbName: state.BreadcrumbReducer.bredcrumbName,
+    filterSize: state.BreadcrumbReducer.filterSize,
+    searchProps: state.BreadcrumbReducer.searchProps,
     RoleAccessModifiedinSingleArray: state.Login.RoleAccessUpdateData,
 
   }));
@@ -34,8 +48,7 @@ const Breadcrumb = props => {
     document.body.classList.add("no_padding");
   }
 
-  let Countsize = ''
-  if (props.breadcrumbCount) { Countsize = props.breadcrumbCount; }
+
   const [IsRedirectNewButton, setIsRedirectNewButton] = useState(false);
 
   // New Button Handller
@@ -66,7 +79,7 @@ const Breadcrumb = props => {
   // Onfocus Search Box
   useEffect(() => {
     // document.getElementById("search-bar-0").focus();
-    
+
     if (!(props.IsSearchVissible === undefined)) {
     }
     history.listen(location => dispatch(BreadcrumbShow('')));
@@ -78,7 +91,7 @@ const Breadcrumb = props => {
       if ((props.ExcelData.length > 0)) {
         // object to array conversion
         const propertyNames = Object.keys(props.ExcelData[0]);
-        setListData(propertyNames)
+        setDownListKey(propertyNames)
       }
     }
   }, [props.ExcelData])
@@ -108,21 +121,72 @@ const Breadcrumb = props => {
   }
 
 
-  const handleChange = (e) => {
-    var chek = document.getElementById("checkAll")
-    if (chek) {
-      for (var i = 0; i < ListData.length; i++) {
-        document.getElementById(`chckbox${i}`).checked = true
+  const excelChekOnChange = (e) => {
+    // e.preventDefault();
+    const check=e.target
+    // var chek = document.getElementById("checkAll").checked
+    debugger
+    if (check.id==="checkAll") {
+      if(check.checked){
+        for (var i = 0; i < downListKey.length; i++) {
+          const a=document.getElementById(`chckbox${i}`)
+          if(a){
+            a.checked = true
+            // props.ExcelData[0][`$defSelect${downListKey[i]}`]=true
+          }
+        }
+      }
+      else {
+        for (var i = 0; i < downListKey.length; i++) {
+          const a=document.getElementById(`chckbox${i}`)
+          if(a){
+            a.checked = false
+            // props.ExcelData[0][`$defSelect${downListKey[i]}`]=false
+
+          }
+        }
       }
     }
-    else {
-      for (var i = 0; i < ListData.length; i++) {
-        document.getElementById(`chckbox${i}`).checked = false
-      }
+    else{
+      // document.getElementById(check.id).checked=check.value;
+    // var chek = document.getElementById("checkAll").checked
+
     }
+    
   };
 
-
+  function funcSelect() {
+    const arrDiv = []
+    downListKey.forEach((index, key) => {
+      
+      const match = index.slice(0, 1);
+      if (!(match === "$")) {
+        arrDiv.push(
+          <>
+            <div className="row" >
+              <div className="col col-12"  >
+                <Row>
+                  <div className="col col-12 " >
+                    <AvInput
+                      className=" text-black checkbox-border-red"
+                      type="checkbox"
+                      id={`chckbox${key}`}
+                      name={index}
+                      // defaultChecked={true}
+                      defaultValue={(props.ExcelData[0][`$defSelect${index}`])?true:false}
+                      // onChange={ excelChekOnChange}
+                    />&nbsp;&nbsp;&nbsp;
+                    <label className="form-label text-black"> {index} </label>
+                  </div>
+                </Row>
+              </div>
+            </div>
+          </>
+        )
+      }
+    })
+    return arrDiv
+  }
   return (
     <React.Fragment>
       <Modal
@@ -152,32 +216,12 @@ const Breadcrumb = props => {
                 id="checkAll"
                 type="checkbox"
                 className="form-check-input"
-                onChange={() => { handleChange() }}
+                onChange={excelChekOnChange}
               />
               <label className="form-label text-black">All Select</label>
             </div>
+            {funcSelect()}
 
-            {ListData.map((index, key) => {
-              return <>
-                <div className="row" >
-                  <div className="col col-12"  >
-                    <Row>
-                      <div className="col col-12 " >
-                        <AvInput
-                          className=" text-black checkbox-border-red"
-                          type="checkbox"
-                          id={`chckbox${key}`}
-                          name={index}
-                          checked={key?.isChecked || false}
-                          onChange={() => { handleChange() }}
-                        />&nbsp;&nbsp;&nbsp;
-                        <label className="form-label text-black"> {index} </label>
-                      </div>
-                    </Row>
-                  </div>
-                </div>
-              </>
-            })}
 
             <div className="modal-body">
               <div className="modal-footer">
@@ -222,8 +266,8 @@ const Breadcrumb = props => {
                     {/* {bredcrumbName.length > 0 ? <label className="font-size-24 form-label  text-nowrap bd-highlight text-secondary" style={{ paddingLeft: "7px" }} >&nbsp;/ <kbd className="bg-light text-secondary">{bredcrumbName}</kbd></label>
                     : <></>} */}
 
-                   
-                    {( bredcrumbName.length > 0 )?
+
+                    {(bredcrumbName.length > 0) ?
                       <label className="font-size-24 form-label  text-nowrap bd-highlight text-primary"
                         style={{ paddingLeft: "7px", color: "#5156be" }} >&nbsp;/&nbsp;{bredcrumbName}</label>
                       : <></>
@@ -234,7 +278,7 @@ const Breadcrumb = props => {
           </div>
         </Col>
 
-        <Col md={Countsize.length < 10 ? 3 : Countsize.length < 25 ? 2 : 1}
+        <Col md={filterSize.length < 10 ? 3 : filterSize.length < 25 ? 2 : 1}
           className='text-end'>
 
           {props.isExcelButtonVisible === true ?
@@ -273,13 +317,13 @@ const Breadcrumb = props => {
         </Col>
 
 
-        <Col md={Countsize.length < 10 ? 1 : Countsize.length < 25 ? 2 : 3} className="text-right col-md-2 px-0 justify-content-end">
+        <Col md={filterSize.length < 10 ? 1 : filterSize.length < 25 ? 2 : 3} className="text-right col-md-2 px-0 justify-content-end">
 
           {
-            !(props.breadcrumbCount === undefined)
+            (showCount)
               ?
               <div className="bg-dark text-center text-light external-event  col-form-label  border border-Success rounded-2" style={{ width: "100%" }}>
-                {props.breadcrumbCount}
+                {filterSize}
               </div>
               :
               <React.Fragment></React.Fragment>

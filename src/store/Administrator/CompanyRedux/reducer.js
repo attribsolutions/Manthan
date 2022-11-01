@@ -10,9 +10,9 @@ import {
 const INIT_STATE = {
   companyList: [],
   editData: { Status: false },
-  deleteId: { Status: false },
+  deleteCompanyID: { Status: false },
   postMsg: { Status: false },
-  updateMsg:{ Status: false },
+  updateMessage:{ Status: false },
   CompanyGroup:[],
 }
 

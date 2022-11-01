@@ -8,6 +8,7 @@ import {
   Label,
   CardHeader,
   FormGroup,
+  Input,
 } from "reactstrap";
 import Select from "react-select";
 import { AvForm, AvInput } from "availity-reactstrap-validation";
@@ -19,13 +20,24 @@ import {
   PostCompanySubmit,
   PostCompanySubmitSuccess,
   updateCompanyID,
-  getCompanyGroup
+  getCompanyGroup,
+  updateCompanyIDSuccess
 } from "../../../store/Administrator/CompanyRedux/actions";
 import { MetaTags } from "react-meta-tags";
-import { AlertState } from "../../../store/actions";
+import { AlertState, commonPageField, commonPageFieldSuccess } from "../../../store/actions";
 import { BreadcrumbShow } from "../../../store/Utilites/Breadcrumb/actions";
 import { useHistory } from "react-router-dom";
 import { SaveButton } from "../../../components/CommonSaveButton";
+import {
+  comAddPageFieldFunc,
+  formValChange,
+  formValid,
+  initialFiledFunc,
+  onChangeSelect,
+  onChangeText,
+
+} from "../../../components/Common/CmponentRelatedCommonFile/validationFunction";
+import { COMPANY_lIST } from "../../../routes/route_url";
 
 const CompanyModule = (props) => {
 
@@ -33,12 +45,7 @@ const CompanyModule = (props) => {
   const dispatch = useDispatch();
   const history = useHistory()
 
-
-
-
-
   //*** "isEditdata get all data from ModuleID for Binding  Form controls
-
 
   const [EditData, setEditData] = useState({});
   const [modalCss, setModalCss] = useState(false);
@@ -48,10 +55,37 @@ const CompanyModule = (props) => {
   const [CompanyGroupselect, setCompanyGroup] = useState("");
 
   //Access redux store Data /  'save_ModuleSuccess' action data
-  const { postMsg, userAccess } = useSelector((state) => ({
+  const { postMsg,updateMsg, userAccess, pageField } = useSelector((state) => ({
     postMsg: state.Company.postMsg,
+    updateMsg: state.Company.updateMessage,
     userAccess: state.Login.RoleAccessUpdateData,
+    pageField: state.CommonPageFieldReducer.pageField
   }));
+
+  {/** Dyanamic Page access state and OnChange function */ }
+  const initialFiled = {
+    id: "",
+    Name: "",
+    Address: "",
+    GSTIN: "",
+    PhoneNo: "",
+    CompanyAbbreviation: "",
+    EmailID: "",
+    CompanyGroup: ""
+  }
+
+const [state, setState] = useState(initialFiledFunc(initialFiled))
+ 
+
+  const values = { ...state.values }
+  const { isError } = state;
+  const { fieldLabel } = state;
+
+  useEffect(() => {
+    dispatch(commonPageFieldSuccess(null));
+    dispatch(commonPageField(2))
+    dispatch(getCompanyGroup());
+  }, [dispatch]);
 
   const location = { ...history.location }
   const hasShowloction = location.hasOwnProperty("editValue")
@@ -76,7 +110,7 @@ const CompanyModule = (props) => {
   }, [userAccess])
 
   useEffect(() => {
- 
+
     // if (!(userPageAccessState === '')) { document.getElementById("txtName").focus(); }
     if ((hasShowloction || hasShowModal)) {
 
@@ -92,31 +126,41 @@ const CompanyModule = (props) => {
       }
 
       if (hasEditVal) {
-        setEditData(hasEditVal);
-        const {
-          CompanyGroup_id,
-          CompanyGroupName,
-          Name } = { ...hasEditVal };
+        const { id, Name, Address, GSTIN, PhoneNo, CompanyAbbreviation, EmailID, CompanyGroup ,CompanyGroupName} = hasEditVal
+        const { values, fieldLabel, hasValid, required, isError } = { ...state }
 
-        setCompanyGroup({
-          value: CompanyGroup_id,
-          label: CompanyGroupName
-        })
-        dispatch(editCompanyIDSuccess({ Status: false }))
-        dispatch(BreadcrumbShow(Name))
+        hasValid.Name.valid = true;
+        hasValid.Address.valid = true;
+        hasValid.GSTIN.valid = true;
+        hasValid.PhoneNo.valid = true;
+        hasValid.CompanyAbbreviation.valid = true;
+        hasValid.EmailID.valid = true;
+        hasValid.CompanyGroup.valid = true;
+
+        values.id = id
+        values.Name = Name
+        values.Address = Address;
+        values.GSTIN = GSTIN;
+        values.PhoneNo = PhoneNo;
+        values.CompanyAbbreviation = CompanyAbbreviation;
+        values.EmailID = EmailID;
+        values.CompanyGroup = { label: CompanyGroupName, value: CompanyGroup };
+        setState({ values, fieldLabel, hasValid, required, isError })
+        dispatch(BreadcrumbShow(hasEditVal.Name))
       }
+      dispatch(editCompanyIDSuccess({ Status: false }))
     }
 
   }, []);
 
 
   useEffect(() => {
-    debugger
+
     if ((postMsg.Status === true) && (postMsg.StatusCode === 200) && !(pageMode === "dropdownAdd")) {
       dispatch(PostCompanySubmitSuccess({ Status: false }))
       setCompanyGroup('')
       formRef.current.reset();
-      if (pageMode === "dropdownAdd") {
+      if (pageMode === "other") {
         dispatch(AlertState({
           Type: 1,
           Status: true,
@@ -128,7 +172,7 @@ const CompanyModule = (props) => {
           Type: 1,
           Status: true,
           Message: postMsg.Message,
-          RedirectPath: '/CompanyList',
+          RedirectPath: COMPANY_lIST,
         }))
       }
     }
@@ -144,10 +188,22 @@ const CompanyModule = (props) => {
     }
   }, [postMsg])
 
-  /// CompanyGroupDropDown
   useEffect(() => {
-    dispatch(getCompanyGroup());
-  }, [dispatch]);
+    if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
+        history.push({
+            pathname: COMPANY_lIST,
+        })
+    } else if (updateMsg.Status === true && !modalCss) {
+        dispatch(updateCompanyIDSuccess({ Status: false }));
+        dispatch(
+            AlertState({
+                Type: 3,
+                Status: true,
+                Message: JSON.stringify(updateMsg.Message),
+            })
+        );
+    }
+}, [updateMsg, modalCss]);
 
   const { CompanyGroup } = useSelector((state) => ({
     CompanyGroup: state.Company.CompanyGroup
@@ -158,33 +214,67 @@ const CompanyModule = (props) => {
     label: Data.Name
   }));
 
-  function handllerCompanyGroupID(e) {
-    setCompanyGroup(e)
-  }
+  useEffect(() => {
 
-  //'Save' And 'Update' Button Handller
-  const handleValidSubmit = (event, values) => {
-
-    const jsonBody = JSON.stringify({
-      Name: values.Name,
-      Address: values.Address,
-      GSTIN: values.GSTIN,
-      PhoneNo: values.PhoneNo,
-      CompanyAbbreviation: values.CompanyAbbreviation,
-      EmailID: values.EmailID,
-      CompanyGroup: CompanyGroupselect.value,
-      CreatedBy: 1,
-      UpdatedBy: 1,
-    });
-
-    if (pageMode === 'edit') {
-      dispatch(updateCompanyID(jsonBody, EditData.id));
+    if (pageField) {
+      const fieldArr = pageField.PageFieldMaster
+      comAddPageFieldFunc({ state, setState, fieldArr })
     }
+  }, [pageField])
 
-    else {
-      dispatch(PostCompanySubmit(jsonBody));
+  const formSubmitHandler = (event) => {
+    debugger
+    event.preventDefault();
+    if (formValid(state, setState)) {
+      const jsonBody = JSON.stringify({
+        Name: values.Name,
+        Address: values.Address,
+        GSTIN: values.GSTIN,
+        PhoneNo: values.PhoneNo,
+        CompanyAbbreviation: values.CompanyAbbreviation,
+        EmailID: values.EmailID,
+        CompanyGroup: values.CompanyGroup.value,
+        CreatedBy: 1,
+        UpdatedBy: 1,
+      });
+
+      if (pageMode === "edit") {
+        dispatch(updateCompanyID(jsonBody, values.id,));
+        console.log("Update jsonBody", jsonBody)
+      }
+      else {
+        dispatch(PostCompanySubmit(jsonBody));
+        console.log("post jsonBody", jsonBody)
+
+      }
     }
   };
+
+  // //'Save' And 'Update' Button Handller
+  // const handleValidSubmit = (event, values) => {
+  //   debugger
+  //   const jsonBody = JSON.stringify({
+  //     Name: values.Name,
+  //     Address: values.Address,
+  //     GSTIN: values.GSTIN,
+  //     PhoneNo: values.PhoneNo,
+  //     CompanyAbbreviation: values.CompanyAbbreviation,
+  //     EmailID: values.EmailID,
+  //     CompanyGroup: values.CompanyGroupselect,
+  //     CreatedBy: 1,
+  //     UpdatedBy: 1,
+  //   });
+
+  //   if (pageMode === 'edit') {
+  //     dispatch(updateCompanyID(jsonBody, EditData.id));
+  //     console.log("Update jsonBody", jsonBody)
+  //   }
+
+  //   else {
+  //     dispatch(PostCompanySubmit(jsonBody));
+  //     console.log("Post jsonBody", jsonBody)
+  //   }
+  // };
 
   var IsEditMode_Css = ''
   if ((modalCss) || (pageMode === "dropdownAdd")) { IsEditMode_Css = "-5.5%" };
@@ -194,7 +284,7 @@ const CompanyModule = (props) => {
       <React.Fragment>
         <div className={"page-content"} style={{ marginTop: IsEditMode_Css }} >
           <MetaTags>
-            <title>Company Master| FoodERP-React FrontEnd</title>
+            <title>{userPageAccessState.PageHeading} | FoodERP-React FrontEnd</title>
           </MetaTags>
           <Breadcrumb breadcrumbItem={userPageAccessState.PageHeading} />
           <Container fluid>
@@ -207,69 +297,87 @@ const CompanyModule = (props) => {
                   </CardHeader>
 
                   <CardBody>
-                    <AvForm onValidSubmit={(e, v) => { handleValidSubmit(e, v) }}
-                      ref={formRef}
-                    >
+                    <form onSubmit={formSubmitHandler} ref={formRef} noValidate>
                       <Card >
                         <CardBody style={{ backgroundColor: "whitesmoke" }}>
                           <Row>
-                            <FormGroup className="mb-3 col col-sm-4 " >
-                              <Label htmlFor="validationCustom01">Name</Label>
-                              <AvField name="Name" value={EditData.Name} type="text" id='txtName'
-                                placeholder=" Please Enter Name "
-                                autoComplete="off"
-                                validate={{
-                                  required: { value: true, errorMessage: 'Please Enter Name' },
+
+                            <FormGroup className="mb-2 col col-sm-4 ">
+                              <Label htmlFor="validationCustom01">{fieldLabel.Name} </Label>
+                              <Input
+                                name="Name"
+                                id="txtName"
+                                value={values.Name}
+                                type="text"
+                                className={isError.Name.length > 0 ? "is-invalid form-control" : "form-control"}
+                                placeholder="Please Enter Name"
+                                autoComplete='off'
+                                onChange={(event) => {
+                                  onChangeText({ event, state, setState })
+                                  dispatch(BreadcrumbShow(event.target.value))
                                 }}
-                                onChange={(e) => { dispatch(BreadcrumbShow(e.target.value)) }}
                               />
+                              {isError.Name.length > 0 && (
+                                <span className="invalid-feedback">{isError.Name}</span>
+                              )}
                             </FormGroup>
+
                             <Col md="1">  </Col>
-                            <FormGroup className="mb-3 col col-sm-4 " >
-                              <Label htmlFor="validationCustom01">Address</Label>
-                              <AvField name="Address" value={EditData.Address} type="text"
-                                autoComplete="off"
-                                placeholder=" Please Enter Address "
-                                defaultValue=''
-                              // validate={{
-                              //   required: { value: true, errorMessage: 'Please Enter Address' },
-                              // }}
+                            <FormGroup className="mb-2 col col-sm-4 ">
+                              <Label htmlFor="validationCustom01">{fieldLabel.Address} </Label>
+                              <Input
+                                name="Address"
+                                value={values.Address}
+                                type="text"
+                                className={isError.Address.length > 0 ? "is-invalid form-control" : "form-control"}
+                                placeholder="Please Enter Address"
+                                autoComplete='off'
+                                onChange={(event) => onChangeText({ event, state, setState })}
                               />
+                              {isError.Address.length > 0 && (
+                                <span className="invalid-feedback">{isError.Address}</span>
+                              )}
                             </FormGroup>
+
                           </Row>
 
                           <Row className="mb-1">
-                            <FormGroup className=" col col-sm-4 " >
-                              <Label htmlFor="validationCustom01">Mobile Number</Label>
-                              <AvInput name="PhoneNo" type="text"
-                                autoComplete="off"
-                                value={EditData.PhoneNo}
-                                defaultValue=''
-                                placeholder="Enter Phone Number"
-                              // validate={{
-                              //   tel: {
-                              //     pattern: /^(\+\d{1,3}[- ]?)?\d{10}$/,
-                              //     errorMessage: 'Please Enter Phone Number'
-                              //   }
-                              // }}
+
+                            <FormGroup className="mb-2 col col-sm-4 ">
+                              <Label htmlFor="validationCustom01">{fieldLabel.PhoneNo} </Label>
+                              <Input
+                                name="PhoneNo"
+                                value={values.PhoneNo}
+                                type="text"
+                                className={isError.PhoneNo.length > 0 ? "is-invalid form-control" : "form-control"}
+                                placeholder="Please Enter PhoneNo"
+                                autoComplete='off'
+                                onChange={(event) => {
+                                  onChangeText({ event, state, setState })
+                                }}
                               />
+                              {isError.PhoneNo.length > 0 && (
+                                <span className="invalid-feedback">{isError.PhoneNo}</span>
+                              )}
                             </FormGroup>
 
                             <Col md="1">  </Col>
-                            <FormGroup className=" col col-sm-4 " >
-                              <Label htmlFor="validationCustom01">Email</Label>
-                              <AvField name="EmailID" value={EditData.EmailID} type="email"
-                                autoComplete="off"
-                                defaultValue=''
-                                placeholder="example@example.com"
-                              // validate={{
-                              //   required: { value: true, errorMessage: 'Please Enter Email' },
-                              //   tel: {
-                              //     pattern:  /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/,
-                              //     errorMessage: "Please Enter valid Email Address.(Ex:abc@gmail.com)"
-                              //   }
-                              // }}
+                            <FormGroup className="mb-2 col col-sm-4 ">
+                              <Label htmlFor="validationCustom01">{fieldLabel.EmailID} </Label>
+                              <Input
+                                name="EmailID"
+                                value={values.EmailID}
+                                type="text"
+                                className={isError.EmailID.length > 0 ? "is-invalid form-control" : "form-control"}
+                                placeholder="Please Enter EmailID"
+                                autoComplete='off'
+                                onChange={(event) => {
+                                  onChangeText({ event, state, setState })
+                                }}
                               />
+                              {isError.EmailID.length > 0 && (
+                                <span className="invalid-feedback">{isError.EmailID}</span>
+                              )}
                             </FormGroup>
                           </Row>
                         </CardBody>
@@ -279,43 +387,65 @@ const CompanyModule = (props) => {
                         <CardBody style={{ backgroundColor: "whitesmoke" }}>
 
                           <Row>
-                            <FormGroup className="mb-3 col col-sm-4 " >
-                              <Label htmlFor="validationCustom01">GSTIN </Label>
-                              <AvField name="GSTIN"
-                                autoComplete="off"
-                                value={EditData.GSTIN} type="text"
-                                placeholder="GSTIN "
-                                validate={{
-                                  required: { value: true, errorMessage: 'Please Enter GSTIN' },
-                                  tel: {
-                                    pattern: /[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}/,
-                                    errorMessage: 'GSTIN is Required (Eg.27AAAAA0000A1Z5)'
-
-                                  }
+                            <FormGroup className="mb-2 col col-sm-4 ">
+                              <Label htmlFor="validationCustom01">{fieldLabel.GSTIN} </Label>
+                              <Input
+                                name="GSTIN"
+                                value={values.GSTIN}
+                                type="text"
+                                className={isError.GSTIN.length > 0 ? "is-invalid form-control" : "form-control"}
+                                placeholder="Please Enter GSTIN"
+                                autoComplete='off'
+                                onChange={(event) => {
+                                  onChangeText({ event, state, setState })
                                 }}
                               />
+                              {isError.GSTIN.length > 0 && (
+                                <span className="invalid-feedback">{isError.GSTIN}</span>
+                              )}
                             </FormGroup>
+
                             <Col md="1">  </Col>
-                            <FormGroup className="mb-3 col col-sm-4 " >
-                              <Label htmlFor="validationCustom01">Company Abbreviation </Label>
-                              <AvField name="CompanyAbbreviation" value={EditData.CompanyAbbreviation} type="text"
-                                autoComplete="off"
-                                placeholder=" Please Enter Company Abbreviation"
-                                validate={{
-                                  required: { value: true, errorMessage: 'Please Enter Company Abbreviation' },
-                                }} />
+                            <FormGroup className="mb-2 col col-sm-4 ">
+                              <Label htmlFor="validationCustom01">{fieldLabel.CompanyAbbreviation} </Label>
+                              <Input
+                                name="CompanyAbbreviation"
+                                value={values.CompanyAbbreviation}
+                                type="text"
+                                className={isError.CompanyAbbreviation.length > 0 ? "is-invalid form-control" : "form-control"}
+                                placeholder="Please Enter CompanyAbbreviation"
+                                autoComplete='off'
+                                onChange={(event) => {
+                                  onChangeText({ event, state, setState })
+                                }}
+                              />
+                              {isError.CompanyAbbreviation.length > 0 && (
+                                <span className="invalid-feedback">{isError.CompanyAbbreviation}</span>
+                              )}
                             </FormGroup>
                           </Row>
 
                           <Row className=" mb-3">
-                            <FormGroup className=" col col-sm-4 " >
-                              <Label htmlFor="validationCustom21">Group Company  </Label>
-                              <Select
-                                value={CompanyGroupselect}
-                                options={CompanyGroupValues}
-                                onChange={(e) => { handllerCompanyGroupID(e) }}
-                              />
-                            </FormGroup>
+
+                            <Col md="4">
+
+                              <FormGroup className="mb-3 ">
+                                <Label htmlFor="validationCustom01"> {fieldLabel.CompanyGroup} </Label>
+                                <Select
+                                  name="CompanyGroup"
+                                  value={values.CompanyGroup}
+                                  //   value={{label:"abc",value:1}}//default value set
+                                  isSearchable={false}
+                                  className="react-dropdown"
+                                  classNamePrefix="dropdown"
+                                  options={CompanyGroupValues}
+                                  onChange={(hasSelect, evn) => onChangeSelect({ hasSelect, evn, state, setState, })}
+                                />
+                                {isError.CompanyGroup.length > 0 && (
+                                  <span className="text-danger f-8"><small>{isError.CompanyGroup}</small></span>
+                                )}
+                              </FormGroup>
+                            </Col>
                           </Row>
 
 
@@ -328,7 +458,7 @@ const CompanyModule = (props) => {
                           </FormGroup >
                         </CardBody>
                       </Card>
-                    </AvForm>
+                    </form>
                   </CardBody>
                 </Card>
               </Col >

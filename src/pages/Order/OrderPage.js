@@ -12,10 +12,12 @@ import "react-super-responsive-table/dist/SuperResponsiveTableStyle.css";
 
 // store action import
 import {
-  submitOrder_fromOrderPage,
+  
   getOrderItems_ForOrderPage,
-  submitOrder_fromOrderPage_Success,
-  updateOrderID_From_OrderPage
+  postOrder,
+  postOrderSuccess,
+  updateOrderID_From_OrderPage,
+  
 } from "../../store/Purchase/OrderPageRedux/actions";
 import { useSelector, useDispatch } from "react-redux";
 import './div.css'
@@ -99,6 +101,7 @@ const OrderPage = (props) => {
 
   useEffect(() => {
     CustomSearchHandller()
+
   }, [CustomSearchInput])
 
 
@@ -106,7 +109,7 @@ const OrderPage = (props) => {
   useEffect(() => {
 
     if ((APIResponse.Status === true) && (APIResponse.StatusCode === 200)) {
-      dispatch(submitOrder_fromOrderPage_Success({ Status: false }))
+      dispatch(postOrderSuccess({ Status: false }))
       // formRef.current.reset();
       if (PageMode === true) {
         dispatch(AlertState({
@@ -126,7 +129,7 @@ const OrderPage = (props) => {
         }))
       }
     } else if (APIResponse.Status === true) {
-      dispatch(submitOrder_fromOrderPage_Success({ Status: false }))
+      dispatch(postOrderSuccess({ Status: false }))
       dispatch(AlertState({
         Type: 4,
         Status: true,
@@ -192,7 +195,7 @@ const OrderPage = (props) => {
       dispatch(updateOrderID_From_OrderPage(requestOptions.body, EditData.id));
     }
     else if (itemArray.length > 0) {
-      dispatch(submitOrder_fromOrderPage(requestOptions.body));
+      dispatch(postOrder(requestOptions.body));
     }
     else {
       dispatch(AlertState({

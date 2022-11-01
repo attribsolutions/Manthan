@@ -30,67 +30,40 @@ import { useHistory } from "react-router-dom";
 import {
     comAddPageFieldFunc,
     formValid,
+    initialFiledFunc,
     onChangeText
 } from "../../../components/Common/CmponentRelatedCommonFile/validationFunction";
 import { SaveButton } from "../../../components/CommonSaveButton";
 import { COMPANYGROUP_lIST } from "../../../routes/route_url";
+import { UPDATE_COMPANYGROUP_TYPE_ID_SUCCESS } from "../../../store/Administrator/CompanyGroupRedux/actionType";
 
 
 const CompanyGroupMaster = (props) => {
 
     const formRef = useRef(null);
-    const dispatch= useDispatch();
+    const dispatch = useDispatch();
     const history = useHistory()
 
-    const [pageMode,setPageMode] = useState();
-    const [userPageAccessState ,setUserPageAccessState] = useState('');
+    const [pageMode, setPageMode] = useState();
+    const [userPageAccessState, setUserPageAccessState] = useState('');
     const [modalCss, setModalCss] = useState(false);
 
 
-{/** Dyanamic Page access state and OnChange function */ }
-    {/*start */ }
-    const [state, setState] = useState({       
-         values: {
-            id: "",
-            Name: "",
-            IsSCM:""
+    {/** Dyanamic Page access state and OnChange function */ }
+    const initialFiled = {
+        id: "",
+        Name: "",
+        IsSCM: ""
+      }
+    
+    const [state, setState] = useState(initialFiledFunc(initialFiled))
 
-        },
-
-        fieldLabel: {
-            Name: '',
-            IsSCM:''
-        },
-
-        isError: {
-            Name: "",
-            IsSCM:""
-        },
-
-        hasValid: {
-            Name: {
-                regExp: '',
-                inValidMsg: "",
-                valid: false
-            },
-
-          IsSCM: {
-                regExp: '',
-                inValidMsg: "",
-                valid: false
-            }
-
-        },
-        required: {
-
-        }
-    }
-    )
-    {/*End */ }
+   
 
     //Access redux store Data /  'save_ModuleSuccess' action data
-    const { PostAPIResponse, pageField, userAccess } = useSelector((state) => ({
-        PostAPIResponse: state.CompanyGroupReducer.PostDataMessage,
+    const { postMsg, updateMsg ,pageField, userAccess } = useSelector((state) => ({
+        postMsg: state.CompanyGroupReducer.PostDataMessage,
+        updateMsg: state.CompanyGroupReducer.updateMessage,
         userAccess: state.Login.RoleAccessUpdateData,
         pageField: state.CommonPageFieldReducer.pageField
 
@@ -106,7 +79,7 @@ const CompanyGroupMaster = (props) => {
         dispatch(commonPageField(32))
     }, []);
 
-    
+
 
     // userAccess useEffect
     useEffect(() => {
@@ -132,7 +105,7 @@ const CompanyGroupMaster = (props) => {
     // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
     useEffect(() => {
 
-       
+
         // if (!(userPageAccessState === '')) { document.getElementById("txtName").focus(); }
         if ((hasShowloction || hasShowModal)) {
 
@@ -165,7 +138,7 @@ const CompanyGroupMaster = (props) => {
 
     useEffect(() => {
 
-        if ((PostAPIResponse.Status === true) && (PostAPIResponse.StatusCode === 200)) {
+        if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
 
             dispatch(PostMethod_ForCompanyGroupMasterSuccess({ Status: false }))
             formRef.current.reset();
@@ -173,30 +146,46 @@ const CompanyGroupMaster = (props) => {
                 dispatch(AlertState({
                     Type: 1,
                     Status: true,
-                    Message: PostAPIResponse.Message,
+                    Message: postMsg.Message,
                 }))
             }
             else {
                 dispatch(AlertState({
                     Type: 1,
                     Status: true,
-                    Message: PostAPIResponse.Message,
+                    Message: postMsg.Message,
                     RedirectPath: COMPANYGROUP_lIST,
                 }))
             }
         }
-        else if (PostAPIResponse.Status === true) {
+        else if (postMsg.Status === true) {
             dispatch(PostMethod_ForCompanyGroupMasterSuccess({ Status: false }))
             dispatch(AlertState({
                 Type: 4,
                 Status: true,
-                Message: JSON.stringify(PostAPIResponse.Message),
+                Message: JSON.stringify(postMsg.Message),
                 RedirectPath: false,
                 AfterResponseAction: false
             }));
         }
-    }, [PostAPIResponse])
+    }, [postMsg])
 
+    useEffect(() => {
+        if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
+            history.push({
+                pathname: COMPANYGROUP_lIST,
+            })
+        } else if (updateMsg.Status === true && !modalCss) {
+            dispatch(UPDATE_COMPANYGROUP_TYPE_ID_SUCCESS({ Status: false }));
+            dispatch(
+                AlertState({
+                    Type: 3,
+                    Status: true,
+                    Message: JSON.stringify(updateMsg.Message),
+                })
+            );
+        }
+    }, [updateMsg, modalCss]);
 
     useEffect(() => {
 
@@ -286,9 +275,9 @@ const CompanyGroupMaster = (props) => {
                                                                 <Row className="justify-content-md-left">
                                                                     <Label htmlFor="horizontal-firstname-input" className="col-sm-3 col-form-label">{fieldLabel.IsSCM}</Label>
                                                                     <Col md={2} style={{ marginTop: '9px' }} >
-                                                                    <div className="form-check form-switch form-switch-md mb-3">
+                                                                        <div className="form-check form-switch form-switch-md mb-3">
                                                                             <Input type="checkbox" className="form-check-input"
-                                                                                value={values.IsSCM}
+                                                                                checked={values.IsSCM}
                                                                                 name="IsSCM"
                                                                                 onChange={(event) => onChangeText({ event, state, setState })}
                                                                             />
@@ -306,7 +295,7 @@ const CompanyGroupMaster = (props) => {
                                                             </Row>
                                                         </FormGroup >
                                                     </Row>
- 
+
                                                 </CardBody>
                                             </Card>
                                         </Col>

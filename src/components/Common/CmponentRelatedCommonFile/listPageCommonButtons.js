@@ -111,15 +111,18 @@ export const listPageCommonButtonFunction = (props) => {
                     </Button>
                     : null
             }
+            {(userPageAccessState.RoleAccess_IsSave) ?
+                <Button
+                    type="button"
+                    data-mdb-toggle="tooltip" data-mdb-placement="top" title={`Copy ${ButtonMsgLable}`}
+                    onClick={() => { dispatch(editActionFun((rowData.id), "copy")); }}
+                    className="badge badge-soft-primary font-size-12 btn btn-primary waves-effect waves-light w-xxs border border-light"
+                >
+                    <i className="bx bxs-copy font-size-18 "></i>
+                </Button>
+                : null
+            }
 
-            <Button
-                type="button"
-                data-mdb-toggle="tooltip" data-mdb-placement="top" title={`Copy ${ButtonMsgLable}`}
-                onClick={() => { dispatch(editActionFun((rowData.id), "copy")); }}
-                className="badge badge-soft-primary font-size-12 btn btn-primary waves-effect waves-light w-xxs border border-light"
-            >
-                <i className="bx bxs-copy font-size-18 "></i>
-            </Button>
 
         </div>
         )

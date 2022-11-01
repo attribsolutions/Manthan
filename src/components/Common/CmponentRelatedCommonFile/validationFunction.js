@@ -1,5 +1,4 @@
 export const formValid = ({ isError, required, hasValid, fieldLabel, values }, setState) => {
-debugger
     let isValid = true;
 
     Object.keys(required).forEach((lab) => {
@@ -119,18 +118,17 @@ export const formValChange = ({ event, state, setState }) => {
 export function comAddPageFieldFunc({ state, setState, fieldArr }) {
     var isState = { ...state }
     const values = { ...state.values }
-    // debugger
+
     fieldArr.forEach(ele => {
-        // debugger
         Object.keys(values).forEach(lab => {
             if (lab === ele.ControlID) {
-                isState.fieldLabel[lab] = ele.FieldLabel
-                isState.hasValid[lab].regExp = ele.RegularExpression
-                isState.hasValid[lab].inValidMsg = ele.InValidMsg
+                isState.fieldLabel[lab] = ele.FieldLabel;
+                isState.hasValid[lab].regExp = ele.RegularExpression;
+                isState.hasValid[lab].inValidMsg = ele.InValidMsg;
                 if (ele.IsCompulsory) {
                     isState.required[lab] = true
-                }
-            }
+                };
+            };
         });
     });
 
@@ -140,8 +138,9 @@ export function comAddPageFieldFunc({ state, setState, fieldArr }) {
 
 
 
-export const onChangeSelect = ({ e, v, state, setState }) => {
-    const event = { change: { name: e.name, value: v }, type: "select" }
+export const onChangeSelect = ({ hasSelect, evn, state, setState }) => {
+
+    const event = { change: { name: evn.name, value: hasSelect }, type: "select" }
     formValChange({ event, state, setState })
 }
 
@@ -151,4 +150,25 @@ export const onChangeDate = ({ v, e, state, setState }) => {
 }
 export const onChangeText = ({ event, state, setState }) => {
     formValChange({ event, state, setState })
+}
+
+
+export const initialFiledFunc = (filed) => {
+    const obj = {}
+    obj["values"] = filed;
+    obj["fieldLabel"] = {}
+    obj["isError"] = {}
+    obj["hasValid"] = {}
+    obj["required"] = {}
+
+    Object.keys(filed).forEach(label => {
+
+        obj.fieldLabel[label] = ''
+        obj.isError[label] = ''
+        obj.hasValid[label] = {}
+        obj.hasValid[label]["regExp"] = ""
+        obj.hasValid[label]["inValidMsg"] = ""
+        obj.hasValid[label]["valid"] = false
+    })
+    return obj
 }

@@ -10,37 +10,29 @@ import {
     FormGroup,
     Input,
 } from "reactstrap";
-import {
-    AvForm,
-    AvInput,
-} from "availity-reactstrap-validation";
+
 import { useDispatch, useSelector } from "react-redux";
 import {
     PostModelsSubmit,
     updateModuleID,
     PostModelsSubmitSuccess,
     editModuleIDSuccess,
+    updateModuleIDSuccess,
 } from "../../../store/Administrator/ModulesRedux/actions";
 import Breadcrumb from "../../../components/Common/Breadcrumb";
-import AvField from "availity-reactstrap-validation/lib/AvField";
 import { MetaTags } from "react-meta-tags";
 import { AlertState, commonPageField } from "../../../store/actions";
 import { BreadcrumbShow } from "../../../store/Utilites/Breadcrumb/actions";
 import { useHistory } from "react-router-dom";
 import { SaveButton } from "../../../components/CommonSaveButton";
 import { MODULE_lIST } from "../../../routes/route_url";
-import { comAddPageFieldFunc, formValid, onChangeText } from "../../../components/Common/CmponentRelatedCommonFile/validationFunction";
+import { comAddPageFieldFunc, formValid, initialFiledFunc, onChangeText } from "../../../components/Common/CmponentRelatedCommonFile/validationFunction";
 
 const Modules = (props) => {
-debugger
+
     const formRef = useRef(null);
     const dispatch = useDispatch();
     const history = useHistory()
-
-    let editDataGatingFromList = props.state;
-    let propsPageMode = props.pageMode;
-    let pageModeProps = props.pageMode
-
 
     const [modalCss, setModalCss] = useState(false);
     const [EditData, setEditData] = useState([]);
@@ -48,8 +40,9 @@ debugger
     const [userPageAccessState, setUserPageAccessState] = useState('');
 
     //Access redux store Data /  'save_ModuleSuccess' action data
-    const { PostAPIResponse, pageField, userAccess } = useSelector((state) => ({
-        PostAPIResponse: state.Modules.modulesSubmitSuccesss,
+    const { postMsg, pageField, userAccess,updateMsg } = useSelector((state) => ({
+        postMsg: state.Modules.modulesSubmitSuccesss,
+        updateMsg: state.Modules.updateMessage,
         userAccess: state.Login.RoleAccessUpdateData,
         pageField: state.CommonPageFieldReducer.pageField
 
@@ -60,60 +53,16 @@ debugger
     }, []);
 
     {/** Dyanamic Page access state and OnChange function */ }
-    {/*start */ }
-    const [state, setState] = useState({
-        values: {
-            Name: "",
-            id: "",
-            DisplayIndex: "",
-            isActive: "",
-            Icon: ""
-
-        },
-        fieldLabel: {
-            Name: '',
-            DisplayIndex: '',
-            isActive: '',
-            Icon: ''
-        },
-
-        isError: {
+    const initialFiled = {
+        id: "",
             Name: "",
             DisplayIndex: "",
-            isActive: "",
-            Icon: ""
-        },
-
-        hasValid: {
-            Name: {
-                regExp: '',
-                inValidMsg: "",
-                valid: false
-            },
-
-            DisplayIndex: {
-                regExp: '',
-                inValidMsg: "",
-                valid: false
-            },
-
-            isActive: {
-                regExp: '',
-                inValidMsg: "",
-                valid: false
-            },
-
-            Icon: {
-                regExp: '',
-                inValidMsg: "",
-                valid: false
-            }
-
-        },
-        required: {
-
-        }
-    })
+            Icon: "",
+            isActive: false,
+      }
+    
+    const [state, setState] = useState(initialFiledFunc(initialFiled))
+   
     const values = { ...state.values }
     const { isError } = state;
     const { fieldLabel } = state;
@@ -122,10 +71,9 @@ debugger
     const hasShowloction = location.hasOwnProperty("editValue")
     const hasShowModal = props.hasOwnProperty("editValue")
 
-
-    // userAccess useEffect
     // userAccess useEffect
     useEffect(() => {
+        
         let userAcc = null;
         let locationPath = location.pathname;
 
@@ -144,7 +92,7 @@ debugger
 
     // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
     useEffect(() => {
-
+        debugger
         // if (!(userPageAccessState === '')) { document.getElementById("txtName").focus(); }
         if ((hasShowloction || hasShowModal)) {
 
@@ -160,9 +108,15 @@ debugger
             }
 
             if (hasEditVal) {
-
+                debugger
                 const { id, Name, DisplayIndex, isActive, Icon } = hasEditVal
                 const { values, fieldLabel, hasValid, required, isError } = { ...state }
+
+                hasValid.Name.valid = true;
+                hasValid.DisplayIndex.valid = true;
+                hasValid.isActive.valid = true;
+                hasValid.Icon.valid = true;
+
                 values.Name = Name;
                 values.DisplayIndex = DisplayIndex;
                 values.isActive = isActive;
@@ -179,37 +133,54 @@ debugger
     // This UseEffect clear Form Data and when modules Save Successfully.
     useEffect(() => {
 
-        if ((PostAPIResponse.Status === true) && (PostAPIResponse.StatusCode === 200) && !(pageMode === "dropdownAdd")) {
+        if ((postMsg.Status === true) && (postMsg.StatusCode === 200) && !(pageMode === "dropdownAdd")) {
             dispatch(PostModelsSubmitSuccess({ Status: false }))
             formRef.current.reset();
             if (pageMode === "dropdownAdd") {
                 dispatch(AlertState({
                     Type: 1,
                     Status: true,
-                    Message: PostAPIResponse.Message,
+                    Message: postMsg.Message,
                 }))
             }
             else {
                 dispatch(AlertState({
                     Type: 1,
                     Status: true,
-                    Message: PostAPIResponse.Message,
+                    Message: postMsg.Message,
                     RedirectPath: MODULE_lIST,
 
                 }))
             }
-        } else if ((PostAPIResponse.Status === true) && !(pageMode === "dropdownAdd")) {
+        } else if ((postMsg.Status === true) && !(pageMode === "dropdownAdd")) {
             dispatch(PostModelsSubmitSuccess({ Status: false }))
             dispatch(AlertState({
                 Type: 4,
                 Status: true,
-                Message: JSON.stringify(PostAPIResponse.Message),
+                Message: JSON.stringify(postMsg.Message),
                 RedirectPath: false,
                 AfterResponseAction: false
             }));
         }
-    }, [PostAPIResponse])
+    }, [postMsg])
 
+    useEffect(() => {
+        if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
+            history.push({
+                pathname: MODULE_lIST,
+            })
+        } else if (updateMsg.Status === true && !modalCss) {
+            dispatch(updateModuleIDSuccess({ Status: false }));
+            dispatch(
+                AlertState({
+                    Type: 3,
+                    Status: true,
+                    Message: JSON.stringify(updateMsg.Message),
+                })
+            );
+        }
+    }, [updateMsg, modalCss]); 
+    
     useEffect(() => {
 
         if (pageField) {
@@ -233,17 +204,19 @@ debugger
 
             if (pageMode === 'edit') {
                 dispatch(updateModuleID(jsonBody, values.id));
+                console.log("update jsonBody", jsonBody)
             }
             else {
                 dispatch(PostModelsSubmit(jsonBody));
+                console.log("post jsonBody", jsonBody)
             }
         }
     };
 
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
-    let IsEditMode_Css = ''
-    if ((pageMode === "edit") || (pageMode === "copy") || (pageMode === "dropdownAdd")) { IsEditMode_Css = "-5.5%" };
-
+    var IsEditMode_Css = ''
+    if ((modalCss) || (pageMode === "dropdownAdd")) { IsEditMode_Css = "-5.5%" };
+    
     if (!(userPageAccessState === '')) {
         return (
             <React.Fragment>
@@ -294,14 +267,14 @@ debugger
                                                             <Input name="DisplayIndex" autoComplete='off'
                                                                 placeholder="Please Enter DisplayIndex"
                                                                 value={values.DisplayIndex}
-                                                                 type="text"
-                                                                 className={isError.DisplayIndex.length > 0 ? "is-invalid form-control" : "form-control"}
-                                                                 onChange={(event) => {
+                                                                type="text"
+                                                                className={isError.DisplayIndex.length > 0 ? "is-invalid form-control" : "form-control"}
+                                                                onChange={(event) => {
                                                                     onChangeText({ event, state, setState })
                                                                     dispatch(BreadcrumbShow(event.target.value))
                                                                 }}
                                                             />
-                                                              {isError.DisplayIndex.length > 0 && (
+                                                            {isError.DisplayIndex.length > 0 && (
                                                                 <span className="invalid-feedback">{isError.DisplayIndex}</span>
                                                             )}
                                                         </FormGroup>
@@ -313,7 +286,7 @@ debugger
                                                             <Input name="Icon"
                                                                 autoComplete='off'
                                                                 placeholder="Please Enter IconPath"
-                                                                value={values.Icon} 
+                                                                value={values.Icon}
                                                                 type="text"
                                                                 className={isError.Icon.length > 0 ? "is-invalid form-control" : "form-control"}
                                                                 onChange={(event) => {
@@ -321,7 +294,7 @@ debugger
                                                                     dispatch(BreadcrumbShow(event.target.value))
                                                                 }}
                                                             />
-                                                             {isError.Icon.length > 0 && (
+                                                            {isError.Icon.length > 0 && (
                                                                 <span className="invalid-feedback">{isError.Icon}</span>
                                                             )}
                                                         </FormGroup>
@@ -331,13 +304,13 @@ debugger
                                                         <Row className="justify-content-md-left">
                                                             <Label htmlFor="horizontal-firstname-input" className="col-sm-3 col-form-label" >{fieldLabel.isActive}  </Label>
                                                             <Col md={2} style={{ marginTop: '9px' }} >
-                                                            <div className="form-check form-switch form-switch-md mb-3" >
-                                                                            <Input type="checkbox" className="form-check-input"
-                                                                                value={values.isActive}
-                                                                                name="isActive"
-                                                                                onChange={(event) => onChangeText({ event, state, setState })}
-                                                                            />
-                                                                        </div>
+                                                                <div className="form-check form-switch form-switch-md mb-3" >
+                                                                    <Input type="checkbox" className="form-check-input"
+                                                                        checked={values.isActive}
+                                                                        name="isActive"
+                                                                        onChange={(event) => onChangeText({ event, state, setState })}
+                                                                    />
+                                                                </div>
                                                             </Col>
                                                         </Row>
                                                     </FormGroup>
