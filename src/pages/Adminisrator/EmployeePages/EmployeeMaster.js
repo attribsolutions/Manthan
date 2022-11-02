@@ -10,7 +10,8 @@ import {
   updateEmployeeID,
   PostEmployeeSuccess,
   Get_CompanyName_By_EmployeeTypeID,
-  editEmployeeSuccess
+  editEmployeeSuccess,
+  updateEmployeeIDSuccess
 } from "../../../store/Administrator/M_EmployeeRedux/action";
 import { AlertState, commonPageField, commonPageFieldSuccess } from "../../../store/actions";
 import { getDistrictOnState, getPartyListAPI } from "../../../store/Administrator/PartyRedux/action";
@@ -24,6 +25,7 @@ import { EMPLOYEE_lIST } from "../../../routes/route_url";
 import {
   comAddPageFieldFunc,
   formValid,
+  initialFiledFunc,
   onChangeDate,
   onChangeSelect,
   onChangeText,
@@ -57,23 +59,24 @@ const AddEmployee = (props) => {
     district,
     partyList,
     company,
-    PostAPIResponse,
+    postMsg,
     userAccess,
-    pageField } = useSelector((state) => ({
+    pageField,
+    updateMsg } = useSelector((state) => ({
       designation: state.M_EmployeesReducer.designation,
       employeeType: state.M_EmployeesReducer.employeeType,
       State: state.M_EmployeesReducer.State,
       district: state.PartyMasterReducer.DistrictOnState,
       partyList: state.PartyMasterReducer.partyList,
       company: state.M_EmployeesReducer.CompanyNames,
-      PostAPIResponse: state.M_EmployeesReducer.postMessage,
+      postMsg: state.M_EmployeesReducer.postMessage,
+      updateMsg: state.M_EmployeesReducer.updateMessage,
       userAccess: state.Login.RoleAccessUpdateData,
       pageField: state.CommonPageFieldReducer.pageField
 
     }));
 
-  const [state, setState] = useState({
-    values: {
+    const initialFiled = {
       id: "",
       Name: "",
       Address: "",
@@ -89,120 +92,10 @@ const AddEmployee = (props) => {
       StateName: "",
       DistrictName: "",
       EmployeeParties: ""
-
-    },
-    fieldLabel: {
-      Name: "",
-      Address: "",
-      Mobile: "",
-      email: "",
-      DOB: "",
-      PAN: "",
-      AadharNo: "",
-      working_hours: "",
-      CompanyName: "",
-      DesignationName: "",
-      EmployeeTypeName: "",
-      StateName: "",
-      DistrictName: "",
-      EmployeeParties: ""
-
-    },
-
-    isError: {
-      Name: "",
-      Address: "",
-      Mobile: "",
-      email: "",
-      DOB: "",
-      PAN: "",
-      AadharNo: "",
-      working_hours: "",
-      CompanyName: "",
-      DesignationName: "",
-      EmployeeTypeName: "",
-      StateName: "",
-      DistrictName: "",
-      EmployeeParties: ""
-
-    },
-
-    hasValid: {
-      Name: {
-        regExp: '',
-        inValidMsg: "",
-        valid: false
-      },
-      Address: {
-        regExp: '',
-        inValidMsg: "",
-        valid: false
-      },
-      Mobile: {
-        regExp: '',
-        inValidMsg: "",
-        valid: false
-      },
-      email: {
-        regExp: '',
-        inValidMsg: "",
-        valid: false
-      },
-      DOB: {
-        regExp: '',
-        inValidMsg: "",
-        valid: false
-      },
-      PAN: {
-        regExp: '',
-        inValidMsg: "",
-        valid: false
-      },
-      AadharNo: {
-        regExp: '',
-        inValidMsg: "",
-        valid: false
-      },
-      working_hours: {
-        regExp: '',
-        inValidMsg: "",
-        valid: false
-      },
-      CompanyName: {
-        regExp: '',
-        inValidMsg: "",
-        valid: false
-      },
-      DesignationName: {
-        regExp: '',
-        inValidMsg: "",
-        valid: false
-      },
-      EmployeeTypeName: {
-        regExp: '',
-        inValidMsg: "",
-        valid: false
-      },
-      StateName: {
-        regExp: '',
-        inValidMsg: "",
-        valid: false
-      },
-      DistrictName: {
-        regExp: '',
-        inValidMsg: "",
-        valid: false
-      },
-      EmployeeParties: {
-        regExp: '',
-        inValidMsg: "",
-        valid: false
-      },
-    },
-    required: {
-
     }
-  })
+  
+  const [state, setState] = useState(initialFiledFunc(initialFiled))
+ 
   const values = { ...state.values }
   const { isError } = state;
   const { fieldLabel } = state;
@@ -320,7 +213,7 @@ const AddEmployee = (props) => {
 
   useEffect(() => {
 
-    if ((PostAPIResponse.Status === true) && (PostAPIResponse.StatusCode === 200) && !(pageMode === "dropdownAdd")) {
+    if ((postMsg.Status === true) && (postMsg.StatusCode === 200) && !(pageMode === "dropdownAdd")) {
       dispatch(PostEmployeeSuccess({ Status: false }))
       formRef.current.reset();
       setDesignation_DropdownSelect('')
@@ -335,30 +228,47 @@ const AddEmployee = (props) => {
         dispatch(AlertState({
           Type: 1,
           Status: true,
-          Message: PostAPIResponse.Message,
+          Message: postMsg.Message,
         }))
       }
       else {
         dispatch(AlertState({
           Type: 1,
           Status: true,
-          Message: PostAPIResponse.Message,
+          Message: postMsg.Message,
           RedirectPath: EMPLOYEE_lIST,
         }))
       }
     }
 
-    else if (PostAPIResponse.Status === true) {
+    else if (postMsg.Status === true) {
       dispatch(PostEmployeeSuccess({ Status: false }))
       dispatch(AlertState({
         Type: 4,
         Status: true,
-        Message: JSON.stringify(PostAPIResponse.Message),
+        Message: JSON.stringify(postMsg.Message),
         RedirectPath: false,
         AfterResponseAction: false
       }));
     }
-  }, [PostAPIResponse])
+  }, [postMsg])
+
+  useEffect(() => {
+    if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
+        history.push({
+            pathname: EMPLOYEE_lIST,
+        })
+    } else if (updateMsg.Status === true && !modalCss) {
+        dispatch(updateEmployeeIDSuccess({ Status: false }));
+        dispatch(
+            AlertState({
+                Type: 3,
+                Status: true,
+                Message: JSON.stringify(updateMsg.Message),
+            })
+        );
+    }
+}, [updateMsg, modalCss]);
 
   useEffect(() => {
 
@@ -655,11 +565,11 @@ const AddEmployee = (props) => {
                               className="react-dropdown"
                               classNamePrefix="dropdown"
                               options={State_DropdownOptions}
-                              onChange={(e,v) => {
-                                onChangeSelect({ e, v, state, setState });
-                                State_Dropdown_Handler(v)
-                              }
-                              }
+                              onChange={(hasSelect, evn) =>{
+                                 onChangeSelect({ hasSelect, evn, state, setState, })
+                                 State_Dropdown_Handler(hasSelect)
+                                }}
+                             
                             />
                             {isError.StateName.length > 0 && (
                               <span className="text-danger f-8"><small>{isError.StateName}</small></span>
@@ -678,11 +588,11 @@ const AddEmployee = (props) => {
                               className="react-dropdown"
                               classNamePrefix="dropdown"
                               options={District_DropdownOptions}
-                              onChange={(e,v) => {
-                                onChangeSelect({ e, v, state, setState });
-                                District_Dropdown_Handler(v)
-                              }
-                              }
+                              onChange={(hasSelect, evn) =>{
+                                onChangeSelect({ hasSelect, evn, state, setState, })
+                                District_Dropdown_Handler(hasSelect)
+                               }}
+                            
                             />
                             {isError.DistrictName.length > 0 && (
                               <span className="text-danger f-8"><small>{isError.DistrictName}</small></span>
@@ -707,9 +617,9 @@ const AddEmployee = (props) => {
                               className="react-dropdown"
                               classNamePrefix="dropdown"
                               options={EmployeeType_DropdownOptions}
-                              onChange={(e,v) => {
-                                onChangeSelect({ e, v, state, setState });
-                                EmployeeType_Dropdown_Handler(v)
+                              onChange={(hasSelect,evn) => {
+                                onChangeSelect({hasSelect,evn, state, setState });
+                                EmployeeType_Dropdown_Handler(hasSelect)
                               }
                               }
                             />
@@ -730,9 +640,9 @@ const AddEmployee = (props) => {
                               className="react-dropdown"
                               classNamePrefix="dropdown"
                               options={Company_DropdownOptions}
-                              onChange={(e,v) => {
-                                onChangeSelect({ e, v, state, setState });
-                                Company_Dropdown_Handler(v)
+                              onChange={(hasSelect,evn) => {
+                                onChangeSelect({hasSelect,evn, state, setState });
+                                Company_Dropdown_Handler(hasSelect)
                               }
                               }
                             />
@@ -756,9 +666,9 @@ const AddEmployee = (props) => {
                                 isMulti={true}
                                 className="react-dropdown"
                                 options={Party_DropdownOptions}
-                                onChange={(e,v) => {
-                                  onChangeSelect({ e, v, state, setState });
-                                  Party_Dropdown_Handler(v)
+                                onChange={(hasSelect,evn) => {
+                                  onChangeSelect({ hasSelect,evn, state, setState });
+                                  Party_Dropdown_Handler(hasSelect)
                                 }
                                 }
                                 classNamePrefix="dropdown"
@@ -782,7 +692,7 @@ const AddEmployee = (props) => {
                               className="react-dropdown"
                               classNamePrefix="dropdown"
                               options={Designation_DropdownOptions}
-                              onChange={(e,v) => onChangeSelect({ e, v, state, setState })}
+                              onChange={(hasSelect,evn) => onChangeSelect({ hasSelect,evn, state, setState })}
                             />
                             {isError.DesignationName.length > 0 && (
                               <span className="text-danger f-8"><small>{isError.DesignationName}</small></span>

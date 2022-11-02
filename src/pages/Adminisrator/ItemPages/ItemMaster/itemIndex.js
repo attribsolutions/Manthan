@@ -527,7 +527,7 @@ const ItemsMaster = (props) => {
                 dispatch(AlertState({
                     Type: 4,
                     Status: true,
-                    Message: "PriceList Already Select",
+                    Message: "Image Type Already Select",
                 }))
                 return
             }

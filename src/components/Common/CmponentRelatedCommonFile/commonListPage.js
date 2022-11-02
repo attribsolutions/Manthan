@@ -17,13 +17,39 @@ import { listPageCommonButtonFunction }
   from "../../../components/Common/CmponentRelatedCommonFile/listPageCommonButtons";
 import { mySearchProps } from "./SearchBox/MySearch";
 
+let sortType = "asc"
+let searchCount = 0
+let downList = []
+let listObj = {}
+
+let searchProps = {
+  onClear: function onClear() { },
+  onSearch: function onSearch() { },
+  searchText: ""
+}
+
+export const countlabelFunc = (toolkitProps, paginationProps, dispatch, ButtonMsgLable) => {
+
+  let iscall = 0
+  if (paginationProps.dataSize) {
+    iscall = paginationProps.dataSize
+  }
+
+  if (!(iscall === searchCount)) {
+    dispatch(BreadcrumbSearchProps(toolkitProps.searchProps))
+    dispatch(BreadcrumbFilterSize(`${ButtonMsgLable} count :${iscall}`))
+    searchCount = paginationProps.dataSize
+  }
+  searchProps = toolkitProps.searchProps
+}
+
 const CommonListPage = (props) => {
 
   const dispatch = useDispatch();
   const history = useHistory()
 
-  const [userPageAccessState, setUserPageAccessState] = useState('');
-  const [modal_center, setmodal_center] = useState(false);
+  const [userAccState, setUserAccState] = useState('');
+  const [modal_edit, setmodal_edit] = useState(false);
 
   const {
     tableList,
@@ -53,6 +79,8 @@ const CommonListPage = (props) => {
     deleteName
   } = props;
 
+  const fileds = pageField.PageFieldMaster;
+
   useEffect(() => {
 
     const locationPath = history.location.pathname
@@ -60,11 +88,28 @@ const CommonListPage = (props) => {
       return (`/${inx.ActualPagePath}` === locationPath)
     })
     if (!(userAcc === undefined)) {
-      setUserPageAccessState(userAcc)
+      setUserAccState(userAcc)
     }
   }, [userAccess])
 
-  debugger
+  useEffect(() => {
+    downList = []
+    listObj = {}
+
+    tableList.forEach((index1) => {
+      fileds.forEach((index2) => {
+        if (index2.ShowInDownload) {
+          listObj[`$defSelect${index2.ControlID}`] = index2.ShownloadDefaultSelect
+          listObj[index2.ControlID] = index1[index2.ControlID]
+        }
+      })
+      downList.push(listObj)
+      listObj = {}
+    })
+
+  }, [tableList])
+
+
   // This UseEffect => UpadateModal Success/Unsucces  Show and Hide Control Alert_modal
   useEffect(() => {
 
@@ -160,45 +205,49 @@ const CommonListPage = (props) => {
   }, [editData]);
 
   function tog_center() {
-    setmodal_center(!modal_center);
+    setmodal_edit(!modal_edit); //when edit mode show in pop up that modal view controle
   }
 
+  fileds.sort(function (a, b) {  //sort function is  sort list page coloumn by asending order by listpage sequense
+    return a.ListPageSeq - b.ListPageSeq
+  });
+
   let sortLabel = ""
-  let pageFiledColumn = []
   const columns = []
 
-  // const hasfield = false
-  // if (hasfield) {
-  //   pageFiledColumn = pageField.PageFieldMaster
-  // }
-
-  pageField.PageFieldMaster.forEach((i, k) => {
+  fileds.forEach((i, k) => {
     if (i.ShowInListPage) {
       columns.push({
         text: i.FieldLabel,
         dataField: i.ControlID,
         sort: true,
       })
-      if (i.DefaultSort) {
+
+      if (i.DefaultSort === 1) {
         sortLabel = i.ControlID
+        sortType = "asc"
+      } else if (i.DefaultSort === 2) {
+        sortLabel = i.ControlID;
+        sortType = "desc"
       }
     }
-    if (pageField.PageFieldMaster.length - 1 === k) {
+    if (fileds.length - 1 === k) {
       columns.push(listPageCommonButtonFunction({
         dispatchHook: dispatch,
         ButtonMsgLable: ButtonMsgLable,
         deleteName: deleteName,
-        userPageAccessState: userPageAccessState,
+        userPageAccessState: userAccState,
         editActionFun: editId,
         deleteActionFun: deleteId
       })
       )
     }
   })
+
   const defaultSorted = [
     {
       dataField: sortLabel, // if dataField is not match to any column you defined, it will be ignored.
-      order: "asc", // desc or asc
+      order: sortType, // desc or asc
     },
   ];
 
@@ -208,23 +257,23 @@ const CommonListPage = (props) => {
     custom: true,
   };
 
-  if (!(userPageAccessState === '')) {
+  if (!(userAccState === '')) {
     return (
       <React.Fragment>
         <MetaTags>
-          <title>{userPageAccessState.PageHeading}| FoodERP-React FrontEnd</title>
+          <title>{userAccState.PageHeading}| FoodERP-React FrontEnd</title>
         </MetaTags>
         <div className="page-content">
           <Breadcrumb
             title={"Count :"}
-            breadcrumbItem={userPageAccessState.PageHeading}
-            IsButtonVissible={(userPageAccessState.RoleAccess_IsSave) ? true : false}
+            breadcrumbItem={userAccState.PageHeading}
+            IsButtonVissible={(userAccState.RoleAccess_IsSave) ? true : false}
             showCount={true}
             SearchProps={searchProps}
             IsSearchVissible={true}
             RedirctPath={"/#"}
             isExcelButtonVisible={true}
-          // ExcelData={tableList}
+            ExcelData={downList}
           />
           <PaginationProvider pagination={paginationFactory(pageOptions)}>
             {({ paginationProps, paginationTableProps }) => (
@@ -248,7 +297,7 @@ const CommonListPage = (props) => {
                       isExcelButtonVisible={true}
                       ExcelData={tableList}
                     /> */}
-                    {test(toolkitProps, paginationProps, dispatch, ButtonMsgLable)}
+                    {countlabelFunc(toolkitProps, paginationProps, dispatch, ButtonMsgLable)}
 
                     <Row>
                       <Col xl="12">
@@ -257,6 +306,8 @@ const CommonListPage = (props) => {
                             keyField={"id"}
                             responsive
                             bordered={false}
+                            defaultSorted={defaultSorted}
+
                             striped={true}
                             classes={"table  table-bordered table-hover"}
                             {...toolkitProps.baseProps}
@@ -278,7 +329,7 @@ const CommonListPage = (props) => {
             )}
           </PaginationProvider>
           <Modal
-            isOpen={modal_center}
+            isOpen={modal_edit}
             toggle={() => {
               tog_center();
             }}
@@ -303,25 +354,3 @@ const CommonListPage = (props) => {
 }
 
 export default CommonListPage;
-
-let searchCount = 0
-
-let searchProps = {
-  onClear: function onClear() { },
-  onSearch: function onSearch() { },
-  searchText: ""
-}
-export const test = (toolkitProps, paginationProps, dispatch, ButtonMsgLable) => {
-
-  let iscall = 0
-  if (paginationProps.dataSize) {
-    iscall = paginationProps.dataSize
-  }
-
-  if (!(iscall === searchCount)) {
-    dispatch(BreadcrumbSearchProps(toolkitProps.searchProps))
-    dispatch(BreadcrumbFilterSize(`${ButtonMsgLable} count :${iscall}`))
-    searchCount = paginationProps.dataSize
-  }
-  searchProps = toolkitProps.searchProps
-}

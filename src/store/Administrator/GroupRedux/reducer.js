@@ -1,4 +1,8 @@
-import { GET_GROUP_LIST_SUCCESS } from "./actionType";
+import { DELETE_GROUP_LIST_ID_SUCCESS, 
+  EDIT_GROUPMASTER_ID_SUCCESS, 
+  GET_GROUP_LIST_SUCCESS, 
+  POST_GROUPLIST_SUCCESS,
+  UPDATE_GROUPMASTER_ID_SUCCESS} from "./actionType";
 
 const INIT_STATE = {
   postMsg: { Status: false },
@@ -10,38 +14,38 @@ const INIT_STATE = {
 
 const GroupReducer = (state = INIT_STATE, action) => {
   switch (action.type) {
+    // post
+    case POST_GROUPLIST_SUCCESS:
+      return {
+        ...state,
+        postMsg: action.payload,
+      }
 
-    // case POST_METHOD_HANDLER_FOR_CATEGORY_API_SUCCESS:
-    //   return {
-    //     ...state,
-    //     postMsg: action.payload,
-    //   }
-
-    // get api
+    // get 
     case GET_GROUP_LIST_SUCCESS:
       return {
         ...state,
        groupList: action.payload,
       }
+    //  del
+    case DELETE_GROUP_LIST_ID_SUCCESS:
+      return {
+        ...state,
+        deleteMsg: action.payload,
+      };
+      // edit
+    case EDIT_GROUPMASTER_ID_SUCCESS :
+      return {
+        ...state,
+        editData: action.payload,
+      };
 
-    // case DELETE_CATEGORY_ID_SUCCESS:
-    //   return {
-    //     ...state,
-    //     deleteMsg: action.payload,
-    //   };
-
-    // case EDIT_CATEGORY_ID_SUCCESS:
-    //   return {
-    //     ...state,
-    //     editData: action.payload,
-    //   };
-
-    // // update api
-    // case UPDATE_CATEGORY_ID_SUCCESS:
-    //   return {
-    //     ...state,
-    //     updateMsg: action.payload,
-    //   };
+    // update api
+    case UPDATE_GROUPMASTER_ID_SUCCESS:
+      return {
+        ...state,
+        updateMsg: action.payload,
+      };
 
     default:
       return state

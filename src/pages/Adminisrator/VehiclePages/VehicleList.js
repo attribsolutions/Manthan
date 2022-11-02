@@ -19,11 +19,11 @@ const VehicleList = (props) => {
   const reducers = useSelector(
     (state) => ({
       tableList: state.VehicleReducer.VehicleList,
+      postMsg: state.VehicleReducer.postMsg,
       editData: state.VehicleReducer.editData,
-      updateMsg: state.VehicleReducer.updateMessage,
-      deleteMsg: state.VehicleReducer.deleteMessage,
+      updateMsg: state.VehicleReducer.updateMsg,
+      deleteMsg: state.VehicleReducer.deleteMsg,
       userAccess: state.Login.RoleAccessUpdateData,
-      postMsg: state.VehicleReducer.PostDataMessage,
       pageField: state.CommonPageFieldReducer.pageFieldList
     })
   );

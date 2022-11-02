@@ -7,7 +7,7 @@ import {
   editSuccess,
   postRole, updateID, PostSuccess
 } from "../../../store/Administrator/RoleMasterRedux/action";
-import { AlertState, commonPageField, commonPageFieldSuccess } from "../../../store/actions";
+import { AlertState, commonPageField, commonPageFieldSuccess, updateSuccess } from "../../../store/actions";
 import Select from "react-select";
 import { BreadcrumbShow } from "../../../store/Utilites/Breadcrumb/actions";
 import { MetaTags } from "react-meta-tags";
@@ -16,9 +16,11 @@ import { getEmployeeTypelist } from "../../../store/Administrator/EmployeeTypeRe
 import {
   comAddPageFieldFunc,
   formValid,
+  initialFiledFunc,
   onChangeSelect,
   onChangeText,
 } from "../../../components/Common/CmponentRelatedCommonFile/validationFunction";
+import { ROLE_lIST } from "../../../routes/route_url";
 
 const RoleMaster = (props) => {
 
@@ -32,91 +34,28 @@ const RoleMaster = (props) => {
   const [modalCss, setModalCss] = useState(false);
 
   const [userPageAccessState, setUserPageAccessState] = useState('');
-
-  // ////////////////////////////////////
-  const [state, setState] = useState({
-    values: {
-      id: "",
-      Name: "",
-      Description: "",
-      Dashboard: "",
-      RoleEmployeeTypes: "",
-      isActive: "",
-      isSCMRole: '',
-      IsPartyConnection: ""
-
-    },
-    fieldLabel: {
-      Name: "",
-      Description: "",
-      Dashboard: "",
-      RoleEmployeeTypes: "",
-      isActive: "",
-      isSCMRole: "",
-      IsPartyConnection: ""
-    },
-
-    isError: {
-      Name: "",
-      Description: "",
-      Dashboard: "",
-      RoleEmployeeTypes: "",
-      isActive: "",
-      isSCMRole: "",
-      IsPartyConnection: ""
-    },
-
-    hasValid: {
-      Name: {
-        regExp: '',
-        inValidMsg: "",
-        valid: false
-      },
-      Description: {
-        regExp: '',
-        inValidMsg: "",
-        valid: false
-      },
-
-      Dashboard: {
-        regExp: '',
-        inValidMsg: "",
-        valid: false
-      },
-      RoleEmployeeTypes: {
-        regExp: '',
-        inValidMsg: "",
-        valid: false
-      },
-      isActive: {
-        regExp: '',
-        inValidMsg: "",
-        valid: false
-      },
-      isSCMRole: {
-        regExp: '',
-        inValidMsg: "",
-        valid: false
-      },
-      IsPartyConnection: {
-        regExp: '',
-        inValidMsg: "",
-        valid: false
-      },
-    },
-    required: {
-
-    }
+  const initialFiled = {
+    id: "",
+    Name: "",
+    Description: "",
+    Dashboard: "",
+    RoleEmployeeTypes: "",
+    isActive: "",
+    isSCMRole: '',
+    IsPartyConnection: ""
   }
-  )
+
+  const [state, setState] = useState(initialFiledFunc(initialFiled))
 
   //Access redux store Data /  'save_ModuleSuccess' action data
   const {
-    PostAPIResponse,
+    postMsg,
+    updateMsg,
     pageField,
     userAccess,
     EmployeeType } = useSelector((state) => ({
-      PostAPIResponse: state.RoleMaster_Reducer.postMsg,
+      postMsg: state.RoleMaster_Reducer.postMsg,
+      updateMsg: state.RoleMaster_Reducer.updateMsg,
       EmployeeType: state.EmployeeTypeReducer.EmployeeTypeList,
       userAccess: state.Login.RoleAccessUpdateData,
       pageField: state.CommonPageFieldReducer.pageField
@@ -183,7 +122,7 @@ const RoleMaster = (props) => {
           label: data.EmployeeTypeName
         }))
 
-        const { id,Name, Description, Dashboard, isActive, isSCMRole, IsPartyConnection, RoleEmployeeTypes } = hasEditVal
+        const { id, Name, Description, Dashboard, isActive, isSCMRole, IsPartyConnection, RoleEmployeeTypes } = hasEditVal
         const { values, fieldLabel, hasValid, required, isError } = { ...state }
 
         hasValid.Name.valid = true;
@@ -214,37 +153,54 @@ const RoleMaster = (props) => {
   }, [])
 
   useEffect(() => {
-    if ((PostAPIResponse.Status === true) && (PostAPIResponse.StatusCode === 200) && !(pageMode === "dropdownAdd")) {
+    if ((postMsg.Status === true) && (postMsg.StatusCode === 200) && !(pageMode === "dropdownAdd")) {
       dispatch(PostSuccess({ Status: false }))
       formRef.current.reset();
       if (pageMode === "dropdownAdd") {
         dispatch(AlertState({
           Type: 1,
           Status: true,
-          Message: PostAPIResponse.Message,
+          Message: postMsg.Message,
         }))
       }
       else {
         dispatch(AlertState({
           Type: 1,
           Status: true,
-          Message: PostAPIResponse.Message,
-          RedirectPath: '/RoleList',
+          Message: postMsg.Message,
+          RedirectPath: ROLE_lIST,
 
         }))
       }
     }
-    else if ((PostAPIResponse.Status === true) && !(pageMode === "dropdownAdd")) {
+    else if ((postMsg.Status === true) && !(pageMode === "dropdownAdd")) {
       dispatch(PostSuccess({ Status: false }))
       dispatch(AlertState({
         Type: 4,
         Status: true,
-        Message: JSON.stringify(PostAPIResponse.Message),
+        Message: JSON.stringify(postMsg.Message),
         RedirectPath: false,
         AfterResponseAction: false
       }));
     }
-  }, [PostAPIResponse.Status])
+  }, [postMsg.Status])
+
+  useEffect(() => {
+    if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
+      history.push({
+        pathname: ROLE_lIST,
+      })
+    } else if (updateMsg.Status === true && !modalCss) {
+      dispatch(updateSuccess({ Status: false }));
+      dispatch(
+        AlertState({
+          Type: 3,
+          Status: true,
+          Message: JSON.stringify(updateMsg.Message),
+        })
+      );
+    }
+  }, [updateMsg, modalCss]);
 
   const EmployeeType_DropdownOptions = EmployeeType.map((data) => ({
     value: data.id,
@@ -356,7 +312,7 @@ const RoleMaster = (props) => {
                                   isMulti={true}
                                   className="react-dropdown"
                                   options={EmployeeType_DropdownOptions}
-                                  onChange={(v, e) => onChangeSelect({ e, v, state, setState })}
+                                  onChange={(hasSelect, evn) => onChangeSelect({ hasSelect, evn, state, setState, })}
                                   classNamePrefix="dropdown"
 
                                 />

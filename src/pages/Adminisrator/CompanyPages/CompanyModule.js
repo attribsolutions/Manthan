@@ -20,7 +20,8 @@ import {
   PostCompanySubmit,
   PostCompanySubmitSuccess,
   updateCompanyID,
-  getCompanyGroup
+  getCompanyGroup,
+  updateCompanyIDSuccess
 } from "../../../store/Administrator/CompanyRedux/actions";
 import { MetaTags } from "react-meta-tags";
 import { AlertState, commonPageField, commonPageFieldSuccess } from "../../../store/actions";
@@ -31,6 +32,7 @@ import {
   comAddPageFieldFunc,
   formValChange,
   formValid,
+  initialFiledFunc,
   onChangeSelect,
   onChangeText,
 
@@ -53,89 +55,28 @@ const CompanyModule = (props) => {
   const [CompanyGroupselect, setCompanyGroup] = useState("");
 
   //Access redux store Data /  'save_ModuleSuccess' action data
-  const { postMsg, userAccess, pageField } = useSelector((state) => ({
+  const { postMsg,updateMsg, userAccess, pageField } = useSelector((state) => ({
     postMsg: state.Company.postMsg,
+    updateMsg: state.Company.updateMessage,
     userAccess: state.Login.RoleAccessUpdateData,
     pageField: state.CommonPageFieldReducer.pageField
   }));
 
   {/** Dyanamic Page access state and OnChange function */ }
-  {/*start */ }
-  const [state, setState] = useState({
-    values: {
-      id: "",
-      Name: "",
-      Address: "",
-      GSTIN: "",
-      PhoneNo: "",
-      CompanyAbbreviation: "",
-      EmailID: "",
-      CompanyGroup: ""
+  const initialFiled = {
+    id: "",
+    Name: "",
+    Address: "",
+    GSTIN: "",
+    PhoneNo: "",
+    CompanyAbbreviation: "",
+    EmailID: "",
+    CompanyGroup: ""
+  }
 
-    },
-    fieldLabel: {
-      Name: "",
-      Address: "",
-      GSTIN: "",
-      PhoneNo: "",
-      CompanyAbbreviation: "",
-      EmailID: "",
-      CompanyGroup: ""
+const [state, setState] = useState(initialFiledFunc(initialFiled))
+ 
 
-    },
-
-    isError: {
-      Name: "",
-      Address: "",
-      GSTIN: "",
-      PhoneNo: "",
-      CompanyAbbreviation: "",
-      EmailID: "",
-      CompanyGroup: "",
-
-    },
-
-    hasValid: {
-      Name: {
-        regExp: '',
-        inValidMsg: "",
-        valid: false
-      },
-      Address: {
-        regExp: '',
-        inValidMsg: "",
-        valid: false
-      },
-      GSTIN: {
-        regExp: '',
-        inValidMsg: "",
-        valid: false
-      },
-      PhoneNo: {
-        regExp: '',
-        inValidMsg: "",
-        valid: false
-      },
-      CompanyAbbreviation: {
-        regExp: '',
-        inValidMsg: "",
-        valid: false
-      },
-      EmailID: {
-        regExp: '',
-        inValidMsg: "",
-        valid: false
-      },
-      CompanyGroup: {
-        regExp: '',
-        inValidMsg: "",
-        valid: false
-      },
-    },
-    required: {
-
-    }
-  })
   const values = { ...state.values }
   const { isError } = state;
   const { fieldLabel } = state;
@@ -247,6 +188,22 @@ const CompanyModule = (props) => {
     }
   }, [postMsg])
 
+  useEffect(() => {
+    if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
+        history.push({
+            pathname: COMPANY_lIST,
+        })
+    } else if (updateMsg.Status === true && !modalCss) {
+        dispatch(updateCompanyIDSuccess({ Status: false }));
+        dispatch(
+            AlertState({
+                Type: 3,
+                Status: true,
+                Message: JSON.stringify(updateMsg.Message),
+            })
+        );
+    }
+}, [updateMsg, modalCss]);
 
   const { CompanyGroup } = useSelector((state) => ({
     CompanyGroup: state.Company.CompanyGroup
@@ -475,14 +432,14 @@ const CompanyModule = (props) => {
                               <FormGroup className="mb-3 ">
                                 <Label htmlFor="validationCustom01"> {fieldLabel.CompanyGroup} </Label>
                                 <Select
-                                  name="CategoryTypeName"
+                                  name="CompanyGroup"
                                   value={values.CompanyGroup}
                                   //   value={{label:"abc",value:1}}//default value set
                                   isSearchable={false}
                                   className="react-dropdown"
                                   classNamePrefix="dropdown"
                                   options={CompanyGroupValues}
-                                  onChange={(v, e) => onChangeSelect({ e, v, state, setState })}
+                                  onChange={(hasSelect, evn) => onChangeSelect({ hasSelect, evn, state, setState, })}
                                 />
                                 {isError.CompanyGroup.length > 0 && (
                                   <span className="text-danger f-8"><small>{isError.CompanyGroup}</small></span>

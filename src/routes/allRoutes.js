@@ -14,12 +14,10 @@ import Modules from "../pages/Adminisrator/ModulesPages/Modules";
 import ModulesList from "../pages/Adminisrator/ModulesPages/ModulesList";
 import CompanyModule from "../pages/Adminisrator/CompanyPages/CompanyModule";
 import CompanyList from "../pages/Adminisrator/CompanyPages/CompanyList";
-// import SubModules from "../pages/Adminisrator/SubModulePages/SubModules";
-// import SubModulesList from "../pages/Adminisrator/SubModulePages/SubModulesList";
+
 import PageList from "../pages/Adminisrator/Page-Pages/PageList";
 import PageMaster from "../pages/Adminisrator/Page-Pages/PageMaster";
-// import OrderPage from "../pages/Order/OrderPage";
-import OrderList from "../pages/Order/OrderList"
+
 import AddUser from "../pages/Adminisrator/UserRegistrationPages/UserRegistration";
 import UserList from "../pages/Adminisrator/UserRegistrationPages/UserList";
 import AddEmployee from "../pages/Adminisrator/EmployeePages/EmployeeMaster";
@@ -59,7 +57,6 @@ import DriverMaster from "../pages/Adminisrator/DriverPage/DriverMaster";
 import DriverList from "../pages/Adminisrator/DriverPage/DriverList";
 import CompanyGroupMaster from "../pages/Adminisrator/CompanyGroupPages/CompanyGroupMaster";
 import CompanyGroupList from "../pages/Adminisrator/CompanyGroupPages/CompanyGroupList";
-import PageMasterTab from "../pages/Adminisrator/Page-Pages/PageMasterTab";
 
 import PriceMaster from "../pages/Adminisrator/PriceList/PriceMaster";
 import PriceList from "../pages/Adminisrator/PriceList/PriceList";
@@ -78,15 +75,14 @@ import GroupTypeList from "../pages/Adminisrator/GroupTypePage/GroupTypeList";
 import GroupTypeMaster from "../pages/Adminisrator/GroupTypePage/GroupTypeMaster";
 import PartySubParty from "../pages/Adminisrator/PartySubPartyPages/PartySubParty";
 import PartySubPartyList from "../pages/Adminisrator/PartySubPartyPages/partysubPartyList";
-import EditTabaleTable from "../pages/Adminisrator/DriverPage/editabale table";
 
 import GSTMaster from "../pages/Adminisrator/GSTPages/GSTMaster";
 import GSTList from "../pages/Adminisrator/GSTPages/GSTList";
 
-import Order from "../pages/Purchase/order/Order";
-
-
 import TermsAndCondtionsList from "../pages/Adminisrator/TermsAndCondtions/TermsAndCondtionsList";
+
+import OrderList from "../pages/Purchase/Order/OrderList.js"
+import Order from "../pages/Purchase/Order/Order.js";
 
 import * as path from "./route_url";
 
@@ -102,7 +98,6 @@ const userRoutes = [
 
   { path: path.PAGE_lIST, component: PageList },
   { path: path.PAGE, component: PageMaster },
-  { path: '/PageMasterTab', component: PageMasterTab },
 
   { path: path.ORDER, component: Order },
   { path: path.ORDER_lIST, component: OrderList },
@@ -146,7 +141,6 @@ const userRoutes = [
 
   { path: path.DRIVER, component: DriverMaster },
   { path: path.DRIVER_lIST, component: DriverList },
-  { path: "/editTable", component: EditTabaleTable },
 
   { path: path.COMPANYGROUP, component: CompanyGroupMaster },
   { path: path.COMPANYGROUP_lIST, component: CompanyGroupList },

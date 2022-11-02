@@ -17,6 +17,7 @@ import {
     updateModuleID,
     PostModelsSubmitSuccess,
     editModuleIDSuccess,
+    updateModuleIDSuccess,
 } from "../../../store/Administrator/ModulesRedux/actions";
 import Breadcrumb from "../../../components/Common/Breadcrumb";
 import { MetaTags } from "react-meta-tags";
@@ -25,7 +26,7 @@ import { BreadcrumbShow } from "../../../store/Utilites/Breadcrumb/actions";
 import { useHistory } from "react-router-dom";
 import { SaveButton } from "../../../components/CommonSaveButton";
 import { MODULE_lIST } from "../../../routes/route_url";
-import { comAddPageFieldFunc, formValid, onChangeText } from "../../../components/Common/CmponentRelatedCommonFile/validationFunction";
+import { comAddPageFieldFunc, formValid, initialFiledFunc, onChangeText } from "../../../components/Common/CmponentRelatedCommonFile/validationFunction";
 
 const Modules = (props) => {
 
@@ -39,8 +40,9 @@ const Modules = (props) => {
     const [userPageAccessState, setUserPageAccessState] = useState('');
 
     //Access redux store Data /  'save_ModuleSuccess' action data
-    const { PostAPIResponse, pageField, userAccess } = useSelector((state) => ({
-        PostAPIResponse: state.Modules.modulesSubmitSuccesss,
+    const { postMsg, pageField, userAccess,updateMsg } = useSelector((state) => ({
+        postMsg: state.Modules.modulesSubmitSuccesss,
+        updateMsg: state.Modules.updateMessage,
         userAccess: state.Login.RoleAccessUpdateData,
         pageField: state.CommonPageFieldReducer.pageField
 
@@ -51,60 +53,16 @@ const Modules = (props) => {
     }, []);
 
     {/** Dyanamic Page access state and OnChange function */ }
-    {/*start */ }
-    const [state, setState] = useState({
-        values: {
-            id: "",
+    const initialFiled = {
+        id: "",
             Name: "",
             DisplayIndex: "",
             Icon: "",
             isActive: false,
-
-        },
-        fieldLabel: {
-            Name: '',
-            DisplayIndex: '',
-            Icon: '',
-            isActive: "",
-        },
-
-        isError: {
-            Name: "",
-            DisplayIndex: "",
-            Icon: "",
-            isActive: "",
-        },
-
-        hasValid: {
-            Name: {
-                regExp: '',
-                inValidMsg: "",
-                valid: false
-            },
-
-            DisplayIndex: {
-                regExp: '',
-                inValidMsg: "",
-                valid: false
-            },
-
-            Icon: {
-                regExp: '',
-                inValidMsg: "",
-                valid: false
-            },
-
-            isActive: {
-                regExp: '',
-                inValidMsg: "",
-                valid: false
-            }
-
-        },
-        required: {
-
-        }
-    })
+      }
+    
+    const [state, setState] = useState(initialFiledFunc(initialFiled))
+   
     const values = { ...state.values }
     const { isError } = state;
     const { fieldLabel } = state;
@@ -175,37 +133,54 @@ const Modules = (props) => {
     // This UseEffect clear Form Data and when modules Save Successfully.
     useEffect(() => {
 
-        if ((PostAPIResponse.Status === true) && (PostAPIResponse.StatusCode === 200) && !(pageMode === "dropdownAdd")) {
+        if ((postMsg.Status === true) && (postMsg.StatusCode === 200) && !(pageMode === "dropdownAdd")) {
             dispatch(PostModelsSubmitSuccess({ Status: false }))
             formRef.current.reset();
             if (pageMode === "dropdownAdd") {
                 dispatch(AlertState({
                     Type: 1,
                     Status: true,
-                    Message: PostAPIResponse.Message,
+                    Message: postMsg.Message,
                 }))
             }
             else {
                 dispatch(AlertState({
                     Type: 1,
                     Status: true,
-                    Message: PostAPIResponse.Message,
+                    Message: postMsg.Message,
                     RedirectPath: MODULE_lIST,
 
                 }))
             }
-        } else if ((PostAPIResponse.Status === true) && !(pageMode === "dropdownAdd")) {
+        } else if ((postMsg.Status === true) && !(pageMode === "dropdownAdd")) {
             dispatch(PostModelsSubmitSuccess({ Status: false }))
             dispatch(AlertState({
                 Type: 4,
                 Status: true,
-                Message: JSON.stringify(PostAPIResponse.Message),
+                Message: JSON.stringify(postMsg.Message),
                 RedirectPath: false,
                 AfterResponseAction: false
             }));
         }
-    }, [PostAPIResponse])
+    }, [postMsg])
 
+    useEffect(() => {
+        if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
+            history.push({
+                pathname: MODULE_lIST,
+            })
+        } else if (updateMsg.Status === true && !modalCss) {
+            dispatch(updateModuleIDSuccess({ Status: false }));
+            dispatch(
+                AlertState({
+                    Type: 3,
+                    Status: true,
+                    Message: JSON.stringify(updateMsg.Message),
+                })
+            );
+        }
+    }, [updateMsg, modalCss]); 
+    
     useEffect(() => {
 
         if (pageField) {
@@ -239,9 +214,9 @@ const Modules = (props) => {
     };
 
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
-    let IsEditMode_Css = ''
-    if ((pageMode === "edit") || (pageMode === "copy") || (pageMode === "dropdownAdd")) { IsEditMode_Css = "-5.5%" };
-
+    var IsEditMode_Css = ''
+    if ((modalCss) || (pageMode === "dropdownAdd")) { IsEditMode_Css = "-5.5%" };
+    
     if (!(userPageAccessState === '')) {
         return (
             <React.Fragment>

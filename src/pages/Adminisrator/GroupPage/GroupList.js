@@ -1,52 +1,43 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  deleteDriverTypeIDSuccess,
-  updateDriverTypeIDSuccess,
-  editDriverTypeId,
-  delete_DriverType_ID,
-  PostMethod_ForDriverMasterSuccess,
-} from "../../../store/Administrator/DriverRedux/action";
-
 import CommonListPage from "../../../components/Common/CmponentRelatedCommonFile/commonListPage";
 import {
   commonPageFieldList,
   commonPageFieldListSuccess,
-  getGroupList
 } from "../../../store/actions";
 import { GROUP } from "../../../routes/route_url";
 import GroupMaster from "./GroupMaster";
+import { deleteGrouplistSuccess, delete_GroupList_ID, editGroupID, getGroupList, postGroupList, updategroupIDSuccess } from "../../../store/Administrator/GroupRedux/action";
 
 const GroupList = (props) => {
   const dispatch = useDispatch();
-
-
   const reducers = useSelector(
     (state) => ({
       tableList: state.GroupReducer.groupList,
-      editData: state.DriverReducer.editData,
-      updateMsg: state.DriverReducer.updateMessage,
-      deleteMsg: state.DriverReducer.deleteMessage,
-      postMsg: state.DriverReducer.PostDataMessage,
+      editData: state.GroupReducer.editData,
+      updateMsg: state.GroupReducer.updateMsg,
+      deleteMsg: state.GroupReducer.deleteMsg,
+      postMsg: state.GroupReducer.postMsg,
       userAccess: state.Login.RoleAccessUpdateData,
       pageField: state.CommonPageFieldReducer.pageFieldList
     })
   );
 
   const action = {
-    getList: getGroupList,
-    editId: editDriverTypeId,
-    deleteId: delete_DriverType_ID,
-    postSucc: PostMethod_ForDriverMasterSuccess,
-    updateSucc: updateDriverTypeIDSuccess,
-    deleteSucc: deleteDriverTypeIDSuccess
+    getList:getGroupList,
+    editId: editGroupID,
+    deleteId: delete_GroupList_ID,
+    postSucc: postGroupList,
+    updateSucc: updategroupIDSuccess,
+    deleteSucc: deleteGrouplistSuccess
 
   }
   useEffect(() => {
-
     dispatch(commonPageFieldListSuccess(null))
     dispatch(commonPageFieldList(120))
-    dispatch(getGroupList())
+    dispatch(getGroupList());
+    
+    
 
   }, []);
 
@@ -61,7 +52,9 @@ const GroupList = (props) => {
             reducers={reducers}
             MasterModal={GroupMaster}
             masterPath={GROUP}
-
+            ButtonMsgLable={"Group"}
+            deleteName={"Name"}
+          
           />
           : null
       }
