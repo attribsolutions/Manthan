@@ -143,7 +143,7 @@ const MRPList = (props) => {
           {((userPageAccessState.RoleAccess_IsEdit) && (Role.CommonID > 0)) ?
             <Button
               type="button"
-              data-mdb-toggle="tooltip" data-mdb-placement="top" title="Edit MRP List"
+              data-mdb-toggle="tooltip" data-mdb-placement="top" title="Edit Effective Date"
               onClick={() => { EditPageHandler(Role); }}
               className="badge badge-soft-success font-size-12 btn btn-success waves-effect waves-light w-xxs border border-light"
             >
@@ -155,7 +155,7 @@ const MRPList = (props) => {
           {(!(userPageAccessState.RoleAccess_IsEdit) && (Role.CommonID > 0) && (userPageAccessState.RoleAccess_IsView)) ?
             <Button
               type="button"
-              data-mdb-toggle="tooltip" data-mdb-placement="top" title="View MRP List"
+              data-mdb-toggle="tooltip" data-mdb-placement="top" title="View Effective Date"
               onClick={() => { EditPageHandler(Role); }}
               className="badge badge-soft-primary font-size-12 btn btn-primary waves-effect waves-light w-xxs border border-light"
 
@@ -167,7 +167,7 @@ const MRPList = (props) => {
             ?
             <Button
               className="badge badge-soft-danger font-size-12 btn btn-danger waves-effect waves-light w-xxs border border-light"
-              data-mdb-toggle="tooltip" data-mdb-placement="top" title="Delete MRP List"
+              data-mdb-toggle="tooltip" data-mdb-placement="top" title="Delete Effective Date"
               onClick={() => { deleteHandeler(Role.CommonID) }}
             >
               <i className="mdi mdi-delete font-size-18"></i>

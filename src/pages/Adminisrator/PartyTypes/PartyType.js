@@ -280,7 +280,7 @@ const PartyType = (props) => {
                                                                     <Col md={2} style={{ marginTop: '9px' }} >
                                                                         <div className="form-check form-switch form-switch-md mb-3">
                                                                             <Input type="checkbox" className="form-check-input"
-                                                                                checked={values.IsDivision}
+                                                                                defaultChecked={values.IsDivision}
                                                                                 name="IsDivision"
                                                                                 onChange={(event) => onChangeText({ event, state, setState })}
                                                                             />

@@ -222,7 +222,7 @@ const GroupMaster = (props) => {
             });
             
             if (pageMode === "edit") {
-                dispatch(updateGroupID(jsonBody, EditData.id));
+                dispatch(updateGroupID(jsonBody, values.id));
             }
             else {
                 dispatch(postGroupList(jsonBody));
