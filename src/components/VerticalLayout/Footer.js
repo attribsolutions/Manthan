@@ -7,7 +7,7 @@ const Footer = () => {
     <React.Fragment>
       <footer className="footer">
         <Container fluid={true}>
-          <Row>
+          <Row style={{height:"1cm"}}>
             <Col md={6}>{new Date().getFullYear()} © FoodERP</Col>
             <Col md={6}>
               <div className="text-sm-end d-none d-sm-block">

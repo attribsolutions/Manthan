@@ -670,7 +670,7 @@ const PartyMaster = (props) => {
                                                                 <Col md="3">
                                                                     <FormGroup className="mb-3">
                                                                         <Label htmlFor="validationCustom01">State </Label>
-                                                                        <Col sm={12}>
+                                                                        <Col sm={12} style={{height:"2.9cm"}}>
                                                                             <Select
                                                                                 value={state_DropDown_select}
                                                                                 options={StateValues}
