@@ -439,7 +439,7 @@ const [state, setState] = useState(initialFiledFunc(initialFiled))
                                   className="react-dropdown"
                                   classNamePrefix="dropdown"
                                   options={CompanyGroupValues}
-                                  onChange={(hasSelect, evn) => onChangeSelect({ hasSelect, evn, state, setState, })}
+                                onChange={(hasSelect, evn) => onChangeSelect({ hasSelect, evn, state, setState, })}
                                 />
                                 {isError.CompanyGroup.length > 0 && (
                                   <span className="text-danger f-8"><small>{isError.CompanyGroup}</small></span>

@@ -82,6 +82,7 @@ const PageMaster = (props) => {
 
   }]);
 
+
   const {
     ControlTypes,
     FieldValidations,
@@ -107,6 +108,7 @@ const PageMaster = (props) => {
   const location = { ...history.location }
   const hasShowloction = location.hasOwnProperty("editValue")
   const hasShowModal = props.hasOwnProperty("editValue")
+
 
   // userAccess useEffect
   useEffect(() => {
@@ -136,7 +138,7 @@ const PageMaster = (props) => {
 
   // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
   useEffect(() => {
-    debugger
+
     // if (!(userPageAccessState === '')) { document.getElementById("txtName").focus(); }
     if ((hasShowloction || hasShowModal)) {
 
@@ -300,7 +302,12 @@ const PageMaster = (props) => {
   const PageAccessValues = PageAccess.map((Data) => ({
     value: Data.id,
     label: Data.Name,
+
   }));
+
+  // const PageAccessValues = PageAccess.map(function (element) {
+  //   return element.Name
+  // });
 
   const Module_DropdownOption = ModuleData.map((d) => ({
     value: d.id,
@@ -364,7 +371,7 @@ const PageMaster = (props) => {
   }
 
   function arrow_value(key) {
-    debugger
+
     pageFieldTabTable[key].DefaultSort = 2
 
     var x = document.getElementById("up");
@@ -386,7 +393,7 @@ const PageMaster = (props) => {
   }
 
   function PageField_onChange_Handler(event, type = '', key) {
-    debugger
+
     var found = pageFieldTabTable.find((i, k) => {
       return (k === key)
     })
@@ -602,7 +609,16 @@ const PageMaster = (props) => {
     }
   };
 
+
   const FormSubmitButton_Handler = (event, values) => {
+
+    let Access = []
+    PageAccess.forEach((element, key) => {
+      var check = document.getElementById(`checkbox${key}`).checked
+      if (check) {
+        Access.push({ Access: element.id })
+      }
+    });
 
     const PageFieldMaster = pageFieldTabTable.map((index) => ({
       ControlID: index.ControlID,
@@ -650,9 +666,7 @@ const PageMaster = (props) => {
       IsEditPopuporComponent: values.IsEditPopuporComponent,
       CreatedBy: 1,
       UpdatedBy: 1,
-      PagePageAccess: tablePageAccessDataState.map((d) => ({
-        Access: d.AccessID,
-      })),
+      PagePageAccess: Access,
       PageFieldMaster: PageFieldMaster,
     })
 
@@ -860,6 +874,7 @@ const PageMaster = (props) => {
       );
     });
   }
+
 
 
   // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
@@ -1281,7 +1296,7 @@ const PageMaster = (props) => {
                               </Row>
                             </CardBody>
                           </Card>
-
+                          {/* 
                           {pageAccessDropDownView ? (
                             <Card className=" mt-n2 text-black">
                               <CardBody style={{ backgroundColor: "whitesmoke" }}>
@@ -1333,8 +1348,45 @@ const PageMaster = (props) => {
 
                               </CardBody>
                             </Card>
-                          ) : <></>}
+                          ) : <></>} */}
+                          <Card className=" mt-n2 text-black" >
+                            <CardBody style={{ backgroundColor: "whitesmoke" }}>
+                              <h5 className="text-black "> Page Access</h5><br></br>
+                               
+                          
 
+                              {PageAccess.map((index, key) => {
+                                return <>
+                                  <div className="row " >
+                                    <div className="col col-12"  >
+
+                                      <Row>
+                                        <div >
+                                        <li>
+                                          <label
+                                            className="col col-2 form-label text-black"
+                                          >
+
+                                            {index.Name}
+                                          </label>
+                                          &nbsp;&nbsp;&nbsp;
+                                          
+                                            <Input
+                                              className="col col-6  "
+                                              type="checkbox"
+                                              id={`checkbox${key}`}
+                                            />
+                                       </li>
+                                        </div>
+                                      </Row>
+                                    </div>
+                                  </div>
+                                </>
+                              })}
+
+
+                            </CardBody>
+                          </Card>
                         </Row>
                       </TabPane>
 
