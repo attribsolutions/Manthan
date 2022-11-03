@@ -558,6 +558,7 @@ const RoleAccessAdd = (props) => {
                                                                 <Label className="col-sm-2 p-2 ml-n4 ">Role</Label>
                                                                 <Col md="9">
                                                                     <Select
+                                                                    
                                                                         value={role_dropdown_Select}
                                                                         options={Role_DropdownOption}
                                                                         className="rounded-bottom"
@@ -645,8 +646,10 @@ const RoleAccessAdd = (props) => {
                                                         <Col className="">
                                                             <FormGroup className="mb-3  row">
                                                                 <Label className="col-sm-3 p-2 ml-n5">Module</Label>
-                                                                <Col md="7">
+                                                                <Col md="7" style={{zIndex:"3"}}>
+                                                                    
 
+                                            
                                                                     <Select
                                                                         value={module_DropdownSelect}
                                                                         placeholder="select.."
@@ -701,15 +704,25 @@ const RoleAccessAdd = (props) => {
                                                             {/* <Table className="table-responsive table-bordered  table-fixed mt-2 "> */}
                                                             <Table className="table table-bordered table-responsive  mt-3">
                                                                 <thead>
-                                                                <tr>
+                                                                <tr style={{zIndex:"2"}}>
                                                                     {tableHederList.map((indx) => {
                                                                         if (indx.text === "IsShowOnMenu") {
                                                                             return (
                                                                                 <th colSpan={2} style={{
                                                                                     textAlign: "center",
-                                                                                    verticalAlign: "middle"
+                                                                                    verticalAlign: "middle",
+                                                                                    
+                                                                                    
+
                                                                                 }}>
+
                                                                                     {indx.text}
+                                                                                    {/* change line css */}
+                                                                    <th style={{width:"10%",height:"30px"}}  scope="col">Add </th>
+
+                                                                    <th  style={{width:"10%",height:"30px"}} scope="col">List</th>
+
+
                                                                                 </th>
                                                                             )
                                                                         }
@@ -720,6 +733,7 @@ const RoleAccessAdd = (props) => {
                                                                                     style={{
                                                                                         textAlign: "center",
                                                                                         verticalAlign: "middle",
+                                                                                        
                                                                                     }}>
                                                                                     {indx.text}
                                                                                 </th>
@@ -731,11 +745,11 @@ const RoleAccessAdd = (props) => {
 
                                                                     })}
                                                                 </tr>
-                                                                <tr>
-                                                                    <th scope="col">Add</th>
-                                                                    <th scope="col">List</th>
+                                                                {/* <tr style={{position:"relative"}}> */}
+                                                                    {/* <th scope="col">Add</th> */}
+                                                                    {/* <th scope="col">List</th> */}
                                                                     {/* <th scope="col">Accepted</th> */}
-                                                                </tr>
+                                                                {/* </tr> */}
                                                                 </thead>
 
                                                                 <Tbody>

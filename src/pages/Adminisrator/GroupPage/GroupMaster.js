@@ -12,13 +12,12 @@ import {
     Label,
     Row,
 } from "reactstrap";
-import { AvField, AvForm, } from "availity-reactstrap-validation";
+
 import Select from "react-select";
 import { MetaTags } from "react-meta-tags";
-import { BreadcrumbShow, commonPageField, commonPageFieldSuccess, editGroupIDSuccess, getGroupList, postGroupList, PostMethod_GroupList_Success, updateGroupID } from "../../../store/actions";
+import { BreadcrumbShow, commonPageField, commonPageFieldSuccess, editGroupIDSuccess, getGroupList, getGroupListSuccess, postGroupList, postGroupSuccess, PostMethod_GroupList_Success, PostMethod_GroupSuccess, updateGroupID, updategroupIDSuccess } from "../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
 import { AlertState } from "../../../store/actions";
-import { CommonGetRoleAccessFunction } from "../../../components/Common/CommonGetRoleAccessFunction";
 import { useHistory } from "react-router-dom";
 import {
     comAddPageFieldFunc,
@@ -33,6 +32,7 @@ import {
 import { SaveButton } from "../../../components/CommonSaveButton";
 import { getGroupTypeslist } from "../../../store/Administrator/GroupTypeRedux/action";
 import { GROUP_lIST } from "../../../routes/route_url";
+
 
 
 
@@ -55,9 +55,11 @@ const GroupMaster = (props) => {
     const {
         postMsg,
         GroupTypeAPI,
+        updateMsg,
         pageField,
         userAccess } = useSelector((state) => ({
             postMsg: state.GroupReducer.postMsg,
+            updateMsg: state.CategoryReducer.updateMessage,
             GroupTypeAPI: state.GroupTypeReducer.GroupType,
             userAccess: state.Login.RoleAccessUpdateData,
             pageField: state.CommonPageFieldReducer.pageField
@@ -130,17 +132,17 @@ const GroupMaster = (props) => {
 
             if (hasEditVal) {
                 setEditData(hasEditVal)
-                const { id, Name, GroupType,GroupTypeName } = hasEditVal
+                const { id, Name, GroupType,GroupTypeName} = hasEditVal
                 const { values, fieldLabel, hasValid, required, isError } = { ...state }
-                values.Name = Name;
-                values.id = id
-                values.GroupType = GroupType;
-                // values.GroupTypeName =GroupTypeName
-                values.GroupType = { label: GroupTypeName ,value:GroupType};
                 hasValid.Name.valid = true;
                 hasValid.GroupType.valid = true;
 
-
+                values.id = id
+                values.Name = Name;
+                values.GroupType = GroupType;
+                // values.GroupTypeName =GroupTypeName
+                values.GroupType = { label: GroupTypeName, value: GroupType};
+               
                 setState({ values, fieldLabel, hasValid, required, isError })
                 dispatch(BreadcrumbShow(hasEditVal.Name))
 
@@ -154,7 +156,7 @@ const GroupMaster = (props) => {
 
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             setGroupTypes_dropdown_Select('')
-            dispatch(PostMethod_GroupList_Success({ Status: false }))
+            dispatch(postGroupSuccess({ Status: false }))
             formRef.current.reset();
             if (pageMode === "other") {
                 dispatch(AlertState({
@@ -173,7 +175,7 @@ const GroupMaster = (props) => {
             }
         }
         else if (postMsg.Status === true) {
-            dispatch(PostMethod_GroupList_Success({ Status: false }))
+            dispatch(getGroupListSuccess({ Status: false }))
             dispatch(AlertState({
                 Type: 4,
                 Status: true,
@@ -183,6 +185,25 @@ const GroupMaster = (props) => {
             }));
         }
     }, [postMsg])
+
+    useEffect(() => {
+        if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
+            history.push({
+                pathname: GROUP_lIST,
+            })
+        } else if (updateMsg.Status === true && !modalCss) {
+            dispatch(updategroupIDSuccess({ Status: false }));
+            dispatch(
+                AlertState({
+                    Type: 3,
+                    Status: true,
+                    Message: JSON.stringify(updateMsg.Message),
+                })
+            );
+        }
+    }, [updateMsg, modalCss]);
+
+
 
     useEffect(() => {
 
@@ -222,7 +243,7 @@ const GroupMaster = (props) => {
             });
             
             if (pageMode === "edit") {
-                dispatch(updateGroupID(jsonBody, EditData.id));
+                dispatch(updateGroupID(jsonBody,values.id));
             }
             else {
                 dispatch(postGroupList(jsonBody));
@@ -257,7 +278,7 @@ const GroupMaster = (props) => {
                             <CardBody className=" vh-10 0 text-black" style={{ backgroundColor: "#whitesmoke" }} >
                                 <form onSubmit={formSubmitHandler} ref={formRef} noValidate>
                                     <Row className="">
-                                        <Col md={12}>
+                                        <Col md={12} style={{height:"9cm"}}>
                                             <Card>
                                                 <CardBody style={{ backgroundColor: "whitesmoke" }}>
                                                     <Row>
@@ -294,8 +315,9 @@ const GroupMaster = (props) => {
                                                         <Row>
                                                             <FormGroup className="mb-2 col col-sm-4 ">
                                                             <Label htmlFor="validationCustom01"> {fieldLabel.GroupType} </Label>
-
-
+                                                                 
+                                                             <Col sm={12}>
+                                                                    
                                                                 <Select
                                                                         name="GroupType"
                                                                         // defaultValue={EmployeeType_DropdownOptions[0]}
@@ -305,11 +327,12 @@ const GroupMaster = (props) => {
                                                                         options={GroupTypesValues}
                                                                         onChange={(hasSelect, evn) => onChangeSelect({ hasSelect, evn, state, setState, })}
                                                                         classNamePrefix="dropdown"
+                                                                    
                                                                     />
                                                                     {isError.GroupType.length > 0 && (
-                                                                        <span className="text-danger f-8"><small>{isError.GroupType}</small></span>
+                                                                        <span className="text-danger f-8"><small >{isError.GroupType}</small></span>
                                                                     )}
-
+                                                                  </Col>
                                                             </FormGroup>
 
                                                         </Row>

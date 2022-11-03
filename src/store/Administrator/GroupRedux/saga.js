@@ -1,5 +1,5 @@
 import { call, put, takeEvery } from "redux-saga/effects";
-import { deleteGrouplistSuccess, editGroupIDSuccess, getGroupListSuccess, PostMethod_GroupList_Success, updategroupIDSuccess} from "./action";
+import { deleteGrouplistSuccess, editGroupIDSuccess, getGroupListSuccess, postGroupSuccess, updategroupIDSuccess} from "./action";
 
 
 import { AlertState } from "../../Utilites/CustomAlertRedux/actions";
@@ -23,7 +23,7 @@ function* Post_Method_ForGroupMaster_GenFun({ data }) {
   try {
     const response = yield call(Post_GroupList_API, data);
     yield put(SpinnerState(false))
-    yield put(PostMethod_GroupList_Success(response));
+    yield put(postGroupSuccess(response));
   } catch (error) {
     yield put(SpinnerState(false))
     yield put(AlertState({
