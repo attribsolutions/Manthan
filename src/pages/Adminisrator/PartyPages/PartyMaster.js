@@ -551,10 +551,6 @@ const PartyMaster = (props) => {
                                                                         </Input>
                                                                         {test1()}
 
-
-
-
-
                                                                     </FormGroup>
                                                                 </Col>
                                                                 <Col md="1">  </Col>

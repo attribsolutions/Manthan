@@ -243,7 +243,10 @@ const GroupMaster = (props) => {
             });
             
             if (pageMode === "edit") {
+
                 dispatch(updateGroupID(jsonBody,values.id));
+
+           
             }
             else {
                 dispatch(postGroupList(jsonBody));

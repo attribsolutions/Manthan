@@ -54,7 +54,7 @@ const ModulesList = () => {
                         reducers={reducers}
                         MasterModal={Modules}
                         masterPath={MODULE}
-                        ButtonMsgLable={"Module"}
+                        ButtonMsgLable={"Name"}
                         deleteName={"Name"}
                     />
                     : null

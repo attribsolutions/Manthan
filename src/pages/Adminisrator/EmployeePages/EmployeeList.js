@@ -55,7 +55,7 @@ const Employee_List = () => {
             reducers={reducers}
             MasterModal={AddEmployee}
             masterPath={EMPLOYEE}
-            ButtonMsgLable={"Employee"}
+            ButtonMsgLable={"Name"}
             deleteName={"Name"}
           />
           : null

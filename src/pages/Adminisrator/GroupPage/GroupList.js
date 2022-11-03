@@ -52,7 +52,7 @@ const GroupList = (props) => {
             reducers={reducers}
             MasterModal={GroupMaster}
             masterPath={GROUP}
-            ButtonMsgLable={"Group"}
+            ButtonMsgLable={"Name"}
             deleteName={"Name"}
           
           />

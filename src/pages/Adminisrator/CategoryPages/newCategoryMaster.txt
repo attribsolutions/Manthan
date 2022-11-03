@@ -11,79 +11,119 @@ import {
     Label,
     Row,
 } from "reactstrap";
+import { AvField, AvForm, } from "availity-reactstrap-validation";
+import Select from "react-select";
 import { MetaTags } from "react-meta-tags";
-import { BreadcrumbShow } from "../../../store/actions";
-import {
-    AlertState,
-    commonPageField,
-    commonPageFieldSuccess
-} from "../../../store/actions";
+import { BreadcrumbShow, commonPageField, commonPageFieldSuccess, getCategoryTypelist } from "../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
 import {
-    PostMethod_ForCompanyGroupMasterSuccess,
-    editCompanyGroupTypeSuccess,
-    updateCompanyGroupTypeID,
-    PostMethodForCompanyGroupMaster,
-    getMethodForCompanyGroupList
-} from "../../../store/Administrator/CompanyGroupRedux/action";
+    editCategoryIDSuccess,
+    PostMethodForCategory,
+    PostMethod_ForCategoryAPISuccess,
+    updateCategoryID
+} from "../../../store/Administrator/CategoryRedux/action";
+import { AlertState } from "../../../store/actions";
+import { CommonGetRoleAccessFunction } from "../../../components/Common/CommonGetRoleAccessFunction";
 import { useHistory } from "react-router-dom";
 import {
     comAddPageFieldFunc,
+    formValChange,
     formValid,
-    initialFiledFunc,
-    onChangeText
+    onChangeSelect,
+    onChangeText,
+
 } from "../../../components/Common/CmponentRelatedCommonFile/validationFunction";
+
+
 import { SaveButton } from "../../../components/CommonSaveButton";
-import { COMPANYGROUP_lIST } from "../../../routes/route_url";
-import { UPDATE_COMPANYGROUP_TYPE_ID_SUCCESS } from "../../../store/Administrator/CompanyGroupRedux/actionType";
+import { CATEGORY_lIST } from "../../../routes/route_url";
 
 
-const CompanyGroupMaster = (props) => {
+const CategoryMaster = (props) => {
+
+    let editDataGetingFromList = props.state;
+    let pageModeProps = props.pageMode;
 
     const formRef = useRef(null);
-    const dispatch = useDispatch();
     const history = useHistory()
+    const dispatch = useDispatch();
 
-    const [pageMode, setPageMode] = useState();
-    const [userPageAccessState, setUserPageAccessState] = useState('');
+    const [EditData, setEditData] = useState([]);
+    const [pageMode, setPageMode] = useState("");
     const [modalCss, setModalCss] = useState(false);
+
+    const [CategoryTypes_dropdown_Select, setCategoryTypes_dropdown_Select] = useState("");
+    const [userPageAccessState, setUserPageAccessState] = useState(123);
+
+
+    //Access redux store Data /  'save_ModuleSuccess' action data
+    const {
+        PostAPIResponse,
+        CategoryAPI,
+        pageField,
+        userAccess } = useSelector((state) => ({
+            PostAPIResponse: state.CategoryReducer.PostDataMessage,
+            CategoryAPI: state.categoryTypeReducer.categoryTypeListData,
+            userAccess: state.Login.RoleAccessUpdateData,
+            pageField: state.CommonPageFieldReducer.pageField
+        }));
 
 
     {/** Dyanamic Page access state and OnChange function */ }
-    const initialFiled = {
-        id: "",
-        Name: "",
-        IsSCM: ""
-      }
-    
-    const [state, setState] = useState(initialFiledFunc(initialFiled))
+    {/*start */ }
+    const [state, setState] = useState({
+        values: {
+            id: "",
+            Name: "",
+            CategoryTypeName: "",
 
-   
+        },
+        fieldLabel: {
+            Name: '',
+            CategoryTypeName: '',
 
-    //Access redux store Data /  'save_ModuleSuccess' action data
-    const { postMsg, updateMsg ,pageField, userAccess } = useSelector((state) => ({
-        postMsg: state.CompanyGroupReducer.PostDataMessage,
-        updateMsg: state.CompanyGroupReducer.updateMessage,
-        userAccess: state.Login.RoleAccessUpdateData,
-        pageField: state.CommonPageFieldReducer.pageField
+        },
 
-    }));
+        isError: {
+            Name: "",
+            CategoryTypeName: "",
+
+        },
+
+        hasValid: {
+            Name: {
+                regExp: '',
+                inValidMsg: "",
+                valid: false
+            },
+            CategoryTypeName: {
+                regExp: '',
+                inValidMsg: "",
+                valid: false
+            },
+        },
+        required: {
+
+        }
+    })
+    const values = { ...state.values }
+    const { isError } = state;
+    const { fieldLabel } = state;
+
+
+    {/*End */ }
+
+    useEffect(() => {
+        dispatch(commonPageFieldSuccess(null));
+        dispatch(commonPageField(18))
+    }, []);
 
     const location = { ...history.location }
     const hasShowloction = location.hasOwnProperty("editValue")
     const hasShowModal = props.hasOwnProperty("editValue")
 
-
-    useEffect(() => {
-        dispatch(commonPageFieldSuccess(null));
-        dispatch(commonPageField(32))
-    }, []);
-
-
-
     // userAccess useEffect
     useEffect(() => {
-
         let userAcc = null;
         let locationPath = location.pathname;
 
@@ -100,12 +140,9 @@ const CompanyGroupMaster = (props) => {
         };
     }, [userAccess])
 
-
-
     // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
     useEffect(() => {
-
-
+        debugger
         // if (!(userPageAccessState === '')) { document.getElementById("txtName").focus(); }
         if ((hasShowloction || hasShowModal)) {
 
@@ -121,71 +158,54 @@ const CompanyGroupMaster = (props) => {
             }
 
             if (hasEditVal) {
-                const { id, Name, IsSCM } = hasEditVal
+
+                const { id, Name, CategoryTypeName } = hasEditVal
                 const { values, fieldLabel, hasValid, required, isError } = { ...state }
                 values.Name = Name;
-                values.IsSCM = IsSCM;
-                hasValid.Name.valid = true;
-                hasValid.IsSCM.valid = true;
+                values.CategoryTypeName = CategoryTypeName;
                 values.id = id
                 setState({ values, fieldLabel, hasValid, required, isError })
-                dispatch(BreadcrumbShow(hasEditVal.Name))
+                dispatch(BreadcrumbShow(hasEditVal.CategoryMaster))
+
             }
-            dispatch(editCompanyGroupTypeSuccess({ Status: false }))
+            dispatch(editCategoryIDSuccess({ Status: false }))
         }
     }, [])
 
 
     useEffect(() => {
 
-        if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
-
-            dispatch(PostMethod_ForCompanyGroupMasterSuccess({ Status: false }))
+        if ((PostAPIResponse.Status === true) && (PostAPIResponse.StatusCode === 200)) {
+            setCategoryTypes_dropdown_Select('')
+            dispatch(PostMethod_ForCategoryAPISuccess({ Status: false }))
             formRef.current.reset();
-            if (pageMode === "dropdownAdd") {
+            if (pageMode === "other") {
                 dispatch(AlertState({
                     Type: 1,
                     Status: true,
-                    Message: postMsg.Message,
+                    Message: PostAPIResponse.Message,
                 }))
             }
             else {
                 dispatch(AlertState({
                     Type: 1,
                     Status: true,
-                    Message: postMsg.Message,
-                    RedirectPath: COMPANYGROUP_lIST,
+                    Message: PostAPIResponse.Message,
+                    RedirectPath: CATEGORY_lIST,
                 }))
             }
         }
-        else if (postMsg.Status === true) {
-            dispatch(PostMethod_ForCompanyGroupMasterSuccess({ Status: false }))
+        else if (PostAPIResponse.Status === true) {
+            dispatch(PostMethod_ForCategoryAPISuccess({ Status: false }))
             dispatch(AlertState({
                 Type: 4,
                 Status: true,
-                Message: JSON.stringify(postMsg.Message),
+                Message: JSON.stringify(postMessage.Message),
                 RedirectPath: false,
                 AfterResponseAction: false
             }));
         }
-    }, [postMsg])
-
-    useEffect(() => {
-        if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
-            history.push({
-                pathname: COMPANYGROUP_lIST,
-            })
-        } else if (updateMsg.Status === true && !modalCss) {
-            dispatch(UPDATE_COMPANYGROUP_TYPE_ID_SUCCESS({ Status: false }));
-            dispatch(
-                AlertState({
-                    Type: 3,
-                    Status: true,
-                    Message: JSON.stringify(updateMsg.Message),
-                })
-            );
-        }
-    }, [updateMsg, modalCss]);
+    }, [PostAPIResponse])
 
     useEffect(() => {
 
@@ -195,26 +215,40 @@ const CompanyGroupMaster = (props) => {
         }
     }, [pageField])
 
-    const values = { ...state.values }
-    const { isError } = state;
-    const { fieldLabel } = state;
 
+    //get method for dropdown
+    useEffect(() => {
+        dispatch(getCategoryTypelist());
+    }, [dispatch]);
+
+
+    function handllerCategoryTypes(e) {
+        setCategoryTypes_dropdown_Select(e)
+    }
+
+    const CategoryTypesValues = CategoryAPI.map((Data) => ({
+        value: Data.id,
+        label: Data.Name
+    }));
 
     const formSubmitHandler = (event) => {
         event.preventDefault();
         if (formValid(state, setState)) {
             const jsonBody = JSON.stringify({
                 Name: values.Name,
-                IsSCM: values.IsSCM,
-                CreatedBy: 1,
-                UpdatedBy: 1
+                CategoryType: values.CategoryTypeName.value,
+
+
             });
 
             if (pageMode === "edit") {
-                dispatch(updateCompanyGroupTypeID(jsonBody, values.id));
+                dispatch(updateCategoryID(jsonBody, values.id,));
+                console.log("jsonBody", jsonBody)
             }
             else {
-                dispatch(PostMethodForCompanyGroupMaster(jsonBody));
+                dispatch(PostMethodForCategory(jsonBody));
+
+
             }
         }
     };
@@ -241,29 +275,26 @@ const CompanyGroupMaster = (props) => {
                             </CardHeader>
 
                             <CardBody className=" vh-10 0 text-black" style={{ backgroundColor: "#whitesmoke" }} >
-
                                 <form onSubmit={formSubmitHandler} ref={formRef} noValidate>
-
                                     <Row className="">
                                         <Col md={12}>
                                             <Card>
                                                 <CardBody style={{ backgroundColor: "whitesmoke" }}>
                                                     <Row>
                                                         <FormGroup className="mb-2 col col-sm-4 ">
-                                                            <Label htmlFor="validationCustom01"> {fieldLabel.Name}</Label>
+                                                            <Label htmlFor="validationCustom01">{fieldLabel.Name} </Label>
                                                             <Input
                                                                 name="Name"
                                                                 id="txtName"
-                                                                className={isError.Name.length > 0 ? "is-invalid form-control" : "form-control"}
-                                                                type="text"
                                                                 value={values.Name}
+                                                                type="text"
+                                                                className={isError.Name.length > 0 ? "is-invalid form-control" : "form-control"}
                                                                 placeholder="Please Enter Name"
                                                                 autoComplete='off'
                                                                 onChange={(event) => {
                                                                     onChangeText({ event, state, setState })
                                                                     dispatch(BreadcrumbShow(event.target.value))
                                                                 }}
-
                                                             />
                                                             {isError.Name.length > 0 && (
                                                                 <span className="invalid-feedback">{isError.Name}</span>
@@ -271,26 +302,31 @@ const CompanyGroupMaster = (props) => {
                                                         </FormGroup>
 
                                                         <Row>
-                                                            <FormGroup className="mb-2 col col-sm-5">
-                                                                <Row className="justify-content-md-left">
-                                                                    <Label htmlFor="horizontal-firstname-input" className="col-sm-3 col-form-label">{fieldLabel.IsSCM}</Label>
-                                                                    <Col md={2} style={{ marginTop: '9px' }} >
-                                                                        <div className="form-check form-switch form-switch-md mb-3">
-                                                                            <Input type="checkbox" className="form-check-input"
-                                                                                defaultChecked={values.IsSCM}
-                                                                                name="IsSCM"
-                                                                                onChange={(event) => onChangeText({ event, state, setState })}
-                                                                            />
-                                                                        </div>
+                                                            <Col md="4">
+                                                                <FormGroup className="mb-3">
+                                                                    <Label htmlFor="validationCustom01"> {fieldLabel.CategoryTypeName} </Label>
+                                                                    <Col sm={12}>
+                                                                        <Select
+                                                                            name="CategoryTypeName"
+                                                                            Value={values.CategoryTypeName}
+                                                                            isSearchable={false}
+                                                                            className="react-dropdown"
+                                                                            classNamePrefix="dropdown"
+                                                                            options={CategoryTypesValues}
+                                                                            onChange={(v, e) => onChangeSelect({ e, v, state, setState })}
+                                                                        />
+                                                                        {isError.CategoryTypeName.length > 0 && (
+                                                                            <span className="text-danger f-8"><small>{isError.CategoryTypeName}</small></span>
+                                                                        )}
                                                                     </Col>
-                                                                </Row>
-                                                            </FormGroup>
+                                                                </FormGroup>
+                                                            </Col>
                                                         </Row>
 
                                                         <FormGroup>
                                                             <Row>
                                                                 <Col sm={2}>
-                                                                    {SaveButton({ pageMode, userPageAccessState, module: "CompanyGroupMaster" })}
+                                                                    {SaveButton({ pageMode, userPageAccessState, module: "CategoryMaster" })}
                                                                 </Col>
                                                             </Row>
                                                         </FormGroup >
@@ -317,5 +353,5 @@ const CompanyGroupMaster = (props) => {
     }
 };
 
-export default CompanyGroupMaster
+export default CategoryMaster
 
