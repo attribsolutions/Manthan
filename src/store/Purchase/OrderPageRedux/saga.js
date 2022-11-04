@@ -8,7 +8,7 @@ import {
   postOrderSuccess,
   editOrderIdSuccess,
   updateOrderIdSuccess,
-  ggetOrderListPageSuccess,
+  getOrderListPageSuccess,
 } from "./actions";
 import {
 
@@ -52,11 +52,24 @@ function* getSupplierGenFunc() {
   }
 }
 
-function* goButtonGenFunc({ data }) {
-
+function* goButtonGenFunc({ data, hasEditVal }) {
+debugger
   yield put(SpinnerState(true))
   try {
     const response = yield call(OrderPage_GoButton_API, data);
+    if (hasEditVal) {
+      response.Data.forEach(element => {
+        hasEditVal.OrderItem.forEach(ele => {
+          if (element.id === ele.Item) {
+            element["inpRate"] = ele.Rate
+            element["inpQty"] = ele.Quantity
+            element["totalAmount"] = ele.Amount
+            element["UOM"] = ele.Unit
+            element["UOMLabel"] = ele.UnitName
+          }
+        })
+      });
+    }
     yield put(goButtonSuccess(response.Data));
     yield put(SpinnerState(false))
   } catch (error) {
@@ -83,22 +96,6 @@ function* postOrder_GenFunc({ data }) {
     }));
   }
 }
-
-// function* fetchOrderList(data) {
-//   yield put(SpinnerState(true))
-//   try {
-//     const response = yield call(OrderPage_get_API, data);
-//     if (response.StatusCode === 200) yield put(getOrderListSuccess(response.Data));
-//     else alert(" response error")
-//     yield put(SpinnerState(false))
-//   } catch (error) {
-//     yield put(SpinnerState(false))
-//     yield put(AlertState({
-//       Type: 4,
-//       Status: true, Message: "500 Error Message",
-//     }));
-//   }
-// }
 
 function* editOrderGenFunc({ id, pageMode }) {
 
@@ -156,7 +153,7 @@ function* get_OrderListPage_GenratorFunction() {
   try {
     const response = yield call(getOrderList_For_Listpage);
     yield put(SpinnerState(false))
-    yield put(ggetOrderListPageSuccess(response.Data))
+    yield put(getOrderListPageSuccess(response.Data))
 
   } catch (error) {
     yield put(SpinnerState(false))

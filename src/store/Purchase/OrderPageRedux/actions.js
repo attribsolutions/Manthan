@@ -1,11 +1,7 @@
 import {
   GET_DIVISIONORDER_LIST,
   GET_DIVISIONORDER_LIST_SUCCESS,
-  GET_ORDER_LIST,
-  GET_ORDER_LIST_MESSAGE,
-  GET_ORDER_LIST_SUCCESS,
-  GET_ORDER_ITEMS_FOR_ORDER_PAGE,
-  GET_ORDER_ITEMS_FOR_ORDER_PAGE_SUCCESS,
+
   UPDATE_ORDER_ID_FROM_ORDER_PAGE,
   UPDATE_ORDER_ID_FROM_ORDER_PAGE_SUCCESS,
   EDIT_ORDER_FOR_ORDER_PAGE_SUCCESS,
@@ -33,9 +29,9 @@ export const getSupplierSuccess = orders => ({
 })
 
 
-export const goButton = data => ({
+export const goButton = (data,hasEditVal) => ({
   type: GO_BUTTON_FOR_ORDER_PAGE,
-  data,
+  data,hasEditVal,
 });
 
 export const goButtonSuccess = list => ({
@@ -49,7 +45,7 @@ export const getOrderListPage = () => ({
 
 });
 
-export const ggetOrderListPageSuccess = (data) => ({
+export const getOrderListPageSuccess = (data) => ({
   type: GET_ORDER_LIST_PAGE_SUCCESS,
   payload: data,
 });

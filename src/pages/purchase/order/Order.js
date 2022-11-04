@@ -21,7 +21,14 @@ import ToolkitProvider, { Search } from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 import paginationFactory, { PaginationListStandalone, PaginationProvider } from "react-bootstrap-table2-paginator";
 import { useHistory } from "react-router-dom";
-import { getSupplier, goButton, goButtonSuccess, postOrder, postOrderSuccess } from "../../../store/Purchase/OrderPageRedux/actions";
+import {
+    editOrderIdSuccess,
+    getSupplier,
+    goButton,
+    goButtonSuccess,
+    postOrder,
+    postOrderSuccess
+} from "../../../store/Purchase/OrderPageRedux/actions";
 import { mySearchProps } from "../../../components/Common/CmponentRelatedCommonFile/SearchBox/MySearch";
 import { AlertState } from "../../../store/actions";
 import { basicAmount, GstAmount, handleKeyDown, totalAmount } from "./OrderPageCalulation";
@@ -42,7 +49,7 @@ const Order = (props) => {
     //Access redux store Data /  'save_ModuleSuccess' action data
 
     const [effectiveDate, setEffectiveDate] = useState("");
-    const [customerSelect, setCustomerSelect] = useState('');
+    const [supplier_select, setSupplier_select] = useState('');
     const [Description, setDescription] = useState('');
     const [orderAmount, setOrderAmount1] = useState("");
 
@@ -64,7 +71,7 @@ const Order = (props) => {
         pageField: state.CommonPageFieldReducer.pageFieldList
     }));
 
-  
+
 
     // userAccess useEffect
     useEffect(() => {
@@ -85,9 +92,9 @@ const Order = (props) => {
     const location = { ...history.location }
     const hasShowloction = location.hasOwnProperty("editValue")
     const hasShowModal = props.hasOwnProperty("editValue")
-    debugger
+
     useEffect(() => {
-        // if (!(userPageAccessState === '')) { document.getElementById("txtName").focus(); }
+        dispatch(goButtonSuccess([]))
         if ((hasShowloction || hasShowModal)) {
 
             let hasEditVal = null
@@ -102,44 +109,22 @@ const Order = (props) => {
             }
 
             if (hasEditVal) {
+
+                const jsonBody = JSON.stringify({
+                    Supplier: hasEditVal.Supplier,
+                    EffectiveDate: hasEditVal.OrderDate
+                }
+                );
+                dispatch(goButton(jsonBody, hasEditVal))
+                setSupplier_select({ label: hasEditVal.SupplierName, value: hasEditVal.Supplier })
+                setEffectiveDate(hasEditVal.OrderDate)
+                description = hasEditVal.Description
+
             }
+            dispatch(editOrderIdSuccess({ Status: false }))
         }
 
-        // const editDataGatingFromList = history.location.editValue
 
-        // const locationPath = history.location.pathname
-        // let userAcc = userAccess.find((inx) => {
-        //     return (`/${inx.ActualPagePath}` === locationPath)
-        // })
-
-        // let division = 0
-        // try {
-        //     division = JSON.parse(localStorage.getItem("roleId")).Party_id
-        // } catch (e) {
-        //     alert(e)
-        // }
-        // if (!(editDataGatingFromList === undefined)) {
-        //     var CustomerName = editDataGatingFromList.Supplier
-        //     var Customerid = 28
-        //     var description = editDataGatingFromList.Description
-        //     var orderDate = editDataGatingFromList.OrderDate
-
-        //     const jsonBody = JSON.stringify({
-        //         Division: division,
-        //         Party: Customerid,
-        //         EffectiveDate: orderDate
-        //     }
-        //     );
-        //     dispatch(goButton(jsonBody))
-        //     // setPartyName_dropdown_Select({ label: partyName, value: partyId })
-        //     setCustomerSelect({ label: CustomerName, value: Customerid })
-        //     setEffectiveDate(orderDate)
-        //     setDescription(description)
-
-        // }
-        // if (!(userAcc === undefined)) {
-        //     setUserPageAccessState(userAcc)
-        // }
     }, [])
 
     useEffect(() => {
@@ -165,7 +150,7 @@ const Order = (props) => {
         }
     }, [postMsg])
 
-    function valChange(val, row, type) {
+    function val_onChange(val, row, type) {
 
         if (type === "qty") {
             row["inpQty"] = val;
@@ -212,12 +197,12 @@ const Order = (props) => {
                                 const val = e.target.value
                                 if (val > 0) {
 
-                                    valChange(val, row, "rate")
+                                    val_onChange(val, row, "rate")
                                     qty.disabled = false
                                 } else {
                                     qty.value = ''
                                     row["inpQty"] = 0;
-                                    valChange(0, row, "rate")
+                                    val_onChange(0, row, "rate")
                                     qty.disabled = true
                                 }
                             }}
@@ -259,7 +244,7 @@ const Order = (props) => {
                         defaultValue={row.inpQty}
                         disabled={(row.inpRate === 0) ? true : false}
                         onChange={(e) => {
-                            valChange(e.target.value, row, "qty")
+                            val_onChange(e.target.value, row, "qty")
                         }}
                         autoComplete="off"
                         onKeyDown={(e) => handleKeyDown(e, items)} />
@@ -330,7 +315,7 @@ const Order = (props) => {
     }
 
     const GoButton_Handler = () => {
-        let party = customerSelect.value
+        let party = supplier_select.value
 
         if (!party > 0) {
             alert("Please Select Customer")
@@ -365,7 +350,7 @@ const Order = (props) => {
     const saveHandeller = () => {
         let division = 0
         let date
-        let party = customerSelect.value
+        let party = supplier_select.value
 
         try {
             division = JSON.parse(localStorage.getItem("roleId")).Party_id
@@ -488,14 +473,14 @@ const Order = (props) => {
                             <Col md="3">
                                 <FormGroup className="mb-2 row mt-3 " >
                                     <Label className="col-md-4 p-2"
-                                        style={{ width: "130px" }}>Customer Name</Label>
+                                        style={{ width: "130px" }}>Supplier Name</Label>
                                     <Col md="7">
                                         <Select
-                                            value={customerSelect}
+                                            value={supplier_select}
                                             classNamePrefix="select2-Customer"
                                             isDisabled={pageMode === "edit" ? true : false}
                                             options={supplierOptions}
-                                            onChange={(e) => { setCustomerSelect(e) }}
+                                            onChange={(e) => { setSupplier_select(e) }}
                                         />
                                     </Col>
                                 </FormGroup>
