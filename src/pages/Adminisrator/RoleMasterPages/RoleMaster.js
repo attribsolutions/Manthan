@@ -21,6 +21,7 @@ import {
   onChangeText,
 } from "../../../components/Common/CmponentRelatedCommonFile/validationFunction";
 import { ROLE_lIST } from "../../../routes/route_url";
+import SaveButton from "../../../components/Common/CommonSaveButton";
 
 const RoleMaster = (props) => {
 
@@ -409,36 +410,13 @@ const RoleMaster = (props) => {
                             <FormGroup>
                               <Row>
                                 <Col sm={2}>
-                                  <div>
-                                    {
-                                      pageMode === "edit" ?
-                                        userPageAccessState.RoleAccess_IsEdit ?
-                                          <button
-                                            type="submit"
-                                            data-mdb-toggle="tooltip" data-mdb-placement="top" title="Update Party Type"
-                                            className="btn btn-success w-md mt-3"
-                                          >
-                                            <i class="fas fa-edit me-2"></i>Update
-                                          </button>
-                                          :
-                                          <></>
-                                        : (
-
-                                          userPageAccessState.RoleAccess_IsSave ?
-                                            <button
-                                              type="submit"
-                                              data-mdb-toggle="tooltip" data-mdb-placement="top" title="Save Party Type"
-                                              className="btn btn-primary w-md mt-3 "
-                                            > <i className="fas fa-save me-2"></i> Save
-                                            </button>
-                                            :
-                                            <></>
-                                        )
-                                    }
-                                  </div>
+                                  <SaveButton pageMode={pageMode} userAcc={userPageAccessState}
+                                    module={"RoleMaster"}
+                                  />
                                 </Col>
                               </Row>
-                            </FormGroup>
+                            </FormGroup >
+
                           </Row>
 
                         </CardBody>

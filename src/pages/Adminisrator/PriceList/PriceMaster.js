@@ -367,6 +367,9 @@ const PriceMaster = (props) => {
 
     }
 
+  
+    
+
 
 
 
@@ -412,20 +415,23 @@ const PriceMaster = (props) => {
 
                                                     <FormGroup className="mb-3 row ">
                                                         <Label className="col-sm-3 p-2 ml-n4 ">Party Type</Label>
-                                                        <Col md="9">
-                                                            <Select
+                                                        <Col md="9" style={{}}>
+                                                        
+                                                           
+                                                            <Select 
                                                                 value={partyType_dropdown_Select}
                                                                 options={PartyTypeDropdown_Options}
                                                                 className="rounded-bottom"
                                                                 placeholder="select"
-                                                                onChange={(e) => { PartyType_Dropdown_OnChange_Handller(e) }}
-                                                                classNamePrefix="select2-selection"
-
+                                                                onChange={(e) => { PartyType_Dropdown_OnChange_Handller(e)}}
+                                                                classNamePrefix="select2-selection"  
+                                                                
                                                             />
+                                                                
+                                                            
                                                         </Col>
                                                     </FormGroup>
                                                 </Col>
-
                                                 <Col md="3" className="mt- ">
                                                     <Button type="button" color="primary" onClick={(e) => { goButtonHandler() }}>Go</Button>
                                                 </Col>
@@ -472,7 +478,7 @@ const PriceMaster = (props) => {
                                                                     onChange={(e) => setPriceList(e)}
                                                                 /> */}
 
-                                                               <label>id={currentPrice.value} </label>
+                                                               {/* <label>id={currentPrice.value} </label> */}
                                                                     <Input
                                                                         value={PriceList_dropdown_Select.label}
                                                                         placeholder="Enter Name"

@@ -13,14 +13,12 @@ import {
     Button,
     Input,
 } from "reactstrap";
-import { AvField, AvForm, } from "availity-reactstrap-validation";
 import Select from "react-select";
 import { MetaTags } from "react-meta-tags";
 import { BreadcrumbShow, commonPageField, commonPageFieldSuccess } from "../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
 import { Tbody, Thead } from "react-super-responsive-table";
 import { AlertState } from "../../../store/actions";
-import { CommonGetRoleAccessFunction } from "../../../components/Common/CommonGetRoleAccessFunction";
 import {
     PostMethodForVehicleMaster,
     getMethodForVehicleList,
@@ -35,7 +33,6 @@ import {
 import { get_Division_ForDropDown, } from "../../../store/Administrator/ItemsRedux/action";
 import { useHistory } from "react-router-dom";
 // import { actionChannel } from "redux-saga/effects";
-import { SaveButton } from "../../../components/CommonSaveButton";
 import { DRIVER_lIST, VEHICLE_lIST } from "../../../routes/route_url";
 import {
     comAddPageFieldFunc,
@@ -44,6 +41,7 @@ import {
     onChangeSelect,
     onChangeText
 } from "../../../components/Common/CmponentRelatedCommonFile/validationFunction";
+import SaveButton from "../../../components/Common/CommonSaveButton";
 
 
 const VehicleMaster = (props) => {
@@ -531,7 +529,9 @@ const VehicleMaster = (props) => {
                                                         <FormGroup>
                                                             <Row>
                                                                 <Col sm={2} className="mt-3">
-                                                                    {SaveButton({ pageMode, userPageAccessState, module: "VehicleMaster" })}
+                                                                    <SaveButton pageMode={pageMode} userAcc={userPageAccessState}
+                                                                        module={"VehicleMaster"}
+                                                                    />
                                                                 </Col>
                                                             </Row>
                                                         </FormGroup >

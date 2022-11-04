@@ -427,7 +427,7 @@ const MRPMaster = (props) => {
                                                 <Row className="mt-3">
                                                     <Col md="3">
                                                         <FormGroup className="mb-3 row ">
-                                                            <Label className="col-sm-3 p-2 ml-n4 ">Division</Label>
+                                                            <Label className="col-sm-3 p-2 ml-n4"  style={{width:""}}>Division</Label>
                                                             <Col md="9">
                                                                 <Select
                                                                     value={division_dropdown_Select}
@@ -444,8 +444,8 @@ const MRPMaster = (props) => {
 
                                                     <Col md="3">
                                                         <FormGroup className="mb-3 row ">
-                                                            <Label className="col-sm-3 p-2 ml-n4 ">Party Name</Label>
-                                                            <Col md="9">
+                                                            <Label className="col-sm-3 p-2 ml-n4 " style={{width:""}}>Party Name</Label>
+                                                            <Col md="9" style={{height:"3.6cm"}}>
                                                                 <Select
                                                                     value={party_dropdown_Select}
                                                                     options={PartyDropdown_Options}

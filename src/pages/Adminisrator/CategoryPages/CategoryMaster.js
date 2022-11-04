@@ -11,7 +11,6 @@ import {
     Label,
     Row,
 } from "reactstrap";
-import { AvField, AvForm, } from "availity-reactstrap-validation";
 import Select from "react-select";
 import { MetaTags } from "react-meta-tags";
 import { BreadcrumbShow, commonPageField, commonPageFieldSuccess, getCategoryTypelist } from "../../../store/actions";
@@ -24,7 +23,6 @@ import {
     updateCategoryIDSuccess
 } from "../../../store/Administrator/CategoryRedux/action";
 import { AlertState } from "../../../store/actions";
-import { CommonGetRoleAccessFunction } from "../../../components/Common/CommonGetRoleAccessFunction";
 import { useHistory } from "react-router-dom";
 import {
     comAddPageFieldFunc,
@@ -34,8 +32,8 @@ import {
     onChangeText,
 
 } from "../../../components/Common/CmponentRelatedCommonFile/validationFunction";
-import { SaveButton } from "../../../components/CommonSaveButton";
 import { CATEGORY_lIST } from "../../../routes/route_url";
+import SaveButton from "../../../components/Common/CommonSaveButton";
 
 const CategoryMaster = (props) => {
 
@@ -272,10 +270,10 @@ const CategoryMaster = (props) => {
                                                         </FormGroup>
 
                                                         <Row>
-                                                            <Col md="4">
+                                                            <Col md="4" >
                                                                 <FormGroup className="mb-3">
                                                                     <Label htmlFor="validationCustom01"> {fieldLabel.CategoryTypeName} </Label>
-                                                                    <Col sm={12}>
+                                                                    <Col sm={12}  style={{height:"2.5cm"}}>
                                                                         <Select
                                                                             name="CategoryTypeName"
                                                                             value={values.CategoryTypeName}
@@ -297,7 +295,9 @@ const CategoryMaster = (props) => {
                                                         <FormGroup>
                                                             <Row>
                                                                 <Col sm={2}>
-                                                                    {SaveButton({ pageMode, userPageAccessState, module: "CategoryMaster" })}
+                                                                    <SaveButton pageMode={pageMode} userAcc={userPageAccessState}
+                                                                        module={"CategoryMaster"}
+                                                                    />
                                                                 </Col>
                                                             </Row>
                                                         </FormGroup >
