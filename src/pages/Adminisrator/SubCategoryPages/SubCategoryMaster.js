@@ -11,7 +11,6 @@ import {
     Label,
     Row,
 } from "reactstrap";
-import { AvField, AvForm, } from "availity-reactstrap-validation";
 import Select from "react-select";
 import { MetaTags } from "react-meta-tags";
 import { useDispatch, useSelector } from "react-redux";
@@ -22,7 +21,6 @@ import {
     updateSubCategoryID
 } from "../../../store/Administrator/SubCategoryRedux/action";
 import { AlertState, BreadcrumbShow, commonPageField } from "../../../store/actions";
-import { CommonGetRoleAccessFunction } from "../../../components/Common/CommonGetRoleAccessFunction";
 import { useHistory } from "react-router-dom";
 import { getCategorylist } from "../../../store/Administrator/CategoryRedux/action";
 import {
@@ -32,10 +30,7 @@ import {
     onChangeSelect,
     onChangeText,
 } from "../../../components/Common/CmponentRelatedCommonFile/validationFunction";
-
-import { SaveButton } from "../../../components/CommonSaveButton";
-
-
+import SaveButton from "../../../components/Common/CommonSaveButton";
 
 const SubCategoryMaster = (props) => {
 
@@ -309,7 +304,9 @@ const SubCategoryMaster = (props) => {
                                                         <FormGroup>
                                                             <Row>
                                                                 <Col sm={2}>
-                                                                    {SaveButton({ pageMode, userPageAccessState, module: "SubCategoryMaster" })}
+                                                                    <SaveButton pageMode={pageMode} userAcc={userPageAccessState}
+                                                                        module={"SubCategoryMaster"}
+                                                                    />
                                                                 </Col>
                                                             </Row>
                                                         </FormGroup >

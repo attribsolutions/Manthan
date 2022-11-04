@@ -24,9 +24,9 @@ import { MetaTags } from "react-meta-tags";
 import { AlertState, commonPageField } from "../../../store/actions";
 import { BreadcrumbShow } from "../../../store/Utilites/Breadcrumb/actions";
 import { useHistory } from "react-router-dom";
-import { SaveButton } from "../../../components/CommonSaveButton";
 import { MODULE_lIST } from "../../../routes/route_url";
 import { comAddPageFieldFunc, formValid, initialFiledFunc, onChangeText } from "../../../components/Common/CmponentRelatedCommonFile/validationFunction";
+import SaveButton from "../../../components/Common/CommonSaveButton";
 
 const Modules = (props) => {
 
@@ -40,7 +40,7 @@ const Modules = (props) => {
     const [userPageAccessState, setUserPageAccessState] = useState('');
 
     //Access redux store Data /  'save_ModuleSuccess' action data
-    const { postMsg, pageField, userAccess,updateMsg } = useSelector((state) => ({
+    const { postMsg, pageField, userAccess, updateMsg } = useSelector((state) => ({
         postMsg: state.Modules.modulesSubmitSuccesss,
         updateMsg: state.Modules.updateMessage,
         userAccess: state.Login.RoleAccessUpdateData,
@@ -55,14 +55,14 @@ const Modules = (props) => {
     {/** Dyanamic Page access state and OnChange function */ }
     const initialFiled = {
         id: "",
-            Name: "",
-            DisplayIndex: "",
-            Icon: "",
-            isActive: false,
-      }
-    
+        Name: "",
+        DisplayIndex: "",
+        Icon: "",
+        isActive: false,
+    }
+
     const [state, setState] = useState(initialFiledFunc(initialFiled))
-   
+
     const values = { ...state.values }
     const { isError } = state;
     const { fieldLabel } = state;
@@ -73,7 +73,7 @@ const Modules = (props) => {
 
     // userAccess useEffect
     useEffect(() => {
-        
+
         let userAcc = null;
         let locationPath = location.pathname;
 
@@ -179,8 +179,8 @@ const Modules = (props) => {
                 })
             );
         }
-    }, [updateMsg, modalCss]); 
-    
+    }, [updateMsg, modalCss]);
+
     useEffect(() => {
 
         if (pageField) {
@@ -216,7 +216,7 @@ const Modules = (props) => {
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
     var IsEditMode_Css = ''
     if ((modalCss) || (pageMode === "dropdownAdd")) { IsEditMode_Css = "-5.5%" };
-    
+
     if (!(userPageAccessState === '')) {
         return (
             <React.Fragment>
@@ -318,7 +318,9 @@ const Modules = (props) => {
                                                     <FormGroup >
                                                         <Row >
                                                             <Col sm={2}>
-                                                                {SaveButton({ pageMode, userPageAccessState, module: "Modules" })}
+                                                                <SaveButton pageMode={pageMode} userAcc={userPageAccessState}
+                                                                    module={"Modules"}
+                                                                />
                                                             </Col>
                                                         </Row>
                                                     </FormGroup >

@@ -27,7 +27,6 @@ import {
     commonPageFieldSuccess
 } from "../../../store/actions";
 import { BreadcrumbShow } from "../../../store/actions";
-import { SaveButton } from "../../../components/CommonSaveButton";
 import {
     comAddPageFieldFunc,
     formValid,
@@ -35,6 +34,7 @@ import {
     onChangeText
 } from "../../../components/Common/CmponentRelatedCommonFile/validationFunction";
 import { EMPLOYEETYPE_lIST } from "../../../routes/route_url";
+import SaveButton from "../../../components/Common/CommonSaveButton";
 
 
 const EmployeeTypesMaster = (props) => {
@@ -301,7 +301,9 @@ const EmployeeTypesMaster = (props) => {
                                                         <FormGroup >
                                                             <Row >
                                                                 <Col sm={2}>
-                                                                    {SaveButton({ pageMode, userPageAccessState, module: "EmployeeTypesMaster" })}
+                                                                    <SaveButton pageMode={pageMode} userAcc={userPageAccessState}
+                                                                        module={"EmployeeTypesMaster"}
+                                                                    />
                                                                 </Col>
                                                             </Row>
                                                         </FormGroup>

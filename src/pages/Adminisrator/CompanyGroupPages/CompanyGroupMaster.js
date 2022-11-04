@@ -33,9 +33,9 @@ import {
     initialFiledFunc,
     onChangeText
 } from "../../../components/Common/CmponentRelatedCommonFile/validationFunction";
-import { SaveButton } from "../../../components/CommonSaveButton";
 import { COMPANYGROUP_lIST } from "../../../routes/route_url";
 import { UPDATE_COMPANYGROUP_TYPE_ID_SUCCESS } from "../../../store/Administrator/CompanyGroupRedux/actionType";
+import SaveButton from "../../../components/Common/CommonSaveButton";
 
 
 const CompanyGroupMaster = (props) => {
@@ -290,7 +290,9 @@ const CompanyGroupMaster = (props) => {
                                                         <FormGroup>
                                                             <Row>
                                                                 <Col sm={2}>
-                                                                    {SaveButton({ pageMode, userPageAccessState, module: "CompanyGroupMaster" })}
+                                                                    <SaveButton pageMode={pageMode} userAcc={userPageAccessState}
+                                                                        module={"CompanyGroupMaster"}
+                                                                    />
                                                                 </Col>
                                                             </Row>
                                                         </FormGroup >
