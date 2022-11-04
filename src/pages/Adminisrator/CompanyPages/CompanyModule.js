@@ -11,10 +11,8 @@ import {
   Input,
 } from "reactstrap";
 import Select from "react-select";
-import { AvForm, AvInput } from "availity-reactstrap-validation";
 import { useDispatch, useSelector } from "react-redux";
 import Breadcrumb from "../../../components/Common/Breadcrumb";
-import AvField from "availity-reactstrap-validation/lib/AvField";
 import {
   editCompanyIDSuccess,
   PostCompanySubmit,
@@ -27,10 +25,8 @@ import { MetaTags } from "react-meta-tags";
 import { AlertState, commonPageField, commonPageFieldSuccess } from "../../../store/actions";
 import { BreadcrumbShow } from "../../../store/Utilites/Breadcrumb/actions";
 import { useHistory } from "react-router-dom";
-import { SaveButton } from "../../../components/CommonSaveButton";
 import {
   comAddPageFieldFunc,
-  formValChange,
   formValid,
   initialFiledFunc,
   onChangeSelect,
@@ -38,6 +34,7 @@ import {
 
 } from "../../../components/Common/CmponentRelatedCommonFile/validationFunction";
 import { COMPANY_lIST } from "../../../routes/route_url";
+import SaveButton from "../../../components/Common/CmponentRelatedCommonFile/SearchBox/CommonSaveButton";
 
 const CompanyModule = (props) => {
 
@@ -55,7 +52,7 @@ const CompanyModule = (props) => {
   const [CompanyGroupselect, setCompanyGroup] = useState("");
 
   //Access redux store Data /  'save_ModuleSuccess' action data
-  const { postMsg,updateMsg, userAccess, pageField } = useSelector((state) => ({
+  const { postMsg, updateMsg, userAccess, pageField } = useSelector((state) => ({
     postMsg: state.Company.postMsg,
     updateMsg: state.Company.updateMessage,
     userAccess: state.Login.RoleAccessUpdateData,
@@ -74,8 +71,8 @@ const CompanyModule = (props) => {
     CompanyGroup: ""
   }
 
-const [state, setState] = useState(initialFiledFunc(initialFiled))
- 
+  const [state, setState] = useState(initialFiledFunc(initialFiled))
+
 
   const values = { ...state.values }
   const { isError } = state;
@@ -126,7 +123,7 @@ const [state, setState] = useState(initialFiledFunc(initialFiled))
       }
 
       if (hasEditVal) {
-        const { id, Name, Address, GSTIN, PhoneNo, CompanyAbbreviation, EmailID, CompanyGroup ,CompanyGroupName} = hasEditVal
+        const { id, Name, Address, GSTIN, PhoneNo, CompanyAbbreviation, EmailID, CompanyGroup, CompanyGroupName } = hasEditVal
         const { values, fieldLabel, hasValid, required, isError } = { ...state }
 
         hasValid.Name.valid = true;
@@ -190,20 +187,20 @@ const [state, setState] = useState(initialFiledFunc(initialFiled))
 
   useEffect(() => {
     if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
-        history.push({
-            pathname: COMPANY_lIST,
-        })
+      history.push({
+        pathname: COMPANY_lIST,
+      })
     } else if (updateMsg.Status === true && !modalCss) {
-        dispatch(updateCompanyIDSuccess({ Status: false }));
-        dispatch(
-            AlertState({
-                Type: 3,
-                Status: true,
-                Message: JSON.stringify(updateMsg.Message),
-            })
-        );
+      dispatch(updateCompanyIDSuccess({ Status: false }));
+      dispatch(
+        AlertState({
+          Type: 3,
+          Status: true,
+          Message: JSON.stringify(updateMsg.Message),
+        })
+      );
     }
-}, [updateMsg, modalCss]);
+  }, [updateMsg, modalCss]);
 
   const { CompanyGroup } = useSelector((state) => ({
     CompanyGroup: state.Company.CompanyGroup
@@ -429,7 +426,7 @@ const [state, setState] = useState(initialFiledFunc(initialFiled))
 
                             <Col md="4">
 
-                              <FormGroup className="mb-3 ">
+                              <FormGroup className="mb-1 ">
                                 <Label htmlFor="validationCustom01"> {fieldLabel.CompanyGroup} </Label>
                                 <Select
                                   name="CompanyGroup"
@@ -449,10 +446,12 @@ const [state, setState] = useState(initialFiledFunc(initialFiled))
                           </Row>
 
 
-                          <FormGroup >
+                          <FormGroup className="mt-1" >
                             <Row >
                               <Col sm={2}>
-                                {SaveButton({ pageMode, userPageAccessState, module: "Company" })}
+                                <SaveButton pageMode={pageMode} userAcc={userPageAccessState}
+                                  module={"Company"}
+                                />
                               </Col>
                             </Row>
                           </FormGroup >
