@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import Select from "react-select";
-import { Card, CardBody, Col, Container, Row, CardHeader, Label, FormGroup, } from "reactstrap";
+import { Card, CardBody, Col, Container, Row, CardHeader, Label, FormGroup, Input, } from "reactstrap";
 import { AvForm, AvInput } from "availity-reactstrap-validation";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -342,6 +342,7 @@ const AddUser = (props) => {
         <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
           <Breadcrumb breadcrumbItem={userPageAccessState.PageHeading} />
           <Container fluid>
+            <div >
             <Row>
               <Col lg={12}>
                 <Card className="text-black" >
@@ -360,7 +361,7 @@ const AddUser = (props) => {
                         <CardBody style={{ backgroundColor: "whitesmoke" }}>
                           <Row >
 
-                            <div>
+                            
                               <FormGroup className="mb-2 col col-sm-4 " >
                                 <Label htmlFor="validationCustom01">Employee</Label>
                                 <Select
@@ -371,27 +372,31 @@ const AddUser = (props) => {
                                   onChange={(e) => { handllerEmployeeID(e) }}
                                 />
                               </FormGroup>
-                            </div>
+                              <Row >
 
-                          </Row>
-                          <Row >
-
-                            <FormGroup className="mb-1 col col-sm-4 " >
+                            <FormGroup
+                             className="mb-1 col col-sm-4 " >
                               <Label htmlFor="validationCustom01">Login Name</Label>
-                              <AvField name="loginName" id="txtName"
+                              <AvField 
+                            
+                              name="loginName" id="txtName"
                                 type="text"
                                 placeholder="Please Enter Name"
                                 defaultvalue=''
                                 value={EditData.LoginName}
-                               disabled={pageMode === "edit" ? true : false}
+                              disabled={pageMode === "edit" ? true : false}
                                 autoComplete='off'
                                 validate={{
                                   required: { value: true, errorMessage: 'Please Enter Name' },
                                 }}
                                 onChange={(e) => { dispatch(BreadcrumbShow(e.target.value)) }}
-                              />
+                               /> 
                             </FormGroup>
+                            </Row>
+                            
+
                           </Row>
+                         
 
 
                           {pageMode === "save" ?
@@ -598,6 +603,8 @@ const AddUser = (props) => {
                                       )
                                   }
                                 </div>
+                                
+
                               </Col>
                             </Row>
                             {/* </FormGroup > */}
@@ -614,6 +621,7 @@ const AddUser = (props) => {
                 </Card>
               </Col>
             </Row>
+            </div>
           </Container >
         </div >
       </React.Fragment >

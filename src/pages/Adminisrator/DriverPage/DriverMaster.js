@@ -103,8 +103,6 @@ const DriverMaster = (props) => {
     // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
     useEffect(() => {
 
-        if (!(userPageAccessState === '')) { document.getElementById("txtName").focus(); }
-        // if (!(userPageAccessState === '')) { document.getElementById("txtName").focus(); }
         if ((hasShowloction || hasShowModal)) {
 
             let hasEditVal = null
@@ -269,6 +267,7 @@ const DriverMaster = (props) => {
                                                                 name="Name"
                                                                 type="text"
                                                                 value={values.Name}
+                                                                autoFocus={true}
                                                                 className={isError.Name.length > 0 ? "is-invalid form-control" : "form-control"}
                                                                 placeholder="Please Enter Name"
                                                                 onChange={(event) => {
@@ -369,7 +368,7 @@ const DriverMaster = (props) => {
                                                             </FormGroup>
 
                                                         </Row>
-                                                        <FormGroup>
+                                                        <FormGroup className="mt-2">
                                                             <Row>
                                                                 <Col sm={2}>
                                                                     <SaveButton pageMode={pageMode} userAcc={userPageAccessState}

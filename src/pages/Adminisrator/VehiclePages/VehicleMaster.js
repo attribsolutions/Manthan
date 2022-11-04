@@ -387,7 +387,7 @@ const VehicleMaster = (props) => {
                                                         </Col>
 
 
-                                                        <Col md="1">  </Col>
+                                                        <Col md="1"className="mx-n1">  </Col>
                                                         <Col md="3">
                                                             <FormGroup className="mb-3">
                                                                 <Label htmlFor="validationCustom01"> {fieldLabel.VehicleType}</Label>
@@ -412,7 +412,7 @@ const VehicleMaster = (props) => {
 
                                                         <Row>
                                                             <Col md="4">
-                                                                <FormGroup className="mb-2 col col-sm-8 ">
+                                                                <FormGroup className="mb-2 col col-sm-9 ">
                                                                     <Label htmlFor="validationCustom01">{fieldLabel.VehicleNumber} </Label>
                                                                     <Input
                                                                         name="VehicleNumber"

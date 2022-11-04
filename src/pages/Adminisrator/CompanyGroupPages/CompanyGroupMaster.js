@@ -105,8 +105,6 @@ const CompanyGroupMaster = (props) => {
     // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
     useEffect(() => {
 
-
-        // if (!(userPageAccessState === '')) { document.getElementById("txtName").focus(); }
         if ((hasShowloction || hasShowModal)) {
 
             let hasEditVal = null
@@ -259,6 +257,7 @@ const CompanyGroupMaster = (props) => {
                                                                 value={values.Name}
                                                                 placeholder="Please Enter Name"
                                                                 autoComplete='off'
+                                                                autoFocus={true}
                                                                 onChange={(event) => {
                                                                     onChangeText({ event, state, setState })
                                                                     dispatch(BreadcrumbShow(event.target.value))

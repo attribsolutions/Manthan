@@ -217,7 +217,7 @@ const GroupMaster = (props) => {
 
 
     useEffect(() => {
-
+       debugger
         if (pageField) {
             const fieldArr = pageField.PageFieldMaster
             comAddPageFieldFunc({ state, setState, fieldArr })// new change
@@ -310,6 +310,7 @@ const GroupMaster = (props) => {
                                                                         className={isError.Name.length > 0 ? "is-invalid form-control" : "form-control"}
                                                                         placeholder="Please Enter Name"
                                                                         autoComplete='off'
+                                                                        autoFocus={true}
                                                                         onChange={(event) => {
                                                                             onChangeText({ event, state, setState })
                                                                             dispatch(BreadcrumbShow(event.target.value))
@@ -327,7 +328,7 @@ const GroupMaster = (props) => {
 
 
                                                         <Row>
-                                                            <FormGroup className="mb-2 col col-sm-4 ">
+                                                            <FormGroup className="mb-2 col col-sm-4">
 
                                                                 <Label htmlFor="validationCustom01"> {fieldLabel.GroupType} </Label>
 
@@ -347,26 +348,7 @@ const GroupMaster = (props) => {
                                                                 )}
 
 
-                                                                <Label htmlFor="validationCustom01"> {fieldLabel.GroupType} </Label>
-
-                                                                <Col sm={12}>
-
-                                                                    <Select
-                                                                        name="GroupType"
-                                                                        // defaultValue={EmployeeType_DropdownOptions[0]}
-                                                                        value={values.GroupType}
-                                                                        isSearchable={false}
-                                                                        className="react-dropdown"
-                                                                        options={GroupTypesValues}
-                                                                        onChange={(hasSelect, evn) => onChangeSelect({ hasSelect, evn, state, setState, })}
-                                                                        classNamePrefix="dropdown"
-
-                                                                    />
-                                                                    {isError.GroupType.length > 0 && (
-                                                                        <span className="text-danger f-8"><small >{isError.GroupType}</small></span>
-                                                                    )}
-                                                                </Col>
-
+                                                               
                                                             </FormGroup>
 
                                                         </Row>

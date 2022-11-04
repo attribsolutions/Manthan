@@ -55,7 +55,7 @@ const RoleList = (props) => {
             reducers={reducers}
             MasterModal={RoleMaster}
             masterPath={ROLE}
-            ButtonMsgLable={"Name"}
+            ButtonMsgLable={"Role"}
             deleteName={"Name"}
           />
           : null

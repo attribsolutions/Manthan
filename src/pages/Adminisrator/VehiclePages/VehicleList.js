@@ -55,7 +55,7 @@ const VehicleList = (props) => {
             reducers={reducers}
             MasterModal={VehicleMaster}
             masterPath={VEHICLE}
-            ButtonMsgLable={"VehicleNumber"}
+            ButtonMsgLable={"Vehicle"}
             deleteName={"VehicleNumber"}
 
           />

@@ -7,7 +7,7 @@ import {
 } from "../../../store/actions";
 import { GROUP } from "../../../routes/route_url";
 import GroupMaster from "./GroupMaster";
-import { deleteGrouplistSuccess, delete_GroupList_ID, editGroupID, getGroupList, postGroupList, postGroupSuccess, PostMethod_GroupSuccess, updategroupIDSuccess } from "../../../store/Administrator/GroupRedux/action";
+import { deleteGrouplistSuccess, delete_GroupList_ID, editGroupID, getGroupList, postGroupSuccess, updategroupIDSuccess } from "../../../store/Administrator/GroupRedux/action";
 
 const GroupList = (props) => {
   const dispatch = useDispatch();
@@ -52,7 +52,7 @@ const GroupList = (props) => {
             reducers={reducers}
             MasterModal={GroupMaster}
             masterPath={GROUP}
-            ButtonMsgLable={"Name"}
+            ButtonMsgLable={"Group"}
             deleteName={"Name"}
           
           />
