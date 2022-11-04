@@ -56,7 +56,7 @@ debugger
             reducers={reducers}
             MasterModal={CompanyGroupMaster}
             masterPath={COMPANYGROUP}
-            ButtonMsgLable={"CompanyGroup"}
+            ButtonMsgLable={"Company Group"}
             deleteName={"Name"}
           />
           : null

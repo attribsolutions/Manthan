@@ -11,10 +11,8 @@ import {
     Label,
     Row
 } from "reactstrap";
-import { AvField, AvForm, } from "availity-reactstrap-validation";
-import Select from "react-select";
 import { MetaTags } from "react-meta-tags";
-import { BreadcrumbShow, commonPageFieldListSuccess, commonPageFieldSuccess } from "../../../store/actions";
+import { BreadcrumbShow, commonPageFieldSuccess } from "../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
 import { AlertState, commonPageField } from "../../../store/actions";
 import { useHistory } from "react-router-dom";
@@ -32,17 +30,13 @@ import {
     updateGroupTypeID,
     updateGroupTypeIDSuccess
 } from "../../../store/Administrator/GroupTypeRedux/action";
-import {GROUPTYPE_lIST } from "../../../routes/route_url";
+import { GROUPTYPE_lIST } from "../../../routes/route_url";
 import SaveButton from "../../../components/Common/CommonSaveButton";
 
 const GroupTypeMaster = (props) => {
 
     const dispatch = useDispatch();
     const history = useHistory()
-
-    let editDataGetingFromList = props.state;
-    let pageModeProps = props.pageMode;
-    console.log("editDataGetingFromList", editDataGetingFromList)
 
     const formRef = useRef(null);
     const [EditData, setEditData] = useState({});
@@ -51,12 +45,13 @@ const GroupTypeMaster = (props) => {
     const [userPageAccessState, setUserPageAccessState] = useState('');
 
     const initialFiled = {
-        id:"",
+        id: "",
         Name: "",
-      }
-    
+        IsReserved: ""
+    }
+
     const [state, setState] = useState(initialFiledFunc(initialFiled))
-   
+
     //Access redux store Data /  'save_ModuleSuccess' action data
     const {
         postMsg,
@@ -115,13 +110,15 @@ const GroupTypeMaster = (props) => {
 
             if (hasEditVal) {
                 setEditData(hasEditVal);
-                const {id, Name } = hasEditVal
+                const { id, Name, IsReserved } = hasEditVal
                 const { values, fieldLabel, hasValid, required, isError } = { ...state }
 
                 hasValid.Name.valid = true;
-                
+                hasValid.IsReserved.valid = true;
+
                 values.id = id
                 values.Name = Name;
+                values.IsReserved = IsReserved;
                 setState({ values, fieldLabel, hasValid, required, isError })
                 dispatch(editGroupTypeIdSuccess({ Status: false }))
                 dispatch(BreadcrumbShow(hasEditVal.GroupTypeMaster))
@@ -196,6 +193,7 @@ const GroupTypeMaster = (props) => {
             debugger
             const jsonBody = JSON.stringify({
                 Name: values.Name,
+                IsReserved: values.IsReserved,
                 CreatedBy: 1,
                 CreatedOn: "0002-10-03T12:48:14.910491",
                 UpdatedBy: 1,
@@ -206,10 +204,8 @@ const GroupTypeMaster = (props) => {
             if (pageMode === 'edit') {
                 dispatch(updateGroupTypeID(jsonBody, EditData.id));
             }
-
             else {
                 dispatch(PostGroupTypeSubmit(jsonBody));
-                console.log("jsonBody", jsonBody)
             }
         }
     };
@@ -263,6 +259,24 @@ const GroupTypeMaster = (props) => {
                                                             )}
                                                         </FormGroup>
 
+                                                        <Row>
+                                                            <FormGroup className="mb-2 col col-sm-3">
+                                                                <Row className="justify-content-md-left">
+                                                                    <Label className="col-sm-4 col-form-label" >{fieldLabel.IsReserved}</Label>
+                                                                    <Col md={2} style={{ marginTop: '9px' }} >
+
+                                                                        <div className="form-check form-switch form-switch-md mb-3" >
+                                                                            <Input type="checkbox" className="form-check-input"
+                                                                                checked={values.IsReserved}
+                                                                                name="IsReserved"
+                                                                                onChange={(event) => onChangeText({ event, state, setState })}
+                                                                            />
+                                                                        </div>
+                                                                    </Col>
+                                                                </Row>
+                                                            </FormGroup>
+                                                        </Row>
+
                                                         <FormGroup>
                                                             <Row>
                                                                 <Col sm={2}>
@@ -272,8 +286,8 @@ const GroupTypeMaster = (props) => {
                                                                 </Col>
                                                             </Row>
                                                         </FormGroup >
-                                                 
-                                                   </Row>
+
+                                                    </Row>
 
                                                 </CardBody>
                                             </Card>

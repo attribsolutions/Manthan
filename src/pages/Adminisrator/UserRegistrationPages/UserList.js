@@ -57,7 +57,7 @@ const UserList = () => {
                         reducers={reducers}
                         MasterModal={AddUser}
                         masterPath={USER}
-                        ButtonMsgLable={"LoginName"}
+                        ButtonMsgLable={"User"}
                         deleteName={"LoginName"}
                     />
                     : null
