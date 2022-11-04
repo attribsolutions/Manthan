@@ -11,9 +11,8 @@ import {
     Label,
     Row
 } from "reactstrap";
-import { SaveButton } from "../../../components/CommonSaveButton";
 import { MetaTags } from "react-meta-tags";
-import { BreadcrumbShow, commonPageFieldListSuccess, commonPageFieldSuccess } from "../../../store/actions";
+import { BreadcrumbShow, commonPageFieldSuccess } from "../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
 import { AlertState, commonPageField } from "../../../store/actions";
 import { useHistory } from "react-router-dom";
@@ -32,15 +31,12 @@ import {
     updateGroupTypeIDSuccess
 } from "../../../store/Administrator/GroupTypeRedux/action";
 import { GROUPTYPE_lIST } from "../../../routes/route_url";
+import SaveButton from "../../../components/Common/CmponentRelatedCommonFile/SearchBox/CommonSaveButton";
 
 const GroupTypeMaster = (props) => {
 
     const dispatch = useDispatch();
     const history = useHistory()
-
-    let editDataGetingFromList = props.state;
-    let pageModeProps = props.pageMode;
-    console.log("editDataGetingFromList", editDataGetingFromList)
 
     const formRef = useRef(null);
     const [EditData, setEditData] = useState({});
@@ -51,7 +47,7 @@ const GroupTypeMaster = (props) => {
     const initialFiled = {
         id: "",
         Name: "",
-        IsReserved:""
+        IsReserved: ""
     }
 
     const [state, setState] = useState(initialFiledFunc(initialFiled))
@@ -114,15 +110,15 @@ const GroupTypeMaster = (props) => {
 
             if (hasEditVal) {
                 setEditData(hasEditVal);
-                const { id, Name ,IsReserved} = hasEditVal
+                const { id, Name, IsReserved } = hasEditVal
                 const { values, fieldLabel, hasValid, required, isError } = { ...state }
 
                 hasValid.Name.valid = true;
-                hasValid.IsReserved.valid=true;
+                hasValid.IsReserved.valid = true;
 
                 values.id = id
                 values.Name = Name;
-                values.IsReserved=IsReserved;
+                values.IsReserved = IsReserved;
                 setState({ values, fieldLabel, hasValid, required, isError })
                 dispatch(editGroupTypeIdSuccess({ Status: false }))
                 dispatch(BreadcrumbShow(hasEditVal.GroupTypeMaster))
@@ -197,7 +193,7 @@ const GroupTypeMaster = (props) => {
             debugger
             const jsonBody = JSON.stringify({
                 Name: values.Name,
-                IsReserved:values.IsReserved,
+                IsReserved: values.IsReserved,
                 CreatedBy: 1,
                 CreatedOn: "0002-10-03T12:48:14.910491",
                 UpdatedBy: 1,
@@ -282,15 +278,17 @@ const GroupTypeMaster = (props) => {
                                                                     </Col>
                                                                 </Row>
                                                             </FormGroup>
-                                                            </Row>
-                                                            <FormGroup className="mt-2">
-                                                                <Row>
-                                                                    <Col sm={2}>
-                                                                        {SaveButton({ pageMode, userPageAccessState, module: "GroupTypeMaster" })}
-                                                                    </Col>
-                                                                </Row>
-                                                            </FormGroup >
                                                         </Row>
+                                                        <FormGroup className="">
+                                                            <Row>
+                                                                <Col sm={2}>
+                                                                    <SaveButton pageMode={pageMode} userAcc={userPageAccessState}
+                                                                        module={"GroupTypeMaster"}
+                                                                    />
+                                                                </Col>
+                                                            </Row>
+                                                        </FormGroup >
+                                                    </Row>
 
                                                 </CardBody>
                                             </Card>
