@@ -27,7 +27,6 @@ import {
     commonPageFieldSuccess
 } from "../../../store/actions";
 import { BreadcrumbShow } from "../../../store/actions";
-import { SaveButton } from "../../../components/CommonSaveButton";
 import {
     comAddPageFieldFunc,
     formValid,
@@ -35,13 +34,13 @@ import {
     onChangeText
 } from "../../../components/Common/CmponentRelatedCommonFile/validationFunction";
 import { EMPLOYEETYPE_lIST } from "../../../routes/route_url";
-
+import SaveButton from "../../../components/Common/CmponentRelatedCommonFile/SearchBox/CommonSaveButton";
 
 const EmployeeTypesMaster = (props) => {
 
     const formRef = useRef(null);
     const dispatch = useDispatch();
-    const history  = useHistory()
+    const history = useHistory()
 
     const [pageMode, setPageMode] = useState();
     const [userPageAccessState, setUserPageAccessState] = useState('');
@@ -52,13 +51,11 @@ const EmployeeTypesMaster = (props) => {
         Name: "",
         IsPartyConnection: false,
         IsSCM: false
-      }
-    
+    }
     const [state, setState] = useState(initialFiledFunc(initialFiled))
-  
 
     //Access redux store Data /  'save_ModuleSuccess' action data
-    const { postMsg, updateMsg ,pageField, userAccess, } = useSelector((state) => ({
+    const { postMsg, updateMsg, pageField, userAccess, } = useSelector((state) => ({
         postMsg: state.EmployeeTypeReducer.PostEmployeeType,
         updateMsg: state.EmployeeTypeReducer.updateMessage,
         userAccess: state.Login.RoleAccessUpdateData,
@@ -69,12 +66,10 @@ const EmployeeTypesMaster = (props) => {
     const hasShowloction = location.hasOwnProperty("editValue")
     const hasShowModal = props.hasOwnProperty("editValue")
 
-
     useEffect(() => {
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(115))
     }, []);
-
 
     // userAccess useEffect
     useEffect(() => {
@@ -97,7 +92,6 @@ const EmployeeTypesMaster = (props) => {
 
 
     useEffect(() => {
-
 
         // if (!(userPageAccessState === '')) { document.getElementById("txtName").focus(); }
         if ((hasShowloction || hasShowModal)) {
@@ -189,11 +183,9 @@ const EmployeeTypesMaster = (props) => {
         }
     }, [pageField])
 
-
     const values = { ...state.values }
     const { isError } = state;
     const { fieldLabel } = state;
-
 
     const formSubmitHandler = (event) => {
         event.preventDefault();
@@ -271,7 +263,7 @@ const EmployeeTypesMaster = (props) => {
                                                                     <Col md={2} style={{ marginTop: '9px' }}>
                                                                         <div className="form-check form-switch form-switch-md mb-3" >
                                                                             <Input type="checkbox" className="form-check-input"
-                                                                                 checked={values.IsPartyConnection}
+                                                                                checked={values.IsPartyConnection}
                                                                                 name="IsPartyConnection"
                                                                                 onChange={(event) => onChangeText({ event, state, setState })}
                                                                             />
@@ -286,9 +278,9 @@ const EmployeeTypesMaster = (props) => {
                                                                 <Row className="justify-content-md-left">
                                                                     <Label htmlFor="horizontal-firstname-input" className="col-sm-5 col-form-label" >{fieldLabel.IsSCM} </Label>
                                                                     <Col md={2} style={{ marginTop: '9px' }} >
-                                                                    <div className="form-check form-switch form-switch-md mb-3" >
+                                                                        <div className="form-check form-switch form-switch-md mb-3" >
                                                                             <Input type="checkbox" className="form-check-input"
-                                                                                 checked={values.IsSCM}
+                                                                                checked={values.IsSCM}
                                                                                 name="IsSCM"
                                                                                 onChange={(event) => onChangeText({ event, state, setState })}
                                                                             />
@@ -301,7 +293,9 @@ const EmployeeTypesMaster = (props) => {
                                                         <FormGroup >
                                                             <Row >
                                                                 <Col sm={2}>
-                                                                    {SaveButton({ pageMode, userPageAccessState, module: "EmployeeTypesMaster" })}
+                                                                    <SaveButton pageMode={pageMode} userAcc={userPageAccessState}
+                                                                        module={"EmployeeTypesMaster"}
+                                                                    />
                                                                 </Col>
                                                             </Row>
                                                         </FormGroup>
