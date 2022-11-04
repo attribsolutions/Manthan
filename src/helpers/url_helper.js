@@ -158,3 +158,6 @@ export const DELETE_API_FOR_LIST_GST_PAGE = '/DeleteGstHsnCodeOnList' // for del
 //PartySubParty
 export const PARTY_SUB_PARTY = '/PartySubParty' // FOR POST
 
+//PartyItems
+export const POST_PARTYITEMS = '/PartyItemList' // FOR POST
+export const SUPPLIERS = "/GetSupplier"

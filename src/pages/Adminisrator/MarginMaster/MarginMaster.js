@@ -435,7 +435,7 @@ const MarginMaster = (props) => {
                                                     <Col md="3">
                                                         <FormGroup className="mb-3 row ">
                                                             <Label className="col-sm-3 p-2 ml-n4 ">Party Name</Label>
-                                                            <Col md="9">
+                                                            <Col md="9"  style={{height:"3.5cm"}}>
                                                                 <Select
                                                                     value={partyName_dropdown_Select}
                                                                     options={PartyTypeDropdown_Options}

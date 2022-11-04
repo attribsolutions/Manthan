@@ -44,6 +44,7 @@ import GroupTypeReducer from "./Administrator/GroupTypeRedux/reducer"
 import  GroupReducer from "./Administrator/GroupRedux/reducer"
 import GSTReducer from "./Administrator/GSTRedux/reducer"
 import PartySubPartyReducer from "./Administrator/PartySubPartyRedux/reducer"
+import PartyItemsReducer from "./Administrator/PartyItemsRedux/reducer"
 
  
 
@@ -102,6 +103,7 @@ const rootReducer = combineReducers({
   TermsAndCondtionsReducer,
   GroupTypeReducer,
   GSTReducer,
+  PartyItemsReducer,
 
 
 })

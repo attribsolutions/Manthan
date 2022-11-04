@@ -22,7 +22,7 @@ export const getGroupListSuccess = (pages) => ({
 });
 
 // Post 
-export const PostMethod_GroupList_Success = (data) => ({
+export const postGroupSuccess = (data) => ({
   type: POST_GROUPLIST_SUCCESS,
   payload: data,
 });

@@ -270,10 +270,10 @@ const CategoryMaster = (props) => {
                                                         </FormGroup>
 
                                                         <Row>
-                                                            <Col md="4">
+                                                            <Col md="4" >
                                                                 <FormGroup className="mb-3">
                                                                     <Label htmlFor="validationCustom01"> {fieldLabel.CategoryTypeName} </Label>
-                                                                    <Col sm={12}>
+                                                                    <Col sm={12}  style={{height:"2.5cm"}}>
                                                                         <Select
                                                                             name="CategoryTypeName"
                                                                             value={values.CategoryTypeName}
