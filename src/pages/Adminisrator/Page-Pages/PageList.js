@@ -18,7 +18,6 @@ import { PAGE } from "../../../routes/route_url";
 export default function PageList() {
 
   const dispatch = useDispatch();
-
   const reducers = useSelector(
     (state) => ({
       tableList: state.H_Pages.HPagesListData,
@@ -48,7 +47,7 @@ export default function PageList() {
   }, []);
 
   const { pageField } = reducers;
-
+debugger
   return (
     <React.Fragment>
       {

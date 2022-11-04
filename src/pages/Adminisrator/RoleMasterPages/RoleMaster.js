@@ -280,7 +280,7 @@ const RoleMaster = (props) => {
                           <Row>
 
                             <FormGroup className="mb-2 col col-sm-4 " >
-                              <Label htmlFor="validationCustom01">{fieldLabel.Name} </Label>
+                              <Label>{fieldLabel.Name} </Label>
                               <Input
                                 name="Name"
                                 id="txtName"
@@ -300,10 +300,10 @@ const RoleMaster = (props) => {
                             </FormGroup>
 
 
-                            <Col md="1"> </Col>
+                            <Col md={1} className="mx-n1"> </Col>
+                                  
+                              <FormGroup className="mb-2 col col-sm-4 ">
 
-                            <div className="col-lg-4 col-md-6">
-                              <div className="mb-3">
                                 <Label htmlFor="validationCustom01">{fieldLabel.RoleEmployeeTypes} </Label>
                                 <Select
                                   name="RoleEmployeeTypes"
@@ -311,7 +311,6 @@ const RoleMaster = (props) => {
                                   value={values.RoleEmployeeTypes}
                                   isSearchable={false}
                                   isMulti={true}
-                                  className="react-dropdown"
                                   options={EmployeeType_DropdownOptions}
                                   onChange={(hasSelect, evn) => onChangeSelect({ hasSelect, evn, state, setState, })}
                                   classNamePrefix="dropdown"
@@ -320,8 +319,10 @@ const RoleMaster = (props) => {
                                 {isError.RoleEmployeeTypes.length > 0 && (
                                   <span className="text-danger f-8"><small>{isError.RoleEmployeeTypes}</small></span>
                                 )}
-                              </div>
-                            </div>
+                              </FormGroup>
+                            
+
+                            
 
                             <Row>
                               <FormGroup className="mb-2 col col-sm-4 ">
@@ -340,6 +341,9 @@ const RoleMaster = (props) => {
                               </FormGroup>
 
                               <Col md="1">  </Col>
+                              {/* <Row md="1"></Row> */}
+                              
+
                               <FormGroup className="mb-2 col col-sm-4 ">
                                 <Label htmlFor="validationCustom01">{fieldLabel.Dashboard} </Label>
                                 <Input
@@ -354,6 +358,8 @@ const RoleMaster = (props) => {
                                   <span className="invalid-feedback">{isError.Dashboard}</span>
                                 )}
                               </FormGroup>
+                            
+
                             </Row>
 
                             <Row>

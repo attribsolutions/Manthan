@@ -14,7 +14,6 @@ import { commonPageFieldList, commonPageFieldListSuccess } from "../../../store/
 import { COMPANY } from "../../../routes/route_url";
 
 const CompanyList = () => {
-
     const dispatch = useDispatch();
     const reducers = useSelector(
         (state) => ({
@@ -47,7 +46,7 @@ const CompanyList = () => {
     }, []);
 
     const { pageField } = reducers;
-
+debugger
     return (
         <React.Fragment>
             {
