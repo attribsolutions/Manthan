@@ -20,7 +20,6 @@ import Flatpickr from "react-flatpickr"
 import { BreadcrumbShow } from "../../../store/Utilites/Breadcrumb/actions";
 import { MetaTags } from "react-meta-tags";
 import { useHistory } from "react-router-dom";
-import { SaveButton } from "../../../components/CommonSaveButton";
 import { EMPLOYEE_lIST } from "../../../routes/route_url";
 import {
   comAddPageFieldFunc,
@@ -31,6 +30,7 @@ import {
   onChangeText,
 
 } from "../../../components/Common/CmponentRelatedCommonFile/validationFunction";
+import SaveButton from "../../../components/Common/CommonSaveButton";
 
 const AddEmployee = (props) => {
 
@@ -76,26 +76,26 @@ const AddEmployee = (props) => {
 
     }));
 
-    const initialFiled = {
-      id: "",
-      Name: "",
-      Address: "",
-      Mobile: "",
-      email: "",
-      DOB: "",
-      PAN: "",
-      AadharNo: "",
-      working_hours: "",
-      CompanyName: "",
-      DesignationName: "",
-      EmployeeTypeName: "",
-      StateName: "",
-      DistrictName: "",
-      EmployeeParties: ""
-    }
-  
+  const initialFiled = {
+    id: "",
+    Name: "",
+    Address: "",
+    Mobile: "",
+    email: "",
+    DOB: "",
+    PAN: "",
+    AadharNo: "",
+    working_hours: "",
+    CompanyName: "",
+    DesignationName: "",
+    EmployeeTypeName: "",
+    StateName: "",
+    DistrictName: "",
+    EmployeeParties: ""
+  }
+
   const [state, setState] = useState(initialFiledFunc(initialFiled))
- 
+
   const values = { ...state.values }
   const { isError } = state;
   const { fieldLabel } = state;
@@ -255,20 +255,20 @@ const AddEmployee = (props) => {
 
   useEffect(() => {
     if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
-        history.push({
-            pathname: EMPLOYEE_lIST,
-        })
+      history.push({
+        pathname: EMPLOYEE_lIST,
+      })
     } else if (updateMsg.Status === true && !modalCss) {
-        dispatch(updateEmployeeIDSuccess({ Status: false }));
-        dispatch(
-            AlertState({
-                Type: 3,
-                Status: true,
-                Message: JSON.stringify(updateMsg.Message),
-            })
-        );
+      dispatch(updateEmployeeIDSuccess({ Status: false }));
+      dispatch(
+        AlertState({
+          Type: 3,
+          Status: true,
+          Message: JSON.stringify(updateMsg.Message),
+        })
+      );
     }
-}, [updateMsg, modalCss]);
+  }, [updateMsg, modalCss]);
 
   useEffect(() => {
 
@@ -565,11 +565,11 @@ const AddEmployee = (props) => {
                               className="react-dropdown"
                               classNamePrefix="dropdown"
                               options={State_DropdownOptions}
-                              onChange={(hasSelect, evn) =>{
-                                 onChangeSelect({ hasSelect, evn, state, setState, })
-                                 State_Dropdown_Handler(hasSelect)
-                                }}
-                             
+                              onChange={(hasSelect, evn) => {
+                                onChangeSelect({ hasSelect, evn, state, setState, })
+                                State_Dropdown_Handler(hasSelect)
+                              }}
+
                             />
                             {isError.StateName.length > 0 && (
                               <span className="text-danger f-8"><small>{isError.StateName}</small></span>
@@ -588,11 +588,11 @@ const AddEmployee = (props) => {
                               className="react-dropdown"
                               classNamePrefix="dropdown"
                               options={District_DropdownOptions}
-                              onChange={(hasSelect, evn) =>{
+                              onChange={(hasSelect, evn) => {
                                 onChangeSelect({ hasSelect, evn, state, setState, })
                                 District_Dropdown_Handler(hasSelect)
-                               }}
-                            
+                              }}
+
                             />
                             {isError.DistrictName.length > 0 && (
                               <span className="text-danger f-8"><small>{isError.DistrictName}</small></span>
@@ -617,8 +617,8 @@ const AddEmployee = (props) => {
                               className="react-dropdown"
                               classNamePrefix="dropdown"
                               options={EmployeeType_DropdownOptions}
-                              onChange={(hasSelect,evn) => {
-                                onChangeSelect({hasSelect,evn, state, setState });
+                              onChange={(hasSelect, evn) => {
+                                onChangeSelect({ hasSelect, evn, state, setState });
                                 EmployeeType_Dropdown_Handler(hasSelect)
                               }
                               }
@@ -640,8 +640,8 @@ const AddEmployee = (props) => {
                               className="react-dropdown"
                               classNamePrefix="dropdown"
                               options={Company_DropdownOptions}
-                              onChange={(hasSelect,evn) => {
-                                onChangeSelect({hasSelect,evn, state, setState });
+                              onChange={(hasSelect, evn) => {
+                                onChangeSelect({ hasSelect, evn, state, setState });
                                 Company_Dropdown_Handler(hasSelect)
                               }
                               }
@@ -666,8 +666,8 @@ const AddEmployee = (props) => {
                                 isMulti={true}
                                 className="react-dropdown"
                                 options={Party_DropdownOptions}
-                                onChange={(hasSelect,evn) => {
-                                  onChangeSelect({ hasSelect,evn, state, setState });
+                                onChange={(hasSelect, evn) => {
+                                  onChangeSelect({ hasSelect, evn, state, setState });
                                   Party_Dropdown_Handler(hasSelect)
                                 }
                                 }
@@ -692,7 +692,7 @@ const AddEmployee = (props) => {
                               className="react-dropdown"
                               classNamePrefix="dropdown"
                               options={Designation_DropdownOptions}
-                              onChange={(hasSelect,evn) => onChangeSelect({ hasSelect,evn, state, setState })}
+                              onChange={(hasSelect, evn) => onChangeSelect({ hasSelect, evn, state, setState })}
                             />
                             {isError.DesignationName.length > 0 && (
                               <span className="text-danger f-8"><small>{isError.DesignationName}</small></span>
@@ -726,7 +726,9 @@ const AddEmployee = (props) => {
                       <FormGroup className="mt-3">
                         <Row>
                           <Col sm={2}>
-                            {SaveButton({ pageMode, userPageAccessState, module: "EmployeeMaster" })}
+                            <SaveButton pageMode={pageMode} userAcc={userPageAccessState}
+                              module={"EmployeeMaster"}
+                            />
                           </Col>
                         </Row>
                       </FormGroup >

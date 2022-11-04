@@ -11,10 +11,20 @@ import {
     Label,
     Row,
 } from "reactstrap";
-
 import Select from "react-select";
 import { MetaTags } from "react-meta-tags";
-import { BreadcrumbShow, commonPageField, commonPageFieldSuccess, editGroupIDSuccess, getGroupList, getGroupListSuccess, postGroupList, postGroupSuccess, PostMethod_GroupList_Success, PostMethod_GroupSuccess, updateGroupID, updategroupIDSuccess } from "../../../store/actions";
+import {
+    BreadcrumbShow,
+    commonPageField,
+    commonPageFieldSuccess,
+    editGroupIDSuccess,
+    getGroupList,
+    getGroupListSuccess,
+    postGroupList,
+    postGroupSuccess,
+    updateGroupID,
+    updategroupIDSuccess
+} from "../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
 import { AlertState } from "../../../store/actions";
 import { useHistory } from "react-router-dom";
@@ -28,8 +38,7 @@ import {
 } from "../../../components/Common/CmponentRelatedCommonFile/validationFunction";
 import { getGroupTypeslist } from "../../../store/Administrator/GroupTypeRedux/action";
 import { GROUP_lIST } from "../../../routes/route_url";
-import SaveButton from "../../../components/Common/CmponentRelatedCommonFile/SearchBox/CommonSaveButton";
-
+import SaveButton from "../../../components/Common/CommonSaveButton";
 
 const GroupMaster = (props) => {
 
@@ -143,8 +152,8 @@ const GroupMaster = (props) => {
                 values.Name = Name;
                 values.GroupType = GroupType;
                 // values.GroupTypeName =GroupTypeName
-                values.GroupType = { label: GroupTypeName, value: GroupType};
-               
+                values.GroupType = { label: GroupTypeName, value: GroupType };
+
                 setState({ values, fieldLabel, hasValid, required, isError })
                 dispatch(BreadcrumbShow(hasEditVal.Name))
 
@@ -246,9 +255,9 @@ const GroupMaster = (props) => {
 
             if (pageMode === "edit") {
 
-                dispatch(updateGroupID(jsonBody,values.id));
+                dispatch(updateGroupID(jsonBody, values.id));
 
-           
+
             }
             else {
                 dispatch(postGroupList(jsonBody));
@@ -283,7 +292,7 @@ const GroupMaster = (props) => {
                             <CardBody className=" vh-10 0 text-black" style={{ backgroundColor: "#whitesmoke" }} >
                                 <form onSubmit={formSubmitHandler} ref={formRef} noValidate>
                                     <Row className="">
-                                        <Col md={12} style={{height:"9cm"}}>
+                                        <Col md={12} style={{ height: "9cm" }}>
                                             <Card>
                                                 <CardBody style={{ backgroundColor: "whitesmoke" }}>
                                                     <Row>
@@ -338,11 +347,11 @@ const GroupMaster = (props) => {
                                                                 )}
 
 
-                                                            <Label htmlFor="validationCustom01"> {fieldLabel.GroupType} </Label>
-                                                                 
-                                                             <Col sm={12}>
-                                                                    
-                                                                <Select
+                                                                <Label htmlFor="validationCustom01"> {fieldLabel.GroupType} </Label>
+
+                                                                <Col sm={12}>
+
+                                                                    <Select
                                                                         name="GroupType"
                                                                         // defaultValue={EmployeeType_DropdownOptions[0]}
                                                                         value={values.GroupType}
@@ -351,12 +360,12 @@ const GroupMaster = (props) => {
                                                                         options={GroupTypesValues}
                                                                         onChange={(hasSelect, evn) => onChangeSelect({ hasSelect, evn, state, setState, })}
                                                                         classNamePrefix="dropdown"
-                                                                    
+
                                                                     />
                                                                     {isError.GroupType.length > 0 && (
                                                                         <span className="text-danger f-8"><small >{isError.GroupType}</small></span>
                                                                     )}
-                                                                  </Col>
+                                                                </Col>
 
                                                             </FormGroup>
 

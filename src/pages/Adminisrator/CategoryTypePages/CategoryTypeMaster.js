@@ -32,8 +32,8 @@ import {
     initialFiledFunc,
     onChangeText
 } from "../../../components/Common/CmponentRelatedCommonFile/validationFunction";
-import { SaveButton } from "../../../components/CommonSaveButton";
 import { CATEGORYTYPE_lIST } from "../../../routes/route_url";
+import SaveButton from "../../../components/Common/CommonSaveButton";
 
 const CategoryTypeMaster = (props) => {
     const formRef = useRef(null);
@@ -60,11 +60,11 @@ const CategoryTypeMaster = (props) => {
     const initialFiled = {
         Name: "",
         id: ""
-      }
-    
+    }
+
     const [state, setState] = useState(initialFiledFunc(initialFiled))
 
-   
+
     const values = { ...state.values }
     const { isError } = state;
     const { fieldLabel } = state;
@@ -202,9 +202,9 @@ const CategoryTypeMaster = (props) => {
         }
     };
 
-     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
-     var IsEditMode_Css = ''
-     if ((modalCss) || (pageMode === "dropdownAdd")) { IsEditMode_Css = "-5.5%" };
+    // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
+    var IsEditMode_Css = ''
+    if ((modalCss) || (pageMode === "dropdownAdd")) { IsEditMode_Css = "-5.5%" };
 
     if (!(userPageAccessState === '')) {
         return (
@@ -252,7 +252,9 @@ const CategoryTypeMaster = (props) => {
                                                         <FormGroup className="mt-2">
                                                             <Row>
                                                                 <Col sm={2}>
-                                                                    {SaveButton({ pageMode, userPageAccessState, module: "CategoryTypeMaster" })}
+                                                                    <SaveButton pageMode={pageMode} userAcc={userPageAccessState}
+                                                                        module={"CategoryTypeMaster"}
+                                                                    />
                                                                 </Col>
                                                             </Row>
                                                         </FormGroup>
