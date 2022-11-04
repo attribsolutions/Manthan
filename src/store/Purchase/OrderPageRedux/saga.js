@@ -53,7 +53,7 @@ function* getSupplierGenFunc() {
 }
 
 function* goButtonGenFunc({ data, hasEditVal }) {
-debugger
+  debugger
   yield put(SpinnerState(true))
   try {
     const response = yield call(OrderPage_GoButton_API, data);
@@ -66,6 +66,8 @@ debugger
             element["totalAmount"] = ele.Amount
             element["UOM"] = ele.Unit
             element["UOMLabel"] = ele.UnitName
+            element["inpBaseUnitQty"] = ele.BaseUnitQuantity
+
           }
         })
       });
@@ -149,6 +151,7 @@ function* UpdateOrder_ID_GenratorFunction({ data, id }) {
 
 // List Page API
 function* get_OrderListPage_GenratorFunction() {
+  debugger
   yield put(SpinnerState(true))
   try {
     const response = yield call(getOrderList_For_Listpage);

@@ -13,6 +13,7 @@ import Flatpickr from "react-flatpickr";
 import Select from "react-select";
 import { useDispatch, useSelector } from "react-redux";
 import "flatpickr/dist/themes/material_blue.css"
+import Breadcrumb from "../../../components/Common/Breadcrumb";
 
 import React, { useEffect, useState, useRef } from "react";
 import { MetaTags } from "react-meta-tags";
@@ -23,19 +24,24 @@ import paginationFactory, { PaginationListStandalone, PaginationProvider } from 
 import { useHistory } from "react-router-dom";
 import {
     editOrderIdSuccess,
+    getOrderListPage,
     getSupplier,
     goButton,
     goButtonSuccess,
     postOrder,
-    postOrderSuccess
+    postOrderSuccess,
+    updateOrderId,
+    updateOrderIdSuccess
 } from "../../../store/Purchase/OrderPageRedux/actions";
 import { mySearchProps } from "../../../components/Common/CmponentRelatedCommonFile/SearchBox/MySearch";
 import { AlertState } from "../../../store/actions";
 import { basicAmount, GstAmount, handleKeyDown, totalAmount } from "./OrderPageCalulation";
 import '../../Order/div.css'
+import OrderList from "./OrderList";
+import { ORDER_lIST } from "../../../routes/route_url";
 
 let description = 'order'
-
+let editVal = {}
 const Order = (props) => {
 
     const dispatch = useDispatch();
@@ -44,14 +50,14 @@ const Order = (props) => {
     const [modalCss, setModalCss] = useState(false);
     const [EditData, setEditData] = useState([]);
     const [pageMode, setPageMode] = useState("save");
-    const [userPageAccessState, setUserPageAccessState] = useState("");
+    const [userAccState, setUserPageAccessState] = useState("");
 
     //Access redux store Data /  'save_ModuleSuccess' action data
 
     const [effectiveDate, setEffectiveDate] = useState("");
     const [supplier_select, setSupplier_select] = useState('');
     const [Description, setDescription] = useState('');
-    const [orderAmount, setOrderAmount1] = useState("");
+    const [orderAmount, setOrderAmount] = useState("");
 
     useEffect(() => {
         dispatch(getSupplier())
@@ -62,11 +68,13 @@ const Order = (props) => {
         postMsg,
         supplier,
         userAccess,
+        updateMsg,
         pageField
     } = useSelector((state) => ({
         items: state.OrderReducer.orderItem,
         supplier: state.OrderReducer.supplier,
         postMsg: state.OrderReducer.postMsg,
+        updateMsg: state.OrderReducer.updateMsg,
         userAccess: state.Login.RoleAccessUpdateData,
         pageField: state.CommonPageFieldReducer.pageFieldList
     }));
@@ -119,6 +127,8 @@ const Order = (props) => {
                 setSupplier_select({ label: hasEditVal.SupplierName, value: hasEditVal.Supplier })
                 setEffectiveDate(hasEditVal.OrderDate)
                 description = hasEditVal.Description
+                editVal = hasEditVal
+                setOrderAmount(hasEditVal.OrderAmount)
 
             }
             dispatch(editOrderIdSuccess({ Status: false }))
@@ -150,6 +160,26 @@ const Order = (props) => {
         }
     }, [postMsg])
 
+
+
+    useEffect(() => {
+        if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
+            history.push({
+                pathname: ORDER_lIST,
+            })
+        } else if (updateMsg.Status === true && !modalCss) {
+            dispatch(updateOrderIdSuccess({ Status: false }));
+            dispatch(
+                AlertState({
+                    Type: 3,
+                    Status: true,
+                    Message: JSON.stringify(updateMsg.Message),
+                })
+            );
+        }
+    }, [updateMsg, modalCss]);
+
+
     function val_onChange(val, row, type) {
 
         if (type === "qty") {
@@ -159,12 +189,12 @@ const Order = (props) => {
             row["inpRate"] = val
         }
         row["totalAmount"] = totalAmount(row)
-        debugger
+
         let sum = 0
         items.forEach(ind => {
-            sum = sum + ind.totalAmount
+            sum = sum + parseFloat(ind.totalAmount)
         });
-        setOrderAmount1(sum.toFixed(2))
+        setOrderAmount(sum.toFixed(2))
     }
 
     const supplierOptions = supplier.map((i) => ({
@@ -315,9 +345,9 @@ const Order = (props) => {
     }
 
     const GoButton_Handler = () => {
-        let party = supplier_select.value
+        let supplier = supplier_select.value
 
-        if (!party > 0) {
+        if (!supplier > 0) {
             alert("Please Select Customer")
             return
         }
@@ -337,8 +367,7 @@ const Order = (props) => {
             alert(e)
         }
         const jsonBody = JSON.stringify({
-            Division: division,
-            Party: party,
+            Supplier: supplier,
             EffectiveDate: effectiveDate
         }
         );
@@ -349,8 +378,8 @@ const Order = (props) => {
 
     const saveHandeller = () => {
         let division = 0
-        let date
-        let party = supplier_select.value
+        let date = ''
+        let supplier = supplier_select.value
 
         try {
             division = JSON.parse(localStorage.getItem("roleId")).Party_id
@@ -394,30 +423,38 @@ const Order = (props) => {
         const jsonBody = JSON.stringify({
             OrderDate: date,
             Customer: division,
-            Supplier: party,
+            Supplier: supplier,
             OrderAmount: orderAmount,
             Description: description,
             CreatedBy: 1,
             UpdatedBy: 1,
             OrderItem: itemArr
         });
-        dispatch(postOrder(jsonBody))
-        console.log(jsonBody)
+
+        if (pageMode === "edit") {
+            dispatch(updateOrderId(jsonBody, editVal.id))
+            console.log("orderEdit", jsonBody)
+
+        } else {
+
+            dispatch(postOrder(jsonBody))
+            console.log("ordersave", jsonBody)
+        }
 
 
     }
 
-    if (!(userPageAccessState === "")) {
+    if (!(userAccState === "")) {
         return (
             <React.Fragment>
                 <MetaTags>
-                    <title>{userPageAccessState.PageHeading}| FoodERP-React FrontEnd</title>
+                    <title>{userAccState.PageHeading}| FoodERP-React FrontEnd</title>
                 </MetaTags>
                 <div className="page-content">
                     {/* <Breadcrumb
                     title={"Count :"}
-                    breadcrumbItem={userPageAccessState.PageHeading ? userPageAccessState.PageHeading : "Order"}
-                    IsButtonVissible={(userPageAccessState.RoleAccess_IsSave) ? true : false}
+                    breadcrumbItem={userAccState.PageHeading ? userAccState.PageHeading : "Order"}
+                    IsButtonVissible={(userAccState.RoleAccess_IsSave) ? true : false}
                     breadcrumbCount={`Product Count: ${"searchCount"}`}
                     // SearchProps={searchProps}
                     // IsSearchVissible={true}
@@ -426,7 +463,18 @@ const Order = (props) => {
                     ExcelData={items}
                 /> */}
 
-
+                    {/* <Breadcrumb
+                        title={"Count :"}
+                        breadcrumbItem={userAccState.PageHeading}
+                        IsButtonVissible={ false}
+                        showCount={true}
+                        // SearchProps={searchProps}
+                        IsSearchVissible={false}
+                        breadcrumbCount={`Product Count: ${"searchCount"}`}
+                        RedirctPath={"/#"}
+                        isExcelButtonVisible={true}
+                        ExcelData={"downList"}
+                    /> */}
 
                     <div className="d-flex  justify-content-between">
                         <div >
@@ -497,7 +545,7 @@ const Order = (props) => {
                                         style={{ width: "100px" }}>Description</Label>
                                     <div>
                                         <Input
-                                            value={description}
+                                            defaultValue={description}
                                             placeholder="Enter Description"
                                             onChange={(e) => { description = e.target.value }}
                                         />
@@ -518,19 +566,6 @@ const Order = (props) => {
                             >
                                 {(toolkitProps,) => (
                                     <React.Fragment>
-
-                                        {/* <Breadcrumb
-                                                    title={"Count :"}
-                                                    breadcrumbItem={userPageAccessState.PageHeading}
-                                                    IsButtonVissible={(userPageAccessState.RoleAccess_IsSave) ? true : false}
-                                                    SearchProps={toolkitProps.searchProps}
-                                                    breadcrumbCount={`Product Count: ${items.length}`}
-                                                    IsSearchVissible={true}
-                                                    RedirctPath={"masterPath"}
-                                                    isExcelButtonVisible={true}
-                                                    ExcelData={items}
-                                                /> */}
-
                                         <Row>
 
                                             <Col xl="12">
