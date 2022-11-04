@@ -11,8 +11,7 @@ import {
     Label,
     Row
 } from "reactstrap";
-import { AvField, AvForm, } from "availity-reactstrap-validation";
-import Select from "react-select";
+import { SaveButton } from "../../../components/CommonSaveButton";
 import { MetaTags } from "react-meta-tags";
 import { BreadcrumbShow, commonPageFieldListSuccess, commonPageFieldSuccess } from "../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
@@ -32,7 +31,7 @@ import {
     updateGroupTypeID,
     updateGroupTypeIDSuccess
 } from "../../../store/Administrator/GroupTypeRedux/action";
-import {GROUPTYPE_lIST } from "../../../routes/route_url";
+import { GROUPTYPE_lIST } from "../../../routes/route_url";
 
 const GroupTypeMaster = (props) => {
 
@@ -50,12 +49,13 @@ const GroupTypeMaster = (props) => {
     const [userPageAccessState, setUserPageAccessState] = useState('');
 
     const initialFiled = {
-        id:"",
+        id: "",
         Name: "",
-      }
-    
+        IsReserved:""
+    }
+
     const [state, setState] = useState(initialFiledFunc(initialFiled))
-   
+
     //Access redux store Data /  'save_ModuleSuccess' action data
     const {
         postMsg,
@@ -114,13 +114,15 @@ const GroupTypeMaster = (props) => {
 
             if (hasEditVal) {
                 setEditData(hasEditVal);
-                const {id, Name } = hasEditVal
+                const { id, Name ,IsReserved} = hasEditVal
                 const { values, fieldLabel, hasValid, required, isError } = { ...state }
 
                 hasValid.Name.valid = true;
-                
+                hasValid.IsReserved.valid=true;
+
                 values.id = id
                 values.Name = Name;
+                values.IsReserved=IsReserved;
                 setState({ values, fieldLabel, hasValid, required, isError })
                 dispatch(editGroupTypeIdSuccess({ Status: false }))
                 dispatch(BreadcrumbShow(hasEditVal.GroupTypeMaster))
@@ -195,6 +197,7 @@ const GroupTypeMaster = (props) => {
             debugger
             const jsonBody = JSON.stringify({
                 Name: values.Name,
+                IsReserved:values.IsReserved,
                 CreatedBy: 1,
                 CreatedOn: "0002-10-03T12:48:14.910491",
                 UpdatedBy: 1,
@@ -262,40 +265,32 @@ const GroupTypeMaster = (props) => {
                                                             )}
                                                         </FormGroup>
 
-                                                        <FormGroup>
-                                                            <Row>
-                                                                <Col sm={2}>
-                                                                    <div>
-                                                                        {
-                                                                            pageMode === "edit" ?
-                                                                                userPageAccessState.RoleAccess_IsEdit ?
-                                                                                    <button
-                                                                                        type="submit"
-                                                                                        data-mdb-toggle="tooltip" data-mdb-placement="top" title="Update Party Type"
-                                                                                        className="btn btn-success w-md mt-3"
-                                                                                    >
-                                                                                        <i class="fas fa-edit me-2"></i>Update
-                                                                                    </button>
-                                                                                    :
-                                                                                    <></>
-                                                                                : (
+                                                        <Row>
+                                                            <FormGroup className="mb-2 col col-sm-4">
+                                                                <Row className="justify-content-md-left">
+                                                                    <Label className="col-sm-4 col-form-label" >{fieldLabel.IsReserved}</Label>
+                                                                    <Col md={2} style={{ marginTop: '9px' }} >
 
-                                                                                    userPageAccessState.RoleAccess_IsSave ?
-                                                                                        <button
-                                                                                            type="submit"
-                                                                                            data-mdb-toggle="tooltip" data-mdb-placement="top" title="Save Party Type"
-                                                                                            className="btn btn-primary w-md mt-3 "
-                                                                                        > <i className="fas fa-save me-2"></i> Save
-                                                                                        </button>
-                                                                                        :
-                                                                                        <></>
-                                                                                )
-                                                                        }
-                                                                    </div>
-                                                                </Col>
+                                                                        <div className="form-check form-switch form-switch-md mb-3" >
+                                                                            <Input type="checkbox" className="form-check-input"
+                                                                                // value={values.IsReserved}
+                                                                                checked={values.IsReserved}
+                                                                                name="IsReserved"
+                                                                                onChange={(event) => onChangeText({ event, state, setState })}
+                                                                            />
+                                                                        </div>
+                                                                    </Col>
+                                                                </Row>
+                                                            </FormGroup>
                                                             </Row>
-                                                        </FormGroup>
-                                                    </Row>
+                                                            <FormGroup className="mt-2">
+                                                                <Row>
+                                                                    <Col sm={2}>
+                                                                        {SaveButton({ pageMode, userPageAccessState, module: "GroupTypeMaster" })}
+                                                                    </Col>
+                                                                </Row>
+                                                            </FormGroup >
+                                                        </Row>
 
                                                 </CardBody>
                                             </Card>
