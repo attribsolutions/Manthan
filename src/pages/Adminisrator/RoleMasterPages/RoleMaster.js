@@ -289,6 +289,7 @@ const RoleMaster = (props) => {
                                 className={isError.Name.length > 0 ? "is-invalid form-control" : "form-control"}
                                 placeholder="Please Enter Name"
                                 autoComplete='off'
+                                autoFocus={true}
                                 onChange={(event) => {
                                   onChangeText({ event, state, setState })
                                   dispatch(BreadcrumbShow(event.target.value))
