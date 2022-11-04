@@ -665,7 +665,7 @@ const RoleAccessAdd = (props) => {
                                                         <Col md="4">
                                                             <FormGroup className="mb-3 row ">
                                                                 <Label className="col-sm-3 p-2 ml-n5">Page</Label>
-                                                                <Col md="7">
+                                                                <Col md="7" style={{zIndex:"3"}}>
 
                                                                     <Select
                                                                         value={page_DropdownSelect}

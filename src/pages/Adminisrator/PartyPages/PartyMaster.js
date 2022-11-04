@@ -450,6 +450,7 @@ const PartyMaster = (props) => {
                                                                             type="text"
                                                                             placeholder="Please Enter Name"
                                                                             autoComplete='off'
+
                                                                             autoFocus={true}
                                                                             validate={{
                                                                                 required: { value: true, errorMessage: 'Please Enter Name' },
@@ -670,7 +671,7 @@ const PartyMaster = (props) => {
                                                             <Row>
                                                                 <Col md="3">
                                                                     <FormGroup className="mb-3">
-                                                                        <Label htmlFor="validationCustom01">State </Label>
+                                                                        <Label htmlFor="validationCustom01">State</Label>
                                                                         <Col sm={12} style={{height:"2.9cm"}}>
                                                                             <Select
                                                                                 value={state_DropDown_select}

@@ -17,7 +17,6 @@ import { DELETE_GROUP_LIST_ID, EDIT_GROUPMASTER_ID, GET_GROUP_LIST, POST_GROUPLI
 
 
 // post api
-debugger
 function* Post_Method_ForGroupMaster_GenFun({ data }) {
   yield put(SpinnerState(true))
   try {
