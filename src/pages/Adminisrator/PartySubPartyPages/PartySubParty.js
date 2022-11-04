@@ -25,12 +25,11 @@ import {
     get_Division_ForDropDown,
     get_Party_ForDropDown
 } from "../../../store/Administrator/ItemsRedux/action";
-
-import { SaveButton } from "../../../components/CommonSaveButton";
 import { Tbody, Thead } from "react-super-responsive-table";
+import SaveButton from "../../../components/Common/CmponentRelatedCommonFile/SearchBox/CommonSaveButton";
 
 const PartySubParty = (props) => {
-    
+
     const [EditData, setEditData] = useState([]);
     const [pageMode, setPageMode] = useState("save");
     const [PartyData, setPartyData] = useState([]);
@@ -117,7 +116,7 @@ const PartySubParty = (props) => {
         };
     }, [userAccess])
     useEffect(() => {
-      
+
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200) && !(pageMode === "dropdownAdd")) {
             // setDivision_dropdown_Select('')
             // setParty_dropdown_Select('')
@@ -356,7 +355,9 @@ const PartySubParty = (props) => {
                                                         <FormGroup>
                                                             <Row>
                                                                 <Col sm={2}>
-                                                                    {SaveButton({ pageMode, userPageAccessState, module: "PartySubParty" })}
+                                                                    <SaveButton pageMode={pageMode} userAcc={userPageAccessState}
+                                                                        module={"PartySubParty"}
+                                                                    />
                                                                 </Col>
                                                             </Row>
                                                         </FormGroup >

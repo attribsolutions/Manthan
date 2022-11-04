@@ -11,13 +11,10 @@ import {
     Row,
 
 } from "reactstrap";
-import Select from "react-select";
 import { MetaTags } from "react-meta-tags";
 import Breadcrumb from "../../../components/Common/Breadcrumb";
-import { AvField, AvForm, AvInput, } from "availity-reactstrap-validation";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useHistory } from "react-router-dom";
-import { CommonGetRoleAccessFunction } from "../../../components/Common/CommonGetRoleAccessFunction";
 import { BreadcrumbShow, AlertState, commonPageField } from "../../../store/actions";
 import {
     editPartyTypeSuccess,
@@ -28,14 +25,12 @@ import {
 } from "../../../store/Administrator/PartyTypeRedux/action";
 import {
     comAddPageFieldFunc,
-    formValChange,
     formValid,
     initialFiledFunc,
     onChangeText
 } from "../../../components/Common/CmponentRelatedCommonFile/validationFunction";
-import { SaveButton } from "../../../components/CommonSaveButton";
 import { PARTYTYPE_lIST } from "../../../routes/route_url";
-
+import SaveButton from "../../../components/Common/CmponentRelatedCommonFile/SearchBox/CommonSaveButton";
 
 const PartyType = (props) => {
     const formRef = useRef(null);
@@ -45,13 +40,6 @@ const PartyType = (props) => {
     const [EditData, setEditData] = useState([]);
     const [pageMode, setPageMode] = useState("save");
     const [userPageAccessState, setUserPageAccessState] = useState("");
-
-
-    //*** "isEditdata get all data from ModuleID for Binding  Form controls
-    let editDataGatingFromList = props.state;
-    let propsPageMode = props.pageMode;
-
-    //Access redux store Data /  'save_ModuleSuccess' action data
 
     const { PostAPIResponse, PartyTypes, pageField, userAccess } =
         useSelector((state) => ({
@@ -74,7 +62,7 @@ const PartyType = (props) => {
     }
 
     const [state, setState] = useState(initialFiledFunc(initialFiled))
-    
+
     const values = { ...state.values }
     const { isError } = state;
     const { fieldLabel } = state;
@@ -82,7 +70,6 @@ const PartyType = (props) => {
     const location = { ...history.location }
     const hasShowloction = location.hasOwnProperty("editValue")
     const hasShowModal = props.hasOwnProperty("editValue")
-
 
     // userAccess useEffect
     useEffect(() => {
@@ -293,7 +280,9 @@ const PartyType = (props) => {
                                                         <FormGroup>
                                                             <Row>
                                                                 <Col sm={2}>
-                                                                    {SaveButton({ pageMode, userPageAccessState, module: "PartyType" })}
+                                                                    <SaveButton pageMode={pageMode} userAcc={userPageAccessState}
+                                                                        module={"PartyType"}
+                                                                    />
                                                                 </Col>
                                                             </Row>
                                                         </FormGroup >

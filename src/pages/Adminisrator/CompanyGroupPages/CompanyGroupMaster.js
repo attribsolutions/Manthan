@@ -24,7 +24,7 @@ import {
     editCompanyGroupTypeSuccess,
     updateCompanyGroupTypeID,
     PostMethodForCompanyGroupMaster,
-    getMethodForCompanyGroupList
+ 
 } from "../../../store/Administrator/CompanyGroupRedux/action";
 import { useHistory } from "react-router-dom";
 import {
@@ -33,10 +33,9 @@ import {
     initialFiledFunc,
     onChangeText
 } from "../../../components/Common/CmponentRelatedCommonFile/validationFunction";
-import { SaveButton } from "../../../components/CommonSaveButton";
 import { COMPANYGROUP_lIST } from "../../../routes/route_url";
 import { UPDATE_COMPANYGROUP_TYPE_ID_SUCCESS } from "../../../store/Administrator/CompanyGroupRedux/actionType";
-
+import SaveButton from "../../../components/Common/CmponentRelatedCommonFile/SearchBox/CommonSaveButton";
 
 const CompanyGroupMaster = (props) => {
 
@@ -48,20 +47,17 @@ const CompanyGroupMaster = (props) => {
     const [userPageAccessState, setUserPageAccessState] = useState('');
     const [modalCss, setModalCss] = useState(false);
 
-
     {/** Dyanamic Page access state and OnChange function */ }
     const initialFiled = {
         id: "",
         Name: "",
         IsSCM: ""
-      }
-    
+    }
+
     const [state, setState] = useState(initialFiledFunc(initialFiled))
 
-   
-
     //Access redux store Data /  'save_ModuleSuccess' action data
-    const { postMsg, updateMsg ,pageField, userAccess } = useSelector((state) => ({
+    const { postMsg, updateMsg, pageField, userAccess } = useSelector((state) => ({
         postMsg: state.CompanyGroupReducer.PostDataMessage,
         updateMsg: state.CompanyGroupReducer.updateMessage,
         userAccess: state.Login.RoleAccessUpdateData,
@@ -73,13 +69,10 @@ const CompanyGroupMaster = (props) => {
     const hasShowloction = location.hasOwnProperty("editValue")
     const hasShowModal = props.hasOwnProperty("editValue")
 
-
     useEffect(() => {
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(32))
     }, []);
-
-
 
     // userAccess useEffect
     useEffect(() => {
@@ -100,11 +93,8 @@ const CompanyGroupMaster = (props) => {
         };
     }, [userAccess])
 
-
-
     // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
     useEffect(() => {
-
 
         // if (!(userPageAccessState === '')) { document.getElementById("txtName").focus(); }
         if ((hasShowloction || hasShowModal)) {
@@ -134,7 +124,6 @@ const CompanyGroupMaster = (props) => {
             dispatch(editCompanyGroupTypeSuccess({ Status: false }))
         }
     }, [])
-
 
     useEffect(() => {
 
@@ -199,7 +188,6 @@ const CompanyGroupMaster = (props) => {
     const { isError } = state;
     const { fieldLabel } = state;
 
-
     const formSubmitHandler = (event) => {
         event.preventDefault();
         if (formValid(state, setState)) {
@@ -218,7 +206,6 @@ const CompanyGroupMaster = (props) => {
             }
         }
     };
-
 
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
     var IsEditMode_Css = ''
@@ -290,7 +277,9 @@ const CompanyGroupMaster = (props) => {
                                                         <FormGroup>
                                                             <Row>
                                                                 <Col sm={2}>
-                                                                    {SaveButton({ pageMode, userPageAccessState, module: "CompanyGroupMaster" })}
+                                                                    <SaveButton pageMode={pageMode} userAcc={userPageAccessState}
+                                                                        module={"CompanyGroupMaster"}
+                                                                    />
                                                                 </Col>
                                                             </Row>
                                                         </FormGroup >
