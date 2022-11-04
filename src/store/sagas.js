@@ -44,6 +44,8 @@ import GroupSaga from "./Administrator/GroupRedux/saga"
 
 import PartySubPartysaga from "./Administrator/PartySubPartyRedux/saga"
 
+import PartyItemssaga from "./Administrator/PartyItemsRedux/saga"
+
 export default function* rootSaga() {
   yield all([
     fork(AccountSaga),
@@ -82,6 +84,7 @@ export default function* rootSaga() {
     fork(GroupSaga),
     fork(GSTSaga),
     fork(PartySubPartysaga),
+    fork(PartyItemssaga),
 
   ])
 }
