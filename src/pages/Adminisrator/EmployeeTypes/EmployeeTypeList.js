@@ -58,7 +58,7 @@ const EmployeeTypeList = (props) => {
             reducers={reducers}
             MasterModal={EmployeeTypesMaster}
             masterPath={EMPLOYEETYPE}
-            ButtonMsgLable={"EmployeeType"}
+            ButtonMsgLable={"Employee Type"}
             deleteName={"Name"}
           />
           : null

@@ -369,7 +369,7 @@ const DriverMaster = (props) => {
                                                             </FormGroup>
 
                                                         </Row>
-                                                        <FormGroup>
+                                                        <FormGroup className="mt-2">
                                                             <Row>
                                                                 <Col sm={2}>
                                                                     <SaveButton pageMode={pageMode} userAcc={userPageAccessState}

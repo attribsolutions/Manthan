@@ -364,7 +364,7 @@ const RoleMaster = (props) => {
 
                                     <div className="form-check form-switch form-switch-md mb-3" >
                                       <Input type="checkbox" className="form-check-input"
-                                        value={values.isSCMRole}
+                                        checked={values.isSCMRole}
                                         name="isSCMRole"
                                         onChange={(event) => onChangeText({ event, state, setState })}
                                       />
@@ -381,7 +381,6 @@ const RoleMaster = (props) => {
                                     <div className="form-check form-switch form-switch-md mb-3" dir="ltr">
                                       <Input type="checkbox" className="form-check-input" id="customSwitchsizemd"
                                         checked={values.isActive}
-                                        defaultChecked={true}
                                         name="isActive"
                                         onChange={(event) => onChangeText({ event, state, setState })}
                                       />
@@ -397,7 +396,7 @@ const RoleMaster = (props) => {
 
                                     <div className="form-check form-switch form-switch-md mb-3" dir="ltr">
                                       <Input type="checkbox" className="form-check-input" id="customSwitchsizemd"
-                                        defaultChecked={values.IsPartyConnection}
+                                        checked={values.IsPartyConnection}
                                         name="IsPartyConnection"
                                         onChange={(event) => onChangeText({ event, state, setState })}
                                       />

@@ -57,7 +57,7 @@ const CompanyList = () => {
                         reducers={reducers}
                         MasterModal={CompanyModule}
                         masterPath={COMPANY}
-                        ButtonMsgLable={"Name"}
+                        ButtonMsgLable={"Company"}
                         deleteName={"Name"}
                     />
                     : null
