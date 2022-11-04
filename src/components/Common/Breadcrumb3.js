@@ -1,107 +1,291 @@
 import React, { useEffect, useState } from "react"
 import PropTypes from 'prop-types'
-import { Row, Col } from "reactstrap"
-import { Redirect } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { CustomSearchInput } from "../../store/Utilites/CustomSearchRedux/actions";
+import { Row, Col, Modal, Button, } from "reactstrap"
+import { useHistory } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { BreadcrumbShow } from "../../store/Utilites/Breadcrumb/actions";
+import { AvForm, AvInput } from "availity-reactstrap-validation";
+import * as XLSX from 'xlsx';
 
-const Breadcrumb3 = props => {
+const Breadcrumb = props => {
 
     const dispatch = useDispatch();
+    const history = useHistory();
 
-    const [IsRedirectNewButton, setIsRedirectNewButton] = useState(false);
+    // for Excel Download
+    const [modal_scroll, setmodal_scroll] = useState(false);
+    const [downListKey, setDownListKey] = useState([]);
+
+    const {
+        newBtnView = false,
+        excelBtnView = false,
+        pageHeading = '',
+        showCount = false,
+        excelData = [],
+        userAcc = {},
+        pageField = {}
+    } = props;
+
+    const {
+        bredcrumbName = '',
+        filterSize,
+        userAccess
+    } = useSelector((state) => ({
+        bredcrumbName: state.BreadcrumbReducer.bredcrumbName,
+        filterSize: state.BreadcrumbReducer.filterSize,
+        userAccess: state.Login.RoleAccessUpdateData,
+    }));
+
+    function tog_scroll() {
+        setmodal_scroll(!modal_scroll);
+        removeBodyCss();
+    }
+
+    function removeBodyCss() {
+        document.body.classList.add("no_padding");
+    }
 
     // New Button Handller
     const NewButtonHandeller = () => {
-        setIsRedirectNewButton(true)
+
+        let pathName = history.location.pathname
+        let userAcc = userAccess.find((inx) => {
+            return (`/${inx.ActualPagePath}` === pathName)
+        })
+        let listPagePath = userAccess.find((inx) => {
+            return (inx.id === userAcc.RelatedPageID)
+        })
+        if (listPagePath === undefined) {
+            return
+        }
+        history.push({
+            pathname: `/${listPagePath.ActualPagePath}`,
+        })
+
+
     }
-    function searchFunctionHandller(e) {
-        dispatch(CustomSearchInput(e.target.value))
-      }
 
     // Onfocus Search Box
     useEffect(() => {
-        if (!(props.breadcrumbCount === undefined)) {
-            //   document.getElementById("search-bar-0").focus();
+        // document.getElementById("search-bar-0").focus();
+
+        if (!(props.IsSearchVissible === undefined)) {
         }
-    }, [])
+        history.listen(location => dispatch(BreadcrumbShow('')));
+    }, [history])
+
+    useEffect(() => {
+        if (!(excelData === undefined)) {
+            if ((excelData.length > 0)) {
+                // object to array conversion
+                const propertyNames = Object.keys(excelData[0]);
+                setDownListKey(propertyNames)
+            }
+        }
+    }, [excelData])
+
+    const DownloadInExcelButtonHanler = (event, values) => {
+        debugger
+        var list = []
+        var object1 = {}
+        var selectedValues = Object.keys(values);
+        var filteredValues = selectedValues.filter(function (selectedValues) {
+            return values[selectedValues]
+        });
+
+        excelData.map((index1) => {
+            filteredValues.map((index2) => {
+                if (index1.hasOwnProperty(index2)) {
+                    object1[index2] = index1[index2]
+                }
+            })
+            list.push(object1)
+            object1 = {}
+        })
+        const worksheet = XLSX.utils.json_to_sheet(list);
+        const workbook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
+        XLSX.writeFile(workbook, "Excel File.xlsx");
+    }
+
+    const excelChekOnChange = (e) => {
+        // e.preventDefault();
+        const check = e.target
+        // var chek = document.getElementById("checkAll").checked
+        debugger
+        if (check.id === "checkAll") {
+            if (check.checked) {
+                for (var i = 0; i < downListKey.length; i++) {
+                    const a = document.getElementById(`chckbox${i}`)
+                    if (a) {
+                        a.checked = true
+                        // excelData[0][`$defSelect${downListKey[i]}`]=true
+                    }
+                }
+            }
+            else {
+                for (var i = 0; i < downListKey.length; i++) {
+                    const a = document.getElementById(`chckbox${i}`)
+                    if (a) {
+                        a.checked = false
+                        // excelData[0][`$defSelect${downListKey[i]}`]=false
+                    }
+                }
+            }
+        }
+    };
+
+    function ExcelCheckBox() {
+        const arrDiv = []
+        downListKey.forEach((index, key) => {
+
+            const match = index.slice(0, 1);
+            if (!(match === "$")) {
+                arrDiv.push(
+                    <div className="row" >
+                        <div className="col col-12"  >
+                            <Row>
+                                <div className="col col-12 " >
+                                    <AvInput
+                                        className=" text-black checkbox-border-red"
+                                        type="checkbox"
+                                        id={`chckbox${key}`}
+                                        name={index}
+                                        defaultValue={(excelData[0][`$defSelect${index}`]) ? true : false}
+                                    />&nbsp;&nbsp;&nbsp;
+                                    <label className="form-label text-black"> {index} </label>
+                                </div>
+                            </Row>
+                        </div>
+                    </div>
+                )
+            }
+        })
+        return arrDiv
+    }
 
     return (
-        <Row xs="12">
-            <Col md={4}>
-        <div className=" text-left">
-          {
-            props.IsButtonVissible ?
-                <Row>
-                <Col md={2}>
-                  <button type="button" className="btn btn-success"
-                    data-mdb-toggle="tooltip" data-mdb-placement="top" title="Create New"
-                    onClick={() => { NewButtonHandeller() }} >
-                    New
-                  </button>
-               </Col>
-                <Col md={10}>
-                <h4 className="font-size-18 form-label" style={{marginTop:"6px"}}>{props.breadcrumbItem}</h4>
-                </Col>
-                </Row>
-              :
-              <React.Fragment>
-                <h4 className="font-size-18  col-ls-6 col-form-label" style={{marginLeft:"6px"}}>{props.breadcrumbItem}</h4>
-              </React.Fragment>
-          }
-         
-        </div>
-      </Col>
-            
-            <Col md={5}>
-            </Col>
-            <Col md={2} className="text-right">
-                    <div className="search-box d-inline-block">
-                        <div className="position-relative">
-                            {
-                                (props.IsButtonVissible || props.IsSearch === true) ?
-                                <React.Fragment>
-                                        <div clclassNameass="search-box d-inline-block">
-                                            <div class="position-relative">
-                                                    <span id="search-bar-0-label" className="sr-only">Search this table</span>
-                                                    <input id="search-bar-0"
-                                                        type="text"
-                                                        aria-labelledby="search-bar-0-label"
-                                                        className="form-control "
-                                                        placeholder="Search"
-                                                        onChange={(e) => { searchFunctionHandller(e) }}
-                                                    />
-                                                    <i class="bx bx-search-alt search-icon-search"></i>
-                                           </div>
-                                        </div>
-                                    </React.Fragment>
-                                    :
-                                    <React.Fragment></React.Fragment>
-                            }
-                        </div>
-                   
-                </div>
-            </Col>
-            <Col md={1} className="text-right">
-                {
-                    !(props.breadcrumbCount === undefined) ?
-                        <div className="bg-soft-success text-center text-danger external-event col-ls-6 col-form-label"
-                        >
-                            Count : &nbsp;(&nbsp; {props.breadcrumbCount}&nbsp;)
-                        </div>
-                        :
-                        <React.Fragment></React.Fragment>
-                }
-            </Col>
-            {/* Redirct To master Component  */}
-            {(IsRedirectNewButton) ? <Redirect to={{ pathname: props.RedirctPath }} /> : null}
-        </Row>
+        <React.Fragment>
 
+
+            <Row style={{ Color: "F7F8F4", marginTop: "-5px", marginBottom: "7px" }}>
+                <Col md={6}>
+                    <div className="mb-1 text-left">
+                        {
+                            newBtnView ?
+                                <Row>
+                                    <Col md={12}>
+                                        <button type="button" className="btn btn-success"
+                                            data-mdb-toggle="tooltip" data-mdb-placement="top" title="Create New"
+                                            onClick={NewButtonHandeller}>
+                                            New
+                                        </button>
+                                        <label className="font-size-18 form-label text-black " style={{ paddingLeft: "7px" }} >{pageHeading}</label>
+
+                                    </Col>
+                                </Row>
+                                :
+                                <Row>
+                                    <Col md={12}>
+                                        <label className="font-size-20  col-ls-6 col-form-label text-black" style={{ marginLeft: "6px" }}>{pageHeading}</label>
+                                        {(bredcrumbName.length > 0) ?
+                                            <label className="font-size-24 form-label  text-nowrap bd-highlight text-primary"
+                                                style={{ paddingLeft: "7px", color: "#5156be" }} >&nbsp;/&nbsp;{bredcrumbName}</label>
+                                            : null
+                                        }
+                                    </Col>
+                                </Row>
+                        }
+                    </div>
+                </Col>
+                <Col sm={2}></Col>
+
+                <Col md={filterSize.length < 10 ? 3 : filterSize.length < 25 ? 2 : 1}
+                    className='text-end'>
+
+                    {excelBtnView ?
+                        <Button
+                            type="button"
+                            title="Download List"
+                            color="btn btn-sm btn-outline-primary mt-1"
+                            onClick={() => { tog_scroll(); }}
+                            data-toggle="modal"
+                        >
+                            <i className="bx bx-download font-size-14" ></i>
+                        </Button>
+                        : null}
+                </Col>
+
+                <Col md={filterSize.length < 10 ? 1 : filterSize.length < 25 ? 2 : 3}
+                    className="text-right col-md-2 px-0 justify-content-end">
+                    {
+                        (showCount) ?
+                            <div className="bg-dark text-center text-light external-event 
+                             col-form-label  border border-Success rounded-2"
+                                style={{ width: "100%" }}>
+                                {filterSize}
+                            </div>
+                            :
+                            null
+                    }
+                </Col>
+                <Modal
+                    isOpen={modal_scroll}
+                    toggle={() => {
+                        tog_scroll();
+                    }}
+                    scrollable={true}
+                >
+                    <div className="modal-header">
+                        <h5 className="modal-title mt-0">List</h5>
+
+                        <button
+                            type="button"
+                            onClick={() => setmodal_scroll(false)}
+                            className="close"
+                            data-dismiss="modal"
+                            aria-label="Close"
+                        >
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div className="modal-body">
+                        <AvForm onValidSubmit={(e, v) => { DownloadInExcelButtonHanler(e, v); }}>
+                            <div className="form-check">
+                                <input
+                                    id="checkAll"
+                                    type="checkbox"
+                                    className="form-check-input"
+                                    onChange={excelChekOnChange}
+                                />
+                                <label className="form-label text-black">All Select</label>
+                            </div>
+
+                            <ExcelCheckBox />
+                            <div className="modal-body">
+                                <div className="modal-footer">
+                                    <button
+                                        type="button"
+                                        className="btn btn-secondary"
+                                        onClick={() => setmodal_scroll(false)}
+                                    >
+                                        Cancel
+                                    </button>
+                                    <button type="submit" className="btn btn-primary">
+                                        Download in Excel
+                                    </button>
+                                </div>
+                            </div>
+                        </AvForm>
+                    </div>
+                </Modal>
+
+            </Row>
+        </React.Fragment>
     )
 }
-
-Breadcrumb3.propTypes = {
+Breadcrumb.propTypes = {
     breadcrumbItem: PropTypes.string,
     title: PropTypes.string
 }
-export default Breadcrumb3
+export default Breadcrumb;

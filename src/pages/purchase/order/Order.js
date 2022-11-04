@@ -13,7 +13,7 @@ import Flatpickr from "react-flatpickr";
 import Select from "react-select";
 import { useDispatch, useSelector } from "react-redux";
 import "flatpickr/dist/themes/material_blue.css"
-import Breadcrumb from "../../../components/Common/Breadcrumb";
+import Breadcrumb from "../../../components/Common/Breadcrumb3";
 
 import React, { useEffect, useState, useRef } from "react";
 import { MetaTags } from "react-meta-tags";
@@ -34,11 +34,13 @@ import {
     updateOrderIdSuccess
 } from "../../../store/Purchase/OrderPageRedux/actions";
 import { mySearchProps } from "../../../components/Common/CmponentRelatedCommonFile/SearchBox/MySearch";
-import { AlertState } from "../../../store/actions";
+import { AlertState, BreadcrumbFilterSize } from "../../../store/actions";
 import { basicAmount, GstAmount, handleKeyDown, totalAmount } from "./OrderPageCalulation";
 import '../../Order/div.css'
 import OrderList from "./OrderList";
 import { ORDER_lIST } from "../../../routes/route_url";
+import SaveButton from "../../../components/Common/CommonSaveButton";
+import { countlabelFunc } from "../../../components/Common/CmponentRelatedCommonFile/commonListPage";
 
 let description = 'order'
 let editVal = {}
@@ -195,6 +197,7 @@ const Order = (props) => {
             sum = sum + parseFloat(ind.totalAmount)
         });
         setOrderAmount(sum.toFixed(2))
+        // dispatch(BreadcrumbFilterSize(`${"Order Amount"} :${sum.toFixed(2)}`))
     }
 
     const supplierOptions = supplier.map((i) => ({
@@ -443,7 +446,9 @@ const Order = (props) => {
 
 
     }
-
+const handleDataChange = ({ dataSize }) => {
+    dispatch(BreadcrumbFilterSize(`${"Order Amount"} :${orderAmount}`))
+  }
     if (!(userAccState === "")) {
         return (
             <React.Fragment>
@@ -452,28 +457,11 @@ const Order = (props) => {
                 </MetaTags>
                 <div className="page-content">
                     {/* <Breadcrumb
-                    title={"Count :"}
-                    breadcrumbItem={userAccState.PageHeading ? userAccState.PageHeading : "Order"}
-                    IsButtonVissible={(userAccState.RoleAccess_IsSave) ? true : false}
-                    breadcrumbCount={`Product Count: ${"searchCount"}`}
-                    // SearchProps={searchProps}
-                    // IsSearchVissible={true}
-                    RedirctPath={"/#"}
-                    isExcelButtonVisible={true}
-                    ExcelData={items}
-                /> */}
-
-                    {/* <Breadcrumb
-                        title={"Count :"}
-                        breadcrumbItem={userAccState.PageHeading}
-                        IsButtonVissible={ false}
+                        pageHeading={userAccState.PageHeading}
+                        newBtnView={(userAccState.RoleAccess_IsSave) ? true : false}
                         showCount={true}
-                        // SearchProps={searchProps}
-                        IsSearchVissible={false}
-                        breadcrumbCount={`Product Count: ${"searchCount"}`}
-                        RedirctPath={"/#"}
-                        isExcelButtonVisible={true}
-                        ExcelData={"downList"}
+                    // excelBtnView={true}
+                    // excelData={downList}
                     /> */}
 
                     <div className="d-flex  justify-content-between">
@@ -536,8 +524,7 @@ const Order = (props) => {
 
                             <Col md="1" className="mt-3 ">
                                 <Button type="button" color="btn btn-outline-success border-2 font-size-12 "
-                                    onClick={GoButton_Handler}
-                                >Go</Button>
+                                    onClick={GoButton_Handler}>Go</Button>
                             </Col>
                             <Col>
                                 <FormGroup className="mb-2 d-flex  justify-content-end mt-3 " >
@@ -567,7 +554,6 @@ const Order = (props) => {
                                 {(toolkitProps,) => (
                                     <React.Fragment>
                                         <Row>
-
                                             <Col xl="12">
                                                 <div className="table table-unRresponsive">
                                                     <BootstrapTable
@@ -575,8 +561,8 @@ const Order = (props) => {
                                                         responsive
                                                         bordered={false}
                                                         striped={false}
+                                                        onDataSizeChange={handleDataChange}
                                                         classes={"table  table-bordered table-hover"}
-
                                                         noDataIndication={
                                                             <div className="text-danger text-center ">
                                                                 Items Not available
@@ -585,7 +571,6 @@ const Order = (props) => {
                                                         {...toolkitProps.baseProps}
                                                         {...paginationTableProps}
                                                     />
-
                                                     {mySearchProps(toolkitProps.searchProps)}
                                                 </div>
                                             </Col>
@@ -603,13 +588,9 @@ const Order = (props) => {
                     </PaginationProvider>
 
                     {(items.length > 0) ? <div className="row save1" style={{ paddingBottom: 'center' }}>
-                        <button
-                            type="submit"
-                            data-mdb-toggle="tooltip" data-mdb-placement="top" title="Save Order"
-                            className="btn btn-primary w-md"
-                            onClick={saveHandeller}
-                        > <i className="fas fa-save me-2"></i> Save
-                        </button>
+                        <SaveButton pageMode={pageMode} userAcc={userAccState}
+                            module={"Order"} onClick={saveHandeller}
+                        />
                     </div>
                         : <div className="row save1"></div>}
                 </div>

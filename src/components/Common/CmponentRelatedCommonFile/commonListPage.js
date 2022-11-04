@@ -1,6 +1,6 @@
 
 import React, { useEffect, useState } from "react";
-import Breadcrumb from "../../../components/Common/Breadcrumb";
+import Breadcrumb from "../../../components/Common/Breadcrumb3";
 import { Col, Modal, Row } from "reactstrap";
 import paginationFactory, {
   PaginationListStandalone,
@@ -256,7 +256,9 @@ const CommonListPage = (props) => {
     // totalSize: tableList.length,
     custom: true,
   };
-
+  const handleDataChange = ({ dataSize }) => {
+    dispatch(BreadcrumbFilterSize(`${ButtonMsgLable} count :${dataSize}`))
+  }
   if (!(userAccState === '')) {
     return (
       <React.Fragment>
@@ -265,40 +267,23 @@ const CommonListPage = (props) => {
         </MetaTags>
         <div className="page-content">
           <Breadcrumb
-            title={"Count :"}
-            breadcrumbItem={userAccState.PageHeading}
-            IsButtonVissible={(userAccState.RoleAccess_IsSave) ? true : false}
+            pageHeading={userAccState.PageHeading}
+            newBtnView={(userAccState.RoleAccess_IsSave) ? true : false}
             showCount={true}
-            SearchProps={searchProps}
-            IsSearchVissible={true}
-            RedirctPath={"/#"}
-            isExcelButtonVisible={true}
-            ExcelData={downList}
+            excelBtnView={true}
+            excelData={downList}
           />
           <PaginationProvider pagination={paginationFactory(pageOptions)}>
             {({ paginationProps, paginationTableProps }) => (
               <ToolkitProvider
                 keyField="id"
-                // defaultSorted={defaultSorted}
                 data={tableList}
                 columns={columns}
                 search
               >
                 {(toolkitProps, a) => (
                   <React.Fragment>
-                    {/* <Breadcrumb
-                      title={"Count :"}
-                      breadcrumbItem={userPageAccessState.PageHeading}
-                      IsButtonVissible={(userPageAccessState.RoleAccess_IsSave) ? true : false}
-                      // SearchProps={toolkitProps.searchProps}
-                      breadcrumbCount={`Product Count: ${tableList.length}`}
-                      IsSearchVissible={true}
-                      RedirctPath={masterPath}
-                      isExcelButtonVisible={true}
-                      ExcelData={tableList}
-                    /> */}
-                    {countlabelFunc(toolkitProps, paginationProps, dispatch, ButtonMsgLable)}
-
+                    {/* {countlabelFunc(toolkitProps, paginationProps, dispatch, ButtonMsgLable)} */}
                     <Row>
                       <Col xl="12">
                         <div className="table-responsive">
@@ -307,7 +292,7 @@ const CommonListPage = (props) => {
                             responsive
                             bordered={false}
                             defaultSorted={defaultSorted}
-
+                            onDataSizeChange={handleDataChange}
                             striped={true}
                             classes={"table  table-bordered table-hover"}
                             {...toolkitProps.baseProps}
