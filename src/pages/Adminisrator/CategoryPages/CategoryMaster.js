@@ -11,6 +11,7 @@ import {
     Label,
     Row,
 } from "reactstrap";
+import { AvField, AvForm, } from "availity-reactstrap-validation";
 import Select from "react-select";
 import { MetaTags } from "react-meta-tags";
 import { BreadcrumbShow, commonPageField, commonPageFieldSuccess, getCategoryTypelist } from "../../../store/actions";
@@ -23,6 +24,7 @@ import {
     updateCategoryIDSuccess
 } from "../../../store/Administrator/CategoryRedux/action";
 import { AlertState } from "../../../store/actions";
+import { CommonGetRoleAccessFunction } from "../../../components/Common/CommonGetRoleAccessFunction";
 import { useHistory } from "react-router-dom";
 import {
     comAddPageFieldFunc,
@@ -32,8 +34,8 @@ import {
     onChangeText,
 
 } from "../../../components/Common/CmponentRelatedCommonFile/validationFunction";
+import { SaveButton } from "../../../components/CommonSaveButton";
 import { CATEGORY_lIST } from "../../../routes/route_url";
-import SaveButton from "../../../components/Common/CmponentRelatedCommonFile/SearchBox/CommonSaveButton";
 
 const CategoryMaster = (props) => {
 
@@ -295,9 +297,7 @@ const CategoryMaster = (props) => {
                                                         <FormGroup>
                                                             <Row>
                                                                 <Col sm={2}>
-                                                                <SaveButton pageMode={pageMode} userAcc={userPageAccessState}
-                                                                    module={"CategoryMaster"}
-                                                                />
+                                                                    {SaveButton({ pageMode, userPageAccessState, module: "CategoryMaster" })}
                                                                 </Col>
                                                             </Row>
                                                         </FormGroup >

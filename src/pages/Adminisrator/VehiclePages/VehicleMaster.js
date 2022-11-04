@@ -13,12 +13,14 @@ import {
     Button,
     Input,
 } from "reactstrap";
+import { AvField, AvForm, } from "availity-reactstrap-validation";
 import Select from "react-select";
 import { MetaTags } from "react-meta-tags";
 import { BreadcrumbShow, commonPageField, commonPageFieldSuccess } from "../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
 import { Tbody, Thead } from "react-super-responsive-table";
 import { AlertState } from "../../../store/actions";
+import { CommonGetRoleAccessFunction } from "../../../components/Common/CommonGetRoleAccessFunction";
 import {
     PostMethodForVehicleMaster,
     getMethodForVehicleList,
@@ -32,7 +34,9 @@ import {
 } from "../../../store/Administrator/VehicleRedux/action";
 import { get_Division_ForDropDown, } from "../../../store/Administrator/ItemsRedux/action";
 import { useHistory } from "react-router-dom";
-import {  VEHICLE_lIST } from "../../../routes/route_url";
+// import { actionChannel } from "redux-saga/effects";
+import { SaveButton } from "../../../components/CommonSaveButton";
+import { DRIVER_lIST, VEHICLE_lIST } from "../../../routes/route_url";
 import {
     comAddPageFieldFunc,
     formValid,
@@ -40,9 +44,10 @@ import {
     onChangeSelect,
     onChangeText
 } from "../../../components/Common/CmponentRelatedCommonFile/validationFunction";
-import SaveButton from "../../../components/Common/CmponentRelatedCommonFile/SearchBox/CommonSaveButton";
+
 
 const VehicleMaster = (props) => {
+
 
     const dispatch = useDispatch();
     const history = useHistory()
@@ -57,7 +62,7 @@ const VehicleMaster = (props) => {
     const [divisionData, setDivisionData] = useState([]);
 
     const [divisionType_dropdown_Select, setDivisionType_dropdown_Select] = useState("");
-
+   
     const initialFiled = {
         id: "",
         VehicleNumber: "",
@@ -65,10 +70,10 @@ const VehicleMaster = (props) => {
         Driver: "",
         VehicleType: "",
         VehicleDivisions: ""
-    }
-
+      }
+    
     const [state, setState] = useState(initialFiledFunc(initialFiled))
-
+   
     //Access redux store Data /  'save_ModuleSuccess' action data
     const {
         postMsg,
@@ -98,6 +103,8 @@ const VehicleMaster = (props) => {
         dispatch(commonPageField(29))
     }, []);
 
+
+
     useEffect(() => {
         //  dispatch(PostMethodForVehicleMaster());
         dispatch(getMethodForVehicleList());
@@ -105,6 +112,8 @@ const VehicleMaster = (props) => {
         dispatch(getMethod_VehicleTypes_ForDropDown());
         dispatch(get_Division_ForDropDown());
     }, [dispatch]);
+
+
 
     // userAccess useEffect
     useEffect(() => {
@@ -148,7 +157,7 @@ const VehicleMaster = (props) => {
                     label: data.DivisionName
                 }))
 
-                const { id, VehicleNumber, Description, Driver, DriverName, VehicleType, VehicleTypeName, VehicleDivisions, } = hasEditVal
+                const { id, VehicleNumber, Description, Driver, DriverName, VehicleType, VehicleTypeName , VehicleDivisions, } = hasEditVal
                 const { values, fieldLabel, hasValid, required, isError } = { ...state }
 
                 hasValid.VehicleNumber.valid = true;
@@ -169,13 +178,18 @@ const VehicleMaster = (props) => {
                 setState({ values, fieldLabel, hasValid, required, isError })
                 dispatch(BreadcrumbShow(hasEditVal.RoleMaster))
                 dispatch(editVehicleTypeSuccess({ Status: false }))
+
+
             }
         }
+
     }, []);
+
 
     useEffect(() => {
 
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
+
             dispatch(PostMethod_ForVehicleMasterSuccess({ Status: false }))
             formRef.current.reset();
 
@@ -250,10 +264,13 @@ const VehicleMaster = (props) => {
         label: data.Name
     }));
 
+
     const VehicleType_DropdownOptions = VehicleTypes.map((data) => ({
         value: data.id,
         label: data.Name
     }));
+
+
 
     const formSubmitHandler = (event) => {
 
@@ -288,6 +305,7 @@ const VehicleMaster = (props) => {
         }
     };
 
+
     function AddDivisionHandler() {
 
         const find = divisionData.find((element) => {
@@ -310,6 +328,7 @@ const VehicleMaster = (props) => {
             }));
         }
     }
+
 
     // For Delete Button in table
     function UserRoles_DeleteButton_Handller(tableValue) {
@@ -360,7 +379,7 @@ const VehicleMaster = (props) => {
                                                                         classNamePrefix="dropdown"
                                                                         options={DriverList_DropdownOptions}
                                                                         onChange={(hasSelect, evn) => onChangeSelect({ hasSelect, evn, state, setState, })}
-
+                                                                       
                                                                     />
                                                                     {isError.Driver.length > 0 && (
                                                                         <span className="text-danger f-8"><small>{isError.Driver}</small></span>
@@ -368,6 +387,7 @@ const VehicleMaster = (props) => {
                                                                 </Col>
                                                             </FormGroup>
                                                         </Col>
+
 
                                                         <Col md="1">  </Col>
                                                         <Col md="3">
@@ -511,9 +531,7 @@ const VehicleMaster = (props) => {
                                                         <FormGroup>
                                                             <Row>
                                                                 <Col sm={2} className="mt-3">
-                                                                    <SaveButton pageMode={pageMode} userAcc={userPageAccessState}
-                                                                        module={"VehicleMaster"}
-                                                                    />
+                                                                    {SaveButton({ pageMode, userPageAccessState, module: "VehicleMaster" })}
                                                                 </Col>
                                                             </Row>
                                                         </FormGroup >
