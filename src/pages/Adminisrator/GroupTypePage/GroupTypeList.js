@@ -40,7 +40,6 @@ const GroupTypeList = (props) => {
 
   }
   useEffect(() => {
-
     dispatch(commonPageFieldListSuccess(null))
     dispatch(commonPageFieldList(107))
     dispatch(getGroupTypeslist())
@@ -58,7 +57,7 @@ const GroupTypeList = (props) => {
             reducers={reducers}
             MasterModal={GroupTypeMaster}
             masterPath={GROUPTYPE}
-            ButtonMsgLable={"Role"}
+            ButtonMsgLable={"Name"}
             deleteName={"Name"}
 
           />

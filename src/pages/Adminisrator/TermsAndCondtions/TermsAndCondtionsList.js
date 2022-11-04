@@ -3,7 +3,7 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import TermsAndCondtionsMaster from "./TermsAndCondtionsMaster";
 import CommonListPage from "../../../components/Common/CmponentRelatedCommonFile/commonListPage";
-import { commonPageField, commonPageFieldList, commonPageFieldListSuccess, commonPageFieldSuccess } from "../../../store/actions";
+import { commonPageFieldList, commonPageFieldListSuccess } from "../../../store/actions";
 import { PostMethod_ForTermsAndCondtionsMaster_Success,GetTermsAndCondtionsList,EditTermsAndCondtions,DeleteTermsAndCondtions,DeleteTermsAndCondtions_Success ,UpdateTermsAndCondtions_Success} from "../../../store/Administrator/TermsAndCondtionsRedux/actions";
 
 const TermsAndCondtionsList = (props) => {
@@ -46,7 +46,7 @@ const TermsAndCondtionsList = (props) => {
   }, []);
 
   const { pageField } = reducers
-debugger
+
   return (
     <React.Fragment>
       {

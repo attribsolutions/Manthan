@@ -355,8 +355,10 @@ export const PartySubParty_Delete_API = (id) => del(`${url.PARTY_SUB_PARTY}/${id
 export const PartySubParty_Edit_API = (id) => get(`${url.PARTY_SUB_PARTY}/${id}`)// edit api
 export const PartySubParty_Update_API = (data, id) => put(`${url.PARTY_SUB_PARTY}/${id}`, data)// update api
 
-
-
+//PartyItems API
+export const Party_Items = (data) => post(url.POST_PARTYITEMS, data)// post api
+export const GetSupplier_API = (party_id) => get(`${url.SUPPLIERS}/${party_id}`)//get api
+export const GoButton_API = (data) => post(url.POST_PARTYITEMS,data)//get api
 
 export {  
   getLoggedInUser,

@@ -306,7 +306,7 @@ const Modules = (props) => {
                                                             <Col md={2} style={{ marginTop: '9px' }} >
                                                                 <div className="form-check form-switch form-switch-md mb-3" >
                                                                     <Input type="checkbox" className="form-check-input"
-                                                                        checked={values.isActive}
+                                                                        defaultChecked={values.isActive}
                                                                         name="isActive"
                                                                         onChange={(event) => onChangeText({ event, state, setState })}
                                                                     />
