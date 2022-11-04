@@ -94,8 +94,7 @@ const CategoryTypeMaster = (props) => {
 
     //This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
     useEffect(() => {
-        debugger
-        // if (!(userPageAccessState === '')) { document.getElementById("txtName").focus(); }
+        
         if ((hasShowloction || hasShowModal)) {
 
             let hasEditVal = null
@@ -239,6 +238,7 @@ const CategoryTypeMaster = (props) => {
                                                                 className={isError.Name.length > 0 ? "is-invalid form-control" : "form-control"}
                                                                 placeholder="Please Enter Name"
                                                                 autoComplete="off"
+                                                                autoFocus={true}
                                                                 onChange={(event) => {
                                                                     onChangeText({ event, state, setState })
                                                                     dispatch(BreadcrumbShow(event.target.value))

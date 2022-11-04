@@ -449,7 +449,8 @@ const PartyMaster = (props) => {
                                                                             value={EditData.Name}
                                                                             type="text"
                                                                             placeholder="Please Enter Name"
-                                                                            // autoComplete='off'
+                                                                            autoComplete='off'
+                                                                            autoFocus={true}
                                                                             validate={{
                                                                                 required: { value: true, errorMessage: 'Please Enter Name' },
                                                                             }}
