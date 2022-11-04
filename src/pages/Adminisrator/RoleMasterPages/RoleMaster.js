@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import Breadcrumb from "../../../components/Common/Breadcrumb";
 import { Card, CardBody, Col, Container, Row, Label, CardHeader, FormGroup, Input, } from "reactstrap";
+import { AvInput } from "availity-reactstrap-validation";
 import { useDispatch, useSelector } from "react-redux";
 import {
   editSuccess,
@@ -20,7 +21,6 @@ import {
   onChangeText,
 } from "../../../components/Common/CmponentRelatedCommonFile/validationFunction";
 import { ROLE_lIST } from "../../../routes/route_url";
-import SaveButton from "../../../components/Common/CmponentRelatedCommonFile/SearchBox/CommonSaveButton";
 
 const RoleMaster = (props) => {
 
@@ -28,6 +28,8 @@ const RoleMaster = (props) => {
   const dispatch = useDispatch();
   const history = useHistory()
 
+  //SetState  Edit data Geting From Modules List component
+  const [EditData, setEditData] = useState([]);
   const [pageMode, setPageMode] = useState("save");
   const [modalCss, setModalCss] = useState(false);
 
@@ -404,15 +406,39 @@ const RoleMaster = (props) => {
                               </FormGroup>
                             </Row>
 
-                            <FormGroup >
-                              <Row >
+                            <FormGroup>
+                              <Row>
                                 <Col sm={2}>
-                                  <SaveButton pageMode={pageMode} userAcc={userPageAccessState}
-                                    module={"RoleMaster"}
-                                  />
+                                  <div>
+                                    {
+                                      pageMode === "edit" ?
+                                        userPageAccessState.RoleAccess_IsEdit ?
+                                          <button
+                                            type="submit"
+                                            data-mdb-toggle="tooltip" data-mdb-placement="top" title="Update Party Type"
+                                            className="btn btn-success w-md mt-3"
+                                          >
+                                            <i class="fas fa-edit me-2"></i>Update
+                                          </button>
+                                          :
+                                          <></>
+                                        : (
+
+                                          userPageAccessState.RoleAccess_IsSave ?
+                                            <button
+                                              type="submit"
+                                              data-mdb-toggle="tooltip" data-mdb-placement="top" title="Save Party Type"
+                                              className="btn btn-primary w-md mt-3 "
+                                            > <i className="fas fa-save me-2"></i> Save
+                                            </button>
+                                            :
+                                            <></>
+                                        )
+                                    }
+                                  </div>
                                 </Col>
                               </Row>
-                            </FormGroup >
+                            </FormGroup>
                           </Row>
 
                         </CardBody>
