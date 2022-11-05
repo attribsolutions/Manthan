@@ -16,21 +16,18 @@ import {
 } from "./actionType"
 
 const INIT_STATE = {
-  supplier:[],
-  orderItem:[],
-  OrderItemsOld: [],
+  supplier: [],
+  orderItem: [],
   postMsg: { Status: false },
-  ordersList: [],
-  orderListMessage: [],
-  editOrderData: { Status: false, Items: [] },
-  updateMessage: { Status: false },
-  deleteMessage: { Status: false },
-  OrderListPage:[]
+  editData: { Status: false, Items: [] },
+  updateMsg: { Status: false },
+  deleteMsg: { Status: false },
+  orderList: []
 
 
 }
 
-const OrderPageReducer = (state = INIT_STATE, action) => {
+const OrderReducer = (state = INIT_STATE, action) => {
   switch (action.type) {
 
     case GET_SUPPLIER_SUCCESS:
@@ -38,58 +35,49 @@ const OrderPageReducer = (state = INIT_STATE, action) => {
         ...state,
         supplier: action.payload,
       }
-      case GO_BUTTON_FOR_ORDER_PAGE_SUCCESS:
+
+    case GO_BUTTON_FOR_ORDER_PAGE_SUCCESS:
       return {
         ...state,
         orderItem: action.payload,
       }
-      case GET_ORDER_ITEMS_FOR_ORDER_PAGE_SUCCESS:
-      return {
-        ...state,
-        OrderItemsOld: action.payload,
-      }
+
+
     case POST_ORDER_FROM_ORDER_PAGE_SUCCESS:
       return {
         ...state,
         postMsg: action.payload,
       }
 
-    case GET_ORDER_LIST_SUCCESS:
-      return {
-        ...state,
-        ordersList: action.payload,
-      }
-    case GET_ORDER_LIST_MESSAGE:
-      return {
-        ...state,
-        orderListMessage: action.payload,
-      }
+
     case EDIT_ORDER_FOR_ORDER_PAGE_SUCCESS:
       return {
         ...state,
-        editOrderData: action.payload,
+        editData: action.payload,
       }
+
     case UPDATE_ORDER_ID_FROM_ORDER_PAGE_SUCCESS:
       return {
         ...state,
-        updateMessage: action.payload,
+        updateMsg: action.payload,
       }
+
     case DELETE_ORDER_FOR_ORDER_PAGE_SUCCESS:
       return {
         ...state,
-        deleteMessage: action.payload,
+        deleteMsg: action.payload,
       }
 
-      // Order List Page 
-      case GET_ORDER_LIST_PAGE_SUCCESS:
-        return {
-          ...state,
-          OrderListPage: action.payload,
-        }
+    // Order List Page 
+    case GET_ORDER_LIST_PAGE_SUCCESS:
+      return {
+        ...state,
+        orderList: action.payload,
+      }
     default:
       return state
   }
 
 }
 
-export default OrderPageReducer
+export default OrderReducer

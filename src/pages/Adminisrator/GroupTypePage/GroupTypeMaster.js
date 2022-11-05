@@ -248,6 +248,7 @@ const GroupTypeMaster = (props) => {
                                                                 value={values.Name}
                                                                 className={isError.Name.length > 0 ? "is-invalid form-control" : "form-control"}
                                                                 placeholder="Please Enter Name"
+                                                                autoFocus={true}
                                                                 onChange={(event) => {
                                                                     onChangeText({ event, state, setState })
                                                                     dispatch(BreadcrumbShow(event.target.value))

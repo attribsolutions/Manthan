@@ -41,7 +41,7 @@ const SidebarContent = (props) => {
   useEffect(() => {
     if (RoleAccessData.length <= 0) {
       var role = JSON.parse(localStorage.getItem("roleId"))
-      if (!(role===undefined) &&!(role===null)) {
+      if (!(role === undefined) && !(role === null)) {
         var party = role.Party_id
         var employee = role.Employee_id;
         dispatch(roleAceessAction(party, employee))
@@ -53,7 +53,7 @@ const SidebarContent = (props) => {
   }, [])
 
   const activateParentDropdown = useCallback((item) => {
-   
+
     item.classList.add("active")
     const parent = item.parentElement
     const parent2El = parent.childNodes[1]
@@ -95,12 +95,13 @@ const SidebarContent = (props) => {
   useEffect(() => {
     // debugger
     let pathName = props.location.pathname
-// debugger
+    // debugger
     let userAcc = RoleAccessModifiedinSingleArray.find((inx) => {
-      return (`/${inx.ActualPagePath}` === pathName)
+      const path = inx.ActualPagePath.toLowerCase()
+      return (`/${path}` === pathName.toLowerCase())
     })
     if (userAcc === undefined) {
-      pathName="Dashbord"
+      pathName = "Dashbord"
     }
     else if (!userAcc.RoleAccess_IsShowOnMenu) {
       let listPagePath = RoleAccessModifiedinSingleArray.find((inx) => {
@@ -141,7 +142,7 @@ const SidebarContent = (props) => {
         ref.current.getScrollElement().scrollTop = currentPosition - 300
       }
     }
-    
+
   }
 
 

@@ -13,41 +13,55 @@ import Flatpickr from "react-flatpickr";
 import Select from "react-select";
 import { useDispatch, useSelector } from "react-redux";
 import "flatpickr/dist/themes/material_blue.css"
+import Breadcrumb from "../../../components/Common/Breadcrumb3";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { MetaTags } from "react-meta-tags";
 
 import ToolkitProvider, { Search } from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 import paginationFactory, { PaginationListStandalone, PaginationProvider } from "react-bootstrap-table2-paginator";
 import { useHistory } from "react-router-dom";
-import { getSupplier, goButton, goButtonSuccess, postOrder, postOrderSuccess } from "../../../store/Purchase/OrderPageRedux/actions";
+import {
+    editOrderIdSuccess,
+    getOrderListPage,
+    getSupplier,
+    goButton,
+    goButtonSuccess,
+    postOrder,
+    postOrderSuccess,
+    updateOrderId,
+    updateOrderIdSuccess
+} from "../../../store/Purchase/OrderPageRedux/actions";
 import { mySearchProps } from "../../../components/Common/CmponentRelatedCommonFile/SearchBox/MySearch";
-import { AlertState } from "../../../store/actions";
+import { AlertState, BreadcrumbFilterSize } from "../../../store/actions";
 import { basicAmount, GstAmount, handleKeyDown, totalAmount } from "./OrderPageCalulation";
 import '../../Order/div.css'
+import OrderList from "./OrderList";
+import { ORDER_lIST } from "../../../routes/route_url";
+import SaveButton from "../../../components/Common/CommonSaveButton";
+import { countlabelFunc } from "../../../components/Common/CmponentRelatedCommonFile/commonListPage";
 
 let description = 'order'
+let editVal = {}
+const Order = (props) => {
 
-const Order=()=> {
-
-    // const props = { tableData: [], func: function a() { } }
     const dispatch = useDispatch();
-    const history = useHistory()
+    const history = useHistory();
 
-    let editMode = history.location.pageMode;
-    const [userPageAccessState, setUserPageAccessState] = useState('');
+    const [modalCss, setModalCss] = useState(false);
+    const [EditData, setEditData] = useState([]);
+    const [pageMode, setPageMode] = useState("save");
+    const [userAccState, setUserPageAccessState] = useState("");
+
+    //Access redux store Data /  'save_ModuleSuccess' action data
+
     const [effectiveDate, setEffectiveDate] = useState("");
-    const [customerSelect, setCustomerSelect] = useState('');
+    const [supplier_select, setSupplier_select] = useState('');
     const [Description, setDescription] = useState('');
-    const [orderAmount, setOrderAmount1] = useState("");
-    const [change, setChange] = useState(false);
-
+    const [orderAmount, setOrderAmount] = useState("");
 
     useEffect(() => {
-        // document.getElementById("txtName").focus();
-        // dispatch(getOrderItems_ForOrderPage());
-        // dispatch(getPartyListAPI())
         dispatch(getSupplier())
     }, [])
 
@@ -55,72 +69,75 @@ const Order=()=> {
         items,
         postMsg,
         supplier,
-        CustomSearchInput,
-        customerNameList,
         userAccess,
+        updateMsg,
         pageField
     } = useSelector((state) => ({
-        items: state.OrderPageReducer.orderItem,
-        supplier: state.OrderPageReducer.supplier,
-        postMsg: state.OrderPageReducer.postMsg,
-        CustomSearchInput: state.CustomSearchReducer.CustomSearchInput,
-        // **customerNameList ==> this is  party list data geting from party list API
-        customerNameList: state.PartyMasterReducer.partyList,
+        items: state.OrderReducer.orderItem,
+        supplier: state.OrderReducer.supplier,
+        postMsg: state.OrderReducer.postMsg,
+        updateMsg: state.OrderReducer.updateMsg,
         userAccess: state.Login.RoleAccessUpdateData,
         pageField: state.CommonPageFieldReducer.pageFieldList
     }));
 
 
-    useEffect(() => {
 
-        const locationPath = history.location.pathname
-        let userAcc = userAccess.find((inx) => {
+    // userAccess useEffect
+    useEffect(() => {
+        let userAcc = null;
+        let locationPath = location.pathname;
+
+        if (hasShowModal) { locationPath = props.masterPath; };
+
+        userAcc = userAccess.find((inx) => {
             return (`/${inx.ActualPagePath}` === locationPath)
         })
-        if (!(userAcc === undefined)) {
+
+        if (userAcc) {
             setUserPageAccessState(userAcc)
-        }
+        };
     }, [userAccess])
 
+    const location = { ...history.location }
+    const hasShowloction = location.hasOwnProperty("editValue")
+    const hasShowModal = props.hasOwnProperty("editValue")
 
     useEffect(() => {
-        debugger
-        const editDataGatingFromList = history.location.editValue
+        dispatch(goButtonSuccess([]))
+        if ((hasShowloction || hasShowModal)) {
 
-        const locationPath = history.location.pathname
-        let userAcc = userAccess.find((inx) => {
-            return (`/${inx.ActualPagePath}` === locationPath)
-        })
-
-        let division = 0
-        try {
-            division = JSON.parse(localStorage.getItem("roleId")).Party_id
-        } catch (e) {
-            alert(e)
-        }
-        if (!(editDataGatingFromList === undefined)) {
-            var CustomerName = editDataGatingFromList.Supplier
-            var Customerid = 28
-            var description = editDataGatingFromList.Description
-            var orderDate = editDataGatingFromList.OrderDate
-
-            const jsonBody = JSON.stringify({
-                Division: division,
-                Party: Customerid,
-                EffectiveDate: orderDate
+            let hasEditVal = null
+            if (hasShowloction) {
+                setPageMode(location.pageMode)
+                hasEditVal = location.editValue
             }
-            );
-            dispatch(goButton(jsonBody))
-            // setPartyName_dropdown_Select({ label: partyName, value: partyId })
-            setCustomerSelect({ label: CustomerName, value: Customerid })
-            setEffectiveDate(orderDate)
-            setDescription(description)
+            else if (hasShowModal) {
+                hasEditVal = props.editValue
+                setPageMode(props.pageMode)
+                setModalCss(true)
+            }
 
+            if (hasEditVal) {
+
+                const jsonBody = JSON.stringify({
+                    Supplier: hasEditVal.Supplier,
+                    EffectiveDate: hasEditVal.OrderDate
+                }
+                );
+                dispatch(goButton(jsonBody, hasEditVal))
+                setSupplier_select({ label: hasEditVal.SupplierName, value: hasEditVal.Supplier })
+                setEffectiveDate(hasEditVal.OrderDate)
+                description = hasEditVal.Description
+                editVal = hasEditVal
+                setOrderAmount(hasEditVal.OrderAmount)
+
+            }
+            dispatch(editOrderIdSuccess({ Status: false }))
         }
-        if (!(userAcc === undefined)) {
-            setUserPageAccessState(userAcc)
-        }
-    }, [userAccess])
+
+
+    }, [])
 
     useEffect(() => {
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
@@ -145,7 +162,27 @@ const Order=()=> {
         }
     }, [postMsg])
 
-    function valChange(val, row, type) {
+
+
+    useEffect(() => {
+        if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
+            history.push({
+                pathname: ORDER_lIST,
+            })
+        } else if (updateMsg.Status === true && !modalCss) {
+            dispatch(updateOrderIdSuccess({ Status: false }));
+            dispatch(
+                AlertState({
+                    Type: 3,
+                    Status: true,
+                    Message: JSON.stringify(updateMsg.Message),
+                })
+            );
+        }
+    }, [updateMsg, modalCss]);
+
+
+    function val_onChange(val, row, type) {
 
         if (type === "qty") {
             row["inpQty"] = val;
@@ -154,12 +191,13 @@ const Order=()=> {
             row["inpRate"] = val
         }
         row["totalAmount"] = totalAmount(row)
-        debugger
+
         let sum = 0
         items.forEach(ind => {
-            sum = sum + ind.totalAmount
+            sum = sum + parseFloat(ind.totalAmount)
         });
-        setOrderAmount1(sum.toFixed(2))
+        setOrderAmount(sum.toFixed(2))
+        // dispatch(BreadcrumbFilterSize(`${"Order Amount"} :${sum.toFixed(2)}`))
     }
 
     const supplierOptions = supplier.map((i) => ({
@@ -192,12 +230,12 @@ const Order=()=> {
                                 const val = e.target.value
                                 if (val > 0) {
 
-                                    valChange(val, row, "rate")
+                                    val_onChange(val, row, "rate")
                                     qty.disabled = false
                                 } else {
                                     qty.value = ''
                                     row["inpQty"] = 0;
-                                    valChange(0, row, "rate")
+                                    val_onChange(0, row, "rate")
                                     qty.disabled = true
                                 }
                             }}
@@ -239,7 +277,7 @@ const Order=()=> {
                         defaultValue={row.inpQty}
                         disabled={(row.inpRate === 0) ? true : false}
                         onChange={(e) => {
-                            valChange(e.target.value, row, "qty")
+                            val_onChange(e.target.value, row, "qty")
                         }}
                         autoComplete="off"
                         onKeyDown={(e) => handleKeyDown(e, items)} />
@@ -310,9 +348,9 @@ const Order=()=> {
     }
 
     const GoButton_Handler = () => {
-        let party = customerSelect.value
+        let supplier = supplier_select.value
 
-        if (!party > 0) {
+        if (!supplier > 0) {
             alert("Please Select Customer")
             return
         }
@@ -332,8 +370,7 @@ const Order=()=> {
             alert(e)
         }
         const jsonBody = JSON.stringify({
-            Division: division,
-            Party: party,
+            Supplier: supplier,
             EffectiveDate: effectiveDate
         }
         );
@@ -344,8 +381,8 @@ const Order=()=> {
 
     const saveHandeller = () => {
         let division = 0
-        let date
-        let party = customerSelect.value
+        let date = ''
+        let supplier = supplier_select.value
 
         try {
             division = JSON.parse(localStorage.getItem("roleId")).Party_id
@@ -389,39 +426,41 @@ const Order=()=> {
         const jsonBody = JSON.stringify({
             OrderDate: date,
             Customer: division,
-            Supplier: party,
+            Supplier: supplier,
             OrderAmount: orderAmount,
             Description: description,
             CreatedBy: 1,
             UpdatedBy: 1,
             OrderItem: itemArr
         });
-        dispatch(postOrder(jsonBody))
-        console.log(jsonBody)
+
+        if (pageMode === "edit") {
+            dispatch(updateOrderId(jsonBody, editVal.id))
+            console.log("orderEdit", jsonBody)
+
+        } else {
+
+            dispatch(postOrder(jsonBody))
+            console.log("ordersave", jsonBody)
+        }
 
 
     }
 
-    if (!(userPageAccessState === "")) {
+    if (!(userAccState === "")) {
         return (
             <React.Fragment>
                 <MetaTags>
-                    <title>{userPageAccessState.PageHeading}| FoodERP-React FrontEnd</title>
+                    <title>{userAccState.PageHeading}| FoodERP-React FrontEnd</title>
                 </MetaTags>
                 <div className="page-content">
                     {/* <Breadcrumb
-                    title={"Count :"}
-                    breadcrumbItem={userPageAccessState.PageHeading ? userPageAccessState.PageHeading : "Order"}
-                    IsButtonVissible={(userPageAccessState.RoleAccess_IsSave) ? true : false}
-                    breadcrumbCount={`Product Count: ${"searchCount"}`}
-                    // SearchProps={searchProps}
-                    // IsSearchVissible={true}
-                    RedirctPath={"/#"}
-                    isExcelButtonVisible={true}
-                    ExcelData={items}
-                /> */}
-
-
+                        pageHeading={userAccState.PageHeading}
+                        newBtnView={(userAccState.RoleAccess_IsSave) ? true : false}
+                        showCount={true}
+                    // excelBtnView={true}
+                    // excelData={downList}
+                    /> */}
 
                     <div className="d-flex  justify-content-between">
                         <div >
@@ -455,9 +494,9 @@ const Order=()=> {
                                                 altInput: true,
                                                 altFormat: "F j, Y",
                                                 dateFormat: "Y-m-d",
-                                                minDate: editMode === "edit" ? effectiveDate : "today",
-                                                maxDate: editMode === "edit" ? effectiveDate : "",
-                                                defaultDate: editMode === "edit" ? "" : "today"
+                                                minDate: pageMode === "edit" ? effectiveDate : "today",
+                                                maxDate: pageMode === "edit" ? effectiveDate : "",
+                                                defaultDate: pageMode === "edit" ? "" : "today"
                                             }}
                                             onChange={EffectiveDateHandler}
                                         />
@@ -468,14 +507,14 @@ const Order=()=> {
                             <Col md="3">
                                 <FormGroup className="mb-2 row mt-3 " >
                                     <Label className="col-md-4 p-2"
-                                        style={{ width: "130px" }}>Customer Name</Label>
+                                        style={{ width: "130px" }}>Supplier Name</Label>
                                     <Col md="7">
                                         <Select
-                                            value={customerSelect}
+                                            value={supplier_select}
                                             classNamePrefix="select2-Customer"
-                                            isDisabled={editMode === "edit" ? true : false}
+                                            isDisabled={pageMode === "edit" ? true : false}
                                             options={supplierOptions}
-                                            onChange={(e) => { setCustomerSelect(e) }}
+                                            onChange={(e) => { setSupplier_select(e) }}
                                         />
                                     </Col>
                                 </FormGroup>
@@ -483,8 +522,7 @@ const Order=()=> {
 
                             <Col md="1" className="mt-3 ">
                                 <Button type="button" color="btn btn-outline-success border-2 font-size-12 "
-                                    onClick={GoButton_Handler}
-                                >Go</Button>
+                                    onClick={GoButton_Handler}>Go</Button>
                             </Col>
                             <Col>
                                 <FormGroup className="mb-2 d-flex  justify-content-end mt-3 " >
@@ -492,7 +530,7 @@ const Order=()=> {
                                         style={{ width: "100px" }}>Description</Label>
                                     <div>
                                         <Input
-                                            value={description}
+                                            defaultValue={description}
                                             placeholder="Enter Description"
                                             onChange={(e) => { description = e.target.value }}
                                         />
@@ -513,21 +551,7 @@ const Order=()=> {
                             >
                                 {(toolkitProps,) => (
                                     <React.Fragment>
-
-                                        {/* <Breadcrumb
-                                                    title={"Count :"}
-                                                    breadcrumbItem={userPageAccessState.PageHeading}
-                                                    IsButtonVissible={(userPageAccessState.RoleAccess_IsSave) ? true : false}
-                                                    SearchProps={toolkitProps.searchProps}
-                                                    breadcrumbCount={`Product Count: ${items.length}`}
-                                                    IsSearchVissible={true}
-                                                    RedirctPath={"masterPath"}
-                                                    isExcelButtonVisible={true}
-                                                    ExcelData={items}
-                                                /> */}
-
                                         <Row>
-
                                             <Col xl="12">
                                                 <div className="table table-unRresponsive">
                                                     <BootstrapTable
@@ -536,7 +560,6 @@ const Order=()=> {
                                                         bordered={false}
                                                         striped={false}
                                                         classes={"table  table-bordered table-hover"}
-
                                                         noDataIndication={
                                                             <div className="text-danger text-center ">
                                                                 Items Not available
@@ -545,7 +568,6 @@ const Order=()=> {
                                                         {...toolkitProps.baseProps}
                                                         {...paginationTableProps}
                                                     />
-
                                                     {mySearchProps(toolkitProps.searchProps)}
                                                 </div>
                                             </Col>
@@ -563,13 +585,9 @@ const Order=()=> {
                     </PaginationProvider>
 
                     {(items.length > 0) ? <div className="row save1" style={{ paddingBottom: 'center' }}>
-                        <button
-                            type="submit"
-                            data-mdb-toggle="tooltip" data-mdb-placement="top" title="Save Order"
-                            className="btn btn-primary w-md"
-                            onClick={saveHandeller}
-                        > <i className="fas fa-save me-2"></i> Save
-                        </button>
+                        <SaveButton pageMode={pageMode} userAcc={userAccState}
+                            module={"Order"} onClick={saveHandeller}
+                        />
                     </div>
                         : <div className="row save1"></div>}
                 </div>

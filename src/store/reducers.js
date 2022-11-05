@@ -20,7 +20,7 @@ import Modules from './Administrator/ModulesRedux/reducer'
 import Company from './Administrator/CompanyRedux/reducer'
 
 import H_Pages from './Administrator/HPagesRedux/reducer'
-import OrderPageReducer from "./Purchase/OrderPageRedux/reducer"
+import OrderReducer from "./Purchase/OrderPageRedux/reducer"
 
 import User_Registration_Reducer from "./Administrator/UserRegistrationRedux/reducer"
 import M_EmployeesReducer from "./Administrator/M_EmployeeRedux/reducer"
@@ -41,12 +41,12 @@ import MRPMasterReducer from "./Administrator/MRPMasterRedux/reducer"
 import MarginMasterReducer from "./Administrator/MarginMasterRedux/reducer"
 import TermsAndCondtionsReducer from "./Administrator/TermsAndCondtionsRedux/reducer"
 import GroupTypeReducer from "./Administrator/GroupTypeRedux/reducer"
-import  GroupReducer from "./Administrator/GroupRedux/reducer"
+import GroupReducer from "./Administrator/GroupRedux/reducer"
 import GSTReducer from "./Administrator/GSTRedux/reducer"
 import PartySubPartyReducer from "./Administrator/PartySubPartyRedux/reducer"
 import PartyItemsReducer from "./Administrator/PartyItemsRedux/reducer"
 
- 
+
 
 
 
@@ -71,7 +71,7 @@ const rootReducer = combineReducers({
   User_Registration_Reducer,
   M_EmployeesReducer,
   // Purchase
-  OrderPageReducer,
+  OrderReducer,
   // Master
   RoleMaster_Reducer,
   ItemMastersReducer,
@@ -80,18 +80,18 @@ const rootReducer = combineReducers({
   EmployeeTypeReducer,
   PartyTypeReducer,
   categoryTypeReducer,
-   CategoryReducer,
-   SubCategoryReducer,
-   VehicleReducer,
-   DriverReducer,
-   CompanyGroupReducer,
-   PriceListReducer,
-   MRPMasterReducer,
-   MarginMasterReducer,
-   TermsAndCondtionsReducer,
-   GroupTypeReducer,
-   GroupReducer,
-   GSTReducer,
+  CategoryReducer,
+  SubCategoryReducer,
+  VehicleReducer,
+  DriverReducer,
+  CompanyGroupReducer,
+  PriceListReducer,
+  MRPMasterReducer,
+  MarginMasterReducer,
+  TermsAndCondtionsReducer,
+  GroupTypeReducer,
+  GroupReducer,
+  GSTReducer,
   PartySubPartyReducer,
   SubCategoryReducer,
   VehicleReducer,
