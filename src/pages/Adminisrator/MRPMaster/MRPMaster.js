@@ -397,7 +397,7 @@ const MRPMaster = (props) => {
 
     return (
         <React.Fragment>
-            <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
+            <div className="page-content" style={{ marginTop: IsEditMode_Css ,marginBottom:"3cm" }}>
                 <MetaTags>
                     <title>PartyType| FoodERP-React FrontEnd</title>
                 </MetaTags>
@@ -423,11 +423,11 @@ const MRPMaster = (props) => {
                                         <Card style={{ backgroundColor: "whitesmoke"}}>
 
 
-                                            <CardHeader className="card-header   text-black " style={{ backgroundColor: "#e9e9ef" }} >
-                                                <Row className="mt-3">
+                                            <CardHeader className="card-header   text-black " style={{ backgroundColor: "#e9e9ef",width:"" }} >
+                                                <Row className="mt-3 " >
                                                     <Col md="3">
                                                         <FormGroup className="mb-3 row ">
-                                                            <Label className="col-sm-3 p-2 ml-n4"  style={{width:""}}>Division</Label>
+                                                            <Label className="col-sm-3 p-2 ml-n4">Division</Label>
                                                             <Col md="9">
                                                                 <Select
                                                                     value={division_dropdown_Select}
@@ -435,17 +435,17 @@ const MRPMaster = (props) => {
                                                                     isDisabled={editMode === "edit" ? true : false}
                                                                     className="divisionName"
                                                                     placeholder="select"
-                                                                    onChange={(e) => { Division_Dropdown_OnChange_Handller(e) }}
+                                                                    onChange={(e) =>{ Division_Dropdown_OnChange_Handller(e) }}
                                                                     classNamePrefix="select2-selection"
                                                                 />
                                                             </Col>
                                                         </FormGroup>
                                                     </Col>
 
-                                                    <Col md="3">
+                                                    <Col lg="3" >
                                                         <FormGroup className="mb-3 row ">
-                                                            <Label className="col-sm-3 p-2 ml-n4 " >Party Name</Label>
-                                                            <Col md="9" style={{height:"3.6cm"}}>
+                                                            <Label className="col-sm-3 p-2 ml-n4 ">Party Name</Label>
+                                                            <Col md="9" style={{}}>
                                                                 <Select
                                                                     value={party_dropdown_Select}
                                                                     options={PartyDropdown_Options}
@@ -460,8 +460,8 @@ const MRPMaster = (props) => {
                                                     </Col>
 
                                                     <Col md="3">
-                                                        <FormGroup className="mb-3 row ">
-                                                            <Label className="col-sm-3 ml-n5 wx-1n">EffectiveDate</Label>
+                                                        <FormGroup className="mb-3 row col-lm-4 ">
+                                                            <Label className="col-sm-3 ml-n5">EffectiveDate</Label>
                                                             <Col md="9">
                                                                 <Flatpickr
                                                                     id="EffectiveDateid"
@@ -480,8 +480,8 @@ const MRPMaster = (props) => {
                                                             </Col>
                                                         </FormGroup>
                                                     </Col>
-                                                    <Col md="3" >
-                                                        <Button type="button" color="btn btn-outline-success border-2 font-size-12" onClick={() => { GoButton_Handler() }} >Go</Button>
+                                                    <Col md="2"style={{margin:"0.1cm"}} >
+                                                        <Button type="button" color="btn btn-outline-success border-2 font-size-12"  onClick={() => { GoButton_Handler() }} >Go</Button>
                                                     </Col>
                                                 </Row>
 
