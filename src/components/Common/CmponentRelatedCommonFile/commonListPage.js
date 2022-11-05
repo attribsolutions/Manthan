@@ -37,7 +37,7 @@ export const countlabelFunc = (toolkitProps, paginationProps, dispatch, ButtonMs
 
   if (!(iscall === searchCount)) {
     dispatch(BreadcrumbSearchProps(toolkitProps.searchProps))
-    dispatch(BreadcrumbFilterSize(`${ButtonMsgLable} Count : ${iscall}`))
+    dispatch(BreadcrumbFilterSize(`${ButtonMsgLable} count :${iscall}`))
     searchCount = paginationProps.dataSize
   }
   searchProps = toolkitProps.searchProps
@@ -256,9 +256,9 @@ const CommonListPage = (props) => {
     // totalSize: tableList.length,
     custom: true,
   };
-  const handleDataChange = ({ dataSize }) => {
-    dispatch(BreadcrumbFilterSize(`${ButtonMsgLable} count :${dataSize}`))
-  }
+  // const handleDataChange = ({ dataSize }) => {
+  //   dispatch(BreadcrumbFilterSize(`${ButtonMsgLable} count :${dataSize}`))
+  // }
   if (!(userAccState === '')) {
     return (
       <React.Fragment>
@@ -271,6 +271,7 @@ const CommonListPage = (props) => {
             newBtnView={(userAccState.RoleAccess_IsSave) ? true : false}
             showCount={true}
             excelBtnView={true}
+            // handleDataChange={}
             excelData={downList}
           />
           <PaginationProvider pagination={paginationFactory(pageOptions)}>
@@ -283,7 +284,6 @@ const CommonListPage = (props) => {
               >
                 {(toolkitProps, a) => (
                   <React.Fragment>
-                    {/* {countlabelFunc(toolkitProps, paginationProps, dispatch, ButtonMsgLable)} */}
                     <Row>
                       <Col xl="12">
                         <div className="table-responsive">
@@ -292,7 +292,7 @@ const CommonListPage = (props) => {
                             responsive
                             bordered={false}
                             defaultSorted={defaultSorted}
-                            onDataSizeChange={handleDataChange}
+                            // onDataSizeChange={handleDataChange}
                             striped={true}
                             classes={"table  table-bordered table-hover"}
                             {...toolkitProps.baseProps}
@@ -301,6 +301,7 @@ const CommonListPage = (props) => {
                         </div>
                       </Col>
 
+                      {countlabelFunc(toolkitProps, paginationProps, dispatch, ButtonMsgLable)}
                       {mySearchProps(toolkitProps.searchProps)}
                     </Row>
                     <Row className="align-items-md-center mt-30">

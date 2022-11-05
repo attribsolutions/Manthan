@@ -446,9 +446,7 @@ const Order = (props) => {
 
 
     }
-const handleDataChange = ({ dataSize }) => {
-    dispatch(BreadcrumbFilterSize(`${"Order Amount"} :${orderAmount}`))
-  }
+
     if (!(userAccState === "")) {
         return (
             <React.Fragment>
@@ -561,7 +559,6 @@ const handleDataChange = ({ dataSize }) => {
                                                         responsive
                                                         bordered={false}
                                                         striped={false}
-                                                        onDataSizeChange={handleDataChange}
                                                         classes={"table  table-bordered table-hover"}
                                                         noDataIndication={
                                                             <div className="text-danger text-center ">

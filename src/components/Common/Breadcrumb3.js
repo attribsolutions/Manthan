@@ -168,7 +168,7 @@ const Breadcrumb = props => {
         <React.Fragment>
 
 
-            <Row style={{ Color: "F7F8F4", marginTop: "-5px", marginBottom: "7px" }}>
+            <Row className="mb-3" style={{ Color: "F7F8F4", }}>
                 <Col md={6}>
                     <div className="mb-1 text-left">
                         {
