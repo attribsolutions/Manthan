@@ -1352,7 +1352,7 @@ const PageMaster = (props) => {
                           >
                             <Table className="table table-bordered table-responsive">
                               <Thead >
-                                <tr>
+                                <tr style={{zIndex:"23"}}>
                                   <th className="">Control ID</th>
                                   <th className="">Field Label</th>
                                   <th className="">Control Type</th>
