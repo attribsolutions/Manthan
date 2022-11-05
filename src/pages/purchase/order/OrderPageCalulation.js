@@ -2,7 +2,7 @@
 
 export const basicAmount = i => {
 
-    let val = i.inpRate * i.inpQty
+    let val = parseFloat(i.inpRate) * parseFloat(i.inpQty)
     if (!val) {
         val = 0
     }
@@ -11,19 +11,19 @@ export const basicAmount = i => {
 
 export const GstAmount = (i) => {
 
-    const a = basicAmount(i);
-    const b = (i.GST / 100);
+    const base = basicAmount(i);
+    const gst = parseFloat(i.GST);
 
-    return a * b
+    return ((base * gst) / 100)
 }
 
 export const totalAmount = (i) => {
 
-    const a = GstAmount(i);
-    const b = basicAmount(i);
-    const c = a + b
+    const gstAmt = GstAmount(i);
+    const baseAmt = basicAmount(i);
+    const total = gstAmt + parseFloat(baseAmt)
 
-    return c
+    return total.toFixed(2)
 }
 
 export function handleKeyDown(e, item) {
