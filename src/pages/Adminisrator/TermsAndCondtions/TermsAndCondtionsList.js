@@ -40,7 +40,7 @@ const TermsAndCondtionsList = (props) => {
   useEffect(() => {
     
     dispatch(commonPageFieldListSuccess(null))
-    dispatch(commonPageFieldList(102))
+    dispatch(commonPageFieldList(101))
     dispatch(getTermAndCondition())
 
   }, []);
