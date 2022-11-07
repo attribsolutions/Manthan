@@ -11,11 +11,14 @@ import {
     Input,
     Label,
     Row,
+    Table,
 } from "reactstrap";
 import { AvField, AvForm, } from "availity-reactstrap-validation";
 import Select from "react-select";
 import { MetaTags } from "react-meta-tags";
+
 import { Breadcrumb_inputName, commonPageField, commonPageFieldSuccess, } from "../../../store/actions";
+
 import { useDispatch, useSelector } from "react-redux";
 import { AlertState } from "../../../store/actions";
 import { CommonGetRoleAccessFunction } from "../../../components/Common/CommonGetRoleAccessFunction";
@@ -29,6 +32,12 @@ import {
 
 } from "../../../components/Common/CmponentRelatedCommonFile/validationFunction";
 import { getSupplier, goButton, goButtonSuccess, PostPartyItemsSuccess } from "../../../store/Administrator/PartyItemsRedux/action";
+import paginationFactory, { PaginationListStandalone, PaginationProvider } from "react-bootstrap-table2-paginator";
+import ToolkitProvider from "react-bootstrap-table2-toolkit";
+import BootstrapTable from "react-bootstrap-table-next";
+import { mySearchProps } from "../../../components/Common/CmponentRelatedCommonFile/SearchBox/MySearch";
+import SaveButton from "../../../components/Common/CommonSaveButton";
+
 
 
 const PartyItems = (props) => {
@@ -39,9 +48,8 @@ const PartyItems = (props) => {
     let editMode = history.location.pageMode;
     const [pageMode, setPageMode] = useState("");
     const [modalCss, setModalCss] = useState(false);
-    const [userPageAccessState, setUserPageAccessState] = useState(123);
     const [SupplierNameSelect, setSupplierNameSelect] = useState('');
-
+    const [userAccState, setUserPageAccessState] = useState("");
     // get method for dropdown
     useEffect(() => {
         dispatch(getSupplier());
@@ -51,11 +59,11 @@ const PartyItems = (props) => {
     const {
         postMsg,
         supplier,
-        items,
+        ItemName,
         pageField,
         userAccess } = useSelector((state) => ({
             postMsg: state.PartyItemsReducer.postMsg,
-            items: state.PartyItemsReducer.orderItem,
+            ItemName: state.PartyItemsReducer.itemName,
             supplier: state.PartyItemsReducer.supplier,
             userAccess: state.Login.RoleAccessUpdateData,
             pageField: state.CommonPageFieldReducer.pageField
@@ -86,7 +94,7 @@ const PartyItems = (props) => {
 
         if (!(editDataGatingFromList === undefined)) {
             var SupplierName = editDataGatingFromList.Supplier
-            var Supplierid = 32
+            var Supplierid = 28
 
             const jsonBody = JSON.stringify({
                 Party: Supplierid,
@@ -126,12 +134,44 @@ const PartyItems = (props) => {
     }, [postMsg])
 
 
-
     const supplierOptions = supplier.map((i) => ({
         value: i.id,
         label: i.Supplier,
     }));
 
+    // const defaultSorted = [
+    //     {
+    //         dataField: "PriceList", // if dataField is not match to any column you defined, it will be ignored.
+    //         order: "asc", // desc or asc
+    //     },
+    // ];
+
+    // const pageOptions = {
+    //     sizePerPage: (items.length + 2),
+    //     totalSize: 0,
+    //     custom: true,
+    // };
+
+    const pagesListColumns = [
+        {
+            text: "id",
+            dataField: "id",
+            sort: true,
+        },
+
+        {
+            text: "Item Name",
+            dataField: "Name",
+            sort: true,
+        },
+
+        {
+            text: "Select All",
+            dataField: "checkbox",
+            sort: true,
+        },
+
+    ];
 
     const GoButton_Handler = () => {
         let party = SupplierNameSelect.value
@@ -141,20 +181,20 @@ const PartyItems = (props) => {
             return
         }
 
-        if (items.length > 0) {
-            if (window.confirm("Refresh Order Item...!")) {
+        if (ItemName.length > 0) {
+            if (window.confirm("Refresh  Item...!")) {
                 dispatch(goButtonSuccess([]))
             } else {
                 return
             }
         }
 
-        // let division = 0
-        // try {
-        //     division = JSON.parse(localStorage.getItem("roleId")).Party_id
-        // } catch (e) {
-        //     alert(e)
-        // }
+        let division = 0
+        try {
+            division = JSON.parse(localStorage.getItem("roleId")).Party_id
+        } catch (e) {
+            alert(e)
+        }
         const jsonBody = JSON.stringify({
             Party: party,
         }
@@ -165,20 +205,13 @@ const PartyItems = (props) => {
     };
 
 
-
-    const SubmitHandler = (event) => {
-        event.preventDefault();
-
+    const saveHandeller = () => {
         const jsonBody = JSON.stringify({
-            // CategoryType: values.CategoryTypeName.value,
-        });
 
-        // if (pageMode === "edit") {
-        //     dispatch(updateCategoryID(jsonBody, values.id,));
-        // }
-        // else {
-        //     dispatch(PostMethodForCategory(jsonBody));
-        // }
+           
+        });
+         dispatch(PostPartyItemsSuccess(jsonBody));
+        
     };
 
 
@@ -186,20 +219,20 @@ const PartyItems = (props) => {
     var IsEditMode_Css = ''
     if ((modalCss) || (pageMode === "dropdownAdd")) { IsEditMode_Css = "-5.5%" };
 
-    if (!(userPageAccessState === '')) {
+    if (!(userAccState === '')) {
         return (
             <React.Fragment>
                 <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
                     <Container fluid>
                         <MetaTags>
-                            <title>{userPageAccessState.PageHeading} | FoodERP-React FrontEnd</title>
+                            <title>{userAccState.PageHeading} | FoodERP-React FrontEnd</title>
                         </MetaTags>
-                        <Breadcrumb breadcrumbItem={userPageAccessState.PageHeading} />
+                        <Breadcrumb breadcrumbItem={userAccState.PageHeading} />
 
                         <Card className="text-black">
                             <CardHeader className="card-header   text-black" style={{ backgroundColor: "#dddddd" }} >
-                                <h4 className="card-title text-black">{userPageAccessState.PageDescription}</h4>
-                                <p className="card-title-desc text-black">{userPageAccessState.PageDescriptionDetails}</p>
+                                <h4 className="card-title text-black">{userAccState.PageDescription}</h4>
+                                <p className="card-title-desc text-black">{userAccState.PageDescriptionDetails}</p>
                             </CardHeader>
 
                             <CardBody className=" vh-10 0 text-black" style={{ backgroundColor: "#whitesmoke" }} >
@@ -236,14 +269,80 @@ const PartyItems = (props) => {
                                         </Card>
                                     </Col>
                                 </Row>
+                                {/* <PaginationProvider pagination={paginationFactory(pageOptions)}>
+                        {({ paginationProps, paginationTableProps }) => (
+                            <ToolkitProvider
+                                keyField="id"
+                                defaultSorted={defaultSorted}
+                                data={items}
+                                columns={pagesListColumns}
+                                search
+                            >
+                                {(toolkitProps,) => (
+                                    <React.Fragment>
+                                        <Row>
+                                            <Col xl="12">
+                                                <div className="table table-unRresponsive">
+                                                    <BootstrapTable
+                                                        keyField={"id"}
+                                                        responsive
+                                                        bordered={false}
+                                                        striped={false}
+                                                        classes={"table  table-bordered table-hover"}
 
-                                <button
-                                    type="submit"
-                                    data-mdb-toggle="tooltip" data-mdb-placement="top" title="Save"
-                                    className="btn btn-primary w-xs"
-                                    onClick={SubmitHandler}
-                                > <i className="fas fa-save me-2"></i> Save
-                                </button>
+                                                        noDataIndication={
+                                                            <div className="text-danger text-center ">
+                                                                Items Not available
+                                                            </div>
+                                                        }
+                                                        {...toolkitProps.baseProps}
+                                                        {...paginationTableProps}
+                                                    />
+
+                                                    {mySearchProps(toolkitProps.searchProps)}
+                                                </div>
+                                            </Col>
+                                        </Row>
+                                        <Row className="align-items-md-center mt-30">
+                                            <Col className="pagination pagination-rounded justify-content-end mb-2">
+                                                <PaginationListStandalone {...paginationProps} />
+                                            </Col>
+                                        </Row>
+                                    </React.Fragment>
+                                )}
+                            </ToolkitProvider>
+                        )}
+
+                    </PaginationProvider> */}
+
+
+                                <Table className="table table-bordered table-responsive">
+                                    <tr style={{ backgroundColor: "#dddddd" }}>
+                                        <th>Id</th>
+                                        <th>ItemName</th>
+                                        <th>Select All</th>
+                                    </tr>
+                                    {arr.map((i, k) => {
+                                        return (<tr>
+                                            <td>{i.id}</td>
+                                            <td>{i.ItemName}</td>
+                                            <td><Input
+                                                type="checkbox"
+                                                id={`inpcheck${k}`}
+                                            ></Input></td>
+                                        </tr>)
+
+                                    })}
+
+                                </Table>
+
+                                {(ItemName.length > 0) ? <div className="row save1" style={{ paddingBottom: 'center' }}>
+                                    <SaveButton pageMode={pageMode} userAcc={userAccState}
+                                        module={"PartyItems"} onClick={saveHandeller}
+                                    />
+                                </div>
+                                    : <div className="row save1"></div>}
+
                             </CardBody>
 
                         </Card>
@@ -262,3 +361,25 @@ const PartyItems = (props) => {
 };
 export default PartyItems
 
+
+
+const arr = [{
+    ItemName: "Abc1",
+    id: 1
+},
+{
+    ItemName: "Abc2",
+    id: 2
+},
+{
+    ItemName: "Abc3",
+    id: 3
+},
+{
+    ItemName: "Abc4",
+    id: 4
+},
+{
+    ItemName: "Abc5",
+    id: 5
+}]
