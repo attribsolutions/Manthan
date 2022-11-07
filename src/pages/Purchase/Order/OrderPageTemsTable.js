@@ -10,6 +10,15 @@ export default function OrderPageTemsTable(props) {
         termsAndCondtions: state.TermsAndCondtionsReducer.TermsAndCondtionsList,
     }));
 
+    const onChange = (e) => {
+        const find = tableList.find((i) => {
+            return (i.value === e.value)
+        });
+        if (find === undefined) {
+            setfunc(terms => [...terms, e]);
+        }
+    }
+
     return (
         <div style={{ minHeight: "400px", marginTop: "-20px" }}>
             <div className="row mx-1 " style={{
@@ -27,7 +36,7 @@ export default function OrderPageTemsTable(props) {
                                 label: i.Name
                             }))
                         }
-                        onChange={e => setfunc(terms => [...terms, e])}
+                        onChange={onChange}
                     />
                 </div>
                 <div className=" col-9 pt-3" >
