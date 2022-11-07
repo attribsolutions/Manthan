@@ -10,6 +10,16 @@ export default function OrderPageTemsTable(props) {
         termsAndCondtions: state.TermsAndCondtionsReducer.TermsAndCondtionsList,
     }));
 
+    function AddDivisionHandler(e) {
+        const find = tableList.find((i) => {
+            return (i.value === e.value)
+        });
+
+        if (find === undefined) {
+            setfunc(terms => [...terms, e])
+        }
+
+    }
     return (
         <div style={{ minHeight: "400px", marginTop: "-20px" }}>
             <div className="row mx-1 " style={{
@@ -27,7 +37,7 @@ export default function OrderPageTemsTable(props) {
                                 label: i.Name
                             }))
                         }
-                        onChange={e => setfunc(terms => [...terms, e])}
+                        onChange={AddDivisionHandler}
                     />
                 </div>
                 <div className=" col-4 pt-3" >
