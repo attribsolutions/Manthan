@@ -46,7 +46,7 @@ import {
     onChangeSelect,
     onChangeText,
 } from "../../../components/Common/CmponentRelatedCommonFile/validationFunction";
-import { AlertState, BreadcrumbShow, commonPageField, commonPageFieldSuccess } from "../../../store/actions"
+import { AlertState, Breadcrumb_inputName, commonPageField, commonPageFieldSuccess } from "../../../store/actions"
 import Tree from "./Tree"
 import AddressDetails_Tab from "."
 import { PARTY_lIST } from "../../../routes/route_url"
@@ -338,7 +338,7 @@ const PartyMaster = (props) => {
                 values.Company = { label: Company, value: Company_id };
                 values.IsDivision ={label: IsDivision, value: IsDivision}
                 setState({ values, fieldLabel, hasValid, required, isError })
-                dispatch(BreadcrumbShow(hasEditVal.Name))
+                dispatch(Breadcrumb_inputName(hasEditVal.Name))
 
             }
             dispatch(editPartyIDSuccess({ Status: false }))
@@ -640,7 +640,7 @@ const PartyMaster = (props) => {
                                                                             autoComplete='off'
                                                                             onChange={(event) => {
                                                                                 onChangeText({ event, state, setState })
-                                                                                dispatch(BreadcrumbShow(event.target.value))
+                                                                                dispatch(Breadcrumb_inputName(event.target.value))
                                                                             }}
                                                                         />
                                                                         {isError.Name.length > 0 && (

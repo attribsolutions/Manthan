@@ -15,7 +15,7 @@ import {
 import { AvField, AvForm, } from "availity-reactstrap-validation";
 import Select from "react-select";
 import { MetaTags } from "react-meta-tags";
-import { BreadcrumbShow } from "../../../store/actions";
+import { Breadcrumb_inputName } from "../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
 import { Tbody, Thead } from "react-super-responsive-table";
 import { AlertState } from "../../../store/actions";
@@ -122,7 +122,7 @@ const VehicleMaster = (props) => {
             })
             setDivisionData(division)
             dispatch(editVehicleTypeSuccess({ Status: false }))
-            dispatch(BreadcrumbShow(editDataGatingFromList.VehicleTypeName))
+            dispatch(Breadcrumb_inputName(editDataGatingFromList.VehicleTypeName))
             return
         }
 

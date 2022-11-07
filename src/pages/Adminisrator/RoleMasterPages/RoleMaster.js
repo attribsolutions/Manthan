@@ -9,7 +9,7 @@ import {
 } from "../../../store/Administrator/RoleMasterRedux/action";
 import { AlertState, commonPageField, commonPageFieldSuccess, updateSuccess } from "../../../store/actions";
 import Select from "react-select";
-import { BreadcrumbShow } from "../../../store/Utilites/Breadcrumb/actions";
+import { Breadcrumb_inputName } from "../../../store/Utilites/Breadcrumb/actions";
 import { MetaTags } from "react-meta-tags";
 import { useHistory } from "react-router-dom";
 import { getEmployeeTypelist } from "../../../store/Administrator/EmployeeTypeRedux/action";
@@ -144,7 +144,7 @@ const RoleMaster = (props) => {
         values.RoleEmployeeTypes = listItems;
 
         setState({ values, fieldLabel, hasValid, required, isError })
-        dispatch(BreadcrumbShow(hasEditVal.RoleMaster))
+        dispatch(Breadcrumb_inputName(hasEditVal.RoleMaster))
 
       }
       dispatch(editSuccess({ Status: false }))
@@ -292,7 +292,7 @@ const RoleMaster = (props) => {
                                 autoFocus={true}
                                 onChange={(event) => {
                                   onChangeText({ event, state, setState })
-                                  dispatch(BreadcrumbShow(event.target.value))
+                                  dispatch(Breadcrumb_inputName(event.target.value))
                                 }}
                               />
                               {isError.Name.length > 0 && (

@@ -1,6 +1,6 @@
 import { BREADCRUMB_FILTER_SIZE, BREADCRUMB_SEARCH_PROPS, BREADCRUMB_SHOW } from "./actionType";
 
-export const BreadcrumbShow = (data) => ({
+export const Breadcrumb_inputName = (data) => ({
   type: BREADCRUMB_SHOW,
   payload: data,
 });

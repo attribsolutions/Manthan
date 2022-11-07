@@ -22,7 +22,7 @@ import {
 import Breadcrumb from "../../../components/Common/Breadcrumb";
 import { MetaTags } from "react-meta-tags";
 import { AlertState, commonPageField } from "../../../store/actions";
-import { BreadcrumbShow } from "../../../store/Utilites/Breadcrumb/actions";
+import { Breadcrumb_inputName } from "../../../store/Utilites/Breadcrumb/actions";
 import { useHistory } from "react-router-dom";
 import { MODULE_lIST } from "../../../routes/route_url";
 import { comAddPageFieldFunc, formValid, initialFiledFunc, onChangeText } from "../../../components/Common/CmponentRelatedCommonFile/validationFunction";
@@ -123,7 +123,7 @@ const Modules = (props) => {
                 values.Icon = Icon;
                 values.id = id
                 setState({ values, fieldLabel, hasValid, required, isError })
-                dispatch(BreadcrumbShow(hasEditVal.Modules))
+                dispatch(Breadcrumb_inputName(hasEditVal.Modules))
 
             }
             dispatch(editModuleIDSuccess({ Status: false }))
@@ -253,7 +253,7 @@ const Modules = (props) => {
                                                                 autoFocus={true}
                                                                 onChange={(event) => {
                                                                     onChangeText({ event, state, setState })
-                                                                    dispatch(BreadcrumbShow(event.target.value))
+                                                                    dispatch(Breadcrumb_inputName(event.target.value))
                                                                 }}
                                                             />
                                                             {isError.Name.length > 0 && (
@@ -272,7 +272,7 @@ const Modules = (props) => {
                                                                 className={isError.DisplayIndex.length > 0 ? "is-invalid form-control" : "form-control"}
                                                                 onChange={(event) => {
                                                                     onChangeText({ event, state, setState })
-                                                                    dispatch(BreadcrumbShow(event.target.value))
+                                                                    dispatch(Breadcrumb_inputName(event.target.value))
                                                                 }}
                                                             />
                                                             {isError.DisplayIndex.length > 0 && (
@@ -292,7 +292,7 @@ const Modules = (props) => {
                                                                 className={isError.Icon.length > 0 ? "is-invalid form-control" : "form-control"}
                                                                 onChange={(event) => {
                                                                     onChangeText({ event, state, setState })
-                                                                    dispatch(BreadcrumbShow(event.target.value))
+                                                                    dispatch(Breadcrumb_inputName(event.target.value))
                                                                 }}
                                                             />
                                                             {isError.Icon.length > 0 && (

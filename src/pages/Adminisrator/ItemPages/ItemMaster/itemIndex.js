@@ -42,7 +42,7 @@ import {
     PostItemDataSuccess,
     updateItemID
 } from "../../../../store/Administrator/ItemsRedux/action";
-import { AlertState, BreadcrumbShow, getCategoryTypelist } from "../../../../store/actions";
+import { AlertState, Breadcrumb_inputName, getCategoryTypelist } from "../../../../store/actions";
 import { Tbody, Thead } from "react-super-responsive-table";
 import { getPartyListAPI } from "../../../../store/Administrator/PartyRedux/action";
 import GSTTab from "./GST_Tab";
@@ -180,7 +180,7 @@ const ItemsMaster = (props) => {
             if (hasEditVal) {
 
                 setEditData(hasEditVal);
-                dispatch(BreadcrumbShow(hasEditVal.Name))
+                dispatch(Breadcrumb_inputName(hasEditVal.Name))
 
                 const editDivision = hasEditVal.ItemDivisionDetails.map(index => ({
                     value: index.Division,
@@ -883,9 +883,9 @@ const ItemsMaster = (props) => {
                                                                             placeholder=" Please Enter Name "
                                                                             defaultValue={EditData.Name}
                                                                             autoComplete="off"
-                                                                            // onChange={(e) => { dispatch(BreadcrumbShow(e.target.value)) }}
+                                                                            // onChange={(e) => { dispatch(Breadcrumb_inputName(e.target.value)) }}
                                                                             onChange={(e) => {
-                                                                                dispatch(BreadcrumbShow(e.target.value));
+                                                                                dispatch(Breadcrumb_inputName(e.target.value));
                                                                                 CommonTab_SimpleText_INPUT_handller_ForAll(e.target.value, "Name")
                                                                             }}
 

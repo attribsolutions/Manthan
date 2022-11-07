@@ -12,7 +12,7 @@ import {
     Row,
 } from "reactstrap";
 import { MetaTags } from "react-meta-tags";
-import { BreadcrumbShow } from "../../../store/actions";
+import { Breadcrumb_inputName } from "../../../store/actions";
 import {
     AlertState,
     commonPageField,
@@ -127,7 +127,7 @@ const CompanyGroupMaster = (props) => {
                 hasValid.IsSCM.valid = true;
                 values.id = id
                 setState({ values, fieldLabel, hasValid, required, isError })
-                dispatch(BreadcrumbShow(hasEditVal.Name))
+                dispatch(Breadcrumb_inputName(hasEditVal.Name))
             }
             dispatch(editCompanyGroupTypeSuccess({ Status: false }))
         }
@@ -260,7 +260,7 @@ const CompanyGroupMaster = (props) => {
                                                                 autoFocus={true}
                                                                 onChange={(event) => {
                                                                     onChangeText({ event, state, setState })
-                                                                    dispatch(BreadcrumbShow(event.target.value))
+                                                                    dispatch(Breadcrumb_inputName(event.target.value))
                                                                 }}
 
                                                             />

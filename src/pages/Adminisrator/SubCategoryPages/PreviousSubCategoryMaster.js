@@ -20,7 +20,7 @@ import {
     PostMethod_ForSubCategoryAPISuccess,
     updateSubCategoryID
 } from "../../../store/Administrator/SubCategoryRedux/action";
-import { AlertState, BreadcrumbShow } from "../../../store/actions";
+import { AlertState, Breadcrumb_inputName } from "../../../store/actions";
 import { CommonGetRoleAccessFunction } from "../../../components/Common/CommonGetRoleAccessFunction";
 import { useHistory } from "react-router-dom";
 import { getCategorylist } from "../../../store/Administrator/CategoryRedux/action";
@@ -115,7 +115,7 @@ const SubCategoryMaster = (props) => {
                 label: editDataGatingFromList.ProductCategoryName
             })
             dispatch(editSubCategoryIDSuccess({ Status: false }))
-            dispatch(BreadcrumbShow(editDataGatingFromList.Name))
+            dispatch(Breadcrumb_inputName(editDataGatingFromList.Name))
             return
         }
     }, [editDataGatingFromList])
@@ -221,7 +221,7 @@ const SubCategoryMaster = (props) => {
                                                                 validate={{
                                                                     required: { value: true, errorMessage: 'Please Enter Name' },
                                                                 }}
-                                                                onChange={(e) => { dispatch(BreadcrumbShow(e.target.value)) }}
+                                                                onChange={(e) => { dispatch(Breadcrumb_inputName(e.target.value)) }}
                                                             />
                                                         </FormGroup>
 

@@ -26,7 +26,7 @@ import {
     commonPageField,
     commonPageFieldSuccess
 } from "../../../store/actions";
-import { BreadcrumbShow } from "../../../store/actions";
+import { Breadcrumb_inputName } from "../../../store/actions";
 import {
     comAddPageFieldFunc,
     formValid,
@@ -124,7 +124,7 @@ const EmployeeTypesMaster = (props) => {
                 hasValid.IsSCM.valid = true;
                 hasValid.IsPartyConnection.valid = true;
                 setState({ values, fieldLabel, hasValid, required, isError })
-                dispatch(BreadcrumbShow(hasEditVal.Name))
+                dispatch(Breadcrumb_inputName(hasEditVal.Name))
             }
             dispatch(editEmployeeTypeSuccess({ Status: false }))
         }
@@ -257,7 +257,7 @@ const EmployeeTypesMaster = (props) => {
                                                                 autoFocus={true}
                                                                 onChange={(event) => {
                                                                     onChangeText({ event, state, setState })
-                                                                    dispatch(BreadcrumbShow(event.target.value))
+                                                                    dispatch(Breadcrumb_inputName(event.target.value))
                                                                 }}
                                                             />
                                                             {isError.Name.length > 0 && (

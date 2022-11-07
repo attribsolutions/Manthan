@@ -14,7 +14,7 @@ import {
 import Select from "react-select";
 import { MetaTags } from "react-meta-tags";
 import {
-    BreadcrumbShow,
+    Breadcrumb_inputName,
     commonPageField,
     commonPageFieldSuccess,
     editGroupIDSuccess,
@@ -155,7 +155,7 @@ const GroupMaster = (props) => {
                 values.GroupType = { label: GroupTypeName, value: GroupType };
 
                 setState({ values, fieldLabel, hasValid, required, isError })
-                dispatch(BreadcrumbShow(hasEditVal.Name))
+                dispatch(Breadcrumb_inputName(hasEditVal.Name))
 
             }
             dispatch(editGroupIDSuccess({ Status: false }))
@@ -313,7 +313,7 @@ const GroupMaster = (props) => {
                                                                         autoFocus={true}
                                                                         onChange={(event) => {
                                                                             onChangeText({ event, state, setState })
-                                                                            dispatch(BreadcrumbShow(event.target.value))
+                                                                            dispatch(Breadcrumb_inputName(event.target.value))
                                                                         }}
 
                                                                     />

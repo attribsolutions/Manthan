@@ -24,7 +24,7 @@ import Breadcrumb from "../../../components/Common/Breadcrumb";
 import AvField from "availity-reactstrap-validation/lib/AvField";
 import { MetaTags } from "react-meta-tags";
 import { AlertState } from "../../../store/actions";
-import { BreadcrumbShow } from "../../../store/Utilites/Breadcrumb/actions";
+import { Breadcrumb_inputName } from "../../../store/Utilites/Breadcrumb/actions";
 import { useHistory } from "react-router-dom";
 import { SaveButton } from "../../../components/CommonSaveButton";
 
@@ -82,7 +82,7 @@ const Modules = (props) => {
             setEditData(editDataGatingFromList);
             setPageMode(pageModeProps);
             dispatch(editModuleIDSuccess({ Status: false }))
-            dispatch(BreadcrumbShow(editDataGatingFromList.Name))
+            dispatch(Breadcrumb_inputName(editDataGatingFromList.Name))
            
         }
         else if (!(propsPageMode === undefined)) {
@@ -187,7 +187,7 @@ const Modules = (props) => {
                                                                 validate={{
                                                                     required: { value: true, errorMessage: 'Please Enter Name' },
                                                                 }}
-                                                                onChange={(e) => { dispatch(BreadcrumbShow(e.target.value)) }}
+                                                                onChange={(e) => { dispatch(Breadcrumb_inputName(e.target.value)) }}
                                                             />
                                                         </FormGroup>
                                                     </Row>

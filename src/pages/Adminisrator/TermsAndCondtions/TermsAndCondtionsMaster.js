@@ -15,7 +15,7 @@ import { MetaTags } from "react-meta-tags";
 import { AlertState } from "../../../store/actions";
 import { useHistory } from "react-router-dom";
 
-import { BreadcrumbShow } from "../../../store/Utilites/Breadcrumb/actions";
+import { Breadcrumb_inputName } from "../../../store/Utilites/Breadcrumb/actions";
 import { useDispatch, useSelector } from "react-redux";
 import {
    
@@ -78,7 +78,7 @@ const TermsAndCondtionsMaster = (props) => {
            // setEditData(editDataGatingFromList);
             setPageMode(pageModeProps);
             //dispatch(editCategoryTypeIDSuccess({ Status: false }))
-            dispatch(BreadcrumbShow(editDataGatingFromList.Name))
+            dispatch(Breadcrumb_inputName(editDataGatingFromList.Name))
             return
         }
     }, [editDataGatingFromList])
@@ -180,7 +180,7 @@ const TermsAndCondtionsMaster = (props) => {
                                                                 validate={{
                                                                     required: { value: true, errorMessage: 'Please Enter Name' },
                                                                 }}
-                                                                onChange={(e) => { dispatch(BreadcrumbShow(e.target.value)) }}
+                                                                onChange={(e) => { dispatch(Breadcrumb_inputName(e.target.value)) }}
                                                             />
 
                                                         </FormGroup>

@@ -29,7 +29,7 @@ import {
 import { fetchModelsList, PostModelsSubmitSuccess } from "../../../store/Administrator/ModulesRedux/actions";
 import { MetaTags } from "react-meta-tags";
 import { AlertState } from "../../../store/actions";
-import { BreadcrumbShow } from "../../../store/Utilites/Breadcrumb/actions";
+import { Breadcrumb_inputName } from "../../../store/Utilites/Breadcrumb/actions";
 import { useHistory } from "react-router-dom";
 import Modules from "../ModulesPages/Modules";
 
@@ -116,7 +116,7 @@ const PageMaster = (props) => {
    
       setPageMode(pageModeProps);
       
-      dispatch(BreadcrumbShow(editDataGatingFromList.Name))
+      dispatch(Breadcrumb_inputName(editDataGatingFromList.Name))
       setEditData(editDataGatingFromList);
       setTablePageAccessDataState(editDataGatingFromList.PagePageAccess);
 
@@ -536,7 +536,7 @@ const PageMaster = (props) => {
                                 },
                               }}
                               onChange={(e) => {
-                                dispatch(BreadcrumbShow(e.target.value));
+                                dispatch(Breadcrumb_inputName(e.target.value));
                               }}
                             />
                           </FormGroup>
