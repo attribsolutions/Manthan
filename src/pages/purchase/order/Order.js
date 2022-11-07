@@ -1,9 +1,6 @@
 import {
     Button,
-    Card,
-    CardBody,
     Col,
-    Container,
     FormGroup,
     Input,
     Label,
@@ -13,9 +10,9 @@ import Flatpickr from "react-flatpickr";
 import Select from "react-select";
 import { useDispatch, useSelector } from "react-redux";
 import "flatpickr/dist/themes/material_blue.css"
-import Breadcrumb from "../../../components/Common/Breadcrumb3";
 
-import React, { useEffect, useState, useRef } from "react";
+
+import React, { useEffect, useState, useRf } from "react";
 import { MetaTags } from "react-meta-tags";
 
 import ToolkitProvider, { Search } from "react-bootstrap-table2-toolkit";
@@ -24,7 +21,7 @@ import paginationFactory, { PaginationListStandalone, PaginationProvider } from 
 import { useHistory } from "react-router-dom";
 import {
     editOrderIdSuccess,
-    getOrderListPage,
+
     getSupplier,
     goButton,
     goButtonSuccess,
@@ -37,12 +34,13 @@ import { mySearchProps } from "../../../components/Common/CmponentRelatedCommonF
 import { AlertState, BreadcrumbFilterSize } from "../../../store/actions";
 import { basicAmount, GstAmount, handleKeyDown, totalAmount } from "./OrderPageCalulation";
 import '../../Order/div.css'
-import OrderList from "./OrderList";
+
 import { ORDER_lIST } from "../../../routes/route_url";
 import SaveButton from "../../../components/Common/CommonSaveButton";
-import { countlabelFunc } from "../../../components/Common/CmponentRelatedCommonFile/commonListPage";
-import ReactSelect from "react-select";
+
 import { getTermAndCondition } from "../../../store/Administrator/TermsAndCondtionsRedux/actions";
+import { Table } from "react-super-responsive-table";
+import OrderPageTemsTable from "./OrderPageTemsTable";
 
 let description = 'order'
 let editVal = {}
@@ -62,6 +60,7 @@ const Order = (props) => {
     const [supplier_select, setSupplier_select] = useState('');
     const [Description, setDescription] = useState('');
     const [orderAmount, setOrderAmount] = useState("");
+    const [termsAndConTable, setTermsAndConTable] = useState([]);
 
     useEffect(() => {
         dispatch(getSupplier())
@@ -83,11 +82,11 @@ const Order = (props) => {
         updateMsg: state.OrderReducer.updateMsg,
         userAccess: state.Login.RoleAccessUpdateData,
         pageField: state.CommonPageFieldReducer.pageFieldList,
-        termsAndCondtions: state.TermsAndCondtionsReducer.RoleAccessUpdateData,
+        termsAndCondtions: state.TermsAndCondtionsReducer.TermsAndCondtionsList,
     }));
 
 
-
+    debugger
     // userAccess useEffect
     useEffect(() => {
         let userAcc = null;
@@ -562,7 +561,7 @@ const Order = (props) => {
                                     <React.Fragment>
                                         <Row>
                                             <Col xl="12">
-                                                <div className="table table-unRresponsive">
+                                                <div className="table table-Rresponsive">
                                                     <BootstrapTable
                                                         keyField={"id"}
                                                         responsive
@@ -592,23 +591,12 @@ const Order = (props) => {
                         )}
 
                     </PaginationProvider>
-                    <div className="row">
-                        <div className="col-3">
-                            <ReactSelect
-                                options={() => {
 
-                                }}
-                            >
+                    {items.length > 0 ?
+                        <OrderPageTemsTable tableList={termsAndConTable} setfunc={setTermsAndConTable} />
+                        : null
+                    }
 
-                            </ReactSelect>
-
-                        </div>
-                    </div>
-                    <br></br>
-                    <br></br>
-                    <br></br>
-                    <br></br>
-                    <br></br>
                     {(items.length > 0) ? <div className="row save1" style={{ paddingBottom: 'center' }}>
                         <SaveButton pageMode={pageMode} userAcc={userAccState}
                             module={"Order"} onClick={saveHandeller}
