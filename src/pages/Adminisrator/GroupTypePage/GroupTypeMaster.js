@@ -263,7 +263,7 @@ const GroupTypeMaster = (props) => {
                                                         <Row>
                                                             <FormGroup className="mb-2 col col-sm-3">
                                                                 <Row className="justify-content-md-left">
-                                                                    <Label className="col-sm-4 col-form-label" >{fieldLabel.IsReserved}</Label>
+                                                                    <Label className="col-sm-6 col-form-label" >{fieldLabel.IsReserved}</Label>
                                                                     <Col md={2} style={{ marginTop: '9px' }} >
 
                                                                         <div className="form-check form-switch form-switch-md mb-3" >
