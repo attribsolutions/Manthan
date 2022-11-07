@@ -380,7 +380,7 @@ const PriceMaster = (props) => {
 
     return (
         <React.Fragment>
-            <div className="page-content" style={{ marginTop: IsEditMode_Css,marginBottom:"3cm" }} >
+            <div className="page-content" style={{ marginTop: IsEditMode_Css,marginBottom:"5cm" }} >
                 <MetaTags>
                     <title>PartyType| FoodERP-React FrontEnd</title>
                 </MetaTags>
