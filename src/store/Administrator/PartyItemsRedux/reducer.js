@@ -7,7 +7,7 @@ import {
   const INIT_STATE = {
     postMsg: { Status: false },
     supplier:[],
-    item:[],
+    itemName:[],
   }
   
   const PartyItemsReducer = (state = INIT_STATE, action) => {
@@ -28,7 +28,7 @@ import {
       case GO_BUTTON_FOR_PARTYITEMS_PAGE_SUCCESS:
       return {
         ...state,
-        item: action.payload,
+        itemName: action.payload,
       }
         default:
             return state

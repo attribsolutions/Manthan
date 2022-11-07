@@ -79,10 +79,13 @@ import PartySubPartyList from "../pages/Adminisrator/PartySubPartyPages/partysub
 import GSTMaster from "../pages/Adminisrator/GSTPages/GSTMaster";
 import GSTList from "../pages/Adminisrator/GSTPages/GSTList";
 
+
 import TermsAndCondtionsList from "../pages/Adminisrator/TermsAndCondtions/TermsAndCondtionsList";
 
-import OrderList from "../pages/Purchase/Order/OrderList.js"
-import Order from "../pages/Purchase/Order/Order.js";
+import OrderList from "../pages/purchase/order/OrderList.js"
+import Order from "../pages/purchase/order/Order";
+
+import PartyItems from "../pages/Adminisrator/PartyItemPage/PartyItems";
 
 import * as path from "./route_url";
 
@@ -173,6 +176,7 @@ const userRoutes = [
   { path: path.PARTY_SUB_PARTY, component: PartySubParty },
   { path: path.PARTY_SUB_PARTY_lIST, component: PartySubPartyList },
 
+  { path:  '/PartyItems', component:PartyItems },
 
   { path: "/SearchBox2", component: SearchBoxSecond },
   { path: "/SearchBox3", component: SerachBox3 },
