@@ -39,7 +39,7 @@ import {
     postPartyDataSuccess,
     updatePartyID
 } from "../../../store/Administrator/PartyRedux/action"
-import { AlertState, BreadcrumbShow } from "../../../store/actions"
+import { AlertState, Breadcrumb_inputName } from "../../../store/actions"
 import Tree from "./Tree"
 import AddressDetails_Tab from "."
 
@@ -132,7 +132,7 @@ const PartyMaster = (props) => {
         if (!(editDataGatingFromList === undefined)) {
             debugger
             setEditData(editDataGatingFromList);
-            dispatch(BreadcrumbShow(editDataGatingFromList.Name))
+            dispatch(Breadcrumb_inputName(editDataGatingFromList.Name))
             setPageMode(pageModeProps);
 
 
@@ -455,7 +455,7 @@ const PartyMaster = (props) => {
                                                                             validate={{
                                                                                 required: { value: true, errorMessage: 'Please Enter Name' },
                                                                             }}
-                                                                            onChange={(e) => { dispatch(BreadcrumbShow(e.target.value)) }}
+                                                                            onChange={(e) => { dispatch(Breadcrumb_inputName(e.target.value)) }}
                                                                         />
                                                                     </FormGroup>
                                                                 </Col>

@@ -13,7 +13,7 @@ import {
 import { AvField, AvForm, } from "availity-reactstrap-validation";
 import Select from "react-select";
 import { MetaTags } from "react-meta-tags";
-import { BreadcrumbShow, getCategoryTypelist } from "../../../store/actions";
+import { Breadcrumb_inputName, getCategoryTypelist } from "../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
 import {
     editCategoryIDSuccess, getMethodForCategory,
@@ -82,7 +82,7 @@ const CategoryMaster = (props) => {
                 label: editDataGatingFromList.ProductCategoryTypeName
             })
             dispatch(editCategoryIDSuccess({ Status: false }))
-            dispatch(BreadcrumbShow(editDataGatingFromList.Name))
+            dispatch(Breadcrumb_inputName(editDataGatingFromList.Name))
             return
         }
     }, [editDataGatingFromList])
@@ -192,7 +192,7 @@ const CategoryMaster = (props) => {
                                                                 validate={{
                                                                     required: { value: true, errorMessage: 'Please Enter Name' },
                                                                 }}
-                                                                onChange={(e) => { dispatch(BreadcrumbShow(e.target.value)) }}
+                                                                onChange={(e) => { dispatch(Breadcrumb_inputName(e.target.value)) }}
                                                             />
                                                         </FormGroup>
 

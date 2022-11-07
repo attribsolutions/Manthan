@@ -4,7 +4,7 @@ import { Row, Col, Modal, Table, Button, } from "reactstrap"
 import { Redirect, useHistory } from "react-router-dom";
 import { Search } from "react-bootstrap-table2-toolkit";
 import { useDispatch, useSelector } from "react-redux";
-import { BreadcrumbShow } from "../../store/Utilites/Breadcrumb/actions";
+import { Breadcrumb_inputName } from "../../store/Utilites/Breadcrumb/actions";
 import { AvForm, AvInput } from "availity-reactstrap-validation";
 import * as XLSX from 'xlsx';
 
@@ -82,7 +82,7 @@ const Breadcrumb = props => {
 
     if (!(props.IsSearchVissible === undefined)) {
     }
-    history.listen(location => dispatch(BreadcrumbShow('')));
+    history.listen(location => dispatch(Breadcrumb_inputName('')));
   }, [history])
 
 

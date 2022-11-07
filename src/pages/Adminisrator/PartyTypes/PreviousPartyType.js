@@ -22,7 +22,7 @@ import { Link, useHistory } from "react-router-dom";
 import { CommonGetRoleAccessFunction } from "../../../components/Common/CommonGetRoleAccessFunction";
 
 
-import { BreadcrumbShow,AlertState } from "../../../store/actions";
+import { Breadcrumb_inputName,AlertState } from "../../../store/actions";
 
 import {
   editPartyTypeSuccess,
@@ -94,7 +94,7 @@ const PartyType = (props) => {
       setEditData(editDataGatingFromList);
       setPageMode("edit");
       dispatch(editPartyTypeSuccess({ Status: false }));
-      dispatch(BreadcrumbShow(editDataGatingFromList.Name));
+      dispatch(Breadcrumb_inputName(editDataGatingFromList.Name));
     } else if (!(propsPageMode === undefined)) {
       setPageMode(propsPageMode);
     }
@@ -199,7 +199,7 @@ if ((pageMode === "edit")||(pageMode==="copy")||(pageMode==="dropdownAdd")) { Is
                                                                 validate={{
                                                                     required: { value: true, errorMessage: 'Please Enter Name' },
                                                                 }}
-                                                                onChange={(e) => { dispatch(BreadcrumbShow(e.target.value)) }}
+                                                                onChange={(e) => { dispatch(Breadcrumb_inputName(e.target.value)) }}
                                                             />
                                                         </FormGroup>
                                                         

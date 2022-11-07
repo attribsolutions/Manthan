@@ -20,7 +20,7 @@ import {
     PostMethod_ForSubCategoryAPISuccess,
     updateSubCategoryID
 } from "../../../store/Administrator/SubCategoryRedux/action";
-import { AlertState, BreadcrumbShow, commonPageField } from "../../../store/actions";
+import { AlertState, Breadcrumb_inputName, commonPageField } from "../../../store/actions";
 import { useHistory } from "react-router-dom";
 import { getCategorylist } from "../../../store/Administrator/CategoryRedux/action";
 import {
@@ -150,7 +150,7 @@ const SubCategoryMaster = (props) => {
                 label: editDataGetingFromList.ProductCategoryName
             })
             dispatch(editSubCategoryIDSuccess({ Status: false }))
-            dispatch(BreadcrumbShow(editDataGetingFromList.Name))
+            dispatch(Breadcrumb_inputName(editDataGetingFromList.Name))
             return
         }
     }, [editDataGetingFromList])
@@ -264,7 +264,7 @@ const SubCategoryMaster = (props) => {
                                                                 autoComplete='off'
                                                                 onChange={(event) => {
                                                                     onChangeText({ event, state, setState })
-                                                                    dispatch(BreadcrumbShow(event.target.value))
+                                                                    dispatch(Breadcrumb_inputName(event.target.value))
                                                                 }}
                                                             />
                                                             {isError.Name.length > 0 && (

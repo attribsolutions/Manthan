@@ -17,7 +17,7 @@ import { AlertState, commonPageField, commonPageFieldSuccess } from "../../../st
 import { getDistrictOnState, getPartyListAPI } from "../../../store/Administrator/PartyRedux/action";
 import Breadcrumb from "../../../components/Common/Breadcrumb";
 import Flatpickr from "react-flatpickr"
-import { BreadcrumbShow } from "../../../store/Utilites/Breadcrumb/actions";
+import { Breadcrumb_inputName } from "../../../store/Utilites/Breadcrumb/actions";
 import { MetaTags } from "react-meta-tags";
 import { useHistory } from "react-router-dom";
 import { EMPLOYEE_lIST } from "../../../routes/route_url";
@@ -203,7 +203,7 @@ const AddEmployee = (props) => {
         // values.CategoryTypeName = { label: CategoryTypeName, value: CategoryType };
 
         setState({ values, fieldLabel, hasValid, required, isError })
-        dispatch(BreadcrumbShow(hasEditVal.Name))
+        dispatch(Breadcrumb_inputName(hasEditVal.Name))
 
       }
       dispatch(editEmployeeSuccess({ Status: false }))
@@ -427,7 +427,7 @@ const AddEmployee = (props) => {
                             autoFocus={true}
                             onChange={(event) => {
                               onChangeText({ event, state, setState })
-                              dispatch(BreadcrumbShow(event.target.value))
+                              dispatch(Breadcrumb_inputName(event.target.value))
                             }}
                           />
                           {isError.Name.length > 0 && (

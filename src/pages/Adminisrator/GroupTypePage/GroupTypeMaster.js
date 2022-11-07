@@ -12,7 +12,7 @@ import {
     Row
 } from "reactstrap";
 import { MetaTags } from "react-meta-tags";
-import { BreadcrumbShow, commonPageFieldSuccess } from "../../../store/actions";
+import { Breadcrumb_inputName, commonPageFieldSuccess } from "../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
 import { AlertState, commonPageField } from "../../../store/actions";
 import { useHistory } from "react-router-dom";
@@ -121,7 +121,7 @@ const GroupTypeMaster = (props) => {
                 values.IsReserved = IsReserved;
                 setState({ values, fieldLabel, hasValid, required, isError })
                 dispatch(editGroupTypeIdSuccess({ Status: false }))
-                dispatch(BreadcrumbShow(hasEditVal.GroupTypeMaster))
+                dispatch(Breadcrumb_inputName(hasEditVal.GroupTypeMaster))
             }
         }
     }, [])
@@ -251,7 +251,7 @@ const GroupTypeMaster = (props) => {
                                                                 autoFocus={true}
                                                                 onChange={(event) => {
                                                                     onChangeText({ event, state, setState })
-                                                                    dispatch(BreadcrumbShow(event.target.value))
+                                                                    dispatch(Breadcrumb_inputName(event.target.value))
                                                                 }}
 
                                                             />

@@ -27,7 +27,7 @@ import { AvField, AvForm, AvInput } from "availity-reactstrap-validation";
 import { Tbody, Thead } from "react-super-responsive-table";
 import {
   AlertState,
-  BreadcrumbShow,
+  Breadcrumb_inputName,
   editHPagesIDSuccess,
   fetchModelsList,
   getControlTypes,
@@ -154,7 +154,7 @@ const PageMaster = (props) => {
       if (hasEditVal) {
         setEditData(hasEditVal);
 
-        dispatch(BreadcrumbShow(hasEditVal.Name))
+        dispatch(Breadcrumb_inputName(hasEditVal.Name))
 
         setTablePageAccessDataState(hasEditVal.PagePageAccess);
 
@@ -997,7 +997,7 @@ const PageMaster = (props) => {
                                         },
                                       }}
                                       onChange={(e) => {
-                                        dispatch(BreadcrumbShow(e.target.value));
+                                        dispatch(Breadcrumb_inputName(e.target.value));
                                       }}
                                     />
                                   </FormGroup>

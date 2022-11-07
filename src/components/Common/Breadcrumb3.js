@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { Row, Col, Modal, Button, } from "reactstrap"
 import { useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { BreadcrumbShow } from "../../store/Utilites/Breadcrumb/actions";
+import { Breadcrumb_inputName } from "../../store/Utilites/Breadcrumb/actions";
 import { AvForm, AvInput } from "availity-reactstrap-validation";
 import * as XLSX from 'xlsx';
 
@@ -71,7 +71,7 @@ const Breadcrumb = props => {
 
         if (!(props.IsSearchVissible === undefined)) {
         }
-        history.listen(location => dispatch(BreadcrumbShow('')));
+        history.listen(location => dispatch(Breadcrumb_inputName('')));
     }, [history])
 
     useEffect(() => {
@@ -83,7 +83,7 @@ const Breadcrumb = props => {
             }
         }
     }, [excelData])
-
+debugger
     const DownloadInExcelButtonHanler = (event, values) => {
         debugger
         var list = []
