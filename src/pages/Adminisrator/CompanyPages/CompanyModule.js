@@ -23,7 +23,7 @@ import {
 } from "../../../store/Administrator/CompanyRedux/actions";
 import { MetaTags } from "react-meta-tags";
 import { AlertState, commonPageField, commonPageFieldSuccess } from "../../../store/actions";
-import { BreadcrumbShow } from "../../../store/Utilites/Breadcrumb/actions";
+import { Breadcrumb_inputName } from "../../../store/Utilites/Breadcrumb/actions";
 import { useHistory } from "react-router-dom";
 import {
   comAddPageFieldFunc,
@@ -142,7 +142,7 @@ const CompanyModule = (props) => {
         values.EmailID = EmailID;
         values.CompanyGroup = { label: CompanyGroupName, value: CompanyGroup };
         setState({ values, fieldLabel, hasValid, required, isError })
-        dispatch(BreadcrumbShow(hasEditVal.Name))
+        dispatch(Breadcrumb_inputName(hasEditVal.Name))
       }
       dispatch(editCompanyIDSuccess({ Status: false }))
     }
@@ -311,7 +311,7 @@ const CompanyModule = (props) => {
                                 autoFocus={true}
                                 onChange={(event) => {
                                   onChangeText({ event, state, setState })
-                                  dispatch(BreadcrumbShow(event.target.value))
+                                  dispatch(Breadcrumb_inputName(event.target.value))
                                 }}
                               />
                               {isError.Name.length > 0 && (

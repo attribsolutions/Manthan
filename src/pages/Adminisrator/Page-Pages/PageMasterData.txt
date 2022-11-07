@@ -12,7 +12,7 @@ import {
 } from "../../../store/Administrator/PartyRedux/action";
 import { getState } from "../../../store/Administrator/M_EmployeeRedux/action";
 import Flatpickr from "react-flatpickr"
-import { BreadcrumbShow } from "../../../store/Utilites/Breadcrumb/actions";
+import { Breadcrumb_inputName } from "../../../store/Utilites/Breadcrumb/actions";
 import { MetaTags } from "react-meta-tags";
 import { useHistory } from "react-router-dom";
 import DropdownTreeSelect from 'react-dropdown-tree-select'
@@ -125,7 +125,7 @@ const PartyMaster = (props) => {
         if (!(userPageAccessState === '')) { document.getElementById("txtName").focus(); }
         if (!(editDataGatingFromList === undefined)) {
             setEditData(editDataGatingFromList);
-            dispatch(BreadcrumbShow(editDataGatingFromList.Name))
+            dispatch(Breadcrumb_inputName(editDataGatingFromList.Name))
             setPageMode(pageModeProps);
             setFSSAIExipry_Date_Select(editDataGatingFromList.FSSAIExipry)
 
@@ -407,7 +407,7 @@ const PartyMaster = (props) => {
                                                                     validate={{
                                                                         required: { value: true, errorMessage: 'Please Enter Name' },
                                                                     }}
-                                                                    onChange={(e) => { dispatch(BreadcrumbShow(e.target.value)) }}
+                                                                    onChange={(e) => { dispatch(Breadcrumb_inputName(e.target.value)) }}
                                                                 />
                                                             </FormGroup>
                                                         </Col>

@@ -18,7 +18,7 @@ import { getDistrictOnState, getPartyListAPI } from "../../../store/Administrato
 import Breadcrumb from "../../../components/Common/Breadcrumb";
 import AvField from "availity-reactstrap-validation/lib/AvField";
 import Flatpickr from "react-flatpickr"
-import { BreadcrumbShow } from "../../../store/Utilites/Breadcrumb/actions";
+import { Breadcrumb_inputName } from "../../../store/Utilites/Breadcrumb/actions";
 import { MetaTags } from "react-meta-tags";
 import { useHistory } from "react-router-dom";
 import { SaveButton } from "../../../components/CommonSaveButton";
@@ -99,7 +99,7 @@ const AddEmployee = (props) => {
     if (!(editDataGatingFromList === undefined)) {
 
       setPageMode(pageModeProps);
-      dispatch(BreadcrumbShow(editDataGatingFromList.Name))
+      dispatch(Breadcrumb_inputName(editDataGatingFromList.Name))
       setEditData(editDataGatingFromList);
       // setIsEdit(true);
       setDesignation_DropdownSelect({
@@ -136,7 +136,7 @@ const AddEmployee = (props) => {
       })
 
       dispatch(editEmployeeSuccess({ Status: false }))
-      dispatch(BreadcrumbShow(editDataGatingFromList.Name))
+      dispatch(Breadcrumb_inputName(editDataGatingFromList.Name))
     }
     else if (!(propsPageMode === undefined)) {
       setPageMode(propsPageMode)
@@ -330,7 +330,7 @@ const AddEmployee = (props) => {
                               validate={{
                                 required: { value: true, errorMessage: 'Please Enter Name' },
                               }}
-                              onChange={(e) => { dispatch(BreadcrumbShow(e.target.value)) }}
+                              onChange={(e) => { dispatch(Breadcrumb_inputName(e.target.value)) }}
                             />
                           </FormGroup>
                         </Col>

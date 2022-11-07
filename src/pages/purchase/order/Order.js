@@ -395,6 +395,9 @@ const Order = (props) => {
         const itemArr = []
         items.forEach(i => {
             if ((i.inpQty > 0)) {
+                const basicAmt = parseFloat(basicAmount(i))
+                const cgstAmt = (GstAmount(i)).toFixed(2)
+
                 const arr = {
                     Item: i.id,
                     Quantity: i.inpQty,
@@ -402,22 +405,23 @@ const Order = (props) => {
                     Rate: i.inpRate,
                     Unit: i.UOM,
                     BaseUnitQuantity: i.inpBaseUnitQty,
-                    GST: i.Gstid,
                     Margin: "",
-                    BasicAmount: basicAmount(i).toFixed(2),
-                    GSTAmount: GstAmount(i).toFixed(2),
-                    CGST: i.GST,
-                    SGST: (GstAmount(i) / 2).toFixed(2),
-                    IGST: (GstAmount(i) / 2).toFixed(2),
+                    BasicAmount: basicAmt,
+                    GSTAmount: cgstAmt,
+                    GST: i.Gstid,
+                    CGST: cgstAmt / 2,
+                    SGST: cgstAmt / 2,
+                    IGST: 0,
                     CGSTPercentage: (i.GST / 2),
                     SGSTPercentage: (i.GST / 2),
-                    IGSTPercentage: (i.GST),
+                    IGSTPercentage: 0,
                     Amount: i.totalAmount,
                 }
+
                 itemArr.push(arr)
             };
         })
-        debugger
+     
         if (itemArr.length === 0) {
             alert("Please Enter one Item Quantity")
             return

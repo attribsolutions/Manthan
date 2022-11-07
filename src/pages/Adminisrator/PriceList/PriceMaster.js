@@ -29,7 +29,7 @@ import Breadcrumb from "../../../components/Common/Breadcrumb";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 
-import { BreadcrumbShow, AlertState } from "../../../store/actions";
+import { Breadcrumb_inputName, AlertState } from "../../../store/actions";
 import {
     delete_PriceList,
     delete_PriceListSuccess,
@@ -380,7 +380,7 @@ const PriceMaster = (props) => {
 
     return (
         <React.Fragment>
-            <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
+            <div className="page-content" style={{ marginTop: IsEditMode_Css,marginBottom:"3cm" }} >
                 <MetaTags>
                     <title>PartyType| FoodERP-React FrontEnd</title>
                 </MetaTags>
@@ -403,7 +403,7 @@ const PriceMaster = (props) => {
                             onChange={onChange}
                             className="bootstrap-demo"
                         /> */}
-                        <CardBody className=" vh-10 0 text-black"  >
+                        <CardBody className=" vh-10 0 text-black" >
                             <Row className="">
                                 <Col md={12}>
                                     <Card style={{ backgroundColor: "whitesmoke" }}>

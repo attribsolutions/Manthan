@@ -16,7 +16,7 @@ import {
 import { AvField, AvForm, } from "availity-reactstrap-validation";
 import Select from "react-select";
 import { MetaTags } from "react-meta-tags";
-import { BreadcrumbShow, commonPageField, commonPageFieldSuccess } from "../../../store/actions";
+import { Breadcrumb_inputName, commonPageField, commonPageFieldSuccess } from "../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
 import { Tbody, Thead } from "react-super-responsive-table";
 import { AlertState } from "../../../store/actions";
@@ -176,7 +176,7 @@ const VehicleMaster = (props) => {
 
                 setDivisionData(divisionTable)
                 setState({ values, fieldLabel, hasValid, required, isError })
-                dispatch(BreadcrumbShow(hasEditVal.RoleMaster))
+                dispatch(Breadcrumb_inputName(hasEditVal.RoleMaster))
                 dispatch(editVehicleTypeSuccess({ Status: false }))
 
 
@@ -426,7 +426,7 @@ const VehicleMaster = (props) => {
                                                                         autoComplete='off'
                                                                         onChange={(event) => {
                                                                             onChangeText({ event, state, setState })
-                                                                            dispatch(BreadcrumbShow(event.target.value))
+                                                                            dispatch(Breadcrumb_inputName(event.target.value))
                                                                         }}
                                                                     />
                                                                     {isError.VehicleNumber.length > 0 && (
@@ -448,7 +448,7 @@ const VehicleMaster = (props) => {
                                                                         autoComplete='off'
                                                                         onChange={(event) => {
                                                                             onChangeText({ event, state, setState })
-                                                                            dispatch(BreadcrumbShow(event.target.value))
+                                                                            dispatch(Breadcrumb_inputName(event.target.value))
                                                                         }}
                                                                     />
                                                                     {isError.Description.length > 0 && (

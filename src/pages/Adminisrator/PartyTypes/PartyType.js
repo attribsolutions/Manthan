@@ -18,7 +18,7 @@ import { AvField, AvForm, AvInput, } from "availity-reactstrap-validation";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useHistory } from "react-router-dom";
 import { CommonGetRoleAccessFunction } from "../../../components/Common/CommonGetRoleAccessFunction";
-import { BreadcrumbShow, AlertState, commonPageField } from "../../../store/actions";
+import { Breadcrumb_inputName, AlertState, commonPageField } from "../../../store/actions";
 import {
     editPartyTypeSuccess,
     PostPartyTypeAPISuccess,
@@ -131,7 +131,7 @@ const PartyType = (props) => {
                 hasValid.IsDivision.valid = true;
 
                 setState({ values, fieldLabel, hasValid, required, isError })
-                dispatch(BreadcrumbShow(hasEditVal.Name))
+                dispatch(Breadcrumb_inputName(hasEditVal.Name))
 
             }
             dispatch(editPartyTypeSuccess({ Status: false }))
@@ -243,7 +243,7 @@ const PartyType = (props) => {
                                                                 autoFocus={true}
                                                                 onChange={(event) => {
                                                                     onChangeText({ event, state, setState })
-                                                                    dispatch(BreadcrumbShow(event.target.value))
+                                                                    dispatch(Breadcrumb_inputName(event.target.value))
                                                                 }}
                                                             />
                                                             {isError.Name.length > 0 && (

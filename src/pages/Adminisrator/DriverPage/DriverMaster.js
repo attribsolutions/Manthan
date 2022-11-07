@@ -12,7 +12,7 @@ import {
     Row
 } from "reactstrap";
 import { MetaTags } from "react-meta-tags";
-import { BreadcrumbShow, commonPageFieldSuccess } from "../../../store/actions";
+import { Breadcrumb_inputName, commonPageFieldSuccess } from "../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
 import { AlertState, commonPageField } from "../../../store/actions";
 import {
@@ -132,7 +132,7 @@ const DriverMaster = (props) => {
                 values.id = id
 
                 setState({ values, fieldLabel, hasValid, required, isError })
-                dispatch(BreadcrumbShow(hasEditVal.DriverMaster))
+                dispatch(Breadcrumb_inputName(hasEditVal.DriverMaster))
             }
             dispatch(editDriverTypeSuccess({ Status: false }))
         }
@@ -272,7 +272,7 @@ const DriverMaster = (props) => {
                                                                 placeholder="Please Enter Name"
                                                                 onChange={(event) => {
                                                                     onChangeText({ event, state, setState })
-                                                                    dispatch(BreadcrumbShow(event.target.value))
+                                                                    dispatch(Breadcrumb_inputName(event.target.value))
                                                                 }}
 
                                                             />

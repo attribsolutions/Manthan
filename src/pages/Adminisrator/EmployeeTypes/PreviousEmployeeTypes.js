@@ -17,7 +17,7 @@ import { editEmployeeTypeSuccess, PostEmployeeTypeSubmit, PostEmployeeTypeSubmit
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { AlertState } from "../../../store/actions";
-import { BreadcrumbShow } from "../../../store/actions";
+import { Breadcrumb_inputName } from "../../../store/actions";
 import { SaveButton } from "../../../components/CommonSaveButton";
 
 const EmployeeTypesMaster = (props) => {
@@ -73,7 +73,7 @@ let pageModeProps=props.pageMode;
       setEditData(editDataGatingFromList);
       setPageMode(pageModeProps);
       dispatch(editEmployeeTypeSuccess({ Status: false }))
-      dispatch(BreadcrumbShow(editDataGatingFromList.Name))
+      dispatch(Breadcrumb_inputName(editDataGatingFromList.Name))
     }
     else if (!(propsPageMode === undefined)) {
         setPageMode(propsPageMode)
@@ -175,7 +175,7 @@ let pageModeProps=props.pageMode;
                                                             validate={{
                                                                 required: { value: true, errorMessage: 'Please Enter Name' },
                                                             }}
-                                                            onChange={(e) => { dispatch(BreadcrumbShow(e.target.value)) }}
+                                                            onChange={(e) => { dispatch(Breadcrumb_inputName(e.target.value)) }}
                                                         />
                                                     </FormGroup>
 

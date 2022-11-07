@@ -9,7 +9,7 @@ import {
 } from "../../../store/Administrator/RoleMasterRedux/action";
 import { AlertState } from "../../../store/actions";
 import Select from "react-select";
-import { BreadcrumbShow } from "../../../store/Utilites/Breadcrumb/actions";
+import { Breadcrumb_inputName } from "../../../store/Utilites/Breadcrumb/actions";
 import { MetaTags } from "react-meta-tags";
 import { useHistory } from "react-router-dom";
 import { CommonGetRoleAccessFunction } from "../../../components/Common/CommonGetRoleAccessFunction";
@@ -84,7 +84,7 @@ const RoleMaster = (props) => {
       setEditData(editDataGatingFromList);
       setPageMode(pageModeProps);
       dispatch(editSuccess({ Status: false }))
-      dispatch(BreadcrumbShow(editDataGatingFromList.Name))
+      dispatch(Breadcrumb_inputName(editDataGatingFromList.Name))
       const listItems = editDataGatingFromList.RoleEmployeeTypes.map((data) => ({
         value: data.EmployeeType,
         label: data.EmployeeTypeName
@@ -194,7 +194,7 @@ const RoleMaster = (props) => {
                                 validate={{
                                   required: { value: true, errorMessage: 'Please Enter Name' },
                                 }}
-                                onChange={(e) => { dispatch(BreadcrumbShow(e.target.value)) }}
+                                onChange={(e) => { dispatch(Breadcrumb_inputName(e.target.value)) }}
                               />
                             </FormGroup>
 
