@@ -136,7 +136,7 @@ const PageMaster = (props) => {
 
   // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
   useEffect(() => {
-    debugger
+    
     // if (!(userPageAccessState === '')) { document.getElementById("txtName").focus(); }
     if ((hasShowloction || hasShowModal)) {
 
@@ -152,6 +152,7 @@ const PageMaster = (props) => {
       }
 
       if (hasEditVal) {
+        debugger
         setEditData(hasEditVal);
 
         dispatch(Breadcrumb_inputName(hasEditVal.Name))
@@ -182,7 +183,7 @@ const PageMaster = (props) => {
             ListPageSeq: index.ListPageSeq,
             ShowInListPage: index.ShowInListPage,
             ShowInDownload: index.ShowInDownload,
-            DownloadDefaultSelect: index.DownloadDefaultSelect
+            DownloadDefaultSelect: index.ShownloadDefaultSelect
           }
         })
 
@@ -364,7 +365,7 @@ const PageMaster = (props) => {
   }
 
   function arrow_value(key) {
-    debugger
+    
     pageFieldTabTable[key].DefaultSort = 2
 
     var x = document.getElementById("up");
@@ -386,7 +387,7 @@ const PageMaster = (props) => {
   }
 
   function PageField_onChange_Handler(event, type = '', key) {
-    debugger
+    
     var found = pageFieldTabTable.find((i, k) => {
       return (k === key)
     })
