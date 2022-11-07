@@ -10,16 +10,6 @@ export default function OrderPageTemsTable(props) {
         termsAndCondtions: state.TermsAndCondtionsReducer.TermsAndCondtionsList,
     }));
 
-    function AddDivisionHandler(e) {
-        const find = tableList.find((i) => {
-            return (i.value === e.value)
-        });
-
-        if (find === undefined) {
-            setfunc(terms => [...terms, e])
-        }
-
-    }
     return (
         <div style={{ minHeight: "400px", marginTop: "-20px" }}>
             <div className="row mx-1 " style={{
@@ -37,19 +27,19 @@ export default function OrderPageTemsTable(props) {
                                 label: i.Name
                             }))
                         }
-                        onChange={AddDivisionHandler}
+                        onChange={e => setfunc(terms => [...terms, e])}
                     />
                 </div>
-                <div className=" col-4 pt-3" >
+                <div className=" col-9 pt-3" >
                     <Table className='table  table-borderless table-hover  '>
                         <tr>
                             <th>Terms And Condation </th>
                             <th>Action</th>
                         </tr >
-                        {tableList.map(i => (
+                        {tableList.map((i, k) => (
                             <tr className='bordered-gray'>
                                 <td className="px-2">
-                                    <i className="bx bx-caret-right text-primary"></i>{i.label}</td>
+                                    <spam className="form-label">{k + 1}</spam>{i.label}</td>
                                 <td> <i className="mdi mdi-delete font-size-18 text-danger text-right"
                                     onClick={() => { setfunc(terms => terms.filter(f => !(f.value === i.value))) }}></i></td>
                             </tr>
