@@ -12,8 +12,8 @@ const INIT_STATE = {
   editData: { Status: false },
   deleteCompanyID: { Status: false },
   postMsg: { Status: false },
-  updateMessage:{ Status: false },
-  CompanyGroup:[],
+  updateMessage: { Status: false },
+  CompanyGroup: [],
 }
 
 const Company = (state = INIT_STATE, action) => {
@@ -59,7 +59,8 @@ const Company = (state = INIT_STATE, action) => {
         CompanyGroup: action.payload,
       };
 
-
+    case "RESET_ALL":
+      return state = INIT_STATE;
 
     default:
       return state

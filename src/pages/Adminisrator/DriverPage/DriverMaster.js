@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState, } from "react";
 import Breadcrumb from "../../../components/Common/Breadcrumb";
 import {
+    Button,
     Card,
     CardBody,
     CardHeader,
@@ -21,7 +22,8 @@ import {
     getMethod_ForDriverListSuccess,
     editDriverTypeSuccess,
     updateDriverTypeID,
-    updateDriverTypeIDSuccess
+    updateDriverTypeIDSuccess,
+    reset
 } from "../../../store/Administrator/DriverRedux/action";
 import { useHistory } from "react-router-dom";
 import Flatpickr from "react-flatpickr"
@@ -244,6 +246,13 @@ const DriverMaster = (props) => {
                             <title>DriverMaster | FoodERP-React FrontEnd</title>
                         </MetaTags>
                         <Breadcrumb breadcrumbItem={userPageAccessState.PageHeading} />
+<Button
+type="text"
+onClick={()=>{
+dispatch(reset())
+}}>
+    "click"
+</Button>
 
                         <Card className="text-black">
                             <CardHeader className="card-header   text-black" style={{ backgroundColor: "#dddddd" }} >

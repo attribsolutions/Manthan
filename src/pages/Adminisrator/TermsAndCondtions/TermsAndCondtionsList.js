@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import TermsAndCondtionsMaster from "./TermsAndCondtionsMaster";
 import CommonListPage from "../../../components/Common/CmponentRelatedCommonFile/commonListPage";
 import { commonPageFieldList, commonPageFieldListSuccess } from "../../../store/actions";
-import { PostMethod_ForTermsAndCondtionsMaster_Success,GetTermsAndCondtionsList,EditTermsAndCondtions,DeleteTermsAndCondtions,DeleteTermsAndCondtions_Success ,UpdateTermsAndCondtions_Success} from "../../../store/Administrator/TermsAndCondtionsRedux/actions";
+import { postTermAndConditionSuccess,getTermAndCondition,EditTermsAndCondtions,DeleteTermsAndCondtions,DeleteTermsAndCondtions_Success ,UpdateTermsAndCondtions_Success} from "../../../store/Administrator/TermsAndCondtionsRedux/actions";
 
 const TermsAndCondtionsList = (props) => {
   
@@ -27,10 +27,10 @@ const TermsAndCondtionsList = (props) => {
 
 
   const action = {
-    getList: GetTermsAndCondtionsList,
+    getList: getTermAndCondition,
     editId: EditTermsAndCondtions,
     deleteId: DeleteTermsAndCondtions,
-    postSucc: PostMethod_ForTermsAndCondtionsMaster_Success,
+    postSucc: postTermAndConditionSuccess,
     updateSucc: UpdateTermsAndCondtions_Success,
     deleteSucc: DeleteTermsAndCondtions_Success
 
@@ -40,8 +40,8 @@ const TermsAndCondtionsList = (props) => {
   useEffect(() => {
     
     dispatch(commonPageFieldListSuccess(null))
-    dispatch(commonPageFieldList(102))
-    dispatch(GetTermsAndCondtionsList())
+    dispatch(commonPageFieldList(101))
+    dispatch(getTermAndCondition())
 
   }, []);
 
