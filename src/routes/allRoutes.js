@@ -79,11 +79,10 @@ import PartySubPartyList from "../pages/Adminisrator/PartySubPartyPages/partysub
 import GSTMaster from "../pages/Adminisrator/GSTPages/GSTMaster";
 import GSTList from "../pages/Adminisrator/GSTPages/GSTList";
 
-
 import TermsAndCondtionsList from "../pages/Adminisrator/TermsAndCondtions/TermsAndCondtionsList";
 
-import OrderList from "../pages/purchase/order/OrderList.js"
-import Order from "../pages/purchase/order/Order";
+import Order from "../pages/Purchase/Order/Order"
+import OrderList from "../pages/Purchase/Order/OrderList"
 
 import PartyItems from "../pages/Adminisrator/PartyItemPage/PartyItems";
 
