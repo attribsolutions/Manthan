@@ -30,16 +30,16 @@ const INIT_STATE = {
     ItemGroupList: [],
     BaseUnit: [],
     CategoryType: [],
-    CategoryByCategoryType:[],
+    CategoryByCategoryType: [],
     SubCategoryByCategoryType: { Data: [], key: null },
     ImageType: [],
     MRPType: [],
     Division: [],
     Party: [],
     PriceList: [],
-    GroupList:[],
-    SubGroupList:[],
-    Category:[]
+    GroupList: [],
+    SubGroupList: [],
+    Category: []
 };
 
 const ItemMastersReducer = (state = INIT_STATE, action) => {
@@ -146,11 +146,14 @@ const ItemMastersReducer = (state = INIT_STATE, action) => {
                 ...state,
                 SubGroupList: action.payload,
             }
-            case GET_CATEGORY_BY_CATEGORYTYPE_FOR_DROPDOWN_API_SUCCESS:
-                return {
-                    ...state,
-                    Category: action.payload,
-                }
+        case GET_CATEGORY_BY_CATEGORYTYPE_FOR_DROPDOWN_API_SUCCESS:
+            return {
+                ...state,
+                Category: action.payload,
+            }
+
+        case "RESET_ALL":
+            return state = INIT_STATE;
         default:
             return state;
     }

@@ -19,8 +19,8 @@ import { Breadcrumb_inputName } from "../../../store/Utilites/Breadcrumb/actions
 import { useDispatch, useSelector } from "react-redux";
 import {
    
-    PostMethod_ForTermsAndCondtionsMaster,
-    PostMethod_ForTermsAndCondtionsMaster_Success,
+    postTermAndCondition,
+    postTermAndConditionSuccess,
     
     EditTermsAndCondtions,
   
@@ -86,7 +86,7 @@ const TermsAndCondtionsMaster = (props) => {
     useEffect(() => {
 
         if ((PostAPIResponse.Status === true) && (PostAPIResponse.StatusCode === 200)) {
-            dispatch(PostMethod_ForTermsAndCondtionsMaster_Success({ Status: false }))
+            dispatch(postTermAndConditionSuccess({ Status: false }))
 
 
             if (pageMode === "other") {
@@ -107,7 +107,7 @@ const TermsAndCondtionsMaster = (props) => {
             }
         }
         else if (PostAPIResponse.Status === true) {
-            dispatch(PostMethod_ForTermsAndCondtionsMaster_Success({ Status: false }))
+            dispatch(postTermAndConditionSuccess({ Status: false }))
             dispatch(AlertState({
                 Type: 4,
                 Status: true,
@@ -133,7 +133,7 @@ const TermsAndCondtionsMaster = (props) => {
         }
         else {
             alert(jsonBody)
-            dispatch(PostMethod_ForTermsAndCondtionsMaster(jsonBody))
+            dispatch(postTermAndCondition(jsonBody))
         }
 
     };

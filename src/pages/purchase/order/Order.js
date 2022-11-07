@@ -41,6 +41,8 @@ import OrderList from "./OrderList";
 import { ORDER_lIST } from "../../../routes/route_url";
 import SaveButton from "../../../components/Common/CommonSaveButton";
 import { countlabelFunc } from "../../../components/Common/CmponentRelatedCommonFile/commonListPage";
+import ReactSelect from "react-select";
+import { getTermAndCondition } from "../../../store/Administrator/TermsAndCondtionsRedux/actions";
 
 let description = 'order'
 let editVal = {}
@@ -63,6 +65,7 @@ const Order = (props) => {
 
     useEffect(() => {
         dispatch(getSupplier())
+        dispatch(getTermAndCondition())
     }, [])
 
     const {
@@ -71,6 +74,7 @@ const Order = (props) => {
         supplier,
         userAccess,
         updateMsg,
+        termsAndCondtions,
         pageField
     } = useSelector((state) => ({
         items: state.OrderReducer.orderItem,
@@ -78,7 +82,8 @@ const Order = (props) => {
         postMsg: state.OrderReducer.postMsg,
         updateMsg: state.OrderReducer.updateMsg,
         userAccess: state.Login.RoleAccessUpdateData,
-        pageField: state.CommonPageFieldReducer.pageFieldList
+        pageField: state.CommonPageFieldReducer.pageFieldList,
+        termsAndCondtions: state.TermsAndCondtionsReducer.RoleAccessUpdateData,
     }));
 
 
@@ -421,7 +426,7 @@ const Order = (props) => {
                 itemArr.push(arr)
             };
         })
-     
+
         if (itemArr.length === 0) {
             alert("Please Enter one Item Quantity")
             return
@@ -587,7 +592,23 @@ const Order = (props) => {
                         )}
 
                     </PaginationProvider>
+                    <div className="row">
+                        <div className="col-3">
+                            <ReactSelect
+                                options={() => {
 
+                                }}
+                            >
+
+                            </ReactSelect>
+
+                        </div>
+                    </div>
+                    <br></br>
+                    <br></br>
+                    <br></br>
+                    <br></br>
+                    <br></br>
                     {(items.length > 0) ? <div className="row save1" style={{ paddingBottom: 'center' }}>
                         <SaveButton pageMode={pageMode} userAcc={userAccState}
                             module={"Order"} onClick={saveHandeller}
