@@ -1193,7 +1193,7 @@ const PageMaster = (props) => {
                                   <Row className="justify-content-md-left">
                                     <Label
                                       htmlFor="horizontal-firstname-input"
-                                      className="col-sm-2 col-form-label mt-4"
+                                      className="col-sm-3 col-form-label mt-4"
                                     >
                                       Active{" "}
                                     </Label>

@@ -418,16 +418,17 @@ debugger
                                         <Card style={{ backgroundColor: "whitesmoke" }}>
 
                                             <CardHeader className="card-header   text-black " style={{ backgroundColor: "#e9e9ef" }} >
-                                                <Row className="mt-3">
-                                                    <Col md="3">
-                                                        <FormGroup className="mb-3 row ">
-                                                            <Label className="col-sm-3 ml-n5 ">EffectiveDate</Label>
-                                                            <Col md="9">
+                                                <Row className="mt-2">
+                                                    <Col md="6">
+                                                        <FormGroup className="mb-4 row">
+                                                            <Label className="col-md-4">EffectiveDate</Label>
+                                                            <Col md="8">
                                                                 <Flatpickr
+                                                                    
                                                                     id="EffectiveDateid"
                                                                     name="effectiveDate"
                                                                     value={effectiveDate}
-                                                                    className="form-control d-block p-2 bg-white text-dark"
+                                                                    className="form-control  bg-white text-dark mt-n2"
                                                                     placeholder=" Please Enter FSSAI Exipry"
                                                                     options={{
                                                                         altInput: true,
@@ -440,8 +441,10 @@ debugger
                                                         </FormGroup>
                                                     </Col>
 
-                                                    <Col md="3" >
-                                                        <Button type="button" color="btn btn-outline-success border-2 font-size-12" onClick={() => { GoButton_Handler() }} >Go</Button>
+                                                    <Col md="2">
+                                                        <Button type="button" color="btn btn-outline-success border-2 font-size-12  "
+                                                        className="mt-n2"
+                                                           onClick={() => { GoButton_Handler() }} >Go</Button>
 
                                                     </Col>
 
