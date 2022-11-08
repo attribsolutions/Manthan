@@ -23,7 +23,6 @@ import {
     editDriverTypeSuccess,
     updateDriverTypeID,
     updateDriverTypeIDSuccess,
-    reset
 } from "../../../store/Administrator/DriverRedux/action";
 import { useHistory } from "react-router-dom";
 import Flatpickr from "react-flatpickr"
@@ -78,7 +77,7 @@ const DriverMaster = (props) => {
 
     useEffect(() => {
         dispatch(commonPageFieldSuccess(null));// new change
-        dispatch(commonPageField(91,history))
+        dispatch(commonPageField(91, history))
     }, []);
 
     // new change
@@ -246,13 +245,6 @@ const DriverMaster = (props) => {
                             <title>DriverMaster | FoodERP-React FrontEnd</title>
                         </MetaTags>
                         <Breadcrumb breadcrumbItem={userPageAccessState.PageHeading} />
-<Button
-type="text"
-onClick={()=>{
-dispatch(reset())
-}}>
-    "click"
-</Button>
 
                         <Card className="text-black">
                             <CardHeader className="card-header   text-black" style={{ backgroundColor: "#dddddd" }} >
