@@ -8,18 +8,18 @@ import {
 
 export const commonPageFieldList = (pageId) => ({
   type: COMMON_PAGE_FILED_lIST,
-  pageId,
+  pageId
 });
 export const commonPageFieldListSuccess = (data) => ({
   type: COMMON_PAGE_FILED_lIST_SUCCESS,
   payload: data,
 });
 
-
 export const commonPageField = (pageId) => ({
   type: COMMON_PAGE_FILED,
-  pageId,
+  pageId
 });
+
 export const commonPageFieldSuccess = (data) => ({
   type: COMMON_PAGE_FILED_SUCCESS,
   payload: data,

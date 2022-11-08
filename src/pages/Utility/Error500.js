@@ -1,11 +1,13 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { Col, Container, Row } from 'reactstrap';
 
 //import images
 import error from "../../assets/images/error-img.png"
 
 const Error500 = () => {
+    const history = useHistory();
+    const Msg = history.location.state
     return (
         <React.Fragment>
             <div className="my-5 pt-5">
@@ -15,6 +17,7 @@ const Error500 = () => {
                             <div className="text-center mb-5">
                                 <h1 className="display-1 fw-semibold">5<span className="text-primary mx-2">0</span>0</h1>
                                 <h4 className="text-uppercase">Internal Server Error</h4>
+                                <span className='text-bold text-danger'>{Msg}</span>
                                 <div className="mt-5 text-center">
                                     <Link className="btn btn-primary" to="/dashboard">Back to Dashboard</Link>
                                 </div>

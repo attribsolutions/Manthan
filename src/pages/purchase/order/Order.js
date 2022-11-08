@@ -1,9 +1,6 @@
 import {
     Button,
-    Card,
-    CardBody,
     Col,
-    Container,
     FormGroup,
     Input,
     Label,
@@ -13,9 +10,9 @@ import Flatpickr from "react-flatpickr";
 import Select from "react-select";
 import { useDispatch, useSelector } from "react-redux";
 import "flatpickr/dist/themes/material_blue.css"
-import Breadcrumb from "../../../components/Common/Breadcrumb3";
 
-import React, { useEffect, useState, useRef } from "react";
+
+import React, { useEffect, useState, useRf } from "react";
 import { MetaTags } from "react-meta-tags";
 
 import ToolkitProvider, { Search } from "react-bootstrap-table2-toolkit";
@@ -24,7 +21,7 @@ import paginationFactory, { PaginationListStandalone, PaginationProvider } from 
 import { useHistory } from "react-router-dom";
 import {
     editOrderIdSuccess,
-    getOrderListPage,
+
     getSupplier,
     goButton,
     goButtonSuccess,
@@ -37,10 +34,13 @@ import { mySearchProps } from "../../../components/Common/CmponentRelatedCommonF
 import { AlertState, BreadcrumbFilterSize } from "../../../store/actions";
 import { basicAmount, GstAmount, handleKeyDown, totalAmount } from "./OrderPageCalulation";
 import '../../Order/div.css'
-import OrderList from "./OrderList";
+
 import { ORDER_lIST } from "../../../routes/route_url";
 import SaveButton from "../../../components/Common/CommonSaveButton";
-import { countlabelFunc } from "../../../components/Common/CmponentRelatedCommonFile/commonListPage";
+
+import { getTermAndCondition } from "../../../store/Administrator/TermsAndCondtionsRedux/actions";
+import { Table } from "react-super-responsive-table";
+import OrderPageTemsTable from "./OrderPageTemsTable";
 
 let description = 'order'
 let editVal = {}
@@ -60,9 +60,11 @@ const Order = (props) => {
     const [supplier_select, setSupplier_select] = useState('');
     const [Description, setDescription] = useState('');
     const [orderAmount, setOrderAmount] = useState("");
+    const [termsAndConTable, setTermsAndConTable] = useState([]);
 
     useEffect(() => {
         dispatch(getSupplier())
+        dispatch(getTermAndCondition())
     }, [])
 
     const {
@@ -71,6 +73,7 @@ const Order = (props) => {
         supplier,
         userAccess,
         updateMsg,
+        termsAndCondtions,
         pageField
     } = useSelector((state) => ({
         items: state.OrderReducer.orderItem,
@@ -78,11 +81,12 @@ const Order = (props) => {
         postMsg: state.OrderReducer.postMsg,
         updateMsg: state.OrderReducer.updateMsg,
         userAccess: state.Login.RoleAccessUpdateData,
-        pageField: state.CommonPageFieldReducer.pageFieldList
+        pageField: state.CommonPageFieldReducer.pageFieldList,
+        termsAndCondtions: state.TermsAndCondtionsReducer.TermsAndCondtionsList,
     }));
 
 
-
+    debugger
     // userAccess useEffect
     useEffect(() => {
         let userAcc = null;
@@ -131,7 +135,11 @@ const Order = (props) => {
                 description = hasEditVal.Description
                 editVal = hasEditVal
                 setOrderAmount(hasEditVal.OrderAmount)
-
+                const termsAndCondition = hasEditVal.OrderTermsAndCondition.map(i => ({
+                    value: i.id,
+                    label: i.TermsAndCondition
+                }))
+                setTermsAndConTable(termsAndCondition)
             }
             dispatch(editOrderIdSuccess({ Status: false }))
         }
@@ -218,6 +226,7 @@ const Order = (props) => {
             formatter: (value, row, k) => {
                 if (row.inpRate === undefined) { row["inpRate"] = 0 }
                 if (row.totalAmount === undefined) { row["totalAmount"] = 0 }
+                if (row.GST === undefined) { row["GST"] = 0 }
                 return (
                     <span className="text-right" >
                         <Input
@@ -421,12 +430,12 @@ const Order = (props) => {
                 itemArr.push(arr)
             };
         })
-     
+
         if (itemArr.length === 0) {
             alert("Please Enter one Item Quantity")
             return
         }
-
+        const termsAndCondition = termsAndConTable.map(i => ({ TermsAndCondition: i.value }))
         const jsonBody = JSON.stringify({
             OrderDate: date,
             Customer: division,
@@ -435,7 +444,8 @@ const Order = (props) => {
             Description: description,
             CreatedBy: 1,
             UpdatedBy: 1,
-            OrderItem: itemArr
+            OrderItem: itemArr,
+            OrderTermsAndConditions: termsAndCondition
         });
 
         if (pageMode === "edit") {
@@ -557,7 +567,7 @@ const Order = (props) => {
                                     <React.Fragment>
                                         <Row>
                                             <Col xl="12">
-                                                <div className="table table-unRresponsive">
+                                                <div className="table table-Rresponsive">
                                                     <BootstrapTable
                                                         keyField={"id"}
                                                         responsive
@@ -587,6 +597,11 @@ const Order = (props) => {
                         )}
 
                     </PaginationProvider>
+
+                    {items.length > 0 ?
+                        <OrderPageTemsTable tableList={termsAndConTable} setfunc={setTermsAndConTable} />
+                        : null
+                    }
 
                     {(items.length > 0) ? <div className="row save1" style={{ paddingBottom: 'center' }}>
                         <SaveButton pageMode={pageMode} userAcc={userAccState}

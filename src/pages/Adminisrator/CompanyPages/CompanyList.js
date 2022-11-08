@@ -12,9 +12,11 @@ import CompanyModule from "./CompanyModule";
 import CommonListPage from "../../../components/Common/CmponentRelatedCommonFile/commonListPage";
 import { commonPageFieldList, commonPageFieldListSuccess } from "../../../store/actions";
 import { COMPANY } from "../../../routes/route_url";
+import { useHistory } from "react-router-dom";
 
 const CompanyList = () => {
     const dispatch = useDispatch();
+
     const reducers = useSelector(
         (state) => ({
             tableList: state.Company.companyList,
@@ -46,7 +48,7 @@ const CompanyList = () => {
     }, []);
 
     const { pageField } = reducers;
-debugger
+    debugger
     return (
         <React.Fragment>
             {
@@ -67,6 +69,7 @@ debugger
 }
 
 export default CompanyList;
+
 
 
 

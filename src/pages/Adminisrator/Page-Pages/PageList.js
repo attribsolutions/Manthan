@@ -10,7 +10,6 @@ import {
 } from "../../../store/Administrator/HPagesRedux/actions";
 import HPageMaster from "./PageMaster";
 import { commonPageFieldList, commonPageFieldListSuccess, } from "../../../store/actions";
-import { useHistory } from "react-router-dom";
 import CommonListPage from "../../../components/Common/CmponentRelatedCommonFile/commonListPage";
 import { PAGE } from "../../../routes/route_url";
 
@@ -47,7 +46,7 @@ export default function PageList() {
   }, []);
 
   const { pageField } = reducers;
-debugger
+
   return (
     <React.Fragment>
       {

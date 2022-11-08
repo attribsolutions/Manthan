@@ -15,25 +15,24 @@ import {
 
 //=============================POST===================================
 
-export const PostMethod_ForTermsAndCondtionsMaster = (data) => ({
+export const postTermAndCondition = (data) => ({
     type: POST_METHOD_HANDLER_FOR_TERMSANDCONDITIONS_MASTER_API,
     data,
 
 });
 
-export const PostMethod_ForTermsAndCondtionsMaster_Success = (data) => ({
+export const postTermAndConditionSuccess = (data) => ({
     type: POST_METHOD_HANDLER_FOR_TERMSANDCONDITIONS_MASTER_API_SUCCESS,
     payload: data,
 });
 
 //=============================ALL GET===================================
 
-export const GetTermsAndCondtionsList = (TANDCdata) => ({
+export const getTermAndCondition = () => ({
     type: GET_METHOD_FOR_TERMSANDCONDITIONSLIST_API,
-    payload:TANDCdata
-  });
+});
 
-export const GetTermsAndCondtionsList_Success = (data) => ({
+export const getTermAndCondition_Success = (data) => ({
     type: GET_METHOD_FOR_TERMSANDCONDITIONSLIST_API_SUCCESS,
     payload: data,
 });

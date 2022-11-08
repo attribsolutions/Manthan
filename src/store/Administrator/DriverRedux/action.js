@@ -65,3 +65,7 @@ export const updateDriverTypeIDSuccess = (updateMessage) => ({
  type: UPDATE_DRIVER_TYPE_ID_SUCCESS,
  payload: updateMessage,
 })
+
+export const reset = () => ({
+  type: "RESET_ALL",
+ })
