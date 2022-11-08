@@ -16,7 +16,6 @@ import { useHistory } from "react-router-dom";
 
 const CompanyList = () => {
     const dispatch = useDispatch();
-    const history = useHistory();
 
     const reducers = useSelector(
         (state) => ({
@@ -44,7 +43,7 @@ const CompanyList = () => {
     // Featch Modules List data  First Rendering
     useEffect(() => {
         dispatch(commonPageFieldListSuccess(null))
-        dispatch(commonPageFieldList(1, history))
+        dispatch(commonPageFieldList(1))
         dispatch(fetchCompanyList());
     }, []);
 

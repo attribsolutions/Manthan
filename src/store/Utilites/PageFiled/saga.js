@@ -10,7 +10,7 @@ import {
 import { hasError500 } from "../CommonError/actions";
 
 
-function* commonPageFiled_GenFunc({ pageId, history }) {
+function* commonPageFiled_GenFunc({ pageId }) {
   yield put(SpinnerState(true))
   try {
     const response = yield call(commonPageFiled_API, pageId);
@@ -23,7 +23,7 @@ function* commonPageFiled_GenFunc({ pageId, history }) {
 
   }
 }
-function* commonPageFiledList_GenFunc({ pageId, history }) {
+function* commonPageFiledList_GenFunc({ pageId }) {
 
   yield put(SpinnerState(true))
   try {

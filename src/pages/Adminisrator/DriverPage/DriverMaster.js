@@ -77,7 +77,7 @@ const DriverMaster = (props) => {
 
     useEffect(() => {
         dispatch(commonPageFieldSuccess(null));// new change
-        dispatch(commonPageField(91, history))
+        dispatch(commonPageField(91))
     }, []);
 
     // new change
