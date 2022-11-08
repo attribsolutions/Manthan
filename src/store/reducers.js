@@ -12,6 +12,8 @@ import Profile from "./auth/profile/reducer"
 //Administrator
 import SpinnerReducer from './Utilites/Spinner/reducer'
 import AlertReducer from './Utilites/CustomAlertRedux/reducer'
+import CommonError from './Utilites/CommonError/reducer'
+
 import CustomSearchReducer from './Utilites/CustomSearchRedux/reducer'
 import BreadcrumbReducer from './Utilites/Breadcrumb/reducer'
 import CommonPageFieldReducer from './Utilites/PageFiled/reducer'
@@ -59,6 +61,7 @@ const rootReducer = combineReducers({
   Profile,
   SpinnerReducer,
   AlertReducer,
+  CommonError,
   CustomSearchReducer,
   BreadcrumbReducer,
   CommonPageFieldReducer,

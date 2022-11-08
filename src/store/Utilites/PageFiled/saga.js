@@ -4,11 +4,13 @@ import { COMMON_PAGE_FILED, COMMON_PAGE_FILED_lIST } from "./actionType";
 
 import {
   commonPageFieldSuccess,
-  SpinnerState, AlertState,
+  SpinnerState,
   commonPageFieldListSuccess
 } from "../../actions"
+import { hasError500 } from "../CommonError/actions";
 
-function* commonPageFiled_GenFunc({ pageId, history }) {
+
+function* commonPageFiled_GenFunc({ pageId }) {
   yield put(SpinnerState(true))
   try {
     const response = yield call(commonPageFiled_API, pageId);
@@ -17,13 +19,11 @@ function* commonPageFiled_GenFunc({ pageId, history }) {
     yield put(SpinnerState(false))
   } catch (error) {
     yield put(SpinnerState(false))
-    history.push({
-      pathname: "/auth-500",
-      state: `PageMaster API Error : Page-Id=${pageId}`
-    })
+    yield put(hasError500(`PageMaster API Error : Page-Id=${pageId}`))
+
   }
 }
-function* commonPageFiledList_GenFunc({ pageId, history }) {
+function* commonPageFiledList_GenFunc({ pageId }) {
 
   yield put(SpinnerState(true))
   try {
@@ -31,11 +31,9 @@ function* commonPageFiledList_GenFunc({ pageId, history }) {
     yield put(commonPageFieldListSuccess(response.Data));
     yield put(SpinnerState(false))
   } catch (error) {
+
+    yield put(hasError500(`PageMaster API Error : Page-Id=${pageId}`))
     yield put(SpinnerState(false))
-    history.push({
-      pathname: "/auth-500",
-      state: `PageMaster API Error : Page-Id=${pageId}`
-    })
   }
 }
 

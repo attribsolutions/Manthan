@@ -135,7 +135,11 @@ const Order = (props) => {
                 description = hasEditVal.Description
                 editVal = hasEditVal
                 setOrderAmount(hasEditVal.OrderAmount)
-
+                const termsAndCondition = hasEditVal.OrderTermsAndCondition.map(i => ({
+                    value: i.id,
+                    label: i.TermsAndCondition
+                }))
+                setTermsAndConTable(termsAndCondition)
             }
             dispatch(editOrderIdSuccess({ Status: false }))
         }
@@ -222,6 +226,7 @@ const Order = (props) => {
             formatter: (value, row, k) => {
                 if (row.inpRate === undefined) { row["inpRate"] = 0 }
                 if (row.totalAmount === undefined) { row["totalAmount"] = 0 }
+                if (row.GST === undefined) { row["GST"] = 0 }
                 return (
                     <span className="text-right" >
                         <Input
@@ -430,7 +435,7 @@ const Order = (props) => {
             alert("Please Enter one Item Quantity")
             return
         }
-
+        const termsAndCondition = termsAndConTable.map(i => ({ TermsAndCondition: i.value }))
         const jsonBody = JSON.stringify({
             OrderDate: date,
             Customer: division,
@@ -439,7 +444,8 @@ const Order = (props) => {
             Description: description,
             CreatedBy: 1,
             UpdatedBy: 1,
-            OrderItem: itemArr
+            OrderItem: itemArr,
+            OrderTermsAndConditions: termsAndCondition
         });
 
         if (pageMode === "edit") {

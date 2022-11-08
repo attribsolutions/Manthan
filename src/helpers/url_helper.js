@@ -28,7 +28,7 @@ export const FOOD_ERP_POST_JWT_PASSWORD_FORGET_VERIFY_OTP = "/VerifyOTP"
 export const FOOD_ERP_POST_JWT_PASSWORD_FORGET_SEND_OTP = "/SendMail"
 export const SUPER_ADMIN_API = '/SuperAdmin'
 
-export const PAGE_FIELD = '/PageMaster'
+export const PAGE_FIELD = '/PageMa'
 
 //PAGE Master
 export const GET_DEFAULT_MODULE = "/HModules"

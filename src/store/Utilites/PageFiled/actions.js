@@ -6,18 +6,18 @@ import {
 } from "./actionType";
 
 
-export const commonPageFieldList = (pageId, history) => ({
+export const commonPageFieldList = (pageId) => ({
   type: COMMON_PAGE_FILED_lIST,
-  pageId, history,
+  pageId
 });
 export const commonPageFieldListSuccess = (data) => ({
   type: COMMON_PAGE_FILED_lIST_SUCCESS,
   payload: data,
 });
 
-export const commonPageField = (pageId, history) => ({
+export const commonPageField = (pageId) => ({
   type: COMMON_PAGE_FILED,
-  pageId, history,
+  pageId
 });
 
 export const commonPageFieldSuccess = (data) => ({
