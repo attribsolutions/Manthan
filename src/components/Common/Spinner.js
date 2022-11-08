@@ -1,13 +1,27 @@
-import React from 'react'
-import { useSelector } from 'react-redux';
+import React, { useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 import { Modal, } from "reactstrap";
+import { hasError500 } from '../../store/Utilites/CommonError/actions'
 
 const Spinner = () => {
-    
+    const history = useHistory();
+    const dispatch = useDispatch();
     //redux Spinner State
-    const { SpinnerState } = useSelector((state) => ({
-       SpinnerState: state.SpinnerReducer.SpinnerState,
+    const { SpinnerState, error500 } = useSelector((state) => ({
+        SpinnerState: state.SpinnerReducer.SpinnerState,
+        error500: state.CommonError.error500,
     }));
+
+    useEffect(() => {
+        if (error500) {
+            dispatch(hasError500(null))
+            history.push({
+                pathname: "/auth-500",
+                state: error500
+            })
+        }
+    }, [error500])
 
     return (
         <React.Fragment>
