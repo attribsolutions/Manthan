@@ -12,9 +12,12 @@ import CompanyModule from "./CompanyModule";
 import CommonListPage from "../../../components/Common/CmponentRelatedCommonFile/commonListPage";
 import { commonPageFieldList, commonPageFieldListSuccess } from "../../../store/actions";
 import { COMPANY } from "../../../routes/route_url";
+import { useHistory } from "react-router-dom";
 
 const CompanyList = () => {
     const dispatch = useDispatch();
+    const history = useHistory();
+
     const reducers = useSelector(
         (state) => ({
             tableList: state.Company.companyList,
@@ -41,12 +44,12 @@ const CompanyList = () => {
     // Featch Modules List data  First Rendering
     useEffect(() => {
         dispatch(commonPageFieldListSuccess(null))
-        dispatch(commonPageFieldList(1))
+        dispatch(commonPageFieldList(1, history))
         dispatch(fetchCompanyList());
     }, []);
 
     const { pageField } = reducers;
-debugger
+    debugger
     return (
         <React.Fragment>
             {
@@ -67,6 +70,7 @@ debugger
 }
 
 export default CompanyList;
+
 
 
 

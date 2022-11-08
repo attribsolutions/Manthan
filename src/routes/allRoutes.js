@@ -175,12 +175,15 @@ const userRoutes = [
   { path: path.PARTY_SUB_PARTY, component: PartySubParty },
   { path: path.PARTY_SUB_PARTY_lIST, component: PartySubPartyList },
 
-  { path:  '/PartyItems', component:PartyItems },
+  { path: '/PartyItems', component: PartyItems },
 
   { path: "/SearchBox2", component: SearchBoxSecond },
   { path: "/SearchBox3", component: SerachBox3 },
 
   { path: "/", exact: true, component: () => <Redirect to="/Dashboard" /> },
+  { path: "/auth-404", component: Error404 },
+  { path: "/auth-500", component: Error500 },
+
 
 ]
 
@@ -193,8 +196,8 @@ const authRoutes = [
   { path: "/SendOTP", component: SendOTP },
   { path: "/EnterOTP", component: EnterOTP },
   { path: "/division", component: SelectDivisionPage },
-
   { path: "/pages-404", component: Error404 },
+
   { path: "/pages-500", component: Error500 },
 ]
 

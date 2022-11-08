@@ -12,12 +12,13 @@ import {
 } from "../../../store/Administrator/DriverRedux/action";
 
 import CommonListPage from "../../../components/Common/CmponentRelatedCommonFile/commonListPage";
-import { commonPageField, commonPageFieldList, commonPageFieldListSuccess, commonPageFieldSuccess } from "../../../store/actions";
+import { commonPageFieldList, commonPageFieldListSuccess } from "../../../store/actions";
 import { DRIVER } from "../../../routes/route_url";
+import { useHistory } from "react-router-dom";
 
 const DriverList = (props) => {
   const dispatch = useDispatch();
-
+  const history = useHistory();
 
   const reducers = useSelector(
     (state) => ({
@@ -43,8 +44,9 @@ const DriverList = (props) => {
   }
 
   useEffect(() => {
+    debugger
     dispatch(commonPageFieldListSuccess(null))
-    dispatch(commonPageFieldList(106))
+    dispatch(commonPageFieldList(106, history))
     dispatch(getMethodForDriverList())
 
   }, []);

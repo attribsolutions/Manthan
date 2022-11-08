@@ -29,12 +29,10 @@ const Breadcrumb = props => {
   const {
     bredcrumbName = '',
     filterSize,
-    searchProps,
     RoleAccessModifiedinSingleArray
   } = useSelector((state) => ({
     bredcrumbName: state.BreadcrumbReducer.bredcrumbName,
     filterSize: state.BreadcrumbReducer.filterSize,
-    searchProps: state.BreadcrumbReducer.searchProps,
     RoleAccessModifiedinSingleArray: state.Login.RoleAccessUpdateData,
 
   }));
