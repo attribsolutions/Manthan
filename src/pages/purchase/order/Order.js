@@ -155,6 +155,7 @@ const Order = (props) => {
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(postOrderSuccess({ Status: false }))
             dispatch(goButtonSuccess([]))
+            setTermsAndConTable([])
             dispatch(AlertState({
                 Type: 1,
                 Status: true,
@@ -434,12 +435,29 @@ const Order = (props) => {
                 itemArr.push(arr)
             };
         })
+        const termsAndCondition = termsAndConTable.map(i => ({ TermsAndCondition: i.value }))
 
         if (itemArr.length === 0) {
-            alert("Please Enter one Item Quantity")
+            dispatch(AlertState({
+                Type: 4,
+                Status: true,
+                Message: "Please Enter One Item Quantity",
+                RedirectPath: false,
+                AfterResponseAction: false
+            }));
             return
         }
-        const termsAndCondition = termsAndConTable.map(i => ({ TermsAndCondition: i.value }))
+        if (termsAndCondition.length === 0) {
+            dispatch(AlertState({
+                Type: 4,
+                Status: true,
+                Message: "Please Enter One Terms And Condition",
+                RedirectPath: false,
+                AfterResponseAction: false
+            }));
+          
+            return
+        }
         const jsonBody = JSON.stringify({
             OrderDate: date,
             Customer: division,
