@@ -56,7 +56,7 @@ const PartyTypeList = (props) => {
             reducers={reducers}
             MasterModal={PartyType}
             masterPath={PARTYTYPE}
-            ButtonMsgLable={"Party Type"}
+            ButtonMsgLable={"PartyType"}
             deleteName={"Name"}
           />
           : null
