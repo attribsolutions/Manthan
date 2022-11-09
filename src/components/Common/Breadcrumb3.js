@@ -68,7 +68,6 @@ const Breadcrumb = props => {
     // Onfocus Search Box
     useEffect(() => {
         // document.getElementById("search-bar-0").focus();
-
         if (!(props.IsSearchVissible === undefined)) {
         }
         history.listen(location => dispatch(Breadcrumb_inputName('')));
@@ -83,7 +82,7 @@ const Breadcrumb = props => {
             }
         }
     }, [excelData])
-debugger
+
     const DownloadInExcelButtonHanler = (event, values) => {
         debugger
         var list = []
@@ -168,13 +167,13 @@ debugger
         <React.Fragment>
 
 
-            <Row className="mb-3" style={{ Color: "F7F8F4", }}>
-                <Col md={6}>
+            <div className="mb-3 " style={{ Color: "F7F8F4", }}>
+                <div className=" d-flex  justify-content-between">
                     <div className="mb-1 text-left">
                         {
                             newBtnView ?
                                 <Row>
-                                    <Col md={12}>
+                                    <Col>
                                         <button type="button" className="btn btn-success"
                                             data-mdb-toggle="tooltip" data-mdb-placement="top" title="Create New"
                                             onClick={NewButtonHandeller}>
@@ -197,38 +196,36 @@ debugger
                                 </Row>
                         }
                     </div>
-                </Col>
-                <Col sm={2}></Col>
 
-                <Col md={filterSize.length < 10 ? 3 : filterSize.length < 25 ? 2 : 1}
-                    className='text-end'>
 
-                    {excelBtnView ?
-                        <Button
-                            type="button"
-                            title="Download List"
-                            color="btn btn-sm btn-outline-primary mt-1"
-                            onClick={() => { tog_scroll(); }}
-                            data-toggle="modal"
-                        >
-                            <i className="bx bx-download font-size-14" ></i>
-                        </Button>
-                        : null}
-                </Col>
+                    <div >
+                        {excelBtnView ?
+                            <Button
+                                type="button"
+                                title="Download List"
+                                color="btn btn-sm btn-outline-primary mt-1"
+                                onClick={() => { tog_scroll(); }}
+                                data-toggle="modal"
+                            >
+                                <i className="bx bx-download font-size-14" ></i>
+                            </Button>
+                            : null}
+                    </div>
 
-                <Col md={filterSize.length < 10 ? 1 : filterSize.length < 25 ? 2 : 3}
-                    className="text-right col-md-2 px-0 justify-content-end">
-                    {
-                        (showCount) ?
-                            <div className="bg-dark text-center text-light external-event 
+                    <div className="text-right ">
+                        {
+                            (showCount) ?
+                                <div className="bg-dark text-center text-light external-event 
                              col-form-label  border border-Success rounded-2"
-                                style={{ width: "100%" }}>
-                                {filterSize}
-                            </div>
-                            :
-                            null
-                    }
-                </Col>
+                                    style={{ width: "100%" }}>
+                                    <samp className="px-2 ">{filterSize}</samp>
+                                </div>
+                                :
+                                null
+                        }
+                    </div>
+
+                </div>
                 <Modal
                     isOpen={modal_scroll}
                     toggle={() => {
@@ -279,8 +276,7 @@ debugger
                         </AvForm>
                     </div>
                 </Modal>
-
-            </Row>
+            </div>
         </React.Fragment>
     )
 }
