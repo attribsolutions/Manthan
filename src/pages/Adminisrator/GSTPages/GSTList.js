@@ -176,7 +176,7 @@ const GSTList = (props) => {
             <React.Fragment>
                 <div className="page-content">
                     <MetaTags>
-                        <title>MRP List| FoodERP-React FrontEnd</title>
+                        <title>GST List| FoodERP-React FrontEnd</title>
                     </MetaTags>
 
                     <Breadcrumb

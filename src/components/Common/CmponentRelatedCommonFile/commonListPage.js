@@ -235,7 +235,7 @@ const CommonListPage = (props) => {
         dispatchHook: dispatch,
         ButtonMsgLable: ButtonMsgLable,
         deleteName: deleteName,
-        userPageAccessState: userAccState,
+        userAccState: userAccState,
         editActionFun: editId,
         deleteActionFun: deleteId
       })

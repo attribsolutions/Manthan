@@ -10,7 +10,7 @@ import paginationFactory, {
 import ToolkitProvider from 'react-bootstrap-table2-toolkit';
 
 //Import Breadcrumb
-import Breadcrumb from "../../../components/Common/Breadcrumb3"
+import Breadcrumb from "../../../components/Common/Breadcrumb"
 import "../../../assets/scss/CustomTable2/datatables.scss";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -21,20 +21,18 @@ import {
 import { AlertState } from "../../../store/actions";
 import { useHistory } from "react-router-dom";
 import RoleAccessCopyFunctionality from "./RoleAccessCopyFunctionality";
-import { mySearchProps } from "../../../components/Common/CmponentRelatedCommonFile/SearchBox/MySearch";
-import { countlabelFunc } from "../../../components/Common/CmponentRelatedCommonFile/commonListPage";
 
 const RoleAccessListPage = () => {
 
     const dispatch = useDispatch();
     const history = useHistory();
 
-    const [userAccState, setUserAccState] = useState('');
+    const [userPageAccessState, setUserPageAccessState] = useState('');
     const [modal_center, setmodal_center] = useState(false);
     const [copy_user_RowData, setCopy_user_RowData] = useState({});
+     
 
-
-    const { TableListData, RoleAccessModifiedinSingleArray, PostMessage_ForCopyRoleAccess } = useSelector((state) => ({
+    const { TableListData, RoleAccessModifiedinSingleArray,PostMessage_ForCopyRoleAccess } = useSelector((state) => ({
         TableListData: state.RoleAccessReducer.RoleAccessListPage,
         RoleAccessModifiedinSingleArray: state.Login.RoleAccessUpdateData,
         PostMessage_ForCopyRoleAccess: state.RoleAccessReducer.PostMessage_ForCopyRoleAccess,
@@ -56,7 +54,7 @@ const RoleAccessListPage = () => {
             return (`/${inx.ActualPagePath}` === locationPath)
         })
         if (!(userAcc === undefined)) {
-            setUserAccState(userAcc)
+            setUserPageAccessState(userAcc)
         }
     }, [RoleAccessModifiedinSingleArray])
 
@@ -67,15 +65,15 @@ const RoleAccessListPage = () => {
     }, []);
 
     const EditPageHandler = (rowData) => {
-        debugger
-        if (rowData.Division_id === null) {
-            rowData.Division_id = 0
-        }
-
+     debugger
+       if(rowData.Division_id===null) {
+        rowData.Division_id=0
+       }
+     
         // let RelatedPageID = 0
         // const userPageAccess = history.location.state
 
-        let RelatedPageID = userAccState.RelatedPageID
+        let  RelatedPageID = userPageAccessState.RelatedPageID
 
         const found = RoleAccessModifiedinSingleArray.find((element) => {
             return element.id === RelatedPageID
@@ -86,21 +84,21 @@ const RoleAccessListPage = () => {
                 pathname: `/${found.ActualPagePath}`,
                 // pathname: `/${found.ActualPagePath}`,
                 // state: { fromDashboardAccess: true, UserDetails: found, EditData: rowData }
-                state: rowData,
+                state:  rowData ,
                 // relatatedPage:"/UserMaster"
             })
         }
     }
 
-
+    
     useEffect(() => {
-
+       
         if ((PostMessage_ForCopyRoleAccess.Status === true) && (PostMessage_ForCopyRoleAccess.StatusCode === 200)) {
             dispatch(PostMethod_ForCopyRoleAccessFor_Role_Success({ Status: false }))
 
             dispatch(getRoleAccessListPage());
             // GoButton_Handler()
-            tog_center()
+            tog_center()   
             dispatch(AlertState({
                 Type: 1,
                 Status: true,
@@ -124,7 +122,7 @@ const RoleAccessListPage = () => {
     const CopyHandeler = (event) => {
 
         setCopy_user_RowData(event)
-        tog_center()
+        tog_center()   
     };
 
 
@@ -162,24 +160,24 @@ const RoleAccessListPage = () => {
         {
             text: "Action",
             hidden: (
-                !(userAccState.RoleAccess_IsEdit)
-                && !(userAccState.RoleAccess_IsView)
-                && !(userAccState.RoleAccess_IsDelete)) ? true : false,
+                !(userPageAccessState.RoleAccess_IsEdit)
+                && !(userPageAccessState.RoleAccess_IsView)
+                && !(userPageAccessState.RoleAccess_IsDelete)) ? true : false,
 
             formatter: (cellContent, RoleAccess) => (
 
                 <div className="d-flex gap-3" style={{ display: 'flex', justifyContent: 'center' }} >
 
-                    <Button
-                        className="badge badge-soft-primary font-size-12 btn btn-primary waves-effect waves-light w-xxs border border-light"
-                        data-mdb-toggle="tooltip" data-mdb-placement="top" title="Copy RoleAccess"
-                        onClick={() => { CopyHandeler(RoleAccess); }}
-                    >
-                        copy
-                    </Button>
+                       <Button
+                            className="badge badge-soft-primary font-size-12 btn btn-primary waves-effect waves-light w-xxs border border-light"
+                            data-mdb-toggle="tooltip" data-mdb-placement="top" title="Copy RoleAccess"
+                            onClick={() => { CopyHandeler(RoleAccess); }}
+                        >
+                           copy
+                        </Button>
 
 
-                    {((userAccState.RoleAccess_IsEdit)) ?
+                    {((userPageAccessState.RoleAccess_IsEdit)) ?
                         <Button
                             type="button"
                             data-mdb-toggle="tooltip" data-mdb-placement="top" title="Edit RoleAccess"
@@ -189,7 +187,7 @@ const RoleAccessListPage = () => {
                             {console.log("id", RoleAccess)} <i className="mdi mdi-pencil font-size-18" id="edittooltip"></i>
                         </Button> : null}
 
-                    {(!(userAccState.RoleAccess_IsEdit) && (userAccState.RoleAccess_IsView)) ?
+                    {(!(userPageAccessState.RoleAccess_IsEdit) && (userPageAccessState.RoleAccess_IsView)) ?
                         <Button
                             type="button"
                             data-mdb-toggle="tooltip" data-mdb-placement="top" title="View RoleAccess"
@@ -200,7 +198,7 @@ const RoleAccessListPage = () => {
                             <i className="bx bxs-show font-size-18 "></i>
                         </Button> : null}
 
-                    {(userAccState.RoleAccess_IsDelete)
+                    {(userPageAccessState.RoleAccess_IsDelete)
                         ?
                         <Button
                             className="badge badge-soft-danger font-size-12 btn btn-danger waves-effect waves-light w-xxs border border-light"
@@ -233,75 +231,83 @@ const RoleAccessListPage = () => {
         setmodal_center(!modal_center)
     }
 
-    if (!(userAccState === '')) {
+    if (!(userPageAccessState === '')) {
         return (
             <React.Fragment>
                 <div className="page-content">
                     <MetaTags>
                         <title>RoleAccess List Page| FoodERP-React FrontEnd</title>
                     </MetaTags>
-                    <Breadcrumb
-                        pageHeading={userAccState.PageHeading}
-                        newBtnView={(userAccState.RoleAccess_IsSave) ? true : false}
-                        showCount={true}
-                        excelBtnView={true}
-                        excelData={TableListData}
-                    />
-                    <PaginationProvider
-                        pagination={paginationFactory(pageOptions)}
-                        keyField='id'
-                        columns={columns}
-                        data={TableListData}
-                    >
-                        {({ paginationProps, paginationTableProps }) => (
-                            <ToolkitProvider
-                                keyField='id'
-                                columns={columns}
-                                data={TableListData}
-                                search
-                            >
-                                {toolkitProps => (
-                                    <React.Fragment>
-                                        <div className="table-responsive">
-                                            <BootstrapTable
-                                                keyField={"id"}
-                                                responsive
-                                                bordered={true}
-                                                striped={false}
-                                                classes={"table align-middle table-nowrap table-hover"}
-                                                noDataIndication={<div className="text-danger text-center ">Items Not available</div>}
-                                                headerWrapperClasses={"thead-light"}
-                                                {...toolkitProps.baseProps}
-                                                {...paginationTableProps}
+                    <div className="container-fluid">
+                        <PaginationProvider
+                            pagination={paginationFactory(pageOptions)}
+                            keyField='id'
+                            columns={columns}
+                            data={TableListData}
+                        >
+                            {({ paginationProps, paginationTableProps }) => (
+                                <ToolkitProvider
+                                    keyField='id'
+                                    columns={columns}
+                                    data={TableListData}
+                                    search
+                                >
+                                    {toolkitProps => (
+                                        <React.Fragment>
+                                            <Breadcrumb
+                                                title={"Count :"}
+                                                breadcrumbItem={userPageAccessState.PageHeading}
+                                                IsButtonVissible={(userPageAccessState.RoleAccess_IsSave) ? true : false}
+                                                SearchProps={toolkitProps.searchProps}
+                                                IsSearchVissible={true}
+                                                defaultSorted={defaultSorted}
+                                                ExcelData={TableListData}
+                                                isExcelButtonVisible={true}
+                                                breadcrumbCount={`RoleAccess Count: ${TableListData.length}`}
+                                            // RedirctPath={"/moduleMaster"}
                                             />
-                                            {countlabelFunc(toolkitProps, paginationProps, dispatch, "RoleAccess")}
-                                            {mySearchProps(toolkitProps.searchProps)}
-                                        </div>
+                                            <Row>
+                                                <Col xl="12">
+                                                    <div className="table-responsive">
+                                                        <BootstrapTable
+                                                            keyField={"id"}
+                                                            responsive
+                                                            bordered={true}
+                                                            striped={false}
+                                                            defaultSorted={defaultSorted}
+                                                            classes={"table align-middle table-nowrap table-hover"}
+                                                            headerWrapperClasses={"thead-light"}
+                                                            {...toolkitProps.baseProps}
+                                                            {...paginationTableProps}
+                                                        />
+                                                    </div>
+                                                </Col>
+                                            </Row>
 
-                                        <Row className="align-items-md-center mt-30">
-                                            <Col className="pagination pagination-rounded justify-content-end mb-2">
-                                                <PaginationListStandalone
-                                                    {...paginationProps}
-                                                />
-                                            </Col>
-                                        </Row>
-                                    </React.Fragment>
-                                )
-                                }
-                            </ToolkitProvider>
-                        )
-                        }
-                    </PaginationProvider>
-                    <Modal
-                        isOpen={modal_center}
-                        toggle={() => { tog_center() }}
-                        size="xl"
-                    >
-                        <RoleAccessCopyFunctionality state={copy_user_RowData} />
-
-                    </Modal>
+                                            <Row className="align-items-md-center mt-30">
+                                                <Col className="pagination pagination-rounded justify-content-end mb-2">
+                                                    <PaginationListStandalone
+                                                        {...paginationProps}
+                                                    />
+                                                </Col>
+                                            </Row>
+                                        </React.Fragment>
+                                    )
+                                    }
+                                </ToolkitProvider>
+                            )
+                            }
+                        </PaginationProvider>
+                        <Modal
+                            isOpen={modal_center}
+                            toggle={() => { tog_center() }}
+                            size="xl"
+                        >
+                            <RoleAccessCopyFunctionality  state={copy_user_RowData} />
+                           
+                        </Modal>
+                    </div>
                 </div>
-
             </React.Fragment>
         )
     }

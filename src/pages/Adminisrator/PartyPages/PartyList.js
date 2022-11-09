@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import Breadcrumbs from "../../../components/Common/Breadcrumb";
+import Breadcrumb from "../../../components/Common/Breadcrumb3"
 import { Button, Col, Modal, Row } from "reactstrap";
 import paginationFactory, {
     PaginationListStandalone,
@@ -24,16 +24,16 @@ import { MetaTags } from "react-meta-tags";
 import { CommonGetRoleAccessFunction } from '../../../components/Common/CommonGetRoleAccessFunction';
 import { useHistory } from 'react-router-dom';
 import { listPageCommonButtonFunction } from '../../../components/Common/CmponentRelatedCommonFile/listPageCommonButtons';
-
+import { mySearchProps } from "../../../components/Common/CmponentRelatedCommonFile/SearchBox/MySearch";
+import { countlabelFunc } from '../../../components/Common/CmponentRelatedCommonFile/commonListPage';
 const PartyList = () => {
     const dispatch = useDispatch();
     const history = useHistory();
-
-    const [userPageAccessState, setUserPageAccessState] = useState('');
+    const [userAccState, setUserAccState] = useState('');
     const [modal_center, setmodal_center] = useState(false);
 
     // get Access redux data
-    const { TableListData, editData, updateMessage, deleteMessage ,RoleAccessModifiedinSingleArray,PostAPIResponse} = useSelector((state) => ({
+    const { TableListData, editData, updateMessage, deleteMessage, RoleAccessModifiedinSingleArray, PostAPIResponse } = useSelector((state) => ({
         TableListData: state.PartyMasterReducer.partyList,
         editData: state.PartyMasterReducer.editData,
         updateMessage: state.PartyMasterReducer.updateMessage,
@@ -48,7 +48,7 @@ const PartyList = () => {
             return (`/${inx.ActualPagePath}` === locationPath)
         })
         if (!(userAcc === undefined)) {
-            setUserPageAccessState(userAcc)
+            setUserAccState(userAcc)
         }
     }, [RoleAccessModifiedinSingleArray])
 
@@ -96,31 +96,31 @@ const PartyList = () => {
     }, [deleteMessage.Status])
 
 
-    
-  useEffect(() => {
 
-    if ((PostAPIResponse.Status === true) && (PostAPIResponse.StatusCode === 200)) {
-        dispatch(postPartyDataSuccess({ Status: false }))
-        tog_center();
-        dispatch(getPartyListAPI());
-        dispatch(AlertState({
-            Type: 1,
-            Status: true,
-            Message: PostAPIResponse.Message,
-        }))
-    }
+    useEffect(() => {
 
-    else if ((PostAPIResponse.Status === true)) {
-        dispatch(postPartyDataSuccess({ Status: false }))
-        dispatch(AlertState({
-            Type: 4,
-            Status: true,
-            Message: JSON.stringify(PostAPIResponse.Message),
-            RedirectPath: false,
-            AfterResponseAction: false
-        }));
-    }
-}, [PostAPIResponse.Status])
+        if ((PostAPIResponse.Status === true) && (PostAPIResponse.StatusCode === 200)) {
+            dispatch(postPartyDataSuccess({ Status: false }))
+            tog_center();
+            dispatch(getPartyListAPI());
+            dispatch(AlertState({
+                Type: 1,
+                Status: true,
+                Message: PostAPIResponse.Message,
+            }))
+        }
+
+        else if ((PostAPIResponse.Status === true)) {
+            dispatch(postPartyDataSuccess({ Status: false }))
+            dispatch(AlertState({
+                Type: 4,
+                Status: true,
+                Message: JSON.stringify(PostAPIResponse.Message),
+                RedirectPath: false,
+                AfterResponseAction: false
+            }));
+        }
+    }, [PostAPIResponse.Status])
     // Edit Modal Show When Edit Data is true
     useEffect(() => {
         if (editData.Status === true) {
@@ -164,18 +164,19 @@ const PartyList = () => {
         //     dataField: "PartyAddress",
         //     sort: true,
         // },
-            // For Edit, Delete ,and View Button Common Code function
-            listPageCommonButtonFunction({
-                dispatchHook: dispatch,
-                ButtonMsgLable: "Party",
-                deleteName:"Name",
-                userPageAccessState: userPageAccessState,
-                editActionFun: editPartyID,
-                deleteActionFun: deletePartyID
-            })
+
+        // For Edit, Delete ,and View Button Common Code function
+        listPageCommonButtonFunction({
+            dispatchHook: dispatch,
+            ButtonMsgLable: "Party",
+            deleteName: "Name",
+            userAccState: userAccState,
+            editActionFun: editPartyID,
+            deleteActionFun: deletePartyID
+        })
     ];
 
-    if (!(userPageAccessState === '')) {
+    if (!(userAccState === '')) {
         return (
             <React.Fragment>
                 <div className="page-content">
@@ -183,6 +184,13 @@ const PartyList = () => {
                         <title>Party List| FoodERP-React FrontEnd</title>
                     </MetaTags>
 
+                    <Breadcrumb
+                        pageHeading={userAccState.PageHeading}
+                        newBtnView={(userAccState.RoleAccess_IsSave) ? true : false}
+                        showCount={true}
+                        excelBtnView={true}
+                        excelData={TableListData}
+                    />
                     <PaginationProvider
                         pagination={paginationFactory(pageOptions)}
                     >
@@ -195,35 +203,22 @@ const PartyList = () => {
                             >
                                 {toolkitProps => (
                                     <React.Fragment>
-                                        <Breadcrumbs
-                                            title={"Count :"}
-                                            breadcrumbItem={userPageAccessState.PageHeading}
-                                            IsButtonVissible={(userPageAccessState.RoleAccess_IsSave) ? true : false}
-                                            SearchProps={toolkitProps.searchProps}
-                                            IsSearchVissible={true}
-                                            defaultSorted={defaultSorted}
-                                            breadcrumbCount={`Party Count: ${TableListData.length}`}
-                                            isExcelButtonVisible={true}
-                                            ExcelData={TableListData}
-                                            RedirctPath={"/PartyMaster"}
-                                        />
-                                        <Row>
-                                            <Col xl="12">
-                                                <div className="table-responsive">
-                                                    <BootstrapTable
-                                                        keyField={"id"}
-                                                        responsive
-                                                        bordered={false}
-                                                        striped={false}
-                                                        classes={
-                                                            "table  table-bordered"
-                                                        }
-                                                        {...toolkitProps.baseProps}
-                                                        {...paginationTableProps}
-                                                    />
-                                                </div>
-                                            </Col>
-                                        </Row>
+                                        <div className="table-responsive">
+                                            <BootstrapTable
+                                                keyField={"id"}
+                                                responsive
+                                                bordered={true}
+                                                striped={false}
+                                                classes={"table align-middle table-nowrap table-hover"}
+                                                noDataIndication={<div className="text-danger text-center ">Items Not available</div>}
+                                                headerWrapperClasses={"thead-light"}
+                                                {...toolkitProps.baseProps}
+                                                {...paginationTableProps}
+                                            />
+                                            {countlabelFunc(toolkitProps, paginationProps, dispatch, "Party")}
+                                            {mySearchProps(toolkitProps.searchProps)}
+                                        </div>
+
                                         <Row className="align-items-md-center mt-30">
                                             <Col className="pagination pagination-rounded justify-content-end mb-2">
                                                 <PaginationListStandalone
@@ -241,7 +236,7 @@ const PartyList = () => {
                         toggle={() => { tog_center() }}
                         size="xl"
                     >
-                        <PartyMaster state={editData.Data} relatatedPage={"/PartyMaster"} pageMode={editData.pageMode}/>
+                        <PartyMaster state={editData.Data} relatatedPage={"/PartyMaster"} pageMode={editData.pageMode} />
                     </Modal>
                 </div>
             </React.Fragment>
