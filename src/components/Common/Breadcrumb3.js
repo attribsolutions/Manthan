@@ -169,11 +169,11 @@ const Breadcrumb = props => {
 
             <div className="mb-3 " style={{ Color: "F7F8F4", }}>
                 <div className=" d-flex  justify-content-between">
-                    <div className="mb-1 text-left">
-                        {
-                            newBtnView ?
-                                <Row>
-                                    <Col>
+                    <div className="mb-1 ">
+                        <div className=" d-flex  justify-content-start">
+                            {
+                                newBtnView ?
+                                    <div>
                                         <button type="button" className="btn btn-success"
                                             data-mdb-toggle="tooltip" data-mdb-placement="top" title="Create New"
                                             onClick={NewButtonHandeller}>
@@ -181,50 +181,51 @@ const Breadcrumb = props => {
                                         </button>
                                         <label className="font-size-18 form-label text-black " style={{ paddingLeft: "7px" }} >{pageHeading}</label>
 
-                                    </Col>
-                                </Row>
-                                :
-                                <Row>
-                                    <Col md={12}>
+                                    </div>
+                                    :
+                                    <div>
                                         <label className="font-size-20  col-ls-6 col-form-label text-black" style={{ marginLeft: "6px" }}>{pageHeading}</label>
                                         {(bredcrumbName.length > 0) ?
                                             <label className="font-size-24 form-label  text-nowrap bd-highlight text-primary"
                                                 style={{ paddingLeft: "7px", color: "#5156be" }} >&nbsp;/&nbsp;{bredcrumbName}</label>
                                             : null
                                         }
-                                    </Col>
-                                </Row>
-                        }
+
+                                    </div>
+                            }
+                        </div>
                     </div>
+
+
 
 
                     <div >
-                        {excelBtnView ?
-                            <Button
-                                type="button"
-                                title="Download List"
-                                color="btn btn-sm btn-outline-primary mt-1"
-                                onClick={() => { tog_scroll(); }}
-                                data-toggle="modal"
-                            >
-                                <i className="bx bx-download font-size-14" ></i>
-                            </Button>
-                            : null}
-                    </div>
-
-                    <div className="text-right ">
-                        {
-                            (showCount) ?
-                                <div className="bg-dark text-center text-light external-event 
-                             col-form-label  border border-Success rounded-2"
-                                    style={{ width: "100%" }}>
-                                    <samp className="px-2 ">{filterSize}</samp>
+                        <div className=" d-flex  justify-content-end">
+                            {excelBtnView ?
+                            <div className="px-2 " style={{marginTop:"7px"}}>
+                                <Button
+                                    type="button"
+                                    title="Download List"
+                                    color="btn btn-sm btn-outline-primary "
+                                    onClick={() => { tog_scroll(); }}
+                                    data-toggle="modal"
+                                >
+                                    <i className="bx bx-download font-size-14" ></i>
+                                </Button>
                                 </div>
-                                :
-                                null
-                        }
+                                : null}
+                            {
+                                (showCount) ?
+                                    <div className="bg-dark text-center text-light external-event 
+                             col-form-label  border border-Success rounded-2"
+                                        style={{ width: "100%" }}>
+                                        <samp className="px-2 ">{filterSize}</samp>
+                                    </div>
+                                    :
+                                    null
+                            }
+                        </div>
                     </div>
-
                 </div>
                 <Modal
                     isOpen={modal_scroll}
