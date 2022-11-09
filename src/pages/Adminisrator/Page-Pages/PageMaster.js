@@ -49,8 +49,6 @@ const PageMaster = (props) => {
   const dispatch = useDispatch();
   const history = useHistory()
 
-  //*** "isEditdata get all data from ModuleID for Binding  Form controls
-
   const [EditData, setEditData] = useState([]);
   const [modalCss, setModalCss] = useState(false);
   const [pageMode, setPageMode] = useState("save");
@@ -136,7 +134,7 @@ const PageMaster = (props) => {
 
   // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
   useEffect(() => {
-    
+
     // if (!(userPageAccessState === '')) { document.getElementById("txtName").focus(); }
     if ((hasShowloction || hasShowModal)) {
 
@@ -152,6 +150,7 @@ const PageMaster = (props) => {
       }
 
       if (hasEditVal) {
+
         debugger
         setEditData(hasEditVal);
 
@@ -165,7 +164,6 @@ const PageMaster = (props) => {
         });
 
         let PageFieldMaster = hasEditVal.PageFieldMaster.map((index) => {
-
           return {
             ControlType: {
               label: index.ControlTypeName,
@@ -365,29 +363,28 @@ const PageMaster = (props) => {
   }
 
   function arrow_value(key) {
-    
-    pageFieldTabTable[key].DefaultSort = 2
+    if (pageFieldTabTable[key].DefaultSort = 2) {
+      var x = document.getElementById("up");
+      var y = document.getElementById("down");
 
-    var x = document.getElementById("up");
-    var y = document.getElementById("down");
+      y.style.display = "block";
+      x.style.display = "none";
+    }
 
-    y.style.display = "block";
-    x.style.display = "none";
   }
 
   function arrow_value1(key) {
-    pageFieldTabTable[key].DefaultSort = 1
+    if (pageFieldTabTable[key].DefaultSort = 1) {
+      var x = document.getElementById("up");
+      var y = document.getElementById("down");
 
-    var x = document.getElementById("up");
-    var y = document.getElementById("down");
-
-    x.style.display = "block";
-    y.style.display = "none";
-
+      x.style.display = "block";
+      y.style.display = "none";
+    }
   }
 
   function PageField_onChange_Handler(event, type = '', key) {
-    
+
     var found = pageFieldTabTable.find((i, k) => {
       return (k === key)
     })
@@ -1353,7 +1350,7 @@ const PageMaster = (props) => {
                           >
                             <Table className="table table-bordered table-responsive">
                               <Thead >
-                                <tr style={{zIndex:"23"}}>
+                                <tr style={{ zIndex: "23" }}>
                                   <th className="">Control ID</th>
                                   <th className="">Field Label</th>
                                   <th className="">Control Type</th>
@@ -1471,14 +1468,16 @@ const PageMaster = (props) => {
 
                                         {pageFieldTabTable[key].DefaultSort > 0 ?
                                           <div >
-                                            <i className=" bx bx-caret-up font-size-20 text-danger "
-
+                                            <i
+                                              className=" bx bx-caret-up font-size-20 text-danger "
                                               id="up"
-                                              style={{ display: "block" }}
+                                              style={{ display: pageFieldTabTable[key].DefaultSort===1  ? "block" :"none"  }}
+
                                               onClick={(e) => arrow_value(key)}></i>
 
-                                            <i className=" bx bx-caret-down font-size-20 text-danger "
-                                              style={{ display: "none" }}
+                                            <i
+                                              className=" bx bx-caret-down font-size-20 text-danger "
+                                              style={{ display: pageFieldTabTable[key].DefaultSort===2  ? "block" :"none"  }}
 
                                               id="down"
                                               onClick={(e) => arrow_value1(key)}></i>
