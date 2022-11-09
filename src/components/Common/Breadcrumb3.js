@@ -202,7 +202,7 @@ const Breadcrumb = props => {
                     <div >
                         <div className=" d-flex  justify-content-end">
                             {excelBtnView ?
-                            <div className="px-2 mt-2 ">
+                            <div className="px-2 " style={{marginTop:"7px"}}>
                                 <Button
                                     type="button"
                                     title="Download List"
