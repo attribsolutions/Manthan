@@ -45,6 +45,7 @@ import GroupSaga from "./Administrator/GroupRedux/saga"
 import PartySubPartysaga from "./Administrator/PartySubPartyRedux/saga"
 
 import PartyItemssaga from "./Administrator/PartyItemsRedux/saga"
+import SupplierSaga from "./CommonAPI/SupplierRedux/saga"
 
 export default function* rootSaga() {
   yield all([
@@ -56,8 +57,9 @@ export default function* rootSaga() {
     fork(Spinner_Saga),
     fork(CustomSearch_Saga),
     fork(CommonPageField_Saga),
+    
     fork(Alert_Saga),
-
+    fork(SupplierSaga),
     fork(ModulesSaga),
     fork(CompanySaga),
     fork(HPageSaga),
