@@ -53,7 +53,7 @@ const CompanyGroupMaster = (props) => {
     const initialFiled = {
         id: "",
         Name: "",
-        IsSCM: ""
+        IsSCM:false
       }
     
     const [state, setState] = useState(initialFiledFunc(initialFiled))
