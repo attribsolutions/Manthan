@@ -8,8 +8,6 @@ import {
   EDIT_ORDER_FOR_ORDER_PAGE,
   DELETE_ORDER_FOR_ORDER_PAGE,
   DELETE_ORDER_FOR_ORDER_PAGE_SUCCESS,
-  GET_SUPPLIER_SUCCESS,
-  GET_SUPPLIER,
   GO_BUTTON_FOR_ORDER_PAGE_SUCCESS,
   GO_BUTTON_FOR_ORDER_PAGE,
   POST_ORDER_FROM_ORDER_PAGE_SUCCESS,
@@ -19,14 +17,6 @@ import {
 } from './actionType'
 
 
-export const getSupplier = () => ({
-  type: GET_SUPPLIER,
-});
-
-export const getSupplierSuccess = orders => ({
-  type: GET_SUPPLIER_SUCCESS,
-  payload: orders,
-})
 
 
 export const goButton = (data,hasEditVal) => ({

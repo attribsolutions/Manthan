@@ -170,7 +170,7 @@ const Breadcrumb = props => {
             <div className="mb-3 " style={{ Color: "F7F8F4", }}>
                 <div className=" d-flex  justify-content-between">
                     <div className="mb-1 ">
-                        <div className=" d-flex  justify-content-start">
+                        <div className="d-flex  justify-content-start">
                             {
                                 newBtnView ?
                                     <div>
@@ -202,22 +202,21 @@ const Breadcrumb = props => {
                     <div >
                         <div className=" d-flex  justify-content-end">
                             {excelBtnView ?
-                            <div className="px-2 " style={{marginTop:"7px"}}>
-                                <Button
-                                    type="button"
-                                    title="Download List"
-                                    color="btn btn-sm btn-outline-primary "
-                                    onClick={() => { tog_scroll(); }}
-                                    data-toggle="modal"
-                                >
-                                    <i className="bx bx-download font-size-14" ></i>
-                                </Button>
+                                <div className="px-2 " style={{ marginTop: "7px" }}>
+                                    <Button
+                                        type="button"
+                                        title="Download List"
+                                        color="btn btn-sm btn-outline-primary "
+                                        onClick={() => { tog_scroll(); }}
+                                        data-toggle="modal"
+                                    >
+                                        <i className="bx bx-download font-size-14" ></i>
+                                    </Button>
                                 </div>
                                 : null}
                             {
                                 (showCount) ?
-                                    <div className="bg-dark text-center text-light external-event 
-                             col-form-label  border border-Success rounded-2"
+                                    <div className="bg-dark text-center text-light external-event col-form-label  border border-Success rounded-2"
                                         style={{ width: "100%" }}>
                                         <samp className="px-2 ">{filterSize}</samp>
                                     </div>

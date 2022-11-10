@@ -137,9 +137,8 @@ export const Role_Master_Delete_API = (id) => del(`${url.ROLE_MASTER_API}/${id}`
 export const Role_Master_Edit_API = (id) => get(`${url.ROLE_MASTER_API}/${id}`)// edit api
 export const Role_Master_Update_API = (data, id) => put(`${url.ROLE_MASTER_API}/${id}`, data)// update api
 
-//Purchase  Order Page api  
+// Order Page api  
 
-export const OrderPage_GetSupplier_API = (perty_id) => get(`${url.SUPPLIER}/${perty_id}`)//get api
 export const OrderPage_GoButton_API = (data) => post(url.GET_ITEM_FOR_ORDER,data)//get api
 export const OrderPage_Post_API = (data) => post(url.ORDER_PAGE_API,data)//get api
 export const OrderPage_get_API = (id) => get(`${url.ORDER_PAGE_API}/${id}`)//get api
@@ -357,8 +356,10 @@ export const PartySubParty_Update_API = (data, id) => put(`${url.PARTY_SUB_PARTY
 
 //PartyItems API
 export const Party_Items = (data) => post(url.POST_PARTYITEMS, data)// post api
-export const GetSupplier_API = (party_id) => get(`${url.SUPPLIERS}/${party_id}`)//get api
 export const GoButton_API = (data) => post(url.POST_PARTYITEMS,data)//get api
+
+//suppiler 
+export const GetSupplier_API = (perty_id) => get(`${url.SUPPLIER}/${perty_id}`)//get api
 
 export {  
   getLoggedInUser,

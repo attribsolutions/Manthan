@@ -16,7 +16,6 @@ import {
 } from "./actionType"
 
 const INIT_STATE = {
-  supplier: [],
   orderItem: [],
   postMsg: { Status: false },
   editData: { Status: false, Items: [] },
@@ -29,12 +28,6 @@ const INIT_STATE = {
 
 const OrderReducer = (state = INIT_STATE, action) => {
   switch (action.type) {
-
-    case GET_SUPPLIER_SUCCESS:
-      return {
-        ...state,
-        supplier: action.payload,
-      }
 
     case GO_BUTTON_FOR_ORDER_PAGE_SUCCESS:
       return {

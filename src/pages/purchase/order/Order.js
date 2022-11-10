@@ -12,7 +12,7 @@ import { useDispatch, useSelector } from "react-redux";
 import "flatpickr/dist/themes/material_blue.css"
 
 
-import React, { useEffect, useState, useRf } from "react";
+import React, { useEffect, useState, useRf, useRef } from "react";
 import { MetaTags } from "react-meta-tags";
 
 import ToolkitProvider, { Search } from "react-bootstrap-table2-toolkit";
@@ -21,8 +21,6 @@ import paginationFactory, { PaginationListStandalone, PaginationProvider } from 
 import { useHistory } from "react-router-dom";
 import {
     editOrderIdSuccess,
-
-    getSupplier,
     goButton,
     goButtonSuccess,
     postOrder,
@@ -30,6 +28,7 @@ import {
     updateOrderId,
     updateOrderIdSuccess
 } from "../../../store/Purchase/OrderPageRedux/actions";
+import { getSupplier, getSupplierAddress } from "../../../store/CommonAPI/SupplierRedux/actions"
 import { mySearchProps } from "../../../components/Common/CmponentRelatedCommonFile/SearchBox/MySearch";
 import { AlertState, BreadcrumbFilterSize } from "../../../store/actions";
 import { basicAmount, GstAmount, handleKeyDown, totalAmount } from "./OrderPageCalulation";
@@ -55,18 +54,23 @@ const Order = (props) => {
     const [EditData, setEditData] = useState([]);
     const [pageMode, setPageMode] = useState("save");
     const [userAccState, setUserPageAccessState] = useState("");
+    const aa = useRef('')
+    const supplierSelect = useRef('')
+    const orderDate = useRef('')
+    const description = useRef('')
+    const delivaryDate = useRef('')
+    const billingAddr = useRef('')
+    const shippingAddr = useRef('')
 
-    //Access redux store Data /  'save_ModuleSuccess' action data
 
-    const [effectiveDate, setEffectiveDate] = useState("");
-    const [supplier_select, setSupplier_select] = useState('');
-    const [Description, setDescription] = useState('');
     const [orderAmount, setOrderAmount] = useState(0);
     const [termsAndConTable, setTermsAndConTable] = useState([]);
 
     useEffect(() => {
         dispatch(getSupplier())
+        dispatch(getSupplierAddress())
         dispatch(getTermAndCondition())
+
     }, [])
 
     const {
@@ -75,11 +79,13 @@ const Order = (props) => {
         supplier,
         userAccess,
         updateMsg,
+        supplierAddress,
         termsAndCondtions,
         pageField
     } = useSelector((state) => ({
         items: state.OrderReducer.orderItem,
-        supplier: state.OrderReducer.supplier,
+        supplier: state.SupplierReducer.supplier,
+        supplierAddress: state.SupplierReducer.supplierAddress,
         postMsg: state.OrderReducer.postMsg,
         updateMsg: state.OrderReducer.updateMsg,
         userAccess: state.Login.RoleAccessUpdateData,
@@ -134,8 +140,8 @@ const Order = (props) => {
                 }
                 );
                 dispatch(goButton(jsonBody, hasEditVal))
-                setSupplier_select({ label: hasEditVal.SupplierName, value: hasEditVal.Supplier })
-                setEffectiveDate(hasEditVal.OrderDate)
+                // setSupplier_select({ label: hasEditVal.SupplierName, value: hasEditVal.Supplier })
+                // setEffectiveDate(hasEditVal.OrderDate)
                 description = hasEditVal.Description
                 editVal = hasEditVal
                 setOrderAmount(hasEditVal.OrderAmount)
@@ -216,6 +222,11 @@ const Order = (props) => {
     const supplierOptions = supplier.map((i) => ({
         value: i.id,
         label: i.Supplier,
+    }));
+
+    const supplierAdssOptions = supplierAddress.map((i) => ({
+        value: i.id,
+        label: i.Address,
     }));
 
     const pagesListColumns = [
@@ -357,14 +368,15 @@ const Order = (props) => {
         custom: true,
     };
 
-    const EffectiveDateHandler = (e, date) => {
-        setEffectiveDate(date)
-    }
+    // const EffectiveDateHandler = (e, date) => {
+    //     setEffectiveDate(date)
+    // }
 
     const GoButton_Handler = () => {
-        let supplier = supplier_select.value
-
-        if (!supplier > 0) {
+        debugger
+        let supplier = supplierSelect.current.state.value
+        // let supplier = 28
+        if (supplier) {
             alert("Please Select Customer")
             return
         }
@@ -384,8 +396,8 @@ const Order = (props) => {
             alert(e)
         }
         const jsonBody = JSON.stringify({
-            Supplier: supplier,
-            EffectiveDate: effectiveDate
+            Supplier: supplier.value
+            // EffectiveDate: "effectiveDate"
         }
         );
 
@@ -396,7 +408,7 @@ const Order = (props) => {
     const saveHandeller = () => {
         let division = 0
         let date = ''
-        let supplier = supplier_select.value
+        let supplier = supplierSelect.current.props.value.value
 
         try {
             division = JSON.parse(localStorage.getItem("roleId")).Party_id
@@ -455,7 +467,7 @@ const Order = (props) => {
                 RedirectPath: false,
                 AfterResponseAction: false
             }));
-          
+
             return
         }
         const jsonBody = JSON.stringify({
@@ -464,6 +476,8 @@ const Order = (props) => {
             Supplier: supplier,
             OrderAmount: orderAmount,
             Description: description,
+            BillingAddress: 84,
+            ShippingAddress: 84,
             CreatedBy: 1,
             UpdatedBy: 1,
             OrderItem: itemArr,
@@ -494,30 +508,25 @@ const Order = (props) => {
                         pageHeading={userAccState.PageHeading}
                         showCount={true}
                     />
-                    <div className="px-2">
-                        <Row className="mb-1 border border-black text-black mt-2 "
-                            style={{ backgroundColor: "#dddddd" }} >
-
+                    <div className="px-2 mb-1 mt-n1" style={{ backgroundColor: "#dddddd" }} >
+                        <div className=" mt-1 row">
                             <Col md="3" className="">
                                 <FormGroup className="mb- row mt-3 " >
                                     <Label className="col-sm-5 p-2"
                                         style={{ width: "100px" }}>Order Date</Label>
                                     <Col md="7">
                                         <Flatpickr
-                                            id="EffectiveDateid"
-                                            name="effectiveDate"
-                                            value={effectiveDate}
+                                            ref={orderDate}
                                             className="form-control d-block p-2 bg-white text-dark"
                                             placeholder="Select..."
                                             options={{
                                                 altInput: true,
                                                 altFormat: "F j, Y",
                                                 dateFormat: "Y-m-d",
-                                                minDate: pageMode === "edit" ? effectiveDate : "today",
-                                                maxDate: pageMode === "edit" ? effectiveDate : "",
+                                                // minDate: pageMode === "edit" ? effectiveDate : "today",
+                                                // maxDate: pageMode === "edit" ? effectiveDate : "",
                                                 defaultDate: pageMode === "edit" ? "" : "today"
                                             }}
-                                            onChange={EffectiveDateHandler}
                                         />
                                     </Col>
                                 </FormGroup>
@@ -529,11 +538,9 @@ const Order = (props) => {
                                         style={{ width: "130px" }}>Supplier Name</Label>
                                     <Col md="7">
                                         <Select
-                                            value={supplier_select}
-                                            classNamePrefix="select2-Customer"
+                                            ref={supplierSelect}
                                             isDisabled={pageMode === "edit" ? true : false}
                                             options={supplierOptions}
-                                            onChange={(e) => { setSupplier_select(e) }}
                                         />
                                     </Col>
                                 </FormGroup>
@@ -543,22 +550,90 @@ const Order = (props) => {
                                 <Button type="button" color="btn btn-outline-success border-2 font-size-12 "
                                     onClick={GoButton_Handler}>Go</Button>
                             </Col>
-                            <Col>
-                                <FormGroup className="mb-2 d-flex  justify-content-end mt-3 " >
-                                    <Label className=" p-2 ml-n4 "
-                                        style={{ width: "100px" }}>Description</Label>
-                                    <div>
-                                        <Input
-                                            defaultValue={description}
-                                            placeholder="Enter Description"
-                                            onChange={(e) => { description = e.target.value }}
-                                        />
-                                    </div>
-                                </FormGroup>
-                            </Col>
-                        </Row>
+                        </div>
                     </div>
 
+                    <div className="px-2  mb-1" style={{ backgroundColor: "#dddddd" }} >
+
+                        <div className="row">
+                            <div className="col col-6">
+                                <FormGroup className=" row mt-3 mt-3" >
+                                    <Label className="  col col-3 mt-2"
+                                        style={{ width: "130px" }}>Description</Label>
+                                    <div className=" col ">
+                                        <Input type="text"
+                                            ref={description}
+                                            style={{ backgroundColor: "#dddddd" }} />
+                                    </div>
+
+                                </FormGroup>
+                            </div >
+                            <div className="col col-6">
+                                <FormGroup className=" row mt-3 " >
+                                    <Label className=" col col-3  p-2"
+                                        style={{ width: "130px" }}>Delivery Date</Label>
+                                    <div className="col col-6">
+                                        <Flatpickr
+                                            ref={delivaryDate}
+                                            className="form-control d-block p-2 bg-white text-dark"
+                                            placeholder="Select..."
+                                            options={{
+                                                altInput: true,
+                                                altFormat: "F j, Y",
+                                                dateFormat: "Y-m-d",
+                                                // minDate: pageMode === "edit" ? effectiveDate : "today",
+                                                // maxDate: pageMode === "edit" ? effectiveDate : "",
+                                                defaultDate: pageMode === "edit" ? "" : "today"
+                                            }}
+                                        />
+                                    </div>
+
+                                </FormGroup>
+                            </div >
+                        </div>
+                        <div className="row  ">
+                            <div className="col col-6">
+                                <FormGroup className="mb-2 row  " >
+                                    <Label className=" p-2"
+                                        style={{ width: "130px" }}>Billing Address</Label>
+                                    <Select
+                                        ref={billingAddr}
+                                        isDisabled={pageMode === "edit" ? true : false}
+                                        options={supplierAdssOptions}
+                                        styles={{
+                                            control: base => ({
+                                                ...base,
+                                                border: 'non',
+                                                backgroundColor: ""
+
+                                            })
+                                        }}
+                                    />
+                                </FormGroup>
+                            </div >
+                            <div className="col col-6">
+                                <FormGroup className="mb-2 row " >
+                                    <Label className=" p-2"
+                                        style={{ width: "130px" }}>Shipping Address</Label>
+                                    <Select
+                                        ref={shippingAddr}
+                                        isDisabled={pageMode === "edit" ? true : false}
+                                        styles={{
+                                            control: base => ({
+                                                ...base,
+                                                border: 'non',
+                                                backgroundColor: ""
+
+                                            })
+                                        }}
+                                        options={supplierAdssOptions}
+                                    // onChange={(e) => { setSupplier_select(e) }}
+                                    />
+                                </FormGroup>
+                            </div >
+                        </div>
+
+                    </div>
                     <PaginationProvider pagination={paginationFactory(pageOptions)}>
                         {({ paginationProps, paginationTableProps }) => (
                             <ToolkitProvider
@@ -603,21 +678,24 @@ const Order = (props) => {
 
                     </PaginationProvider>
 
-                    {items.length > 0 ?
-                        <OrderPageTemsTable tableList={termsAndConTable} setfunc={setTermsAndConTable} />
-                        : null
+                    {
+                        items.length > 0 ?
+                            <OrderPageTemsTable tableList={termsAndConTable} setfunc={setTermsAndConTable} />
+                            : null
                     }
 
-                    {(items.length > 0) ? <div className="row save1" style={{ paddingBottom: 'center' }}>
-                        <SaveButton pageMode={pageMode} userAcc={userAccState}
-                            module={"Order"} onClick={saveHandeller}
-                        />
-                    </div>
-                        : <div className="row save1"></div>}
-                </div>
+                    {
+                        (items.length > 0) ? <div className="row save1" style={{ paddingBottom: 'center' }}>
+                            <SaveButton pageMode={pageMode} userAcc={userAccState}
+                                module={"Order"} onClick={saveHandeller}
+                            />
+                        </div>
+                            : <div className="row save1"></div>
+                    }
+                </div >
                 {/* </div> */}
 
-            </React.Fragment>
+            </React.Fragment >
         )
     } else {
         return null
