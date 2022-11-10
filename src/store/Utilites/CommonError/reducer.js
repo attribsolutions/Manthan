@@ -1,4 +1,4 @@
-import { COMMON_400_ERROR, COMMON_500_ERROR, COMMON_PAGE_FILED_lIST_SUCCESS, COMMON_PAGE_FILED_SUCCESS } from "./actionType"
+import { COMMON_400_ERROR, COMMON_500_ERROR,  } from "./actionType"
 
 const INIT_STATE = {
   error500: null,

@@ -39,11 +39,13 @@ import { ORDER_lIST } from "../../../routes/route_url";
 import SaveButton from "../../../components/Common/CommonSaveButton";
 
 import { getTermAndCondition } from "../../../store/Administrator/TermsAndCondtionsRedux/actions";
-import { Table } from "react-super-responsive-table";
-import OrderPageTemsTable from "./OrderPageTemsTable";
 
-let description = 'order'
+import OrderPageTemsTable from "./OrderPageTemsTable";
+import Breadcrumb from "../../../components/Common/Breadcrumb3";
+
+let description = ''
 let editVal = {}
+
 const Order = (props) => {
 
     const dispatch = useDispatch();
@@ -59,7 +61,7 @@ const Order = (props) => {
     const [effectiveDate, setEffectiveDate] = useState("");
     const [supplier_select, setSupplier_select] = useState('');
     const [Description, setDescription] = useState('');
-    const [orderAmount, setOrderAmount] = useState("");
+    const [orderAmount, setOrderAmount] = useState(0);
     const [termsAndConTable, setTermsAndConTable] = useState([]);
 
     useEffect(() => {
@@ -86,7 +88,7 @@ const Order = (props) => {
     }));
 
 
-    debugger
+
     // userAccess useEffect
     useEffect(() => {
         let userAcc = null;
@@ -108,7 +110,9 @@ const Order = (props) => {
     const hasShowModal = props.hasOwnProperty("editValue")
 
     useEffect(() => {
+        dispatch(BreadcrumbFilterSize(`${"Order Amount"} :${orderAmount}`))
         dispatch(goButtonSuccess([]))
+
         if ((hasShowloction || hasShowModal)) {
 
             let hasEditVal = null
@@ -151,11 +155,12 @@ const Order = (props) => {
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(postOrderSuccess({ Status: false }))
             dispatch(goButtonSuccess([]))
+            setTermsAndConTable([])
             dispatch(AlertState({
                 Type: 1,
                 Status: true,
                 Message: postMsg.Message,
-                RedirectPath: false,
+                RedirectPath: ORDER_lIST,
             }))
 
         } else if (postMsg.Status === true) {
@@ -205,7 +210,7 @@ const Order = (props) => {
             sum = sum + parseFloat(ind.totalAmount)
         });
         setOrderAmount(sum.toFixed(2))
-        // dispatch(BreadcrumbFilterSize(`${"Order Amount"} :${sum.toFixed(2)}`))
+        dispatch(BreadcrumbFilterSize(`${"Order Amount"} :${sum.toFixed(2)}`))
     }
 
     const supplierOptions = supplier.map((i) => ({
@@ -405,7 +410,7 @@ const Order = (props) => {
         items.forEach(i => {
             if ((i.inpQty > 0)) {
                 const basicAmt = parseFloat(basicAmount(i))
-                const cgstAmt = (GstAmount(i)).toFixed(2)
+                const cgstAmt = (GstAmount(i))
 
                 const arr = {
                     Item: i.id,
@@ -415,11 +420,11 @@ const Order = (props) => {
                     Unit: i.UOM,
                     BaseUnitQuantity: i.inpBaseUnitQty,
                     Margin: "",
-                    BasicAmount: basicAmt,
-                    GSTAmount: cgstAmt,
+                    BasicAmount: basicAmt.toFixed(2),
+                    GSTAmount: cgstAmt.toFixed(2),
                     GST: i.Gstid,
-                    CGST: cgstAmt / 2,
-                    SGST: cgstAmt / 2,
+                    CGST: (cgstAmt / 2).toFixed(2),
+                    SGST: (cgstAmt / 2).toFixed(2),
                     IGST: 0,
                     CGSTPercentage: (i.GST / 2),
                     SGSTPercentage: (i.GST / 2),
@@ -430,12 +435,29 @@ const Order = (props) => {
                 itemArr.push(arr)
             };
         })
+        const termsAndCondition = termsAndConTable.map(i => ({ TermsAndCondition: i.value }))
 
         if (itemArr.length === 0) {
-            alert("Please Enter one Item Quantity")
+            dispatch(AlertState({
+                Type: 4,
+                Status: true,
+                Message: "Please Enter One Item Quantity",
+                RedirectPath: false,
+                AfterResponseAction: false
+            }));
             return
         }
-        const termsAndCondition = termsAndConTable.map(i => ({ TermsAndCondition: i.value }))
+        if (termsAndCondition.length === 0) {
+            dispatch(AlertState({
+                Type: 4,
+                Status: true,
+                Message: "Please Enter One Terms And Condition",
+                RedirectPath: false,
+                AfterResponseAction: false
+            }));
+          
+            return
+        }
         const jsonBody = JSON.stringify({
             OrderDate: date,
             Customer: division,
@@ -468,27 +490,10 @@ const Order = (props) => {
                     <title>{userAccState.PageHeading}| FoodERP-React FrontEnd</title>
                 </MetaTags>
                 <div className="page-content">
-                    {/* <Breadcrumb
+                    <Breadcrumb
                         pageHeading={userAccState.PageHeading}
-                        newBtnView={(userAccState.RoleAccess_IsSave) ? true : false}
                         showCount={true}
-                    // excelBtnView={true}
-                    // excelData={downList}
-                    /> */}
-
-                    <div className="d-flex  justify-content-between">
-                        <div >
-                            <label className="font-size-18 form-label text-black pl-2" >
-                                {"Order"}
-                            </label>
-                        </div>
-                        <div >
-                            <label className="font-size-16 form-label  bd-highlight text-primary rounded pr-2" >
-                                Order Amount : &nbsp;
-                                <kbd className="bg-light text-danger font-size-22">{orderAmount}</kbd>
-                            </label>
-                        </div>
-                    </div>
+                    />
                     <div className="px-2">
                         <Row className="mb-1 border border-black text-black mt-2 "
                             style={{ backgroundColor: "#dddddd" }} >

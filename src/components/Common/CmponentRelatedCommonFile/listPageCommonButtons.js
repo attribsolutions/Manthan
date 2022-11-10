@@ -4,7 +4,7 @@ import { AlertState } from "../../../store/actions";
 export const listPageCommonButtonFunction = (props) => {
 
     const dispatch = props.dispatchHook;
-    const userPageAccessState = props.userPageAccessState;
+    const userAccState = props.userAccState;
     const editActionFun = props.editActionFun;
     const deleteActionFun = props.deleteActionFun;
     const ButtonMsgLable = props.ButtonMsgLable;
@@ -17,17 +17,17 @@ export const listPageCommonButtonFunction = (props) => {
         text: "Action",
         hidden:
             (
-                !(userPageAccessState.RoleAccess_IsEdit)
-                && !(userPageAccessState.RoleAccess_IsView)
-                && !(userPageAccessState.RoleAccess_IsDelete)
-                && !(userPageAccessState.RoleAccess_IsEditSelf)) ? true : false,
+                !(userAccState.RoleAccess_IsEdit)
+                && !(userAccState.RoleAccess_IsView)
+                && !(userAccState.RoleAccess_IsDelete)
+                && !(userAccState.RoleAccess_IsEditSelf)) ? true : false,
 
         formatter: (cellContent, rowData) => (<div className="d-flex gap-3" style={{ display: 'flex', justifyContent: 'center' }} >
 
             {
                 //** if condition start
 
-                (userPageAccessState.RoleAccess_IsEdit) //condtion:1
+                (userAccState.RoleAccess_IsEdit) //condtion:1
                     ?
                     (<Button
                         type="button"
@@ -40,7 +40,7 @@ export const listPageCommonButtonFunction = (props) => {
 
                     : // **Else-If Condition start 
 
-                    ((userPageAccessState.RoleAccess_IsEditSelf) && (rowData.CreatedBy === userCreated)) //**condition :2
+                    ((userAccState.RoleAccess_IsEditSelf) && (rowData.CreatedBy === userCreated)) //**condition :2
                         ?
                         <Button
                             type="button"
@@ -53,7 +53,7 @@ export const listPageCommonButtonFunction = (props) => {
 
                         : // **second else-if condition
 
-                        (userPageAccessState.RoleAccess_IsView)  // ** condition :3
+                        (userAccState.RoleAccess_IsView)  // ** condition :3
                             ?
                             <Button
                                 type="button"
@@ -69,7 +69,7 @@ export const listPageCommonButtonFunction = (props) => {
             }
 
 
-            {(userPageAccessState.RoleAccess_IsDelete)
+            {(userAccState.RoleAccess_IsDelete)
                 ?
                 <Button
                     type="button"
@@ -91,7 +91,7 @@ export const listPageCommonButtonFunction = (props) => {
                 line no 88 to 108
                 */
                 :
-                ((userPageAccessState.RoleAccess_IsDeleteSelf) && (rowData.CreatedBy === userCreated))
+                ((userAccState.RoleAccess_IsDeleteSelf) && (rowData.CreatedBy === userCreated))
                     ?
                     <Button
                         type="button"
@@ -111,7 +111,7 @@ export const listPageCommonButtonFunction = (props) => {
                     </Button>
                     : null
             }
-            {(userPageAccessState.RoleAccess_IsSave) ?
+            {(userAccState.RoleAccess_IsSave) ?
                 <Button
                     type="button"
                     data-mdb-toggle="tooltip" data-mdb-placement="top" title={`Copy ${ButtonMsgLable}`}

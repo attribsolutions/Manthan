@@ -55,7 +55,7 @@ const CategoryTypeList = (props) => {
             reducers={reducers}
             MasterModal={CategoryTypeMaster}
             masterPath={CATEGORYTYPE}
-            ButtonMsgLable={"Category Type"}
+            ButtonMsgLable={"CategoryType"}
             deleteName={"Name"}
           />
           : null

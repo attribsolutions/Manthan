@@ -10,9 +10,9 @@ import ToolkitProvider, { Search } from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 import { useDispatch } from "react-redux";
 import { MetaTags } from "react-meta-tags";
-import { useHistory, Redirect } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 
-import { AlertState, BreadcrumbFilterSize, BreadcrumbSearchProps } from "../../../store/actions";
+import { AlertState, BreadcrumbFilterSize } from "../../../store/actions";
 import { listPageCommonButtonFunction }
   from "../../../components/Common/CmponentRelatedCommonFile/listPageCommonButtons";
 import { mySearchProps } from "./SearchBox/MySearch";
@@ -36,7 +36,6 @@ export const countlabelFunc = (toolkitProps, paginationProps, dispatch, ButtonMs
   }
 
   if (!(iscall === searchCount)) {
-    dispatch(BreadcrumbSearchProps(toolkitProps.searchProps))
     dispatch(BreadcrumbFilterSize(`${ButtonMsgLable} Count :${iscall}`))
     searchCount = paginationProps.dataSize
   }
@@ -236,7 +235,7 @@ const CommonListPage = (props) => {
         dispatchHook: dispatch,
         ButtonMsgLable: ButtonMsgLable,
         deleteName: deleteName,
-        userPageAccessState: userAccState,
+        userAccState: userAccState,
         editActionFun: editId,
         deleteActionFun: deleteId
       })

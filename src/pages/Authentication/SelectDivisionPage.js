@@ -80,7 +80,7 @@ const SelectDivisionPage = props => {
   }));
 
   function goButtonHandller() {
-
+debugger
     let value = divisionDropdown_redux[divisionDropdowSelect.value]
     var employee = value.Employee_id;
     var party = value.Party_id
