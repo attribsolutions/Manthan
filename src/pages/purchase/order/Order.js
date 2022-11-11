@@ -52,18 +52,19 @@ const Order = (props) => {
 
     const [modalCss, setModalCss] = useState(false);
     const [pageMode, setPageMode] = useState("save");
-    const [userAccState, setUserPageAccessState] = useState();
-    const aa = useRef('')
-    const supplierSelect = useRef('')
-    const orderDate = useRef('')
-    const description = useRef('')
-    const delivaryDate = useRef('')
-    const billingAddr = useRef('')
-    const shippingAddr = useRef('')
+    const [userAccState, setUserPageAccessState] = useState("");
 
+    //Access redux store Data /  'save_ModuleSuccess' action data
 
+    const [podate, setpoDate] = useState("");
+    const [deliverydate, setdeliverydate] = useState('')
+    const [billAddr, setbillAddr] = useState('')
+    const [shippAddr, setshippAddr] = useState('')
+
+    const [supplierSelect, setsupplierSelect] = useState('');
     const [orderAmount, setOrderAmount] = useState(0);
     const [termsAndConTable, setTermsAndConTable] = useState([]);
+
 
     useEffect(() => {
         dispatch(getSupplier())
@@ -139,8 +140,13 @@ const Order = (props) => {
                 }
                 );
                 dispatch(goButton(jsonBody, hasEditVal))
-                // setSupplier_select({ label: hasEditVal.SupplierName, value: hasEditVal.Supplier })
-                // setEffectiveDate(hasEditVal.OrderDate)
+                dispatch(BreadcrumbFilterSize(`${"Order Amount"} :${hasEditVal.OrderAmount}`))
+
+                setsupplierSelect({ label: hasEditVal.SupplierName, value: hasEditVal.Supplier })
+                setpoDate(hasEditVal.OrderDate)
+                setdeliverydate(hasEditVal.DeliveryDate)
+                setshippAddr({ label: hasEditVal.ShippingAddress, value: hasEditVal.ShippingAddressID })
+                setbillAddr({ label: hasEditVal.BillingAddress, value: hasEditVal.BillingAddressID });
                 description = hasEditVal.Description
                 editVal = hasEditVal
                 setOrderAmount(hasEditVal.OrderAmount)
@@ -367,15 +373,11 @@ const Order = (props) => {
         custom: true,
     };
 
-    // const EffectiveDateHandler = (e, date) => {
-    //     setEffectiveDate(date)
-    // }
-
+    debugger
     const GoButton_Handler = () => {
-        debugger
-        let supplier = supplierSelect.current.state.value
-        // let supplier = 28
-        if (supplier) {
+        let supplier = supplierSelect.value
+
+        if (!supplier > 0) {
             alert("Please Select Customer")
             return
         }
@@ -395,8 +397,8 @@ const Order = (props) => {
             alert(e)
         }
         const jsonBody = JSON.stringify({
-            Supplier: supplier.value
-            // EffectiveDate: "effectiveDate"
+            Supplier: supplier,
+            EffectiveDate: podate
         }
         );
 
@@ -407,15 +409,8 @@ const Order = (props) => {
     const saveHandeller = () => {
         let division = 0
         let date = ''
-        const supplier = supplierSelect.current.state.value
-        const billAddr = billingAddr.current.state.value
-        const sippAddr = shippingAddr.current.state.value;
-        const POdate = date;
-        const dDate = ""
-        if (!billAddr || !sippAddr || !POdate || !supplier || !dDate) {
-            alert("Enter all Details")
-            return
-        }
+        const supplier = supplierSelect.value
+
         try {
             division = JSON.parse(localStorage.getItem("roleId")).Party_id
         } catch (e) {
@@ -476,13 +471,19 @@ const Order = (props) => {
             return
         }
         const jsonBody = JSON.stringify({
-            OrderDate: date,
+            OrderDate: podate,
+            DeliveryDate: deliverydate,
             Customer: division,
             Supplier: supplier,
             OrderAmount: orderAmount,
             Description: description,
-            BillingAddress: 84,
-            ShippingAddress: 84,
+            BillingAddress: billAddr.value,
+            ShippingAddress: shippAddr.value,
+            OrderNo: 1,
+            FullOrderNumber: "PO0001",
+            OrderType: 1,
+            POType: 1,
+            Division: division,
             CreatedBy: 1,
             UpdatedBy: 1,
             OrderItem: itemArr,
@@ -502,7 +503,7 @@ const Order = (props) => {
 
     }
 
-    if ((userAccState)) {
+    if (!(userAccState === "")) {
         return (
             <React.Fragment>
                 <MetaTags>
@@ -521,17 +522,20 @@ const Order = (props) => {
                                         style={{ width: "100px" }}>Order Date</Label>
                                     <Col md="7">
                                         <Flatpickr
-                                            ref={orderDate}
+                                            id="orderdate"
+                                            name="orderdate"
+                                            value={podate}
                                             className="form-control d-block p-2 bg-white text-dark"
                                             placeholder="Select..."
                                             options={{
                                                 altInput: true,
                                                 altFormat: "F j, Y",
                                                 dateFormat: "Y-m-d",
-                                                // minDate: pageMode === "edit" ? effectiveDate : "today",
-                                                // maxDate: pageMode === "edit" ? effectiveDate : "",
+                                                minDate: pageMode === "edit" ? podate : "today",
+                                                maxDate: pageMode === "edit" ? podate : "",
                                                 defaultDate: pageMode === "edit" ? "" : "today"
                                             }}
+                                            onChange={(e, date) => { setpoDate(date) }}
                                         />
                                     </Col>
                                 </FormGroup>
@@ -543,9 +547,11 @@ const Order = (props) => {
                                         style={{ width: "130px" }}>Supplier Name</Label>
                                     <Col md="7">
                                         <Select
-                                            ref={supplierSelect}
+                                            value={supplierSelect}
+                                            classNamePrefix="select2-Customer"
                                             isDisabled={pageMode === "edit" ? true : false}
                                             options={supplierOptions}
+                                            onChange={(e) => { setsupplierSelect(e) }}
                                         />
                                     </Col>
                                 </FormGroup>
@@ -567,7 +573,8 @@ const Order = (props) => {
                                         style={{ width: "130px" }}>Description</Label>
                                     <div className=" col ">
                                         <Input type="text"
-                                            ref={description}
+                                            value={description}
+                                            onChange={e => description = e.target.value}
                                             style={{ backgroundColor: "#dddddd" }} />
                                     </div>
 
@@ -579,17 +586,19 @@ const Order = (props) => {
                                         style={{ width: "130px" }}>Delivery Date</Label>
                                     <div className="col col-6">
                                         <Flatpickr
-                                            ref={delivaryDate}
+                                            // id="orderdate"
+                                            name="deliverydate"
+                                            value={deliverydate}
                                             className="form-control d-block p-2 bg-white text-dark"
                                             placeholder="Select..."
                                             options={{
                                                 altInput: true,
                                                 altFormat: "F j, Y",
                                                 dateFormat: "Y-m-d",
-                                                // minDate: pageMode === "edit" ? effectiveDate : "today",
-                                                // maxDate: pageMode === "edit" ? effectiveDate : "",
-                                                defaultDate: pageMode === "edit" ? "" : "today"
+                                                minDate: pageMode === "edit" ? podate : "today",
+
                                             }}
+                                            onChange={(e, date) => { setdeliverydate(date) }}
                                         />
                                     </div>
 
@@ -602,8 +611,9 @@ const Order = (props) => {
                                     <Label className=" p-2"
                                         style={{ width: "130px" }}>Billing Address</Label>
                                     <Select
-                                        ref={billingAddr}
-                                        isDisabled={pageMode === "edit" ? true : false}
+                                        value={billAddr}
+                                        classNamePrefix="select2-Customer"
+                                        // isDisabled={pageMode === "edit" ? true : false}
                                         options={supplierAdssOptions}
                                         styles={{
                                             control: base => ({
@@ -613,6 +623,7 @@ const Order = (props) => {
 
                                             })
                                         }}
+                                        onChange={(e) => { setbillAddr(e) }}
                                     />
                                 </FormGroup>
                             </div >
@@ -621,8 +632,9 @@ const Order = (props) => {
                                     <Label className=" p-2"
                                         style={{ width: "130px" }}>Shipping Address</Label>
                                     <Select
-                                        ref={shippingAddr}
-                                        isDisabled={pageMode === "edit" ? true : false}
+                                        value={shippAddr}
+                                        classNamePrefix="select2-Customer"
+                                        // isDisabled={pageMode === "edit" ? true : false}
                                         styles={{
                                             control: base => ({
                                                 ...base,
@@ -632,7 +644,7 @@ const Order = (props) => {
                                             })
                                         }}
                                         options={supplierAdssOptions}
-                                    // onChange={(e) => { setSupplier_select(e) }}
+                                        onChange={(e) => { setshippAddr(e) }}
                                     />
                                 </FormGroup>
                             </div >
