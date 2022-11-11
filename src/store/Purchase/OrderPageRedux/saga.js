@@ -37,23 +37,8 @@ import { SpinnerState } from "../../Utilites/Spinner/actions";
 import { AlertState } from "../../Utilites/CustomAlertRedux/actions";
 
 
-function* getSupplierGenFunc() {
-
-  const USER = JSON.parse(localStorage.getItem("roleId"))
-  try {
-    const response = yield call(OrderPage_GetSupplier_API, USER.Party_id
-    );
-    yield put(getSupplierSuccess(response.Data));
-  } catch (error) {
-    yield put(AlertState({
-      Type: 4,
-      Status: true, Message: "500 Error Message for getSupplier ",
-    }));
-  }
-}
-
 function* goButtonGenFunc({ data, hasEditVal }) {
-  debugger
+  
   yield put(SpinnerState(true))
   try {
     const response = yield call(OrderPage_GoButton_API, data);
@@ -168,10 +153,9 @@ function* get_OrderListPage_GenratorFunction() {
 }
 
 function* OrderPageSaga() {
-  yield takeEvery(GET_SUPPLIER, getSupplierGenFunc);
+ 
   yield takeEvery(GO_BUTTON_FOR_ORDER_PAGE, goButtonGenFunc);
   yield takeEvery(POST_ORDER_FROM_ORDER_PAGE, postOrder_GenFunc);
-  // yield takeEvery(GET_ORDER_LIST, fetchOrderList);
   yield takeEvery(EDIT_ORDER_FOR_ORDER_PAGE, editOrderGenFunc);
   yield takeEvery(UPDATE_ORDER_ID_FROM_ORDER_PAGE, UpdateOrder_ID_GenratorFunction)
   yield takeEvery(DELETE_ORDER_FOR_ORDER_PAGE, DeleteOrder_GenratorFunction);
