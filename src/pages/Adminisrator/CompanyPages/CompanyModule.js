@@ -432,7 +432,6 @@ const CompanyModule = (props) => {
                                   name="CompanyGroup"
                                   value={values.CompanyGroup}
                                   //   value={{label:"abc",value:1}}//default value set
-                                  isSearchable={false}
                                   className="react-dropdown"
                                   classNamePrefix="dropdown"
                                   options={CompanyGroupValues}

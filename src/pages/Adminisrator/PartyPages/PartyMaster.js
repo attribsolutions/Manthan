@@ -63,7 +63,7 @@ const PartyMaster = (props) => {
     const [PriceList_dropdown_Select, setPriceList_dropdown_Select] = useState("");
     const [dropOpen, setDropOpen] = useState(false);
     const [AddressDetailsMaster, setAddressDetailsMaster] = useState([]);
-
+    // console.log("AddressDetailsMaster", AddressDetailsMaster)
     const toggle1 = tab => {
         if (activeTab1 !== tab) {
             setactiveTab1(tab)
@@ -229,12 +229,6 @@ const PartyMaster = (props) => {
         division: index.IsDivision
     }));
 
-    // party drop down option
-    // const PriceList_DropdownOptions = PriceList.map((data) => ({
-    //     value: data.id,
-    //     label: data.Name
-    // }));
-
     function handllerState(e) {
         setState_DropDown_select(e)
         dispatch(getDistrictOnState(e.value))
@@ -290,7 +284,23 @@ const PartyMaster = (props) => {
     }
 
     const FormSubmitButton_Handler = (event, values) => {
-        debugger
+       
+        const SortArray = AddressDetailsMaster.map(function (index) {
+            return index.IsDefault
+        })
+        const count = SortArray.filter(value => value === true).length;
+       
+        if (count>1) {
+            dispatch(
+                AlertState({
+                    Type: 4,
+                    Status: true,
+                    Message: "only one default is true",
+                    RedirectPath: false,
+                    PermissionAction: false,
+                }))
+        }
+
         const jsonBody = JSON.stringify({
             Name: values.Name,
             PriceList: PriceList_dropdown_Select.value,
@@ -316,12 +326,21 @@ const PartyMaster = (props) => {
 
         });
 
-        if (pageMode === 'edit') {
+        if (!AddressDetailsMaster.length > 0) {
+            dispatch(AlertState({
+                Type: 4, Status: true,
+                Message: "Address Details can not blank",
+                RedirectPath: false,
+                PermissionAction: false,
+            }));
+        }
+
+        else if (pageMode === 'edit') {
             dispatch(updatePartyID(jsonBody, EditData.id));
             console.log("update jsonBody", jsonBody)
         }
         else {
-            dispatch(postPartyData(jsonBody));
+            // dispatch(postPartyData(jsonBody));
             console.log("post jsonBody", jsonBody)
         }
     };
@@ -405,7 +424,7 @@ const PartyMaster = (props) => {
                                                         <Row >
                                                             <Col sm={2}>
                                                                 <div>
-                                                                    {
+                                                                    {/* {
                                                                         pageMode === "edit" ?
                                                                             userPageAccessState.RoleAccess_IsEdit ?
                                                                                 <button
@@ -418,17 +437,17 @@ const PartyMaster = (props) => {
                                                                                 :
                                                                                 <></>
                                                                             : (
-                                                                                userPageAccessState.RoleAccess_IsSave ?
-                                                                                    <button
-                                                                                        type="submit"
-                                                                                        data-mdb-toggle="tooltip" data-mdb-placement="top" title="Save Role"
-                                                                                        className="btn btn-primary w-md"
-                                                                                    > <i className="fas fa-save me-2"></i> Save
-                                                                                    </button>
-                                                                                    :
+                                                                                userPageAccessState.RoleAccess_IsSave ? */}
+                                                                    <button
+                                                                        type="submit"
+                                                                        data-mdb-toggle="tooltip" data-mdb-placement="top" title="Save Role"
+                                                                        className="btn btn-primary w-md"
+                                                                    > <i className="fas fa-save me-2"></i> Save
+                                                                    </button>
+                                                                    {/* :
                                                                                     <></>
                                                                             )
-                                                                    }
+                                                                    } */}
                                                                 </div>
                                                             </Col>
                                                         </Row>
@@ -672,7 +691,7 @@ const PartyMaster = (props) => {
                                                                 <Col md="3">
                                                                     <FormGroup className="mb-3">
                                                                         <Label htmlFor="validationCustom01">State</Label>
-                                                                        <Col sm={12} style={{height:"2.9cm"}}>
+                                                                        <Col sm={12} style={{ height: "2.9cm" }}>
                                                                             <Select
                                                                                 value={state_DropDown_select}
                                                                                 options={StateValues}

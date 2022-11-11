@@ -433,6 +433,7 @@ const RoleAccessAdd = (props) => {
     function input_checkBoxHandler(e, v,) {
 
         if (e === "IsEdit") {
+        debugger
             let isEdit = document.getElementById(`IsEdit${v}`)
             let isView = document.getElementById(`IsView${v}`)
             let isEditSelf = document.getElementById(`IsEditSelf${v}`)

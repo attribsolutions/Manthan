@@ -1,16 +1,17 @@
 import {
+  GET_PARTY_ITEM_LIST_SUCCESS,
     GET_SUPPLIER_SUCCESS,
     POST_PARTYITEMS_SUCCESS,
-    GO_BUTTON_FOR_PARTYITEMS_PAGE_SUCCESS,
   } from "./actionType"
-  
   const INIT_STATE = {
+    
     postMsg: { Status: false },
     supplier:[],
-    itemName:[],
+    partyItem:[],
   }
   
   const PartyItemsReducer = (state = INIT_STATE, action) => {
+  
     switch (action.type) {
   
       case POST_PARTYITEMS_SUCCESS:
@@ -18,17 +19,15 @@ import {
           ...state,
           postMsg: action.payload,
         }
-
-
         case GET_SUPPLIER_SUCCESS:
       return {
         ...state,
         supplier: action.payload,
       }
-      case GO_BUTTON_FOR_PARTYITEMS_PAGE_SUCCESS:
+      case GET_PARTY_ITEM_LIST_SUCCESS:
       return {
         ...state,
-        itemName: action.payload,
+        partyItem: action.payload,
       }
         default:
             return state
