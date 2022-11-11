@@ -51,9 +51,8 @@ const Order = (props) => {
     const history = useHistory();
 
     const [modalCss, setModalCss] = useState(false);
-    const [EditData, setEditData] = useState([]);
     const [pageMode, setPageMode] = useState("save");
-    const [userAccState, setUserPageAccessState] = useState("");
+    const [userAccState, setUserPageAccessState] = useState();
     const aa = useRef('')
     const supplierSelect = useRef('')
     const orderDate = useRef('')
@@ -408,11 +407,17 @@ const Order = (props) => {
     const saveHandeller = () => {
         let division = 0
         let date = ''
-        let supplier = supplierSelect.current.props.value.value
-
+        const supplier = supplierSelect.current.state.value
+        const billAddr = billingAddr.current.state.value
+        const sippAddr = shippingAddr.current.state.value;
+        const POdate = date;
+        const dDate = ""
+        if (!billAddr || !sippAddr || !POdate || !supplier || !dDate) {
+            alert("Enter all Details")
+            return
+        }
         try {
             division = JSON.parse(localStorage.getItem("roleId")).Party_id
-            date = document.getElementById("EffectiveDateid").value;
         } catch (e) {
             alert(e)
             return
@@ -497,7 +502,7 @@ const Order = (props) => {
 
     }
 
-    if (!(userAccState === "")) {
+    if ((userAccState)) {
         return (
             <React.Fragment>
                 <MetaTags>
