@@ -56,8 +56,8 @@ const Order = (props) => {
 
     //Access redux store Data /  'save_ModuleSuccess' action data
 
-    const [podate, setpoDate] = useState("");
-    const [deliverydate, setdeliverydate] = useState('')
+    const [podate, setpoDate] = useState("today");
+    const [deliverydate, setdeliverydate] = useState("today")
     const [billAddr, setbillAddr] = useState('')
     const [shippAddr, setshippAddr] = useState('')
 
@@ -233,7 +233,7 @@ const Order = (props) => {
         value: i.id,
         label: i.Address,
     }));
-
+    debugger
     const pagesListColumns = [
         {
             text: "Item Name",
@@ -247,13 +247,13 @@ const Order = (props) => {
             formatter: (value, row, k) => {
                 if (row.inpRate === undefined) { row["inpRate"] = 0 }
                 if (row.totalAmount === undefined) { row["totalAmount"] = 0 }
-                if (row.GST === undefined) { row["GST"] = 0 }
                 return (
                     <span className="text-right" >
                         <Input
                             type="text"
                             id={`inpRatey${k}`}
                             defaultValue={row.inpRate}
+                            disabled={(row.GST === '') ? true : false}
                             onChange={e => {
                                 row["inpRate"] = e.target.value;
                                 const qty = document.getElementById(`inpQty${k}`)
@@ -305,7 +305,7 @@ const Order = (props) => {
                     <Input type="text"
                         id={`inpQty${k}`}
                         defaultValue={row.inpQty}
-                        disabled={(row.inpRate === 0) ? true : false}
+                        disabled={((row.inpRate === 0) || row.GST === '') ? true : false}
                         onChange={(e) => {
                             val_onChange(e.target.value, row, "qty")
                         }}
@@ -373,7 +373,7 @@ const Order = (props) => {
         custom: true,
     };
 
-    debugger
+
     const GoButton_Handler = () => {
         let supplier = supplierSelect.value
 
@@ -529,11 +529,11 @@ const Order = (props) => {
                                             placeholder="Select..."
                                             options={{
                                                 altInput: true,
-                                                altFormat: "F j, Y",
+                                                altFormat: "d-m-Y",
                                                 dateFormat: "Y-m-d",
                                                 minDate: pageMode === "edit" ? podate : "today",
-                                                maxDate: pageMode === "edit" ? podate : "",
-                                                defaultDate: pageMode === "edit" ? "" : "today"
+                                                // maxDate: pageMode === "edit" ? podate : "",
+                                                // defaultDate: pageMode === "edit" ? "" : "today"
                                             }}
                                             onChange={(e, date) => { setpoDate(date) }}
                                         />
@@ -593,7 +593,7 @@ const Order = (props) => {
                                             placeholder="Select..."
                                             options={{
                                                 altInput: true,
-                                                altFormat: "F j, Y",
+                                                altFormat: "d-m-Y",
                                                 dateFormat: "Y-m-d",
                                                 minDate: pageMode === "edit" ? podate : "today",
 
