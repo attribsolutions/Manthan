@@ -11,7 +11,8 @@ import {
   PostEmployeeSuccess,
   Get_CompanyName_By_EmployeeTypeID,
   editEmployeeSuccess,
-  updateEmployeeIDSuccess
+  updateEmployeeIDSuccess,
+  Get_CompanyName_By_EmployeeTypeID_Success
 } from "../../../store/Administrator/M_EmployeeRedux/action";
 import { AlertState, commonPageField, commonPageFieldSuccess } from "../../../store/actions";
 import { getDistrictOnState, getPartyListAPI } from "../../../store/Administrator/PartyRedux/action";
@@ -38,7 +39,6 @@ const AddEmployee = (props) => {
   const dispatch = useDispatch();
   const history = useHistory()
 
-  const [EditData, setEditData] = useState([]);
   const [pageMode, setPageMode] = useState("save");
   const [userPageAccessState, setUserPageAccessState] = useState('');
 
@@ -95,12 +95,13 @@ const AddEmployee = (props) => {
   }
 
   const [state, setState] = useState(initialFiledFunc(initialFiled))
-
+  console.log("state", state)
   const values = { ...state.values }
   const { isError } = state;
   const { fieldLabel } = state;
 
   useEffect(() => {
+
     dispatch(commonPageFieldSuccess(null));
     dispatch(commonPageField(8))
     dispatch(getDesignationID());
@@ -198,7 +199,6 @@ const AddEmployee = (props) => {
         values.StateName = { label: StateName, value: State_id };
         values.DistrictName = { label: DistrictName, value: District_id };
         values.EmployeeParties = listItems;
-
 
         // values.CategoryTypeName = { label: CategoryTypeName, value: CategoryType };
 
@@ -308,16 +308,10 @@ const AddEmployee = (props) => {
     label: data.Name
   }));
 
-  function Designation_Dropdown_Handler(e) {
-    setDesignation_DropdownSelect(e)
-  }
   function EmployeeType_Dropdown_Handler(e) {
-    // console.log(" data",JSON.stringify(e))
-    setEmployeeType_DropdownSelect(e)
+debugger
     dispatch(Get_CompanyName_By_EmployeeTypeID(e.value))
-    setCompany_DropdownSelect('')
-    setParty_DropdownSelect('')
-
+   
     const IsPartyConnection = employeeType.find((element) => {
       return element.id === e.value
     });
@@ -330,14 +324,12 @@ const AddEmployee = (props) => {
       setPartyDropDownShow_UI(false)
       setParty_DropdownSelect([{ value: null }])
     }
+
   }
 
   function State_Dropdown_Handler(e, v) {
-
-    debugger
     dispatch(getDistrictOnState(e.value))
     setState_DropdownSelect(e)
-
   }
 
   function District_Dropdown_Handler(e, v) {
@@ -350,6 +342,7 @@ const AddEmployee = (props) => {
 
   function Company_Dropdown_Handler(e, v) {
     setCompany_DropdownSelect(e)
+
   }
 
   const formSubmitHandler = (event) => {
@@ -369,7 +362,7 @@ const AddEmployee = (props) => {
         EmployeeType: values.EmployeeTypeName.value,
         State: values.StateName.value,
         District: values.DistrictName.value,
-        EmployeeParties: values.EmployeeParties.map((i) => { return ({ Party: i.value }) }),
+        EmployeeParties: values.EmployeeParties.length > 0 ? [] : values.EmployeeParties.map((i) => { return ({ Party: i.value }) }),
         Company: values.CompanyName.value,
         CreatedBy: 1,
         UpdatedBy: 1,
