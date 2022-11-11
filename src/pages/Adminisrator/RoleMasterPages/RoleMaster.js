@@ -5,7 +5,9 @@ import { AvInput } from "availity-reactstrap-validation";
 import { useDispatch, useSelector } from "react-redux";
 import {
   editSuccess,
-  postRole, updateID, PostSuccess
+  postRole,
+  updateID,
+  PostSuccess
 } from "../../../store/Administrator/RoleMasterRedux/action";
 import { AlertState, commonPageField, commonPageFieldSuccess, updateSuccess } from "../../../store/actions";
 import Select from "react-select";
@@ -23,18 +25,17 @@ import {
 import { ROLE_lIST } from "../../../routes/route_url";
 import SaveButton from "../../../components/Common/CommonSaveButton";
 
-const RoleMaster = (props) => {
 
+const RoleMaster = (props) => {
   const formRef = useRef(null);
   const dispatch = useDispatch();
   const history = useHistory()
 
   //SetState  Edit data Geting From Modules List component
-  const [EditData, setEditData] = useState([]);
-  const [pageMode, setPageMode] = useState("save");
+  const [pageMode, setPageMode] = useState("");
   const [modalCss, setModalCss] = useState(false);
+  const [userPageAccessState, setUserPageAccessState] = useState(123);
 
-  const [userPageAccessState, setUserPageAccessState] = useState('');
   const initialFiled = {
     id: "",
     Name: "",
@@ -60,7 +61,6 @@ const RoleMaster = (props) => {
       EmployeeType: state.EmployeeTypeReducer.EmployeeTypeList,
       userAccess: state.Login.RoleAccessUpdateData,
       pageField: state.CommonPageFieldReducer.pageField
-
     }));
 
   const location = { ...history.location }
@@ -101,8 +101,7 @@ const RoleMaster = (props) => {
   }, [pageField])
 
   useEffect(() => {
-    debugger
-    // if (!(userPageAccessState === '')) { document.getElementById("txtName").focus(); }
+
     if ((hasShowloction || hasShowModal)) {
 
       let hasEditVal = null
@@ -117,7 +116,6 @@ const RoleMaster = (props) => {
       }
 
       if (hasEditVal) {
-        debugger
         const listItems = hasEditVal.RoleEmployeeTypes.map((data) => ({
           value: data.EmployeeType,
           label: data.EmployeeTypeName
@@ -144,8 +142,7 @@ const RoleMaster = (props) => {
         values.RoleEmployeeTypes = listItems;
 
         setState({ values, fieldLabel, hasValid, required, isError })
-        dispatch(Breadcrumb_inputName(hasEditVal.RoleMaster))
-
+        dispatch(Breadcrumb_inputName(hasEditVal.Name))
       }
       dispatch(editSuccess({ Status: false }))
 
@@ -214,7 +211,7 @@ const RoleMaster = (props) => {
   const { fieldLabel } = state;
 
   const formSubmitHandler = (event) => {
-    debugger
+
     event.preventDefault();
     if (formValid(state, setState)) {
 
@@ -239,12 +236,12 @@ const RoleMaster = (props) => {
 
       if (pageMode === 'edit') {
         dispatch(updateID(jsonBody, values.id));
-        console.log("update jsonBody", jsonBody)
+        console.log("jsonBody", jsonBody)
       }
 
       else {
         dispatch(postRole(jsonBody));
-        console.log("jsonBody", jsonBody)
+
       }
     }
   };
@@ -278,7 +275,6 @@ const RoleMaster = (props) => {
                       <Card>
                         <CardBody style={{ backgroundColor: "whitesmoke" }}>
                           <Row>
-
                             <FormGroup className="mb-2 col col-sm-4 " >
                               <Label>{fieldLabel.Name} </Label>
                               <Input
@@ -302,28 +298,24 @@ const RoleMaster = (props) => {
 
 
                             <Col md={1} className="mx-n1"> </Col>
-                                  
-                              <FormGroup className="mb-2 col col-sm-4 ">
 
-                                <Label htmlFor="validationCustom01">{fieldLabel.RoleEmployeeTypes} </Label>
-                                <Select
-                                  name="RoleEmployeeTypes"
-                                  // defaultValue={EmployeeType_DropdownOptions[0]}
-                                  value={values.RoleEmployeeTypes}
-                                  isSearchable={false}
-                                  isMulti={true}
-                                  options={EmployeeType_DropdownOptions}
-                                  onChange={(hasSelect, evn) => onChangeSelect({ hasSelect, evn, state, setState, })}
-                                  classNamePrefix="dropdown"
+                            <FormGroup className="mb-2 col col-sm-4 ">
 
-                                />
-                                {isError.RoleEmployeeTypes.length > 0 && (
-                                  <span className="text-danger f-8"><small>{isError.RoleEmployeeTypes}</small></span>
-                                )}
-                              </FormGroup>
-                            
-
-                            
+                              <Label htmlFor="validationCustom01">{fieldLabel.RoleEmployeeTypes} </Label>
+                              <Select
+                                name="RoleEmployeeTypes"
+                                // defaultValue={EmployeeType_DropdownOptions[0]}
+                                value={values.RoleEmployeeTypes}
+                                isSearchable={false}
+                                isMulti={true}
+                                options={EmployeeType_DropdownOptions}
+                                onChange={(hasSelect, evn) => onChangeSelect({ hasSelect, evn, state, setState, })}
+                                classNamePrefix="dropdown"
+                              />
+                              {isError.RoleEmployeeTypes.length > 0 && (
+                                <span className="text-danger f-8"><small>{isError.RoleEmployeeTypes}</small></span>
+                              )}
+                            </FormGroup>
 
                             <Row>
                               <FormGroup className="mb-2 col col-sm-4 ">
@@ -343,7 +335,7 @@ const RoleMaster = (props) => {
 
                               <Col md="1">  </Col>
                               {/* <Row md="1"></Row> */}
-                              
+
 
                               <FormGroup className="mb-2 col col-sm-4 ">
                                 <Label htmlFor="validationCustom01">{fieldLabel.Dashboard} </Label>
@@ -359,8 +351,6 @@ const RoleMaster = (props) => {
                                   <span className="invalid-feedback">{isError.Dashboard}</span>
                                 )}
                               </FormGroup>
-                            
-
                             </Row>
 
                             <Row>
@@ -422,18 +412,14 @@ const RoleMaster = (props) => {
                                 </Col>
                               </Row>
                             </FormGroup >
-
                           </Row>
-
                         </CardBody>
                       </Card>
                     </Col>
                   </Row>
-
                 </form>
               </CardBody>
             </Card>
-
           </Container>
         </div>
       </React.Fragment>

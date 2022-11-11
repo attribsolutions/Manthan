@@ -38,7 +38,6 @@ function* Get_Roles_GenratorFunction() {
 }
 
 function* Submit_Roles_GenratorFunction({ Data }) {
-  debugger
   yield put(SpinnerState(true))
   try {
     const response = yield call(Role_Master_Post_API, Data);
@@ -70,11 +69,11 @@ function* Delete_Roles_GenratorFunction({ id }) {
 }
 
 function* Edit_Roles_GenratorFunction({ id, pageMode }) {
-debugger
   try {
     const response = yield call(Role_Master_Edit_API, id);
     response.pageMode = pageMode
     yield put(editSuccess(response));
+    console.log("response in saga" , response)
   } catch (error) {
     yield put(AlertState({
       Type: 4,
@@ -85,11 +84,9 @@ debugger
 
 
 function* Update_Roles_GenratorFunction({ data,ID }) {
-debugger
   try {
     yield put(SpinnerState(true))
     const response = yield call(Role_Master_Update_API, data,ID);
-    console.log("response in saga file", response)
     yield put(SpinnerState(false))
     yield put(updateSuccess(response))
   }
