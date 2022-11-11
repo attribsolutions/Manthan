@@ -9,31 +9,11 @@ import { AvField, AvInput } from 'availity-reactstrap-validation';
 
 function AddressDetails_Tab(props) {
 
-    const dispatch = useDispatch();
-
-    const [AddressType_DropdownSelect, setAddressType_DropdownSelect] = useState('');
     const [address, setAddress] = useState('');
     const [FSSAINo, setFSSAINo] = useState('');
     const [FSSAIExipry, setFSSAIExipry] = useState('');
     const [PIN, setPIN] = useState('');
     const [IsDefault, setIsDefault] = useState(false);
-
-    const { AddressTypes } = useSelector((state) => ({
-        AddressTypes: state.PartyMasterReducer.AddressTypes,
-    }));
-
-    useEffect(() => {
-        dispatch(getAddressTypes());
-    }, [dispatch]);
-
-    const AddressType_DropdownOption = AddressTypes.map((d) => ({
-        value: d.id,
-        label: d.Name,
-    }));
-
-    const AddressTypeHandler = (event) => {
-        setAddressType_DropdownSelect(event)
-    }
 
     const FSSAIExipryHandler = (e, date) => {
         setFSSAIExipry(date)
@@ -53,41 +33,42 @@ function AddressDetails_Tab(props) {
 
     const IsDefaultHandler = (event) => {
         setIsDefault(event.target.checked)
+
     }
 
     const addRowsHandler = (data) => {
-        
+
         const val = {
-            AddressType: AddressType_DropdownSelect.value,
-            AddressTypeName: AddressType_DropdownSelect.label,
             Address: address,
             FSSAINo: FSSAINo,
             FSSAIExipry: FSSAIExipry,
             PIN: PIN,
-            IsDefault: IsDefault,
+            IsDefault: IsDefault
         };
 
-        if (!(AddressType_DropdownSelect === "")
-            && !(address === "")
+        if (!(address === "")
             && !(FSSAINo === "")
             && !(FSSAIExipry === "")
             && !(PIN === "")
             && !(IsDefault === "")
         ) {
-            const totalTableData = props.tableData.length;
-            val.id = totalTableData + 1;
+            if (IsDefault) {
+                props.tableData.forEach(ele => {
+                    ele.IsDefault = false
+                });
+            }
+            const tableleth = props.tableData.length;
+            val.id = tableleth + 1;
             const updatedTableData = [...props.tableData];
             updatedTableData.push(val);
             props.func(updatedTableData)
             clearState();
-
         }
         else (alert("Please Enter value"))
-    };
+    }
 
     const clearState = () => {
         setAddress('');
-        setAddressType_DropdownSelect('');
         setFSSAIExipry('');
         setFSSAINo('');
         setIsDefault(false);
@@ -100,20 +81,7 @@ function AddressDetails_Tab(props) {
                 <Card className="text-black">
                     <CardBody style={{ backgroundColor: "whitesmoke" }}>
                         <Row className="mt-3">
-                            <Col md="4" >
-                                <FormGroup className="mb-3">
-                                    <Label htmlFor="validationCustom01">AddressType </Label>
-                                    <Select
-                                        value={AddressType_DropdownSelect}
-                                        options={AddressType_DropdownOption}
-                                        autoComplete="off"
-                                        onChange={AddressTypeHandler}
-                                    />
-                                </FormGroup>
-                            </Col>
-
-
-                            <Col md="6" >
+                            <Col md="9" >
                                 <FormGroup className="mb-3">
                                     <Label htmlFor="validationCustom01">Address </Label>
                                     <AvField name="Address" value={address} type="text"
@@ -126,9 +94,9 @@ function AddressDetails_Tab(props) {
                                 </FormGroup>
                             </Col>
 
-                            <Col md="1">  </Col>
-                            <Col md="1">
-                                <Button className="btn btn-sm btn-light mt-3   align-items-sm-end"
+
+                            <Col md="1" style={{ marginTop: '9px' }}>
+                                <Button className="btn btn-sm btn-light mt-4   align-items-sm-end"
                                     type="button"
                                     onClick={addRowsHandler}
                                 >
@@ -139,13 +107,13 @@ function AddressDetails_Tab(props) {
                         </Row>
                         <Row>
                             {/* <Col md="4"></Col> */}
-                            <Col md="3">
+                            <Col md="4">
                                 <FormGroup className="mb-3">
                                     <Label htmlFor="validationCustom01">
                                         FSSAI No </Label>
                                     <AvField
                                         name="FSSAINo"
-                                      value={FSSAINo}
+                                        value={FSSAINo}
                                         placeholder="Please Enter FSSAINo"
                                         type="text"
 
@@ -163,7 +131,7 @@ function AddressDetails_Tab(props) {
                                 </FormGroup>
                             </Col>
                             <Col md="1"></Col>
-                            <Col md="3">
+                            <Col md="4">
                                 <FormGroup className="mb-3">
                                     <Label htmlFor="validationCustom01">FSSAI Exipry </Label>
                                     <Flatpickr
@@ -182,9 +150,10 @@ function AddressDetails_Tab(props) {
                                 </FormGroup>
                             </Col>
 
-                            <Col md="1">  </Col>
-                            <Col md="3">
-                                <FormGroup className="mb-2">
+                            {/* <Col md="1">  </Col> */}
+                            <Row className='col col-12'>
+                                {/* <Col md="4"> */}
+                                <FormGroup className="mb-2 col-4">
                                     <Label htmlFor="validationCustom01"> PIN </Label>
                                     <AvField name="PIN" type="text"
                                         value={PIN}
@@ -200,17 +169,18 @@ function AddressDetails_Tab(props) {
                                         onChange={PINHandler}
                                     />
                                 </FormGroup>
-                            </Col>
-
-                            <Col md="1">  </Col>
-                            <Col md="9">
-                                <FormGroup className="mb-2 col col-sm-5">
+                                {/* </Col> */}
+                                <Col md="1">  </Col>
+                                {/* <Col md="9"> */}
+                                <FormGroup className="mb-2 col col-sm-5 mt-4">
                                     <Row className="justify-content-md-left">
                                         <Label htmlFor="horizontal-firstname-input" className="col-sm-4 col-form-label" >IsDefault </Label>
-                                        <Col md={2} style={{ marginTop: '9px' }} >
+                                        <Col md={3} style={{ marginTop: '9px' }} >
                                             <div className="form-check form-switch form-switch-md mb-3" dir="ltr">
-                                                <AvInput type="checkbox" className="form-check-input" id="customSwitchsizemd"
-                                                    defaultChecked={IsDefault}
+                                                <AvInput type="checkbox"
+                                                    id="IsDefault"
+                                                    className="form-check-input"
+                                                    checked={IsDefault}
                                                     name="IsDefault"
                                                     onChange={IsDefaultHandler}
                                                 // defaultChecked
@@ -220,8 +190,8 @@ function AddressDetails_Tab(props) {
                                         </Col>
                                     </Row>
                                 </FormGroup>
-                            </Col>
-
+                                {/* </Col> */}
+                            </Row>
                         </Row>
 
                     </CardBody>

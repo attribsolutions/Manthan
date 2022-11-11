@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, Table, } from 'reactstrap';
+import { Button, Input, Table, } from 'reactstrap';
 import { Tbody, Thead } from 'react-super-responsive-table';
 
 function AddressDetailsTable(props) {
@@ -14,17 +14,32 @@ function AddressDetailsTable(props) {
         }
     };
 
-    const tableRows = props.tableData.map((info) => {
-        
+    function defaultChangeHandler(key) {
+      
+        const newtableData = props.tableData.map((ele, k) => {
+            ele.IsDefault = false;
+            if (k === key) {
+                ele.IsDefault = true;
+            }
+            return ele
+        });
+        props.func(newtableData)
+    }
+    const tableRows = props.tableData.map((info, key) => {
+
         return (
             <tr>
-                {/* <td>{info.id}</td> */}
-                <td>{info.AddressTypeName}</td>
                 <td>{info.Address}</td>
                 <td>{info.FSSAINo}</td>
                 <td>{info.FSSAIExipry}</td>
                 <td>{info.PIN}</td>
-                < td>{`${info.IsDefault}`}</td>
+                < td><Input type="radio"
+                    name="btnradio"
+                    id={`radioButton${key}`}
+                    defaultChecked={info.IsDefault ? true:false}
+                    onClick={(e) => defaultChangeHandler(key)} />
+                    {`${info.IsDefault}`}
+                </td>
                 <td>
                     <Button
                         className="badge badge-soft-danger font-size-12 btn btn-danger waves-effect waves-light w-xxs border border-light"
@@ -47,7 +62,6 @@ function AddressDetailsTable(props) {
                     <Table className="table table-bordered table-hover">
                         <Thead>
                             <tr>
-                                <th className="col col-sm-3">Address Type</th>
                                 <th className="col col-sm-3">Address</th>
                                 <th className="col col-sm-3">FSSAINo</th>
                                 <th className="col col-sm-3">FSSAIExipry</th>
