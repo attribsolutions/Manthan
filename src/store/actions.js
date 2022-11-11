@@ -24,6 +24,8 @@ export *from './Administrator/UserRegistrationRedux/actions'
 
 export *from './Administrator/CategoryTypeRedux/actions'
 export *from './Administrator/GroupRedux/action'
+export *from './Administrator/ItemsRedux/action'
+
  
  
 

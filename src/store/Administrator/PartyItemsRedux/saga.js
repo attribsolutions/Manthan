@@ -1,9 +1,9 @@
 import { call, put, takeEvery } from "redux-saga/effects";
-import { Party_Items,GetSupplier_API, GoButton_API, } from "../../../helpers/backend_helper";
+import { Party_Items, GetSupplier_API, get_Item_List, get_Party_Item_List, Items_Master_Get_API, } from "../../../helpers/backend_helper";
 import { AlertState } from "../../Utilites/CustomAlertRedux/actions";
 import { SpinnerState } from "../../Utilites/Spinner/actions";
-import {  PostPartyItemsSuccess, goButtonSuccess, getSupplierSuccess,} from "./action";
-import {  POST_PARTYITEMS, GET_SUPPLIER,  GO_BUTTON_FOR_PARTYITEMS_PAGE, } from "./actionType";
+import { PostPartyItemsSuccess, getSupplierSuccess, getPartyItemListSuccess, } from "./action";
+import { POST_PARTYITEMS, GET_SUPPLIER, GET_PARTY_ITEM_LIST, } from "./actionType";
 
 // post api
 function* Post_PartyItems_GneratorFunction({ data }) {
@@ -21,40 +21,50 @@ function* Post_PartyItems_GneratorFunction({ data }) {
   }
 }
 
-function* goButtonGenFunc({ data }) {
-    yield put(SpinnerState(true))
-    try {
-      const response = yield call(GoButton_API, data);
-      yield put(goButtonSuccess(response.Data));
-      yield put(SpinnerState(false))
-    } catch (error) {
-      yield put(SpinnerState(false))
-      yield put(AlertState({
-        Type: 4,
-        Status: true, Message: "500 Error Message",
-      }));
-    }
-  }
+function* getPartyItemGenFunc({ supplierId }) {
 
-  function* getSupplierGenFunc() {
 
-    const USER = JSON.parse(localStorage.getItem("roleId"))
-    try {
-      const response = yield call(GetSupplier_API, USER.Party_id
-      );
-      yield put(getSupplierSuccess(response.Data));
-    } catch (error) {
-      yield put(AlertState({
-        Type: 4,
-        Status: true, Message: "500 Error Message for getSupplier ",
-      }));
-    }
+  // yield put(SpinnerState(true))
+  try {
+    const itemList = yield call(Items_Master_Get_API);
+    const partyItem = yield call(get_Party_Item_List, supplierId);
+    const response = itemList.Data.map((item) => {
+      item["itemCheck"] = false
+      partyItem.Data.forEach((ele) => {
+        if (item.id ===ele.Item) { item["itemCheck"] = true }
+      });
+      return item
+    });
+    yield put(getPartyItemListSuccess(response));
+    // yield put(SpinnerState(false))
+  } catch (error) {
+    // yield put(SpinnerState(false))
+    yield put(AlertState({
+      Type: 4,
+      Status: true, Message: "500 Error Message",
+    }));
   }
+}
+
+function* getSupplierGenFunc() {
+
+  const USER = JSON.parse(localStorage.getItem("roleId"))
+  try {
+    const response = yield call(GetSupplier_API, USER.Party_id
+    );
+    yield put(getSupplierSuccess(response.Data));
+  } catch (error) {
+    yield put(AlertState({
+      Type: 4,
+      Status: true, Message: "500 Error Message for getSupplier ",
+    }));
+  }
+}
 
 function* PartyItemsSaga() {
-    yield takeEvery(POST_PARTYITEMS, Post_PartyItems_GneratorFunction)
-    yield takeEvery(GET_SUPPLIER, getSupplierGenFunc)
-    yield takeEvery(GO_BUTTON_FOR_PARTYITEMS_PAGE, goButtonGenFunc)
-  }
-  
-  export default PartyItemsSaga;
+  yield takeEvery(POST_PARTYITEMS, Post_PartyItems_GneratorFunction)
+  yield takeEvery(GET_SUPPLIER, getSupplierGenFunc)
+  yield takeEvery(GET_PARTY_ITEM_LIST, getPartyItemGenFunc)
+}
+
+export default PartyItemsSaga;
