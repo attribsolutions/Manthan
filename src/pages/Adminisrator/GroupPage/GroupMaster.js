@@ -81,7 +81,7 @@ const GroupMaster = (props) => {
     }
 
     const [state, setState] = useState(initialFiledFunc(initialFiled))
-
+    debugger
     const values = { ...state.values }
     const { isError } = state;
     const { fieldLabel } = state;
