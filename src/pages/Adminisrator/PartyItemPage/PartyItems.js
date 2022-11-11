@@ -17,7 +17,7 @@ import { AvField, AvForm, } from "availity-reactstrap-validation";
 import Select from "react-select";
 import { MetaTags } from "react-meta-tags";
 
-import { Breadcrumb_inputName, commonPageField, commonPageFieldSuccess, } from "../../../store/actions";
+import { Breadcrumb_inputName, commonPageField, commonPageFieldSuccess, getItemList, getItemListSuccess, } from "../../../store/actions";
 
 import { useDispatch, useSelector } from "react-redux";
 import { AlertState } from "../../../store/actions";
@@ -31,12 +31,13 @@ import {
     onChangeText,
 
 } from "../../../components/Common/CmponentRelatedCommonFile/validationFunction";
-import { getSupplier, goButton, goButtonSuccess, PostPartyItemsSuccess } from "../../../store/Administrator/PartyItemsRedux/action";
+import { getpartyItemList, getPartyItemListSuccess, getSupplier, PostPartyItems, PostPartyItemsSuccess } from "../../../store/Administrator/PartyItemsRedux/action";
 import paginationFactory, { PaginationListStandalone, PaginationProvider } from "react-bootstrap-table2-paginator";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 import { mySearchProps } from "../../../components/Common/CmponentRelatedCommonFile/SearchBox/MySearch";
 import SaveButton from "../../../components/Common/CommonSaveButton";
+import { Td, Th, Tr } from "react-super-responsive-table";
 
 
 
@@ -48,7 +49,9 @@ const PartyItems = (props) => {
     let editMode = history.location.pageMode;
     const [pageMode, setPageMode] = useState("");
     const [modalCss, setModalCss] = useState(false);
-    const [SupplierNameSelect, setSupplierNameSelect] = useState('');
+    const [isChecked, Setcheckbox] = useState([false])
+
+    const [supplierSelect, setSupplierSelect] = useState('');
     const [userAccState, setUserPageAccessState] = useState("");
     // get method for dropdown
     useEffect(() => {
@@ -59,11 +62,13 @@ const PartyItems = (props) => {
     const {
         postMsg,
         supplier,
-        ItemName,
+        partyItem,
+
         pageField,
         userAccess } = useSelector((state) => ({
+
             postMsg: state.PartyItemsReducer.postMsg,
-            ItemName: state.PartyItemsReducer.itemName,
+            partyItem: state.PartyItemsReducer.partyItem,
             supplier: state.PartyItemsReducer.supplier,
             userAccess: state.Login.RoleAccessUpdateData,
             pageField: state.CommonPageFieldReducer.pageField
@@ -84,36 +89,9 @@ const PartyItems = (props) => {
 
 
     useEffect(() => {
-
-        const editDataGatingFromList = history.location.editValue
-
-        const locationPath = history.location.pathname
-        let userAcc = userAccess.find((inx) => {
-            return (`/${inx.ActualPagePath}` === locationPath)
-        })
-
-        if (!(editDataGatingFromList === undefined)) {
-            var SupplierName = editDataGatingFromList.Supplier
-            var Supplierid = 28
-
-            const jsonBody = JSON.stringify({
-                Party: Supplierid,
-            }
-            );
-            dispatch(goButton(jsonBody))
-            setSupplierNameSelect({ label: SupplierName, value: Supplierid })
-
-        }
-        if (!(userAcc === undefined)) {
-            setUserPageAccessState(userAcc)
-        }
-    }, [userAccess])
-
-
-    useEffect(() => {
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(PostPartyItemsSuccess({ Status: false }))
-            dispatch(goButtonSuccess([]))
+            dispatch(getPartyItemListSuccess([]))
             dispatch(AlertState({
                 Type: 1,
                 Status: true,
@@ -121,12 +99,13 @@ const PartyItems = (props) => {
                 RedirectPath: false,
             }))
 
-        } else if (postMsg.Status === true) {
+        } else if
+            (postMsg.Status === true) {
             dispatch(PostPartyItemsSuccess({ Status: false }))
             dispatch(AlertState({
-                Type: 4,
+                Type: 1,
                 Status: true,
-                Message: "error Message",
+                Message: postMsg.Message,
                 RedirectPath: false,
                 AfterResponseAction: false
             }));
@@ -139,79 +118,43 @@ const PartyItems = (props) => {
         label: i.Supplier,
     }));
 
-    // const defaultSorted = [
-    //     {
-    //         dataField: "PriceList", // if dataField is not match to any column you defined, it will be ignored.
-    //         order: "asc", // desc or asc
-    //     },
-    // ];
 
-    // const pageOptions = {
-    //     sizePerPage: (items.length + 2),
-    //     totalSize: 0,
-    //     custom: true,
-    // };
 
-    const pagesListColumns = [
-        {
-            text: "id",
-            dataField: "id",
-            sort: true,
-        },
-
-        {
-            text: "Item Name",
-            dataField: "Name",
-            sort: true,
-        },
-
-        {
-            text: "Select All",
-            dataField: "checkbox",
-            sort: true,
-        },
-
-    ];
 
     const GoButton_Handler = () => {
-        let party = SupplierNameSelect.value
+        let supplier = supplierSelect.value
 
-        if (!party > 0) {
+        if (!supplier > 0) {
             alert("Please Select Supplier")
             return
         }
 
-        if (ItemName.length > 0) {
+        if (partyItem.length > 0) {
             if (window.confirm("Refresh  Item...!")) {
-                dispatch(goButtonSuccess([]))
+                dispatch(getPartyItemListSuccess([]))
             } else {
                 return
             }
         }
-
-        let division = 0
-        try {
-            division = JSON.parse(localStorage.getItem("roleId")).Party_id
-        } catch (e) {
-            alert(e)
-        }
-        const jsonBody = JSON.stringify({
-            Party: party,
-        }
-        );
-
-        dispatch(goButton(jsonBody))
-        console.log("jsonBody", jsonBody)
+        dispatch(getpartyItemList(supplier))
+        // dispatch(getItemList(ItemList))
     };
 
 
-    const saveHandeller = () => {
-        const jsonBody = JSON.stringify({
+    const saveHandeller = (event, values) => {
+        const Find = partyItem.filter((index) => {
+            return (index.itemCheck === true)
+        })
 
-           
-        });
-         dispatch(PostPartyItemsSuccess(jsonBody));
-        
+        var PartyData = Find.map((index) => ({
+            Item: index.id,
+            Party: supplierSelect.value
+
+        }))
+        const jsonBody = JSON.stringify(Find, PartyData)
+        dispatch(PostPartyItems(PartyData));
+        console.log("post Data", jsonBody)
+
     };
 
 
@@ -248,11 +191,11 @@ const PartyItems = (props) => {
                                                                 <Label htmlFor="validationCustom01"> SupplierName </Label>
                                                                 <Col md="12">
                                                                     <Select
-                                                                        value={SupplierNameSelect}
+                                                                        value={supplierSelect}
                                                                         classNamePrefix="select2-Supplier"
                                                                         isDisabled={editMode === "edit" ? true : false}
                                                                         options={supplierOptions}
-                                                                        onChange={(e) => { setSupplierNameSelect(e) }}
+                                                                        onChange={(e) => { setSupplierSelect(e) }}
                                                                     />
                                                                 </Col>
                                                             </FormGroup>
@@ -269,76 +212,39 @@ const PartyItems = (props) => {
                                         </Card>
                                     </Col>
                                 </Row>
-                                {/* <PaginationProvider pagination={paginationFactory(pageOptions)}>
-                        {({ paginationProps, paginationTableProps }) => (
-                            <ToolkitProvider
-                                keyField="id"
-                                defaultSorted={defaultSorted}
-                                data={items}
-                                columns={pagesListColumns}
-                                search
-                            >
-                                {(toolkitProps,) => (
-                                    <React.Fragment>
-                                        <Row>
-                                            <Col xl="12">
-                                                <div className="table table-unRresponsive">
-                                                    <BootstrapTable
-                                                        keyField={"id"}
-                                                        responsive
-                                                        bordered={false}
-                                                        striped={false}
-                                                        classes={"table  table-bordered table-hover"}
 
-                                                        noDataIndication={
-                                                            <div className="text-danger text-center ">
-                                                                Items Not available
-                                                            </div>
-                                                        }
-                                                        {...toolkitProps.baseProps}
-                                                        {...paginationTableProps}
+                                <Table className="table table-bordered text-black "  >
+
+                                    <Tr >
+                                        <Th className="col-sm-1 text-center" style={{ height: "1cm" }}>Id</Th>
+                                        <Th className="col-sm-5 text-center">ItemName</Th>
+                                        <Th className="col-sm-1 text-center">Select All</Th>
+                                    </Tr>
+
+                                    {partyItem.map((i, k) => {
+                                        return (
+                                            <Tr style={{ height: "20px" }}>
+                                                <Td className="col-sm-1 text-center" id="td">{i.id}</Td>
+                                                <Td className="col-sm-5 text-center">{i.Name}</Td>
+                                                <Td className="col-sm-1 text-center">
+                                                    <Input
+                                                        className="form-check-input"
+                                                        type="checkbox"
+                                                        id="myCheck"
+                                                        // checked={isChecked}
+                                                        defaultChecked={i.itemCheck}
+                                                        onChange={e => {
+                                                            i.itemCheck = e.target.checked
+                                                        }}
+
                                                     />
-
-                                                    {mySearchProps(toolkitProps.searchProps)}
-                                                </div>
-                                            </Col>
-                                        </Row>
-                                        <Row className="align-items-md-center mt-30">
-                                            <Col className="pagination pagination-rounded justify-content-end mb-2">
-                                                <PaginationListStandalone {...paginationProps} />
-                                            </Col>
-                                        </Row>
-                                    </React.Fragment>
-                                )}
-                            </ToolkitProvider>
-                        )}
-
-                    </PaginationProvider> */}
-
-
-                                <Table className="table table-bordered table-responsive">
-                                    <tr style={{ backgroundColor: "#dddddd" }}>
-                                        <th>Id</th>
-                                        <th>ItemName</th>
-                                        <th>Select All</th>
-                                    </tr>
-                                    {arr.map((i, k) => {
-                                        return (<tr>
-                                            <td>{i.id}</td>
-                                            <td>{i.ItemName}</td>
-                                            <td><Input
-                                                type="checkbox"
-                                                id={`inpcheck${k}`}
-                                            ></Input></td>
-                                        </tr>)
-
+                                                </Td>
+                                            </Tr>)
                                     })}
-
                                 </Table>
-
-                                {(ItemName.length > 0) ? <div className="row save1" style={{ paddingBottom: 'center' }}>
+                                {(supplier.length > 0) ? <div className="row save1" style={{ paddingBottom: 'center' }}>
                                     <SaveButton pageMode={pageMode} userAcc={userAccState}
-                                        module={"PartyItems"} onClick={saveHandeller}
+                                        module={"supplier"} onClick={saveHandeller}
                                     />
                                 </div>
                                     : <div className="row save1"></div>}
@@ -362,24 +268,3 @@ const PartyItems = (props) => {
 export default PartyItems
 
 
-
-const arr = [{
-    ItemName: "Abc1",
-    id: 1
-},
-{
-    ItemName: "Abc2",
-    id: 2
-},
-{
-    ItemName: "Abc3",
-    id: 3
-},
-{
-    ItemName: "Abc4",
-    id: 4
-},
-{
-    ItemName: "Abc5",
-    id: 5
-}]

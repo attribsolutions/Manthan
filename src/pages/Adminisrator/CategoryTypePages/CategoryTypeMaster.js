@@ -94,7 +94,7 @@ const CategoryTypeMaster = (props) => {
 
     //This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
     useEffect(() => {
-        
+
         if ((hasShowloction || hasShowModal)) {
 
             let hasEditVal = null
@@ -176,6 +176,7 @@ const CategoryTypeMaster = (props) => {
             );
         }
     }, [updateMsg, modalCss]);
+  
 
     useEffect(() => {
 
