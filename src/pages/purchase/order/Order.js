@@ -94,7 +94,6 @@ const Order = (props) => {
     }));
 
 
-
     // userAccess useEffect
     useEffect(() => {
         let userAcc = null;
@@ -163,6 +162,13 @@ const Order = (props) => {
     }, [])
 
     useEffect(() => {
+        if ((supplierAddress.length > 0) && (!((hasShowloction || hasShowModal)))) {
+            setbillAddr(supplierAddress[0]);
+            setshippAddr(supplierAddress[0]);
+        }
+    }, [supplierAddress])
+
+    useEffect(() => {
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(postOrderSuccess({ Status: false }))
             dispatch(goButtonSuccess([]))
@@ -229,11 +235,7 @@ const Order = (props) => {
         label: i.Supplier,
     }));
 
-    const supplierAdssOptions = supplierAddress.map((i) => ({
-        value: i.id,
-        label: i.Address,
-    }));
-    
+
     const pagesListColumns = [
         {
             text: "Item Name",
@@ -573,7 +575,7 @@ const Order = (props) => {
                                         style={{ width: "130px" }}>Description</Label>
                                     <div className=" col ">
                                         <Input type="text"
-                                            value={description}
+                                            defaultValue={description}
                                             onChange={e => description = e.target.value}
                                             style={{ backgroundColor: "#dddddd" }} />
                                     </div>
@@ -614,7 +616,7 @@ const Order = (props) => {
                                         value={billAddr}
                                         classNamePrefix="select2-Customer"
                                         // isDisabled={pageMode === "edit" ? true : false}
-                                        options={supplierAdssOptions}
+                                        options={supplierAddress}
                                         styles={{
                                             control: base => ({
                                                 ...base,
@@ -643,7 +645,7 @@ const Order = (props) => {
 
                                             })
                                         }}
-                                        options={supplierAdssOptions}
+                                        options={supplierAddress}
                                         onChange={(e) => { setshippAddr(e) }}
                                     />
                                 </FormGroup>
