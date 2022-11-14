@@ -1,0 +1,9 @@
+$THEME_NAME: 'default' !default;
+
+.react-color-picker--theme-#{$THEME_NAME} {
+  color: inherit;
+
+  .react-color-picker__hue-spectrum {
+    margin-left: 10px;
+  }
+}

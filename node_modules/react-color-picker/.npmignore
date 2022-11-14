@@ -1,0 +1,9 @@
+test
+build
+node_modules
+.idea
+.babelrc
+index.jsx
+index.html
+test.html
+logfile

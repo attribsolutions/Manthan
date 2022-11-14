@@ -69,9 +69,6 @@
  export const PARTY_SUB_PARTY="/PartySubParty"
  export const PARTY_SUB_PARTY_lIST="/PartySubPartyList"
 
- export const PARTY_ITEM="/PartyItem"
- export const PARTY_ITEM_LIST="/PartyItemList"
-
 
 
  

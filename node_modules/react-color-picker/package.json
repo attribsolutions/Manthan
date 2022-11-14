@@ -1,0 +1,57 @@
+{
+  "name": "react-color-picker",
+  "version": "4.0.2",
+  "description": "React Color Picker",
+  "main": "lib/index.js",
+  "scripts": {
+    "dev": "webpack-dev-server --progress --config build/webpack.config.js",
+    "styles": "theme-builder",
+    "lib": "rimraf lib && npm run babel",
+    "babel": "babel --out-dir lib src",
+    "build": "npm run styles && npm run lib",
+    "prepublish": "npm run build"
+  },
+  "keywords": [
+    "react",
+    "react-component",
+    "color",
+    "picker",
+    "color-picker"
+  ],
+  "dependencies": {
+    "drag-helper": "^1.3.3",
+    "object-assign": "^4.1.0",
+    "react": "^15.3.0",
+    "react-class": "^3.2.2",
+    "react-dom": "^15.3.0",
+    "region": "^2.1.2",
+    "tinycolor2": "^1.4.1"
+  },
+  "devDependencies": {
+    "autoprefixer-loader": "^3.2.0",
+    "babel-cli": "^6.11.4",
+    "babel-loader": "^6.2.4",
+    "babel-preset-es2015": "^6.9.0",
+    "babel-preset-react": "^6.11.1",
+    "css-loader": "^0.23.1",
+    "rimraf": "^2.5.3",
+    "sass-loader": "^4.0.0",
+    "style-loader": "^0.13.1",
+    "webpack": "^1.13.0",
+    "webpack-dev-server": "^1.14.1",
+    "zippyui-theme-builder": "^1.0.2"
+  },
+  "peerDependencies": {
+    "react": ">=0.14.0 || >=15.0.0",
+    "react-dom": ">=0.14.0 || >=15.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/zippyui/react-color-picker.git"
+  },
+  "bugs": {
+    "url": "https://github.com/zippyui/react-color-picker/issues"
+  },
+  "license": "MIT",
+  "author": "ZippyUI <contact@zippyui.com>"
+}

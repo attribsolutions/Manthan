@@ -86,7 +86,6 @@ import OrderList from "../pages/Purchase/Order/OrderList"
 
 import PartyItems from "../pages/Adminisrator/PartyItemPage/PartyItems";
 
-
 import * as path from "./route_url";
 
 const userRoutes = [
@@ -177,7 +176,6 @@ const userRoutes = [
   { path: path.PARTY_SUB_PARTY_lIST, component: PartySubPartyList },
 
   { path: '/PartyItems', component: PartyItems },
-
 
   { path: "/SearchBox2", component: SearchBoxSecond },
   { path: "/SearchBox3", component: SerachBox3 },
