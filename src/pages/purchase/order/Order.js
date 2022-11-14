@@ -233,7 +233,7 @@ const Order = (props) => {
         value: i.id,
         label: i.Address,
     }));
-    debugger
+    
     const pagesListColumns = [
         {
             text: "Item Name",
