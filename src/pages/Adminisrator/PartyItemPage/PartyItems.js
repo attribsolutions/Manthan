@@ -212,9 +212,9 @@ const PartyItems = (props) => {
                                         </Card>
                                     </Col>
                                 </Row>
-
-                                <Table className="table table-bordered text-black "  >
-
+                             <div  className="table-responsive">
+                                {/* <BootstrapTable> */}
+                                  <Table className="table table-bordered table-responsive">
                                     <Tr >
                                         <Th className="col-sm-1 text-center" style={{ height: "1cm" }}>Id</Th>
                                         <Th className="col-sm-5 text-center">ItemName</Th>
@@ -241,7 +241,11 @@ const PartyItems = (props) => {
                                                 </Td>
                                             </Tr>)
                                     })}
+                                
+
                                 </Table>
+
+                                </div>
                                 {(supplier.length > 0) ? <div className="row save1" style={{ paddingBottom: 'center' }}>
                                     <SaveButton pageMode={pageMode} userAcc={userAccState}
                                         module={"supplier"} onClick={saveHandeller}
