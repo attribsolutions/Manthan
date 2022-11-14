@@ -1,13 +1,13 @@
 import MetaTags from "react-meta-tags"
 import React, { useEffect, useState } from "react"
 
-import { Row, Col,  Container,  Button } from "reactstrap"
+import { Row, Col, Container, Button } from "reactstrap"
 
 //redux
 import { useSelector, useDispatch } from "react-redux"
 
-import {  Link, useHistory } from "react-router-dom"
-import { getUserDetailsAction,  roleAceessAction } from "../../store/actions"
+import { Link, useHistory } from "react-router-dom"
+import { getUserDetailsAction, roleAceessAction } from "../../store/actions"
 
 // import images
 import logo from "../../assets/images/logo-sm.svg"
@@ -20,9 +20,9 @@ const SelectDivisionPage = props => {
   const dispatch = useDispatch()
   const history = useHistory();
 
-  const [divisionDropdowSelect, setDivisionDropdowSelect] = useState([]);
+  const [divisionDropdowSelect, setDivisionDropdowSelect] = useState(null);
 
-  const {  divisionDropdown_redux } = useSelector(state => ({
+  const { divisionDropdown_redux } = useSelector(state => ({
     loginError: state.Login.loginError,
     divisionDropdown_redux: state.Login.divisionDropdown,
   }))
@@ -72,18 +72,20 @@ const SelectDivisionPage = props => {
 
   function goButtonHandller() {
 
-    if (!divisionDropdowSelect.length > 0) {
+    if (divisionDropdowSelect) {
+
+      let value = divisionDropdown_redux[divisionDropdowSelect.value]
+      var employee = value.Employee_id;
+      var party = value.Party_id
+
+      localStorage.setItem("roleId", JSON.stringify(value))
+      dispatch(roleAceessAction(party, employee))
+      history.push("/Dashboard")
+    }
+    else {
       alert("Please Select Division...!")
       return
     }
-    let value = divisionDropdown_redux[divisionDropdowSelect.value]
-    var employee = value.Employee_id;
-    var party = value.Party_id
-
-    localStorage.setItem("roleId", JSON.stringify(value))
-    dispatch(roleAceessAction(party, employee))
-    history.push("/Dashboard")
-
   }
   return (
     <React.Fragment>
