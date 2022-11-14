@@ -36,16 +36,23 @@ function* supplierAddressGenFunc() {
   try {
     const response = yield call(Party_Master_Edit_API, USER.Party_id
     );
-    let a = [], b = [], newArr = []
+    let first = [], secd = [], newArr = []
     const arr = response.Data.PartyAddress;
     arr.forEach((i, k) => {
       if (i.IsDefault === true) {
-        a.push(i)
+
+        first.push({
+          value: i.id,
+          label: i.Address,
+        })
       } else {
-        b.push(i)
+        secd.push({
+          value: i.id,
+          label: i.Address,
+        })
       }
     })
-    newArr = [...a, ...b]
+    newArr = [...first, ...secd]
 
     yield put(getSupplierAddressSuccess(newArr));
   } catch (error) {
