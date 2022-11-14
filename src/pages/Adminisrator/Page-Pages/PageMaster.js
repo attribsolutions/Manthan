@@ -45,6 +45,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { PAGE_lIST } from "../../../routes/route_url";
 
+
 const PageMaster = (props) => {
   const dispatch = useDispatch();
   const history = useHistory()
@@ -384,7 +385,7 @@ const PageMaster = (props) => {
   }
 
   function PageField_onChange_Handler(event, type = '', key) {
-
+    debugger
     var found = pageFieldTabTable.find((i, k) => {
       return (k === key)
     })
@@ -432,8 +433,8 @@ const PageMaster = (props) => {
           FieldLabel: found.FieldLabel,
           ControlType: event,
           FieldValidation: found.FieldValidation,
-          InValidMsg: found.InValidMsg,
-          IsCompulsory: found.IsCompulsory,
+          InValidMsg: event.value === 4 ? event = '' : found.InValidMsg,
+          IsCompulsory: event.value === 4 ? event = false : found.IsCompulsory,
           DefaultSort: found.DefaultSort,
           ShowInListPage: found.ShowInListPage,
           ListPageSeq: found.ListPageSeq,
@@ -589,9 +590,10 @@ const PageMaster = (props) => {
     setPageFieldTabTable(newTabArr)
   }
 
-  function FieldValidation_Dropdown_Handler(e) {
+  function ControlType_Dropdown_Handler(e, key) {
+
     dispatch(getFieldValidations(e.value))
-    setPageFieldTabTable(e)
+    pageFieldTabTable.FieldValidation = []
   }
 
   const toggleCustom = (tab) => {
@@ -1367,10 +1369,10 @@ const PageMaster = (props) => {
                                 </tr>
                               </Thead>
                               <Tbody  >
+
                                 {pageFieldTabTable.map((TableValue, key) => (
                                   <tr >
                                     <td>
-
                                       <div style={{ width: "150px" }}>
                                         <Input
                                           type="text"
@@ -1401,7 +1403,7 @@ const PageMaster = (props) => {
                                           // placeholder="select unit"
                                           value={pageFieldTabTable[key].ControlType}
                                           options={ControlTypes_DropdownOptions}
-                                          onChange={(e) => { FieldValidation_Dropdown_Handler(e); PageField_onChange_Handler(e, "ControlType", key) }}
+                                          onChange={(e) => { ControlType_Dropdown_Handler(e, key); PageField_onChange_Handler(e, "ControlType", key) }}
                                         />
                                       </div>
                                     </td>
@@ -1412,6 +1414,7 @@ const PageMaster = (props) => {
                                           // placeholder="select unit"
                                           autoComplete="off"
                                           value={pageFieldTabTable[key].FieldValidation}
+                                          isDisabled={TableValue.ControlType.value === 4 ? true : false}
                                           options={FieldValidations_DropdownOptions}
                                           onChange={(e) => { PageField_onChange_Handler(e, "FieldValidation", key); }}
                                         />
@@ -1424,6 +1427,7 @@ const PageMaster = (props) => {
                                           id={`InValidMsg${key}`}
                                           autoComplete="off"
                                           defaultValue={EditData.InValidMsg}
+                                          disabled={TableValue.ControlType.value === 4 ? true : false}
                                           value={pageFieldTabTable[key].InValidMsg}
                                           onChange={(e) => PageField_onChange_Handler(e.target.value, "InValidMsg", key)}>
                                         </Input>
@@ -1442,9 +1446,10 @@ const PageMaster = (props) => {
                                     </td>
                                     <td>
                                       <Input
-                                        autoComplete="off"
+                                        // autoComplete="off"
                                         type="checkbox"
                                         id={`IsCompulsory${key}`}
+                                        disabled={TableValue.ControlType.value === 4 ? true : false}
                                         checked={pageFieldTabTable[key].IsCompulsory}
                                         onChange={(e) => PageField_onChange_Handler(e.target.checked, "IsCompulsory", key)}>
 
@@ -1471,13 +1476,13 @@ const PageMaster = (props) => {
                                             <i
                                               className=" bx bx-caret-up font-size-20 text-danger "
                                               id="up"
-                                              style={{ display: pageFieldTabTable[key].DefaultSort===1  ? "block" :"none"  }}
+                                              style={{ display: pageFieldTabTable[key].DefaultSort === 1 ? "block" : "none" }}
 
                                               onClick={(e) => arrow_value(key)}></i>
 
                                             <i
                                               className=" bx bx-caret-down font-size-20 text-danger "
-                                              style={{ display: pageFieldTabTable[key].DefaultSort===2  ? "block" :"none"  }}
+                                              style={{ display: pageFieldTabTable[key].DefaultSort === 2 ? "block" : "none" }}
 
                                               id="down"
                                               onClick={(e) => arrow_value1(key)}></i>
