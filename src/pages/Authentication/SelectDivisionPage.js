@@ -1,21 +1,13 @@
-import PropTypes from "prop-types"
 import MetaTags from "react-meta-tags"
 import React, { useEffect, useState } from "react"
 
-import { Row, Col, Alert, Container, Label, Button } from "reactstrap"
+import { Row, Col, Container, Button } from "reactstrap"
 
 //redux
 import { useSelector, useDispatch } from "react-redux"
 
-import { withRouter, Link, useHistory } from "react-router-dom"
-
-// availity-reactstrap-validation
-import { AvForm, AvField } from "availity-reactstrap-validation"
-
-
-/// tsdfddf Punam demotest
-// actions
-import { getUserDetailsAction, loginUser, roleAceessAction } from "../../store/actions"
+import { Link, useHistory } from "react-router-dom"
+import { getUserDetailsAction, roleAceessAction } from "../../store/actions"
 
 // import images
 import logo from "../../assets/images/logo-sm.svg"
@@ -28,9 +20,9 @@ const SelectDivisionPage = props => {
   const dispatch = useDispatch()
   const history = useHistory();
 
-  const [divisionDropdowSelect, setDivisionDropdowSelect] = useState([]);
+  const [divisionDropdowSelect, setDivisionDropdowSelect] = useState(null);
 
-  const { loginError, divisionDropdown_redux } = useSelector(state => ({
+  const { divisionDropdown_redux } = useSelector(state => ({
     loginError: state.Login.loginError,
     divisionDropdown_redux: state.Login.divisionDropdown,
   }))
@@ -40,7 +32,6 @@ const SelectDivisionPage = props => {
 
     if (!(localStorage.getItem("userId"))) {
       history.push("/login")
-
     }
     else {
       dispatch(getUserDetailsAction(localStorage.getItem("userId")))
@@ -48,15 +39,15 @@ const SelectDivisionPage = props => {
   }, [])
 
   useEffect(() => {
-// debugger
+    // debugger
     if (divisionDropdown_redux.length === 1) {
 
       let value = divisionDropdown_redux[0]
       let employee = value.Employee_id;
       let party = value.Party_id
-      if((party===null)){
-        party=0;
-        value.Party_id=0
+      if ((party === null)) {
+        party = 0;
+        value.Party_id = 0
       }
 
 
@@ -80,15 +71,21 @@ const SelectDivisionPage = props => {
   }));
 
   function goButtonHandller() {
-debugger
-    let value = divisionDropdown_redux[divisionDropdowSelect.value]
-    var employee = value.Employee_id;
-    var party = value.Party_id
 
-    localStorage.setItem("roleId", JSON.stringify(value))
-    dispatch(roleAceessAction(party, employee))
-    history.push("/Dashboard")
+    if (divisionDropdowSelect) {
 
+      let value = divisionDropdown_redux[divisionDropdowSelect.value]
+      var employee = value.Employee_id;
+      var party = value.Party_id
+
+      localStorage.setItem("roleId", JSON.stringify(value))
+      dispatch(roleAceessAction(party, employee))
+      history.push("/Dashboard")
+    }
+    else {
+      alert("Please Select Division...!")
+      return
+    }
   }
   return (
     <React.Fragment>
