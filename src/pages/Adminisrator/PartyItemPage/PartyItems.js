@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState, } from "react";
-import Breadcrumb from "../../../components/Common/Breadcrumb";
+import Breadcrumb from "../../../components/Common/Breadcrumb3";
 import {
     Button,
     Card,
@@ -11,45 +11,30 @@ import {
     Input,
     Label,
     Row,
-    Table,
 } from "reactstrap";
-import { AvField, AvForm, } from "availity-reactstrap-validation";
 import Select from "react-select";
 import { MetaTags } from "react-meta-tags";
 
-import { Breadcrumb_inputName, commonPageField, commonPageFieldSuccess, getItemList, getItemListSuccess, } from "../../../store/actions";
 
 import { useDispatch, useSelector } from "react-redux";
 import { AlertState } from "../../../store/actions";
-import { CommonGetRoleAccessFunction } from "../../../components/Common/CommonGetRoleAccessFunction";
 import { useHistory } from "react-router-dom";
-import {
-    comAddPageFieldFunc,
-    formValid,
-    initialFiledFunc,
-    onChangeSelect,
-    onChangeText,
-
-} from "../../../components/Common/CmponentRelatedCommonFile/validationFunction";
 import { getpartyItemList, getPartyItemListSuccess, getSupplier, PostPartyItems, PostPartyItemsSuccess } from "../../../store/Administrator/PartyItemsRedux/action";
 import paginationFactory, { PaginationListStandalone, PaginationProvider } from "react-bootstrap-table2-paginator";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 import { mySearchProps } from "../../../components/Common/CmponentRelatedCommonFile/SearchBox/MySearch";
 import SaveButton from "../../../components/Common/CommonSaveButton";
-import { Td, Th, Tr } from "react-super-responsive-table";
-
+import { countlabelFunc } from "../../../components/Common/CmponentRelatedCommonFile/commonListPage";
 
 
 const PartyItems = (props) => {
 
-    const formRef = useRef(null);
     const history = useHistory()
     const dispatch = useDispatch();
     let editMode = history.location.pageMode;
     const [pageMode, setPageMode] = useState("");
     const [modalCss, setModalCss] = useState(false);
-    const [isChecked, Setcheckbox] = useState([false])
 
     const [supplierSelect, setSupplierSelect] = useState('');
     const [userAccState, setUserPageAccessState] = useState("");
@@ -118,7 +103,38 @@ const PartyItems = (props) => {
         label: i.Supplier,
     }));
 
+    const tableColumns = [
+        {
+            text: "ID",
+            dataField: "id",
+            sort: true,
+        },
+        {
+            text: "ItemName",
+            dataField: "Name",
+            sort: true,
+        },
+        {
+            text: "Action",
+            dataField: "itemCheck",
+            sort: true,
 
+            formatter: (cellContent, row, k) => (
+                <span >
+                    <Input type="checkbox"
+                        defaultChecked={cellContent}
+                        onChange={e => row.itemCheck = e.target.checked}
+                    />
+                </span>
+
+            ),
+        }
+    ]
+
+    const pageOptions = {
+        sizePerPage: 15,
+        custom: true,
+    };
 
 
     const GoButton_Handler = () => {
@@ -170,7 +186,13 @@ const PartyItems = (props) => {
                         <MetaTags>
                             <title>{userAccState.PageHeading} | FoodERP-React FrontEnd</title>
                         </MetaTags>
-                        <Breadcrumb breadcrumbItem={userAccState.PageHeading} />
+
+                        <Breadcrumb
+                            pageHeading={userAccState.PageHeading}
+                            newBtnView={false}
+                            showCount={true}
+                            excelBtnView={false}
+                        />
 
                         <Card className="text-black">
                             <CardHeader className="card-header   text-black" style={{ backgroundColor: "#dddddd" }} >
@@ -212,9 +234,54 @@ const PartyItems = (props) => {
                                         </Card>
                                     </Col>
                                 </Row>
-                             <div  className="table-responsive">
-                                {/* <BootstrapTable> */}
-                                  <Table className="table table-bordered table-responsive">
+
+                                <PaginationProvider
+                                    pagination={paginationFactory(pageOptions)}
+                                >
+                                    {({ paginationProps, paginationTableProps }) => (
+                                        <ToolkitProvider
+
+                                            keyField="id"
+                                            data={partyItem}
+                                            columns={tableColumns}
+                                            search
+                                        >
+                                            {toolkitProps => (
+                                                <React.Fragment>
+                                                    <div className="table">
+                                                        <BootstrapTable
+                                                            keyField={"id"}
+                                                            bordered={true}
+                                                            striped={false}
+                                                            noDataIndication={<div className="text-danger text-center ">Items Not available</div>}
+                                                            classes={"table align-middle table-nowrap table-hover"}
+                                                            headerWrapperClasses={"thead-light"}
+
+                                                            {...toolkitProps.baseProps}
+                                                            {...paginationTableProps}
+                                                        />
+                                                        {countlabelFunc(toolkitProps, paginationProps, dispatch, "MRP")}
+                                                        {mySearchProps(toolkitProps.searchProps)}
+                                                    </div>
+
+                                                    <Row className="align-items-md-center mt-30">
+                                                        <Col className="pagination pagination-rounded justify-content-end mb-2">
+                                                            <PaginationListStandalone
+                                                                {...paginationProps}
+                                                            />
+                                                        </Col>
+                                                    </Row>
+                                                </React.Fragment>
+                                            )
+                                            }
+                                        </ToolkitProvider>
+                                    )
+                                    }
+
+                                </PaginationProvider>
+
+
+                                {/* <Table className="table table-bordered table-responsive">
                                     <Tr >
                                         <Th className="col-sm-1 text-center" style={{ height: "1cm" }}>Id</Th>
                                         <Th className="col-sm-5 text-center">ItemName</Th>
@@ -241,11 +308,11 @@ const PartyItems = (props) => {
                                                 </Td>
                                             </Tr>)
                                     })}
-                                
 
-                                </Table>
 
-                                </div>
+                                </Table> */}
+
+                                {/* </div> */}
                                 {(supplier.length > 0) ? <div className="row save1" style={{ paddingBottom: 'center' }}>
                                     <SaveButton pageMode={pageMode} userAcc={userAccState}
                                         module={"supplier"} onClick={saveHandeller}
