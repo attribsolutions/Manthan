@@ -37,11 +37,13 @@ import {
     getPriceList,
     postPartyData,
     postPartyDataSuccess,
-    updatePartyID
+    updatePartyID,
+    updatePartyIDSuccess
 } from "../../../store/Administrator/PartyRedux/action"
 import { AlertState, Breadcrumb_inputName } from "../../../store/actions"
 import Tree from "./Tree"
 import AddressDetails_Tab from "."
+import { PARTY_lIST } from "../../../routes/route_url"
 
 const PartyMaster = (props) => {
     const dispatch = useDispatch();
@@ -56,6 +58,7 @@ const PartyMaster = (props) => {
     const [pageMode, setPageMode] = useState("save");
     const [userPageAccessState, setUserPageAccessState] = useState(11);
     const [activeTab1, setactiveTab1] = useState("1")
+    const [modalCss, setModalCss] = useState(false);
     const [state_DropDown_select, setState_DropDown_select] = useState("");
     const [district_dropdown_Select, setDistrict_dropdown_Select] = useState("");
     const [companyList_dropdown_Select, setCompanyList_dropdown_Select] = useState("");
@@ -63,7 +66,7 @@ const PartyMaster = (props) => {
     const [PriceList_dropdown_Select, setPriceList_dropdown_Select] = useState("");
     const [dropOpen, setDropOpen] = useState(false);
     const [AddressDetailsMaster, setAddressDetailsMaster] = useState([]);
-    // console.log("AddressDetailsMaster", AddressDetailsMaster)
+
     const toggle1 = tab => {
         if (activeTab1 !== tab) {
             setactiveTab1(tab)
@@ -78,42 +81,95 @@ const PartyMaster = (props) => {
         Company,
         PartyTypes,
         priceListByPartyType,
-        RoleAccessModifiedinSingleArray
+        userAccess,
+        updateMsg
     } = useSelector((state) => ({
         PostAPIResponse: state.PartyMasterReducer.PartySaveSuccess,
+        updateMsg: state.PartyMasterReducer.updateMessage,
         State: state.M_EmployeesReducer.State,
         DistrictOnState: state.PartyMasterReducer.DistrictOnState,
         Company: state.PartyMasterReducer.Company,
         PartyTypes: state.PartyMasterReducer.PartyTypes,
         PriceList: state.PartyMasterReducer.PriceList,
         AddressTypes: state.PartyMasterReducer.AddressTypes,
-        RoleAccessModifiedinSingleArray: state.Login.RoleAccessUpdateData,
+        userAccess: state.Login.RoleAccessUpdateData,
         priceListByPartyType: state.PriceListReducer.priceListByPartyType,
 
     }));
 
+    const location = { ...history.location }
+    const hasShowloction = location.hasOwnProperty("editValue")
+    const hasShowModal = props.hasOwnProperty("editValue")
+  
     useEffect(() => {
 
-        let userAcc = undefined
-        if ((editDataGatingFromList === undefined)) {
+        let userAcc = null;
+        let locationPath = location.pathname;
 
-            let locationPath = history.location.pathname
-            userAcc = RoleAccessModifiedinSingleArray.find((inx) => {
-                return (`/${inx.ActualPagePath}` === locationPath)
-            })
-        }
-        else if (!(editDataGatingFromList === undefined)) {
-            let relatatedPage = props.relatatedPage
-            userAcc = RoleAccessModifiedinSingleArray.find((inx) => {
-                return (`/${inx.ActualPagePath}` === relatatedPage)
-            })
+        if (hasShowModal) {
+            locationPath = props.masterPath;
+        };
 
-        }
-        if (!(userAcc === undefined)) {
+        userAcc = userAccess.find((inx) => {
+            return (`/${inx.ActualPagePath}` === locationPath)
+        })
+
+        if (userAcc) {
             setUserPageAccessState(userAcc)
-        }
+        };
+    }, [userAccess])
 
-    }, [RoleAccessModifiedinSingleArray])
+    useEffect(() => {
+
+        // if (!(userPageAccessState === '')) { document.getElementById("txtName").focus(); }
+        if ((hasShowloction || hasShowModal)) {
+
+            let hasEditVal = null
+            if (hasShowloction) {
+                setPageMode(location.pageMode)
+                hasEditVal = location.editValue
+            }
+            else if (hasShowModal) {
+                hasEditVal = props.editValue
+                setPageMode(props.pageMode)
+                setModalCss(true)
+            }
+
+            if (hasEditVal) {
+                debugger
+                setEditData(hasEditVal);
+                dispatch(Breadcrumb_inputName(hasEditVal.Name))
+
+                setState_DropDown_select({
+                    label: hasEditVal.StateName,
+                    value: hasEditVal.State,
+                });
+                setDistrict_dropdown_Select({
+                    label: hasEditVal.DistrictName,
+                    value: hasEditVal.District,
+                });
+
+                setPartyType_dropdown_Select({
+                    label: hasEditVal.PartyTypeName,
+                    value: hasEditVal.PartyType,
+                });
+
+                setCompanyList_dropdown_Select({
+                    label: hasEditVal.CompanyName,
+                    value: hasEditVal.Company,
+                });
+                setPriceList_dropdown_Select({
+                    label: hasEditVal.PriceListName,
+                    value: hasEditVal.PriceList,
+                });
+
+                // setAddressDetailsMaster(hasEditVal.PagePageAccess);
+                setAddressDetailsMaster(hasEditVal.PartyAddress)
+
+                dispatch(editPartyIDSuccess({ Status: false }));
+            }
+        }
+    }, []);
 
     useEffect(() => {
         dispatch(getState());
@@ -125,49 +181,6 @@ const PartyMaster = (props) => {
 
 
     }, [dispatch]);
-
-    useEffect(() => {
-
-        if (!(userPageAccessState === '')) { document.getElementById("txtName").focus(); }
-        if (!(editDataGatingFromList === undefined)) {
-            debugger
-            setEditData(editDataGatingFromList);
-            dispatch(Breadcrumb_inputName(editDataGatingFromList.Name))
-            setPageMode(pageModeProps);
-
-
-            setCompanyList_dropdown_Select({
-                value: editDataGatingFromList.Company,
-                label: editDataGatingFromList.CompanyName
-            })
-
-            setPartyType_dropdown_Select({
-                value: editDataGatingFromList.PartyType,
-                label: editDataGatingFromList.PartyTypeName
-            })
-            setPriceList_dropdown_Select({
-                value: editDataGatingFromList.PriceList,
-                label: editDataGatingFromList.PriceListName
-            })
-            setState_DropDown_select({
-                value: editDataGatingFromList.State,
-                label: editDataGatingFromList.StateName
-            })
-            setDistrict_dropdown_Select({
-                value: editDataGatingFromList.District,
-                label: editDataGatingFromList.DistrictName
-            })
-
-
-            setAddressDetailsMaster(editDataGatingFromList.PartyAddress)
-
-            dispatch(editPartyIDSuccess({ Status: false }))
-        }
-        else if (!(propsPageMode === undefined)) {
-            setPageMode(propsPageMode)
-        }
-    }, [editDataGatingFromList, propsPageMode])
-
 
     useEffect(() => {
 
@@ -208,6 +221,23 @@ const PartyMaster = (props) => {
         }
     }, [PostAPIResponse.Status])
 
+    useEffect(() => {
+        if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
+          history.push({
+            pathname: PARTY_lIST,
+          })
+        } else if (updateMsg.Status === true && !modalCss) {
+          dispatch(updatePartyIDSuccess({ Status: false }));
+          dispatch(
+            AlertState({
+              Type: 3,
+              Status: true,
+              Message: JSON.stringify(updateMsg.Message),
+            })
+          );
+        }
+      }, [updateMsg, modalCss]);
+
     const StateValues = State.map((index) => ({
         value: index.id,
         label: index.Name
@@ -228,6 +258,12 @@ const PartyMaster = (props) => {
         label: index.Name,
         division: index.IsDivision
     }));
+
+    // party drop down option
+    // const PriceList_DropdownOptions = PriceList.map((data) => ({
+    //     value: data.id,
+    //     label: data.Name
+    // }));
 
     function handllerState(e) {
         setState_DropDown_select(e)
@@ -284,23 +320,7 @@ const PartyMaster = (props) => {
     }
 
     const FormSubmitButton_Handler = (event, values) => {
-       
-        const SortArray = AddressDetailsMaster.map(function (index) {
-            return index.IsDefault
-        })
-        const count = SortArray.filter(value => value === true).length;
-       
-        if (count>1) {
-            dispatch(
-                AlertState({
-                    Type: 4,
-                    Status: true,
-                    Message: "only one default is true",
-                    RedirectPath: false,
-                    PermissionAction: false,
-                }))
-        }
-
+        debugger
         const jsonBody = JSON.stringify({
             Name: values.Name,
             PriceList: PriceList_dropdown_Select.value,
@@ -326,21 +346,12 @@ const PartyMaster = (props) => {
 
         });
 
-        if (!AddressDetailsMaster.length > 0) {
-            dispatch(AlertState({
-                Type: 4, Status: true,
-                Message: "Address Details can not blank",
-                RedirectPath: false,
-                PermissionAction: false,
-            }));
-        }
-
-        else if (pageMode === 'edit') {
+        if (pageMode === 'edit') {
             dispatch(updatePartyID(jsonBody, EditData.id));
             console.log("update jsonBody", jsonBody)
         }
         else {
-            // dispatch(postPartyData(jsonBody));
+            dispatch(postPartyData(jsonBody));
             console.log("post jsonBody", jsonBody)
         }
     };
@@ -424,7 +435,7 @@ const PartyMaster = (props) => {
                                                         <Row >
                                                             <Col sm={2}>
                                                                 <div>
-                                                                    {/* {
+                                                                    {
                                                                         pageMode === "edit" ?
                                                                             userPageAccessState.RoleAccess_IsEdit ?
                                                                                 <button
@@ -437,17 +448,17 @@ const PartyMaster = (props) => {
                                                                                 :
                                                                                 <></>
                                                                             : (
-                                                                                userPageAccessState.RoleAccess_IsSave ? */}
-                                                                    <button
-                                                                        type="submit"
-                                                                        data-mdb-toggle="tooltip" data-mdb-placement="top" title="Save Role"
-                                                                        className="btn btn-primary w-md"
-                                                                    > <i className="fas fa-save me-2"></i> Save
-                                                                    </button>
-                                                                    {/* :
+                                                                                userPageAccessState.RoleAccess_IsSave ?
+                                                                                    <button
+                                                                                        type="submit"
+                                                                                        data-mdb-toggle="tooltip" data-mdb-placement="top" title="Save Role"
+                                                                                        className="btn btn-primary w-md"
+                                                                                    > <i className="fas fa-save me-2"></i> Save
+                                                                                    </button>
+                                                                                    :
                                                                                     <></>
                                                                             )
-                                                                    } */}
+                                                                    }
                                                                 </div>
                                                             </Col>
                                                         </Row>

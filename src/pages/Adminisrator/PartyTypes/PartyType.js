@@ -63,8 +63,8 @@ const PartyType = (props) => {
     const initialFiled = {
         id: "",
         Name: "",
-        IsSCM: "",
-        IsDivision: "",
+        IsSCM: false,
+        IsDivision: false,
     }
 
     const [state, setState] = useState(initialFiledFunc(initialFiled))
