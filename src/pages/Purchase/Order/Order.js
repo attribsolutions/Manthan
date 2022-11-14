@@ -410,11 +410,14 @@ const Order = (props) => {
 
     const saveHandeller = () => {
         let division = 0
-        let date = ''
+        let orderDate =''
+        let delDate =''
         const supplier = supplierSelect.value
 
         try {
             division = JSON.parse(localStorage.getItem("roleId")).Party_id
+            orderDate=document.getElementById("orderdate").value
+            delDate=document.getElementById("deliverydate").value
         } catch (e) {
             alert(e)
             return
@@ -473,8 +476,8 @@ const Order = (props) => {
             return
         }
         const jsonBody = JSON.stringify({
-            OrderDate: podate,
-            DeliveryDate: deliverydate,
+            OrderDate: orderDate,
+            DeliveryDate: delDate,
             Customer: division,
             Supplier: supplier,
             OrderAmount: orderAmount,
@@ -588,7 +591,8 @@ const Order = (props) => {
                                         style={{ width: "130px" }}>Delivery Date</Label>
                                     <div className="col col-6">
                                         <Flatpickr
-                                            // id="orderdate"
+                                            id="deliverydate"
+                                            ref={(e)=>{debugger}}
                                             name="deliverydate"
                                             value={deliverydate}
                                             className="form-control d-block p-2 bg-white text-dark"
