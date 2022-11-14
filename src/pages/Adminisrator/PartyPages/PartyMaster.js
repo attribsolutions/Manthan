@@ -251,9 +251,11 @@ const PartyMaster = (props) => {
     }
 
     const test1 = () => {
+        debugger
         return (
             <>
                 <Modal
+                
                     isOpen={dropOpen}
                     toggle={() => { setDropOpen(!dropOpen) }}
                     size="sm"
