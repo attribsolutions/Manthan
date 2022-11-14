@@ -250,23 +250,30 @@ const GSTMaster = (props) => {
             text: "GSTPercentage ",
             dataField: "GSTPercentage",
             sort: true,
-            formatter: (cellContent, user, key) => (
-                <>
+            formatter: (cellContent, user, key) => {
+                if (((cellContent > 0) && (user["GSTPerDis"] === undefined) || user.GSTPerDis)) {
+                    user["GSTPerDis"] = true
+                } else {
+                    user["GSTPerDis"] = false
+                }
+                return (
+
                     <div style={{ justifyContent: 'center' }} >
                         <Col>
                             <FormGroup className=" col col-sm-4 ">
                                 <Input
                                     type="text"
                                     defaultValue={TableData[key].GSTPercentage}
-                                    disabled={!(user.GSTPercentage === '') ? true : false}
+                                    disabled={user.GSTPerDis}
                                     className="col col-sm text-center"
                                     onChange={(e) => GSTPercentageHandler(e, cellContent, user, key)}
                                 />
                             </FormGroup>
                         </Col>
                     </div>
-                </>
-            ),
+
+                )
+            },
         },
         {
             text: "Current HSNCode",
@@ -297,23 +304,30 @@ const GSTMaster = (props) => {
             text: "HSNCode ",
             dataField: "HSNCode",
             sort: true,
-            formatter: (cellContent, user, key) => (
-                <>
+            formatter: (cellContent, user, key) => {
+                if (((cellContent > 0) && (user["hsncodeDis"] === undefined) || user.hsncodeDis)) {
+                    user["hsncodeDis"] = true
+                } else {
+                    user["hsncodeDis"] = false
+                }
+                return (
+
                     <div style={{ justifyContent: 'center' }} >
                         <Col>
                             <FormGroup className=" col col-sm-4 ">
                                 <Input
                                     type="text"
-                                    defaultValue={TableData[key].HSNCode}
-                                    disabled={!(user.HSNCode === '') ? true : false}
+                                    defaultValue={cellContent}
+                                    disabled={user.hsncodeDis}
                                     className="col col-sm text-center"
                                     onChange={(e) => HSNCodeHandler(e, cellContent, user, key)}
                                 />
                             </FormGroup>
                         </Col>
                     </div>
-                </>
-            ),
+
+                )
+            },
         },
         {
             text: "Action ",
@@ -347,7 +361,7 @@ const GSTMaster = (props) => {
 
     //'Save' And 'Update' Button Handller
     const handleValidSubmit = (event, values) => {
-debugger
+        debugger
         var ItemData = TableData.map((index) => ({
             EffectiveDate: effectiveDate,
             Company: 1,
@@ -424,7 +438,7 @@ debugger
                                                             <Label className="col-md-4">EffectiveDate</Label>
                                                             <Col md="8">
                                                                 <Flatpickr
-                                                                    
+
                                                                     id="EffectiveDateid"
                                                                     name="effectiveDate"
                                                                     value={effectiveDate}
@@ -443,8 +457,8 @@ debugger
 
                                                     <Col md="2">
                                                         <Button type="button" color="btn btn-outline-success border-2 font-size-12  "
-                                                        className="mt-n2"
-                                                           onClick={() => { GoButton_Handler() }} >Go</Button>
+                                                            className="mt-n2"
+                                                            onClick={() => { GoButton_Handler() }} >Go</Button>
 
                                                     </Col>
 
@@ -458,7 +472,7 @@ debugger
                                     <PaginationProvider pagination={paginationFactory(pageOptions)}>
                                         {({ paginationProps, paginationTableProps }) => (
                                             <ToolkitProvider
-                                                keyField="id"
+                                                keyField="Item"
                                                 data={TableData}
                                                 columns={pagesListColumns}
                                                 search
@@ -469,7 +483,7 @@ debugger
                                                             <Col xl="12">
                                                                 <div className="table-responsive">
                                                                     <BootstrapTable
-                                                                        keyField={"id"}
+                                                                        keyField={"Item"}
                                                                         responsive
                                                                         bordered={false}
                                                                         striped={false}
