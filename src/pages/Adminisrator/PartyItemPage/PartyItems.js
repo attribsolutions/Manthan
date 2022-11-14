@@ -105,7 +105,7 @@ const PartyItems = (props) => {
 
     const tableColumns = [
         {
-            text: "ID",
+            text: "PartyItemID",
             dataField: "id",
             sort: true,
         },
@@ -281,38 +281,6 @@ const PartyItems = (props) => {
                                 </PaginationProvider>
 
 
-                                {/* <Table className="table table-bordered table-responsive">
-                                    <Tr >
-                                        <Th className="col-sm-1 text-center" style={{ height: "1cm" }}>Id</Th>
-                                        <Th className="col-sm-5 text-center">ItemName</Th>
-                                        <Th className="col-sm-1 text-center">Select All</Th>
-                                    </Tr>
-
-                                    {partyItem.map((i, k) => {
-                                        return (
-                                            <Tr style={{ height: "20px" }}>
-                                                <Td className="col-sm-1 text-center" id="td">{i.id}</Td>
-                                                <Td className="col-sm-5 text-center">{i.Name}</Td>
-                                                <Td className="col-sm-1 text-center">
-                                                    <Input
-                                                        className="form-check-input"
-                                                        type="checkbox"
-                                                        id="myCheck"
-                                                        // checked={isChecked}
-                                                        defaultChecked={i.itemCheck}
-                                                        onChange={e => {
-                                                            i.itemCheck = e.target.checked
-                                                        }}
-
-                                                    />
-                                                </Td>
-                                            </Tr>)
-                                    })}
-
-
-                                </Table> */}
-
-                                {/* </div> */}
                                 {(supplier.length > 0) ? <div className="row save1" style={{ paddingBottom: 'center' }}>
                                     <SaveButton pageMode={pageMode} userAcc={userAccState}
                                         module={"supplier"} onClick={saveHandeller}
