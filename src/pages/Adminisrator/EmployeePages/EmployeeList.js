@@ -40,7 +40,7 @@ const Employee_List = () => {
   //  This UseEffect => Featch Modules List data  First Rendering
   useEffect(() => {
     dispatch(commonPageFieldListSuccess(null))
-    dispatch(commonPageFieldList(11))
+    dispatch(commonPageFieldList(12))
     dispatch(getEmployeelist());
   }, []);
 
