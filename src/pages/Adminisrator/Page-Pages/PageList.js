@@ -15,7 +15,7 @@ import { PAGE } from "../../../routes/route_url";
 
 
 export default function PageList() {
-
+debugger
   const dispatch = useDispatch();
   const reducers = useSelector(
     (state) => ({
@@ -41,7 +41,7 @@ export default function PageList() {
   // Featch Modules List data  First Rendering
   useEffect(() => {
     dispatch(commonPageFieldListSuccess(null))
-    dispatch(commonPageFieldList(5))
+    dispatch(commonPageFieldList(8))
     dispatch(GetHpageListData());
   }, []);
 
