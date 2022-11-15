@@ -15,7 +15,7 @@ import { USER } from "../../../routes/route_url";
 
 
 const UserList = () => {
-    
+    debugger
     const dispatch = useDispatch();
     const reducers = useSelector(
         (state) => ({
@@ -42,7 +42,7 @@ const UserList = () => {
     //  This UseEffect => Featch Modules List data  First Rendering
     useEffect(() => {
         dispatch(commonPageFieldListSuccess(null))
-        dispatch(commonPageFieldList(3))
+        dispatch(commonPageFieldList(14))
         dispatch(getUser());
     }, []);
 
