@@ -64,7 +64,7 @@
  export const PAGE_lIST="/PageList"
 
  export const ORDER="/Order"
- export const ORDER_lIST="/Orders"
+ export const ORDER_lIST="/OrderList"
 
  export const PARTY_SUB_PARTY="/PartySubParty"
  export const PARTY_SUB_PARTY_lIST="/PartySubPartyList"
