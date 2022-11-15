@@ -84,7 +84,7 @@ const AddUser = (props) => {
     userAccess: state.Login.RoleAccessUpdateData,
     pageField: state.CommonPageFieldReducer.pageField
   }));
-
+console.log("employeelistForDropdown",employeelistForDropdown)
   const location = { ...history.location }
   const hasShowloction = location.hasOwnProperty("editValue")
   const hasShowModal = props.hasOwnProperty("editValue")

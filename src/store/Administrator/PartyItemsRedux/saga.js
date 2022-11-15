@@ -27,7 +27,7 @@ function* getPartyItemGenFunc({ supplierId }) {
   // yield put(SpinnerState(true))
   try {
     const itemList = yield call(Items_Master_Get_API);
-    const partyItem = yield call(get_Party_Item_List, supplierId);
+    const partyItem =  yield call(get_Party_Item_List, supplierId);
     const response = itemList.Data.map((item) => {
       item["itemCheck"] = false
       partyItem.Data.forEach((ele) => {

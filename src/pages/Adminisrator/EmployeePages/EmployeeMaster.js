@@ -103,7 +103,7 @@ const AddEmployee = (props) => {
   useEffect(() => {
 
     dispatch(commonPageFieldSuccess(null));
-    dispatch(commonPageField(8))
+    dispatch(commonPageField(11))
     dispatch(getDesignationID());
     dispatch(getEmployeeType());
     dispatch(getState());

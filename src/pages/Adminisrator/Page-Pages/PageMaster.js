@@ -603,7 +603,7 @@ const PageMaster = (props) => {
   };
 
   const FormSubmitButton_Handler = (event, values) => {
-
+    debugger
     const PageFieldMaster = pageFieldTabTable.map((index) => ({
       ControlID: index.ControlID,
       FieldLabel: index.FieldLabel,
@@ -617,7 +617,7 @@ const PageMaster = (props) => {
       FieldValidation: index.FieldValidation.value,
       DownloadDefaultSelect: index.DownloadDefaultSelect,
     }))
-
+debugger
     if (
       tablePageAccessDataState.length <= 0 &&
       !(pageType_DropdownSelect.value === 1)
@@ -633,7 +633,20 @@ const PageMaster = (props) => {
       );
       return;
     }
-
+    // else if ((pageType_DropdownSelect.value === 1) && (PageFieldMaster.length > 0)) {
+    //   {
+    //     dispatch(
+    //       AlertState({
+    //         Type: 4,
+    //         Status: true,
+    //         Message: "PageField is Required",
+    //         RedirectPath: false,
+    //         PermissionAction: false,
+    //       })
+    //     );
+    //     return;
+    //   }
+    // }
     const jsonBody = JSON.stringify({
       Name: values.Name,
       Module: module_DropdownSelect.value,
@@ -653,7 +666,7 @@ const PageMaster = (props) => {
       PagePageAccess: tablePageAccessDataState.map((d) => ({
         Access: d.AccessID,
       })),
-      PageFieldMaster: PageFieldMaster,
+      PageFieldMaster: (pageType_DropdownSelect.value === 2) ? [] : PageFieldMaster,
     })
 
     if (pageMode === "edit") {
@@ -905,7 +918,7 @@ const PageMaster = (props) => {
                           <span className="d-none d-sm-block">Page Master Details</span>
                         </NavLink>
                       </NavItem>
-                      <NavItem>
+                      {(pageType_DropdownSelect.value === 1) ? <NavItem>
                         <NavLink
                           style={{ cursor: "pointer" }}
                           className={classnames({
@@ -921,6 +934,10 @@ const PageMaster = (props) => {
                           <span className="d-none d-sm-block">Page Field</span>
                         </NavLink>
                       </NavItem>
+                        :
+                        null
+                      }
+
 
                       <NavItem>
                         <NavLink
