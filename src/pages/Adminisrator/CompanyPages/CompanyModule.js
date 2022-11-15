@@ -80,7 +80,7 @@ const CompanyModule = (props) => {
 
   useEffect(() => {
     dispatch(commonPageFieldSuccess(null));
-    dispatch(commonPageField(2))
+    dispatch(commonPageField(1))
     dispatch(getCompanyGroup());
   }, [dispatch]);
 

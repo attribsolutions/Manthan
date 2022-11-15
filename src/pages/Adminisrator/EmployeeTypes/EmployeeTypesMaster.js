@@ -72,7 +72,7 @@ const EmployeeTypesMaster = (props) => {
 
     useEffect(() => {
         dispatch(commonPageFieldSuccess(null));
-        dispatch(commonPageField(115))
+        dispatch(commonPageField(46))
     }, []);
 
 
