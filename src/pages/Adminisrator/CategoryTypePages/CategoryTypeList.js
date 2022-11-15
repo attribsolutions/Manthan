@@ -40,7 +40,7 @@ const CategoryTypeList = (props) => {
   //  This UseEffect => Featch Modules List data  First Rendering
   useEffect(() => {
     dispatch(commonPageFieldListSuccess(null))
-    dispatch(commonPageFieldList(17))
+    dispatch(commonPageFieldList(22))
     dispatch(getCategoryTypelist());
   }, []);
 

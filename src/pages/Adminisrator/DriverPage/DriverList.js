@@ -45,7 +45,7 @@ const DriverList = (props) => {
 
   useEffect(() => {
     dispatch(commonPageFieldListSuccess(null))
-    dispatch(commonPageFieldList(106))
+    dispatch(commonPageFieldList(34))
     dispatch(getMethodForDriverList())
 
   }, []);

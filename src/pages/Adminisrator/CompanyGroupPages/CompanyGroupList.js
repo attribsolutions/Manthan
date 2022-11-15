@@ -41,7 +41,7 @@ debugger
   //  This UseEffect => Featch Modules List data  First Rendering
   useEffect(() => {
     dispatch(commonPageFieldListSuccess(null))
-    dispatch(commonPageFieldList(33))
+    dispatch(commonPageFieldList(4))
     dispatch(getMethodForCompanyGroupList());
   }, []);
 

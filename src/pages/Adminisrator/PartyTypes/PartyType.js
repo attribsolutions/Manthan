@@ -56,7 +56,7 @@ const PartyType = (props) => {
         }));
 
     useEffect(() => {
-        dispatch(commonPageField(53))
+        dispatch(commonPageField(31))
     }, []);
 
     {/** Dyanamic Page access state and OnChange function */ }
