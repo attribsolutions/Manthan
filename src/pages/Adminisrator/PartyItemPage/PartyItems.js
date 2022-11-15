@@ -114,11 +114,20 @@ const PartyItems = (props) => {
             text: "ItemName",
             dataField: "Name",
             sort: true,
-        },
-        {
+        }];
+
+
+       const selectRow = {
+            
+            mode: 'checkbox',
+            clickToSelect: true,
             text: "Action",
             dataField: "itemCheck",
             sort: true,
+            selectColumnPosition: 'right',
+            headerColumnStyle: {
+                lable:'SelectAll'
+              },
 
             formatter: (cellContent, row, col,k) => (
                 <span >
@@ -133,13 +142,16 @@ const PartyItems = (props) => {
             ),
 
 
+   }
 
-        },
-       
+    // ];
+    // const selectRow = {
+    //     mode: 'checkbox',
+    //     clickToSelect: true,
+    //     headerColumnStyle: {
+    //     },
 
-    ];
-
-    
+    // }
 
     const pageOptions = {
         sizePerPage: 15,
@@ -147,8 +159,8 @@ const PartyItems = (props) => {
     };
 
 
-    const GoButton_Handler = () => {
-        let supplier = supplierSelect.value
+    const GoButton_Handler = (e) => {
+        let supplier = e.value
 
         if (!supplier > 0) {
             alert("Please Select Supplier")
@@ -227,7 +239,7 @@ const PartyItems = (props) => {
                                                                         classNamePrefix="select2-Supplier"
                                                                         // isDisabled={editMode === "edit" ? true : false}
                                                                         options={supplierOptions}
-                                                                        onChange={(e) => { setSupplierSelect(e); GoButton_Handler(e) }
+                                                                        onChange={(e) => { ; GoButton_Handler(e) }
                                                                         // dispatch(GoButton_Handler());
                                                                     }
                                                                                   
@@ -266,6 +278,7 @@ const PartyItems = (props) => {
                                                 <React.Fragment>
                                                     <div className="table">
                                                         <BootstrapTable
+                                                             selectRow={ selectRow }
                                                             keyField={"id"}
                                                             bordered={true}
                                                             striped={false}
