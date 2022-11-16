@@ -91,7 +91,7 @@ const GroupMaster = (props) => {
 
     useEffect(() => {
         dispatch(commonPageFieldSuccess(null));
-        dispatch(commonPageField(119))
+        dispatch(commonPageField(50))
         dispatch(getGroupTypeslist())
     }, []);
 

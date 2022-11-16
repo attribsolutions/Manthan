@@ -88,6 +88,7 @@ import PartyItems from "../pages/Adminisrator/PartyItemPage/PartyItems";
 
 import * as path from "./route_url";
 import GRNList from "../pages/Purchase/GRN/GRNList";
+import Demo from "../pages/Adminisrator/PartyPages/Demo";
 
 const userRoutes = [
 
@@ -187,6 +188,11 @@ const userRoutes = [
   { path: "/", exact: true, component: () => <Redirect to="/Dashboard" /> },
   { path: "/auth-404", component: Error404 },
   { path: "/auth-500", component: Error500 },
+
+
+  // { path: "/Demo", component: Demo },
+
+
 
 
 ]

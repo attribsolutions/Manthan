@@ -34,7 +34,7 @@ const GroupList = (props) => {
   }
   useEffect(() => {
     dispatch(commonPageFieldListSuccess(null))
-    dispatch(commonPageFieldList(120))
+    dispatch(commonPageFieldList(51))
     dispatch(getGroupList());
     
     
