@@ -40,7 +40,7 @@ const PartyList = () => {
     //  This UseEffect => Featch Modules List data  First Rendering
     useEffect(() => {
         dispatch(commonPageFieldListSuccess(null))
-        dispatch(commonPageFieldList(11))
+        dispatch(commonPageFieldList(18))
         dispatch(getPartyListAPI());
     }, []);
 
