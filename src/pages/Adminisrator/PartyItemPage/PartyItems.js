@@ -239,9 +239,9 @@ const PartyItems = (props) => {
                                                                         classNamePrefix="select2-Supplier"
                                                                         // isDisabled={editMode === "edit" ? true : false}
                                                                         options={supplierOptions}
-                                                                        onChange={(e) => { ; GoButton_Handler(e) }
+                                                                        onChange={GoButton_Handler}
                                                                         // dispatch(GoButton_Handler());
-                                                                    }
+                                                                    
                                                                                   
                                                                         // onClick={GoButton_Handler}
 
