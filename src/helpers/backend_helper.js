@@ -150,6 +150,9 @@ export const getOrderList_forOrderPage_ApiCall = (data) => get(url.ORDER_PAGE_AP
 export const getDivisionOrders = () => get(`${url.ORDER_PAGE_API}?FromDate=2022-01-25&ToDate=2022-01-25&CustomerID=0&DivisionID=3`)
 export const getOrderList_For_Listpage = () => get(url.ORDER_PAGE_API)// Get subModule For H_pages
 
+//GRN PAGE grn 
+export const GRN_get_API = (data) => get(url.ORDER_PAGE_API)
+
 //Administrator   Modules submit  
 export const postSubmitModules = (data) => post(url.H_MODULES_API_URL, data)
 export const Fetch_ModulesList = () => get(url.H_MODULES_API_URL,)//module-list get API method

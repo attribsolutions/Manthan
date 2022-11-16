@@ -91,7 +91,7 @@ const AddEmployee = (props) => {
     EmployeeTypeName: "",
     StateName: "",
     DistrictName: "",
-    EmployeeParties: ""
+    EmployeeParties: []
   }
 
   const [state, setState] = useState(initialFiledFunc(initialFiled))

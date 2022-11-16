@@ -23,6 +23,7 @@ import Company from './Administrator/CompanyRedux/reducer'
 
 import H_Pages from './Administrator/HPagesRedux/reducer'
 import OrderReducer from "./Purchase/OrderPageRedux/reducer"
+import GRNReducer from "./Purchase/GRNRedux/reducer"
 import SupplierReducer from "./CommonAPI/SupplierRedux/reducer"
 import User_Registration_Reducer from "./Administrator/UserRegistrationRedux/reducer"
 import M_EmployeesReducer from "./Administrator/M_EmployeeRedux/reducer"
@@ -77,6 +78,7 @@ const rootReducer = combineReducers({
   M_EmployeesReducer,
   // order
   OrderReducer,
+  GRNReducer,
   // Master
   RoleMaster_Reducer,
   ItemMastersReducer,
