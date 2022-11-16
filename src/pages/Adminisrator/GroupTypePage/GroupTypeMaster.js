@@ -67,7 +67,7 @@ const GroupTypeMaster = (props) => {
 
     useEffect(() => {
         dispatch(commonPageFieldSuccess(null));
-        dispatch(commonPageField(105))
+        dispatch(commonPageField(44))
     }, []);
 
     const location = { ...history.location }

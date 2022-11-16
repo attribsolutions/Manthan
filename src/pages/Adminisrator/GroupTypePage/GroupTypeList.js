@@ -41,7 +41,7 @@ const GroupTypeList = (props) => {
   }
   useEffect(() => {
     dispatch(commonPageFieldListSuccess(null))
-    dispatch(commonPageFieldList(107))
+    dispatch(commonPageFieldList(45))
     dispatch(getGroupTypeslist())
 
   }, []);
