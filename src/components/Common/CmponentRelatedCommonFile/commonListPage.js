@@ -294,6 +294,7 @@ const CommonListPage = (props) => {
                             // onDataSizeChange={handleDataChange}
                             striped={true}
                             classes={"table  table-bordered table-hover"}
+                            noDataIndication={<div className="text-danger text-center ">Data Not available</div>}
                             {...toolkitProps.baseProps}
                             {...paginationTableProps}
                           />
