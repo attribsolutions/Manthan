@@ -75,7 +75,7 @@ const CategoryMaster = (props) => {
 
     useEffect(() => {
         dispatch(commonPageFieldSuccess(null));
-        dispatch(commonPageField(18))
+        dispatch(commonPageField(23))
     }, []);
 
     const location = { ...history.location }

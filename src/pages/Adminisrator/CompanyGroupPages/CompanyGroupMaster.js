@@ -76,7 +76,7 @@ const CompanyGroupMaster = (props) => {
 
     useEffect(() => {
         dispatch(commonPageFieldSuccess(null));
-        dispatch(commonPageField(32))
+        dispatch(commonPageField(3))
     }, []);
 
 

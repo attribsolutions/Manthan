@@ -64,7 +64,7 @@
  export const PAGE_lIST="/PageList"
 
  export const ORDER="/Order"
- export const ORDER_lIST="/Orders"
+ export const ORDER_lIST="/OrderList"
 
  export const GRN_lIST="/GRNList"
 

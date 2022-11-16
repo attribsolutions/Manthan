@@ -53,7 +53,7 @@ const CategoryTypeMaster = (props) => {
     }));
 
     useEffect(() => {
-        dispatch(commonPageField(16))
+        dispatch(commonPageField(21))
     }, []);
 
     {/** Dyanamic Page access state and OnChange function */ }

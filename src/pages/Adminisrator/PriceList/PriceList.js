@@ -39,7 +39,7 @@ const PriceList = (props) => {
   //  This UseEffect => Featch Modules List data  First Rendering
   useEffect(() => {
     dispatch(commonPageFieldListSuccess(null))
-    dispatch(commonPageFieldList(94))
+    dispatch(commonPageFieldList(35))
     dispatch(getPriceListPage());
   }, []);
 

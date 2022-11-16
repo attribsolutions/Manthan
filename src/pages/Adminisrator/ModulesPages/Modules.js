@@ -49,7 +49,7 @@ const Modules = (props) => {
     }));
 
     useEffect(() => {
-        dispatch(commonPageField(14))
+        dispatch(commonPageField(5))
     }, []);
 
     {/** Dyanamic Page access state and OnChange function */ }

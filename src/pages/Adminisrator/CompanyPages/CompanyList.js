@@ -43,7 +43,7 @@ const CompanyList = () => {
     // Featch Modules List data  First Rendering
     useEffect(() => {
         dispatch(commonPageFieldListSuccess(null))
-        dispatch(commonPageFieldList(1))
+        dispatch(commonPageFieldList(2))
         dispatch(fetchCompanyList());
     }, []);
 
