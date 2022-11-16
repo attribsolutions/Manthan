@@ -258,8 +258,8 @@ console.log("employeelistForDropdown",employeelistForDropdown)
     const jsonBody = JSON.stringify({
       email: values.email,
       LoginName: values.loginName,
-      password: "1234",
-      AdminPassword: "1234",
+      password:values.password,
+      AdminPassword:values.password,
       Employee: EmployeeSelect.value,
       isActive: values.isActive,
       isSendOTP: values.isSendOTP,
@@ -399,7 +399,7 @@ console.log("employeelistForDropdown",employeelistForDropdown)
                          
 
 
-                          {pageMode === "save" ?
+                          {/* {pageMode === "save" ? */}
                             <Row>
                               <Row>
                                 <FormGroup className="mb-1 col col-sm-4 " >
@@ -439,7 +439,7 @@ console.log("employeelistForDropdown",employeelistForDropdown)
                                 </FormGroup>
                               </Row>
                             </Row>
-                            : null}
+                            {/* : null} */}
 
 
 
