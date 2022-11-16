@@ -70,7 +70,7 @@ const RoleMaster = (props) => {
 
   useEffect(() => {
     dispatch(commonPageFieldSuccess());
-    dispatch(commonPageField(12))
+    dispatch(commonPageField(19))
     dispatch(getEmployeeTypelist());
   }, []);
 
