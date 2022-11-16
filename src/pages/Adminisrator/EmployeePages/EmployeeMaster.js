@@ -309,9 +309,9 @@ const AddEmployee = (props) => {
   }));
 
   function EmployeeType_Dropdown_Handler(e) {
-debugger
+    debugger
     dispatch(Get_CompanyName_By_EmployeeTypeID(e.value))
-   
+
     const IsPartyConnection = employeeType.find((element) => {
       return element.id === e.value
     });
@@ -347,8 +347,13 @@ debugger
 
   const formSubmitHandler = (event) => {
     debugger
+
     event.preventDefault();
     if (formValid(state, setState)) {
+     let emplPartie=[{ Party: "" }]
+      if(!(values.EmployeeParties.length === 0)){
+        emplPartie=values.EmployeeParties.map((i) => { return ({ Party: i.value }) })
+      }
       const jsonBody = JSON.stringify({
         Name: values.Name,
         Address: values.Address,
@@ -362,7 +367,7 @@ debugger
         EmployeeType: values.EmployeeTypeName.value,
         State: values.StateName.value,
         District: values.DistrictName.value,
-        EmployeeParties: values.EmployeeParties.length > 0 ? [] : values.EmployeeParties.map((i) => { return ({ Party: i.value }) }),
+        EmployeeParties: emplPartie,
         Company: values.CompanyName.value,
         CreatedBy: 1,
         UpdatedBy: 1,
