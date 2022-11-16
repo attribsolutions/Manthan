@@ -42,9 +42,9 @@ const RoleMaster = (props) => {
     Description: "",
     Dashboard: "",
     RoleEmployeeTypes: "",
-    isActive: "",
-    isSCMRole: '',
-    IsPartyConnection: ""
+    isActive:false,
+    isSCMRole:false,
+    IsPartyConnection:false
   }
 
   const [state, setState] = useState(initialFiledFunc(initialFiled))
