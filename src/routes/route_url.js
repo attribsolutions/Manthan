@@ -66,6 +66,8 @@
  export const ORDER="/Order"
  export const ORDER_lIST="/Orders"
 
+ export const GRN_lIST="/GRNList"
+
  export const PARTY_SUB_PARTY="/PartySubParty"
  export const PARTY_SUB_PARTY_lIST="/PartySubPartyList"
 
