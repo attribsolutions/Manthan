@@ -48,11 +48,7 @@ function* Get_Items_GenratorFunction() {
   try {
     const response = yield call(apiCall.Items_Master_Get_API);
     yield put(SpinnerState(false))
-    if (response.StatusCode === 200) yield put(getItemListSuccess(response.Data))
-    else yield put(AlertState({
-      Type: 4,
-      Status: true, Message: JSON.stringify(response.Message),
-    }));
+    put(getItemListSuccess(response.Data))
   } catch (error) {
     yield put(SpinnerState(false))
     yield put(AlertState({
@@ -229,7 +225,7 @@ function* Group_DropDown_GenratorFunction({ id }) {
   try {
     const response = yield call(apiCall.Group_By_GroupTypes_DropDown_API, id);
     yield put(get_Group_By_GroupType_ForDropDown_Success(response.Data));
-   } catch (error) {
+  } catch (error) {
     console.log("Group saga page error", error);
   }
 }
@@ -244,7 +240,7 @@ function* SubGroup_DropDown_GenratorFunction({ id }) {
 }
 
 // Category  API dependent on CategoryType api
-function* Category_DropDown_API_GenratorFunction({ id}) {
+function* Category_DropDown_API_GenratorFunction({ id }) {
   try {
     const response = yield call(apiCall.Category_By_CategoryTypes_DropDown_API, id);
     yield put(get_Category_By_CategoryType_ForDropDownAPI_Success(response.Data));

@@ -49,11 +49,7 @@ const GroupMaster = (props) => {
     const [EditData, setEditData] = useState({});
     const [pageMode, setPageMode] = useState("");
     const [modalCss, setModalCss] = useState(false);
-
-    const [GroupTypes_dropdown_Select, setGroupTypes_dropdown_Select] = useState("");
     const [userPageAccessState, setUserPageAccessState] = useState('');
-
-
 
     //Access redux store Data /  'save_ModuleSuccess' action data
     const {
@@ -69,14 +65,9 @@ const GroupMaster = (props) => {
             pageField: state.CommonPageFieldReducer.pageField
         }));
 
-
-    {/** Dyanamic Page access state and OnChange function */ }
-    {/*start */ }
-
-    const initialFiled = {
+        const initialFiled = {
         id: "",
         Name: "",
-        GroupType: "",
         GroupTypeName: ""
     }
 
@@ -85,9 +76,6 @@ const GroupMaster = (props) => {
     const values = { ...state.values }
     const { isError } = state;
     const { fieldLabel } = state;
-
-
-    {/*End */ }
 
     useEffect(() => {
         dispatch(commonPageFieldSuccess(null));
@@ -139,20 +127,14 @@ const GroupMaster = (props) => {
 
                 const { id, Name, GroupType, GroupTypeName } = hasEditVal
                 const { values, fieldLabel, hasValid, required, isError } = { ...state }
+
                 values.Name = Name;
                 values.id = id
-                values.GroupType = GroupType;
-                // values.GroupTypeName =GroupTypeName
-                values.GroupType = { label: GroupTypeName, value: GroupType };
+                values.GroupTypeName = { label: GroupTypeName, value: GroupType };
 
+                hasValid.id.valid = true;
                 hasValid.Name.valid = true;
-                hasValid.GroupType.valid = true;
-
-                values.id = id
-                values.Name = Name;
-                values.GroupType = GroupType;
-                // values.GroupTypeName =GroupTypeName
-                values.GroupType = { label: GroupTypeName, value: GroupType };
+                hasValid.GroupTypeName.valid = true;
 
                 setState({ values, fieldLabel, hasValid, required, isError })
                 dispatch(Breadcrumb_inputName(hasEditVal.Name))
@@ -166,7 +148,6 @@ const GroupMaster = (props) => {
     useEffect(() => {
 
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
-            setGroupTypes_dropdown_Select('')
             dispatch(postGroupSuccess({ Status: false }))
             formRef.current.reset();
             if (pageMode === "other") {
@@ -181,7 +162,7 @@ const GroupMaster = (props) => {
                     Type: 1,
                     Status: true,
                     Message: postMsg.Message,
-                    RedirectPath: false,
+                    RedirectPath: GROUP_lIST,
                 }))
             }
         }
@@ -217,7 +198,7 @@ const GroupMaster = (props) => {
 
 
     useEffect(() => {
-       debugger
+        debugger
         if (pageField) {
             const fieldArr = pageField.PageFieldMaster
             comAddPageFieldFunc({ state, setState, fieldArr })// new change
@@ -230,11 +211,6 @@ const GroupMaster = (props) => {
         dispatch(getGroupList());
     }, [dispatch]);
 
-
-    function handllerDivision(e) {
-        setGroupTypes_dropdown_Select(e)
-    }
-
     const GroupTypesValues = GroupTypeAPI.map((Data) => ({
         value: Data.id,
         label: Data.Name
@@ -246,7 +222,7 @@ const GroupMaster = (props) => {
             debugger
             const jsonBody = JSON.stringify({
                 Name: values.Name,
-                GroupType: values.GroupType.value,
+                GroupType: values.GroupTypeName.value,
                 CreatedBy: 1,
                 CreatedOn: "0002-10-03T12:48:14.910491",
                 UpdatedBy: 1,
@@ -328,32 +304,32 @@ const GroupMaster = (props) => {
 
 
                                                         <Row>
-                                                            <FormGroup className="mb-2 col col-sm-4">
+                                                            <FormGroup className="mb-3 col col-sm-4 ">
 
-                                                                <Label htmlFor="validationCustom01"> {fieldLabel.GroupType} </Label>
+                                                                <Label htmlFor="validationCustom01"> {fieldLabel.GroupTypeName} </Label>
 
 
                                                                 <Select
-                                                                    name="GroupType"
+                                                                    name="GroupTypeName"
                                                                     // defaultValue={EmployeeType_DropdownOptions[0]}
-                                                                    value={values.GroupType}
+                                                                    value={values.GroupTypeName}
                                                                     isSearchable={false}
                                                                     className="react-dropdown"
                                                                     options={GroupTypesValues}
                                                                     onChange={(hasSelect, evn) => onChangeSelect({ hasSelect, evn, state, setState, })}
                                                                     classNamePrefix="dropdown"
                                                                 />
-                                                                {isError.GroupType.length > 0 && (
-                                                                    <span className="text-danger f-8"><small>{isError.GroupType}</small></span>
+                                                                {isError.GroupTypeName.length > 0 && (
+                                                                    <span className="text-danger f-8"><small>{isError.GroupTypeName}</small></span>
                                                                 )}
 
 
-                                                               
+
                                                             </FormGroup>
 
                                                         </Row>
 
-                                                        <FormGroup>
+                                                        <FormGroup >
                                                             <Row>
                                                                 <Col sm={2}>
                                                                     <SaveButton pageMode={pageMode} userAcc={userPageAccessState}
