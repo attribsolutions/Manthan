@@ -18,8 +18,6 @@ const TermsAndCondtionsList = (props) => {
       editData: state.TermsAndCondtionsReducer.TermsAndCondtionseditData,
       updateMsg: state.TermsAndCondtionsReducer.TermsAndCondtionsupdateMessage,
       deleteMsg: state.TermsAndCondtionsReducer.TermsAndCondtionsdeleteMessage,
-      
-      
       userAccess: state.Login.RoleAccessUpdateData,
       pageField: state.CommonPageFieldReducer.pageFieldList
     })
@@ -40,7 +38,7 @@ const TermsAndCondtionsList = (props) => {
   useEffect(() => {
     
     dispatch(commonPageFieldListSuccess(null))
-    dispatch(commonPageFieldList(101))
+    dispatch(commonPageFieldList(43))
     dispatch(getTermAndCondition())
 
   }, []);
