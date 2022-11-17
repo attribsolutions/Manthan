@@ -191,6 +191,8 @@ const PartyItems = (props) => {
             if (window.confirm("Refresh  Item...!")) {
                 dispatch(getPartyItemListSuccess([]))
             } else {
+
+                
                 return
             }
         }
