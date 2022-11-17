@@ -215,12 +215,12 @@ const MRPMaster = (props) => {
         setEffectiveDate(date)
     }
 
-    const MRPHandler = (e, cellContent, user, abd) => {
+    const MRPHandler = (e,user) => {
 
         user["MRP"] = e.target.value
     }
 
-    const CurrentMRPHandler = (e, cellContent, user, key) => {
+    const CurrentMRPHandler = (e, user) => {
         user["CurrentMRP"] = e.target.value
     }
 
@@ -272,7 +272,7 @@ const MRPMaster = (props) => {
             text: "Current MRP",
             dataField: "CurrentMRP",
             sort: true,
-            formatter: (cellContent, user, key) => (
+            formatter: (cellContent,user) => (
                 <>
                     <div style={{ justifyContent: 'center' }} >
 
@@ -282,9 +282,9 @@ const MRPMaster = (props) => {
                                     id=""
                                     type="text"
                                     disabled={true}
-                                    defaultValue={TableData[key].CurrentMRP}
+                                    defaultValue={cellContent}
                                     className="col col-sm text-center"
-                                    onChange={(e) => CurrentMRPHandler(e, cellContent, user, key)}
+                                    onChange={(e) => CurrentMRPHandler(e,user)}
                                 />
                             </FormGroup>
                         </Col>
@@ -297,12 +297,12 @@ const MRPMaster = (props) => {
             text: "Effective from ",
             dataField: "CurrentDate",
             sort: true,
-            formatter: (cellContent, user, key) => (
+            formatter: (cellContent) => (
                 <>
                     <div style={{ justifyContent: 'center' }} >
                         <Col>
                             <FormGroup className=" col col-sm-6 ">
-                                <Label style={{ color: "#B0290B" }}>{TableData[key].CurrentDate}</Label>
+                                <Label style={{ color: "#B0290B" }}>{cellContent}</Label>
                             </FormGroup>
                         </Col>
                     </div>
@@ -314,24 +314,32 @@ const MRPMaster = (props) => {
             text: "MRP ",
             dataField: "MRP",
             sort: true,
-            formatter: (cellContent, user, key) => (
-                <>
+           
+            formatter: (cellContent,user) => {
+                
+                if (((cellContent > 0) && (user["mrp"] === undefined) || user.mrp)) {
+                    user["mrp"] = true
+                } else {
+                    user["mrp"] = false
+                }
+                return (
+
                     <div style={{ justifyContent: 'center' }} >
                         <Col>
                             <FormGroup className=" col col-sm-4 ">
                                 <Input
-                                    id="MRPid"
                                     type="text"
-                                    defaultValue={TableData[key].MRP}
-                                    disabled={!(user.MRP === '') ? true : false}
+                                    defaultValue={cellContent}
+                                    disabled={user.mrp}
                                     className="col col-sm text-center"
-                                    onChange={(e) => MRPHandler(e, cellContent, user, key)}
+                                    onChange={(e) => MRPHandler(e,user)}
                                 />
                             </FormGroup>
                         </Col>
                     </div>
-                </>
-            ),
+
+                )
+            },
         },
         {
             text: "Action ",
@@ -397,7 +405,7 @@ const MRPMaster = (props) => {
 
     return (
         <React.Fragment>
-            <div className="page-content" style={{ marginTop: IsEditMode_Css ,marginBottom:"3cm" }}>
+            <div className="page-content" style={{ marginTop: IsEditMode_Css, marginBottom: "3cm" }}>
                 <MetaTags>
                     <title>PartyType| FoodERP-React FrontEnd</title>
                 </MetaTags>
@@ -420,10 +428,10 @@ const MRPMaster = (props) => {
 
                                 <Row >
                                     <Col md={12}>
-                                        <Card style={{ backgroundColor: "whitesmoke"}}>
+                                        <Card style={{ backgroundColor: "whitesmoke" }}>
 
 
-                                            <CardHeader className="card-header   text-black " style={{ backgroundColor: "#e9e9ef",width:"" }} >
+                                            <CardHeader className="card-header   text-black " style={{ backgroundColor: "#e9e9ef", width: "" }} >
                                                 <Row className="mt-3 " >
                                                     <Col md="3">
                                                         <FormGroup className="mb-3 row ">
@@ -435,7 +443,7 @@ const MRPMaster = (props) => {
                                                                     isDisabled={editMode === "edit" ? true : false}
                                                                     className="divisionName"
                                                                     placeholder="select"
-                                                                    onChange={(e) =>{ Division_Dropdown_OnChange_Handller(e) }}
+                                                                    onChange={(e) => { Division_Dropdown_OnChange_Handller(e) }}
                                                                     classNamePrefix="select2-selection"
                                                                 />
                                                             </Col>
@@ -480,8 +488,8 @@ const MRPMaster = (props) => {
                                                             </Col>
                                                         </FormGroup>
                                                     </Col>
-                                                    <Col md="2"style={{margin:"0.1cm"}} >
-                                                        <Button type="button" color="btn btn-outline-success border-2 font-size-12"  onClick={() => { GoButton_Handler() }} >Go</Button>
+                                                    <Col md="2" style={{ margin: "0.1cm" }} >
+                                                        <Button type="button" color="btn btn-outline-success border-2 font-size-12" onClick={() => { GoButton_Handler() }} >Go</Button>
                                                     </Col>
                                                 </Row>
 
@@ -493,7 +501,7 @@ const MRPMaster = (props) => {
                                     <PaginationProvider pagination={paginationFactory(pageOptions)}>
                                         {({ paginationProps, paginationTableProps }) => (
                                             <ToolkitProvider
-                                                keyField="id"
+                                                keyField="Item"
                                                 data={TableData}
                                                 columns={pagesListColumns}
                                                 search
@@ -504,7 +512,7 @@ const MRPMaster = (props) => {
                                                             <Col xl="12">
                                                                 <div className="table-responsive">
                                                                     <BootstrapTable
-                                                                        keyField={"id"}
+                                                                        keyField={"Item"}
                                                                         responsive
                                                                         bordered={false}
                                                                         striped={false}
