@@ -262,13 +262,7 @@ export const detelet_Category_List_Api = (id) => del(`${url.CATEGORY_API}/${id}`
 export const edit_Category_List_Api = (id) => get(`${url.CATEGORY_API}/${id}`) // edit api
 export const update_Category_List_Api = (data, id) => put(`${url.CATEGORY_API}/${id}`, data)// update
 
-//Sub-Category API
-export const Post_SubCategory_API = (data) => post(url.SUB_CATEGORY_API, data)// post api
-export const get_SubCategory_API = () => get(url.CATEGORY_API)// Product Category DropDown Api api
-export const get_SubCategory_List_Api = () => get(url.SUB_CATEGORY_API) // get api
-export const detelet_SubCategory_List_Api = (id) => del(`${url.SUB_CATEGORY_API}/${id}`) // delete api
-export const edit_SubCategory_List_Api = (id) => get(`${url.SUB_CATEGORY_API}/${id}`) // edit api
-export const update_SubCategory_List_Api = (data, id) => put(`${url.SUB_CATEGORY_API}/${id}`, data)// update
+
 
 //Vehicle API
 export const Post_Vehicle_API = (data) => post(url.VEHICLE_API, data)// post api
