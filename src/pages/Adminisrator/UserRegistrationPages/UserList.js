@@ -54,7 +54,7 @@ const UserList = () => {
                 (pageField) ?
                     <CommonListPage
                         action={action}
-                        showBreadcrumb={false}
+                        showBreadcrumb={true}
                         reducers={reducers}
                         MasterModal={AddUser}
                         masterPath={USER}
