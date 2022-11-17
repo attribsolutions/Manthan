@@ -269,6 +269,7 @@ const DriverMaster = (props) => {
                                                                 type="text"
                                                                 value={values.Name}
                                                                 autoFocus={true}
+                                                                autoComplete='off'
                                                                 className={isError.Name.length > 0 ? "is-invalid form-control" : "form-control"}
                                                                 placeholder="Please Enter Name"
                                                                 onChange={(event) => {
