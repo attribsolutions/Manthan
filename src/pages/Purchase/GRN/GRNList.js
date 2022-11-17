@@ -46,18 +46,22 @@ const GRNList = () => {
     }, []);
 
     const { pageField } = reducers;
+function func1(){
 
+}
     return (
         <React.Fragment>
             {
                 (pageField) ?
                     <CommonListPage
                         action={action}
+                        showBreadcrumb={false}
                         reducers={reducers}
                         MasterModal={Order}
                         masterPath={ORDER}
                         ButtonMsgLable={"Order"}
                         deleteName={"Name"}
+                        listHeader={func1()}
                     />
                     : null
             }
