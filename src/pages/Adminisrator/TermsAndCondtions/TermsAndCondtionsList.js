@@ -5,6 +5,7 @@ import TermsAndCondtionsMaster from "./TermsAndCondtionsMaster";
 import CommonListPage from "../../../components/Common/CmponentRelatedCommonFile/commonListPage";
 import { commonPageFieldList, commonPageFieldListSuccess } from "../../../store/actions";
 import { postTermAndConditionSuccess,getTermAndCondition,EditTermsAndCondtions,DeleteTermsAndCondtions,DeleteTermsAndCondtions_Success ,UpdateTermsAndCondtions_Success} from "../../../store/Administrator/TermsAndCondtionsRedux/actions";
+import { TERMS_AND_CONDITION } from "../../../routes/route_url";
 
 const TermsAndCondtionsList = (props) => {
   
@@ -53,7 +54,7 @@ const TermsAndCondtionsList = (props) => {
             action={action}
             reducers={reducers}
             MasterModal={TermsAndCondtionsMaster}
-            masterPath={"/TermsAndCondtionsMaster"}
+            masterPath={TERMS_AND_CONDITION}
 
           />
           : null
