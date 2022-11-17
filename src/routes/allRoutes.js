@@ -49,8 +49,6 @@ import CategoryTypeMaster from "../pages/Adminisrator/CategoryTypePages/Category
 import CategoryTypeList from "../pages/Adminisrator/CategoryTypePages/CategoryTypeList";
 import CategoryList from "../pages/Adminisrator/CategoryPages/CategoryList";
 import CategoryMaster from "../pages/Adminisrator/CategoryPages/CategoryMaster";
-import SubCategoryMaster from "../pages/Adminisrator/SubCategoryPages/SubCategoryMaster";
-import SubCategoryList from "../pages/Adminisrator/SubCategoryPages/SubCategoryList";
 import VehicleMaster from "../pages/Adminisrator/VehiclePages/VehicleMaster";
 import VehicleList from "../pages/Adminisrator/VehiclePages/VehicleList";
 import DriverMaster from "../pages/Adminisrator/DriverPage/DriverMaster";
@@ -127,7 +125,7 @@ const userRoutes = [
 
   { path: path.ROLEACCESS, component: RoleAccessAdd },
   { path: path.ROLEACCESS_lIST, component: RoleAccessListPage },
-  { path: `/CopyRoleAccess`, component: RoleAccessCopyFunctionality },
+  { path: path.COPY_ROLEACCESS, component: RoleAccessCopyFunctionality },
 
   { path: path.EMPLOYEETYPE, component: EmployeeTypesMaster },
   { path: path.EMPLOYEETYPE_lIST, component: EmployeeTypeList },
@@ -140,9 +138,6 @@ const userRoutes = [
 
   { path: path.CATEGORY, component: CategoryMaster },
   { path: path.CATEGORY_lIST, component: CategoryList },
-
-  { path: "/SubCategoryMaster", component: SubCategoryMaster },
-  { path: "/SubCategoryList", component: SubCategoryList },
 
   { path: path.VEHICLE, component: VehicleMaster },
   { path: path.VEHICLE_lIST, component: VehicleList },
@@ -159,8 +154,8 @@ const userRoutes = [
   { path: path.PARTY_SUB_PARTY, component: PartySubParty },
   { path: path.PARTY_SUB_PARTY_lIST, component: PartySubPartyList },
 
-  { path: '/TermsAndCondtionsMaster', component: TermsAndCondtionsMaster },
-  { path: '/TermsAndCondtionsList', component: TermsAndCondtionsList },
+  { path: path.TERMS_AND_CONDITION, component: TermsAndCondtionsMaster },
+  { path:  path.TERMS_AND_CONDITION_LIST, component: TermsAndCondtionsList },
 
   { path: path.PRICE_lIST, component: PriceList },
   { path: path.PRICE, component: PriceMaster },
@@ -171,20 +166,19 @@ const userRoutes = [
   { path: path.MARGIN, component: MarginMaster },
   { path: path.MARGIN_lIST, component: MarginList },
 
-
   { path: path.GROUP, component: GroupMaster },
   { path: path.GROUP_lIST, component: GroupList },
 
-  { path: '/GSTMaster', component: GSTMaster },
-  { path: '/GSTList', component: GSTList },
+  { path: path.GST, component: GSTMaster },
+  { path: path.GST_LIST, component: GSTList },
 
   { path: path.PARTY_SUB_PARTY, component: PartySubParty },
   { path: path.PARTY_SUB_PARTY_lIST, component: PartySubPartyList },
 
-  { path: '/PartyItems', component: PartyItems },
+  { path: path.PARTY_ITEMS, component: PartyItems },
 
-  { path: "/SearchBox2", component: SearchBoxSecond },
-  { path: "/SearchBox3", component: SerachBox3 },
+  { path: path.SEARCH_BOX2, component: SearchBoxSecond },
+  { path: path.SEARCH_BOX3, component: SerachBox3 },
 
   { path: "/", exact: true, component: () => <Redirect to="/Dashboard" /> },
   { path: "/auth-404", component: Error404 },

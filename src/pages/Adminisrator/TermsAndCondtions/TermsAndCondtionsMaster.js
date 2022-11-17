@@ -21,7 +21,6 @@ import {
    
     postTermAndCondition,
     postTermAndConditionSuccess,
-    
     EditTermsAndCondtions,
   
 } from "../../../store/Administrator/TermsAndCondtionsRedux/actions";
@@ -40,9 +39,7 @@ const TermsAndCondtionsMaster = (props) => {
 
     //Access redux store Data /  'save_ModuleSuccess' action data
     const { PostAPIResponse, RoleAccessModifiedinSingleArray } = useSelector((state) => ({
-        
         PostAPIResponse: state.TermsAndCondtionsReducer.PostData,
-        
         RoleAccessModifiedinSingleArray: state.Login.RoleAccessUpdateData,
     }));
 
@@ -182,7 +179,6 @@ const TermsAndCondtionsMaster = (props) => {
                                                                 }}
                                                                 onChange={(e) => { dispatch(Breadcrumb_inputName(e.target.value)) }}
                                                             />
-
                                                         </FormGroup>
 
                                                         <FormGroup>
