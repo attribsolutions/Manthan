@@ -66,18 +66,25 @@ export const MARGIN_lIST = "/MarginList"
 export const PAGE = "/PageMaster"
 export const PAGE_lIST = "/PageList"
 
-export const ORDER = "/Order"
+export const ORDER = "/OrderMaster"
 export const ORDER_lIST = "/OrderList"
 
 export const GRN_lIST = "/GRNList"
 
-export const PARTY_SUB_PARTY = "/PartySubParty"
+export const PARTY_SUB_PARTY = "/PartySubPartyMaster"
 export const PARTY_SUB_PARTY_lIST = "/PartySubPartyList"
 
-export const PARTY_ITEMS = "/PartyItems"
+export const PARTY_ITEMS = "/PartyItemsMaster"
 
 export const SEARCH_BOX2 = "/SearchBoxSecond"
 export const SEARCH_BOX3 ="/SerachBox3"
 
-export const TERMS_AND_CONDITION = "/TermsAndCondtions"
+export const TERMS_AND_CONDITION = "/TermsAndCondtionsMaster"
 export const TERMS_AND_CONDITION_LIST = "/TermsAndCondtionsList"
+
+
+
+
+
+
+

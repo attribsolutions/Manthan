@@ -179,7 +179,6 @@ const TermsAndCondtionsMaster = (props) => {
                                                                 }}
                                                                 onChange={(e) => { dispatch(Breadcrumb_inputName(e.target.value)) }}
                                                             />
-
                                                         </FormGroup>
 
                                                         <FormGroup>
