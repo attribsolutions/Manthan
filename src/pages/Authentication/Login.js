@@ -52,7 +52,10 @@ const Login = props => {
     //       // setPost(response.data);
     //       console.log(response)
     //     });
-    dispatch(postSuperAdmin())
+    const jsonBody = JSON.stringify([]);
+    dispatch(postSuperAdmin(jsonBody))
+
+    console.log("jsonBody",jsonBody)
   }
 
   return (

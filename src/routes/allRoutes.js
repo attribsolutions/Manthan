@@ -88,9 +88,7 @@ import PartyItems from "../pages/Adminisrator/PartyItemPage/PartyItems";
 
 import * as path from "./route_url";
 
-import GRNList from "../pages/Purchase/GRN/GRNList";
-import Demo from "../pages/Adminisrator/PartyPages/Demo";
-// import GRNList from "../pages/Purchase/GRN/GRNList";
+
 
 
 const userRoutes = [
