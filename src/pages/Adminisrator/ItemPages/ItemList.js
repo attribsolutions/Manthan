@@ -41,7 +41,7 @@ const ItemsList = (props) => {
   //  This UseEffect => Featch Modules List data  First Rendering
   useEffect(() => {
     dispatch(commonPageFieldListSuccess(null))
-    dispatch(commonPageFieldList(21))
+    dispatch(commonPageFieldList(26))
     dispatch(getItemList());
   }, []);
 

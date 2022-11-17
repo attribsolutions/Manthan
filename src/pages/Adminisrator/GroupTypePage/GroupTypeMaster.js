@@ -47,7 +47,7 @@ const GroupTypeMaster = (props) => {
     const initialFiled = {
         id: "",
         Name: "",
-        IsReserved: ""
+        IsReserved:false
     }
 
     const [state, setState] = useState(initialFiledFunc(initialFiled))

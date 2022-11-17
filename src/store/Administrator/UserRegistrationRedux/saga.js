@@ -54,7 +54,7 @@ function* user_save_GenratorFunction({ data }) {
   yield put(SpinnerState(true))
   try {
     const response = yield call(User_Component_PostMethod_API, data);
-    console.log("response",response)
+    console.log("response", response)
     yield put(SpinnerState(false))
     yield put(addUserSuccess(response));
   } catch (error) {
@@ -99,10 +99,10 @@ function* Delete_UserList_GenratorFunction({ id }) {
 }
 
 // edit api
-function* Edit_UserList_GenratorFunction({ id,pageMode}) {
+function* Edit_UserList_GenratorFunction({ id, pageMode }) {
   try {
     const response = yield call(User_Component_EditById_API, id);
-    response.pageMode=pageMode
+    response.pageMode = pageMode
     yield put(editSuccess(response));
   } catch (error) {
     yield put(AlertState({
@@ -117,7 +117,7 @@ function* Update_User_GenratorFunction({ data, id }) {
   try {
     yield put(SpinnerState(true))
     const response = yield call(User_Component_Update_API, data, id);
-    console.log("update response",response)
+    console.log("update response", response)
     yield put(SpinnerState(false))
     yield put(updateSuccess(response))
   }
@@ -131,9 +131,16 @@ function* Update_User_GenratorFunction({ data, id }) {
 }
 
 function* Get_UserPartiesForUserMaster_GenratorFunction({ id }) {
-  
+
   try {
-    const response = yield call(UserPartiesForUserMaster_API,  id);
+    const response = yield call(UserPartiesForUserMaster_API, id);
+    // let newArray = response.Data.map((i) => (
+    //   {
+    //     PartyRoles: [],
+    //     Party: i.Party_id,
+    //     PartyName: i.PartyName
+    //   }
+    // ))
     yield put(GetUserPartiesForUserMastePageSuccess(response.Data))
   }
   catch (error) {
@@ -149,11 +156,11 @@ function* UserRegistrationSaga() {
   yield takeEvery(GET_ROLE, RolesListDropdoun_GenratorFunction);
   yield takeEvery(ADD_USER, user_save_GenratorFunction);
   yield takeEvery(UPDATE_USER, Update_User_GenratorFunction);
-  
+
   yield takeEvery(GET_USER, Fetch_UserList_GenratorFunction)
   yield takeEvery(DELETE_USER, Delete_UserList_GenratorFunction)
   yield takeEvery(EDIT_USER, Edit_UserList_GenratorFunction)
   yield takeEvery(GET_USER_PARTIES_FOR_USER_MASTER, Get_UserPartiesForUserMaster_GenratorFunction)
-  
+
 }
 export default UserRegistrationSaga;

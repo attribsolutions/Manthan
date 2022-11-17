@@ -42,7 +42,7 @@ export const countlabelFunc = (toolkitProps, paginationProps, dispatch, ButtonMs
   searchProps = toolkitProps.searchProps
 }
 
-const CommonListPage = (props) => {
+const PurchaseListPage = (props) => {
 
   const dispatch = useDispatch();
   const history = useHistory()
@@ -75,8 +75,7 @@ const CommonListPage = (props) => {
     MasterModal,
     masterPath,
     ButtonMsgLable,
-    deleteName,
-    showBreadcrumb = true
+    deleteName
   } = props;
 
   const fileds = pageField.PageFieldMaster;
@@ -256,9 +255,7 @@ const CommonListPage = (props) => {
     // totalSize: tableList.length,
     custom: true,
   };
-  // const handleDataChange = ({ dataSize }) => {
-  //   dispatch(BreadcrumbFilterSize(`${ButtonMsgLable} count :${dataSize}`))
-  // }
+
   if (!(userAccState === '')) {
     return (
       <React.Fragment>
@@ -266,17 +263,15 @@ const CommonListPage = (props) => {
           <title>{userAccState.PageHeading}| FoodERP-React FrontEnd</title>
         </MetaTags>
         <div className="page-content">
-          {showBreadcrumb ?
-            <Breadcrumb
-              pageHeading={userAccState.PageHeading}
-              newBtnView={(userAccState.RoleAccess_IsSave) ? true : false}
-              showCount={true}
-              excelBtnView={true}
-              // handleDataChange={}
-              excelData={downList}
-            />
-            : null
-          }
+          <Breadcrumb
+            pageHeading={userAccState.PageHeading}
+            newBtnView={(userAccState.RoleAccess_IsSave) ? true : false}
+            showCount={true}
+            excelBtnView={true}
+            // handleDataChange={}
+            excelData={downList}
+          />
+          
           <PaginationProvider pagination={paginationFactory(pageOptions)}>
             {({ paginationProps, paginationTableProps }) => (
               <ToolkitProvider
@@ -298,7 +293,6 @@ const CommonListPage = (props) => {
                             // onDataSizeChange={handleDataChange}
                             striped={true}
                             classes={"table  table-bordered table-hover"}
-                            noDataIndication={<div className="text-danger text-center ">Data Not available</div>}
                             {...toolkitProps.baseProps}
                             {...paginationTableProps}
                           />
@@ -343,4 +337,4 @@ const CommonListPage = (props) => {
   }
 }
 
-export default CommonListPage;
+export default PurchaseListPage;
