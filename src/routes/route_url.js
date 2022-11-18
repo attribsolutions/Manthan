@@ -71,6 +71,8 @@
  export const PARTY_SUB_PARTY="/PartySubParty"
  export const PARTY_SUB_PARTY_lIST="/PartySubPartyList"
 
+ export const PARTYITEM='/PartyItems'
+
 
 
  
