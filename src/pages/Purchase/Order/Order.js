@@ -6,10 +6,10 @@ import {
     Label,
     Row,
 } from "reactstrap";
-import Flatpickr from "react-flatpickr";
-import Select from "react-select";
 import { useDispatch, useSelector } from "react-redux";
+import Select from "react-select";
 import "flatpickr/dist/themes/material_blue.css"
+import Flatpickr from "react-flatpickr";
 
 
 import React, { useEffect, useState, useRf, useRef } from "react";

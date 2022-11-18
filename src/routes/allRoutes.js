@@ -85,6 +85,8 @@ import OrderList from "../pages/Purchase/Order/OrderList"
 import PartyItems from "../pages/Adminisrator/PartyItemPage/PartyItems";
 
 import * as path from "./route_url";
+import GRNList from "../pages/Purchase/GRN/GRNList";
+import GRNAdd from "../pages/Purchase/GRN/GRNAdd";
 
 
 
@@ -106,7 +108,8 @@ const userRoutes = [
   { path: path.ORDER_lIST, component: OrderList },
 
 
-  // { path: path.GRN_lIST, component: GRNList },
+  { path: path.GRN_lIST, component: GRNList },
+  { path: path.GRN_ADD, component: GRNAdd },
 
   { path: path.USER, component: AddUser },
   { path: path.USER_lIST, component: UserList },
