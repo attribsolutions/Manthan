@@ -362,6 +362,7 @@ debugger
             var isPrint = document.getElementById("IsPrint" + i).checked;
             var isTopOfTheDivision = document.getElementById("IsTopOfTheDivision" + i).checked;
             var isCopy = document.getElementById("IsCopy" + i).checked;
+            var isExceldownload = document.getElementById("Exceldownload" + i).checked;
 
 
             // if (isShowOnMenu) { isSave = true }
@@ -379,6 +380,7 @@ debugger
             if (isPrint) roleAccessArray.push({ "PageAccess": 8 });
             if (isTopOfTheDivision) roleAccessArray.push({ "PageAccess": 9 });
             if (isCopy) roleAccessArray.push({ "PageAccess": 12 });
+            if (isExceldownload) roleAccessArray.push({ "PageAccess": 11 });
 
             if (addIsShowOnMenu) roleAccessArray2.push({ "PageAccess": 1 });
             if (isSave) roleAccessArray2.push({ "PageAccess": 2 });
@@ -390,6 +392,7 @@ debugger
             if (isPrint) roleAccessArray2.push({ "PageAccess": 8 });
             if (isTopOfTheDivision) roleAccessArray2.push({ "PageAccess": 9 });
             if (isCopy) roleAccessArray2.push({ "PageAccess": 12 });
+            if (isExceldownload) roleAccessArray2.push({ "PageAccess": 11 });
             // roleAccessArray.push(roleAccessElement)
 
             let divisionID = division_dropdown_Select.value
