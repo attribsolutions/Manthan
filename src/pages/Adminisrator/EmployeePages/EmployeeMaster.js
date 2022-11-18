@@ -349,29 +349,15 @@ const AddEmployee = (props) => {
   const formSubmitHandler = (event) => {
 
     event.preventDefault();
+   
+     
     if (formValid(state, setState)) {
       let emplPartie = [{ Party: "" }]
       if (!(values.EmployeeParties.length === 0)) {
         emplPartie = values.EmployeeParties.map((i) => { return ({ Party: i.value }) })
       }
 
-      const IsPartyConnection = employeeType.find((element) => {
-        return element.id ===  values.EmployeeTypeName.value
-      });
-     
-      if (IsPartyConnection.IsPartyConnection) {
-        dispatch(
-          AlertState({
-            Type: 4,
-            Status: true,
-            Message: "Please Select Party",
-            RedirectPath: false,
-            PermissionAction: false,
-          })
-        );
-        return;
-      }
-       
+      
       const jsonBody = JSON.stringify({
         Name: values.Name,
         Address: values.Address,
@@ -390,9 +376,8 @@ const AddEmployee = (props) => {
         CreatedBy: 1,
         UpdatedBy: 1,
       });
-
-
-      if (pageMode === "edit") {
+      
+     if (pageMode === "edit") {
         dispatch(updateEmployeeID(jsonBody, values.id,));
         console.log("update jsonBody", jsonBody)
       }
