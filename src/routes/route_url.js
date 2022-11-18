@@ -86,5 +86,7 @@ export const TERMS_AND_CONDITION_LIST = "/TermsAndCondtionsList"
 
 
 
+ export const PARTYITEM='/PartyItems'
+
 
 

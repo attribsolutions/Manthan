@@ -175,6 +175,7 @@ const userRoutes = [
   { path: path.PARTY_SUB_PARTY, component: PartySubParty },
   { path: path.PARTY_SUB_PARTY_lIST, component: PartySubPartyList },
 
+  { path:path.PARTYITEM, component: PartyItems },
   { path: path.PARTY_ITEMS, component: PartyItems },
 
   { path: path.SEARCH_BOX2, component: SearchBoxSecond },
