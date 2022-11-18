@@ -167,19 +167,19 @@ const GSTMaster = (props) => {
         setEffectiveDate(date)
     }
 
-    const GSTPercentageHandler = (e, cellContent, user, abd) => {
+    const GSTPercentageHandler = (e,user) => {
         user["GSTPercentage"] = e.target.value
     }
 
-    const CurrentGSTPercentageHandler = (e, cellContent, user, key) => {
+    const CurrentGSTPercentageHandler = (e,user) => {
         user["CurrentGSTPercentage"] = e.target.value
     }
 
-    const CurrentHSNCodeHandler = (e, cellContent, user, abd) => {
+    const CurrentHSNCodeHandler = (e,user) => {
         user["GSTPercentage"] = e.target.value
     }
 
-    const HSNCodeHandler = (e, cellContent, user, key) => {
+    const HSNCodeHandler = (e,user) => {
         user["HSNCode"] = e.target.value
     }
     //select id for delete row
@@ -225,7 +225,7 @@ const GSTMaster = (props) => {
             text: "Current GSTPercentage",
             dataField: "CurrentGSTPercentage",
             sort: true,
-            formatter: (cellContent, user, key) => (
+            formatter: (cellContent, user) => (
                 <>
                     <div style={{ justifyContent: 'center' }} >
 
@@ -235,9 +235,9 @@ const GSTMaster = (props) => {
                                     id=""
                                     type="text"
                                     disabled={true}
-                                    defaultValue={TableData[key].CurrentGSTPercentage}
+                                    defaultValue={cellContent}
                                     className="col col-sm text-center"
-                                    onChange={(e) => CurrentGSTPercentageHandler(e, cellContent, user, key)}
+                                    onChange={(e) => CurrentGSTPercentageHandler(e,user)}
                                 />
                             </FormGroup>
                         </Col>
@@ -263,10 +263,10 @@ const GSTMaster = (props) => {
                             <FormGroup className=" col col-sm-4 ">
                                 <Input
                                     type="text"
-                                    defaultValue={TableData[key].GSTPercentage}
+                                    defaultValue={cellContent}
                                     disabled={user.GSTPerDis}
                                     className="col col-sm text-center"
-                                    onChange={(e) => GSTPercentageHandler(e, cellContent, user, key)}
+                                    onChange={(e) => GSTPercentageHandler(e,user)}
                                 />
                             </FormGroup>
                         </Col>
@@ -279,7 +279,7 @@ const GSTMaster = (props) => {
             text: "Current HSNCode",
             dataField: "CurrentHSNCode",
             sort: true,
-            formatter: (cellContent, user, key) => (
+            formatter: (cellContent, user) => (
                 <>
                     <div style={{ justifyContent: 'center' }} >
 
@@ -289,9 +289,9 @@ const GSTMaster = (props) => {
                                     id=""
                                     type="text"
                                     disabled={true}
-                                    defaultValue={TableData[key].CurrentHSNCode}
+                                    defaultValue={cellContent}
                                     className="col col-sm text-center"
-                                    onChange={(e) => CurrentHSNCodeHandler(e, cellContent, user, key)}
+                                    onChange={(e) => CurrentHSNCodeHandler(e,user)}
                                 />
                             </FormGroup>
                         </Col>
@@ -320,7 +320,7 @@ const GSTMaster = (props) => {
                                     defaultValue={cellContent}
                                     disabled={user.hsncodeDis}
                                     className="col col-sm text-center"
-                                    onChange={(e) => HSNCodeHandler(e, cellContent, user, key)}
+                                    onChange={(e) => HSNCodeHandler(e,user)}
                                 />
                             </FormGroup>
                         </Col>

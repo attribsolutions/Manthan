@@ -66,7 +66,7 @@ const MarginMaster = (props) => {
         PriceList: state.ItemMastersReducer.PriceList,
         userAccess: state.Login.RoleAccessUpdateData,
     }));
-
+    console.log("tabledata", TableData)
     const location = { ...history.location }
     const hasShowModal = props.hasOwnProperty("editValue")
 
@@ -173,11 +173,12 @@ const MarginMaster = (props) => {
         setEffectiveDate(date)
     }
 
-    const MRPHandler = (e, cellContent, user, key) => {
+    const MRPHandler = (e,user) => {
+        debugger
         user["Margin"] = e.target.value
     }
 
-    const CurrentMRPHandler = (e, cellContent, user, key) => {
+    const CurrentMRPHandler = (e, user) => {
         user["CurrentMRP"] = e.target.value
     }
 
@@ -267,9 +268,9 @@ const MarginMaster = (props) => {
         },
         {
             text: "Current Margin",
-            dataField: "",
+            dataField: "CurrentMargin",
             sort: true,
-            formatter: (cellContent, user, key) => (
+            formatter: (cellContent,user) => (
                 <>
                     <div style={{ justifyContent: 'center' }} >
                         <Col>
@@ -278,9 +279,9 @@ const MarginMaster = (props) => {
                                     id=""
                                     type="text"
                                     disabled={true}
-                                    defaultValue={TableData[key].CurrentMargin}
+                                    defaultValue={cellContent}
                                     className="col col-sm text-center"
-                                    onChange={(e) => CurrentMRPHandler(e, cellContent, user, key)}
+                                    onChange={(e) => CurrentMRPHandler(e, user)}
                                 />
                             </FormGroup>
                         </Col>
@@ -293,40 +294,48 @@ const MarginMaster = (props) => {
             text: "Effective from ",
             dataField: "CurrentDate",
             sort: true,
-            formatter: (cellContent, user, key) => (
+            formatter: (cellContent) => (
                 <>
                     <div style={{ justifyContent: 'center' }} >
                         <Col>
                             <FormGroup className=" col col-sm-6 ">
-                                <Label style={{ color: "#B0290B" }}>{TableData[key].CurrentDate}</Label>
+                                <Label style={{ color: "#B0290B" }}>{cellContent}</Label>
                             </FormGroup>
                         </Col>
                     </div>
                 </>
             ),
         },
+       
         {
-
             text: "Margin ",
-            dataField: "",
+            dataField: "Margin",
             sort: true,
-            formatter: (cellContent, user, key) => (
-                <>
+            formatter: (cellContent,user) => {
+                debugger
+                if (((cellContent > 0) && (user["margin"] === undefined) || user.margin)) {
+                    user["margin"] = true
+                } else {
+                    user["margin"] = false
+                }
+                return (
+
                     <div style={{ justifyContent: 'center' }} >
                         <Col>
                             <FormGroup className=" col col-sm-4 ">
                                 <Input
                                     type="text"
-                                    defaultValue={TableData[key].Margin}
-                                    disabled={!(user.Margin === '') ? true : false}
+                                    defaultValue={cellContent}
+                                    disabled={user.margin}
                                     className="col col-sm text-center"
-                                    onChange={(e) => MRPHandler(e, cellContent, user, key)}
+                                    onChange={(e) => MRPHandler(e,user)}
                                 />
                             </FormGroup>
                         </Col>
                     </div>
-                </>
-            ),
+
+                )
+            },
         },
         {
             text: "Action ",
@@ -368,7 +377,7 @@ const MarginMaster = (props) => {
             IsDeleted: 0,
             Item: index.Item,
             Margin: index.Margin,
-            id:index.id
+            id: index.id
         }))
 
         const Find = ItemData.filter((index) => {
@@ -435,7 +444,7 @@ const MarginMaster = (props) => {
                                                     <Col md="3">
                                                         <FormGroup className="mb-3 row ">
                                                             <Label className="col-sm-3 p-2 ml-n4 ">Party Name</Label>
-                                                            <Col md="9"  style={{height:"3.5cm"}}>
+                                                            <Col md="9" style={{ height: "3.5cm" }}>
                                                                 <Select
                                                                     value={partyName_dropdown_Select}
                                                                     options={PartyTypeDropdown_Options}
@@ -484,7 +493,7 @@ const MarginMaster = (props) => {
                                     <PaginationProvider pagination={paginationFactory(pageOptions)}>
                                         {({ paginationProps, paginationTableProps }) => (
                                             <ToolkitProvider
-                                                keyField="id"
+                                                keyField="Item"
                                                 data={TableData}
                                                 columns={pagesListColumns}
                                                 search
@@ -495,7 +504,7 @@ const MarginMaster = (props) => {
                                                             <Col xl="12">
                                                                 <div className="table-responsive">
                                                                     <BootstrapTable
-                                                                        keyField={"id"}
+                                                                        keyField={"Item"}
                                                                         responsive
                                                                         bordered={false}
                                                                         striped={false}
