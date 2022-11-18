@@ -186,7 +186,7 @@ const RoleAccessListPage = () => {
                             onClick={() => { EditPageHandler(RoleAccess); }}
                             className="badge badge-soft-success font-size-12 btn btn-success waves-effect waves-light w-xxs border border-light"
                         >
-                            {console.log("id", RoleAccess)} <i className="mdi mdi-pencil font-size-18" id="edittooltip"></i>
+                            <i className="mdi mdi-pencil font-size-18" id="edittooltip"></i>
                         </Button> : null}
 
                     {(!(userAccState.RoleAccess_IsEdit) && (userAccState.RoleAccess_IsView)) ?
