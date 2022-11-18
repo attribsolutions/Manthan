@@ -111,7 +111,7 @@ export const listPageCommonButtonFunction = (props) => {
                     </Button>
                     : null
             }
-            {(userAccState.RoleAccess_IsSave) ?
+            {((userAccState.RoleAccess_IsSave) && (userAccState.RoleAccess_IsCopy)) ?
                 <Button
                     type="button"
                     data-mdb-toggle="tooltip" data-mdb-placement="top" title={`Copy ${ButtonMsgLable}`}
