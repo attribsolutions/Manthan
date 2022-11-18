@@ -103,7 +103,7 @@ const PartyItems = (props) => {
         value: i.id,
         label: i.Supplier,
     }));
-    
+
     const tableColumns = [
         {
             text: "PartyItemID",
@@ -114,44 +114,57 @@ const PartyItems = (props) => {
             text: "ItemName",
             dataField: "Name",
             sort: true,
-        }];
+        },
+        // {
+        //     text: "SelectAll",
+        //     dataField: "itemCheck",
+        //     sort: true,
 
 
-       const selectRow = {
-            
-            mode: 'checkbox',
-            clickToSelect: true,
-            text: "Action",
-            dataField: "itemCheck",
-            sort: true,
-            selectColumnPosition: 'right',
-            headerColumnStyle: {
-                lable:'SelectAll'
-              },
+        //     formatter: (cellContent, row, col, k) => (
+        //         <span >
+        //             <Input type="checkbox"
+        //                 defaultChecked={cellContent}
+        //                 onChange={e => row.itemCheck = e.target.checked}
+        //             />
 
-            formatter: (cellContent, row, col,k) => (
-                <span >
-                    <Input type="checkbox"
-                        defaultChecked={cellContent}
-                        onChange={e => row.itemCheck = e.target.checked}
-                    />
-                    
-                </span>
-                
-
-            ),
+        //         </span>
 
 
-   }
+        //     ),
 
-    // ];
-    // const selectRow = {
-    //     mode: 'checkbox',
-    //     clickToSelect: true,
-    //     headerColumnStyle: {
-    //     },
+        // }
+    ];
 
-    // }
+
+    const selectRow = {
+
+        mode: 'checkbox',
+        clickToSelect: true,
+        text: "Action",
+        dataField: "itemCheck",
+        sort: true,
+        selectColumnPosition: 'right',
+        headerColumnStyle: {
+            lable:'SelectAll'
+          },
+
+        formatter: (cellContent, row, col,k) => (
+            <span >
+                <Input type="checkbox"
+                    defaultChecked={cellContent}
+                    onChange={e => row.itemCheck = e.target.checked}
+                />
+
+            </span>
+
+
+        ),
+
+
+    }
+
+   
 
     const pageOptions = {
         sizePerPage: 15,
@@ -161,7 +174,7 @@ const PartyItems = (props) => {
 
     const GoButton_Handler = (e) => {
         let supplier = e.value
-
+        setSupplierSelect(e)
         if (!supplier > 0) {
             alert("Please Select Supplier")
             return
@@ -171,6 +184,8 @@ const PartyItems = (props) => {
             if (window.confirm("Refresh  Item...!")) {
                 dispatch(getPartyItemListSuccess([]))
             } else {
+
+
                 return
             }
         }
@@ -180,6 +195,7 @@ const PartyItems = (props) => {
 
 
     const saveHandeller = (event, values) => {
+        debugger
         const Find = partyItem.filter((index) => {
             return (index.itemCheck === true)
         })
@@ -240,10 +256,10 @@ const PartyItems = (props) => {
                                                                         // isDisabled={editMode === "edit" ? true : false}
                                                                         options={supplierOptions}
                                                                         onChange={GoButton_Handler}
-                                                                        // dispatch(GoButton_Handler());
-                                                                    
-                                                                                  
-                                                                        // onClick={GoButton_Handler}
+                                                                    // dispatch(GoButton_Handler());
+
+
+                                                                    // onClick={GoButton_Handler}
 
 
                                                                     />
@@ -278,7 +294,7 @@ const PartyItems = (props) => {
                                                 <React.Fragment>
                                                     <div className="table">
                                                         <BootstrapTable
-                                                             selectRow={ selectRow }
+                                                            selectRow={selectRow}
                                                             keyField={"id"}
                                                             bordered={true}
                                                             striped={false}

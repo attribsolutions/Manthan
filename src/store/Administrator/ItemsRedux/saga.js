@@ -48,12 +48,12 @@ function* Get_Items_GenratorFunction() {
   try {
     const response = yield call(apiCall.Items_Master_Get_API);
     yield put(SpinnerState(false))
-    put(getItemListSuccess(response.Data))
+    if (response.StatusCode === 200) yield put(getItemListSuccess(response.Data))
   } catch (error) {
     yield put(SpinnerState(false))
     yield put(AlertState({
       Type: 4,
-      Status: true, Message: "500 Error Message",
+      Status: true, Message: "500 Error for Item Master",
     }));
   }
 }
