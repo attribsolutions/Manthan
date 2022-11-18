@@ -139,8 +139,8 @@ export const Role_Master_Update_API = (data, id) => put(`${url.ROLE_MASTER_API}/
 
 // Order Page api  
 
-export const OrderPage_GoButton_API = (data) => post(url.GET_ITEM_FOR_ORDER,data)//get api
-export const OrderPage_Post_API = (data) => post(url.ORDER_PAGE_API,data)//get api
+export const OrderPage_GoButton_API = (data) => post(url.GET_ITEM_FOR_ORDER, data)//get api
+export const OrderPage_Post_API = (data) => post(url.ORDER_PAGE_API, data)//get api
 export const OrderPage_get_API = (id) => get(`${url.ORDER_PAGE_API}/${id}`)//get api
 
 export const deleteOrderID_forOrderPage_ApiCall = (id) => del(`${url.ORDER_PAGE_API}/${id}`)//Delete Order
@@ -152,6 +152,11 @@ export const getOrderList_For_Listpage = () => get(url.ORDER_PAGE_API)// Get sub
 
 //GRN PAGE grn 
 export const GRN_get_API = (data) => get(url.ORDER_PAGE_API)
+export const GRN_Edit_API = (id) => get(`${url.ROLE_MASTER_API}/${id}`)// edit api
+export const GRN_Post_API = (data) => post(url.ORDER_PAGE_API, data)//get api
+export const GRN_update_API = (id, data) => put(`${url.ORDER_PAGE_API}/${id}`, data)// update api
+export const GRN_delete_API = (id) => del(`${url.ORDER_PAGE_API}/${id}`)//Delete Order
+export const GRN_getItem_API = (data) => post(url.ORDER_PAGE_API, data)
 
 //Administrator   Modules submit  
 export const postSubmitModules = (data) => post(url.H_MODULES_API_URL, data)
@@ -326,8 +331,8 @@ export const GroupTypes_Update_API = (data, id) => put(`${url.GROUP_TYPE_API}/${
 export const get_Group_List_Api = () => get(url.GROUP_API)// get api
 export const Post_GroupList_API = (data) => post(url.GROUP_API, data)// post api
 export const del_Group_List_API = (id) => del(`${url.GROUP_API}/${id}`)// delete api
-export const edit_Group_List_Api = (id) => get(`${url. GROUP_API}/${id}`)// edit api
-export const update_Group_List_Api = (data,id) => put(`${url.GROUP_API}/${id}`,data)// update api
+export const edit_Group_List_Api = (id) => get(`${url.GROUP_API}/${id}`)// edit api
+export const update_Group_List_Api = (data, id) => put(`${url.GROUP_API}/${id}`, data)// update api
 
 
 
@@ -353,7 +358,7 @@ export const PartySubParty_Update_API = (data, id) => put(`${url.PARTY_SUB_PARTY
 
 //PartyItems API
 
-export const GoButton_API = (data) => post(url.PARTYITEMS,data)//get api
+export const GoButton_API = (data) => post(url.PARTYITEMS, data)//get api
 
 export const Party_Items = (data) => post(url.PARTYITEMS, data)// post api
 export const get_Party_Item_List = (party_id) => get(`${url.PARTYITEMS}/${party_id}`)//get api
@@ -361,7 +366,7 @@ export const get_Party_Item_List = (party_id) => get(`${url.PARTYITEMS}/${party_
 //suppiler 
 export const GetSupplier_API = (perty_id) => get(`${url.SUPPLIER}/${perty_id}`)//get api
 
-export {  
+export {
   getLoggedInUser,
   isUserAuthenticated,
   postFakeRegister,

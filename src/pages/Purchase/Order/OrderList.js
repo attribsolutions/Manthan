@@ -18,10 +18,22 @@ import Order from "./Order";
 import { ORDER } from "../../../routes/route_url";
 import { Button, Col, FormGroup, Label } from "reactstrap";
 import Breadcrumb from "../../../components/Common/Breadcrumb3";
+import { useHistory } from "react-router-dom";
+import { getGRN_itemMode2 } from "../../../store/Purchase/GRNRedux/actions";
 
 const OrderList = () => {
 
     const dispatch = useDispatch();
+    const history = useHistory();
+
+    const location = { ...history.location }
+    const hasPageMode = location.hasOwnProperty("pageMode")
+    let initial = "list"
+
+    if (hasPageMode) { initial = location.pageMode }
+
+    const [pageMode, setpageMode] = useState(initial)
+
     const reducers = useSelector(
         (state) => ({
             tableList: state.OrderReducer.orderList,
@@ -50,6 +62,34 @@ const OrderList = () => {
         dispatch(commonPageFieldList(54))
         dispatch(getOrderListPage());
     }, []);
+
+
+    const onsavefunc = (list = []) => {
+        var isGRNSelect = ''
+        if (list.length > 0) {
+            list.forEach(ele => {
+                if (ele.GRNSelect) {
+
+
+                    isGRNSelect = isGRNSelect.concat(`${ele.id}`, ",");
+                }
+            });
+            // debugger
+            console.log("isGRNSelect", isGRNSelect)
+            if (isGRNSelect) {
+               const jsonBody = JSON.stringify({
+                    OrderIDs: isGRNSelect
+                })
+                
+                dispatch(getGRN_itemMode2(jsonBody, pageMode))
+
+                alert("API call get GRNItem ")
+            } else {
+                alert("Please Select Order1")
+            }
+        }
+
+    }
 
     const { pageField } = reducers;
 
@@ -149,7 +189,8 @@ const OrderList = () => {
                             masterPath={ORDER}
                             ButtonMsgLable={"Order"}
                             deleteName={"Name"}
-                            pageMode={"List"}
+                            pageMode={pageMode}
+                            onsavefunc={onsavefunc}
                         />
                         : null
                 }

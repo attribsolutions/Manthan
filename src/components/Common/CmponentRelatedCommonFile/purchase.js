@@ -16,6 +16,7 @@ import { AlertState, BreadcrumbFilterSize } from "../../../store/actions";
 import { listPageCommonButtonFunction }
     from "../../../components/Common/CmponentRelatedCommonFile/listPageCommonButtons";
 import { mySearchProps } from "./SearchBox/MySearch";
+import { getModify } from "../../../helpers/api_helper";
 
 let sortType = "asc"
 let searchCount = 0
@@ -77,10 +78,12 @@ const PurchaseListPage = (props) => {
         ButtonMsgLable,
         deleteName,
         showBreadcrumb = true,
-        pageMode = "List"
+        pageMode = "List",
+        onsavefunc = () => { }
     } = props;
 
     const fileds = pageField.PageFieldMaster;
+
 
     useEffect(() => {
 
@@ -232,14 +235,19 @@ const PurchaseListPage = (props) => {
                 sortType = "desc"
             }
         }
-        if ((pageMode === "select") && (fileds.length - 1 === k)) {
+        if ((pageMode === "GRNMode2") && (fileds.length - 1 === k)) {
             columns.push({
-                text: "select",
-                dataField:"abc" ,
+                text: "Select",
+                dataField: "GRNSelect",
                 sort: true,
-                formatter:()=>(<>
-                <Input type="checkbox"/>
-                </>)
+                formatter: (cellContent, item, key) => {
+                    item["GRNSelect"] = false
+                    return (
+                        <Input type="checkbox"
+                            defaultChecked={item.GRNSelect}
+                            onChange={e => item.GRNSelect = e.target.checked}
+                        />)
+                }
             })
 
 
@@ -271,7 +279,10 @@ const PurchaseListPage = (props) => {
         // totalSize: tableList.length,
         custom: true,
     };
+    function onSaveBtnClick() {
+        onsavefunc(tableList);
 
+    }
     if (!(userAccState === '')) {
         return (
             <React.Fragment>
@@ -330,6 +341,24 @@ const PurchaseListPage = (props) => {
                             </ToolkitProvider>
                         )}
                     </PaginationProvider>
+
+                    {
+                        pageMode === "GRNMode2" ?
+
+
+                            <div className="row save1" style={{ paddingBottom: 'center' }}>
+                                <button
+                                    type="submit"
+                                    data-mdb-toggle="tooltip" data-mdb-placement="top"
+                                    className="btn btn-primary w-md"
+                                    onClick={onSaveBtnClick}
+                                >
+                                    <i class="fas fa-edit me-2"></i>Make GRN
+                                </button>
+                            </div>
+                            :
+                            null
+                    }
                     <Modal
                         isOpen={modal_edit}
                         toggle={() => {
@@ -341,10 +370,7 @@ const PurchaseListPage = (props) => {
                         <MasterModal editValue={editData.Data} masterPath={masterPath} pageMode={editData.pageMode} />
                     </Modal>
                 </div>
-                {/* {(isRedirect) ? <Redirect to={{
-          pathname: masterPath,
-          state: editData.Data, relatatedPage: masterPath, pageMode: editData.pageMode
-        }} /> : null} */}
+
             </React.Fragment>
         );
     }
