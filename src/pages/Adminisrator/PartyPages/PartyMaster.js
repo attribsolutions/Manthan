@@ -292,62 +292,35 @@ const PartyMaster = (props) => {
         dispatch(getPriceListData(e.value))
     }
 
-    
- const  onclickselect = function () {
- const targetDiv = document.getElementById("color");
 
-    if (targetDiv.style.display !== "none") {
-      targetDiv.style.display = "none";
-    } else {
-      targetDiv.style.display ="block";
-    }
-  };
+    const onclickselect = function () {
+        const hasNone = document.getElementById("color").style;
+
+        if (hasNone.display === "none") {
+            hasNone.display = "block";
+        } else {
+            hasNone.display = "none";
+        }
+    };
+
+
 
     const test1 = () => {
         debugger
         return (
             <>
-                {/* <Modal */}
-                <div id="color"
-                //   isOpen={dropOpen}
-                  toggle={() => {setDropOpen(!dropOpen) }}
-                  size="sm"
-                  centered={true}
-                //   aria-hidden="true"
-                >
-              
-                {/* <div 
-                    isOpen={dropOpen}
-                    toggle={() => { setDropOpen(!dropOpen) }}
-                    size="sm"
-                    centered={true}
-                backdrop={'static'}
-                > */}
-                    <div style={{width:"6cm"}} id="">
-                        {/* <div className="text-center mt-2"> */}
-                            {/* <Label className="text-primary text-center "> {priceList.label}</Label> */}
-                            {/* <Input type="button" className="btn btn-light text-primary"
+                <div id="color"  >
+                    <div style={{ width: "6cm", marginBottom: "-60px" }} id="">
 
-                                onClick={() => {
-                                    // sub_Price_Add_Handler()
-                                }}
-                                value={PriceList_dropdown_Select.label}
-                            /> */}
-
-
-                        {/* </div > */}
-                        <Tree id="tree"  data={priceListByPartyType} priceList={PriceList_dropdown_Select}
-                            func1={setPriceList_dropdown_Select} func2={setDropOpen} />
+                        <Tree id="tree" data={priceListByPartyType} priceList={PriceList_dropdown_Select}
+                            func1={setPriceList_dropdown_Select} />
                     </div>
-
-                {/* </Modal> */}
                 </div>
-         {/* </div> */}
 
             </>
         )
     }
-  
+
     const FormSubmitButton_Handler = (event, values) => {
 
         if (AddressDetailsMaster.length === 0) {
@@ -366,7 +339,7 @@ const PartyMaster = (props) => {
         const data = AddressDetailsMaster.map((index) => {
             return index.IsDefault === true
         })
-        
+
         const count1 = data.filter(value => value === true).length;
 
         if (count1 === 0) {
@@ -493,10 +466,10 @@ const PartyMaster = (props) => {
                                                         <span className="d-none d-sm-block">Transaction Prefix</span>
                                                     </NavLink>
                                                 </NavItem>
-                                                
 
-                                                
-                                                
+
+
+
 
 
 
@@ -665,13 +638,13 @@ const PartyMaster = (props) => {
                                                                             value={PriceList_dropdown_Select.label}
                                                                             placeholder="Select..."
                                                                             // onChange={(e) => setDropOpen(!dropOpen)}
-                                                                             onClick={onclickselect}
-                                                                            
+                                                                            onClick={onclickselect}
+
                                                                         >
                                                                         </Input>
-                                                                    
+
                                                                         {test1()}
-                                                                        
+
 
                                                                     </FormGroup>
                                                                 </Col>
@@ -798,7 +771,7 @@ const PartyMaster = (props) => {
                                                                             <Select
                                                                                 value={state_DropDown_select}
                                                                                 options={StateValues}
-                                                                                onChange={(e) =>{ handllerState(e) }}
+                                                                                onChange={(e) => { handllerState(e) }}
                                                                             />
                                                                         </Col>
                                                                     </FormGroup>
@@ -859,7 +832,7 @@ const PartyMaster = (props) => {
                                                 </TabPane>
 
                                                 <TabPane tabId="3">
-                                                <Row>
+                                                    <Row>
                                                         <Col md={12}  >
                                                             <Row className="mt-3">
                                                                 <Col className=" col col-11 ">
