@@ -313,7 +313,7 @@ const GroupMaster = (props) => {
                                                                     name="GroupTypeName"
                                                                     // defaultValue={EmployeeType_DropdownOptions[0]}
                                                                     value={values.GroupTypeName}
-                                                                    isSearchable={false}
+                                                                    isSearchable={true}
                                                                     className="react-dropdown"
                                                                     options={GroupTypesValues}
                                                                     onChange={(hasSelect, evn) => onChangeSelect({ hasSelect, evn, state, setState, })}
