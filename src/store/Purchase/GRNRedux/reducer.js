@@ -1,4 +1,4 @@
-import { DELETE_GRN_FOR_GRN_PAGE_SUCCESS, EDIT_GRN_FOR_GRN_PAGE_SUCCESS, GET_GRN_ITEM_MODE_2_SUCCESS, GET_GRN_LIST_PAGE_SUCCESS, POST_GRN_FROM_GRN_PAGE_SUCCESS, UPDATE_GRN_ID_FROM_GRN_PAGE_SUCCESS, } from "./actionType"
+import { DELETE_GRN_FOR_GRN_PAGE_SUCCESS, EDIT_GRN_FOR_GRN_PAGE_SUCCESS, GET_GRN_ITEM_MODE_2_SUCCESS, GET_GRN_ITEM_MODE_3_SUCCESS, GET_GRN_LIST_PAGE_SUCCESS, POST_GRN_FROM_GRN_PAGE_SUCCESS, UPDATE_GRN_ID_FROM_GRN_PAGE_SUCCESS, } from "./actionType"
 
 const INIT_STATE = {
   postMsg: { Status: false },
@@ -6,7 +6,8 @@ const INIT_STATE = {
   updateMsg: { Status: false },
   deleteMsg: { Status: false },
   GRNList: [],
-  GRNitem: { Status: false, Data: [] }
+  GRNitem: { Status: false, Data: [], },
+  GRNitem3: []
 
 }
 
@@ -17,6 +18,11 @@ const GRNReducer = (state = INIT_STATE, action) => {
       return {
         ...state,
         GRNitem: action.payload,
+      }
+    case GET_GRN_ITEM_MODE_3_SUCCESS:
+      return {
+        ...state,
+        GRNitem3: action.payload,
       }
 
     // GRN List Page 

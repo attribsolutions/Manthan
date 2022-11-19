@@ -6,6 +6,7 @@ import {
   EDIT_GRN_FOR_GRN_PAGE_SUCCESS,
   GET_GRN_ITEM_MODE_2,
   GET_GRN_ITEM_MODE_2_SUCCESS,
+  GET_GRN_ITEM_MODE_3_SUCCESS,
   GET_GRN_LIST_PAGE,
   GET_GRN_LIST_PAGE_SUCCESS,
   POST_GRN_FROM_GRN_PAGE,
@@ -17,13 +18,17 @@ import {
 
 
 
-export const getGRN_itemMode2 = (data, pageMode) => ({
+export const getGRN_itemMode2 = (data, pageMode,path) => ({
   type: GET_GRN_ITEM_MODE_2,
-  data, pageMode,
+  data, pageMode,path
 });
 
 export const getGRN_itemMode2_Success = list => ({
   type: GET_GRN_ITEM_MODE_2_SUCCESS,
+  payload: list,
+})
+export const getGRN_itemMode3_Success = list => ({
+  type: GET_GRN_ITEM_MODE_3_SUCCESS,
   payload: list,
 })
 

@@ -20,7 +20,7 @@ import {
 } from "reactstrap";
 import MetaTags from "react-meta-tags"
 //Import Breadcrumb
-import Breadcrumb from "../../../components/Common/Breadcrumb";
+import Breadcrumb from "../../../components/Common/Breadcrumb3";
 import Select from "react-select";
 import classnames from "classnames";
 import { AvField, AvForm, AvInput } from "availity-reactstrap-validation";
@@ -900,7 +900,7 @@ const PageMaster = (props) => {
               name="mainForm"
               onValidSubmit={(e, v) => { FormSubmitButton_Handler(e, v); }}>
 
-              <Breadcrumb breadcrumbItem={userPageAccessState.PageHeading} />
+              <Breadcrumb pageHeading={userPageAccessState.PageHeading} />
               <Col lg={12}>
                 <Card className="text-black" >
                   <CardHeader className="card-header   text-black" style={{ backgroundColor: "#dddddd" }} >
@@ -1322,7 +1322,7 @@ const PageMaster = (props) => {
                             <Card className=" mt-n2 text-black">
                               <CardBody style={{ backgroundColor: "whitesmoke" }}>
                                 <Row className="">
-                                  <FormGroup className=" ml-3 col col-sm-4 mb-4 ">
+                                  <FormGroup className=" ml-3 col col-sm-4 mb-5 ">
                                     <Label htmlFor="validationCustom01">
                                       Page Access
                                     </Label>
@@ -1333,6 +1333,7 @@ const PageMaster = (props) => {
                                       }}
                                       // defaultValue={{ label: "IsShowOnMenu", value: 1 }}
                                       classNamePrefix="select2-selection"
+                                      
                                     />
                                   </FormGroup>
 

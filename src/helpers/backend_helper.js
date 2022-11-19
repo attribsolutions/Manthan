@@ -156,7 +156,7 @@ export const GRN_Edit_API = (id) => get(`${url.ROLE_MASTER_API}/${id}`)// edit a
 export const GRN_Post_API = (data) => post(url.ORDER_PAGE_API, data)//get api
 export const GRN_update_API = (id, data) => put(`${url.ORDER_PAGE_API}/${id}`, data)// update api
 export const GRN_delete_API = (id) => del(`${url.ORDER_PAGE_API}/${id}`)//Delete Order
-export const GRN_getItem_API = (data) => post(url.ORDER_PAGE_API, data)
+export const GRN_getItem_API = (data) => post(url .GET_GRN_ITEM,data)
 
 //Administrator   Modules submit  
 export const postSubmitModules = (data) => post(url.H_MODULES_API_URL, data)

@@ -13,7 +13,7 @@ import {
 } from "reactstrap";
 import Select from "react-select";
 import { MetaTags } from "react-meta-tags";
-import Breadcrumb from "../../../components/Common/Breadcrumb";
+import Breadcrumb from "../../../components/Common/Breadcrumb3";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import Flatpickr from "react-flatpickr"
@@ -396,12 +396,14 @@ const MarginMaster = (props) => {
 
 
     return (
-        <React.Fragment>
+        <React.Fragment
+        
+        >
             <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
                 <MetaTags>
                     <title>PartyType| FoodERP-React FrontEnd</title>
                 </MetaTags>
-                <Breadcrumb breadcrumbItem={userPageAccessState.PageHeading} />
+                <Breadcrumb pageHeading={userPageAccessState.PageHeading} />
                 <Container fluid>
                     <AvForm
                         onValidSubmit={(e, v) => {
@@ -415,18 +417,18 @@ const MarginMaster = (props) => {
                                 <p className="card-title-desc text-black">{userPageAccessState.PageDescriptionDetails}</p>
                             </CardHeader>
 
-                            <CardBody className=" vh-10 0 text-black"  >
+                            <CardBody className=" vh-10 0 text-black" style={{marginBottom:"4cm"}}>
                                 <Row className="">
-                                    <Col md={12}>
-                                        <Card style={{ backgroundColor: "whitesmoke" }}>
+                                    <Col md={12} >
+                                        <Card style={{ backgroundColor: "whitesmoke"  }}>
 
 
-                                            <CardHeader className="card-header   text-black " style={{ backgroundColor: "#e9e9ef" }} >
+                                            <CardHeader className="card-header   text-black " style={{ backgroundColor: "#e9e9ef", }} >
                                                 <Row className="mt-3">
                                                     <Col md="3">
-                                                        <FormGroup className="mb-3 row ">
-                                                            <Label className="col-sm-3 p-2 ml-n4 ">PriceList</Label>
-                                                            <Col md="9">
+                                                        <FormGroup className="mb-3 row">
+                                                            <Label className="col-sm-4 p-2 ml-n4 ">PriceList</Label>
+                                                            <Col md="8">
                                                                 <Select
                                                                     value={priceList_dropdown_Select}
                                                                     options={PriceList_DropdownOptions}
@@ -443,8 +445,8 @@ const MarginMaster = (props) => {
 
                                                     <Col md="3">
                                                         <FormGroup className="mb-3 row ">
-                                                            <Label className="col-sm-3 p-2 ml-n4 ">Party Name</Label>
-                                                            <Col md="9" style={{ height: "3.5cm" }}>
+                                                            <Label className="col-sm-3 p-2 ">Party Name</Label>
+                                                            <Col md="9" style={{  }}>
                                                                 <Select
                                                                     value={partyName_dropdown_Select}
                                                                     options={PartyTypeDropdown_Options}
@@ -461,8 +463,8 @@ const MarginMaster = (props) => {
 
                                                     <Col md="3">
                                                         <FormGroup className="mb-3 row ">
-                                                            <Label className="col-sm-3 p-2 ml-n4 ">EffectiveDate</Label>
-                                                            <Col md="9">
+                                                            <Label className="col-md-6 p-2" >EffectiveDate</Label>
+                                                            <Col md="6">
                                                                 <Flatpickr
                                                                     id="EffectiveDateid"
                                                                     name="effectiveDate"
@@ -480,7 +482,7 @@ const MarginMaster = (props) => {
                                                             </Col>
                                                         </FormGroup>
                                                     </Col>
-                                                    <Col md="3" >
+                                                    <Col sm="2" >
                                                         <Button type="button" color="btn btn-outline-success border-2 font-size-12 " onClick={() => { GoButton_Handler() }} >Go</Button>
                                                     </Col>
 

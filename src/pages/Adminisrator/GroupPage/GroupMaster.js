@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState, } from "react";
-import Breadcrumb from "../../../components/Common/Breadcrumb";
+import Breadcrumb from "../../../components/Common/Breadcrumb3";
 import {
     Card,
     CardBody,
@@ -257,7 +257,7 @@ const GroupMaster = (props) => {
                         <MetaTags>
                             <title>{userPageAccessState.PageHeading} | FoodERP-React FrontEnd</title>
                         </MetaTags>
-                        <Breadcrumb breadcrumbItem={userPageAccessState.PageHeading} />
+                        <Breadcrumb pageHeading={userPageAccessState.PageHeading} />
 
                         <Card className="text-black">
                             <CardHeader className="card-header   text-black" style={{ backgroundColor: "#dddddd" }} >
@@ -273,11 +273,11 @@ const GroupMaster = (props) => {
                                                 <CardBody style={{ backgroundColor: "whitesmoke" }}>
                                                     <Row>
 
-                                                        <Col md="4">
+                                                        <Col sm="4">
                                                             <FormGroup className="mb-3">
                                                                 <Label htmlFor="validationCustom01">{fieldLabel.Name} </Label>
 
-                                                                <Col sm={12}>
+                                                                <Col>
                                                                     <Input
                                                                         name="Name"
                                                                         id="txtName"

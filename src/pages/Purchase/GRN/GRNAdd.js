@@ -40,6 +40,7 @@ import SaveButton from "../../../components/Common/CommonSaveButton";
 import { getTermAndCondition } from "../../../store/Administrator/TermsAndCondtionsRedux/actions";
 
 import Breadcrumb from "../../../components/Common/Breadcrumb3";
+import { getGRN_itemMode2_Success } from "../../../store/Purchase/GRNRedux/actions";
 
 let description = ''
 let editVal = {}
@@ -62,18 +63,18 @@ const Order = (props) => {
 
     const [supplierSelect, setsupplierSelect] = useState('');
     const [orderAmount, setOrderAmount] = useState(0);
-    const [termsAndConTable, setTermsAndConTable] = useState([]);
+    const [table, settable] = useState([]);
 
 
     useEffect(() => {
-        dispatch(getSupplier())
+        // dispatch(getSupplier())
         dispatch(getSupplierAddress())
-        dispatch(getTermAndCondition())
 
     }, [])
 
     const {
         items,
+        // table,
         postMsg,
         supplier,
         userAccess,
@@ -84,13 +85,15 @@ const Order = (props) => {
     } = useSelector((state) => ({
         supplier: state.SupplierReducer.supplier,
         supplierAddress: state.SupplierReducer.supplierAddress,
-        items: state.OrderReducer.orderItem,
+        items: state.GRNReducer.GRNitem,
+        table: state.GRNReducer.GRNitem3,
         postMsg: state.GRNReducer.postMsg,
         updateMsg: state.GRNReducer.updateMsg,
         userAccess: state.Login.RoleAccessUpdateData,
         pageField: state.CommonPageFieldReducer.pageFieldList,
         termsAndCondtions: state.TermsAndCondtionsReducer.TermsAndCondtionsList,
     }));
+
 
 
     // userAccess useEffect
@@ -112,6 +115,36 @@ const Order = (props) => {
     const location = { ...history.location }
     const hasShowloction = location.hasOwnProperty("editValue")
     const hasShowModal = props.hasOwnProperty("editValue")
+
+    useEffect(() => {
+        if ((items.Status === true) && (items.StatusCode === 200)) {
+            // dispatch(BreadcrumbFilterSize(`${"Order Amount"} :${orderAmount}`))
+
+            const hasEditVal = items.Data
+            hasEditVal.OrderItem.forEach(ele => {
+                ele["Name"] = ele.ItemName
+                ele["inpRate"] = ele.Rate
+                ele["inpQty"] = ele.Quantity
+                ele["totalAmount"] = ele.Amount
+                ele["UOM"] = ele.Unit
+                ele["UOMLabel"] = ele.UnitName
+                ele["inpBaseUnitQty"] = ele.BaseUnitQuantity
+            });
+
+            settable(hasEditVal.OrderItem)
+            dispatch(BreadcrumbFilterSize(`${"Order Amount"} :${hasEditVal.OrderAmount}`))
+
+            setsupplierSelect({ label: hasEditVal.SupplierName, value: hasEditVal.Supplier })
+            setpoDate(hasEditVal.OrderDate)
+            setOrderAmount(hasEditVal.OrderAmount)
+
+            items.Status = false
+            items.Data = []
+            dispatch(getGRN_itemMode2_Success(items))
+        }
+
+    }, [items])
+
 
     useEffect(() => {
         dispatch(BreadcrumbFilterSize(`${"Order Amount"} :${orderAmount}`))
@@ -148,11 +181,7 @@ const Order = (props) => {
                 description = hasEditVal.Description
                 editVal = hasEditVal
                 setOrderAmount(hasEditVal.OrderAmount)
-                const termsAndCondition = hasEditVal.OrderTermsAndCondition.map(i => ({
-                    value: i.id,
-                    label: i.TermsAndCondition
-                }))
-                setTermsAndConTable(termsAndCondition)
+
             }
             dispatch(editOrderIdSuccess({ Status: false }))
         }
@@ -171,7 +200,6 @@ const Order = (props) => {
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(postOrderSuccess({ Status: false }))
             dispatch(goButtonSuccess([]))
-            setTermsAndConTable([])
             dispatch(AlertState({
                 Type: 1,
                 Status: true,
@@ -219,10 +247,15 @@ const Order = (props) => {
         else {
             row["inpRate"] = val
         }
-        row["totalAmount"] = totalAmount(row)
+        const amount = totalAmount(row)
+        row["totalAmount"] = amount
+        try {
+            document.getElementById(`abc${row.id}`).value = amount
+        }
+        catch { alert("`abc${row.id}`") }
 
         let sum = 0
-        items.forEach(ind => {
+        table.forEach(ind => {
             sum = sum + parseFloat(ind.totalAmount)
         });
         setOrderAmount(sum.toFixed(2))
@@ -236,11 +269,64 @@ const Order = (props) => {
 
 
     const pagesListColumns = [
+        //------------- ItemName column ----------------------------------
         {
             text: "Item Name",
             dataField: "Name",
             sort: true,
+            formatter: (value, row) => (
+                <div className=" mt-2">
+                    <span>{value}</span>
+                </div>
+
+
+            ),
         },
+        //  ------------Quntity column -----------------------------------  
+        {
+            text: "Quntity",
+            dataField: "",
+            sort: true,
+            formatter: (value, row, k) => (
+
+                <span >
+                    <Input type="text"
+                        id={`inpQty${k}`}
+                        className="text-end "
+                        defaultValue={row.inpQty}
+                        disabled={((row.inpRate === 0) || row.GST === '') ? true : false}
+                        onChange={(e) => {
+                            val_onChange(e.target.value, row, "qty")
+                        }}
+                        autoComplete="off"
+                        onKeyDown={(e) => handleKeyDown(e, table)} />
+                </span>
+
+            ),
+            headerStyle: (colum, colIndex) => {
+                return { width: '140px', textAlign: 'center' };
+            }
+
+
+        },
+        //  ------------UOM column -----------------------------------
+        {
+            text: "UOM",
+            dataField: "UOMLabel",
+            sort: true,
+            formatter: (value, row) => (
+                <div className="text-center mt-2">
+                    <span>{value}</span>
+                </div>
+
+
+            ),
+            headerStyle: (colum, colIndex) => {
+                return { width: '150px', textAlign: 'center' };
+            }
+
+        },
+        //-------------Rate column ----------------------------------
         {
             text: "Rate",
             dataField: "Rate",
@@ -253,6 +339,7 @@ const Order = (props) => {
                         <Input
                             type="text"
                             id={`inpRatey${k}`}
+                            className=" text-end "
                             defaultValue={row.inpRate}
                             disabled={(row.GST === '') ? true : false}
                             onChange={e => {
@@ -260,12 +347,9 @@ const Order = (props) => {
                                 const qty = document.getElementById(`inpQty${k}`)
                                 const val = e.target.value
                                 if (val > 0) {
-
                                     val_onChange(val, row, "rate")
                                     qty.disabled = false
                                 } else {
-                                    qty.value = ''
-                                    row["inpQty"] = 0;
                                     val_onChange(0, row, "rate")
                                     qty.disabled = true
                                 }
@@ -280,15 +364,16 @@ const Order = (props) => {
                 return { width: '140px', textAlign: 'center' };
             }
         },
+        //------------- GST column ------------------------------------
         {
             text: "GST %",
             dataField: "GST",
             sort: true,
             formatter: (value, row) => (
+                <div className="text-center mt-2">
+                    <span>{value}</span>
+                </div>
 
-                <span >
-                    {value}
-                </span>
 
             ),
             headerStyle: (colum, colIndex) => {
@@ -296,69 +381,25 @@ const Order = (props) => {
             }
 
         },
+        //------------- ItemName column ----------------------------------
         {
-            text: "Quntity",
+            text: "Item Amount",
             dataField: "",
             sort: true,
             formatter: (value, row, k) => (
-
-                <span >
-                    <Input type="text"
-                        id={`inpQty${k}`}
-                        defaultValue={row.inpQty}
-                        disabled={((row.inpRate === 0) || row.GST === '') ? true : false}
-                        onChange={(e) => {
-                            val_onChange(e.target.value, row, "qty")
-                        }}
-                        autoComplete="off"
-                        onKeyDown={(e) => handleKeyDown(e, items)} />
-                </span>
-
+                <div className="row mt-1">
+                    <div className="col ">
+                        <Input type='text'
+                            id={`abc${row.id}`}
+                            className="  border-0  "
+                            value={row.totalAmount} />
+                    </div>
+                </div>
             ),
             headerStyle: (colum, colIndex) => {
-                return { width: '140px', textAlign: 'center' };
+                return { width: '130px', textAlign: 'center', text: "center" };
             }
-
-
         },
-        {
-            text: "UOM",
-            dataField: "",
-            sort: true,
-            formatter: (value, row, key) => {
-                if (row.UOMLabel === undefined) {
-                    row["UOM"] = row.UnitDetails[0].UnitID
-                    row["UOMLabel"] = row.UnitDetails[0].UnitName
-                    row["inpBaseUnitQty"] = row.UnitDetails[0].BaseUnitQuantity
-                }
-                return (
-                    <Select
-                        classNamePrefix="select2-selection"
-                        id={"ddlUnit"}
-                        defaultValue={{ value: row.UOM, label: row.UOMLabel }}
-                        // value={{value:row.UOM,label:row.UOMLabel}}
-                        options={
-                            row.UnitDetails.map(i => ({
-                                label: i.UnitName,
-                                value: i.UnitID,
-                                baseUnitQty: i.BaseUnitQuantity
-                            }))
-                        }
-                        onChange={e => {
-                            row["UOM"] = e.value;
-                            row["UOMLabel"] = e.label
-                            row["inpBaseUnitQty"] = e.baseUnitQty
-                        }}
-                    >
-                    </Select >
-                )
-            },
-            headerStyle: (colum, colIndex) => {
-                return { width: '150px', textAlign: 'center' };
-            }
-
-        },
-
     ];
 
     const defaultSorted = [
@@ -369,11 +410,10 @@ const Order = (props) => {
     ];
 
     const pageOptions = {
-        sizePerPage: (items.length + 2),
+        sizePerPage: (table.length + 2),
         totalSize: 0,
         custom: true,
     };
-
 
     const GoButton_Handler = () => {
         let supplier = supplierSelect.value
@@ -451,7 +491,7 @@ const Order = (props) => {
                 itemArr.push(arr)
             };
         })
-        const termsAndCondition = termsAndConTable.map(i => ({ TermsAndCondition: i.value }))
+
 
         if (itemArr.length === 0) {
             dispatch(AlertState({
@@ -463,17 +503,7 @@ const Order = (props) => {
             }));
             return
         }
-        if (termsAndCondition.length === 0) {
-            dispatch(AlertState({
-                Type: 4,
-                Status: true,
-                Message: "Please Enter One Terms And Condition",
-                RedirectPath: false,
-                AfterResponseAction: false
-            }));
 
-            return
-        }
         const jsonBody = JSON.stringify({
             OrderDate: orderDate,
             DeliveryDate: delDate,
@@ -491,7 +521,7 @@ const Order = (props) => {
             CreatedBy: 1,
             UpdatedBy: 1,
             OrderItem: itemArr,
-            OrderTermsAndConditions: termsAndCondition
+
         });
 
         if (pageMode === "edit") {
@@ -518,6 +548,7 @@ const Order = (props) => {
                         pageHeading={userAccState.PageHeading}
                         showCount={true}
                     />
+                    <label id="text">"text"</label>
                     <div className="px-2 mb-1 mt-n1" style={{ backgroundColor: "#dddddd" }} >
                         <div className=" mt-1 row">
                             <Col md="3" className="">
@@ -526,8 +557,8 @@ const Order = (props) => {
                                         style={{ width: "100px" }}>GRN Date</Label>
                                     <Col md="7">
                                         <Flatpickr
-                                            id="orderdate"
-                                            name="orderdate"
+                                            id="orderdate1"
+                                            name="orderdate1"
                                             value={podate}
                                             className="form-control d-block p-2 bg-white text-dark"
                                             placeholder="Select..."
@@ -535,7 +566,7 @@ const Order = (props) => {
                                                 altInput: true,
                                                 altFormat: "d-m-Y",
                                                 dateFormat: "Y-m-d",
-                                                minDate: pageMode === "edit" ? podate : "today",
+                                                // minDate: pageMode === "edit" ? podate : "today",
                                                 // maxDate: pageMode === "edit" ? podate : "",
                                                 // defaultDate: pageMode === "edit" ? "" : "today"
                                             }}
@@ -584,8 +615,8 @@ const Order = (props) => {
                         {({ paginationProps, paginationTableProps }) => (
                             <ToolkitProvider
                                 keyField="id"
-                                defaultSorted={defaultSorted}
-                                data={items}
+                                // defaultSorted={defaultSorted}
+                                data={table}
                                 columns={pagesListColumns}
                                 search
                             >

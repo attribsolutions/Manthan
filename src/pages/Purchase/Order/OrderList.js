@@ -15,11 +15,11 @@ import {
 import { commonPageFieldList, commonPageFieldListSuccess, } from "../../../store/actions";
 import PurchaseListPage from "../../../components/Common/CmponentRelatedCommonFile/purchase"
 import Order from "./Order";
-import { ORDER } from "../../../routes/route_url";
+import { GRN_ADD, ORDER } from "../../../routes/route_url";
 import { Button, Col, FormGroup, Label } from "reactstrap";
 import Breadcrumb from "../../../components/Common/Breadcrumb3";
 import { useHistory } from "react-router-dom";
-import { getGRN_itemMode2 } from "../../../store/Purchase/GRNRedux/actions";
+import { getGRN_itemMode2, getGRN_itemMode2_Success } from "../../../store/Purchase/GRNRedux/actions";
 
 const OrderList = () => {
 
@@ -37,6 +37,7 @@ const OrderList = () => {
     const reducers = useSelector(
         (state) => ({
             tableList: state.OrderReducer.orderList,
+            GRNitem: state.GRNReducer.GRNitem,
             deleteMsg: state.OrderReducer.deleteMsg,
             updateMsg: state.OrderReducer.updateMsg,
             postMsg: state.OrderReducer.postMsg,
@@ -63,27 +64,32 @@ const OrderList = () => {
         dispatch(getOrderListPage());
     }, []);
 
+    const { GRNitem } = reducers
+    
+    useEffect(() => {
+        if (GRNitem.Status === true && GRNitem.StatusCode === 200) {
+            // GRNitem.Status = false
+            // dispatch(getGRN_itemMode2_Success(GRNitem))
+            history.push({
+                pathname: GRNitem.path,
+                pageMode: GRNitem.pageMode
+            })
+        }
+    }, [GRNitem])
 
     const onsavefunc = (list = []) => {
         var isGRNSelect = ''
         if (list.length > 0) {
             list.forEach(ele => {
-                if (ele.GRNSelect) {
-
-
-                    isGRNSelect = isGRNSelect.concat(`${ele.id}`, ",");
-                }
+                if (ele.GRNSelect) { isGRNSelect = isGRNSelect.concat(`${ele.id},`) }
             });
-            // debugger
-            console.log("isGRNSelect", isGRNSelect)
+
             if (isGRNSelect) {
-               const jsonBody = JSON.stringify({
+                const jsonBody = JSON.stringify({
                     OrderIDs: isGRNSelect
                 })
-                
-                dispatch(getGRN_itemMode2(jsonBody, pageMode))
-
-                alert("API call get GRNItem ")
+                dispatch(getGRN_itemMode2(jsonBody, pageMode, GRN_ADD))
+               
             } else {
                 alert("Please Select Order1")
             }

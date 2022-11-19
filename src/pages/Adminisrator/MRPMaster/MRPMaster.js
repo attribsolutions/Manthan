@@ -13,7 +13,7 @@ import {
 } from "reactstrap";
 import Select from "react-select";
 import { MetaTags } from "react-meta-tags";
-import Breadcrumb from "../../../components/Common/Breadcrumb";
+import Breadcrumb from "../../../components/Common/Breadcrumb3";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import Flatpickr from "react-flatpickr"
@@ -409,7 +409,7 @@ const MRPMaster = (props) => {
                 <MetaTags>
                     <title>PartyType| FoodERP-React FrontEnd</title>
                 </MetaTags>
-                <Breadcrumb breadcrumbItem={userPageAccessState.PageHeading} />
+                <Breadcrumb pageHeading={userPageAccessState.PageHeading} />
                 <Container fluid>
                     <AvForm
                         onValidSubmit={(e, v) => {
@@ -433,10 +433,10 @@ const MRPMaster = (props) => {
 
                                             <CardHeader className="card-header   text-black " style={{ backgroundColor: "#e9e9ef", width: "" }} >
                                                 <Row className="mt-3 " >
-                                                    <Col md="3">
+                                                    <Col xs="3">
                                                         <FormGroup className="mb-3 row ">
-                                                            <Label className="col-sm-3 p-2 ml-n4">Division</Label>
-                                                            <Col md="9">
+                                                            <Label className="col-sm-4 p-2 ml-n4">Division</Label>
+                                                            <Col >
                                                                 <Select
                                                                     value={division_dropdown_Select}
                                                                     options={Division_DropdownOptions}
@@ -450,10 +450,10 @@ const MRPMaster = (props) => {
                                                         </FormGroup>
                                                     </Col>
 
-                                                    <Col lg="3" >
+                                                    <Col xs="3" >
                                                         <FormGroup className="mb-3 row ">
-                                                            <Label className="col-sm-3 p-2 ml-n4 ">Party Name</Label>
-                                                            <Col md="9" style={{}}>
+                                                            <Label className="col-sm-3 p-2 ml-n4" style={{}} >Party Name</Label>
+                                                            <Col >
                                                                 <Select
                                                                     value={party_dropdown_Select}
                                                                     options={PartyDropdown_Options}
@@ -467,10 +467,10 @@ const MRPMaster = (props) => {
                                                         </FormGroup>
                                                     </Col>
 
-                                                    <Col md="3">
+                                                    <Col sm="">
                                                         <FormGroup className="mb-3 row col-lm-4 ">
-                                                            <Label className="col-sm-3 ml-n5">EffectiveDate</Label>
-                                                            <Col md="9">
+                                                            <Label className="col-sm-6 p-2 ml-n5">EffectiveDate</Label>
+                                                            <Col>
                                                                 <Flatpickr
                                                                     id="EffectiveDateid"
                                                                     name="effectiveDate"
@@ -487,8 +487,8 @@ const MRPMaster = (props) => {
                                                                 />
                                                             </Col>
                                                         </FormGroup>
-                                                    </Col>
-                                                    <Col md="2" style={{ margin: "0.1cm" }} >
+                                                    </Col >
+                                                    <Col xs="2" style={{ margin: "0.1cm" }} >
                                                         <Button type="button" color="btn btn-outline-success border-2 font-size-12" onClick={() => { GoButton_Handler() }} >Go</Button>
                                                     </Col>
                                                 </Row>

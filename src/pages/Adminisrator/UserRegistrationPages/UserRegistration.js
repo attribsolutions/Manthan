@@ -13,7 +13,7 @@ import {
   editSuccess
 }
   from "../../../store/Administrator/UserRegistrationRedux/actions";
-import Breadcrumb from "../../../components/Common/Breadcrumb";
+import Breadcrumb from "../../../components/Common/Breadcrumb3";
 import AvField from "availity-reactstrap-validation/lib/AvField";
 import { AlertState } from "../../../store/Utilites/CustomAlertRedux/actions";
 import { Tbody, Thead } from "react-super-responsive-table";
@@ -330,7 +330,7 @@ const AddUser = (props) => {
           <title>User Registration| FoodERP-React FrontEnd</title>
         </MetaTags>
         <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
-          <Breadcrumb breadcrumbItem={userPageAccessState.PageHeading} />
+          <Breadcrumb pageHeading={userPageAccessState.PageHeading} />
           <Container fluid>
             <div >
               <Row>
