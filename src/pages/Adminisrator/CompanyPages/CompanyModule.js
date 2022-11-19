@@ -12,7 +12,7 @@ import {
 } from "reactstrap";
 import Select from "react-select";
 import { useDispatch, useSelector } from "react-redux";
-import Breadcrumb from "../../../components/Common/Breadcrumb";
+import Breadcrumb from "../../../components/Common/Breadcrumb3";
 import {
   editCompanyIDSuccess,
   PostCompanySubmit,
@@ -282,7 +282,7 @@ const CompanyModule = (props) => {
           <MetaTags>
             <title>{userPageAccessState.PageHeading} | FoodERP-React FrontEnd</title>
           </MetaTags>
-          <Breadcrumb breadcrumbItem={userPageAccessState.PageHeading} />
+          <Breadcrumb pageHeading={userPageAccessState.PageHeading} />
           <Container fluid>
             <Row>
               <Col lg={12}>

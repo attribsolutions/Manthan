@@ -19,7 +19,7 @@ import {
     editModuleIDSuccess,
     updateModuleIDSuccess,
 } from "../../../store/Administrator/ModulesRedux/actions";
-import Breadcrumb from "../../../components/Common/Breadcrumb";
+import Breadcrumb from "../../../components/Common/Breadcrumb3";
 import { MetaTags } from "react-meta-tags";
 import { AlertState, commonPageField } from "../../../store/actions";
 import { Breadcrumb_inputName } from "../../../store/Utilites/Breadcrumb/actions";
@@ -224,7 +224,7 @@ const Modules = (props) => {
                     <MetaTags>
                         <title>{userPageAccessState.PageHeading}| FoodERP-React FrontEnd</title>
                     </MetaTags>
-                    <Breadcrumb breadcrumbItem={userPageAccessState.PageHeading} />
+                    <Breadcrumb pageHeading={userPageAccessState.PageHeading} />
                     <Container fluid  >
 
                         <Card className="text-black" >

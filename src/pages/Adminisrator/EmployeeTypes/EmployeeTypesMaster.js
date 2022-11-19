@@ -10,7 +10,7 @@ import {
     Label,
     Row,
 } from "reactstrap";
-import Breadcrumb from "../../../components/Common/Breadcrumb";
+import Breadcrumb from "../../../components/Common/Breadcrumb3";
 import { MetaTags } from "react-meta-tags";
 import {
     editEmployeeTypeSuccess,
@@ -229,7 +229,7 @@ const EmployeeTypesMaster = (props) => {
                     <MetaTags>
                         <title>{userPageAccessState.PageHeading}| FoodERP-React FrontEnd</title>
                     </MetaTags>
-                    <Breadcrumb breadcrumbItem={userPageAccessState.PageHeading} />
+                    <Breadcrumb pageHeading={userPageAccessState.PageHeading} />
                     <Container fluid>
                         <Card className="text-black">
                             <CardHeader className="card-header   text-black" style={{ backgroundColor: "#dddddd" }} >

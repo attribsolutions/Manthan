@@ -20,7 +20,7 @@ import {
 } from "reactstrap";
 import MetaTags from "react-meta-tags"
 //Import Breadcrumb
-import Breadcrumb from "../../../components/Common/Breadcrumb";
+import Breadcrumb from "../../../components/Common/Breadcrumb3";
 import Select from "react-select";
 import classnames from "classnames";
 import { AvField, AvForm, AvInput } from "availity-reactstrap-validation";
@@ -900,7 +900,7 @@ const PageMaster = (props) => {
               name="mainForm"
               onValidSubmit={(e, v) => { FormSubmitButton_Handler(e, v); }}>
 
-              <Breadcrumb breadcrumbItem={userPageAccessState.PageHeading} />
+              <Breadcrumb pageHeading={userPageAccessState.PageHeading} />
               <Col lg={12}>
                 <Card className="text-black" >
                   <CardHeader className="card-header   text-black" style={{ backgroundColor: "#dddddd" }} >

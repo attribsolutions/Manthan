@@ -16,7 +16,7 @@ import {
 } from "../../../store/Administrator/M_EmployeeRedux/action";
 import { AlertState, commonPageField, commonPageFieldSuccess } from "../../../store/actions";
 import { getDistrictOnState, getPartyListAPI } from "../../../store/Administrator/PartyRedux/action";
-import Breadcrumb from "../../../components/Common/Breadcrumb";
+import Breadcrumb from "../../../components/Common/Breadcrumb3";
 import Flatpickr from "react-flatpickr"
 import { Breadcrumb_inputName } from "../../../store/Utilites/Breadcrumb/actions";
 import { MetaTags } from "react-meta-tags";
@@ -400,7 +400,7 @@ const AddEmployee = (props) => {
           <MetaTags>
             <title>{userPageAccessState.PageHeading} | FoodERP-React FrontEnd</title>
           </MetaTags>
-          <Breadcrumb breadcrumbItem={userPageAccessState.PageHeading} />
+          <Breadcrumb pageHeading={userPageAccessState.PageHeading} />
 
           <Container fluid>
 
