@@ -80,7 +80,7 @@ const CommonListPage = (props) => {
   } = props;
 
   const fileds = pageField.PageFieldMaster;
-
+console.log("userAccess",userAccess)
   useEffect(() => {
 
     const locationPath = history.location.pathname
@@ -326,7 +326,7 @@ const CommonListPage = (props) => {
             size="xl"
           >
 
-            <MasterModal editValue={editData.Data} masterPath={masterPath} pageMode={editData.pageMode} />
+            <MasterModal editValue={editData.Data} masterPath={masterPath} pageMode={editData.pageMode} pageHeading={userAccess.pageHeading} />
           </Modal>
         </div>
         {/* {(isRedirect) ? <Redirect to={{

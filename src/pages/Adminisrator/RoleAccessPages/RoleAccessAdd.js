@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import Breadcrumb from "../../../components/Common/Breadcrumb";
+import Breadcrumb from "../../../components/Common/Breadcrumb3";
 import { Card, CardBody, Col, Container, Row, Label, Input, CardHeader, FormGroup, Button, Table, } from "reactstrap";
 import { AvForm, AvGroup, AvField, AvInput } from "availity-reactstrap-validation";
 import { useDispatch, useSelector } from "react-redux";
@@ -551,7 +551,7 @@ debugger
                         <title>Role Access| FoodERP-React FrontEnd</title>
                     </MetaTags>
                     {/* <Breadcrumbs breadcrumbItem={"Role Access List"} /> */}
-                    <Breadcrumb breadcrumbItem={userPageAccessState.PageHeading} />
+                    <Breadcrumb pageHeading={userPageAccessState.PageHeading} />
 
                     <Container fluid>
                         <Card className="text-black">

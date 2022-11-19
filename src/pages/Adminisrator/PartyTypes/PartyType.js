@@ -13,7 +13,7 @@ import {
 } from "reactstrap";
 import Select from "react-select";
 import { MetaTags } from "react-meta-tags";
-import Breadcrumb from "../../../components/Common/Breadcrumb";
+import Breadcrumb from "../../../components/Common/Breadcrumb3";
 import { AvField, AvForm, AvInput, } from "availity-reactstrap-validation";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useHistory } from "react-router-dom";
@@ -215,7 +215,7 @@ const PartyType = (props) => {
                     <MetaTags>
                         <title>{userPageAccessState.PageHeading}| FoodERP-React FrontEnd</title>
                     </MetaTags>
-                    <Breadcrumb breadcrumbItem={userPageAccessState.PageHeading} />
+                    <Breadcrumb pageHeading={userPageAccessState.PageHeading} />
                     <Container fluid>
                         <Card className="text-black">
                             <CardHeader className="card-header   text-black" style={{ backgroundColor: "#dddddd" }} >

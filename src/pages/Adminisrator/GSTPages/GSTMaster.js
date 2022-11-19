@@ -13,7 +13,7 @@ import {
 } from "reactstrap";
 import Select from "react-select";
 import { MetaTags } from "react-meta-tags";
-import Breadcrumb from "../../../components/Common/Breadcrumb";
+import Breadcrumb from "../../../components/Common/Breadcrumb3";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import Flatpickr from "react-flatpickr"
@@ -410,7 +410,7 @@ const GSTMaster = (props) => {
                 <MetaTags>
                     <title>PartyType| FoodERP-React FrontEnd</title>
                 </MetaTags>
-                <Breadcrumb breadcrumbItem={userPageAccessState.PageHeading} />
+                <Breadcrumb pageHeading={userPageAccessState.PageHeading} />
                 <Container fluid>
                     <AvForm
                         onValidSubmit={(e, v) => {
