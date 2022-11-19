@@ -273,11 +273,11 @@ const GroupMaster = (props) => {
                                                 <CardBody style={{ backgroundColor: "whitesmoke" }}>
                                                     <Row>
 
-                                                        <Col md="4">
+                                                        <Col sm="4">
                                                             <FormGroup className="mb-3">
                                                                 <Label htmlFor="validationCustom01">{fieldLabel.Name} </Label>
 
-                                                                <Col sm={12}>
+                                                                <Col>
                                                                     <Input
                                                                         name="Name"
                                                                         id="txtName"

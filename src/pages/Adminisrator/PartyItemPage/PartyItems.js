@@ -115,54 +115,58 @@ const PartyItems = (props) => {
             dataField: "Name",
             sort: true,
         },
-        // {
-        //     text: "SelectAll",
-        //     dataField: "itemCheck",
-        //     sort: true,
+        {
+            text: "SelectAll",
+            dataField: "itemCheck",
+            sort: true,
+            mode:'checkbox',
+            clickToSelect: true,
+            headerColumnStyle: {
+                        lable:'SelectAll'
+                      },
+
+            formatter: (cellContent, row, col, k) => (
+                <span >
+                    <Input type="checkbox"
+                        defaultChecked={cellContent}
+                        onChange={e => row.itemCheck = e.target.checked}
+                    />
+
+                </span>
 
 
-        //     formatter: (cellContent, row, col, k) => (
-        //         <span >
-        //             <Input type="checkbox"
-        //                 defaultChecked={cellContent}
-        //                 onChange={e => row.itemCheck = e.target.checked}
-        //             />
+            ),
 
-        //         </span>
-
-
-        //     ),
-
-        // }
+        }
     ];
 
 
-    const selectRow = {
+    // const selectRow = {
 
-        mode: 'checkbox',
-        clickToSelect: true,
-        text: "Action",
-        dataField: "itemCheck",
-        sort: true,
-        selectColumnPosition: 'right',
-        headerColumnStyle: {
-            lable:'SelectAll'
-          },
+    //     mode: 'checkbox',
+    //     clickToSelect: true,
+    //     text: "Action",
+    //     dataField: "itemCheck",
+    //     sort: true,
+    //     selectColumnPosition: 'right',
+    //     // headerColumnStyle: {
+    //     //     lable:'SelectAll'
+    //     //   },
 
-        formatter: (cellContent, row, col,k) => (
-            <span >
-                <Input type="checkbox"
-                    defaultChecked={cellContent}
-                    onChange={e => row.itemCheck = e.target.checked}
-                />
+    //     formatter: (cellContent, row, col,k) => (
+    //         <span >
+    //             <Input type="checkbox"
+    //                 defaultChecked={cellContent}
+    //                 onChange={e => row.itemCheck = e.target.checked}
+    //             />
 
-            </span>
-
-
-        ),
+    //         </span>
 
 
-    }
+    //     ),
+
+
+    // }
 
    
 
@@ -294,7 +298,7 @@ const PartyItems = (props) => {
                                                 <React.Fragment>
                                                     <div className="table">
                                                         <BootstrapTable
-                                                            selectRow={selectRow}
+                                                            // selectRow={selectRow}
                                                             keyField={"id"}
                                                             bordered={true}
                                                             striped={false}

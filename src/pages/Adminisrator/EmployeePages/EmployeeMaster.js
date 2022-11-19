@@ -563,6 +563,7 @@ const AddEmployee = (props) => {
                           <Col sm={12}>
                             <Select
                               name="StateName"
+                              id="state"
                               value={values.StateName}
                               isSearchable={true}
                               className="react-dropdown"
