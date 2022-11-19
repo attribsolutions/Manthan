@@ -38,7 +38,7 @@ export default function Tree(props) {
                         onClick={(e) => { props.func1(node) }
                         }
                     > */}
-                     <span className="align-middle text-black list-group-ite  form-control" 
+                     <span  id= "span" className="align-middle text-black list-group-ite  form-control" style={{marginLeft:"-1.9cm" }}
                      
                  /* <span className="treeclass"  */
 

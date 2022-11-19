@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react"
 import MetaTags from "react-meta-tags"
-import './partymaster.scss'
+import './demo.scss'
+
+
 import {
     Button,
     Card,
@@ -43,6 +45,7 @@ import {
 import { AlertState, Breadcrumb_inputName } from "../../../store/actions"
 import Tree from "./Tree"
 import AddressDetails_Tab from "."
+import Transaction from "./Transaction Prefix"
 import { PARTY_lIST } from "../../../routes/route_url"
 
 const PartyMaster = (props) => {
@@ -66,6 +69,9 @@ const PartyMaster = (props) => {
     const [PriceList_dropdown_Select, setPriceList_dropdown_Select] = useState("");
     const [dropOpen, setDropOpen] = useState(false);
     const [AddressDetailsMaster, setAddressDetailsMaster] = useState([]);
+    const [TransactionPrefixMaster, setTransactionPrefixMaster] = useState([]);
+
+
 
     const toggle1 = tab => {
         if (activeTab1 !== tab) {
@@ -286,34 +292,57 @@ const PartyMaster = (props) => {
         dispatch(getPriceListData(e.value))
     }
 
+    
+ const  onclickselect = function () {
+ const targetDiv = document.getElementById("color");
+
+    if (targetDiv.style.display !== "none") {
+      targetDiv.style.display = "none";
+    } else {
+      targetDiv.style.display ="block";
+    }
+  };
+
     const test1 = () => {
+        debugger
         return (
             <>
-                <Modal
+                {/* <Modal */}
+                <div id="color"
+                //   isOpen={dropOpen}
+                  toggle={() => {setDropOpen(!dropOpen) }}
+                  size="sm"
+                  centered={true}
+                //   aria-hidden="true"
+                >
+              
+                {/* <div 
                     isOpen={dropOpen}
                     toggle={() => { setDropOpen(!dropOpen) }}
                     size="sm"
                     centered={true}
-                // backdrop={'static'}
-                >
-                    <div>
-                        <div className="text-center mt-2">
+                backdrop={'static'}
+                > */}
+                    <div style={{width:"6cm"}} id="">
+                        {/* <div className="text-center mt-2"> */}
                             {/* <Label className="text-primary text-center "> {priceList.label}</Label> */}
-                            <Input type="button" className="btn btn-light text-primary"
+                            {/* <Input type="button" className="btn btn-light text-primary"
 
                                 onClick={() => {
                                     // sub_Price_Add_Handler()
                                 }}
                                 value={PriceList_dropdown_Select.label}
-                            />
+                            /> */}
 
 
-                        </div>
-                        <Tree data={priceListByPartyType} priceList={PriceList_dropdown_Select}
+                        {/* </div > */}
+                        <Tree id="tree"  data={priceListByPartyType} priceList={PriceList_dropdown_Select}
                             func1={setPriceList_dropdown_Select} func2={setDropOpen} />
                     </div>
 
-                </Modal>
+                {/* </Modal> */}
+                </div>
+         {/* </div> */}
 
             </>
         )
@@ -447,9 +476,33 @@ const PartyMaster = (props) => {
 
                                                     </NavLink>
                                                 </NavItem>
+                                                <NavItem>
+                                                    <NavLink
+                                                        id="nave-link-3"
+                                                        style={{ cursor: "pointer" }}
+                                                        className={classnames({
+                                                            active: activeTab1 === "3",
+                                                        })}
+                                                        onClick={() => {
+                                                            toggle1("3")
+                                                        }}
+                                                    >
+                                                        <span className="d-block d-sm-none">
+                                                            <i className="fas fa-home"></i>
+                                                        </span>
+                                                        <span className="d-none d-sm-block">Transaction Prefix</span>
+                                                    </NavLink>
+                                                </NavItem>
+                                                
+
+                                                
+                                                
+
+
+
+
 
                                                 <NavItem>
-
                                                     <NavLink
                                                         style={{ cursor: "pointer" }}
                                                     // className={classnames({
@@ -603,20 +656,22 @@ const PartyMaster = (props) => {
                                                                         {/* <Select
                                                                         value={PriceList_dropdown_Select}
                                                                         options={PriceList_DropdownOptions}
-                                                                        // onChange={(e) =>{ handllerPriceList(e)}}
-                                                                        onChange={(e) =>{setPriceList_dropdown_Select(e)}}
-
-
+                                                                        onChange={(e) =>{ handllerPriceList(e)}}
+                                                                        // onChange={(e) =>{setPriceList_dropdown_Select(e)}}
 
                                                                     /> */}
 
-                                                                        <Input
+                                                                        <Input id="Input"
                                                                             value={PriceList_dropdown_Select.label}
                                                                             placeholder="Select..."
-                                                                            onClick={(e) => setDropOpen(!dropOpen)}
+                                                                            // onChange={(e) => setDropOpen(!dropOpen)}
+                                                                             onClick={onclickselect}
+                                                                            
                                                                         >
                                                                         </Input>
+                                                                    
                                                                         {test1()}
+                                                                        
 
                                                                     </FormGroup>
                                                                 </Col>
@@ -743,7 +798,7 @@ const PartyMaster = (props) => {
                                                                             <Select
                                                                                 value={state_DropDown_select}
                                                                                 options={StateValues}
-                                                                                onChange={(e) => { handllerState(e) }}
+                                                                                onChange={(e) =>{ handllerState(e) }}
                                                                             />
                                                                         </Col>
                                                                     </FormGroup>
@@ -804,6 +859,19 @@ const PartyMaster = (props) => {
                                                 </TabPane>
 
                                                 <TabPane tabId="3">
+                                                <Row>
+                                                        <Col md={12}  >
+                                                            <Row className="mt-3">
+                                                                <Col className=" col col-11 ">
+                                                                    <Transaction tableData={TransactionPrefixMaster} func={setTransactionPrefixMaster} />
+                                                                </Col>
+                                                            </Row>
+                                                        </Col>
+                                                    </Row>
+
+
+
+
 
                                                 </TabPane>
                                             </TabContent>
