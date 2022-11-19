@@ -110,6 +110,7 @@ const userRoutes = [
 
   { path: path.GRN_lIST, component: GRNList },
   { path: path.GRN_ADD, component: GRNAdd },
+  { path: path.GST_ADD_Mode_2, component: OrderList },
 
   { path: path.USER, component: AddUser },
   { path: path.USER_lIST, component: UserList },
@@ -158,7 +159,7 @@ const userRoutes = [
   { path: path.PARTY_SUB_PARTY_lIST, component: PartySubPartyList },
 
   { path: path.TERMS_AND_CONDITION, component: TermsAndCondtionsMaster },
-  { path:  path.TERMS_AND_CONDITION_LIST, component: TermsAndCondtionsList },
+  { path: path.TERMS_AND_CONDITION_LIST, component: TermsAndCondtionsList },
 
   { path: path.PRICE_lIST, component: PriceList },
   { path: path.PRICE, component: PriceMaster },
@@ -178,7 +179,7 @@ const userRoutes = [
   { path: path.PARTY_SUB_PARTY, component: PartySubParty },
   { path: path.PARTY_SUB_PARTY_lIST, component: PartySubPartyList },
 
-  { path:path.PARTYITEM, component: PartyItems },
+  { path: path.PARTYITEM, component: PartyItems },
   { path: path.PARTY_ITEMS, component: PartyItems },
 
   { path: path.SEARCH_BOX2, component: SearchBoxSecond },
