@@ -617,7 +617,7 @@ const AddEmployee = (props) => {
                             <Select
                               name="EmployeeTypeName"
                               value={values.EmployeeTypeName}
-                              isSearchable={false}
+                              isSearchable={true}
                               className="react-dropdown"
                               classNamePrefix="dropdown"
                               options={EmployeeType_DropdownOptions}
@@ -640,7 +640,7 @@ const AddEmployee = (props) => {
                             <Select
                               name="CompanyName"
                               value={values.CompanyName}
-                              isSearchable={false}
+                              isSearchable={true}
                               className="react-dropdown"
                               classNamePrefix="dropdown"
                               options={Company_DropdownOptions}
@@ -666,7 +666,7 @@ const AddEmployee = (props) => {
                                 name="EmployeeParties"
                                 // defaultValue={EmployeeType_DropdownOptions[0]}
                                 value={values.EmployeeParties}
-                                isSearchable={false}
+                                isSearchable={true}
                                 isMulti={true}
                                 className="react-dropdown"
                                 options={Party_DropdownOptions}
@@ -692,7 +692,7 @@ const AddEmployee = (props) => {
                             <Select
                               name="DesignationName"
                               value={values.DesignationName}
-                              isSearchable={false}
+                              isSearchable={true}
                               className="react-dropdown"
                               classNamePrefix="dropdown"
                               options={Designation_DropdownOptions}
