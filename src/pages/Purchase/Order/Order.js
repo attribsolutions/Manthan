@@ -237,11 +237,77 @@ const Order = (props) => {
 
 
     const pagesListColumns = [
+        //------------- ItemName column ----------------------------------
         {
             text: "Item Name",
             dataField: "Name",
             sort: true,
         },
+        //------------- Quntity column ----------------------------------
+        {
+            text: "Quntity",
+            dataField: "",
+            sort: true,
+            formatter: (value, row, k) => (
+
+                <span >
+                    <Input type="text"
+                        id={`inpQty${k}`}
+                        defaultValue={row.inpQty}
+                        disabled={((row.inpRate === 0) || row.GST === '') ? true : false}
+                        onChange={(e) => {
+                            val_onChange(e.target.value, row, "qty")
+                        }}
+                        autoComplete="off"
+                        onKeyDown={(e) => handleKeyDown(e, items)} />
+                </span>
+
+            ),
+            headerStyle: (colum, colIndex) => {
+                return { width: '140px', textAlign: 'center' };
+            }
+
+
+        },
+        //------------- UOM column ----------------------------------
+        {
+            text: "UOM",
+            dataField: "",
+            sort: true,
+            formatter: (value, row, key) => {
+                if (row.UOMLabel === undefined) {
+                    row["UOM"] = row.UnitDetails[0].UnitID
+                    row["UOMLabel"] = row.UnitDetails[0].UnitName
+                    row["inpBaseUnitQty"] = row.UnitDetails[0].BaseUnitQuantity
+                }
+                return (
+                    <Select
+                        classNamePrefix="select2-selection"
+                        id={"ddlUnit"}
+                        defaultValue={{ value: row.UOM, label: row.UOMLabel }}
+                        // value={{value:row.UOM,label:row.UOMLabel}}
+                        options={
+                            row.UnitDetails.map(i => ({
+                                label: i.UnitName,
+                                value: i.UnitID,
+                                baseUnitQty: i.BaseUnitQuantity
+                            }))
+                        }
+                        onChange={e => {
+                            row["UOM"] = e.value;
+                            row["UOMLabel"] = e.label
+                            row["inpBaseUnitQty"] = e.baseUnitQty
+                        }}
+                    >
+                    </Select >
+                )
+            },
+            headerStyle: (colum, colIndex) => {
+                return { width: '150px', textAlign: 'center' };
+            }
+
+        },
+        //------------- Rate column ----------------------------------
         {
             text: "Rate",
             dataField: "Rate",
@@ -281,6 +347,7 @@ const Order = (props) => {
                 return { width: '140px', textAlign: 'center' };
             }
         },
+        //------------- GST column ----------------------------------
         {
             text: "GST %",
             dataField: "GST",
@@ -294,68 +361,6 @@ const Order = (props) => {
             ),
             headerStyle: (colum, colIndex) => {
                 return { width: '130px', textAlign: 'center', text: "left" };
-            }
-
-        },
-        {
-            text: "Quntity",
-            dataField: "",
-            sort: true,
-            formatter: (value, row, k) => (
-
-                <span >
-                    <Input type="text"
-                        id={`inpQty${k}`}
-                        defaultValue={row.inpQty}
-                        disabled={((row.inpRate === 0) || row.GST === '') ? true : false}
-                        onChange={(e) => {
-                            val_onChange(e.target.value, row, "qty")
-                        }}
-                        autoComplete="off"
-                        onKeyDown={(e) => handleKeyDown(e, items)} />
-                </span>
-
-            ),
-            headerStyle: (colum, colIndex) => {
-                return { width: '140px', textAlign: 'center' };
-            }
-
-
-        },
-        {
-            text: "UOM",
-            dataField: "",
-            sort: true,
-            formatter: (value, row, key) => {
-                if (row.UOMLabel === undefined) {
-                    row["UOM"] = row.UnitDetails[0].UnitID
-                    row["UOMLabel"] = row.UnitDetails[0].UnitName
-                    row["inpBaseUnitQty"] = row.UnitDetails[0].BaseUnitQuantity
-                }
-                return (
-                    <Select
-                        classNamePrefix="select2-selection"
-                        id={"ddlUnit"}
-                        defaultValue={{ value: row.UOM, label: row.UOMLabel }}
-                        // value={{value:row.UOM,label:row.UOMLabel}}
-                        options={
-                            row.UnitDetails.map(i => ({
-                                label: i.UnitName,
-                                value: i.UnitID,
-                                baseUnitQty: i.BaseUnitQuantity
-                            }))
-                        }
-                        onChange={e => {
-                            row["UOM"] = e.value;
-                            row["UOMLabel"] = e.label
-                            row["inpBaseUnitQty"] = e.baseUnitQty
-                        }}
-                    >
-                    </Select >
-                )
-            },
-            headerStyle: (colum, colIndex) => {
-                return { width: '150px', textAlign: 'center' };
             }
 
         },
@@ -410,14 +415,14 @@ const Order = (props) => {
 
     const saveHandeller = () => {
         let division = 0
-        let orderDate =''
-        let delDate =''
+        let orderDate = ''
+        let delDate = ''
         const supplier = supplierSelect.value
 
         try {
             division = JSON.parse(localStorage.getItem("roleId")).Party_id
-            orderDate=document.getElementById("orderdate").value
-            delDate=document.getElementById("deliverydate").value
+            orderDate = document.getElementById("orderdate").value
+            delDate = document.getElementById("deliverydate").value
         } catch (e) {
             alert(e)
             return
@@ -592,7 +597,7 @@ const Order = (props) => {
                                     <div className="col col-6">
                                         <Flatpickr
                                             id="deliverydate"
-                                            ref={(e)=>{debugger}}
+                                            ref={(e) => { debugger }}
                                             name="deliverydate"
                                             value={deliverydate}
                                             className="form-control d-block p-2 bg-white text-dark"

@@ -18,6 +18,9 @@ export const ORDER_PAGE_API = "Orders"
 export const SUPPLIER = "/GetSupplier"
 export const GET_ITEM_FOR_ORDER = "/GetItemsForOrder"
 
+// GRN
+export const GET_GRN_ITEM = "/MakeOrdersGrn"
+
 
 
 //Python Logic 

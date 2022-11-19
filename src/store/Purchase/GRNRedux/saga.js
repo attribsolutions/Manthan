@@ -5,6 +5,7 @@ import {
   editGRNIdSuccess,
   getGRNListPageSuccess,
   getGRN_itemMode2_Success,
+  getGRN_itemMode3_Success,
   postGRNSuccess,
   updateGRNIdSuccess,
 
@@ -145,13 +146,30 @@ function* get_GRN_GerFunc() {
 }
 
 // List Page API
-function* getGRNitem_Mode2_GenFunc({ data, pageMode }) {
+function* getGRNitem_Mode2_GenFunc({ data, pageMode, path }) {
   debugger
   yield put(SpinnerState(true))
   try {
     const response = yield call(GRN_getItem_API, data);
+
+    response["pageMode"] = pageMode;
+    response["path"] = path;
     yield put(SpinnerState(false))
     yield put(getGRN_itemMode2_Success(response))
+    response.Data.OrderItem.forEach(ele => {
+
+
+      ele["inpRate"] = ele.Rate
+      ele["inpQty"] = ele.Quantity
+      ele["totalAmount"] = ele.Amount
+      ele["UOM"] = ele.Unit
+      ele["UOMLabel"] = ele.UnitName
+      ele["inpBaseUnitQty"] = ele.BaseUnitQuantity
+
+
+    });
+    yield put(getGRN_itemMode3_Success(response.Data.OrderItem))
+
 
   } catch (error) {
     yield put(SpinnerState(false))
