@@ -55,7 +55,7 @@ const TermsAndCondtionsList = (props) => {
             reducers={reducers}
             MasterModal={TermsAndCondtionsMaster}
             masterPath={TERMS_AND_CONDITION}
-            ButtonMsgLable={"Employee"}
+            ButtonMsgLable={"Terms & Conditions"}
             deleteName={"Name"}
           />
           : null
