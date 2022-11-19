@@ -1,59 +1,61 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import {
-    deleteOrderId,
-    deleteOrderIdSuccess,
-    editOrderId,
-    getOrderListPage,
-    updateOrderIdSuccess,
-    // getOrderList
-} from "../../../store/Purchase/OrderPageRedux/actions";
+
 import { commonPageFieldList, commonPageFieldListSuccess, } from "../../../store/actions";
-import CommonListPage from "../../../components/Common/CmponentRelatedCommonFile/commonListPage"
 import Order from "../Order/Order";
-import { ORDER } from "../../../routes/route_url";
+import { ORDER, ORDER_lIST } from "../../../routes/route_url";
 import { Button, Col, FormGroup, Label } from "reactstrap";
-import Breadcrumb from "../../../components/Common/Breadcrumb3";
+import Breadcrumb from "../../../components/Common/Breadcrumb";
 import Select from "react-select";
 import "flatpickr/dist/themes/material_blue.css"
 import Flatpickr from "react-flatpickr";
 import PurchaseListPage from "../../../components/Common/CmponentRelatedCommonFile/purchase";
+import {
+    deleteGRNId,
+    deleteGRNIdSuccess,
+    editGRNId, getGRNListPage,
+    updateGRNIdSuccess
+} from "../../../store/Purchase/GRNRedux/actions";
+
+
 const GRNList = () => {
 
     const dispatch = useDispatch();
+
+
+
     const reducers = useSelector(
         (state) => ({
-            tableList: state.OrderReducer.orderList,
-            deleteMsg: state.OrderReducer.deleteMsg,
-            updateMsg: state.OrderReducer.updateMsg,
-            postMsg: state.OrderReducer.postMsg,
-            editData: state.OrderReducer.editData,
+            tableList: state.GRNReducer.GRNList,
+            deleteMsg: state.GRNReducer.deleteMsg,
+            updateMsg: state.GRNReducer.updateMsg,
+            postMsg: state.GRNReducer.postMsg,
+            editData: state.GRNReducer.editData,
             userAccess: state.Login.RoleAccessUpdateData,
             pageField: state.CommonPageFieldReducer.pageFieldList,
         })
     );
 
     const action = {
-        getList: getOrderListPage,
-        editId: editOrderId,
-        deleteId: deleteOrderId,
+        getList: getGRNListPage,
+        editId: editGRNId,
+        deleteId: deleteGRNId,
         postSucc: postMessage,
-        updateSucc: updateOrderIdSuccess,
-        deleteSucc: deleteOrderIdSuccess
+        updateSucc: updateGRNIdSuccess,
+        deleteSucc: deleteGRNIdSuccess
     }
 
 
     // Featch Modules List data  First Rendering
     useEffect(() => {
         dispatch(commonPageFieldListSuccess(null))
-        dispatch(commonPageFieldList(50))
-        dispatch(getOrderListPage());
+        dispatch(commonPageFieldList(56))
+        dispatch(getGRNListPage());
     }, []);
 
     const { pageField } = reducers;
-    function func1() {
 
-    }
+debugger
     return (
 
         <React.Fragment>
@@ -63,7 +65,8 @@ const GRNList = () => {
                     newBtnView={true}
                     showCount={true}
                     excelBtnView={true}
-
+                    pageMode={"GRNMode2"}
+                    newBtnPagePath={ORDER_lIST}
                     excelData={"downList"} />
 
                 <div className="px-2 mb-1 mt-n1" style={{ backgroundColor: "#dddddd" }} >
@@ -149,10 +152,10 @@ const GRNList = () => {
                             reducers={reducers}
                             MasterModal={Order}
                             masterPath={ORDER}
-                            ButtonMsgLable={"Order"}
+                            ButtonMsgLable={"GRN"}
                             deleteName={"Name"}
-                            listHeader={func1()}
                             pageMode={"List"}
+
                         />
                         : null
                 }

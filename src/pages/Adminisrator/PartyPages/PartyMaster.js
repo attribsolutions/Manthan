@@ -100,7 +100,7 @@ const PartyMaster = (props) => {
     const location = { ...history.location }
     const hasShowloction = location.hasOwnProperty("editValue")
     const hasShowModal = props.hasOwnProperty("editValue")
-  
+
     useEffect(() => {
 
         let userAcc = null;
@@ -223,20 +223,20 @@ const PartyMaster = (props) => {
 
     useEffect(() => {
         if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
-          history.push({
-            pathname: PARTY_lIST,
-          })
-        } else if (updateMsg.Status === true && !modalCss) {
-          dispatch(updatePartyIDSuccess({ Status: false }));
-          dispatch(
-            AlertState({
-              Type: 3,
-              Status: true,
-              Message: JSON.stringify(updateMsg.Message),
+            history.push({
+                pathname: PARTY_lIST,
             })
-          );
+        } else if (updateMsg.Status === true && !modalCss) {
+            dispatch(updatePartyIDSuccess({ Status: false }));
+            dispatch(
+                AlertState({
+                    Type: 3,
+                    Status: true,
+                    Message: JSON.stringify(updateMsg.Message),
+                })
+            );
         }
-      }, [updateMsg, modalCss]);
+    }, [updateMsg, modalCss]);
 
     const StateValues = State.map((index) => ({
         value: index.id,
@@ -320,7 +320,20 @@ const PartyMaster = (props) => {
     }
 
     const FormSubmitButton_Handler = (event, values) => {
-        debugger
+     
+        if (AddressDetailsMaster.length === 0) {
+            dispatch(
+                AlertState({
+                    Type: 4,
+                    Status: true,
+                    Message: "Address details is required",
+                    RedirectPath: false,
+                    PermissionAction: false,
+                })
+            );
+            return;
+        }
+
         const jsonBody = JSON.stringify({
             Name: values.Name,
             PriceList: PriceList_dropdown_Select.value,

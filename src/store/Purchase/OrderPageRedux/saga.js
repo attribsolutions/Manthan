@@ -136,7 +136,7 @@ function* UpdateOrder_ID_GenratorFunction({ data, id }) {
 
 // List Page API
 function* get_OrderListPage_GenratorFunction() {
-  debugger
+  
   yield put(SpinnerState(true))
   try {
     const response = yield call(getOrderList_For_Listpage);

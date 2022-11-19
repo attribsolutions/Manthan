@@ -271,7 +271,7 @@ const CommonListPage = (props) => {
               pageHeading={userAccState.PageHeading}
               newBtnView={(userAccState.RoleAccess_IsSave) ? true : false}
               showCount={true}
-              excelBtnView={true}
+              excelBtnView={userAccState.RoleAccess_Exceldownload ? true : false}
               // handleDataChange={}
               excelData={downList}
             />
