@@ -156,19 +156,19 @@ function* getGRNitem_Mode2_GenFunc({ data, pageMode, path }) {
     response["path"] = path;
     yield put(SpinnerState(false))
     yield put(getGRN_itemMode2_Success(response))
-    response.Data.OrderItem.forEach(ele => {
+    // response.Data.OrderItem.forEach(ele => {
 
 
-      ele["inpRate"] = ele.Rate
-      ele["inpQty"] = ele.Quantity
-      ele["totalAmount"] = ele.Amount
-      ele["UOM"] = ele.Unit
-      ele["UOMLabel"] = ele.UnitName
-      ele["inpBaseUnitQty"] = ele.BaseUnitQuantity
+    //   ele["inpRate"] = ele.Rate
+    //   ele["inpQty"] = ele.Quantity
+    //   ele["totalAmount"] = ele.Amount
+    //   ele["UOM"] = ele.Unit
+    //   ele["UOMLabel"] = ele.UnitName
+    //   ele["inpBaseUnitQty"] = ele.BaseUnitQuantity
 
 
-    });
-    yield put(getGRN_itemMode3_Success(response.Data.OrderItem))
+    // });
+    // yield put(getGRN_itemMode3_Success(response.Data.OrderItem))
 
 
   } catch (error) {
