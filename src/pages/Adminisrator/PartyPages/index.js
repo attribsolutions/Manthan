@@ -86,6 +86,7 @@ function AddressDetails_Tab(props) {
                                     <Label htmlFor="validationCustom01">Address </Label>
                                     <AvField name="Address" value={address} type="text"
                                         placeholder=" Please Enter Address "
+                                        autoComplete='off'
                                         // validate={{
                                         //     required: { value: true, errorMessage: 'Please Enter your Address' },
                                         // }}
@@ -115,6 +116,7 @@ function AddressDetails_Tab(props) {
                                         name="FSSAINo"
                                         value={FSSAINo}
                                         placeholder="Please Enter FSSAINo"
+                                        autoComplete='off'
                                         type="text"
 
                                         errorMessage="Please Enter FSSAI Number."
@@ -140,6 +142,7 @@ function AddressDetails_Tab(props) {
                                         value={FSSAIExipry}
                                         className="form-control d-block p-2 bg-white text-dark"
                                         placeholder=" Please Enter FSSAI Exipry"
+                                        autoComplete='off'
                                         options={{
                                             altInput: true,
                                             altFormat: "F j, Y",
@@ -158,6 +161,7 @@ function AddressDetails_Tab(props) {
                                     <AvField name="PIN" type="text"
                                         value={PIN}
                                         placeholder=" PIN No. "
+                                        autoComplete='off'
                                         // validate={{
                                         //     required: { value: true, errorMessage: 'Please Enter your PIN No.' },
                                         //     tel: {

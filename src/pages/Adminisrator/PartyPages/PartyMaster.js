@@ -318,15 +318,34 @@ const PartyMaster = (props) => {
             </>
         )
     }
-
+  
     const FormSubmitButton_Handler = (event, values) => {
-     
+
         if (AddressDetailsMaster.length === 0) {
             dispatch(
                 AlertState({
                     Type: 4,
                     Status: true,
                     Message: "Address details is required",
+                    RedirectPath: false,
+                    PermissionAction: false,
+                })
+            );
+            return;
+        }
+
+        const data = AddressDetailsMaster.map((index) => {
+            return index.IsDefault === true
+        })
+        
+        const count1 = data.filter(value => value === true).length;
+
+        if (count1 === 0) {
+            dispatch(
+                AlertState({
+                    Type: 4,
+                    Status: true,
+                    Message: "At least one Address Details IsDefault true",
                     RedirectPath: false,
                     PermissionAction: false,
                 })
@@ -510,6 +529,7 @@ const PartyMaster = (props) => {
                                                                             value={EditData.MobileNo}
                                                                             id="mobileNo"
                                                                             placeholder="Enter Mobile No."
+                                                                            autoComplete='off'
                                                                             validate={{
                                                                                 required: { value: true, errorMessage: 'Enter your Mobile Number' },
                                                                                 tel: {
@@ -527,6 +547,7 @@ const PartyMaster = (props) => {
                                                                         <Label htmlFor="validationCustom01">Alternate Contact Number(s)</Label>
                                                                         <AvField name="AlternateContactNo" type="tel"
                                                                             value={EditData.AlternateContactNo}
+                                                                            autoComplete='off'
                                                                             id="mobileNo"
                                                                             // defaultValue={''}
                                                                             placeholder="Alternate Contact Number(s)"
@@ -542,6 +563,7 @@ const PartyMaster = (props) => {
                                                                             id="email"
                                                                             value={EditData.Email}
                                                                             placeholder="Enter your Email"
+                                                                            autoComplete='off'
                                                                             validate={{
                                                                                 required: { value: true, errorMessage: 'Please Enter your Email' },
                                                                                 tel: {
@@ -636,8 +658,9 @@ const PartyMaster = (props) => {
                                                                             value={EditData.PAN}
                                                                             placeholder="Please Enter PAN"
                                                                             type="text"
-                                                                            errorMessage="Please Enter PAN Number."
+                                                                            errorMessage='Please Enter valid PAN Number.(Ex:AAAAA1234A).'
                                                                             className="form-control"
+                                                                            autoComplete='off'
                                                                             validate={{
                                                                                 required: { value: true },
                                                                                 tel: {
@@ -659,7 +682,8 @@ const PartyMaster = (props) => {
                                                                             value={EditData.GSTIN}
                                                                             placeholder="Please Enter GSTIN"
                                                                             type="text"
-                                                                            errorMessage="Please Enter GSTIN Number."
+                                                                            errorMessage='Please Enter valid GSTIN number.(Ex:27AAAAA0000A1Z5).'
+                                                                            autoComplete='off'
                                                                             className="form-control"
                                                                             validate={{
                                                                                 required: { value: true },
