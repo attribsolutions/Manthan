@@ -277,7 +277,7 @@ const CategoryMaster = (props) => {
                                                                         <Select
                                                                             name="CategoryTypeName"
                                                                             value={values.CategoryTypeName}
-                                                                            isSearchable={false}
+                                                                            isSearchable={true}
                                                                             className="react-dropdown"
                                                                             classNamePrefix="dropdown"
                                                                             options={CategoryTypesValues}
