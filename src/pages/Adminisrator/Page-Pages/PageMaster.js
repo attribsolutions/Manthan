@@ -32,6 +32,7 @@ import {
   fetchModelsList,
   getControlTypes,
   getFieldValidations,
+  getFieldValidationsSuccess,
   getPageAccess_DropDown_API,
   getPageList,
   getPageListSuccess,
@@ -434,7 +435,7 @@ const PageMaster = (props) => {
           ControlType: event,
           FieldValidation: found.FieldValidation,
           InValidMsg: event.value === 4 ? event = '' : found.InValidMsg,
-          IsCompulsory: event.value === 4 ? event = false : found.IsCompulsory,
+          IsCompulsory: found.IsCompulsory,
           DefaultSort: found.DefaultSort,
           ShowInListPage: found.ShowInListPage,
           ListPageSeq: found.ListPageSeq,
@@ -591,9 +592,11 @@ const PageMaster = (props) => {
   }
 
   function ControlType_Dropdown_Handler(e, key) {
-
+    debugger
+   
     dispatch(getFieldValidations(e.value))
     pageFieldTabTable.FieldValidation = []
+    // dispatch(getFieldValidationsSuccess([]))
   }
 
   const toggleCustom = (tab) => {
@@ -617,7 +620,7 @@ const PageMaster = (props) => {
       FieldValidation: index.FieldValidation.value,
       DownloadDefaultSelect: index.DownloadDefaultSelect,
     }))
-debugger
+    debugger
     if (
       tablePageAccessDataState.length <= 0 &&
       !(pageType_DropdownSelect.value === 1)
@@ -874,7 +877,10 @@ debugger
     });
   }
 
-
+  // function myFunction() {
+  //   document.getElementById("txtName").disabled = false;
+  //   document.getElementById("pagePathid").disabled = false;
+  // }
   // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
   var IsEditMode_Css = ''
   if ((modalCss) || (pageMode === "dropdownAdd")) { IsEditMode_Css = "-5.5%" };
@@ -888,6 +894,7 @@ debugger
           </MetaTags>
           <Container fluid>
             {/* Render Breadcrumbs */}
+
             <AvForm
               id="mainForm"
               name="mainForm"
@@ -918,7 +925,8 @@ debugger
                           <span className="d-none d-sm-block">Page Master Details</span>
                         </NavLink>
                       </NavItem>
-                      {(pageType_DropdownSelect.value === 1) ? <NavItem>
+                      {/* {(pageType_DropdownSelect.value === 1) ? */}
+                      <NavItem>
                         <NavLink
                           style={{ cursor: "pointer" }}
                           className={classnames({
@@ -934,9 +942,9 @@ debugger
                           <span className="d-none d-sm-block">Page Field</span>
                         </NavLink>
                       </NavItem>
-                        :
+                      {/* :
                         null
-                      }
+                      } */}
 
 
                       <NavItem>
@@ -1004,6 +1012,7 @@ debugger
                                       name="Name"
                                       id="txtName"
                                       value={EditData.Name}
+                                      disabled={pageMode === 'edit' ? true : false}
                                       type="text"
                                       placeholder="Please Enter Name"
                                       autoComplete="off"
@@ -1170,7 +1179,9 @@ debugger
                                     <Label htmlFor="validationCustom01">Page Path</Label>
                                     <AvField
                                       name="pagePath"
+                                      id="pagePathid"
                                       value={EditData.ActualPagePath}
+                                      disabled={pageMode === 'edit' ? true : false}
                                       type="text"
                                       placeholder="Please Enter Page Path"
                                       validate={{
@@ -1296,14 +1307,22 @@ debugger
                                   </Row>
                                 </FormGroup>
                               </Row>
+                              {/* <Row className="btn btn-sm">
+                                <button
+                                  type="button"
+                                  className="btn btn-primary w-md float-right"
+                                  onclick={() => myFunction()}>Disabled false</button>
+                              </Row> */}
+
                             </CardBody>
+
                           </Card>
 
                           {pageAccessDropDownView ? (
                             <Card className=" mt-n2 text-black">
                               <CardBody style={{ backgroundColor: "whitesmoke" }}>
                                 <Row className="">
-                                  <FormGroup className=" ml-3 col col-sm-4 mb-4 ">
+                                  <FormGroup className=" ml-3 col col-sm-4 mb-5 ">
                                     <Label htmlFor="validationCustom01">
                                       Page Access
                                     </Label>
@@ -1314,6 +1333,7 @@ debugger
                                       }}
                                       // defaultValue={{ label: "IsShowOnMenu", value: 1 }}
                                       classNamePrefix="select2-selection"
+                                      
                                     />
                                   </FormGroup>
 
@@ -1351,6 +1371,7 @@ debugger
                               </CardBody>
                             </Card>
                           ) : <></>}
+
 
                         </Row>
                       </TabPane>
@@ -1428,10 +1449,9 @@ debugger
                                       <div style={{ width: "150px" }}>
                                         <Select
                                           id={`FieldValidation-${key}`}
-                                          // placeholder="select unit"
                                           autoComplete="off"
                                           value={pageFieldTabTable[key].FieldValidation}
-                                          isDisabled={TableValue.ControlType.value === 4 ? true : false}
+                                          // isDisabled={TableValue.ControlType.value === 4 ? true : false}
                                           options={FieldValidations_DropdownOptions}
                                           onChange={(e) => { PageField_onChange_Handler(e, "FieldValidation", key); }}
                                         />
@@ -1463,11 +1483,10 @@ debugger
                                     </td>
                                     <td>
                                       <Input
-                                        // autoComplete="off"
                                         type="checkbox"
                                         id={`IsCompulsory${key}`}
                                         disabled={TableValue.ControlType.value === 4 ? true : false}
-                                        checked={pageFieldTabTable[key].IsCompulsory}
+                                        checked={(TableValue.ControlType.value === 4) ? pageFieldTabTable[key].IsCompulsory = false : pageFieldTabTable[key].IsCompulsory}
                                         onChange={(e) => PageField_onChange_Handler(e.target.checked, "IsCompulsory", key)}>
 
                                       </Input>
@@ -1483,7 +1502,6 @@ debugger
                                             value={`DefaultSort${key}`}
                                             id={`DefaultSort${key}`}
                                             checked={pageFieldTabTable[key].DefaultSort}
-
                                             onChange={(e) => PageField_onChange_Handler(e.target.checked, "DefaultSort", key)}>
                                           </Input>
                                         </div>

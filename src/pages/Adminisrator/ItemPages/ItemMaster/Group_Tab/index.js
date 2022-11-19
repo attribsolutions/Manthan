@@ -119,16 +119,17 @@ function GroupTab(props) {
     };
 
     return (
-        <Row>
-            <Col md={12}>
-                <Card className="text-black">
+        <Row style={{marginBottom:"2cm"}}>
+            <Col md={12} >
+                <Card className="text-black" >
                     <CardBody style={{ backgroundColor: "whitesmoke" }}>
-                        <Row className="mt-3">
-                            <Col className=" col col-11 ">
+                        <Row className="mt-6">
+                            <Col className="col-11 ">
                                 <Row>
-                                    <FormGroup className=" col col-sm-4 ">
+                                    <FormGroup className="col-sm-4 ">
                                         <Label>Group Type</Label>
                                         <Select
+                                        
                                             // id={`dropGroupType-${0}`}
                                             value={groupTypeDropdownSelect}
                                             options={GroupType_DropdownOptions}
@@ -136,7 +137,7 @@ function GroupTab(props) {
                                         />
                                     </FormGroup>
 
-                                    <FormGroup className="mb-3 col col-sm-4 ">
+                                    <FormGroup className=" col col-sm-4 ">
                                         <Label>Group</Label>
                                         <Select
                                             // id={`dropGroup-${0}`}
