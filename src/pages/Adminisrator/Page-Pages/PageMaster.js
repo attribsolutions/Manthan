@@ -1322,7 +1322,7 @@ const PageMaster = (props) => {
                             <Card className=" mt-n2 text-black">
                               <CardBody style={{ backgroundColor: "whitesmoke" }}>
                                 <Row className="">
-                                  <FormGroup className=" ml-3 col col-sm-4 mb-4 ">
+                                  <FormGroup className=" ml-3 col col-sm-4 mb-5 ">
                                     <Label htmlFor="validationCustom01">
                                       Page Access
                                     </Label>
@@ -1333,6 +1333,7 @@ const PageMaster = (props) => {
                                       }}
                                       // defaultValue={{ label: "IsShowOnMenu", value: 1 }}
                                       classNamePrefix="select2-selection"
+                                      
                                     />
                                   </FormGroup>
 
