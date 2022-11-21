@@ -80,7 +80,7 @@ const CommonListPage = (props) => {
   } = props;
 
   const fileds = pageField.PageFieldMaster;
-console.log("userAccess",userAccess)
+
   useEffect(() => {
 
     const locationPath = history.location.pathname
