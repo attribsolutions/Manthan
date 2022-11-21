@@ -45,7 +45,7 @@ import { getGRN_itemMode2_Success } from "../../../store/Purchase/GRNRedux/actio
 let description = ''
 let editVal = {}
 
-const Order = (props) => {
+const GRNAdd = (props) => {
 
     const dispatch = useDispatch();
     const history = useHistory();
@@ -63,8 +63,8 @@ const Order = (props) => {
 
     const [supplierSelect, setsupplierSelect] = useState('');
     const [orderAmount, setOrderAmount] = useState(0);
-    const [table, settable] = useState([]);
-
+    const [grnItemData, setgrnItemData] = useState({});
+    const { OrderItem = [] } = grnItemData
 
     useEffect(() => {
         // dispatch(getSupplier())
@@ -80,7 +80,6 @@ const Order = (props) => {
         userAccess,
         updateMsg,
         supplierAddress,
-        termsAndCondtions,
         pageField
     } = useSelector((state) => ({
         supplier: state.SupplierReducer.supplier,
@@ -131,11 +130,11 @@ const Order = (props) => {
                 ele["inpBaseUnitQty"] = ele.BaseUnitQuantity
             });
 
-            settable(hasEditVal.OrderItem)
+            setgrnItemData(hasEditVal)
             dispatch(BreadcrumbFilterSize(`${"Order Amount"} :${hasEditVal.OrderAmount}`))
 
-            setsupplierSelect({ label: hasEditVal.SupplierName, value: hasEditVal.Supplier })
-            setpoDate(hasEditVal.OrderDate)
+            // setsupplierSelect({ label: hasEditVal.SupplierName, value: hasEditVal.Supplier })
+            // setpoDate(hasEditVal.OrderDate)
             setOrderAmount(hasEditVal.OrderAmount)
 
             items.Status = false
@@ -255,7 +254,7 @@ const Order = (props) => {
         catch { alert("`abc${row.id}`") }
 
         let sum = 0
-        table.forEach(ind => {
+        OrderItem.forEach(ind => {
             sum = sum + parseFloat(ind.totalAmount)
         });
         setOrderAmount(sum.toFixed(2))
@@ -278,8 +277,6 @@ const Order = (props) => {
                 <div className=" mt-2">
                     <span>{value}</span>
                 </div>
-
-
             ),
         },
         //  ------------Quntity column -----------------------------------  
@@ -299,7 +296,7 @@ const Order = (props) => {
                             val_onChange(e.target.value, row, "qty")
                         }}
                         autoComplete="off"
-                        onKeyDown={(e) => handleKeyDown(e, table)} />
+                        onKeyDown={(e) => handleKeyDown(e, OrderItem)} />
                 </span>
 
             ),
@@ -410,7 +407,7 @@ const Order = (props) => {
     ];
 
     const pageOptions = {
-        sizePerPage: (table.length + 2),
+        sizePerPage: (OrderItem.length + 2),
         totalSize: 0,
         custom: true,
     };
@@ -448,44 +445,40 @@ const Order = (props) => {
     };
 
     const saveHandeller = () => {
-        let division = 0
-        let orderDate = ''
-        let delDate = ''
-        const supplier = supplierSelect.value
-
-        try {
-            division = JSON.parse(localStorage.getItem("roleId")).Party_id
-            orderDate = document.getElementById("orderdate").value
-            delDate = document.getElementById("deliverydate").value
-        } catch (e) {
-            alert(e)
-            return
-        }
 
         const itemArr = []
-        items.forEach(i => {
+        OrderItem.forEach(i => {
             if ((i.inpQty > 0)) {
                 const basicAmt = parseFloat(basicAmount(i))
                 const cgstAmt = (GstAmount(i))
 
                 const arr = {
-                    Item: i.id,
+                    Item: i.Item,
                     Quantity: i.inpQty,
                     MRP: i.MRP,
+                    ReferenceRate: i.Rate,
                     Rate: i.inpRate,
                     Unit: i.UOM,
                     BaseUnitQuantity: i.inpBaseUnitQty,
-                    Margin: "",
+                    GSTPercentage: i.GSTPercentage,
                     BasicAmount: basicAmt.toFixed(2),
                     GSTAmount: cgstAmt.toFixed(2),
-                    GST: i.Gstid,
+                    Amount: i.totalAmount,
+
                     CGST: (cgstAmt / 2).toFixed(2),
                     SGST: (cgstAmt / 2).toFixed(2),
                     IGST: 0,
                     CGSTPercentage: (i.GST / 2),
                     SGSTPercentage: (i.GST / 2),
                     IGSTPercentage: 0,
-                    Amount: i.totalAmount,
+
+                    BatchDate: "2022-11-19",
+                    BatchCode: 1,
+                    DiscountType: "0",
+                    Discount: "0.00",
+                    DiscountAmount: "0.00",
+                    TaxType: "GST",
+
                 }
 
                 itemArr.push(arr)
@@ -505,22 +498,21 @@ const Order = (props) => {
         }
 
         const jsonBody = JSON.stringify({
-            OrderDate: orderDate,
-            DeliveryDate: delDate,
-            Customer: division,
-            Supplier: supplier,
-            OrderAmount: orderAmount,
-            Description: description,
-            BillingAddress: billAddr.value,
-            ShippingAddress: shippAddr.value,
-            OrderNo: 1,
-            FullOrderNumber: "PO0001",
-            OrderType: 1,
-            POType: 1,
-            Division: division,
+            GRNDate: grnItemData.OrderDate,
+
+            Customer: grnItemData.Customer,
+            GRNNumber: 1,
+            GrandTotal: orderAmount,
+            Party: grnItemData.Supplier,
             CreatedBy: 1,
             UpdatedBy: 1,
-            OrderItem: itemArr,
+            GRNItems: itemArr,
+            GRNReferences: [
+                {
+                    Invoice: null,
+                    Order: 1
+                }
+            ],
 
         });
 
@@ -548,7 +540,6 @@ const Order = (props) => {
                         pageHeading={userAccState.PageHeading}
                         showCount={true}
                     />
-                    <label id="text">"text"</label>
                     <div className="px-2 mb-1 mt-n1" style={{ backgroundColor: "#dddddd" }} >
                         <div className=" mt-1 row">
                             <Col md="3" className="">
@@ -556,9 +547,9 @@ const Order = (props) => {
                                     <Label className="col-sm-5 p-2"
                                         style={{ width: "100px" }}>GRN Date</Label>
                                     <Col md="7">
-                                        <Flatpickr
-                                            id="orderdate1"
-                                            name="orderdate1"
+                                        {/* <Flatpickr
+                                            id="grndate"
+                                            name="grndate"
                                             value={podate}
                                             className="form-control d-block p-2 bg-white text-dark"
                                             placeholder="Select..."
@@ -571,7 +562,8 @@ const Order = (props) => {
                                                 // defaultDate: pageMode === "edit" ? "" : "today"
                                             }}
                                             onChange={(e, date) => { setpoDate(date) }}
-                                        />
+                                        /> */}
+                                        <Input type="text" value={grnItemData.OrderDate} disabled={true} />
                                     </Col>
                                 </FormGroup>
                             </Col>
@@ -581,13 +573,14 @@ const Order = (props) => {
                                     <Label className="col-md-4 p-2"
                                         style={{ width: "130px" }}>Supplier Name</Label>
                                     <Col md="7">
-                                        <Select
+                                        {/* <Select
                                             value={supplierSelect}
                                             classNamePrefix="select2-Customer"
                                             isDisabled={pageMode === "edit" ? true : false}
                                             options={supplierOptions}
                                             onChange={(e) => { setsupplierSelect(e) }}
-                                        />
+                                        /> */}
+                                        < Input type="text" value={grnItemData.SupplierName} disabled={true} />
                                     </Col>
                                 </FormGroup>
                             </Col >
@@ -603,10 +596,10 @@ const Order = (props) => {
                             </Col >
 
 
-                            <Col md="1" className="mt-3 ">
+                            {/* <Col md="1" className="mt-3 ">
                                 <Button type="button" color="btn btn-outline-success border-2 font-size-12 "
                                     onClick={GoButton_Handler}>Go</Button>
-                            </Col>
+                            </Col> */}
                         </div>
                     </div>
 
@@ -616,7 +609,7 @@ const Order = (props) => {
                             <ToolkitProvider
                                 keyField="id"
                                 // defaultSorted={defaultSorted}
-                                data={table}
+                                data={OrderItem}
                                 columns={pagesListColumns}
                                 search
                             >
@@ -658,9 +651,9 @@ const Order = (props) => {
 
 
                     {
-                        (items.length > 0) ? <div className="row save1" style={{ paddingBottom: 'center' }}>
+                        (OrderItem.length > 0) ? <div className="row save1" style={{ paddingBottom: 'center' }}>
                             <SaveButton pageMode={pageMode} userAcc={userAccState}
-                                module={"Order"} onClick={saveHandeller}
+                                module={"GRN"} onClick={saveHandeller}
                             />
                         </div>
                             : <div className="row save1"></div>
@@ -675,5 +668,5 @@ const Order = (props) => {
     }
 
 }
-export default Order
+export default GRNAdd
 
