@@ -359,12 +359,19 @@ export const PartySubParty_Update_API = (data, id) => put(`${url.PARTY_SUB_PARTY
 //PartyItems API
 
 export const GoButton_API = (data) => post(url.PARTYITEMS, data)//get api
-
 export const Party_Items = (data) => post(url.PARTYITEMS, data)// post api
 export const get_Party_Item_List = (party_id) => get(`${url.PARTYITEMS}/${party_id}`)//get api
 
 //suppiler 
 export const GetSupplier_API = (perty_id) => get(`${url.SUPPLIER}/${perty_id}`)//get api
+
+
+// SubGroup API
+export const get_SubGroup_List_Api = () => get(url.SUBGROUP_API)// get api
+export const Post_SubGroupList_API = (data) => post(url.SUBGROUP_API, data)// post api
+export const del_SubGroup_List_API = (id) => del(`${url.SUBGROUP_API}/${id}`)// delete api
+export const edit_SubGroup_List_Api = (id) => get(`${url.SUBGROUP_API}/${id}`)// edit api
+export const update_SubGroup_List_Api = (data, id) => put(`${url.SUBGROUP_API}/${id}`, data)// update api
 
 export {
   getLoggedInUser,
