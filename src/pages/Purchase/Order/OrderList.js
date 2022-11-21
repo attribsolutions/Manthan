@@ -99,16 +99,27 @@ const OrderList = () => {
 
     const onsavefunc = (list = []) => {
         var isGRNSelect = ''
+        var challanNo = ''
+        const grnRef = []
         if (list.length > 0) {
             list.forEach(ele => {
-                if (ele.GRNSelect) { isGRNSelect = isGRNSelect.concat(`${ele.id},`) }
+                if (ele.GRNSelect) {
+                    grnRef.push({
+                        Invoice: null,
+                        Order: ele.id,
+                        ChallanNo: ele.FullOrderNumber
+                    });
+                    isGRNSelect = isGRNSelect.concat(`${ele.id},`)
+                    challanNo = challanNo.concat(`${ele.FullOrderNumber},`)
+                }
             });
 
             if (isGRNSelect) {
                 const jsonBody = JSON.stringify({
                     OrderIDs: isGRNSelect
                 })
-                dispatch(getGRN_itemMode2(jsonBody, pageMode, GRN_ADD))
+
+                dispatch(getGRN_itemMode2({ jsonBody, pageMode, GRN_ADD, grnRef, challanNo }))
 
             } else {
                 alert("Please Select Order1")
@@ -124,7 +135,7 @@ const OrderList = () => {
             <div className="page-content">
                 <Breadcrumb
                     pageHeading={userAccState.PageHeading}
-                    newBtnView={true}
+                    newBtnView={(pageMode === "list") ? true : false}
                     showCount={true}
                     excelBtnView={true}
 

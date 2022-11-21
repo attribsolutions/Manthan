@@ -1,5 +1,5 @@
 const SaveButton = (props) => {
-  const { pageMode, userAcc, module,onClick} = props
+  const { pageMode, userAcc, module, onClick } = props
   return (
     <div>
       {
@@ -32,3 +32,13 @@ const SaveButton = (props) => {
   )
 }
 export default SaveButton
+
+export const CreatedBy = () => {
+  let createby
+  try {
+    createby = localStorage.getItem("userId")
+  } catch {
+    alert("Common Created By Error")
+  }
+  return createby
+}

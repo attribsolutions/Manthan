@@ -62,10 +62,11 @@ import { EDIT_ORDER_FOR_ORDER_PAGE } from "../OrderPageRedux/actionType";
 // }
 
 function* postGRNGenFunc({ data }) {
-
+  debugger
   yield put(SpinnerState(true))
   try {
     const response = yield call(GRN_Post_API, data);
+    debugger
     yield put(postGRNSuccess(response));
     yield put(SpinnerState(false))
   } catch (error) {
@@ -146,14 +147,21 @@ function* get_GRN_GerFunc() {
 }
 
 // List Page API
-function* getGRNitem_Mode2_GenFunc({ data, pageMode, path }) {
+function* getGRNitem_Mode2_GenFunc({ data }) {
   debugger
+  const { jsonBody, pageMode, GRN_ADD, grnRef, challanNo } = data
+
   yield put(SpinnerState(true))
   try {
-    const response = yield call(GRN_getItem_API, data);
+    const response = yield call(GRN_getItem_API, jsonBody);
 
     response["pageMode"] = pageMode;
-    response["path"] = path;
+    response.Data["GRNReferences"] = grnRef;
+    response.Data["challanNo"] = challanNo;
+
+    response["path"] = GRN_ADD; //Pagepath
+
+    debugger
     yield put(SpinnerState(false))
     yield put(getGRN_itemMode2_Success(response))
     // response.Data.OrderItem.forEach(ele => {
