@@ -25,7 +25,7 @@ import {
 import { Link, useHistory } from "react-router-dom"
 import { useDispatch, useSelector } from "react-redux";
 import classnames from "classnames"
-import Breadcrumb from "../../../components/Common/Breadcrumb";
+import Breadcrumb from "../../../components/Common/Breadcrumb3";
 import { AvField, AvForm, AvInput } from "availity-reactstrap-validation"
 import Select from "react-select";
 import { getPriceListData } from "../../../store/Administrator/PriceList/action";
@@ -51,13 +51,11 @@ import { PARTY_lIST } from "../../../routes/route_url"
 const PartyMaster = (props) => {
     const dispatch = useDispatch();
     const history = useHistory()
-
-    //*** "isEditdata get all data from ModuleID for Binding  Form controls
-    let editDataGatingFromList = props.state;
-    let propsPageMode = props.pageMode;
-    let pageModeProps = props.pageMode;
-
-    const [EditData, setEditData] = useState([]);
+    
+    const [EditData, setEditData] = useState('');
+    console.log(EditData)
+    // const obj = Object.assign({}, EditData)
+    // console.log("EditData",obj)
     const [pageMode, setPageMode] = useState("save");
     const [userPageAccessState, setUserPageAccessState] = useState(11);
     const [activeTab1, setactiveTab1] = useState("1")
@@ -70,7 +68,7 @@ const PartyMaster = (props) => {
     const [dropOpen, setDropOpen] = useState(false);
     const [AddressDetailsMaster, setAddressDetailsMaster] = useState([]);
     const [TransactionPrefixMaster, setTransactionPrefixMaster] = useState([]);
-
+    const [PartyPrefix, setPartyPrefix] = useState([]);
 
 
     const toggle1 = tab => {
@@ -146,29 +144,49 @@ const PartyMaster = (props) => {
                 setEditData(hasEditVal);
                 dispatch(Breadcrumb_inputName(hasEditVal.Name))
 
-                setState_DropDown_select({
-                    label: hasEditVal.StateName,
-                    value: hasEditVal.State,
-                });
+                setState_DropDown_select([{
+                    label: hasEditVal.State.Name,
+                    value: hasEditVal.State.id,
+                }]);
                 setDistrict_dropdown_Select({
-                    label: hasEditVal.DistrictName,
-                    value: hasEditVal.District,
+                    label: hasEditVal.District.Name,
+                    value: hasEditVal.District.id,
                 });
 
                 setPartyType_dropdown_Select({
-                    label: hasEditVal.PartyTypeName,
-                    value: hasEditVal.PartyType,
+                    label: hasEditVal.PartyType.Name,
+                    value: hasEditVal.PartyType.id,
                 });
 
                 setCompanyList_dropdown_Select({
-                    label: hasEditVal.CompanyName,
-                    value: hasEditVal.Company,
+                    label: hasEditVal.Company.Name,
+                    value: hasEditVal.Company.id,
                 });
                 setPriceList_dropdown_Select({
-                    label: hasEditVal.PriceListName,
-                    value: hasEditVal.PriceList,
+                    label: hasEditVal.PriceList.Name,
+                    value: hasEditVal.PriceList.id,
                 });
 
+                // PartyPrefix: [
+                //     {
+                //       Orderprefix: "PO",
+                //       Invoiceprefix: "IN",
+                //       Grnprefix: "GN",
+                //       Receiptprefix: "RI"
+                //     }
+                //   ]
+
+                let PartyPrefix = hasEditVal.PartyPrefix.map((index) => {
+                    return {
+                        Orderprefix: index.Orderprefix,
+                        Invoiceprefix: index.Invoiceprefix,
+                        Grnprefix: index.Grnprefix,
+                        Receiptprefix: index.Receiptprefix
+                    }
+                })
+               
+                // setEditData(PartyPrefix)
+                // setPartyPrefix(hasEditVal.PartyPrefix)
                 // setAddressDetailsMaster(hasEditVal.PagePageAccess);
                 setAddressDetailsMaster(hasEditVal.PartyAddress)
 
@@ -306,7 +324,7 @@ const PartyMaster = (props) => {
 
 
     const test1 = () => {
-        debugger
+
         return (
             <>
                 <div id="color"  >
@@ -377,6 +395,14 @@ const PartyMaster = (props) => {
             UpdatedBy: 1,
             UpdatedOn: "2022-06-24T11:16:53.330888Z",
             PartyAddress: AddressDetailsMaster,
+            PartyPrefix: [
+                {
+                    Orderprefix: values.Orderprefix,
+                    Invoiceprefix: values.Invoiceprefix,
+                    Grnprefix: values.Grnprefix,
+                    Receiptprefix: values.Receiptprefix,
+                }
+            ]
 
         });
 
@@ -402,7 +428,7 @@ const PartyMaster = (props) => {
                     <Container fluid>
                         <AvForm onValidSubmit={(e, v) => { FormSubmitButton_Handler(e, v); }}>
                             {/* Render Breadcrumbs */}
-                            <Breadcrumb breadcrumbItem={userPageAccessState.PageHeading} />
+                            <Breadcrumb pageHeading={userPageAccessState.PageHeading} />
 
                             <Row>
 
@@ -835,16 +861,85 @@ const PartyMaster = (props) => {
                                                     <Row>
                                                         <Col md={12}  >
                                                             <Row className="mt-3">
-                                                                <Col className=" col col-11 ">
+                                                                {/* <Col className=" col col-11 ">
                                                                     <Transaction tableData={TransactionPrefixMaster} func={setTransactionPrefixMaster} />
-                                                                </Col>
+                                                                </Col> */}
+                                                                <Card className="text-black" style={{ backgroundColor: "whitesmoke" }} >
+                                                                    <Col>
+                                                                        <FormGroup className="mb-3 mt-3">
+                                                                            <Row md="5">
+
+                                                                                <Label htmlFor="validationCustom01"> Order Prefix</Label>
+                                                                                <AvField
+                                                                                    // value={EditData.PartyPrefix[0].Orderprefix}
+                                                                                    type="text"
+                                                                                    autoComplete='off'
+                                                                                    name="Orderprefix"
+                                                                                    placeholder="Please Enter Order Prefix"
+                                                                                    className="form-control "
+                                                                                />
+                                                                            </Row>
+
+                                                                        </FormGroup>
+                                                                    </Col>
+                                                                    {/* <Col md="1"></Col> */}
+                                                                    <Col >
+                                                                        <FormGroup className="mb-3">
+                                                                            <Row md="5">
+
+                                                                                <Label htmlFor="validationCustom01">Invoice Prefix</Label>
+                                                                                <AvField
+                                                                                    // value={EditData.PartyPrefix[0].Invoiceprefix}
+                                                                                    type="text"
+                                                                                    autoComplete='off'
+                                                                                    name="Invoiceprefix"
+                                                                                    placeholder="Please Enter Invoice Prefix "
+                                                                                    className="form-control"
+                                                                                />
+                                                                            </Row>
+
+                                                                        </FormGroup>
+                                                                    </Col>
+                                                                    {/* <Col md="1"></Col>  */}
+                                                                    <Col>
+                                                                        <FormGroup className="mb-3">
+                                                                            <Row md="5">
+                                                                                <Label htmlFor="validationCustom01" > GRN Prefix</Label>
+                                                                                <AvField
+                                                                                    // value={EditData.PartyPrefix[0].Grnprefix}
+                                                                                    type="text"
+                                                                                    autoComplete='off'
+                                                                                    name="Grnprefix"
+                                                                                    placeholder="Please Enter GRN Prefix"
+                                                                                    className="form-control "
+                                                                                />
+                                                                            </Row>
+
+                                                                        </FormGroup>
+                                                                    </Col>
+                                                                    {/* <Col md="1"></Col> */}
+
+                                                                    <Col>
+                                                                        <FormGroup className="mb-3">
+                                                                            <Row md="5">
+
+                                                                                <Label htmlFor="validationCustom01"> Receipt Prefix</Label>
+                                                                                <AvField
+                                                                                    // value={EditData.PartyPrefix[0].Receiptprefix}
+                                                                                    type="text"
+                                                                                    autoComplete='off'
+                                                                                    name="Receiptprefix"
+                                                                                    placeholder="Please Enter Receipt Prefix"
+                                                                                    className="form-control"
+                                                                                />
+                                                                            </Row>
+
+                                                                        </FormGroup>
+                                                                    </Col>
+                                                                </Card>
                                                             </Row>
                                                         </Col>
                                                     </Row>
-
-
-
-
 
                                                 </TabPane>
                                             </TabContent>
