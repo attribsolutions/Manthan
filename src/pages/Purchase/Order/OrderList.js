@@ -174,8 +174,8 @@ const OrderList = () => {
                                     style={{ width: "100px" }}>To Date</Label>
                                 <Col md="7">
                                     <Flatpickr
-                                        id="orderdate"
-                                        name="orderdate"
+                                        id="orderdate1"
+                                        name="orderdate1"
                                         // value={podate}
                                         className="form-control d-block p-2 bg-white text-dark"
                                         placeholder="Select..."
@@ -202,7 +202,7 @@ const OrderList = () => {
                                         value={"supplierSelect"}
                                         classNamePrefix="select2-Customer"
                                         isDisabled={"pageMode" === "edit" ? true : false}
-                                        options={"supplierOptions"}
+                                        //options={"supplierOptions"}
                                     // onChange={(e) => { setsupplierSelect(e) }}
                                     />
                                 </Col>
