@@ -94,7 +94,7 @@ const Breadcrumb = props => {
   }, [excelData])
 
   const DownloadInExcelButtonHanler = (event, values) => {
-    debugger
+    
     var list = []
     var object1 = {}
     var selectedValues = Object.keys(values);

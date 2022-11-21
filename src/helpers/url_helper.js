@@ -20,6 +20,7 @@ export const GET_ITEM_FOR_ORDER = "/GetItemsForOrder"
 
 // GRN
 export const GET_GRN_ITEM = "/MakeOrdersGrn"
+export const GRN = "/GRN"
 
 
 

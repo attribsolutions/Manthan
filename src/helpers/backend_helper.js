@@ -151,11 +151,11 @@ export const getDivisionOrders = () => get(`${url.ORDER_PAGE_API}?FromDate=2022-
 export const getOrderList_For_Listpage = () => get(url.ORDER_PAGE_API)// Get subModule For H_pages
 
 //GRN PAGE grn 
-export const GRN_get_API = (data) => get(url.ORDER_PAGE_API)
-export const GRN_Edit_API = (id) => get(`${url.ROLE_MASTER_API}/${id}`)// edit api
-export const GRN_Post_API = (data) => post(url.ORDER_PAGE_API, data)//get api
-export const GRN_update_API = (id, data) => put(`${url.ORDER_PAGE_API}/${id}`, data)// update api
-export const GRN_delete_API = (id) => del(`${url.ORDER_PAGE_API}/${id}`)//Delete Order
+export const GRN_get_API = (data) => get(url.GRN)
+export const GRN_Edit_API = (id) => get(`${url.GRN}/${id}`)// edit api
+export const GRN_Post_API = (data) => post(url.GRN, data)//get api
+export const GRN_update_API = (id, data) => put(`${url.GRN}/${id}`, data)// update api
+export const GRN_delete_API = (id) => del(`${url.GRN}/${id}`)//Delete Order
 export const GRN_getItem_API = (data) => post(url .GET_GRN_ITEM,data)
 
 //Administrator   Modules submit  
