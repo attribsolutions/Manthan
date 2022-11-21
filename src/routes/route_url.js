@@ -77,7 +77,7 @@ export const GRN_ADD = "/GRN"
 export const PARTY_SUB_PARTY = "/PartySubParty"
 export const PARTY_SUB_PARTY_lIST = "/PartySubPartyList"
 
-export const PARTY_ITEMS = "/PartyItemsMaster"
+// export const PARTY_ITEMS = "/PartyItemsMaster"
 
 export const SEARCH_BOX2 = "/SearchBoxSecond"
 export const SEARCH_BOX3 = "/SerachBox3"
@@ -85,7 +85,15 @@ export const SEARCH_BOX3 = "/SerachBox3"
 export const TERMS_AND_CONDITION = "/TermsAndCondtionsMaster"
 export const TERMS_AND_CONDITION_LIST = "/TermsAndCondtionsList"
 
-export const PARTYITEM = '/PartyItems'
+
+export const PARTYITEM='/PartyItems'
+export const PARTYITEM_LIST='/PartyItemsList'
+
+
+export const SUBGROUP="/SubGroupMaster"
+export const SUBGROUP_LIST="/SubGroupList"
+
+
 
 
 

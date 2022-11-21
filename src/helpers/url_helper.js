@@ -154,6 +154,13 @@ export const GROUP_TYPE_API = '/GroupTypes'
 // Group Api
 export const GROUP_API = '/Group'
 
+// SubGroup API
+export const SUBGROUP_API  = '/SubGroups'
+
+
+
+// SUBGROUP_API
+
 // GST API
 export const GST_LIST_API = '/GstHsnCode' // for list page
 export const GO_BUTTON_POST_API_FOR_GST_MASTER = '/GetGstHsncode' // for go button
