@@ -9,6 +9,12 @@ import AddressDetailsTable from './Table';
 import { AvField, AvInput } from 'availity-reactstrap-validation';
 
 const Transaction = () => {
+    // const [Orderprefix, setOrderprefix] = useState('');
+    // const [Invoiceprefix, setInvoiceprefix] = useState('');
+    // const [Grnprefix, setGrnprefix] = useState('');
+    // const [Receiptprefix, setReceiptprefix] = useState('');
+
+
     return (
 
         <Row>
@@ -24,7 +30,7 @@ const Transaction = () => {
                                     <AvField
                                         type="text"
                                         autoComplete='off'
-                                        name="FSSAINo"
+                                        name="Orderprefix"
                                         placeholder="Please Enter FSSAINo"
                                         className="form-control "
                                     />
@@ -41,7 +47,7 @@ const Transaction = () => {
                                     <AvField
                                         type="text"
                                         autoComplete='off'
-                                        name="Invoice"
+                                        name="Invoiceprefix"
                                         placeholder="Please Enter Invoice "
                                         className="form-control"
                                     />
@@ -57,7 +63,7 @@ const Transaction = () => {
                                     <AvField
                                         type="text"
                                         autoComplete='off'
-                                        name="GRN"
+                                        name="Grnprefix"
                                         placeholder="Please Enter GRN"
                                         className="form-control "
                                     />
@@ -75,7 +81,7 @@ const Transaction = () => {
                                     <AvField
                                         type="text"
                                         autoComplete='off'
-                                        name="Receipt"
+                                        name="Receiptprefix"
                                         placeholder="Please Enter Receipt Prefix"
                                         className="form-control"
                                     />
