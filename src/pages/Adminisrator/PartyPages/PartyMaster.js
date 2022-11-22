@@ -45,17 +45,18 @@ import {
 import { AlertState, Breadcrumb_inputName } from "../../../store/actions"
 import Tree from "./Tree"
 import AddressDetails_Tab from "."
-import Transaction from "./Transaction Prefix"
 import { PARTY_lIST } from "../../../routes/route_url"
 
 const PartyMaster = (props) => {
     const dispatch = useDispatch();
     const history = useHistory()
-    
+
     const [EditData, setEditData] = useState('');
-    console.log(EditData)
-    // const obj = Object.assign({}, EditData)
-    // console.log("EditData",obj)
+
+    // const PrefixEditData = Object.assign({}, EditData.PartyPrefix)
+
+    // console.log("EditData", PrefixEditData)
+
     const [pageMode, setPageMode] = useState("save");
     const [userPageAccessState, setUserPageAccessState] = useState(11);
     const [activeTab1, setactiveTab1] = useState("1")
@@ -69,7 +70,7 @@ const PartyMaster = (props) => {
     const [AddressDetailsMaster, setAddressDetailsMaster] = useState([]);
     const [TransactionPrefixMaster, setTransactionPrefixMaster] = useState([]);
     const [PartyPrefix, setPartyPrefix] = useState([]);
-
+    console.log("PartyPrefix", PartyPrefix)
 
     const toggle1 = tab => {
         if (activeTab1 !== tab) {
@@ -144,10 +145,10 @@ const PartyMaster = (props) => {
                 setEditData(hasEditVal);
                 dispatch(Breadcrumb_inputName(hasEditVal.Name))
 
-                setState_DropDown_select([{
+                setState_DropDown_select({
                     label: hasEditVal.State.Name,
                     value: hasEditVal.State.id,
-                }]);
+                });
                 setDistrict_dropdown_Select({
                     label: hasEditVal.District.Name,
                     value: hasEditVal.District.id,
@@ -167,27 +168,7 @@ const PartyMaster = (props) => {
                     value: hasEditVal.PriceList.id,
                 });
 
-                // PartyPrefix: [
-                //     {
-                //       Orderprefix: "PO",
-                //       Invoiceprefix: "IN",
-                //       Grnprefix: "GN",
-                //       Receiptprefix: "RI"
-                //     }
-                //   ]
-
-                let PartyPrefix = hasEditVal.PartyPrefix.map((index) => {
-                    return {
-                        Orderprefix: index.Orderprefix,
-                        Invoiceprefix: index.Invoiceprefix,
-                        Grnprefix: index.Grnprefix,
-                        Receiptprefix: index.Receiptprefix
-                    }
-                })
-               
-                // setEditData(PartyPrefix)
-                // setPartyPrefix(hasEditVal.PartyPrefix)
-                // setAddressDetailsMaster(hasEditVal.PagePageAccess);
+                setPartyPrefix(hasEditVal.PartyPrefix)
                 setAddressDetailsMaster(hasEditVal.PartyAddress)
 
                 dispatch(editPartyIDSuccess({ Status: false }));
@@ -864,6 +845,7 @@ const PartyMaster = (props) => {
                                                                 {/* <Col className=" col col-11 ">
                                                                     <Transaction tableData={TransactionPrefixMaster} func={setTransactionPrefixMaster} />
                                                                 </Col> */}
+
                                                                 <Card className="text-black" style={{ backgroundColor: "whitesmoke" }} >
                                                                     <Col>
                                                                         <FormGroup className="mb-3 mt-3">
@@ -871,7 +853,7 @@ const PartyMaster = (props) => {
 
                                                                                 <Label htmlFor="validationCustom01"> Order Prefix</Label>
                                                                                 <AvField
-                                                                                    // value={EditData.PartyPrefix[0].Orderprefix}
+                                                                                    value={PartyPrefix.length === 1 ? PartyPrefix[0].Orderprefix : ''}
                                                                                     type="text"
                                                                                     autoComplete='off'
                                                                                     name="Orderprefix"
@@ -889,7 +871,7 @@ const PartyMaster = (props) => {
 
                                                                                 <Label htmlFor="validationCustom01">Invoice Prefix</Label>
                                                                                 <AvField
-                                                                                    // value={EditData.PartyPrefix[0].Invoiceprefix}
+                                                                                    value={PartyPrefix.length === 1 ? PartyPrefix[0].Invoiceprefix : ''}
                                                                                     type="text"
                                                                                     autoComplete='off'
                                                                                     name="Invoiceprefix"
@@ -906,7 +888,7 @@ const PartyMaster = (props) => {
                                                                             <Row md="5">
                                                                                 <Label htmlFor="validationCustom01" > GRN Prefix</Label>
                                                                                 <AvField
-                                                                                    // value={EditData.PartyPrefix[0].Grnprefix}
+                                                                                    value={PartyPrefix.length === 1 ? PartyPrefix[0].Grnprefix : ''}
                                                                                     type="text"
                                                                                     autoComplete='off'
                                                                                     name="Grnprefix"
@@ -925,7 +907,7 @@ const PartyMaster = (props) => {
 
                                                                                 <Label htmlFor="validationCustom01"> Receipt Prefix</Label>
                                                                                 <AvField
-                                                                                    // value={EditData.PartyPrefix[0].Receiptprefix}
+                                                                                    value={PartyPrefix.length === 1 ? PartyPrefix[0].Receiptprefix : ''}
                                                                                     type="text"
                                                                                     autoComplete='off'
                                                                                     name="Receiptprefix"
@@ -937,6 +919,7 @@ const PartyMaster = (props) => {
                                                                         </FormGroup>
                                                                     </Col>
                                                                 </Card>
+
                                                             </Row>
                                                         </Col>
                                                     </Row>

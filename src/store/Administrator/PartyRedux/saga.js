@@ -2,8 +2,33 @@ import { call, put, takeEvery } from "redux-saga/effects";
 import { GetPriceList_For_Dropdown, GetCompanyByDivisionTypeID_For_Dropdown, GetDistrictOnState_For_Dropdown, GetPartyTypeByDivisionTypeID_For_Dropdown, Party_Master_Delete_API, Party_Master_Edit_API, Party_Master_Get_API, Party_Master_Post_API, Party_Master_Update_API, GetAddressTypes_For_Dropdown, GetParty_For_Dropdown, GetPartyTypes_For_Dropdown, GetCompany_For_Dropdown } from "../../../helpers/backend_helper";
 import { AlertState } from "../../Utilites/CustomAlertRedux/actions";
 import { SpinnerState } from "../../Utilites/Spinner/actions";
-import { deletePartyIDSuccess, editPartyIDSuccess, GetCompanyByDivisionTypeIDSuccess, getDistrictOnStateSuccess, getPartyListAPISuccess, GetPartyTypeByDivisionTypeIDSuccess, getPriceListSuccess, postPartyDataSuccess, updatePartyIDSuccess, getAddressTypesSuccess, getPartySuccess, getPartyTypesSuccess, getCompanySuccess } from "./action";
-import { DELETE_PARTY_ID, EDIT_PARTY_ID, GET_COMPANY_BY_DIVISIONTYPES_ID, GET_DISTRICT_ON_STATE, GET_PRICELIST, GET_ADDRESSTYPES, GET_PARTTYPE_BY_DIVISIONTYPES_ID, GET_PARTY_LIST_API, POST_PARTY_DATA, UPDATE_PARTY_ID, GET_PARTY, GET_PARTYTYPES, GET_COMPANY } from "./actionTypes";
+import {
+  deletePartyIDSuccess,
+  editPartyIDSuccess,
+  GetCompanyByDivisionTypeIDSuccess,
+  getDistrictOnStateSuccess,
+  getPartyListAPISuccess,
+  GetPartyTypeByDivisionTypeIDSuccess,
+  getPriceListSuccess,
+  postPartyDataSuccess,
+  updatePartyIDSuccess,
+  getAddressTypesSuccess,
+  getPartyTypesSuccess,
+  getCompanySuccess
+} from "./action";
+import {
+  DELETE_PARTY_ID, EDIT_PARTY_ID,
+  GET_COMPANY_BY_DIVISIONTYPES_ID,
+  GET_DISTRICT_ON_STATE,
+  GET_PRICELIST,
+  GET_ADDRESSTYPES,
+  GET_PARTTYPE_BY_DIVISIONTYPES_ID,
+  GET_PARTY_LIST_API,
+  POST_PARTY_DATA,
+  UPDATE_PARTY_ID,
+  GET_PARTYTYPES,
+  GET_COMPANY
+} from "./actionTypes";
 
 function* Get_Party_GenratorFunction() {
   yield put(SpinnerState(true))
@@ -41,7 +66,9 @@ function* Get_Party_GenratorFunction() {
       isActive: index.isActive,
       id: index.id,
       PartyAddress: address(index)
+
     }));
+   
 
     yield put(SpinnerState(false))
     yield put(getPartyListAPISuccess(data1))
@@ -58,7 +85,6 @@ function* Submit_Party_GenratorFunction({ Data }) {
   yield put(SpinnerState(true))
   try {
     const response = yield call(Party_Master_Post_API, Data);
-    console.log("response", response)
     yield put(SpinnerState(false))
     yield put(postPartyDataSuccess(response));
   } catch (error) {
@@ -86,9 +112,40 @@ function* Delete_Party_GenratorFunction({ id }) {
 }
 
 function* Edit_Party_GenratorFunction({ id, pageMode }) {
+  debugger
   try {
+    debugger
     const response = yield call(Party_Master_Edit_API, id);
     response.pageMode = pageMode
+    console.log("response",response)
+
+    // const data1 = response.Data.map((index) => ({
+    //   StateId: index.State.id,
+    //   State: index.State.Name,
+    //   DistrictId: index.District.id,
+    //   District: index.District.Name,
+    //   CompanyId: index.Company.id,
+    //   Company: index.Company.Name,
+    //   PartyTypeId: index.PartyType.id,
+    //   PartyTypeName: index.PartyType.Name,
+    //   PriceListId: index.PriceList.id,
+    //   PriceListName: index.PriceList.Name,
+    //   Name: index.Name,
+    //   Email: index.Email,
+    //   MobileNo: index.MobileNo,
+    //   AlternateContactNo: index.AlternateContactNo,
+    //   GSTIN: index.GSTIN,
+    //   PAN: index.PAN,
+    //   IsDivision: index.IsDivision,
+    //   MkUpMkDn: index.MkUpMkDn,
+    //   isActive: index.isActive,
+    //   id: index.id,
+    //   // PartyAddress: address(index)
+
+    // }));
+
+    // console.log("data1",data1)
+
     yield put(editPartyIDSuccess(response));
 
   } catch (error) {
