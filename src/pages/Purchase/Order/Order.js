@@ -192,8 +192,6 @@ const Order = (props) => {
         }
     }, [postMsg])
 
-
-
     useEffect(() => {
         if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
             history.push({

@@ -17,9 +17,9 @@ import PurchaseListPage from "../../../components/Common/CmponentRelatedCommonFi
 import Order from "./Order";
 import { GRN_ADD, ORDER } from "../../../routes/route_url";
 import { Button, Col, FormGroup, Label } from "reactstrap";
-import Breadcrumb from "../../../components/Common/Breadcrumb3";
+import Breadcrumb from "../../../components/Common/Breadcrumb";
 import { useHistory } from "react-router-dom";
-import { getGRN_itemMode2, getGRN_itemMode2_Success } from "../../../store/Purchase/GRNRedux/actions";
+import { getGRN_itemMode2 } from "../../../store/Purchase/GRNRedux/actions";
 
 const OrderList = () => {
 
@@ -28,11 +28,12 @@ const OrderList = () => {
 
     const location = { ...history.location }
     const hasPageMode = location.hasOwnProperty("pageMode")
-    let initial = "list"
 
-    if (hasPageMode) { initial = location.pageMode }
 
-    const [pageMode, setpageMode] = useState(initial)
+
+
+    const [pageMode, setpageMode] = useState("list")
+    const [userAccState, setUserAccState] = useState('');
 
     const reducers = useSelector(
         (state) => ({
@@ -56,16 +57,35 @@ const OrderList = () => {
         deleteSucc: deleteOrderIdSuccess
     }
 
-
     // Featch Modules List data  First Rendering
     useEffect(() => {
+
+        let mode = "list"
+        if (hasPageMode) {
+            mode = location.pageMode
+            setpageMode(mode)
+        }
+        const pageId = (mode === "list") ? 54 : 60;
         dispatch(commonPageFieldListSuccess(null))
-        dispatch(commonPageFieldList(54))
+        dispatch(commonPageFieldList(pageId))
         dispatch(getOrderListPage());
     }, []);
 
-    const { GRNitem } = reducers
-    
+    const { pageField, userAccess, GRNitem } = reducers;
+
+    useEffect(() => {
+        let mode = "list"
+        if (hasPageMode) { mode = location.pageMode }
+        const pageId = (mode === "list") ? 54 : 60;
+
+        let userAcc = userAccess.find((inx) => {
+            return (inx.id === pageId)
+        })
+        if (!(userAcc === undefined)) {
+            setUserAccState(userAcc)
+        }
+    }, [userAccess])
+
     useEffect(() => {
         if (GRNitem.Status === true && GRNitem.StatusCode === 200) {
             // GRNitem.Status = false
@@ -79,17 +99,28 @@ const OrderList = () => {
 
     const onsavefunc = (list = []) => {
         var isGRNSelect = ''
+        var challanNo = ''
+        const grnRef = []
         if (list.length > 0) {
             list.forEach(ele => {
-                if (ele.GRNSelect) { isGRNSelect = isGRNSelect.concat(`${ele.id},`) }
+                if (ele.GRNSelect) {
+                    grnRef.push({
+                        Invoice: null,
+                        Order: ele.id,
+                        ChallanNo: ele.FullOrderNumber
+                    });
+                    isGRNSelect = isGRNSelect.concat(`${ele.id},`)
+                    challanNo = challanNo.concat(`${ele.FullOrderNumber},`)
+                }
             });
 
             if (isGRNSelect) {
                 const jsonBody = JSON.stringify({
                     OrderIDs: isGRNSelect
                 })
-                dispatch(getGRN_itemMode2(jsonBody, pageMode, GRN_ADD))
-               
+
+                dispatch(getGRN_itemMode2({ jsonBody, pageMode, GRN_ADD, grnRef, challanNo }))
+
             } else {
                 alert("Please Select Order1")
             }
@@ -97,14 +128,14 @@ const OrderList = () => {
 
     }
 
-    const { pageField } = reducers;
+
 
     return (
         <React.Fragment>
             <div className="page-content">
                 <Breadcrumb
-                    pageHeading={"Order List"}
-                    newBtnView={true}
+                    pageHeading={userAccState.PageHeading}
+                    newBtnView={(pageMode === "list") ? true : false}
                     showCount={true}
                     excelBtnView={true}
 
@@ -143,8 +174,8 @@ const OrderList = () => {
                                     style={{ width: "100px" }}>To Date</Label>
                                 <Col md="7">
                                     <Flatpickr
-                                        id="orderdate"
-                                        name="orderdate"
+                                        id="orderdate1"
+                                        name="orderdate1"
                                         // value={podate}
                                         className="form-control d-block p-2 bg-white text-dark"
                                         placeholder="Select..."
@@ -171,7 +202,7 @@ const OrderList = () => {
                                         value={"supplierSelect"}
                                         classNamePrefix="select2-Customer"
                                         isDisabled={"pageMode" === "edit" ? true : false}
-                                        options={"supplierOptions"}
+                                        //options={"supplierOptions"}
                                     // onChange={(e) => { setsupplierSelect(e) }}
                                     />
                                 </Col>

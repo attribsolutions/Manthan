@@ -27,10 +27,7 @@ export const getGRN_itemMode2_Success = list => ({
   type: GET_GRN_ITEM_MODE_2_SUCCESS,
   payload: list,
 })
-export const getGRN_itemMode3_Success = list => ({
-  type: GET_GRN_ITEM_MODE_3_SUCCESS,
-  payload: list,
-})
+
 
 //get listpage api
 export const getGRNListPage = () => ({

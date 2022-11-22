@@ -29,43 +29,12 @@ import { SpinnerState } from "../../Utilites/Spinner/actions";
 import { AlertState } from "../../Utilites/CustomAlertRedux/actions";
 import { EDIT_ORDER_FOR_ORDER_PAGE } from "../OrderPageRedux/actionType";
 
-
-// function* goButtonGenFunc({ data, hasEditVal }) {
-
-//   yield put(SpinnerState(true))
-//   try {
-//     const response = yield call(OrderPage_GoButton_API, data);
-//     if (hasEditVal) {
-//       response.Data.forEach(element => {
-//         hasEditVal.OrderItem.forEach(ele => {
-//           if (element.id === ele.Item) {
-//             element["inpRate"] = ele.Rate
-//             element["inpQty"] = ele.Quantity
-//             element["totalAmount"] = ele.Amount
-//             element["UOM"] = ele.Unit
-//             element["UOMLabel"] = ele.UnitName
-//             element["inpBaseUnitQty"] = ele.BaseUnitQuantity
-
-//           }
-//         })
-//       });
-//     }
-//     yield put(goButtonSuccess(response.Data));
-//     yield put(SpinnerState(false))
-//   } catch (error) {
-//     yield put(SpinnerState(false))
-//     yield put(AlertState({
-//       Type: 4,
-//       Status: true, Message: "500 Error Message",
-//     }));
-//   }
-// }
-
 function* postGRNGenFunc({ data }) {
-
+  debugger
   yield put(SpinnerState(true))
   try {
     const response = yield call(GRN_Post_API, data);
+    debugger
     yield put(postGRNSuccess(response));
     yield put(SpinnerState(false))
   } catch (error) {
@@ -133,6 +102,18 @@ function* get_GRN_GerFunc() {
   yield put(SpinnerState(true))
   try {
     const response = yield call(GRN_get_API);
+    // const convertList = response.Data.map(i => {
+    //   delete i.age
+    //   id,
+    //   GRNDate,
+    //   Customer,
+    //   GRNNumber,
+    //   GrandTotal,
+    //   Party,
+    //   CreatedBy,
+    //   UpdatedBy
+    // })
+    // debugger
     yield put(SpinnerState(false))
     yield put(getGRNListPageSuccess(response.Data))
 
@@ -146,29 +127,36 @@ function* get_GRN_GerFunc() {
 }
 
 // List Page API
-function* getGRNitem_Mode2_GenFunc({ data, pageMode, path }) {
+function* getGRNitem_Mode2_GenFunc({ data }) {
   debugger
+  const { jsonBody, pageMode, GRN_ADD, grnRef, challanNo } = data
+
   yield put(SpinnerState(true))
   try {
-    const response = yield call(GRN_getItem_API, data);
+    const response = yield call(GRN_getItem_API, jsonBody);
 
     response["pageMode"] = pageMode;
-    response["path"] = path;
+    response.Data["GRNReferences"] = grnRef;
+    response.Data["challanNo"] = challanNo;
+
+    response["path"] = GRN_ADD; //Pagepath
+
+    debugger
     yield put(SpinnerState(false))
     yield put(getGRN_itemMode2_Success(response))
-    response.Data.OrderItem.forEach(ele => {
+    // response.Data.OrderItem.forEach(ele => {
 
 
-      ele["inpRate"] = ele.Rate
-      ele["inpQty"] = ele.Quantity
-      ele["totalAmount"] = ele.Amount
-      ele["UOM"] = ele.Unit
-      ele["UOMLabel"] = ele.UnitName
-      ele["inpBaseUnitQty"] = ele.BaseUnitQuantity
+    //   ele["inpRate"] = ele.Rate
+    //   ele["inpQty"] = ele.Quantity
+    //   ele["totalAmount"] = ele.Amount
+    //   ele["UOM"] = ele.Unit
+    //   ele["UOMLabel"] = ele.UnitName
+    //   ele["inpBaseUnitQty"] = ele.BaseUnitQuantity
 
 
-    });
-    yield put(getGRN_itemMode3_Success(response.Data.OrderItem))
+    // });
+    // yield put(getGRN_itemMode3_Success(response.Data.OrderItem))
 
 
   } catch (error) {

@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 
 import { commonPageFieldList, commonPageFieldListSuccess, } from "../../../store/actions";
 import Order from "../Order/Order";
-import { ORDER, ORDER_lIST } from "../../../routes/route_url";
+import { GST_ADD_Mode_2, ORDER, ORDER_lIST } from "../../../routes/route_url";
 import { Button, Col, FormGroup, Label } from "reactstrap";
 import Breadcrumb from "../../../components/Common/Breadcrumb";
 import Select from "react-select";
@@ -55,7 +55,6 @@ const GRNList = () => {
 
     const { pageField } = reducers;
 
-debugger
     return (
 
         <React.Fragment>
@@ -66,7 +65,7 @@ debugger
                     showCount={true}
                     excelBtnView={true}
                     pageMode={"GRNMode2"}
-                    newBtnPagePath={ORDER_lIST}
+                    newBtnPagePath={GST_ADD_Mode_2}
                     excelData={"downList"} />
 
                 <div className="px-2 mb-1 mt-n1" style={{ backgroundColor: "#dddddd" }} >
@@ -153,7 +152,7 @@ debugger
                             MasterModal={Order}
                             masterPath={ORDER}
                             ButtonMsgLable={"GRN"}
-                            deleteName={"Name"}
+                            deleteName={"CreatedBy"}
                             pageMode={"List"}
 
                         />
