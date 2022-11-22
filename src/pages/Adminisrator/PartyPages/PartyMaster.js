@@ -1,10 +1,7 @@
 import React, { useEffect, useState } from "react"
 import MetaTags from "react-meta-tags"
 import './demo.scss'
-
-
 import {
-    Button,
     Card,
     CardBody,
     CardHeader,
@@ -13,13 +10,11 @@ import {
     FormGroup,
     Input,
     Label,
-    Modal,
     Nav,
     NavItem,
     NavLink,
     Row,
     TabContent,
-    Table,
     TabPane,
 } from "reactstrap"
 import { Link, useHistory } from "react-router-dom"
@@ -44,19 +39,14 @@ import {
 } from "../../../store/Administrator/PartyRedux/action"
 import { AlertState, Breadcrumb_inputName } from "../../../store/actions"
 import Tree from "./Tree"
-import AddressDetails_Tab from "."
 import { PARTY_lIST } from "../../../routes/route_url"
+import AddressDetails_Tab from "./AddressDetailsTab"
 
 const PartyMaster = (props) => {
     const dispatch = useDispatch();
     const history = useHistory()
 
     const [EditData, setEditData] = useState('');
-
-    // const PrefixEditData = Object.assign({}, EditData.PartyPrefix)
-
-    // console.log("EditData", PrefixEditData)
-
     const [pageMode, setPageMode] = useState("save");
     const [userPageAccessState, setUserPageAccessState] = useState(11);
     const [activeTab1, setactiveTab1] = useState("1")
@@ -66,11 +56,8 @@ const PartyMaster = (props) => {
     const [companyList_dropdown_Select, setCompanyList_dropdown_Select] = useState("");
     const [partyType_dropdown_Select, setPartyType_dropdown_Select] = useState("");
     const [PriceList_dropdown_Select, setPriceList_dropdown_Select] = useState("");
-    const [dropOpen, setDropOpen] = useState(false);
     const [AddressDetailsMaster, setAddressDetailsMaster] = useState([]);
-    const [TransactionPrefixMaster, setTransactionPrefixMaster] = useState([]);
     const [PartyPrefix, setPartyPrefix] = useState([]);
-    console.log("PartyPrefix", PartyPrefix)
 
     const toggle1 = tab => {
         if (activeTab1 !== tab) {
@@ -81,7 +68,6 @@ const PartyMaster = (props) => {
     //Access redux store Data /  'save_ModuleSuccess' action data
     const { PostAPIResponse,
         State,
-        // PriceList,
         DistrictOnState,
         Company,
         PartyTypes,
@@ -110,15 +96,12 @@ const PartyMaster = (props) => {
 
         let userAcc = null;
         let locationPath = location.pathname;
-
         if (hasShowModal) {
             locationPath = props.masterPath;
         };
-
         userAcc = userAccess.find((inx) => {
             return (`/${inx.ActualPagePath}` === locationPath)
         })
-
         if (userAcc) {
             setUserPageAccessState(userAcc)
         };
@@ -170,7 +153,6 @@ const PartyMaster = (props) => {
 
                 setPartyPrefix(hasEditVal.PartyPrefix)
                 setAddressDetailsMaster(hasEditVal.PartyAddress)
-
                 dispatch(editPartyIDSuccess({ Status: false }));
             }
         }
@@ -183,8 +165,6 @@ const PartyMaster = (props) => {
         dispatch(getPriceList());
         dispatch(getPartyTypes());
         dispatch(getCompany());
-
-
     }, [dispatch]);
 
     useEffect(() => {
@@ -196,7 +176,6 @@ const PartyMaster = (props) => {
             setPriceList_dropdown_Select('')
             setDistrict_dropdown_Select('')
             setState_DropDown_select('')
-            // setMKupMkdown_DropdownSelect('')
             if (pageMode === "dropdownAdd") {
                 dispatch(AlertState({
                     Type: 1,
@@ -264,12 +243,6 @@ const PartyMaster = (props) => {
         division: index.IsDivision
     }));
 
-    // party drop down option
-    // const PriceList_DropdownOptions = PriceList.map((data) => ({
-    //     value: data.id,
-    //     label: data.Name
-    // }));
-
     function handllerState(e) {
         setState_DropDown_select(e)
         dispatch(getDistrictOnState(e.value))
@@ -301,8 +274,6 @@ const PartyMaster = (props) => {
             hasNone.display = "none";
         }
     };
-
-
 
     const test1 = () => {
 
@@ -408,11 +379,9 @@ const PartyMaster = (props) => {
                     </MetaTags>
                     <Container fluid>
                         <AvForm onValidSubmit={(e, v) => { FormSubmitButton_Handler(e, v); }}>
-                            {/* Render Breadcrumbs */}
                             <Breadcrumb pageHeading={userPageAccessState.PageHeading} />
 
                             <Row>
-
                                 <Col lg={12}>
                                     <Card className="text-black" >
                                         <CardHeader className="card-header   text-black" style={{ backgroundColor: "#dddddd" }} >
@@ -474,29 +443,13 @@ const PartyMaster = (props) => {
                                                     </NavLink>
                                                 </NavItem>
 
-
-
-
-
-
-
-
-
                                                 <NavItem>
                                                     <NavLink
                                                         style={{ cursor: "pointer" }}
-                                                    // className={classnames({
-                                                    //     active: activeTab1 === "7",
-                                                    // })}
-                                                    // onClick={() => {
-                                                    //     toggle1("7")
-                                                    // }}
                                                     >
                                                         <span className="d-block d-sm-none">
                                                             <i className="fas fa-home"></i>
                                                         </span>
-                                                        {/* <span className="d-none d-sm-block">Tab7</span> */}
-                                                        {/* <Button type="submit"> save</Button> */}
                                                         <Row >
                                                             <Col sm={2}>
                                                                 <div>
@@ -582,7 +535,6 @@ const PartyMaster = (props) => {
                                                                             value={EditData.AlternateContactNo}
                                                                             autoComplete='off'
                                                                             id="mobileNo"
-                                                                            // defaultValue={''}
                                                                             placeholder="Alternate Contact Number(s)"
                                                                         />
                                                                     </FormGroup>
@@ -672,19 +624,6 @@ const PartyMaster = (props) => {
                                                             </Row>
 
                                                             <Row>
-                                                                {/* <Col md="3">
-                                                        <FormGroup className="mb-3">
-                                                            <Label htmlFor="validationCustom01">CustomerDivision </Label>
-                                                            <Col sm={12}>
-                                                                <Select
-                                                                    value={""}
-                                                                    options={""}
-                                                                // onChange={(e) => { handllerDesignationID(e) }}
-                                                                />
-                                                            </Col>
-                                                        </FormGroup>
-                                                    </Col> */}
-                                                                {/* <Col md="1">  </Col> */}
                                                                 <Col md="3">
                                                                     <FormGroup className="mb-3">
                                                                         <Label htmlFor="validationCustom01"> PAN </Label>
@@ -733,19 +672,6 @@ const PartyMaster = (props) => {
                                                                 </Col>
 
                                                                 <Col md="1">  </Col>
-                                                                {/* <Col md="3">
-                                                                    <FormGroup className="mb-3">
-                                                                        <Label htmlFor="validationCustom01">MKUp MkDown</Label>
-                                                                        <Select
-                                                                            value={MKupMkdown_DropdownSelect}
-                                                                            options={MkupMkdown_DropdownOption}
-                                                                            autoComplete="off"
-                                                                            onChange={(e) => {
-                                                                                MKupMkdown_DropdownSelectHandller(e);
-                                                                            }}
-                                                                        />
-                                                                    </FormGroup>
-                                                                </Col> */}
                                                                 <Col md="3">
                                                                     <FormGroup className="mb-3">
                                                                         <Row style={{ marginTop: '25px' }}>
@@ -759,7 +685,6 @@ const PartyMaster = (props) => {
                                                                                 <div className="form-check form-switch form-switch-md mb-3" dir="ltr">
                                                                                     <AvInput type="checkbox" className="form-check-input " id="inp-MkUpMkDn"
                                                                                         checked={EditData.MkUpMkDn}
-                                                                                        // defaultChecked={true}
                                                                                         name="MkUpMkDn"
                                                                                     />
                                                                                     <label className="form-check-label" ></label>
@@ -842,9 +767,6 @@ const PartyMaster = (props) => {
                                                     <Row>
                                                         <Col md={12}  >
                                                             <Row className="mt-3">
-                                                                {/* <Col className=" col col-11 ">
-                                                                    <Transaction tableData={TransactionPrefixMaster} func={setTransactionPrefixMaster} />
-                                                                </Col> */}
 
                                                                 <Card className="text-black" style={{ backgroundColor: "whitesmoke" }} >
                                                                     <Col>
@@ -864,7 +786,7 @@ const PartyMaster = (props) => {
 
                                                                         </FormGroup>
                                                                     </Col>
-                                                                    {/* <Col md="1"></Col> */}
+
                                                                     <Col >
                                                                         <FormGroup className="mb-3">
                                                                             <Row md="5">
@@ -882,7 +804,7 @@ const PartyMaster = (props) => {
 
                                                                         </FormGroup>
                                                                     </Col>
-                                                                    {/* <Col md="1"></Col>  */}
+
                                                                     <Col>
                                                                         <FormGroup className="mb-3">
                                                                             <Row md="5">
@@ -896,10 +818,8 @@ const PartyMaster = (props) => {
                                                                                     className="form-control "
                                                                                 />
                                                                             </Row>
-
                                                                         </FormGroup>
                                                                     </Col>
-                                                                    {/* <Col md="1"></Col> */}
 
                                                                     <Col>
                                                                         <FormGroup className="mb-3">
@@ -915,23 +835,19 @@ const PartyMaster = (props) => {
                                                                                     className="form-control"
                                                                                 />
                                                                             </Row>
-
                                                                         </FormGroup>
                                                                     </Col>
-                                                                </Card>
 
+                                                                </Card>
                                                             </Row>
                                                         </Col>
                                                     </Row>
-
                                                 </TabPane>
                                             </TabContent>
                                         </CardBody>
                                     </Card>
                                 </Col>
-
                             </Row>
-
                         </AvForm>
                     </Container>
                 </div >
