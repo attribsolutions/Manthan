@@ -29,38 +29,6 @@ import { SpinnerState } from "../../Utilites/Spinner/actions";
 import { AlertState } from "../../Utilites/CustomAlertRedux/actions";
 import { EDIT_ORDER_FOR_ORDER_PAGE } from "../OrderPageRedux/actionType";
 
-
-// function* goButtonGenFunc({ data, hasEditVal }) {
-
-//   yield put(SpinnerState(true))
-//   try {
-//     const response = yield call(OrderPage_GoButton_API, data);
-//     if (hasEditVal) {
-//       response.Data.forEach(element => {
-//         hasEditVal.OrderItem.forEach(ele => {
-//           if (element.id === ele.Item) {
-//             element["inpRate"] = ele.Rate
-//             element["inpQty"] = ele.Quantity
-//             element["totalAmount"] = ele.Amount
-//             element["UOM"] = ele.Unit
-//             element["UOMLabel"] = ele.UnitName
-//             element["inpBaseUnitQty"] = ele.BaseUnitQuantity
-
-//           }
-//         })
-//       });
-//     }
-//     yield put(goButtonSuccess(response.Data));
-//     yield put(SpinnerState(false))
-//   } catch (error) {
-//     yield put(SpinnerState(false))
-//     yield put(AlertState({
-//       Type: 4,
-//       Status: true, Message: "500 Error Message",
-//     }));
-//   }
-// }
-
 function* postGRNGenFunc({ data }) {
   debugger
   yield put(SpinnerState(true))
@@ -134,6 +102,18 @@ function* get_GRN_GerFunc() {
   yield put(SpinnerState(true))
   try {
     const response = yield call(GRN_get_API);
+    // const convertList = response.Data.map(i => {
+    //   delete i.age
+    //   id,
+    //   GRNDate,
+    //   Customer,
+    //   GRNNumber,
+    //   GrandTotal,
+    //   Party,
+    //   CreatedBy,
+    //   UpdatedBy
+    // })
+    // debugger
     yield put(SpinnerState(false))
     yield put(getGRNListPageSuccess(response.Data))
 

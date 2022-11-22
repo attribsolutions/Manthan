@@ -475,7 +475,7 @@ const GRNAdd = (props) => {
     };
 
     const saveHandeller = () => {
-        debugger
+        
         const itemArr = []
         OrderItem.forEach(i => {
             if ((i.inpQty > 0)) {
@@ -529,7 +529,6 @@ const GRNAdd = (props) => {
 
         const jsonBody = JSON.stringify({
             GRNDate: grnItemData.OrderDate,
-
             Customer: grnItemData.Customer,
             GRNNumber: 1,
             GrandTotal: orderAmount,
@@ -685,7 +684,6 @@ const GRNAdd = (props) => {
                             : <div className="row save1"></div>
                     }
                 </div >
-                {/* </div> */}
 
             </React.Fragment >
         )

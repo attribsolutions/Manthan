@@ -55,7 +55,6 @@ const GRNList = () => {
 
     const { pageField } = reducers;
 
-
     return (
 
         <React.Fragment>
@@ -153,7 +152,7 @@ const GRNList = () => {
                             MasterModal={Order}
                             masterPath={ORDER}
                             ButtonMsgLable={"GRN"}
-                            deleteName={"Name"}
+                            deleteName={"CreatedBy"}
                             pageMode={"List"}
 
                         />
