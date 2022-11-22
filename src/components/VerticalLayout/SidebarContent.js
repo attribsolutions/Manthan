@@ -50,126 +50,188 @@ const SidebarContent = (props) => {
     }
   }, [])
 
-  const activateParentDropdown = useCallback((item) => {
+  // const activateParentDropdown = useCallback((item) => {
 
-    item.classList.add("active")
-    const parent = item.parentElement
-    const parent2El = parent.childNodes[1]
-    if (parent2El && parent2El.id !== "side-menu") {
-      parent2El.classList.add("mm-show")
-    }
+  //   item.classList.add("active")
+  //   const parent = item.parentElement
+  //   const parent2El = parent.childNodes[1]
+  //   if (parent2El && parent2El.id !== "side-menu") {
+  //     parent2El.classList.add("mm-show")
+  //   }
 
-    if (parent) {
-      parent.classList.add("mm-active")
-      const parent2 = parent.parentElement
+  //   if (parent) {
+  //     parent.classList.add("mm-active")
+  //     const parent2 = parent.parentElement
 
-      if (parent2) {
-        parent2.classList.add("mm-show") // ul tag
+  //     if (parent2) {
+  //       parent2.classList.add("mm-show") // ul tag
 
-        const parent3 = parent2.parentElement // li tag
+  //       const parent3 = parent2.parentElement // li tag
 
-        if (parent3) {
-          parent3.classList.add("mm-active") // li
-          parent3.childNodes[0].classList.add("mm-active") //a
-          const parent4 = parent3.parentElement // ul
-          if (parent4) {
-            parent4.classList.add("mm-show") // ul
-            const parent5 = parent4.parentElement
-            if (parent5) {
-              parent5.classList.add("mm-show") // li
-              parent5.childNodes[0].classList.add("mm-active") // a tag
-            }
+  //       if (parent3) {
+  //         parent3.classList.add("mm-active") // li
+  //         parent3.childNodes[0].classList.add("mm-active") //a
+  //         const parent4 = parent3.parentElement // ul
+  //         if (parent4) {
+  //           parent4.classList.add("mm-show") // ul
+  //           const parent5 = parent4.parentElement
+  //           if (parent5) {
+  //             parent5.classList.add("mm-show") // li
+  //             parent5.childNodes[0].classList.add("mm-active") // a tag
+  //           }
+  //         }
+  //       }
+  //     }
+  //     scrollElement(item);
+  //     return false
+  //   }
+  //   scrollElement(item);
+  //   return false
+  // }, []);
+
+  // // Use ComponentDidMount and ComponentDidUpdate method symultaniously
+  // useEffect(() => {
+  //   // debugger
+  //   let pathName = props.location.pathname
+  //   // debugger
+  //   let userAcc = RoleAccessModifiedinSingleArray.find((inx) => {
+  //     const path = inx.ActualPagePath.toLowerCase()
+  //     return (`/${path}` === pathName.toLowerCase())
+  //   })
+  //   if (userAcc === undefined) {
+  //     pathName = "Dashbord"
+  //   }
+  //   else if (!userAcc.RoleAccess_IsShowOnMenu) {
+  //     let listPagePath = RoleAccessModifiedinSingleArray.find((inx) => {
+  //       return (inx.id === userAcc.RelatedPageID)
+  //     })
+  //     if (!(listPagePath === undefined)) {
+  //       pathName = `/${listPagePath.ActualPagePath}`
+  //     }
+  //   }
+
+  //   const initMenu = () => {
+
+  //     new MetisMenu("#side-menu")
+  //     let matchingMenuItem = null
+  //     const ul = document.getElementById("side-menu")
+  //     const items = ul.getElementsByTagName("a")
+  //     for (let i = 0; i < items.length; ++i) {
+  //       if (pathName === items[i].pathname) {
+  //         matchingMenuItem = items[i]
+  //         break
+  //       }
+  //     }
+  //     if (matchingMenuItem) {
+  //       activateParentDropdown(matchingMenuItem)
+  //     }
+  //   }
+  //   initMenu()
+  // }, [pathName, activateParentDropdown, RoleAccessModifiedinSingleArray])
+
+  // useEffect(() => {
+  //   ref.current.recalculate()
+  // })
+
+  // function scrollElement(item) {
+  //   if (item) {
+  //     const currentPosition = item.offsetTop
+  //     if (currentPosition > window.innerHeight) {
+  //       ref.current.getScrollElement().scrollTop = currentPosition - 300
+  //     }
+  //   }
+
+  // }
+
+//--------------------------------------------------------------------------------
+
+
+const activateParentDropdown = useCallback(item => {
+  item.classList.add("active");
+  const parent = item.parentElement;
+  const parent2El = parent.childNodes[1];
+  if (parent2El && parent2El.id !== "side-menu") {
+    parent2El.classList.add("mm-show");
+  }
+
+  if (parent) {
+    parent.classList.add("mm-active");
+    const parent2 = parent.parentElement;
+
+    if (parent2) {
+      parent2.classList.add("mm-show"); // ul tag
+
+      const parent3 = parent2.parentElement; // li tag
+
+      if (parent3) {
+        parent3.classList.add("mm-active"); // li
+        parent3.childNodes[0].classList.add("mm-active"); //a
+        const parent4 = parent3.parentElement; // ul
+        if (parent4) {
+          parent4.classList.add("mm-show"); // ul
+          const parent5 = parent4.parentElement;
+          if (parent5) {
+            parent5.classList.add("mm-show"); // li
+            parent5.childNodes[0].classList.add("mm-active"); // a tag
           }
         }
       }
-      scrollElement(item);
-      return false
     }
     scrollElement(item);
-    return false
-  }, []);
-
-  // Use ComponentDidMount and ComponentDidUpdate method symultaniously
-  useEffect(() => {
-    // debugger
-    let pathName = props.location.pathname
-    // debugger
-    let userAcc = RoleAccessModifiedinSingleArray.find((inx) => {
-      const path = inx.ActualPagePath.toLowerCase()
-      return (`/${path}` === pathName.toLowerCase())
-    })
-    if (userAcc === undefined) {
-      pathName = "Dashbord"
-    }
-    else if (!userAcc.RoleAccess_IsShowOnMenu) {
-      let listPagePath = RoleAccessModifiedinSingleArray.find((inx) => {
-        return (inx.id === userAcc.RelatedPageID)
-      })
-      if (!(listPagePath === undefined)) {
-        pathName = `/${listPagePath.ActualPagePath}`
-      }
-    }
-
-    const initMenu = () => {
-
-      new MetisMenu("#side-menu")
-      let matchingMenuItem = null
-      const ul = document.getElementById("side-menu")
-      const items = ul.getElementsByTagName("a")
-      for (let i = 0; i < items.length; ++i) {
-        if (pathName === items[i].pathname) {
-          matchingMenuItem = items[i]
-          break
-        }
-      }
-      if (matchingMenuItem) {
-        activateParentDropdown(matchingMenuItem)
-      }
-    }
-    initMenu()
-  }, [pathName, activateParentDropdown, RoleAccessModifiedinSingleArray])
-
-  useEffect(() => {
-    ref.current.recalculate()
-  })
-
-  function scrollElement(item) {
-    if (item) {
-      const currentPosition = item.offsetTop
-      if (currentPosition > window.innerHeight) {
-        ref.current.getScrollElement().scrollTop = currentPosition - 300
-      }
-    }
-
+    return false;
   }
+  scrollElement(item);
+  return false;
+}, []);
 
+// Use ComponentDidMount and ComponentDidUpdate method symultaniously
+useEffect(() => {
+  const pathName = props.location.pathname;
 
+  const initMenu = () => {
+    new MetisMenu("#side-menu");
+    let matchingMenuItem = null;
+    const ul = document.getElementById("side-menu");
+    const items = ul.getElementsByTagName("a");
+    for (let i = 0; i < items.length; ++i) {
+      if (pathName === items[i].pathname) {
+        matchingMenuItem = items[i];
+        break;
+      }
+    }
+    if (matchingMenuItem) {
+      activateParentDropdown(matchingMenuItem);
+    }
+  };
+  initMenu();
+}, [props.location.pathname, activateParentDropdown,]);
+
+useEffect(() => {
+  ref.current.recalculate();
+});
+
+function scrollElement(item) {
+  if (item) {
+    const currentPosition = item.offsetTop;
+    if (currentPosition > window.innerHeight) {
+      ref.current.getScrollElement().scrollTop = currentPosition - 300;
+    }
+  }
+}
+debugger
+//----------------------------------------------------------------------------------
   return (
     <React.Fragment>
       <SimpleBar style={{ maxHeight: "100%" }} ref={ref}>
         <div id="sidebar-menu">
           <ul className="metismenu list-unstyled" id="side-menu">
-
-            {/* <li>
-              <Link to="/Dashboard" className="">
-                <FeatherIcon icon="home" />
-                <span>{props.t("Dashboard")}</span>
-              </Link>
-            </li> */}
-            {/* <li>
-              <Link to= {`/${btoa("RoleAccess")}`} State={ "occupation" }>
-                Next Step
-              </Link>
-              <Link to={{pathname:`/${btoa("RoleAccess")}`, state: {fromDashboardAccess: true }}}>
-              Next Step2222
-              </Link>
-            </li> */}
+          
             {RoleAccessData.map((item) => {
               return (
                 <li >
                   <Link to="/#" className="has-arrow">
                     <FeatherIcon icon="grid" />
-                    <span>{props.t(item.ModuleName)}</span>    {/* change Module Name */}
+                    <span>{props.t(item.ModuleName)}</span>
 
                   </Link>
                   <ul className="sub-menu">
@@ -179,8 +241,7 @@ const SidebarContent = (props) => {
                           <li>
                             <Link to={{ pathname: `/${index.ActualPagePath}`, }} >{props.t(index.Name)}</Link>
                           </li>
-                          // class={pathName === indx.SelectIcon ? "active" : ""}
-                        )
+                                                 )
                       }
                       else {
                         <></>
@@ -191,16 +252,7 @@ const SidebarContent = (props) => {
                 </li>
               )
             })}
-            {/* <li>
-              <link href={"/RolesMaster"}>{props.t('Roles Master')}</link>
-              <a href="/RolesList">Visit Pluralsight</a>
-            </li>
-            <li>
-              <Link to={'/RolesList'}>{props.t('Roles List')}</Link>
-            </li>
-            <li>
-              <Link to={'/validationTest'}>{props.t('validationTest')}</Link>
-            </li> */}
+         
           </ul >
         </div>
       </SimpleBar>
