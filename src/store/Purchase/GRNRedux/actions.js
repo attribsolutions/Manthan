@@ -18,9 +18,9 @@ import {
 
 
 
-export const getGRN_itemMode2 = (data, pageMode,path) => ({
+export const getGRN_itemMode2 = (data, pageMode, path) => ({
   type: GET_GRN_ITEM_MODE_2,
-  data, pageMode,path
+  data, pageMode, path
 });
 
 export const getGRN_itemMode2_Success = list => ({
@@ -30,9 +30,9 @@ export const getGRN_itemMode2_Success = list => ({
 
 
 //get listpage api
-export const getGRNListPage = () => ({
+export const getGRNListPage = (filters) => ({
   type: GET_GRN_LIST_PAGE,
-
+  filters,
 });
 
 export const getGRNListPageSuccess = (data) => ({

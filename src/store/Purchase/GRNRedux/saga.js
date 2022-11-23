@@ -97,23 +97,13 @@ function* UpdateGRNGenFunc({ data, id }) {
 }
 
 // List Page API
-function* get_GRN_GerFunc() {
-
+function* get_GRN_GerFunc({ filters }) {
+  debugger
   yield put(SpinnerState(true))
   try {
-    const response = yield call(GRN_get_API);
-    // const convertList = response.Data.map(i => {
-    //   delete i.age
-    //   id,
-    //   GRNDate,
-    //   Customer,
-    //   GRNNumber,
-    //   GrandTotal,
-    //   Party,
-    //   CreatedBy,
-    //   UpdatedBy
-    // })
-    // debugger
+    const response = yield call(GRN_get_API, filters);
+    debugger
+
     yield put(SpinnerState(false))
     yield put(getGRNListPageSuccess(response.Data))
 

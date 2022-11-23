@@ -12,15 +12,18 @@ export const POST_EDIT_JWT_PROFILE = "/post-jwt-profile"
 export const POST_EDIT_PROFILE = "/post-fake-profile"
 
 //ORDERS
-
-export const GET_ORDER_ITEM = "/Items"
-export const ORDER_PAGE_API = "Orders"
 export const SUPPLIER = "/GetSupplier"
+
+// export const GET_ORDER_ITEM = "/Items"
+export const ORDER_LiST_BY_FILTERS = "/OrdersFilter"
+export const ORDER_PAGE_API = "Orders"
 export const GET_ITEM_FOR_ORDER = "/GetItemsForOrder"
 
 // GRN
 export const GET_GRN_ITEM = "/MakeOrdersGrn"
 export const GRN = "/GRN"
+export const GRN_LiST_BY_FILTERS = "/GRNFilter"
+
 
 
 
@@ -155,7 +158,7 @@ export const GROUP_TYPE_API = '/GroupTypes'
 export const GROUP_API = '/Group'
 
 // SubGroup API
-export const SUBGROUP_API  = '/SubGroups'
+export const SUBGROUP_API = '/SubGroups'
 
 
 

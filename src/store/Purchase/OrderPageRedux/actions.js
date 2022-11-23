@@ -30,9 +30,9 @@ export const goButtonSuccess = list => ({
 })
 
 //get listpage api
-export const getOrderListPage = () => ({
+export const getOrderListPage = (filters) => ({
   type: GET_ORDER_LIST_PAGE,
-
+  filters,
 });
 
 export const getOrderListPageSuccess = (data) => ({
