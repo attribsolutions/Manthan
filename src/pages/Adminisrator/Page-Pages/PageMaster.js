@@ -1012,7 +1012,7 @@ const PageMaster = (props) => {
                                       name="Name"
                                       id="txtName"
                                       value={EditData.Name}
-                                      disabled={pageMode === 'edit' ? true : false}
+                                      // disabled={pageMode === 'edit' ? true : false}
                                       type="text"
                                       placeholder="Please Enter Name"
                                       autoComplete="off"

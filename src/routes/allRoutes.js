@@ -87,6 +87,9 @@ import PartyItems from "../pages/Adminisrator/PartyItemPage/PartyItems";
 import * as path from "./route_url";
 import GRNList from "../pages/Purchase/GRN/GRNList";
 import GRNAdd from "../pages/Purchase/GRN/GRNAdd";
+import SubGroupMaster from "../pages/Adminisrator/SubGroupPages/SubGroupMaster";
+import SubGroupList from "../pages/Adminisrator/SubGroupPages/SubGroupList";
+// import PartyItemsList from "../pages/Adminisrator/PartyItemPage/PartyItemList";
 
 
 
@@ -179,8 +182,16 @@ const userRoutes = [
   { path: path.PARTY_SUB_PARTY, component: PartySubParty },
   { path: path.PARTY_SUB_PARTY_lIST, component: PartySubPartyList },
 
-  { path: path.PARTYITEM, component: PartyItems },
-  { path: path.PARTY_ITEMS, component: PartyItems },
+ 
+  { path:path.PARTYITEM, component: PartyItems },
+  // { path: path.PARTYITEM_LIST, component: PartyItemsList },
+
+  { path:path.SUBGROUP, component: SubGroupMaster },
+  { path:path.SUBGROUP_LIST, component: SubGroupList },
+
+
+
+
 
   { path: path.SEARCH_BOX2, component: SearchBoxSecond },
   { path: path.SEARCH_BOX3, component: SerachBox3 },

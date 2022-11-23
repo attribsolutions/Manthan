@@ -34,13 +34,15 @@ import { AlertState, BreadcrumbFilterSize } from "../../../store/actions";
 import { basicAmount, GstAmount, handleKeyDown, totalAmount } from "../Order/OrderPageCalulation";
 import '../../Order/div.css'
 
-import { ORDER_lIST } from "../../../routes/route_url";
-import SaveButton from "../../../components/Common/CommonSaveButton";
+import { GRN_lIST, ORDER_lIST } from "../../../routes/route_url";
+import SaveButton, { CreatedBy } from "../../../components/Common/CommonSaveButton";
 
 import { getTermAndCondition } from "../../../store/Administrator/TermsAndCondtionsRedux/actions";
 
 import Breadcrumb from "../../../components/Common/Breadcrumb3";
-import { getGRN_itemMode2_Success } from "../../../store/Purchase/GRNRedux/actions";
+import { getGRN_itemMode2_Success, postGRN, postGRNSuccess } from "../../../store/Purchase/GRNRedux/actions";
+import GRNList from "./GRNList";
+import { useMemo } from "react";
 
 let description = ''
 let editVal = {}
@@ -63,8 +65,7 @@ const GRNAdd = (props) => {
 
     const [supplierSelect, setsupplierSelect] = useState('');
     const [orderAmount, setOrderAmount] = useState(0);
-    const [grnItemData, setgrnItemData] = useState({});
-    const { OrderItem = [] } = grnItemData
+    // const [grnItemData, setgrnItemData] = useState({});
 
     useEffect(() => {
         // dispatch(getSupplier())
@@ -115,34 +116,64 @@ const GRNAdd = (props) => {
     const hasShowloction = location.hasOwnProperty("editValue")
     const hasShowModal = props.hasOwnProperty("editValue")
 
-    useEffect(() => {
-        if ((items.Status === true) && (items.StatusCode === 200)) {
-            // dispatch(BreadcrumbFilterSize(`${"Order Amount"} :${orderAmount}`))
+    // useEffect(() => {
+    //     if ((items.Status === true) && (items.StatusCode === 200)) {
+    //         // dispatch(BreadcrumbFilterSize(`${"Order Amount"} :${orderAmount}`))
 
-            const hasEditVal = items.Data
-            hasEditVal.OrderItem.forEach(ele => {
-                ele["Name"] = ele.ItemName
-                ele["inpRate"] = ele.Rate
-                ele["inpQty"] = ele.Quantity
-                ele["totalAmount"] = ele.Amount
-                ele["UOM"] = ele.Unit
-                ele["UOMLabel"] = ele.UnitName
-                ele["inpBaseUnitQty"] = ele.BaseUnitQuantity
-            });
+    //         const hasEditVal = items.Data
+    //         hasEditVal.OrderItem.forEach(ele => {
+    //             ele["Name"] = ele.ItemName
+    //             ele["inpRate"] = ele.Rate
+    //             ele["inpQty"] = ele.Quantity
+    //             ele["totalAmount"] = ele.Amount
+    //             ele["UOM"] = ele.Unit
+    //             ele["UOMLabel"] = ele.UnitName
+    //             ele["inpBaseUnitQty"] = ele.BaseUnitQuantity
+    //         });
 
-            setgrnItemData(hasEditVal)
-            dispatch(BreadcrumbFilterSize(`${"Order Amount"} :${hasEditVal.OrderAmount}`))
+    //         setgrnItemData(hasEditVal)
+    //         dispatch(BreadcrumbFilterSize(`${"Order Amount"} :${hasEditVal.OrderAmount}`))
 
-            // setsupplierSelect({ label: hasEditVal.SupplierName, value: hasEditVal.Supplier })
-            // setpoDate(hasEditVal.OrderDate)
-            setOrderAmount(hasEditVal.OrderAmount)
+    //         // setsupplierSelect({ label: hasEditVal.SupplierName, value: hasEditVal.Supplier })
+    //         // setpoDate(hasEditVal.OrderDate)
+    //         setOrderAmount(hasEditVal.OrderAmount)
 
-            items.Status = false
-            items.Data = []
-            dispatch(getGRN_itemMode2_Success(items))
+    //         items.Status = false
+    //         items.Data = []
+    //         dispatch(getGRN_itemMode2_Success(items))
+    //     }
+
+    // }, [items])
+
+    // debugger
+    const grnItemData = useMemo(() => {
+        // debugger
+        const { Data, Status = false } = items
+        if (!Status) {
+            return items
         }
+        // debugger
+        const hasEditVal = Data;
+        hasEditVal.OrderItem.forEach(ele => {
+            ele["Name"] = ele.ItemName
+            ele["inpRate"] = ele.Rate
+            ele["inpQty"] = ele.Quantity
+            ele["totalAmount"] = ele.Amount
+            ele["UOM"] = ele.Unit
+            ele["UOMLabel"] = ele.UnitName
+            ele["inpBaseUnitQty"] = ele.BaseUnitQuantity
+        });
+        setsupplierSelect({ label: hasEditVal.SupplierName, value: hasEditVal.Supplier })
+        dispatch(BreadcrumbFilterSize(`${"Order Amount"} :${hasEditVal.OrderAmount}`))
+        setOrderAmount(hasEditVal.OrderAmount)
+        items.Status = false
+        dispatch(getGRN_itemMode2_Success(items))
+        return hasEditVal
 
-    }, [items])
+    }, items)
+
+    const { OrderItem = [] } = grnItemData
+
 
 
     useEffect(() => {
@@ -196,18 +227,18 @@ const GRNAdd = (props) => {
     }, [supplierAddress])
 
     useEffect(() => {
+        debugger
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
-            dispatch(postOrderSuccess({ Status: false }))
-            dispatch(goButtonSuccess([]))
+            dispatch(postGRNSuccess({ Status: false }))
             dispatch(AlertState({
                 Type: 1,
                 Status: true,
                 Message: postMsg.Message,
-                RedirectPath: ORDER_lIST,
+                RedirectPath: GRN_lIST,
             }))
 
         } else if (postMsg.Status === true) {
-            dispatch(postOrderSuccess({ Status: false }))
+            dispatch(postGRNSuccess({ Status: false }))
             dispatch(AlertState({
                 Type: 4,
                 Status: true,
@@ -499,31 +530,25 @@ const GRNAdd = (props) => {
 
         const jsonBody = JSON.stringify({
             GRNDate: grnItemData.OrderDate,
-
             Customer: grnItemData.Customer,
             GRNNumber: 1,
             GrandTotal: orderAmount,
             Party: grnItemData.Supplier,
-            CreatedBy: 1,
+            CreatedBy: CreatedBy(),
             UpdatedBy: 1,
             GRNItems: itemArr,
-            GRNReferences: [
-                {
-                    Invoice: null,
-                    Order: 1
-                }
-            ],
+            GRNReferences: grnItemData.GRNReferences
 
         });
 
         if (pageMode === "edit") {
-            dispatch(updateOrderId(jsonBody, editVal.id))
+            // dispatch(editGRNId(jsonBody, editVal.id))
             console.log("orderEdit", jsonBody)
 
         } else {
 
-            dispatch(postOrder(jsonBody))
-            console.log("ordersave", jsonBody)
+            dispatch(postGRN(jsonBody))
+            console.log("postGRNsave", jsonBody)
         }
 
 
@@ -590,6 +615,8 @@ const GRNAdd = (props) => {
                                         style={{ width: "130px" }}>Challan No</Label>
                                     <Col md="7">
                                         <Input type="text"
+                                            disabled={true}
+                                            value={grnItemData.challanNo}
                                             placeholder="Enter Challan No" />
                                     </Col>
                                 </FormGroup>
@@ -659,7 +686,6 @@ const GRNAdd = (props) => {
                             : <div className="row save1"></div>
                     }
                 </div >
-                {/* </div> */}
 
             </React.Fragment >
         )

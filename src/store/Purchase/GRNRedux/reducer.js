@@ -7,7 +7,7 @@ const INIT_STATE = {
   deleteMsg: { Status: false },
   GRNList: [],
   GRNitem: { Status: false, Data: [], },
-  GRNitem3: []
+  // GRNitem3: []
 
 }
 
@@ -19,12 +19,7 @@ const GRNReducer = (state = INIT_STATE, action) => {
         ...state,
         GRNitem: action.payload,
       }
-    case GET_GRN_ITEM_MODE_3_SUCCESS:
-      return {
-        ...state,
-        GRNitem3: action.payload,
-      }
-
+   
     // GRN List Page 
     case GET_GRN_LIST_PAGE_SUCCESS:
       return {

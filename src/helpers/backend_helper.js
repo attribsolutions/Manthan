@@ -151,11 +151,11 @@ export const getDivisionOrders = () => get(`${url.ORDER_PAGE_API}?FromDate=2022-
 export const getOrderList_For_Listpage = () => get(url.ORDER_PAGE_API)// Get subModule For H_pages
 
 //GRN PAGE grn 
-export const GRN_get_API = (data) => get(url.ORDER_PAGE_API)
-export const GRN_Edit_API = (id) => get(`${url.ROLE_MASTER_API}/${id}`)// edit api
-export const GRN_Post_API = (data) => post(url.ORDER_PAGE_API, data)//get api
-export const GRN_update_API = (id, data) => put(`${url.ORDER_PAGE_API}/${id}`, data)// update api
-export const GRN_delete_API = (id) => del(`${url.ORDER_PAGE_API}/${id}`)//Delete Order
+export const GRN_get_API = (data) => get(url.GRN)
+export const GRN_Edit_API = (id) => get(`${url.GRN}/${id}`)// edit api
+export const GRN_Post_API = (data) => post(url.GRN, data)//get api
+export const GRN_update_API = (id, data) => put(`${url.GRN}/${id}`, data)// update api
+export const GRN_delete_API = (id) => del(`${url.GRN}/${id}`)//Delete Order
 export const GRN_getItem_API = (data) => post(url .GET_GRN_ITEM,data)
 
 //Administrator   Modules submit  
@@ -359,12 +359,20 @@ export const PartySubParty_Update_API = (data, id) => put(`${url.PARTY_SUB_PARTY
 //PartyItems API
 
 export const GoButton_API = (data) => post(url.PARTYITEMS, data)//get api
-
 export const Party_Items = (data) => post(url.PARTYITEMS, data)// post api
 export const get_Party_Item_List = (party_id) => get(`${url.PARTYITEMS}/${party_id}`)//get api
+export const GetPartyList_API = () => get(url.PARTYITEMS)// get api
 
 //suppiler 
 export const GetSupplier_API = (perty_id) => get(`${url.SUPPLIER}/${perty_id}`)//get api
+
+
+// SubGroup API
+export const get_SubGroup_List_Api = () => get(url.SUBGROUP_API)// get api
+export const Post_SubGroupList_API = (data) => post(url.SUBGROUP_API, data)// post api
+export const del_SubGroup_List_API = (id) => del(`${url.SUBGROUP_API}/${id}`)// delete api
+export const edit_SubGroup_List_Api = (id) => get(`${url.SUBGROUP_API}/${id}`)// edit api
+export const update_SubGroup_List_Api = (data, id) => put(`${url.SUBGROUP_API}/${id}`, data)// update api
 
 export {
   getLoggedInUser,

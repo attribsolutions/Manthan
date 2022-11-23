@@ -17,9 +17,9 @@ import { MetaTags } from "react-meta-tags";
 
 
 import { useDispatch, useSelector } from "react-redux";
-import { AlertState } from "../../../store/actions";
+import { AlertState, commonPageField, commonPageFieldSuccess } from "../../../store/actions";
 import { useHistory } from "react-router-dom";
-import { getpartyItemList, getPartyItemListSuccess, getSupplier, PostPartyItems, PostPartyItemsSuccess } from "../../../store/Administrator/PartyItemsRedux/action";
+import { getpartyItemList, getPartyItemListSuccess, GetPartyList, getSupplier, PostPartyItems, PostPartyItemsSuccess } from "../../../store/Administrator/PartyItemsRedux/action";
 import paginationFactory, { PaginationListStandalone, PaginationProvider } from "react-bootstrap-table2-paginator";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable, { CHECKBOX_STATUS_CHECKED } from "react-bootstrap-table-next";
@@ -27,6 +27,8 @@ import { mySearchProps } from "../../../components/Common/CmponentRelatedCommonF
 import SaveButton from "../../../components/Common/CommonSaveButton";
 import { countlabelFunc } from "../../../components/Common/CmponentRelatedCommonFile/commonListPage";
 import { AvCheckbox } from "availity-reactstrap-validation";
+import { comAddPageFieldFunc, initialFiledFunc } from "../../../components/Common/CmponentRelatedCommonFile/validationFunction";
+import { PARTYITEM_LIST } from "../../../routes/route_url";
 
 
 const PartyItems = (props) => {
@@ -47,18 +49,33 @@ const PartyItems = (props) => {
     //Access redux store Data /  'save_ModuleSuccess' action data
     const {
         postMsg,
+        updateMsg,
         supplier,
         partyItem,
-
         pageField,
         userAccess } = useSelector((state) => ({
 
             postMsg: state.PartyItemsReducer.postMsg,
+            updateMsg: state.PartyItemsReducer.updateMsg,
             partyItem: state.PartyItemsReducer.partyItem,
             supplier: state.PartyItemsReducer.supplier,
             userAccess: state.Login.RoleAccessUpdateData,
             pageField: state.CommonPageFieldReducer.pageField
         }));
+
+
+        
+    // const [state, setState] = useState(initialFiledFunc())
+    // const values = { ...state.values }
+    // const { isError } = state;
+    // const { fieldLabel } = state;
+
+    
+    useEffect(() => {
+        dispatch(commonPageFieldSuccess(null));
+        dispatch(commonPageField(36))
+        dispatch(getSupplier())
+    }, []);
 
     useEffect(() => {
 
@@ -98,8 +115,37 @@ const PartyItems = (props) => {
         }
     }, [postMsg])
 
+    
+    // useEffect(() => {
+    //     if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
+    //         history.push({
+    //             pathname: PARTYITEM_LIST,
+    //         })
+    //     } else if (updateMsg.Status === true && !modalCss) {
+    //         // dispatch(updategroupIDSuccess({ Status: false }));
+    //         dispatch(
+    //             AlertState({
+    //                 Type: 3,
+    //                 Status: true,
+    //                 Message: JSON.stringify(updateMsg.Message),
+    //             })
+    //         );
+    //     }
+    // }, [updateMsg, modalCss]);
 
+    
+    // useEffect(() => {
+    //     if (pageField) {
+    //         const fieldArr = pageField.PageFieldMaster
+    //         comAddPageFieldFunc({ state, setState, fieldArr })// new change
+    //     }
+    // }, [pageField])
+
+    // useEffect(() => {
+    //     dispatch(GetPartyList());
+    // }, [dispatch]);
     const supplierOptions = supplier.map((i) => ({
+
         value: i.id,
         label: i.Supplier,
     }));
