@@ -361,6 +361,7 @@ export const PartySubParty_Update_API = (data, id) => put(`${url.PARTY_SUB_PARTY
 export const GoButton_API = (data) => post(url.PARTYITEMS, data)//get api
 export const Party_Items = (data) => post(url.PARTYITEMS, data)// post api
 export const get_Party_Item_List = (party_id) => get(`${url.PARTYITEMS}/${party_id}`)//get api
+export const GetPartyList_API = () => get(url.PARTYITEMS)// get api
 
 //suppiler 
 export const GetSupplier_API = (perty_id) => get(`${url.SUPPLIER}/${perty_id}`)//get api
