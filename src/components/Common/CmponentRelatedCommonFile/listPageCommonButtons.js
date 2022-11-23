@@ -10,7 +10,7 @@ export const listPageCommonButtonFunction = (props) => {
     const ButtonMsgLable = props.ButtonMsgLable;
     const userCreated = parseInt(localStorage.getItem("userId"))
     const deleteName = props.deleteName;
-    debugger
+    
     /***
      * deletemsgLable change to=> ButtonMsgLable line no:11 
      *    autho by => Rohit  date :22-08-022 */
