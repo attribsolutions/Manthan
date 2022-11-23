@@ -145,14 +145,14 @@ const GRNAdd = (props) => {
 
     // }, [items])
 
-    debugger
+    // debugger
     const grnItemData = useMemo(() => {
-        debugger
+        // debugger
         const { Data, Status = false } = items
         if (!Status) {
             return items
         }
-        debugger
+        // debugger
         const hasEditVal = Data;
         hasEditVal.OrderItem.forEach(ele => {
             ele["Name"] = ele.ItemName
@@ -227,7 +227,8 @@ const GRNAdd = (props) => {
     }, [supplierAddress])
 
     useEffect(() => {
-        if ((postMsg.Status === "true") && (postMsg.StatusCode === 200)) {
+        debugger
+        if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(postGRNSuccess({ Status: false }))
             dispatch(AlertState({
                 Type: 1,
@@ -475,7 +476,7 @@ const GRNAdd = (props) => {
     };
 
     const saveHandeller = () => {
-        
+
         const itemArr = []
         OrderItem.forEach(i => {
             if ((i.inpQty > 0)) {
@@ -614,6 +615,7 @@ const GRNAdd = (props) => {
                                         style={{ width: "130px" }}>Challan No</Label>
                                     <Col md="7">
                                         <Input type="text"
+                                            disabled={true}
                                             value={grnItemData.challanNo}
                                             placeholder="Enter Challan No" />
                                     </Col>

@@ -53,7 +53,7 @@ function* editGRNGenFunc({ id, pageMode }) {
     const response = yield call(GRN_Edit_API, id);
     response.pageMode = pageMode
     yield put(SpinnerState(false))
-    debugger
+    // debugger
     yield put(editGRNIdSuccess(response));
   } catch (error) {
     yield put(SpinnerState(false))
@@ -128,7 +128,7 @@ function* get_GRN_GerFunc() {
 
 // List Page API
 function* getGRNitem_Mode2_GenFunc({ data }) {
-  debugger
+  // debugger
   const { jsonBody, pageMode, GRN_ADD, grnRef, challanNo } = data
 
   yield put(SpinnerState(true))
