@@ -1,9 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Card, CardBody, Col, FormGroup, Input, Label, Row } from 'reactstrap';
+import { Button, Card, CardBody, Col, FormGroup, Label, Row } from 'reactstrap';
 import Flatpickr from "react-flatpickr"
-import Select from "react-select";
-import { useDispatch, useSelector } from 'react-redux';
-import { getAddressTypes } from '../../../store/Administrator/PartyRedux/action';
 import AddressDetailsTable from './Table';
 import { AvField, AvInput } from 'availity-reactstrap-validation';
 
@@ -33,7 +30,6 @@ function AddressDetails_Tab(props) {
 
     const IsDefaultHandler = (event) => {
         setIsDefault(event.target.checked)
-
     }
 
     const addRowsHandler = (data) => {

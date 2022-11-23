@@ -49,6 +49,7 @@ const CommonListPage = (props) => {
 
   const [userAccState, setUserAccState] = useState('');
   const [modal_edit, setmodal_edit] = useState(false);
+  const [masterPath, setmasterPath] = useState('');
 
   const {
     tableList,
@@ -73,7 +74,6 @@ const CommonListPage = (props) => {
 
   const {
     MasterModal,
-    masterPath,
     ButtonMsgLable,
     deleteName,
     showBreadcrumb = true
@@ -81,8 +81,10 @@ const CommonListPage = (props) => {
 
   const fileds = pageField.PageFieldMaster;
 
-  useEffect(() => {
 
+
+  useEffect(() => {
+    
     const locationPath = history.location.pathname
     let userAcc = userAccess.find((inx) => {
       return (`/${inx.ActualPagePath}` === locationPath)
@@ -91,6 +93,25 @@ const CommonListPage = (props) => {
       setUserAccState(userAcc)
     }
   }, [userAccess])
+
+  // this useEffect for MasterPagePath dynamically work 
+  useEffect(() => {
+    const locationPath = history.location.pathname
+
+    let userAcc = userAccess.find((inx) => {
+      return (`/${inx.ActualPagePath}` === locationPath)
+    })
+
+    let MasterPagePath = userAccess.find((inx) => {
+      return (inx.id === userAcc.RelatedPageID)
+    })
+    
+    if (!(MasterPagePath === undefined)) {
+      setmasterPath(`/${MasterPagePath.ActualPagePath}`)
+    }
+     
+  }, [userAccess])
+
 
   useEffect(() => {
     downList = []
@@ -189,6 +210,7 @@ const CommonListPage = (props) => {
 
   // Edit Modal Show When Edit Data is true
   useEffect(() => {
+    debugger
     if (editData.Status === true) {
       if (pageField.IsEditPopuporComponent) {
         history.push({

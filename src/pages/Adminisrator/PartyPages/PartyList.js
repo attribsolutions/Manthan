@@ -11,11 +11,11 @@ import {
 import PartyMaster from './PartyMaster';
 import CommonListPage from "../../../components/Common/CmponentRelatedCommonFile/commonListPage";
 import { commonPageFieldList, commonPageFieldListSuccess } from "../../../store/actions";
-import { PARTY } from '../../../routes/route_url';
 
 const PartyList = () => {
     const dispatch = useDispatch();
     const reducers = useSelector(
+
         (state) => ({
             tableList: state.PartyMasterReducer.partyList,
             editData: state.PartyMasterReducer.editData,
@@ -23,7 +23,7 @@ const PartyList = () => {
             deleteMsg: state.PartyMasterReducer.deleteMessage,
             userAccess: state.Login.RoleAccessUpdateData,
             postMsg: state.PartyMasterReducer.PartySaveSuccess,
-            pageField: state.CommonPageFieldReducer.pageFieldList
+            pageField: state.CommonPageFieldReducer.pageFieldList,
         })
     );
 
@@ -35,7 +35,6 @@ const PartyList = () => {
         deleteSucc: deletePartyIDSuccess,
         postSucc: postPartyDataSuccess
     }
-
 
     //  This UseEffect => Featch Modules List data  First Rendering
     useEffect(() => {
@@ -54,7 +53,6 @@ const PartyList = () => {
                         action={action}
                         reducers={reducers}
                         MasterModal={PartyMaster}
-                        masterPath={PARTY}
                         ButtonMsgLable={"Party"}
                         deleteName={"Name"}
                     />
