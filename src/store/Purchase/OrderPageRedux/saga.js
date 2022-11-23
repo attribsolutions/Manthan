@@ -20,14 +20,13 @@ import {
   OrderPage_GoButton_API,
   OrderPage_get_API,
   getOrderList_For_Listpage,
+  Order_get_API,
 } from "../../../helpers/backend_helper";
 
 import {
-  GET_ORDER_LIST,
   UPDATE_ORDER_ID_FROM_ORDER_PAGE,
   EDIT_ORDER_FOR_ORDER_PAGE,
   DELETE_ORDER_FOR_ORDER_PAGE,
-  GET_SUPPLIER,
   GO_BUTTON_FOR_ORDER_PAGE,
   POST_ORDER_FROM_ORDER_PAGE,
   GET_ORDER_LIST_PAGE,
@@ -38,7 +37,7 @@ import { AlertState } from "../../Utilites/CustomAlertRedux/actions";
 
 
 function* goButtonGenFunc({ data, hasEditVal }) {
-  
+
   yield put(SpinnerState(true))
   try {
     const response = yield call(OrderPage_GoButton_API, data);
@@ -102,7 +101,7 @@ function* editOrderGenFunc({ id, pageMode }) {
   }
 }
 
-function* DeleteOrder_GenratorFunction({ id }) {
+function* DeleteOrder_GenFunc({ id }) {
   yield put(SpinnerState(true))
   try {
     const response = yield call(deleteOrderID_forOrderPage_ApiCall, id);
@@ -117,7 +116,7 @@ function* DeleteOrder_GenratorFunction({ id }) {
   }
 }
 
-function* UpdateOrder_ID_GenratorFunction({ data, id }) {
+function* UpdateOrder_ID_GenFunc({ data, id }) {
 
   try {
     yield put(SpinnerState(true))
@@ -135,11 +134,11 @@ function* UpdateOrder_ID_GenratorFunction({ data, id }) {
 }
 
 // List Page API
-function* get_OrderListPage_GenratorFunction() {
-  
+function* get_OrderList_GenFunc({ filters }) {
+debugger
   yield put(SpinnerState(true))
   try {
-    const response = yield call(getOrderList_For_Listpage);
+    const response = yield call(Order_get_API, filters);
     yield put(SpinnerState(false))
     yield put(getOrderListPageSuccess(response.Data))
 
@@ -153,13 +152,13 @@ function* get_OrderListPage_GenratorFunction() {
 }
 
 function* OrderPageSaga() {
- 
+
   yield takeEvery(GO_BUTTON_FOR_ORDER_PAGE, goButtonGenFunc);
   yield takeEvery(POST_ORDER_FROM_ORDER_PAGE, postOrder_GenFunc);
   yield takeEvery(EDIT_ORDER_FOR_ORDER_PAGE, editOrderGenFunc);
-  yield takeEvery(UPDATE_ORDER_ID_FROM_ORDER_PAGE, UpdateOrder_ID_GenratorFunction)
-  yield takeEvery(DELETE_ORDER_FOR_ORDER_PAGE, DeleteOrder_GenratorFunction);
-  yield takeEvery(GET_ORDER_LIST_PAGE, get_OrderListPage_GenratorFunction);
+  yield takeEvery(UPDATE_ORDER_ID_FROM_ORDER_PAGE, UpdateOrder_ID_GenFunc)
+  yield takeEvery(DELETE_ORDER_FOR_ORDER_PAGE, DeleteOrder_GenFunc);
+  yield takeEvery(GET_ORDER_LIST_PAGE, get_OrderList_GenFunc);
 }
 
 export default OrderPageSaga;

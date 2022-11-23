@@ -53,7 +53,7 @@ function* editGRNGenFunc({ id, pageMode }) {
     const response = yield call(GRN_Edit_API, id);
     response.pageMode = pageMode
     yield put(SpinnerState(false))
-    debugger
+    // debugger
     yield put(editGRNIdSuccess(response));
   } catch (error) {
     yield put(SpinnerState(false))
@@ -97,23 +97,13 @@ function* UpdateGRNGenFunc({ data, id }) {
 }
 
 // List Page API
-function* get_GRN_GerFunc() {
-
+function* get_GRN_GerFunc({ filters }) {
+  debugger
   yield put(SpinnerState(true))
   try {
-    const response = yield call(GRN_get_API);
-    // const convertList = response.Data.map(i => {
-    //   delete i.age
-    //   id,
-    //   GRNDate,
-    //   Customer,
-    //   GRNNumber,
-    //   GrandTotal,
-    //   Party,
-    //   CreatedBy,
-    //   UpdatedBy
-    // })
-    // debugger
+    const response = yield call(GRN_get_API, filters);
+    debugger
+
     yield put(SpinnerState(false))
     yield put(getGRNListPageSuccess(response.Data))
 
@@ -128,7 +118,7 @@ function* get_GRN_GerFunc() {
 
 // List Page API
 function* getGRNitem_Mode2_GenFunc({ data }) {
-  debugger
+  // debugger
   const { jsonBody, pageMode, GRN_ADD, grnRef, challanNo } = data
 
   yield put(SpinnerState(true))

@@ -16,16 +16,20 @@ import {
     editGRNId, getGRNListPage,
     updateGRNIdSuccess
 } from "../../../store/Purchase/GRNRedux/actions";
+import { goButton } from "../../../store/Purchase/OrderPageRedux/actions";
+import { getSupplier } from "../../../store/CommonAPI/SupplierRedux/actions";
 
 
 const GRNList = () => {
 
     const dispatch = useDispatch();
+    const [supplierSelect, setsupplierSelect] = useState({ value: '' });
 
 
 
     const reducers = useSelector(
         (state) => ({
+            supplier: state.SupplierReducer.supplier,
             tableList: state.GRNReducer.GRNList,
             deleteMsg: state.GRNReducer.deleteMsg,
             updateMsg: state.GRNReducer.updateMsg,
@@ -35,7 +39,7 @@ const GRNList = () => {
             pageField: state.CommonPageFieldReducer.pageFieldList,
         })
     );
-
+    const { pageField, supplier } = reducers;
     const action = {
         getList: getGRNListPage,
         editId: editGRNId,
@@ -50,10 +54,42 @@ const GRNList = () => {
     useEffect(() => {
         dispatch(commonPageFieldListSuccess(null))
         dispatch(commonPageFieldList(56))
-        dispatch(getGRNListPage());
+        dispatch(getSupplier())
+        goButtonHandler();
     }, []);
 
-    const { pageField } = reducers;
+    const supplierOptions = supplier.map((i) => ({
+        value: i.id,
+        label: i.Supplier,
+    }));
+
+    const goButtonHandler = () => {
+        debugger
+        let supplier = supplierSelect.value;
+        let todate;
+        let fromdate;
+        let party;
+
+        try {
+            todate = document.getElementById("todate").value
+            fromdate = document.getElementById("fromdate").value;
+            party = JSON.parse(localStorage.getItem("roleId")).Party_id
+        } catch (e) {
+            alert(e)
+            return
+        }
+        const jsonBody = JSON.stringify({
+            FromDate: fromdate,
+            ToDate: todate,
+            Supplier: supplier,
+            Party: party,
+        }
+        );
+        dispatch(getGRNListPage(jsonBody));
+    }
+
+
+
 
     return (
 
@@ -76,8 +112,8 @@ const GRNList = () => {
                                     style={{ width: "100px" }}>From Date</Label>
                                 <Col md="7">
                                     <Flatpickr
-                                        id="orderdate"
-                                        name="orderdate"
+                                        id="fromdate"
+                                        name="fromdate"
                                         // value={podate}
                                         className="form-control d-block p-2 bg-white text-dark"
                                         placeholder="Select..."
@@ -85,9 +121,9 @@ const GRNList = () => {
                                             altInput: true,
                                             altFormat: "d-m-Y",
                                             dateFormat: "Y-m-d",
-                                            minDate: "pageMode" === "edit" ? "podate" : "today",
+                                            minDate: "today",
                                             // maxDate: pageMode === "edit" ? podate : "",
-                                            defaultDate: "pageMode" === "edit" ? "" : "today"
+                                            defaultDate: "today"
 
                                         }}
                                     // onChange={(e, date) => { setpoDate(date) }}
@@ -101,8 +137,8 @@ const GRNList = () => {
                                     style={{ width: "100px" }}>To Date</Label>
                                 <Col md="7">
                                     <Flatpickr
-                                        id="orderdate"
-                                        name="orderdate"
+                                        id="todate"
+                                        name="todate"
                                         // value={podate}
                                         className="form-control d-block p-2 bg-white text-dark"
                                         placeholder="Select..."
@@ -110,9 +146,9 @@ const GRNList = () => {
                                             altInput: true,
                                             altFormat: "d-m-Y",
                                             dateFormat: "Y-m-d",
-                                            minDate: "pageMode" === "edit" ? "podate" : "today",
+                                            minDate: "today",
                                             // maxDate: pageMode === "edit" ? podate : "",
-                                            defaultDate: "pageMode" === "edit" ? "" : "today"
+                                            defaultDate: "today"
                                         }}
                                     // onChange={(e, date) => { setpoDate(date) }}
                                     />
@@ -126,11 +162,11 @@ const GRNList = () => {
                                     style={{ width: "130px" }}>Supplier Name</Label>
                                 <Col md="7">
                                     <Select
-                                        value={"supplierSelect"}
+                                        // value={"supplier"}
                                         classNamePrefix="select2-Customer"
-                                        isDisabled={"pageMode" === "edit" ? true : false}
-                                        options={"supplierOptions"}
-                                    // onChange={(e) => { setsupplierSelect(e) }}
+                                        // isDisabled={"pageMode" === "edit" ? true : false}
+                                        options={supplierOptions}
+                                        onChange={(e) => { setsupplierSelect(e) }}
                                     />
                                 </Col>
                             </FormGroup>
@@ -138,7 +174,7 @@ const GRNList = () => {
 
                         <Col md="1" className="mt-3 ">
                             <Button type="button" color="btn btn-outline-success border-2 font-size-12 "
-                            // onClick={GoButton_Handler}
+                                onClick={goButtonHandler}
                             >Go</Button>
                         </Col>
                     </div>
