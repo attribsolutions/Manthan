@@ -46,23 +46,23 @@ function* postGRNGenFunc({ data }) {
   }
 }
 
-function* editGRNGenFunc({ id, pageMode }) {
+// function* editGRNGenFunc({ id, pageMode }) {
 
-  yield put(SpinnerState(true))
-  try {
-    const response = yield call(GRN_Edit_API, id);
-    response.pageMode = pageMode
-    yield put(SpinnerState(false))
-    // debugger
-    yield put(editGRNIdSuccess(response));
-  } catch (error) {
-    yield put(SpinnerState(false))
-    yield put(AlertState({
-      Type: 4,
-      Status: true, Message: "500 Error EditGRN-ID API",
-    }));
-  }
-}
+//   yield put(SpinnerState(true))
+//   try {
+//     const response = yield call(GRN_Edit_API, id);
+//     response.pageMode = pageMode
+//     yield put(SpinnerState(false))
+//     // debugger
+//     yield put(editGRNIdSuccess(response));
+//   } catch (error) {
+//     yield put(SpinnerState(false))
+//     yield put(AlertState({
+//       Type: 4,
+//       Status: true, Message: "500 Error EditGRN-ID API",
+//     }));
+//   }
+// }
 
 function* DeleteGRNGenFunc({ id }) {
   yield put(SpinnerState(true))
@@ -134,21 +134,6 @@ function* getGRNitem_Mode2_GenFunc({ data }) {
     debugger
     yield put(SpinnerState(false))
     yield put(getGRN_itemMode2_Success(response))
-    // response.Data.OrderItem.forEach(ele => {
-
-
-    //   ele["inpRate"] = ele.Rate
-    //   ele["inpQty"] = ele.Quantity
-    //   ele["totalAmount"] = ele.Amount
-    //   ele["UOM"] = ele.Unit
-    //   ele["UOMLabel"] = ele.UnitName
-    //   ele["inpBaseUnitQty"] = ele.BaseUnitQuantity
-
-
-    // });
-    // yield put(getGRN_itemMode3_Success(response.Data.OrderItem))
-
-
   } catch (error) {
     yield put(SpinnerState(false))
     yield put(AlertState({
@@ -161,7 +146,7 @@ function* GRNSaga() {
 
   yield takeEvery(GET_GRN_ITEM_MODE_2, getGRNitem_Mode2_GenFunc);
   yield takeEvery(POST_GRN_FROM_GRN_PAGE, postGRNGenFunc);
-  yield takeEvery(EDIT_ORDER_FOR_ORDER_PAGE, editGRNGenFunc);
+  // yield takeEvery(EDIT_ORDER_FOR_ORDER_PAGE, editGRNGenFunc);
   yield takeEvery(UPDATE_GRN_ID_FROM_GRN_PAGE, UpdateGRNGenFunc)
   yield takeEvery(DELETE_GRN_FOR_GRN_PAGE, DeleteGRNGenFunc);
   yield takeEvery(GET_GRN_LIST_PAGE, get_GRN_GerFunc);
