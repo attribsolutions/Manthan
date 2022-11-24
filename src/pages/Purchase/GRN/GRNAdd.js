@@ -395,7 +395,7 @@ const GRNAdd = (props) => {
         //------------- GST column ------------------------------------
         {
             text: "GST %",
-            dataField: "GST",
+            dataField: "GSTPercentage",
             sort: true,
             formatter: (value, row) => (
                 <div className="text-center mt-2">
