@@ -432,7 +432,7 @@ const GRNAdd = (props) => {
 
     const defaultSorted = [
         {
-            dataField: "PriceList", // if dataField is not match to any column you defined, it will be ignored.
+            dataField: "Name", // if dataField is not match to any column you defined, it will be ignored.
             order: "asc", // desc or asc
         },
     ];
@@ -630,7 +630,7 @@ const GRNAdd = (props) => {
                         {({ paginationProps, paginationTableProps }) => (
                             <ToolkitProvider
                                 keyField="id"
-                                // defaultSorted={defaultSorted}
+                                defaultSorted={defaultSorted}
                                 data={OrderItem}
                                 columns={pagesListColumns}
                                 search
