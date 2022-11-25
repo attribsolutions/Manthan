@@ -51,7 +51,8 @@ import Margin_Tab from "./MarginTab/index";
 import GroupTab from "./Group_Tab";
 import CategoryTab from "./Category_Tab";
 import DivisionTab from "./Division_Tab";
-import UnitConverstion from "./UnitConversion/Index";
+import UnitConverstion from "./UnitConversion_Tab/Index";
+import Image from "./Image_Tab/Index";
 
 const ItemsMaster = (props) => {
     const dispatch = useDispatch();
@@ -358,7 +359,6 @@ const ItemsMaster = (props) => {
         setpageRefresh(!pageRefresh)
     }
 
-
     function Common_Text_INPUT_Validation(value, type, key) {
 
         let OnchangeControl = document.getElementById(`txt${type}${key}`)
@@ -391,58 +391,6 @@ const ItemsMaster = (props) => {
 
 
 
-    function ImageTab_AddRow_Handler(key) {
-
-
-        var newarr1 = [...imageTabTable, {
-            ImageType: { value: 0, label: "select" },
-            ImageUpload: {}
-        }]
-        setImageTabTable(newarr1)
-    }
-    function ImageTab_DeleteRow_Handler(key) {
-        var removeElseArrray1 = imageTabTable.filter((i, k) => {
-            return !(k === key)
-        })
-        setImageTabTable(removeElseArrray1)
-    }
-    function ImageTab_onChange_Handler(event, key, type) {
-
-        var found = imageTabTable.find((i, k) => {
-            return (k === key)
-        })
-        let newSelectValue = ''
-
-        if (type === "ImageType") {
-            const foundDublicate = imageTabTable.find((element) => {
-                return (element[type].value === event.value)
-            });
-            if (!(foundDublicate === undefined)) {
-                dispatch(AlertState({
-                    Type: 4,
-                    Status: true,
-                    Message: "Image Type Already Select",
-                }))
-                return
-            }
-            newSelectValue = {
-                ImageType: event,
-                ImageUpload: found.ImageUpload,
-            }
-        }
-        else if (type === 'ImageUpload') {
-            newSelectValue = {
-                ImageType: found.ImageType,
-                ImageUpload: event.target.value,
-            }
-        }
-
-        let newTabArr = imageTabTable.map((index, k) => {
-            return (k === key) ? newSelectValue : index
-        })
-        setImageTabTable(newTabArr)
-    }
-
 
     const CategoryType_Handler = (event) => {
         dropDownValidation(event, "CategoryType")
@@ -451,14 +399,11 @@ const ItemsMaster = (props) => {
     };
 
     const Category_Handler = (event) => {
-        // setcategoryDropdownSelect(event);
         dropDownValidation(event, "Category")
-
     };
 
     const Division_Handler = (event) => {
         dropDownValidation(event, "Division")
-        // setDivision_dropdown_Select(event);
 
     };
 
@@ -624,7 +569,7 @@ const ItemsMaster = (props) => {
                     </MetaTags>
                     <Container fluid>
                         <AvForm onValidSubmit={(e, v) => { handleValidSubmit(e, v); }}>
-                            {/* Render Breadcrumbs */}
+
                             <Breadcrumb breadcrumbItem={userPageAccessState.PageHeading} />
 
                             <Row>
@@ -1081,70 +1026,11 @@ const ItemsMaster = (props) => {
                                                 </TabPane>
 
                                                 <TabPane tabId="4">
-                                                    <Col md={12} >
-                                                        <Card className="text-black">
-                                                            <CardBody style={{ backgroundColor: "whitesmoke" }}>
+                                                    <Image state={{
+                                                        imageTable: imageTabTable,
+                                                        setImageTable: setImageTabTable
+                                                    }} />
 
-                                                                {imageTabTable.map((index, key) => {
-                                                                    return <Row className=" col col-sm-11" >
-                                                                        <FormGroup className="mb-3 col col-sm-4 " >
-                                                                            <Label htmlFor="validationCustom21">Image Type</Label>
-                                                                            <Select
-                                                                                value={imageTabTable[key].ImageType}
-                                                                                options={ImageType_DropdownOptions}
-                                                                                onChange={(e) => { ImageTab_onChange_Handler(e, key, "ImageType") }}
-                                                                            />
-                                                                        </FormGroup>
-
-                                                                        <FormGroup className="mb-3 col col-sm-4 " >
-                                                                            <Label >Upload</Label>
-                                                                            <Input type="file" className="form-control col col-sm-4 "
-                                                                                value={imageTabTable.ImageUpload}
-                                                                                // value={"C:\fakepath\cropper.jpg"}
-                                                                                onChange={(e) => ImageTab_onChange_Handler(e, key, "ImageUpload")} />
-                                                                        </FormGroup>
-
-
-                                                                        <Col md={1}>
-                                                                            {(imageTabTable.length === key + 1) ?
-                                                                                <Row className=" mt-3">
-                                                                                    <Col md={6} className=" mt-3">
-                                                                                        {(imageTabTable.length > 1)
-                                                                                            ?
-                                                                                            < i className="mdi mdi-trash-can d-block text-danger font-size-20" onClick={() => {
-                                                                                                ImageTab_DeleteRow_Handler(key)
-                                                                                            }} >
-                                                                                            </i>
-                                                                                            : <Col md={6} ></Col>
-                                                                                        }
-
-                                                                                    </Col>
-
-                                                                                    <Col md={6}>
-                                                                                        <Button className="btn btn-sm mt-3 btn-light  btn-outline-primary  align-items-sm-end"
-                                                                                            type="button"
-                                                                                            onClick={() => { ImageTab_AddRow_Handler(key) }} >
-                                                                                            <i className="dripicons-plus"></i>Add
-                                                                                        </Button>
-                                                                                    </Col>
-                                                                                </Row>
-                                                                                :
-                                                                                <Row className="mt-3">
-                                                                                    < i className="mdi mdi-trash-can d-block text-danger font-size-20 mt-3" onClick={() => {
-                                                                                        ImageTab_DeleteRow_Handler(key)
-                                                                                    }} >
-                                                                                    </i>
-                                                                                </Row>
-                                                                            }
-
-                                                                        </Col>
-                                                                    </Row>
-                                                                })}
-                                                            </CardBody>
-                                                        </Card>
-                                                    </Col>
-                                                    <Row>
-                                                    </Row>
                                                 </TabPane>
 
                                                 <TabPane tabId="5">
