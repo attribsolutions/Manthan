@@ -499,8 +499,8 @@ const GRNAdd = (props) => {
                     CGST: (cgstAmt / 2).toFixed(2),
                     SGST: (cgstAmt / 2).toFixed(2),
                     IGST: 0,
-                    CGSTPercentage: (i.GST / 2),
-                    SGSTPercentage: (i.GST / 2),
+                    CGSTPercentage: (i.GSTPercentage / 2),
+                    SGSTPercentage: (i.GSTPercentage / 2),
                     IGSTPercentage: 0,
 
                     BatchDate: "2022-11-19",
@@ -511,7 +511,7 @@ const GRNAdd = (props) => {
                     TaxType: "GST",
 
                 }
-
+                debugger
                 itemArr.push(arr)
             };
         })
@@ -540,7 +540,7 @@ const GRNAdd = (props) => {
             GRNReferences: grnItemData.GRNReferences
 
         });
-
+        debugger
         if (pageMode === "edit") {
             // dispatch(editGRNId(jsonBody, editVal.id))
             console.log("GRNedit", jsonBody)
@@ -569,7 +569,7 @@ const GRNAdd = (props) => {
                         <div className=" mt-1 row">
 
                             <FormGroup className="mb- row mt-3 " >
-                            <Label className="col-md-4 p-2"
+                                <Label className="col-md-4 p-2"
                                     style={{ width: "130px" }}>GRN Date</Label>
                                 <Col md="3">
                                     <Flatpickr

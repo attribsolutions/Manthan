@@ -7,7 +7,7 @@ import { AlertState } from '../../../../../store/actions';
 
 export default function UnitConverstion(props) {
     const dispatch = useDispatch();
-    
+
     const { pageMode, formValue, TableData = [], BaseUnit = [], } = props.state;
     const { settable, setFormValue } = props
 
@@ -31,6 +31,7 @@ export default function UnitConverstion(props) {
         const newarr = [...TableData, {
             Conversion: '',
             Unit: '',
+            IsBase: false
         }]
         settable(newarr)
     }
@@ -50,10 +51,16 @@ export default function UnitConverstion(props) {
         })
 
         if (type === "Conversion") {
+            var conv = event.target.value
+            var float = ''
+            if (!(conv === '')) {
+                float = parseFloat(conv).toFixed(3)
+            }
 
             newSelectValue = {
-                Conversion: event.target.value,
+                Conversion: float,
                 Unit: found.Unit,
+                IsBase: found.IsBase
             }
         }
         else if (type === 'Unit') {
@@ -61,6 +68,7 @@ export default function UnitConverstion(props) {
             newSelectValue = {
                 Conversion: found.Conversion,
                 Unit: event,
+                IsBase: found.IsBase
             }
         }
 
@@ -70,6 +78,86 @@ export default function UnitConverstion(props) {
         settable(newTabArr)
     }
 
+    const tbodyfunction = () => {
+
+        const newarr = []
+
+        TableData.forEach((index, key) => {
+
+            newarr.push(
+                (
+                    <tr >
+                        <td>
+                            <Row>
+                                <Label className=" col-sm-2 col-form-label">1</Label>
+                                <Col md={7}>
+                                    <Select
+                                        id={`dropUnit-${key}`}
+                                        placeholder="Select..."
+                                        value={index.Unit}
+                                        options={BaseUnit_DropdownOptions}
+                                        onChange={(e) => baseUnit2_onChange(e, "Unit", key)}
+                                    />
+                                </Col>
+                                < Label className=" col-sm-3 col-form-label">=</Label>
+                            </Row>
+                        </td>
+                        <td>
+                            <Row>
+                                <Col>
+                                    <Input
+                                        type="text"
+                                        id={`txtConversion${key}`}
+                                        placeholder="Select..."
+                                        autoComplete="off"
+                                        value={index.Conversion}
+                                        onChange={(e) => baseUnit2_onChange(e, "Conversion", key,)}
+                                    >
+
+                                    </Input>
+                                </Col>
+                                <Label className=" col-sm-4 col-form-label"> {formValue.BaseUnit.label}</Label>
+                            </Row>
+                        </td>
+
+                        <td>
+                            {(TableData.length === key + 1) ?
+                                <Row className="">
+                                    <Col md={6} className=" mt-3">
+                                        {(TableData.length > 1) ? <>
+                                            < i className="mdi mdi-trash-can d-block text-danger font-size-20" onClick={() => {
+                                                deleteRow_Handler(key)
+                                            }} >
+                                            </i>
+                                        </> : <Col md={6} ></Col>}
+
+                                    </Col>
+
+                                    <Col md={6} >
+                                        <Button className="btn btn-sm btn-light mt-3   align-items-sm-end"
+                                            type="button"
+                                            onClick={() => { addRow_Handler(key) }}
+                                        >
+                                            <i className="dripicons-plus"></i>
+                                        </Button>
+                                    </Col>
+                                </Row>
+                                :
+
+                                < i className="mdi mdi-trash-can d-block text-danger font-size-20" onClick={() => {
+                                    deleteRow_Handler(key)
+                                }} >
+                                </i>
+                            }
+                        </td>
+                    </tr>
+                )
+            )
+
+        });
+        return newarr
+
+    }
 
 
     return (
@@ -103,75 +191,7 @@ export default function UnitConverstion(props) {
                                         </tr>
                                     </Thead>
                                     <Tbody  >
-                                        {TableData.map((TableValue, key) => (
-
-                                            <tr >
-                                                <td>
-                                                    <Row>
-                                                        <Label className=" col-sm-2 col-form-label">1</Label>
-                                                        <Col md={7}>
-                                                            <Select
-                                                                id={`dropUnit-${key}`}
-                                                                placeholder="Select..."
-                                                                value={TableData[key].Unit}
-                                                                options={BaseUnit_DropdownOptions}
-                                                                onChange={(e) => baseUnit2_onChange(e, "Unit", key)}
-                                                            />
-                                                        </Col>
-                                                        < Label className=" col-sm-3 col-form-label">=</Label>
-                                                    </Row>
-                                                </td>
-                                                <td>
-                                                    <Row>
-                                                        <Col>
-                                                            <Input
-                                                                type="text"
-                                                                id={`txtConversion${key}`}
-                                                                placeholder="Select..."
-                                                                autoComplete="off"
-                                                                value={TableData[key].Conversion}
-                                                                onChange={(e) => baseUnit2_onChange(e, "Conversion", key,)}
-                                                            >
-
-                                                            </Input>
-                                                        </Col>
-                                                        <Label className=" col-sm-4 col-form-label"> {formValue.BaseUnit.label}</Label>
-                                                    </Row>
-                                                </td>
-
-                                                <td>
-                                                    {(TableData.length === key + 1) ?
-                                                        <Row className="">
-                                                            <Col md={6} className=" mt-3">
-                                                                {(TableData.length > 1) ? <>
-                                                                    < i className="mdi mdi-trash-can d-block text-danger font-size-20" onClick={() => {
-                                                                        deleteRow_Handler(key)
-                                                                    }} >
-                                                                    </i>
-                                                                </> : <Col md={6} ></Col>}
-
-                                                            </Col>
-
-                                                            <Col md={6} >
-                                                                <Button className="btn btn-sm btn-light mt-3   align-items-sm-end"
-                                                                    type="button"
-                                                                    onClick={() => { addRow_Handler(key) }}
-                                                                >
-                                                                    <i className="dripicons-plus"></i>
-                                                                </Button>
-                                                            </Col>
-                                                        </Row>
-                                                        :
-
-                                                        < i className="mdi mdi-trash-can d-block text-danger font-size-20" onClick={() => {
-                                                            deleteRow_Handler(key)
-                                                        }} >
-                                                        </i>
-                                                    }
-                                                </td>
-
-                                            </tr>
-                                        ))}
+                                        {tbodyfunction()}
                                     </Tbody>
                                 </Table>
                             </Col>
