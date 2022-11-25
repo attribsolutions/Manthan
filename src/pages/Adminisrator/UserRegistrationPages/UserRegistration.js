@@ -36,6 +36,7 @@ const AddUser = (props) => {
   const [partyRoleData, setPartyRoleData] = useState([]);
   const [EmployeeSelect, setEmployeeSelect] = useState("");
   const [userPartiesForUserMaster, setUserPartiesForUserMaster] = useState([]);
+  console.log("EmployeeSelect",EmployeeSelect.length)
   // M_Roles DropDown
 
   const [password, setPassword] = useState('');
@@ -79,7 +80,7 @@ const AddUser = (props) => {
     userAccess: state.Login.RoleAccessUpdateData,
     pageField: state.CommonPageFieldReducer.pageField
   }));
-
+console.log("employeelistForDropdown",employeelistForDropdown)
   const location = { ...history.location }
   const hasShowloction = location.hasOwnProperty("editValue")
   const hasShowModal = props.hasOwnProperty("editValue")
@@ -351,45 +352,46 @@ const AddUser = (props) => {
                           <CardBody style={{ backgroundColor: "whitesmoke" }}>
                             <Row >
 
-                              <FormGroup className="mb-2 col col-sm-4 " >
-                                <Label htmlFor="validationCustom01">Employee</Label>
-                                <Select
-                                  id="EmployeeDropDown "
-                                  isDisabled={pageMode === "edit" ? true : false}
-                                  value={EmployeeSelect}
-                                  options={EmployeeValues}
-                                  onChange={(e) => { handllerEmployeeID(e) }}
-                                />
-                              </FormGroup>
-                              <Row >
-
-                                <FormGroup
-                                  className="mb-1 col col-sm-4 " >
-                                  <Label htmlFor="validationCustom01">Login Name</Label>
-                                  <AvField
-
-                                    name="loginName" id="txtName"
-                                    type="text"
-                                    placeholder="Please Enter Name"
-                                    defaultvalue=''
-                                    value={EditData.LoginName}
-                                    disabled={pageMode === "edit" ? true : false}
-                                    autoComplete='off'
-                                    validate={{
-                                      required: { value: true, errorMessage: 'Please Enter Name' },
-                                    }}
-                                    onChange={(e) => { dispatch(Breadcrumb_inputName(e.target.value)) }}
+                              <FormGroup className="mb-2 col col-sm-4 ">
+                                <Label htmlFor="validationCustom01"> Employee </Label>
+                                <Col sm={12}>
+                                  <Select
+                                    id="EmployeeDropDown "
+                                    isDisabled={pageMode === "edit" ? true : false}
+                                    value={EmployeeSelect}
+                                    options={EmployeeValues}
+                                    onChange={(e) => { handllerEmployeeID(e) }}
                                   />
-                                </FormGroup>
-                              </Row>
+
+                                </Col>
+                              </FormGroup>
 
                             </Row>
 
                             <Row>
-                              <Row>
-                                <FormGroup className="mb-1 col col-sm-4 " >
-                                  <Label htmlFor="validationCustom01">Password</Label>
-                                  <AvField name="password" id="password"
+                              <FormGroup className="mb-2 col col-sm-4 ">
+                                <Label htmlFor="validationCustom01">Login Name</Label>
+                                <AvField
+
+                                  name="loginName" id="txtName"
+                                  type="text"
+                                  placeholder="Please Enter Login Name"
+                                  defaultvalue=''
+                                  value={EditData.LoginName}
+                                  disabled={pageMode === "edit" ? true : false}
+                                  autoComplete='off'
+                                  validate={{
+                                    required: { value: true, errorMessage: 'Please Enter Name' },
+                                  }}
+                                  onChange={(e) => { dispatch(Breadcrumb_inputName(e.target.value)) }}
+                                />
+                              </FormGroup>
+                            </Row>
+
+                            <Row>
+                              <FormGroup className="mb-2 col col-sm-4 ">
+                                <Label htmlFor="validationCustom01">Password</Label>
+                                <AvField name="password" id="password"
                                     type="password"
                                     placeholder="Please Enter Password"
                                     autoComplete="new-password"
@@ -397,14 +399,13 @@ const AddUser = (props) => {
 
                                     value={password}
                                     onChange={(e) => { setPassword(e.target.value) }} />
+                              </FormGroup>
+                            </Row>
 
-                                </FormGroup>
-
-                              </Row>
-                              <Row>
-                                <FormGroup className="mb-1 col col-sm-4 " >
-                                  <Label htmlFor="validationCustom01">Confirm Password</Label>
-                                  <AvField name="password" id="password"
+                            <Row>
+                              <FormGroup className="mb-2 col col-sm-4 ">
+                                <Label htmlFor="validationCustom01">Confirm Password</Label>
+                                <AvField name="password" id="password"
                                     type="password"
                                     // value={EditData.password}
                                     placeholder="Please Enter Password"
@@ -413,8 +414,7 @@ const AddUser = (props) => {
                                     value={cPassword}
                                     onChange={handleCPassword} />
                                   {showErrorMessage && isCPassword ? <div> Passwords did not match </div> : ''}
-                                </FormGroup>
-                              </Row>
+                              </FormGroup>
                             </Row>
 
                             <Row className="mt-2">
@@ -477,42 +477,9 @@ const AddUser = (props) => {
                                 </Row>
                               </FormGroup>
                             </Row>
-                          </CardBody>
-                        </Card>
 
-                        <Card className="mt-n2">
-                          <CardBody style={{ backgroundColor: "whitesmoke" }}>
-                            <Row className="">
-
-                              {!(userPartiesForUserMaster.length === 0) ? userPartiesForUserMaster[0].Party > 0 ?
-                                <Col sm={6} style={{ marginTop: '28px' }}>
-
-                                  {partyRoleData ? (
-                                    <div >
-                                      {rolaTable()}
-                                    </div>
-                                  ) :
-                                    null
-                                  }
-                                </Col> : <div className="col-lg-3 col-md-6">
-                                  <div className="mb-3">
-                                    <Label className="form-label font-size-13 ">Role name</Label>
-
-                                    <Select
-                                      defaultValue={pageMode === "edit" ? userPartiesForUserMaster[0].PartyRoles.map((i) => ({ value: i.Role, label: i.RoleName })) : null}
-                                      options={RolesValues}
-                                      isMulti={true}
-                                      className="basic-multi-select"
-                                      onChange={(event) => { RoleDropDown_select_handler(event, userPartiesForUserMaster[0], 0) }}
-                                      classNamePrefix="select2-selection"
-                                    />
-                                  </div>
-                                </div> :
-                                <></>}
-
-
-
-                              <Row >
+                            {(EmployeeSelect.length === 0) ?
+                              <Row className="mt-3">
                                 <Col sm={2}>
                                   <div>
                                     {
@@ -545,10 +512,82 @@ const AddUser = (props) => {
 
 
                                 </Col>
-                              </Row>
-                            </Row>
+                              </Row> : <></>}
+
                           </CardBody>
                         </Card>
+
+                        {!(EmployeeSelect.length === 0) ?
+                          < Card className="mt-n2">
+                            <CardBody style={{ backgroundColor: "whitesmoke" }}>
+                              <Row className="">
+
+                                {!(userPartiesForUserMaster.length === 0) ? userPartiesForUserMaster[0].Party > 0 ?
+                                  <Col sm={6} style={{ marginTop: '28px' }}>
+
+                                    {partyRoleData ? (
+                                      <div >
+                                        {rolaTable()}
+                                      </div>
+                                    ) :
+                                      null
+                                    }
+                                  </Col> : <div className="col-lg-3 col-md-6">
+                                    <div className="mb-3">
+                                      <Label className="form-label font-size-13 ">Role name</Label>
+
+                                      <Select
+                                        defaultValue={pageMode === "edit" ? userPartiesForUserMaster[0].PartyRoles.map((i) => ({ value: i.Role, label: i.RoleName })) : null}
+                                        options={RolesValues}
+                                        isMulti={true}
+                                        className="basic-multi-select"
+                                        onChange={(event) => { RoleDropDown_select_handler(event, userPartiesForUserMaster[0], 0) }}
+                                        classNamePrefix="select2-selection"
+                                      />
+                                    </div>
+                                  </div> :
+                                  <></>}
+
+
+                                <Row >
+                                  <Col sm={2}>
+                                    <div>
+                                      {
+                                        pageMode === "edit" ?
+
+                                          userPageAccessState.RoleAccess_IsEdit ?
+
+                                            <button
+                                              type="submit"
+                                              data-mdb-toggle="tooltip" data-mdb-placement="top" title="Update User"
+                                              className="btn btn-success w-md"
+                                            >
+                                              <i class="fas fa-edit me-2"></i>Update
+                                            </button>
+                                            :
+                                            <></>
+                                          : (
+                                            userPageAccessState.RoleAccess_IsSave ?
+                                              <button
+                                                type="submit"
+                                                data-mdb-toggle="tooltip" data-mdb-placement="top" title="Save User"
+                                                className="btn btn-primary w-md"
+                                              > <i className="fas fa-save me-2"></i> Save
+                                              </button>
+                                              :
+                                              <></>
+                                          )
+                                      }
+                                    </div>
+
+
+                                  </Col>
+                                </Row>
+                              </Row>
+                            </CardBody>
+                          </Card>
+                          : <></>}
+
                       </AvForm>
                     </CardBody>
                     <br></br>
