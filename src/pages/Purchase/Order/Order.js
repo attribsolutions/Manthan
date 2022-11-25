@@ -582,6 +582,7 @@ const Order = (props) => {
                                     <div className=" col ">
                                         <Input type="text"
                                             defaultValue={description}
+                                            placeholder='Enter Order Description'
                                             onChange={e => description = e.target.value}
                                             style={{ backgroundColor: "#dddddd" }} />
                                     </div>
