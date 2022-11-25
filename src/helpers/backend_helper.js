@@ -300,7 +300,7 @@ export const get_PriceListByPartyType_API = (partyType) => get(`${url.PRICE_LIST
 export const GetPriceList_For_Listpage = () => get(url.PRICELIST)//  get priceList
 export const delete_PriceList_API = (id) => del(`${url.PRICE_LIST}/${id}`)// delete api
 export const edit_PriceList = (id) => get(`${url.PRICE_LIST}/${id}`) // edit api
-export const update_PriceList = (data, id) => put(`${url.PRICE_LIST}/${id}`, data)// update
+export const update_PriceList = (data, id) => put(`${url.PRICE_LIST}/${id}`,data)// update
 
 // MRP Master 
 export const Post_MRPMaster_API = (data) => post(url.MRP_MASTER_LIST, data)// post api
