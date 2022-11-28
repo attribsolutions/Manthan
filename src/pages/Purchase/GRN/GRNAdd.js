@@ -58,7 +58,7 @@ const GRNAdd = (props) => {
 
     //Access redux store Data /  'save_ModuleSuccess' action data
 
-    const [podate, setpoDate] = useState("today");
+    const [grnDate, setgrnDate] = useState('');
     const [deliverydate, setdeliverydate] = useState("today")
     const [billAddr, setbillAddr] = useState('')
     const [shippAddr, setshippAddr] = useState('')
@@ -204,7 +204,7 @@ const GRNAdd = (props) => {
                 dispatch(BreadcrumbFilterSize(`${"Order Amount"} :${hasEditVal.OrderAmount}`))
 
                 setsupplierSelect({ label: hasEditVal.SupplierName, value: hasEditVal.Supplier })
-                setpoDate(hasEditVal.OrderDate)
+                // setgrnDate(hasEditVal.OrderDate)
                 setdeliverydate(hasEditVal.DeliveryDate)
                 setshippAddr({ label: hasEditVal.ShippingAddress, value: hasEditVal.ShippingAddressID })
                 setbillAddr({ label: hasEditVal.BillingAddress, value: hasEditVal.BillingAddressID });
@@ -467,7 +467,7 @@ const GRNAdd = (props) => {
         }
         const jsonBody = JSON.stringify({
             Supplier: supplier,
-            EffectiveDate: podate
+            EffectiveDate: grnDate
         }
         );
 
@@ -529,7 +529,7 @@ const GRNAdd = (props) => {
         }
 
         const jsonBody = JSON.stringify({
-            GRNDate: grnItemData.OrderDate,
+            GRNDate: grnDate,
             Customer: grnItemData.Customer,
             GRNNumber: 1,
             GrandTotal: orderAmount,
@@ -543,7 +543,7 @@ const GRNAdd = (props) => {
 
         if (pageMode === "edit") {
             // dispatch(editGRNId(jsonBody, editVal.id))
-            console.log("orderEdit", jsonBody)
+            console.log("GRNedit", jsonBody)
 
         } else {
 
@@ -567,60 +567,55 @@ const GRNAdd = (props) => {
                     />
                     <div className="px-2 mb-1 mt-n1" style={{ backgroundColor: "#dddddd" }} >
                         <div className=" mt-1 row">
-                            <Col md="3" className="">
-                                <FormGroup className="mb- row mt-3 " >
-                                    <Label className="col-sm-5 p-2"
-                                        style={{ width: "100px" }}>GRN Date</Label>
-                                    <Col md="7">
-                                        {/* <Flatpickr
-                                            id="grndate"
-                                            name="grndate"
-                                            value={podate}
-                                            className="form-control d-block p-2 bg-white text-dark"
-                                            placeholder="Select..."
-                                            options={{
-                                                altInput: true,
-                                                altFormat: "d-m-Y",
-                                                dateFormat: "Y-m-d",
-                                                // minDate: pageMode === "edit" ? podate : "today",
-                                                // maxDate: pageMode === "edit" ? podate : "",
-                                                // defaultDate: pageMode === "edit" ? "" : "today"
-                                            }}
-                                            onChange={(e, date) => { setpoDate(date) }}
-                                        /> */}
-                                        <Input type="text" value={grnItemData.OrderDate} disabled={true} />
-                                    </Col>
-                                </FormGroup>
-                            </Col>
 
-                            <Col md="3">
-                                <FormGroup className="mb-2 row mt-3 " >
-                                    <Label className="col-md-4 p-2"
-                                        style={{ width: "130px" }}>Supplier Name</Label>
-                                    <Col md="7">
-                                        {/* <Select
+                            <FormGroup className="mb- row mt-3 " >
+                            <Label className="col-md-4 p-2"
+                                    style={{ width: "130px" }}>GRN Date</Label>
+                                <Col md="3">
+                                    <Flatpickr
+                                        name="grndate"
+                                        className="form-control d-block p-2 bg-white text-dark"
+                                        placeholder="Select..."
+                                        options={{
+                                            altInput: true,
+                                            altFormat: "d-m-Y",
+                                            dateFormat: "Y-m-d",
+                                            defaultDate: "today"
+                                        }}
+                                        onChange={(e, date) => { setgrnDate(date) }}
+                                        onReady={(e, date) => { setgrnDate(date); }}
+                                    />
+                                </Col>
+                            </FormGroup>
+
+
+
+                            <FormGroup className="mb-2 row mt-3 " >
+                                <Label className="col-md-4 p-2"
+                                    style={{ width: "130px" }}>Supplier Name</Label>
+                                <Col md="3">
+                                    {/* <Select
                                             value={supplierSelect}
                                             classNamePrefix="select2-Customer"
                                             isDisabled={pageMode === "edit" ? true : false}
                                             options={supplierOptions}
                                             onChange={(e) => { setsupplierSelect(e) }}
                                         /> */}
-                                        < Input type="text" value={grnItemData.SupplierName} disabled={true} />
-                                    </Col>
-                                </FormGroup>
-                            </Col >
-                            <Col md="3">
-                                <FormGroup className="mb-2 row mt-3 " >
-                                    <Label className="col-md-4 p-2"
-                                        style={{ width: "130px" }}>Challan No</Label>
-                                    <Col md="7">
-                                        <Input type="text"
-                                            disabled={true}
-                                            value={grnItemData.challanNo}
-                                            placeholder="Enter Challan No" />
-                                    </Col>
-                                </FormGroup>
-                            </Col >
+                                    < Input type="text" value={grnItemData.SupplierName} disabled={true} />
+                                </Col>
+                            </FormGroup>
+
+                            <FormGroup className="mb-2 row mt-3 " >
+                                <Label className="col-md-4 p-2"
+                                    style={{ width: "130px" }}>Challan No</Label>
+                                <Col md="3">
+                                    <Input type="text"
+                                        disabled={true}
+                                        value={grnItemData.challanNo}
+                                        placeholder="Enter Challan No" />
+                                </Col>
+                            </FormGroup>
+
 
 
                             {/* <Col md="1" className="mt-3 ">

@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import './pricemaster.scss'
 
 
+
 import {
     Button,
     Card,
@@ -37,12 +38,14 @@ import {
     postPriceListData,
     postPriceListDataSuccess,
     editPriceList,
-    updatePriceList
+    updatePriceList,
+    updatePriceListSuccess
 
 
 } from "../../../store/Administrator/PriceList/action";
 import { getPartyTypes } from "../../../store/Administrator/PartyRedux/action";
 import Tree from "../PartyPages/Tree";
+import { initialFiledFunc } from "../../../components/Common/CmponentRelatedCommonFile/validationFunction";
 
 
 
@@ -80,17 +83,25 @@ const PriceMaster = (props) => {
     const { PostAPIResponse,
         priceListByPartyType,
         deleteAPIResponse,
+        updateMessage,
+        // editData,
         PartyTypes,
         PriceList,
         RoleAccessModifiedinSingleArray
     } = useSelector((state) => ({
         PostAPIResponse: state.PriceListReducer.postMsg,
         deleteAPIResponse: state.PriceListReducer.deleteMsg,
+        updateMessage: state.PriceListReducer.updateMessage,
+        // editData: state.PriceListReducer.editData,
         PartyTypes: state.PartyMasterReducer.PartyTypes,
         PriceList: state.ItemMastersReducer.PriceList,
         priceListByPartyType: state.PriceListReducer.priceListByPartyType,
         RoleAccessModifiedinSingleArray: state.Login.RoleAccessUpdateData,
     }));
+
+    // const [state, setState] = useState(initialFiledFunc())
+    // debugger
+    // const values = { ...state.values }
 
     // userAccess useEffect
     useEffect(() => {
@@ -149,6 +160,25 @@ const PriceMaster = (props) => {
 
     }, [deleteAPIResponse])
 
+
+    useEffect(() => {
+        if ((updateMessage.Status === true) && (updateMessage.StatusCode === 200)) {
+            // setpartyType_dropdown_Select('')
+            dispatch(updatePriceListSuccess({ Status: false }))
+            dispatch(getPriceListData(partyType_dropdown_Select.value))
+            // setDropOpen(!dropOpen)
+            dispatch(AlertState({
+                Type: 1,
+                Status: true,
+                Message: updateMessage.Message,
+                RedirectPath: '',
+
+            }))
+
+        }
+
+    }, [updateMessage])
+
     const PartyTypeDropdown_Options = PartyTypes.map((Data) => ({
         value: Data.id,
         label: Data.Name
@@ -181,11 +211,11 @@ const PriceMaster = (props) => {
     }
     // Edit handler
     const dropOpen_EditHandler = price => {
+         
         price["mode"] = "edit"
-
+        
         setCurrentPrice(price)
         setDropOpen(true)
-
 
     }
     const delete_PriceList_Handler = price => {
@@ -198,7 +228,6 @@ const PriceMaster = (props) => {
         }));
     }
     function sub_Price_Add_Handler() {
-        debugger
         var textInp1 = document.getElementById("txtsubprice")
         if (textInp1.value === "") {
             alert("please enter value")
@@ -221,14 +250,16 @@ const PriceMaster = (props) => {
 
     }
     // // edit price handler
-    function sub_Price_edit_Handler() {
+    function sub_Price_edit_Handler () {
         debugger
         var textInp1 = document.getElementById("txtsubprice")
+        // var id = document.getElementById("txtsubprice")
         if (textInp1.value === "") {
             alert("please enter value")
         } else {
             var mkup = document.getElementById(`mkupMkdown`).checked
             const jsonBody = JSON.stringify({
+                id:currentPrice.value,
                 Name: textInp1.value,
                 BasePriceListID: currentPrice.value,
                 PLPartyType: partyType_dropdown_Select.value,
@@ -241,43 +272,71 @@ const PriceMaster = (props) => {
                 UpdatedOn: "2022-07-18T00:00:00",
                 
             });
-            dispatch(updatePriceList(jsonBody));
+            dispatch(updatePriceList(jsonBody,currentPrice.value));
         }
 
     }
 
+    
+    const onclickselect = function () {
+        const hasNone = document.getElementById("color").style;
+
+        if (hasNone.display === "none") {
+            hasNone.display = "block";
+        } else {
+            hasNone.display = "none";
+        }
+    };
+
     // drop down tree
     const test1 = () => {
+
+
+
         return (
             <>
-                <Modal
-                    isOpen={dropOpen2}
-                    toggle={() => { setDropOpen2(!dropOpen2) }}
-                    size="sm"
-                    centered={true}
-                // backdrop={'static'}
-                >
-                    <div>
-                        <div className="text-center mt-2">
-                            {/* <Label className="text-primary text-center "> {priceList.label}</Label> */}
-                            <Input type="button" className="btn btn-light text-primary"
+                <div id="color"  >
+                    <div style={{ width: "6cm", marginBottom: "-60px" }} id="">
 
-                                onClick={() => {
-                                    // sub_Price_Add_Handler()
-                                }}
-                                value={PriceList_dropdown_Select.label}
-                            />
-
-
-                        </div>
-                        <Tree data={priceListByPartyType} priceList={PriceList_dropdown_Select}
-                            func1={setPriceList_dropdown_Select} func2={setDropOpen2} />
+                        <Tree id="tree" data={priceListByPartyType} priceList={PriceList_dropdown_Select}
+                            func1={setPriceList_dropdown_Select} />
                     </div>
-
-                </Modal>
+                </div>
 
             </>
         )
+
+
+        // return (
+        //     <>
+        //         <Modal
+        //             isOpen={dropOpen2}
+        //             toggle={() => { setDropOpen2(!dropOpen2) }}
+        //             size="sm"
+        //             centered={true}
+        //         // backdrop={'static'}
+        //         >
+        //             <div>
+        //                 <div className="text-center mt-2">
+        //                     {/* <Label className="text-primary text-center "> {priceList.label}</Label> */}
+        //                     <Input type="button" className="btn btn-light text-primary"
+
+        //                         onClick={() => {
+        //                             // sub_Price_Add_Handler()
+        //                         }}
+        //                         value={PriceList_dropdown_Select.label}
+        //                     />
+
+
+        //                 </div>
+        //                 <Tree data={priceListByPartyType} priceList={PriceList_dropdown_Select}
+        //                     func1={setPriceList_dropdown_Select} func2={setDropOpen2} />
+        //             </div>
+
+        //         </Modal>
+
+        //     </>
+        // )
     }
 
     const toggle = () => {
@@ -469,8 +528,8 @@ const PriceMaster = (props) => {
                                                     <div className="modal-body">
                                                         {currentPrice.mode === "edit" ?
                                                             <Row className="justify-content-md-left">
-                                                                <Label className="col-4 col-form-label" >Price List</Label>
-                                                                <Col className="col">
+                                                                <Label className="col-3 col-form-label" >Price List</Label>
+                                                                <Col className="col-9">
                                                                     {/* <Select
                                                                     id={`dropPriceList-${0}`}
                                                                     value={priceList}
@@ -479,6 +538,19 @@ const PriceMaster = (props) => {
                                                                 /> */}
 
                                                                {/* <label>id={currentPrice.value} </label> */}
+
+                                                               <Input id="Input"
+                                                                            value={PriceList_dropdown_Select.label}
+                                                                            placeholder="Select..."
+                                                                            // onChange={(e) => setDropOpen(!dropOpen)}
+                                                                            onClick={onclickselect}
+                                                                        >
+                                                                        </Input>
+
+                                                                        {test1()}
+
+
+{/* 
                                                                     <Input
                                                                         value={PriceList_dropdown_Select.label}
                                                                         placeholder="Enter Name"
@@ -490,7 +562,7 @@ const PriceMaster = (props) => {
                                                                     </Input>
 
 
-                                                                    {test1()}
+                                                                    {test1()} */}
 
 
 
@@ -506,7 +578,7 @@ const PriceMaster = (props) => {
                                                             <Row className="mt-2">
                                                                 <span className="form-label text-primary text-center">{currentPrice.Name}</span>
                                                                 <Label htmlFor="horizontal-firstname-input"
-                                                                    className="col-4 col-form-label" > {currentPrice.id === 0 ? "Main Price" : "sub-Price"} </Label>
+                                                                    className="col-3 col-form-label" > {currentPrice.id === 0 ? "Main Price" : "sub-Price"} </Label>
                                                                 <Col style={{ marginTop: '9px' }} >
                                                                     <Input type="text" id='txtsubprice'
                                                                         defaultValue={currentPrice.label}

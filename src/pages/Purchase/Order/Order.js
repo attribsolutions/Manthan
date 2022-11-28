@@ -431,7 +431,7 @@ const Order = (props) => {
             if ((i.inpQty > 0)) {
                 const basicAmt = parseFloat(basicAmount(i))
                 const cgstAmt = (GstAmount(i))
-
+                
                 const arr = {
                     Item: i.id,
                     Quantity: i.inpQty,
@@ -442,7 +442,7 @@ const Order = (props) => {
                     Margin: "",
                     BasicAmount: basicAmt.toFixed(2),
                     GSTAmount: cgstAmt.toFixed(2),
-                    GST: i.Gstid,
+                    GSTPercentage: i.GST,
                     CGST: (cgstAmt / 2).toFixed(2),
                     SGST: (cgstAmt / 2).toFixed(2),
                     IGST: 0,
