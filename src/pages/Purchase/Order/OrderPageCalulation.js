@@ -12,13 +12,13 @@ export const basicAmount = i => {
 export const GstAmount = (i) => {
 
     const base = basicAmount(i);
-    const gst = parseFloat(i.GST);
-
+    const gst = parseFloat(i.GSTPercentage);
+    debugger
     return ((base * gst) / 100)
 }
 
 export const totalAmount = (i) => {
-
+    debugger
     const gstAmt = GstAmount(i);
     const baseAmt = basicAmount(i);
     const total = gstAmt + parseFloat(baseAmt)

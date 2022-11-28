@@ -90,6 +90,7 @@ import GRNAdd from "../pages/Purchase/GRN/GRNAdd";
 import SubGroupMaster from "../pages/Adminisrator/SubGroupPages/SubGroupMaster";
 import SubGroupList from "../pages/Adminisrator/SubGroupPages/SubGroupList";
 import PartyItemsList from "../pages/Adminisrator/PartyItemPage/PartyItemList";
+import Index from "../pages/Adminisrator/ItemPages/ItemMaster/Image_Tab/Index";
 // import PartyItemsList from "../pages/Adminisrator
 
 
@@ -189,6 +190,10 @@ const userRoutes = [
 
   { path:path.SUBGROUP, component: SubGroupMaster },
   { path:path.SUBGROUP_LIST, component: SubGroupList },
+
+
+
+
 
 
 
