@@ -39,7 +39,6 @@ export default function Image(props) {
     }
 
     const onchangeHandler = async (event, key, type) => {
-        debugger
         var found = imageTable.find((i, k) => {
             return (k === key)
         })
@@ -64,7 +63,7 @@ export default function Image(props) {
             return (k === key) ? newSelectValue : index
         })
         setImageTable(newTabArr)
-        debugger
+        
     }
 
 
@@ -152,7 +151,7 @@ export default function Image(props) {
                         {<div className=" col-3 mt-2 " style={{ height: "2cm", width: "1.8cm" }}>
 
 
-                            <img id='img' src={index.ImageUpload} onerror='' />
+                         { (index.ImageUpload=== "")?  <div  d='img'/>:<img id='img' src={index.ImageUpload}/>}
                         </div>}
                     
                     </Row>
