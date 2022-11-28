@@ -15,7 +15,7 @@ import { PAGE } from "../../../routes/route_url";
 
 
 export default function PageList() {
-debugger
+
   const dispatch = useDispatch();
   const reducers = useSelector(
     (state) => ({
