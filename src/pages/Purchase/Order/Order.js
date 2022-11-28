@@ -211,7 +211,7 @@ const Order = (props) => {
 
 
     function val_onChange(val, row, type) {
-
+        debugger
         if (type === "qty") {
             row["inpQty"] = val;
         }
@@ -233,8 +233,29 @@ const Order = (props) => {
         label: i.Supplier,
     }));
 
-
+    const copybtnOnclick = (r) => {
+       
+    }
     const pagesListColumns = [
+        {
+            text: "Actions",
+            dataField: "",
+            sort: true,
+            formatter: (value, row, k) => (
+                <Button
+                    type="button"
+                    data-mdb-toggle="tooltip" data-mdb-placement="top"
+                    onClick={(e) => copybtnOnclick(row)}
+                    className="badge badge-soft-primary font-size-12 btn btn-primary
+                     waves-effect waves-light w-xxs border border-light"
+                >
+                    <i className="bx bxs-copy font-size-12 "></i>
+                </Button >
+            ),
+            headerStyle: (colum, colIndex) => {
+                return { width: '130px', textAlign: 'center', text: "center" };
+            }
+        },
         //------------- ItemName column ----------------------------------
         {
             text: "Item Name",

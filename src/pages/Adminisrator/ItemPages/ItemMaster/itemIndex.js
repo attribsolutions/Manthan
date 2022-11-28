@@ -545,12 +545,11 @@ const ItemsMaster = (props) => {
                 ItemDivisionDetails: formValue.Division.map((i) => {
                     return ({ Division: i.value })
                 }),
-                ItemImagesDetails: [
-                    {
-                        ImageType: "1",
-                        Item_pic: "sadsadasdas"
-                    }
-                ],
+
+                ItemImagesDetails: imageTabTable.map(i => ({
+                    ImageType: i.ImageType.value,
+                    Item_pic: i.ImageUpload
+                })),
                 ItemMRPDetails: hasAdd_MRP,
                 ItemMarginDetails: hasAdd_Margin,
                 ItemGSTHSNDetails: hasAdd_GST,

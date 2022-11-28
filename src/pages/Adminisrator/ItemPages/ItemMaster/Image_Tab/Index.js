@@ -27,7 +27,7 @@
 //         }
 //     })
 // }
-//     const   uploadedImage = async (e) => {
+//     const   onchangeHandler = async (e) => {
 //         const file = e.target.files[0]
 //         const base64 = await convertBase64(file);
 
@@ -106,7 +106,7 @@
 
 //                                 // onChange={(event) => onChangeHandler({event, imageTable, setImageTable, })}
 
-// onChange={(e) => {uploadedImage(e)}}
+// onChange={(e) => {onchangeHandler(e)}}
 
 //                             // value={imageTabTable.ImageUpload}
 //                             // value={"C:\fakepath\cropper.jpg"}
@@ -217,14 +217,8 @@ export default function Image(props) {
         setImageTable(removeElseArrray1)
     }
 
-    const uploadedImage = async (event, key, type) => {
+    const onchangeHandler = async (event, key, type) => {
         debugger
-        const file = event.target.files[0]
-        const base64 = await convertBase64(file);
-
-        // setbaseimage(base64)
-        console.log(base64);
-
         var found = imageTable.find((i, k) => {
             return (k === key)
         })
@@ -248,9 +242,11 @@ export default function Image(props) {
             }
         }
         else if (type === 'ImageUpload') {
+            const file = event.target.files[0]
+            const base64 = await convertBase64(file);
             newSelectValue = {
                 ImageType: found.ImageType,
-                ImageUpload: event.target.value,
+                ImageUpload: base64,
             }
         }
         let newTabArr = imageTable.map((index, k) => {
@@ -262,7 +258,7 @@ export default function Image(props) {
 
 
     const convertBase64 = (file) => {
-        debugger
+
         return new Promise((resolve, reject) => {
             const fileReader = new FileReader()
             fileReader.readAsDataURL(file);
@@ -290,7 +286,7 @@ export default function Image(props) {
                             <Label htmlFor="validationCustom21">Image Type</Label>
                             <Select
                                 options={imageTypes}
-                            // onChange={(e) => { onChangeHandler(e, key, "ImageType") }}
+                                onChange={(e) => { onchangeHandler(e, key, "ImageType") }}
                             />
                         </FormGroup>
 
@@ -302,7 +298,7 @@ export default function Image(props) {
                                 accept=".jpg, .jpeg, .png"
                                 // onChange={e => this.onChangeHandler(e)}
                                 // onChange={(event) => onChangeHandler({event, imageTable, setImageTable, })}
-                                onChange={(event) => { uploadedImage(event) }}
+                                onChange={(event) => { onchangeHandler(event, key, "ImageUpload") }}
 
                             />
                         </FormGroup>
@@ -345,7 +341,7 @@ export default function Image(props) {
                         </Col>
                         {/* <Row> */}
                         <div className=" col-3 mt-2 " style={{ height: "2cm", width: "1.8cm" }}>
-                            <img id='img' src={baseimage} />
+                            <img id='img' src={index.ImageUpload} />
 
                         </div>
                         {/* </Row> */}
