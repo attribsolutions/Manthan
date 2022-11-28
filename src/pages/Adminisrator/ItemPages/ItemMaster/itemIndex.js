@@ -731,7 +731,7 @@ const ItemsMaster = (props) => {
                     <Container fluid>
                         <AvForm onValidSubmit={(e, v) => { handleValidSubmit(e, v); }}>
                             {/* Render Breadcrumbs */}
-                            <Breadcrumb breadcrumbItem={userPageAccessState.PageHeading} />
+                            <Breadcrumb pageHeading={userPageAccessState.PageHeading} />
 
                             <Row>
 
