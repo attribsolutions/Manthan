@@ -22,6 +22,8 @@ let searchCount = 0
 let downList = []
 let listObj = {}
 
+console.log("downList", downList)
+
 let searchProps = {
   onClear: function onClear() { },
   onSearch: function onSearch() { },
@@ -62,6 +64,8 @@ const CommonListPage = (props) => {
 
   } = props.reducers;
 
+
+
   const {
     getList,
     editId,
@@ -79,12 +83,12 @@ const CommonListPage = (props) => {
     showBreadcrumb = true
   } = props;
 
-  const fileds = pageField.PageFieldMaster;
+  const { PageFieldMaster = [] } = { ...pageField };
 
 
 
   useEffect(() => {
-    
+
     const locationPath = history.location.pathname
     let userAcc = userAccess.find((inx) => {
       return (`/${inx.ActualPagePath}` === locationPath)
@@ -105,20 +109,22 @@ const CommonListPage = (props) => {
     let MasterPagePath = userAccess.find((inx) => {
       return (inx.id === userAcc.RelatedPageID)
     })
-    
+
     if (!(MasterPagePath === undefined)) {
       setmasterPath(`/${MasterPagePath.ActualPagePath}`)
     }
-     
+
   }, [userAccess])
 
 
   useEffect(() => {
+
     downList = []
     listObj = {}
 
     tableList.forEach((index1) => {
-      fileds.forEach((index2) => {
+
+      PageFieldMaster.forEach((index2) => {
         if (index2.ShowInDownload) {
           listObj[`$defSelect${index2.ControlID}`] = index2.ShownloadDefaultSelect
           listObj[index2.ControlID] = index1[index2.ControlID]
@@ -230,14 +236,14 @@ const CommonListPage = (props) => {
     setmodal_edit(!modal_edit); //when edit mode show in pop up that modal view controle
   }
 
-  fileds.sort(function (a, b) {  //sort function is  sort list page coloumn by asending order by listpage sequense
+  PageFieldMaster.sort(function (a, b) {  //sort function is  sort list page coloumn by asending order by listpage sequense
     return a.ListPageSeq - b.ListPageSeq
   });
 
   let sortLabel = ""
   const columns = []
 
-  fileds.forEach((i, k) => {
+  PageFieldMaster.forEach((i, k) => {
     if (i.ShowInListPage) {
       columns.push({
         text: i.FieldLabel,
@@ -253,7 +259,7 @@ const CommonListPage = (props) => {
         sortType = "desc"
       }
     }
-    if (fileds.length - 1 === k) {
+    if (PageFieldMaster.length - 1 === k) {
       columns.push(listPageCommonButtonFunction({
         dispatchHook: dispatch,
         ButtonMsgLable: ButtonMsgLable,

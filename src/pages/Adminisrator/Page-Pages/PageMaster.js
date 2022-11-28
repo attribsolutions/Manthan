@@ -186,6 +186,7 @@ const PageMaster = (props) => {
             DownloadDefaultSelect: index.ShownloadDefaultSelect
           }
         })
+        PageFieldMaster.sort((firstItem, secondItem) => firstItem.ListPageSeq - secondItem.ListPageSeq);
 
         if (!(PageFieldMaster.length === 0)) {
           setPageFieldTabTable(PageFieldMaster)
@@ -387,10 +388,10 @@ const PageMaster = (props) => {
 
   function PageField_onChange_Handler(event, type = '', key) {
     debugger
+
     var found = pageFieldTabTable.find((i, k) => {
       return (k === key)
     })
-
     let newSelectValue = ''
 
     switch (type) {
@@ -593,7 +594,7 @@ const PageMaster = (props) => {
 
   function ControlType_Dropdown_Handler(e, key) {
     debugger
-   
+
     dispatch(getFieldValidations(e.value))
     pageFieldTabTable.FieldValidation = []
     // dispatch(getFieldValidationsSuccess([]))
@@ -877,10 +878,6 @@ const PageMaster = (props) => {
     });
   }
 
-  // function myFunction() {
-  //   document.getElementById("txtName").disabled = false;
-  //   document.getElementById("pagePathid").disabled = false;
-  // }
   // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
   var IsEditMode_Css = ''
   if ((modalCss) || (pageMode === "dropdownAdd")) { IsEditMode_Css = "-5.5%" };
@@ -1333,7 +1330,7 @@ const PageMaster = (props) => {
                                       }}
                                       // defaultValue={{ label: "IsShowOnMenu", value: 1 }}
                                       classNamePrefix="select2-selection"
-                                      
+
                                     />
                                   </FormGroup>
 
@@ -1471,15 +1468,17 @@ const PageMaster = (props) => {
                                       </div>
                                     </td>
                                     <td>
-                                      <Input
-                                        autoComplete="off"
-                                        type="text"
-                                        id={`ListPageSeq${key}`}
-                                        defaultValue={EditData.ListPageSeq}
-                                        value={pageFieldTabTable[key].ListPageSeq}
-                                        onChange={(e) => PageField_onChange_Handler(e.target.value, "ListPageSeq", key)}>
+                                      <div style={{ width: "70px" }}>
+                                        <Input
+                                          autoComplete="off"
+                                          type="text"
+                                          id={`ListPageSeq${key}`}
+                                          defaultValue={EditData.ListPageSeq}
+                                          value={pageFieldTabTable[key].ListPageSeq}
+                                          onChange={(e) => PageField_onChange_Handler(e.target.value, "ListPageSeq", key)}>
 
-                                      </Input>
+                                        </Input>
+                                      </div>
                                     </td>
                                     <td>
                                       <Input
@@ -1547,7 +1546,12 @@ const PageMaster = (props) => {
                                       <Input
                                         type="checkbox"
                                         id={`DownloadDefaultSelect${key}`}
-                                        defaultChecked={pageFieldTabTable[key].DownloadDefaultSelect}
+                                        disabled={TableValue.ShowInDownload === true ? false : true}
+                                        // defaultChecked={pageFieldTabTable[key].DownloadDefaultSelect}
+                                        checked={
+                                          (TableValue.ShowInDownload === false)
+                                            ? pageFieldTabTable[key].DownloadDefaultSelect = false
+                                            : pageFieldTabTable[key].DownloadDefaultSelect}
                                         onChange={(e) => PageField_onChange_Handler(e.target.checked, "DownloadDefaultSelect", key)}>
                                       </Input>
                                     </td>
