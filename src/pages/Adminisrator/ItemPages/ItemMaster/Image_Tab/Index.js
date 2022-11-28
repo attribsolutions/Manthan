@@ -151,6 +151,7 @@ export default function Image(props) {
                         {<div className=" col-3 mt-2 " style={{ height: "2cm", width: "1.8cm" }}>
 
 
+
                          { (index.ImageUpload=== "")?  <div  d='img'/>:<img id='img' src={index.ImageUpload}/>}
                         </div>}
                     
