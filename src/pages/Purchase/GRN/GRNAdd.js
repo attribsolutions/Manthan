@@ -65,7 +65,7 @@ const GRNAdd = (props) => {
 
     const [supplierSelect, setsupplierSelect] = useState('');
     const [orderAmount, setOrderAmount] = useState(0);
-    // const [grnItemData, setgrnItemData] = useState({});
+    const [grnItemData, setgrnItemData] = useState([]);
 
     useEffect(() => {
         // dispatch(getSupplier())
@@ -116,63 +116,60 @@ const GRNAdd = (props) => {
     const hasShowloction = location.hasOwnProperty("editValue")
     const hasShowModal = props.hasOwnProperty("editValue")
 
-    // useEffect(() => {
-    //     if ((items.Status === true) && (items.StatusCode === 200)) {
-    //         // dispatch(BreadcrumbFilterSize(`${"Order Amount"} :${orderAmount}`))
+    useEffect(() => {
+        debugger
+        if ((items.Status === true) && (items.StatusCode === 200)) {
+            // dispatch(BreadcrumbFilterSize(`${"Order Amount"} :${orderAmount}`))
 
-    //         const hasEditVal = items.Data
-    //         hasEditVal.OrderItem.forEach(ele => {
-    //             ele["Name"] = ele.ItemName
-    //             ele["inpRate"] = ele.Rate
-    //             ele["inpQty"] = ele.Quantity
-    //             ele["totalAmount"] = ele.Amount
-    //             ele["UOM"] = ele.Unit
-    //             ele["UOMLabel"] = ele.UnitName
-    //             ele["inpBaseUnitQty"] = ele.BaseUnitQuantity
-    //         });
+            const hasEditVal = items.Data
+            hasEditVal.OrderItem.forEach(ele => {
+                ele["Name"] = ele.ItemName
+                ele["inpRate"] = ele.Rate
+                ele["inpQty"] = ele.Quantity
+                ele["totalAmount"] = ele.Amount
+                ele["UOM"] = ele.Unit
+                ele["UOMLabel"] = ele.UnitName
+                ele["inpBaseUnitQty"] = ele.BaseUnitQuantity
+            });
+            debugger
+            setgrnItemData(hasEditVal.OrderItem)
+            setsupplierSelect({ label: hasEditVal.SupplierName, value: hasEditVal.Supplier })
+            dispatch(BreadcrumbFilterSize(`${"Order Amount"} :${hasEditVal.OrderAmount}`))
+            setOrderAmount(hasEditVal.OrderAmount)
+            items.Status = false
+            dispatch(getGRN_itemMode2_Success(items))
+        }
 
-    //         setgrnItemData(hasEditVal)
-    //         dispatch(BreadcrumbFilterSize(`${"Order Amount"} :${hasEditVal.OrderAmount}`))
-
-    //         // setsupplierSelect({ label: hasEditVal.SupplierName, value: hasEditVal.Supplier })
-    //         // setpoDate(hasEditVal.OrderDate)
-    //         setOrderAmount(hasEditVal.OrderAmount)
-
-    //         items.Status = false
-    //         items.Data = []
-    //         dispatch(getGRN_itemMode2_Success(items))
-    //     }
-
-    // }, [items])
+    }, [items])
 
     // debugger
-    const grnItemData = useMemo(() => {
-        // debugger
-        const { Data, Status = false } = items
-        if (!Status) {
-            return items
-        }
-        // debugger
-        const hasEditVal = Data;
-        hasEditVal.OrderItem.forEach(ele => {
-            ele["Name"] = ele.ItemName
-            ele["inpRate"] = ele.Rate
-            ele["inpQty"] = ele.Quantity
-            ele["totalAmount"] = ele.Amount
-            ele["UOM"] = ele.Unit
-            ele["UOMLabel"] = ele.UnitName
-            ele["inpBaseUnitQty"] = ele.BaseUnitQuantity
-        });
-        setsupplierSelect({ label: hasEditVal.SupplierName, value: hasEditVal.Supplier })
-        dispatch(BreadcrumbFilterSize(`${"Order Amount"} :${hasEditVal.OrderAmount}`))
-        setOrderAmount(hasEditVal.OrderAmount)
-        items.Status = false
-        dispatch(getGRN_itemMode2_Success(items))
-        return hasEditVal
+    // const grnItemData1 = useMemo(() => {
+    //     // debugger
+    //     const { Data, Status = false } = items
+    //     if (!Status) {
+    //         return items
+    //     }
+    //     // debugger
+    //     const hasEditVal = Data;
+    //     hasEditVal.OrderItem.forEach(ele => {
+    //         ele["Name"] = ele.ItemName
+    //         ele["inpRate"] = ele.Rate
+    //         ele["inpQty"] = ele.Quantity
+    //         ele["totalAmount"] = ele.Amount
+    //         ele["UOM"] = ele.Unit
+    //         ele["UOMLabel"] = ele.UnitName
+    //         ele["inpBaseUnitQty"] = ele.BaseUnitQuantity
+    //     });
+    //     setsupplierSelect({ label: hasEditVal.SupplierName, value: hasEditVal.Supplier })
+    //     dispatch(BreadcrumbFilterSize(`${"Order Amount"} :${hasEditVal.OrderAmount}`))
+    //     setOrderAmount(hasEditVal.OrderAmount)
+    //     items.Status = false
+    //     dispatch(getGRN_itemMode2_Success(items))
+    //     return hasEditVal
 
-    }, items)
+    // }, items)
 
-    const { OrderItem = [] } = grnItemData
+    // const { OrderItem = [] } = grnItemData
 
 
 
@@ -285,7 +282,7 @@ const GRNAdd = (props) => {
         catch { alert("`abc${row.id}`") }
 
         let sum = 0
-        OrderItem.forEach(ind => {
+        grnItemData.forEach(ind => {
             sum = sum + parseFloat(ind.totalAmount)
         });
         setOrderAmount(sum.toFixed(2))
@@ -296,7 +293,6 @@ const GRNAdd = (props) => {
         value: i.id,
         label: i.Supplier,
     }));
-
 
     const pagesListColumns = [
         //------------- ItemName column ----------------------------------
@@ -327,7 +323,7 @@ const GRNAdd = (props) => {
                             val_onChange(e.target.value, row, "qty")
                         }}
                         autoComplete="off"
-                        onKeyDown={(e) => handleKeyDown(e, OrderItem)} />
+                        onKeyDown={(e) => handleKeyDown(e, grnItemData)} />
                 </span>
 
             ),
@@ -428,6 +424,25 @@ const GRNAdd = (props) => {
                 return { width: '130px', textAlign: 'center', text: "center" };
             }
         },
+        {
+            text: "Actions",
+            dataField: "",
+            sort: true,
+            formatter: (value, row, k) => (
+                <Button
+                    type="button"
+                    data-mdb-toggle="tooltip" data-mdb-placement="top"
+                    onClick={(e) => copybtnOnclick(row)}
+                    className="badge badge-soft-primary font-size-12 btn btn-primary
+                     waves-effect waves-light w-xxs border border-light"
+                >
+                    <i className="bx bxs-copy font-size-12 "></i>
+                </Button >
+            ),
+            headerStyle: (colum, colIndex) => {
+                return { width: '130px', textAlign: 'center', text: "center" };
+            }
+        },
     ];
 
     const defaultSorted = [
@@ -438,7 +453,7 @@ const GRNAdd = (props) => {
     ];
 
     const pageOptions = {
-        sizePerPage: (OrderItem.length + 2),
+        sizePerPage: (grnItemData.length + 2),
         totalSize: 0,
         custom: true,
     };
@@ -475,10 +490,39 @@ const GRNAdd = (props) => {
         console.log("jsonBody", jsonBody)
     };
 
+    const copybtnOnclick = (r) => {
+        const list = [...grnItemData];
+
+        const id = r.id
+        const newArr = []
+        debugger
+        list.forEach(element => {
+
+            if (element.id < id) {
+                newArr.push(element)
+            }
+            else if (element.id === id) {
+                newArr.push(element);
+                const ele = { ...element }
+                ele.id = element.id + 1
+                newArr.push(ele)
+            }
+            else {
+                const ele = { ...element }
+                ele.id = element.id + 1
+                newArr.push(ele)
+            }
+
+        });
+        debugger
+        setgrnItemData(newArr)
+
+    }
+
     const saveHandeller = () => {
 
         const itemArr = []
-        OrderItem.forEach(i => {
+        grnItemData.forEach(i => {
             if ((i.inpQty > 0)) {
                 const basicAmt = parseFloat(basicAmount(i))
                 const cgstAmt = (GstAmount(i))
@@ -631,7 +675,7 @@ const GRNAdd = (props) => {
                             <ToolkitProvider
                                 keyField="id"
                                 defaultSorted={defaultSorted}
-                                data={OrderItem}
+                                data={grnItemData}
                                 columns={pagesListColumns}
                                 search
                             >
@@ -673,7 +717,7 @@ const GRNAdd = (props) => {
 
 
                     {
-                        (OrderItem.length > 0) ? <div className="row save1" style={{ paddingBottom: 'center' }}>
+                        (grnItemData.length > 0) ? <div className="row save1" style={{ paddingBottom: 'center' }}>
                             <SaveButton pageMode={pageMode} userAcc={userAccState}
                                 module={"GRN"} onClick={saveHandeller}
                             />
