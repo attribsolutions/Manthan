@@ -107,6 +107,7 @@ const ItemsMaster = (props) => {
     const [baseUnitTableData, setBaseUnitTableData] = useState([{
         Conversion: '',
         Unit: '',
+        IsBase: false
     }]);
 
 
@@ -198,6 +199,8 @@ const ItemsMaster = (props) => {
                 }))
 
                 let initialFormValue = {
+                    // ====================== Base detail tab ======================
+
                     Name: hasEditVal.Name,
                     Sequence: hasEditVal.Sequence,
                     ShortName: hasEditVal.ShortName,
@@ -209,6 +212,7 @@ const ItemsMaster = (props) => {
                     BaseUnit: { label: hasEditVal.BaseUnitName, value: hasEditVal.BaseUnitID },
                     isActive: hasEditVal.isActive,
                 }
+                // ====================== Images tab ======================
 
                 let ItemImagesDetails = hasEditVal.ItemImagesDetails.map((index) => {
                     return {
@@ -220,30 +224,33 @@ const ItemsMaster = (props) => {
                     }
                 })
 
-                const ItemUnitDetails = []
-                hasEditVal.ItemUnitDetails.forEach((index) => {
+                // ====================== Unit Conversion tab  start ======================
 
-                    if (!(hasEditVal.BaseUnitID === index.UnitID)) {
-                        ItemUnitDetails.push({
-                            Unit: {
-                                label: index.UnitName,
-                                value: index.UnitID,
-                            },
+                const UnitDetails = []
+                hasEditVal.ItemUnitDetails.forEach((index) => {
+                    if (!index.IsBase) {
+                        UnitDetails.push({
+                            Unit: { label: index.UnitName, value: index.UnitID },
                             Conversion: index.BaseUnitQuantity,
+                            IsBase: false
                         })
                     }
-                });
-
-                if (ItemUnitDetails.length === 0) {
-                    ItemUnitDetails.push({
+                })
+                debugger
+                if ((UnitDetails.length === 0)) {
+                    UnitDetails.push({
                         Unit: '',
                         Conversion: '',
+                        IsBase: false,
                     })
                 };
 
+                setBaseUnitTableData(UnitDetails)
+                // ====================== Unit Conversion tab  end ======================
+
                 setFormValue(initialFormValue);
                 setImageTabTable(ItemImagesDetails)
-                setBaseUnitTableData(ItemUnitDetails)
+
                 setMRP_Tab_TableData(hasEditVal.ItemMRPDetails)
                 setMarginMaster(hasEditVal.ItemMarginDetails)
                 setGStDetailsMaster(hasEditVal.ItemGSTHSNDetails)
@@ -391,7 +398,6 @@ const ItemsMaster = (props) => {
 
 
 
-
     const CategoryType_Handler = (event) => {
         dropDownValidation(event, "CategoryType")
         // setCategoryTypeDropdownSelect(event);
@@ -463,41 +469,63 @@ const ItemsMaster = (props) => {
                 inValidMsg.push(" GroupType Primary:Is Requried")
             }
         }
-        if (isvalid) {
+        if (isvalid) {/// ************* is valid if start 
 
-            const itemUnitDetails = baseUnitTableData.map((index) => ({
-                BaseUnitQuantity: index.Conversion,
-                UnitID: index.Unit.value,
-            }))
-            const islastIndex = itemUnitDetails.length
+            // ====================== Unit conversion *****start ======================
 
-            if ((islastIndex === 1) && (itemUnitDetails[0].BaseUnitQuantity === "")) {
-                itemUnitDetails[0] = {
-                    BaseUnitQuantity: 1,
-                    UnitID: formValue.BaseUnit.value,
+            const itemUnitDetails = []
+
+            baseUnitTableData.forEach((index, key) => {
+
+                const found = baseUnitTableData.find((i, k) => {
+                    return ((index.Conversion === i.Conversion) && (index.Unit.value === i.Unit.value) && !(key === k))
+                });
+                const found2 = itemUnitDetails.find((i, k) => {
+                    return ((index.Conversion === i.BaseUnitQuantity) && (index.Unit.value === i.UnitID) && !(key === k))
+                });
+                debugger
+                if (
+                    ((found === undefined) || (found2 === undefined))
+                    && !(index.Conversion === '')
+                    && !(index.Unit === '')) {
+                    debugger
+                    itemUnitDetails.push({
+                        BaseUnitQuantity: index.Conversion,
+                        UnitID: index.Unit.value,
+                        IsBase: index.IsBase
+                    })
                 }
-            }
-            else if (islastIndex > 0) {
 
-                itemUnitDetails.unshift({
+            });
+            debugger
+            if (pageMode === 'save')
+                itemUnitDetails.push({
                     BaseUnitQuantity: 1,
                     UnitID: formValue.BaseUnit.value,
+                    IsBase: true
                 })
-            }
-            debugger
+
+            //  ======================   ItemCategoryDetails *****start   ====================== 
+
             const ItemCategoryDetails = formValue.Category.map((index) => ({
                 CategoryType: formValue.CategoryType.value,
                 Category: index.value
             }))
+            //  ======================   MRP_Tab_TableData *****start   ====================== 
 
             let hasAdd_MRP = []
             MRP_Tab_TableData.forEach((index) => {
                 if (index.IsAdd === true) { hasAdd_MRP.push(index) }
             })
+
+            // ======================  marginMaster *****start   ====================== 
+
             let hasAdd_Margin = []
             marginMaster.forEach((index) => {
                 if (index.IsAdd === true) { hasAdd_Margin.push(index) }
             })
+
+            // ======================  GStDetailsMaster *****start   ====================== 
 
             let hasAdd_GST = []
             GStDetailsMaster.forEach((index) => {
@@ -544,8 +572,9 @@ const ItemsMaster = (props) => {
                 dispatch(postItemData(jsonBody));
                 console.log("post json", jsonBody)
             }
-        }
-        else {
+
+        } /// ************* is valid if start 
+        else { /// ************* is valid esle start 
             dispatch(AlertState({
                 Type: 4, Status: true,
                 Message: JSON.stringify(inValidMsg),

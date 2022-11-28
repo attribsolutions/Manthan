@@ -246,21 +246,24 @@ const Order = (props) => {
             text: "Quntity",
             dataField: "",
             sort: true,
-            formatter: (value, row, k) => (
+            formatter: (value, row, k) => {
+                debugger
+                return (
 
-                <span >
-                    <Input type="text"
-                        id={`inpQty${k}`}
-                        defaultValue={row.inpQty}
-                        disabled={((row.inpRate === 0) || row.GST === '') ? true : false}
-                        onChange={(e) => {
-                            val_onChange(e.target.value, row, "qty")
-                        }}
-                        autoComplete="off"
-                        onKeyDown={(e) => handleKeyDown(e, items)} />
-                </span>
+                    <span >
+                        <Input type="text"
+                            id={`inpQty${k}`}
+                            defaultValue={row.inpQty}
+                            disabled={((row.inpRate === 0) || row.GSTPercentage === '') ? true : false}
+                            onChange={(e) => {
+                                val_onChange(e.target.value, row, "qty")
+                            }}
+                            autoComplete="off"
+                            onKeyDown={(e) => handleKeyDown(e, items)} />
+                    </span>
 
-            ),
+                )
+            },
             headerStyle: (colum, colIndex) => {
                 return { width: '140px', textAlign: 'center' };
             }
@@ -431,7 +434,7 @@ const Order = (props) => {
             if ((i.inpQty > 0)) {
                 const basicAmt = parseFloat(basicAmount(i))
                 const cgstAmt = (GstAmount(i))
-                
+
                 const arr = {
                     Item: i.id,
                     Quantity: i.inpQty,
@@ -442,12 +445,12 @@ const Order = (props) => {
                     Margin: "",
                     BasicAmount: basicAmt.toFixed(2),
                     GSTAmount: cgstAmt.toFixed(2),
-                    GSTPercentage: i.GST,
+                    GSTPercentage: i.GSTPercentage,
                     CGST: (cgstAmt / 2).toFixed(2),
                     SGST: (cgstAmt / 2).toFixed(2),
                     IGST: 0,
-                    CGSTPercentage: (i.GST / 2),
-                    SGSTPercentage: (i.GST / 2),
+                    CGSTPercentage: (i.GSTPercentage / 2),
+                    SGSTPercentage: (i.GSTPercentage / 2),
                     IGSTPercentage: 0,
                     Amount: i.totalAmount,
                 }
@@ -596,7 +599,6 @@ const Order = (props) => {
                                     <div className="col col-6">
                                         <Flatpickr
                                             id="deliverydate"
-                                            ref={(e) => { debugger }}
                                             name="deliverydate"
                                             value={deliverydate}
                                             className="form-control d-block p-2 bg-white text-dark"
