@@ -123,7 +123,6 @@ const ItemsMaster = (props) => {
         BaseUnit,
         PostAPIResponse,
         userAccess,
-        ImageType,
         Division,
         CategoryTypeList,
         CategoryList
@@ -132,7 +131,6 @@ const ItemsMaster = (props) => {
         BaseUnit: state.ItemMastersReducer.BaseUnit,
         userAccess: state.Login.RoleAccessUpdateData,
         PostAPIResponse: state.ItemMastersReducer.postMessage,
-        ImageType: state.ItemMastersReducer.ImageType,
         Division: state.ItemMastersReducer.Division,
         CategoryTypeList: state.categoryTypeReducer.categoryTypeListData,
         CategoryList: state.ItemMastersReducer.Category,
@@ -341,10 +339,7 @@ const ItemsMaster = (props) => {
     }));
 
 
-    const ImageType_DropdownOptions = ImageType.map((data) => ({
-        value: data.id,
-        label: data.Name
-    }));
+
 
     const Division_DropdownOptions = Division.map((data) => ({
         value: data.id,
@@ -1057,7 +1052,8 @@ const ItemsMaster = (props) => {
                                                 <TabPane tabId="4">
                                                     <Image state={{
                                                         imageTable: imageTabTable,
-                                                        setImageTable: setImageTabTable
+                                                        setImageTable: setImageTabTable,
+
                                                     }} />
 
                                                 </TabPane>

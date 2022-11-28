@@ -19,15 +19,28 @@
     padding-top: 0;
     
     display: none;
-
-
 }
 
-
  #Input:hover + .color {
-        display: block;
-        
+        display: block; 
       }
+  
+
+#img{
+  height: 1cm;
+  width: 1cm;
+  border-radius: 10px;
+  transition: transform .2s; /* Animation */
+  cursor: pointer;
+  margin-top: 18px;
+
+
+}      
+
+#img:hover {
+  transform: scale(3.0); 
+
+}
     
 
 
