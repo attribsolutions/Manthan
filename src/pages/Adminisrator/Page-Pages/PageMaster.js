@@ -67,7 +67,6 @@ const PageMaster = (props) => {
   const [pageAccess_DropDownSelect, setPageAccess_DropDownSelect] = useState("");
   const [pageAccessData, setPageAccessData] = useState([]);
 
-
   const [pageFieldTabTable, setPageFieldTabTable] = useState([{
     ControlID: '',
     FieldLabel: '',
@@ -218,7 +217,7 @@ const PageMaster = (props) => {
         PageFieldList.sort((firstItem, secondItem) => firstItem.ListPageSeq - secondItem.ListPageSeq);
 
 
-        if (!(PageFieldMaster.length === 0) && (pageType_ID === 2)) {
+        if ((pageType_ID === 2)) {
           setPageFieldTabTable(PageFieldList)
         }
 
@@ -249,6 +248,7 @@ const PageMaster = (props) => {
   }, []);
 
   const pageAccessval = useMemo(() => {
+    debugger
     const arr = []
     PageAccess.forEach(i => {
       i["hascheck"] = false;
@@ -671,35 +671,23 @@ const PageMaster = (props) => {
       DownloadDefaultSelect: index.DownloadDefaultSelect,
     }))
 
-    // if (
-    //   tablePageAccessDataState.length <= 0 &&
-    //   !(pageType_DropdownSelect.value === 1)
-    // ) {
-    //   dispatch(
-    //     AlertState({
-    //       Type: 4,
-    //       Status: true,
-    //       Message: "At Least One PageAccess is Select",
-    //       RedirectPath: false,
-    //       PermissionAction: false,
-    //     })
-    //   );
-    //   return;
-    // }
-    // else if ((pageType_DropdownSelect.value === 1) && (PageFieldMaster.length > 0)) {
-    //   {
-    //     dispatch(
-    //       AlertState({
-    //         Type: 4,
-    //         Status: true,
-    //         Message: "PageField is Required",
-    //         RedirectPath: false,
-    //         PermissionAction: false,
-    //       })
-    //     );
-    //     return;
-    //   }
-    // }
+    if (
+      Access.length === 0 &&
+      (pageType_DropdownSelect.value === 2)
+    ) {
+      dispatch(
+        AlertState({
+          Type: 4,
+          Status: true,
+          Message: "At Least One PageAccess is Select",
+          RedirectPath: false,
+          PermissionAction: false,
+        })
+      );
+      return;
+    }
+
+
     const jsonBody = JSON.stringify({
       Name: values.Name,
       Module: module_DropdownSelect.value,
@@ -719,7 +707,20 @@ const PageMaster = (props) => {
       PagePageAccess: Access,
       PageFieldMaster: PageFieldMaster,
     })
-
+    if ((pageType_DropdownSelect.value === 1) && (PageFieldMaster.length === 1)) {
+      {
+        dispatch(
+          AlertState({
+            Type: 4,
+            Status: true,
+            Message: "PageFields is Required",
+            RedirectPath: false,
+            PermissionAction: false,
+          })
+        );
+        return;
+      }
+    }
     if (pageMode === "edit") {
       dispatch(updateHPages(jsonBody, EditData.id));
       console.log("updated jsonBody", jsonBody)
@@ -1451,7 +1452,6 @@ const PageMaster = (props) => {
                                               <Input
                                                 defaultChecked={index.hascheck}
                                                 onChange={e => {
-                                                  debugger;
                                                   pageAccessval[key].hascheck = e.target.checked
                                                 }}
                                                 className="col col-6  "
@@ -1503,6 +1503,7 @@ const PageMaster = (props) => {
 
                                 </tr>
                               </Thead>
+
                               <Tbody  >
 
                                 {pageFieldTabTable.map((TableValue, key) => (
@@ -1659,10 +1660,11 @@ const PageMaster = (props) => {
                                       {(pageFieldTabTable.length === key + 1) ?
                                         <Row className="">
                                           <Col md={6} className=" mt-3">
-                                            {(pageFieldTabTable.length > 1) ? <>
-                                              < i className="mdi mdi-trash-can d-block text-danger font-size-20" onClick={() => {
-                                                PageField_DeleteRow_Handler(key)
-                                              }} >
+                                            {(pageFieldTabTable.length > 0) ? <>
+                                              < i className="mdi mdi-trash-can d-block text-danger font-size-20"
+                                                onClick={() => {
+                                                  PageField_DeleteRow_Handler(key)
+                                                }} >
                                               </i>
                                             </> : <Col md={6} ></Col>}
 
@@ -1702,6 +1704,17 @@ const PageMaster = (props) => {
 
                               </Tbody>
                             </Table>
+                            {
+                              pageFieldTabTable.length === 0 ?
+                                <div className="col border-end d-flex justify-content-center mt-5 ">
+                                  <Button type="button"
+                                    onClick={() => { PageField_Tab_AddRow_Handler() }}
+                                    className="btn btn-sm ">Add New Row
+                                    <i className="dripicons-plus"> </i>
+                                  </Button>
+                                </div> : null
+                            }
+
                           </div>
                         </div>
 
