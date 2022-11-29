@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { memo, useEffect, useMemo, useState } from "react";
 import {
   Button,
   Card,
@@ -65,6 +65,7 @@ const PageMaster = (props) => {
   const [pageAccessDropDownView, setPageAccessDropDownView] = useState(false);
   const [modal_center, setmodal_center] = useState(false);
   const [pageAccess_DropDownSelect, setPageAccess_DropDownSelect] = useState("");
+  const [pageAccessData, setPageAccessData] = useState([]);
 
   const [pageFieldTabTable, setPageFieldTabTable] = useState([{
     ControlID: '',
@@ -103,7 +104,7 @@ const PageMaster = (props) => {
     modulePostAPIResponse: state.Modules.modulesSubmitSuccesss,
     PageList: state.H_Pages.PageList,
   }));
-
+  // debugger
   const location = { ...history.location }
   const hasShowloction = location.hasOwnProperty("editValue")
   const hasShowModal = props.hasOwnProperty("editValue")
@@ -148,17 +149,17 @@ const PageMaster = (props) => {
       else if (hasShowModal) {
         hasEditVal = props.editValue
         setPageMode(props.pageMode)
-        setModalCss(true)
+        // setModalreturnCss(true)
       }
 
       if (hasEditVal) {
 
-        debugger
+        let pageType_ID = hasEditVal.PageType;
+
         setEditData(hasEditVal);
 
         dispatch(Breadcrumb_inputName(hasEditVal.Name))
-
-        setTablePageAccessDataState(hasEditVal.PagePageAccess);
+        setPageAccessData(hasEditVal.PagePageAccess);
 
         setModule_DropdownSelect({
           label: hasEditVal.ModuleName,
@@ -188,8 +189,36 @@ const PageMaster = (props) => {
         })
         PageFieldMaster.sort((firstItem, secondItem) => firstItem.ListPageSeq - secondItem.ListPageSeq);
 
-        if (!(PageFieldMaster.length === 0)) {
+        if (!(PageFieldMaster.length === 0) && (pageType_ID === 1)) {
           setPageFieldTabTable(PageFieldMaster)
+        }
+
+        let PageFieldList = hasEditVal.PageFieldList.map((index) => {
+          return {
+            ControlType: {
+              label: index.ControlTypeName,
+              value: index.ControlType
+            },
+            FieldValidation: {
+              label: index.FieldValidationName,
+              value: index.FieldValidation
+            },
+            ControlID: index.ControlID,
+            FieldLabel: index.FieldLabel,
+            InValidMsg: index.InValidMsg,
+            IsCompulsory: index.IsCompulsory,
+            DefaultSort: index.DefaultSort,
+            ListPageSeq: index.ListPageSeq,
+            ShowInListPage: index.ShowInListPage,
+            ShowInDownload: index.ShowInDownload,
+            DownloadDefaultSelect: index.ShownloadDefaultSelect
+          }
+        })
+        PageFieldList.sort((firstItem, secondItem) => firstItem.ListPageSeq - secondItem.ListPageSeq);
+
+
+        if ((pageType_ID === 2)) {
+          setPageFieldTabTable(PageFieldList)
         }
 
         if (hasEditVal.PageType === 2) {
@@ -201,7 +230,6 @@ const PageMaster = (props) => {
         });
 
         // When value 2 is get then DropDown lable is "ListPage" and ShowMenu is disabled Otherwise DropDown lable is "AddPage" and ShowMenu is enabled
-        let pageType_ID = hasEditVal.PageType;
 
         if (pageType_ID === 2) {
           setPageAccessDropDownView(true);
@@ -213,11 +241,26 @@ const PageMaster = (props) => {
           setrelatedPage_DropdownSelect({ value: 0 });
           setPageType_DropdownSelect({ value: 1, label: "AddPage" });
         }
-
+        console.log("hasEditVal", hasEditVal)
         dispatch(editHPagesIDSuccess({ Status: false }));
       }
     }
   }, []);
+
+  const pageAccessval = useMemo(() => {
+    debugger
+    const arr = []
+    PageAccess.forEach(i => {
+      i["hascheck"] = false;
+      pageAccessData.forEach(ele => {
+        if (ele.AccessName === i.Name) {
+          i.hascheck = true
+        }
+      })
+      arr.push(i)
+    })
+    return arr
+  }, [pageAccessData, PageAccess]);
 
   // This UseEffect clear Form Data and when modules Save Successfully.
   useEffect(() => {
@@ -299,11 +342,12 @@ const PageMaster = (props) => {
     }
   }, [updateMsg, modalCss]);
 
-  const PageAccessValues = PageAccess.map((Data) => ({
-    value: Data.id,
-    label: Data.Name,
-  }));
-
+  // const pageAccessval = PageAccess.map((Data) => ({
+  //   value: Data.id,
+  //   label: Data.Name,
+  //   Checked: false
+  // }));
+  console.log(pageAccessval)
   const Module_DropdownOption = ModuleData.map((d) => ({
     value: d.id,
     label: d.Name,
@@ -387,7 +431,6 @@ const PageMaster = (props) => {
   }
 
   function PageField_onChange_Handler(event, type = '', key) {
-    debugger
 
     var found = pageFieldTabTable.find((i, k) => {
       return (k === key)
@@ -593,7 +636,6 @@ const PageMaster = (props) => {
   }
 
   function ControlType_Dropdown_Handler(e, key) {
-    debugger
 
     dispatch(getFieldValidations(e.value))
     pageFieldTabTable.FieldValidation = []
@@ -607,7 +649,14 @@ const PageMaster = (props) => {
   };
 
   const FormSubmitButton_Handler = (event, values) => {
-    debugger
+
+
+    let Access = []
+    PageAccess.forEach((element, key) => {
+      if (element.hascheck) {
+        Access.push({ Access: element.id })
+      }
+    });
     const PageFieldMaster = pageFieldTabTable.map((index) => ({
       ControlID: index.ControlID,
       FieldLabel: index.FieldLabel,
@@ -621,10 +670,10 @@ const PageMaster = (props) => {
       FieldValidation: index.FieldValidation.value,
       DownloadDefaultSelect: index.DownloadDefaultSelect,
     }))
-    debugger
+
     if (
-      tablePageAccessDataState.length <= 0 &&
-      !(pageType_DropdownSelect.value === 1)
+      Access.length === 0 &&
+      (pageType_DropdownSelect.value === 2)
     ) {
       dispatch(
         AlertState({
@@ -637,20 +686,8 @@ const PageMaster = (props) => {
       );
       return;
     }
-    // else if ((pageType_DropdownSelect.value === 1) && (PageFieldMaster.length > 0)) {
-    //   {
-    //     dispatch(
-    //       AlertState({
-    //         Type: 4,
-    //         Status: true,
-    //         Message: "PageField is Required",
-    //         RedirectPath: false,
-    //         PermissionAction: false,
-    //       })
-    //     );
-    //     return;
-    //   }
-    // }
+
+
     const jsonBody = JSON.stringify({
       Name: values.Name,
       Module: module_DropdownSelect.value,
@@ -667,12 +704,23 @@ const PageMaster = (props) => {
       IsEditPopuporComponent: values.IsEditPopuporComponent,
       CreatedBy: 1,
       UpdatedBy: 1,
-      PagePageAccess: tablePageAccessDataState.map((d) => ({
-        Access: d.AccessID,
-      })),
-      PageFieldMaster: (pageType_DropdownSelect.value === 2) ? [] : PageFieldMaster,
+      PagePageAccess: Access,
+      PageFieldMaster: PageFieldMaster,
     })
-
+    if ((pageType_DropdownSelect.value === 1) && (PageFieldMaster.length === 1)) {
+      {
+        dispatch(
+          AlertState({
+            Type: 4,
+            Status: true,
+            Message: "PageFields is Required",
+            RedirectPath: false,
+            PermissionAction: false,
+          })
+        );
+        return;
+      }
+    }
     if (pageMode === "edit") {
       dispatch(updateHPages(jsonBody, EditData.id));
       console.log("updated jsonBody", jsonBody)
@@ -759,13 +807,13 @@ const PageMaster = (props) => {
         );
 
         const ViewValues = Common_Find_Function(
-          PageAccessValues,
+          pageAccessval,
           "label",
           "IsView"
         );
 
         const IsEditSelfValues = Common_Find_Function(
-          PageAccessValues,
+          pageAccessval,
           "label",
           "IsEditSelf"
         );
@@ -854,7 +902,7 @@ const PageMaster = (props) => {
 
       if ((TableValue.AccessName === "IsView") || (TableValue.AccessName === "IsEditSelf")) {
         // find function pass Parameter (array,indexParameter,findvalue)
-        // const ViewValues = Common_Find_Function(PageAccessValues, "label", "IsView");
+        // const ViewValues = Common_Find_Function(pageAccessval, "label", "IsView");
         const View = tablePageAccessDataState.find((element) => {
           return element.AccessName === "IsEdit";
         });
@@ -877,7 +925,16 @@ const PageMaster = (props) => {
       );
     });
   }
+  function input_checkBoxHandler(e, key) {
 
+    pageAccessval.map((index, key) => {
+      if (index.label === e) {
+        debugger
+        index.Checked = true
+      }
+    })
+
+  }
   // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
   var IsEditMode_Css = ''
   if ((modalCss) || (pageMode === "dropdownAdd")) { IsEditMode_Css = "-5.5%" };
@@ -1315,7 +1372,7 @@ const PageMaster = (props) => {
 
                           </Card>
 
-                          {pageAccessDropDownView ? (
+                          {/* {pageAccessDropDownView ? (
                             <Card className=" mt-n2 text-black">
                               <CardBody style={{ backgroundColor: "whitesmoke" }}>
                                 <Row className="">
@@ -1324,7 +1381,7 @@ const PageMaster = (props) => {
                                       Page Access
                                     </Label>
                                     <Select
-                                      options={PageAccessValues}
+                                      options={pageAccessval}
                                       onChange={(e) => {
                                         PageAccess_DropdownSelect_Handler(e);
                                       }}
@@ -1367,9 +1424,52 @@ const PageMaster = (props) => {
 
                               </CardBody>
                             </Card>
+                          ) : <></>} */}
+
+                          {pageAccessDropDownView ? (
+
+                            <Card className=" mt-n2 text-black" >
+                              <CardBody style={{ backgroundColor: "whitesmoke" }}>
+                                <h5 className="text-black "> Page Access</h5><br></br>
+
+                                {pageAccessval.map((index, key) => {
+
+                                  return <>
+                                    <div className="row " >
+                                      <div className="col col-12"  >
+
+                                        <Row>
+                                          <div >
+                                            <li>
+                                              <label
+                                                className="col col-2 form-label text-black"
+                                              >
+
+                                                {index.Name}
+                                              </label>
+                                              &nbsp;&nbsp;&nbsp;
+
+                                              <Input
+                                                defaultChecked={index.hascheck}
+                                                onChange={e => {
+                                                  pageAccessval[key].hascheck = e.target.checked
+                                                }}
+                                                className="col col-6  "
+                                                type="checkbox"
+                                              // id={`chk${key}`}
+                                              />
+
+                                            </li>
+                                          </div>
+                                        </Row>
+                                      </div>
+                                    </div>
+                                  </>
+                                })}
+
+                              </CardBody>
+                            </Card>
                           ) : <></>}
-
-
                         </Row>
                       </TabPane>
 
@@ -1403,6 +1503,7 @@ const PageMaster = (props) => {
 
                                 </tr>
                               </Thead>
+
                               <Tbody  >
 
                                 {pageFieldTabTable.map((TableValue, key) => (
@@ -1559,10 +1660,11 @@ const PageMaster = (props) => {
                                       {(pageFieldTabTable.length === key + 1) ?
                                         <Row className="">
                                           <Col md={6} className=" mt-3">
-                                            {(pageFieldTabTable.length > 1) ? <>
-                                              < i className="mdi mdi-trash-can d-block text-danger font-size-20" onClick={() => {
-                                                PageField_DeleteRow_Handler(key)
-                                              }} >
+                                            {(pageFieldTabTable.length > 0) ? <>
+                                              < i className="mdi mdi-trash-can d-block text-danger font-size-20"
+                                                onClick={() => {
+                                                  PageField_DeleteRow_Handler(key)
+                                                }} >
                                               </i>
                                             </> : <Col md={6} ></Col>}
 
@@ -1602,6 +1704,17 @@ const PageMaster = (props) => {
 
                               </Tbody>
                             </Table>
+                            {
+                              pageFieldTabTable.length === 0 ?
+                                <div className="col border-end d-flex justify-content-center mt-5 ">
+                                  <Button type="button"
+                                    onClick={() => { PageField_Tab_AddRow_Handler() }}
+                                    className="btn btn-sm ">Add New Row
+                                    <i className="dripicons-plus"> </i>
+                                  </Button>
+                                </div> : null
+                            }
+
                           </div>
                         </div>
 
@@ -1612,10 +1725,22 @@ const PageMaster = (props) => {
                         {/* </Card> */}
 
                       </TabPane>
-
+                      {/* <div className="row save1" style={{ paddingBottom: 'center' }}>
+                      <button
+                        type="submit"
+                        data-mdb-toggle="tooltip" data-mdb-placement="top" title="Save Order"
+                        className="btn btn-success w-md"
+                      // onClick={() => {
+                      //   saveHandeller();
+                      // }}
+                      > <i className="fas fa-save me-2"></i> Save
+                      </button>
+                    </div> */}
                     </TabContent>
+
                   </CardBody>
                 </Card>
+
               </Col>
             </AvForm>
           </Container>
