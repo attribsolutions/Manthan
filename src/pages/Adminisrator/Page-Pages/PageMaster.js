@@ -707,20 +707,20 @@ const PageMaster = (props) => {
       PagePageAccess: Access,
       PageFieldMaster: PageFieldMaster,
     })
-    // if ((pageType_DropdownSelect.value === 1) && (PageFieldMaster.length === 1)) {
-    //   {
-    //     dispatch(
-    //       AlertState({
-    //         Type: 4,
-    //         Status: true,
-    //         Message: "PageFields is Required",
-    //         RedirectPath: false,
-    //         PermissionAction: false,
-    //       })
-    //     );
-    //     return;
-    //   }
-    // }
+    if ((pageType_DropdownSelect.value === 1) && (PageFieldMaster.length === 0)) {
+      {
+        dispatch(
+          AlertState({
+            Type: 4,
+            Status: true,
+            Message: "PageFields is Required",
+            RedirectPath: false,
+            PermissionAction: false,
+          })
+        );
+        return;
+      }
+    }
     if (pageMode === "edit") {
       dispatch(updateHPages(jsonBody, EditData.id));
       console.log("updated jsonBody", jsonBody)
