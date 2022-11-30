@@ -115,7 +115,7 @@ const GRNList = () => {
                     newBtnView={true}
                     showCount={true}
                     excelBtnView={true}
-                    pageMode={"GRNMode2"}
+                    pageMode={GST_ADD_Mode_2}
                     newBtnPagePath={GST_ADD_Mode_2}
                     excelData={"downList"} />
 

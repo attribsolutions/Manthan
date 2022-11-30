@@ -306,7 +306,22 @@ const GRNAdd = (props) => {
         value: i.id,
         label: i.Supplier,
     }));
+    const onChange = (r, e, k) => {
+        debugger
+        const id = r.id
+        let newArr = []
+        let list = [...initialTableData];
 
+        newArr = list.map(element => {
+            if (element.id === id) {
+                element.inpQty = e.target.value
+            }
+            return element
+        });
+        document.getElementById(`inpQty${k}`).value = e.target.value
+        initialTableData = newArr
+        setgrnItemList(newArr)
+    }
     const pagesListColumns = [
         {//------------- ItemName column ----------------------------------
             text: "Item Name",
@@ -333,22 +348,26 @@ const GRNAdd = (props) => {
             text: "GRN-QTY",
             dataField: "",
             sort: true,
-            formatter: (value, row, k) => (
+            formatter: (value, row, k) => {
+                debugger
+                console.log("formatter", row)
+                return (
+                    <span >
+                        <Input type="text"
+                            id={`inpQty${k}`}
+                            className="text-end "
+                            defaultValue={row.inpQty}
+                            disabled={((row.inpRate === 0) || row.GST === '') ? true : false}
+                            onChange={(e) => {
+                                // onChange(row, e, k)
+                                val_onChange(e.target.value, row, "qty")
+                            }}
+                            autoComplete="off"
+                            onKeyDown={(e) => handleKeyDown(e, grnItemList)} />
+                    </span>
 
-                <span >
-                    <Input type="text"
-                        id={`inpQty${k}`}
-                        className="text-end "
-                        defaultValue={row.inpQty}
-                        disabled={((row.inpRate === 0) || row.GST === '') ? true : false}
-                        onChange={(e) => {
-                            val_onChange(e.target.value, row, "qty")
-                        }}
-                        autoComplete="off"
-                        onKeyDown={(e) => handleKeyDown(e, grnItemList)} />
-                </span>
-
-            ),
+                )
+            },
             headerStyle: (colum, colIndex) => {
                 return { width: '130px', textAlign: 'center' };
             }
@@ -450,6 +469,7 @@ const GRNAdd = (props) => {
             formatter: (value, row, k) => (
                 <Input type="text"
                     // id={`Batch${k}`}
+                    placeholder="Batch Code..."
                     className="text-end "
                     defaultValue={row.BatchCode}
                     onChange={e => { row["BatchCode"] = e.target.value }}
@@ -467,12 +487,12 @@ const GRNAdd = (props) => {
             formatter: (value, row, k) => (
                 <Flatpickr
                     className="form-control d-block p-2 bg-white text-dark"
-                    placeholder="Select..."
+                    placeholder="Batch Date..."
                     options={{
                         altInput: true,
                         altFormat: "d-m-Y",
                         dateFormat: "Y-m-d",
-                        defaultDate: "today"
+                        // defaultDate: "today"
                     }}
                     onChange={(e, date) => { row.BatchDate = date }}
                     onReady={(e, date) => { row.BatchDate = date }}
@@ -567,13 +587,15 @@ const GRNAdd = (props) => {
         const id = r.id
         const newArr = []
         let list = [...initialTableData];
-        debugger
-        list.forEach(element => {
 
+        list.forEach(element => {
+            debugger
             if (element.id < id) {
+                // element.id = element.id 
                 newArr.push(element)
             }
             else if (element.id === id) {
+                // element.id = element.id 
                 newArr.push(element);
                 const ele = { ...element }
                 ele.id = element.id + 1
@@ -581,14 +603,14 @@ const GRNAdd = (props) => {
                 newArr.push(ele)
             }
             else {
-                const ele = { ...element }
-                ele.id = element.id + 1
-                newArr.push(ele)
+                const ele1 = { ...element }
+                ele1.id = element.id + 1
+                newArr.push(ele1)
             }
         });
-
-        
         debugger
+        console.log("setgrnItemList", newArr)
+
         initialTableData = newArr
         setgrnItemList(newArr)
 
