@@ -471,19 +471,26 @@ const ItemsMaster = (props) => {
             const itemUnitDetails = []
 
             baseUnitTableData.forEach((index, key) => {
+                let val1 = index.Conversion
+                const unit1 = index.Unit.value;
 
+                if (!(val1 === '')) {
+                    val1 = parseFloat(val1).toFixed(3)
+                }
+                
                 const found = baseUnitTableData.find((i, k) => {
-                    return ((index.Conversion === i.Conversion) && (index.Unit.value === i.Unit.value) && !(key === k))
+                    let inner = i.Conversion;
+                    if (!(inner === '')) { inner = parseFloat(inner).toFixed(3) }
+                    return ((val1 === inner) && (unit1 === i.Unit.value) && !(key === k))
                 });
                 const found2 = itemUnitDetails.find((i, k) => {
-                    return ((index.Conversion === i.BaseUnitQuantity) && (index.Unit.value === i.UnitID) && !(key === k))
+                    return ((val1 === i.BaseUnitQuantity) && (unit1 === i.UnitID) && !(key === k))
                 });
-                debugger
+
                 if (
                     ((found === undefined) || (found2 === undefined))
-                    && !(index.Conversion === '')
-                    && !(index.Unit === '')) {
-                    debugger
+                    && !(val1 === '')
+                    && !(unit1 === '')) {
                     itemUnitDetails.push({
                         BaseUnitQuantity: index.Conversion,
                         UnitID: index.Unit.value,
@@ -492,7 +499,7 @@ const ItemsMaster = (props) => {
                 }
 
             });
-            debugger
+            
             if (pageMode === 'save')
                 itemUnitDetails.push({
                     BaseUnitQuantity: 1,
@@ -559,12 +566,12 @@ const ItemsMaster = (props) => {
 
             if (pageMode === 'edit') {
                 dispatch(updateItemID(jsonBody, EditData.id));
-                console.log("edit json", jsonBody)
+                console.log("items edit json", jsonBody)
             }
 
             else {
                 dispatch(postItemData(jsonBody));
-                console.log("post json", jsonBody)
+                console.log("items post json", jsonBody)
             }
 
         } /// ************* is valid if start 
@@ -593,7 +600,11 @@ const ItemsMaster = (props) => {
                     <Container fluid>
                         <AvForm onValidSubmit={(e, v) => { handleValidSubmit(e, v); }}>
 
-                            <Breadcrumb breadcrumbItem={userPageAccessState.PageHeading} />
+                            {/* Render Breadcrumbs */}
+                            <Breadcrumb pageHeading={userPageAccessState.PageHeading} />
+
+                         
+
 
                             <Row>
 

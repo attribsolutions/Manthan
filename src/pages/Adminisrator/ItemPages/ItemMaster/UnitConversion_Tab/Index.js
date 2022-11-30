@@ -52,13 +52,10 @@ export default function UnitConverstion(props) {
 
         if (type === "Conversion") {
             var conv = event.target.value
-            var float = ''
-            if (!(conv === '')) {
-                float = parseFloat(conv).toFixed(3)
-            }
+           
 
             newSelectValue = {
-                Conversion: float,
+                Conversion: conv,
                 Unit: found.Unit,
                 IsBase: found.IsBase
             }

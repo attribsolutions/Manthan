@@ -1,5 +1,4 @@
 import React, { useEffect } from "react";
-
 import { useSelector, useDispatch } from "react-redux";
 import CommonListPage from "../../../components/Common/CmponentRelatedCommonFile/commonListPage";
 import { commonPageFieldList, commonPageFieldListSuccess } from "../../../store/actions";
@@ -11,7 +10,7 @@ import {
   postPartySubPartySuccess,
   updatePartySubPartySuccess
 } from "../../../store/Administrator/PartySubPartyRedux/action";
-import { PARTY_SUB_PARTY } from "../../../helpers/url_helper";
+import { PARTY_SUB_PARTY } from "../../../routes/route_url";
 import PartySubParty from "./PartySubParty";
 
 const PartySubPartyList = () => {
@@ -27,7 +26,7 @@ const PartySubPartyList = () => {
       pageField: state.CommonPageFieldReducer.pageFieldList
     })
   );
-debugger
+
   const action = {
     getList: getPartySubPartylist,
     editId: editPartySubParty,
@@ -40,7 +39,7 @@ debugger
   //  This UseEffect => Featch Modules List data  First Rendering
   useEffect(() => {
     dispatch(commonPageFieldListSuccess(null))
-    dispatch(commonPageFieldList(122))
+    dispatch(commonPageFieldList(58))
     dispatch(getPartySubPartylist());
   }, []);
 
@@ -48,7 +47,7 @@ debugger
 
   return (
     <React.Fragment>
-      {/* {
+      {
         (pageField) ?
           <CommonListPage
             action={action}
@@ -59,8 +58,7 @@ debugger
             deleteName={"PartySubParty"}
           />
           : null
-      } */}
-
+      }
     </React.Fragment>
   )
 }
