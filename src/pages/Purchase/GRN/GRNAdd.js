@@ -339,7 +339,7 @@ const GRNAdd = (props) => {
                     <Input type="text"
                         id={`inpQty${k}`}
                         className="text-end "
-                      value={row.inpQty}
+                        defaultValue={row.inpQty}
                         disabled={((row.inpRate === 0) || row.GST === '') ? true : false}
                         onChange={(e) => {
                             val_onChange(e.target.value, row, "qty")
@@ -586,11 +586,8 @@ const GRNAdd = (props) => {
                 newArr.push(ele)
             }
         });
-  const ele = { ...element }
-                ele.id = element.id + 1
-                newArr.push(ele)
 
-
+        
         debugger
         initialTableData = newArr
         setgrnItemList(newArr)
