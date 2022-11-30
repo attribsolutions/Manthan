@@ -2,16 +2,14 @@ import { call, put, takeEvery } from "redux-saga/effects";
 
 import {
   deleteGRNIdSuccess,
-  editGRNIdSuccess,
   getGRNListPageSuccess,
   getGRN_itemMode2_Success,
-  getGRN_itemMode3_Success,
   postGRNSuccess,
   updateGRNIdSuccess,
 
 } from "./actions";
 import {
-  GRN_delete_API, GRN_Edit_API,
+  GRN_delete_API, 
   GRN_getItem_API,
   GRN_get_API, GRN_Post_API,
   GRN_update_API,
@@ -27,7 +25,6 @@ import {
 
 import { SpinnerState } from "../../Utilites/Spinner/actions";
 import { AlertState } from "../../Utilites/CustomAlertRedux/actions";
-import { EDIT_ORDER_FOR_ORDER_PAGE } from "../OrderPageRedux/actionType";
 
 function* postGRNGenFunc({ data }) {
   debugger
@@ -46,23 +43,6 @@ function* postGRNGenFunc({ data }) {
   }
 }
 
-// function* editGRNGenFunc({ id, pageMode }) {
-
-//   yield put(SpinnerState(true))
-//   try {
-//     const response = yield call(GRN_Edit_API, id);
-//     response.pageMode = pageMode
-//     yield put(SpinnerState(false))
-//     // debugger
-//     yield put(editGRNIdSuccess(response));
-//   } catch (error) {
-//     yield put(SpinnerState(false))
-//     yield put(AlertState({
-//       Type: 4,
-//       Status: true, Message: "500 Error EditGRN-ID API",
-//     }));
-//   }
-// }
 
 function* DeleteGRNGenFunc({ id }) {
   yield put(SpinnerState(true))
@@ -102,7 +82,6 @@ function* get_GRN_GerFunc({ filters }) {
   yield put(SpinnerState(true))
   try {
     const response = yield call(GRN_get_API, filters);
-    debugger
 
     yield put(SpinnerState(false))
     yield put(getGRNListPageSuccess(response.Data))
@@ -118,9 +97,7 @@ function* get_GRN_GerFunc({ filters }) {
 
 // List Page API
 function* getGRNitem_Mode2_GenFunc({ data }) {
-  // debugger
   const { jsonBody, pageMode, GRN_ADD, grnRef, challanNo } = data
-
   yield put(SpinnerState(true))
   try {
     const response = yield call(GRN_getItem_API, jsonBody);
@@ -131,7 +108,6 @@ function* getGRNitem_Mode2_GenFunc({ data }) {
 
     response["path"] = GRN_ADD; //Pagepath
 
-    debugger
     yield put(SpinnerState(false))
     yield put(getGRN_itemMode2_Success(response))
   } catch (error) {

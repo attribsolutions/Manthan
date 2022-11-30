@@ -237,25 +237,7 @@ const Order = (props) => {
        
     }
     const pagesListColumns = [
-        {
-            text: "Actions",
-            dataField: "",
-            sort: true,
-            formatter: (value, row, k) => (
-                <Button
-                    type="button"
-                    data-mdb-toggle="tooltip" data-mdb-placement="top"
-                    onClick={(e) => copybtnOnclick(row)}
-                    className="badge badge-soft-primary font-size-12 btn btn-primary
-                     waves-effect waves-light w-xxs border border-light"
-                >
-                    <i className="bx bxs-copy font-size-12 "></i>
-                </Button >
-            ),
-            headerStyle: (colum, colIndex) => {
-                return { width: '130px', textAlign: 'center', text: "center" };
-            }
-        },
+
         //------------- ItemName column ----------------------------------
         {
             text: "Item Name",
@@ -372,7 +354,7 @@ const Order = (props) => {
         //------------- GST column ----------------------------------
         {
             text: "GST %",
-            dataField: "GST",
+            dataField: "GSTPercentage",
             sort: true,
             formatter: (value, row) => (
 
@@ -534,6 +516,10 @@ const Order = (props) => {
 
 
     }
+
+  const  handleDataChange = (a,b,c) => {
+        debugger
+      }
 
     if (!(userAccState === "")) {
         return (
@@ -700,6 +686,7 @@ const Order = (props) => {
                                                 <div className="table table-Rresponsive">
                                                     <BootstrapTable
                                                         keyField={"id"}
+                                                        onDataSizeChange={handleDataChange }
                                                         responsive
                                                         bordered={false}
                                                         striped={false}
