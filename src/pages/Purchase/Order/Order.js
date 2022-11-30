@@ -237,15 +237,13 @@ const Order = (props) => {
 
     }
     const pagesListColumns = [
-
-        //------------- ItemName column ----------------------------------
-        {
+        {//------------- ItemName column ----------------------------------
             text: "Item Name",
             dataField: "Name",
             sort: true,
         },
-        //------------- Quntity column ----------------------------------
-        {
+
+        { //------------- Quntity column ----------------------------------
             text: "Quntity",
             dataField: "",
             sort: true,
@@ -274,8 +272,8 @@ const Order = (props) => {
 
 
         },
-        //------------- UOM column ----------------------------------
-        {
+      
+        {  //------------- UOM column ----------------------------------
             text: "UOM",
             dataField: "",
             sort: true,
@@ -312,8 +310,8 @@ const Order = (props) => {
             }
 
         },
-        //------------- Rate column ----------------------------------
-        {
+        
+        {//------------- Rate column ----------------------------------
             text: "Rate",
             dataField: "Rate",
             sort: true,
@@ -351,8 +349,8 @@ const Order = (props) => {
                 return { width: '140px', textAlign: 'center' };
             }
         },
-        //------------- GST column ----------------------------------
-        {
+       
+        { //------------- GST column ----------------------------------
             text: "GST %",
             dataField: "GSTPercentage",
             sort: true,

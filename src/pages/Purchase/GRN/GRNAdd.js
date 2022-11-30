@@ -122,9 +122,8 @@ const GRNAdd = (props) => {
     const hasShowModal = props.hasOwnProperty("editValue")
 
     useEffect(() => {
-
+        debugger
         if ((items.Status === true) && (items.StatusCode === 200)) {
-            // dispatch(BreadcrumbFilterSize(`${"Order Amount"} :${orderAmount}`))
             const hasEditVal = items.Data
             hasEditVal.OrderItem.forEach((ele, k) => {
                 ele.id = k + 1;
@@ -148,10 +147,11 @@ const GRNAdd = (props) => {
             setGrnDetail(details)
 
             setsupplierSelect({ label: hasEditVal.SupplierName, value: hasEditVal.Supplier })
-            dispatch(BreadcrumbFilterSize(`${"Order Amount"} :${hasEditVal.OrderAmount}`))
             setOrderAmount(hasEditVal.OrderAmount)
             items.Status = false
             dispatch(getGRN_itemMode2_Success(items))
+            debugger
+            dispatch(BreadcrumbFilterSize(`${"Order Amount"} :${hasEditVal.OrderAmount}`))
         }
 
     }, [items])
@@ -186,7 +186,6 @@ const GRNAdd = (props) => {
 
 
     useEffect(() => {
-        dispatch(BreadcrumbFilterSize(`${"Order Amount"} :${orderAmount}`))
         dispatch(goButtonSuccess([]))
 
         if ((hasShowloction || hasShowModal)) {
@@ -306,22 +305,7 @@ const GRNAdd = (props) => {
         value: i.id,
         label: i.Supplier,
     }));
-    const onChange = (r, e, k) => {
-        debugger
-        const id = r.id
-        let newArr = []
-        let list = [...initialTableData];
 
-        newArr = list.map(element => {
-            if (element.id === id) {
-                element.inpQty = e.target.value
-            }
-            return element
-        });
-        document.getElementById(`inpQty${k}`).value = e.target.value
-        initialTableData = newArr
-        setgrnItemList(newArr)
-    }
     const pagesListColumns = [
         {//------------- ItemName column ----------------------------------
             text: "Item Name",
@@ -349,7 +333,7 @@ const GRNAdd = (props) => {
             dataField: "",
             sort: true,
             formatter: (value, row, k) => {
-                debugger
+
                 console.log("formatter", row)
                 return (
                     <span >
@@ -374,17 +358,38 @@ const GRNAdd = (props) => {
 
 
         },
-        {//  ------------UOM column -----------------------------------
+        {  //------------- UOM column ----------------------------------
             text: "UOM",
-            dataField: "UOMLabel",
+            dataField: "",
             sort: true,
-            formatter: (value, row) => (
-                <div className="text-center mt-2">
-                    <span>{value}</span>
-                </div>
-
-
-            ),
+            formatter: (value, row, key) => {
+                if (row.UOMLabel === undefined) {
+                    row["UOM"] = row.UnitDetails[0].Unit
+                    row["UOMLabel"] = row.UnitDetails[0].UnitName
+                    row["inpBaseUnitQty"] = row.UnitDetails[0].BaseUnitQuantity
+                }
+                return (
+                    <Select
+                        classNamePrefix="select2-selection"
+                        id={"ddlUnit"}
+                        defaultValue={{ value: row.UOM, label: row.UOMLabel }}
+                        // value={{value:row.UOM,label:row.UOMLabel}}
+                        options={
+                            row.UnitDetails.map(i => ({
+                                label: i.UnitName,
+                                value: i.Unit,
+                                baseUnitQty: i.BaseUnitQuantity
+                            }))
+                        }
+                        onChange={e => {
+                            row["UOM"] = e.value;
+                            row["UOMLabel"] = e.label
+                            row["inpBaseUnitQty"] = e.baseUnitQty
+                        }}
+                    >
+                    </Select >
+                )
+            },
             headerStyle: (colum, colIndex) => {
                 return { width: '150px', textAlign: 'center' };
             }
@@ -583,6 +588,7 @@ const GRNAdd = (props) => {
         dispatch(goButton(jsonBody))
         console.log("jsonBody", jsonBody)
     };
+
     const copybtnOnclick = (r) => {
         const id = r.id
         const newArr = []
@@ -640,7 +646,7 @@ const GRNAdd = (props) => {
                     Rate: i.inpRate,
                     Unit: i.UOM,
                     BaseUnitQuantity: i.inpQty,
-                    GSTPercentage: i.GSTPercentage,
+                    GST: i.GST,
                     BasicAmount: basicAmt.toFixed(2),
                     GSTAmount: cgstAmt.toFixed(2),
                     Amount: i.totalAmount,
