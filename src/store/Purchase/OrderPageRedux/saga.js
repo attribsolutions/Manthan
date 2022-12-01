@@ -29,7 +29,7 @@ import {
   DELETE_ORDER_FOR_ORDER_PAGE,
   GO_BUTTON_FOR_ORDER_PAGE,
   POST_ORDER_FROM_ORDER_PAGE,
-  GET_ORDER_LIST_PAGE,
+  GET_ORDER_LIST_PAGE,Unit
 } from "./actionType";
 
 import { SpinnerState } from "../../Utilites/Spinner/actions";
@@ -37,7 +37,7 @@ import { AlertState } from "../../Utilites/CustomAlertRedux/actions";
 
 
 function* goButtonGenFunc({ data, hasEditVal }) {
-
+  
   yield put(SpinnerState(true))
   try {
     const response = yield call(OrderPage_GoButton_API, data);
@@ -62,7 +62,7 @@ function* goButtonGenFunc({ data, hasEditVal }) {
     yield put(SpinnerState(false))
     yield put(AlertState({
       Type: 4,
-      Status: true, Message: "500 Error Message",
+      Status: true, Message: "500 Error Go Button-Order Page",
     }));
   }
 }
@@ -78,25 +78,24 @@ function* postOrder_GenFunc({ data }) {
     yield put(SpinnerState(false))
     yield put(AlertState({
       Type: 4,
-      Status: true, Message: "500 Error Message",
+      Status: true, Message: "500 Error Post Order",
     }));
   }
 }
 
 function* editOrderGenFunc({ id, pageMode }) {
-
+  
   yield put(SpinnerState(true))
   try {
     const response = yield call(editOrderID_forOrderPage_ApiCall, id);
     response.pageMode = pageMode
     yield put(SpinnerState(false))
-    debugger
     yield put(editOrderIdSuccess(response));
   } catch (error) {
     yield put(SpinnerState(false))
     yield put(AlertState({
       Type: 4,
-      Status: true, Message: "500 Error Message",
+      Status: true, Message: "500 Error Edit Order",
     }));
   }
 }
@@ -111,7 +110,7 @@ function* DeleteOrder_GenFunc({ id }) {
     yield put(SpinnerState(false))
     yield put(AlertState({
       Type: 4,
-      Status: true, Message: "500 Error Message",
+      Status: true, Message: "500 Error DeleteOrder",
     }));
   }
 }
@@ -128,14 +127,14 @@ function* UpdateOrder_ID_GenFunc({ data, id }) {
     yield put(SpinnerState(false))
     yield put(AlertState({
       Type: 4,
-      Status: true, Message: "500 Error Message",
+      Status: true, Message: "500 Error UpdateOrder",
     }));
   }
 }
 
 // List Page API
 function* get_OrderList_GenFunc({ filters }) {
-debugger
+  
   yield put(SpinnerState(true))
   try {
     const response = yield call(Order_get_API, filters);
@@ -146,7 +145,7 @@ debugger
     yield put(SpinnerState(false))
     yield put(AlertState({
       Type: 4,
-      Status: true, Message: "500 Error Message",
+      Status: true, Message: "500 Error  Get OrderList",
     }));
   }
 }

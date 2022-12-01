@@ -290,6 +290,7 @@ const PriceMaster = (props) => {
 
     // drop down tree
     const test1 = () => {
+        debugger
 
 
 
@@ -354,6 +355,7 @@ const PriceMaster = (props) => {
     }
 
     function fun2(node) {
+        debugger
 
         return (
             <div style={{ paddingLeft: "50px" }} className={"pricelistclass"} >
@@ -403,7 +405,7 @@ const PriceMaster = (props) => {
 
                                 <DropdownItem
                                     key={node.value}
-                                    onClick={(e) => { dropOpen_EditHandler(node) }}
+                                    onClick={(e) => {dropOpen_EditHandler(node) }}
                                 >
                                     <span className="align-middle text-black" >{"Edit"}</span>
                                 </DropdownItem>
@@ -527,6 +529,7 @@ const PriceMaster = (props) => {
 
                                                     <div className="modal-body">
                                                         {currentPrice.mode === "edit" ?
+                                                        
                                                             <Row className="justify-content-md-left">
                                                                 <Label className="col-3 col-form-label" >Price List</Label>
                                                                 <Col className="col-9">
@@ -540,7 +543,7 @@ const PriceMaster = (props) => {
                                                                {/* <label>id={currentPrice.value} </label> */}
 
                                                                <Input id="Input"
-                                                                            value={PriceList_dropdown_Select.label}
+                                                                            value={priceList.label}
                                                                             placeholder="Select..."
                                                                             // onChange={(e) => setDropOpen(!dropOpen)}
                                                                             onClick={onclickselect}
@@ -549,20 +552,10 @@ const PriceMaster = (props) => {
 
                                                                         {test1()}
 
-
-{/* 
-                                                                    <Input
-                                                                        value={PriceList_dropdown_Select.label}
-                                                                        placeholder="Enter Name"
-                                                                        id="txtsubprice"
-
-                                                                        // onClick={(e) =>setDropOpen(!dropOpen)}
-                                                                        onClick={(e) => setDropOpen2(!dropOpen2)}
-                                                                    >
-                                                                    </Input>
+                                                                        {/* value={PriceList_dropdown_Select.label} */}
 
 
-                                                                    {test1()} */}
+                                                    
 
 
 
@@ -576,6 +569,9 @@ const PriceMaster = (props) => {
 
 
                                                             <Row className="mt-2">
+
+
+                                                                
                                                                 <span className="form-label text-primary text-center">{currentPrice.Name}</span>
                                                                 <Label htmlFor="horizontal-firstname-input"
                                                                     className="col-3 col-form-label" > {currentPrice.id === 0 ? "Main Price" : "sub-Price"} </Label>

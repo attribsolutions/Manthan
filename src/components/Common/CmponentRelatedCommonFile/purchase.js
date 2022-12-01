@@ -78,9 +78,8 @@ const PurchaseListPage = (props) => {
         masterPath,
         ButtonMsgLable,
         deleteName,
-        showBreadcrumb = true,
-        pageMode = "List",
-        onsavefunc = () => { }
+        pageMode,
+        onsavefunc = () => { },
     } = props;
 
     const fileds = pageField.PageFieldMaster;
@@ -125,7 +124,7 @@ const PurchaseListPage = (props) => {
                     Type: 1,
                     Status: true,
                     Message: updateMsg.Message,
-                    AfterResponseAction: getList,
+                    isFunc: true,
                 })
             );
             tog_center();
@@ -222,11 +221,11 @@ const PurchaseListPage = (props) => {
     }
 
 
-// ****** columns sort by sequnce
+    // ****** columns sort by sequnce
     fileds.sort(function (a, b) {  //sort function is  sort list page coloumn by asending order by listpage sequense
         return a.ListPageSeq - b.ListPageSeq
     });
-// *******
+    // *******
 
     let sortLabel = ""
     const columns = []
@@ -248,7 +247,7 @@ const PurchaseListPage = (props) => {
             }
         }
 
-// ======================== for GRNMode2 Page Action Button ================================
+        // ======================== for GRNMode2 Page Action Button ================================
 
         if ((pageMode === GST_ADD_Mode_2) && (fileds.length - 1 === k)) {
             columns.push({
@@ -265,7 +264,7 @@ const PurchaseListPage = (props) => {
                 }
             })
         }
-// ======================== for List Page Action Button ================================
+        // ======================== for List Page Action Button ================================
 
         else if ((fileds.length - 1 === k)) {
             columns.push(listPageCommonButtonFunction({

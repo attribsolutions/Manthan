@@ -156,34 +156,6 @@ const GRNAdd = (props) => {
 
     }, [items])
 
-    // debugger
-    // const grnItemList = useMemo(() => {
-    //     // debugger
-    //     const { Data, Status = false } = items
-    //     if (!Status) {
-    //         return items
-    //     }
-    //     // debugger
-    //     const hasEditVal = Data;
-    //     hasEditVal.OrderItem.forEach(ele => {
-    //         ele["Name"] = ele.ItemName
-    //         ele["inpRate"] = ele.Rate
-    //         ele["inpQty"] = ele.Quantity
-    //         ele["totalAmount"] = ele.Amount
-    //         ele["UOM"] = ele.Unit
-    //         ele["UOMLabel"] = ele.UnitName
-    //         ele["inpBaseUnitQty"] = ele.BaseUnitQuantity
-    //     });
-    //     setsupplierSelect({ label: hasEditVal.SupplierName, value: hasEditVal.Supplier })
-    //     dispatch(BreadcrumbFilterSize(`${"Order Amount"} :${hasEditVal.OrderAmount}`))
-    //     setOrderAmount(hasEditVal.OrderAmount)
-    //     items.Status = false
-    //     dispatch(getGRN_itemMode2_Success(items))
-    //     return hasEditVal
-
-    // }, items)
-
-
 
     useEffect(() => {
         dispatch(goButtonSuccess([]))
@@ -235,7 +207,7 @@ const GRNAdd = (props) => {
     }, [supplierAddress])
 
     useEffect(() => {
-        debugger
+        
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(postGRNSuccess({ Status: false }))
             dispatch(AlertState({
@@ -250,7 +222,7 @@ const GRNAdd = (props) => {
             dispatch(AlertState({
                 Type: 4,
                 Status: true,
-                Message: "error Message",
+                Message: JSON.stringify(postMsg.Message),
                 RedirectPath: false,
                 AfterResponseAction: false
             }));
@@ -300,11 +272,6 @@ const GRNAdd = (props) => {
         setOrderAmount(sum.toFixed(2))
         dispatch(BreadcrumbFilterSize(`${"Order Amount"} :${sum.toFixed(2)}`))
     }
-
-    const supplierOptions = supplier.map((i) => ({
-        value: i.id,
-        label: i.Supplier,
-    }));
 
     const pagesListColumns = [
         {//------------- ItemName column ----------------------------------
@@ -559,36 +526,6 @@ const GRNAdd = (props) => {
         custom: true,
     };
 
-    const GoButton_Handler = () => {
-        let supplier = supplierSelect.value
-
-        if (!supplier > 0) {
-            alert("Please Select Customer")
-            return
-        }
-
-        if (items.length > 0) {
-            if (window.confirm("Refresh Order Item...!")) {
-                dispatch(goButtonSuccess([]))
-            } else { return }
-        }
-
-        let division = 0
-        try {
-            division = JSON.parse(localStorage.getItem("roleId")).Party_id
-        } catch (e) {
-            alert(e)
-        }
-        const jsonBody = JSON.stringify({
-            Supplier: supplier,
-            EffectiveDate: grnDate
-        }
-        );
-
-        dispatch(goButton(jsonBody))
-        console.log("jsonBody", jsonBody)
-    };
-
     const copybtnOnclick = (r) => {
         const id = r.id
         const newArr = []
@@ -666,7 +603,6 @@ const GRNAdd = (props) => {
                     TaxType: "GST",
 
                 }
-                debugger
                 itemArr.push(arr)
             };
         })

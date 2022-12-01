@@ -91,7 +91,9 @@ import SubGroupMaster from "../pages/Adminisrator/SubGroupPages/SubGroupMaster";
 import SubGroupList from "../pages/Adminisrator/SubGroupPages/SubGroupList";
 import PartyItemsList from "../pages/Adminisrator/PartyItemPage/PartyItemList";
 import Index from "../pages/Adminisrator/ItemPages/ItemMaster/Image_Tab/Index";
+import demo from "../pages/Adminisrator/GroupPage/demo";
 import BOMMaster from "../pages/Purchase/BOM/BOMMaster/BOMIndex";
+
 // import PartyItemsList from "../pages/Adminisrator
 
 
@@ -192,6 +194,14 @@ const userRoutes = [
   { path:path.SUBGROUP, component: SubGroupMaster },
   { path:path.SUBGROUP_LIST, component: SubGroupList },
 
+
+  // { path:"/demo", component: demo },
+
+
+
+
+
+
   { path:path.BOM, component: BOMMaster },
 
 
@@ -203,7 +213,7 @@ const userRoutes = [
   { path: "/auth-500", component: Error500 },
 
 
-  // { path: "/Demo", component: Demo },
+  
 
 
 

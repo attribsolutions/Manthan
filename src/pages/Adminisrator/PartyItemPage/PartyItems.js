@@ -17,7 +17,7 @@ import { MetaTags } from "react-meta-tags";
 
 
 import { useDispatch, useSelector } from "react-redux";
-import { AlertState, commonPageField, commonPageFieldSuccess } from "../../../store/actions";
+import { AlertState, commonPageField, commonPageFieldSuccess, getGroupList } from "../../../store/actions";
 import { useHistory } from "react-router-dom";
 import { getpartyItemList, getPartyItemListSuccess, GetPartyList, getSupplier, PostPartyItems, PostPartyItemsSuccess } from "../../../store/Administrator/PartyItemsRedux/action";
 import paginationFactory, { PaginationListStandalone, PaginationProvider } from "react-bootstrap-table2-paginator";
@@ -53,28 +53,31 @@ const PartyItems = (props) => {
         supplier,
         partyItem,
         pageField,
+        tableList,
         userAccess } = useSelector((state) => ({
 
             postMsg: state.PartyItemsReducer.postMsg,
             updateMsg: state.PartyItemsReducer.updateMsg,
             partyItem: state.PartyItemsReducer.partyItem,
+            tableList: state.GroupReducer.groupList,
             supplier: state.PartyItemsReducer.supplier,
             userAccess: state.Login.RoleAccessUpdateData,
             pageField: state.CommonPageFieldReducer.pageField
         }));
 
 
-        
+
     // const [state, setState] = useState(initialFiledFunc())
     // const values = { ...state.values }
     // const { isError } = state;
     // const { fieldLabel } = state;
 
-    
+
     useEffect(() => {
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(36))
         dispatch(getSupplier())
+        dispatch(getGroupList());
     }, []);
 
     useEffect(() => {
@@ -115,7 +118,7 @@ const PartyItems = (props) => {
         }
     }, [postMsg])
 
-    
+
     // useEffect(() => {
     //     if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
     //         history.push({
@@ -133,7 +136,7 @@ const PartyItems = (props) => {
     //     }
     // }, [updateMsg, modalCss]);
 
-    
+
     // useEffect(() => {
     //     if (pageField) {
     //         const fieldArr = pageField.PageFieldMaster
@@ -165,27 +168,52 @@ const PartyItems = (props) => {
             text: "SelectAll",
             dataField: "itemCheck",
             sort: true,
-            mode:'checkbox',
+            mode: 'checkbox',
             clickToSelect: true,
             headerColumnStyle: {
-                        lable:'SelectAll'
-                      },
+                lable: 'SelectAll'
+            },
+
+
+            // formatter: (cellContent, row,i) => {
+            //     return (
+            //         <button
+            //             className="btn btn-danger btn-xs"
+            //             onClick={() => handleDelete(row.id,i)}
+            //         >
+            //             Add
+            //         </button>
+            //     );
+            // },
 
             formatter: (cellContent, row, col, k) => (
-                <span >
-                    <Input type="checkbox"
-                        defaultChecked={cellContent}
-                        onChange={e => row.itemCheck = e.target.checked}
-                    />
+            <span >
+                <Input type="checkbox"
+                    defaultChecked={cellContent}
+                    onChange={e => row.itemCheck = e.target.checked}
+                />
 
-                </span>
+            </span>
 
 
             ),
 
         }
     ];
-
+    // const handleDelete = (i) => {
+    //         var Index = i + 1
+    //         document.getElementById("BootstrapTable")
+    //         $table.bootstrapTable('insertRow', {
+    //           index: 1,
+    //           row: {
+    //             name: 'Item ' + Index,
+    //             price: '$' + Index
+    //           }
+    //         // })
+    //     //   } )
+    //     })
+    
+    // };
 
     // const selectRow = {
 
@@ -214,7 +242,7 @@ const PartyItems = (props) => {
 
     // }
 
-   
+
 
     const pageOptions = {
         sizePerPage: 15,
@@ -338,12 +366,14 @@ const PartyItems = (props) => {
                                             keyField="id"
                                             data={partyItem}
                                             columns={tableColumns}
+
                                             search
                                         >
                                             {toolkitProps => (
                                                 <React.Fragment>
                                                     <div className="table">
                                                         <BootstrapTable
+                                                        // id="BootstrapTable"
                                                             // selectRow={selectRow}
                                                             keyField={"id"}
                                                             bordered={true}
