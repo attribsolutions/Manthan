@@ -15,7 +15,7 @@ import { COMPANYGROUP } from "../../../routes/route_url";
 
 
 const CompanyGroupList = (props) => {
-debugger
+
   const dispatch = useDispatch();
   const reducers = useSelector(
     (state) => ({

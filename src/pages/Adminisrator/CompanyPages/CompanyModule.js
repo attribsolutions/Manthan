@@ -68,7 +68,7 @@ const CompanyModule = (props) => {
     PhoneNo: "",
     CompanyAbbreviation: "",
     EmailID: "",
-    CompanyGroup: ""
+    CompanyGroupName: ""
   }
 
   const [state, setState] = useState(initialFiledFunc(initialFiled))
@@ -131,7 +131,7 @@ const CompanyModule = (props) => {
         hasValid.PhoneNo.valid = true;
         hasValid.CompanyAbbreviation.valid = true;
         hasValid.EmailID.valid = true;
-        hasValid.CompanyGroup.valid = true;
+        hasValid.CompanyGroupName.valid = true;
 
         values.id = id
         values.Name = Name
@@ -140,7 +140,7 @@ const CompanyModule = (props) => {
         values.PhoneNo = PhoneNo;
         values.CompanyAbbreviation = CompanyAbbreviation;
         values.EmailID = EmailID;
-        values.CompanyGroup = { label: CompanyGroupName, value: CompanyGroup };
+        values.CompanyGroupName = { label: CompanyGroupName, value: CompanyGroup };
         setState({ values, fieldLabel, hasValid, required, isError })
         dispatch(Breadcrumb_inputName(hasEditVal.Name))
       }
@@ -229,7 +229,7 @@ const CompanyModule = (props) => {
         PhoneNo: values.PhoneNo,
         CompanyAbbreviation: values.CompanyAbbreviation,
         EmailID: values.EmailID,
-        CompanyGroup: values.CompanyGroup.value,
+        CompanyGroup: values.CompanyGroupName.value,
         CreatedBy: 1,
         UpdatedBy: 1,
       });
@@ -427,18 +427,18 @@ const CompanyModule = (props) => {
                             <Col md="4">
 
                               <FormGroup className="mb-3 ">
-                                <Label htmlFor="validationCustom01"> {fieldLabel.CompanyGroup} </Label>
+                                <Label htmlFor="validationCustom01"> {fieldLabel.CompanyGroupName} </Label>
                                 <Select
-                                  name="CompanyGroup"
-                                  value={values.CompanyGroup}
+                                  name="CompanyGroupName"
+                                  value={values.CompanyGroupName}
                                   //   value={{label:"abc",value:1}}//default value set
                                   className="react-dropdown"
                                   classNamePrefix="dropdown"
                                   options={CompanyGroupValues}
-                                  onChange={(hasSelect, evn) => onChangeSelect({ hasSelect, evn, state, setState, })}
+                                  onChange={(hasSelect, evn) => onChangeSelect({ hasSelect, evn, state, setState })}
                                 />
-                                {isError.CompanyGroup.length > 0 && (
-                                  <span className="text-danger f-8"><small>{isError.CompanyGroup}</small></span>
+                                {isError.CompanyGroupName.length > 0 && (
+                                  <span className="text-danger f-8"><small>{isError.CompanyGroupName}</small></span>
                                 )}
                               </FormGroup>
                             </Col>

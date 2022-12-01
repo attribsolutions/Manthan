@@ -16,16 +16,26 @@ import {
     editGRNId, getGRNListPage,
     updateGRNIdSuccess
 } from "../../../store/Purchase/GRNRedux/actions";
+import { goButton } from "../../../store/Purchase/OrderPageRedux/actions";
+import { getSupplier } from "../../../store/CommonAPI/SupplierRedux/actions";
+
+
+let onlodTodate = null
+let onlodFromdate = null
 
 
 const GRNList = () => {
 
     const dispatch = useDispatch();
+    const [supplierSelect, setsupplierSelect] = useState({ value: '' });
+    const [fromdate, setFromdate] = useState('');
+    const [todate, setTodate] = useState('');
 
 
 
     const reducers = useSelector(
         (state) => ({
+            supplier: state.SupplierReducer.supplier,
             tableList: state.GRNReducer.GRNList,
             deleteMsg: state.GRNReducer.deleteMsg,
             updateMsg: state.GRNReducer.updateMsg,
@@ -35,7 +45,7 @@ const GRNList = () => {
             pageField: state.CommonPageFieldReducer.pageFieldList,
         })
     );
-
+    const { pageField, supplier } = reducers;
     const action = {
         getList: getGRNListPage,
         editId: editGRNId,
@@ -50,10 +60,51 @@ const GRNList = () => {
     useEffect(() => {
         dispatch(commonPageFieldListSuccess(null))
         dispatch(commonPageFieldList(56))
-        dispatch(getGRNListPage());
+        dispatch(getSupplier())
     }, []);
 
-    const { pageField } = reducers;
+    const supplierOptions = supplier.map((i) => ({
+        value: i.id,
+        label: i.Supplier,
+    }));
+
+    const goButtonHandler = (onload = false) => {
+        // debugger
+        let FromDate
+        let ToDate
+
+        if (!(onlodFromdate) || !(onlodTodate)) {
+            return
+        }
+        if (onload) {
+            FromDate = onlodFromdate;
+            ToDate = onlodTodate;
+        } else {
+            ToDate = todate;
+            FromDate = fromdate;
+        }
+
+        let supplier = supplierSelect.value;
+        let party;
+
+        try {
+            party = JSON.parse(localStorage.getItem("roleId")).Party_id
+        } catch (e) {
+            alert(e)
+            return
+        }
+        const jsonBody = JSON.stringify({
+            FromDate: FromDate,
+            ToDate: ToDate,
+            Supplier: supplier,
+            Party: party,
+        }
+        );
+        dispatch(getGRNListPage(jsonBody));
+    }
+
+
+
 
     return (
 
@@ -64,7 +115,7 @@ const GRNList = () => {
                     newBtnView={true}
                     showCount={true}
                     excelBtnView={true}
-                    pageMode={"GRNMode2"}
+                    pageMode={GST_ADD_Mode_2}
                     newBtnPagePath={GST_ADD_Mode_2}
                     excelData={"downList"} />
 
@@ -76,21 +127,21 @@ const GRNList = () => {
                                     style={{ width: "100px" }}>From Date</Label>
                                 <Col md="7">
                                     <Flatpickr
-                                        id="orderdate"
-                                        name="orderdate"
-                                        // value={podate}
+                                        name='fromdate'
                                         className="form-control d-block p-2 bg-white text-dark"
                                         placeholder="Select..."
                                         options={{
                                             altInput: true,
                                             altFormat: "d-m-Y",
                                             dateFormat: "Y-m-d",
-                                            minDate: "pageMode" === "edit" ? "podate" : "today",
-                                            // maxDate: pageMode === "edit" ? podate : "",
-                                            defaultDate: "pageMode" === "edit" ? "" : "today"
-
+                                            defaultDate: "today"
                                         }}
-                                    // onChange={(e, date) => { setpoDate(date) }}
+                                        onChange={(e, date) => { setFromdate(date) }}
+                                        onReady={(e, date) => {
+                                            onlodFromdate = date;
+                                            setFromdate(date);
+                                            goButtonHandler(true)
+                                        }}
                                     />
                                 </Col>
                             </FormGroup>
@@ -101,20 +152,21 @@ const GRNList = () => {
                                     style={{ width: "100px" }}>To Date</Label>
                                 <Col md="7">
                                     <Flatpickr
-                                        id="orderdate"
-                                        name="orderdate"
-                                        // value={podate}
+                                        nane='todate'
                                         className="form-control d-block p-2 bg-white text-dark"
                                         placeholder="Select..."
                                         options={{
                                             altInput: true,
                                             altFormat: "d-m-Y",
                                             dateFormat: "Y-m-d",
-                                            minDate: "pageMode" === "edit" ? "podate" : "today",
-                                            // maxDate: pageMode === "edit" ? podate : "",
-                                            defaultDate: "pageMode" === "edit" ? "" : "today"
+                                            defaultDate: "today"
                                         }}
-                                    // onChange={(e, date) => { setpoDate(date) }}
+                                        onChange={(e, date) => { setTodate(date) }}
+                                        onReady={(e, date) => {
+                                            onlodTodate = date;
+                                            setTodate(date);
+                                            goButtonHandler(true)
+                                        }}
                                     />
                                 </Col>
                             </FormGroup>
@@ -126,11 +178,11 @@ const GRNList = () => {
                                     style={{ width: "130px" }}>Supplier Name</Label>
                                 <Col md="7">
                                     <Select
-                                        value={"supplierSelect"}
+                                        // value={"supplier"}
                                         classNamePrefix="select2-Customer"
-                                        isDisabled={"pageMode" === "edit" ? true : false}
-                                        options={"supplierOptions"}
-                                    // onChange={(e) => { setsupplierSelect(e) }}
+                                        // isDisabled={"pageMode" === "edit" ? true : false}
+                                        options={supplierOptions}
+                                        onChange={(e) => { setsupplierSelect(e) }}
                                     />
                                 </Col>
                             </FormGroup>
@@ -138,7 +190,7 @@ const GRNList = () => {
 
                         <Col md="1" className="mt-3 ">
                             <Button type="button" color="btn btn-outline-success border-2 font-size-12 "
-                            // onClick={GoButton_Handler}
+                                onClick={() => goButtonHandler()}
                             >Go</Button>
                         </Col>
                     </div>

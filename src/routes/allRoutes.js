@@ -89,7 +89,9 @@ import GRNList from "../pages/Purchase/GRN/GRNList";
 import GRNAdd from "../pages/Purchase/GRN/GRNAdd";
 import SubGroupMaster from "../pages/Adminisrator/SubGroupPages/SubGroupMaster";
 import SubGroupList from "../pages/Adminisrator/SubGroupPages/SubGroupList";
-// import PartyItemsList from "../pages/Adminisrator/PartyItemPage/PartyItemList";
+import PartyItemsList from "../pages/Adminisrator/PartyItemPage/PartyItemList";
+import Index from "../pages/Adminisrator/ItemPages/ItemMaster/Image_Tab/Index";
+// import PartyItemsList from "../pages/Adminisrator
 
 
 
@@ -184,10 +186,14 @@ const userRoutes = [
 
  
   { path:path.PARTYITEM, component: PartyItems },
-  // { path: path.PARTYITEM_LIST, component: PartyItemsList },
+  { path: path.PARTYITEM_LIST, component: PartyItemsList },
 
   { path:path.SUBGROUP, component: SubGroupMaster },
   { path:path.SUBGROUP_LIST, component: SubGroupList },
+
+
+
+
 
 
 

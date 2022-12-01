@@ -249,6 +249,7 @@ const GroupTypeMaster = (props) => {
                                                                 className={isError.Name.length > 0 ? "is-invalid form-control" : "form-control"}
                                                                 placeholder="Please Enter Name"
                                                                 autoFocus={true}
+                                                                autoComplete='off'
                                                                 onChange={(event) => {
                                                                     onChangeText({ event, state, setState })
                                                                     dispatch(Breadcrumb_inputName(event.target.value))
@@ -270,7 +271,13 @@ const GroupTypeMaster = (props) => {
                                                                             <Input type="checkbox" className="form-check-input"
                                                                                 checked={values.IsReserved}
                                                                                 name="IsReserved"
-                                                                                onChange={(event) => onChangeText({ event, state, setState })}
+                                                                                onChange={(e) => {
+                                                                                    setState((i) => {
+                                                                                        const a = { ...i }
+                                                                                        a.values.IsReserved = e.target.checked;
+                                                                                        return a
+                                                                                    })
+                                                                                }}
                                                                             />
                                                                         </div>
                                                                     </Col>

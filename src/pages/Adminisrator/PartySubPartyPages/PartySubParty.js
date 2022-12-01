@@ -16,10 +16,13 @@ import Select from "react-select";
 import { MetaTags } from "react-meta-tags";
 import { useDispatch, useSelector } from "react-redux";
 import {
+    editPartySubPartySuccess,
     postPartySubParty,
-    postPartySubPartySuccess
+    postPartySubPartySuccess,
+    updatePartySubParty,
+    updatePartySubPartySuccess
 } from "../../../store/Administrator/PartySubPartyRedux/action";
-import { AlertState } from "../../../store/actions";
+import { AlertState, Breadcrumb_inputName, commonPageField, commonPageFieldSuccess } from "../../../store/actions";
 import { useHistory } from "react-router-dom";
 import {
     get_Division_ForDropDown,
@@ -27,11 +30,14 @@ import {
 } from "../../../store/Administrator/ItemsRedux/action";
 import { Tbody, Thead } from "react-super-responsive-table";
 import SaveButton from "../../../components/Common/CommonSaveButton";
+import { PARTY_SUB_PARTY_lIST } from "../../../routes/route_url";
+import { comAddPageFieldFunc, formValid, initialFiledFunc, onChangeSelect } from "../../../components/Common/CmponentRelatedCommonFile/validationFunction";
 
 const PartySubParty = (props) => {
 
-    const [EditData, setEditData] = useState([]);
-    const [pageMode, setPageMode] = useState("save");
+
+    const [pageMode, setPageMode] = useState("");
+    const [modalCss, setModalCss] = useState(false);
     const [PartyData, setPartyData] = useState([]);
     const [Division_dropdown_Select, setDivision_dropdown_Select] = useState("");
     const dispatch = useDispatch();
@@ -43,60 +49,42 @@ const PartySubParty = (props) => {
     const { postMsg,
         Divisions,
         Party,
+        updateMsg,
+        pageField,
         userAccess } = useSelector((state) => ({
             postMsg: state.PartySubPartyReducer.postMsg,
             Divisions: state.ItemMastersReducer.Division,
             Party: state.ItemMastersReducer.Party,
-            // pageField: state.CommonPageFieldReducer.pageField,
+            updateMsg: state.PartySubPartyReducer.updateMsg,
+            pageField: state.CommonPageFieldReducer.pageField,
             userAccess: state.Login.RoleAccessUpdateData,
         }));
 
-    // useEffect(() => {
-    //     dispatch(commonPageField(121))
-    // }, []);
 
+    {/** Dyanamic Page access state and OnChange function */ }
+    const initialFiled = {
+        id: "",
+        Party: "",
+        Division: "",
+    }
 
-    {/*start */ }
-    const [state, setState] = useState({
-        values: {
-            Division: "",
-            Party: ""
-        },
-        fieldLabel: {
-            Division: "",
-            Party: ""
-        },
+    const [state, setState] = useState(initialFiledFunc(initialFiled))
 
-        isError: {
-            Division: "",
-            Party: ""
-        },
-        hasValid: {
-            Division: {
-                regExp: '',
-                inValidMsg: "",
-                valid: false
-            },
-
-            Party: {
-                regExp: '',
-                inValidMsg: "",
-                valid: false
-            },
-
-        },
-        required: {
-
-        }
-    })
     const values = { ...state.values }
     const { isError } = state;
     const { fieldLabel } = state;
 
+    useEffect(() => {
+        dispatch(commonPageFieldSuccess(null));
+        dispatch(commonPageField(52))
+    }, []);
 
     const location = { ...history.location }
     const hasShowloction = location.hasOwnProperty("editValue")
     const hasShowModal = props.hasOwnProperty("editValue")
+
+
+
 
     // userAccess useEffect
     useEffect(() => {
@@ -115,6 +103,72 @@ const PartySubParty = (props) => {
             setUserPageAccessState(userAcc)
         };
     }, [userAccess])
+
+
+
+    // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
+    useEffect(() => {
+
+        if ((hasShowloction || hasShowModal)) {
+
+            let hasEditVal = null
+            if (hasShowloction) {
+                setPageMode(location.pageMode)
+                hasEditVal = location.editValue
+            }
+            else if (hasShowModal) {
+                hasEditVal = props.editValue
+                setPageMode(props.pageMode)
+                setModalCss(true)
+            }
+
+            if (hasEditVal) {
+
+                const { id, Party, Division } = hasEditVal
+                const { values, fieldLabel, hasValid, required, isError } = { ...state }
+
+                hasValid.Party.valid = true;
+                hasValid.Division.valid = true;
+
+                values.id = id
+                values.Party = { label: Party, value: Party };
+                values.Division = { label: Division, value: Division };
+
+                setState({ values, fieldLabel, hasValid, required, isError })
+                dispatch(Breadcrumb_inputName(hasEditVal.Party))
+
+            }
+            dispatch(editPartySubPartySuccess({ Status: false }))
+        }
+    }, [])
+
+    useEffect(() => {
+
+        if (pageField) {
+            const fieldArr = pageField.PageFieldMaster
+            comAddPageFieldFunc({ state, setState, fieldArr })
+        }
+    }, [pageField])
+
+    useEffect(() => {
+        if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
+            history.push({
+                pathname: PARTY_SUB_PARTY_lIST,
+            })
+        } else if (updateMsg.Status === true && !modalCss) {
+            dispatch(updatePartySubPartySuccess({ Status: false }));
+            dispatch(
+                AlertState({
+                    Type: 3,
+                    Status: true,
+                    Message: JSON.stringify(updateMsg.Message),
+                })
+            );
+        }
+    }, [updateMsg, modalCss]);
+
+
+
     useEffect(() => {
 
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200) && !(pageMode === "dropdownAdd")) {
@@ -133,7 +187,7 @@ const PartySubParty = (props) => {
                     Type: 1,
                     Status: true,
                     Message: postMsg.Message,
-                    RedirectPath: false,
+                    RedirectPath: PARTY_SUB_PARTY_lIST,
                 }))
             }
         }
@@ -179,42 +233,36 @@ const PartySubParty = (props) => {
     const formSubmitHandler = (event) => {
 
         event.preventDefault();
-        // if (formValid(state, setState)) {
-        //     const arr = PartyData.map(i => ({
-        //         Party: Division_dropdown_Select.value,
-        //         SubParty: i.value,
-        //         CreatedBy: 1,
-        //         UpdatedBy: 1,
+        if (formValid(state, setState)) {
+            const arr = PartyData.map(i => ({
+                // Party: Division_dropdown_Select.values,
+                Party: values.Division.value,
+                SubParty: i.value,
+                CreatedBy: 1,
+                UpdatedBy: 1,
 
-        //     }))
-        //     const jsonBody = JSON.stringify(arr);
-        //     console.log(" jsonBody", jsonBody)
-        //     if (pageMode === "edit") {
-        //         // dispatch(updateCategoryID(jsonBody, EditData.id));
-        //     }
-        //     else {
-        //         dispatch(PostMethodForPartySubParty(jsonBody));
-        //     }
-        // }
+            }))
 
-        const arr = PartyData.map(i => ({
-            Party: Division_dropdown_Select.value,
-            SubParty: i.value,
-            CreatedBy: 1,
-            UpdatedBy: 1,
+            const jsonBody = JSON.stringify(arr);
+            console.log(" jsonBody", jsonBody)
+            // const jsonBody = JSON.stringify(arr);
+            // dispatch(postPartySubParty(jsonBody));
 
-        }))
-        const jsonBody = JSON.stringify(arr);
-        console.log(" jsonBody", jsonBody)
-        dispatch(postPartySubParty(jsonBody));
+            if (pageMode === "edit") {
+                dispatch(updatePartySubParty(jsonBody, values.id,));
+            }
+            else {
+                dispatch(postPartySubParty(jsonBody));
+            }
+        }
     };
 
 
     /// Role Table Validation
     function AddPartyHandler() {
-        debugger
+
         const find = PartyData.find((element) => {
-            return element.value === Party_dropdown_Select.value
+            return element.value === Party_dropdown_Select.values
         });
 
         if (Party_dropdown_Select.length <= 0) {
@@ -270,17 +318,32 @@ const PartySubParty = (props) => {
                                             <Card>
                                                 <CardBody style={{ backgroundColor: "whitesmoke" }}>
                                                     <Row>
-                                                        <FormGroup className="mb-2  ">
+                                                        <FormGroup className="mb-2">
                                                             <Row>
                                                                 <Col md="4">
                                                                     <FormGroup className="mb-3">
-                                                                        <Label htmlFor="validationCustom01"> Division </Label>
+                                                                        <Label htmlFor="validationCustom01">{fieldLabel.Division} </Label>
                                                                         <Col sm={12}>
                                                                             <Select
-                                                                                value={Division_dropdown_Select}
+                                                                                // value={Division_dropdown_Select}
+                                                                                // options={DivisionValues}
+                                                                                // onChange={(e) => { handllerDivision(e) }}
+
+                                                                                name="Division"
+                                                                                value={values.Division}
+                                                                                isSearchable={true}
+                                                                                className="react-dropdown"
+                                                                                classNamePrefix="dropdown"
                                                                                 options={DivisionValues}
-                                                                                onChange={(e) => { handllerDivision(e) }}
+                                                                                onChange={(hasSelect, evn) => {
+                                                                                    onChangeSelect({ hasSelect, evn, state, setState, })
+                                                                                    handllerDivision(hasSelect)
+                                                                                }}
                                                                             />
+                                                                            {isError.Division.length > 0 && (
+                                                                                <span className="text-danger f-8"><small>{isError.Division}</small></span>
+                                                                            )}
+
                                                                         </Col>
                                                                     </FormGroup>
                                                                 </Col>
@@ -290,17 +353,30 @@ const PartySubParty = (props) => {
                                                         <Row>
                                                             <Col md="4">
                                                                 <FormGroup className="mb-3">
-                                                                    <Label htmlFor="validationCustom01"> Party</Label>
+                                                                    <Label htmlFor="validationCustom01"> {fieldLabel.Party}</Label>
                                                                     <Select
-                                                                        value={Party_dropdown_Select}
+                                                                        // value={Party_dropdown_Select}
+                                                                        // options={PartyValues}
+                                                                        // onChange={(e) => { handllerParty(e) }}
+
+
+                                                                        name="Party"
+                                                                        value={values.Party}
+                                                                        isSearchable={true}
+                                                                        className="react-dropdown"
+                                                                        classNamePrefix="dropdown"
                                                                         options={PartyValues}
-                                                                        onChange={(e) => { handllerParty(e) }}
-
+                                                                        onChange={(hasSelect, evn) => {
+                                                                            onChangeSelect({ hasSelect, evn, state, setState, })
+                                                                            handllerParty(hasSelect)
+                                                                        }}
                                                                     />
-
+                                                                    {isError.Party.length > 0 && (
+                                                                        <span className="text-danger f-8"><small>{isError.Party}</small></span>
+                                                                    )}
                                                                 </FormGroup>
-
                                                             </Col>
+
                                                             <Col sm={2} style={{ marginTop: '28px' }} >
                                                                 <Button
                                                                     type="button"
@@ -312,8 +388,8 @@ const PartySubParty = (props) => {
                                                                     <i className="dripicons-plus "></i>
                                                                 </Button>
                                                             </Col>
-
                                                         </Row>
+
                                                         <Row>
                                                             <Col sm={3} style={{ marginTop: '28px' }}>
                                                                 {PartyData.length > 0 ? (

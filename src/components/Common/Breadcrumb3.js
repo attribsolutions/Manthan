@@ -105,6 +105,7 @@ const Breadcrumb = props => {
         const workbook = XLSX.utils.book_new();
         XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
         XLSX.writeFile(workbook, "Excel File.xlsx");
+        setmodal_scroll(false)
     }
 
     const excelChekOnChange = (e) => {
@@ -268,7 +269,7 @@ const Breadcrumb = props => {
                                     >
                                         Cancel
                                     </button>
-                                    <button type="submit" className="btn btn-primary">
+                                    <button type="submit" className="btn btn-primary" >
                                         Download in Excel
                                     </button>
                                 </div>

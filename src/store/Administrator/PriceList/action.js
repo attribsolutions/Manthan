@@ -69,11 +69,11 @@ export const editPriceListSuccess = (editData) => ({
 })
 
 // update api
-export const updatePriceList = (updateData, ID) => ({
+export const updatePriceList = (updateData,ID) => ({
  type: UPDATE_PRICE_LIST,
  updateData, ID,
 })
-export const updatePriceListSuccess = (updateMessage) => ({
+export const updatePriceListSuccess=(updateMessage) => ({
  type: UPDATE_PRICE_LIST_SUCCESS,
  payload: updateMessage,
 })

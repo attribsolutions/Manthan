@@ -76,7 +76,6 @@ function* Edit_PriceList__GenratorFunction({ id ,pageMode}) {
     response.pageMode=pageMode
     yield put(editPriceListSuccess(response));
     console.log("response in saga", response)
-
   } catch (error) {
     yield put(AlertState({
       Type: 4,

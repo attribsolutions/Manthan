@@ -22,6 +22,7 @@ let searchCount = 0
 let downList = []
 let listObj = {}
 
+
 let searchProps = {
   onClear: function onClear() { },
   onSearch: function onSearch() { },
@@ -49,6 +50,7 @@ const CommonListPage = (props) => {
 
   const [userAccState, setUserAccState] = useState('');
   const [modal_edit, setmodal_edit] = useState(false);
+  const [masterPath, setmasterPath] = useState('');
 
   const {
     tableList,
@@ -60,6 +62,8 @@ const CommonListPage = (props) => {
     pageField
 
   } = props.reducers;
+
+
 
   const {
     getList,
@@ -73,13 +77,14 @@ const CommonListPage = (props) => {
 
   const {
     MasterModal,
-    masterPath,
     ButtonMsgLable,
     deleteName,
     showBreadcrumb = true
   } = props;
 
-  const fileds = pageField.PageFieldMaster;
+  const { PageFieldMaster = [] } = { ...pageField };
+
+
 
   useEffect(() => {
 
@@ -92,12 +97,33 @@ const CommonListPage = (props) => {
     }
   }, [userAccess])
 
+  // this useEffect for MasterPagePath dynamically work 
   useEffect(() => {
+    const locationPath = history.location.pathname
+
+    let userAcc = userAccess.find((inx) => {
+      return (`/${inx.ActualPagePath}` === locationPath)
+    })
+
+    let MasterPagePath = userAccess.find((inx) => {
+      return (inx.id === userAcc.RelatedPageID)
+    })
+
+    if (!(MasterPagePath === undefined)) {
+      setmasterPath(`/${MasterPagePath.ActualPagePath}`)
+    }
+
+  }, [userAccess])
+
+
+  useEffect(() => {
+
     downList = []
     listObj = {}
 
     tableList.forEach((index1) => {
-      fileds.forEach((index2) => {
+
+      PageFieldMaster.forEach((index2) => {
         if (index2.ShowInDownload) {
           listObj[`$defSelect${index2.ControlID}`] = index2.ShownloadDefaultSelect
           listObj[index2.ControlID] = index1[index2.ControlID]
@@ -189,6 +215,7 @@ const CommonListPage = (props) => {
 
   // Edit Modal Show When Edit Data is true
   useEffect(() => {
+  
     if (editData.Status === true) {
       if (pageField.IsEditPopuporComponent) {
         history.push({
@@ -208,14 +235,14 @@ const CommonListPage = (props) => {
     setmodal_edit(!modal_edit); //when edit mode show in pop up that modal view controle
   }
 
-  fileds.sort(function (a, b) {  //sort function is  sort list page coloumn by asending order by listpage sequense
+  PageFieldMaster.sort(function (a, b) {  //sort function is  sort list page coloumn by asending order by listpage sequense
     return a.ListPageSeq - b.ListPageSeq
   });
 
   let sortLabel = ""
   const columns = []
 
-  fileds.forEach((i, k) => {
+  PageFieldMaster.forEach((i, k) => {
     if (i.ShowInListPage) {
       columns.push({
         text: i.FieldLabel,
@@ -231,7 +258,7 @@ const CommonListPage = (props) => {
         sortType = "desc"
       }
     }
-    if (fileds.length - 1 === k) {
+    if (PageFieldMaster.length - 1 === k) {
       columns.push(listPageCommonButtonFunction({
         dispatchHook: dispatch,
         ButtonMsgLable: ButtonMsgLable,

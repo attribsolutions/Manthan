@@ -15,11 +15,16 @@ import {
 import { commonPageFieldList, commonPageFieldListSuccess, } from "../../../store/actions";
 import PurchaseListPage from "../../../components/Common/CmponentRelatedCommonFile/purchase"
 import Order from "./Order";
-import { GRN_ADD, ORDER } from "../../../routes/route_url";
+import { GRN_ADD, GST_ADD_Mode_2, ORDER } from "../../../routes/route_url";
 import { Button, Col, FormGroup, Label } from "reactstrap";
 import Breadcrumb from "../../../components/Common/Breadcrumb";
 import { useHistory } from "react-router-dom";
 import { getGRN_itemMode2 } from "../../../store/Purchase/GRNRedux/actions";
+import { getSupplier } from "../../../store/CommonAPI/SupplierRedux/actions";
+
+let onlodTodate = null
+let onlodFromdate = null
+
 
 const OrderList = () => {
 
@@ -31,12 +36,15 @@ const OrderList = () => {
 
 
 
-
+    const [supplierSelect, setsupplierSelect] = useState({ value: '' });
     const [pageMode, setpageMode] = useState("list")
     const [userAccState, setUserAccState] = useState('');
+    const [fromdate, setFromdate] = useState();
+    const [todate, setTodate] = useState();
 
     const reducers = useSelector(
         (state) => ({
+            supplier: state.SupplierReducer.supplier,
             tableList: state.OrderReducer.orderList,
             GRNitem: state.GRNReducer.GRNitem,
             deleteMsg: state.OrderReducer.deleteMsg,
@@ -65,13 +73,22 @@ const OrderList = () => {
             mode = location.pageMode
             setpageMode(mode)
         }
-        const pageId = (mode === "list") ? 54 : 60;
+        const pageId = (mode === GST_ADD_Mode_2) ? 60 : 54;
         dispatch(commonPageFieldListSuccess(null))
         dispatch(commonPageFieldList(pageId))
-        dispatch(getOrderListPage());
+        dispatch(getSupplier());
+
     }, []);
 
-    const { pageField, userAccess, GRNitem } = reducers;
+
+
+    const { pageField, userAccess, GRNitem, supplier } = reducers;
+    const supplierOptions = supplier.map((i) => ({
+        value: i.id,
+        label: i.Supplier,
+    }));
+
+
 
     useEffect(() => {
         let mode = "list"
@@ -128,7 +145,41 @@ const OrderList = () => {
 
     }
 
+    const goButtonHandler = (onload = false) => {
+        let FromDate
+        let ToDate
 
+        if (!(onlodFromdate) || !(onlodTodate)) {
+            return
+        }
+        if (onload) {
+            FromDate = onlodFromdate;
+            ToDate = onlodTodate;
+        } else {
+            ToDate = todate;
+            FromDate = fromdate;
+        }
+
+        let supplier = supplierSelect.value
+        let customer = 0
+        try {
+
+            customer = JSON.parse(localStorage.getItem("roleId")).Party_id
+        } catch (e) {
+            alert(e)
+            return
+        }
+
+        const jsonBody = JSON.stringify({
+            FromDate: FromDate,
+            ToDate: ToDate,
+            Supplier: supplier,
+            Customer: customer
+        }
+        );
+        debugger
+        dispatch(getOrderListPage(jsonBody));
+    }
 
     return (
         <React.Fragment>
@@ -149,21 +200,24 @@ const OrderList = () => {
                                     style={{ width: "100px" }}>From Date</Label>
                                 <Col md="7">
                                     <Flatpickr
-                                        id="orderdate"
-                                        name="orderdate"
-                                        // value={podate}
+                                        name='fromdate'
                                         className="form-control d-block p-2 bg-white text-dark"
                                         placeholder="Select..."
                                         options={{
                                             altInput: true,
                                             altFormat: "d-m-Y",
                                             dateFormat: "Y-m-d",
-                                            minDate: "pageMode" === "edit" ? "podate" : "today",
+                                            // minDate: "today",
                                             // maxDate: pageMode === "edit" ? podate : "",
-                                            defaultDate: "pageMode" === "edit" ? "" : "today"
+                                            defaultDate: "today"
 
                                         }}
-                                    // onChange={(e, date) => { setpoDate(date) }}
+                                        onChange={(e, date) => { setFromdate(date) }}
+                                        onReady={(e, date) => {
+                                            onlodFromdate = date;
+                                            setFromdate(date);
+                                            goButtonHandler(true)
+                                        }}
                                     />
                                 </Col>
                             </FormGroup>
@@ -174,20 +228,23 @@ const OrderList = () => {
                                     style={{ width: "100px" }}>To Date</Label>
                                 <Col md="7">
                                     <Flatpickr
-                                        id="orderdate1"
-                                        name="orderdate1"
-                                        // value={podate}
+                                        name="todate"
                                         className="form-control d-block p-2 bg-white text-dark"
                                         placeholder="Select..."
                                         options={{
                                             altInput: true,
                                             altFormat: "d-m-Y",
                                             dateFormat: "Y-m-d",
-                                            minDate: "pageMode" === "edit" ? "podate" : "today",
-                                            // maxDate: pageMode === "edit" ? podate : "",
-                                            defaultDate: "pageMode" === "edit" ? "" : "today"
+                                            // minDate: "today",
+                                            defaultDate: "today"
                                         }}
-                                    // onChange={(e, date) => { setpoDate(date) }}
+                                        onChange={(e, date) => { setTodate(date) }}
+                                        onReady={(e, date) => {
+                                            onlodTodate = date;
+                                            setTodate(date)
+                                            goButtonHandler(true)
+                                        }}
+
                                     />
                                 </Col>
                             </FormGroup>
@@ -199,11 +256,11 @@ const OrderList = () => {
                                     style={{ width: "130px" }}>Supplier Name</Label>
                                 <Col md="7">
                                     <Select
-                                        value={"supplierSelect"}
+                                        // value={"supplierSelect"}
                                         classNamePrefix="select2-Customer"
-                                        isDisabled={"pageMode" === "edit" ? true : false}
-                                        //options={"supplierOptions"}
-                                    // onChange={(e) => { setsupplierSelect(e) }}
+                                        // isDisabled={"pageMode" === "edit" ? true : false}
+                                        options={supplierOptions}
+                                        onChange={(e) => { setsupplierSelect(e) }}
                                     />
                                 </Col>
                             </FormGroup>
@@ -211,7 +268,7 @@ const OrderList = () => {
 
                         <Col md="1" className="mt-3 ">
                             <Button type="button" color="btn btn-outline-success border-2 font-size-12 "
-                            // onClick={GoButton_Handler}
+                                onClick={() => goButtonHandler()}
                             >Go</Button>
                         </Col>
                     </div>
@@ -229,6 +286,8 @@ const OrderList = () => {
                             pageMode={pageMode}
                             onsavefunc={onsavefunc}
                         />
+
+
                         : null
                 }
             </div>

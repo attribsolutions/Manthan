@@ -140,8 +140,9 @@ export const Role_Master_Update_API = (data, id) => put(`${url.ROLE_MASTER_API}/
 // Order Page api  
 
 export const OrderPage_GoButton_API = (data) => post(url.GET_ITEM_FOR_ORDER, data)//get api
+export const Order_get_API = (filters) => post(url.ORDER_LiST_BY_FILTERS, filters)
 export const OrderPage_Post_API = (data) => post(url.ORDER_PAGE_API, data)//get api
-export const OrderPage_get_API = (id) => get(`${url.ORDER_PAGE_API}/${id}`)//get api
+export const OrderPage_Edit_API = (id) => get(`${url.ORDER_PAGE_API}/${id}`)//get api
 
 export const deleteOrderID_forOrderPage_ApiCall = (id) => del(`${url.ORDER_PAGE_API}/${id}`)//Delete Order
 export const editOrderID_forOrderPage_ApiCall = (id) => get(`${url.ORDER_PAGE_API}/${id}`)//Edit Order
@@ -151,12 +152,12 @@ export const getDivisionOrders = () => get(`${url.ORDER_PAGE_API}?FromDate=2022-
 export const getOrderList_For_Listpage = () => get(url.ORDER_PAGE_API)// Get subModule For H_pages
 
 //GRN PAGE grn 
-export const GRN_get_API = (data) => get(url.GRN)
+export const GRN_get_API = (filter) => post(url.GRN_LiST_BY_FILTERS, filter)
 export const GRN_Edit_API = (id) => get(`${url.GRN}/${id}`)// edit api
 export const GRN_Post_API = (data) => post(url.GRN, data)//get api
 export const GRN_update_API = (id, data) => put(`${url.GRN}/${id}`, data)// update api
 export const GRN_delete_API = (id) => del(`${url.GRN}/${id}`)//Delete Order
-export const GRN_getItem_API = (data) => post(url .GET_GRN_ITEM,data)
+export const GRN_getItem_API = (data) => post(url.GET_GRN_ITEM, data)
 
 //Administrator   Modules submit  
 export const postSubmitModules = (data) => post(url.H_MODULES_API_URL, data)
@@ -299,7 +300,7 @@ export const get_PriceListByPartyType_API = (partyType) => get(`${url.PRICE_LIST
 export const GetPriceList_For_Listpage = () => get(url.PRICELIST)//  get priceList
 export const delete_PriceList_API = (id) => del(`${url.PRICE_LIST}/${id}`)// delete api
 export const edit_PriceList = (id) => get(`${url.PRICE_LIST}/${id}`) // edit api
-export const update_PriceList = (data, id) => put(`${url.PRICE_LIST}/${id}`, data)// update
+export const update_PriceList = (data, id) => put(`${url.PRICE_LIST}/${id}`,data)// update
 
 // MRP Master 
 export const Post_MRPMaster_API = (data) => post(url.MRP_MASTER_LIST, data)// post api
@@ -361,6 +362,7 @@ export const PartySubParty_Update_API = (data, id) => put(`${url.PARTY_SUB_PARTY
 export const GoButton_API = (data) => post(url.PARTYITEMS, data)//get api
 export const Party_Items = (data) => post(url.PARTYITEMS, data)// post api
 export const get_Party_Item_List = (party_id) => get(`${url.PARTYITEMS}/${party_id}`)//get api
+export const GetPartyList_API = () => get(url.PARTYITEMS)// get api
 
 //suppiler 
 export const GetSupplier_API = (perty_id) => get(`${url.SUPPLIER}/${perty_id}`)//get api
