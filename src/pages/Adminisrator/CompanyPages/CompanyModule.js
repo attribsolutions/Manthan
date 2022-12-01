@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useMemo } from "react";
 import {
   Card,
   CardBody,
@@ -60,18 +60,22 @@ const CompanyModule = (props) => {
   }));
 
   {/** Dyanamic Page access state and OnChange function */ }
-  const initialFiled = {
-    id: "",
-    Name: "",
-    Address: "",
-    GSTIN: "",
-    PhoneNo: "",
-    CompanyAbbreviation: "",
-    EmailID: "",
-    CompanyGroupName: ""
-  }
+  const initialFiled = useMemo(() => {
 
-  const [state, setState] = useState(initialFiledFunc(initialFiled))
+    const fileds = {
+      id: "",
+      Name: "",
+      Address: "",
+      GSTIN: "",
+      PhoneNo: "",
+      CompanyAbbreviation: "",
+      EmailID: "",
+      CompanyGroupName: ""
+    }
+    return initialFiledFunc(fileds)
+  }, []);
+
+  const [state, setState] = useState(initialFiled)
 
 
   const values = { ...state.values }

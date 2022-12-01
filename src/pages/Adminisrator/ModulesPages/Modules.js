@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useMemo } from "react";
 import {
     Card,
     CardBody,
@@ -53,15 +53,20 @@ const Modules = (props) => {
     }, []);
 
     {/** Dyanamic Page access state and OnChange function */ }
-    const initialFiled = {
-        id: "",
-        Name: "",
-        DisplayIndex: "",
-        Icon: "",
-        isActive: false,
-    }
+    const initialFiled = useMemo(() => {
 
-    const [state, setState] = useState(initialFiledFunc(initialFiled))
+        const fileds = {
+            id: "",
+            Name: "",
+            DisplayIndex: "",
+            Icon: "",
+            isActive: false,
+        }
+        return initialFiledFunc(fileds)
+    }, []);
+
+    const [state, setState] = useState(initialFiled)
+
 
     const values = { ...state.values }
     const { isError } = state;
