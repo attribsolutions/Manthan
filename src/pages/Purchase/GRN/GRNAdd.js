@@ -40,13 +40,13 @@ import SaveButton, { CreatedBy } from "../../../components/Common/CommonSaveButt
 import { getTermAndCondition } from "../../../store/Administrator/TermsAndCondtionsRedux/actions";
 
 import Breadcrumb from "../../../components/Common/Breadcrumb3";
-import { getGRN_itemMode2_Success, postGRN, postGRNSuccess } from "../../../store/Purchase/GRNRedux/actions";
+import { getGRN_itemMode2, getGRN_itemMode2_Success, getGRN_itemMode3, postGRN, postGRNSuccess } from "../../../store/Purchase/GRNRedux/actions";
 import GRNList from "./GRNList";
 import { useMemo } from "react";
 
 let description = ''
 let editVal = {}
-
+let initialTableData = []
 const GRNAdd = (props) => {
 
     const dispatch = useDispatch();
@@ -65,7 +65,10 @@ const GRNAdd = (props) => {
 
     const [supplierSelect, setsupplierSelect] = useState('');
     const [orderAmount, setOrderAmount] = useState(0);
-    const [grnItemData, setgrnItemData] = useState([]);
+    const [grnDetail, setGrnDetail] = useState({});
+    const [grnItemList, setgrnItemList] = useState([]);
+
+
 
     useEffect(() => {
         // dispatch(getSupplier())
@@ -81,11 +84,13 @@ const GRNAdd = (props) => {
         userAccess,
         updateMsg,
         supplierAddress,
-        pageField
+        pageField,
+
     } = useSelector((state) => ({
         supplier: state.SupplierReducer.supplier,
         supplierAddress: state.SupplierReducer.supplierAddress,
         items: state.GRNReducer.GRNitem,
+        grnItemList: state.GRNReducer.grnItemList,
         table: state.GRNReducer.GRNitem3,
         postMsg: state.GRNReducer.postMsg,
         updateMsg: state.GRNReducer.updateMsg,
@@ -119,31 +124,40 @@ const GRNAdd = (props) => {
     useEffect(() => {
         debugger
         if ((items.Status === true) && (items.StatusCode === 200)) {
-            // dispatch(BreadcrumbFilterSize(`${"Order Amount"} :${orderAmount}`))
-
             const hasEditVal = items.Data
-            hasEditVal.OrderItem.forEach(ele => {
+            hasEditVal.OrderItem.forEach((ele, k) => {
+                ele.id = k + 1;
                 ele["Name"] = ele.ItemName
                 ele["inpRate"] = ele.Rate
-                ele["inpQty"] = ele.Quantity
+                ele["inpQty"] = 0
                 ele["totalAmount"] = ele.Amount
                 ele["UOM"] = ele.Unit
                 ele["UOMLabel"] = ele.UnitName
-                ele["inpBaseUnitQty"] = ele.BaseUnitQuantity
+                ele["UOM"] = ele.Unit
+                ele["BatchDate"] = ''
+                ele["BatchCode"] = ''
+                ele["delbtn"] = false
+
             });
-            debugger
-            setgrnItemData(hasEditVal.OrderItem)
+            initialTableData = []
+            let details = { ...hasEditVal }
+            initialTableData = details.OrderItem
+            setgrnItemList(initialTableData)
+            details.OrderItem = []
+            setGrnDetail(details)
+
             setsupplierSelect({ label: hasEditVal.SupplierName, value: hasEditVal.Supplier })
-            dispatch(BreadcrumbFilterSize(`${"Order Amount"} :${hasEditVal.OrderAmount}`))
             setOrderAmount(hasEditVal.OrderAmount)
             items.Status = false
             dispatch(getGRN_itemMode2_Success(items))
+            debugger
+            dispatch(BreadcrumbFilterSize(`${"Order Amount"} :${hasEditVal.OrderAmount}`))
         }
 
     }, [items])
 
     // debugger
-    // const grnItemData1 = useMemo(() => {
+    // const grnItemList = useMemo(() => {
     //     // debugger
     //     const { Data, Status = false } = items
     //     if (!Status) {
@@ -169,12 +183,9 @@ const GRNAdd = (props) => {
 
     // }, items)
 
-    // const { OrderItem = [] } = grnItemData
-
 
 
     useEffect(() => {
-        dispatch(BreadcrumbFilterSize(`${"Order Amount"} :${orderAmount}`))
         dispatch(goButtonSuccess([]))
 
         if ((hasShowloction || hasShowModal)) {
@@ -277,12 +288,13 @@ const GRNAdd = (props) => {
         const amount = totalAmount(row)
         row["totalAmount"] = amount
         try {
-            document.getElementById(`abc${row.id}`).value = amount
+            document.getElementById(`abc${row.id}`).innerText = amount
+            // value = amount
         }
         catch { alert("`abc${row.id}`") }
 
         let sum = 0
-        grnItemData.forEach(ind => {
+        grnItemList.forEach(ind => {
             sum = sum + parseFloat(ind.totalAmount)
         });
         setOrderAmount(sum.toFixed(2))
@@ -295,8 +307,7 @@ const GRNAdd = (props) => {
     }));
 
     const pagesListColumns = [
-        //------------- ItemName column ----------------------------------
-        {
+        {//------------- ItemName column ----------------------------------
             text: "Item Name",
             dataField: "Name",
             sort: true,
@@ -306,52 +317,85 @@ const GRNAdd = (props) => {
                 </div>
             ),
         },
-        //  ------------Quntity column -----------------------------------  
-        {
-            text: "Quntity",
+        {//------------- Quntity first column ----------------------------------
+            text: "Initial-QTY",
             dataField: "",
             sort: true,
             formatter: (value, row, k) => (
-
-                <span >
-                    <Input type="text"
-                        id={`inpQty${k}`}
-                        className="text-end "
-                        defaultValue={row.inpQty}
-                        disabled={((row.inpRate === 0) || row.GST === '') ? true : false}
-                        onChange={(e) => {
-                            val_onChange(e.target.value, row, "qty")
-                        }}
-                        autoComplete="off"
-                        onKeyDown={(e) => handleKeyDown(e, grnItemData)} />
-                </span>
-
+                <samp className="font-asian">{row.Quantity}</samp>
             ),
             headerStyle: (colum, colIndex) => {
-                return { width: '140px', textAlign: 'center' };
+                return { width: '90px', textAlign: 'center', text: "center" };
+            }
+        },
+        {//  ------------Quntity column -----------------------------------  
+            text: "GRN-QTY",
+            dataField: "",
+            sort: true,
+            formatter: (value, row, k) => {
+
+                console.log("formatter", row)
+                return (
+                    <span >
+                        <Input type="text"
+                            id={`inpQty${k}`}
+                            className="text-end "
+                            defaultValue={row.inpQty}
+                            disabled={((row.inpRate === 0) || row.GST === '') ? true : false}
+                            onChange={(e) => {
+                                // onChange(row, e, k)
+                                val_onChange(e.target.value, row, "qty")
+                            }}
+                            autoComplete="off"
+                            onKeyDown={(e) => handleKeyDown(e, grnItemList)} />
+                    </span>
+
+                )
+            },
+            headerStyle: (colum, colIndex) => {
+                return { width: '130px', textAlign: 'center' };
             }
 
 
         },
-        //  ------------UOM column -----------------------------------
-        {
+        {  //------------- UOM column ----------------------------------
             text: "UOM",
-            dataField: "UOMLabel",
+            dataField: "",
             sort: true,
-            formatter: (value, row) => (
-                <div className="text-center mt-2">
-                    <span>{value}</span>
-                </div>
-
-
-            ),
+            formatter: (value, row, key) => {
+                if (row.UOMLabel === undefined) {
+                    row["UOM"] = row.UnitDetails[0].Unit
+                    row["UOMLabel"] = row.UnitDetails[0].UnitName
+                    row["inpBaseUnitQty"] = row.UnitDetails[0].BaseUnitQuantity
+                }
+                return (
+                    <Select
+                        classNamePrefix="select2-selection"
+                        id={"ddlUnit"}
+                        defaultValue={{ value: row.UOM, label: row.UOMLabel }}
+                        // value={{value:row.UOM,label:row.UOMLabel}}
+                        options={
+                            row.UnitDetails.map(i => ({
+                                label: i.UnitName,
+                                value: i.Unit,
+                                baseUnitQty: i.BaseUnitQuantity
+                            }))
+                        }
+                        onChange={e => {
+                            row["UOM"] = e.value;
+                            row["UOMLabel"] = e.label
+                            row["inpBaseUnitQty"] = e.baseUnitQty
+                        }}
+                    >
+                    </Select >
+                )
+            },
             headerStyle: (colum, colIndex) => {
                 return { width: '150px', textAlign: 'center' };
             }
 
         },
-        //-------------Rate column ----------------------------------
-        {
+        {  //-------------Rate column ----------------------------------
             text: "Rate",
             dataField: "Rate",
             sort: true,
@@ -363,7 +407,7 @@ const GRNAdd = (props) => {
                         <Input
                             type="text"
                             id={`inpRatey${k}`}
-                            className=" text-end "
+                            className="border-0"
                             defaultValue={row.inpRate}
                             disabled={(row.GST === '') ? true : false}
                             onChange={e => {
@@ -385,11 +429,10 @@ const GRNAdd = (props) => {
             },
 
             headerStyle: (colum, colIndex) => {
-                return { width: '140px', textAlign: 'center' };
+                return { width: '100px', textAlign: 'center' };
             }
         },
-        //------------- GST column ------------------------------------
-        {
+        {//------------- GST column ------------------------------------
             text: "GST %",
             dataField: "GSTPercentage",
             sort: true,
@@ -401,46 +444,104 @@ const GRNAdd = (props) => {
 
             ),
             headerStyle: (colum, colIndex) => {
-                return { width: '130px', textAlign: 'center', text: "left" };
+                return { width: '70px', textAlign: 'center', text: "left" };
             }
 
         },
-        //------------- ItemName column ----------------------------------
-        {
-            text: "Item Amount",
+        {//------------- ItemName column ----------------------------------
+            text: "Amount",
             dataField: "",
             sort: true,
             formatter: (value, row, k) => (
                 <div className="row mt-1">
                     <div className="col ">
-                        <Input type='text'
+                        {/* <Input type='text'
                             id={`abc${row.id}`}
                             className="  border-0  "
-                            value={row.totalAmount} />
+                            value={row.totalAmount} /> */}
+                        <samp id={`abc${row.id}`}>{row.totalAmount}</samp>
                     </div>
                 </div>
+            ),
+            headerStyle: (colum, colIndex) => {
+                return { width: '100px', textAlign: 'center', text: "center" };
+            }
+        },
+        {//------------- Batch Code column ----------------------------------
+            text: "BatchCode",
+            dataField: "",
+            sort: true,
+            formatter: (value, row, k) => (
+                <Input type="text"
+                    // id={`Batch${k}`}
+                    placeholder="Batch Code..."
+                    className="text-end "
+                    defaultValue={row.BatchCode}
+                    onChange={e => { row["BatchCode"] = e.target.value }}
+                    autoComplete="off"
+                />
             ),
             headerStyle: (colum, colIndex) => {
                 return { width: '130px', textAlign: 'center', text: "center" };
             }
         },
-        {
-            text: "Actions",
+        {//------------- Batch Code column ----------------------------------
+            text: "Batch Date",
             dataField: "",
             sort: true,
             formatter: (value, row, k) => (
-                <Button
-                    type="button"
-                    data-mdb-toggle="tooltip" data-mdb-placement="top"
-                    onClick={(e) => copybtnOnclick(row)}
-                    className="badge badge-soft-primary font-size-12 btn btn-primary
-                     waves-effect waves-light w-xxs border border-light"
-                >
-                    <i className="bx bxs-copy font-size-12 "></i>
-                </Button >
+                <Flatpickr
+                    className="form-control d-block p-2 bg-white text-dark"
+                    placeholder="Batch Date..."
+                    options={{
+                        altInput: true,
+                        altFormat: "d-m-Y",
+                        dateFormat: "Y-m-d",
+                        // defaultDate: "today"
+                    }}
+                    onChange={(e, date) => { row.BatchDate = date }}
+                    onReady={(e, date) => { row.BatchDate = date }}
+                />
             ),
             headerStyle: (colum, colIndex) => {
                 return { width: '130px', textAlign: 'center', text: "center" };
+            }
+        },
+        {//------------- Action column ----------------------------------
+            text: "Action",
+            dataField: "",
+            formatter: (value, row, k, a, v) => (
+                <div className="d-flex justify-Content-center mt-2" >
+                    <div> <Button
+                        type="button"
+                        data-mdb-toggle="tooltip" data-mdb-placement="top"
+                        onClick={(e) => copybtnOnclick(row)}
+                        className="badge badge-soft-primary font-size-12 btn btn-primary
+                     waves-effect waves-light w-xxs border border-light"
+                    >
+                        <i className="bx bxs-copy font-size-8 "></i>
+                    </Button ></div>
+
+                    <div >
+                        {row.delbtn ? <div >
+                            <Button
+                                type="button"
+                                data-mdb-toggle="tooltip" data-mdb-placement="top"
+                                onClick={(e) => deletebtnOnclick(row)}
+                                className="badge badge-soft-danger font-size-12 btn btn-danger
+                                      waves-effect waves-light w-xxs border border-light"
+                            >
+                                <i class="mdi mdi-delete font-size-8 "></i>
+                            </Button >
+                        </div>
+                            : null}
+
+                    </div>
+                </div>
+
+            ),
+            headerStyle: (colum, colIndex) => {
+                return { width: '30px', textAlign: 'center', text: "center" };
             }
         },
     ];
@@ -453,7 +554,7 @@ const GRNAdd = (props) => {
     ];
 
     const pageOptions = {
-        sizePerPage: (grnItemData.length + 2),
+        sizePerPage: (grnItemList.length + 2),
         totalSize: 0,
         custom: true,
     };
@@ -469,9 +570,7 @@ const GRNAdd = (props) => {
         if (items.length > 0) {
             if (window.confirm("Refresh Order Item...!")) {
                 dispatch(goButtonSuccess([]))
-            } else {
-                return
-            }
+            } else { return }
         }
 
         let division = 0
@@ -491,38 +590,50 @@ const GRNAdd = (props) => {
     };
 
     const copybtnOnclick = (r) => {
-        const list = [...grnItemData];
-
         const id = r.id
         const newArr = []
-        debugger
-        list.forEach(element => {
+        let list = [...initialTableData];
 
+        list.forEach(element => {
+            debugger
             if (element.id < id) {
+                // element.id = element.id 
                 newArr.push(element)
             }
             else if (element.id === id) {
+                // element.id = element.id 
                 newArr.push(element);
                 const ele = { ...element }
                 ele.id = element.id + 1
+                ele.delbtn = true
                 newArr.push(ele)
             }
             else {
-                const ele = { ...element }
-                ele.id = element.id + 1
-                newArr.push(ele)
+                const ele1 = { ...element }
+                ele1.id = element.id + 1
+                newArr.push(ele1)
             }
-
         });
         debugger
-        setgrnItemData(newArr)
+        console.log("setgrnItemList", newArr)
+
+        initialTableData = newArr
+        setgrnItemList(newArr)
 
     }
+    const deletebtnOnclick = (r) => {
+        const list = [...initialTableData];
+        const newArr = list.filter(i => { return (!(i.id === r.id)) })
+        initialTableData = newArr
+        setgrnItemList(newArr)
+
+    }
+
 
     const saveHandeller = () => {
 
         const itemArr = []
-        grnItemData.forEach(i => {
+        grnItemList.forEach(i => {
             if ((i.inpQty > 0)) {
                 const basicAmt = parseFloat(basicAmount(i))
                 const cgstAmt = (GstAmount(i))
@@ -534,8 +645,8 @@ const GRNAdd = (props) => {
                     ReferenceRate: i.Rate,
                     Rate: i.inpRate,
                     Unit: i.UOM,
-                    BaseUnitQuantity: i.inpBaseUnitQty,
-                    GSTPercentage: i.GSTPercentage,
+                    BaseUnitQuantity: i.inpQty,
+                    GST: i.GST,
                     BasicAmount: basicAmt.toFixed(2),
                     GSTAmount: cgstAmt.toFixed(2),
                     Amount: i.totalAmount,
@@ -547,8 +658,8 @@ const GRNAdd = (props) => {
                     SGSTPercentage: (i.GSTPercentage / 2),
                     IGSTPercentage: 0,
 
-                    BatchDate: "2022-11-19",
-                    BatchCode: 1,
+                    BatchDate: i.BatchDate,
+                    BatchCode: i.BatchCode,
                     DiscountType: "0",
                     Discount: "0.00",
                     DiscountAmount: "0.00",
@@ -574,14 +685,14 @@ const GRNAdd = (props) => {
 
         const jsonBody = JSON.stringify({
             GRNDate: grnDate,
-            Customer: grnItemData.Customer,
+            Customer: grnDetail.Customer,
             GRNNumber: 1,
             GrandTotal: orderAmount,
-            Party: grnItemData.Supplier,
+            Party: grnDetail.Supplier,
             CreatedBy: CreatedBy(),
             UpdatedBy: 1,
             GRNItems: itemArr,
-            GRNReferences: grnItemData.GRNReferences
+            GRNReferences: grnDetail.GRNReferences
 
         });
         debugger
@@ -645,7 +756,7 @@ const GRNAdd = (props) => {
                                             options={supplierOptions}
                                             onChange={(e) => { setsupplierSelect(e) }}
                                         /> */}
-                                    < Input type="text" value={grnItemData.SupplierName} disabled={true} />
+                                    < Input type="text" value={grnDetail.SupplierName} disabled={true} />
                                 </Col>
                             </FormGroup>
 
@@ -655,7 +766,7 @@ const GRNAdd = (props) => {
                                 <Col md="3">
                                     <Input type="text"
                                         disabled={true}
-                                        value={grnItemData.challanNo}
+                                        value={grnDetail.challanNo}
                                         placeholder="Enter Challan No" />
                                 </Col>
                             </FormGroup>
@@ -675,7 +786,7 @@ const GRNAdd = (props) => {
                             <ToolkitProvider
                                 keyField="id"
                                 defaultSorted={defaultSorted}
-                                data={grnItemData}
+                                data={grnItemList}
                                 columns={pagesListColumns}
                                 search
                             >
@@ -685,7 +796,7 @@ const GRNAdd = (props) => {
                                             <Col xl="12">
                                                 <div className="table table-Rresponsive">
                                                     <BootstrapTable
-                                                        keyField={"id"}
+                                                        keyField={"Item"}
                                                         responsive
                                                         bordered={false}
                                                         striped={false}
@@ -717,7 +828,7 @@ const GRNAdd = (props) => {
 
 
                     {
-                        (grnItemData.length > 0) ? <div className="row save1" style={{ paddingBottom: 'center' }}>
+                        (grnItemList.length > 0) ? <div className="row save1" style={{ paddingBottom: 'center' }}>
                             <SaveButton pageMode={pageMode} userAcc={userAccState}
                                 module={"GRN"} onClick={saveHandeller}
                             />
