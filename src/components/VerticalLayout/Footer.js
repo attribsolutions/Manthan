@@ -3,9 +3,12 @@ import { Link } from "react-router-dom"
 import { Container, Row, Col } from "reactstrap"
 
 const Footer = () => {
+ 
   let user
   try {
-    user = JSON.parse(localStorage.getItem("roleId"))
+  let  user1 = JSON.parse(localStorage.getItem("roleId"))
+  user=user1.PartyName
+  
   } catch (e) {
 
   }
@@ -16,7 +19,7 @@ const Footer = () => {
           <Row style={{ height: "1cm" }}>
             <Col md={6}>{new Date().getFullYear()} © FoodERP  <samp className="pl-4 text-primary">
               <samp className="text-black">Party :</samp>
-              {user.PartyName}</samp></Col>
+              {user}</samp></Col>
             <Col md={6}>
               <div className="text-sm-end d-none d-sm-block">
                 Design & Develop by
