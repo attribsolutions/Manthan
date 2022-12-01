@@ -48,20 +48,17 @@ const CompanyGroupMaster = (props) => {
     const [userPageAccessState, setUserPageAccessState] = useState('');
     const [modalCss, setModalCss] = useState(false);
 
-
     {/** Dyanamic Page access state and OnChange function */ }
     const initialFiled = {
         id: "",
         Name: "",
-        IsSCM:false
-      }
-    
+        IsSCM: false
+    }
+
     const [state, setState] = useState(initialFiledFunc(initialFiled))
-
-   
-
+    debugger
     //Access redux store Data /  'save_ModuleSuccess' action data
-    const { postMsg, updateMsg ,pageField, userAccess } = useSelector((state) => ({
+    const { postMsg, updateMsg, pageField, userAccess } = useSelector((state) => ({
         postMsg: state.CompanyGroupReducer.PostDataMessage,
         updateMsg: state.CompanyGroupReducer.updateMessage,
         userAccess: state.Login.RoleAccessUpdateData,
@@ -78,8 +75,6 @@ const CompanyGroupMaster = (props) => {
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(3))
     }, []);
-
-
 
     // userAccess useEffect
     useEffect(() => {
@@ -100,8 +95,6 @@ const CompanyGroupMaster = (props) => {
         };
     }, [userAccess])
 
-
-
     // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
     useEffect(() => {
 
@@ -119,6 +112,7 @@ const CompanyGroupMaster = (props) => {
             }
 
             if (hasEditVal) {
+                debugger
                 const { id, Name, IsSCM } = hasEditVal
                 const { values, fieldLabel, hasValid, required, isError } = { ...state }
                 values.Name = Name;
@@ -132,7 +126,6 @@ const CompanyGroupMaster = (props) => {
             dispatch(editCompanyGroupTypeSuccess({ Status: false }))
         }
     }, [])
-
 
     useEffect(() => {
 
@@ -197,7 +190,6 @@ const CompanyGroupMaster = (props) => {
     const { isError } = state;
     const { fieldLabel } = state;
 
-
     const formSubmitHandler = (event) => {
         event.preventDefault();
         if (formValid(state, setState)) {
@@ -216,7 +208,6 @@ const CompanyGroupMaster = (props) => {
             }
         }
     };
-
 
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
     var IsEditMode_Css = ''
@@ -278,7 +269,14 @@ const CompanyGroupMaster = (props) => {
                                                                             <Input type="checkbox" className="form-check-input"
                                                                                 defaultChecked={values.IsSCM}
                                                                                 name="IsSCM"
-                                                                                onChange={(event) => onChangeText({ event, state, setState })}
+                                                                                onChange={(e) => {
+                                                                                    setState((i) => {
+                                                                                        const a = { ...i }
+                                                                                        a.values.IsSCM = e.target.checked;
+                                                                                        return a
+                                                                                    })
+                                                                                }}
+
                                                                             />
                                                                         </div>
                                                                     </Col>
