@@ -260,7 +260,13 @@ const PartyType = (props) => {
                                                                             <Input type="checkbox" className="form-check-input"
                                                                                 checked={values.IsSCM}
                                                                                 name="IsSCM"
-                                                                                onChange={(event) => onChangeText({ event, state, setState })}
+                                                                                onChange={(e) => {
+                                                                                    setState((i) => {
+                                                                                        const a = { ...i }
+                                                                                        a.values.IsSCM = e.target.checked;
+                                                                                        return a
+                                                                                    })
+                                                                                }}
                                                                             />
                                                                         </div>
                                                                     </Col>
@@ -277,7 +283,13 @@ const PartyType = (props) => {
                                                                             <Input type="checkbox" className="form-check-input"
                                                                                 defaultChecked={values.IsDivision}
                                                                                 name="IsDivision"
-                                                                                onChange={(event) => onChangeText({ event, state, setState })}
+                                                                                onChange={(e) => {
+                                                                                    setState((i) => {
+                                                                                        const a = { ...i }
+                                                                                        a.values.IsDivision = e.target.checked;
+                                                                                        return a
+                                                                                    })
+                                                                                }}
                                                                             />
                                                                         </div>
                                                                     </Col>
