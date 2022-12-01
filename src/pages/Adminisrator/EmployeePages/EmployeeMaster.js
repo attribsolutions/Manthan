@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useMemo } from "react";
 import Select from "react-select";
 import { Card, CardBody, Col, Container, Row, Label, CardHeader, FormGroup, Input } from "reactstrap";
 import { useDispatch, useSelector } from "react-redux";
@@ -76,25 +76,31 @@ const AddEmployee = (props) => {
 
     }));
 
-  const initialFiled = {
-    id: "",
-    Name: "",
-    Address: "",
-    Mobile: "",
-    email: "",
-    DOB: "",
-    PAN: "",
-    AadharNo: "",
-    working_hours: "",
-    CompanyName: "",
-    DesignationName: "",
-    EmployeeTypeName: "",
-    StateName: "",
-    DistrictName: "",
-    EmployeeParties: []
-  }
+  const initialFiled = useMemo(() => {
 
-  const [state, setState] = useState(initialFiledFunc(initialFiled))
+    const fileds = {
+      id: "",
+      Name: "",
+      Address: "",
+      Mobile: "",
+      email: "",
+      DOB: "",
+      PAN: "",
+      AadharNo: "",
+      working_hours: "",
+      CompanyName: "",
+      DesignationName: "",
+      EmployeeTypeName: "",
+      StateName: "",
+      DistrictName: "",
+      EmployeeParties: []
+    }
+    return initialFiledFunc(fileds)
+  }, []);
+
+  const [state, setState] = useState(initialFiled)
+
+
   console.log("state", state)
   const values = { ...state.values }
   const { isError } = state;
@@ -349,15 +355,15 @@ const AddEmployee = (props) => {
   const formSubmitHandler = (event) => {
 
     event.preventDefault();
-   
-     
+
+
     if (formValid(state, setState)) {
       let emplPartie = [{ Party: "" }]
       if (!(values.EmployeeParties.length === 0)) {
         emplPartie = values.EmployeeParties.map((i) => { return ({ Party: i.value }) })
       }
 
-      
+
       const jsonBody = JSON.stringify({
         Name: values.Name,
         Address: values.Address,
@@ -376,8 +382,8 @@ const AddEmployee = (props) => {
         CreatedBy: 1,
         UpdatedBy: 1,
       });
-      
-     if (pageMode === "edit") {
+
+      if (pageMode === "edit") {
         dispatch(updateEmployeeID(jsonBody, values.id,));
         console.log("update jsonBody", jsonBody)
       }
