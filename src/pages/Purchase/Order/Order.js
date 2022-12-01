@@ -80,8 +80,6 @@ const Order = (props) => {
         userAccess,
         updateMsg,
         supplierAddress,
-        termsAndCondtions,
-        pageField
     } = useSelector((state) => ({
         items: state.OrderReducer.orderItem,
         supplier: state.SupplierReducer.supplier,
