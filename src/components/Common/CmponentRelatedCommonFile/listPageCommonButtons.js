@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import { Button } from "reactstrap";
 import { AlertState } from "../../../store/actions";
 
@@ -10,7 +11,7 @@ export const listPageCommonButtonFunction = (props) => {
     const ButtonMsgLable = props.ButtonMsgLable;
     const userCreated = parseInt(localStorage.getItem("userId"))
     const deleteName = props.deleteName;
-    
+
     /***
      * deletemsgLable change to=> ButtonMsgLable line no:11 
      *    autho by => Rohit  date :22-08-022 */
@@ -171,4 +172,23 @@ export const commonListPageDelete_UpdateMsgFunction = (props) => {
             Message: response.Message,
         }));
     }
+}
+
+export const excelDownCommonFunc = (props) => {
+    const { tableList = [], PageFieldMaster = [] } = props
+    let downList = [];
+    let listObj = {};
+
+    tableList.forEach((index1) => {
+
+        PageFieldMaster.forEach((index2) => {
+            if (index2.ShowInDownload) {
+                listObj[`$defSelect${index2.ControlID}`] = index2.ShownloadDefaultSelect
+                listObj[index2.ControlID] = index1[index2.ControlID]
+            }
+        })
+        downList.push(listObj)
+        listObj = {}
+    })
+    return downList
 }
