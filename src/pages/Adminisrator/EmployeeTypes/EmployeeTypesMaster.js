@@ -41,7 +41,7 @@ const EmployeeTypesMaster = (props) => {
 
     const formRef = useRef(null);
     const dispatch = useDispatch();
-    const history  = useHistory()
+    const history = useHistory()
 
     const [pageMode, setPageMode] = useState();
     const [userPageAccessState, setUserPageAccessState] = useState('');
@@ -52,13 +52,13 @@ const EmployeeTypesMaster = (props) => {
         Name: "",
         IsPartyConnection: false,
         IsSCM: false
-      }
-    
+    }
+
     const [state, setState] = useState(initialFiledFunc(initialFiled))
-  
+
 
     //Access redux store Data /  'save_ModuleSuccess' action data
-    const { postMsg, updateMsg ,pageField, userAccess, } = useSelector((state) => ({
+    const { postMsg, updateMsg, pageField, userAccess, } = useSelector((state) => ({
         postMsg: state.EmployeeTypeReducer.PostEmployeeType,
         updateMsg: state.EmployeeTypeReducer.updateMessage,
         userAccess: state.Login.RoleAccessUpdateData,
@@ -272,9 +272,15 @@ const EmployeeTypesMaster = (props) => {
                                                                     <Col md={2} style={{ marginTop: '9px' }}>
                                                                         <div className="form-check form-switch form-switch-md mb-3" >
                                                                             <Input type="checkbox" className="form-check-input"
-                                                                                 checked={values.IsPartyConnection}
+                                                                                defaultChecked={values.IsPartyConnection}
                                                                                 name="IsPartyConnection"
-                                                                                onChange={(event) => onChangeText({ event, state, setState })}
+                                                                                onChange={(e) => {
+                                                                                    setState((i) => {
+                                                                                        const a = { ...i }
+                                                                                        a.values.IsPartyConnection = e.target.checked;
+                                                                                        return a
+                                                                                    })
+                                                                                }}
                                                                             />
                                                                         </div>
                                                                     </Col>
@@ -287,11 +293,17 @@ const EmployeeTypesMaster = (props) => {
                                                                 <Row className="justify-content-md-left">
                                                                     <Label htmlFor="horizontal-firstname-input" className="col-sm-5 col-form-label" >{fieldLabel.IsSCM} </Label>
                                                                     <Col md={2} style={{ marginTop: '9px' }} >
-                                                                    <div className="form-check form-switch form-switch-md mb-3" >
+                                                                        <div className="form-check form-switch form-switch-md mb-3" >
                                                                             <Input type="checkbox" className="form-check-input"
-                                                                                 checked={values.IsSCM}
+                                                                                defaultChecked={values.IsSCM}
                                                                                 name="IsSCM"
-                                                                                onChange={(event) => onChangeText({ event, state, setState })}
+                                                                                onChange={(e) => {
+                                                                                    setState((i) => {
+                                                                                        const a = { ...i }
+                                                                                        a.values.IsSCM = e.target.checked;
+                                                                                        return a
+                                                                                    })
+                                                                                }}
                                                                             />
                                                                         </div>
                                                                     </Col>
