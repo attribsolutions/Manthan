@@ -213,14 +213,19 @@ const ItemsMaster = (props) => {
                 // ====================== Images tab ======================
 
                 let ItemImagesDetails = hasEditVal.ItemImagesDetails.map((index) => {
+            
                     return {
-                        ImageType: {
+                        ImageType:
+                      { 
                             label: index.ImageTypeName,
                             value: index.ImageType
                         },
                         ImageUpload: index.Item_pic
                     }
                 })
+
+
+
 
                 // ====================== Unit Conversion tab  start ======================
 
@@ -234,7 +239,7 @@ const ItemsMaster = (props) => {
                         })
                     }
                 })
-                debugger
+        
                 if ((UnitDetails.length === 0)) {
                     UnitDetails.push({
                         Unit: '',
@@ -487,10 +492,16 @@ const ItemsMaster = (props) => {
                     return ((val1 === i.BaseUnitQuantity) && (unit1 === i.UnitID) && !(key === k))
                 });
 
+
                 if (
                     ((found === undefined) || (found2 === undefined))
                     && !(val1 === '')
-                    && !(unit1 === '')) {
+                    && !(unit1 === '')) 
+    
+                if (
+                    ((found === undefined) || (found2 === undefined))
+                    && !(index.Conversion === '')
+                    && !(index.Unit === '')) {
                     itemUnitDetails.push({
                         BaseUnitQuantity: index.Conversion,
                         UnitID: index.Unit.value,
@@ -499,7 +510,9 @@ const ItemsMaster = (props) => {
                 }
 
             });
+
             
+
             if (pageMode === 'save')
                 itemUnitDetails.push({
                     BaseUnitQuantity: 1,
@@ -553,7 +566,8 @@ const ItemsMaster = (props) => {
                     return ({ Division: i.value })
                 }),
 
-                ItemImagesDetails: imageTabTable.map(i => ({
+                ItemImagesDetails: imageTabTable.map((i) => ({
+
                     ImageType: i.ImageType.value,
                     Item_pic: i.ImageUpload
                 })),
@@ -563,7 +577,6 @@ const ItemsMaster = (props) => {
                 ItemGroupDetails: Group_Tab_TableData,
 
             });
-
             if (pageMode === 'edit') {
                 dispatch(updateItemID(jsonBody, EditData.id));
                 console.log("items edit json", jsonBody)
@@ -573,7 +586,6 @@ const ItemsMaster = (props) => {
                 dispatch(postItemData(jsonBody));
                 console.log("items post json", jsonBody)
             }
-
         } /// ************* is valid if start 
         else { /// ************* is valid esle start 
             dispatch(AlertState({
