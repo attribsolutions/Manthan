@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState, } from "react";
+import React, { useEffect, useMemo, useRef, useState, } from "react";
 import Breadcrumb from "../../../components/Common/Breadcrumb3";
 import {
     Card,
@@ -49,14 +49,19 @@ const CompanyGroupMaster = (props) => {
     const [modalCss, setModalCss] = useState(false);
 
     {/** Dyanamic Page access state and OnChange function */ }
-    const initialFiled = {
+    const initialFiled = useMemo(() => {
+
+        const fileds = {
         id: "",
         Name: "",
         IsSCM: false
-    }
-
-    const [state, setState] = useState(initialFiledFunc(initialFiled))
-    debugger
+        }
+        return initialFiledFunc(fileds)
+        }, []);
+        
+        const [state, setState] = useState(initialFiled)
+        
+ 
     //Access redux store Data /  'save_ModuleSuccess' action data
     const { postMsg, updateMsg, pageField, userAccess } = useSelector((state) => ({
         postMsg: state.CompanyGroupReducer.PostDataMessage,
