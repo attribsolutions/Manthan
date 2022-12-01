@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState, } from "react";
+import React, { useEffect, useMemo, useRef, useState, } from "react";
 import Breadcrumb from "../../../components/Common/Breadcrumb3";
 import {
     Card,
@@ -47,16 +47,22 @@ const CompanyGroupMaster = (props) => {
     const [pageMode, setPageMode] = useState();
     const [userPageAccessState, setUserPageAccessState] = useState('');
     const [modalCss, setModalCss] = useState(false);
+    const [Checkbox, setCheckbox] = useState(false);
 
     {/** Dyanamic Page access state and OnChange function */ }
-    const initialFiled = {
-        id: "",
-        Name: "",
-        IsSCM: false
-    }
 
-    const [state, setState] = useState(initialFiledFunc(initialFiled))
-    debugger
+    const initialFiled = useMemo(() => {
+
+        const fileds = {
+            id: "",
+            Name: "",
+            IsSCM: false
+        }
+        return initialFiledFunc(fileds)
+    }, []);
+
+    const [state, setState] = useState(initialFiled)
+
     //Access redux store Data /  'save_ModuleSuccess' action data
     const { postMsg, updateMsg, pageField, userAccess } = useSelector((state) => ({
         postMsg: state.CompanyGroupReducer.PostDataMessage,
@@ -195,16 +201,18 @@ const CompanyGroupMaster = (props) => {
         if (formValid(state, setState)) {
             const jsonBody = JSON.stringify({
                 Name: values.Name,
-                IsSCM: values.IsSCM,
+                IsSCM: Checkbox,
                 CreatedBy: 1,
                 UpdatedBy: 1
             });
 
             if (pageMode === "edit") {
                 dispatch(updateCompanyGroupTypeID(jsonBody, values.id));
+                console.log("update data", jsonBody)
             }
             else {
                 dispatch(PostMethodForCompanyGroupMaster(jsonBody));
+                console.log("post data", jsonBody)
             }
         }
     };
@@ -269,6 +277,7 @@ const CompanyGroupMaster = (props) => {
                                                                             <Input type="checkbox" className="form-check-input"
                                                                                 defaultChecked={values.IsSCM}
                                                                                 name="IsSCM"
+                                                                                // onChange={(event) => onChangeText({ event, state, setState })}
                                                                                 onChange={(e) => {
                                                                                     setState((i) => {
                                                                                         const a = { ...i }
