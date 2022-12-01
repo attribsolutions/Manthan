@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import Breadcrumb from "../../../components/Common/Breadcrumb3";
 import { Card, CardBody, Col, Container, Row, Label, CardHeader, FormGroup, Input, } from "reactstrap";
 import { AvInput } from "availity-reactstrap-validation";
@@ -36,18 +36,24 @@ const RoleMaster = (props) => {
   const [modalCss, setModalCss] = useState(false);
   const [userPageAccessState, setUserPageAccessState] = useState(123);
 
-  const initialFiled = {
-    id: "",
-    Name: "",
-    Description: "",
-    Dashboard: "",
-    RoleEmployeeTypes: "",
-    isActive:false,
-    isSCMRole:false,
-    IsPartyConnection:false
-  }
+   {/** Dyanamic Page access state and OnChange function */ }
+   const initialFiled = useMemo(() => {
 
-  const [state, setState] = useState(initialFiledFunc(initialFiled))
+    const fileds = {
+      id: "",
+      Name: "",
+      Description: "",
+      Dashboard: "",
+      RoleEmployeeTypes: "",
+      isActive:false,
+      isSCMRole:false,
+      IsPartyConnection:false
+    }
+    return initialFiledFunc(fileds)
+}, []);
+
+const [state, setState] = useState(initialFiled)
+    
 
   //Access redux store Data /  'save_ModuleSuccess' action data
   const {

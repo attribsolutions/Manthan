@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState, } from "react";
+import React, { useEffect, useMemo, useRef, useState, } from "react";
 import Breadcrumb from "../../../components/Common/Breadcrumb3";
 import {
     Card,
@@ -50,12 +50,17 @@ const TermsAndCondtionsMaster = (props) => {
     }, []);
 
     {/** Dyanamic Page access state and OnChange function */ }
-    const initialFiled = {
-        Name: "",
-        id: ""
-    }
+    const initialFiled = useMemo (() => {
 
-    const [state, setState] = useState(initialFiledFunc(initialFiled))
+        const fileds = {
+            Name: "",
+            id: ""
+        }
+        return initialFiledFunc(fileds)
+    }, []);
+
+    const [state, setState] = useState(initialFiled)
+
 
 
     const values = { ...state.values }
@@ -168,7 +173,7 @@ const TermsAndCondtionsMaster = (props) => {
             );
         }
     }, [updateMsg, modalCss]);
-  
+
 
     useEffect(() => {
 
