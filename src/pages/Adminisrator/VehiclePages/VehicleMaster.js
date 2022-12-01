@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState, } from "react";
+import React, { useEffect, useMemo, useRef, useState, } from "react";
 import Breadcrumb from "../../../components/Common/Breadcrumb3";
 import {
     Card,
@@ -61,16 +61,23 @@ const VehicleMaster = (props) => {
 
     const [divisionType_dropdown_Select, setDivisionType_dropdown_Select] = useState("");
    
-    const initialFiled = {
+   {/** Dyanamic Page access state and OnChange function */ }
+   const initialFiled = useMemo(() => {
+
+    const fileds = {
         id: "",
         VehicleNumber: "",
         Description: "",
         Driver: "",
         VehicleType: "",
         VehicleDivisions: ""
-      }
-    
-    const [state, setState] = useState(initialFiledFunc(initialFiled))
+    }
+    return initialFiledFunc(fileds)
+}, []);
+
+const [state, setState] = useState(initialFiled)
+
+       
    
     //Access redux store Data /  'save_ModuleSuccess' action data
     const {
