@@ -138,8 +138,9 @@ export const get_CategoryTypes_ForDropDown_Success = (data) => ({
   });
 
     // get Image Type for dropdown api
-    export const get_ImageType_ForDropDown = () => ({
+    export const get_ImageType_ForDropDown = (id) => ({
       type: GET_IMAGETYPE_FOR_DROPDOWN,
+      id
     });
     
     export const get_ImageType_ForDropDown_Success = (data) => ({

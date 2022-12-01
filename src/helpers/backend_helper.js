@@ -375,6 +375,10 @@ export const del_SubGroup_List_API = (id) => del(`${url.SUBGROUP_API}/${id}`)// 
 export const edit_SubGroup_List_Api = (id) => get(`${url.SUBGROUP_API}/${id}`)// edit api
 export const update_SubGroup_List_Api = (data, id) => put(`${url.SUBGROUP_API}/${id}`, data)// update api
 
+// BOM API
+export const BOM_Post_API = (data) => post(url.BOM, data)// post api
+export const GetItemUnits_For_Dropdown = (data) => post(url.GET_ITEM_UNITS, data)// post api
+
 export {
   getLoggedInUser,
   isUserAuthenticated,

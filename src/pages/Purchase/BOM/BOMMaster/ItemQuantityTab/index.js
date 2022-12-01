@@ -12,6 +12,7 @@ import {
 import Select from "react-select";
 import { getBaseUnit_ForDropDown, getItemList } from '../../../../../store/actions';
 import { useDispatch, useSelector } from 'react-redux';
+import BOMTable from './Table';
 
 function ItemTab(props) {
 
@@ -54,37 +55,40 @@ function ItemTab(props) {
         const val = {
             ItemID: contentItemSelect === "" ? "" : contentItemSelect.value,
             ItemName: contentItemSelect.label,
-            ItemID: unitSelect === "" ? "" : unitSelect.value,
-            ItemName: unitSelect.label,
-            GSTPercentage: ItemQuantity,
+            UnitID: unitSelect === "" ? "" : unitSelect.value,
+            UnitName: unitSelect.label,
+            ItemQuantity: ItemQuantity,
            
         };
 
-        // if (!(GST === "")
-        //     && !(HSNCode === "")
-        //     && !(effectiveDate === "")
-        // ) {
-        //     const totalTableData = props.tableData.length;
-        //     val.id = totalTableData + 1;
-        //     const updatedTableData = [...props.tableData];
-        //     updatedTableData.push(val);
-        //     props.func(updatedTableData)
-        //     clearState();
+        if (!(contentItemSelect === "")
+            && !(unitSelect === "")
+            && !(ItemQuantity === "")
+        ) {
+            const totalTableData = props.tableData.length;
+            val.id = totalTableData + 1;
+            const updatedTableData = [...props.tableData];
+            updatedTableData.push(val);
+            props.func(updatedTableData)
+            clearState();
 
-        // }
-        // else {
-        //     alert("Please Enter value")
-        // }
+        }
+        else {
+            alert("Please Enter value")
+        }
     };
     const clearState = () => {
-
+        setContentItemSelect('');
+        setItemQuantity('');
+        setUnitSelect('');
     };
 
     return (
 
         <Row>
             <Col md={12}  >
-                <Card className="text-black">
+                
+                <Card className="mt-n3 text-black">
                     <CardBody style={{ backgroundColor: "whitesmoke" }}>
                         <Row>
 
@@ -135,7 +139,7 @@ function ItemTab(props) {
                     </CardBody>
                 </Card>
                 <Row>
-                    {/* <ItemTable tableData={props.tableData} func={props.func} /> */}
+                    <BOMTable tableData={props.tableData} func={props.func} />
                 </Row>
             </Col>
         </Row>

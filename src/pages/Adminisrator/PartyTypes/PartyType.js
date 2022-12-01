@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import {
     Card,
     CardBody,
@@ -60,14 +60,18 @@ const PartyType = (props) => {
     }, []);
 
     {/** Dyanamic Page access state and OnChange function */ }
-    const initialFiled = {
-        id: "",
-        Name: "",
-        IsSCM: false,
-        IsDivision: false,
-    }
+    const initialFiled = useMemo(() => {
 
-    const [state, setState] = useState(initialFiledFunc(initialFiled))
+        const fileds = {
+            id: "",
+            Name: "",
+            IsSCM: false,
+            IsDivision: false,
+        }
+        return initialFiledFunc(fileds)
+    }, []);
+
+    const [state, setState] = useState(initialFiled)
 
     const values = { ...state.values }
     const { isError } = state;

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState, } from "react";
+import React, { useEffect, useMemo, useRef, useState, } from "react";
 import Breadcrumb from "../../../components/Common/Breadcrumb3";
 import {
     Card,
@@ -65,14 +65,19 @@ const GroupMaster = (props) => {
             pageField: state.CommonPageFieldReducer.pageField
         }));
 
-        const initialFiled = {
-        id: "",
-        Name: "",
-        GroupTypeName: ""
-    }
+    const initialFiled = useMemo(() => {
 
-    const [state, setState] = useState(initialFiledFunc(initialFiled))
-    debugger
+        const fileds = {
+            id: "",
+            Name: "",
+            GroupTypeName: ""
+        }
+        return initialFiledFunc(fileds)
+    }, []);
+
+    const [state, setState] = useState(initialFiled)
+
+
     const values = { ...state.values }
     const { isError } = state;
     const { fieldLabel } = state;

@@ -10,7 +10,7 @@ import { DELETE_SUBGROUP_LIST_ID,
     UPDATE_SUBGROUPMASTER_ID,
     UPDATE_SUBGROUPMASTER_ID_SUCCESS} from "./actionType";
     
-  
+     
   
   /// get 
   export const getSubGroupList = () => ({

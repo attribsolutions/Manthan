@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState, } from "react";
+import React, { useEffect, useMemo, useRef, useState, } from "react";
 import {
     Card,
     CardBody,
@@ -47,14 +47,19 @@ const EmployeeTypesMaster = (props) => {
     const [userPageAccessState, setUserPageAccessState] = useState('');
     const [modalCss, setModalCss] = useState(false);
 
-    const initialFiled = {
-        id: "",
-        Name: "",
-        IsPartyConnection: false,
-        IsSCM: false
-    }
+    const initialFiled = useMemo(() => {
 
-    const [state, setState] = useState(initialFiledFunc(initialFiled))
+        const fileds = {
+            id: "",
+            Name: "",
+            IsPartyConnection: false,
+            IsSCM: false
+        }
+        return initialFiledFunc(fileds)
+    }, []);
+
+    const [state, setState] = useState(initialFiled)
+
 
 
     //Access redux store Data /  'save_ModuleSuccess' action data

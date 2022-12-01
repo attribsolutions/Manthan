@@ -47,6 +47,7 @@ import PartySubPartysaga from "./Administrator/PartySubPartyRedux/saga"
 import PartyItemssaga from "./Administrator/PartyItemsRedux/saga"
 import SupplierSaga from "./CommonAPI/SupplierRedux/saga"
 import GRNSaga from "./Purchase/GRNRedux/saga"
+import BOMSaga from "./Purchase/BOMRedux/saga"
 
 export default function* rootSaga() {
   yield all([
@@ -89,6 +90,7 @@ export default function* rootSaga() {
     fork(GSTSaga),
     fork(PartySubPartysaga),
     fork(PartyItemssaga),
+    fork(BOMSaga),
 
   ])
 }
