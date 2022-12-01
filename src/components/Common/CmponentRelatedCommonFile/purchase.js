@@ -17,6 +17,7 @@ import { listPageCommonButtonFunction }
     from "../../../components/Common/CmponentRelatedCommonFile/listPageCommonButtons";
 import { mySearchProps } from "./SearchBox/MySearch";
 import { getModify } from "../../../helpers/api_helper";
+import { GST_ADD_Mode_2 } from "../../../routes/route_url";
 
 let sortType = "asc"
 let searchCount = 0
@@ -77,9 +78,8 @@ const PurchaseListPage = (props) => {
         masterPath,
         ButtonMsgLable,
         deleteName,
-        showBreadcrumb = true,
-        pageMode = "List",
-        onsavefunc = () => { }
+        pageMode,
+        onsavefunc = () => { },
     } = props;
 
     const fileds = pageField.PageFieldMaster;
@@ -124,7 +124,7 @@ const PurchaseListPage = (props) => {
                     Type: 1,
                     Status: true,
                     Message: updateMsg.Message,
-                    AfterResponseAction: getList,
+                    isFunc: true,
                 })
             );
             tog_center();
@@ -139,6 +139,8 @@ const PurchaseListPage = (props) => {
             );
         }
     }, [updateMsg]);
+
+
 
     useEffect(() => {
         if (deleteMsg.Status === true && deleteMsg.StatusCode === 200) {
@@ -162,6 +164,8 @@ const PurchaseListPage = (props) => {
             );
         }
     }, [deleteMsg]);
+
+
 
 
     useEffect(() => {
@@ -191,6 +195,8 @@ const PurchaseListPage = (props) => {
 
     }, [postMsg])
 
+
+
     // Edit Modal Show When Edit Data is true
     useEffect(() => {
         if (editData.Status === true) {
@@ -208,13 +214,18 @@ const PurchaseListPage = (props) => {
         }
     }, [editData]);
 
+
+
     function tog_center() {
         setmodal_edit(!modal_edit); //when edit mode show in pop up that modal view controle
     }
 
+
+    // ****** columns sort by sequnce
     fileds.sort(function (a, b) {  //sort function is  sort list page coloumn by asending order by listpage sequense
         return a.ListPageSeq - b.ListPageSeq
     });
+    // *******
 
     let sortLabel = ""
     const columns = []
@@ -235,7 +246,10 @@ const PurchaseListPage = (props) => {
                 sortType = "desc"
             }
         }
-        if ((pageMode === "GRNMode2") && (fileds.length - 1 === k)) {
+
+        // ======================== for GRNMode2 Page Action Button ================================
+
+        if ((pageMode === GST_ADD_Mode_2) && (fileds.length - 1 === k)) {
             columns.push({
                 text: "Select",
                 dataField: "GRNSelect",
@@ -249,10 +263,8 @@ const PurchaseListPage = (props) => {
                         />)
                 }
             })
-
-
-
         }
+        // ======================== for List Page Action Button ================================
 
         else if ((fileds.length - 1 === k)) {
             columns.push(listPageCommonButtonFunction({
@@ -266,6 +278,7 @@ const PurchaseListPage = (props) => {
             )
         }
     })
+
 
     const defaultSorted = [
         {
@@ -343,7 +356,7 @@ const PurchaseListPage = (props) => {
                     </PaginationProvider>
 
                     {
-                        pageMode === "GRNMode2" ?
+                        pageMode === GST_ADD_Mode_2 ?
 
 
                             <div className="row save1" style={{ paddingBottom: 'center' }}>

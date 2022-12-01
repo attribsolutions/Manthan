@@ -115,7 +115,7 @@ const Order = (props) => {
     const hasShowModal = props.hasOwnProperty("editValue")
 
     useEffect(() => {
-        dispatch(BreadcrumbFilterSize(`${"Order Amount"} :${orderAmount}`))
+
         dispatch(goButtonSuccess([]))
 
         if ((hasShowloction || hasShowModal)) {
@@ -132,15 +132,8 @@ const Order = (props) => {
             }
 
             if (hasEditVal) {
-
-                const jsonBody = JSON.stringify({
-                    Supplier: hasEditVal.Supplier,
-                    EffectiveDate: hasEditVal.OrderDate
-                }
-                );
-                dispatch(goButton(jsonBody, hasEditVal))
+                GoButton_Handler(hasEditVal)//=======Go Button API Call
                 dispatch(BreadcrumbFilterSize(`${"Order Amount"} :${hasEditVal.OrderAmount}`))
-
                 setsupplierSelect({ label: hasEditVal.SupplierName, value: hasEditVal.Supplier })
                 setpoDate(hasEditVal.OrderDate)
                 setdeliverydate(hasEditVal.DeliveryDate)
@@ -155,6 +148,7 @@ const Order = (props) => {
                 }))
                 setTermsAndConTable(termsAndCondition)
             }
+            dispatch(BreadcrumbFilterSize(`${"Order Amount"} :${orderAmount}`))
             dispatch(editOrderIdSuccess({ Status: false }))
         }
 
@@ -185,7 +179,7 @@ const Order = (props) => {
             dispatch(AlertState({
                 Type: 4,
                 Status: true,
-                Message: "error Message",
+                Message: JSON.stringify(postMsg.Message),
                 RedirectPath: false,
                 AfterResponseAction: false
             }));
@@ -233,49 +227,28 @@ const Order = (props) => {
         label: i.Supplier,
     }));
 
-    const copybtnOnclick = (r) => {
-       
-    }
+
     const pagesListColumns = [
-        {
-            text: "Actions",
-            dataField: "",
-            sort: true,
-            formatter: (value, row, k) => (
-                <Button
-                    type="button"
-                    data-mdb-toggle="tooltip" data-mdb-placement="top"
-                    onClick={(e) => copybtnOnclick(row)}
-                    className="badge badge-soft-primary font-size-12 btn btn-primary
-                     waves-effect waves-light w-xxs border border-light"
-                >
-                    <i className="bx bxs-copy font-size-12 "></i>
-                </Button >
-            ),
-            headerStyle: (colum, colIndex) => {
-                return { width: '130px', textAlign: 'center', text: "center" };
-            }
-        },
-        //------------- ItemName column ----------------------------------
-        {
+        {//------------- ItemName column ----------------------------------
             text: "Item Name",
             dataField: "Name",
             sort: true,
         },
-        //------------- Quntity column ----------------------------------
-        {
+
+        { //------------- Quntity column ----------------------------------
             text: "Quntity",
             dataField: "",
             sort: true,
             formatter: (value, row, k) => {
-                debugger
+                if (row.inpRate === undefined) { row["inpRate"] = 0 }
+                if (row.totalAmount === undefined) { row["totalAmount"] = 0 }
                 return (
 
                     <span >
                         <Input type="text"
                             id={`inpQty${k}`}
                             defaultValue={row.inpQty}
-                            disabled={((row.inpRate === 0) || row.GSTPercentage === '') ? true : false}
+                            disabled={((row.inpRate === 0) || (row.GSTPercentage === '')) ? true : false}
                             onChange={(e) => {
                                 val_onChange(e.target.value, row, "qty")
                             }}
@@ -291,8 +264,8 @@ const Order = (props) => {
 
 
         },
-        //------------- UOM column ----------------------------------
-        {
+
+        {  //------------- UOM column ----------------------------------
             text: "UOM",
             dataField: "",
             sort: true,
@@ -329,14 +302,13 @@ const Order = (props) => {
             }
 
         },
-        //------------- Rate column ----------------------------------
-        {
+
+        {//------------- Rate column ----------------------------------
             text: "Rate",
             dataField: "Rate",
             sort: true,
             formatter: (value, row, k) => {
-                if (row.inpRate === undefined) { row["inpRate"] = 0 }
-                if (row.totalAmount === undefined) { row["totalAmount"] = 0 }
+
                 return (
                     <span className="text-right" >
                         <Input
@@ -369,10 +341,10 @@ const Order = (props) => {
                 return { width: '140px', textAlign: 'center' };
             }
         },
-        //------------- GST column ----------------------------------
-        {
+
+        { //------------- GST column ----------------------------------
             text: "GST %",
-            dataField: "GST",
+            dataField: "GSTPercentage",
             sort: true,
             formatter: (value, row) => (
 
@@ -402,10 +374,18 @@ const Order = (props) => {
         custom: true,
     };
 
+    const GoButton_Handler = (hasEditVal = false) => {
 
-    const GoButton_Handler = () => {
+        if (hasEditVal) {
+            const jsonBody = JSON.stringify({
+                Party: hasEditVal.Supplier,
+                EffectiveDate: hasEditVal.OrderDate
+            });
+            dispatch(goButton(jsonBody, hasEditVal))
+            return
+        }
+
         let supplier = supplierSelect.value
-
         if (!supplier > 0) {
             alert("Please Select Customer")
             return
@@ -414,9 +394,7 @@ const Order = (props) => {
         if (items.length > 0) {
             if (window.confirm("Refresh Order Item...!")) {
                 dispatch(goButtonSuccess([]))
-            } else {
-                return
-            }
+            } else { return }
         }
 
         let division = 0
@@ -426,13 +404,11 @@ const Order = (props) => {
             alert(e)
         }
         const jsonBody = JSON.stringify({
-            Supplier: supplier,
+            Party: supplier,
             EffectiveDate: podate
-        }
-        );
-
+        });
         dispatch(goButton(jsonBody))
-        console.log("jsonBody", jsonBody)
+
     };
 
     const saveHandeller = () => {
@@ -466,7 +442,7 @@ const Order = (props) => {
                     Margin: "",
                     BasicAmount: basicAmt.toFixed(2),
                     GSTAmount: cgstAmt.toFixed(2),
-                    GSTPercentage: i.GSTPercentage,
+                    GST: i.Gstid,
                     CGST: (cgstAmt / 2).toFixed(2),
                     SGST: (cgstAmt / 2).toFixed(2),
                     IGST: 0,
@@ -591,7 +567,7 @@ const Order = (props) => {
 
                             <Col md="1" className="mt-3 ">
                                 <Button type="button" color="btn btn-outline-success border-2 font-size-12 "
-                                    onClick={GoButton_Handler}>Go</Button>
+                                    onClick={(e) => GoButton_Handler()}>Go</Button>
                             </Col>
                         </div>
                     </div>
@@ -653,7 +629,6 @@ const Order = (props) => {
                                                 ...base,
                                                 border: 'non',
                                                 backgroundColor: ""
-
                                             })
                                         }}
                                         onChange={(e) => { setbillAddr(e) }}

@@ -15,15 +15,14 @@ import {
 import { commonPageFieldList, commonPageFieldListSuccess, } from "../../../store/actions";
 import PurchaseListPage from "../../../components/Common/CmponentRelatedCommonFile/purchase"
 import Order from "./Order";
-import { GRN_ADD, ORDER } from "../../../routes/route_url";
+import { GRN_ADD, GST_ADD_Mode_2, ORDER, ORDER_lIST } from "../../../routes/route_url";
 import { Button, Col, FormGroup, Label } from "reactstrap";
 import Breadcrumb from "../../../components/Common/Breadcrumb";
 import { useHistory } from "react-router-dom";
 import { getGRN_itemMode2 } from "../../../store/Purchase/GRNRedux/actions";
 import { getSupplier } from "../../../store/CommonAPI/SupplierRedux/actions";
-
-let onlodTodate = null
-let onlodFromdate = null
+import { currentDate, excelDownCommonFunc } from "../../../components/Common/CmponentRelatedCommonFile/listPageCommonButtons";
+import { useMemo } from "react";
 
 
 const OrderList = () => {
@@ -31,13 +30,10 @@ const OrderList = () => {
     const dispatch = useDispatch();
     const history = useHistory();
 
-    const location = { ...history.location }
-    const hasPageMode = location.hasOwnProperty("pageMode")
-
-
+    const hasPagePath = history.location.pathname
 
     const [supplierSelect, setsupplierSelect] = useState({ value: '' });
-    const [pageMode, setpageMode] = useState("list")
+    const [pageMode, setpageMode] = useState(ORDER_lIST)
     const [userAccState, setUserAccState] = useState('');
     const [fromdate, setFromdate] = useState();
     const [todate, setTodate] = useState();
@@ -67,34 +63,31 @@ const OrderList = () => {
 
     // Featch Modules List data  First Rendering
     useEffect(() => {
-
-        let mode = "list"
-        if (hasPageMode) {
-            mode = location.pageMode
-            setpageMode(mode)
-        }
-        const pageId = (mode === "list") ? 54 : 60;
+        setpageMode(hasPagePath)
+        const pageId = (hasPagePath === GST_ADD_Mode_2) ? 60 : 54;
         dispatch(commonPageFieldListSuccess(null))
         dispatch(commonPageFieldList(pageId))
         dispatch(getSupplier());
+        goButtonHandler(true)
 
     }, []);
 
+    const { userAccess, pageField, GRNitem, supplier, tableList } = reducers;
 
-
-    const { pageField, userAccess, GRNitem, supplier } = reducers;
     const supplierOptions = supplier.map((i) => ({
         value: i.id,
         label: i.Supplier,
     }));
 
+    const downList = useMemo(() => {
+        let PageFieldMaster = []
+        if (pageField) { PageFieldMaster = pageField.PageFieldMaster; }
+        return excelDownCommonFunc({ tableList, PageFieldMaster })
+    }, [tableList])
 
 
     useEffect(() => {
-        let mode = "list"
-        if (hasPageMode) { mode = location.pageMode }
-        const pageId = (mode === "list") ? 54 : 60;
-
+        const pageId = (hasPagePath === GST_ADD_Mode_2) ? 60 : 54;
         let userAcc = userAccess.find((inx) => {
             return (inx.id === pageId)
         })
@@ -105,8 +98,6 @@ const OrderList = () => {
 
     useEffect(() => {
         if (GRNitem.Status === true && GRNitem.StatusCode === 200) {
-            // GRNitem.Status = false
-            // dispatch(getGRN_itemMode2_Success(GRNitem))
             history.push({
                 pathname: GRNitem.path,
                 pageMode: GRNitem.pageMode
@@ -149,12 +140,10 @@ const OrderList = () => {
         let FromDate
         let ToDate
 
-        if (!(onlodFromdate) || !(onlodTodate)) {
-            return
-        }
         if (onload) {
-            FromDate = onlodFromdate;
-            ToDate = onlodTodate;
+            const currentdate = currentDate()
+            FromDate = currentdate;
+            ToDate = currentdate;
         } else {
             ToDate = todate;
             FromDate = fromdate;
@@ -163,7 +152,6 @@ const OrderList = () => {
         let supplier = supplierSelect.value
         let customer = 0
         try {
-
             customer = JSON.parse(localStorage.getItem("roleId")).Party_id
         } catch (e) {
             alert(e)
@@ -177,7 +165,6 @@ const OrderList = () => {
             Customer: customer
         }
         );
-        debugger
         dispatch(getOrderListPage(jsonBody));
     }
 
@@ -186,11 +173,10 @@ const OrderList = () => {
             <div className="page-content">
                 <Breadcrumb
                     pageHeading={userAccState.PageHeading}
-                    newBtnView={(pageMode === "list") ? true : false}
+                    newBtnView={(pageMode === ORDER_lIST) ? true : false}
                     showCount={true}
                     excelBtnView={true}
-
-                    excelData={"downList"} />
+                    excelData={downList} />
 
                 <div className="px-2 mb-1 mt-n1" style={{ backgroundColor: "#dddddd" }} >
                     <div className=" mt-1 row">
@@ -207,17 +193,11 @@ const OrderList = () => {
                                             altInput: true,
                                             altFormat: "d-m-Y",
                                             dateFormat: "Y-m-d",
-                                            // minDate: "today",
-                                            // maxDate: pageMode === "edit" ? podate : "",
                                             defaultDate: "today"
 
                                         }}
                                         onChange={(e, date) => { setFromdate(date) }}
-                                        onReady={(e, date) => {
-                                            onlodFromdate = date;
-                                            setFromdate(date);
-                                            goButtonHandler(true)
-                                        }}
+                                        onReady={(e, date) => { setFromdate(date) }}
                                     />
                                 </Col>
                             </FormGroup>
@@ -235,15 +215,10 @@ const OrderList = () => {
                                             altInput: true,
                                             altFormat: "d-m-Y",
                                             dateFormat: "Y-m-d",
-                                            // minDate: "today",
                                             defaultDate: "today"
                                         }}
                                         onChange={(e, date) => { setTodate(date) }}
-                                        onReady={(e, date) => {
-                                            onlodTodate = date;
-                                            setTodate(date)
-                                            goButtonHandler(true)
-                                        }}
+                                        onReady={(e, date) => { setTodate(date) }}
 
                                     />
                                 </Col>
@@ -256,9 +231,7 @@ const OrderList = () => {
                                     style={{ width: "130px" }}>Supplier Name</Label>
                                 <Col md="7">
                                     <Select
-                                        // value={"supplierSelect"}
                                         classNamePrefix="select2-Customer"
-                                        // isDisabled={"pageMode" === "edit" ? true : false}
                                         options={supplierOptions}
                                         onChange={(e) => { setsupplierSelect(e) }}
                                     />

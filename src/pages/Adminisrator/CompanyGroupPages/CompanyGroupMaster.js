@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState, } from "react";
+import React, { useEffect, useMemo, useRef, useState, } from "react";
 import Breadcrumb from "../../../components/Common/Breadcrumb3";
 import {
     Card,
@@ -47,21 +47,24 @@ const CompanyGroupMaster = (props) => {
     const [pageMode, setPageMode] = useState();
     const [userPageAccessState, setUserPageAccessState] = useState('');
     const [modalCss, setModalCss] = useState(false);
-
+    const [Checkbox, setCheckbox] = useState(false);
 
     {/** Dyanamic Page access state and OnChange function */ }
-    const initialFiled = {
-        id: "",
-        Name: "",
-        IsSCM:false
-      }
-    
-    const [state, setState] = useState(initialFiledFunc(initialFiled))
 
-   
+    const initialFiled = useMemo(() => {
+
+        const fileds = {
+            id: "",
+            Name: "",
+            IsSCM: false
+        }
+        return initialFiledFunc(fileds)
+    }, []);
+
+    const [state, setState] = useState(initialFiled)
 
     //Access redux store Data /  'save_ModuleSuccess' action data
-    const { postMsg, updateMsg ,pageField, userAccess } = useSelector((state) => ({
+    const { postMsg, updateMsg, pageField, userAccess } = useSelector((state) => ({
         postMsg: state.CompanyGroupReducer.PostDataMessage,
         updateMsg: state.CompanyGroupReducer.updateMessage,
         userAccess: state.Login.RoleAccessUpdateData,
@@ -78,8 +81,6 @@ const CompanyGroupMaster = (props) => {
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(3))
     }, []);
-
-
 
     // userAccess useEffect
     useEffect(() => {
@@ -100,8 +101,6 @@ const CompanyGroupMaster = (props) => {
         };
     }, [userAccess])
 
-
-
     // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
     useEffect(() => {
 
@@ -119,6 +118,7 @@ const CompanyGroupMaster = (props) => {
             }
 
             if (hasEditVal) {
+                debugger
                 const { id, Name, IsSCM } = hasEditVal
                 const { values, fieldLabel, hasValid, required, isError } = { ...state }
                 values.Name = Name;
@@ -132,7 +132,6 @@ const CompanyGroupMaster = (props) => {
             dispatch(editCompanyGroupTypeSuccess({ Status: false }))
         }
     }, [])
-
 
     useEffect(() => {
 
@@ -197,26 +196,26 @@ const CompanyGroupMaster = (props) => {
     const { isError } = state;
     const { fieldLabel } = state;
 
-
     const formSubmitHandler = (event) => {
         event.preventDefault();
         if (formValid(state, setState)) {
             const jsonBody = JSON.stringify({
                 Name: values.Name,
-                IsSCM: values.IsSCM,
+                IsSCM: Checkbox,
                 CreatedBy: 1,
                 UpdatedBy: 1
             });
 
             if (pageMode === "edit") {
                 dispatch(updateCompanyGroupTypeID(jsonBody, values.id));
+                console.log("update data", jsonBody)
             }
             else {
                 dispatch(PostMethodForCompanyGroupMaster(jsonBody));
+                console.log("post data", jsonBody)
             }
         }
     };
-
 
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
     var IsEditMode_Css = ''
@@ -278,7 +277,15 @@ const CompanyGroupMaster = (props) => {
                                                                             <Input type="checkbox" className="form-check-input"
                                                                                 defaultChecked={values.IsSCM}
                                                                                 name="IsSCM"
-                                                                                onChange={(event) => onChangeText({ event, state, setState })}
+                                                                                // onChange={(event) => onChangeText({ event, state, setState })}
+                                                                                onChange={(e) => {
+                                                                                    setState((i) => {
+                                                                                        const a = { ...i }
+                                                                                        a.values.IsSCM = e.target.checked;
+                                                                                        return a
+                                                                                    })
+                                                                                }}
+
                                                                             />
                                                                         </div>
                                                                     </Col>

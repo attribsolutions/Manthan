@@ -92,6 +92,8 @@ import SubGroupList from "../pages/Adminisrator/SubGroupPages/SubGroupList";
 import PartyItemsList from "../pages/Adminisrator/PartyItemPage/PartyItemList";
 import Index from "../pages/Adminisrator/ItemPages/ItemMaster/Image_Tab/Index";
 import demo from "../pages/Adminisrator/GroupPage/demo";
+import BOMMaster from "../pages/Purchase/BOM/BOMMaster/BOMIndex";
+
 // import PartyItemsList from "../pages/Adminisrator
 
 
@@ -199,7 +201,9 @@ const userRoutes = [
 
 
 
-  
+
+  { path:path.BOM, component: BOMMaster },
+
 
   { path: path.SEARCH_BOX2, component: SearchBoxSecond },
   { path: path.SEARCH_BOX3, component: SerachBox3 },

@@ -325,6 +325,7 @@ const RoleMaster = (props) => {
                                   defaultValue={values.Description}
                                   className={isError.Description.length > 0 ? "is-invalid form-control" : "form-control"}
                                   name="Description"
+                                  autoComplete="off"
                                   placeholder="Please Enter description"
                                   onChange={(event) => onChangeText({ event, state, setState })}
                                 />
@@ -344,6 +345,7 @@ const RoleMaster = (props) => {
                                   value={values.Dashboard}
                                   className={isError.Dashboard.length > 0 ? "is-invalid form-control" : "form-control"}
                                   name="Dashboard"
+                                  autoComplete="off"
                                   placeholder="Please Enter dashboard"
                                   onChange={(event) => onChangeText({ event, state, setState })}
                                 />
@@ -363,7 +365,13 @@ const RoleMaster = (props) => {
                                       <Input type="checkbox" className="form-check-input"
                                         checked={values.isSCMRole}
                                         name="isSCMRole"
-                                        onChange={(event) => onChangeText({ event, state, setState })}
+                                        onChange={(e) => {
+                                          setState((i) => {
+                                              const a = { ...i }
+                                              a.values.isSCMRole = e.target.checked;
+                                              return a
+                                          })
+                                      }}
                                       />
                                     </div>
                                   </Col>
@@ -379,7 +387,13 @@ const RoleMaster = (props) => {
                                       <Input type="checkbox" className="form-check-input" id="customSwitchsizemd"
                                         checked={values.isActive}
                                         name="isActive"
-                                        onChange={(event) => onChangeText({ event, state, setState })}
+                                        onChange={(e) => {
+                                          setState((i) => {
+                                              const a = { ...i }
+                                              a.values.isActive = e.target.checked;
+                                              return a
+                                          })
+                                      }}
                                       />
                                     </div>
                                   </Col>
@@ -395,7 +409,13 @@ const RoleMaster = (props) => {
                                       <Input type="checkbox" className="form-check-input" id="customSwitchsizemd"
                                         checked={values.IsPartyConnection}
                                         name="IsPartyConnection"
-                                        onChange={(event) => onChangeText({ event, state, setState })}
+                                        onChange={(e) => {
+                                          setState((i) => {
+                                              const a = { ...i }
+                                              a.values.IsPartyConnection = e.target.checked;
+                                              return a
+                                          })
+                                      }}
                                       />
                                     </div>
                                   </Col>
