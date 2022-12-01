@@ -15,7 +15,7 @@ import {
 import { commonPageFieldList, commonPageFieldListSuccess, } from "../../../store/actions";
 import PurchaseListPage from "../../../components/Common/CmponentRelatedCommonFile/purchase"
 import Order from "./Order";
-import { GRN_ADD, ORDER } from "../../../routes/route_url";
+import { GRN_ADD, GST_ADD_Mode_2, ORDER } from "../../../routes/route_url";
 import { Button, Col, FormGroup, Label } from "reactstrap";
 import Breadcrumb from "../../../components/Common/Breadcrumb";
 import { useHistory } from "react-router-dom";
@@ -73,7 +73,7 @@ const OrderList = () => {
             mode = location.pageMode
             setpageMode(mode)
         }
-        const pageId = (mode === "list") ? 54 : 60;
+        const pageId = (mode === GST_ADD_Mode_2) ? 60 : 54;
         dispatch(commonPageFieldListSuccess(null))
         dispatch(commonPageFieldList(pageId))
         dispatch(getSupplier());
@@ -286,6 +286,8 @@ const OrderList = () => {
                             pageMode={pageMode}
                             onsavefunc={onsavefunc}
                         />
+
+
                         : null
                 }
             </div>

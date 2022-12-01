@@ -234,30 +234,29 @@ const Order = (props) => {
     }));
 
     const copybtnOnclick = (r) => {
-       
+
     }
     const pagesListColumns = [
-
-        //------------- ItemName column ----------------------------------
-        {
+        {//------------- ItemName column ----------------------------------
             text: "Item Name",
             dataField: "Name",
             sort: true,
         },
-        //------------- Quntity column ----------------------------------
-        {
+
+        { //------------- Quntity column ----------------------------------
             text: "Quntity",
             dataField: "",
             sort: true,
             formatter: (value, row, k) => {
-                debugger
+                if (row.inpRate === undefined) { row["inpRate"] = 0 }
+                if (row.totalAmount === undefined) { row["totalAmount"] = 0 }
                 return (
 
                     <span >
                         <Input type="text"
                             id={`inpQty${k}`}
                             defaultValue={row.inpQty}
-                            disabled={((row.inpRate === 0) || row.GSTPercentage === '') ? true : false}
+                            disabled={((row.inpRate === 0) || (row.GSTPercentage === '')) ? true : false}
                             onChange={(e) => {
                                 val_onChange(e.target.value, row, "qty")
                             }}
@@ -273,8 +272,8 @@ const Order = (props) => {
 
 
         },
-        //------------- UOM column ----------------------------------
-        {
+      
+        {  //------------- UOM column ----------------------------------
             text: "UOM",
             dataField: "",
             sort: true,
@@ -311,14 +310,13 @@ const Order = (props) => {
             }
 
         },
-        //------------- Rate column ----------------------------------
-        {
+        
+        {//------------- Rate column ----------------------------------
             text: "Rate",
             dataField: "Rate",
             sort: true,
             formatter: (value, row, k) => {
-                if (row.inpRate === undefined) { row["inpRate"] = 0 }
-                if (row.totalAmount === undefined) { row["totalAmount"] = 0 }
+
                 return (
                     <span className="text-right" >
                         <Input
@@ -351,8 +349,8 @@ const Order = (props) => {
                 return { width: '140px', textAlign: 'center' };
             }
         },
-        //------------- GST column ----------------------------------
-        {
+       
+        { //------------- GST column ----------------------------------
             text: "GST %",
             dataField: "GSTPercentage",
             sort: true,
@@ -408,7 +406,7 @@ const Order = (props) => {
             alert(e)
         }
         const jsonBody = JSON.stringify({
-            Supplier: supplier,
+            Party: supplier,
             EffectiveDate: podate
         }
         );
@@ -448,7 +446,7 @@ const Order = (props) => {
                     Margin: "",
                     BasicAmount: basicAmt.toFixed(2),
                     GSTAmount: cgstAmt.toFixed(2),
-                    GSTPercentage: i.GSTPercentage,
+                    GST: i.Gstid,
                     CGST: (cgstAmt / 2).toFixed(2),
                     SGST: (cgstAmt / 2).toFixed(2),
                     IGST: 0,
@@ -517,9 +515,9 @@ const Order = (props) => {
 
     }
 
-  const  handleDataChange = (a,b,c) => {
+    const handleDataChange = (a, b, c) => {
         debugger
-      }
+    }
 
     if (!(userAccState === "")) {
         return (
@@ -686,7 +684,7 @@ const Order = (props) => {
                                                 <div className="table table-Rresponsive">
                                                     <BootstrapTable
                                                         keyField={"id"}
-                                                        onDataSizeChange={handleDataChange }
+                                                        onDataSizeChange={handleDataChange}
                                                         responsive
                                                         bordered={false}
                                                         striped={false}
