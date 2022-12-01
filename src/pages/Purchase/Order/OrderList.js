@@ -15,12 +15,14 @@ import {
 import { commonPageFieldList, commonPageFieldListSuccess, } from "../../../store/actions";
 import PurchaseListPage from "../../../components/Common/CmponentRelatedCommonFile/purchase"
 import Order from "./Order";
-import { GRN_ADD, GST_ADD_Mode_2, ORDER } from "../../../routes/route_url";
+import { GRN_ADD, GST_ADD_Mode_2, ORDER, ORDER_lIST } from "../../../routes/route_url";
 import { Button, Col, FormGroup, Label } from "reactstrap";
 import Breadcrumb from "../../../components/Common/Breadcrumb";
 import { useHistory } from "react-router-dom";
 import { getGRN_itemMode2 } from "../../../store/Purchase/GRNRedux/actions";
 import { getSupplier } from "../../../store/CommonAPI/SupplierRedux/actions";
+import { excelDownCommonFunc } from "../../../components/Common/CmponentRelatedCommonFile/listPageCommonButtons";
+import { useMemo } from "react";
 
 let onlodTodate = null
 let onlodFromdate = null
@@ -31,13 +33,10 @@ const OrderList = () => {
     const dispatch = useDispatch();
     const history = useHistory();
 
-    const location = { ...history.location }
-    const hasPageMode = location.hasOwnProperty("pageMode")
-
-
+    const hasPagePath = history.location.pathname
 
     const [supplierSelect, setsupplierSelect] = useState({ value: '' });
-    const [pageMode, setpageMode] = useState("list")
+    const [pageMode, setpageMode] = useState(ORDER_lIST)
     const [userAccState, setUserAccState] = useState('');
     const [fromdate, setFromdate] = useState();
     const [todate, setTodate] = useState();
@@ -67,13 +66,8 @@ const OrderList = () => {
 
     // Featch Modules List data  First Rendering
     useEffect(() => {
-
-        let mode = "list"
-        if (hasPageMode) {
-            mode = location.pageMode
-            setpageMode(mode)
-        }
-        const pageId = (mode === GST_ADD_Mode_2) ? 60 : 54;
+        setpageMode(hasPagePath)
+        const pageId = (hasPagePath === GST_ADD_Mode_2) ? 60 : 54;
         dispatch(commonPageFieldListSuccess(null))
         dispatch(commonPageFieldList(pageId))
         dispatch(getSupplier());
@@ -82,19 +76,22 @@ const OrderList = () => {
 
 
 
-    const { pageField, userAccess, GRNitem, supplier } = reducers;
+    const { userAccess, pageField, GRNitem, supplier, tableList } = reducers;
+
     const supplierOptions = supplier.map((i) => ({
         value: i.id,
         label: i.Supplier,
     }));
 
+    const downList = useMemo(() => {
+        let PageFieldMaster = []
+        if (pageField) { PageFieldMaster = pageField.PageFieldMaster; }
+        return excelDownCommonFunc({ tableList, PageFieldMaster })
+    }, [tableList])
 
-
+    
     useEffect(() => {
-        let mode = "list"
-        if (hasPageMode) { mode = location.pageMode }
-        const pageId = (mode === "list") ? 54 : 60;
-
+        const pageId = (hasPagePath === GST_ADD_Mode_2) ? 60 : 54;
         let userAcc = userAccess.find((inx) => {
             return (inx.id === pageId)
         })
@@ -113,6 +110,8 @@ const OrderList = () => {
             })
         }
     }, [GRNitem])
+
+
 
     const onsavefunc = (list = []) => {
         var isGRNSelect = ''
@@ -186,11 +185,11 @@ const OrderList = () => {
             <div className="page-content">
                 <Breadcrumb
                     pageHeading={userAccState.PageHeading}
-                    newBtnView={(pageMode === "list") ? true : false}
+                    newBtnView={(pageMode === ORDER_lIST) ? true : false}
                     showCount={true}
                     excelBtnView={true}
 
-                    excelData={"downList"} />
+                    excelData={downList} />
 
                 <div className="px-2 mb-1 mt-n1" style={{ backgroundColor: "#dddddd" }} >
                     <div className=" mt-1 row">

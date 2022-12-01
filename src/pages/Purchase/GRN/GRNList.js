@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 
 import { commonPageFieldList, commonPageFieldListSuccess, } from "../../../store/actions";
@@ -18,6 +18,7 @@ import {
 } from "../../../store/Purchase/GRNRedux/actions";
 import { goButton } from "../../../store/Purchase/OrderPageRedux/actions";
 import { getSupplier } from "../../../store/CommonAPI/SupplierRedux/actions";
+import { excelDownCommonFunc } from "../../../components/Common/CmponentRelatedCommonFile/listPageCommonButtons";
 
 
 let onlodTodate = null
@@ -45,7 +46,21 @@ const GRNList = () => {
             pageField: state.CommonPageFieldReducer.pageFieldList,
         })
     );
-    const { pageField, supplier } = reducers;
+
+    const { userAccess, pageField, supplier, tableList } = reducers;
+
+
+    const supplierOptions = supplier.map((i) => ({
+        value: i.id,
+        label: i.Supplier,
+    }));
+
+    const downList = useMemo(() => {
+        let PageFieldMaster = []
+        if (pageField) { PageFieldMaster = pageField.PageFieldMaster; }
+        return excelDownCommonFunc({ tableList, PageFieldMaster })
+    }, [tableList])
+
     const action = {
         getList: getGRNListPage,
         editId: editGRNId,
@@ -63,10 +78,7 @@ const GRNList = () => {
         dispatch(getSupplier())
     }, []);
 
-    const supplierOptions = supplier.map((i) => ({
-        value: i.id,
-        label: i.Supplier,
-    }));
+
 
     const goButtonHandler = (onload = false) => {
         // debugger
@@ -117,7 +129,7 @@ const GRNList = () => {
                     excelBtnView={true}
                     pageMode={GST_ADD_Mode_2}
                     newBtnPagePath={GST_ADD_Mode_2}
-                    excelData={"downList"} />
+                    excelData={downList} />
 
                 <div className="px-2 mb-1 mt-n1" style={{ backgroundColor: "#dddddd" }} >
                     <div className=" mt-1 row">
