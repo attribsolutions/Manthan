@@ -192,3 +192,11 @@ export const excelDownCommonFunc = (props) => {
     })
     return downList
 }
+
+export const currentDate = (props) => {
+    const current = new Date();
+    const month = current.getMonth() + 1;
+    const currentDate = `${current.getFullYear()}-${month < 10 ? `0${month}` :
+        `${month}`}-${current.getDate() < 10 ? `0${current.getDate()}` : `${current.getDate()}`}`;
+    return currentDate
+}
