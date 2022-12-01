@@ -1,5 +1,5 @@
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import Breadcrumb from "../../../components/Common/Breadcrumb3";
 import { Col, Modal, Row } from "reactstrap";
 import paginationFactory, {
@@ -13,7 +13,7 @@ import { MetaTags } from "react-meta-tags";
 import { useHistory } from "react-router-dom";
 
 import { AlertState, BreadcrumbFilterSize } from "../../../store/actions";
-import { listPageCommonButtonFunction }
+import { excelDownCommonFunc, listPageCommonButtonFunction }
   from "../../../components/Common/CmponentRelatedCommonFile/listPageCommonButtons";
 import { mySearchProps } from "./SearchBox/MySearch";
 
@@ -116,51 +116,36 @@ const CommonListPage = (props) => {
   }, [userAccess])
 
 
-  useEffect(() => {
-
-    downList = []
-    listObj = {}
-
-    tableList.forEach((index1) => {
-
-      PageFieldMaster.forEach((index2) => {
-        if (index2.ShowInDownload) {
-          listObj[`$defSelect${index2.ControlID}`] = index2.ShownloadDefaultSelect
-          listObj[index2.ControlID] = index1[index2.ControlID]
-        }
-      })
-      downList.push(listObj)
-      listObj = {}
-    })
-
+  const downList = useMemo(() => {
+    return excelDownCommonFunc({ tableList, PageFieldMaster })
   }, [tableList])
 
+  const a =
+    // This UseEffect => UpadateModal Success/Unsucces  Show and Hide Control Alert_modal
+    useEffect(() => {
 
-  // This UseEffect => UpadateModal Success/Unsucces  Show and Hide Control Alert_modal
-  useEffect(() => {
-
-    if (updateMsg.Status === true && updateMsg.StatusCode === 200) {
-      dispatch(updateSucc({ Status: false }));
-      dispatch(
-        AlertState({
-          Type: 1,
-          Status: true,
-          Message: updateMsg.Message,
-          AfterResponseAction: getList,
-        })
-      );
-      tog_center();
-    } else if (updateMsg.Status === true) {
-      dispatch(updateSucc({ Status: false }));
-      dispatch(
-        AlertState({
-          Type: 3,
-          Status: true,
-          Message: JSON.stringify(updateMsg.Message),
-        })
-      );
-    }
-  }, [updateMsg]);
+      if (updateMsg.Status === true && updateMsg.StatusCode === 200) {
+        dispatch(updateSucc({ Status: false }));
+        dispatch(
+          AlertState({
+            Type: 1,
+            Status: true,
+            Message: updateMsg.Message,
+            AfterResponseAction: getList,
+          })
+        );
+        tog_center();
+      } else if (updateMsg.Status === true) {
+        dispatch(updateSucc({ Status: false }));
+        dispatch(
+          AlertState({
+            Type: 3,
+            Status: true,
+            Message: JSON.stringify(updateMsg.Message),
+          })
+        );
+      }
+    }, [updateMsg]);
 
   useEffect(() => {
     if (deleteMsg.Status === true && deleteMsg.StatusCode === 200) {
@@ -215,7 +200,7 @@ const CommonListPage = (props) => {
 
   // Edit Modal Show When Edit Data is true
   useEffect(() => {
-  
+
     if (editData.Status === true) {
       if (pageField.IsEditPopuporComponent) {
         history.push({
@@ -283,9 +268,7 @@ const CommonListPage = (props) => {
     // totalSize: tableList.length,
     custom: true,
   };
-  // const handleDataChange = ({ dataSize }) => {
-  //   dispatch(BreadcrumbFilterSize(`${ButtonMsgLable} count :${dataSize}`))
-  // }
+
   if (!(userAccState === '')) {
     return (
       <React.Fragment>
