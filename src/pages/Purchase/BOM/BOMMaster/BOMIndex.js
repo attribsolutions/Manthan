@@ -46,10 +46,10 @@ const BOMMaster = (props) => {
 
     const initialFiled = {
         id: "",
-        BOMDate: "",
+        Date: "",
         ItemName: "",
         EstimatedOutput: "",
-        Unit: "",
+        UnitName: "",
         Comment: "",
         IsActive: false
     }
@@ -234,12 +234,12 @@ const BOMMaster = (props) => {
             debugger
             const jsonBody = JSON.stringify({
 
-                Date: values.BOMDate,
+                Date: values.Date,
                 EstimatedOutput: values.EstimatedOutput,
                 Comment: values.Comment,
                 IsActive: values.IsActive,
                 Item: values.ItemName.value,
-                Unit: values.Unit.value,
+                Unit: values.Unit.UnitName,
                 CreatedBy: 1,
                 Company: 1,
                 BOMItems: BOMItems
@@ -283,10 +283,10 @@ const BOMMaster = (props) => {
                                         <CardBody style={{ backgroundColor: "whitesmoke" }}>
                                             <Row>
                                                 <FormGroup className="mb-2 col col-sm-4 ">
-                                                    <Label >{fieldLabel.BOMDate} </Label>
+                                                    <Label >{fieldLabel.Date} </Label>
                                                     <Flatpickr
-                                                        name="BOMDate"
-                                                        value={values.BOMDate}
+                                                        name="Date"
+                                                        value={values.Date}
                                                         className="form-control d-block p-2 bg-white text-dark"
                                                         placeholder="YYYY-MM-DD"
                                                         autoComplete="0,''"
@@ -299,8 +299,8 @@ const BOMMaster = (props) => {
                                                         }}
                                                         onChange={(y, v, e) => { onChangeDate({ e, v, state, setState }) }}
                                                     />
-                                                    {isError.BOMDate.length > 0 && (
-                                                        <span className="invalid-feedback">{isError.BOMDate}</span>
+                                                    {isError.Date.length > 0 && (
+                                                        <span className="invalid-feedback">{isError.Date}</span>
                                                     )}
                                                 </FormGroup>
 
@@ -351,11 +351,11 @@ const BOMMaster = (props) => {
 
                                                 <Col md="1"></Col>
                                                 <FormGroup className="mb-2 col col-sm-4 ">
-                                                    <Label > {fieldLabel.Unit} </Label>
+                                                    <Label > {fieldLabel.UnitName} </Label>
                                                     <Col sm={12}>
                                                         <Select
-                                                            name="Unit"
-                                                            value={values.Unit}
+                                                            name="UnitName"
+                                                            value={values.UnitName}
                                                             isSearchable={true}
                                                             className="react-dropdown"
                                                             classNamePrefix="dropdown"
@@ -363,8 +363,8 @@ const BOMMaster = (props) => {
                                                             onChange={(hasSelect, evn) => onChangeSelect({ hasSelect, evn, state, setState, })}
 
                                                         />
-                                                        {isError.Unit.length > 0 && (
-                                                            <span className="text-danger f-8"><small>{isError.Unit}</small></span>
+                                                        {isError.UnitName.length > 0 && (
+                                                            <span className="text-danger f-8"><small>{isError.UnitName}</small></span>
                                                         )}
                                                     </Col>
                                                 </FormGroup>
