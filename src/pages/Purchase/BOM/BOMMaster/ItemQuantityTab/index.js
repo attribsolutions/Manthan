@@ -12,6 +12,8 @@ import {
 import Select from "react-select";
 import { getBaseUnit_ForDropDown, getItemList } from '../../../../../store/actions';
 import { useDispatch, useSelector } from 'react-redux';
+import BOMTable from './Table';
+import { GetItemUnitsDrodownAPI } from '../../../../../store/Purchase/BOMRedux/action';
 
 function ItemTab(props) {
 
@@ -20,9 +22,9 @@ function ItemTab(props) {
     const [ItemQuantity, setItemQuantity] = useState('');
     const [unitSelect, setUnitSelect] = useState('');
 
-    const { Items, Unit } = useSelector((state) => ({
+    const { Items, GetItemUnits } = useSelector((state) => ({
         Items: state.ItemMastersReducer.pages,
-        Unit: state.ItemMastersReducer.BaseUnit,
+        GetItemUnits: state.BOMReducer.GetItemUnits,
     }));
 
     useEffect(() => {
@@ -36,13 +38,18 @@ function ItemTab(props) {
         label: index.Name,
     }));
 
-    const Unit_DropdownOptions = Unit.map((data) => ({
-        value: data.id,
-        label: data.Name
+    const Unit_DropdownOptions = GetItemUnits.map((data) => ({
+        value: data.value,
+        label: data.label
     }));
 
     const ContentItem_Handler = (event) => {
+        const jsonBody = JSON.stringify({
+            Item: event.value,
+        });
+        dispatch(GetItemUnitsDrodownAPI(jsonBody))
         setContentItemSelect(event);
+        setUnitSelect('')
     };
 
     const Unit_Handler = (event) => {
@@ -54,37 +61,40 @@ function ItemTab(props) {
         const val = {
             ItemID: contentItemSelect === "" ? "" : contentItemSelect.value,
             ItemName: contentItemSelect.label,
-            ItemID: unitSelect === "" ? "" : unitSelect.value,
-            ItemName: unitSelect.label,
-            GSTPercentage: ItemQuantity,
+            UnitID: unitSelect === "" ? "" : unitSelect.value,
+            UnitName: unitSelect.label,
+            ItemQuantity: ItemQuantity,
            
         };
 
-        // if (!(GST === "")
-        //     && !(HSNCode === "")
-        //     && !(effectiveDate === "")
-        // ) {
-        //     const totalTableData = props.tableData.length;
-        //     val.id = totalTableData + 1;
-        //     const updatedTableData = [...props.tableData];
-        //     updatedTableData.push(val);
-        //     props.func(updatedTableData)
-        //     clearState();
+        if (!(contentItemSelect === "")
+            && !(unitSelect === "")
+            && !(ItemQuantity === "")
+        ) {
+            const totalTableData = props.tableData.length;
+            val.id = totalTableData + 1;
+            const updatedTableData = [...props.tableData];
+            updatedTableData.push(val);
+            props.func(updatedTableData)
+            clearState();
 
-        // }
-        // else {
-        //     alert("Please Enter value")
-        // }
+        }
+        else {
+            alert("Please Enter value")
+        }
     };
     const clearState = () => {
-
+        setContentItemSelect('');
+        setItemQuantity('');
+        setUnitSelect('');
     };
 
     return (
 
         <Row>
             <Col md={12}  >
-                <Card className="text-black">
+                
+                <Card className="mt-n3 text-black">
                     <CardBody style={{ backgroundColor: "whitesmoke" }}>
                         <Row>
 
@@ -135,7 +145,7 @@ function ItemTab(props) {
                     </CardBody>
                 </Card>
                 <Row>
-                    {/* <ItemTable tableData={props.tableData} func={props.func} /> */}
+                    <BOMTable tableData={props.tableData} func={props.func} />
                 </Row>
             </Col>
         </Row>

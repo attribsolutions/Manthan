@@ -34,7 +34,7 @@ import { AlertState, BreadcrumbFilterSize } from "../../../store/actions";
 import { basicAmount, GstAmount, handleKeyDown, totalAmount } from "../Order/OrderPageCalulation";
 import '../../Order/div.css'
 
-import { GRN_lIST, ORDER_lIST } from "../../../routes/route_url";
+import { GRN_lIST, ORDER_lIST, ROLE } from "../../../routes/route_url";
 import SaveButton, { CreatedBy } from "../../../components/Common/CommonSaveButton";
 
 import { getTermAndCondition } from "../../../store/Administrator/TermsAndCondtionsRedux/actions";
@@ -43,6 +43,7 @@ import Breadcrumb from "../../../components/Common/Breadcrumb3";
 import { getGRN_itemMode2, getGRN_itemMode2_Success, getGRN_itemMode3, postGRN, postGRNSuccess } from "../../../store/Purchase/GRNRedux/actions";
 import GRNList from "./GRNList";
 import { useMemo } from "react";
+import flatpickr from "flatpickr";
 
 let description = ''
 let editVal = {}
@@ -156,34 +157,6 @@ const GRNAdd = (props) => {
 
     }, [items])
 
-    // debugger
-    // const grnItemList = useMemo(() => {
-    //     // debugger
-    //     const { Data, Status = false } = items
-    //     if (!Status) {
-    //         return items
-    //     }
-    //     // debugger
-    //     const hasEditVal = Data;
-    //     hasEditVal.OrderItem.forEach(ele => {
-    //         ele["Name"] = ele.ItemName
-    //         ele["inpRate"] = ele.Rate
-    //         ele["inpQty"] = ele.Quantity
-    //         ele["totalAmount"] = ele.Amount
-    //         ele["UOM"] = ele.Unit
-    //         ele["UOMLabel"] = ele.UnitName
-    //         ele["inpBaseUnitQty"] = ele.BaseUnitQuantity
-    //     });
-    //     setsupplierSelect({ label: hasEditVal.SupplierName, value: hasEditVal.Supplier })
-    //     dispatch(BreadcrumbFilterSize(`${"Order Amount"} :${hasEditVal.OrderAmount}`))
-    //     setOrderAmount(hasEditVal.OrderAmount)
-    //     items.Status = false
-    //     dispatch(getGRN_itemMode2_Success(items))
-    //     return hasEditVal
-
-    // }, items)
-
-
 
     useEffect(() => {
         dispatch(goButtonSuccess([]))
@@ -235,7 +208,7 @@ const GRNAdd = (props) => {
     }, [supplierAddress])
 
     useEffect(() => {
-        debugger
+
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(postGRNSuccess({ Status: false }))
             dispatch(AlertState({
@@ -250,7 +223,7 @@ const GRNAdd = (props) => {
             dispatch(AlertState({
                 Type: 4,
                 Status: true,
-                Message: "error Message",
+                Message: JSON.stringify(postMsg.Message),
                 RedirectPath: false,
                 AfterResponseAction: false
             }));
@@ -301,11 +274,6 @@ const GRNAdd = (props) => {
         dispatch(BreadcrumbFilterSize(`${"Order Amount"} :${sum.toFixed(2)}`))
     }
 
-    const supplierOptions = supplier.map((i) => ({
-        value: i.id,
-        label: i.Supplier,
-    }));
-
     const pagesListColumns = [
         {//------------- ItemName column ----------------------------------
             text: "Item Name",
@@ -330,26 +298,24 @@ const GRNAdd = (props) => {
         },
         {//  ------------Quntity column -----------------------------------  
             text: "GRN-QTY",
-            dataField: "",
+            dataField: "rate",
             sort: true,
             formatter: (value, row, k) => {
-
-                console.log("formatter", row)
+                try {
+                    document.getElementById(`inpQty${k}`).value = row.inpQty
+                } catch (e) { }
                 return (
                     <span >
                         <Input type="text"
                             id={`inpQty${k}`}
                             className="text-end "
                             defaultValue={row.inpQty}
-                            disabled={((row.inpRate === 0) || row.GST === '') ? true : false}
                             onChange={(e) => {
-                                // onChange(row, e, k)
                                 val_onChange(e.target.value, row, "qty")
                             }}
                             autoComplete="off"
                             onKeyDown={(e) => handleKeyDown(e, grnItemList)} />
                     </span>
-
                 )
             },
             headerStyle: (colum, colIndex) => {
@@ -471,38 +437,52 @@ const GRNAdd = (props) => {
             text: "BatchCode",
             dataField: "",
             sort: true,
-            formatter: (value, row, k) => (
-                <Input type="text"
-                    // id={`Batch${k}`}
-                    placeholder="Batch Code..."
-                    className="text-end "
-                    defaultValue={row.BatchCode}
-                    onChange={e => { row["BatchCode"] = e.target.value }}
-                    autoComplete="off"
-                />
-            ),
+            formatter: (value, row, k) => {
+                try {
+                    document.getElementById(`Batch${k}`).value = row.BatchCode
+                } catch (e) { }
+                return (
+                    <Input type="text"
+                        id={`Batch${k}`}
+                        placeholder="Batch Code..."
+                        className="text-end "
+                        defaultValue={row.BatchCode}
+                        onChange={e => { row["BatchCode"] = e.target.value }}
+                        autoComplete="off"
+                    />
+                )
+            },
             headerStyle: (colum, colIndex) => {
                 return { width: '130px', textAlign: 'center', text: "center" };
             }
         },
-        {//------------- Batch Code column ----------------------------------
+        {//------------- Batch Date column ----------------------------------
             text: "Batch Date",
             dataField: "",
             sort: true,
-            formatter: (value, row, k) => (
-                <Flatpickr
-                    className="form-control d-block p-2 bg-white text-dark"
-                    placeholder="Batch Date..."
-                    options={{
-                        altInput: true,
-                        altFormat: "d-m-Y",
-                        dateFormat: "Y-m-d",
-                        // defaultDate: "today"
-                    }}
-                    onChange={(e, date) => { row.BatchDate = date }}
-                    onReady={(e, date) => { row.BatchDate = date }}
-                />
-            ),
+            formatter: (value, row, k) => {
+                try {
+                    // document.getElementById(`BatchDate${k}`).value = row.BatchDate
+                 const a=    flatpickr(`BatchDate${k}`)
+debugger
+
+                } catch (e) { }
+                return (
+                    <Flatpickr
+                        className="form-control d-block p-2 bg-white text-dark"
+                        placeholder="Batch Date..."
+                        id={`BatchDate${k}`}
+                        options={{
+                            altInput: true,
+                            altFormat: "d-m-Y",
+                            dateFormat: "Y-m-d",
+                            defaultDate: row.BatchDate,
+                        }}
+                        onChange={(e, date) => { row.BatchDate = date }}
+                        onReady={(e, date) => { row.BatchDate = date }}
+                    />
+                )
+            },
             headerStyle: (colum, colIndex) => {
                 return { width: '130px', textAlign: 'center', text: "center" };
             }
@@ -559,41 +539,11 @@ const GRNAdd = (props) => {
         custom: true,
     };
 
-    const GoButton_Handler = () => {
-        let supplier = supplierSelect.value
-
-        if (!supplier > 0) {
-            alert("Please Select Customer")
-            return
-        }
-
-        if (items.length > 0) {
-            if (window.confirm("Refresh Order Item...!")) {
-                dispatch(goButtonSuccess([]))
-            } else { return }
-        }
-
-        let division = 0
-        try {
-            division = JSON.parse(localStorage.getItem("roleId")).Party_id
-        } catch (e) {
-            alert(e)
-        }
-        const jsonBody = JSON.stringify({
-            Supplier: supplier,
-            EffectiveDate: grnDate
-        }
-        );
-
-        dispatch(goButton(jsonBody))
-        console.log("jsonBody", jsonBody)
-    };
-
     const copybtnOnclick = (r) => {
         const id = r.id
         const newArr = []
         let list = [...initialTableData];
-
+        debugger
         list.forEach(element => {
             debugger
             if (element.id < id) {
@@ -606,6 +556,7 @@ const GRNAdd = (props) => {
                 const ele = { ...element }
                 ele.id = element.id + 1
                 ele.delbtn = true
+                ele.inpQty = 0
                 newArr.push(ele)
             }
             else {
@@ -614,7 +565,7 @@ const GRNAdd = (props) => {
                 newArr.push(ele1)
             }
         });
-        debugger
+
         console.log("setgrnItemList", newArr)
 
         initialTableData = newArr
@@ -666,7 +617,6 @@ const GRNAdd = (props) => {
                     TaxType: "GST",
 
                 }
-                debugger
                 itemArr.push(arr)
             };
         })
@@ -796,7 +746,7 @@ const GRNAdd = (props) => {
                                             <Col xl="12">
                                                 <div className="table table-Rresponsive">
                                                     <BootstrapTable
-                                                        keyField={"Item"}
+                                                        // keyField={"id"}
                                                         responsive
                                                         bordered={false}
                                                         striped={false}

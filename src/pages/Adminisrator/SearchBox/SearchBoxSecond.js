@@ -309,8 +309,9 @@ const MySearch = () => {
                 />
                 <button className="btn btn-primary"
                     onClick={handleClick}
-                    type="butten">
-                    <i className="bx bx-search-alt align-middle" />
+                    type="button">
+                    {/* <i className="bx bx-search-alt align-middle" /> */}
+                    <i class="mdi mdi-magnify"/>
                 </button>
 
             </div>

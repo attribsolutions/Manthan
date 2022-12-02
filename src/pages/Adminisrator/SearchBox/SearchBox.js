@@ -13,7 +13,7 @@ export default function SearchBox() {
                 list.removeChild(list.firstChild)
             }
         }
-        searchInput.addEventListener("input", (e) => {
+        searchInput.addEventListener("input",(e) => {
             // inside, we will need to achieve a few things:
             // 1. declare and assign the value of the event's target to a variable AKA whatever is typed in the search bar
             let value = e.target.value

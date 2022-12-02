@@ -90,7 +90,7 @@ export const PARTYITEM_LIST='/PartyItemsList'
 export const SUBGROUP="/SubGroupMaster"
 export const SUBGROUP_LIST="/SubGroupList"
 
-export const BOM="/BOM"
+export const BillOfMaterials="/BOM"
 
 
 

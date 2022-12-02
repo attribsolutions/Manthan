@@ -80,8 +80,6 @@ const Order = (props) => {
         userAccess,
         updateMsg,
         supplierAddress,
-        termsAndCondtions,
-        pageField
     } = useSelector((state) => ({
         items: state.OrderReducer.orderItem,
         supplier: state.SupplierReducer.supplier,
@@ -115,7 +113,7 @@ const Order = (props) => {
     const hasShowModal = props.hasOwnProperty("editValue")
 
     useEffect(() => {
-        dispatch(BreadcrumbFilterSize(`${"Order Amount"} :${orderAmount}`))
+
         dispatch(goButtonSuccess([]))
 
         if ((hasShowloction || hasShowModal)) {
@@ -132,15 +130,8 @@ const Order = (props) => {
             }
 
             if (hasEditVal) {
-
-                const jsonBody = JSON.stringify({
-                    Supplier: hasEditVal.Supplier,
-                    EffectiveDate: hasEditVal.OrderDate
-                }
-                );
-                dispatch(goButton(jsonBody, hasEditVal))
+                GoButton_Handler(hasEditVal)//=======Go Button API Call
                 dispatch(BreadcrumbFilterSize(`${"Order Amount"} :${hasEditVal.OrderAmount}`))
-
                 setsupplierSelect({ label: hasEditVal.SupplierName, value: hasEditVal.Supplier })
                 setpoDate(hasEditVal.OrderDate)
                 setdeliverydate(hasEditVal.DeliveryDate)
@@ -155,6 +146,7 @@ const Order = (props) => {
                 }))
                 setTermsAndConTable(termsAndCondition)
             }
+            dispatch(BreadcrumbFilterSize(`${"Order Amount"} :${orderAmount}`))
             dispatch(editOrderIdSuccess({ Status: false }))
         }
 
@@ -185,7 +177,7 @@ const Order = (props) => {
             dispatch(AlertState({
                 Type: 4,
                 Status: true,
-                Message: "error Message",
+                Message: JSON.stringify(postMsg.Message),
                 RedirectPath: false,
                 AfterResponseAction: false
             }));
@@ -233,9 +225,7 @@ const Order = (props) => {
         label: i.Supplier,
     }));
 
-    const copybtnOnclick = (r) => {
 
-    }
     const pagesListColumns = [
         {//------------- ItemName column ----------------------------------
             text: "Item Name",
@@ -272,7 +262,7 @@ const Order = (props) => {
 
 
         },
-      
+
         {  //------------- UOM column ----------------------------------
             text: "UOM",
             dataField: "",
@@ -310,7 +300,7 @@ const Order = (props) => {
             }
 
         },
-        
+
         {//------------- Rate column ----------------------------------
             text: "Rate",
             dataField: "Rate",
@@ -349,7 +339,7 @@ const Order = (props) => {
                 return { width: '140px', textAlign: 'center' };
             }
         },
-       
+
         { //------------- GST column ----------------------------------
             text: "GST %",
             dataField: "GSTPercentage",
@@ -382,10 +372,18 @@ const Order = (props) => {
         custom: true,
     };
 
+    const GoButton_Handler = (hasEditVal = false) => {
 
-    const GoButton_Handler = () => {
+        if (hasEditVal) {
+            const jsonBody = JSON.stringify({
+                Party: hasEditVal.Supplier,
+                EffectiveDate: hasEditVal.OrderDate
+            });
+            dispatch(goButton(jsonBody, hasEditVal))
+            return
+        }
+
         let supplier = supplierSelect.value
-
         if (!supplier > 0) {
             alert("Please Select Customer")
             return
@@ -394,9 +392,7 @@ const Order = (props) => {
         if (items.length > 0) {
             if (window.confirm("Refresh Order Item...!")) {
                 dispatch(goButtonSuccess([]))
-            } else {
-                return
-            }
+            } else { return }
         }
 
         let division = 0
@@ -408,11 +404,9 @@ const Order = (props) => {
         const jsonBody = JSON.stringify({
             Party: supplier,
             EffectiveDate: podate
-        }
-        );
-
+        });
         dispatch(goButton(jsonBody))
-        console.log("jsonBody", jsonBody)
+
     };
 
     const saveHandeller = () => {
@@ -515,10 +509,6 @@ const Order = (props) => {
 
     }
 
-    const handleDataChange = (a, b, c) => {
-        debugger
-    }
-
     if (!(userAccState === "")) {
         return (
             <React.Fragment>
@@ -575,7 +565,7 @@ const Order = (props) => {
 
                             <Col md="1" className="mt-3 ">
                                 <Button type="button" color="btn btn-outline-success border-2 font-size-12 "
-                                    onClick={GoButton_Handler}>Go</Button>
+                                    onClick={(e) => GoButton_Handler()}>Go</Button>
                             </Col>
                         </div>
                     </div>
@@ -637,7 +627,6 @@ const Order = (props) => {
                                                 ...base,
                                                 border: 'non',
                                                 backgroundColor: ""
-
                                             })
                                         }}
                                         onChange={(e) => { setbillAddr(e) }}
@@ -684,7 +673,6 @@ const Order = (props) => {
                                                 <div className="table table-Rresponsive">
                                                     <BootstrapTable
                                                         keyField={"id"}
-                                                        onDataSizeChange={handleDataChange}
                                                         responsive
                                                         bordered={false}
                                                         striped={false}

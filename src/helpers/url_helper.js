@@ -29,7 +29,7 @@ export const GRN_LiST_BY_FILTERS = "/GRNFilter"
 
 //Python Logic 
 export const FOOD_ERP_POST_JWT_LOGIN = "/Login"
-export const FOOD_ERP_POST_USER_DETAILS_AFTER_LOGIN = "/GerUserDetials"
+export const FOOD_ERP_POST_USER_DETAILS_AFTER_LOGIN = "/GetUserDetails"
 export const DIVIDION_DROPDOWN_FOR_LOGIN_CHANGE_DIVSION_PAGE = "/PartyDropdownforloginpage"
 export const FOOD_ERP_POST_JWT_PASSWORD_FORGET_VERIFY_OTP = "/VerifyOTP"
 export const FOOD_ERP_POST_JWT_PASSWORD_FORGET_SEND_OTP = "/SendMail"
@@ -175,3 +175,6 @@ export const PARTY_SUB_PARTY = '/PartySubParty' // FOR POST
 //PartyItems
 export const PARTYITEMS = '/PartyItemList' // FOR Get
 
+//Bill Of Master
+export const BOM = '/Billofmaterial' 
+export const GET_ITEM_UNITS = '/GetItemUnits' 

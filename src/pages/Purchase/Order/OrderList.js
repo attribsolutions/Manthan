@@ -21,11 +21,8 @@ import Breadcrumb from "../../../components/Common/Breadcrumb";
 import { useHistory } from "react-router-dom";
 import { getGRN_itemMode2 } from "../../../store/Purchase/GRNRedux/actions";
 import { getSupplier } from "../../../store/CommonAPI/SupplierRedux/actions";
-import { excelDownCommonFunc } from "../../../components/Common/CmponentRelatedCommonFile/listPageCommonButtons";
+import { currentDate, excelDownCommonFunc } from "../../../components/Common/CmponentRelatedCommonFile/listPageCommonButtons";
 import { useMemo } from "react";
-
-let onlodTodate = null
-let onlodFromdate = null
 
 
 const OrderList = () => {
@@ -71,10 +68,9 @@ const OrderList = () => {
         dispatch(commonPageFieldListSuccess(null))
         dispatch(commonPageFieldList(pageId))
         dispatch(getSupplier());
+        goButtonHandler(true)
 
     }, []);
-
-
 
     const { userAccess, pageField, GRNitem, supplier, tableList } = reducers;
 
@@ -89,7 +85,7 @@ const OrderList = () => {
         return excelDownCommonFunc({ tableList, PageFieldMaster })
     }, [tableList])
 
-    
+
     useEffect(() => {
         const pageId = (hasPagePath === GST_ADD_Mode_2) ? 60 : 54;
         let userAcc = userAccess.find((inx) => {
@@ -102,16 +98,12 @@ const OrderList = () => {
 
     useEffect(() => {
         if (GRNitem.Status === true && GRNitem.StatusCode === 200) {
-            // GRNitem.Status = false
-            // dispatch(getGRN_itemMode2_Success(GRNitem))
             history.push({
                 pathname: GRNitem.path,
                 pageMode: GRNitem.pageMode
             })
         }
     }, [GRNitem])
-
-
 
     const onsavefunc = (list = []) => {
         var isGRNSelect = ''
@@ -148,12 +140,10 @@ const OrderList = () => {
         let FromDate
         let ToDate
 
-        if (!(onlodFromdate) || !(onlodTodate)) {
-            return
-        }
         if (onload) {
-            FromDate = onlodFromdate;
-            ToDate = onlodTodate;
+            const currentdate = currentDate()
+            FromDate = currentdate;
+            ToDate = currentdate;
         } else {
             ToDate = todate;
             FromDate = fromdate;
@@ -162,7 +152,6 @@ const OrderList = () => {
         let supplier = supplierSelect.value
         let customer = 0
         try {
-
             customer = JSON.parse(localStorage.getItem("roleId")).Party_id
         } catch (e) {
             alert(e)
@@ -176,7 +165,6 @@ const OrderList = () => {
             Customer: customer
         }
         );
-        debugger
         dispatch(getOrderListPage(jsonBody));
     }
 
@@ -188,7 +176,6 @@ const OrderList = () => {
                     newBtnView={(pageMode === ORDER_lIST) ? true : false}
                     showCount={true}
                     excelBtnView={true}
-
                     excelData={downList} />
 
                 <div className="px-2 mb-1 mt-n1" style={{ backgroundColor: "#dddddd" }} >
@@ -206,17 +193,11 @@ const OrderList = () => {
                                             altInput: true,
                                             altFormat: "d-m-Y",
                                             dateFormat: "Y-m-d",
-                                            // minDate: "today",
-                                            // maxDate: pageMode === "edit" ? podate : "",
                                             defaultDate: "today"
 
                                         }}
                                         onChange={(e, date) => { setFromdate(date) }}
-                                        onReady={(e, date) => {
-                                            onlodFromdate = date;
-                                            setFromdate(date);
-                                            goButtonHandler(true)
-                                        }}
+                                        onReady={(e, date) => { setFromdate(date) }}
                                     />
                                 </Col>
                             </FormGroup>
@@ -234,15 +215,10 @@ const OrderList = () => {
                                             altInput: true,
                                             altFormat: "d-m-Y",
                                             dateFormat: "Y-m-d",
-                                            // minDate: "today",
                                             defaultDate: "today"
                                         }}
                                         onChange={(e, date) => { setTodate(date) }}
-                                        onReady={(e, date) => {
-                                            onlodTodate = date;
-                                            setTodate(date)
-                                            goButtonHandler(true)
-                                        }}
+                                        onReady={(e, date) => { setTodate(date) }}
 
                                     />
                                 </Col>
@@ -255,9 +231,7 @@ const OrderList = () => {
                                     style={{ width: "130px" }}>Supplier Name</Label>
                                 <Col md="7">
                                     <Select
-                                        // value={"supplierSelect"}
                                         classNamePrefix="select2-Customer"
-                                        // isDisabled={"pageMode" === "edit" ? true : false}
                                         options={supplierOptions}
                                         onChange={(e) => { setsupplierSelect(e) }}
                                     />
@@ -285,8 +259,6 @@ const OrderList = () => {
                             pageMode={pageMode}
                             onsavefunc={onsavefunc}
                         />
-
-
                         : null
                 }
             </div>

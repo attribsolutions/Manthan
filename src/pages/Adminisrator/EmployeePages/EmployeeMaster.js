@@ -46,7 +46,6 @@ const AddEmployee = (props) => {
   const [designation_DropdownSelect, setDesignation_DropdownSelect] = useState("");
   const [employeeType_DropdownSelect, setEmployeeType_DropdownSelect] = useState("");
   const [State_DropdownSelect, setState_DropdownSelect] = useState("");
-  const [district_DropdownSelect, setDistrict_DropdownSelect] = useState("");
   const [company_DropdownSelect, setCompany_DropdownSelect] = useState("");
   const [party_DropdownSelect, setParty_DropdownSelect] = useState('');
   const [DOB_Date_Select, setDOB_Date_Select] = useState("");
@@ -100,8 +99,6 @@ const AddEmployee = (props) => {
 
   const [state, setState] = useState(initialFiled)
 
-
-  console.log("state", state)
   const values = { ...state.values }
   const { isError } = state;
   const { fieldLabel } = state;
@@ -226,8 +223,6 @@ const AddEmployee = (props) => {
       setEmployeeType_DropdownSelect('')
       setState_DropdownSelect('')
       setDOB_Date_Select('')
-      setDistrict_DropdownSelect('')
-      setParty_DropdownSelect('')
       setCompany_DropdownSelect('')
 
       if (pageMode === "other") {
@@ -316,7 +311,6 @@ const AddEmployee = (props) => {
   }));
 
   function EmployeeType_Dropdown_Handler(e) {
-    debugger
     dispatch(Get_CompanyName_By_EmployeeTypeID(e.value))
 
     const IsPartyConnection = employeeType.find((element) => {
@@ -324,27 +318,31 @@ const AddEmployee = (props) => {
     });
 
     if (IsPartyConnection.IsPartyConnection) {
-      Party_Dropdown_Handler()
       setPartyDropDownShow_UI(true)
     }
     else {
       setPartyDropDownShow_UI(false)
       setParty_DropdownSelect([{ value: null }])
     }
-
+    setState((i) => {
+      const a = { ...i }
+      a.values.CompanyName = "";
+      a.values.EmployeeParties = "";
+      a.hasValid.CompanyName.valid = false
+      a.hasValid.EmployeeParties.valid = false
+      return a
+  })
   }
 
   function State_Dropdown_Handler(e, v) {
     dispatch(getDistrictOnState(e.value))
     setState_DropdownSelect(e)
-  }
-
-  function District_Dropdown_Handler(e, v) {
-    setDistrict_DropdownSelect(e)
-  }
-
-  function Party_Dropdown_Handler(e, v) {
-    setParty_DropdownSelect(e)
+    setState((i) => {
+      const a = { ...i }
+      a.values.DistrictName = "";
+      a.hasValid.DistrictName.valid = false
+      return a
+  })
   }
 
   function Company_Dropdown_Handler(e, v) {
@@ -600,7 +598,6 @@ const AddEmployee = (props) => {
                               options={District_DropdownOptions}
                               onChange={(hasSelect, evn) => {
                                 onChangeSelect({ hasSelect, evn, state, setState, })
-                                District_Dropdown_Handler(hasSelect)
                               }}
 
                             />
@@ -678,7 +675,6 @@ const AddEmployee = (props) => {
                                 options={Party_DropdownOptions}
                                 onChange={(hasSelect, evn) => {
                                   onChangeSelect({ hasSelect, evn, state, setState });
-                                  Party_Dropdown_Handler(hasSelect)
                                 }
                                 }
                                 classNamePrefix="dropdown"
