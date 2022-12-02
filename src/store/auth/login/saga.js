@@ -64,7 +64,7 @@ function* afterLoginUserDetails_genFun({ id }) {
     })
     yield put(getUserDetailsActionSuccess(response.Data))
     localStorage.setItem("UserName", (response.Data.UserName))
-
+    localStorage.setItem("Company", response.Data.CompanyID)
     var employee = response.Data.EmployeeID;
 
     const response2 = yield call(divisionDropdown_Forlogin_ChangeDivisionPage_ApiCall, employee,)
