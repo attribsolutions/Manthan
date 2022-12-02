@@ -30,7 +30,7 @@ import Select from "react-select";
 import SaveButton from "../../../../components/Common/CommonSaveButton";
 import ItemTab from "./ItemQuantityTab";
 import { GetItemUnitsDrodownAPI, postBOM, postBOMSuccess } from "../../../../store/Purchase/BOMRedux/action";
-import { BillOfMaterials } from "../../../../routes/route_url";
+import { BillOfMaterials, BillOfMaterialsList } from "../../../../routes/route_url";
 
 const BOMMaster = (props) => {
 
@@ -153,7 +153,7 @@ const BOMMaster = (props) => {
                     Type: 1,
                     Status: true,
                     Message: postMsg.Message,
-                    RedirectPath: BillOfMaterials,
+                    RedirectPath: BillOfMaterialsList,
                 }))
             }
         }
@@ -198,7 +198,6 @@ const BOMMaster = (props) => {
         label: index.Name,
     }));
 
-
     const Unit_DropdownOptions = GetItemUnits.map((data) => ({
         value: data.value,
         label: data.label
@@ -211,8 +210,8 @@ const BOMMaster = (props) => {
         dispatch(GetItemUnitsDrodownAPI(jsonBody))
         setState((i) => {
             const a = { ...i }
-            a.values.Unit = "";
-            a.hasValid.Unit.valid = false
+            a.values.UnitName = "";
+            a.hasValid.UnitName.valid = false
             return a
         })
     }
@@ -239,7 +238,7 @@ const BOMMaster = (props) => {
                 Comment: values.Comment,
                 IsActive: values.IsActive,
                 Item: values.ItemName.value,
-                Unit: values.Unit.UnitName,
+                Unit: values.UnitName.value,
                 CreatedBy: 1,
                 Company: 1,
                 BOMItems: BOMItems
@@ -294,8 +293,8 @@ const BOMMaster = (props) => {
                                                             altInput: true,
                                                             altFormat: "F j, Y",
                                                             dateFormat: "Y-m-d",
-                                                            minDate: new Date().fp_incr("n"),
-                                                            maxDate: new Date().fp_incr(0) // 14 days from now"0,''"
+                                                            // minDate: new Date().fp_incr("n"),
+                                                            // maxDate: new Date().fp_incr(0) // 14 days from now"0,''"
                                                         }}
                                                         onChange={(y, v, e) => { onChangeDate({ e, v, state, setState }) }}
                                                     />
