@@ -19,7 +19,6 @@ import { Breadcrumb_inputName } from "../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
 import { Tbody, Thead } from "react-super-responsive-table";
 import { AlertState } from "../../../store/actions";
-import { CommonGetRoleAccessFunction } from "../../../components/Common/CommonGetRoleAccessFunction";
 import { PostMethodForVehicleMaster, getMethodForVehicleList, getMethod_DriverList_ForDropDown, getMethod_VehicleTypes_ForDropDown, PostMethod_ForVehicleMasterSuccess, getMethod_ForVehicleListSuccess, editVehicleTypeSuccess, updateVehicleTypeID } from "../../../store/Administrator/VehicleRedux/action";
 import { get_Division_ForDropDown, } from "../../../store/Administrator/ItemsRedux/action";
 import { useHistory } from "react-router-dom";

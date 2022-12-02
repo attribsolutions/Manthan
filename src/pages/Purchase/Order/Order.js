@@ -115,7 +115,7 @@ const Order = (props) => {
     useEffect(() => {
 
         dispatch(goButtonSuccess([]))
-
+        dispatch(BreadcrumbFilterSize(`${"Order Amount"} :0:00`))
         if ((hasShowloction || hasShowModal)) {
 
             let hasEditVal = null
@@ -392,6 +392,7 @@ const Order = (props) => {
         if (items.length > 0) {
             if (window.confirm("Refresh Order Item...!")) {
                 dispatch(goButtonSuccess([]))
+                dispatch(BreadcrumbFilterSize(`${"Order Amount"} :0:00`))
             } else { return }
         }
 

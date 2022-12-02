@@ -11,13 +11,10 @@ import {
     Row,
 
 } from "reactstrap";
-import Select from "react-select";
 import { MetaTags } from "react-meta-tags";
 import Breadcrumb from "../../../components/Common/Breadcrumb3";
-import { AvField, AvForm, AvInput, } from "availity-reactstrap-validation";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useHistory } from "react-router-dom";
-import { CommonGetRoleAccessFunction } from "../../../components/Common/CommonGetRoleAccessFunction";
+import {useHistory } from "react-router-dom";
 import { Breadcrumb_inputName, AlertState, commonPageField } from "../../../store/actions";
 import {
     editPartyTypeSuccess,
@@ -28,7 +25,6 @@ import {
 } from "../../../store/Administrator/PartyTypeRedux/action";
 import {
     comAddPageFieldFunc,
-    formValChange,
     formValid,
     initialFiledFunc,
     onChangeText
@@ -41,16 +37,14 @@ const PartyType = (props) => {
     const dispatch = useDispatch();
     const history = useHistory();
     const [modalCss, setModalCss] = useState(false);
-    const [EditData, setEditData] = useState([]);
     const [pageMode, setPageMode] = useState("save");
     const [userPageAccessState, setUserPageAccessState] = useState("");
 
     //Access redux store Data /  'save_ModuleSuccess' action data
 
-    const { PostAPIResponse, PartyTypes, pageField, userAccess } =
+    const { PostAPIResponse,  pageField, userAccess } =
         useSelector((state) => ({
             PostAPIResponse: state.PartyTypeReducer.PostData,
-            PartyTypes: state.PartyMasterReducer.PartyTypes,
             pageField: state.CommonPageFieldReducer.pageField,
             userAccess: state.Login.RoleAccessUpdateData,
         }));

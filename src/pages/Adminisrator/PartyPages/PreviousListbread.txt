@@ -21,7 +21,6 @@ import {
 } from '../../../store/Administrator/PartyRedux/action';
 import PartyMaster from './PartyMaster';
 import { MetaTags } from "react-meta-tags";
-import { CommonGetRoleAccessFunction } from '../../../components/Common/CommonGetRoleAccessFunction';
 import { useHistory } from 'react-router-dom';
 import { listPageCommonButtonFunction } from '../../../components/Common/CmponentRelatedCommonFile/listPageCommonButtons';
 import { mySearchProps } from "../../../components/Common/CmponentRelatedCommonFile/SearchBox/MySearch";
