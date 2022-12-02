@@ -175,3 +175,6 @@ export const PARTY_SUB_PARTY = '/PartySubParty' // FOR POST
 //PartyItems
 export const PARTYITEMS = '/PartyItemList' // FOR Get
 
+//Bill Of Master
+export const BOM = '/Billofmaterial' 
+export const GET_ITEM_UNITS = '/GetItemUnits' 

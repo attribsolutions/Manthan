@@ -197,12 +197,7 @@ const userRoutes = [
 
   // { path:"/demo", component: demo },
 
-
-
-
-
-
-  { path:path.BOM, component: BOMMaster },
+  { path:path.BillOfMaterials, component: BOMMaster },
 
 
   { path: path.SEARCH_BOX2, component: SearchBoxSecond },
@@ -211,10 +206,6 @@ const userRoutes = [
   { path: "/", exact: true, component: () => <Redirect to="/Dashboard" /> },
   { path: "/auth-404", component: Error404 },
   { path: "/auth-500", component: Error500 },
-
-
-  
-
 
 
 
