@@ -20,7 +20,6 @@ import { Breadcrumb_inputName, commonPageField, commonPageFieldSuccess } from ".
 import { useDispatch, useSelector } from "react-redux";
 import { Tbody, Thead } from "react-super-responsive-table";
 import { AlertState } from "../../../store/actions";
-import { CommonGetRoleAccessFunction } from "../../../components/Common/CommonGetRoleAccessFunction";
 import {
     PostMethodForVehicleMaster,
     getMethodForVehicleList,

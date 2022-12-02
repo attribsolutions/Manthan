@@ -23,7 +23,6 @@ import {
 import ItemsMaster from "./ItemMaster/index";
 import { MetaTags } from "react-meta-tags";
 import { useHistory } from "react-router-dom";
-import { CommonGetRoleAccessFunction } from "../../../components/Common/CommonGetRoleAccessFunction";
 import { listPageCommonButtonFunction } from "../../../components/Common/CmponentRelatedCommonFile/listPageCommonButtons";
 
 const ItemsList = (props) => {

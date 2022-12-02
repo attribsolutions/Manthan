@@ -38,17 +38,9 @@ const RoleAccessListPage = () => {
         PostMessage_ForCopyRoleAccess: state.RoleAccessReducer.PostMessage_ForCopyRoleAccess,
 
     }));
-
-    // useEffect(() => {
-    //     const userAcc = CommonGetRoleAccessFunction(history)
-    //     if (!(userAcc === undefined)) {
-    //         setUserPageAccessState(userAcc)
-    //     }
-    // }, [history])
+    
 
     useEffect(() => {
-        // debugger
-        // const userAcc = CommonGetRoleAccessFunction(history)
         const locationPath = history.location.pathname
         let userAcc = RoleAccessModifiedinSingleArray.find((inx) => {
             return (`/${inx.ActualPagePath}` === locationPath)

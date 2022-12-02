@@ -22,7 +22,6 @@ import {
     updateCategoryID
 } from "../../../store/Administrator/CategoryRedux/action";
 import { AlertState } from "../../../store/actions";
-import { CommonGetRoleAccessFunction } from "../../../components/Common/CommonGetRoleAccessFunction";
 import { useHistory } from "react-router-dom";
 
 const CategoryMaster = (props) => {
