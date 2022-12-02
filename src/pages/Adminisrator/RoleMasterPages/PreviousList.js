@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Breadcrumbs from "../../../components/Common/Breadcrumb";
-import { Button, Col, Modal, Row } from "reactstrap";
+import {  Col, Modal, Row } from "reactstrap";
 import {
   getRole,
   deleteRole,
@@ -17,13 +17,11 @@ import paginationFactory, {
 import ToolkitProvider, { Search } from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 import { useSelector, useDispatch } from "react-redux";
-import Breadcrumb from "../../../components/Common/Breadcrumb"
 
 import "../../../assets/scss/CustomTable2/datatables.scss";
 import RoleMaster from "./RoleMaster";
 import { MetaTags } from "react-meta-tags";
 import { useHistory } from "react-router-dom";
-import { CommonGetRoleAccessFunction } from "../../../components/Common/CommonGetRoleAccessFunction";
 import { listPageCommonButtonFunction } from "../../../components/Common/CmponentRelatedCommonFile/listPageCommonButtons";
 import { AlertState } from "../../../store/actions";
 
