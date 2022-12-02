@@ -25,7 +25,6 @@ function* Post_BOM_GenratorFunction({ data }) {
 // GetItemUnits API
 function* GetItemUnits_saga({ data }) {
     try {
-      debugger
       const response = yield call(GetItemUnits_For_Dropdown, data);
       const UnitDataConvert =response.Data.ItemUnitDetails.map((data) => ({
         value: data.id,
@@ -34,7 +33,7 @@ function* GetItemUnits_saga({ data }) {
     }))
       yield put(GetItemUnitsDrodownAPISuccess(UnitDataConvert));
     } catch (error) {
-      console.log("GetDistrictOnState_saga page error", error);
+      console.log("GetItemUnits saga page error", error);
     }
   }
 function* BOMSaga() {
