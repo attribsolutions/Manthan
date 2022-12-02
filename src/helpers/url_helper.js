@@ -178,3 +178,4 @@ export const PARTYITEMS = '/PartyItemList' // FOR Get
 //Bill Of Master
 export const BOM = '/Billofmaterial' 
 export const GET_ITEM_UNITS = '/GetItemUnits' 
+export const BOM_LiST = "/BomFilter"
