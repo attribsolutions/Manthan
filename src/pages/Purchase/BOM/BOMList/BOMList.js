@@ -116,7 +116,7 @@ return (
         <div className="page-content">
             <Breadcrumb
                 pageHeading={userAccState.PageHeading}
-                newBtnView={(pageMode === ORDER_lIST) ? true : false}
+                newBtnView={true}
                 showCount={true}
                 excelBtnView={true}
                 excelData={downList} />
