@@ -1,9 +1,13 @@
-import { GET_ITEM_UNITS_DROPDOWN_API_SUCCESS,
-     POST_BOM_SUCCESS } from "./actionTypes"
+import {
+    GET_BOM_LIST_PAGE_SUCCESS,
+    GET_ITEM_UNITS_DROPDOWN_API_SUCCESS,
+    POST_BOM_SUCCESS
+} from "./actionTypes"
 
 const INIT_STATE = {
     PostData: { Status: false },
-    GetItemUnits:[]
+    GetItemUnits: [],
+    BOMList:[]
 }
 
 const BOMReducer = (state = INIT_STATE, action) => {
@@ -22,6 +26,12 @@ const BOMReducer = (state = INIT_STATE, action) => {
                 GetItemUnits: action.payload,
             };
 
+        // BOM List Page 
+        case GET_BOM_LIST_PAGE_SUCCESS:
+            return {
+                ...state,
+                BOMList: action.payload,
+            }
         default:
             return state
     }

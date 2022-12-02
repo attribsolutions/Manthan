@@ -80,8 +80,6 @@ const Order = (props) => {
         userAccess,
         updateMsg,
         supplierAddress,
-        termsAndCondtions,
-        pageField
     } = useSelector((state) => ({
         items: state.OrderReducer.orderItem,
         supplier: state.SupplierReducer.supplier,
@@ -117,7 +115,7 @@ const Order = (props) => {
     useEffect(() => {
 
         dispatch(goButtonSuccess([]))
-
+        dispatch(BreadcrumbFilterSize(`${"Order Amount"} :0:00`))
         if ((hasShowloction || hasShowModal)) {
 
             let hasEditVal = null
@@ -394,6 +392,7 @@ const Order = (props) => {
         if (items.length > 0) {
             if (window.confirm("Refresh Order Item...!")) {
                 dispatch(goButtonSuccess([]))
+                dispatch(BreadcrumbFilterSize(`${"Order Amount"} :0:00`))
             } else { return }
         }
 

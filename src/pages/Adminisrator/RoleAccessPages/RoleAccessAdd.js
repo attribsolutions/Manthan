@@ -1,23 +1,30 @@
 import React, { useEffect, useRef, useState } from "react";
 import Breadcrumb from "../../../components/Common/Breadcrumb3";
 import { Card, CardBody, Col, Container, Row, Label, Input, CardHeader, FormGroup, Button, Table, } from "reactstrap";
-import { AvForm, AvGroup, AvField, AvInput } from "availity-reactstrap-validation";
 import { useDispatch, useSelector } from "react-redux";
 import { AlertState } from "../../../store/Utilites/CustomAlertRedux/actions";
 import Select from "react-select";
 import {
-    editPartyIDSuccess, getDistrictOnState, getDistrictOnStateSuccess, getDivisionTypesID,
     getPartyListAPI,
-    GetPartyTypeByDivisionTypeID, postPartyData, postPartyDataSuccess, updatePartyID
+    GetPartyTypeByDivisionTypeID,
 } from "../../../store/Administrator/PartyRedux/action";
 import { Tbody, Thead } from "react-super-responsive-table";
 import { MetaTags } from "react-meta-tags";
 // import { getRoles } from "../../../store/Administrator/UserRegistrationRedux/actions";
-import { AddPageHandlerForRoleAccessListPage, GetHpageListData, getH_Modules, getPageAccess_DropDown_API, GetRoleListForRoleAccessListPage, getRoles, GO_Button_HandlerForRoleAccessListPage, GO_Button_HandlerForRoleAccessListPage_Success, PageDropdownForRoleAccessList, PageDropdownForRoleAccessList_Success, PageMasterForRoleAccessLit, PostMethodForRoleAccessListPage, PostMethod_ForRoleAccessListPage_Success, roleAceessAction } from "../../../store/actions";
+import {
+    AddPageHandlerForRoleAccessListPage,
+    getPageAccess_DropDown_API,
+    getRoles,
+    GO_Button_HandlerForRoleAccessListPage,
+    GO_Button_HandlerForRoleAccessListPage_Success,
+    PageDropdownForRoleAccessList,
+    PageDropdownForRoleAccessList_Success,
+    PostMethodForRoleAccessListPage,
+    PostMethod_ForRoleAccessListPage_Success,
+} from "../../../store/actions";
 import { fetchModelsList } from "../../../store/actions";
 
-import { useHistory, useLocation, useParams } from "react-router-dom";
-import { CommonGetRoleAccessFunction } from "../../../components/Common/CommonGetRoleAccessFunction";
+import { useHistory, } from "react-router-dom";
 import "./table-fixed.scss"
 const RoleAccessAdd = (props) => {
 
@@ -63,15 +70,15 @@ const RoleAccessAdd = (props) => {
         RoleAccessModifiedinSingleArray: state.Login.RoleAccessUpdateData,
     }));
 
-console.log("PageAccess",PageAccess)
-console.log("ModuleData",ModuleData)
-console.log("PageDropdownForRoleAccess",PageDropdownForRoleAccess)
-console.log("AddPage_PageMasterListForRoleAccess_Redux",AddPage_PageMasterListForRoleAccess_Redux)
-console.log("GO_buttonPageMasterListForRoleAccess_Redux",GO_buttonPageMasterListForRoleAccess_Redux)
-console.log("PostMessage_ForRoleAccessList",PostMessage_ForRoleAccessList)
-console.log("Roles",Roles)
-console.log("PartyTypes",PartyTypes)
-console.log("RoleAccessModifiedinSingleArray",RoleAccessModifiedinSingleArray)
+    console.log("PageAccess", PageAccess)
+    console.log("ModuleData", ModuleData)
+    console.log("PageDropdownForRoleAccess", PageDropdownForRoleAccess)
+    console.log("AddPage_PageMasterListForRoleAccess_Redux", AddPage_PageMasterListForRoleAccess_Redux)
+    console.log("GO_buttonPageMasterListForRoleAccess_Redux", GO_buttonPageMasterListForRoleAccess_Redux)
+    console.log("PostMessage_ForRoleAccessList", PostMessage_ForRoleAccessList)
+    console.log("Roles", Roles)
+    console.log("PartyTypes", PartyTypes)
+    console.log("RoleAccessModifiedinSingleArray", RoleAccessModifiedinSingleArray)
 
     useEffect(() => {
 
@@ -265,7 +272,7 @@ console.log("RoleAccessModifiedinSingleArray",RoleAccessModifiedinSingleArray)
     }
 
     const GoButton_Handler = () => {
-debugger
+        debugger
         var division = division_dropdown_Select.value
         var role = role_dropdown_Select.value
         if (division === undefined) {
