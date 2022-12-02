@@ -42,7 +42,6 @@ const BOMMaster = (props) => {
     const [modalCss, setModalCss] = useState(false);
     const [pageMode, setPageMode] = useState("save");
     const [userPageAccessState, setUserPageAccessState] = useState('');
-    const [activeTab1, setactiveTab1] = useState("1")
     const [ItemTabDetails, setItemTabDetails] = useState([])
 
     const initialFiled = {
@@ -57,11 +56,6 @@ const BOMMaster = (props) => {
 
     const [state, setState] = useState(initialFiledFunc(initialFiled))
 
-    const toggle1 = tab => {
-        if (activeTab1 !== tab) {
-            setactiveTab1(tab)
-        }
-    }
     //Access redux store Data /  'save_ModuleSuccess' action data
     const {
         postMsg,
@@ -73,14 +67,13 @@ const BOMMaster = (props) => {
         GetItemUnits
     } = useSelector((state) => ({
         postMsg: state.BOMReducer.PostData,
-        GetItemUnits: state.BOMReducer.GetItemUnits,
         updateMsg: state.GroupTypeReducer.updateMessage,
         userAccess: state.Login.RoleAccessUpdateData,
         pageField: state.CommonPageFieldReducer.pageField,
+        GetItemUnits: state.BOMReducer.GetItemUnits,
         Items: state.ItemMastersReducer.pages,
-        Unit: state.ItemMastersReducer.BaseUnit,
     }));
-    console.log(GetItemUnits)
+
     useEffect(() => {
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(69))
@@ -206,7 +199,7 @@ const BOMMaster = (props) => {
     }));
 
 
-    const Unit_DropdownOptions =GetItemUnits.map((data) => ({
+    const Unit_DropdownOptions = GetItemUnits.map((data) => ({
         value: data.value,
         label: data.label
     }))
@@ -216,6 +209,12 @@ const BOMMaster = (props) => {
             Item: e.value,
         });
         dispatch(GetItemUnitsDrodownAPI(jsonBody))
+        setState((i) => {
+            const a = { ...i }
+            a.values.Unit = "";
+            a.hasValid.Unit.valid = false
+            return a
+        })
     }
 
     const values = { ...state.values }
@@ -242,6 +241,7 @@ const BOMMaster = (props) => {
                 Item: values.ItemName.value,
                 Unit: values.Unit.value,
                 CreatedBy: 1,
+                Company: 1,
                 BOMItems: BOMItems
             });
 
@@ -337,7 +337,8 @@ const BOMMaster = (props) => {
                                                             options={ItemDropdown_Options}
                                                             onChange={(hasSelect, evn) => {
                                                                 onChangeSelect({ hasSelect, evn, state, setState });
-                                                                Items_Dropdown_Handler(hasSelect)
+                                                                Items_Dropdown_Handler(hasSelect);
+                                                                dispatch(Breadcrumb_inputName(hasSelect.label))
                                                             }
                                                             }
 

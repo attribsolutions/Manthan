@@ -13,6 +13,7 @@ import Select from "react-select";
 import { getBaseUnit_ForDropDown, getItemList } from '../../../../../store/actions';
 import { useDispatch, useSelector } from 'react-redux';
 import BOMTable from './Table';
+import { GetItemUnitsDrodownAPI } from '../../../../../store/Purchase/BOMRedux/action';
 
 function ItemTab(props) {
 
@@ -21,9 +22,9 @@ function ItemTab(props) {
     const [ItemQuantity, setItemQuantity] = useState('');
     const [unitSelect, setUnitSelect] = useState('');
 
-    const { Items, Unit } = useSelector((state) => ({
+    const { Items, GetItemUnits } = useSelector((state) => ({
         Items: state.ItemMastersReducer.pages,
-        Unit: state.ItemMastersReducer.BaseUnit,
+        GetItemUnits: state.BOMReducer.GetItemUnits,
     }));
 
     useEffect(() => {
@@ -37,13 +38,18 @@ function ItemTab(props) {
         label: index.Name,
     }));
 
-    const Unit_DropdownOptions = Unit.map((data) => ({
-        value: data.id,
-        label: data.Name
+    const Unit_DropdownOptions = GetItemUnits.map((data) => ({
+        value: data.value,
+        label: data.label
     }));
 
     const ContentItem_Handler = (event) => {
+        const jsonBody = JSON.stringify({
+            Item: event.value,
+        });
+        dispatch(GetItemUnitsDrodownAPI(jsonBody))
         setContentItemSelect(event);
+        setUnitSelect('')
     };
 
     const Unit_Handler = (event) => {
