@@ -1,9 +1,9 @@
 import { call, put, takeEvery } from "redux-saga/effects";
-import { BOM_ListPage_API, BOM_Post_API, GetItemUnits_For_Dropdown } from "../../../helpers/backend_helper";
+import { BOM_ListPage_API, BOM_Post_API, editBOMListID_forBOMPage_ApiCall, GetItemUnits_For_Dropdown } from "../../../helpers/backend_helper";
 import { AlertState } from "../../Utilites/CustomAlertRedux/actions";
 import { SpinnerState } from "../../Utilites/Spinner/actions";
-import { getBOMListPageSuccess, GetItemUnitsDrodownAPISuccess, postBOMSuccess } from "./action";
-import { GET_BOM_LIST_PAGE, GET_ITEM_UNITS_DROPDOWN_API, POST_BOM } from "./actionTypes";
+import { editBOMListSuccess, getBOMListPageSuccess, GetItemUnitsDrodownAPISuccess, postBOMSuccess } from "./action";
+import { EDIT_BOM_LIST_ID, GET_BOM_LIST_PAGE, GET_ITEM_UNITS_DROPDOWN_API, POST_BOM } from "./actionTypes";
 
 //post api
 function* Post_BOM_GenratorFunction({ data }) {
@@ -55,10 +55,29 @@ function* get_BOMList_GenFunc({ filters }) {
     }));
   }
 }
+
+// edit List page
+function* editBOMListGenFunc({ id1, id2, pageMode }) {
+  debugger
+  yield put(SpinnerState(true))
+  try {
+    const response = yield call(editBOMListID_forBOMPage_ApiCall, id1, id2);
+    response.pageMode = pageMode
+    yield put(SpinnerState(false))
+    yield put(editBOMListSuccess(response));
+  } catch (error) {
+    yield put(SpinnerState(false))
+    yield put(AlertState({
+      Type: 4,
+      Status: true, Message: "500 Error BOM Edit Method ",
+    }));
+  }
+}
 function* BOMSaga() {
   yield takeEvery(POST_BOM, Post_BOM_GenratorFunction)
   yield takeEvery(GET_ITEM_UNITS_DROPDOWN_API, GetItemUnits_saga)
   yield takeEvery(GET_BOM_LIST_PAGE, get_BOMList_GenFunc)
+  yield takeEvery(EDIT_BOM_LIST_ID, editBOMListGenFunc)
 }
 
 export default BOMSaga;

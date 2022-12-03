@@ -1,4 +1,5 @@
 import {
+    EDIT_BOM_LIST_ID_SUCCESS,
     GET_BOM_LIST_PAGE_SUCCESS,
     GET_ITEM_UNITS_DROPDOWN_API_SUCCESS,
     POST_BOM_SUCCESS
@@ -7,7 +8,8 @@ import {
 const INIT_STATE = {
     PostData: { Status: false },
     GetItemUnits: [],
-    BOMList:[]
+    BOMList: [],
+    editData: { Status: false,},
 }
 
 const BOMReducer = (state = INIT_STATE, action) => {
@@ -31,6 +33,12 @@ const BOMReducer = (state = INIT_STATE, action) => {
             return {
                 ...state,
                 BOMList: action.payload,
+            }
+        //edit list page
+        case EDIT_BOM_LIST_ID_SUCCESS:
+            return {
+                ...state,
+                editData: action.payload,
             }
         default:
             return state
