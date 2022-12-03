@@ -40,7 +40,8 @@ import {
 } from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
 // import { getGroupList } from "../../../store/Administrator/GroupRedux/action";
 import { SUBGROUP_LIST } from "../../../routes/route_url"
-import SaveButton from "../../../components/Common/CommonSaveButton"
+import SaveButton from "../../../components/Common/ComponentRelatedCommonFile/CommonSaveButton";
+
 
 const SubGroupMaster = (props) => {
 

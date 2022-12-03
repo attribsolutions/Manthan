@@ -1,8 +1,12 @@
 
 
 export const basicAmount = i => {
+    let rate = 0
+    let qty = 0
+    if (!(i.inpRate == '')) { rate = i.inpRate; };
+    if (!(i.inpQty == '')) { qty = i.inpQty; };
 
-    let val = parseFloat(i.inpRate) * parseFloat(i.inpQty)
+    let val = parseFloat(rate) * parseFloat(qty)
     if (!val) {
         val = 0
     }
@@ -18,7 +22,7 @@ export const GstAmount = (i) => {
 }
 
 export const totalAmount = (i) => {
-    debugger
+
     const gstAmt = GstAmount(i);
     const baseAmt = basicAmount(i);
     const total = gstAmt + parseFloat(baseAmt)

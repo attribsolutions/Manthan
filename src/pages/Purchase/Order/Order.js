@@ -29,13 +29,12 @@ import {
     updateOrderIdSuccess
 } from "../../../store/Purchase/OrderPageRedux/actions";
 import { getSupplier, getSupplierAddress } from "../../../store/CommonAPI/SupplierRedux/actions"
-import { countlabelFunc } from "../../../components/Common/ComponentRelatedCommonFile/CommonMasterListPage";
 import { AlertState, BreadcrumbFilterSize } from "../../../store/actions";
 import { basicAmount, GstAmount, handleKeyDown, totalAmount } from "./OrderPageCalulation";
 import '../../Order/div.css'
 
 import { ORDER_lIST } from "../../../routes/route_url";
-import SaveButton from "../../../components/Common/CommonSaveButton";
+import SaveButton from "../../../components/Common/ComponentRelatedCommonFile/CommonSaveButton";
 
 import { getTermAndCondition } from "../../../store/Administrator/TermsAndCondtionsRedux/actions";
 
@@ -204,7 +203,7 @@ const Order = (props) => {
 
 
     function val_onChange(val, row, type) {
-        debugger
+
         if (type === "qty") {
             row["inpQty"] = val;
         }
@@ -239,7 +238,8 @@ const Order = (props) => {
             dataField: "",
             sort: true,
             formatter: (value, row, k) => {
-                if (row.inpRate === undefined) { row["inpRate"] = 0 }
+                if (row.inpRate === undefined) { row["inpRate"] = '' }
+                if (row.inpQty === undefined) { row["inpQty"] = '' }
                 if (row.totalAmount === undefined) { row["totalAmount"] = 0 }
                 return (
 
@@ -247,9 +247,16 @@ const Order = (props) => {
                         <Input type="text"
                             id={`inpQty${k}`}
                             defaultValue={row.inpQty}
-                            disabled={((row.inpRate === 0) || (row.GSTPercentage === '')) ? true : false}
+                            key={row.inpQty}
+                            // disabled={((row.inpRate === 0) || (row.GSTPercentage === '')) ? true : false}
                             onChange={(e) => {
-                                val_onChange(e.target.value, row, "qty")
+                                const val = e.target.value
+                                let isnum = /^\d+$/.test(val);
+                                if ((typeof val == 'number') || (val === '')) {
+                                    val_onChange(val, row, "qty")
+                                } else {
+                                    document.getElementById(`inpQty${k}`).value = row.inpQty
+                                }
                             }}
                             autoComplete="off"
                             onKeyDown={(e) => handleKeyDown(e, items)} />
@@ -317,18 +324,9 @@ const Order = (props) => {
                             disabled={(row.GST === '') ? true : false}
                             onChange={e => {
                                 row["inpRate"] = e.target.value;
-                                const qty = document.getElementById(`inpQty${k}`)
                                 const val = e.target.value
-                                if (val > 0) {
+                                val_onChange(val, row, "rate")
 
-                                    val_onChange(val, row, "rate")
-                                    qty.disabled = false
-                                } else {
-                                    qty.value = ''
-                                    row["inpQty"] = 0;
-                                    val_onChange(0, row, "rate")
-                                    qty.disabled = true
-                                }
                             }}
                             onKeyDown={(e) => handleKeyDown(e, items)}
                         />
@@ -425,10 +423,14 @@ const Order = (props) => {
             alert(e)
             return
         }
-
+        const validMsg = []
         const itemArr = []
         items.forEach(i => {
-            if ((i.inpQty > 0)) {
+            if ((i.inpQty > 0) && !(i.inpRate > 0)) {
+                validMsg.push(`${i.Name}:  This Item Rate Is Require...`);
+            }
+
+            if ((i.inpQty > 0) && (i.inpRate > 0)) {
                 const basicAmt = parseFloat(basicAmount(i))
                 const cgstAmt = (GstAmount(i))
 
@@ -457,6 +459,16 @@ const Order = (props) => {
         })
         const termsAndCondition = termsAndConTable.map(i => ({ TermsAndCondition: i.value }))
 
+        if (validMsg.length > 0) {
+            dispatch(AlertState({
+                Type: 4,
+                Status: true,
+                Message: JSON.stringify(validMsg),
+                RedirectPath: false,
+                AfterResponseAction: false
+            }));
+            return
+        }
         if (itemArr.length === 0) {
             dispatch(AlertState({
                 Type: 4,

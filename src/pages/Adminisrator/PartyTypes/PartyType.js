@@ -30,7 +30,8 @@ import {
     onChangeText
 } from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
 import { PARTYTYPE_lIST } from "../../../routes/route_url";
-import SaveButton from "../../../components/Common/CommonSaveButton";
+import SaveButton from "../../../components/Common/ComponentRelatedCommonFile/CommonSaveButton";
+
 
 const PartyType = (props) => {
     const formRef = useRef(null);

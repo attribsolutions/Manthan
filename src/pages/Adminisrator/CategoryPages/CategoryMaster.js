@@ -33,7 +33,7 @@ import {
 
 } from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
 import { CATEGORY_lIST } from "../../../routes/route_url";
-import SaveButton from "../../../components/Common/CommonSaveButton";
+import SaveButton from "../../../components/Common/ComponentRelatedCommonFile/CommonSaveButton";
 
 const CategoryMaster = (props) => {
 

@@ -24,7 +24,8 @@ import {
     initialFiledFunc,
     onChangeText
 } from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
-import SaveButton from "../../../components/Common/CommonSaveButton";
+import SaveButton from "../../../components/Common/ComponentRelatedCommonFile/CommonSaveButton";
+
 import { EditTermsAndCondtions_Success, postTermAndCondition, postTermAndConditionSuccess, UpdateTermsAndCondtions, UpdateTermsAndCondtions_Success } from "../../../store/Administrator/TermsAndCondtionsRedux/actions";
 import { TERMS_AND_CONDITION_LIST } from "../../../routes/route_url";
 

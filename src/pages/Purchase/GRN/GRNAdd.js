@@ -35,12 +35,10 @@ import { basicAmount, GstAmount, handleKeyDown, totalAmount } from "../Order/Ord
 import '../../Order/div.css'
 
 import { GRN_lIST, ORDER_lIST, ROLE } from "../../../routes/route_url";
-import SaveButton, { CreatedBy } from "../../../components/Common/CommonSaveButton";
-
-import { getTermAndCondition } from "../../../store/Administrator/TermsAndCondtionsRedux/actions";
+import SaveButton, { CreatedBy } from "../../../components/Common/ComponentRelatedCommonFile/CommonSaveButton";
 
 import Breadcrumb from "../../../components/Common/Breadcrumb3";
-import { getGRN_itemMode2, getGRN_itemMode2_Success, getGRN_itemMode3, postGRN, postGRNSuccess } from "../../../store/Purchase/GRNRedux/actions";
+import { getGRN_itemMode2_Success, getGRN_itemMode3, postGRN, postGRNSuccess } from "../../../store/Purchase/GRNRedux/actions";
 import GRNList from "./GRNList";
 import { useMemo } from "react";
 import flatpickr from "flatpickr";
@@ -464,8 +462,8 @@ const GRNAdd = (props) => {
             formatter: (value, row, k) => {
                 try {
                     // document.getElementById(`BatchDate${k}`).value = row.BatchDate
-                 const a=    flatpickr(`BatchDate${k}`)
-debugger
+                    const a = flatpickr(`BatchDate${k}`)
+                    debugger
 
                 } catch (e) { }
                 return (

@@ -25,7 +25,8 @@ import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable, { CHECKBOX_STATUS_CHECKED } from "react-bootstrap-table-next";
 import { countlabelFunc } from "../../../components/Common/ComponentRelatedCommonFile/CommonMasterListPage";
 import { mySearchProps } from "../../../components/Common/ComponentRelatedCommonFile/SearchBox/MySearch";
-import SaveButton from "../../../components/Common/CommonSaveButton";
+import SaveButton from "../../../components/Common/ComponentRelatedCommonFile/CommonSaveButton";
+
 
 
 const PartyItems = (props) => {

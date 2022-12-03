@@ -199,3 +199,18 @@ export const currentDate = (props) => {
         `${month}`}-${current.getDate() < 10 ? `0${current.getDate()}` : `${current.getDate()}`}`;
     return currentDate
 }
+
+export const createdBy = () => {
+    let createdBy = 0
+    try {
+        createdBy = localStorage.get("userId")
+    } catch (e) { }
+    return createdBy
+}
+export const userCompany = () => {
+    let userCompany = 0
+    try {
+        userCompany = localStorage.get("Company")
+    } catch (e) { }
+    return userCompany
+}
