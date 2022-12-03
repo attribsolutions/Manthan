@@ -44,6 +44,7 @@ import { getGRN_itemMode2, getGRN_itemMode2_Success, getGRN_itemMode3, postGRN, 
 import GRNList from "./GRNList";
 import { useMemo } from "react";
 import flatpickr from "flatpickr";
+import { mySearchProps } from "../../../components/Common/ComponentRelatedCommonFile/MySearch";
 
 let description = ''
 let editVal = {}

@@ -41,6 +41,7 @@ import { getTermAndCondition } from "../../../store/Administrator/TermsAndCondti
 
 import OrderPageTemsTable from "./OrderPageTemsTable";
 import Breadcrumb from "../../../components/Common/Breadcrumb3";
+import { mySearchProps } from "../../../components/Common/ComponentRelatedCommonFile/MySearch";
 
 let description = ''
 let editVal = {}

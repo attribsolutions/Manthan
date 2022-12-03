@@ -44,8 +44,12 @@ function* get_BOMList_GenFunc({ filters }) {
   try {
 
     const response = yield call(BOM_ListPage_API, filters);
+    let data = response.Data.map((i) => {
+      i.id = `${i.id}/${i.Company}`;
+      return i
+    })
     yield put(SpinnerState(false))
-    yield put(getBOMListPageSuccess(response.Data))
+    yield put(getBOMListPageSuccess(data))
     console.log(response)
   } catch (error) {
     yield put(SpinnerState(false))
@@ -57,12 +61,13 @@ function* get_BOMList_GenFunc({ filters }) {
 }
 
 // edit List page
-function* editBOMListGenFunc({ id1, id2, pageMode }) {
+function* editBOMListGenFunc({ id1, pageMode }) {
   debugger
   yield put(SpinnerState(true))
   try {
-    const response = yield call(editBOMListID_forBOMPage_ApiCall, id1, id2);
+    let response = yield call(editBOMListID_forBOMPage_ApiCall, id1);
     response.pageMode = pageMode
+    // response.Data = response.Data[0];
     yield put(SpinnerState(false))
     yield put(editBOMListSuccess(response));
   } catch (error) {
