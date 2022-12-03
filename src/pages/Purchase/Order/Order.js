@@ -41,6 +41,7 @@ import { getTermAndCondition } from "../../../store/Administrator/TermsAndCondti
 import OrderPageTemsTable from "./OrderPageTemsTable";
 import Breadcrumb from "../../../components/Common/Breadcrumb3";
 import { mySearchProps } from "../../../components/Common/ComponentRelatedCommonFile/MySearch";
+import { createdBy } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 
 let description = ''
 let editVal = {}
@@ -251,9 +252,10 @@ const Order = (props) => {
                             key={row.inpQty}
                             // disabled={((row.inpRate === 0) || (row.GSTPercentage === '')) ? true : false}
                             onChange={(e) => {
+                                debugger
                                 const val = e.target.value
-                                let isnum = /^\d+$/.test(val);
-                                if ((typeof val == 'number') || (val === '')) {
+                                let isnum =/^[+-]?[0-9]+([.][0-9]+)?([eE][+-]?[0-9]+)?$/.test(val);
+                                if ((isnum) || (val === '')) {
                                     val_onChange(val, row, "qty")
                                 } else {
                                     document.getElementById(`inpQty${k}`).value = row.inpQty
@@ -505,8 +507,8 @@ const Order = (props) => {
             OrderType: 1,
             POType: 1,
             Division: division,
-            CreatedBy: 1,
-            UpdatedBy: 1,
+            CreatedBy:createdBy(),
+            UpdatedBy:createdBy(),
             OrderItem: itemArr,
             OrderTermsAndConditions: termsAndCondition
         });
