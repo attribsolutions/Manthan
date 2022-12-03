@@ -1,4 +1,4 @@
-import { GET_BOM_LIST_PAGE, GET_BOM_LIST_PAGE_SUCCESS, GET_ITEM_UNITS_DROPDOWN_API, GET_ITEM_UNITS_DROPDOWN_API_SUCCESS, POST_BOM, POST_BOM_SUCCESS } from "./actionTypes";
+import { EDIT_BOM_LIST_ID, EDIT_BOM_LIST_ID_SUCCESS, GET_BOM_LIST_PAGE, GET_BOM_LIST_PAGE_SUCCESS, GET_ITEM_UNITS_DROPDOWN_API, GET_ITEM_UNITS_DROPDOWN_API_SUCCESS, POST_BOM, POST_BOM_SUCCESS } from "./actionTypes";
 
 // post api
 export const postBOM = (data) => ({
@@ -32,3 +32,14 @@ export const getBOMListPageSuccess = (data) => ({
   type:GET_BOM_LIST_PAGE_SUCCESS,
   payload: data,
 });
+
+ // edit api
+ export const editBOMList =(id1,id2,pageMode)=>({
+  type:EDIT_BOM_LIST_ID,
+  id1,id2,pageMode
+})
+
+export const editBOMListSuccess =(editData)=>({
+  type:EDIT_BOM_LIST_ID_SUCCESS,
+ payload:editData,
+})

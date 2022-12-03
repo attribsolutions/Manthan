@@ -30,7 +30,7 @@ import Select from "react-select";
 import SaveButton from "../../../../components/Common/CommonSaveButton";
 import ItemTab from "./ItemQuantityTab";
 import { GetItemUnitsDrodownAPI, postBOM, postBOMSuccess } from "../../../../store/Purchase/BOMRedux/action";
-import { BillOfMaterials } from "../../../../routes/route_url";
+import { BillOfMaterials, BillOfMaterialsList } from "../../../../routes/route_url";
 
 const BOMMaster = (props) => {
 
@@ -153,7 +153,7 @@ const BOMMaster = (props) => {
                     Type: 1,
                     Status: true,
                     Message: postMsg.Message,
-                    RedirectPath: BillOfMaterials,
+                    RedirectPath: BillOfMaterialsList,
                 }))
             }
         }
@@ -198,7 +198,6 @@ const BOMMaster = (props) => {
         label: index.Name,
     }));
 
-
     const Unit_DropdownOptions = GetItemUnits.map((data) => ({
         value: data.value,
         label: data.label
@@ -210,9 +209,10 @@ const BOMMaster = (props) => {
         });
         dispatch(GetItemUnitsDrodownAPI(jsonBody))
         setState((i) => {
+
             const a = { ...i }
-            a.values.Unit = "";
-            a.hasValid.Unit.valid = false
+            a.values.UnitName = "";
+            a.hasValid.UnitName.valid = false
             return a
         })
     }
@@ -222,13 +222,19 @@ const BOMMaster = (props) => {
     const { fieldLabel } = state;
 
     const formSubmitHandler = (event) => {
-
+        debugger
         const BOMItems = ItemTabDetails.map((index) => ({
             Item: index.ItemID,
             Quantity: index.ItemQuantity,
             Unit: index.UnitID
         }))
 
+        let Company = ''
+        try {
+            Company = JSON.parse(localStorage.getItem('Company'))
+        } catch (e) {
+            alert(e)
+        }
         event.preventDefault();
         if (formValid(state, setState)) {
             debugger
@@ -239,11 +245,24 @@ const BOMMaster = (props) => {
                 Comment: values.Comment,
                 IsActive: values.IsActive,
                 Item: values.ItemName.value,
-                Unit: values.Unit.UnitName,
+                Unit: values.UnitName.value,
                 CreatedBy: 1,
-                Company: 1,
+                Company: Company,
                 BOMItems: BOMItems
             });
+
+            if (BOMItems.length === 0) {
+                dispatch(
+                    AlertState({
+                        Type: 4,
+                        Status: true,
+                        Message: "At Least One Matrial data Add in the table",
+                        RedirectPath: false,
+                        PermissionAction: false,
+                    })
+                );
+                return;
+            }
 
             if (pageMode === 'edit') {
                 // dispatch(updateGroupTypeID(jsonBody, EditData.id));
@@ -294,8 +313,8 @@ const BOMMaster = (props) => {
                                                             altInput: true,
                                                             altFormat: "F j, Y",
                                                             dateFormat: "Y-m-d",
-                                                            minDate: new Date().fp_incr("n"),
-                                                            maxDate: new Date().fp_incr(0) // 14 days from now"0,''"
+                                                            // minDate: new Date().fp_incr("n"),
+                                                            // maxDate: new Date().fp_incr(0) // 14 days from now"0,''"
                                                         }}
                                                         onChange={(y, v, e) => { onChangeDate({ e, v, state, setState }) }}
                                                     />
