@@ -22,7 +22,9 @@ import "../../../assets/scss/CustomTable2/datatables.scss";
 import RoleMaster from "./RoleMaster";
 import { MetaTags } from "react-meta-tags";
 import { useHistory } from "react-router-dom";
-import { listPageCommonButtonFunction } from "../../../components/Common/CmponentRelatedCommonFile/listPageCommonButtons";
+import { listPageCommonButtonFunction } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+
+
 import { AlertState } from "../../../store/actions";
 
 const RoleList = (props) => {

@@ -19,7 +19,9 @@ import { AlertState } from "../../../store/Utilites/CustomAlertRedux/actions";
 import { useHistory } from "react-router-dom";
 import { MetaTags } from "react-meta-tags";
 import Breadcrumbs from "../../../components/Common/Breadcrumb";
-import { listPageCommonButtonFunction } from "../../../components/Common/CmponentRelatedCommonFile/listPageCommonButtons";
+import { listPageCommonButtonFunction } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+
+
 
 const UserList = () => {
 

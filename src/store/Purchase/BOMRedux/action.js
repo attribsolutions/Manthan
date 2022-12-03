@@ -34,9 +34,9 @@ export const getBOMListPageSuccess = (data) => ({
 });
 
  // edit api
- export const editBOMList =(id1,id2,pageMode)=>({
+ export const editBOMList =(id1,pageMode)=>({
   type:EDIT_BOM_LIST_ID,
-  id1,id2,pageMode
+  id1,pageMode
 })
 
 export const editBOMListSuccess =(editData)=>({

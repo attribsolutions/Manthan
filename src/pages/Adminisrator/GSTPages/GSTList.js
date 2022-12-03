@@ -17,8 +17,8 @@ import {
     deleteGSTListPageSuccess,
     getGSTListPage
 } from "../../../store/Administrator/GSTRedux/action";
-import { mySearchProps } from "../../../components/Common/CmponentRelatedCommonFile/SearchBox/MySearch";
-import { countlabelFunc } from "../../../components/Common/CmponentRelatedCommonFile/commonListPage";
+import { mySearchProps } from "../../../components/Common/ComponentRelatedCommonFile/SearchBox/MySearch";
+import { countlabelFunc } from "../../../components/Common/ComponentRelatedCommonFile/CommonMasterListPage";
 
 const GSTList = (props) => {
 

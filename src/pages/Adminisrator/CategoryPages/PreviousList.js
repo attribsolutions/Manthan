@@ -17,7 +17,9 @@ import { useHistory } from "react-router-dom";
 import { AlertState } from "../../../store/actions";
 import { deleteCategoryIDSuccess, deleteProductTypesIDSuccess, delete_Category_ID, delete_ProductTypes_ID, editCategoryID, editProductTypesID, getCategorylist, getProductTypeslist, PostMethod_ForCategoryAPISuccess, updateCategoryIDSuccess, updateProductTypesIDSuccess } from "../../../store/Administrator/CategoryRedux/action";
 import CategoryMaster from "./CategoryMaster";
-import { listPageCommonButtonFunction } from "../../../components/Common/CmponentRelatedCommonFile/listPageCommonButtons";
+import { listPageCommonButtonFunction } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+
+
 // import { AlertState } from "../../../store/action";
 
 const CategoryList = (props) => {

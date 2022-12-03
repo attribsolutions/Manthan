@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 
 import { useDispatch, useSelector } from "react-redux";
 import TermsAndCondtionsMaster from "./TermsAndCondtionsMaster";
-import CommonListPage from "../../../components/Common/CmponentRelatedCommonFile/commonListPage";
+import CommonListPage from "../../../components/Common/ComponentRelatedCommonFile/CommonMasterListPage";
 import { commonPageFieldList, commonPageFieldListSuccess } from "../../../store/actions";
 import { postTermAndConditionSuccess, getTermAndCondition, EditTermsAndCondtions, DeleteTermsAndCondtions, DeleteTermsAndCondtions_Success, UpdateTermsAndCondtions_Success } from "../../../store/Administrator/TermsAndCondtionsRedux/actions";
 import { TERMS_AND_CONDITION } from "../../../routes/route_url";

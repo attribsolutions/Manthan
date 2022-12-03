@@ -37,7 +37,7 @@ import {
     onChangeSelect,
     onChangeText,
 
-} from "../../../components/Common/CmponentRelatedCommonFile/validationFunction";
+} from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
 // import { getGroupList } from "../../../store/Administrator/GroupRedux/action";
 import { SUBGROUP_LIST } from "../../../routes/route_url"
 import SaveButton from "../../../components/Common/CommonSaveButton"
@@ -413,7 +413,7 @@ export default SubGroupMaster
 // import { useHistory } from 'react-router-dom';
 // import { useDispatch, useSelector } from 'react-redux';
 
-// import { initialFiledFunc } from "../../../components/Common/CmponentRelatedCommonFile/validationFunction";
+// import { initialFiledFunc } from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
 // import { commonPageField, commonPageFieldSuccess } from '../../../store/actions';
 
 

@@ -9,7 +9,7 @@ import {
   delete_VehicleType_ID,
   PostMethod_ForVehicleMasterSuccess,
 } from "../../../store/Administrator/VehicleRedux/action";
-import CommonListPage from "../../../components/Common/CmponentRelatedCommonFile/commonListPage";
+import CommonListPage from "../../../components/Common/ComponentRelatedCommonFile/CommonMasterListPage";
 import { commonPageFieldList, commonPageFieldListSuccess, } from "../../../store/actions";
 import { VEHICLE } from "../../../routes/route_url";
 

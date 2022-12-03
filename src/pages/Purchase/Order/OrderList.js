@@ -13,7 +13,7 @@ import {
     // getOrderList
 } from "../../../store/Purchase/OrderPageRedux/actions";
 import { commonPageFieldList, commonPageFieldListSuccess, } from "../../../store/actions";
-import PurchaseListPage from "../../../components/Common/CmponentRelatedCommonFile/purchase"
+import PurchaseListPage from "../../../components/Common/ComponentRelatedCommonFile/purchase"
 import Order from "./Order";
 import { GRN_ADD, GST_ADD_Mode_2, ORDER, ORDER_lIST } from "../../../routes/route_url";
 import { Button, Col, FormGroup, Label } from "reactstrap";
@@ -21,7 +21,7 @@ import Breadcrumb from "../../../components/Common/Breadcrumb";
 import { useHistory } from "react-router-dom";
 import { getGRN_itemMode2 } from "../../../store/Purchase/GRNRedux/actions";
 import { getSupplier } from "../../../store/CommonAPI/SupplierRedux/actions";
-import { currentDate, excelDownCommonFunc } from "../../../components/Common/CmponentRelatedCommonFile/listPageCommonButtons";
+import { currentDate, excelDownCommonFunc } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import { useMemo } from "react";
 
 

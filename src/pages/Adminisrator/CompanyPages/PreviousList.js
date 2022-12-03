@@ -29,7 +29,9 @@ import CompanyModule from "./CompanyModule";
 import "../../../assets/scss/CustomTable2/datatables.scss"
 import { AlertState } from "../../../store/actions";
 import { useHistory } from "react-router-dom";
-import { listPageCommonButtonFunction } from "../../../components/Common/CmponentRelatedCommonFile/listPageCommonButtons";
+import { listPageCommonButtonFunction } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+
+
 
 const CompanyList = () => {
 

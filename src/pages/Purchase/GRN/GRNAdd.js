@@ -29,7 +29,7 @@ import {
     updateOrderIdSuccess
 } from "../../../store/Purchase/OrderPageRedux/actions";
 import { getSupplier, getSupplierAddress } from "../../../store/CommonAPI/SupplierRedux/actions"
-import { mySearchProps } from "../../../components/Common/CmponentRelatedCommonFile/SearchBox/MySearch";
+import { countlabelFunc } from "../../../components/Common/ComponentRelatedCommonFile/CommonMasterListPage";
 import { AlertState, BreadcrumbFilterSize } from "../../../store/actions";
 import { basicAmount, GstAmount, handleKeyDown, totalAmount } from "../Order/OrderPageCalulation";
 import '../../Order/div.css'
@@ -44,6 +44,7 @@ import { getGRN_itemMode2, getGRN_itemMode2_Success, getGRN_itemMode3, postGRN, 
 import GRNList from "./GRNList";
 import { useMemo } from "react";
 import flatpickr from "flatpickr";
+import { mySearchProps } from "../../../components/Common/ComponentRelatedCommonFile/MySearch";
 
 let description = ''
 let editVal = {}

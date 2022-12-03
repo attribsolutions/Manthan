@@ -9,7 +9,7 @@ import {
 } from "../../../store/Administrator/RoleMasterRedux/action";
 import { useSelector, useDispatch } from "react-redux";
 import RoleMaster from "./RoleMaster";
-import CommonListPage from "../../../components/Common/CmponentRelatedCommonFile/commonListPage";
+import CommonListPage from "../../../components/Common/ComponentRelatedCommonFile/CommonMasterListPage";
 import { commonPageFieldList, commonPageFieldListSuccess } from "../../../store/actions";
 import { ROLE } from "../../../routes/route_url";
 

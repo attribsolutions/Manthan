@@ -1,6 +1,6 @@
 
 import React, { useEffect, useState } from "react";
-import Breadcrumb from "../../../components/Common/Breadcrumb3";
+import Breadcrumb from "../Breadcrumb3";
 import { Col, Input, Modal, Row } from "reactstrap";
 import paginationFactory, {
     PaginationListStandalone,
@@ -14,8 +14,8 @@ import { useHistory } from "react-router-dom";
 
 import { AlertState, BreadcrumbFilterSize } from "../../../store/actions";
 import { listPageCommonButtonFunction }
-    from "../../../components/Common/CmponentRelatedCommonFile/listPageCommonButtons";
-import { mySearchProps } from "./SearchBox/MySearch";
+    from "./listPageCommonButtons";
+import { mySearchProps } from "./MySearch";
 import { getModify } from "../../../helpers/api_helper";
 import { GST_ADD_Mode_2 } from "../../../routes/route_url";
 

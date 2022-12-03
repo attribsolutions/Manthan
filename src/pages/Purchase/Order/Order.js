@@ -29,7 +29,7 @@ import {
     updateOrderIdSuccess
 } from "../../../store/Purchase/OrderPageRedux/actions";
 import { getSupplier, getSupplierAddress } from "../../../store/CommonAPI/SupplierRedux/actions"
-import { mySearchProps } from "../../../components/Common/CmponentRelatedCommonFile/SearchBox/MySearch";
+import { countlabelFunc } from "../../../components/Common/ComponentRelatedCommonFile/CommonMasterListPage";
 import { AlertState, BreadcrumbFilterSize } from "../../../store/actions";
 import { basicAmount, GstAmount, handleKeyDown, totalAmount } from "./OrderPageCalulation";
 import '../../Order/div.css'
@@ -41,6 +41,7 @@ import { getTermAndCondition } from "../../../store/Administrator/TermsAndCondti
 
 import OrderPageTemsTable from "./OrderPageTemsTable";
 import Breadcrumb from "../../../components/Common/Breadcrumb3";
+import { mySearchProps } from "../../../components/Common/ComponentRelatedCommonFile/MySearch";
 
 let description = ''
 let editVal = {}

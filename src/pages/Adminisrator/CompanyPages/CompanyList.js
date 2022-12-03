@@ -2,14 +2,15 @@ import React, { useEffect } from "react";
 import {
     deleteCompany_ID,
     editCompanyID,
-    fetchCompanyList,
     updateCompanyIDSuccess,
     deleteCompanyIDSuccess,
     PostCompanySubmitSuccess,
+    fetchCompanyList,
 } from "../../../store/Administrator/CompanyRedux/actions";
 import { useSelector, useDispatch } from "react-redux";
 import CompanyModule from "./CompanyModule";
-import CommonListPage from "../../../components/Common/CmponentRelatedCommonFile/commonListPage";
+import CommonListPage from "../../../components/Common/ComponentRelatedCommonFile/CommonMasterListPage";
+
 import { commonPageFieldList, commonPageFieldListSuccess } from "../../../store/actions";
 import { COMPANY } from "../../../routes/route_url";
 

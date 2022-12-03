@@ -10,7 +10,7 @@ import {
 } from "../../../store/actions";
 import Modules from "./Modules";
 import { commonPageFieldList, commonPageFieldListSuccess } from "../../../store/actions";
-import CommonListPage from "../../../components/Common/CmponentRelatedCommonFile/commonListPage";
+import CommonListPage from "../../../components/Common/ComponentRelatedCommonFile/CommonMasterListPage";
 import { MODULE } from "../../../routes/route_url";
 const ModulesList = () => {
 

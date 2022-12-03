@@ -9,7 +9,7 @@ import {
   updateEmployeeTypeIDSuccess
 } from "../../../store/Administrator/EmployeeTypeRedux/action";
 import EmployeeTypesMaster from "./EmployeeTypesMaster";
-import CommonListPage from "../../../components/Common/CmponentRelatedCommonFile/commonListPage";
+import CommonListPage from "../../../components/Common/ComponentRelatedCommonFile/CommonMasterListPage";
 import {  commonPageFieldList, commonPageFieldListSuccess } from "../../../store/actions";
 import { EMPLOYEETYPE } from "../../../routes/route_url";
 

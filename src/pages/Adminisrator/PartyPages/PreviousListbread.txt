@@ -22,9 +22,9 @@ import {
 import PartyMaster from './PartyMaster';
 import { MetaTags } from "react-meta-tags";
 import { useHistory } from 'react-router-dom';
-import { listPageCommonButtonFunction } from '../../../components/Common/CmponentRelatedCommonFile/listPageCommonButtons';
-import { mySearchProps } from "../../../components/Common/CmponentRelatedCommonFile/SearchBox/MySearch";
-import { countlabelFunc } from '../../../components/Common/CmponentRelatedCommonFile/commonListPage';
+import { listPageCommonButtonFunction } from '../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons';
+import { countlabelFunc } from "../../../components/Common/ComponentRelatedCommonFile/CommonMasterListPage";
+import { countlabelFunc } from '../../../components/Common/ComponentRelatedCommonFile/commonListPage';
 const PartyList = () => {
     const dispatch = useDispatch();
     const history = useHistory();

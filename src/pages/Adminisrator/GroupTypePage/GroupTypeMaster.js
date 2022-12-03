@@ -21,7 +21,7 @@ import {
     formValid,
     initialFiledFunc,
     onChangeText,
-} from "../../../components/Common/CmponentRelatedCommonFile/validationFunction";
+} from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
 import {
     editGroupTypeIdSuccess,
     getGroupTypeslistSuccess,

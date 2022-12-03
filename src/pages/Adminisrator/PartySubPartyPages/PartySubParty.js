@@ -31,7 +31,7 @@ import {
 import { Tbody, Thead } from "react-super-responsive-table";
 import SaveButton from "../../../components/Common/CommonSaveButton";
 import { PARTY_SUB_PARTY_lIST } from "../../../routes/route_url";
-import { comAddPageFieldFunc, formValid, initialFiledFunc, onChangeSelect } from "../../../components/Common/CmponentRelatedCommonFile/validationFunction";
+import { comAddPageFieldFunc, formValid, initialFiledFunc, onChangeSelect } from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
 
 const PartySubParty = (props) => {
 

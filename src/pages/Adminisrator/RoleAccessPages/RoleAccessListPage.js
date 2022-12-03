@@ -21,8 +21,8 @@ import {
 import { AlertState } from "../../../store/actions";
 import { useHistory } from "react-router-dom";
 import RoleAccessCopyFunctionality from "./RoleAccessCopyFunctionality";
-import { mySearchProps } from "../../../components/Common/CmponentRelatedCommonFile/SearchBox/MySearch";
-import { countlabelFunc } from "../../../components/Common/CmponentRelatedCommonFile/commonListPage";
+import { countlabelFunc } from "../../../components/Common/ComponentRelatedCommonFile/CommonMasterListPage";
+import { mySearchProps } from "../../../components/Common/ComponentRelatedCommonFile/SearchBox/MySearch";
 
 const RoleAccessListPage = () => {
 

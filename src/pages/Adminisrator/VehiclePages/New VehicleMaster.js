@@ -42,7 +42,7 @@ import {
     initialFiledFunc,
     onChangeSelect,
     onChangeText
-} from "../../../components/Common/CmponentRelatedCommonFile/validationFunction";
+} from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
 
 
 const VehicleMaster = (props) => {

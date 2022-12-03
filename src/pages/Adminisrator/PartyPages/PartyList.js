@@ -9,7 +9,7 @@ import {
     updatePartyIDSuccess
 } from '../../../store/Administrator/PartyRedux/action';
 import PartyMaster from './PartyMaster';
-import CommonListPage from "../../../components/Common/CmponentRelatedCommonFile/commonListPage";
+import CommonListPage from "../../../components/Common/ComponentRelatedCommonFile/CommonMasterListPage";
 import { commonPageFieldList, commonPageFieldListSuccess } from "../../../store/actions";
 
 const PartyList = () => {

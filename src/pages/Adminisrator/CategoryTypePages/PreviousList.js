@@ -21,7 +21,9 @@ import {
   updateCategoryTypeIDSuccess
 } from "../../../store/actions";
 import { AlertState } from "../../../store/actions";
-import { listPageCommonButtonFunction } from "../../../components/Common/CmponentRelatedCommonFile/listPageCommonButtons";
+import { listPageCommonButtonFunction } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+
+
 
 const CategoryTypeList = (props) => {
 

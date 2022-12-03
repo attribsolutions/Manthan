@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import CommonListPage from "../../../components/Common/CmponentRelatedCommonFile/commonListPage";
+import CommonListPage from "../../../components/Common/ComponentRelatedCommonFile/CommonMasterListPage";
+
 import { GROUPTYPE } from "../../../routes/route_url";
 import { commonPageFieldList, commonPageFieldListSuccess } from "../../../store/actions";
 import {

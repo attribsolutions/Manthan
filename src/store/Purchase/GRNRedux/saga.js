@@ -27,11 +27,9 @@ import { SpinnerState } from "../../Utilites/Spinner/actions";
 import { AlertState } from "../../Utilites/CustomAlertRedux/actions";
 
 function* postGRNGenFunc({ data }) {
-  debugger
   yield put(SpinnerState(true))
   try {
     const response = yield call(GRN_Post_API, data);
-    debugger
     yield put(postGRNSuccess(response));
     yield put(SpinnerState(false))
   } catch (error) {
@@ -60,7 +58,6 @@ function* DeleteGRNGenFunc({ id }) {
 }
 
 function* UpdateGRNGenFunc({ data, id }) {
-
   try {
     yield put(SpinnerState(true))
     const response = yield call(GRN_update_API, data, id);
@@ -78,7 +75,7 @@ function* UpdateGRNGenFunc({ data, id }) {
 
 // List Page API
 function* get_GRN_GerFunc({ filters }) {
-  debugger
+  
   yield put(SpinnerState(true))
   try {
     const response = yield call(GRN_get_API, filters);
