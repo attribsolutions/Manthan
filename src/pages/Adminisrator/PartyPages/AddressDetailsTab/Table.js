@@ -15,7 +15,7 @@ function AddressDetailsTable(props) {
     };
 
     function defaultChangeHandler(key) {
-      
+
         const newtableData = props.tableData.map((ele, k) => {
             ele.IsDefault = false;
             if (k === key) {
@@ -36,7 +36,7 @@ function AddressDetailsTable(props) {
                 < td><Input type="radio"
                     name="btnradio"
                     id={`radioButton${key}`}
-                    defaultChecked={info.IsDefault ? true:false}
+                    defaultChecked={info.IsDefault ? true : false}
                     onClick={(e) => defaultChangeHandler(key)} />
                     {`${info.IsDefault}`}
                 </td>
@@ -50,6 +50,7 @@ function AddressDetailsTable(props) {
                     >
                         <i className="mdi mdi-delete font-size-18"></i>
                     </Button>
+                   
                 </td>
             </tr>
         );

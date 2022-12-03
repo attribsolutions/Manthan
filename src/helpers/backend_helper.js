@@ -379,7 +379,7 @@ export const update_SubGroup_List_Api = (data, id) => put(`${url.SUBGROUP_API}/$
 export const BOM_Post_API = (data) => post(url.BOM, data)// post api
 export const GetItemUnits_For_Dropdown = (data) => post(url.GET_ITEM_UNITS, data)// post api
 export const BOM_ListPage_API = (filters) => post(url.BOM_LiST, filters)
-
+export const editBOMListID_forBOMPage_ApiCall = (id1, id2) => get(`${url.BOM}/${id1}/${id2}`) //SIngle get api BOMList 
 export {
   getLoggedInUser,
   isUserAuthenticated,
