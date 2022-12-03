@@ -199,6 +199,7 @@ const PurchaseListPage = (props) => {
 
     // Edit Modal Show When Edit Data is true
     useEffect(() => {
+        debugger
         if (editData.Status === true) {
             if (pageField.IsEditPopuporComponent) {
                 history.push({
@@ -326,7 +327,7 @@ const PurchaseListPage = (props) => {
                                     <React.Fragment>
                                         <Row>
                                             <Col xl="12">
-                                                <div className="table-responsive">
+                                                <div className="table-responsive mt-3">
                                                     <BootstrapTable
                                                         keyField={"id"}
                                                         responsive
@@ -334,7 +335,7 @@ const PurchaseListPage = (props) => {
                                                         defaultSorted={defaultSorted}
                                                         striped={true}
                                                         classes={"table  table-bordered table-hover"}
-                                                        noDataIndication={<div className="text-danger text-center ">Data Not available</div>}
+                                                        noDataIndication={<div className="text-danger text-center ">Record Not Found</div>}
                                                         {...toolkitProps.baseProps}
                                                         {...paginationTableProps}
                                                     />

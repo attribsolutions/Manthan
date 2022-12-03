@@ -248,7 +248,6 @@ const PageMaster = (props) => {
   }, []);
 
   const pageAccessval = useMemo(() => {
-    debugger
     const arr = []
     PageAccess.forEach(i => {
       i["hascheck"] = false;
@@ -342,13 +341,7 @@ const PageMaster = (props) => {
     }
   }, [updateMsg, modalCss]);
 
-  // const pageAccessval = PageAccess.map((Data) => ({
-  //   value: Data.id,
-  //   label: Data.Name,
-  //   Checked: false
-  // }));
-  console.log(pageAccessval)
-  const Module_DropdownOption = ModuleData.map((d) => ({
+    const Module_DropdownOption = ModuleData.map((d) => ({
     value: d.id,
     label: d.Name,
   }));
@@ -636,10 +629,16 @@ const PageMaster = (props) => {
   }
 
   function ControlType_Dropdown_Handler(e, key) {
-
+debugger
     dispatch(getFieldValidations(e.value))
-    pageFieldTabTable.FieldValidation = []
     // dispatch(getFieldValidationsSuccess([]))
+  //   setPageFieldTabTable((i) => {
+  //     debugger
+  //     const a = { ...i }
+  //     a[key].FieldValidation = "";
+  //     // a.hasValid.UnitName.valid = false
+  //     return a
+  // })
   }
 
   const toggleCustom = (tab) => {
@@ -1055,10 +1054,9 @@ const PageMaster = (props) => {
                       className="p-3 text-muted"
                     >
                       <TabPane tabId="1">
-                        <Row>
-                          <Card className="text-black"  >
-                            <CardBody style={{ backgroundColor: "whitesmoke" }}>
-                              <Row>
+                          <Card className="text-black " style={{ backgroundColor: "whitesmoke" }} >
+                            <CardBody >
+                              <Row >
                                 <Col md="3">
                                   <FormGroup className="mb-3 ">
                                     <Label>Name </Label>
@@ -1143,9 +1141,9 @@ const PageMaster = (props) => {
                             </CardBody>
                           </Card>
 
-                          <Card className=" mt-n2 text-black">
-                            <CardBody style={{ backgroundColor: "whitesmoke" }}>
-                              <Row>
+                          <Card className=" mt-n2 text-black"style={{ backgroundColor: "whitesmoke" }}>
+                            <CardBody >
+                              <Row >
                                 <Col md="3">
 
                                   <FormGroup className="mb-3 ">
@@ -1470,7 +1468,6 @@ const PageMaster = (props) => {
                               </CardBody>
                             </Card>
                           ) : <></>}
-                        </Row>
                       </TabPane>
 
                       <TabPane tabId="2">

@@ -209,6 +209,7 @@ const BOMMaster = (props) => {
         });
         dispatch(GetItemUnitsDrodownAPI(jsonBody))
         setState((i) => {
+
             const a = { ...i }
             a.values.UnitName = "";
             a.hasValid.UnitName.valid = false
@@ -221,13 +222,19 @@ const BOMMaster = (props) => {
     const { fieldLabel } = state;
 
     const formSubmitHandler = (event) => {
-
+        debugger
         const BOMItems = ItemTabDetails.map((index) => ({
             Item: index.ItemID,
             Quantity: index.ItemQuantity,
             Unit: index.UnitID
         }))
 
+        let Company = ''
+        try {
+            Company = JSON.parse(localStorage.getItem('Company'))
+        } catch (e) {
+            alert(e)
+        }
         event.preventDefault();
         if (formValid(state, setState)) {
             debugger
@@ -240,9 +247,22 @@ const BOMMaster = (props) => {
                 Item: values.ItemName.value,
                 Unit: values.UnitName.value,
                 CreatedBy: 1,
-                Company: 1,
+                Company: Company,
                 BOMItems: BOMItems
             });
+
+            if (BOMItems.length === 0) {
+                dispatch(
+                    AlertState({
+                        Type: 4,
+                        Status: true,
+                        Message: "At Least One Matrial data Add in the table",
+                        RedirectPath: false,
+                        PermissionAction: false,
+                    })
+                );
+                return;
+            }
 
             if (pageMode === 'edit') {
                 // dispatch(updateGroupTypeID(jsonBody, EditData.id));

@@ -74,9 +74,9 @@ function AddressDetails_Tab(props) {
     return (
         <Row>
             <Col md={12}  >
-                <Card className="text-black">
-                    <CardBody style={{ backgroundColor: "whitesmoke" }}>
-                        <Row className="mt-3">
+                <Card className="text-black" style={{ backgroundColor: "whitesmoke" }}>
+                    <CardBody >
+                        <Row >
                             <Col md="9" >
                                 <FormGroup className="mb-3">
                                     <Label htmlFor="validationCustom01">Address </Label>
@@ -91,14 +91,19 @@ function AddressDetails_Tab(props) {
                                 </FormGroup>
                             </Col>
 
+                            <Col md={1}>
 
-                            <Col md="1" style={{ marginTop: '9px' }}>
-                                <Button className="btn btn-sm btn-light mt-4   align-items-sm-end"
-                                    type="button"
-                                    onClick={addRowsHandler}
-                                >
-                                    <i className="dripicons-plus"></i>
-                                </Button>
+                                <Row className=" mt-3">
+                                    <Col >
+                                        <Button
+                                            className="btn btn-sm mt-1 mt-3 btn-light  btn-outline-primary  "
+                                            type="button"
+                                            onClick={addRowsHandler}
+                                        >
+                                            <i className="dripicons-plus mt-3"> </i> Add
+                                        </Button>
+                                    </Col>
+                                </Row>
                             </Col>
 
                         </Row>
@@ -152,7 +157,7 @@ function AddressDetails_Tab(props) {
                             {/* <Col md="1">  </Col> */}
                             <Row className='col col-12'>
                                 {/* <Col md="4"> */}
-                                <FormGroup className="mb-2 col-4">
+                                <FormGroup className="col-4">
                                     <Label htmlFor="validationCustom01"> PIN </Label>
                                     <AvField name="PIN" type="text"
                                         value={PIN}
@@ -172,11 +177,11 @@ function AddressDetails_Tab(props) {
                                 {/* </Col> */}
                                 <Col md="1">  </Col>
                                 {/* <Col md="9"> */}
-                                <FormGroup className="mb-2 col col-sm-5 mt-4">
+                                <FormGroup className="col col-sm-5 mt-4">
                                     <Row className="justify-content-md-left">
                                         <Label htmlFor="horizontal-firstname-input" className="col-sm-4 col-form-label" >IsDefault </Label>
                                         <Col md={3} style={{ marginTop: '9px' }} >
-                                            <div className="form-check form-switch form-switch-md mb-3" dir="ltr">
+                                            <div className="form-check form-switch form-switch-md " dir="ltr">
                                                 <AvInput type="checkbox"
                                                     id="IsDefault"
                                                     className="form-check-input"
