@@ -268,8 +268,6 @@ export const detelet_Category_List_Api = (id) => del(`${url.CATEGORY_API}/${id}`
 export const edit_Category_List_Api = (id) => get(`${url.CATEGORY_API}/${id}`) // edit api
 export const update_Category_List_Api = (data, id) => put(`${url.CATEGORY_API}/${id}`, data)// update
 
-
-
 //Vehicle API
 export const Post_Vehicle_API = (data) => post(url.VEHICLE_API, data)// post api
 export const get_Vehicle_API = () => get(url.VEHICLE_API)//  get Api 
@@ -278,7 +276,6 @@ export const get_DriverListAPI = () => get(url.DRIVERLIST_DROPDOWN)//dropDown
 export const detelet_VehicleType_List_Api = (id) => del(`${url.VEHICLE_API}/${id}`) // delete api
 export const edit_VehicleType_List_Api = (id) => get(`${url.VEHICLE_API}/${id}`) // edit api
 export const update_VehicleType_List_Api = (data, id) => put(`${url.VEHICLE_API}/${id}`, data)// update
-
 
 //CompanyGroup API
 export const Post_CompanyGroup_API = (data) => post(url.COMPANYGROUP_API, data)// post api
@@ -335,8 +332,6 @@ export const del_Group_List_API = (id) => del(`${url.GROUP_API}/${id}`)// delete
 export const edit_Group_List_Api = (id) => get(`${url.GROUP_API}/${id}`)// edit api
 export const update_Group_List_Api = (data, id) => put(`${url.GROUP_API}/${id}`, data)// update api
 
-
-
 // TermsAndCondtions API
 export const Post_TermsAndCondtions_Master_API = (data) => post(url.TERMSANDCONDITIONS_API, data)// post api
 
@@ -348,7 +343,6 @@ export const GetGSTList_For_Listpage = () => get(url.GST_LIST_API)//  get List
 export const delete_GSTList_API = (CommonID) => del(`${url.DELETE_API_FOR_LIST_GST_PAGE}/${CommonID}`)// Delete api
 export const GoButton_Post_API_For_GSTMaster = (data) => post(url.GO_BUTTON_POST_API_FOR_GST_MASTER, data)// go button postapi
 export const GST_MasterPage_delete_API = (id) => del(`${url.GST_LIST_API}/${id}`)// delete api
-
 
 // PartySubParty API
 export const PartySubParty_Get_API = () => get(`${url.PARTY_SUB_PARTY}`)// get list api
@@ -367,7 +361,6 @@ export const GetPartyList_API = () => get(url.PARTYITEMS)// get api
 //suppiler 
 export const GetSupplier_API = (perty_id) => get(`${url.SUPPLIER}/${perty_id}`)//get api
 
-
 // SubGroup API
 export const get_SubGroup_List_Api = () => get(url.SUBGROUP_API)// get api
 export const Post_SubGroupList_API = (data) => post(url.SUBGROUP_API, data)// post api
@@ -376,10 +369,13 @@ export const edit_SubGroup_List_Api = (id) => get(`${url.SUBGROUP_API}/${id}`)//
 export const update_SubGroup_List_Api = (data, id) => put(`${url.SUBGROUP_API}/${id}`, data)// update api
 
 // BOM API
-export const BOM_Post_API = (data) => post(url.BOM, data)// post api
 export const GetItemUnits_For_Dropdown = (data) => post(url.GET_ITEM_UNITS, data)// post api
-export const BOM_ListPage_API = (filters) => post(url.BOM_LiST, filters)
-export const editBOMListID_forBOMPage_ApiCall = (id1) => get(`${url.BOM}/${id1}`) //SIngle get api BOMList 
+export const BOM_ListPage_API = (filters) => post(url.BOM_LiST, filters)// get list api
+export const BOM_Post_API = (data) => post(url.BOM, data)// post api
+export const edit_BOMListID = (id1) => get(`${url.BOM}/${id1}`) //Single get api BOMList 
+export const BOM_Update_API = (data, id) => put(`${url.BOM_LiST}/${id}`, data)// update api
+export const BOM_Delete_API = (id) => del(`${url.BOM_LiST}/${id}`)// delete api
+
 export {
   getLoggedInUser,
   isUserAuthenticated,

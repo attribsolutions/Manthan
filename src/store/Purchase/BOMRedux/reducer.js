@@ -1,15 +1,19 @@
 import {
+    DELETE_BOM_LIST_PAGE_SUCCESS,
     EDIT_BOM_LIST_ID_SUCCESS,
     GET_BOM_LIST_PAGE_SUCCESS,
     GET_ITEM_UNITS_DROPDOWN_API_SUCCESS,
-    POST_BOM_SUCCESS
+    POST_BOM_SUCCESS,
+    UPDATE_BOM_LIST_SUCCESS
 } from "./actionTypes"
 
 const INIT_STATE = {
     PostData: { Status: false },
     GetItemUnits: [],
     BOMList: [],
-    editData: { Status: false,},
+    editData: { Status: false, },
+    updateMsg: { Status: false },
+    deleteMsg: { Status: false },
 }
 
 const BOMReducer = (state = INIT_STATE, action) => {
@@ -39,6 +43,18 @@ const BOMReducer = (state = INIT_STATE, action) => {
             return {
                 ...state,
                 editData: action.payload,
+            }
+
+        case UPDATE_BOM_LIST_SUCCESS:
+            return {
+                ...state,
+                updateMsg: action.payload,
+            }
+
+        case DELETE_BOM_LIST_PAGE_SUCCESS:
+            return {
+                ...state,
+                deleteMsg: action.payload,
             }
         default:
             return state

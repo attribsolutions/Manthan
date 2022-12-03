@@ -1,4 +1,4 @@
-import { EDIT_BOM_LIST_ID, EDIT_BOM_LIST_ID_SUCCESS, GET_BOM_LIST_PAGE, GET_BOM_LIST_PAGE_SUCCESS, GET_ITEM_UNITS_DROPDOWN_API, GET_ITEM_UNITS_DROPDOWN_API_SUCCESS, POST_BOM, POST_BOM_SUCCESS } from "./actionTypes";
+import { DELETE_BOM_LIST_PAGE, DELETE_BOM_LIST_PAGE_SUCCESS, EDIT_BOM_LIST_ID, EDIT_BOM_LIST_ID_SUCCESS, GET_BOM_LIST_PAGE, GET_BOM_LIST_PAGE_SUCCESS, GET_ITEM_UNITS_DROPDOWN_API, GET_ITEM_UNITS_DROPDOWN_API_SUCCESS, POST_BOM, POST_BOM_SUCCESS, UPDATE_BOM_LIST, UPDATE_BOM_LIST_SUCCESS } from "./actionTypes";
 
 // post api
 export const postBOM = (data) => ({
@@ -43,3 +43,21 @@ export const editBOMListSuccess =(editData)=>({
   type:EDIT_BOM_LIST_ID_SUCCESS,
  payload:editData,
 })
+
+export const updateBOMList = (data, id) => ({
+  type: UPDATE_BOM_LIST,
+  data, id,
+});
+export const updateBOMListSuccess = (data) => ({
+  type: UPDATE_BOM_LIST_SUCCESS,
+  payload: data,
+});
+
+export const deleteBOMId = (id) => ({
+  type: DELETE_BOM_LIST_PAGE,
+  id,
+});
+export const deleteBOMIdSuccess = (data) => ({
+  type: DELETE_BOM_LIST_PAGE_SUCCESS,
+  payload: data,
+});
