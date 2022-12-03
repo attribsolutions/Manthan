@@ -1,9 +1,9 @@
 import { call, put, takeEvery } from "redux-saga/effects";
-import { BOM_ListPage_API, BOM_Post_API, editBOMListID_forBOMPage_ApiCall, GetItemUnits_For_Dropdown } from "../../../helpers/backend_helper";
+import { BOM_Delete_API, BOM_ListPage_API, BOM_Post_API, BOM_Update_API, editBOMListID_forBOMPage_ApiCall, edit_BOMListID, GetItemUnits_For_Dropdown } from "../../../helpers/backend_helper";
 import { AlertState } from "../../Utilites/CustomAlertRedux/actions";
 import { SpinnerState } from "../../Utilites/Spinner/actions";
-import { editBOMListSuccess, getBOMListPageSuccess, GetItemUnitsDrodownAPISuccess, postBOMSuccess } from "./action";
-import { EDIT_BOM_LIST_ID, GET_BOM_LIST_PAGE, GET_ITEM_UNITS_DROPDOWN_API, POST_BOM } from "./actionTypes";
+import { deleteBOMIdSuccess, editBOMListSuccess, getBOMListPageSuccess, GetItemUnitsDrodownAPISuccess, postBOMSuccess, updateBOMListSuccess } from "./action";
+import { DELETE_BOM_LIST_PAGE, EDIT_BOM_LIST_ID, GET_BOM_LIST_PAGE, GET_ITEM_UNITS_DROPDOWN_API, POST_BOM, UPDATE_BOM_LIST } from "./actionTypes";
 
 //post api
 function* Post_BOM_GenratorFunction({ data }) {
@@ -41,8 +41,8 @@ function* GetItemUnits_saga({ data }) {
 function* get_BOMList_GenFunc({ filters }) {
 
   yield put(SpinnerState(true))
+  
   try {
-
     const response = yield call(BOM_ListPage_API, filters);
     let data = response.Data.map((i) => {
       i.id = `${i.id}/${i.Company}`;
@@ -62,12 +62,12 @@ function* get_BOMList_GenFunc({ filters }) {
 
 // edit List page
 function* editBOMListGenFunc({ id1, pageMode }) {
-  debugger
+
   yield put(SpinnerState(true))
   try {
-    let response = yield call(editBOMListID_forBOMPage_ApiCall, id1);
+    let response = yield call(edit_BOMListID, id1);
     response.pageMode = pageMode
-    // response.Data = response.Data[0];
+    response.Data = response.Data[0];
     yield put(SpinnerState(false))
     yield put(editBOMListSuccess(response));
   } catch (error) {
@@ -78,11 +78,46 @@ function* editBOMListGenFunc({ id1, pageMode }) {
     }));
   }
 }
+
+function* UpdateBOM_ID_GenFunc({ data, id }) {
+
+  try {
+    yield put(SpinnerState(true))
+    const response = yield call(BOM_Update_API, data, id);
+    yield put(SpinnerState(false))
+    yield put(updateBOMListSuccess(response))
+  }
+  catch (error) {
+    yield put(SpinnerState(false))
+    yield put(AlertState({
+      Type: 4,
+      Status: true, Message: "500 Error UpdateOrder",
+    }));
+  }
+}
+
+function* DeleteBOM_GenFunc({ id }) {
+  yield put(SpinnerState(true))
+  try {
+    const response = yield call(BOM_Delete_API, id);
+    yield put(SpinnerState(false))
+    yield put(deleteBOMIdSuccess(response));
+  } catch (error) {
+    yield put(SpinnerState(false))
+    yield put(AlertState({
+      Type: 4,
+      Status: true, Message: "500 Error DeleteOrder",
+    }));
+  }
+}
+
 function* BOMSaga() {
   yield takeEvery(POST_BOM, Post_BOM_GenratorFunction)
   yield takeEvery(GET_ITEM_UNITS_DROPDOWN_API, GetItemUnits_saga)
   yield takeEvery(GET_BOM_LIST_PAGE, get_BOMList_GenFunc)
   yield takeEvery(EDIT_BOM_LIST_ID, editBOMListGenFunc)
+  yield takeEvery(UPDATE_BOM_LIST, UpdateBOM_ID_GenFunc)
+  yield takeEvery(DELETE_BOM_LIST_PAGE, DeleteBOM_GenFunc)
 }
 
 export default BOMSaga;
