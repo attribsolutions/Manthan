@@ -29,8 +29,8 @@ import {
 import Select from "react-select";
 import SaveButton from "../../../../components/Common/ComponentRelatedCommonFile/CommonSaveButton";
 import ItemTab from "./ItemQuantityTab";
-import { GetItemUnitsDrodownAPI, postBOM, postBOMSuccess } from "../../../../store/Purchase/BOMRedux/action";
-import { BillOfMaterials, BillOfMaterialsList } from "../../../../routes/route_url";
+import { editBOMListSuccess, GetItemUnitsDrodownAPI, postBOM, postBOMSuccess } from "../../../../store/Purchase/BOMRedux/action";
+import { BillOfMaterialsList } from "../../../../routes/route_url";
 
 const BOMMaster = (props) => {
 
@@ -43,7 +43,7 @@ const BOMMaster = (props) => {
     const [pageMode, setPageMode] = useState("save");
     const [userPageAccessState, setUserPageAccessState] = useState('');
     const [ItemTabDetails, setItemTabDetails] = useState([])
-
+    console.log("ItemTabDetails", ItemTabDetails)
     const initialFiled = {
         id: "",
         Date: "",
@@ -103,39 +103,50 @@ const BOMMaster = (props) => {
         };
     }, [userAccess])
 
-    // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
-    // useEffect(() => {
+    //This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
+    useEffect(() => {
 
-    //     if ((hasShowloction || hasShowModal)) {
+        if ((hasShowloction || hasShowModal)) {
 
-    //         let hasEditVal = null
-    //         if (hasShowloction) {
-    //             setPageMode(location.pageMode)
-    //             hasEditVal = location.editValue
-    //         }
-    //         else if (hasShowModal) {
-    //             hasEditVal = props.editValue
-    //             setPageMode(props.pageMode)
-    //             setModalCss(true)
-    //         }
+            let hasEditVal = null
+            if (hasShowloction) {
+                setPageMode(location.pageMode)
+                hasEditVal = location.editValue
+            }
+            else if (hasShowModal) {
+                hasEditVal = props.editValue
+                setPageMode(props.pageMode)
+                setModalCss(true)
+            }
 
-    //         if (hasEditVal) {
-    //             setEditData(hasEditVal);
-    //             const { id, Name, IsReserved } = hasEditVal
-    //             const { values, fieldLabel, hasValid, required, isError } = { ...state }
+            if (hasEditVal) {
+                console.log("hasEditVal", hasEditVal)
+                setEditData(hasEditVal);
+                const { id, Date, Item, ItemName, Unit, UnitName, EstimatedOutput, Comment, IsActive } = hasEditVal
+                const { values, fieldLabel, hasValid, required, isError } = { ...state }
 
-    //             hasValid.Name.valid = true;
-    //             hasValid.IsReserved.valid = true;
+                hasValid.id.valid = true;
+                hasValid.Date.valid = true;
+                hasValid.ItemName.valid = true;
+                hasValid.UnitName.valid = true;
+                hasValid.EstimatedOutput.valid = true;
+                hasValid.Comment.valid = true;
+                hasValid.IsActive.valid = true;
 
-    //             values.id = id
-    //             values.Name = Name;
-    //             values.IsReserved = IsReserved;
-    //             setState({ values, fieldLabel, hasValid, required, isError })
-    //             dispatch(editGroupTypeIdSuccess({ Status: false }))
-    //             dispatch(Breadcrumb_inputName(hasEditVal.GroupTypeMaster))
-    //         }
-    //     }
-    // }, [])
+                values.id = id
+                values.Date = Date;
+                values.EstimatedOutput = EstimatedOutput;
+                values.Comment = Comment;
+                values.IsActive = IsActive;
+                values.ItemName = { label: ItemName, value: Item };
+                values.UnitName = { label: UnitName, value: Unit };
+                setItemTabDetails(hasEditVal.BOMItems)
+                setState({ values, fieldLabel, hasValid, required, isError })
+                dispatch(editBOMListSuccess({ Status: false }))
+                dispatch(Breadcrumb_inputName(hasEditVal.ItemName))
+            }
+        }
+    }, [])
 
     useEffect(() => {
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
@@ -225,7 +236,7 @@ const BOMMaster = (props) => {
         debugger
         const BOMItems = ItemTabDetails.map((index) => ({
             Item: index.ItemID,
-            Quantity: index.ItemQuantity,
+            Quantity: index.Quantity,
             Unit: index.UnitID
         }))
 
@@ -397,7 +408,7 @@ const BOMMaster = (props) => {
                                                         value={values.Comment}
                                                         type="text"
                                                         className={isError.Comment.length > 0 ? "is-invalid form-control" : "form-control"}
-                                                        placeholder="Please Enter EstimatedOutput"
+                                                        placeholder="Please Enter Comment"
                                                         autoComplete='off'
                                                         onChange={(event) => {
                                                             onChangeText({ event, state, setState })

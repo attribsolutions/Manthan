@@ -62,12 +62,12 @@ function BOMTable(props) {
 
 
   const tableRows = props.tableData.map((info) => {
-
+debugger
     return (
       <tr>
         {/* <td>{info.id}</td> */}
         <td>{info.ItemName}</td>
-        <td>{info.ItemQuantity}</td>
+        <td>{info.Quantity}</td>
         <td>{info.UnitName}</td>
         <td>
           <Button

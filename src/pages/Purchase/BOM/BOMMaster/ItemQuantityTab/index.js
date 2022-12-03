@@ -19,7 +19,7 @@ function ItemTab(props) {
 
     const dispatch = useDispatch();
     const [contentItemSelect, setContentItemSelect] = useState('');
-    const [ItemQuantity, setItemQuantity] = useState('');
+    const [Quantity, setQuantity] = useState('');
     const [unitSelect, setUnitSelect] = useState('');
 
     const { Items, GetItemUnits } = useSelector((state) => ({
@@ -63,13 +63,13 @@ function ItemTab(props) {
             ItemName: contentItemSelect.label,
             UnitID: unitSelect === "" ? "" : unitSelect.value,
             UnitName: unitSelect.label,
-            ItemQuantity: ItemQuantity,
+            Quantity: Quantity  ,
            
         };
 
         if (!(contentItemSelect === "")
             && !(unitSelect === "")
-            && !(ItemQuantity === "")
+            && !(Quantity === "")
         ) {
             const totalTableData = props.tableData.length;
             val.id = totalTableData + 1;
@@ -85,7 +85,7 @@ function ItemTab(props) {
     };
     const clearState = () => {
         setContentItemSelect('');
-        setItemQuantity('');
+        setQuantity('');
         setUnitSelect('');
     };
 
@@ -110,10 +110,10 @@ function ItemTab(props) {
                             <FormGroup className="mb-3 col col-sm-3 " >
                                 <Label >Item Quantity</Label>
                                 <Input type="text"
-                                    value={ItemQuantity}
+                                    value={Quantity}
                                     placeholder="Please Enter Margin"
                                     autoComplete="off"
-                                    onChange={(event) => setItemQuantity(event.target.value)}
+                                    onChange={(event) => setQuantity(event.target.value)}
                                 />
 
                             </FormGroup>
