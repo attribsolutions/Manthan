@@ -294,7 +294,7 @@ const AddEmployee = (props) => {
     label: data.Name,
     IsPartyConnection: data.IsPartyConnection
   }));
-  console.log(EmployeeType_DropdownOptions)
+
   const State_DropdownOptions = State.map((data) => ({
     value: data.id,
     label: data.Name
@@ -325,6 +325,7 @@ const AddEmployee = (props) => {
       setParty_DropdownSelect([{ value: null }])
     }
     setState((i) => {
+      debugger
       const a = { ...i }
       a.values.CompanyName = "";
       a.values.EmployeeParties = "";

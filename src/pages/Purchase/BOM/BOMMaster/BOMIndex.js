@@ -30,7 +30,7 @@ import Select from "react-select";
 import SaveButton from "../../../../components/Common/CommonSaveButton";
 import ItemTab from "./ItemQuantityTab";
 import { GetItemUnitsDrodownAPI, postBOM, postBOMSuccess } from "../../../../store/Purchase/BOMRedux/action";
-import { BillOfMaterials } from "../../../../routes/route_url";
+import { BillOfMaterials, BillOfMaterialsList } from "../../../../routes/route_url";
 
 const BOMMaster = (props) => {
 
@@ -46,10 +46,10 @@ const BOMMaster = (props) => {
 
     const initialFiled = {
         id: "",
-        BOMDate: "",
+        Date: "",
         ItemName: "",
         EstimatedOutput: "",
-        Unit: "",
+        UnitName: "",
         Comment: "",
         IsActive: false
     }
@@ -153,7 +153,7 @@ const BOMMaster = (props) => {
                     Type: 1,
                     Status: true,
                     Message: postMsg.Message,
-                    RedirectPath: BillOfMaterials,
+                    RedirectPath: BillOfMaterialsList,
                 }))
             }
         }
@@ -198,7 +198,6 @@ const BOMMaster = (props) => {
         label: index.Name,
     }));
 
-
     const Unit_DropdownOptions = GetItemUnits.map((data) => ({
         value: data.value,
         label: data.label
@@ -210,9 +209,10 @@ const BOMMaster = (props) => {
         });
         dispatch(GetItemUnitsDrodownAPI(jsonBody))
         setState((i) => {
+
             const a = { ...i }
-            a.values.Unit = "";
-            a.hasValid.Unit.valid = false
+            a.values.UnitName = "";
+            a.hasValid.UnitName.valid = false
             return a
         })
     }
@@ -222,28 +222,47 @@ const BOMMaster = (props) => {
     const { fieldLabel } = state;
 
     const formSubmitHandler = (event) => {
-
+        debugger
         const BOMItems = ItemTabDetails.map((index) => ({
             Item: index.ItemID,
             Quantity: index.ItemQuantity,
             Unit: index.UnitID
         }))
 
+        let Company = ''
+        try {
+            Company = JSON.parse(localStorage.getItem('Company'))
+        } catch (e) {
+            alert(e)
+        }
         event.preventDefault();
         if (formValid(state, setState)) {
             debugger
             const jsonBody = JSON.stringify({
 
-                Date: values.BOMDate,
+                Date: values.Date,
                 EstimatedOutput: values.EstimatedOutput,
                 Comment: values.Comment,
                 IsActive: values.IsActive,
                 Item: values.ItemName.value,
-                Unit: values.Unit.value,
+                Unit: values.UnitName.value,
                 CreatedBy: 1,
-                Company: 1,
+                Company: Company,
                 BOMItems: BOMItems
             });
+
+            if (BOMItems.length === 0) {
+                dispatch(
+                    AlertState({
+                        Type: 4,
+                        Status: true,
+                        Message: "At Least One Matrial data Add in the table",
+                        RedirectPath: false,
+                        PermissionAction: false,
+                    })
+                );
+                return;
+            }
 
             if (pageMode === 'edit') {
                 // dispatch(updateGroupTypeID(jsonBody, EditData.id));
@@ -283,10 +302,10 @@ const BOMMaster = (props) => {
                                         <CardBody style={{ backgroundColor: "whitesmoke" }}>
                                             <Row>
                                                 <FormGroup className="mb-2 col col-sm-4 ">
-                                                    <Label >{fieldLabel.BOMDate} </Label>
+                                                    <Label >{fieldLabel.Date} </Label>
                                                     <Flatpickr
-                                                        name="BOMDate"
-                                                        value={values.BOMDate}
+                                                        name="Date"
+                                                        value={values.Date}
                                                         className="form-control d-block p-2 bg-white text-dark"
                                                         placeholder="YYYY-MM-DD"
                                                         autoComplete="0,''"
@@ -294,13 +313,13 @@ const BOMMaster = (props) => {
                                                             altInput: true,
                                                             altFormat: "F j, Y",
                                                             dateFormat: "Y-m-d",
-                                                            minDate: new Date().fp_incr("n"),
-                                                            maxDate: new Date().fp_incr(0) // 14 days from now"0,''"
+                                                            // minDate: new Date().fp_incr("n"),
+                                                            // maxDate: new Date().fp_incr(0) // 14 days from now"0,''"
                                                         }}
                                                         onChange={(y, v, e) => { onChangeDate({ e, v, state, setState }) }}
                                                     />
-                                                    {isError.BOMDate.length > 0 && (
-                                                        <span className="invalid-feedback">{isError.BOMDate}</span>
+                                                    {isError.Date.length > 0 && (
+                                                        <span className="invalid-feedback">{isError.Date}</span>
                                                     )}
                                                 </FormGroup>
 
@@ -351,11 +370,11 @@ const BOMMaster = (props) => {
 
                                                 <Col md="1"></Col>
                                                 <FormGroup className="mb-2 col col-sm-4 ">
-                                                    <Label > {fieldLabel.Unit} </Label>
+                                                    <Label > {fieldLabel.UnitName} </Label>
                                                     <Col sm={12}>
                                                         <Select
-                                                            name="Unit"
-                                                            value={values.Unit}
+                                                            name="UnitName"
+                                                            value={values.UnitName}
                                                             isSearchable={true}
                                                             className="react-dropdown"
                                                             classNamePrefix="dropdown"
@@ -363,8 +382,8 @@ const BOMMaster = (props) => {
                                                             onChange={(hasSelect, evn) => onChangeSelect({ hasSelect, evn, state, setState, })}
 
                                                         />
-                                                        {isError.Unit.length > 0 && (
-                                                            <span className="text-danger f-8"><small>{isError.Unit}</small></span>
+                                                        {isError.UnitName.length > 0 && (
+                                                            <span className="text-danger f-8"><small>{isError.UnitName}</small></span>
                                                         )}
                                                     </Col>
                                                 </FormGroup>

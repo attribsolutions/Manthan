@@ -486,103 +486,105 @@ const PartyMaster = (props) => {
 
                                             <TabContent activeTab={activeTab1} className="p-3 text-muted">
                                                 <TabPane tabId="1">
-                                                    <Row>
+                                                   
                                                         <Card className="text-black" style={{ backgroundColor: "whitesmoke" }} >
+                                                            <CardBody>
+                                                                <Row >
+                                                                    <Col md="3">
+                                                                        <FormGroup className="mb-3">
+                                                                            <Label htmlFor="validationCustom01">Name </Label>
+                                                                            <AvField name="Name" id="txtName"
+                                                                                value={EditData.Name}
+                                                                                type="text"
+                                                                                placeholder="Please Enter Name"
+                                                                                autoComplete='off'
 
-                                                            <Row className="mt-3 ">
-                                                                <Col md="3">
-                                                                    <FormGroup className="mb-3">
-                                                                        <Label htmlFor="validationCustom01">Name </Label>
-                                                                        <AvField name="Name" id="txtName"
-                                                                            value={EditData.Name}
-                                                                            type="text"
-                                                                            placeholder="Please Enter Name"
-                                                                            autoComplete='off'
+                                                                                autoFocus={true}
+                                                                                validate={{
+                                                                                    required: { value: true, errorMessage: 'Please Enter Name' },
+                                                                                }}
+                                                                                onChange={(e) => { dispatch(Breadcrumb_inputName(e.target.value)) }}
+                                                                            />
+                                                                        </FormGroup>
+                                                                    </Col>
+                                                                    <Col md="1">  </Col>
+                                                                    <Col md="3">
+                                                                        <FormGroup className="mb-3">
+                                                                            <Label htmlFor="validationCustom01">Mobile Number </Label>
+                                                                            <AvField name="MobileNo" type="tel"
+                                                                                value={EditData.MobileNo}
+                                                                                id="mobileNo"
+                                                                                placeholder="Enter Mobile No."
+                                                                                autoComplete='off'
+                                                                                validate={{
+                                                                                    required: { value: true, errorMessage: 'Enter your Mobile Number' },
+                                                                                    tel: {
+                                                                                        pattern: /^(\+\d{1,3}[- ]?)?\d{10}$/,
+                                                                                        errorMessage: "Please Enter 10 Digit Mobile Number."
+                                                                                    }
+                                                                                }}
+                                                                            />
+                                                                        </FormGroup>
+                                                                    </Col>
+                                                                    <Col md="1">  </Col>
 
-                                                                            autoFocus={true}
-                                                                            validate={{
-                                                                                required: { value: true, errorMessage: 'Please Enter Name' },
-                                                                            }}
-                                                                            onChange={(e) => { dispatch(Breadcrumb_inputName(e.target.value)) }}
-                                                                        />
-                                                                    </FormGroup>
-                                                                </Col>
-                                                                <Col md="1">  </Col>
-                                                                <Col md="3">
-                                                                    <FormGroup className="mb-3">
-                                                                        <Label htmlFor="validationCustom01">Mobile Number </Label>
-                                                                        <AvField name="MobileNo" type="tel"
-                                                                            value={EditData.MobileNo}
-                                                                            id="mobileNo"
-                                                                            placeholder="Enter Mobile No."
-                                                                            autoComplete='off'
-                                                                            validate={{
-                                                                                required: { value: true, errorMessage: 'Enter your Mobile Number' },
-                                                                                tel: {
-                                                                                    pattern: /^(\+\d{1,3}[- ]?)?\d{10}$/,
-                                                                                    errorMessage: "Please Enter 10 Digit Mobile Number."
+                                                                    <Col md="3">
+                                                                        <FormGroup className="mb-3">
+                                                                            <Label htmlFor="validationCustom01">Alternate Contact Number(s)</Label>
+                                                                            <AvField name="AlternateContactNo" type="tel"
+                                                                                value={EditData.AlternateContactNo}
+                                                                                autoComplete='off'
+                                                                                id="mobileNo"
+                                                                                placeholder="Alternate Contact Number(s)"
+                                                                            />
+                                                                        </FormGroup>
+                                                                    </Col>
+                                                                </Row>
+                                                                <Row className="mt-2">
+                                                                    <Col md="3">
+                                                                        <FormGroup >
+                                                                            <Label htmlFor="validationCustom01">Email </Label>
+                                                                            <AvField name="Email" type="email"
+                                                                                id="email"
+                                                                                value={EditData.Email}
+                                                                                placeholder="Enter your Email"
+                                                                                autoComplete='off'
+                                                                                validate={{
+                                                                                    required: { value: true, errorMessage: 'Please Enter your Email' },
+                                                                                    tel: {
+                                                                                        pattern: "/^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/",
+                                                                                        errorMessage: "Please Enter valid Email Address.(Ex:abc@gmail.com)"
+                                                                                    }
                                                                                 }
-                                                                            }}
-                                                                        />
-                                                                    </FormGroup>
-                                                                </Col>
-                                                                <Col md="1">  </Col>
-
-                                                                <Col md="3">
-                                                                    <FormGroup className="mb-3">
-                                                                        <Label htmlFor="validationCustom01">Alternate Contact Number(s)</Label>
-                                                                        <AvField name="AlternateContactNo" type="tel"
-                                                                            value={EditData.AlternateContactNo}
-                                                                            autoComplete='off'
-                                                                            id="mobileNo"
-                                                                            placeholder="Alternate Contact Number(s)"
-                                                                        />
-                                                                    </FormGroup>
-                                                                </Col>
-                                                            </Row>
-                                                            <Row className="mt-3">
-                                                                <Col md="3">
-                                                                    <FormGroup className="mb-3">
-                                                                        <Label htmlFor="validationCustom01">Email </Label>
-                                                                        <AvField name="Email" type="email"
-                                                                            id="email"
-                                                                            value={EditData.Email}
-                                                                            placeholder="Enter your Email"
-                                                                            autoComplete='off'
-                                                                            validate={{
-                                                                                required: { value: true, errorMessage: 'Please Enter your Email' },
-                                                                                tel: {
-                                                                                    pattern: "/^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/",
-                                                                                    errorMessage: "Please Enter valid Email Address.(Ex:abc@gmail.com)"
                                                                                 }
-                                                                            }
-                                                                            }
-                                                                        />
-                                                                    </FormGroup>
-                                                                </Col>
-                                                            </Row>
+                                                                            />
+                                                                        </FormGroup>
+                                                                    </Col>
+                                                                </Row>
+                                                            </CardBody>
                                                         </Card>
-                                                    </Row>
-                                                    <Row>
+                                              
+                                                    
                                                         <Card className=" text-black mt-n2" style={{ backgroundColor: "whitesmoke" }} >
-                                                            <Row className="mt-3 ">
+                                                           <CardBody>
+                                                            <Row >
                                                                 <Col md="3">
                                                                     <FormGroup className="mb-3">
                                                                         <Label htmlFor="validationCustom01"> Party Type </Label>
-                                                                        <Col sm={12}>
+                                                                        {/* <Col sm={12}> */}
                                                                             <Select
                                                                                 value={partyType_dropdown_Select}
                                                                                 options={PartyTypeDropdown_Options}
                                                                                 onChange={(e) => { PartyType_Dropdown_OnChange_Handller(e) }}
                                                                             />
 
-                                                                        </Col>
+                                                                        {/* </Col> */}
                                                                     </FormGroup>
                                                                 </Col>
 
                                                                 <Col md="1">  </Col>
                                                                 <Col md="3">
-                                                                    <FormGroup className="mb-3">
+                                                                    <FormGroup>
                                                                         <Label htmlFor="validationCustom01">Price List </Label>
 
                                                                         {/* <Select
@@ -610,15 +612,15 @@ const PartyMaster = (props) => {
                                                                 <Col md="1">  </Col>
 
                                                                 <Col md="3">
-                                                                    <FormGroup className="mb-3">
+                                                                    <FormGroup>
                                                                         <Label htmlFor="validationCustom01">Company Name </Label>
-                                                                        <Col sm={12}>
+                                                                        {/* <Col sm={12}> */}
                                                                             <Select
                                                                                 value={companyList_dropdown_Select}
                                                                                 options={companyListValues}
                                                                                 onChange={(e) => { handllercompanyList(e) }}
                                                                             />
-                                                                        </Col>
+                                                                        {/* </Col> */}
                                                                     </FormGroup>
                                                                 </Col>
                                                             </Row>
@@ -649,7 +651,7 @@ const PartyMaster = (props) => {
 
                                                                 <Col md="1">  </Col>
                                                                 <Col md="3">
-                                                                    <FormGroup className="mb-3">
+                                                                    <FormGroup>
                                                                         <Label htmlFor="validationCustom01"> GSTIN </Label>
                                                                         <AvField
                                                                             name="GSTIN"
@@ -673,7 +675,7 @@ const PartyMaster = (props) => {
 
                                                                 <Col md="1">  </Col>
                                                                 <Col md="3">
-                                                                    <FormGroup className="mb-3">
+                                                                    <FormGroup>
                                                                         <Row style={{ marginTop: '25px' }}>
                                                                             <Label
                                                                                 htmlFor="horizontal-firstname-input"
@@ -695,9 +697,10 @@ const PartyMaster = (props) => {
                                                                 </Col>
 
                                                             </Row>
+                                                            
                                                             <Row>
                                                                 <Col md="3">
-                                                                    <FormGroup className="mb-3">
+                                                                    <FormGroup >
                                                                         <Label htmlFor="validationCustom01">State</Label>
                                                                         <Col sm={12} style={{ height: "2.9cm" }}>
                                                                             <Select
@@ -711,7 +714,7 @@ const PartyMaster = (props) => {
 
                                                                 <Col md="1">  </Col>
                                                                 <Col md="3">
-                                                                    <FormGroup className="mb-3">
+                                                                    <FormGroup>
                                                                         <Label htmlFor="validationCustom01">District </Label>
                                                                         <Col sm={12}>
                                                                             <Select
@@ -725,7 +728,7 @@ const PartyMaster = (props) => {
 
                                                                 <Col md="1"></Col>
                                                                 <Col md="3">
-                                                                    <FormGroup className="mb-3">
+                                                                    <FormGroup>
                                                                         <Row style={{ marginTop: '25px' }}>
                                                                             <Label
                                                                                 htmlFor="horizontal-firstname-input"
@@ -734,7 +737,7 @@ const PartyMaster = (props) => {
                                                                                 Active
                                                                             </Label>
                                                                             <Col md={4} style={{ marginTop: '7px' }} className=" form-check form-switch form-switch-sm ">
-                                                                                <div className="form-check form-switch form-switch-md mb-3" dir="ltr">
+                                                                                <div className="form-check form-switch form-switch-md " dir="ltr">
                                                                                     <AvInput type="checkbox" className="form-check-input " id="inp-isActive"
                                                                                         checked={EditData.isActive}
                                                                                         defaultChecked={true}
@@ -747,8 +750,9 @@ const PartyMaster = (props) => {
                                                                     </FormGroup>
                                                                 </Col>
                                                             </Row>
+                                                            </CardBody>
                                                         </Card>
-                                                    </Row>
+                                                   
                                                 </TabPane>
 
                                                 <TabPane tabId="2">
@@ -764,13 +768,14 @@ const PartyMaster = (props) => {
                                                 </TabPane>
 
                                                 <TabPane tabId="3">
-                                                    <Row>
+                                                    {/* <Row> */}
                                                         <Col md={12}  >
-                                                            <Row className="mt-3">
+                                                            {/* <Row className="mt-3"> */}
 
                                                                 <Card className="text-black" style={{ backgroundColor: "whitesmoke" }} >
+                                                                   <CardBody>
                                                                     <Col>
-                                                                        <FormGroup className="mb-3 mt-3">
+                                                                        <FormGroup className="mb-3">
                                                                             <Row md="5">
 
                                                                                 <Label htmlFor="validationCustom01"> Order Prefix</Label>
@@ -822,7 +827,7 @@ const PartyMaster = (props) => {
                                                                     </Col>
 
                                                                     <Col>
-                                                                        <FormGroup className="mb-3">
+                                                                        <FormGroup>
                                                                             <Row md="5">
 
                                                                                 <Label htmlFor="validationCustom01"> Receipt Prefix</Label>
@@ -837,11 +842,11 @@ const PartyMaster = (props) => {
                                                                             </Row>
                                                                         </FormGroup>
                                                                     </Col>
-
+                                                                    </CardBody>
                                                                 </Card>
-                                                            </Row>
+                                                            {/* </Row> */}
                                                         </Col>
-                                                    </Row>
+                                                    {/* </Row> */}
                                                 </TabPane>
                                             </TabContent>
                                         </CardBody>

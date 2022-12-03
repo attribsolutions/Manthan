@@ -93,6 +93,7 @@ import PartyItemsList from "../pages/Adminisrator/PartyItemPage/PartyItemList";
 import Index from "../pages/Adminisrator/ItemPages/ItemMaster/Image_Tab/Index";
 import demo from "../pages/Adminisrator/GroupPage/demo";
 import BOMMaster from "../pages/Purchase/BOM/BOMMaster/BOMIndex";
+import BOMList from "../pages/Purchase/BOM/BOMList/BOMList";
 
 // import PartyItemsList from "../pages/Adminisrator
 
@@ -198,6 +199,8 @@ const userRoutes = [
   // { path:"/demo", component: demo },
 
   { path:path.BillOfMaterials, component: BOMMaster },
+  { path:path.BillOfMaterialsList, component: BOMList },
+  
 
 
   { path: path.SEARCH_BOX2, component: SearchBoxSecond },

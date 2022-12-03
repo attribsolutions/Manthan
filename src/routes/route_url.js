@@ -91,6 +91,6 @@ export const SUBGROUP="/SubGroupMaster"
 export const SUBGROUP_LIST="/SubGroupList"
 
 export const BillOfMaterials="/BOM"
-
+export const BillOfMaterialsList="/BOMList"
 
 
