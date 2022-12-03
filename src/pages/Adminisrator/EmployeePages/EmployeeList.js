@@ -9,7 +9,7 @@ import {
 } from "../../../store/Administrator/M_EmployeeRedux/action";
 import { useSelector, useDispatch } from "react-redux";
 import AddEmployee from "./EmployeeMaster";
-import CommonListPage from "../../../components/Common/CmponentRelatedCommonFile/commonListPage";
+import CommonListPage from "../../../components/Common/ComponentRelatedCommonFile/CommonMasterListPage";
 import { commonPageFieldList, commonPageFieldListSuccess } from "../../../store/actions";
 
 const Employee_List = () => {

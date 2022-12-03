@@ -22,7 +22,7 @@ import {
 } from "../../../store/Administrator/VehicleRedux/action";
 import { AlertState } from "../../../store/actions";
 import { listPageCommonButtonFunction } 
-from "../../../components/Common/CmponentRelatedCommonFile/listPageCommonButtons";
+from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 
 const VehicleList = (props) => {
 

@@ -23,12 +23,9 @@ import { getpartyItemList, getPartyItemListSuccess, GetPartyList, getSupplier, P
 import paginationFactory, { PaginationListStandalone, PaginationProvider } from "react-bootstrap-table2-paginator";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable, { CHECKBOX_STATUS_CHECKED } from "react-bootstrap-table-next";
-import { mySearchProps } from "../../../components/Common/CmponentRelatedCommonFile/SearchBox/MySearch";
+import { countlabelFunc } from "../../../components/Common/ComponentRelatedCommonFile/CommonMasterListPage";
+import { mySearchProps } from "../../../components/Common/ComponentRelatedCommonFile/SearchBox/MySearch";
 import SaveButton from "../../../components/Common/CommonSaveButton";
-import { countlabelFunc } from "../../../components/Common/CmponentRelatedCommonFile/commonListPage";
-import { AvCheckbox } from "availity-reactstrap-validation";
-import { comAddPageFieldFunc, initialFiledFunc } from "../../../components/Common/CmponentRelatedCommonFile/validationFunction";
-import { PARTYITEM_LIST } from "../../../routes/route_url";
 
 
 const PartyItems = (props) => {
@@ -187,13 +184,13 @@ const PartyItems = (props) => {
             // },
 
             formatter: (cellContent, row, col, k) => (
-            <span >
-                <Input type="checkbox"
-                    defaultChecked={cellContent}
-                    onChange={e => row.itemCheck = e.target.checked}
-                />
+                <span >
+                    <Input type="checkbox"
+                        defaultChecked={cellContent}
+                        onChange={e => row.itemCheck = e.target.checked}
+                    />
 
-            </span>
+                </span>
 
 
             ),
@@ -212,7 +209,7 @@ const PartyItems = (props) => {
     //         // })
     //     //   } )
     //     })
-    
+
     // };
 
     // const selectRow = {
@@ -373,7 +370,7 @@ const PartyItems = (props) => {
                                                 <React.Fragment>
                                                     <div className="table">
                                                         <BootstrapTable
-                                                        // id="BootstrapTable"
+                                                            // id="BootstrapTable"
                                                             // selectRow={selectRow}
                                                             keyField={"id"}
                                                             bordered={true}

@@ -10,13 +10,15 @@ import {
     // getOrderList
 } from "../../../../store/Purchase/OrderPageRedux/actions";
 import { commonPageFieldList, commonPageFieldListSuccess, } from "../../../../store/actions";
-import PurchaseListPage from "../../../../components/Common/CmponentRelatedCommonFile/purchase"
+import PurchaseListPage from "../../../../components/Common/ComponentRelatedCommonFile/purchase"
 
 import { BillOfMaterials, BillOfMaterialsList } from "../../../../routes/route_url";
 import { Button, Col, FormGroup, Label } from "reactstrap";
 import Breadcrumb from "../../../../components/Common/Breadcrumb";
 import { useHistory } from "react-router-dom";
-import { currentDate, excelDownCommonFunc } from "../../../../components/Common/CmponentRelatedCommonFile/listPageCommonButtons";
+
+import { currentDate, excelDownCommonFunc } from "../../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+
 import { useMemo } from "react";
 import { editBOMList, getBOMListPage } from "../../../../store/Purchase/BOMRedux/action";
 

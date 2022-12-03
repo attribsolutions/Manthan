@@ -23,7 +23,9 @@ import {
 import ItemsMaster from "./ItemMaster/index";
 import { MetaTags } from "react-meta-tags";
 import { useHistory } from "react-router-dom";
-import { listPageCommonButtonFunction } from "../../../components/Common/CmponentRelatedCommonFile/listPageCommonButtons";
+import { listPageCommonButtonFunction } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+
+
 
 const ItemsList = (props) => {
 

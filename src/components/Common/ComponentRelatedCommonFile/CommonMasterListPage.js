@@ -1,6 +1,6 @@
 
 import React, { useEffect, useMemo, useState } from "react";
-import Breadcrumb from "../../../components/Common/Breadcrumb3";
+import Breadcrumb from "../Breadcrumb3";
 import { Col, Modal, Row } from "reactstrap";
 import paginationFactory, {
   PaginationListStandalone,
@@ -14,8 +14,8 @@ import { useHistory } from "react-router-dom";
 
 import { AlertState, BreadcrumbFilterSize } from "../../../store/actions";
 import { excelDownCommonFunc, listPageCommonButtonFunction }
-  from "../../../components/Common/CmponentRelatedCommonFile/listPageCommonButtons";
-import { mySearchProps } from "./SearchBox/MySearch";
+  from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { mySearchProps } from "./MySearch";
 
 let sortType = "asc"
 let searchCount = 0

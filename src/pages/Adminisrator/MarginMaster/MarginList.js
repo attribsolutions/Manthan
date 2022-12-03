@@ -17,8 +17,9 @@ import {
   delete_MarginListSuccess,
   getMarginListPage,
 } from "../../../store/Administrator/MarginMasterRedux/action";
-import { countlabelFunc } from "../../../components/Common/CmponentRelatedCommonFile/commonListPage";
-import { mySearchProps } from "../../../components/Common/CmponentRelatedCommonFile/SearchBox/MySearch";
+import { countlabelFunc } from "../../../components/Common/ComponentRelatedCommonFile/CommonMasterListPage";
+import { mySearchProps } from "../../../components/Common/ComponentRelatedCommonFile/SearchBox/MySearch";
+
 const MarginList = (props) => {
 
   const dispatch = useDispatch();

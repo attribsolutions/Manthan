@@ -9,8 +9,9 @@ import {
   delete_CompanyGroupType_ID,
   PostMethod_ForCompanyGroupMasterSuccess,
 } from "../../../store/Administrator/CompanyGroupRedux/action";
-import CommonListPage from "../../../components/Common/CmponentRelatedCommonFile/commonListPage";
-import {  commonPageFieldList, commonPageFieldListSuccess } from "../../../store/actions";
+import CommonListPage from "../../../components/Common/ComponentRelatedCommonFile/CommonMasterListPage";
+
+import { commonPageFieldList, commonPageFieldListSuccess } from "../../../store/actions";
 import { COMPANYGROUP } from "../../../routes/route_url";
 
 
@@ -32,7 +33,7 @@ const CompanyGroupList = (props) => {
   const action = {
     getList: getMethodForCompanyGroupList,
     editId: editCompanyGroupTypeId,
-    deleteId:delete_CompanyGroupType_ID,
+    deleteId: delete_CompanyGroupType_ID,
     postSucc: PostMethod_ForCompanyGroupMasterSuccess,
     updateSucc: updateCompanyGroupTypeIDSuccess,
     deleteSucc: deleteCompanyGroupTypeIDSuccess,

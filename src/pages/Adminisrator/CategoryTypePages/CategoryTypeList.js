@@ -9,9 +9,9 @@ import {
   PostMethod_ForCategoryTypeMasterAPISuccess,
   updateCategoryTypeIDSuccess
 } from "../../../store/actions";
-import CommonListPage from "../../../components/Common/CmponentRelatedCommonFile/commonListPage";
 import {  commonPageFieldList, commonPageFieldListSuccess } from "../../../store/actions";
 import { CATEGORYTYPE } from "../../../routes/route_url";
+import CommonListPage from "../../../components/Common/ComponentRelatedCommonFile/CommonMasterListPage";
 
 const CategoryTypeList = (props) => {
 

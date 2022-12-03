@@ -45,7 +45,7 @@ import {
     formValid,
     onChangeSelect,
     onChangeText,
-} from "../../../components/Common/CmponentRelatedCommonFile/validationFunction";
+} from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
 import { AlertState, Breadcrumb_inputName, commonPageField, commonPageFieldSuccess } from "../../../store/actions"
 import Tree from "./Tree"
 import AddressDetails_Tab from "."

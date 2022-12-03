@@ -24,7 +24,9 @@ import { useSelector, useDispatch } from "react-redux";
 import AddEmployee from "./EmployeeMaster";
 import { MetaTags } from "react-meta-tags";
 import { useHistory } from "react-router-dom";
-import { listPageCommonButtonFunction } from "../../../components/Common/CmponentRelatedCommonFile/listPageCommonButtons";
+import { listPageCommonButtonFunction } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+
+
 
 const Employee_List = () => {
   const dispatch = useDispatch();

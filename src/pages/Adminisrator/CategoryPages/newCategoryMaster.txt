@@ -31,7 +31,7 @@ import {
     onChangeSelect,
     onChangeText,
 
-} from "../../../components/Common/CmponentRelatedCommonFile/validationFunction";
+} from "../../../components/Common/import { countlabelFunc } from "../../../components/Common/ComponentRelatedCommonFile/CommonMasterListPage";/validationFunction";
 
 
 import { SaveButton } from "../../../components/CommonSaveButton";

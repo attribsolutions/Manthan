@@ -25,7 +25,7 @@ import {
     onChangeDate,
     onChangeSelect,
     onChangeText,
-} from "../../../../components/Common/CmponentRelatedCommonFile/validationFunction";
+} from "../../../../components/Common/ComponentRelatedCommonFile/validationFunction";
 import Select from "react-select";
 import SaveButton from "../../../../components/Common/CommonSaveButton";
 import ItemTab from "./ItemQuantityTab";

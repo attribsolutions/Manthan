@@ -15,7 +15,9 @@ import { MetaTags } from "react-meta-tags";
 import { useHistory } from "react-router-dom";
 import { deleteEmployeeTypeIDSuccess, delete_EmployeeType_ID, editEmployeeTypeId, getEmployeeTypelist, PostEmployeeTypeSubmitSuccess, updateEmployeeTypeIDSuccess } from "../../../store/Administrator/EmployeeTypeRedux/action";
 import EmployeeTypesMaster from "./EmployeeTypesMaster";
-import { listPageCommonButtonFunction } from "../../../components/Common/CmponentRelatedCommonFile/listPageCommonButtons";
+import { listPageCommonButtonFunction } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+
+
 
 const EmployeeTypeList = (props) => {
 

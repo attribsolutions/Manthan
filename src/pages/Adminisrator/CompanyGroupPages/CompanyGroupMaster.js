@@ -32,7 +32,7 @@ import {
     formValid,
     initialFiledFunc,
     onChangeText
-} from "../../../components/Common/CmponentRelatedCommonFile/validationFunction";
+} from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
 import { COMPANYGROUP_lIST } from "../../../routes/route_url";
 import { UPDATE_COMPANYGROUP_TYPE_ID_SUCCESS } from "../../../store/Administrator/CompanyGroupRedux/actionType";
 import SaveButton from "../../../components/Common/CommonSaveButton";

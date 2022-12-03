@@ -9,7 +9,7 @@ import {
   updatePriceListSuccess,
   getPriceListPage
 } from "../../../store/Administrator/PriceList/action";
-import CommonListPage from "../../../components/Common/CmponentRelatedCommonFile/commonListPage";
+import CommonListPage from "../../../components/Common/ComponentRelatedCommonFile/CommonMasterListPage";
 import { commonPageFieldList, commonPageFieldListSuccess } from "../../../store/actions";
 import { PRICE } from "../../../routes/route_url";
 

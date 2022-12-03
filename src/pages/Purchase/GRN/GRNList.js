@@ -9,7 +9,7 @@ import Breadcrumb from "../../../components/Common/Breadcrumb";
 import Select from "react-select";
 import "flatpickr/dist/themes/material_blue.css"
 import Flatpickr from "react-flatpickr";
-import PurchaseListPage from "../../../components/Common/CmponentRelatedCommonFile/purchase";
+import PurchaseListPage from "../../../components/Common/ComponentRelatedCommonFile/purchase";
 import {
     deleteGRNId,
     deleteGRNIdSuccess,
@@ -18,7 +18,7 @@ import {
 } from "../../../store/Purchase/GRNRedux/actions";
 import { goButton } from "../../../store/Purchase/OrderPageRedux/actions";
 import { getSupplier } from "../../../store/CommonAPI/SupplierRedux/actions";
-import { excelDownCommonFunc } from "../../../components/Common/CmponentRelatedCommonFile/listPageCommonButtons";
+import { excelDownCommonFunc } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 
 
 let onlodTodate = null

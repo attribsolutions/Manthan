@@ -10,7 +10,7 @@ import {
 } from "../../../store/Administrator/HPagesRedux/actions";
 import HPageMaster from "./PageMaster";
 import { commonPageFieldList, commonPageFieldListSuccess, } from "../../../store/actions";
-import CommonListPage from "../../../components/Common/CmponentRelatedCommonFile/commonListPage";
+import CommonListPage from "../../../components/Common/ComponentRelatedCommonFile/CommonMasterListPage";
 import { PAGE } from "../../../routes/route_url";
 
 

@@ -9,7 +9,7 @@ import {
     updateSuccess,
     addUserSuccess
 } from "../../../store/Administrator/UserRegistrationRedux/actions";
-import CommonListPage from "../../../components/Common/CmponentRelatedCommonFile/commonListPage";
+import CommonListPage from "../../../components/Common/ComponentRelatedCommonFile/CommonMasterListPage";
 import {  commonPageFieldList, commonPageFieldListSuccess, } from "../../../store/actions";
 import { USER } from "../../../routes/route_url";
 

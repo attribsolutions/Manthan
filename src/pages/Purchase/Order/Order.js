@@ -29,7 +29,7 @@ import {
     updateOrderIdSuccess
 } from "../../../store/Purchase/OrderPageRedux/actions";
 import { getSupplier, getSupplierAddress } from "../../../store/CommonAPI/SupplierRedux/actions"
-import { mySearchProps } from "../../../components/Common/CmponentRelatedCommonFile/SearchBox/MySearch";
+import { countlabelFunc } from "../../../components/Common/ComponentRelatedCommonFile/CommonMasterListPage";
 import { AlertState, BreadcrumbFilterSize } from "../../../store/actions";
 import { basicAmount, GstAmount, handleKeyDown, totalAmount } from "./OrderPageCalulation";
 import '../../Order/div.css'

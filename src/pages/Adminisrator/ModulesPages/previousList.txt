@@ -19,7 +19,7 @@ import {
 } from "../../../store/actions";
 import Modules from "./Modules";
 import { useHistory } from "react-router-dom";
-import { commonDefaultSorted, commonListPageDelete_UpdateMsgFunction, commonPageOptions, listPageCommonButtonFunction } from "../../../components/Common/CmponentRelatedCommonFile/listPageCommonButtons";
+import { commonDefaultSorted, commonListPageDelete_UpdateMsgFunction, commonPageOptions, listPageCommonButtonFunction } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 
 const ModulesList = () => {
     const dispatch = useDispatch();

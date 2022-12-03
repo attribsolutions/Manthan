@@ -9,9 +9,9 @@ import {
   PostMethod_ForCategoryAPISuccess,
   updateCategoryIDSuccess
 } from "../../../store/Administrator/CategoryRedux/action";
-import CommonListPage from "../../../components/Common/CmponentRelatedCommonFile/commonListPage";
 import {  commonPageFieldList, commonPageFieldListSuccess } from "../../../store/actions";
 import { CATEGORY } from "../../../routes/route_url";
+import CommonListPage from "../../../components/Common/ComponentRelatedCommonFile/CommonMasterListPage";
 
 const CategoryList = (props) => {
 

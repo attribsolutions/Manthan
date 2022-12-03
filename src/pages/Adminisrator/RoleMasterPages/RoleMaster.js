@@ -21,7 +21,7 @@ import {
   initialFiledFunc,
   onChangeSelect,
   onChangeText,
-} from "../../../components/Common/CmponentRelatedCommonFile/validationFunction";
+} from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
 import { ROLE_lIST } from "../../../routes/route_url";
 import SaveButton from "../../../components/Common/CommonSaveButton";
 

@@ -22,7 +22,7 @@ import {
 } from "../../../store/Administrator/CompanyGroupRedux/action";
 import { AlertState } from "../../../store/actions";
 import { listPageCommonButtonFunction }
-  from "../../../components/Common/CmponentRelatedCommonFile/listPageCommonButtons";
+  from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 
 const CompanyGroupList = (props) => {
 

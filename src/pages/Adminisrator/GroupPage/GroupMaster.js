@@ -35,7 +35,7 @@ import {
     onChangeSelect,
     onChangeText,
 
-} from "../../../components/Common/CmponentRelatedCommonFile/validationFunction";
+} from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
 import { getGroupTypeslist } from "../../../store/Administrator/GroupTypeRedux/action";
 import { GROUP_lIST } from "../../../routes/route_url";
 import SaveButton from "../../../components/Common/CommonSaveButton";

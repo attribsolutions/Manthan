@@ -30,7 +30,7 @@ import {
   onChangeSelect,
   onChangeText,
 
-} from "../../../components/Common/CmponentRelatedCommonFile/validationFunction";
+} from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
 import SaveButton from "../../../components/Common/CommonSaveButton";
 
 const AddEmployee = (props) => {

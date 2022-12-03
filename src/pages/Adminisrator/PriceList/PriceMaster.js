@@ -45,7 +45,7 @@ import {
 } from "../../../store/Administrator/PriceList/action";
 import { getPartyTypes } from "../../../store/Administrator/PartyRedux/action";
 import Tree from "../PartyPages/Tree";
-import { initialFiledFunc } from "../../../components/Common/CmponentRelatedCommonFile/validationFunction";
+import { initialFiledFunc } from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
 
 
 

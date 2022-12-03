@@ -10,8 +10,8 @@ import {
   delete_DriverType_ID,
   PostMethod_ForDriverMasterSuccess,
 } from "../../../store/Administrator/DriverRedux/action";
+import CommonListPage from "../../../components/Common/ComponentRelatedCommonFile/CommonMasterListPage";
 
-import CommonListPage from "../../../components/Common/CmponentRelatedCommonFile/commonListPage";
 import { commonPageFieldList, commonPageFieldListSuccess } from "../../../store/actions";
 import { DRIVER } from "../../../routes/route_url";
 import { useHistory } from "react-router-dom";
