@@ -34,7 +34,8 @@ import {
     initialFiledFunc
 } from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
 import { DRIVER_lIST } from "../../../routes/route_url";
-import SaveButton from "../../../components/Common/CommonSaveButton";
+import SaveButton from "../../../components/Common/ComponentRelatedCommonFile/CommonSaveButton";
+
 
 const DriverMaster = (props) => {
 

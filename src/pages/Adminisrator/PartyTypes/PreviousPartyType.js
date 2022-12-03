@@ -29,7 +29,8 @@ import {
   updatePartyTypeID,
   PostPartyTypeAPI,
 } from "../../../store/Administrator/PartyTypeRedux/action";
-import { SaveButton } from "../../../components/CommonSaveButton";
+import SaveButton from "../../../components/Common/ComponentRelatedCommonFile/CommonSaveButton";
+
 
 
 const PartyType = (props) => {

@@ -18,7 +18,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { AlertState } from "../../../store/actions";
 import { Breadcrumb_inputName } from "../../../store/actions";
-import { SaveButton } from "../../../components/CommonSaveButton";
+import SaveButton from "../../../components/Common/ComponentRelatedCommonFile/CommonSaveButton";
 
 const EmployeeTypesMaster = (props) => {
 
