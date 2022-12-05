@@ -11,6 +11,7 @@ import {
 } from 'reactstrap';
 import Flatpickr from "react-flatpickr"
 import GSTTable from './Table';
+import { createdBy, userCompany } from '../../../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons';
 
 function GSTTab(props) {
 
@@ -27,9 +28,9 @@ function GSTTab(props) {
             GSTPercentage: GST,
             HSNCode: HSNCode,
             EffectiveDate: effectiveDate,
-            CreatedBy: 1,
-            UpdatedBy: 1,
-            Company: 1,
+            CreatedBy:createdBy(),
+            UpdatedBy:createdBy(),
+            Company:userCompany(),
             CommonID:0,
             IsDeleted:0,
             IsAdd:true,

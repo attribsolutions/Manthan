@@ -33,6 +33,7 @@ import SaveButton from "../../../components/Common/ComponentRelatedCommonFile/Co
 
 import { PARTY_SUB_PARTY_lIST } from "../../../routes/route_url";
 import { comAddPageFieldFunc, formValid, initialFiledFunc, onChangeSelect } from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
+import { createdBy } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 
 const PartySubParty = (props) => {
 
@@ -244,8 +245,8 @@ const PartySubParty = (props) => {
                 // Party: Division_dropdown_Select.values,
                 Party: values.Division.value,
                 SubParty: i.value,
-                CreatedBy: 1,
-                UpdatedBy: 1,
+                CreatedBy:createdBy(),
+                UpdatedBy: createdBy(),
 
             }))
 

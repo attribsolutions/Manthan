@@ -203,14 +203,15 @@ export const currentDate = (props) => {
 export const createdBy = () => {
     let createdBy = 0
     try {
-        createdBy = localStorage.get("userId")
+        createdBy = JSON.parse(localStorage.getItem('userId'))
     } catch (e) { }
     return createdBy
 }
+
 export const userCompany = () => {
-    let userCompany = 0
+    let userCompany =0
     try {
-        userCompany = localStorage.get("Company")
+        userCompany = JSON.parse(localStorage.getItem('Company'))
     } catch (e) { }
     return userCompany
 }

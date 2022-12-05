@@ -45,6 +45,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { PAGE_lIST } from "../../../routes/route_url";
+import { createdBy } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 
 
 const PageMaster = (props) => {
@@ -701,8 +702,8 @@ debugger
       RelatedPageID: relatedPage_DropdownSelect.value,
       IsDivisionRequired: values.IsDivisionRequired,
       IsEditPopuporComponent: values.IsEditPopuporComponent,
-      CreatedBy: 1,
-      UpdatedBy: 1,
+      CreatedBy:createdBy(),
+      UpdatedBy:createdBy(),
       PagePageAccess: Access,
       PageFieldMaster: PageFieldMaster,
     })
