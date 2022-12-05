@@ -307,13 +307,22 @@ const GRNAdd = (props) => {
                     <span >
                         <Input type="text"
                             id={`inpQty${k}`}
-                            className="text-end "
                             defaultValue={row.inpQty}
+                            key={row.inpQty}
+                            // disabled={((row.inpRate === 0) || (row.GSTPercentage === '')) ? true : false}
                             onChange={(e) => {
-                                val_onChange(e.target.value, row, "qty")
+                                debugger
+                                const val = e.target.value
+                                let isnum = /^[+-]?([0-9]+([.][0-9]*)?|[.][0-9]+)?([eE][+-]?[0-9]+)?$/.test(val);
+                                if ((isnum) || (val === '')) {
+                                    val_onChange(val, row, "qty")
+                                } else {
+                                    document.getElementById(`inpQty${k}`).value = row.inpQty
+                                }
                             }}
                             autoComplete="off"
-                            onKeyDown={(e) => handleKeyDown(e, grnItemList)} />
+                            onKeyDown={(e) => handleKeyDown(e, items)}
+                        />
                     </span>
                 )
             },
@@ -775,15 +784,15 @@ const GRNAdd = (props) => {
                     </PaginationProvider>
 
 
-
                     {
                         (grnItemList.length > 0) ? <div className="row save1" style={{ paddingBottom: 'center' }}>
                             <SaveButton pageMode={pageMode} userAcc={userAccState}
                                 module={"GRN"} onClick={saveHandeller}
                             />
                         </div>
-                            : <div className="row save1"></div>
-                    }
+                            : 
+                            <div className="row save1"></div>
+                    } 
                 </div >
 
             </React.Fragment >
