@@ -15,7 +15,7 @@ import { AvForm, AvField } from "availity-reactstrap-validation"
 
 /// tsdfddf Punam demotest
 // actions
-import { loginUser, postSuperAdmin } from "../../store/actions"
+import { loginUser, postSuperAdmin, roleAceessAction, roleAceessActionSuccess } from "../../store/actions"
 
 // import images
 import logo from "../../assets/images/logo-sm.svg"
@@ -24,8 +24,13 @@ import logo from "../../assets/images/logo-sm.svg"
 import CarouselPage from "./CarouselPage"
 import axios from "axios";
 
+
+
+
+
 const Login = props => {
   const dispatch = useDispatch()
+ 
 
   const { loginError } = useSelector(state => ({
     loginError: state.Login.loginError,
@@ -38,9 +43,12 @@ const Login = props => {
     document.getElementById("UserName").focus();
   }, [])
   // handleValidSubmit
-  const handleValidSubmit = (event, values) => {
+  const handleValidSubmit = (event,values) => {
     dispatch(loginUser(values, props.history))
+
+
   }
+
 
   function createSuperAdminHandler() {
     //     debugger
@@ -55,7 +63,7 @@ const Login = props => {
     const jsonBody = JSON.stringify([]);
     dispatch(postSuperAdmin(jsonBody))
 
-    console.log("jsonBody",jsonBody)
+    console.log("jsonBody", jsonBody)
   }
 
   return (

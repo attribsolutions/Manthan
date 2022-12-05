@@ -119,7 +119,7 @@ function GroupTab(props) {
     };
 
     return (
-        <Row style={{marginBottom:"2cm"}}>
+        <Row style={{marginBottom:""}}>
             <Col md={12} >
                 <Card className="text-black" >
                     <CardBody style={{ backgroundColor: "whitesmoke" }}>
@@ -168,7 +168,7 @@ function GroupTab(props) {
                                             type="button"
                                             onClick={addRowsHandler}
                                         >
-                                            <i className="dripicons-plus mt-3"> </i> Add
+                                            Add
                                         </Button>
                                     </Col>
                                 </Row>

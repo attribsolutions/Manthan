@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import React, { useEffect, useRef, useCallback } from "react";
+import React, { useEffect, useRef, useCallback, useState, useMemo } from "react";
 
 //Import Icons
 import FeatherIcon from "feather-icons-react";
@@ -15,24 +15,30 @@ import { withTranslation } from "react-i18next";
 
 // MetisMenu
 import MetisMenu from "metismenujs";
-import { withRouter } from "react-router-dom";
+import {  withRouter } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { roleAceessAction } from "../../store/actions";
+import { WindowScrollController } from "@fullcalendar/react";
 
 const SidebarContent = (props) => {
   const ref = useRef();
   const dispatch = useDispatch();
 
+
+
   // const  RoleAccessData=demoRolleAcess
+
+ ;
   const {
     RoleAccessData,
     afterLoginUserDetails,
-    RoleAccessModifiedinSingleArray
+    RoleAccessModifiedinSingleArray,
   } = useSelector((state) => ({
     RoleAccessData: state.Login.RoleData,
     afterLoginUserDetails: state.Login.afterLoginUserDetails,
     RoleAccessModifiedinSingleArray: state.Login.RoleAccessUpdateData,
+
   }));
 
   useEffect(() => {
@@ -44,10 +50,64 @@ const SidebarContent = (props) => {
         dispatch(roleAceessAction(party, employee))
       };
 
+
       // dispatch(getUserDetailsAction(user))
       // roleAceessAction()
     }
   }, [])
+
+  // useEffect(() => {
+  
+
+    
+  //   var role = localStorage.getItem("UserName")
+  //   if (afterLoginUserDetails.UserName === role) {
+  //     var role = JSON.parse(localStorage.getItem("roleId"))
+  //     if (!(role === undefined) && !(role === null)) {
+  //       var party = role.Party_id
+  //       var employee = role.Employee_id;
+  //       dispatch(roleAceessAction(party, employee))
+  //     };
+
+  //     // dispatch(getUserDetailsAction(user))
+  //     // roleAceessAction()
+  //   }
+  // }, [])
+
+  // useEffect(() => {
+
+  //   if (RoleAccessData.length <= 0) {
+  //     var role = JSON.parse(localStorage.getItem("roleId"))
+  //     if (!(role === undefined) && !(role === null)) {
+  //       var party = role.Party_id
+  //       var employee = role.Employee_id;
+  //       dispatch(roleAceessAction(party, employee))
+  //     };
+  //   }
+
+  //   let pathName = props.location.pathname
+
+  //   const userAcc = RoleAccessModifiedinSingleArray.find(inx => {
+  //     return inx.id ;
+  //   });
+
+  //   const listPagePath = RoleAccessModifiedinSingleArray.find((inx) => {
+  //     return inx.RelatedPageID
+  //   })
+     
+  //   if (userAcc === undefined) {
+  //     pathName = "Dashbord"
+  //   }
+  //   else if
+  //   (userAcc.id===listPagePath.RelatedPageID){}
+  //   // let a =listPagePath.ActualPagePath
+  //   //  {
+  //   //   if (!(listPagePath === undefined)) {
+  //   //    let path = `/${listPagePath.ActualPagePath}`
+  //   //    console.log(path)
+  //   //   }
+  //   // }
+  // }, [initMenu])
 
 
 
@@ -92,23 +152,31 @@ const SidebarContent = (props) => {
   // Use ComponentDidMount and ComponentDidUpdate method symultaniously
   useEffect(() => {
     const pathName = props.location.pathname;
-
     const initMenu = () => {
-      // debugger
       new MetisMenu("#side-menu");
       let matchingMenuItem = null;
       const ul = document.getElementById("side-menu");
       const items = ul.getElementsByTagName("a");
+
+      // let userAcc = RoleAccessModifiedinSingleArray.find((inx) => {
+      //   const path = inx.ActualPagePath.toLowerCase()
+      //   return (`/${path}` === pathName.toLowerCase())
+      // })
+      // console.log(userAcc)
+
+
       for (let i = 0; i < items.length; ++i) {
         if (pathName === items[i].pathname) {
+
           matchingMenuItem = items[i];
-          break;
+
         }
+        
       }
-      if (matchingMenuItem) {
+      if (matchingMenuItem){
         activateParentDropdown(matchingMenuItem);
       }
-    };
+          };
     initMenu();
   }, [props.location.pathname, activateParentDropdown]);
 
@@ -149,6 +217,7 @@ const SidebarContent = (props) => {
               </Link> */}
             {/* <ul className="sub-menu"> */}
             {RoleAccessData.map((item) => {
+          
               return (
                 <li >
                   <Link to="/#" className="has-arrow">
@@ -159,7 +228,9 @@ const SidebarContent = (props) => {
                   </Link>
                   <ul className="sub-menu">
                     {item.ModuleData.map((index, j) => {
+                  
                       if (index.RoleAccess_IsShowOnMenu === true) {
+                  
                         return (
                           <li>
                             <Link to={{ pathname: `/${index.ActualPagePath}`, }} >{props.t(index.Name)}</Link>
@@ -182,10 +253,10 @@ const SidebarContent = (props) => {
     </React.Fragment>
   );
 };
-
 SidebarContent.propTypes = {
   location: PropTypes.object,
   t: PropTypes.any,
 };
+
 
 export default withTranslation()(withRouter(SidebarContent));

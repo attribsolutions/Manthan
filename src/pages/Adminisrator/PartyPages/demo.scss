@@ -57,9 +57,23 @@
   height: 1.3cm;
   border-radius: 10px;
   margin-bottom: 20px;
-  
-  
-  
-
-
 }
+
+.button_add{
+width:0.9cm !important ;
+height: 0.9cm !important;
+ background-color:#5156be !important; 
+ border-radius: 100% !important;
+ margin-top: 12px !important;
+ padding-bottom: 3px !important;
+ padding-top: 7px !important; 
+ padding-left: 9px  !important;
+}
+.button_add:active {
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2) !important;
+}
+
+
+
+
+
