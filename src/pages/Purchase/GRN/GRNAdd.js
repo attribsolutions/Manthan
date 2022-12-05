@@ -129,8 +129,9 @@ const GRNAdd = (props) => {
                 ele.id = k + 1;
                 ele["Name"] = ele.ItemName
                 ele["inpRate"] = ele.Rate
-                ele["inpQty"] = 0
-                ele["totalAmount"] = ele.Amount
+                ele["inpQty"] = ''
+                ele["POItemAmt"] = ele.Amount
+                ele["totalAmount"] = 0.00
                 ele["UOM"] = ele.Unit
                 ele["UOMLabel"] = ele.UnitName
                 ele["UOM"] = ele.Unit
@@ -147,11 +148,11 @@ const GRNAdd = (props) => {
             setGrnDetail(details)
 
             setsupplierSelect({ label: hasEditVal.SupplierName, value: hasEditVal.Supplier })
-            setOrderAmount(hasEditVal.OrderAmount)
+            // setOrderAmount(hasEditVal.OrderAmount)
             items.Status = false
             dispatch(getGRN_itemMode2_Success(items))
             debugger
-            dispatch(BreadcrumbFilterSize(`${"Order Amount"} :${hasEditVal.OrderAmount}`))
+            dispatch(BreadcrumbFilterSize(`${"GRN Amount"} :${hasEditVal.OrderAmount}`))
         }
 
     }, [items])
@@ -181,7 +182,7 @@ const GRNAdd = (props) => {
                 }
                 );
                 dispatch(goButton(jsonBody, hasEditVal))
-                dispatch(BreadcrumbFilterSize(`${"Order Amount"} :${hasEditVal.OrderAmount}`))
+                // dispatch(BreadcrumbFilterSize(`${"Order Amount"} :${hasEditVal.OrderAmount}`))
 
                 setsupplierSelect({ label: hasEditVal.SupplierName, value: hasEditVal.Supplier })
                 // setgrnDate(hasEditVal.OrderDate)
@@ -270,7 +271,7 @@ const GRNAdd = (props) => {
             sum = sum + parseFloat(ind.totalAmount)
         });
         setOrderAmount(sum.toFixed(2))
-        dispatch(BreadcrumbFilterSize(`${"Order Amount"} :${sum.toFixed(2)}`))
+        dispatch(BreadcrumbFilterSize(`${"GRN Amount"} :${sum.toFixed(2)}`))
     }
 
     const pagesListColumns = [
@@ -285,14 +286,14 @@ const GRNAdd = (props) => {
             ),
         },
         {//------------- Quntity first column ----------------------------------
-            text: "Initial-QTY",
+            text: "PO-QTY",
             dataField: "",
             sort: true,
             formatter: (value, row, k) => (
                 <samp className="font-asian">{row.Quantity}</samp>
             ),
             headerStyle: (colum, colIndex) => {
-                return { width: '90px', textAlign: 'center', text: "center" };
+                return { width: '100px', textAlign: 'center', text: "end" };
             }
         },
         {//  ------------Quntity column -----------------------------------  
@@ -307,13 +308,22 @@ const GRNAdd = (props) => {
                     <span >
                         <Input type="text"
                             id={`inpQty${k}`}
-                            className="text-end "
                             defaultValue={row.inpQty}
+                            className="text-end"
+                            key={row.inpQty}
                             onChange={(e) => {
-                                val_onChange(e.target.value, row, "qty")
+                                debugger
+                                const val = e.target.value
+                                let isnum = /^[+-]?([0-9]+([.][0-9]*)?|[.][0-9]+)?([eE][+-]?[0-9]+)?$/.test(val);
+                                if ((isnum) || (val === '')) {
+                                    val_onChange(val, row, "qty")
+                                } else {
+                                    document.getElementById(`inpQty${k}`).value = row.inpQty
+                                }
                             }}
                             autoComplete="off"
-                            onKeyDown={(e) => handleKeyDown(e, grnItemList)} />
+                            onKeyDown={(e) => handleKeyDown(e, items)}
+                        />
                     </span>
                 )
             },
@@ -372,7 +382,7 @@ const GRNAdd = (props) => {
                         <Input
                             type="text"
                             id={`inpRatey${k}`}
-                            className="border-0"
+                            className="border-0 text-end"
                             defaultValue={row.inpRate}
                             disabled={(row.GST === '') ? true : false}
                             onChange={e => {
@@ -420,10 +430,6 @@ const GRNAdd = (props) => {
             formatter: (value, row, k) => (
                 <div className="row mt-1">
                     <div className="col ">
-                        {/* <Input type='text'
-                            id={`abc${row.id}`}
-                            className="  border-0  "
-                            value={row.totalAmount} /> */}
                         <samp id={`abc${row.id}`}>{row.totalAmount}</samp>
                     </div>
                 </div>
@@ -775,15 +781,15 @@ const GRNAdd = (props) => {
                     </PaginationProvider>
 
 
-
                     {
                         (grnItemList.length > 0) ? <div className="row save1" style={{ paddingBottom: 'center' }}>
                             <SaveButton pageMode={pageMode} userAcc={userAccState}
                                 module={"GRN"} onClick={saveHandeller}
                             />
                         </div>
-                            : <div className="row save1"></div>
-                    }
+                            : 
+                            <div className="row save1"></div>
+                    } 
                 </div >
 
             </React.Fragment >

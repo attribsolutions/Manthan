@@ -177,7 +177,7 @@ function* SubCategory_DropDown_GenratorFunction({ id, key }) {
 }
 
 function* ImageType_DropDown_GenratorFunction() {
-  debugger
+  
   try {
     const response = yield call(apiCall.ImageType_Get_DropDown_API);
     yield put(get_ImageType_ForDropDown_Success(response.Data));

@@ -75,8 +75,8 @@ const PartySubParty = (props) => {
     }, []);
 
     const [state, setState] = useState(initialFiled)
-       
 
+debugger
     const values = { ...state.values }
     const { isError } = state;
     const { fieldLabel } = state;
@@ -115,6 +115,7 @@ const PartySubParty = (props) => {
 
     // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
     useEffect(() => {
+        debugger
 
         if ((hasShowloction || hasShowModal)) {
 
@@ -130,6 +131,7 @@ const PartySubParty = (props) => {
             }
 
             if (hasEditVal) {
+                
 
                 const { id, Party, Division } = hasEditVal
                 const { values, fieldLabel, hasValid, required, isError } = { ...state }
@@ -325,7 +327,7 @@ const PartySubParty = (props) => {
                                             <Card>
                                                 <CardBody style={{ backgroundColor: "whitesmoke" }}>
                                                     <Row>
-                                                        <FormGroup className="mb-2">
+                                                        <FormGroup className="mb-3">
                                                             <Row>
                                                                 <Col md="4">
                                                                     <FormGroup className="mb-3">
@@ -358,8 +360,8 @@ const PartySubParty = (props) => {
                                                         </FormGroup>
 
                                                         <Row>
-                                                            <Col md="4">
-                                                                <FormGroup className="mb-3">
+                                                            <Col md="4" style={{width:"7.9cm"}}>
+                                                                <FormGroup >
                                                                     <Label htmlFor="validationCustom01"> {fieldLabel.Party}</Label>
                                                                     <Select
                                                                         // value={Party_dropdown_Select}
@@ -384,8 +386,9 @@ const PartySubParty = (props) => {
                                                                 </FormGroup>
                                                             </Col>
 
-                                                            <Col sm={2} style={{ marginTop: '28px' }} >
+                                                            <Col sm={2} style={{ marginTop:'24px' }} >
                                                                 <Button
+                                                            
                                                                     type="button"
                                                                     className="btn btn-sm mt-1 mb-0 btn-light  btn-outline-primary text-center"
                                                                     onClick={() =>
@@ -402,11 +405,10 @@ const PartySubParty = (props) => {
                                                                 {PartyData.length > 0 ? (
 
                                                                     <div className="table">
-                                                                        <Table className="table table-bordered  text-center">
+                                                                        <Table className="table table-bordered  text-center" >
                                                                             <Thead>
                                                                                 <tr>
                                                                                     <th>Party</th>
-
                                                                                     <th>Action</th>
                                                                                 </tr>
                                                                             </Thead>
@@ -421,6 +423,9 @@ const PartySubParty = (props) => {
                                                                                                 UserRoles_DeleteButton_Handller(TableValue.value)
                                                                                             }} >
                                                                                             </i>
+
+                                                                                         
+
                                                                                         </td>
                                                                                     </tr>
                                                                                 ))}

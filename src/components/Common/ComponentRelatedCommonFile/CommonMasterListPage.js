@@ -52,6 +52,7 @@ const CommonListPage = (props) => {
   const [modal_edit, setmodal_edit] = useState(false);
   const [masterPath, setmasterPath] = useState('');
 
+
   const {
     tableList,
     editData,
@@ -99,6 +100,7 @@ const CommonListPage = (props) => {
 
   // this useEffect for MasterPagePath dynamically work 
   useEffect(() => {
+    debugger
     const locationPath = history.location.pathname
 
     let userAcc = userAccess.find((inx) => {
@@ -299,8 +301,10 @@ const CommonListPage = (props) => {
                   <React.Fragment>
                     <Row>
                       <Col xl="12">
-                        <div className="table-responsive">
+                        <div className="table-responsive table " >
                           <BootstrapTable
+                          //  expandRow={ expandRow }
+                          
                             keyField={"id"}
                             responsive
                             bordered={false}

@@ -41,6 +41,7 @@ import { getTermAndCondition } from "../../../store/Administrator/TermsAndCondti
 import OrderPageTemsTable from "./OrderPageTemsTable";
 import Breadcrumb from "../../../components/Common/Breadcrumb3";
 import { mySearchProps } from "../../../components/Common/ComponentRelatedCommonFile/MySearch";
+import { createdBy } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 
 let description = ''
 let editVal = {}
@@ -249,18 +250,18 @@ const Order = (props) => {
                             id={`inpQty${k}`}
                             defaultValue={row.inpQty}
                             key={row.inpQty}
-                            // disabled={((row.inpRate === 0) || (row.GSTPercentage === '')) ? true : false}
                             onChange={(e) => {
                                 const val = e.target.value
-                                let isnum = /^\d+$/.test(val);
-                                if ((typeof val == 'number') || (val === '')) {
+                                let isnum = /^[+-]?([0-9]+([.][0-9]*)?|[.][0-9]+)?([eE][+-]?[0-9]+)?$/.test(val);
+                                if ((isnum) || (val === '')) {
                                     val_onChange(val, row, "qty")
                                 } else {
                                     document.getElementById(`inpQty${k}`).value = row.inpQty
                                 }
                             }}
                             autoComplete="off"
-                            onKeyDown={(e) => handleKeyDown(e, items)} />
+                            onKeyDown={(e) => handleKeyDown(e, items)}
+                        />
                     </span>
 
                 )
@@ -322,12 +323,16 @@ const Order = (props) => {
                             type="text"
                             id={`inpRatey${k}`}
                             defaultValue={row.inpRate}
-                            disabled={(row.GST === '') ? true : false}
-                            onChange={e => {
-                                row["inpRate"] = e.target.value;
+                            autoComplete="off"
+                            // disabled={(row.GST === '') ? true : false}
+                            onChange={(e) => {
                                 const val = e.target.value
-                                val_onChange(val, row, "rate")
-
+                                let isnum = /^[+-]?([0-9]+([.][0-9]*)?|[.][0-9]+)?([eE][+-]?[0-9]+)?$/.test(val);
+                                if ((isnum) || (val === '')) {
+                                    val_onChange(val, row, "rate")
+                                } else {
+                                    document.getElementById(`inpRatey${k}`).value = row.inpRate
+                                }
                             }}
                             onKeyDown={(e) => handleKeyDown(e, items)}
                         />
@@ -505,8 +510,8 @@ const Order = (props) => {
             OrderType: 1,
             POType: 1,
             Division: division,
-            CreatedBy: 1,
-            UpdatedBy: 1,
+            CreatedBy: createdBy(),
+            UpdatedBy: createdBy(),
             OrderItem: itemArr,
             OrderTermsAndConditions: termsAndCondition
         });
