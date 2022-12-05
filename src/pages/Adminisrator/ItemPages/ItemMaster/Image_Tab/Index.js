@@ -1,10 +1,9 @@
 
-import { Modal } from 'bootstrap'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import Select from 'react-select'
 import { Button, Card, CardBody, Col, FormGroup, Input, Label, Row } from 'reactstrap'
-import { AlertState, get_ImageType_ForDropDown } from '../../../../../store/actions'
+import { get_ImageType_ForDropDown } from '../../../../../store/actions'
 
 
 export default function Image(props) {
@@ -13,25 +12,21 @@ export default function Image(props) {
         ImageType: state.ItemMastersReducer.ImageType
     }));
 
-    const [baseimage, setbaseimage] = useState("")
     const { imageTable, setImageTable } = props.state
     const dispatch = useDispatch()
-    const [ImageTypevalue, setImageTypevalue] = useState("")
 
     const imageTypes = ImageType.map((Data) => ({
         value: Data.id,
         label: Data.Name
     }));
-   
-   
+
+
 
     useEffect(() => {
         dispatch(get_ImageType_ForDropDown());
     }, []);
 
     function addRowHandler(key) {
-
-
         var newarr1 = [...imageTable, {
             ImageType: { value: 0, label: "select" },
             ImageUpload: ""
@@ -39,6 +34,7 @@ export default function Image(props) {
         setImageTable(newarr1)
 
     }
+
     function deleteRowHandler(key) {
         var removeElseArrray1 = imageTable.filter((i, k) => {
             return !(k === key)
@@ -71,12 +67,6 @@ export default function Image(props) {
             return (k === key) ? newSelectValue : index
         })
         setImageTable(newTabArr)
-
-
-        // select
-    
-      
-
     }
 
 
@@ -100,19 +90,14 @@ export default function Image(props) {
         <Card className="text-black">
             <CardBody style={{ backgroundColor: "whitesmoke" }}>
 
-
                 {imageTable.map((index, key) => {
-
-        
-                     
                     return <Row className=" col col-sm-12" >
                         <FormGroup className="mb-3 col col-sm-4 " >
                             <Label htmlFor="validationCustom21">Image Type</Label>
                             <Select
+                                value={index.ImageType}
                                 options={imageTypes}
                                 onChange={(e) => { onchangeHandler(e, key, "ImageType") }}
-                                defaultValue={ImageTypevalue}
-                                
                             />
                         </FormGroup>
 
@@ -122,11 +107,9 @@ export default function Image(props) {
                                 name="image"
                                 id="file"
                                 accept=".jpg, .jpeg, .png"
-                                onChange={(event) => {onchangeHandler(event, key, "ImageUpload") }}
-
+                                onChange={(event) => { onchangeHandler(event, key, "ImageUpload") }}
                             />
                         </FormGroup>
-
 
                         <Col md={2}>
                             {(imageTable.length === key + 1) ?
@@ -164,15 +147,7 @@ export default function Image(props) {
 
                         </Col>
 
-                    
-                            {/* {<div className=" col-3 mt-2 " style={{ height: "1cm", width: "1cm" }}> */}
-                        
-
-                            
-                            <a id="img" href='#'> {(index.ImageUpload === "") ? null : <img id='images' src={index.ImageUpload} />} </a>   
-
-                             {/* <Modal        /> */}
-                            {/* </div>} */}
+                        <a id="img" href='#'> {(index.ImageUpload === "") ? null : <img id='images' src={index.ImageUpload} />} </a>
 
                     </Row>
                 })}
