@@ -757,6 +757,11 @@ const ItemsMaster = (props) => {
                                             </Nav>
 
                                             <TabContent activeTab={activeTab1} className="p-3 text-muted">
+
+
+
+
+
                                                 <TabPane tabId="1">
                                                     <Col md={12}  >
                                                         <Card className="text-black">
@@ -941,6 +946,14 @@ const ItemsMaster = (props) => {
 
                                                 </TabPane>
 
+
+
+
+
+
+
+
+
                                                 <TabPane tabId="2">
                                                     <Row>
                                                         <Col md={12}  >
@@ -1121,7 +1134,7 @@ const ItemsMaster = (props) => {
                                             </TabContent>
                                             <Row >
                                                 <Col sm={2}>
-                                                    <div className="">
+                                                    <div style={{paddingLeft:"14px"}}>
                                                         {
                                                             pageMode === "edit" ?
                                                                 userPageAccessState.RoleAccess_IsEdit ?

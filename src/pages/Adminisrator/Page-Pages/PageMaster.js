@@ -1161,7 +1161,14 @@ debugger
                                 </Col>
 
                                 <Col md="1" className=" mt-3">
-                                  <Button className=" mt-3 btn btn-sm" type="button" onClick={() => { DropDownAddHandler() }}>add</Button>
+                                  <Button 
+                                  
+                                  // className=" mt-3 btn btn-sm"
+                                  className=" btn button_add "
+                      type="button" onClick={() => { DropDownAddHandler() }}>
+                      <i className="dripicons-plus"></i>
+
+                      </Button>
                                 </Col>
 
                                 <Col md="3">
@@ -1678,6 +1685,7 @@ debugger
                                             <div className="col border-end d-flex justify-content-center ">
                                               <Button
                                                 className="btn btn-outline-light btn-sm  align-items-sm-center text-center mt-3"
+                                                // className="button button-white button-animate "
                                                 type="button"
                                                 onClick={() => { PageField_Tab_AddRow_Handler(key) }}
                                               >
@@ -1707,11 +1715,12 @@ debugger
                                 <div className="col border-end d-flex justify-content-center mt-5 ">
                                   <Button type="button"
                                     onClick={() => { PageField_Tab_AddRow_Handler() }}
-                                    className="btn btn-sm ">Add New Row
+                                    className="button button-white button-animate ">Add New Row
                                     <i className="dripicons-plus"> </i>
                                   </Button>
                                 </div> : null
                             }
+                             {/* className="btn btn-sm "> */}
 
                           </div>
                         </div>
