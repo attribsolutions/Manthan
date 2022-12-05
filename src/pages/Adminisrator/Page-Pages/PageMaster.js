@@ -1164,7 +1164,7 @@ debugger
                                   <Button 
                                   
                                   // className=" mt-3 btn btn-sm"
-                                  className=" btn button_add "
+                                  className=" button_add badge badge-soft-primary font-size-12 btn btn-primary waves-effect waves-light w-xxs border border-light"
                       type="button" onClick={() => { DropDownAddHandler() }}>
                       <i className="dripicons-plus"></i>
 

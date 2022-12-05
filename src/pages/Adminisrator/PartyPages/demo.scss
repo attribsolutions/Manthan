@@ -60,18 +60,21 @@
 }
 
 .button_add{
-width:0.9cm !important ;
-height: 0.9cm !important;
- background-color:#5156be !important; 
- border-radius: 100% !important;
- margin-top: 12px !important;
+width:0.8cm !important ;
+height: 0.8cm !important;
+//  background-color:#b3e7c0 !important; 
+ border-radius: 10% !important;
+ margin-top: 15px !important;
  padding-bottom: 3px !important;
- padding-top: 7px !important; 
- padding-left: 9px  !important;
+ padding-top: 6px !important; 
+ padding-left: 3px  !important;
+ 
 }
-.button_add:active {
-  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2) !important;
-}
+
+// .button_add:hover{
+//   background-color: rgb(203, 213, 233) !important;
+// }
+
 
 
 
