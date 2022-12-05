@@ -162,7 +162,7 @@ function MRPTab(props) {
                     <Button
                   
                     //  className="btn btn-sm mt-1 mt-3 btn-light  btn-outline-primary  "
-                    className="button_add"
+                    className="button_add badge badge-soft-primary font-size-12 btn btn-primary waves-effect waves-light w-xxs border border-light"
                       type="button"
                       onClick={addRowsHandler} >
                       <i className="dripicons-plus"></i>
