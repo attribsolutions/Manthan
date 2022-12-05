@@ -342,7 +342,7 @@ const PageMaster = (props) => {
     }
   }, [updateMsg, modalCss]);
 
-    const Module_DropdownOption = ModuleData.map((d) => ({
+  const Module_DropdownOption = ModuleData.map((d) => ({
     value: d.id,
     label: d.Name,
   }));
@@ -630,16 +630,16 @@ const PageMaster = (props) => {
   }
 
   function ControlType_Dropdown_Handler(e, key) {
-debugger
+
     dispatch(getFieldValidations(e.value))
     // dispatch(getFieldValidationsSuccess([]))
-  //   setPageFieldTabTable((i) => {
-  //     debugger
-  //     const a = { ...i }
-  //     a[key].FieldValidation = "";
-  //     // a.hasValid.UnitName.valid = false
-  //     return a
-  // })
+    //   setPageFieldTabTable((i) => {
+    //     debugger
+    //     const a = { ...i }
+    //     a[key].FieldValidation = "";
+    //     // a.hasValid.UnitName.valid = false
+    //     return a
+    // })
   }
 
   const toggleCustom = (tab) => {
@@ -702,8 +702,8 @@ debugger
       RelatedPageID: relatedPage_DropdownSelect.value,
       IsDivisionRequired: values.IsDivisionRequired,
       IsEditPopuporComponent: values.IsEditPopuporComponent,
-      CreatedBy:createdBy(),
-      UpdatedBy:createdBy(),
+      CreatedBy: createdBy(),
+      UpdatedBy: createdBy(),
       PagePageAccess: Access,
       PageFieldMaster: PageFieldMaster,
     })
@@ -935,6 +935,10 @@ debugger
     })
 
   }
+
+  const Access_1 = PageAccess.slice(0, 4);
+  const Access_2 = PageAccess.slice(4, 8);
+  const Access_3 = PageAccess.slice(8, pageAccessval.length);
   // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
   var IsEditMode_Css = ''
   if ((modalCss) || (pageMode === "dropdownAdd")) { IsEditMode_Css = "-5.5%" };
@@ -1055,427 +1059,407 @@ debugger
                       className="p-3 text-muted"
                     >
                       <TabPane tabId="1">
-                          <Card className="text-black " style={{ backgroundColor: "whitesmoke" }} >
-                            <CardBody >
-                              <Row >
-                                <Col md="3">
-                                  <FormGroup className="mb-3 ">
-                                    <Label>Name </Label>
-                                    <AvField
-                                      name="Name"
-                                      id="txtName"
-                                      value={EditData.Name}
-                                      // disabled={pageMode === 'edit' ? true : false}
-                                      type="text"
-                                      placeholder="Please Enter Name"
-                                      autoComplete="off"
-                                      validate={{
-                                        required: {
-                                          value: true,
-                                          errorMessage: "Please Enter Name",
-                                        },
-                                      }}
-                                      onChange={(e) => {
-                                        dispatch(Breadcrumb_inputName(e.target.value));
-                                      }}
-                                    />
-                                  </FormGroup>
-                                </Col>
+                        <Card className="text-black " style={{ backgroundColor: "whitesmoke" }} >
+                          <CardBody >
+                            <Row >
+                              <Col md="3">
+                                <FormGroup className="mb-3 ">
+                                  <Label>Name </Label>
+                                  <AvField
+                                    name="Name"
+                                    id="txtName"
+                                    value={EditData.Name}
+                                    // disabled={pageMode === 'edit' ? true : false}
+                                    type="text"
+                                    placeholder="Please Enter Name"
+                                    autoComplete="off"
+                                    validate={{
+                                      required: {
+                                        value: true,
+                                        errorMessage: "Please Enter Name",
+                                      },
+                                    }}
+                                    onChange={(e) => {
+                                      dispatch(Breadcrumb_inputName(e.target.value));
+                                    }}
+                                  />
+                                </FormGroup>
+                              </Col>
 
-                                <Col md="1"> </Col>
+                              <Col md="1"> </Col>
 
-                                <Col md="7">
-                                  <FormGroup className="mb-3 ">
-                                    <Label>Page Description </Label>
-                                    <AvField
-                                      name="pagedescription"
-                                      value={EditData.PageDescription}
-                                      type="text"
-                                      placeholder="Please Enter Page Description"
-                                      autoComplete="off"
-                                      validate={{
-                                        required: {
-                                          value: true,
-                                          errorMessage: "Please Enter Page Description",
-                                        },
-                                      }}
-                                    />
-                                  </FormGroup>
-                                </Col>
-                              </Row>
+                              <Col md="7">
+                                <FormGroup className="mb-3 ">
+                                  <Label>Page Description </Label>
+                                  <AvField
+                                    name="pagedescription"
+                                    value={EditData.PageDescription}
+                                    type="text"
+                                    placeholder="Please Enter Page Description"
+                                    autoComplete="off"
+                                    validate={{
+                                      required: {
+                                        value: true,
+                                        errorMessage: "Please Enter Page Description",
+                                      },
+                                    }}
+                                  />
+                                </FormGroup>
+                              </Col>
+                            </Row>
 
-                              <Row>
-                                <Col md="3">
-                                  <FormGroup className="mb-3">
-                                    <Label>Page Heading</Label>
-                                    <AvField
-                                      name="pageheading"
-                                      type="text"
-                                      defaultValue=""
-                                      value={EditData.PageHeading}
-                                      placeholder="Enter your Page Heading "
-                                    />
-                                  </FormGroup>
-                                </Col>
+                            <Row>
+                              <Col md="3">
+                                <FormGroup className="mb-3">
+                                  <Label>Page Heading</Label>
+                                  <AvField
+                                    name="pageheading"
+                                    type="text"
+                                    defaultValue=""
+                                    value={EditData.PageHeading}
+                                    placeholder="Enter your Page Heading "
+                                  />
+                                </FormGroup>
+                              </Col>
 
-                                <Col md="1"> </Col>
-                                <Col md="7">
-                                  <FormGroup className="mb-3">
-                                    <Label>Page Description Details</Label>
-                                    <AvField
-                                      name="pageheadingdescription"
-                                      type="text"
-                                      defaultValue=""
-                                      value={EditData.PageDescriptionDetails}
-                                      placeholder="Enter your Description "
-                                      validate={{
-                                        required: {
-                                          value: true,
-                                          errorMessage:
-                                            "Please Enter Page Description Deails",
-                                        },
-                                      }}
-                                    />
-                                  </FormGroup>
-                                </Col>
-                              </Row>
-                            </CardBody>
-                          </Card>
+                              <Col md="1"> </Col>
+                              <Col md="7">
+                                <FormGroup className="mb-3">
+                                  <Label>Page Description Details</Label>
+                                  <AvField
+                                    name="pageheadingdescription"
+                                    type="text"
+                                    defaultValue=""
+                                    value={EditData.PageDescriptionDetails}
+                                    placeholder="Enter your Description "
+                                    validate={{
+                                      required: {
+                                        value: true,
+                                        errorMessage:
+                                          "Please Enter Page Description Deails",
+                                      },
+                                    }}
+                                  />
+                                </FormGroup>
+                              </Col>
+                            </Row>
+                          </CardBody>
+                        </Card>
 
-                          <Card className=" mt-n2 text-black"style={{ backgroundColor: "whitesmoke" }}>
-                            <CardBody >
-                              <Row >
-                                <Col md="3">
+                        <Card className=" mt-n2 text-black" style={{ backgroundColor: "whitesmoke" }}>
+                          <CardBody >
+                            <Row >
+                              <Col md="3">
 
-                                  <FormGroup className="mb-3 ">
-                                    <Label htmlFor="validationCustom01">Module</Label>
-                                    <Select
-                                      value={module_DropdownSelect}
-                                      options={Module_DropdownOption}
-                                      autoComplete="off"
-                                      onChange={(e) => {
-                                        Module_DropdownSelectHandller(e);
-                                      }}
-                                    />
-                                  </FormGroup>
-                                </Col>
+                                <FormGroup className="mb-3 ">
+                                  <Label htmlFor="validationCustom01">Module</Label>
+                                  <Select
+                                    value={module_DropdownSelect}
+                                    options={Module_DropdownOption}
+                                    autoComplete="off"
+                                    onChange={(e) => {
+                                      Module_DropdownSelectHandller(e);
+                                    }}
+                                  />
+                                </FormGroup>
+                              </Col>
 
-                                <Col md="1" className=" mt-3">
-                                  <Button 
-                                  
+                              <Col md="1" className=" mt-3">
+                                <Button
+
                                   // className=" mt-3 btn btn-sm"
                                   className=" button_add badge badge-soft-primary font-size-12 btn btn-primary waves-effect waves-light w-xxs border border-light"
-                      type="button" onClick={() => { DropDownAddHandler() }}>
-                      <i className="dripicons-plus"></i>
+                                  type="button" onClick={() => { DropDownAddHandler() }}>
+                                  <i className="dripicons-plus"></i>
 
-                      </Button>
-                                </Col>
+                                </Button>
+                              </Col>
 
+                              <Col md="3">
+                                <FormGroup className="mb-3">
+                                  <Label htmlFor="validationCustom01">Page Type</Label>
+                                  <Select
+                                    value={pageType_DropdownSelect}
+                                    options={PageType_DropdownOption}
+                                    autoComplete="off"
+                                    onChange={(e) => {
+                                      PageType_DropdownSelectHandller(e);
+                                    }}
+                                  />
+                                </FormGroup>
+                              </Col>
+
+                              <Col md="1"> </Col>
+                              {relatedPageListShowUI ?
                                 <Col md="3">
                                   <FormGroup className="mb-3">
-                                    <Label htmlFor="validationCustom01">Page Type</Label>
+                                    <Label htmlFor="validationCustom01">
+                                      Related Page List
+                                    </Label>
                                     <Select
-                                      value={pageType_DropdownSelect}
-                                      options={PageType_DropdownOption}
+                                      value={relatedPage_DropdownSelect}
+                                      options={PageList_DropdownOption}
                                       autoComplete="off"
                                       onChange={(e) => {
-                                        PageType_DropdownSelectHandller(e);
+                                        relatedPage_DropdownSelectHandller(e);
                                       }}
                                     />
                                   </FormGroup>
-                                </Col>
+                                </Col> : null}
 
-                                <Col md="1"> </Col>
-                                {relatedPageListShowUI ?
-                                  <Col md="3">
-                                    <FormGroup className="mb-3">
-                                      <Label htmlFor="validationCustom01">
-                                        Related Page List
-                                      </Label>
-                                      <Select
-                                        value={relatedPage_DropdownSelect}
-                                        options={PageList_DropdownOption}
-                                        autoComplete="off"
-                                        onChange={(e) => {
-                                          relatedPage_DropdownSelectHandller(e);
-                                        }}
+
+                            </Row>
+
+                            <Row>
+                              <Col md="3">
+                                <FormGroup>
+                                  <Label htmlFor="validationCustom01">
+                                    Display Index
+                                  </Label>
+                                  <AvField
+                                    name="displayIndex"
+                                    value={EditData.DisplayIndex}
+                                    type="text"
+                                    autoComplete="off"
+                                    placeholder=" Please Enter Display Index"
+                                    validate={{
+                                      number: true,
+                                      required: {
+                                        value: true,
+                                        errorMessage:
+                                          "Please Enter Display Index Only 2 Digit ",
+                                      },
+                                      tel: {
+                                        pattern: /^\d{1,2}$/,
+                                      },
+                                    }}
+                                  />
+                                </FormGroup>
+                              </Col>
+
+                              <Col md="1"> </Col>
+                              <Col md="3">
+                                <FormGroup className="mb-3">
+                                  <Label htmlFor="validationCustom01">Page Path</Label>
+                                  <AvField
+                                    name="pagePath"
+                                    id="pagePathid"
+                                    value={EditData.ActualPagePath}
+                                    disabled={pageMode === 'edit' ? true : false}
+                                    type="text"
+                                    placeholder="Please Enter Page Path"
+                                    validate={{
+                                      required: {
+                                        value: true,
+                                        errorMessage: "Please Enter Page Path",
+                                      },
+                                    }}
+                                    autoComplete="off"
+                                  />
+                                </FormGroup>
+                              </Col>
+
+                              <Col md="1"> </Col>
+                              <Col md="3">
+                                <FormGroup className="mb-3">
+                                  <Label htmlFor="validationCustom01">Icon</Label>
+                                  <AvField
+                                    name="Icon"
+                                    value={EditData.Icon}
+                                    type="text"
+                                    placeholder="Please Enter Icon"
+                                    validate={{
+                                      required: {
+                                        value: true,
+                                        errorMessage: "Please Enter Icon",
+                                      },
+                                    }}
+                                    autoComplete="off"
+                                  />
+                                </FormGroup>
+                              </Col>
+                            </Row>
+
+                            <Row Col sm="12">
+                              <FormGroup className="mb-1 col col-sm-4">
+                                <Row className="justify-content-md-left">
+                                  <Label
+                                    htmlFor="horizontal-firstname-input"
+                                    className="col-sm-3 col-form-label mt-4"
+                                  >
+                                    Active{" "}
+                                  </Label>
+                                  <Col md={5} style={{ marginTop: "15px" }}>
+                                    <div
+                                      className="form-check form-switch form-switch-md mb-1"
+                                      dir="ltr"
+                                    >
+                                      <AvInput
+                                        type="checkbox"
+                                        className="form-check-input mt-4"
+                                        id="customSwitchsizemd"
+                                        checked={EditData.isActive}
+                                        name="isActive"
+                                        defaultChecked={true}
                                       />
-                                    </FormGroup>
-                                  </Col> : null}
+                                      <label
+                                        className="form-check-label"
+                                        htmlFor="customSwitchsizemd"
+                                      ></label>
+                                    </div>
+                                  </Col>
+                                </Row>
+                              </FormGroup>
 
+                              <FormGroup className="mb-1 col col-sm-4">
+                                <Row className="justify-content-md-left">
 
-                              </Row>
-
-                              <Row>
-                                <Col md="3">
-                                  <FormGroup>
-                                    <Label htmlFor="validationCustom01">
-                                      Display Index
-                                    </Label>
-                                    <AvField
-                                      name="displayIndex"
-                                      value={EditData.DisplayIndex}
-                                      type="text"
-                                      autoComplete="off"
-                                      placeholder=" Please Enter Display Index"
-                                      validate={{
-                                        number: true,
-                                        required: {
-                                          value: true,
-                                          errorMessage:
-                                            "Please Enter Display Index Only 2 Digit ",
-                                        },
-                                        tel: {
-                                          pattern: /^\d{1,2}$/,
-                                        },
-                                      }}
-                                    />
-                                  </FormGroup>
-                                </Col>
-
-                                <Col md="1"> </Col>
-                                <Col md="3">
-                                  <FormGroup className="mb-3">
-                                    <Label htmlFor="validationCustom01">Page Path</Label>
-                                    <AvField
-                                      name="pagePath"
-                                      id="pagePathid"
-                                      value={EditData.ActualPagePath}
-                                      disabled={pageMode === 'edit' ? true : false}
-                                      type="text"
-                                      placeholder="Please Enter Page Path"
-                                      validate={{
-                                        required: {
-                                          value: true,
-                                          errorMessage: "Please Enter Page Path",
-                                        },
-                                      }}
-                                      autoComplete="off"
-                                    />
-                                  </FormGroup>
-                                </Col>
-
-                                <Col md="1"> </Col>
-                                <Col md="3">
-                                  <FormGroup className="mb-3">
-                                    <Label htmlFor="validationCustom01">Icon</Label>
-                                    <AvField
-                                      name="Icon"
-                                      value={EditData.Icon}
-                                      type="text"
-                                      placeholder="Please Enter Icon"
-                                      validate={{
-                                        required: {
-                                          value: true,
-                                          errorMessage: "Please Enter Icon",
-                                        },
-                                      }}
-                                      autoComplete="off"
-                                    />
-                                  </FormGroup>
-                                </Col>
-                              </Row>
-
-                              <Row Col sm="12">
-                                <FormGroup className="mb-1 col col-sm-4">
-                                  <Row className="justify-content-md-left">
-                                    <Label
-                                      htmlFor="horizontal-firstname-input"
-                                      className="col-sm-3 col-form-label mt-4"
+                                  <Label
+                                    htmlFor="horizontal-firstname-input"
+                                    className="col-sm-4 col-form-label mt-4"
+                                  >
+                                    Division Req*{" "}
+                                  </Label>
+                                  <Col md={5} style={{ marginTop: "15px" }}>
+                                    <div
+                                      className="form-check form-switch form-switch-md mb-1"
+                                      dir="ltr"
                                     >
-                                      Active{" "}
-                                    </Label>
-                                    <Col md={5} style={{ marginTop: "15px" }}>
-                                      <div
-                                        className="form-check form-switch form-switch-md mb-1"
-                                        dir="ltr"
-                                      >
-                                        <AvInput
-                                          type="checkbox"
-                                          className="form-check-input mt-4"
-                                          id="customSwitchsizemd"
-                                          checked={EditData.isActive}
-                                          name="isActive"
-                                          defaultChecked={true}
-                                        />
-                                        <label
-                                          className="form-check-label"
-                                          htmlFor="customSwitchsizemd"
-                                        ></label>
-                                      </div>
-                                    </Col>
-                                  </Row>
-                                </FormGroup>
+                                      <AvInput
+                                        type="checkbox"
+                                        className="form-check-input mt-4"
+                                        id="customSwitchsizemd"
+                                        defaultChecked={EditData.IsDivisionRequired}
+                                        name="IsDivisionRequired"
+                                      />
+                                      <label
+                                        className="form-check-label"
+                                        htmlFor="customSwitchsizemd"
+                                      ></label>
+                                    </div>
+                                  </Col>
+                                </Row>
+                              </FormGroup>
 
-                                <FormGroup className="mb-1 col col-sm-4">
-                                  <Row className="justify-content-md-left">
+                              <FormGroup className="mb-1 col col-sm-4">
+                                <Row className="justify-content-md-left">
 
-                                    <Label
-                                      htmlFor="horizontal-firstname-input"
-                                      className="col-sm-4 col-form-label mt-4"
+                                  <Label
+                                    htmlFor="horizontal-firstname-input"
+                                    className="col-sm-4 col-form-label mt-4"
+                                  >
+                                    EditMode show In Component
+                                  </Label>
+                                  <Col md={5} style={{ marginTop: "15px" }}>
+                                    <div
+                                      className="form-check form-switch form-switch-md mb-1"
+                                      dir="ltr"
                                     >
-                                      Division Req*{" "}
-                                    </Label>
-                                    <Col md={5} style={{ marginTop: "15px" }}>
-                                      <div
-                                        className="form-check form-switch form-switch-md mb-1"
-                                        dir="ltr"
-                                      >
-                                        <AvInput
-                                          type="checkbox"
-                                          className="form-check-input mt-4"
-                                          id="customSwitchsizemd"
-                                          defaultChecked={EditData.IsDivisionRequired}
-                                          name="IsDivisionRequired"
-                                        />
-                                        <label
-                                          className="form-check-label"
-                                          htmlFor="customSwitchsizemd"
-                                        ></label>
-                                      </div>
-                                    </Col>
-                                  </Row>
-                                </FormGroup>
-
-                                <FormGroup className="mb-1 col col-sm-4">
-                                  <Row className="justify-content-md-left">
-
-                                    <Label
-                                      htmlFor="horizontal-firstname-input"
-                                      className="col-sm-4 col-form-label mt-4"
-                                    >
-                                      EditMode show In Component
-                                    </Label>
-                                    <Col md={5} style={{ marginTop: "15px" }}>
-                                      <div
-                                        className="form-check form-switch form-switch-md mb-1"
-                                        dir="ltr"
-                                      >
-                                        <AvInput
-                                          type="checkbox"
-                                          className="form-check-input mt-4"
-                                          id="customSwitchsizemd"
-                                          defaultChecked={EditData.IsEditPopuporComponent}
-                                          name="IsEditPopuporComponent"
-                                        />
-                                        <label
-                                          className="form-check-label"
-                                          htmlFor="customSwitchsizemd"
-                                        ></label>
-                                      </div>
-                                    </Col>
-                                  </Row>
-                                </FormGroup>
-                              </Row>
-                              {/* <Row className="btn btn-sm">
+                                      <AvInput
+                                        type="checkbox"
+                                        className="form-check-input mt-4"
+                                        id="customSwitchsizemd"
+                                        defaultChecked={EditData.IsEditPopuporComponent}
+                                        name="IsEditPopuporComponent"
+                                      />
+                                      <label
+                                        className="form-check-label"
+                                        htmlFor="customSwitchsizemd"
+                                      ></label>
+                                    </div>
+                                  </Col>
+                                </Row>
+                              </FormGroup>
+                            </Row>
+                            {/* <Row className="btn btn-sm">
                                 <button
                                   type="button"
                                   className="btn btn-primary w-md float-right"
                                   onclick={() => myFunction()}>Disabled false</button>
                               </Row> */}
 
-                            </CardBody>
+                          </CardBody>
 
-                          </Card>
+                        </Card>
 
-                          {/* {pageAccessDropDownView ? (
-                            <Card className=" mt-n2 text-black">
-                              <CardBody style={{ backgroundColor: "whitesmoke" }}>
-                                <Row className="">
-                                  <FormGroup className=" ml-3 col col-sm-4 mb-5 ">
-                                    <Label htmlFor="validationCustom01">
-                                      Page Access
-                                    </Label>
-                                    <Select
-                                      options={pageAccessval}
-                                      onChange={(e) => {
-                                        PageAccess_DropdownSelect_Handler(e);
-                                      }}
-                                      // defaultValue={{ label: "IsShowOnMenu", value: 1 }}
-                                      classNamePrefix="select2-selection"
+                        {/* {pageAccessval.map((index, key) => {
 
-                                    />
-                                  </FormGroup>
+                          return <>
+                            <div className="row " >
+                              <div className="col col-12"  >
 
-                                  <Col sm={1} style={{ marginTop: "28px" }}>
-                                    <Button
-                                      type="button"
-                                      className="btn btn-sm mt-1 mb-0 btn-light  btn-outline-primary  "
-                                      onClick={() => AddRoleHandler()}
-                                    >
-                                      <i className="dripicons-plus "></i>
-                                    </Button>
-                                  </Col>
+                                <Row>
+                                  <div >
+                                    <li>
+                                      <label
+                                        className="col col-2 form-label text-black"
+                                      >
 
-                                  <Col sm={3} style={{ marginTop: "28px" }}>
-                                    {tablePageAccessDataState.length > 0 ? (
-                                      <div className="table-responsive">
-                                        <Table className="table table-bordered  text-center">
-                                          <Thead>
-                                            <tr>
-                                              <th>Page Access</th>
+                                        {index.Name}
+                                      </label>
+                                      &nbsp;&nbsp;&nbsp;
 
-                                              <th>Action</th>
-                                            </tr>
-                                          </Thead>
+                                      <Input
+                                        defaultChecked={index.hascheck}
+                                        onChange={e => {
+                                          pageAccessval[key].hascheck = e.target.checked
+                                        }}
+                                        className="col col-6  "
+                                        type="checkbox"
+                                      // id={`chk${key}`}
+                                      />
 
-                                          <Tbody>{TableBodyFunction()}</Tbody>
-                                        </Table>
-                                      </div>
-                                    ) : (
-                                      <> </>
-                                    )}
-                                  </Col>
+                                    </li>
+                                  </div>
                                 </Row>
+                              </div>
+                            </div>
+                          </>
+                        })} */}
 
-                              </CardBody>
-                            </Card>
-                          ) : <></>} */}
+                        {pageAccessDropDownView ? (
 
-                          {pageAccessDropDownView ? (
+                          <Card className=" mt-n2 " >
+                            <CardBody style={{ backgroundColor: "whitesmoke" }}>
+                              <h5 className="text-black "> Page Access</h5><br></br>
 
-                            <Card className=" mt-n2 text-black" >
-                              <CardBody style={{ backgroundColor: "whitesmoke" }}>
-                                <h5 className="text-black "> Page Access</h5><br></br>
-
+                              <Row className="row ">
                                 {pageAccessval.map((index, key) => {
 
                                   return <>
-                                    <div className="row " >
-                                      <div className="col col-12"  >
 
-                                        <Row>
-                                          <div >
+                                    <Col className="col col-4 text-black" >
+                                      <li>
+                                        <Row className="row ">
+                                          <Col className=" col col-6 ">
                                             <li>
-                                              <label
-                                                className="col col-2 form-label text-black"
-                                              >
-
-                                                {index.Name}
-                                              </label>
-                                              &nbsp;&nbsp;&nbsp;
-
-                                              <Input
-                                                defaultChecked={index.hascheck}
-                                                onChange={e => {
-                                                  pageAccessval[key].hascheck = e.target.checked
-                                                }}
-                                                className="col col-6  "
-                                                type="checkbox"
-                                              // id={`chk${key}`}
-                                              />
-
+                                              <Label>{index.Name}</Label>
                                             </li>
-                                          </div>
+                                          </Col>
+
+                                          <Col className=" col col-6 ">
+
+                                            <Input
+                                              className="col col-2 text-black "
+                                              type="checkbox"
+                                              defaultChecked={index.hascheck}
+                                              onChange={e => {
+                                                pageAccessval[key].hascheck = e.target.checked
+                                              }}
+                                            />
+
+                                          </Col>
                                         </Row>
-                                      </div>
-                                    </div>
+                                      </li>
+                                    </Col>
                                   </>
                                 })}
+                              </Row>
 
-                              </CardBody>
-                            </Card>
-                          ) : <></>}
+
+                            </CardBody>
+                          </Card>
+                        ) : <></>}
                       </TabPane>
 
                       <TabPane tabId="2">
@@ -1720,7 +1704,7 @@ debugger
                                   </Button>
                                 </div> : null
                             }
-                             {/* className="btn btn-sm "> */}
+                            {/* className="btn btn-sm "> */}
 
                           </div>
                         </div>
@@ -1732,17 +1716,7 @@ debugger
                         {/* </Card> */}
 
                       </TabPane>
-                      {/* <div className="row save1" style={{ paddingBottom: 'center' }}>
-                      <button
-                        type="submit"
-                        data-mdb-toggle="tooltip" data-mdb-placement="top" title="Save Order"
-                        className="btn btn-success w-md"
-                      // onClick={() => {
-                      //   saveHandeller();
-                      // }}
-                      > <i className="fas fa-save me-2"></i> Save
-                      </button>
-                    </div> */}
+
                     </TabContent>
 
                   </CardBody>
