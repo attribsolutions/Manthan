@@ -28,12 +28,12 @@ function GSTTab(props) {
             GSTPercentage: GST,
             HSNCode: HSNCode,
             EffectiveDate: effectiveDate,
-            CreatedBy:createdBy(),
-            UpdatedBy:createdBy(),
-            Company:userCompany(),
-            CommonID:0,
-            IsDeleted:0,
-            IsAdd:true,
+            CreatedBy: createdBy(),
+            UpdatedBy: createdBy(),
+            Company: userCompany(),
+            CommonID: 0,
+            IsDeleted: 0,
+            IsAdd: true,
         };
 
         if (!(GST === "")
@@ -115,11 +115,11 @@ function GSTTab(props) {
                                 <Row className=" mt-3">
                                     <Col >
                                         <Button
-                                            className="button_add badge badge-soft-primary font-size-12 btn btn-primary waves-effect waves-light w-xxs border border-light "
+                                            className="button_add badge badge-soft-primary font-size-12 waves-effect  waves-light  btn-outline-primary "
                                             type="button"
                                             onClick={addRowsHandler}
                                         >
-                                            <i className="dripicons-plus mt-3"> </i> 
+                                            <i className="dripicons-plus mt-3"> </i>
                                         </Button>
                                     </Col>
                                 </Row>
