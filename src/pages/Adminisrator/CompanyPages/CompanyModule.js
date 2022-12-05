@@ -35,6 +35,7 @@ import {
 } from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
 import { COMPANY_lIST } from "../../../routes/route_url";
 import SaveButton from "../../../components/Common/ComponentRelatedCommonFile/CommonSaveButton";
+import { createdBy } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 
 
 const CompanyModule = (props) => {
@@ -235,8 +236,8 @@ const CompanyModule = (props) => {
         CompanyAbbreviation: values.CompanyAbbreviation,
         EmailID: values.EmailID,
         CompanyGroup: values.CompanyGroupName.value,
-        CreatedBy: 1,
-        UpdatedBy: 1,
+        CreatedBy: createdBy(),
+        UpdatedBy:  createdBy(),
       });
 
       if (pageMode === "edit") {

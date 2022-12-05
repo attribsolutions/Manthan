@@ -35,6 +35,7 @@ import {
     postMarginMasterDataSuccess
 } from "../../../store/Administrator/MarginMasterRedux/action";
 import { AvForm } from "availity-reactstrap-validation";
+import { createdBy, userCompany } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 
 const MarginMaster = (props) => {
     const dispatch = useDispatch();
@@ -371,9 +372,9 @@ const MarginMaster = (props) => {
             PriceList: priceList_dropdown_Select.value,
             Party: partyName_dropdown_Select.value,
             EffectiveDate: effectiveDate,
-            Company: 1,
-            CreatedBy: 1,
-            UpdatedBy: 1,
+            Company:userCompany(),
+            CreatedBy:createdBy(),
+            UpdatedBy: createdBy(),
             IsDeleted: 0,
             Item: index.Item,
             Margin: index.Margin,

@@ -31,6 +31,7 @@ import {
 } from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
 import { PARTYTYPE_lIST } from "../../../routes/route_url";
 import SaveButton from "../../../components/Common/ComponentRelatedCommonFile/CommonSaveButton";
+import { createdBy } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 
 
 const PartyType = (props) => {
@@ -187,9 +188,9 @@ const PartyType = (props) => {
                 Name: values.Name,
                 IsSCM: values.IsSCM,
                 IsDivision: values.IsDivision,
-                CreatedBy: 1,
+                CreatedBy: createdBy(),
                 CreatedOn: "2022-07-18T00:00:00",
-                UpdatedBy: 1,
+                UpdatedBy: createdBy(),
                 UpdatedOn: "2022-07-18T00:00:00"
             });
             console.log("jsonBody", jsonBody)

@@ -53,6 +53,7 @@ import CategoryTab from "./Category_Tab";
 import DivisionTab from "./Division_Tab";
 import UnitConverstion from "./UnitConversion_Tab/Index";
 import Image from "./Image_Tab/Index";
+import { createdBy } from "../../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 
 const ItemsMaster = (props) => {
     const dispatch = useDispatch();
@@ -556,8 +557,8 @@ const ItemsMaster = (props) => {
                 isActive: formValue.isActive,
                 Company: formValue.Company.value,
                 BaseUnitID: formValue.BaseUnit.value,
-                CreatedBy: 1,
-                UpdatedBy: 1,
+                CreatedBy: createdBy(),
+                UpdatedBy: createdBy(),
                 ItemCategoryDetails: ItemCategoryDetails,
 
                 ItemUnitDetails: itemUnitDetails,

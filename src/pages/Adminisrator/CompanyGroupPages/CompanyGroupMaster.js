@@ -36,6 +36,7 @@ import {
 import { COMPANYGROUP_lIST } from "../../../routes/route_url";
 import { UPDATE_COMPANYGROUP_TYPE_ID_SUCCESS } from "../../../store/Administrator/CompanyGroupRedux/actionType";
 import SaveButton from "../../../components/Common/ComponentRelatedCommonFile/CommonSaveButton";
+import { createdBy } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 
 
 
@@ -204,8 +205,8 @@ const CompanyGroupMaster = (props) => {
             const jsonBody = JSON.stringify({
                 Name: values.Name,
                 IsSCM: Checkbox,
-                CreatedBy: 1,
-                UpdatedBy: 1
+                CreatedBy: createdBy(),
+                UpdatedBy: createdBy()
             });
 
             if (pageMode === "edit") {
