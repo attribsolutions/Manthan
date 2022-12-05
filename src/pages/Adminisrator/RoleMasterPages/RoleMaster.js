@@ -24,6 +24,7 @@ import {
 } from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
 import { ROLE_lIST } from "../../../routes/route_url";
 import SaveButton from "../../../components/Common/ComponentRelatedCommonFile/CommonSaveButton";
+import { createdBy } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 
 
 
@@ -235,9 +236,9 @@ const [state, setState] = useState(initialFiled)
         //     EmployeeType: 1
         //   }
         // ],
-        CreatedBy: 1,
+        CreatedBy:createdBy(),
         CreatedOn: "2022-05-20T11:22:55.711483Z",
-        UpdatedBy: 1,
+        UpdatedBy:createdBy(),
         UpdatedOn: "2022-05-20T11:22:55.711483Z"
       });
 

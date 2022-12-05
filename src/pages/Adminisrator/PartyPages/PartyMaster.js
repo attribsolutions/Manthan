@@ -41,6 +41,7 @@ import { AlertState, Breadcrumb_inputName } from "../../../store/actions"
 import Tree from "./Tree"
 import { PARTY_lIST } from "../../../routes/route_url"
 import AddressDetails_Tab from "./AddressDetailsTab"
+import { createdBy } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons"
 
 const PartyMaster = (props) => {
     const dispatch = useDispatch();
@@ -342,9 +343,9 @@ const PartyMaster = (props) => {
             MkUpMkDn: values.MkUpMkDn,
             isActive: values.isActive,
             IsDivision: partyType_dropdown_Select.division,
-            CreatedBy: 1,
+            CreatedBy: createdBy(),
             CreatedOn: "2022-06-24T11:16:53.165483Z",
-            UpdatedBy: 1,
+            UpdatedBy: createdBy(),
             UpdatedOn: "2022-06-24T11:16:53.330888Z",
             PartyAddress: AddressDetailsMaster,
             PartyPrefix: [

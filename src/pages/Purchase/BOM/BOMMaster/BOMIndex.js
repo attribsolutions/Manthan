@@ -31,6 +31,7 @@ import SaveButton from "../../../../components/Common/ComponentRelatedCommonFile
 import ItemTab from "./ItemQuantityTab";
 import { editBOMListSuccess, GetItemUnitsDrodownAPI, postBOM, postBOMSuccess } from "../../../../store/Purchase/BOMRedux/action";
 import { BillOfMaterialsList } from "../../../../routes/route_url";
+import { createdBy, userCompany } from "../../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 
 const BOMMaster = (props) => {
 
@@ -240,12 +241,6 @@ const BOMMaster = (props) => {
             Unit: index.UnitID
         }))
 
-        let Company = ''
-        try {
-            Company = JSON.parse(localStorage.getItem('Company'))
-        } catch (e) {
-            alert(e)
-        }
         event.preventDefault();
         if (formValid(state, setState)) {
             debugger
@@ -257,8 +252,8 @@ const BOMMaster = (props) => {
                 IsActive: values.IsActive,
                 Item: values.ItemName.value,
                 Unit: values.UnitName.value,
-                CreatedBy: 1,
-                Company: Company,
+                CreatedBy: createdBy(),
+                Company: userCompany(),
                 BOMItems: BOMItems
             });
 

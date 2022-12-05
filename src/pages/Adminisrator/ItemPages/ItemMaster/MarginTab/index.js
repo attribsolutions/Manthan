@@ -5,6 +5,7 @@ import Select from "react-select";
 import { useDispatch, useSelector } from 'react-redux';
 import MarginTable from './Table';
 import { get_Party_ForDropDown, get_PriceList_ForDropDown } from '../../../../../store/Administrator/ItemsRedux/action';
+import { createdBy, userCompany } from '../../../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons';
 
 function Margin_Tab(props) {
 
@@ -65,9 +66,9 @@ function Margin_Tab(props) {
             Party: partyName === "" ? "" : partyName.value,
             EffectiveDate: effectiveDate,
             Margin: margin,
-            CreatedBy: 1,
-            UpdatedBy: 1,
-            Company: 1,
+            CreatedBy: createdBy(),
+            UpdatedBy: createdBy(),
+            Company: userCompany(),
             CommonID:0,
             IsDeleted:0,
             IsAdd:true

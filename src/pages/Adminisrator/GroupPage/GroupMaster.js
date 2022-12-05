@@ -39,6 +39,7 @@ import {
 import { getGroupTypeslist } from "../../../store/Administrator/GroupTypeRedux/action";
 import { GROUP_lIST } from "../../../routes/route_url";
 import SaveButton from "../../../components/Common/ComponentRelatedCommonFile/CommonSaveButton";
+import { createdBy } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 
 
 const GroupMaster = (props) => {
@@ -229,9 +230,9 @@ const GroupMaster = (props) => {
             const jsonBody = JSON.stringify({
                 Name: values.Name,
                 GroupType: values.GroupTypeName.value,
-                CreatedBy: 1,
+                CreatedBy: createdBy(),
                 CreatedOn: "0002-10-03T12:48:14.910491",
-                UpdatedBy: 1,
+                UpdatedBy:createdBy(),
                 UpdatedOn: "0002-10-03T12:48:14.910491"
             });
 
