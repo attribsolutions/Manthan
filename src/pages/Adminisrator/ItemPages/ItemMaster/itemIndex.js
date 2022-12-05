@@ -178,7 +178,7 @@ const ItemsMaster = (props) => {
             }
 
             if (hasEditVal) {
-
+            
                 setEditData(hasEditVal);
                 dispatch(Breadcrumb_inputName(hasEditVal.Name))
 
@@ -214,10 +214,10 @@ const ItemsMaster = (props) => {
                 // ====================== Images tab ======================
 
                 let ItemImagesDetails = hasEditVal.ItemImagesDetails.map((index) => {
-            
+                    debugger
                     return {
                         ImageType:
-                      { 
+                        {
                             label: index.ImageTypeName,
                             value: index.ImageType
                         },
@@ -240,7 +240,7 @@ const ItemsMaster = (props) => {
                         })
                     }
                 })
-        
+
                 if ((UnitDetails.length === 0)) {
                     UnitDetails.push({
                         Unit: '',
@@ -483,7 +483,7 @@ const ItemsMaster = (props) => {
                 if (!(val1 === '')) {
                     val1 = parseFloat(val1).toFixed(3)
                 }
-                
+
                 const found = baseUnitTableData.find((i, k) => {
                     let inner = i.Conversion;
                     if (!(inner === '')) { inner = parseFloat(inner).toFixed(3) }
@@ -497,22 +497,22 @@ const ItemsMaster = (props) => {
                 if (
                     ((found === undefined) || (found2 === undefined))
                     && !(val1 === '')
-                    && !(unit1 === '')) 
-    
-                if (
-                    ((found === undefined) || (found2 === undefined))
-                    && !(index.Conversion === '')
-                    && !(index.Unit === '')) {
-                    itemUnitDetails.push({
-                        BaseUnitQuantity: index.Conversion,
-                        UnitID: index.Unit.value,
-                        IsBase: index.IsBase
-                    })
-                }
+                    && !(unit1 === ''))
+
+                    if (
+                        ((found === undefined) || (found2 === undefined))
+                        && !(index.Conversion === '')
+                        && !(index.Unit === '')) {
+                        itemUnitDetails.push({
+                            BaseUnitQuantity: index.Conversion,
+                            UnitID: index.Unit.value,
+                            IsBase: index.IsBase
+                        })
+                    }
 
             });
 
-            
+
 
             if (pageMode === 'save')
                 itemUnitDetails.push({
@@ -616,7 +616,7 @@ const ItemsMaster = (props) => {
                             {/* Render Breadcrumbs */}
                             <Breadcrumb pageHeading={userPageAccessState.PageHeading} />
 
-                         
+
 
 
                             <Row>

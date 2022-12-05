@@ -26,7 +26,6 @@ export default function Image(props) {
    
 
     useEffect(() => {
-        debugger
         dispatch(get_ImageType_ForDropDown());
     }, []);
 
@@ -112,9 +111,8 @@ export default function Image(props) {
                             <Select
                                 options={imageTypes}
                                 onChange={(e) => { onchangeHandler(e, key, "ImageType") }}
-                                value={ImageTypevalue}
+                                defaultValue={ImageTypevalue}
                                 
-
                             />
                         </FormGroup>
 

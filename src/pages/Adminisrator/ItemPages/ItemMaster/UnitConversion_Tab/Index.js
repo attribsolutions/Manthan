@@ -18,13 +18,12 @@ export default function UnitConverstion(props) {
     }));
 
 
-
-
-    function baseunitOnchange(event, type) {
+    function baseunitOnchange(event) {
         const val = { ...formValue }
-        val[type] = event
+        val["BaseUnit"] = event
         setFormValue(val)
     }
+
 
     function addRow_Handler() {
 
@@ -43,7 +42,8 @@ export default function UnitConverstion(props) {
 
         settable(found)
     }
-    function baseUnit2_onChange(event, type, key,) {
+    function baseUnit2_onChange(event, type, key) {
+     
         let newSelectValue = ''
 
         const found = TableData.find((i, k) => {
@@ -52,7 +52,7 @@ export default function UnitConverstion(props) {
 
         if (type === "Conversion") {
             var conv = event.target.value
-           
+
 
             newSelectValue = {
                 Conversion: conv,
@@ -75,12 +75,22 @@ export default function UnitConverstion(props) {
         settable(newTabArr)
     }
 
+    let BaseUnit_DropdownOptions2 = []
+    BaseUnit.forEach(myFunction);
+    function myFunction(item, index, arr) {
+        if (!(formValue.BaseUnit.label === item.Name)) {
+            BaseUnit_DropdownOptions2[index] = {
+                value: item.id,
+                label: item.Name
+            };
+        }
+    }
     const tbodyfunction = () => {
 
         const newarr = []
 
         TableData.forEach((index, key) => {
-
+       
             newarr.push(
                 (
                     <tr >
@@ -92,7 +102,7 @@ export default function UnitConverstion(props) {
                                         id={`dropUnit-${key}`}
                                         placeholder="Select..."
                                         value={index.Unit}
-                                        options={BaseUnit_DropdownOptions}
+                                        options={BaseUnit_DropdownOptions2}
                                         onChange={(e) => baseUnit2_onChange(e, "Unit", key)}
                                     />
                                 </Col>
@@ -107,7 +117,7 @@ export default function UnitConverstion(props) {
                                         id={`txtConversion${key}`}
                                         placeholder="Select..."
                                         autoComplete="off"
-                                        value={index.Conversion}
+                                        defaultValue={index.Conversion}
                                         onChange={(e) => baseUnit2_onChange(e, "Conversion", key,)}
                                     >
 
