@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react"
 import MetaTags from "react-meta-tags"
 import {
-    Button,
     Card,
     CardBody,
     CardHeader,
@@ -15,10 +14,9 @@ import {
     NavLink,
     Row,
     TabContent,
-    Table,
     TabPane,
 } from "reactstrap"
-import { Link, useHistory } from "react-router-dom"
+import { useHistory } from "react-router-dom"
 import { useDispatch, useSelector } from "react-redux";
 import classnames from "classnames"
 import Breadcrumb from "../../../../components/Common/Breadcrumb";
@@ -29,28 +27,21 @@ import {
     editItemSuccess,
     getBaseUnit_ForDropDown,
     get_CategoryTypes_ForDropDown,
-    get_Category_By_CategoryType_ForDropDown,
     get_Category_By_CategoryType_ForDropDownAPI,
-    get_Category_By_CategoryType_ForDropDown_Success,
     get_Division_ForDropDown,
     get_ImageType_ForDropDown,
     get_Party_ForDropDown,
     get_PriceList_ForDropDown,
-    get_Sub_Category_By_CategoryType_ForDropDown,
-    get_Sub_Category_By_CategoryType_ForDropDown_Success,
     postItemData,
     PostItemDataSuccess,
     updateItemID
 } from "../../../../store/Administrator/ItemsRedux/action";
 import { AlertState, Breadcrumb_inputName, getCategoryTypelist } from "../../../../store/actions";
-import { Tbody, Thead } from "react-super-responsive-table";
 import { getPartyListAPI } from "../../../../store/Administrator/PartyRedux/action";
 import GSTTab from "./GST_Tab";
 import MRPTab from "./MRP_Tab";
 import Margin_Tab from "./MarginTab/index";
 import GroupTab from "./Group_Tab";
-import CategoryTab from "./Category_Tab";
-import DivisionTab from "./Division_Tab";
 import UnitConverstion from "./UnitConversion_Tab/Index";
 import Image from "./Image_Tab/Index";
 import { createdBy } from "../../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
@@ -64,7 +55,6 @@ const ItemsMaster = (props) => {
     const [modalCss, setModalCss] = useState(false);
     const [pageMode, setPageMode] = useState("save");
     const [userPageAccessState, setUserPageAccessState] = useState('');
-
     const [activeTab1, setactiveTab1] = useState("1")
 
 
@@ -113,11 +103,9 @@ const ItemsMaster = (props) => {
 
 
     const [MRP_Tab_TableData, setMRP_Tab_TableData] = useState([]);
-
     const [Group_Tab_TableData, setGroup_Tab_TableData] = useState([]);
-
-
     const [GStDetailsMaster, setGStDetailsMaster] = useState([]);
+
 
     const {
         companyList,
@@ -178,7 +166,7 @@ const ItemsMaster = (props) => {
             }
 
             if (hasEditVal) {
-            
+
                 setEditData(hasEditVal);
                 dispatch(Breadcrumb_inputName(hasEditVal.Name))
 
@@ -345,8 +333,6 @@ const ItemsMaster = (props) => {
     }));
 
 
-
-
     const Division_DropdownOptions = Division.map((data) => ({
         value: data.id,
         label: data.Name
@@ -401,7 +387,6 @@ const ItemsMaster = (props) => {
 
     const CategoryType_Handler = (event) => {
         dropDownValidation(event, "CategoryType")
-        // setCategoryTypeDropdownSelect(event);
         dispatch(get_Category_By_CategoryType_ForDropDownAPI(event.value))
     };
 
@@ -611,16 +596,9 @@ const ItemsMaster = (props) => {
                         <title>Item Master| FoodERP-React FrontEnd</title>
                     </MetaTags>
                     <Container fluid>
+                        <Breadcrumb pageHeading={userPageAccessState.PageHeading} />
                         <AvForm onValidSubmit={(e, v) => { handleValidSubmit(e, v); }}>
-
-                            {/* Render Breadcrumbs */}
-                            <Breadcrumb pageHeading={userPageAccessState.PageHeading} />
-
-
-
-
                             <Row>
-
                                 <Col lg={12}>
                                     <Card className="text-black" >
                                         <CardHeader className="card-header   text-black" style={{ backgroundColor: "#dddddd" }} >
@@ -758,11 +736,7 @@ const ItemsMaster = (props) => {
 
                                             <TabContent activeTab={activeTab1} className="p-3 text-muted">
 
-
-
-
-
-                                                <TabPane tabId="1">
+                                                <TabPane tabId="1">{/* +++++++++++ TabPane tabId="1" ++++++++++++++++++++++++++++++++++++++++++ */}
                                                     <Col md={12}  >
                                                         <Card className="text-black">
                                                             <CardBody style={{ backgroundColor: "whitesmoke" }}>
@@ -946,15 +920,7 @@ const ItemsMaster = (props) => {
 
                                                 </TabPane>
 
-
-
-
-
-
-
-
-
-                                                <TabPane tabId="2">
+                                                <TabPane tabId="2">{/* +++++++++++ TabPane Group Type ++++++++++++++++++++++++++++++++++++++++++ */}
                                                     <Row>
                                                         <Col md={12}  >
                                                             <Row className="mt-3">
@@ -965,8 +931,9 @@ const ItemsMaster = (props) => {
                                                         </Col>
                                                     </Row>
                                                 </TabPane>
-                                                <TabPane tabId="3">
 
+
+                                                <TabPane tabId="3">{/* ++++++++++++ TabPane UnitConverstion ++++++++++++++++++++++++++++++++++++++++++ */}
                                                     <UnitConverstion
                                                         state={{
                                                             pageMode: pageMode,
@@ -1085,16 +1052,16 @@ const ItemsMaster = (props) => {
 
                                                 </TabPane>
 
-                                                <TabPane tabId="4">
+
+                                                <TabPane tabId="4">{/* ++++++++++++ TabPane Item Image ++++++++++++++++++++++++++++++++++++++++++ */}
                                                     <Image state={{
                                                         imageTable: imageTabTable,
                                                         setImageTable: setImageTabTable,
-
                                                     }} />
-
                                                 </TabPane>
 
-                                                <TabPane tabId="5">
+
+                                                <TabPane tabId="5">{/* ++++++++++++ TabPane MRP_Tab ++++++++++++++++++++++++++++++++++++++++++ */}
                                                     <Row>
                                                         <Col md={12}  >
                                                             <Row className="mt-3">
@@ -1106,8 +1073,7 @@ const ItemsMaster = (props) => {
                                                     </Row>
                                                 </TabPane>
 
-                                                <TabPane tabId="6">
-
+                                                <TabPane tabId="6">{/* ++++++++++++ TabPane Margin ++++++++++++++++++++++++++++++++++++++++++ */}
                                                     <Row>
                                                         <Col md={12}  >
                                                             <Row className="mt-3">
@@ -1120,7 +1086,7 @@ const ItemsMaster = (props) => {
 
                                                 </TabPane>
 
-                                                <TabPane tabId="7">
+                                                <TabPane tabId="7">{/* +++++++++++++ TabPane Gst ++++++++++++++++++++++++++++++++++++++++++ */}
                                                     <Row>
                                                         <Col md={12}  >
                                                             <Row className="mt-3">
@@ -1132,9 +1098,10 @@ const ItemsMaster = (props) => {
                                                     </Row>
                                                 </TabPane>
                                             </TabContent>
-                                            <Row >
+
+                                            <Row >{/* +++++++++++++++++++++++++++ Save Button  ++++++++++++++++++++++++++++++++++++++++++ */}
                                                 <Col sm={2}>
-                                                    <div style={{paddingLeft:"14px"}}>
+                                                    <div style={{ paddingLeft: "14px" }}>
                                                         {
                                                             pageMode === "edit" ?
                                                                 userPageAccessState.RoleAccess_IsEdit ?
