@@ -250,9 +250,7 @@ const Order = (props) => {
                             id={`inpQty${k}`}
                             defaultValue={row.inpQty}
                             key={row.inpQty}
-                            // disabled={((row.inpRate === 0) || (row.GSTPercentage === '')) ? true : false}
                             onChange={(e) => {
-                                debugger
                                 const val = e.target.value
                                 let isnum = /^[+-]?([0-9]+([.][0-9]*)?|[.][0-9]+)?([eE][+-]?[0-9]+)?$/.test(val);
                                 if ((isnum) || (val === '')) {
@@ -262,7 +260,8 @@ const Order = (props) => {
                                 }
                             }}
                             autoComplete="off"
-                            onKeyDown={(e) => handleKeyDown(e, items)} />
+                            onKeyDown={(e) => handleKeyDown(e, items)}
+                        />
                     </span>
 
                 )
@@ -324,6 +323,7 @@ const Order = (props) => {
                             type="text"
                             id={`inpRatey${k}`}
                             defaultValue={row.inpRate}
+                            autoComplete="off"
                             // disabled={(row.GST === '') ? true : false}
                             onChange={(e) => {
                                 const val = e.target.value
