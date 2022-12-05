@@ -35,6 +35,7 @@ import {
 } from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
 import { EMPLOYEETYPE_lIST } from "../../../routes/route_url";
 import SaveButton from "../../../components/Common/ComponentRelatedCommonFile/CommonSaveButton";
+import { createdBy } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 
 
 
@@ -209,9 +210,9 @@ const EmployeeTypesMaster = (props) => {
                 IsPartyConnection: values.IsPartyConnection,
                 IsSCM: values.IsSCM,
                 Description: "sfasfgasd",
-                CreatedBy: 1,
+                CreatedBy: createdBy(),
                 CreatedOn: "2022-07-18T00:00:00",
-                UpdatedBy: 1,
+                UpdatedBy: createdBy(),
                 UpdatedOn: "2022-07-18T00:00:00"
             });
 

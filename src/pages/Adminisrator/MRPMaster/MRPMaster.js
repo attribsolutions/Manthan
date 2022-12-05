@@ -38,6 +38,7 @@ import {
     postMRPMasterData, postMRPMasterDataSuccess
 } from "../../../store/Administrator/MRPMasterRedux/action";
 import { MRP_lIST } from "../../../routes/route_url";
+import { createdBy, userCompany } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 
 
 const MRPMaster = (props) => {
@@ -377,9 +378,9 @@ const MRPMaster = (props) => {
             Division: division_dropdown_Select.value,
             Party: party_dropdown_Select.value,
             EffectiveDate: effectiveDate,
-            Company: 1,
-            CreatedBy: 1,
-            UpdatedBy: 1,
+            Company: userCompany(),
+            CreatedBy: createdBy(),
+            UpdatedBy: createdBy(),
             IsDeleted: 0,
             IsAdd: true,
             Item: index.Item,

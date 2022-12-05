@@ -26,6 +26,7 @@ import ToolkitProvider, { Search } from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 import { AvField, AvForm } from "availity-reactstrap-validation";
 import { deleteGSTForMasterPage, deleteGSTForMasterPageSuccess, getGSTListPage, postGoButtonForGST_Master, postGoButtonForGST_Master_Success, postGSTMasterData, postGSTMasterDataSuccess } from "../../../store/Administrator/GSTRedux/action";
+import { createdBy, userCompany } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 
 const GSTMaster = (props) => {
     const dispatch = useDispatch();
@@ -364,10 +365,10 @@ const GSTMaster = (props) => {
         debugger
         var ItemData = TableData.map((index) => ({
             EffectiveDate: effectiveDate,
-            Company: 1,
-            CreatedBy: 1,
+            Company: userCompany(),
+            CreatedBy: createdBy(),
             IsDeleted: 0,
-            UpdatedBy: 1,
+            UpdatedBy:createdBy(),
             Item: index.Item,
             GSTPercentage: index.GSTPercentage,
             HSNCode: index.HSNCode,

@@ -32,6 +32,7 @@ import {
 
 } from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
 import SaveButton from "../../../components/Common/ComponentRelatedCommonFile/CommonSaveButton";
+import { createdBy } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 
 
 const AddEmployee = (props) => {
@@ -379,8 +380,8 @@ const AddEmployee = (props) => {
         District: values.DistrictName.value,
         EmployeeParties: emplPartie,
         Company: values.CompanyName.value,
-        CreatedBy: 1,
-        UpdatedBy: 1,
+        CreatedBy:createdBy(),
+        UpdatedBy:createdBy()
       });
 
       if (pageMode === "edit") {

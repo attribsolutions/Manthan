@@ -27,6 +27,7 @@ import { useHistory } from "react-router-dom";
 import { MODULE_lIST } from "../../../routes/route_url";
 import { comAddPageFieldFunc, formValid, initialFiledFunc, onChangeText } from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
 import SaveButton from "../../../components/Common/ComponentRelatedCommonFile/CommonSaveButton";
+import { createdBy } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 
 
 const Modules = (props) => {
@@ -204,8 +205,8 @@ const Modules = (props) => {
                 DisplayIndex: values.DisplayIndex,
                 isActive: values.isActive,
                 Icon: values.Icon,
-                CreatedBy: 9,
-                UpdatedBy: 9
+                CreatedBy: createdBy(),
+                UpdatedBy:createdBy(),
             });
 
             if (pageMode === 'edit') {

@@ -20,6 +20,7 @@ import { Tbody, Thead } from "react-super-responsive-table";
 import { Breadcrumb_inputName } from "../../../store/Utilites/Breadcrumb/actions";
 import { MetaTags } from "react-meta-tags";
 import { useHistory } from "react-router-dom";
+import { createdBy } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 
 const AddUser = (props) => {
 
@@ -256,8 +257,8 @@ console.log("employeelistForDropdown",employeelistForDropdown)
       isSendOTP: values.isSendOTP,
       isLoginUsingMobile: values.isLoginUsingMobile,
       isLoginUsingEmail: values.isLoginUsingEmail,
-      CreatedBy: 1,
-      UpdatedBy: 1,
+      CreatedBy: createdBy(),
+      UpdatedBy: createdBy(),
       UserRole: partyRoleData
     })
 

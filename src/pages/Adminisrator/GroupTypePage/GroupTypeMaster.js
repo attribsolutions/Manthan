@@ -32,6 +32,7 @@ import {
 } from "../../../store/Administrator/GroupTypeRedux/action";
 import { GROUPTYPE_lIST } from "../../../routes/route_url";
 import SaveButton from "../../../components/Common/ComponentRelatedCommonFile/CommonSaveButton";
+import { createdBy } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 
 
 const GroupTypeMaster = (props) => {
@@ -199,9 +200,9 @@ const GroupTypeMaster = (props) => {
             const jsonBody = JSON.stringify({
                 Name: values.Name,
                 IsReserved: values.IsReserved,
-                CreatedBy: 1,
+                CreatedBy: createdBy(),
                 CreatedOn: "0002-10-03T12:48:14.910491",
-                UpdatedBy: 1,
+                UpdatedBy: createdBy(),
                 UpdatedOn: "0002-10-03T12:48:14.910491"
 
             });
