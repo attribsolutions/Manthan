@@ -254,7 +254,7 @@ const Order = (props) => {
                             onChange={(e) => {
                                 debugger
                                 const val = e.target.value
-                                let isnum =/^[+-]?[0-9]+([.][0-9]+)?([eE][+-]?[0-9]+)?$/.test(val);
+                                let isnum = /^[+-]?([0-9]+([.][0-9]*)?|[.][0-9]+)?([eE][+-]?[0-9]+)?$/.test(val);
                                 if ((isnum) || (val === '')) {
                                     val_onChange(val, row, "qty")
                                 } else {
@@ -324,12 +324,15 @@ const Order = (props) => {
                             type="text"
                             id={`inpRatey${k}`}
                             defaultValue={row.inpRate}
-                            disabled={(row.GST === '') ? true : false}
-                            onChange={e => {
-                                row["inpRate"] = e.target.value;
+                            // disabled={(row.GST === '') ? true : false}
+                            onChange={(e) => {
                                 const val = e.target.value
-                                val_onChange(val, row, "rate")
-
+                                let isnum = /^[+-]?([0-9]+([.][0-9]*)?|[.][0-9]+)?([eE][+-]?[0-9]+)?$/.test(val);
+                                if ((isnum) || (val === '')) {
+                                    val_onChange(val, row, "rate")
+                                } else {
+                                    document.getElementById(`inpRatey${k}`).value = row.inpRate
+                                }
                             }}
                             onKeyDown={(e) => handleKeyDown(e, items)}
                         />
@@ -507,8 +510,8 @@ const Order = (props) => {
             OrderType: 1,
             POType: 1,
             Division: division,
-            CreatedBy:createdBy(),
-            UpdatedBy:createdBy(),
+            CreatedBy: createdBy(),
+            UpdatedBy: createdBy(),
             OrderItem: itemArr,
             OrderTermsAndConditions: termsAndCondition
         });
