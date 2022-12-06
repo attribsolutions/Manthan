@@ -390,7 +390,7 @@ debugger
                                                                 <Button
                                                             
                                                                     type="button"
-                                                                    className="btn btn-sm mt-1 mb-0 btn-light  btn-outline-primary text-center"
+                                                                    className="btn btn-sm mt-1 mb-0 btn-light btn-outline-primary text-center"
                                                                     onClick={() =>
                                                                         AddPartyHandler()
                                                                     }
