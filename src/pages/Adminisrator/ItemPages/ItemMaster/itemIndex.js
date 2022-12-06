@@ -95,6 +95,7 @@ const ItemsMaster = (props) => {
         ImageType: '',
         ImageUpload: ''
     }]);
+    console.log("imageTabTable", imageTabTable)
     const [baseUnitTableData, setBaseUnitTableData] = useState([{
         Conversion: '',
         Unit: '',
@@ -533,7 +534,7 @@ const ItemsMaster = (props) => {
                 if (index.IsAdd === true) { hasAdd_GST.push(index) }
             })
 
-
+            debugger
             const jsonBody = JSON.stringify({
                 Name: formValue.Name,
                 ShortName: formValue.ShortName,
@@ -591,7 +592,7 @@ const ItemsMaster = (props) => {
     if (!(userPageAccessState === '')) {
         return (
             <React.Fragment>
-                <div className="page-content" style={{ marginTop: IsEditMode_Css ,marginBottom:"1cm"}}>
+                <div className="page-content" style={{ marginTop: IsEditMode_Css, marginBottom: "1cm" }}>
                     <MetaTags>
                         <title>Item Master| FoodERP-React FrontEnd</title>
                     </MetaTags>

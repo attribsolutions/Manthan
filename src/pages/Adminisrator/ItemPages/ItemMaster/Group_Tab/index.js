@@ -72,6 +72,7 @@ function GroupTab(props) {
     };
 
     const Group_Handler = (event) => {
+        debugger
         const found = props.tableData.find(element => {
             return element.Group == event.value
         });
