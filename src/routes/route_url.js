@@ -93,4 +93,7 @@ export const SUBGROUP_LIST="/SubGroupList"
 export const BillOfMaterials="/BOM"
 export const BillOfMaterialsList="/BOMList"
 
+export const WORKORDER="/WorkOrder"
+export const WorkOrderList="/WorkOrderList"
+
 

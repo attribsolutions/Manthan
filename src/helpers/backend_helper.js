@@ -376,6 +376,8 @@ export const edit_BOMListID = (id1) => get(`${url.BOM}/${id1}`) //Single get api
 export const BOM_Update_API = (data, id) => put(`${url.BOM}/${id}`, data)// update api
 export const BOM_Delete_API = (id) => del(`${url.BOM}/${id}`)// delete api
 
+// Work Order API
+export const BOMList_Get_API = () => get(url.BOMLIST)
 export {
   getLoggedInUser,
   isUserAuthenticated,
