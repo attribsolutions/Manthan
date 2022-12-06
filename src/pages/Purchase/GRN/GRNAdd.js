@@ -43,6 +43,7 @@ import GRNList from "./GRNList";
 import { useMemo } from "react";
 import flatpickr from "flatpickr";
 import { mySearchProps } from "../../../components/Common/ComponentRelatedCommonFile/MySearch";
+import { currentDate } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 
 let description = ''
 let editVal = {}
@@ -58,7 +59,9 @@ const GRNAdd = (props) => {
 
     //Access redux store Data /  'save_ModuleSuccess' action data
 
-    const [grnDate, setgrnDate] = useState('');
+    const [grnDate, setgrnDate] = useState(() => currentDate());
+    const [invoiceDate, setInvoiceDate] = useState(() => currentDate());
+
     const [deliverydate, setdeliverydate] = useState("today")
     const [billAddr, setbillAddr] = useState('')
     const [shippAddr, setshippAddr] = useState('')
@@ -711,12 +714,41 @@ const GRNAdd = (props) => {
 
                             <FormGroup className="mb-2 row mt-3 " >
                                 <Label className="col-md-4 p-2"
-                                    style={{ width: "130px" }}>Challan No</Label>
+                                    style={{ width: "130px" }}>PO.No</Label>
                                 <Col md="3">
                                     <Input type="text"
                                         disabled={true}
                                         value={grnDetail.challanNo}
                                         placeholder="Enter Challan No" />
+                                </Col>
+                            </FormGroup>
+                            <FormGroup className="mb-2 row mt-3 " >
+                                <Label className="col-md-4 p-2"
+                                    style={{ width: "130px" }}>Invoice Date</Label>
+                                <Col md="3">
+                                    <Flatpickr
+                                        className="form-control d-block p-2 bg-white text-dark"
+                                        placeholder="Select..."
+                                        options={{
+                                            altInput: true,
+                                            altFormat: "d-m-Y",
+                                            dateFormat: "Y-m-d",
+                                            defaultDate: "today"
+                                        }}
+                                        onChange={(e, date) => { setInvoiceDate(date) }}
+                                        onReady={(e, date) => { setInvoiceDate(date); }}
+                                    />
+                                </Col>
+                            </FormGroup>
+                            <FormGroup className="mb-2 row mt-3 " >
+                                <Label className="col-md-4 p-2"
+                                    style={{ width: "130px" }}>Invoice No</Label>
+                                <Col md="3">
+                                    <Input type="text"
+                                        // disabled={true}
+                                        pattern={/[A-Za-z]{3}/}
+                                        value={grnDetail.challanNo}
+                                        placeholder="Enter Invoice No" />
                                 </Col>
                             </FormGroup>
 
