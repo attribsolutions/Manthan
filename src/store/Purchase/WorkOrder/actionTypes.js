@@ -1,0 +1,2 @@
+export const GET_BOM_LIST="GET_BOM_LIST"
+export const GET_BOM_LIST_SUCCESS="GET_BOM_LIST_SUCCESS"
