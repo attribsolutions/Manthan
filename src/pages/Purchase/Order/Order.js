@@ -537,18 +537,18 @@ const Order = (props) => {
                 <MetaTags>
                     <title>{userAccState.PageHeading}| FoodERP-React FrontEnd</title>
                 </MetaTags>
-                <div className="page-content">
+                <div className="page-content" style={{marginTop:"-0.4cm"}}>
                     <Breadcrumb
                         pageHeading={userAccState.PageHeading}
                         showCount={true}
                     />
-                    <div className="px-2 mb-1 mt-n1" style={{ backgroundColor: "#dddddd" }} >
-                        <div className=" mt-1 row">
-                            <Col md="3" className="">
+                    <div className="px-2 mb-1 mt-n3 " style={{ backgroundColor: "rgb(210 210 220)", borderRadius: "5px" }} >
+                        <div className=" mt-1 row ">
+                            <Col sm="5" className="">
                                 <FormGroup className="mb- row mt-3 " >
                                     <Label className="col-sm-5 p-2"
-                                        style={{ width: "100px" }}>Order Date</Label>
-                                    <Col md="7">
+                                        style={{ width: "115px" }}>Order Date</Label>
+                                    <Col sm="7">
                                         <Flatpickr
                                             id="orderdate"
                                             name="orderdate"
@@ -568,13 +568,14 @@ const Order = (props) => {
                                     </Col>
                                 </FormGroup>
                             </Col>
-
-                            <Col md="3">
-                                <FormGroup className="mb-2 row mt-3 " >
-                                    <Label className="col-md-4 p-2"
-                                        style={{ width: "130px" }}>Supplier Name</Label>
-                                    <Col md="7">
+                          
+                            <Col sm="6">
+                                <FormGroup className="mb- row mt-3 " >
+                                    <Label className="col-sm-2 p-2"
+                                        style={{ width: "116px" ,marginLeft:"2.2cm",}}>Supplier Name</Label>
+                                    <Col sm="6" style={{marginLeft:"0.4cm"}}>
                                         <Select
+                                             
                                             value={supplierSelect}
                                             classNamePrefix="select2-Customer"
                                             isDisabled={pageMode === "edit" ? true : false}
@@ -585,7 +586,7 @@ const Order = (props) => {
                                 </FormGroup>
                             </Col >
 
-                            <Col md="1" className="mt-3 ">
+                            <Col sm="1" className="mt-3 ">
                                 {pageMode === "save" ? <Button type="button" color="btn btn-outline-success border-2 font-size-12 "
                                     onClick={(e) => GoButton_Handler()}>Go</Button>
                                     : null}
@@ -593,28 +594,28 @@ const Order = (props) => {
                         </div>
                     </div>
 
-                    <div className="px-2  mb-1" style={{ backgroundColor: "#dddddd" }} >
+                    <div className="px-2  mb-1" style={{ backgroundColor: "#e9e9ef", borderRadius: "5px" }} >
 
                         <div className="row">
                             <div className="col col-6">
-                                <FormGroup className=" row mt-3 mt-3" >
-                                    <Label className="  col col-3 mt-2"
-                                        style={{ width: "130px" }}>Description</Label>
-                                    <div className=" col ">
+                                <FormGroup className=" row  mt-3" >
+                                    <Label className="   p-2"
+                                        style={{ width: "115px" }}>Description</Label>
+                                    <div className="col-7">
                                         <Input type="text"
                                             defaultValue={description}
                                             placeholder='Enter Order Description'
                                             onChange={e => description = e.target.value}
-                                            style={{ backgroundColor: "#dddddd" }} />
+                                             />
                                     </div>
 
                                 </FormGroup>
                             </div >
-                            <div className="col col-6">
+                            <div className="col col-6" >
                                 <FormGroup className=" row mt-3 " >
-                                    <Label className=" col col-3  p-2"
+                                    <Label className=" p-2"
                                         style={{ width: "130px" }}>Delivery Date</Label>
-                                    <div className="col col-6">
+                                    <div className="col col-7 sm-1">
                                         <Flatpickr
                                             id="deliverydate"
                                             name="deliverydate"
@@ -639,7 +640,9 @@ const Order = (props) => {
                             <div className="col col-6">
                                 <FormGroup className="mb-2 row  " >
                                     <Label className=" p-2"
-                                        style={{ width: "130px" }}>Billing Address</Label>
+                                        style={{ width: "115px" }}>Billing Address</Label>
+                            <div className="col col-7">
+
                                     <Select
                                         value={billAddr}
                                         classNamePrefix="select2-Customer"
@@ -649,17 +652,20 @@ const Order = (props) => {
                                             control: base => ({
                                                 ...base,
                                                 border: 'non',
-                                                backgroundColor: ""
+                                                // backgroundColor: ""
                                             })
                                         }}
                                         onChange={(e) => { setbillAddr(e) }}
                                     />
+                                    </div>
                                 </FormGroup>
                             </div >
                             <div className="col col-6">
                                 <FormGroup className="mb-2 row " >
                                     <Label className=" p-2"
                                         style={{ width: "130px" }}>Shipping Address</Label>
+                            <div className="col col-7">
+
                                     <Select
                                         value={shippAddr}
                                         classNamePrefix="select2-Customer"
@@ -668,13 +674,14 @@ const Order = (props) => {
                                             control: base => ({
                                                 ...base,
                                                 border: 'non',
-                                                backgroundColor: ""
+                                                // backgroundColor: ""
 
                                             })
                                         }}
                                         options={supplierAddress}
                                         onChange={(e) => { setshippAddr(e) }}
                                     />
+                                    </div>
                                 </FormGroup>
                             </div >
                         </div>
@@ -693,7 +700,7 @@ const Order = (props) => {
                                     <React.Fragment>
                                         <Row>
                                             <Col xl="12">
-                                                <div className="table table-Rresponsive">
+                                                <div className="table table-Rresponsive ">
                                                     <BootstrapTable
                                                         keyField={"id"}
                                                         responsive

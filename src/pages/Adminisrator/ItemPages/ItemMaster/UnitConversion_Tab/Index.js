@@ -43,7 +43,7 @@ export default function UnitConverstion(props) {
         settable(found)
     }
     function baseUnit2_onChange(event, type, key) {
-     
+
         let newSelectValue = ''
 
         const found = TableData.find((i, k) => {
@@ -90,7 +90,7 @@ export default function UnitConverstion(props) {
         const newarr = []
 
         TableData.forEach((index, key) => {
-       
+
             newarr.push(
                 (
                     <tr >
@@ -106,7 +106,7 @@ export default function UnitConverstion(props) {
                                         onChange={(e) => baseUnit2_onChange(e, "Unit", key)}
                                     />
                                 </Col>
-                                < Label className=" col-sm-3 col-form-label">=</Label>
+                                < Label className=" col-sm-2 col-form-label">=</Label>
                             </Row>
                         </td>
                         <td>
@@ -140,8 +140,10 @@ export default function UnitConverstion(props) {
 
                                     </Col>
 
-                                    <Col md={6} >
-                                        <Button className="btn btn-sm btn-light mt-3   align-items-sm-end"
+                                    <Col md={6} style={{marginRight:""}}>
+                                        <Button
+                                        style={{marginLeft:"-0.6cm"}}
+                                            className="button_add badge badge-soft-primary font-size-12 waves-effect  waves-light  btn-outline-primary mt-1"
                                             type="button"
                                             onClick={() => { addRow_Handler(key) }}
                                         >

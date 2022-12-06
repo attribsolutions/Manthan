@@ -128,7 +128,7 @@ export default function Image(props) {
                                     </Col>
 
                                     <Col md={2}>
-                                        <Button className="button_add badge badge-soft-primary font-size-12 btn btn-primary waves-effect waves-light w-xxs border border-light"
+                                        <Button className="button_add badge badge-soft-primary font-size-12 waves-effect  waves-light  btn-outline-primary"
                                             type="button"
                                             onClick={() => { addRowHandler(key) }} >
                                             <i className="dripicons-plus"></i>
