@@ -44,9 +44,9 @@ export const editBOMListSuccess =(editData)=>({
  payload:editData,
 })
 
-export const updateBOMList = (data, id) => ({
+export const updateBOMList = (data, id1) => ({
   type: UPDATE_BOM_LIST,
-  data, id,
+  data, id1,
 });
 export const updateBOMListSuccess = (data) => ({
   type: UPDATE_BOM_LIST_SUCCESS,

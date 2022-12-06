@@ -10,7 +10,7 @@ function BOMTable(props) {
   const dispatch = useDispatch();
 
     const onDeleteHandeler = (ele) => {
-        debugger
+ 
         if (!(ele === 0)) {
           var fil = props.tableData.filter((i) => {
             return !(i.id === ele.id);
@@ -62,7 +62,7 @@ function BOMTable(props) {
 
 
   const tableRows = props.tableData.map((info) => {
-debugger
+
     return (
       <tr>
         {/* <td>{info.id}</td> */}
