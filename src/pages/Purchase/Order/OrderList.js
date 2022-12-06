@@ -137,7 +137,6 @@ const OrderList = () => {
     }
 
     const goButtonHandler = (onload = false) => {
-        debugger
         let FromDate
         let ToDate
 
@@ -259,6 +258,8 @@ const OrderList = () => {
                             deleteName={"Name"}
                             pageMode={pageMode}
                             onsavefunc={onsavefunc}
+                            goButnFunc={goButtonHandler}
+
                         />
                         : null
                 }

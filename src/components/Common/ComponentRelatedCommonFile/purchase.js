@@ -80,6 +80,7 @@ const PurchaseListPage = (props) => {
         deleteName,
         pageMode,
         onsavefunc = () => { },
+        goButnFunc = () => { },
     } = props;
 
     const fileds = pageField.PageFieldMaster;
@@ -150,7 +151,8 @@ const PurchaseListPage = (props) => {
                     Type: 1,
                     Status: true,
                     Message: deleteMsg.Message,
-                    AfterResponseAction: getList,
+                    // AfterResponseAction: false,
+                    isfunc: goButnFunc
                 })
             );
         } else if (deleteMsg.Status === true) {
@@ -199,7 +201,7 @@ const PurchaseListPage = (props) => {
 
     // Edit Modal Show When Edit Data is true
     useEffect(() => {
-        
+
         if (editData.Status === true) {
             if (pageField.IsEditPopuporComponent) {
                 history.push({
