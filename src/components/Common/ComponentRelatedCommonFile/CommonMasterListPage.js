@@ -100,7 +100,7 @@ const CommonListPage = (props) => {
 
   // this useEffect for MasterPagePath dynamically work 
   useEffect(() => {
-    
+
     const locationPath = history.location.pathname
 
     let userAcc = userAccess.find((inx) => {
@@ -296,7 +296,7 @@ const CommonListPage = (props) => {
                 data={tableList}
                 columns={columns}
                 // search={ defaultSearch }
-                search={defaultSearch(pageField.id)}
+                search={ defaultSearch(pageField.id)}
               >
                 {(toolkitProps, a) => (
                   <React.Fragment>
