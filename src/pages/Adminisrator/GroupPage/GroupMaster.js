@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState, } from "react";
+import React, { useEffect,  useRef, useState, } from "react";
 import Breadcrumb from "../../../components/Common/Breadcrumb3";
 import {
     Card,
@@ -67,18 +67,15 @@ const GroupMaster = (props) => {
             pageField: state.CommonPageFieldReducer.pageField
         }));
 
-    const initialFiled = useMemo(() => {
+    {/** Dyanamic Page access state and OnChange function */ }
 
-        const fileds = {
-            id: "",
-            Name: "",
-            GroupTypeName: ""
-        }
-        return initialFiledFunc(fileds)
-    }, []);
+    const fileds = {
+        id: "",
+        Name: "",
+        GroupTypeName: ""
+    }
 
-    const [state, setState] = useState(initialFiled)
-
+    const [state, setState] = useState(() => initialFiledFunc(fileds))
 
     const values = { ...state.values }
     const { isError } = state;
@@ -232,7 +229,7 @@ const GroupMaster = (props) => {
                 GroupType: values.GroupTypeName.value,
                 CreatedBy: createdBy(),
                 CreatedOn: "0002-10-03T12:48:14.910491",
-                UpdatedBy:createdBy(),
+                UpdatedBy: createdBy(),
                 UpdatedOn: "0002-10-03T12:48:14.910491"
             });
 

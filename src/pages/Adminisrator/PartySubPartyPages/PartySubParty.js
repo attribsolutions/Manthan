@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState, } from "react";
+import React, { useEffect,  useRef, useState, } from "react";
 import Breadcrumb from "../../../components/Common/Breadcrumb3";
 import {
     Button,
@@ -64,19 +64,15 @@ const PartySubParty = (props) => {
 
 
     {/** Dyanamic Page access state and OnChange function */ }
-    const initialFiled = useMemo(() => {
 
-        const fileds = {
-            id: "",
-            Party: "",
-            Division: "",
-        }
-        return initialFiledFunc(fileds)
-    }, []);
+    const fileds = {
+        id: "",
+        Party: "",
+        Division: "",
+    }
 
-    const [state, setState] = useState(initialFiled)
-
-debugger
+    const [state, setState] = useState(() => initialFiledFunc(fileds))
+    debugger
     const values = { ...state.values }
     const { isError } = state;
     const { fieldLabel } = state;
@@ -89,7 +85,6 @@ debugger
     const location = { ...history.location }
     const hasShowloction = location.hasOwnProperty("editValue")
     const hasShowModal = props.hasOwnProperty("editValue")
-
 
 
 
@@ -131,7 +126,7 @@ debugger
             }
 
             if (hasEditVal) {
-                
+
 
                 const { id, Party, Division } = hasEditVal
                 const { values, fieldLabel, hasValid, required, isError } = { ...state }
@@ -247,7 +242,7 @@ debugger
                 // Party: Division_dropdown_Select.values,
                 Party: values.Division.value,
                 SubParty: i.value,
-                CreatedBy:createdBy(),
+                CreatedBy: createdBy(),
                 UpdatedBy: createdBy(),
 
             }))
@@ -360,7 +355,7 @@ debugger
                                                         </FormGroup>
 
                                                         <Row>
-                                                            <Col md="4" style={{width:"7.9cm"}}>
+                                                            <Col md="4" style={{ width: "7.9cm" }}>
                                                                 <FormGroup >
                                                                     <Label htmlFor="validationCustom01"> {fieldLabel.Party}</Label>
                                                                     <Select
@@ -386,9 +381,9 @@ debugger
                                                                 </FormGroup>
                                                             </Col>
 
-                                                            <Col sm={2} style={{ marginTop:'24px' }} >
+                                                            <Col sm={2} style={{ marginTop: '24px' }} >
                                                                 <Button
-                                                            
+
                                                                     type="button"
                                                                     className="btn btn-sm mt-1 mb-0 btn-light btn-outline-primary text-center"
                                                                     onClick={() =>
@@ -424,7 +419,7 @@ debugger
                                                                                             }} >
                                                                                             </i>
 
-                                                                                         
+
 
                                                                                         </td>
                                                                                     </tr>

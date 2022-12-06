@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState, } from "react";
+import React, { useEffect,  useRef, useState, } from "react";
 import Breadcrumb from "../../../components/Common/Breadcrumb3";
 import {
     Card,
@@ -61,9 +61,8 @@ const VehicleMaster = (props) => {
     const [divisionData, setDivisionData] = useState([]);
 
     const [divisionType_dropdown_Select, setDivisionType_dropdown_Select] = useState("");
-   
-   {/** Dyanamic Page access state and OnChange function */ }
-   const initialFiled = useMemo(() => {
+
+    {/** Dyanamic Page access state and OnChange function */ }
 
     const fileds = {
         id: "",
@@ -73,13 +72,10 @@ const VehicleMaster = (props) => {
         VehicleType: "",
         VehicleDivisions: ""
     }
-    return initialFiledFunc(fileds)
-}, []);
 
-const [state, setState] = useState(initialFiled)
+    const [state, setState] = useState(() => initialFiledFunc(fileds))
 
-       
-   
+
     //Access redux store Data /  'save_ModuleSuccess' action data
     const {
         postMsg,
@@ -163,7 +159,7 @@ const [state, setState] = useState(initialFiled)
                     label: data.DivisionName
                 }))
 
-                const { id, VehicleNumber, Description, Driver, DriverName, VehicleType, VehicleTypeName , VehicleDivisions, } = hasEditVal
+                const { id, VehicleNumber, Description, Driver, DriverName, VehicleType, VehicleTypeName, VehicleDivisions, } = hasEditVal
                 const { values, fieldLabel, hasValid, required, isError } = { ...state }
 
                 hasValid.VehicleNumber.valid = true;
@@ -385,7 +381,7 @@ const [state, setState] = useState(initialFiled)
                                                                         classNamePrefix="dropdown"
                                                                         options={DriverList_DropdownOptions}
                                                                         onChange={(hasSelect, evn) => onChangeSelect({ hasSelect, evn, state, setState, })}
-                                                                       
+
                                                                     />
                                                                     {isError.Driver.length > 0 && (
                                                                         <span className="text-danger f-8"><small>{isError.Driver}</small></span>
@@ -395,7 +391,7 @@ const [state, setState] = useState(initialFiled)
                                                         </Col>
 
 
-                                                        <Col md="1"className="mx-n1">  </Col>
+                                                        <Col md="1" className="mx-n1">  </Col>
                                                         <Col md="3">
                                                             <FormGroup className="mb-3">
                                                                 <Label htmlFor="validationCustom01"> {fieldLabel.VehicleType}</Label>

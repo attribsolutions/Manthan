@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState, } from "react";
+import React, { useEffect, useRef, useState, } from "react";
 import Breadcrumb from "../../../components/Common/Breadcrumb3";
 import {
     Button,
@@ -55,17 +55,14 @@ const PartyItems = (props) => {
 
 
     {/** Dyanamic Page access state and OnChange function */ }
-    const initialFiled = useMemo(() => {
 
-        const fileds = {
-            id: "",
-            SupplierName: "",
+    const fileds = {
+        id: "",
+        SupplierName: "",
 
-        }
-        return initialFiledFunc(fileds)
-    }, []);
+    }
 
-    const [state, setState] = useState(initialFiled)
+    const [state, setState] = useState(() => initialFiledFunc(fileds))
 
     const values = { ...state.values }
     const { isError } = state;
