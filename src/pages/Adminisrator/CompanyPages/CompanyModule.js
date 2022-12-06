@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useMemo } from "react";
+import React, { useState, useEffect, useRef,} from "react";
 import {
   Card,
   CardBody,
@@ -62,23 +62,19 @@ const CompanyModule = (props) => {
   }));
 
   {/** Dyanamic Page access state and OnChange function */ }
-  const initialFiled = useMemo(() => {
 
-    const fileds = {
-      id: "",
-      Name: "",
-      Address: "",
-      GSTIN: "",
-      PhoneNo: "",
-      CompanyAbbreviation: "",
-      EmailID: "",
-      CompanyGroupName: ""
-    }
-    return initialFiledFunc(fileds)
-  }, []);
+  const fileds = {
+    id: "",
+    Name: "",
+    Address: "",
+    GSTIN: "",
+    PhoneNo: "",
+    CompanyAbbreviation: "",
+    EmailID: "",
+    CompanyGroupName: ""
+  }
 
-  const [state, setState] = useState(initialFiled)
-
+  const [state, setState] = useState(() => initialFiledFunc(fileds))
 
   const values = { ...state.values }
   const { isError } = state;
@@ -237,7 +233,7 @@ const CompanyModule = (props) => {
         EmailID: values.EmailID,
         CompanyGroup: values.CompanyGroupName.value,
         CreatedBy: createdBy(),
-        UpdatedBy:  createdBy(),
+        UpdatedBy: createdBy(),
       });
 
       if (pageMode === "edit") {

@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState, } from "react";
+import React, { useEffect,  useRef, useState, } from "react";
 import Breadcrumb from "../../../components/Common/Breadcrumb3";
 import {
     Card,
@@ -46,17 +46,16 @@ const GroupTypeMaster = (props) => {
     const [pageMode, setPageMode] = useState("save");
     const [userPageAccessState, setUserPageAccessState] = useState('');
 
-    const initialFiled = useMemo(() => {
+  
+ {/** Dyanamic Page access state and OnChange function */ }
 
         const fileds = {
             id: "",
             Name: "",
             IsReserved:false
         }
-        return initialFiledFunc(fileds)
-    }, []);
-
-    const [state, setState] = useState(initialFiled)
+    
+    const [state, setState] = useState(() => initialFiledFunc(fileds))
 
     //Access redux store Data /  'save_ModuleSuccess' action data
     const {

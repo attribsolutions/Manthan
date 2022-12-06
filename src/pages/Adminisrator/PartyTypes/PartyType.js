@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { useEffect,  useRef, useState } from "react";
 import {
     Card,
     CardBody,
@@ -14,7 +14,7 @@ import {
 import { MetaTags } from "react-meta-tags";
 import Breadcrumb from "../../../components/Common/Breadcrumb3";
 import { useDispatch, useSelector } from "react-redux";
-import {useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import { Breadcrumb_inputName, AlertState, commonPageField } from "../../../store/actions";
 import {
     editPartyTypeSuccess,
@@ -44,7 +44,7 @@ const PartyType = (props) => {
 
     //Access redux store Data /  'save_ModuleSuccess' action data
 
-    const { PostAPIResponse,  pageField, userAccess } =
+    const { PostAPIResponse, pageField, userAccess } =
         useSelector((state) => ({
             PostAPIResponse: state.PartyTypeReducer.PostData,
             pageField: state.CommonPageFieldReducer.pageField,
@@ -56,18 +56,15 @@ const PartyType = (props) => {
     }, []);
 
     {/** Dyanamic Page access state and OnChange function */ }
-    const initialFiled = useMemo(() => {
 
-        const fileds = {
-            id: "",
-            Name: "",
-            IsSCM: false,
-            IsDivision: false,
-        }
-        return initialFiledFunc(fileds)
-    }, []);
+    const fileds = {
+        id: "",
+        Name: "",
+        IsSCM: false,
+        IsDivision: false,
+    }
 
-    const [state, setState] = useState(initialFiled)
+    const [state, setState] = useState(() => initialFiledFunc(fileds))
 
     const values = { ...state.values }
     const { isError } = state;

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useMemo } from "react";
+import React, { useState, useEffect, useRef, } from "react";
 import Select from "react-select";
 import { Card, CardBody, Col, Container, Row, Label, CardHeader, FormGroup, Input } from "reactstrap";
 import { useDispatch, useSelector } from "react-redux";
@@ -76,30 +76,28 @@ const AddEmployee = (props) => {
       pageField: state.CommonPageFieldReducer.pageField
 
     }));
+  {/** Dyanamic Page access state and OnChange function */ }
+  
+  const fileds = {
+    id: "",
+    Name: "",
+    Address: "",
+    Mobile: "",
+    email: "",
+    DOB: "",
+    PAN: "",
+    AadharNo: "",
+    working_hours: "",
+    CompanyName: "",
+    DesignationName: "",
+    EmployeeTypeName: "",
+    StateName: "",
+    DistrictName: "",
+    EmployeeParties: []
+  }
 
-  const initialFiled = useMemo(() => {
 
-    const fileds = {
-      id: "",
-      Name: "",
-      Address: "",
-      Mobile: "",
-      email: "",
-      DOB: "",
-      PAN: "",
-      AadharNo: "",
-      working_hours: "",
-      CompanyName: "",
-      DesignationName: "",
-      EmployeeTypeName: "",
-      StateName: "",
-      DistrictName: "",
-      EmployeeParties: []
-    }
-    return initialFiledFunc(fileds)
-  }, []);
-
-  const [state, setState] = useState(initialFiled)
+  const [state, setState] = useState(() => initialFiledFunc(fileds))
 
   const values = { ...state.values }
   const { isError } = state;
@@ -334,7 +332,7 @@ const AddEmployee = (props) => {
       a.hasValid.CompanyName.valid = false
       a.hasValid.EmployeeParties.valid = false
       return a
-  })
+    })
   }
 
   function State_Dropdown_Handler(e, v) {
@@ -345,7 +343,7 @@ const AddEmployee = (props) => {
       a.values.DistrictName = "";
       a.hasValid.DistrictName.valid = false
       return a
-  })
+    })
   }
 
   function Company_Dropdown_Handler(e, v) {
@@ -380,8 +378,8 @@ const AddEmployee = (props) => {
         District: values.DistrictName.value,
         EmployeeParties: emplPartie,
         Company: values.CompanyName.value,
-        CreatedBy:createdBy(),
-        UpdatedBy:createdBy()
+        CreatedBy: createdBy(),
+        UpdatedBy: createdBy()
       });
 
       if (pageMode === "edit") {

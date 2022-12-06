@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState, } from "react";
+import React, { useEffect, useRef, useState, } from "react";
 import {
     Card,
     CardBody,
@@ -49,18 +49,16 @@ const EmployeeTypesMaster = (props) => {
     const [userPageAccessState, setUserPageAccessState] = useState('');
     const [modalCss, setModalCss] = useState(false);
 
-    const initialFiled = useMemo(() => {
+      {/** Dyanamic Page access state and OnChange function */ }
+      
+    const fileds = {
+        id: "",
+        Name: "",
+        IsPartyConnection: false,
+        IsSCM: false
+    }
 
-        const fileds = {
-            id: "",
-            Name: "",
-            IsPartyConnection: false,
-            IsSCM: false
-        }
-        return initialFiledFunc(fileds)
-    }, []);
-
-    const [state, setState] = useState(initialFiled)
+    const [state, setState] = useState(() => initialFiledFunc(fileds))
 
 
 

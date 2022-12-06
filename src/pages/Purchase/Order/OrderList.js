@@ -157,7 +157,6 @@ const OrderList = () => {
             alert(e)
             return
         }
-
         const jsonBody = JSON.stringify({
             FromDate: FromDate,
             ToDate: ToDate,
@@ -165,6 +164,7 @@ const OrderList = () => {
             Customer: customer
         }
         );
+        console.log(jsonBody)
         dispatch(getOrderListPage(jsonBody));
     }
 
@@ -255,7 +255,7 @@ const OrderList = () => {
                             MasterModal={Order}
                             masterPath={ORDER}
                             ButtonMsgLable={"Order"}
-                            deleteName={"Name"}
+                            deleteName={"OrderDate"}
                             pageMode={pageMode}
                             onsavefunc={onsavefunc}
                             goButnFunc={goButtonHandler}
