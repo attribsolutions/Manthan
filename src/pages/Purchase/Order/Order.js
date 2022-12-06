@@ -165,8 +165,9 @@ const Order = (props) => {
     useEffect(() => {
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(postOrderSuccess({ Status: false }))
-            dispatch(goButtonSuccess([]))
             setTermsAndConTable([])
+            dispatch(goButtonSuccess([]))
+            description = ''
             dispatch(AlertState({
                 Type: 1,
                 Status: true,
@@ -188,6 +189,7 @@ const Order = (props) => {
 
     useEffect(() => {
         if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
+            description = ''
             history.push({
                 pathname: ORDER_lIST,
             })
@@ -584,8 +586,9 @@ const Order = (props) => {
                             </Col >
 
                             <Col md="1" className="mt-3 ">
-                                <Button type="button" color="btn btn-outline-success border-2 font-size-12 "
+                                {pageMode === "save" ? <Button type="button" color="btn btn-outline-success border-2 font-size-12 "
                                     onClick={(e) => GoButton_Handler()}>Go</Button>
+                                    : null}
                             </Col>
                         </div>
                     </div>
