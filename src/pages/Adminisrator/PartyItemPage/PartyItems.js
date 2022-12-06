@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState, } from "react";
+import React, { useEffect, useMemo, useRef, useState, } from "react";
 import Breadcrumb from "../../../components/Common/Breadcrumb3";
 import {
     Button,
@@ -17,15 +17,24 @@ import { MetaTags } from "react-meta-tags";
 
 
 import { useDispatch, useSelector } from "react-redux";
-import { AlertState, commonPageField, commonPageFieldSuccess, getGroupList } from "../../../store/actions";
+import { AlertState, Breadcrumb_inputName, commonPageField, commonPageFieldSuccess, editGroupIDSuccess, getGroupList, updateGroupID, updategroupIDSuccess } from "../../../store/actions";
 import { useHistory } from "react-router-dom";
-import { getpartyItemList, getPartyItemListSuccess, GetPartyList, getSupplier, PostPartyItems, PostPartyItemsSuccess } from "../../../store/Administrator/PartyItemsRedux/action";
+import {
+    getpartyItemList,
+    getPartyItemListSuccess,
+    GetPartyList,
+    getSupplier,
+    PostPartyItems,
+    PostPartyItemsSuccess
+} from "../../../store/Administrator/PartyItemsRedux/action";
 import paginationFactory, { PaginationListStandalone, PaginationProvider } from "react-bootstrap-table2-paginator";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable, { CHECKBOX_STATUS_CHECKED } from "react-bootstrap-table-next";
 import { countlabelFunc } from "../../../components/Common/ComponentRelatedCommonFile/CommonMasterListPage";
 import { mySearchProps } from "../../../components/Common/ComponentRelatedCommonFile/SearchBox/MySearch";
 import SaveButton from "../../../components/Common/ComponentRelatedCommonFile/CommonSaveButton";
+import { PARTYITEM_LIST } from "../../../routes/route_url";
+import { comAddPageFieldFunc, formValid, initialFiledFunc, onChangeSelect } from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
 
 
 
@@ -33,16 +42,44 @@ const PartyItems = (props) => {
 
     const history = useHistory()
     const dispatch = useDispatch();
-    let editMode = history.location.pageMode;
+    const formRef = useRef(null);
     const [pageMode, setPageMode] = useState("");
     const [modalCss, setModalCss] = useState(false);
-
     const [supplierSelect, setSupplierSelect] = useState('');
     const [userAccState, setUserPageAccessState] = useState("");
+
     // get method for dropdown
     useEffect(() => {
         dispatch(getSupplier());
     }, [dispatch]);
+
+
+    {/** Dyanamic Page access state and OnChange function */ }
+    const initialFiled = useMemo(() => {
+
+        const fileds = {
+            id: "",
+            SupplierName: "",
+
+        }
+        return initialFiledFunc(fileds)
+    }, []);
+
+    const [state, setState] = useState(initialFiled)
+
+    const values = { ...state.values }
+    const { isError } = state;
+    const { fieldLabel } = state;
+
+    useEffect(() => {
+        dispatch(commonPageFieldSuccess(null));
+        dispatch(commonPageField(36))
+    }, []);
+
+    const location = { ...history.location }
+    const hasShowloction = location.hasOwnProperty("editValue")
+    const hasShowModal = props.hasOwnProperty("editValue")
+
 
     //Access redux store Data /  'save_ModuleSuccess' action data
     const {
@@ -63,33 +100,67 @@ const PartyItems = (props) => {
             pageField: state.CommonPageFieldReducer.pageField
         }));
 
-
-
-    // const [state, setState] = useState(initialFiledFunc())
-    // const values = { ...state.values }
-    // const { isError } = state;
-    // const { fieldLabel } = state;
-
-
     useEffect(() => {
-        dispatch(commonPageFieldSuccess(null));
-        dispatch(commonPageField(36))
         dispatch(getSupplier())
         dispatch(getGroupList());
     }, []);
 
-    useEffect(() => {
 
-        const locationPath = history.location.pathname
-        let userAcc = userAccess.find((inx) => {
+
+    // userAccess useEffect
+    useEffect(() => {
+        let userAcc = null;
+        let locationPath = location.pathname;
+
+        if (hasShowModal) {
+            locationPath = props.masterPath;
+        };
+
+        userAcc = userAccess.find((inx) => {
             return (`/${inx.ActualPagePath}` === locationPath)
         })
-        if (!(userAcc === undefined)) {
+
+        if (userAcc) {
             setUserPageAccessState(userAcc)
-        }
+        };
     }, [userAccess])
 
     // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
+
+
+    useEffect(() => {
+
+        if ((hasShowloction || hasShowModal)) {
+
+            let hasEditVal = null
+            if (hasShowloction) {
+                setPageMode(location.pageMode)
+                hasEditVal = location.editValue
+            }
+            else if (hasShowModal) {
+                hasEditVal = props.editValue
+                setPageMode(props.pageMode)
+                setModalCss(true)
+            }
+
+            if (hasEditVal) {
+
+                const { id, SupplierName } = hasEditVal
+                const { values, fieldLabel, hasValid, required, isError } = { ...state }
+
+                hasValid.SupplierName.valid = true;
+
+
+                values.id = id
+                values.SupplierName = { label: SupplierName, value: SupplierName };
+
+                setState({ values, fieldLabel, hasValid, required, isError })
+                dispatch(Breadcrumb_inputName(hasEditVal.SupplierName))
+
+            }
+            dispatch(editGroupIDSuccess({ Status: false }))
+        }
+    }, [])
 
 
     useEffect(() => {
@@ -117,34 +188,32 @@ const PartyItems = (props) => {
     }, [postMsg])
 
 
-    // useEffect(() => {
-    //     if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
-    //         history.push({
-    //             pathname: PARTYITEM_LIST,
-    //         })
-    //     } else if (updateMsg.Status === true && !modalCss) {
-    //         // dispatch(updategroupIDSuccess({ Status: false }));
-    //         dispatch(
-    //             AlertState({
-    //                 Type: 3,
-    //                 Status: true,
-    //                 Message: JSON.stringify(updateMsg.Message),
-    //             })
-    //         );
-    //     }
-    // }, [updateMsg, modalCss]);
+    useEffect(() => {
+        if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
+            history.push({
+                pathname: PARTYITEM_LIST,
+            })
+        } else if (updateMsg.Status === true && !modalCss) {
+            dispatch(updategroupIDSuccess({ Status: false }));
+            dispatch(
+                AlertState({
+                    Type: 3,
+                    Status: true,
+                    Message: JSON.stringify(updateMsg.Message),
+                })
+            );
+        }
+    }, [updateMsg, modalCss]);
+
+    useEffect(() => {
+
+        if (pageField) {
+            const fieldArr = pageField.PageFieldMaster
+            comAddPageFieldFunc({ state, setState, fieldArr })
+        }
+    }, [pageField])
 
 
-    // useEffect(() => {
-    //     if (pageField) {
-    //         const fieldArr = pageField.PageFieldMaster
-    //         comAddPageFieldFunc({ state, setState, fieldArr })// new change
-    //     }
-    // }, [pageField])
-
-    // useEffect(() => {
-    //     dispatch(GetPartyList());
-    // }, [dispatch]);
     const supplierOptions = supplier.map((i) => ({
 
         value: i.id,
@@ -270,12 +339,11 @@ const PartyItems = (props) => {
     };
 
 
-    const saveHandeller = (event, values) => {
-        debugger
+    const SubmitHandler = (event) => {
+
         const Find = partyItem.filter((index) => {
             return (index.itemCheck === true)
         })
-
         var PartyData = Find.map((index) => ({
             Item: index.id,
             Party: supplierSelect.value
@@ -327,18 +395,21 @@ const PartyItems = (props) => {
                                                                 <Label htmlFor="validationCustom01"> SupplierName </Label>
                                                                 <Col md="12">
                                                                     <Select
-                                                                        value={supplierSelect}
-                                                                        classNamePrefix="select2-Supplier"
-                                                                        // isDisabled={editMode === "edit" ? true : false}
+                                                                        name="SupplierName"
+                                                                        value={values.SupplierName}
+                                                                        isSearchable={true}
+                                                                        className="react-dropdown"
+                                                                        classNamePrefix="dropdown"
                                                                         options={supplierOptions}
-                                                                        onChange={GoButton_Handler}
-                                                                    // dispatch(GoButton_Handler());
-
-
-                                                                    // onClick={GoButton_Handler}
-
-
+                                                                        onChange={(hasSelect, evn) => {
+                                                                            onChangeSelect({ hasSelect, evn, state, setState, })
+                                                                            GoButton_Handler(hasSelect)
+                                                                        }}
                                                                     />
+                                                                    {isError.SupplierName.length > 0 && (
+                                                                        <span className="text-danger f-8"><small>{isError.SupplierName}</small></span>
+                                                                    )}
+
                                                                 </Col>
                                                             </FormGroup>
                                                         </Col>
@@ -406,7 +477,7 @@ const PartyItems = (props) => {
 
                                 {(supplier.length > 0) ? <div className="row save1" style={{ paddingBottom: 'center' }}>
                                     <SaveButton pageMode={pageMode} userAcc={userAccState}
-                                        module={"supplier"} onClick={saveHandeller}
+                                        module={"supplier"} onClick={SubmitHandler}
                                     />
                                 </div>
                                     : <div className="row save1"></div>}
