@@ -14,7 +14,7 @@ import {
 } from "reactstrap";
 import { MetaTags } from "react-meta-tags";
 import Flatpickr from "react-flatpickr"
-import { Breadcrumb_inputName, commonPageFieldSuccess, getBaseUnit_ForDropDown, getItemList } from "../../../../store/actions";
+import { Breadcrumb_inputName, commonPageFieldSuccess, getItemList } from "../../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
 import { AlertState, commonPageField } from "../../../../store/actions";
 import { useHistory } from "react-router-dom";
@@ -29,7 +29,7 @@ import {
 import Select from "react-select";
 import SaveButton from "../../../../components/Common/ComponentRelatedCommonFile/CommonSaveButton";
 import ItemTab from "./ItemQuantityTab";
-import { editBOMListSuccess, GetItemUnitsDrodownAPI, postBOM, postBOMSuccess } from "../../../../store/Purchase/BOMRedux/action";
+import { editBOMListSuccess, GetItemUnitsDrodownAPI, postBOM, postBOMSuccess, updateBOMList, updateBOMListSuccess } from "../../../../store/Purchase/BOMRedux/action";
 import { BillOfMaterialsList } from "../../../../routes/route_url";
 import { createdBy, userCompany } from "../../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 
@@ -44,10 +44,10 @@ const BOMMaster = (props) => {
     const [pageMode, setPageMode] = useState("save");
     const [userPageAccessState, setUserPageAccessState] = useState('');
     const [ItemTabDetails, setItemTabDetails] = useState([])
-    console.log("ItemTabDetails", ItemTabDetails)
+
     const initialFiled = {
         id: "",
-        Date: "",
+        BomDate: "",
         ItemName: "",
         EstimatedOutput: "",
         UnitName: "",
@@ -68,7 +68,7 @@ const BOMMaster = (props) => {
         GetItemUnits
     } = useSelector((state) => ({
         postMsg: state.BOMReducer.PostData,
-        updateMsg: state.GroupTypeReducer.updateMessage,
+        updateMsg: state.BOMReducer.updateMsg,
         userAccess: state.Login.RoleAccessUpdateData,
         pageField: state.CommonPageFieldReducer.pageField,
         GetItemUnits: state.BOMReducer.GetItemUnits,
@@ -123,11 +123,11 @@ const BOMMaster = (props) => {
             if (hasEditVal) {
                 console.log("hasEditVal", hasEditVal)
                 setEditData(hasEditVal);
-                const { id, Date, Item, ItemName, Unit, UnitName, EstimatedOutput, Comment, IsActive } = hasEditVal
+                const { id, BomDate, Item, ItemName, Unit, UnitName, EstimatedOutput, Comment, IsActive } = hasEditVal
                 const { values, fieldLabel, hasValid, required, isError } = { ...state }
 
                 hasValid.id.valid = true;
-                hasValid.Date.valid = true;
+                hasValid.BomDate.valid = true;
                 hasValid.ItemName.valid = true;
                 hasValid.UnitName.valid = true;
                 hasValid.EstimatedOutput.valid = true;
@@ -135,7 +135,7 @@ const BOMMaster = (props) => {
                 hasValid.IsActive.valid = true;
 
                 values.id = id
-                values.Date = Date;
+                values.BomDate = BomDate;
                 values.EstimatedOutput = EstimatedOutput;
                 values.Comment = Comment;
                 values.IsActive = IsActive;
@@ -181,22 +181,23 @@ const BOMMaster = (props) => {
         }
     }, [postMsg])
 
-    // useEffect(() => {
-    //     if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
-    //         history.push({
-    //             pathname: GROUPTYPE_lIST,
-    //         })
-    //     } else if (updateMsg.Status === true && !modalCss) {
-    //         dispatch(updateGroupTypeIDSuccess({ Status: false }));
-    //         dispatch(
-    //             AlertState({
-    //                 Type: 3,
-    //                 Status: true,
-    //                 Message: JSON.stringify(updateMsg.Message),
-    //             })
-    //         );
-    //     }
-    // }, [updateMsg, modalCss]);
+    useEffect(() => {
+        debugger
+        if ((updateMsg.Status === true) && (updateMsg.StatusCode === 200) && !(modalCss)) {
+            history.push({
+                pathname: BillOfMaterialsList,
+            })
+        } else if (updateMsg.Status === true && !modalCss) {
+            dispatch(updateBOMListSuccess({ Status: false }));
+            dispatch(
+                AlertState({
+                    Type: 3,
+                    Status: true,
+                    Message: JSON.stringify(updateMsg.Message),
+                })
+            );
+        }
+    }, [updateMsg, modalCss]);
 
     useEffect(() => {
         if (pageField) {
@@ -236,17 +237,17 @@ const BOMMaster = (props) => {
     const formSubmitHandler = (event) => {
         debugger
         const BOMItems = ItemTabDetails.map((index) => ({
-            Item: index.ItemID,
+            Item: index.Item,
             Quantity: index.Quantity,
-            Unit: index.UnitID
+            Unit: index.Unit
         }))
 
         event.preventDefault();
         if (formValid(state, setState)) {
-            debugger
+
             const jsonBody = JSON.stringify({
 
-                Date: values.Date,
+                BomDate: values.BomDate,
                 EstimatedOutput: values.EstimatedOutput,
                 Comment: values.Comment,
                 IsActive: values.IsActive,
@@ -271,7 +272,9 @@ const BOMMaster = (props) => {
             }
 
             if (pageMode === 'edit') {
-                // dispatch(updateGroupTypeID(jsonBody, EditData.id));
+
+                dispatch(updateBOMList(jsonBody, `${EditData.id}/${EditData.Company}`));
+                console.log("update jsonBody", jsonBody)
             }
             else {
                 dispatch(postBOM(jsonBody));
@@ -308,10 +311,10 @@ const BOMMaster = (props) => {
                                         <CardBody style={{ backgroundColor: "whitesmoke" }}>
                                             <Row>
                                                 <FormGroup className="mb-2 col col-sm-4 ">
-                                                    <Label >{fieldLabel.Date} </Label>
+                                                    <Label >{fieldLabel.BomDate} </Label>
                                                     <Flatpickr
-                                                        name="Date"
-                                                        value={values.Date}
+                                                        name="BomDate"
+                                                        value={values.BomDate}
                                                         className="form-control d-block p-2 bg-white text-dark"
                                                         placeholder="YYYY-MM-DD"
                                                         autoComplete="0,''"
@@ -324,8 +327,8 @@ const BOMMaster = (props) => {
                                                         }}
                                                         onChange={(y, v, e) => { onChangeDate({ e, v, state, setState }) }}
                                                     />
-                                                    {isError.Date.length > 0 && (
-                                                        <span className="invalid-feedback">{isError.Date}</span>
+                                                    {isError.BomDate.length > 0 && (
+                                                        <span className="invalid-feedback">{isError.BomDate}</span>
                                                     )}
                                                 </FormGroup>
 
@@ -453,8 +456,9 @@ const BOMMaster = (props) => {
                                             <Row>
                                                 <Col sm={2}>
                                                     <SaveButton pageMode={pageMode} userAcc={userPageAccessState}
-                                                        module={"GroupTypeMaster"}
+                                                        module={"BOMMaster"}
                                                     />
+                                                    
                                                 </Col>
                                             </Row>
                                         </FormGroup >

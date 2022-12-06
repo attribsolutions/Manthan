@@ -935,10 +935,7 @@ const PageMaster = (props) => {
     })
 
   }
-
-  const Access_1 = PageAccess.slice(0, 4);
-  const Access_2 = PageAccess.slice(4, 8);
-  const Access_3 = PageAccess.slice(8, pageAccessval.length);
+  
   // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
   var IsEditMode_Css = ''
   if ((modalCss) || (pageMode === "dropdownAdd")) { IsEditMode_Css = "-5.5%" };
@@ -1382,41 +1379,6 @@ const PageMaster = (props) => {
 
                         </Card>
 
-                        {/* {pageAccessval.map((index, key) => {
-
-                          return <>
-                            <div className="row " >
-                              <div className="col col-12"  >
-
-                                <Row>
-                                  <div >
-                                    <li>
-                                      <label
-                                        className="col col-2 form-label text-black"
-                                      >
-
-                                        {index.Name}
-                                      </label>
-                                      &nbsp;&nbsp;&nbsp;
-
-                                      <Input
-                                        defaultChecked={index.hascheck}
-                                        onChange={e => {
-                                          pageAccessval[key].hascheck = e.target.checked
-                                        }}
-                                        className="col col-6  "
-                                        type="checkbox"
-                                      // id={`chk${key}`}
-                                      />
-
-                                    </li>
-                                  </div>
-                                </Row>
-                              </div>
-                            </div>
-                          </>
-                        })} */}
-
                         {pageAccessDropDownView ? (
 
                           <Card className=" mt-n2 " >
@@ -1438,7 +1400,6 @@ const PageMaster = (props) => {
                                           </Col>
 
                                           <Col className=" col col-6 ">
-
                                             <Input
                                               className="col col-2 text-black "
                                               type="checkbox"
