@@ -550,6 +550,7 @@ const Order = (props) => {
                                         style={{ width: "115px" }}>Order Date</Label>
                                     <Col sm="6">
                                         <Flatpickr
+                                        style={{userselect:"all"}}
                                             id="orderdate"
                                             name="orderdate"
                                             value={podate}
