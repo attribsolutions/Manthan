@@ -534,7 +534,10 @@ const Order = (props) => {
                 <MetaTags>
                     <title>{userAccState.PageHeading}| FoodERP-React FrontEnd</title>
                 </MetaTags>
+
+              
                 <div className="page-content" style={{ marginTop: "-0.4cm" }}>
+
                     <Breadcrumb
                         pageHeading={userAccState.PageHeading}
                         showCount={true}
@@ -547,6 +550,7 @@ const Order = (props) => {
                                         style={{ width: "115px" }}>Order Date</Label>
                                     <Col sm="6">
                                         <Flatpickr
+                                        style={{userselect:"all"}}
                                             id="orderdate"
                                             name="orderdate"
                                             value={podate}
@@ -564,12 +568,14 @@ const Order = (props) => {
                                 </FormGroup>
                             </Col>
 
+
                             <Col sm="6">
                                 <FormGroup className="mb-1 row mt-3 " >
                                     <Label className="col-sm-1 p-2"
                                         style={{ width: "115px", marginRight: "0.4cm" }}>Supplier Name</Label>
                                     <Col sm="6">
                                         <Select
+
 
                                             value={supplierSelect}
                                             classNamePrefix="select2-Customer"
@@ -579,14 +585,15 @@ const Order = (props) => {
                                         />
                                     </Col>
                                     <Col sm="1" className=" ">
-                                        {pageMode === "save" ? <Button type="button" color="btn btn-outline-success border-2 font-size-12"
-                                            onClick={(e) => GoButton_Handler()}>Go</Button>
-                                            : null}
-                                    </Col>
+                                {pageMode === "save" ? <Button type="button" color="btn btn-outline-success border-2 font-size-12"
+                                    onClick={(e) => GoButton_Handler()}>Go</Button>
+                                    : null}
+                            </Col>
                                 </FormGroup>
                             </Col >
 
-
+                          
+                              
                         </div>
                     </div>
 
@@ -602,6 +609,7 @@ const Order = (props) => {
                                             defaultValue={description}
                                             placeholder='Enter Order Description'
                                             onChange={e => description = e.target.value}
+                                             />
                                         />
                                     </div>
 
@@ -638,6 +646,23 @@ const Order = (props) => {
                                 <FormGroup className="mb-2 row  " >
                                     <Label className=" p-2"
                                         style={{ width: "115px" }}>Billing Address</Label>
+
+                            <div className="col col-7">
+
+                                    <Select
+                                        value={billAddr}
+                                        classNamePrefix="select2-Customer"
+                                        // isDisabled={pageMode === "edit" ? true : false}
+                                        options={supplierAddress}
+                                        styles={{
+                                            control: base => ({
+                                                ...base,
+                                                border: 'non',
+                                                // backgroundColor: ""
+                                            })
+                                        }}
+                                        onChange={(e) => { setbillAddr(e) }}
+                                    />
                                     <div className="col col-7">
 
                                         <Select
@@ -654,6 +679,7 @@ const Order = (props) => {
                                             }}
                                             onChange={(e) => { setbillAddr(e) }}
                                         />
+
                                     </div>
                                 </FormGroup>
                             </div >
@@ -661,6 +687,25 @@ const Order = (props) => {
                                 <FormGroup className="mb-2 row " >
                                     <Label className=" p-2"
                                         style={{ width: "130px" }}>Shipping Address</Label>
+
+                            <div className="col col-7">
+
+                                    <Select
+                                        value={shippAddr}
+                                        classNamePrefix="select2-Customer"
+                                        // isDisabled={pageMode === "edit" ? true : false}
+                                        styles={{
+                                            control: base => ({
+                                                ...base,
+                                                border: 'non',
+                                                // backgroundColor: ""
+
+                                            })
+                                        }}
+                                        options={supplierAddress}
+                                        onChange={(e) => { setshippAddr(e) }}
+                                    />
+
                                     <div className="col col-7">
 
                                         <Select
@@ -678,6 +723,7 @@ const Order = (props) => {
                                             options={supplierAddress}
                                             onChange={(e) => { setshippAddr(e) }}
                                         />
+
                                     </div>
                                 </FormGroup>
                             </div >
