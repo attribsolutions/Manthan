@@ -610,7 +610,7 @@ const Order = (props) => {
                                             placeholder='Enter Order Description'
                                             onChange={e => description = e.target.value}
                                              />
-                                        />
+                                        
                                     </div>
 
                                 </FormGroup>
@@ -647,9 +647,9 @@ const Order = (props) => {
                                     <Label className=" p-2"
                                         style={{ width: "115px" }}>Billing Address</Label>
 
-                            <div className="col col-7">
+                            {/* <div className="col col-7"> */}
 
-                                    <Select
+                                    {/* <Select
                                         value={billAddr}
                                         classNamePrefix="select2-Customer"
                                         // isDisabled={pageMode === "edit" ? true : false}
@@ -662,7 +662,7 @@ const Order = (props) => {
                                             })
                                         }}
                                         onChange={(e) => { setbillAddr(e) }}
-                                    />
+                                    /> */}
                                     <div className="col col-7">
 
                                         <Select
@@ -688,9 +688,9 @@ const Order = (props) => {
                                     <Label className=" p-2"
                                         style={{ width: "130px" }}>Shipping Address</Label>
 
-                            <div className="col col-7">
+                            {/* <div className="col col-7"> */}
 
-                                    <Select
+                                    {/* <Select
                                         value={shippAddr}
                                         classNamePrefix="select2-Customer"
                                         // isDisabled={pageMode === "edit" ? true : false}
@@ -704,7 +704,7 @@ const Order = (props) => {
                                         }}
                                         options={supplierAddress}
                                         onChange={(e) => { setshippAddr(e) }}
-                                    />
+                                    /> */}
 
                                     <div className="col col-7">
 
