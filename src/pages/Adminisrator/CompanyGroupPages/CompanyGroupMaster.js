@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState, } from "react";
+import React, { useEffect, useRef, useState, } from "react";
 import Breadcrumb from "../../../components/Common/Breadcrumb3";
 import {
     Card,
@@ -24,7 +24,6 @@ import {
     editCompanyGroupTypeSuccess,
     updateCompanyGroupTypeID,
     PostMethodForCompanyGroupMaster,
-    getMethodForCompanyGroupList
 } from "../../../store/Administrator/CompanyGroupRedux/action";
 import { useHistory } from "react-router-dom";
 import {
@@ -53,17 +52,12 @@ const CompanyGroupMaster = (props) => {
 
     {/** Dyanamic Page access state and OnChange function */ }
 
-    const initialFiled = useMemo(() => {
-
-        const fileds = {
-            id: "",
-            Name: "",
-            IsSCM: false
-        }
-        return initialFiledFunc(fileds)
-    }, []);
-
-    const [state, setState] = useState(initialFiled)
+    const fileds = {
+        id: "",
+        Name: "",
+        IsSCM: false
+    }
+    const [state, setState] = useState(() => initialFiledFunc(fileds))
 
 
     //Access redux store Data /  'save_ModuleSuccess' action data
