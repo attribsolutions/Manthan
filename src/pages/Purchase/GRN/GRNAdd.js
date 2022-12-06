@@ -467,24 +467,22 @@ const GRNAdd = (props) => {
             sort: true,
             formatter: (value, row, k) => {
                 try {
-                    // document.getElementById(`BatchDate${k}`).value = row.BatchDate
-                    const a = flatpickr(`BatchDate${k}`)
-                    debugger
-
+                    document.getElementById(`BatchDate${k}`).value = row.BatchDate
                 } catch (e) { }
                 return (
                     <Flatpickr
                         className="form-control d-block p-2 bg-white text-dark"
                         placeholder="Batch Date..."
                         id={`BatchDate${k}`}
+
+                        value={row.BatchDate}
+                        data-enable-time
                         options={{
                             altInput: true,
                             altFormat: "d-m-Y",
                             dateFormat: "Y-m-d",
-                            defaultDate: row.BatchDate,
                         }}
                         onChange={(e, date) => { row.BatchDate = date }}
-                        onReady={(e, date) => { row.BatchDate = date }}
                     />
                 )
             },
@@ -548,15 +546,13 @@ const GRNAdd = (props) => {
         const id = r.id
         const newArr = []
         let list = [...initialTableData];
-        debugger
+
         list.forEach(element => {
-            debugger
+
             if (element.id < id) {
-                // element.id = element.id 
                 newArr.push(element)
             }
             else if (element.id === id) {
-                // element.id = element.id 
                 newArr.push(element);
                 const ele = { ...element }
                 ele.id = element.id + 1
@@ -570,8 +566,6 @@ const GRNAdd = (props) => {
                 newArr.push(ele1)
             }
         });
-
-        console.log("setgrnItemList", newArr)
 
         initialTableData = newArr
         setgrnItemList(newArr)
@@ -787,9 +781,9 @@ const GRNAdd = (props) => {
                                 module={"GRN"} onClick={saveHandeller}
                             />
                         </div>
-                            : 
+                            :
                             <div className="row save1"></div>
-                    } 
+                    }
                 </div >
 
             </React.Fragment >
