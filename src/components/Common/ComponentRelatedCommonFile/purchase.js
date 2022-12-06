@@ -151,8 +151,7 @@ const PurchaseListPage = (props) => {
                     Type: 1,
                     Status: true,
                     Message: deleteMsg.Message,
-                    // AfterResponseAction: false,
-                    isfunc: goButnFunc
+                    afterResponseIsfunc: goButnFunc
                 })
             );
         } else if (deleteMsg.Status === true) {
