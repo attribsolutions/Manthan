@@ -61,8 +61,6 @@ const Breadcrumb = props => {
         history.push({
             pathname: `/${listPagePath.ActualPagePath}`,
         })
-
-
     }
 
     // Onfocus Search Box
@@ -74,6 +72,7 @@ const Breadcrumb = props => {
     }, [history])
 
     useEffect(() => {
+
         if (!(excelData === undefined)) {
             if ((excelData.length > 0)) {
                 // object to array conversion
@@ -108,18 +107,35 @@ const Breadcrumb = props => {
         setmodal_scroll(false)
     }
 
-    const excelChekOnChange = (e) => {
+    const handleChange = (e) => {
+        debugger
+        var chek = document.getElementById("checkAll")
+        if (chek) {
+            for (var i = 0; i < downListKey.length; i++) {
+                document.getElementById(`chckbox${i}`).checked = true
+            }
+        }
+        else {
+            for (var i = 0; i < downListKey.length; i++) {
+                document.getElementById(`chckbox${i}`).checked = false
+            }
+        }
+    };
+
+    const excelCheckBoxOnChange = (e) => {
+        debugger
         // e.preventDefault();
         const check = e.target
         // var chek = document.getElementById("checkAll").checked
-        debugger
+
         if (check.id === "checkAll") {
+            debugger
             if (check.checked) {
                 for (var i = 0; i < downListKey.length; i++) {
                     const a = document.getElementById(`chckbox${i}`)
                     if (a) {
                         a.checked = true
-                        // excelData[0][`$defSelect${downListKey[i]}`]=true
+                        // excelData[0][`$defSelect${downListKey[i]}`] = true
                     }
                 }
             }
@@ -128,19 +144,22 @@ const Breadcrumb = props => {
                     const a = document.getElementById(`chckbox${i}`)
                     if (a) {
                         a.checked = false
-                        // excelData[0][`$defSelect${downListKey[i]}`]=false
+                        // excelData[0][`$defSelect${downListKey[i]}`] = false
                     }
                 }
             }
         }
+
     };
 
     function ExcelCheckBox() {
+
         const arrDiv = []
         downListKey.forEach((index, key) => {
 
             const match = index.slice(0, 1);
             if (!(match === "$")) {
+
                 arrDiv.push(
                     <div className="row" >
                         <div className="col col-12"  >
@@ -197,9 +216,6 @@ const Breadcrumb = props => {
                         </div>
                     </div>
 
-
-
-
                     <div >
                         <div className=" d-flex  justify-content-end">
                             {excelBtnView ?
@@ -254,12 +270,12 @@ const Breadcrumb = props => {
                                     id="checkAll"
                                     type="checkbox"
                                     className="form-check-input"
-                                    onChange={excelChekOnChange}
+                                    onChange={excelCheckBoxOnChange}
                                 />
                                 <label className="form-label text-black">All Select</label>
                             </div>
-
                             <ExcelCheckBox />
+
                             <div className="modal-body">
                                 <div className="modal-footer">
                                     <button

@@ -39,7 +39,7 @@ function* GetItemUnits_saga({ data }) {
 
 // List Page API
 function* get_BOMList_GenFunc({ filters }) {
-
+debugger
   yield put(SpinnerState(true))
   
   try {
@@ -79,11 +79,11 @@ function* editBOMListGenFunc({ id1, pageMode }) {
   }
 }
 
-function* UpdateBOM_ID_GenFunc({ data, id }) {
+function* UpdateBOM_ID_GenFunc({ data, id1 }) {
 
   try {
     yield put(SpinnerState(true))
-    const response = yield call(BOM_Update_API, data, id);
+    const response = yield call(BOM_Update_API, data, id1);
     yield put(SpinnerState(false))
     yield put(updateBOMListSuccess(response))
   }
@@ -97,6 +97,7 @@ function* UpdateBOM_ID_GenFunc({ data, id }) {
 }
 
 function* DeleteBOM_GenFunc({ id }) {
+  debugger
   yield put(SpinnerState(true))
   try {
     const response = yield call(BOM_Delete_API, id);

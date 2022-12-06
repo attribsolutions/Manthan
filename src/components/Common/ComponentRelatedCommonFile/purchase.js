@@ -80,6 +80,7 @@ const PurchaseListPage = (props) => {
         deleteName,
         pageMode,
         onsavefunc = () => { },
+        goButnFunc = () => { },
     } = props;
 
     const fileds = pageField.PageFieldMaster;
@@ -150,7 +151,7 @@ const PurchaseListPage = (props) => {
                     Type: 1,
                     Status: true,
                     Message: deleteMsg.Message,
-                    AfterResponseAction: getList,
+                    afterResponseIsfunc: goButnFunc
                 })
             );
         } else if (deleteMsg.Status === true) {
@@ -199,7 +200,7 @@ const PurchaseListPage = (props) => {
 
     // Edit Modal Show When Edit Data is true
     useEffect(() => {
-        
+
         if (editData.Status === true) {
             if (pageField.IsEditPopuporComponent) {
                 history.push({
@@ -360,16 +361,17 @@ const PurchaseListPage = (props) => {
                         pageMode === GST_ADD_Mode_2 ?
 
 
-                            <div className="row save1" style={{ paddingBottom: 'center' }}>
+                            <div className="row save1 " style={{ paddingBottom: 'center'}}>
                                 <button
+                            
                                     type="submit"
                                     data-mdb-toggle="tooltip" data-mdb-placement="top"
-                                    className="btn btn-primary w-md"
+                                    className="btn btn-primary w-md "
                                     onClick={onSaveBtnClick}
                                 >
                                     <i class="fas fa-edit me-2"></i>Make GRN
                                 </button>
-                            </div>
+                             </div>
                             :
                             null
                     }
@@ -384,6 +386,7 @@ const PurchaseListPage = (props) => {
                         <MasterModal editValue={editData.Data} masterPath={masterPath} pageMode={editData.pageMode} />
                     </Modal>
                 </div>
+                
 
             </React.Fragment>
         );

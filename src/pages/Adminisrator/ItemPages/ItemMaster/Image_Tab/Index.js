@@ -3,7 +3,7 @@ import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import Select from 'react-select'
 import { Button, Card, CardBody, Col, FormGroup, Input, Label, Row } from 'reactstrap'
-import { get_ImageType_ForDropDown } from '../../../../../store/actions'
+import { AlertState, get_ImageType_ForDropDown } from '../../../../../store/actions'
 
 
 export default function Image(props) {
@@ -15,10 +15,26 @@ export default function Image(props) {
     const { imageTable, setImageTable } = props.state
     const dispatch = useDispatch()
 
+
+    // debugger
+    // let BaseUnit_DropdownOptions2 = []
+    // ImageType.forEach(myFunction);
+    // function myFunction(item, index, arr) {
+    //     debugger
+    //     if (!(ImageType.label === item.label )) {
+    //         BaseUnit_DropdownOptions2[index] = {
+    //             value: item.id,
+    //             label: item.Name
+    //         };
+    //     }
+    // }
     const imageTypes = ImageType.map((Data) => ({
         value: Data.id,
         label: Data.Name
     }));
+
+
+
 
 
 
@@ -43,6 +59,23 @@ export default function Image(props) {
     }
 
     const onchangeHandler = async (event, key, type) => {
+        debugger
+        const found1 = imageTable.find(element => {
+            return element.ImageType.value === event.value
+        });
+        if ((found1) && (type === "ImageType")) {
+            dispatch(
+                AlertState({
+                    Type: 4,
+                    Status: true,
+                    Message: `${event.label} is alerady selected`,
+                    RedirectPath: false,
+                    PermissionAction: false,
+                })
+            );
+            return;
+        }
+
         var found = imageTable.find((i, k) => {
             return (k === key)
         })
@@ -91,6 +124,7 @@ export default function Image(props) {
             <CardBody style={{ backgroundColor: "whitesmoke" }}>
 
                 {imageTable.map((index, key) => {
+
                     return <Row className=" col col-sm-12" >
                         <FormGroup className="mb-3 col col-sm-4 " >
                             <Label htmlFor="validationCustom21">Image Type</Label>
@@ -128,7 +162,7 @@ export default function Image(props) {
                                     </Col>
 
                                     <Col md={2}>
-                                        <Button className="button_add badge badge-soft-primary font-size-12 btn btn-primary waves-effect waves-light w-xxs border border-light"
+                                        <Button className="button_add badge badge-soft-primary font-size-12 waves-effect  waves-light  btn-outline-primary"
                                             type="button"
                                             onClick={() => { addRowHandler(key) }} >
                                             <i className="dripicons-plus"></i>
