@@ -15,7 +15,7 @@ import { useHistory } from "react-router-dom";
 import { AlertState, BreadcrumbFilterSize } from "../../../store/actions";
 import { excelDownCommonFunc, listPageCommonButtonFunction }
   from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
-import { mySearchProps } from "./MySearch";
+import { defaultSearch, mySearchProps } from "./MySearch";
 
 let sortType = "asc"
 let searchCount = 0
@@ -100,7 +100,7 @@ const CommonListPage = (props) => {
 
   // this useEffect for MasterPagePath dynamically work 
   useEffect(() => {
-    debugger
+    
     const locationPath = history.location.pathname
 
     let userAcc = userAccess.find((inx) => {
@@ -122,32 +122,32 @@ const CommonListPage = (props) => {
     return excelDownCommonFunc({ tableList, PageFieldMaster })
   }, [tableList])
 
-  const a =
-    // This UseEffect => UpadateModal Success/Unsucces  Show and Hide Control Alert_modal
-    useEffect(() => {
+  // This UseEffect => UpadateModal Success/Unsucces  Show and Hide Control Alert_modal
+  useEffect(() => {
 
-      if (updateMsg.Status === true && updateMsg.StatusCode === 200) {
-        dispatch(updateSucc({ Status: false }));
-        dispatch(
-          AlertState({
-            Type: 1,
-            Status: true,
-            Message: updateMsg.Message,
-            AfterResponseAction: getList,
-          })
-        );
-        tog_center();
-      } else if (updateMsg.Status === true) {
-        dispatch(updateSucc({ Status: false }));
-        dispatch(
-          AlertState({
-            Type: 3,
-            Status: true,
-            Message: JSON.stringify(updateMsg.Message),
-          })
-        );
-      }
-    }, [updateMsg]);
+    if (updateMsg.Status === true && updateMsg.StatusCode === 200) {
+      dispatch(updateSucc({ Status: false }));
+      dispatch(
+        AlertState({
+          Type: 1,
+          Status: true,
+          Message: updateMsg.Message,
+          AfterResponseAction: getList,
+        })
+      );
+      tog_center();
+    } else if (updateMsg.Status === true) {
+      dispatch(updateSucc({ Status: false }));
+      dispatch(
+        AlertState({
+          Type: 3,
+          Status: true,
+          Message: JSON.stringify(updateMsg.Message),
+        })
+      );
+    }
+  }, [updateMsg]);
+
 
   useEffect(() => {
     if (deleteMsg.Status === true && deleteMsg.StatusCode === 200) {
@@ -295,7 +295,8 @@ const CommonListPage = (props) => {
                 keyField="id"
                 data={tableList}
                 columns={columns}
-                search
+                // search={ defaultSearch }
+                search={defaultSearch(pageField.id)}
               >
                 {(toolkitProps, a) => (
                   <React.Fragment>
@@ -303,8 +304,8 @@ const CommonListPage = (props) => {
                       <Col xl="12">
                         <div className="table-responsive table " >
                           <BootstrapTable
-                          //  expandRow={ expandRow }
-                          
+                            //  expandRow={ expandRow }
+
                             keyField={"id"}
                             responsive
                             bordered={false}
@@ -320,7 +321,7 @@ const CommonListPage = (props) => {
                       </Col>
 
                       {countlabelFunc(toolkitProps, paginationProps, dispatch, ButtonMsgLable)}
-                      {mySearchProps(toolkitProps.searchProps)}
+                      {mySearchProps(toolkitProps.searchProps, pageField.id)}
                     </Row>
                     <Row className="align-items-md-center mt-30">
                       <Col className="pagination pagination-rounded justify-content-end mb-2">
