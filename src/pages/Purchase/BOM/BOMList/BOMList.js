@@ -2,26 +2,16 @@ import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import "flatpickr/dist/themes/material_blue.css"
 import Flatpickr from "react-flatpickr";
-import {
-    deleteOrderId,
-    deleteOrderIdSuccess,
-    editOrderId,
-    updateOrderIdSuccess,
-    // getOrderList
-} from "../../../../store/Purchase/OrderPageRedux/actions";
 import { commonPageFieldList, commonPageFieldListSuccess, } from "../../../../store/actions";
 import PurchaseListPage from "../../../../components/Common/ComponentRelatedCommonFile/purchase"
-
 import { BillOfMaterials, BillOfMaterialsList } from "../../../../routes/route_url";
 import { Button, Col, FormGroup, Label } from "reactstrap";
 import Breadcrumb from "../../../../components/Common/Breadcrumb";
 import { useHistory } from "react-router-dom";
-
-import { currentDate, excelDownCommonFunc } from "../../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
-
+import { currentDate, excelDownCommonFunc, userCompany } from "../../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import { useMemo } from "react";
-import { editBOMList, getBOMListPage } from "../../../../store/Purchase/BOMRedux/action";
-
+import { deleteBOMId, deleteBOMIdSuccess, editBOMList, getBOMListPage, updateBOMListSuccess } from "../../../../store/Purchase/BOMRedux/action";
+import BOMMaster from "../BOMMaster/BOMIndex";
 
 const BOMList = () => {
 
@@ -37,12 +27,10 @@ const BOMList = () => {
     const reducers = useSelector(
         (state) => ({
             tableList: state.BOMReducer.BOMList,
-            deleteMsg: state.OrderReducer.deleteMsg,
-            updateMsg: state.OrderReducer.updateMsg,
+            deleteMsg: state.BOMReducer.deleteMsg,
+            updateMsg: state.BOMReducer.updateMsg,
             postMsg: state.OrderReducer.postMsg,
             editData: state.BOMReducer.editData,
-            userAccess: state.Login.RoleAccessUpdateData,
-            pageField: state.CommonPageFieldReducer.pageFieldList,
             userAccess: state.Login.RoleAccessUpdateData,
             pageField: state.CommonPageFieldReducer.pageFieldList,
         })
@@ -51,10 +39,10 @@ const BOMList = () => {
     const action = {
         getList: getBOMListPage,
         editId: editBOMList,
-        deleteId: deleteOrderId,
+        deleteId: deleteBOMId,
         postSucc: postMessage,
-        updateSucc: updateOrderIdSuccess,
-        deleteSucc: deleteOrderIdSuccess
+        updateSucc: updateBOMListSuccess,
+        deleteSucc: deleteBOMIdSuccess
     }
 
     // Featch Modules List data  First Rendering
@@ -99,19 +87,11 @@ const BOMList = () => {
             FromDate = fromdate;
         }
 
-        let Company = ''
-        try {
-            Company = JSON.parse(localStorage.getItem('Company'))
-        } catch (e) {
-            alert(e)
-        }
-
         const jsonBody = JSON.stringify({
             FromDate: FromDate,
             ToDate: ToDate,
-            Company: Company,
-        }
-        );
+            Company: userCompany(),
+        });
         dispatch(getBOMListPage(jsonBody));
         console.log("go button post json",jsonBody)
     }
@@ -186,12 +166,12 @@ const BOMList = () => {
                             action={action}
                             reducers={reducers}
                             showBreadcrumb={false}
-                            // MasterModal={Order}
+                            MasterModal={BOMMaster}
                             masterPath={BillOfMaterials}
                             ButtonMsgLable={"BOM"}
-                            deleteName={"Name"}
+                            deleteName={"ItemName"}
                             pageMode={pageMode}
-                        // onsavefunc={onsavefunc}
+                            goButnFunc={goButtonHandler}
                         />
                         : null
                 }

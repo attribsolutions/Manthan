@@ -59,9 +59,9 @@ function ItemTab(props) {
     const addRowsHandler = (data) => {
         
         const val = {
-            ItemID: contentItemSelect === "" ? "" : contentItemSelect.value,
+            Item: contentItemSelect === "" ? "" : contentItemSelect.value,
             ItemName: contentItemSelect.label,
-            UnitID: unitSelect === "" ? "" : unitSelect.value,
+            Unit: unitSelect === "" ? "" : unitSelect.value,
             UnitName: unitSelect.label,
             Quantity: Quantity  ,
            
