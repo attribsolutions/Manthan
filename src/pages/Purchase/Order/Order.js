@@ -544,11 +544,11 @@ const Order = (props) => {
                     />
                     <div className="px-2 mb-1 mt-n3 " style={{ backgroundColor: "rgb(210 210 220)", borderRadius: "5px" }} >
                         <div className=" mt-1 row ">
-                            <Col sm="5" className="">
+                            <Col sm="6" className="">
                                 <FormGroup className="mb- row mt-3 " >
                                     <Label className="col-sm-5 p-2"
                                         style={{ width: "115px" }}>Order Date</Label>
-                                    <Col sm="7">
+                                    <Col sm="6">
                                         <Flatpickr
                                             id="orderdate"
                                             name="orderdate"
@@ -570,10 +570,10 @@ const Order = (props) => {
                             </Col>
                           
                             <Col sm="6">
-                                <FormGroup className="mb- row mt-3 " >
-                                    <Label className="col-sm-2 p-2"
-                                        style={{ width: "116px" ,marginLeft:"2.2cm",}}>Supplier Name</Label>
-                                    <Col sm="6" style={{marginLeft:"0.4cm"}}>
+                                <FormGroup className="mb-1 row mt-3 " >
+                                    <Label className="col-sm-1 p-2"
+                                        style={{ width:"115px",marginRight:"0.4cm"}}>Supplier Name</Label>
+                                    <Col sm="6">
                                         <Select
                                              
                                             value={supplierSelect}
@@ -583,14 +583,15 @@ const Order = (props) => {
                                             onChange={(e) => { setsupplierSelect(e) }}
                                         />
                                     </Col>
-                                </FormGroup>
-                            </Col >
-
-                            <Col sm="1" className="mt-3 ">
-                                {pageMode === "save" ? <Button type="button" color="btn btn-outline-success border-2 font-size-12 "
+                                    <Col sm="1" className=" ">
+                                {pageMode === "save" ? <Button type="button" color="btn btn-outline-success border-2 font-size-12"
                                     onClick={(e) => GoButton_Handler()}>Go</Button>
                                     : null}
                             </Col>
+                                </FormGroup>
+                            </Col >
+
+                          
                         </div>
                     </div>
 
