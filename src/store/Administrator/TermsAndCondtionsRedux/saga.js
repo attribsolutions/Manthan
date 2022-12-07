@@ -29,7 +29,7 @@ function* Post_Method_ForTermsAndCondtionsMaster_GenFun({ data }) {
 
 // Get List Page API
 function* Get_TermsAndCondtions_GenratorFunction() {
-  debugger
+  
   yield put(SpinnerState(true))
   try {
     const response = yield call(get_TermsAndCondtionsList_API);
