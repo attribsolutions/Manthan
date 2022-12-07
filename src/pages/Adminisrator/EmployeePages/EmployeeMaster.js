@@ -410,7 +410,7 @@ const AddEmployee = (props) => {
           <Container fluid>
 
             <Card className="text-black">
-              <CardHeader className="card-header   text-dark" style={{ backgroundColor: "#dddddd" }} >
+              <CardHeader className="card-header   text-dark c_card_header" >
                 <h4 className="card-title text-black">{userPageAccessState.PageDescription}</h4>
                 <p className="card-title-desc text-black">{userPageAccessState.PageDescriptionDetails}</p>
               </CardHeader>
@@ -418,7 +418,7 @@ const AddEmployee = (props) => {
               <CardBody>
                 <form onSubmit={formSubmitHandler} ref={formRef} noValidate>
                   <Card  >
-                    <CardBody style={{ backgroundColor: "whitesmoke" }}>
+                    <CardBody className="card_body">
                       <Row >
 
                         <FormGroup className="mb-2 col col-sm-3 ">
@@ -612,7 +612,7 @@ const AddEmployee = (props) => {
                   </Card>
 
                   <Card className="mt-n2">
-                    <CardBody style={{ backgroundColor: "whitesmoke" }}>
+                    <CardBody className="card_body">
                       <Row >
 
                         <FormGroup className="mb-2 col col-sm-3 ">
