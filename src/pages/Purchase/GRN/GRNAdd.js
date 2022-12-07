@@ -12,10 +12,10 @@ import "flatpickr/dist/themes/material_blue.css"
 import Flatpickr from "react-flatpickr";
 
 
-import React, { useEffect, useState, useRf, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import { MetaTags } from "react-meta-tags";
 
-import ToolkitProvider, { Search } from "react-bootstrap-table2-toolkit";
+import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 import paginationFactory, { PaginationListStandalone, PaginationProvider } from "react-bootstrap-table2-paginator";
 import { useHistory } from "react-router-dom";
@@ -23,27 +23,20 @@ import {
     editOrderIdSuccess,
     goButton,
     goButtonSuccess,
-    postOrder,
-    postOrderSuccess,
-    updateOrderId,
     updateOrderIdSuccess
 } from "../../../store/Purchase/OrderPageRedux/actions";
-import { getSupplier, getSupplierAddress } from "../../../store/CommonAPI/SupplierRedux/actions"
-import { countlabelFunc } from "../../../components/Common/ComponentRelatedCommonFile/CommonMasterListPage";
+import { getSupplierAddress } from "../../../store/CommonAPI/SupplierRedux/actions"
 import { AlertState, BreadcrumbFilterSize } from "../../../store/actions";
 import { basicAmount, GstAmount, handleKeyDown, totalAmount } from "../Order/OrderPageCalulation";
 import '../../Order/div.css'
 
-import { GRN_lIST, ORDER_lIST, ROLE } from "../../../routes/route_url";
-import SaveButton, { CreatedBy } from "../../../components/Common/ComponentRelatedCommonFile/CommonSaveButton";
+import { GRN_lIST, ORDER_lIST } from "../../../routes/route_url";
+import SaveButton from "../../../components/Common/ComponentRelatedCommonFile/CommonSaveButton";
 
 import Breadcrumb from "../../../components/Common/Breadcrumb3";
-import { getGRN_itemMode2_Success, getGRN_itemMode3, postGRN, postGRNSuccess } from "../../../store/Purchase/GRNRedux/actions";
-import GRNList from "./GRNList";
-import { useMemo } from "react";
-import flatpickr from "flatpickr";
+import { getGRN_itemMode2_Success, postGRN, postGRNSuccess } from "../../../store/Purchase/GRNRedux/actions";
 import { mySearchProps } from "../../../components/Common/ComponentRelatedCommonFile/MySearch";
-import { currentDate } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { createdBy, currentDate } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 
 let description = ''
 let editVal = {}
@@ -81,14 +74,10 @@ const GRNAdd = (props) => {
 
     const {
         items,
-        // table,
         postMsg,
-        supplier,
         userAccess,
         updateMsg,
         supplierAddress,
-        pageField,
-
     } = useSelector((state) => ({
         supplier: state.SupplierReducer.supplier,
         supplierAddress: state.SupplierReducer.supplierAddress,
@@ -641,7 +630,7 @@ const GRNAdd = (props) => {
             GRNNumber: 1,
             GrandTotal: orderAmount,
             Party: grnDetail.Supplier,
-            CreatedBy: CreatedBy(),
+            CreatedBy: createdBy(),
             UpdatedBy: 1,
             GRNItems: itemArr,
             GRNReferences: grnDetail.GRNReferences
