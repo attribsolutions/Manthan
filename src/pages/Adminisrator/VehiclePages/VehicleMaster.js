@@ -247,6 +247,7 @@ const VehicleMaster = (props) => {
             comAddPageFieldFunc({ state, setState, fieldArr })
         }
     }, [pageField])
+    
 
     const values = { ...state.values }
     const { isError } = state;
