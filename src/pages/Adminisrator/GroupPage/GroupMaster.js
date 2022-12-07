@@ -274,7 +274,7 @@ const GroupMaster = (props) => {
                                     <Row className="">
                                         <Col md={12} style={{ height: "9cm" }}>
                                             <Card>
-                                                <CardBody className="card_body">
+                                                <CardBody className="c_card_body">
                                                     <Row>
 
                                                         <Col sm="4">

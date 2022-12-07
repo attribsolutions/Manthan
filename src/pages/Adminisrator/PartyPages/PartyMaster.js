@@ -385,7 +385,7 @@ const PartyMaster = (props) => {
                             <Row>
                                 <Col lg={12}>
                                     <Card className="text-black" >
-                                        <CardHeader className="card-header   text-black" style={{ backgroundColor: "#dddddd" }} >
+                                        <CardHeader className="card-header   text-black c_card_header" >
                                             <h4 className="card-title text-black">{userPageAccessState.PageDescription}</h4>
                                             <p className="card-title-desc text-black">{userPageAccessState.PageDescriptionDetails}</p>
                                         </CardHeader>
@@ -488,8 +488,8 @@ const PartyMaster = (props) => {
                                             <TabContent activeTab={activeTab1} className="p-3 text-muted">
                                                 <TabPane tabId="1">
                                                    
-                                                        <Card className="text-black" style={{ backgroundColor: "whitesmoke" }} >
-                                                            <CardBody>
+                                                        <Card className="text-black" >
+                                                            <CardBody className="c_card_body">
                                                                 <Row >
                                                                     <Col md="3">
                                                                         <FormGroup className="mb-3">
@@ -566,8 +566,8 @@ const PartyMaster = (props) => {
                                                         </Card>
                                               
                                                     
-                                                        <Card className=" text-black mt-n2" style={{ backgroundColor: "whitesmoke" }} >
-                                                           <CardBody>
+                                                        <Card className=" text-black mt-n2" >
+                                                           <CardBody className="c_card_body">
                                                             <Row >
                                                                 <Col md="3">
                                                                     <FormGroup className="mb-3">
@@ -773,8 +773,8 @@ const PartyMaster = (props) => {
                                                         <Col md={12}  >
                                                             {/* <Row className="mt-3"> */}
 
-                                                                <Card className="text-black" style={{ backgroundColor: "whitesmoke" }} >
-                                                                   <CardBody>
+                                                                <Card className="text-black " >
+                                                                   <CardBody className="c_card_body">
                                                                     <Col>
                                                                         <FormGroup className="mb-3">
                                                                             <Row md="5">

@@ -121,7 +121,7 @@ export default function Image(props) {
 
     return (
         <Card className="text-black">
-            <CardBody style={{ backgroundColor: "whitesmoke" }}>
+            <CardBody className='c_card_body'>
 
                 {imageTable.map((index, key) => {
 

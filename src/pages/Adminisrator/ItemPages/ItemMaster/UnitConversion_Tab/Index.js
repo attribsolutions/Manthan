@@ -173,7 +173,7 @@ export default function UnitConverstion(props) {
     return (
         <div>
             <Card className="text-black">
-                <CardBody style={{ backgroundColor: "whitesmoke" }}>
+                <CardBody className='c_card_body'>
 
                     <Row>
                         <FormGroup className=" col col-sm-4 " >

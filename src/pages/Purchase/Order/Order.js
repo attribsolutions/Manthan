@@ -587,7 +587,7 @@ const Order = (props) => {
                         pageHeading={userAccState.PageHeading}
                         showCount={true}
                     />
-                    <div className="px-2 mb-1 mt-n3 " style={{ backgroundColor: "rgb(210 210 220)", borderRadius: "5px" }} >
+                    <div className="px-2 mb-1 mt-n3 c_card_filter" >
                         <div className=" mt-1 row ">
                             <Col sm="6" className="">
                                 <FormGroup className="mb- row mt-3 " >
@@ -629,7 +629,7 @@ const Order = (props) => {
                                             onChange={(e) => { setsupplierSelect(e) }}
                                         />
                                     </Col>
-                                    <Col sm="1" className=" ">
+                                    <Col sm="1" className="mx-4 ">
                                         {pageMode === "save" ? <Button type="button" color="btn btn-outline-success border-2 font-size-12"
                                             onClick={(e) => GoButton_Handler()}>Go</Button>
                                             : null}
@@ -642,14 +642,14 @@ const Order = (props) => {
                         </div>
                     </div>
 
-                    <div className="px-2  mb-1" style={{ backgroundColor: "#e9e9ef", borderRadius: "5px" }} >
+                    <div className="px-2  mb-1 c_card_body" >
 
                         <div className="row">
                             <div className="col col-6">
                                 <FormGroup className=" row  mt-3" >
                                     <Label className="   p-2"
                                         style={{ width: "115px" }}>Description</Label>
-                                    <div className="col-7">
+                                    <div className="col-6">
                                         <Input type="text"
                                             defaultValue={description}
                                             placeholder='Enter Order Description'
@@ -664,7 +664,7 @@ const Order = (props) => {
                                 <FormGroup className=" row mt-3 " >
                                     <Label className=" p-2"
                                         style={{ width: "130px" }}>Delivery Date</Label>
-                                    <div className="col col-7 sm-1">
+                                    <div className="col col-6 sm-1">
                                         <Flatpickr
                                             id="deliverydate"
                                             name="deliverydate"
@@ -692,7 +692,7 @@ const Order = (props) => {
                                     <Label className=" p-2"
                                         style={{ width: "115px" }}>Billing Address</Label>
 
-                                    <div className="col col-7">
+                                    <div className="col col-6">
 
                                         <Select
                                             value={billAddr}
@@ -718,7 +718,7 @@ const Order = (props) => {
                                         style={{ width: "130px" }}>Shipping Address</Label>
 
 
-                                    <div className="col col-7">
+                                    <div className="col col-6">
 
                                         <Select
                                             value={shippAddr}

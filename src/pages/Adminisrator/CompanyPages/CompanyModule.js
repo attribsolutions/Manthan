@@ -297,7 +297,7 @@ const CompanyModule = (props) => {
                   <CardBody>
                     <form onSubmit={formSubmitHandler} ref={formRef} noValidate>
                       <Card >
-                        <CardBody className="card_body">
+                        <CardBody className="c_card_body">
                           <Row>
 
                             <FormGroup className="mb-2 col col-sm-4 ">
@@ -383,7 +383,7 @@ const CompanyModule = (props) => {
                       </Card>
 
                       <Card className="mt-n2">
-                        <CardBody className="card_body">
+                        <CardBody className="c_card_body">
 
                           <Row>
                             <FormGroup className="mb-2 col col-sm-4 ">
