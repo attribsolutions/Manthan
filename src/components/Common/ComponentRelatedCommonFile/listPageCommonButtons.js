@@ -24,8 +24,11 @@ export const listPageCommonButtonFunction = (props) => {
      *    autho by => Rohit  date :22-08-022 */
 
 
-    function editHandler(rowData, mode) {
-        dispatch(editActionFun(rowData.id, mode,));
+    function editHandler(rowData) {
+        dispatch(editActionFun(rowData.id, "edit",));
+    }
+    function copyHandler(rowData) {
+        dispatch(editActionFun(rowData.id, "copy",));
     }
 
     function deleteHandler(rowData) {
@@ -37,8 +40,6 @@ export const listPageCommonButtonFunction = (props) => {
             ID: rowData.id,
         }));
     }
-
-
 
 
 
@@ -88,7 +89,7 @@ export const listPageCommonButtonFunction = (props) => {
                                 type="button"
                                 className={editSelfBtnCss}
                                 data-mdb-toggle="tooltip" data-mdb-placement="top" title={`View ${ButtonMsgLable}`}
-                                onClick={() => { editHandler(rowData, "edit") }}
+                                onClick={() => { editHandler(rowData) }}
                             >
                                 <i className="bx bxs-show font-size-18 "></i>
                             </Button>
@@ -129,7 +130,7 @@ export const listPageCommonButtonFunction = (props) => {
                     type="button"
                     className={editSelfBtnCss}
                     data-mdb-toggle="tooltip" data-mdb-placement="top" title={`Copy ${ButtonMsgLable}`}
-                    onClick={() => { editHandler(rowData, "copy") }}
+                    onClick={() => { copyHandler(rowData) }}
                 >
                     <i className="bx bxs-copy font-size-18 "></i>
                 </Button>
