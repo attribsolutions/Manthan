@@ -656,12 +656,12 @@ const GRNAdd = (props) => {
                 <MetaTags>
                     <title>{userAccState.PageHeading}| FoodERP-React FrontEnd</title>
                 </MetaTags>
-                <div className="page-content">
-                    <Breadcrumb
+                <div className="page-content" style={{marginTop:"-0.4cm"}}>
+                    <Breadcrumb  
                         pageHeading={userAccState.PageHeading}
                         showCount={true}
                     />
-                    <div className="px-2 mb-1 mt-n1 card_body " >
+                    <div className="px-2 mb-1 mt-n4 c_card_header " >
                         <Row>
                         <Col sm={5}>
 
