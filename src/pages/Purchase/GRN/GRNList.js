@@ -131,13 +131,13 @@ const GRNList = () => {
                     newBtnPagePath={GST_ADD_Mode_2}
                     excelData={downList} />
 
-                <div className="px-2 mb-1 mt-n1 card_body">
+                <div className="px-2 mb-1 mt-n1 c_card_header">
                     <div className=" mt-1 row">
                         <Col sm="3" className="">
                             <FormGroup className="mb- row mt-3 " >
                                 <Label className="col-sm-5 p-2"
                                     style={{ width: "83px" }}>From Date</Label>
-                                <Col md="7">
+                                <Col sm="7">
                                     <Flatpickr
                                         name='fromdate'
                                         className="form-control d-block p-2 bg-white text-dark"
@@ -162,7 +162,7 @@ const GRNList = () => {
                             <FormGroup className="mb- row mt-3 " >
                                 <Label className="col-sm-5 p-2"
                                     style={{ width: "65px" }}>To Date</Label>
-                                <Col md="8">
+                                <Col sm="7">
                                     <Flatpickr
                                         nane='todate'
                                         className="form-control d-block p-2 bg-white text-dark"
@@ -188,7 +188,7 @@ const GRNList = () => {
                             <FormGroup className="mb-2 row mt-3 " >
                                 <Label className="col-md-4 p-2"
                                     style={{ width: "115px" }}>Supplier Name</Label>
-                                <Col md="7">
+                                <Col md="5">
                                     <Select
                                         // value={"supplier"}
                                         classNamePrefix="select2-Customer"

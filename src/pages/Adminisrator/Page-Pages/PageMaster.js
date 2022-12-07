@@ -426,220 +426,31 @@ const PageMaster = (props) => {
 
   function PageField_onChange_Handler(event, type = '', key) {
 
-    var found = pageFieldTabTable.find((i, k) => {
-      return (k === key)
-    })
-    let newSelectValue = ''
+    const newval = pageFieldTabTable.map((index, k) => {
 
-    switch (type) {
-      case 'ControlID':
-        newSelectValue = {
-          ControlID: event,
-          FieldLabel: found.FieldLabel,
-          ControlType: found.ControlType,
-          FieldValidation: found.FieldValidation,
-          InValidMsg: found.InValidMsg,
-          IsCompulsory: found.IsCompulsory,
-          DefaultSort: found.DefaultSort,
-          ShowInListPage: found.ShowInListPage,
-          ListPageSeq: found.ListPageSeq,
-          ShowInDownload: found.ShowInDownload,
-          DownloadDefaultSelect: found.DownloadDefaultSelect,
-
+      if (key === k) {
+        if ((type === "ControlType")) {
+          index.ControlType = event
+          index.InValidMsg = (event.value === 4) ? '' : index.InValidMsg;
+          index.FieldValidation = "";
         }
-        break;
-
-      case 'FieldLabel':
-        newSelectValue = {
-          ControlID: found.ControlID,
-          FieldLabel: event,
-          ControlType: found.ControlType,
-          FieldValidation: found.FieldValidation,
-          InValidMsg: found.InValidMsg,
-          IsCompulsory: found.IsCompulsory,
-          DefaultSort: found.DefaultSort,
-          ShowInListPage: found.ShowInListPage,
-          ListPageSeq: found.ListPageSeq,
-          ShowInDownload: found.ShowInDownload,
-          DownloadDefaultSelect: found.DownloadDefaultSelect,
-
-        }
-        break;
-
-      case 'ControlType':
-        newSelectValue = {
-          ControlID: found.ControlID,
-          FieldLabel: found.FieldLabel,
-          ControlType: event,
-          FieldValidation: found.FieldValidation,
-          InValidMsg: event.value === 4 ? event = '' : found.InValidMsg,
-          IsCompulsory: found.IsCompulsory,
-          DefaultSort: found.DefaultSort,
-          ShowInListPage: found.ShowInListPage,
-          ListPageSeq: found.ListPageSeq,
-          ShowInDownload: found.ShowInDownload,
-          DownloadDefaultSelect: found.DownloadDefaultSelect,
-
-        }
-        break;
-
-      case 'FieldValidation':
-        newSelectValue = {
-          ControlID: found.ControlID,
-          FieldLabel: found.FieldLabel,
-          ControlType: found.ControlType,
-          FieldValidation: event,
-          InValidMsg: found.InValidMsg,
-          IsCompulsory: found.IsCompulsory,
-          DefaultSort: found.DefaultSort,
-          ShowInListPage: found.ShowInListPage,
-          ListPageSeq: found.ListPageSeq,
-          ShowInDownload: found.ShowInDownload,
-          DownloadDefaultSelect: found.DownloadDefaultSelect,
-        }
-        break;
-
-      case 'InValidMsg':
-        newSelectValue = {
-          ControlID: found.ControlID,
-          FieldLabel: found.FieldLabel,
-          ControlType: found.ControlType,
-          FieldValidation: found.FieldValidation,
-          InValidMsg: event,
-          IsCompulsory: found.IsCompulsory,
-          DefaultSort: found.DefaultSort,
-          ShowInListPage: found.ShowInListPage,
-          ListPageSeq: found.ListPageSeq,
-          ShowInDownload: found.ShowInDownload,
-          DownloadDefaultSelect: found.DownloadDefaultSelect,
-
-        }
-        break;
-
-      case 'IsCompulsory':
-        newSelectValue = {
-          ControlID: found.ControlID,
-          FieldLabel: found.FieldLabel,
-          ControlType: found.ControlType,
-          FieldValidation: found.FieldValidation,
-          InValidMsg: found.InValidMsg,
-          IsCompulsory: event,
-          DefaultSort: found.DefaultSort,
-          ShowInListPage: found.ShowInListPage,
-          ListPageSeq: found.ListPageSeq,
-          ShowInDownload: found.ShowInDownload,
-          DownloadDefaultSelect: found.DownloadDefaultSelect,
-
-        }
-        break;
-
-      case 'DefaultSort':
-        newSelectValue = {
-          ControlID: found.ControlID,
-          FieldLabel: found.FieldLabel,
-          ControlType: found.ControlType,
-          FieldValidation: found.FieldValidation,
-          InValidMsg: found.InValidMsg,
-          IsCompulsory: found.IsCompulsory,
-          DefaultSort: event ? 1 : 0,
-          ShowInListPage: found.ShowInListPage,
-          ListPageSeq: found.ListPageSeq,
-          ShowInDownload: found.ShowInDownload,
-          DownloadDefaultSelect: found.DownloadDefaultSelect,
-
-        }
-        break;
-
-      case 'ShowInListPage':
-        newSelectValue = {
-          ControlID: found.ControlID,
-          FieldLabel: found.FieldLabel,
-          ControlType: found.ControlType,
-          FieldValidation: found.FieldValidation,
-          InValidMsg: found.InValidMsg,
-          IsCompulsory: found.IsCompulsory,
-          DefaultSort: found.DefaultSort,
-          ShowInListPage: event,
-          ListPageSeq: found.ListPageSeq,
-          ShowInDownload: found.ShowInDownload,
-          DownloadDefaultSelect: found.DownloadDefaultSelect,
-
-        }
-        break;
-
-      case 'ListPageSeq':
-        newSelectValue = {
-          ControlID: found.ControlID,
-          FieldLabel: found.FieldLabel,
-          ControlType: found.ControlType,
-          FieldValidation: found.FieldValidation,
-          InValidMsg: found.InValidMsg,
-          IsCompulsory: found.IsCompulsory,
-          DefaultSort: found.DefaultSort,
-          ShowInListPage: found.ShowInListPage,
-          ListPageSeq: event,
-          ShowInDownload: found.ShowInDownload,
-          DownloadDefaultSelect: found.DownloadDefaultSelect,
-
-        }
-        break;
-
-      case 'ShowInDownload':
-        newSelectValue = {
-          ControlID: found.ControlID,
-          FieldLabel: found.FieldLabel,
-          ControlType: found.ControlType,
-          FieldValidation: found.FieldValidation,
-          InValidMsg: found.InValidMsg,
-          IsCompulsory: found.IsCompulsory,
-          DefaultSort: found.DefaultSort,
-          ShowInListPage: found.ShowInListPage,
-          ListPageSeq: found.ListPageSeq,
-          ShowInDownload: event,
-          DownloadDefaultSelect: found.DownloadDefaultSelect,
-
-        }
-        break;
-
-      case 'DownloadDefaultSelect':
-        newSelectValue = {
-          ControlID: found.ControlID,
-          FieldLabel: found.FieldLabel,
-          ControlType: found.ControlType,
-          FieldValidation: found.FieldValidation,
-          InValidMsg: found.InValidMsg,
-          IsCompulsory: found.IsCompulsory,
-          DefaultSort: found.DefaultSort,
-          ShowInListPage: found.ShowInListPage,
-          ListPageSeq: found.ListPageSeq,
-          ShowInDownload: found.ShowInDownload,
-          DownloadDefaultSelect: event,
-
-        }
-        break;
-    }
-
-    let newTabArr = pageFieldTabTable.map((index, k) => {
+        else if ((type === "DefaultSort")) {
+          index.DefaultSort = event ? 1 : 0;
+        } else { index[type] = event }
+      };
 
       if (type === "DefaultSort" && !(k === key)) {
         index["DefaultSort"] = 0
       }
-      return (k === key) ? newSelectValue : index
+      return index
     })
-    setPageFieldTabTable(newTabArr)
+
+    setPageFieldTabTable(newval)
   }
 
   function ControlType_Dropdown_Handler(e, key) {
-
     dispatch(getFieldValidations(e.value))
-    // dispatch(getFieldValidationsSuccess([]))
-    //   setPageFieldTabTable((i) => {
-    //     debugger
-    //     const a = { ...i }
-    //     a[key].FieldValidation = "";
-    //     // a.hasValid.UnitName.valid = false
-    //     return a
-    // })
+    PageField_onChange_Handler(e, "ControlType", key)
   }
 
   const toggleCustom = (tab) => {
@@ -687,6 +498,18 @@ const PageMaster = (props) => {
       return;
     }
 
+    if ((pageType_DropdownSelect.value === 2)) {
+      dispatch(
+        AlertState({
+          Type: 4,
+          Status: true,
+          Message: "Please Select Related Page ID",
+          RedirectPath: false,
+          PermissionAction: false,
+        })
+      );
+      return;
+    }
 
     const jsonBody = JSON.stringify({
       Name: values.Name,
@@ -736,23 +559,18 @@ const PageMaster = (props) => {
     setModule_DropdownSelect(e);
   };
 
-  function PageAccess_DropdownSelect_Handler(e) {
-    setPageAccess_DropDownSelect(e);
-  }
 
   //  for PageType deropDown
   const PageType_DropdownSelectHandller = (e) => {
     if (e.value === 2) {
       relatedPage_DropdownSelectHandller()
       setRelatedPageListShowUI(true)
-
       dispatch(getPageList(e.value));
-      // showCheckBox.disabled = true
       setPageAccessDropDownView(true);
-    } else if (e.value === 1) {
+    }
+    else if (e.value === 1) {
       setRelatedPageListShowUI(false)
       setTablePageAccessDataState([]);
-      // showCheckBox.disabled = false
       setPageAccessDropDownView(false);
       dispatch(getPageListSuccess([]));
       setrelatedPage_DropdownSelect({ value: 0 });
@@ -764,130 +582,7 @@ const PageMaster = (props) => {
     setrelatedPage_DropdownSelect(e);
   };
 
-  // ADD Button handler
 
-  function Common_Find_Function(arry, elementValue, findvalue) {
-    return arry.find((index) => {
-      return index[elementValue] === findvalue;
-    });
-  }
-
-  function AddRoleHandler() {
-    const drop_value = pageAccess_DropDownSelect.value;
-    const drop_label = pageAccess_DropDownSelect.label;
-
-    // find function pass Parameter (array,indexParameter,findvalue)
-    const find = Common_Find_Function(
-      tablePageAccessDataState,
-      "AccessID",
-      drop_value
-    );
-
-    if (pageAccess_DropDownSelect.length <= 0) {
-      dispatch(
-        AlertState({
-          Type: 3,
-          Status: true,
-          Message: "Select One DropDown Value",
-        })
-      );
-    } else if (find === undefined) {
-      if (drop_label === "IsEdit") {
-        // find function pass Parameter (array,indexParameter,findvalue)
-        const findIsView = Common_Find_Function(
-          tablePageAccessDataState,
-          "AccessName",
-          "IsView"
-        );
-        // find function pass Parameter (array,indexParameter,findvalue)
-        const find_IsEditSelf = Common_Find_Function(
-          tablePageAccessDataState,
-          "AccessName",
-          "IsEditSelf"
-        );
-
-        const ViewValues = Common_Find_Function(
-          pageAccessval,
-          "label",
-          "IsView"
-        );
-
-        const IsEditSelfValues = Common_Find_Function(
-          pageAccessval,
-          "label",
-          "IsEditSelf"
-        );
-        if ((findIsView === undefined) && (find_IsEditSelf === undefined)) {
-          // find function pass Parameter (array,indexParameter,findvalue)
-
-          setTablePageAccessDataState([
-            ...tablePageAccessDataState,
-            {
-              AccessID: ViewValues.value,
-              AccessName: ViewValues.label,
-            },
-            {
-              AccessID: IsEditSelfValues.value,
-              AccessName: IsEditSelfValues.label,
-            },
-            {
-              AccessID: drop_value,
-              AccessName: drop_label,
-            },
-          ]);
-          return;
-        }
-        else if (findIsView === undefined) {
-          setTablePageAccessDataState([
-            ...tablePageAccessDataState,
-            {
-              AccessID: ViewValues.value,
-              AccessName: ViewValues.label,
-            },
-            {
-              AccessID: drop_value,
-              AccessName: drop_label,
-            },
-          ]);
-          return;
-        }
-        else if (find_IsEditSelf === undefined) {
-          setTablePageAccessDataState([
-            ...tablePageAccessDataState,
-            {
-              AccessID: IsEditSelfValues.value,
-              AccessName: IsEditSelfValues.label,
-            },
-            {
-              AccessID: drop_value,
-              AccessName: drop_label,
-            },
-          ]);
-          return;
-        }
-      }
-
-      setTablePageAccessDataState([
-        ...tablePageAccessDataState,
-        { AccessID: drop_value, AccessName: drop_label },
-      ]);
-    } else {
-      dispatch(
-        AlertState({
-          Type: 4,
-          Status: true,
-          Message: "PageAccess Data already Exists ",
-        })
-      );
-    }
-  }
-
-  // For Delete Button in table
-  function PageAccess_DeleteButton_Handller(tableValue) {
-    setTablePageAccessDataState(
-      tablePageAccessDataState.filter((item) => !(item.AccessID === tableValue))
-    );
-  }
 
   function tog_center() {
     setmodal_center(!modal_center)
@@ -896,46 +591,8 @@ const PageMaster = (props) => {
     tog_center()
   }
 
-  function TableBodyFunction() {
-    return tablePageAccessDataState.map((TableValue) => {
-      let ViewValues = false;
 
-      if ((TableValue.AccessName === "IsView") || (TableValue.AccessName === "IsEditSelf")) {
-        // find function pass Parameter (array,indexParameter,findvalue)
-        // const ViewValues = Common_Find_Function(pageAccessval, "label", "IsView");
-        const View = tablePageAccessDataState.find((element) => {
-          return element.AccessName === "IsEdit";
-        });
-        if (!(View === undefined)) ViewValues = true;
-      }
-      return (
-        <tr>
-          <td>{TableValue.AccessName}</td>
-          <td>
-            {!(TableValue.AccessName === "IsShowOnMenu") && !ViewValues ? (
-              <i
-                className="mdi mdi-trash-can d-block text-danger font-size-20"
-                onClick={() => {
-                  PageAccess_DeleteButton_Handller(TableValue.AccessID);
-                }}
-              ></i>
-            ) : null}
-          </td>
-        </tr>
-      );
-    });
-  }
-  function input_checkBoxHandler(e, key) {
 
-    pageAccessval.map((index, key) => {
-      if (index.label === e) {
-        debugger
-        index.Checked = true
-      }
-    })
-
-  }
-  
   // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
   var IsEditMode_Css = ''
   if ((modalCss) || (pageMode === "dropdownAdd")) { IsEditMode_Css = "-5.5%" };
@@ -997,26 +654,15 @@ const PageMaster = (props) => {
                           <span className="d-none d-sm-block">Page Field</span>
                         </NavLink>
                       </NavItem>
-                      {/* :
-                        null
-                      } */}
 
 
                       <NavItem>
                         <NavLink
                           style={{ cursor: "pointer" }}
-                        // className={classnames({
-                        //     active: activeTab1 === "7",
-                        // })}
-                        // onClick={() => {
-                        //     toggle1("7")
-                        // }}
                         >
                           <span className="d-block d-sm-none">
                             <i className="fas fa-home"></i>
                           </span>
-                          {/* <span className="d-none d-sm-block">Tab7</span> */}
-                          {/* <Button type="submit"> save</Button> */}
                           <Row >
                             <Col sm={2}>
                               <div>
@@ -1368,12 +1014,6 @@ const PageMaster = (props) => {
                                 </Row>
                               </FormGroup>
                             </Row>
-                            {/* <Row className="btn btn-sm">
-                                <button
-                                  type="button"
-                                  className="btn btn-primary w-md float-right"
-                                  onclick={() => myFunction()}>Disabled false</button>
-                              </Row> */}
 
                           </CardBody>
 
@@ -1388,8 +1028,7 @@ const PageMaster = (props) => {
                               <Row className="row ">
                                 {pageAccessval.map((index, key) => {
 
-                                  return <>
-
+                                  return (
                                     <Col className="col col-4 text-black" >
                                       <li>
                                         <Row className="row ">
@@ -1408,27 +1047,21 @@ const PageMaster = (props) => {
                                                 pageAccessval[key].hascheck = e.target.checked
                                               }}
                                             />
-
                                           </Col>
                                         </Row>
                                       </li>
                                     </Col>
-                                  </>
+                                  )
                                 })}
                               </Row>
 
 
                             </CardBody>
                           </Card>
-                        ) : <></>}
+                        ) : null}
                       </TabPane>
 
                       <TabPane tabId="2">
-
-                        {/* <Card> */}
-                        {/* <CardBody style={{ backgroundColor: "whitesmoke" }}> */}
-
-                        {/* {!(PageFieldShowUI) ? */}
 
                         <div className="table-rep-plugin  mx-n4">
                           <div
@@ -1489,7 +1122,7 @@ const PageMaster = (props) => {
                                           // placeholder="select unit"
                                           value={pageFieldTabTable[key].ControlType}
                                           options={ControlTypes_DropdownOptions}
-                                          onChange={(e) => { ControlType_Dropdown_Handler(e, key); PageField_onChange_Handler(e, "ControlType", key) }}
+                                          onChange={(e) => { ControlType_Dropdown_Handler(e, key); }}
                                         />
                                       </div>
                                     </td>
@@ -1598,7 +1231,6 @@ const PageMaster = (props) => {
                                         type="checkbox"
                                         id={`DownloadDefaultSelect${key}`}
                                         disabled={TableValue.ShowInDownload === true ? false : true}
-                                        // defaultChecked={pageFieldTabTable[key].DownloadDefaultSelect}
                                         checked={
                                           (TableValue.ShowInDownload === false)
                                             ? pageFieldTabTable[key].DownloadDefaultSelect = false
@@ -1621,11 +1253,6 @@ const PageMaster = (props) => {
                                           </Col>
 
                                           <Col md={6} >
-                                            {/* <Button className="btn btn-sm btn-light align-items-sm-center text-center mt-3"
-                                              type="button"
-                                              onClick={() => { PageField_Tab_AddRow_Handler(key) }} >
-                                              <i className="dripicons-plus"></i>
-                                            </Button> */}
 
                                             <div className="col border-end d-flex justify-content-center ">
                                               <Button
@@ -1669,12 +1296,6 @@ const PageMaster = (props) => {
 
                           </div>
                         </div>
-
-
-                        {/* : <></>} */}
-
-                        {/* </CardBody> */}
-                        {/* </Card> */}
 
                       </TabPane>
 
