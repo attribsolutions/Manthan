@@ -672,13 +672,14 @@ const GRNAdd = (props) => {
                         pageHeading={userAccState.PageHeading}
                         showCount={true}
                     />
-                    <div className="px-2 mb-1 mt-n1" style={{ backgroundColor: "#dddddd" }} >
-                        <div className=" mt-1 row">
+                    <div className="px-2 mb-1 mt-n1 card_body " >
+                        <Row>
+                        <Col sm={5}>
 
                             <FormGroup className="mb- row mt-3 " >
                                 <Label className="col-md-4 p-2"
                                     style={{ width: "130px" }}>GRN Date</Label>
-                                <Col md="3">
+                                <Col md="5">
                                     <Flatpickr
                                         name="grndate"
                                         className="form-control d-block p-2 bg-white text-dark"
@@ -700,7 +701,7 @@ const GRNAdd = (props) => {
                             <FormGroup className="mb-2 row mt-3 " >
                                 <Label className="col-md-4 p-2"
                                     style={{ width: "130px" }}>Supplier Name</Label>
-                                <Col md="3">
+                                <Col md="5">
                                     {/* <Select
                                             value={supplierSelect}
                                             classNamePrefix="select2-Customer"
@@ -708,24 +709,30 @@ const GRNAdd = (props) => {
                                             options={supplierOptions}
                                             onChange={(e) => { setsupplierSelect(e) }}
                                         /> */}
-                                    < Input type="text" value={grnDetail.SupplierName} disabled={true} />
+                                    < Input
+                                        style={{ backgroundColor: "white" }}
+                                        type="text" value={grnDetail.SupplierName} disabled={true} />
                                 </Col>
                             </FormGroup>
 
                             <FormGroup className="mb-2 row mt-3 " >
                                 <Label className="col-md-4 p-2"
                                     style={{ width: "130px" }}>PO.No</Label>
-                                <Col md="3">
+                                <Col md="5">
                                     <Input type="text"
+                                        style={{ backgroundColor: "white" }}
+
                                         disabled={true}
                                         value={grnDetail.challanNo}
                                         placeholder="Enter Challan No" />
                                 </Col>
                             </FormGroup>
+                            </Col>
+                        <Col sm={5}>
                             <FormGroup className="mb-2 row mt-3 " >
                                 <Label className="col-md-4 p-2"
                                     style={{ width: "130px" }}>Invoice Date</Label>
-                                <Col md="3">
+                                <Col md="5">
                                     <Flatpickr
                                         className="form-control d-block p-2 bg-white text-dark"
                                         placeholder="Select..."
@@ -743,7 +750,7 @@ const GRNAdd = (props) => {
                             <FormGroup className="mb-2 row mt-3 " >
                                 <Label className="col-md-4 p-2"
                                     style={{ width: "130px" }}>Invoice No</Label>
-                                <Col md="3">
+                                <Col md="5">
                                     <Input type="text"
                                         // disabled={true}
                                         pattern={/[A-Za-z]{3}/}
@@ -751,14 +758,14 @@ const GRNAdd = (props) => {
                                         placeholder="Enter Invoice No" />
                                 </Col>
                             </FormGroup>
+                        </Col>
+                        </Row>
 
 
-
-                            {/* <Col md="1" className="mt-3 ">
+                        {/* <Col md="1" className="mt-3 ">
                                 <Button type="button" color="btn btn-outline-success border-2 font-size-12 "
                                     onClick={GoButton_Handler}>Go</Button>
                             </Col> */}
-                        </div>
                     </div>
 
 

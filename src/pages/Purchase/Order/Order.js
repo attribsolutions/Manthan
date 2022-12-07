@@ -647,22 +647,6 @@ const Order = (props) => {
                                     <Label className=" p-2"
                                         style={{ width: "115px" }}>Billing Address</Label>
 
-                            {/* <div className="col col-7"> */}
-
-                                    {/* <Select
-                                        value={billAddr}
-                                        classNamePrefix="select2-Customer"
-                                        // isDisabled={pageMode === "edit" ? true : false}
-                                        options={supplierAddress}
-                                        styles={{
-                                            control: base => ({
-                                                ...base,
-                                                border: 'non',
-                                                // backgroundColor: ""
-                                            })
-                                        }}
-                                        onChange={(e) => { setbillAddr(e) }}
-                                    /> */}
                                     <div className="col col-7">
 
                                         <Select
@@ -688,23 +672,6 @@ const Order = (props) => {
                                     <Label className=" p-2"
                                         style={{ width: "130px" }}>Shipping Address</Label>
 
-                            {/* <div className="col col-7"> */}
-
-                                    {/* <Select
-                                        value={shippAddr}
-                                        classNamePrefix="select2-Customer"
-                                        // isDisabled={pageMode === "edit" ? true : false}
-                                        styles={{
-                                            control: base => ({
-                                                ...base,
-                                                border: 'non',
-                                                // backgroundColor: ""
-
-                                            })
-                                        }}
-                                        options={supplierAddress}
-                                        onChange={(e) => { setshippAddr(e) }}
-                                    /> */}
 
                                     <div className="col col-7">
 
