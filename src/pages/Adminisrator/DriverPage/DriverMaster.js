@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState, } from "react";
+import React, { useEffect, useRef, useState, } from "react";
 import Breadcrumb from "../../../components/Common/Breadcrumb3";
 import {
     Button,
@@ -47,21 +47,16 @@ const DriverMaster = (props) => {
     const [userPageAccessState, setUserPageAccessState] = useState("");
     const [modalCss, setModalCss] = useState(false);// new change
 
-    const initialFiled = useMemo(() => {
-
-        const fileds = {
-            id: "",
-            Name: "",
-            Address: "",
-            UID: "",
-            DOB: ''
-        }
-        return initialFiledFunc(fileds)
-      }, []);
-    
-      const [state, setState] = useState(initialFiled)
-    
-        
+  {/** Dyanamic Page access state and OnChange function */ }
+  
+    const fileds = {
+        id: "",
+        Name: "",
+        Address: "",
+        UID: "",
+        DOB: ''
+    }
+    const [state, setState] = useState(() => initialFiledFunc(fileds))
 
     //Access redux store Data /  'save_ModuleSuccess' action data
     const {
@@ -254,7 +249,7 @@ const DriverMaster = (props) => {
                         <Breadcrumb pageHeading={userPageAccessState.PageHeading} />
 
                         <Card className="text-black">
-                            <CardHeader className="card-header   text-black" style={{ backgroundColor: "#dddddd" }} >
+                            <CardHeader className="card-header   text-black c_card_header"  >
                                 <h4 className="card-title text-black">{userPageAccessState.PageDescription}</h4>
                                 <p className="card-title-desc text-black">{userPageAccessState.PageDescriptionDetails}</p>
                             </CardHeader>
@@ -266,7 +261,7 @@ const DriverMaster = (props) => {
                                     <Row className="">
                                         <Col md={12}>
                                             <Card>
-                                                <CardBody style={{ backgroundColor: "whitesmoke" }}>
+                                                <CardBody className="c_card_body">
                                                     <Row>
                                                         <FormGroup className="mb-2 col col-sm-4 ">
                                                             <Label htmlFor="validationCustom01">{fieldLabel.Name} </Label>

@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState, } from "react";
+import React, { useEffect, useRef, useState, } from "react";
 import Breadcrumb from "../../../components/Common/Breadcrumb3";
 import {
     Button,
@@ -55,17 +55,14 @@ const PartyItems = (props) => {
 
 
     {/** Dyanamic Page access state and OnChange function */ }
-    const initialFiled = useMemo(() => {
 
-        const fileds = {
-            id: "",
-            SupplierName: "",
+    const fileds = {
+        id: "",
+        SupplierName: "",
 
-        }
-        return initialFiledFunc(fileds)
-    }, []);
+    }
 
-    const [state, setState] = useState(initialFiled)
+    const [state, setState] = useState(() => initialFiledFunc(fileds))
 
     const values = { ...state.values }
     const { isError } = state;
@@ -377,7 +374,7 @@ const PartyItems = (props) => {
                         />
 
                         <Card className="text-black">
-                            <CardHeader className="card-header   text-black" style={{ backgroundColor: "#dddddd" }} >
+                            <CardHeader className="card-header   text-black c_card_header" >
                                 <h4 className="card-title text-black">{userAccState.PageDescription}</h4>
                                 <p className="card-title-desc text-black">{userAccState.PageDescriptionDetails}</p>
                             </CardHeader>
@@ -387,7 +384,7 @@ const PartyItems = (props) => {
                                 <Row className="">
                                     <Col md={12}>
                                         <Card>
-                                            <CardBody style={{ backgroundColor: "whitesmoke" }}>
+                                            <CardBody className="c_card_body">
                                                 <Row>
                                                     <Row>
                                                         <Col md="3">

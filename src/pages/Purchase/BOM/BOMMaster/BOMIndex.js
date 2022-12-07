@@ -298,17 +298,17 @@ const BOMMaster = (props) => {
                         <Breadcrumb pageHeading={userPageAccessState.PageHeading} />
 
                         <Card className="text-black">
-                            <CardHeader className="card-header   text-black" style={{ backgroundColor: "#dddddd" }} >
+                            <CardHeader className="card-header  text-black c_card_header"  >
                                 <h4 className="card-title text-black">{userPageAccessState.PageDescription}</h4>
                                 <p className="card-title-desc text-black">{userPageAccessState.PageDescriptionDetails}</p>
                             </CardHeader>
 
-                            <CardBody className=" vh-10 0 text-black" style={{ backgroundColor: "#whitesmoke" }} >
+                            <CardBody className=" vh-10 0 text-black">
 
                                 <form onSubmit={formSubmitHandler} ref={formRef} noValidate>
 
                                     <Card>
-                                        <CardBody style={{ backgroundColor: "whitesmoke" }}>
+                                        <CardBody className="c_card_body">
                                             <Row>
                                                 <FormGroup className="mb-2 col col-sm-4 ">
                                                     <Label >{fieldLabel.BomDate} </Label>

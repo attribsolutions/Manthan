@@ -1,5 +1,5 @@
 
-import React, { useEffect, useMemo, useRef, useState, } from "react";
+import React, { useEffect, useRef, useState, } from "react";
 import Breadcrumb from "../../../components/Common/Breadcrumb3";
 import {
     Card,
@@ -69,19 +69,15 @@ const SubGroupMaster = (props) => {
         }));
 
     {/** Dyanamic Page access state and OnChange function */ }
-    const initialFiled = useMemo(() => {
 
-        const fileds = {
-            id: "",
-            Name: "",
-            Group:"",
-            GroupName: ""
-        }
-        return initialFiledFunc(fileds)
-    }, []);
-    
-    const [state, setState] = useState(initialFiled)
-        
+    const fileds = {
+        id: "",
+        Name: "",
+        Group: "",
+        GroupName: ""
+    }
+
+    const [state, setState] = useState(() => initialFiledFunc(fileds))
 
 
     const values = { ...state.values }
@@ -141,7 +137,7 @@ const SubGroupMaster = (props) => {
 
                 values.Name = Name;
                 values.id = id
-                values.Group=  Group
+                values.Group = Group
                 values.GroupName = { label: GroupName, value: Group };
 
                 hasValid.id.valid = true;
@@ -177,7 +173,7 @@ const SubGroupMaster = (props) => {
                     Type: 1,
                     Status: true,
                     Message: postMsg.Message,
-                    RedirectPath:SUBGROUP_LIST,
+                    RedirectPath: SUBGROUP_LIST,
                 }))
             }
         }
@@ -235,9 +231,9 @@ const SubGroupMaster = (props) => {
         if (formValid(state, setState)) {
             debugger
             const jsonBody = JSON.stringify({
-                id:values.id,
+                id: values.id,
                 Name: values.Name,
-                Group:  values.GroupName.value,
+                Group: values.GroupName.value,
                 CreatedBy: 1,
                 CreatedOn: "2022-11-19T00:00:00",
                 UpdatedBy: 1,
@@ -246,7 +242,7 @@ const SubGroupMaster = (props) => {
 
             if (pageMode === "edit") {
 
-                dispatch(updateSubGroupID(jsonBody,values.id));
+                dispatch(updateSubGroupID(jsonBody, values.id));
 
 
             }
@@ -275,17 +271,17 @@ const SubGroupMaster = (props) => {
                         <Breadcrumb pageHeading={userPageAccessState.PageHeading} />
 
                         <Card className="text-black">
-                            <CardHeader className="card-header   text-black" style={{ backgroundColor: "#dddddd" }} >
+                            <CardHeader className="card-header   text-black c_card_header" >
                                 <h4 className="card-title text-black">{userPageAccessState.PageDescription}</h4>
                                 <p className="card-title-desc text-black">{userPageAccessState.PageDescriptionDetails}</p>
                             </CardHeader>
 
-                            <CardBody className=" vh-10 0 text-black" style={{ backgroundColor: "#whitesmoke" }} >
+                            <CardBody className=" vh-10 0 text-black" >
                                 <form onSubmit={formSubmitHandler} ref={formRef} noValidate>
                                     <Row className="">
                                         <Col md={12} style={{ height: "9cm" }}>
                                             <Card>
-                                                <CardBody style={{ backgroundColor: "whitesmoke" }}>
+                                                <CardBody className="c_card_body">
                                                     <Row>
 
                                                         <Col sm="4">
@@ -523,7 +519,7 @@ export default SubGroupMaster
 //                                                     <FormGroup>
 //                                                         <Row>
 //                                                             <Col sm={2}>
-//                                                                 {/* <SaveButton  
+//                                                                 {/* <SaveButton
 //                                                                 pageMode={pageMode} userAcc={userPageAccessState}
 //                                                                 module={""}/> */}
 //                                                             </Col>

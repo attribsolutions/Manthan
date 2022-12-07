@@ -41,7 +41,7 @@ const CustomAlert = () => {
       dispatch(AfterResponseAction());
     };
     if (afterResponseIsfunc) {
-      afterResponseIsfunc(true)
+      afterResponseIsfunc()
     }
 
     if (RedirectPath) {

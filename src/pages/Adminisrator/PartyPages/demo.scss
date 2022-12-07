@@ -79,12 +79,33 @@ height: 0.8cm !important;
   // margin-top: -2cm;
   // position: -webkit-sticky;
   
-
-   
-   
-
-  
 }
+
+.c_card_body{
+  // rgb(225 225 237)
+  background-color:rgb(237, 237, 242) !important ;
+  // background-color:whitesmoke;
+  border-radius: 5px;
+}
+
+.c_card_header{
+  background-color:rgb(214, 214, 227) !important;
+  border-radius: 5px;
+}
+
+
+.c_card_filter{ 
+
+  background-color:rgb(214, 214, 227) !important;
+  
+  border-radius: 5px;
+}
+ 
+
+
+   
+   
+
 
 
 

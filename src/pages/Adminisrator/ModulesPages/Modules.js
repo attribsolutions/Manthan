@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useMemo } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
     Card,
     CardBody,
@@ -55,7 +55,6 @@ const Modules = (props) => {
     }, []);
 
     {/** Dyanamic Page access state and OnChange function */ }
-    const initialFiled = useMemo(() => {
 
         const fileds = {
             id: "",
@@ -64,11 +63,8 @@ const Modules = (props) => {
             Icon: "",
             isActive: false,
         }
-        return initialFiledFunc(fileds)
-    }, []);
-
-    const [state, setState] = useState(initialFiled)
-
+   
+    const [state, setState] = useState(() => initialFiledFunc(fileds))
 
     const values = { ...state.values }
     const { isError } = state;
@@ -235,7 +231,7 @@ const Modules = (props) => {
                     <Container fluid  >
 
                         <Card className="text-black" >
-                            <CardHeader className="card-header   text-black" style={{ backgroundColor: "#dddddd" }} >
+                            <CardHeader className="card-header   text-black c_card_header" >
                                 <h4 className="card-title text-black">{userPageAccessState.PageDescription}</h4>
                                 <p className="card-title-desc text-black">{userPageAccessState.PageDescriptionDetails}</p>
                             </CardHeader>
@@ -245,7 +241,7 @@ const Modules = (props) => {
                                     <Row className="">
                                         <Col md={12}  >
                                             <Card >
-                                                <CardBody style={{ backgroundColor: "whitesmoke" }}>
+                                                <CardBody className="c_card_body">
                                                     <Row>
                                                         <FormGroup className="mb-2 col col-sm-4 " >
                                                             <Label htmlFor="validationCustom01">{fieldLabel.Name} </Label>

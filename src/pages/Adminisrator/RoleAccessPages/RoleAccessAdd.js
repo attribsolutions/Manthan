@@ -562,7 +562,7 @@ const RoleAccessAdd = (props) => {
 
                     <Container fluid>
                         <Card className="text-black">
-                            <CardHeader className="card-header   text-dark" style={{ backgroundColor: "#dddddd" }} >
+                            <CardHeader className="card-header   text-dark c_card_header"  >
                                 <h4 className="card-title text-black">{userPageAccessState.PageDescription}</h4>
                                 <p className="card-title-desc text-black">{userPageAccessState.PageDescriptionDetails}</p>
                             </CardHeader>
@@ -573,7 +573,7 @@ const RoleAccessAdd = (props) => {
                                     {
                                         !showTableOnUI ?
                                             <>
-                                                <CardHeader className="card-header   text-black " style={{ backgroundColor: "#dddddd" }} >
+                                                <CardHeader className="card-header   text-black " style={{ backgroundColor: "rgb(237, 237, 242)" }} >
                                                     <Row className="mt-3">
                                                         <Col md="4">
 

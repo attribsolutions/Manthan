@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState, } from "react";
+import React, { useEffect,  useRef, useState, } from "react";
 import Breadcrumb from "../../../components/Common/Breadcrumb3";
 import {
     Card,
@@ -67,18 +67,15 @@ const GroupMaster = (props) => {
             pageField: state.CommonPageFieldReducer.pageField
         }));
 
-    const initialFiled = useMemo(() => {
+    {/** Dyanamic Page access state and OnChange function */ }
 
-        const fileds = {
-            id: "",
-            Name: "",
-            GroupTypeName: ""
-        }
-        return initialFiledFunc(fileds)
-    }, []);
+    const fileds = {
+        id: "",
+        Name: "",
+        GroupTypeName: ""
+    }
 
-    const [state, setState] = useState(initialFiled)
-
+    const [state, setState] = useState(() => initialFiledFunc(fileds))
 
     const values = { ...state.values }
     const { isError } = state;
@@ -232,7 +229,7 @@ const GroupMaster = (props) => {
                 GroupType: values.GroupTypeName.value,
                 CreatedBy: createdBy(),
                 CreatedOn: "0002-10-03T12:48:14.910491",
-                UpdatedBy:createdBy(),
+                UpdatedBy: createdBy(),
                 UpdatedOn: "0002-10-03T12:48:14.910491"
             });
 
@@ -267,17 +264,17 @@ const GroupMaster = (props) => {
                         <Breadcrumb pageHeading={userPageAccessState.PageHeading} />
 
                         <Card className="text-black">
-                            <CardHeader className="card-header   text-black" style={{ backgroundColor: "#dddddd" }} >
+                            <CardHeader className="card-header   text-black c_card_header" >
                                 <h4 className="card-title text-black">{userPageAccessState.PageDescription}</h4>
                                 <p className="card-title-desc text-black">{userPageAccessState.PageDescriptionDetails}</p>
                             </CardHeader>
 
-                            <CardBody className=" vh-10 0 text-black" style={{ backgroundColor: "#whitesmoke" }} >
+                            <CardBody className=" vh-10 0 text-black " >
                                 <form onSubmit={formSubmitHandler} ref={formRef} noValidate>
                                     <Row className="">
                                         <Col md={12} style={{ height: "9cm" }}>
                                             <Card>
-                                                <CardBody style={{ backgroundColor: "whitesmoke" }}>
+                                                <CardBody className="c_card_body">
                                                     <Row>
 
                                                         <Col sm="4">

@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Breadcrumb from "../../../components/Common/Breadcrumb3";
 import { Card, CardBody, Col, Container, Row, Label, CardHeader, FormGroup, Input, } from "reactstrap";
 import { AvInput } from "availity-reactstrap-validation";
@@ -38,24 +38,21 @@ const RoleMaster = (props) => {
   const [modalCss, setModalCss] = useState(false);
   const [userPageAccessState, setUserPageAccessState] = useState(123);
 
-   {/** Dyanamic Page access state and OnChange function */ }
-   const initialFiled = useMemo(() => {
+  {/** Dyanamic Page access state and OnChange function */ }
 
-    const fileds = {
-      id: "",
-      Name: "",
-      Description: "",
-      Dashboard: "",
-      RoleEmployeeTypes: "",
-      isActive:false,
-      isSCMRole:false,
-      IsPartyConnection:false
-    }
-    return initialFiledFunc(fileds)
-}, []);
+  const fileds = {
+    id: "",
+    Name: "",
+    Description: "",
+    Dashboard: "",
+    RoleEmployeeTypes: "",
+    isActive: false,
+    isSCMRole: false,
+    IsPartyConnection: false
+  }
 
-const [state, setState] = useState(initialFiled)
-    
+  const [state, setState] = useState(() => initialFiledFunc(fileds))
+
 
   //Access redux store Data /  'save_ModuleSuccess' action data
   const {
@@ -236,9 +233,9 @@ const [state, setState] = useState(initialFiled)
         //     EmployeeType: 1
         //   }
         // ],
-        CreatedBy:createdBy(),
+        CreatedBy: createdBy(),
         CreatedOn: "2022-05-20T11:22:55.711483Z",
-        UpdatedBy:createdBy(),
+        UpdatedBy: createdBy(),
         UpdatedOn: "2022-05-20T11:22:55.711483Z"
       });
 
@@ -269,7 +266,7 @@ const [state, setState] = useState(initialFiled)
             <Breadcrumb pageHeading={userPageAccessState.PageHeading} />
 
             <Card className="text-black">
-              <CardHeader className="card-header   text-black" style={{ backgroundColor: "#dddddd" }} >
+              <CardHeader className="card-header   text-black c_card_header" >
                 <h4 className="card-title text-black">{userPageAccessState.PageDescription}</h4>
                 <p className="card-title-desc text-black">{userPageAccessState.PageDescriptionDetails}</p>
               </CardHeader>
@@ -281,7 +278,7 @@ const [state, setState] = useState(initialFiled)
                   <Row className="">
                     <Col md={12}>
                       <Card>
-                        <CardBody style={{ backgroundColor: "whitesmoke" }}>
+                        <CardBody className="c_card_body">
                           <Row>
                             <FormGroup className="mb-2 col col-sm-4 " >
                               <Label>{fieldLabel.Name} </Label>
@@ -375,11 +372,11 @@ const [state, setState] = useState(initialFiled)
                                         name="isSCMRole"
                                         onChange={(e) => {
                                           setState((i) => {
-                                              const a = { ...i }
-                                              a.values.isSCMRole = e.target.checked;
-                                              return a
+                                            const a = { ...i }
+                                            a.values.isSCMRole = e.target.checked;
+                                            return a
                                           })
-                                      }}
+                                        }}
                                       />
                                     </div>
                                   </Col>
@@ -397,11 +394,11 @@ const [state, setState] = useState(initialFiled)
                                         name="isActive"
                                         onChange={(e) => {
                                           setState((i) => {
-                                              const a = { ...i }
-                                              a.values.isActive = e.target.checked;
-                                              return a
+                                            const a = { ...i }
+                                            a.values.isActive = e.target.checked;
+                                            return a
                                           })
-                                      }}
+                                        }}
                                       />
                                     </div>
                                   </Col>
@@ -410,8 +407,8 @@ const [state, setState] = useState(initialFiled)
 
                               <FormGroup className="mb-2 col col-sm-5">
                                 <Row className="justify-content-md-left">
-                                  <Label className="col-sm-4 col-form-label" >{fieldLabel.IsPartyConnection}</Label>
-                                  <Col md={2} style={{ marginTop: '9px' }} >
+                                  <Label className="col-sm-5 col-form-label" >{fieldLabel.IsPartyConnection}</Label>
+                                  <Col md={1} style={{ marginTop: '9px' }} >
 
                                     <div className="form-check form-switch form-switch-md mb-3" dir="ltr">
                                       <Input type="checkbox" className="form-check-input" id="customSwitchsizemd"
@@ -419,11 +416,11 @@ const [state, setState] = useState(initialFiled)
                                         name="IsPartyConnection"
                                         onChange={(e) => {
                                           setState((i) => {
-                                              const a = { ...i }
-                                              a.values.IsPartyConnection = e.target.checked;
-                                              return a
+                                            const a = { ...i }
+                                            a.values.IsPartyConnection = e.target.checked;
+                                            return a
                                           })
-                                      }}
+                                        }}
                                       />
                                     </div>
                                   </Col>

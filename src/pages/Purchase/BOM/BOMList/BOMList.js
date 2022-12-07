@@ -106,13 +106,13 @@ debugger
                     excelBtnView={true}
                     excelData={downList} />
 
-                <div className="px-2 mb-1 mt-n1" style={{ backgroundColor: "#dddddd" }} >
+                <div className="px-2 mb-1 mt-n1 c_card_header"  >
                     <div className=" mt-1 row">
-                        <Col md="4" className="">
+                        <Col sm="4" className="">
                             <FormGroup className="mb- row mt-3 " >
                                 <Label className="col-sm-5 p-2"
-                                    style={{ width: "100px" }}>From Date</Label>
-                                <Col md="7">
+                                    style={{ width: "83px" }}>From Date</Label>
+                                <Col sm="7">
                                     <Flatpickr
                                         name='fromdate'
                                         className="form-control d-block p-2 bg-white text-dark"
@@ -130,11 +130,11 @@ debugger
                                 </Col>
                             </FormGroup>
                         </Col>
-                        <Col md="4" className="">
+                        <Col sm="4" className="">
                             <FormGroup className="mb- row mt-3 " >
                                 <Label className="col-sm-5 p-2"
-                                    style={{ width: "100px" }}>To Date</Label>
-                                <Col md="7">
+                                    style={{ width: "65px" }}>To Date</Label>
+                                <Col sm="7 ">
                                     <Flatpickr
                                         name="todate"
                                         className="form-control d-block p-2 bg-white text-dark"
@@ -153,8 +153,8 @@ debugger
                             </FormGroup>
                         </Col>
 
-                        <Col md="1" className="mt-3 ">
-                            <Button type="button" color="btn btn-outline-success border-2 font-size-12 "
+                        <Col sm="1" style={{marginLeft:"6cm"}}>
+                            <Button  type="button" color="btn btn-outline-success border-2 font-size-12 m-3  "
                                 onClick={() => goButtonHandler()}
                             >Go</Button>
                         </Col>

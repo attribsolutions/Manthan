@@ -15,7 +15,7 @@ import { useHistory } from "react-router-dom";
 import { AlertState, BreadcrumbFilterSize } from "../../../store/actions";
 import { listPageCommonButtonFunction }
     from "./listPageCommonButtons";
-import { mySearchProps } from "./MySearch";
+import { defaultSearch, mySearchProps } from "./MySearch";
 import { getModify } from "../../../helpers/api_helper";
 import { GST_ADD_Mode_2 } from "../../../routes/route_url";
 
@@ -322,7 +322,7 @@ const PurchaseListPage = (props) => {
                                 keyField="id"
                                 data={tableList}
                                 columns={columns}
-                                search
+                                search={defaultSearch(pageField.id)}
                             >
                                 {(toolkitProps, a) => (
                                     <React.Fragment>
@@ -344,7 +344,7 @@ const PurchaseListPage = (props) => {
                                             </Col>
 
                                             {countlabelFunc(toolkitProps, paginationProps, dispatch, ButtonMsgLable)}
-                                            {mySearchProps(toolkitProps.searchProps)}
+                                            {mySearchProps(toolkitProps.searchProps, pageField.id)}
                                         </Row>
                                         <Row className="align-items-md-center mt-30">
                                             <Col className="pagination pagination-rounded justify-content-end mb-2">

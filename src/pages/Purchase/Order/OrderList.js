@@ -157,7 +157,6 @@ const OrderList = () => {
             alert(e)
             return
         }
-
         const jsonBody = JSON.stringify({
             FromDate: FromDate,
             ToDate: ToDate,
@@ -165,6 +164,7 @@ const OrderList = () => {
             Customer: customer
         }
         );
+        console.log(jsonBody)
         dispatch(getOrderListPage(jsonBody));
     }
 
@@ -176,15 +176,15 @@ const OrderList = () => {
                     newBtnView={(pageMode === ORDER_lIST) ? true : false}
                     showCount={true}
                     excelBtnView={true}
-                    excelData={downList} />
+                    excelData={downList}/>
 
-                <div className="px-2 mb-1 mt-n1" style={{ backgroundColor: "#dddddd" }} >
+                <div className="px-2 mb-1 mt-n1 c_card_filter"  >
                     <div className=" mt-1 row">
-                        <Col md="3" className="">
+                        <Col sm="3" className="">
                             <FormGroup className="mb- row mt-3 " >
                                 <Label className="col-sm-5 p-2"
-                                    style={{ width: "100px" }}>From Date</Label>
-                                <Col md="7">
+                                    style={{ width: "83px" }}>From Date</Label>
+                                <Col sm="7">
                                     <Flatpickr
                                         name='fromdate'
                                         className="form-control d-block p-2 bg-white text-dark"
@@ -202,11 +202,11 @@ const OrderList = () => {
                                 </Col>
                             </FormGroup>
                         </Col>
-                        <Col md="3" className="">
+                        <Col sm="3" className="">
                             <FormGroup className="mb- row mt-3 " >
                                 <Label className="col-sm-5 p-2"
-                                    style={{ width: "100px" }}>To Date</Label>
-                                <Col md="7">
+                                    style={{ width: "65px" }}>To Date</Label>
+                                <Col sm="8">
                                     <Flatpickr
                                         name="todate"
                                         className="form-control d-block p-2 bg-white text-dark"
@@ -225,11 +225,11 @@ const OrderList = () => {
                             </FormGroup>
                         </Col>
 
-                        <Col md="3">
+                        <Col sm="5">
                             <FormGroup className="mb-2 row mt-3 " >
                                 <Label className="col-md-4 p-2"
-                                    style={{ width: "130px" }}>Supplier Name</Label>
-                                <Col md="7">
+                                    style={{ width:"115px"}}>Supplier Name</Label>
+                                <Col sm="8">
                                     <Select
                                         classNamePrefix="select2-Customer"
                                         options={supplierOptions}
@@ -239,8 +239,8 @@ const OrderList = () => {
                             </FormGroup>
                         </Col >
 
-                        <Col md="1" className="mt-3 ">
-                            <Button type="button" color="btn btn-outline-success border-2 font-size-12 "
+                        <Col sm="1" className="mt-3 ">
+                            <Button type="button" color="btn btn-outline-success border-2 font-size-12 mb-2 "
                                 onClick={() => goButtonHandler()}
                             >Go</Button>
                         </Col>
@@ -255,7 +255,7 @@ const OrderList = () => {
                             MasterModal={Order}
                             masterPath={ORDER}
                             ButtonMsgLable={"Order"}
-                            deleteName={"Name"}
+                            deleteName={"OrderDate"}
                             pageMode={pageMode}
                             onsavefunc={onsavefunc}
                             goButnFunc={goButtonHandler}

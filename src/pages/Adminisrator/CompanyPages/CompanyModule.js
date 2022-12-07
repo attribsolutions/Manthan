@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useMemo } from "react";
+import React, { useState, useEffect, useRef,} from "react";
 import {
   Card,
   CardBody,
@@ -62,23 +62,19 @@ const CompanyModule = (props) => {
   }));
 
   {/** Dyanamic Page access state and OnChange function */ }
-  const initialFiled = useMemo(() => {
 
-    const fileds = {
-      id: "",
-      Name: "",
-      Address: "",
-      GSTIN: "",
-      PhoneNo: "",
-      CompanyAbbreviation: "",
-      EmailID: "",
-      CompanyGroupName: ""
-    }
-    return initialFiledFunc(fileds)
-  }, []);
+  const fileds = {
+    id: "",
+    Name: "",
+    Address: "",
+    GSTIN: "",
+    PhoneNo: "",
+    CompanyAbbreviation: "",
+    EmailID: "",
+    CompanyGroupName: ""
+  }
 
-  const [state, setState] = useState(initialFiled)
-
+  const [state, setState] = useState(() => initialFiledFunc(fileds))
 
   const values = { ...state.values }
   const { isError } = state;
@@ -237,7 +233,7 @@ const CompanyModule = (props) => {
         EmailID: values.EmailID,
         CompanyGroup: values.CompanyGroupName.value,
         CreatedBy: createdBy(),
-        UpdatedBy:  createdBy(),
+        UpdatedBy: createdBy(),
       });
 
       if (pageMode === "edit") {
@@ -293,7 +289,7 @@ const CompanyModule = (props) => {
             <Row>
               <Col lg={12}>
                 <Card className="text-black" >
-                  <CardHeader className="card-header   text-black" style={{ backgroundColor: "#dddddd" }} >
+                  <CardHeader className="card-header   text-black c_card_header" >
                     <h4 className="card-title text-black">{userPageAccessState.PageDescription}</h4>
                     <p className="card-title-desc text-black">{userPageAccessState.PageDescriptionDetails}</p>
                   </CardHeader>
@@ -301,7 +297,7 @@ const CompanyModule = (props) => {
                   <CardBody>
                     <form onSubmit={formSubmitHandler} ref={formRef} noValidate>
                       <Card >
-                        <CardBody style={{ backgroundColor: "whitesmoke" }}>
+                        <CardBody className="c_card_body">
                           <Row>
 
                             <FormGroup className="mb-2 col col-sm-4 ">
@@ -387,7 +383,7 @@ const CompanyModule = (props) => {
                       </Card>
 
                       <Card className="mt-n2">
-                        <CardBody style={{ backgroundColor: "whitesmoke" }}>
+                        <CardBody className="c_card_body">
 
                           <Row>
                             <FormGroup className="mb-2 col col-sm-4 ">

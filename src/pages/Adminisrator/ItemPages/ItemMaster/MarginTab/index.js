@@ -100,7 +100,7 @@ function Margin_Tab(props) {
         <Row>
             <Col md={12}  >
                 <Card className="text-black">
-                    <CardBody style={{ backgroundColor: "whitesmoke" }}>
+                    <CardBody className='c_card_body'>
                         <Row className="mt-3">
                             <Col className=" col col-11 ">
                                 <Row>

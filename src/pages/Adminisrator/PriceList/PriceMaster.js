@@ -448,7 +448,7 @@ const PriceMaster = (props) => {
                 <Breadcrumb pageHeading={userPageAccessState.PageHeading} />
                 <Container fluid>
                     <Card className="text-black">
-                        <CardHeader className="card-header   text-black" style={{ backgroundColor: "#dddddd" }} >
+                        <CardHeader className="card-header   text-black c_card_header" >
                             <h4 className="card-title text-black">{userPageAccessState.PageDescription}</h4>
                             <p className="card-title-desc text-black">{userPageAccessState.PageDescriptionDetails}</p>
                         </CardHeader>
@@ -470,7 +470,7 @@ const PriceMaster = (props) => {
                                     <Card style={{ backgroundColor: "whitesmoke" }}>
 
 
-                                        <CardHeader className="card-header   text-black " style={{ backgroundColor: "#e9e9ef" }} >
+                                        <CardHeader className="card-header   text-black  " style={{ backgroundColor: "#e9e9ef" }} >
                                             <Row className="mt-3">
                                                 <Col md="4">
 

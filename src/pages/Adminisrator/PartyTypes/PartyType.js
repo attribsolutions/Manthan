@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { useEffect,  useRef, useState } from "react";
 import {
     Card,
     CardBody,
@@ -14,7 +14,7 @@ import {
 import { MetaTags } from "react-meta-tags";
 import Breadcrumb from "../../../components/Common/Breadcrumb3";
 import { useDispatch, useSelector } from "react-redux";
-import {useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import { Breadcrumb_inputName, AlertState, commonPageField } from "../../../store/actions";
 import {
     editPartyTypeSuccess,
@@ -44,7 +44,7 @@ const PartyType = (props) => {
 
     //Access redux store Data /  'save_ModuleSuccess' action data
 
-    const { PostAPIResponse,  pageField, userAccess } =
+    const { PostAPIResponse, pageField, userAccess } =
         useSelector((state) => ({
             PostAPIResponse: state.PartyTypeReducer.PostData,
             pageField: state.CommonPageFieldReducer.pageField,
@@ -56,18 +56,15 @@ const PartyType = (props) => {
     }, []);
 
     {/** Dyanamic Page access state and OnChange function */ }
-    const initialFiled = useMemo(() => {
 
-        const fileds = {
-            id: "",
-            Name: "",
-            IsSCM: false,
-            IsDivision: false,
-        }
-        return initialFiledFunc(fileds)
-    }, []);
+    const fileds = {
+        id: "",
+        Name: "",
+        IsSCM: false,
+        IsDivision: false,
+    }
 
-    const [state, setState] = useState(initialFiled)
+    const [state, setState] = useState(() => initialFiledFunc(fileds))
 
     const values = { ...state.values }
     const { isError } = state;
@@ -218,7 +215,7 @@ const PartyType = (props) => {
                     <Breadcrumb pageHeading={userPageAccessState.PageHeading} />
                     <Container fluid>
                         <Card className="text-black">
-                            <CardHeader className="card-header   text-black" style={{ backgroundColor: "#dddddd" }} >
+                            <CardHeader className="card-header   text-black c_card_header"  >
                                 <h4 className="card-title text-black">{userPageAccessState.PageDescription}</h4>
                                 <p className="card-title-desc text-black">{userPageAccessState.PageDescriptionDetails}</p>
                             </CardHeader>
@@ -228,7 +225,7 @@ const PartyType = (props) => {
                                     <Row className="">
                                         <Col md={12}>
                                             <Card>
-                                                <CardBody style={{ backgroundColor: "whitesmoke" }}>
+                                                <CardBody className="c_card_body">
                                                     <Row>
                                                         <FormGroup className="mb-2 col col-sm-4 ">
                                                             <Label htmlFor="validationCustom01">{fieldLabel.Name} </Label>
