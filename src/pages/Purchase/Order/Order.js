@@ -48,6 +48,51 @@ let editVal = {}
 
 const Order = (props) => {
 
+
+
+    // debugger
+
+    // const current1 = new Date('2022-12-02T12:44:33.154233');
+
+
+    // const month1 = current1.getMonth() + 1;
+    // const currentDate1 = `${current1.getFullYear()}-${month1 < 10 ? `0${month1}` :
+    //     `${month1}`}-${current1.getDate() < 10 ? `0${current1.getDate()}` : `${current1.getDate()}`}`;
+
+    // const currentDate2 = `(${current1.getDate() < 10 ? `0${current1.getDate()}` :
+    //     `${current1.getDate()}`}/${month1 < 10 ? `0${month1}` :
+    //         `${month1}`})`;
+
+    console.log("time stamp", formatTime('2022-12-02T12:44:33.154233'))
+
+
+    function formatTime(inputDate) {
+        const date = new Date(inputDate);
+        let month1 = date.getMonth() + 1;
+
+        let convDate1 = `${date.getFullYear()}-${month1 < 10 ? `0${month1}` :
+            `${month1}`}-${date.getDate() < 10 ? `0${date.getDate()}` : `${date.getDate()}`}`;
+
+        let convDate2 = `${date.getDate() < 10 ? `0${date.getDate()}` :
+            `${date.getDate()}`}/${month1 < 10 ? `0${month1}` :
+                `${month1}`}`;
+
+        let hours = date.getHours() < 10 ? "0" + date.getHours() : date.getHours();
+        let minutes = date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes();
+        let timeString = hours + ":" + minutes;
+
+        let [hourString, minute] = timeString.split(":");
+        let hour = +hourString % 24;
+        let time = (hour % 12 || 12) + ":" + minute + (hour < 12 ? "AM" : "PM");
+
+        return (`${convDate1} (${convDate2}-${time})`)
+    }
+
+
+
+
+
+
     const dispatch = useDispatch();
     const history = useHistory();
 
@@ -534,7 +579,10 @@ const Order = (props) => {
                 <MetaTags>
                     <title>{userAccState.PageHeading}| FoodERP-React FrontEnd</title>
                 </MetaTags>
+
+
                 <div className="page-content" style={{ marginTop: "-0.4cm" }}>
+
                     <Breadcrumb
                         pageHeading={userAccState.PageHeading}
                         showCount={true}
@@ -547,6 +595,7 @@ const Order = (props) => {
                                         style={{ width: "115px" }}>Order Date</Label>
                                     <Col sm="6">
                                         <Flatpickr
+                                            style={{ userselect: "all" }}
                                             id="orderdate"
                                             name="orderdate"
                                             value={podate}
@@ -564,12 +613,14 @@ const Order = (props) => {
                                 </FormGroup>
                             </Col>
 
+
                             <Col sm="6">
                                 <FormGroup className="mb-1 row mt-3 " >
                                     <Label className="col-sm-1 p-2"
                                         style={{ width: "115px", marginRight: "0.4cm" }}>Supplier Name</Label>
                                     <Col sm="6">
                                         <Select
+
 
                                             value={supplierSelect}
                                             classNamePrefix="select2-Customer"
@@ -585,6 +636,7 @@ const Order = (props) => {
                                     </Col>
                                 </FormGroup>
                             </Col >
+
 
 
                         </div>
@@ -603,6 +655,7 @@ const Order = (props) => {
                                             placeholder='Enter Order Description'
                                             onChange={e => description = e.target.value}
                                         />
+
                                     </div>
 
                                 </FormGroup>
@@ -638,6 +691,7 @@ const Order = (props) => {
                                 <FormGroup className="mb-2 row  " >
                                     <Label className=" p-2"
                                         style={{ width: "115px" }}>Billing Address</Label>
+
                                     <div className="col col-7">
 
                                         <Select
@@ -654,6 +708,7 @@ const Order = (props) => {
                                             }}
                                             onChange={(e) => { setbillAddr(e) }}
                                         />
+
                                     </div>
                                 </FormGroup>
                             </div >
@@ -661,6 +716,8 @@ const Order = (props) => {
                                 <FormGroup className="mb-2 row " >
                                     <Label className=" p-2"
                                         style={{ width: "130px" }}>Shipping Address</Label>
+
+
                                     <div className="col col-7">
 
                                         <Select
@@ -678,6 +735,7 @@ const Order = (props) => {
                                             options={supplierAddress}
                                             onChange={(e) => { setshippAddr(e) }}
                                         />
+
                                     </div>
                                 </FormGroup>
                             </div >

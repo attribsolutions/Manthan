@@ -90,14 +90,9 @@ import GRNAdd from "../pages/Purchase/GRN/GRNAdd";
 import SubGroupMaster from "../pages/Adminisrator/SubGroupPages/SubGroupMaster";
 import SubGroupList from "../pages/Adminisrator/SubGroupPages/SubGroupList";
 import PartyItemsList from "../pages/Adminisrator/PartyItemPage/PartyItemList";
-import Index from "../pages/Adminisrator/ItemPages/ItemMaster/Image_Tab/Index";
-import demo from "../pages/Adminisrator/GroupPage/demo";
 import BOMMaster from "../pages/Purchase/BOM/BOMMaster/BOMIndex";
 import BOMList from "../pages/Purchase/BOM/BOMList/BOMList";
-
-// import PartyItemsList from "../pages/Adminisrator
-
-
+import WorkOrder from "../pages/Purchase/WorkOrder/WorkOrder";
 
 
 const userRoutes = [
@@ -200,8 +195,8 @@ const userRoutes = [
 
   { path:path.BillOfMaterials, component: BOMMaster },
   { path:path.BillOfMaterialsList, component: BOMList },
-  
 
+  { path:path.WORKORDER, component: WorkOrder },
 
   { path: path.SEARCH_BOX2, component: SearchBoxSecond },
   { path: path.SEARCH_BOX3, component: SerachBox3 },

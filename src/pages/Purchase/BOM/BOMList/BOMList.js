@@ -106,7 +106,7 @@ const BOMList = () => {
                     excelBtnView={true}
                     excelData={downList} />
 
-                <div className="px-2 mb-1 mt-n1" style={{ backgroundColor: "#dddddd" }} >
+                <div className="px-2 mb-1 mt-n1 card_body"  >
                     <div className=" mt-1 row">
                         <Col md="4" className="">
                             <FormGroup className="mb- row mt-3 " >

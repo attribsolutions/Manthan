@@ -204,7 +204,7 @@ export const createdBy = () => {
     let createdBy = 0
     try {
         createdBy = JSON.parse(localStorage.getItem('userId'))
-    } catch (e) { }
+    } catch (e) {alert("Common Created By Error") }
     return createdBy
 }
 
@@ -212,6 +212,6 @@ export const userCompany = () => {
     let userCompany =0
     try {
         userCompany = JSON.parse(localStorage.getItem('Company'))
-    } catch (e) { }
+    } catch (e) { alert("Common userCompany  Error")}
     return userCompany
 }

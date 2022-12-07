@@ -11,15 +11,11 @@ import {
   getOrderListPageSuccess,
 } from "./actions";
 import {
-
   editOrderID_forOrderPage_ApiCall,
   UpdateOrder_ID_ApiCall,
   deleteOrderID_forOrderPage_ApiCall,
   OrderPage_Post_API,
-  OrderPage_GetSupplier_API,
   OrderPage_GoButton_API,
-  OrderPage_get_API,
-  getOrderList_For_Listpage,
   Order_get_API,
 } from "../../../helpers/backend_helper";
 
@@ -29,7 +25,7 @@ import {
   DELETE_ORDER_FOR_ORDER_PAGE,
   GO_BUTTON_FOR_ORDER_PAGE,
   POST_ORDER_FROM_ORDER_PAGE,
-  GET_ORDER_LIST_PAGE,Unit
+  GET_ORDER_LIST_PAGE
 } from "./actionType";
 
 import { SpinnerState } from "../../Utilites/Spinner/actions";
@@ -37,7 +33,7 @@ import { AlertState } from "../../Utilites/CustomAlertRedux/actions";
 
 
 function* goButtonGenFunc({ data, hasEditVal }) {
-  
+
   yield put(SpinnerState(true))
   try {
     const response = yield call(OrderPage_GoButton_API, data);
@@ -84,7 +80,7 @@ function* postOrder_GenFunc({ data }) {
 }
 
 function* editOrderGenFunc({ id, pageMode }) {
-  
+
   yield put(SpinnerState(true))
   try {
     const response = yield call(editOrderID_forOrderPage_ApiCall, id);
@@ -134,12 +130,16 @@ function* UpdateOrder_ID_GenFunc({ data, id }) {
 
 // List Page API
 function* get_OrderList_GenFunc({ filters }) {
-  
+
   yield put(SpinnerState(true))
   try {
     const response = yield call(Order_get_API, filters);
+    const newList = yield response.Data.map((i) => {
+      i.OrderDate = formatTime(i.CreatedOn)
+      return i
+    })
     yield put(SpinnerState(false))
-    yield put(getOrderListPageSuccess(response.Data))
+    yield put(getOrderListPageSuccess(newList))
 
   } catch (error) {
     yield put(SpinnerState(false))
@@ -161,3 +161,28 @@ function* OrderPageSaga() {
 }
 
 export default OrderPageSaga;
+
+
+
+
+function formatTime(inputDate) {
+  const date = new Date(inputDate);
+  let month1 = date.getMonth() + 1;
+
+  let convDate1 = `${date.getFullYear()}-${month1 < 10 ? `0${month1}` :
+    `${month1}`}-${date.getDate() < 10 ? `0${date.getDate()}` : `${date.getDate()}`}`;
+
+  let convDate2 = `${date.getDate() < 10 ? `0${date.getDate()}` :
+    `${date.getDate()}`}/${month1 < 10 ? `0${month1}` :
+      `${month1}`}`;
+
+  let hours = date.getHours() < 10 ? "0" + date.getHours() : date.getHours();
+  let minutes = date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes();
+  let timeString = hours + ":" + minutes;
+
+  let [hourString, minute] = timeString.split(":");
+  let hour = +hourString % 24;
+  let time = (hour % 12 || 12) + ":" + minute + (hour < 12 ? "AM" : "PM");
+
+  return (`${convDate1} (${convDate2}-${time})`)
+}

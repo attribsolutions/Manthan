@@ -10,19 +10,21 @@ export const mySearchProps = (props, pageID) => {
     pageid = pageID
 };
 
-export const defaultSearch = (defaultid) => {
-    debugger
-    const found = priviousSerach.find((i, k) => {
+export const defaultSearch = (defaultid,) => {
+    let retn = { defaultSearch: '' }
+
+    let found = priviousSerach.find((i, k) => {
         return (i.id === defaultid)
     });
-    let aa = { defaultSearch: '' }
+    document.getElementById("myInput").focus()
 
     if (found) {
+        // document.getElementById("myInput").select()
         document.getElementById("myInput").value = found.text
-
-        aa = { defaultSearch: found.text }
+        retn = { defaultSearch: found.text }
     }
-    return aa
+
+    return retn
 }
 
 
@@ -62,6 +64,7 @@ export const MySearch = () => {
                     type="text"
                     onChange={handleClick}
                     name="myCountry"
+                    autoComplete="off"
                 />
                 <button className="btn btn-primary"
                     type="butten">
