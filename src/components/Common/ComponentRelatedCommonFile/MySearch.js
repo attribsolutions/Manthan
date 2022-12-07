@@ -64,6 +64,7 @@ export const MySearch = () => {
                     type="text"
                     onChange={handleClick}
                     name="myCountry"
+                    autoComplete="off"
                 />
                 <button className="btn btn-primary"
                     type="butten">
