@@ -131,12 +131,12 @@ const GRNList = () => {
                     newBtnPagePath={GST_ADD_Mode_2}
                     excelData={downList} />
 
-                <div className="px-2 mb-1 mt-n1" style={{ backgroundColor: "#dddddd" }} >
+                <div className="px-2 mb-1 mt-n1 card_body">
                     <div className=" mt-1 row">
-                        <Col md="3" className="">
+                        <Col sm="3" className="">
                             <FormGroup className="mb- row mt-3 " >
                                 <Label className="col-sm-5 p-2"
-                                    style={{ width: "100px" }}>From Date</Label>
+                                    style={{ width: "83px" }}>From Date</Label>
                                 <Col md="7">
                                     <Flatpickr
                                         name='fromdate'
@@ -158,11 +158,11 @@ const GRNList = () => {
                                 </Col>
                             </FormGroup>
                         </Col>
-                        <Col md="3" className="">
+                        <Col sm="3" className="">
                             <FormGroup className="mb- row mt-3 " >
                                 <Label className="col-sm-5 p-2"
-                                    style={{ width: "100px" }}>To Date</Label>
-                                <Col md="7">
+                                    style={{ width: "65px" }}>To Date</Label>
+                                <Col md="8">
                                     <Flatpickr
                                         nane='todate'
                                         className="form-control d-block p-2 bg-white text-dark"
@@ -184,10 +184,10 @@ const GRNList = () => {
                             </FormGroup>
                         </Col>
 
-                        <Col md="3">
+                        <Col sm="5">
                             <FormGroup className="mb-2 row mt-3 " >
                                 <Label className="col-md-4 p-2"
-                                    style={{ width: "130px" }}>Supplier Name</Label>
+                                    style={{ width: "115px" }}>Supplier Name</Label>
                                 <Col md="7">
                                     <Select
                                         // value={"supplier"}
@@ -200,7 +200,7 @@ const GRNList = () => {
                             </FormGroup>
                         </Col >
 
-                        <Col md="1" className="mt-3 ">
+                        <Col sm="1" className="mt-3 ">
                             <Button type="button" color="btn btn-outline-success border-2 font-size-12 "
                                 onClick={() => goButtonHandler()}
                             >Go</Button>

@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState, } from "react";
+import React, { useEffect, useRef, useState, } from "react";
 import Breadcrumb from "../../../components/Common/Breadcrumb3";
 import {
     Card,
@@ -61,17 +61,15 @@ const CategoryMaster = (props) => {
 
 
     {/** Dyanamic Page access state and OnChange function */ }
-    const initialFiled = useMemo(() => {
-
+  
         const fileds = {
-        id: "",
-        Name: "",
-        CategoryTypeName: ""
+            id: "",
+            Name: "",
+            CategoryTypeName: ""
         }
-        return initialFiledFunc(fileds)
-        }, []);
-        
-        const [state, setState] = useState(initialFiled)
+       
+
+    const [state, setState] = useState(() => initialFiledFunc(fileds))
 
     const values = { ...state.values }
     const { isError } = state;
@@ -277,7 +275,7 @@ const CategoryMaster = (props) => {
                                                             <Col md="4" >
                                                                 <FormGroup className="mb-3">
                                                                     <Label htmlFor="validationCustom01"> {fieldLabel.CategoryTypeName} </Label>
-                                                                    <Col sm={12}  style={{height:"2.5cm"}}>
+                                                                    <Col sm={12} style={{ height: "2.5cm" }}>
                                                                         <Select
                                                                             name="CategoryTypeName"
                                                                             value={values.CategoryTypeName}

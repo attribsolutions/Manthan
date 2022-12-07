@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState, } from "react";
+import React, { useEffect, useRef, useState, } from "react";
 import Breadcrumb from "../../../components/Common/Breadcrumb3";
 import {
     Button,
@@ -47,21 +47,16 @@ const DriverMaster = (props) => {
     const [userPageAccessState, setUserPageAccessState] = useState("");
     const [modalCss, setModalCss] = useState(false);// new change
 
-    const initialFiled = useMemo(() => {
-
-        const fileds = {
-            id: "",
-            Name: "",
-            Address: "",
-            UID: "",
-            DOB: ''
-        }
-        return initialFiledFunc(fileds)
-      }, []);
-    
-      const [state, setState] = useState(initialFiled)
-    
-        
+  {/** Dyanamic Page access state and OnChange function */ }
+  
+    const fileds = {
+        id: "",
+        Name: "",
+        Address: "",
+        UID: "",
+        DOB: ''
+    }
+    const [state, setState] = useState(() => initialFiledFunc(fileds))
 
     //Access redux store Data /  'save_ModuleSuccess' action data
     const {
