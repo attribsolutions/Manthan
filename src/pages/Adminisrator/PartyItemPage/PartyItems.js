@@ -374,7 +374,7 @@ const PartyItems = (props) => {
                         />
 
                         <Card className="text-black">
-                            <CardHeader className="card-header   text-black" style={{ backgroundColor: "#dddddd" }} >
+                            <CardHeader className="card-header   text-black c_card_header" >
                                 <h4 className="card-title text-black">{userAccState.PageDescription}</h4>
                                 <p className="card-title-desc text-black">{userAccState.PageDescriptionDetails}</p>
                             </CardHeader>
@@ -384,7 +384,7 @@ const PartyItems = (props) => {
                                 <Row className="">
                                     <Col md={12}>
                                         <Card>
-                                            <CardBody style={{ backgroundColor: "whitesmoke" }}>
+                                            <CardBody className="c_card_body">
                                                 <Row>
                                                     <Row>
                                                         <Col md="3">

@@ -63,7 +63,7 @@ function GSTTab(props) {
         <Row>
             <Col md={12}  >
                 <Card className="text-black">
-                    <CardBody style={{ backgroundColor: "whitesmoke" }}>
+                    <CardBody className='c_card_body'>
                         <Row>
 
                             <FormGroup className="mb-3 col col-sm-3 ">

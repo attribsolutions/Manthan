@@ -615,7 +615,7 @@ const PageMaster = (props) => {
               <Breadcrumb pageHeading={userPageAccessState.PageHeading} />
               <Col lg={12}>
                 <Card className="text-black" >
-                  <CardHeader className="card-header   text-black" style={{ backgroundColor: "#dddddd" }} >
+                  <CardHeader className="card-header   text-black c_card_header" >
                     <h4 className="card-title text-black">{userPageAccessState.PageDescription}</h4>
                     <p className="card-title-desc text-black">{userPageAccessState.PageDescriptionDetails}</p>
                   </CardHeader>
@@ -1022,7 +1022,7 @@ const PageMaster = (props) => {
                         {pageAccessDropDownView ? (
 
                           <Card className=" mt-n2 " >
-                            <CardBody style={{ backgroundColor: "whitesmoke" }}>
+                            <CardBody style={{ backgroundColor: "whitesmoke"}}>
                               <h5 className="text-black "> Page Access</h5><br></br>
 
                               <Row className="row ">
