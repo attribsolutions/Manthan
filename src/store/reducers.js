@@ -49,6 +49,7 @@ import GSTReducer from "./Administrator/GSTRedux/reducer"
 import PartySubPartyReducer from "./Administrator/PartySubPartyRedux/reducer"
 import PartyItemsReducer from "./Administrator/PartyItemsRedux/reducer"
 import BOMReducer from "./Purchase/BOMRedux/reducer"
+import WorkOrderReducer from "./Purchase/WorkOrder/reducer"
 
 const rootReducer = combineReducers({
 
@@ -108,6 +109,7 @@ const rootReducer = combineReducers({
   GSTReducer,
   PartyItemsReducer,
   BOMReducer,
+  WorkOrderReducer,
 
 
 })
