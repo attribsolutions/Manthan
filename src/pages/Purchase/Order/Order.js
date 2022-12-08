@@ -285,6 +285,7 @@ const Order = (props) => {
                     row["UOM"] = row.UnitDetails[0].UnitID
                     row["UOMLabel"] = row.UnitDetails[0].UnitName
                     row["inpBaseUnitQty"] = row.UnitDetails[0].BaseUnitQuantity
+                    row["poBaseUnitQty"] = row.UnitDetails[0].BaseUnitQuantity
                 }
                 return (
                     <Select
