@@ -702,7 +702,7 @@ const PageMaster = (props) => {
                       className="p-3 text-muted"
                     >
                       <TabPane tabId="1">
-                        <Card className="text-black " style={{ backgroundColor: "whitesmoke" }} >
+                        <Card className="text-black c_card_body" >
                           <CardBody >
                             <Row >
                               <Col md="3">
@@ -789,8 +789,8 @@ const PageMaster = (props) => {
                           </CardBody>
                         </Card>
 
-                        <Card className=" mt-n2 text-black" style={{ backgroundColor: "whitesmoke" }}>
-                          <CardBody >
+                        <Card className=" mt-n2 text-black c_card_body">
+                          <CardBody>
                             <Row >
                               <Col md="3">
 
@@ -1021,7 +1021,7 @@ const PageMaster = (props) => {
 
                         {pageAccessDropDownView ? (
 
-                          <Card className=" mt-n2 " >
+                          <Card className=" mt-n2  " >
                             <CardBody style={{ backgroundColor: "whitesmoke"}}>
                               <h5 className="text-black "> Page Access</h5><br></br>
 
@@ -1068,9 +1068,9 @@ const PageMaster = (props) => {
                             className="custom_scroll_div"
                             data-pattern="priority-columns "
                           >
-                            <Table className="table table-bordered table-responsive">
-                              <Thead >
-                                <tr style={{ zIndex: "23" }}>
+                            <Table className="table table-bordered table-responsive ">
+                              <Thead  >
+                                <tr style={{ zIndex: "23" }} className="">
                                   <th className="">Control ID</th>
                                   <th className="">Field Label</th>
                                   <th className="">Control Type</th>
