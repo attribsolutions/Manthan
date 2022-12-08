@@ -85,14 +85,9 @@ const WorkOrder = (props) => {
 
     const { BOMItems = [], EstimatedOutputQty = '' } = GoButton
 
-    console.log("BOMItems", BOMItems)
-
     useEffect(() => {
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(72))
-        dispatch(getBOMList())
-        dispatch(postGoButtonForWorkOrder_Master())
-        // dispatch(getBaseUnit_ForDropDown());
     }, []);
 
     const location = { ...history.location }
@@ -148,7 +143,7 @@ const WorkOrder = (props) => {
             }));
         }
     }, [postMsg])
- 
+
     useEffect(() => {
         if (pageField) {
             const fieldArr = pageField.PageFieldMaster
@@ -164,9 +159,11 @@ const WorkOrder = (props) => {
     }));
 
     useEffect(() => {
+        debugger
+        let date = currentDate();
         const jsonBody = JSON.stringify({
             FromDate: "2022-12-01",
-            ToDate: currentDate(),
+            ToDate: date,
             Company: userCompany(),
         });
         dispatch(getBOMList(jsonBody));
@@ -214,7 +211,7 @@ const WorkOrder = (props) => {
     const { fieldLabel } = state;
 
     const formSubmitHandler = (event) => {
-      
+
         const WorkOrderItems = BOMItems.map((index) => ({
             Item: index.Item,
             Unit: index.Unit,
@@ -224,7 +221,7 @@ const WorkOrder = (props) => {
 
         event.preventDefault();
         if (formValid(state, setState)) {
-          
+
             const jsonBody = JSON.stringify({
                 WorkOrderDate: values.WorkOrderDate,
                 Item: values.ItemBom.ItemID,
@@ -243,6 +240,10 @@ const WorkOrder = (props) => {
 
         }
     };
+
+    const QuantityHandler = (e, user) => {
+        user["CurrentMRP"] = e.target.value
+    }
 
     const pagesListColumns = [
         {
@@ -267,6 +268,26 @@ const WorkOrder = (props) => {
             text: "Quantity",
             dataField: "Quantity",
             sort: true,
+            formatter: (cellContent, user) => (
+                <>
+                    <div style={{ justifyContent: 'center' }} >
+
+                        <Col>
+                            <FormGroup className=" col col-sm-4 ">
+                                <Input
+                                    id=""
+                                    type="text"
+                                    disabled={true}
+                                    defaultValue={cellContent}
+                                    className="col col-sm text-center"
+                                    onChange={(e) => QuantityHandler(e, user)}
+                                />
+                            </FormGroup>
+                        </Col>
+                    </div>
+                    {console.log("user", cellContent)}
+                </>
+            ),
         },
         {
 
@@ -414,7 +435,6 @@ const WorkOrder = (props) => {
                                                     )}
                                                 </FormGroup>
 
-                                                {/* <Col md="1"></Col> */}
                                                 <Col md="1" className="mt-4 ">
                                                     <Button color="btn btn-outline-success border-2 font-size-12 " style={{ marginTop: '6px' }}
                                                         onClick={(e) => goButtonHandler(e)}
