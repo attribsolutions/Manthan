@@ -206,7 +206,7 @@ const OrderList = () => {
                             <FormGroup className="mb- row mt-3 " >
                                 <Label className="col-sm-5 p-2"
                                     style={{ width: "65px" }}>To Date</Label>
-                                <Col sm="8">
+                                <Col sm="7">
                                     <Flatpickr
                                         name="todate"
                                         className="form-control d-block p-2 bg-white text-dark"
@@ -229,7 +229,7 @@ const OrderList = () => {
                             <FormGroup className="mb-2 row mt-3 " >
                                 <Label className="col-md-4 p-2"
                                     style={{ width:"115px"}}>Supplier Name</Label>
-                                <Col sm="8">
+                                <Col sm="5">
                                     <Select
                                         classNamePrefix="select2-Customer"
                                         options={supplierOptions}

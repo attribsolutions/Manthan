@@ -68,12 +68,7 @@ const RoleAccessReducer = (state = INIT_STATE, action) => {
          PostMessage_ForCopyRoleAccess: action.payload,
     }
 
-    case  LOGOUT_REST: 
-      return{
-           ...state,
-        RoleListDataForRoleListPage:[],
-
-      }
+  
     default:
       return state
   }
