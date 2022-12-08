@@ -1,4 +1,4 @@
-import React, { useEffect,  useRef, useState, } from "react";
+import React, { useEffect, useRef, useState, } from "react";
 import Breadcrumb from "../../../components/Common/Breadcrumb3";
 import {
     Card,
@@ -277,55 +277,58 @@ const GroupMaster = (props) => {
                                                 <CardBody className="c_card_body">
                                                     <Row>
 
-                                                        <Col sm="4">
-                                                            <FormGroup className="mb-3">
-                                                                <Label htmlFor="validationCustom01">{fieldLabel.Name} </Label>
+                                                        
+                                                        <FormGroup className="mb-3">
+                                                            <Label htmlFor="validationCustom01">{fieldLabel.Name}</Label>
 
-                                                                <Col>
-                                                                    <Input
-                                                                        name="Name"
-                                                                        id="txtName"
-                                                                        value={values.Name}
-                                                                        type="text"
-                                                                        className={isError.Name.length > 0 ? "is-invalid form-control" : "form-control"}
-                                                                        placeholder="Please Enter Name"
-                                                                        autoComplete='off'
-                                                                        autoFocus={true}
-                                                                        onChange={(event) => {
-                                                                            onChangeText({ event, state, setState })
-                                                                            dispatch(Breadcrumb_inputName(event.target.value))
-                                                                        }}
+                                                            <Col md={4}  >
+                                                                <Input
+                                                                    name="Name"
+                                                                    id="txtName"
+                                                                    value={values.Name}
+                                                                    type="text"
+                                                                    className={isError.Name.length > 0 ? "is-invalid form-control" : "form-control"}
+                                                                    placeholder="Please Enter Name"
+                                                                    autoComplete='off'
+                                                                    autoFocus={true}
+                                                                    onChange={(event) => {
+                                                                        onChangeText({ event, state, setState })
+                                                                        dispatch(Breadcrumb_inputName(event.target.value))
+                                                                    }}
 
-                                                                    />
-                                                                    {isError.Name.length > 0 && (
-                                                                        <span className="invalid-feedback">{isError.Name}</span>
-                                                                    )}
+                                                                />
+                                                                {isError.Name.length > 0 && (
+                                                                    <span className="invalid-feedback">{isError.Name}</span>
+                                                                )}
 
 
-                                                                </Col>
-                                                            </FormGroup>
-                                                        </Col>
+                                                            </Col>
+                                                        </FormGroup>
 
 
                                                         <Row>
-                                                            <FormGroup className="mb-3 col col-sm-4 ">
+                                                            <FormGroup className="mb-3  " style={{marginLeft:"8px" , paddingLeft:"4px"}}>
 
                                                                 <Label htmlFor="validationCustom01"> {fieldLabel.GroupTypeName} </Label>
+                                                                <Col md={4} >
 
 
-                                                                <Select
-                                                                    name="GroupTypeName"
-                                                                    // defaultValue={EmployeeType_DropdownOptions[0]}
-                                                                    value={values.GroupTypeName}
-                                                                    isSearchable={true}
-                                                                    className="react-dropdown"
-                                                                    options={GroupTypesValues}
-                                                                    onChange={(hasSelect, evn) => onChangeSelect({ hasSelect, evn, state, setState, })}
-                                                                    classNamePrefix="dropdown"
-                                                                />
-                                                                {isError.GroupTypeName.length > 0 && (
-                                                                    <span className="text-danger f-8"><small>{isError.GroupTypeName}</small></span>
-                                                                )}
+
+                                                                    <Select
+                                                                        name="GroupTypeName"
+                                                                        // defaultValue={EmployeeType_DropdownOptions[0]}
+                                                                        value={values.GroupTypeName}
+                                                                        isSearchable={true}
+                                                                        className="react-dropdown"
+                                                                        options={GroupTypesValues}
+                                                                        onChange={(hasSelect, evn) => onChangeSelect({ hasSelect, evn, state, setState, })}
+                                                                        classNamePrefix="dropdown"
+                                                                    />
+                                                                    {isError.GroupTypeName.length > 0 && (
+                                                                        <span className="text-danger f-8"><small>{isError.GroupTypeName}</small></span>
+                                                                    )}
+                                                                </Col>
+
 
 
 
@@ -335,7 +338,7 @@ const GroupMaster = (props) => {
 
                                                         <FormGroup >
                                                             <Row>
-                                                                <Col sm={2}>
+                                                                <Col sm={4}>
                                                                     <SaveButton pageMode={pageMode} userAcc={userPageAccessState}
                                                                         module={"GroupMaster"}
                                                                     />
