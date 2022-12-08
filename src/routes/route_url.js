@@ -94,6 +94,6 @@ export const BillOfMaterials="/BOM"
 export const BillOfMaterialsList="/BOMList"
 
 export const WORKORDER="/WorkOrder"
-export const WorkOrderList="/WorkOrderList"
+export const WORKORDERLIST="/WorkOrderList"
 
 

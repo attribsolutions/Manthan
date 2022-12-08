@@ -184,3 +184,5 @@ export const BOM_LiST = "/BomFilter"
 // export const BOMLIST = '/BomList'
 export const GO_BUTTON_POST_API_FOR_WORKORDER = '/BomDetails'
 export const POST_WORK_ORDER_API = '/WorkOrder'
+export const WORK_ORDER_LIST='/WorkOrderFilter'// ALL GET
+export const WORK_ORDER_LIST_API='/WorkOrder' //Single gate and delete

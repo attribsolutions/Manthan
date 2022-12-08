@@ -93,7 +93,7 @@ import PartyItemsList from "../pages/Adminisrator/PartyItemPage/PartyItemList";
 import BOMMaster from "../pages/Purchase/BOM/BOMMaster/BOMIndex";
 import BOMList from "../pages/Purchase/BOM/BOMList/BOMList";
 import WorkOrder from "../pages/Purchase/WorkOrder/WorkOrder";
-
+import WorkOrderList from "../pages/Purchase/WorkOrder/WorkOrderList";
 
 const userRoutes = [
 
@@ -197,6 +197,7 @@ const userRoutes = [
   { path:path.BillOfMaterialsList, component: BOMList },
 
   { path:path.WORKORDER, component: WorkOrder },
+  { path:path.WORKORDERLIST, component: WorkOrderList },
 
   { path: path.SEARCH_BOX2, component: SearchBoxSecond },
   { path: path.SEARCH_BOX3, component: SerachBox3 },
