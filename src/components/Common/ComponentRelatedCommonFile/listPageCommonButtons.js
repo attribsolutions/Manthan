@@ -227,6 +227,13 @@ export const userCompany = () => {//+++++++++++++++++++++ Seesion Company Id++++
     } catch (e) { alert("Common userCompany  Error") }
     return userCompany
 }
+export const userParty = () => {//+++++++++++++++++++++ Seesion userParty Id+++++++++++++++++++++++++++++++
+    let userParty = 0
+    try {
+        userParty = JSON.parse(localStorage.getItem("roleId")).Party_id
+    } catch (e) { alert("Common userParty Func  Error") }
+    return userParty
+}
 
 export function convertTimefunc(inputDate) { //+++++++++++Convert Time Format+++++++++++++++++++++++++++++++
     const date = new Date(inputDate);

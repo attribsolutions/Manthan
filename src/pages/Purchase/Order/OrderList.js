@@ -21,7 +21,7 @@ import Breadcrumb from "../../../components/Common/Breadcrumb";
 import { useHistory } from "react-router-dom";
 import { getGRN_itemMode2 } from "../../../store/Purchase/GRNRedux/actions";
 import { getSupplier } from "../../../store/CommonAPI/SupplierRedux/actions";
-import { currentDate, excelDownCommonFunc } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { currentDate, excelDownCommonFunc, userParty } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import { useMemo } from "react";
 
 
@@ -31,12 +31,13 @@ const OrderList = () => {
     const history = useHistory();
 
     const hasPagePath = history.location.pathname
+    // const hasShowloction = history.location.hasOwnProperty("renderMode")
 
     const [supplierSelect, setsupplierSelect] = useState({ value: '' });
     const [pageMode, setpageMode] = useState(ORDER_lIST)
     const [userAccState, setUserAccState] = useState('');
-    const [fromdate, setFromdate] = useState();
-    const [todate, setTodate] = useState();
+    const [fromdate, setFromdate] = useState(() => currentDate());
+    const [todate, setTodate] = useState(() => currentDate());
 
     const reducers = useSelector(
         (state) => ({
@@ -47,6 +48,7 @@ const OrderList = () => {
             updateMsg: state.OrderReducer.updateMsg,
             postMsg: state.OrderReducer.postMsg,
             editData: state.OrderReducer.editData,
+            orderlistFilter: state.OrderReducer.orderlistFilter,
             userAccess: state.Login.RoleAccessUpdateData,
             pageField: state.CommonPageFieldReducer.pageFieldList,
         })
@@ -72,7 +74,7 @@ const OrderList = () => {
 
     }, []);
 
-    const { userAccess, pageField, GRNitem, supplier, tableList } = reducers;
+    const { userAccess, pageField, GRNitem, supplier, tableList, orderlistFilter } = reducers;
 
     const supplierOptions = supplier.map((i) => ({
         value: i.id,
@@ -137,34 +139,14 @@ const OrderList = () => {
     }
 
     const goButtonHandler = (onload = false) => {
-        let FromDate
-        let ToDate
 
-        if (onload) {
-            const currentdate = currentDate()
-            FromDate = currentdate;
-            ToDate = currentdate;
-        } else {
-            ToDate = todate;
-            FromDate = fromdate;
-        }
-
-        let supplier = supplierSelect.value
-        let customer = 0
-        try {
-            customer = JSON.parse(localStorage.getItem("roleId")).Party_id
-        } catch (e) {
-            alert(e)
-            return
-        }
         const jsonBody = JSON.stringify({
-            FromDate: FromDate,
-            ToDate: ToDate,
-            Supplier: supplier,
-            Customer: customer
-        }
-        );
-        console.log(jsonBody)
+            FromDate: fromdate,
+            ToDate: todate,
+            Supplier: supplierSelect.value,
+            Customer: userParty(),
+
+        });
         dispatch(getOrderListPage(jsonBody));
     }
 
@@ -176,7 +158,7 @@ const OrderList = () => {
                     newBtnView={(pageMode === ORDER_lIST) ? true : false}
                     showCount={true}
                     excelBtnView={true}
-                    excelData={downList}/>
+                    excelData={downList} />
 
                 <div className="px-2 mb-1 mt-n1 c_card_header"  >
                     <div className=" mt-1 row">
@@ -228,7 +210,7 @@ const OrderList = () => {
                         <Col sm="5">
                             <FormGroup className="mb-2 row mt-3 " >
                                 <Label className="col-md-4 p-2"
-                                    style={{ width:"115px"}}>Supplier Name</Label>
+                                    style={{ width: "115px" }}>Supplier Name</Label>
                                 <Col sm="8">
                                     <Select
                                         classNamePrefix="select2-Customer"
