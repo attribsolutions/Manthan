@@ -424,7 +424,7 @@ const MarginMaster = (props) => {
                                         <Card style={{ backgroundColor: "whitesmoke"  }}>
 
 
-                                            <CardHeader className="card-header   text-black " style={{ backgroundColor: "#e9e9ef", }} >
+                                            <CardHeader className="card-header   text-black c_card_body "  >
                                                 <Row className="mt-3">
                                                     <Col md="3">
                                                         <FormGroup className="mb-3 row">
