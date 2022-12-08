@@ -1,9 +1,7 @@
 import { call, put, takeEvery } from "redux-saga/effects";
 
 import {
-  getOrderListSuccess,
   deleteOrderIdSuccess,
-  getSupplierSuccess,
   goButtonSuccess,
   postOrderSuccess,
   editOrderIdSuccess,
@@ -30,6 +28,7 @@ import {
 
 import { SpinnerState } from "../../Utilites/Spinner/actions";
 import { AlertState } from "../../Utilites/CustomAlertRedux/actions";
+import { convertDatefunc, convertTimefunc } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 
 
 function* goButtonGenFunc({ data, hasEditVal }) {
@@ -135,7 +134,9 @@ function* get_OrderList_GenFunc({ filters }) {
   try {
     const response = yield call(Order_get_API, filters);
     const newList = yield response.Data.map((i) => {
-      i.OrderDate = formatTime(i.CreatedOn)
+      var date = convertDatefunc(i.OrderDate)
+      var time = convertTimefunc(i.CreatedOn)
+      i.OrderDate = (`${date} ${time}`)
       return i
     })
     yield put(SpinnerState(false))
@@ -162,27 +163,3 @@ function* OrderPageSaga() {
 
 export default OrderPageSaga;
 
-
-
-
-function formatTime(inputDate) {
-  const date = new Date(inputDate);
-  let month1 = date.getMonth() + 1;
-
-  let convDate1 = `${date.getFullYear()}-${month1 < 10 ? `0${month1}` :
-    `${month1}`}-${date.getDate() < 10 ? `0${date.getDate()}` : `${date.getDate()}`}`;
-
-  let convDate2 = `${date.getDate() < 10 ? `0${date.getDate()}` :
-    `${date.getDate()}`}/${month1 < 10 ? `0${month1}` :
-      `${month1}`}`;
-
-  let hours = date.getHours() < 10 ? "0" + date.getHours() : date.getHours();
-  let minutes = date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes();
-  let timeString = hours + ":" + minutes;
-
-  let [hourString, minute] = timeString.split(":");
-  let hour = +hourString % 24;
-  let time = (hour % 12 || 12) + ":" + minute + (hour < 12 ? "AM" : "PM");
-
-  return (`${convDate1} (${convDate2}-${time})`)
-}
