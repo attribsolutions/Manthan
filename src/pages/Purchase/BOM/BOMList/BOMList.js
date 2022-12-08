@@ -153,7 +153,7 @@ debugger
                             </FormGroup>
                         </Col>
 
-                        <Col sm="1" style={{marginLeft:"6cm"}}>
+                        <Col sm="1">
                             <Button  type="button" color="btn btn-outline-success border-2 font-size-12 m-3  "
                                 onClick={() => goButtonHandler()}
                             >Go</Button>
