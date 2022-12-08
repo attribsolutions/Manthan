@@ -181,6 +181,6 @@ export const GET_ITEM_UNITS = '/GetItemUnits'
 export const BOM_LiST = "/BomFilter"
 
 // Work Order
-export const BOMLIST = '/BomList'
+// export const BOMLIST = '/BomList'
 export const GO_BUTTON_POST_API_FOR_WORKORDER = '/BomDetails'
 export const POST_WORK_ORDER_API = '/WorkOrder'
