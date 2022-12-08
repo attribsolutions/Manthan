@@ -573,7 +573,7 @@ const RoleAccessAdd = (props) => {
                                     {
                                         !showTableOnUI ?
                                             <>
-                                                <CardHeader className="card-header   text-black " style={{ backgroundColor: "rgb(237, 237, 242)" }} >
+                                                <CardHeader className="card-header   text-black  c_card_body"  >
                                                     <Row className="mt-3">
                                                         <Col md="4">
 
