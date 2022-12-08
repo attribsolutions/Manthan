@@ -17,7 +17,6 @@ export const GstAmount = (i) => {
 
     const base = basicAmount(i);
     const gst = parseFloat(i.GSTPercentage);
-    debugger
     return ((base * gst) / 100)
 }
 

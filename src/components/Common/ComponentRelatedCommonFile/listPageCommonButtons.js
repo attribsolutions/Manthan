@@ -4,16 +4,45 @@ import { AlertState } from "../../../store/actions";
 export const listPageCommonButtonFunction = (props) => {
 
     const dispatch = props.dispatchHook;
-    const userAccState = props.userAccState;
-    const editActionFun = props.editActionFun;
-    const deleteActionFun = props.deleteActionFun;
-    const ButtonMsgLable = props.ButtonMsgLable;
     const userCreated = parseInt(localStorage.getItem("userId"))
-    const deleteName = props.deleteName;
+    const {
+        userAccState,
+        editActionFun,
+        deleteActionFun,
+        ButtonMsgLable,
+        deleteName,
+    } = props;
+
+    const editBtnCss = "badge badge-soft-success font-size-12 btn btn-success waves-effect waves-light w-xxs border border-light"
+    const editSelfBtnCss = "badge badge-soft-primary font-size-12 btn btn-primary waves-effect waves-light w-xxs border border-light"
+    const deltBtnCss = "badge badge-soft-danger font-size-12 btn btn-danger waves-effect waves-light w-xxs border border-light"
+
+
 
     /***
      * deletemsgLable change to=> ButtonMsgLable line no:11 
      *    autho by => Rohit  date :22-08-022 */
+
+
+    function editHandler(rowData) {
+        dispatch(editActionFun(rowData.id, "edit",));
+    }
+    function copyHandler(rowData) {
+        dispatch(editActionFun(rowData.id, "copy",));
+    }
+
+    function deleteHandler(rowData) {
+        dispatch(AlertState({
+            Type: 5, Status: true,
+            Message: `Are you sure you want to delete this ${ButtonMsgLable} : "${rowData[deleteName]}"`,
+            RedirectPath: false,
+            PermissionAction: deleteActionFun,
+            ID: rowData.id,
+        }));
+    }
+
+
+
     return ({
         text: "Action",
         hidden:
@@ -32,9 +61,9 @@ export const listPageCommonButtonFunction = (props) => {
                     ?
                     (<Button
                         type="button"
+                        className={editBtnCss}
                         data-mdb-toggle="tooltip" data-mdb-placement="top" title={`Edit ${ButtonMsgLable}`}
-                        onClick={() => { dispatch(editActionFun(rowData.id, 'edit')); }}
-                        className="badge badge-soft-success font-size-12 btn btn-success waves-effect waves-light w-xxs border border-light"
+                        onClick={() => { editHandler(rowData) }}
                     >
                         <i className="mdi mdi-pencil font-size-18" id="edittooltip"></i>
                     </Button>)
@@ -45,9 +74,9 @@ export const listPageCommonButtonFunction = (props) => {
                         ?
                         <Button
                             type="button"
+                            className={editSelfBtnCss}
                             data-mdb-toggle="tooltip" data-mdb-placement="top" title={`EditSelf ${ButtonMsgLable}`}
-                            onClick={() => { dispatch(editActionFun(rowData.id, 'edit')); }}
-                            className="badge badge-soft-primary font-size-12 btn btn-primary waves-effect waves-light w-xxs border border-light"
+                            onClick={() => { deleteHandler(rowData) }}
                         >
                             <i className="mdi mdi-pencil font-size-18" id="edittooltip"></i>
                         </Button>
@@ -58,9 +87,9 @@ export const listPageCommonButtonFunction = (props) => {
                             ?
                             <Button
                                 type="button"
+                                className={editSelfBtnCss}
                                 data-mdb-toggle="tooltip" data-mdb-placement="top" title={`View ${ButtonMsgLable}`}
-                                onClick={() => { dispatch(editActionFun(rowData.id, 'edit')); }}
-                                className="badge badge-soft-primary font-size-12 btn btn-primary waves-effect waves-light w-xxs border border-light"
+                                onClick={() => { editHandler(rowData) }}
                             >
                                 <i className="bx bxs-show font-size-18 "></i>
                             </Button>
@@ -74,17 +103,9 @@ export const listPageCommonButtonFunction = (props) => {
                 ?
                 <Button
                     type="button"
-                    className="badge badge-soft-danger font-size-12 btn btn-danger waves-effect waves-light w-xxs border border-light"
+                    className={deltBtnCss}
                     data-mdb-toggle="tooltip" data-mdb-placement="top" title={`Delete ${ButtonMsgLable}`}
-                    onClick={() => {
-                        dispatch(AlertState({
-                            Type: 5, Status: true,
-                            Message: `Are you sure you want to delete this ${ButtonMsgLable} : "${rowData[deleteName]}"`,
-                            RedirectPath: false,
-                            PermissionAction: deleteActionFun,
-                            ID: rowData.id
-                        }));
-                    }}
+                    onClick={() => { deleteHandler(rowData) }}
                 >
                     <i className="mdi mdi-delete font-size-18"></i>
                 </Button>
@@ -96,17 +117,9 @@ export const listPageCommonButtonFunction = (props) => {
                     ?
                     <Button
                         type="button"
-                        className="badge badge-soft-danger font-size-12 btn btn-danger waves-effect waves-light w-xxs border border-light"
+                        className={deltBtnCss}
                         data-mdb-toggle="tooltip" data-mdb-placement="top" title={`Delete ${ButtonMsgLable}`}
-                        onClick={() => {
-                            dispatch(AlertState({
-                                Type: 5, Status: true,
-                                Message: `Are you sure you want to delete this ${ButtonMsgLable} : "${rowData.Name}"`,
-                                RedirectPath: false,
-                                PermissionAction: deleteActionFun,
-                                ID: rowData.id
-                            }));
-                        }}
+                        onClick={() => { deleteHandler(rowData) }}
                     >
                         <i className="mdi mdi-delete font-size-18"></i>
                     </Button>
@@ -115,15 +128,14 @@ export const listPageCommonButtonFunction = (props) => {
             {((userAccState.RoleAccess_IsSave) && (userAccState.RoleAccess_IsCopy)) ?
                 <Button
                     type="button"
+                    className={editSelfBtnCss}
                     data-mdb-toggle="tooltip" data-mdb-placement="top" title={`Copy ${ButtonMsgLable}`}
-                    onClick={() => { dispatch(editActionFun((rowData.id), "copy")); }}
-                    className="badge badge-soft-primary font-size-12 btn btn-primary waves-effect waves-light w-xxs border border-light"
+                    onClick={() => { copyHandler(rowData) }}
                 >
                     <i className="bx bxs-copy font-size-18 "></i>
                 </Button>
                 : null
             }
-
 
         </div>
         )
@@ -173,7 +185,7 @@ export const commonListPageDelete_UpdateMsgFunction = (props) => {
     }
 }
 
-export const excelDownCommonFunc = (props) => {
+export const excelDownCommonFunc = (props) => {//++++++++Common Excel Covernt Data Function ++++++++++++++
     const { tableList = [], PageFieldMaster = [] } = props
     let downList = [];
     let listObj = {};
@@ -192,7 +204,7 @@ export const excelDownCommonFunc = (props) => {
     return downList
 }
 
-export const currentDate = (props) => {
+export const currentDate = () => {//+++++++++++++++ Cuurnt Date++++++++++++++++++++++++++++++++++++
     const current = new Date();
     const month = current.getMonth() + 1;
     const currentDate = `${current.getFullYear()}-${month < 10 ? `0${month}` :
@@ -200,18 +212,46 @@ export const currentDate = (props) => {
     return currentDate
 }
 
-export const createdBy = () => {
+export const createdBy = () => {//++++++++++++++++++++++ Seesion User Id+++++++++++++++++++++++++++++
     let createdBy = 0
     try {
         createdBy = JSON.parse(localStorage.getItem('userId'))
-    } catch (e) {alert("Common Created By Error") }
+    } catch (e) { alert("Common Created By Error") }
     return createdBy
 }
 
-export const userCompany = () => {
-    let userCompany =0
+export const userCompany = () => {//+++++++++++++++++++++ Seesion Company Id+++++++++++++++++++++++++++++++
+    let userCompany = 0
     try {
         userCompany = JSON.parse(localStorage.getItem('Company'))
-    } catch (e) { alert("Common userCompany  Error")}
+    } catch (e) { alert("Common userCompany  Error") }
     return userCompany
+}
+
+export function convertTimefunc(inputDate) { //+++++++++++Convert Time Format+++++++++++++++++++++++++++++++
+    const date = new Date(inputDate);
+    let month = date.getMonth() + 1;
+
+    let convDate = `${date.getDate() < 10 ? `0${date.getDate()}` :
+        `${date.getDate()}`}/${month < 10 ? `0${month}` :
+            `${month}`}`;
+
+    let hours = date.getHours() < 10 ? "0" + date.getHours() : date.getHours();
+    let minutes = date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes();
+    let timeString = hours + ":" + minutes;
+
+    let [hourString, minute] = timeString.split(":");
+    let hour = +hourString % 24;
+    let time = (hour % 12 || 12) + ":" + minute + (hour < 12 ? "AM" : "PM");
+
+    return (`(${convDate}-${time})`)
+}
+
+export function convertDatefunc(inputDate) {// +++++++++++Convert Date Format+++++++++++++++++++++++++++++++
+    const date = new Date(inputDate);
+    let month = date.getMonth() + 1;
+
+    let convDate = `${date.getDate() < 10 ? `0${date.getDate()}` : `${date.getDate()}`}-${month < 10 ? `0${month}`
+        : `${month}`}-${date.getFullYear()}`;
+    return convDate
 }

@@ -1,3 +1,4 @@
+import { LOGOUT_REST } from "../../auth/login/actionTypes"
 import {
   ADD_PAGE_HANDLER_FOR_ROLE_ACCESS_lIST_PAGE_SUCCESS,
   GET_ROLEACCESS_LIST_PAGE_SUCCESS,
@@ -66,6 +67,8 @@ const RoleAccessReducer = (state = INIT_STATE, action) => {
          ...state,
          PostMessage_ForCopyRoleAccess: action.payload,
     }
+
+  
     default:
       return state
   }

@@ -25,6 +25,7 @@ import {
 
 import { SpinnerState } from "../../Utilites/Spinner/actions";
 import { AlertState } from "../../Utilites/CustomAlertRedux/actions";
+import { convertDatefunc, convertTimefunc } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 
 function* postGRNGenFunc({ data }) {
   yield put(SpinnerState(true))
@@ -79,9 +80,14 @@ function* get_GRN_GerFunc({ filters }) {
   yield put(SpinnerState(true))
   try {
     const response = yield call(GRN_get_API, filters);
-
+    const newList = yield response.Data.map((i) => {
+      var date = convertDatefunc(i.GRNDate)
+      var time = convertTimefunc(i.CreatedOn)
+      i.GRNDate = (`${date} ${time}`)
+      return i
+    })
     yield put(SpinnerState(false))
-    yield put(getGRNListPageSuccess(response.Data))
+    yield put(getGRNListPageSuccess(newList))
 
   } catch (error) {
     yield put(SpinnerState(false))

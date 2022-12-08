@@ -176,9 +176,11 @@ export const PARTY_SUB_PARTY = '/PartySubParty' // FOR POST
 export const PARTYITEMS = '/PartyItemList' // FOR Get
 
 //Bill Of Master
-export const BOM = '/Billofmaterial' 
-export const GET_ITEM_UNITS = '/GetItemUnits' 
+export const BOM = '/Billofmaterial'
+export const GET_ITEM_UNITS = '/GetItemUnits'
 export const BOM_LiST = "/BomFilter"
 
 // Work Order
-export const BOMLIST = '/BomList' 
+// export const BOMLIST = '/BomList'
+export const GO_BUTTON_POST_API_FOR_WORKORDER = '/BomDetails'
+export const POST_WORK_ORDER_API = '/WorkOrder'

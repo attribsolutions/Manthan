@@ -8,7 +8,8 @@ import {
   ROLE_ACCESS_API_UPDATE_SUCCESS,
   GET_USER_DETAILS_AFTER_LOGIN_SUCCESS,
   DESISION_DEROPDOWN_SUCCESS_AFTER_LOGIN,
-  GET_SUPER_ADMIN_API_SUCCESS
+  GET_SUPER_ADMIN_API_SUCCESS,
+  LOGOUT_REST
 } from "./actionTypes"
 
 const initialState = {
@@ -36,10 +37,12 @@ const Login = (state = initialState, action) => {
       }
    
     case LOGOUT_USER:
-      state = { ...state }
+      state = { ...state ,
+    }
       break
     case LOGOUT_USER_SUCCESS:
-      state = { ...state }
+      state = { ...state ,
+      }
       
     case API_ERROR:
       state = { ...state, loginError: action.payload, loading: false }
@@ -72,6 +75,11 @@ const Login = (state = initialState, action) => {
             return {
               ...state,
               SuperAdmin: action.payload,
+            }
+
+            case  LOGOUT_REST: 
+            return{
+                 ...initialState,
             }
     default:
       state = { ...state }

@@ -12,7 +12,8 @@ import {
   GET_USER_DETAILS_AFTER_LOGIN_SUCCESS,
   DESISION_DEROPDOWN_SUCCESS_AFTER_LOGIN,
   GET_SUPER_ADMIN_API,
-  GET_SUPER_ADMIN_API_SUCCESS
+  GET_SUPER_ADMIN_API_SUCCESS,
+  LOGOUT_REST
 } from "./actionTypes"
 
 export const loginUser = (user, history) => {
@@ -33,6 +34,7 @@ export const logoutUser = history => {
   return {
     type: LOGOUT_USER,
     payload: { history },
+    user:null
   }
 }
 
@@ -107,3 +109,10 @@ export  const roleAceessActionSuccess=(data)=>{
       payload:data,
   });
   
+
+  export  const logoutReset=(data)=>{
+    return{
+      type: LOGOUT_REST,
+      payload: data,
+    }
+    }
