@@ -248,7 +248,7 @@ const CategoryMaster = (props) => {
                                     <Row className="">
                                         <Col md={12}>
                                             <Card>
-                                                <CardBody className="card_body">
+                                                <CardBody className="c_card_body">
                                                     <Row>
                                                         <FormGroup className="mb-2 col col-sm-4 ">
                                                             <Label htmlFor="validationCustom01">{fieldLabel.Name} </Label>

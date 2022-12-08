@@ -74,7 +74,7 @@ const BOMList = () => {
     }, [userAccess])
 
     const goButtonHandler = (onload = false) => {
-
+debugger
         let FromDate
         let ToDate
 

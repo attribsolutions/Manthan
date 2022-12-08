@@ -43,6 +43,7 @@ debugger
   yield put(SpinnerState(true))
   
   try {
+    debugger
     const response = yield call(BOM_ListPage_API, filters);
     let data = response.Data.map((i) => {
       i.id = `${i.id}/${i.Company}`;

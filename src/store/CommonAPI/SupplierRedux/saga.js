@@ -16,7 +16,7 @@ import { AlertState } from "../../Utilites/CustomAlertRedux/actions";
 
 
 function* getSupplierGenFunc() {
-  debugger
+  
   const USER = JSON.parse(localStorage.getItem("roleId"))
   try {
     const response = yield call(GetSupplier_API, USER.Party_id
