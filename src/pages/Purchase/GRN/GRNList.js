@@ -132,7 +132,7 @@ const GRNList = () => {
                     newBtnPagePath={GST_ADD_Mode_2}
                     excelData={downList} />
 
-                <div className="px-2 mb-1 mt-n1 c_card_header">
+                <div className="px-2 mb-1 mt-n1 c_card_filter">
                     <div className=" mt-1 row">
                         <Col sm="3" className="">
                             <FormGroup className="mb- row mt-3 " >

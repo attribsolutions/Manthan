@@ -49,7 +49,7 @@ const BOMMaster = (props) => {
         id: "",
         BomDate: "",
         ItemName: "",
-        EstimatedOutput: "",
+        EstimatedOutputQty: "",
         UnitName: "",
         Comment: "",
         IsActive: false
@@ -123,20 +123,20 @@ const BOMMaster = (props) => {
             if (hasEditVal) {
                 console.log("hasEditVal", hasEditVal)
                 setEditData(hasEditVal);
-                const { id, BomDate, Item, ItemName, Unit, UnitName, EstimatedOutput, Comment, IsActive } = hasEditVal
+                const { id, BomDate, Item, ItemName, Unit, UnitName, EstimatedOutputQty, Comment, IsActive } = hasEditVal
                 const { values, fieldLabel, hasValid, required, isError } = { ...state }
 
                 hasValid.id.valid = true;
                 hasValid.BomDate.valid = true;
                 hasValid.ItemName.valid = true;
                 hasValid.UnitName.valid = true;
-                hasValid.EstimatedOutput.valid = true;
+                hasValid.EstimatedOutputQty.valid = true;
                 hasValid.Comment.valid = true;
                 hasValid.IsActive.valid = true;
 
                 values.id = id
                 values.BomDate = BomDate;
-                values.EstimatedOutput = EstimatedOutput;
+                values.EstimatedOutputQty = EstimatedOutputQty;
                 values.Comment = Comment;
                 values.IsActive = IsActive;
                 values.ItemName = { label: ItemName, value: Item };
@@ -248,7 +248,7 @@ const BOMMaster = (props) => {
             const jsonBody = JSON.stringify({
 
                 BomDate: values.BomDate,
-                EstimatedOutput: values.EstimatedOutput,
+                EstimatedOutputQty: values.EstimatedOutputQty,
                 Comment: values.Comment,
                 IsActive: values.IsActive,
                 Item: values.ItemName.value,
@@ -308,7 +308,7 @@ const BOMMaster = (props) => {
                                 <form onSubmit={formSubmitHandler} ref={formRef} noValidate>
 
                                     <Card>
-                                        <CardBody className="card_body">
+                                        <CardBody className="c_card_body">
                                             <Row>
                                                 <FormGroup className="mb-2 col col-sm-4 ">
                                                     <Label >{fieldLabel.BomDate} </Label>
@@ -334,20 +334,20 @@ const BOMMaster = (props) => {
 
                                                 <Col md="1"></Col>
                                                 <FormGroup className="mb-2 col col-sm-4 ">
-                                                    <Label >{fieldLabel.EstimatedOutput} </Label>
+                                                    <Label >{fieldLabel.EstimatedOutputQty} </Label>
                                                     <Input
-                                                        name="EstimatedOutput"
-                                                        value={values.EstimatedOutput}
+                                                        name="EstimatedOutputQty"
+                                                        value={values.EstimatedOutputQty}
                                                         type="text"
-                                                        className={isError.EstimatedOutput.length > 0 ? "is-invalid form-control" : "form-control"}
-                                                        placeholder="Please Enter EstimatedOutput"
+                                                        className={isError.EstimatedOutputQty.length > 0 ? "is-invalid form-control" : "form-control"}
+                                                        placeholder="Please Enter EstimatedOutputQty"
                                                         autoComplete='off'
                                                         onChange={(event) => {
                                                             onChangeText({ event, state, setState })
                                                         }}
                                                     />
-                                                    {isError.EstimatedOutput.length > 0 && (
-                                                        <span className="invalid-feedback">{isError.EstimatedOutput}</span>
+                                                    {isError.EstimatedOutputQty.length > 0 && (
+                                                        <span className="invalid-feedback">{isError.EstimatedOutputQty}</span>
                                                     )}
                                                 </FormGroup>
                                             </Row>

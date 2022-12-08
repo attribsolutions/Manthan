@@ -283,11 +283,11 @@ const CommonListPage = (props) => {
               pageHeading={userAccState.PageHeading}
               newBtnView={(userAccState.RoleAccess_IsSave) ? true : false}
               showCount={true}
-              excelBtnView={userAccState.RoleAccess_Exceldownload ? true : false}
-              // handleDataChange={}
-              excelData={downList}
+              excelBtnView={(userAccState.RoleAccess_Exceldownload)  ? true : false}
+              // handleDataChange={ }
+          excelData={downList}
             />
-            : null
+          : null
           }
           <PaginationProvider pagination={paginationFactory(pageOptions)}>
             {({ paginationProps, paginationTableProps }) => (
@@ -296,7 +296,7 @@ const CommonListPage = (props) => {
                 data={tableList}
                 columns={columns}
                 // search={ defaultSearch }
-                search={ defaultSearch(pageField.id)}
+                search={defaultSearch(pageField.id)}
               >
                 {(toolkitProps, a) => (
                   <React.Fragment>

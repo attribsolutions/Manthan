@@ -81,13 +81,21 @@ height: 0.8cm !important;
   
 }
 
-.card_body{
-  background-color:whitesmoke;
+.c_card_body{
+  // rgb(225 225 237)
+  // background-color:rgb(237, 237, 242) !important ;
+  background-color:whitesmoke !important;
   border-radius: 5px;
 }
 
 .c_card_header{
-  background-color:#dddddd !important;
+  background-color:rgb(221, 221, 221) !important;
+  border-radius: 5px;
+}
+
+
+.c_card_filter{ 
+  background-color:rgb(218, 218, 219) !important;
   border-radius: 5px;
 }
  

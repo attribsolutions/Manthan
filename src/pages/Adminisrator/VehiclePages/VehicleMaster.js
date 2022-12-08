@@ -247,6 +247,7 @@ const VehicleMaster = (props) => {
             comAddPageFieldFunc({ state, setState, fieldArr })
         }
     }, [pageField])
+    
 
     const values = { ...state.values }
     const { isError } = state;
@@ -355,7 +356,7 @@ const VehicleMaster = (props) => {
                         <Breadcrumb pageHeading={userPageAccessState.PageHeading} />
 
                         <Card className="text-black">
-                            <CardHeader className="card-header   text-black" style={{ backgroundColor: "#dddddd" }} >
+                            <CardHeader className="card-header   text-black c_card_header" >
                                 <h4 className="card-title text-black">{userPageAccessState.PageDescription}</h4>
                                 <p className="card-title-desc text-black">{userPageAccessState.PageDescriptionDetails}</p>
                             </CardHeader>
@@ -365,7 +366,7 @@ const VehicleMaster = (props) => {
                                     <Row className="">
                                         <Col md={12}>
                                             <Card>
-                                                <CardBody style={{ backgroundColor: "whitesmoke" }}>
+                                                <CardBody className="c_card_body">
                                                     <Row className="mt-1">
                                                         <Col md="3">
                                                             <FormGroup className="mb-3">
@@ -482,11 +483,11 @@ const VehicleMaster = (props) => {
                                                                 )}
 
                                                             </FormGroup>
-                                                            <Col sm={1} style={{ marginTop: '28px' }} >
+                                                            <Col sm={1} style={{ marginTop: '17px' }} >
                                                                 {" "}
                                                                 <Button
                                                                     type="button"
-                                                                    className="btn btn-sm mt-1 mb-0 btn-light  btn-outline-primary"
+                                                                    className="button_add badge badge-soft-primary font-size-12 waves-effect  waves-light  btn-outline-primary"
                                                                     onClick={() =>
                                                                         AddDivisionHandler()
                                                                     }

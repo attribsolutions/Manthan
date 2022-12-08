@@ -602,7 +602,7 @@ const ItemsMaster = (props) => {
                             <Row>
                                 <Col lg={12}>
                                     <Card className="text-black" >
-                                        <CardHeader className="card-header   text-black" style={{ backgroundColor: "#dddddd" }} >
+                                        <CardHeader className="card-header   text-black c_card_header" >
                                             <h4 className="card-title text-black">{userPageAccessState.PageDescription}</h4>
                                             <p className="card-title-desc text-black">{userPageAccessState.PageDescriptionDetails}</p>
                                         </CardHeader>
@@ -740,7 +740,7 @@ const ItemsMaster = (props) => {
                                                 <TabPane tabId="1">{/* +++++++++++ TabPane tabId="1" ++++++++++++++++++++++++++++++++++++++++++ */}
                                                     <Col md={12}  >
                                                         <Card className="text-black">
-                                                            <CardBody style={{ backgroundColor: "whitesmoke" }}>
+                                                            <CardBody className="c_card_body">
                                                                 <Row>
 
                                                                     <FormGroup className="mb-3 col col-sm-4 " >

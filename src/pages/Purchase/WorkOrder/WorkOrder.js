@@ -15,7 +15,7 @@ import {
 } from "reactstrap";
 import { MetaTags } from "react-meta-tags";
 import Flatpickr from "react-flatpickr"
-import { Breadcrumb_inputName, commonPageFieldSuccess, getItemList } from "../../../store/actions";
+import { Breadcrumb_inputName, commonPageFieldSuccess } from "../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
 import { AlertState, commonPageField } from "../../../store/actions";
 import { useHistory } from "react-router-dom";
@@ -30,9 +30,12 @@ import {
 import Select from "react-select";
 import SaveButton from "../../../components/Common/ComponentRelatedCommonFile/CommonSaveButton";
 import { postBOM, postBOMSuccess, updateBOMList, } from "../../../store/Purchase/BOMRedux/action";
-import { BillOfMaterialsList } from "../../../routes/route_url";
-import { createdBy, userCompany } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
-import { getBOMList } from "../../../store/Purchase/WorkOrder/action";
+import { WORKORDER } from "../../../routes/route_url";
+import { createdBy, currentDate, userCompany } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { editWorkOrderListSuccess, getBOMList, postGoButtonForWorkOrder_Master, postGoButtonForWorkOrder_MasterSuccess, postWorkOrderMaster, postWorkOrderMasterSuccess } from "../../../store/Purchase/WorkOrder/action";
+import paginationFactory, { PaginationListStandalone, PaginationProvider } from "react-bootstrap-table2-paginator";
+import ToolkitProvider, { Search } from "react-bootstrap-table2-toolkit";
+import BootstrapTable from "react-bootstrap-table-next";
 
 const WorkOrder = (props) => {
 
@@ -44,28 +47,25 @@ const WorkOrder = (props) => {
     const [modalCss, setModalCss] = useState(false);
     const [pageMode, setPageMode] = useState("save");
     const [userPageAccessState, setUserPageAccessState] = useState('');
-    const [ItemTabDetails, setItemTabDetails] = useState([])
-    const [EstimatedOutputLabel, setEstimatedOutputLabel] = useState("")
-    const [quantity, setQuantity] = useState("")
-
+    const [itemselect, setItemselect] = useState("")
+    const [workOrderItems, setWorkOrderItems] = useState([])
 
     const initialFiled = useMemo(() => {
 
         const fileds = {
             id: "",
             WorkOrderDate: "",
-            ItemBom: "",
+            ItemName: [],
             NumberOfLot: "",
             Quantity: "",
             StockQuantity: "",
-            EstimatedOutput: ""
+            EstimatedOutputQty: ""
         }
         return initialFiledFunc(fileds)
     }, []);
 
     const [state, setState] = useState(initialFiled)
 
-    console.log(state.values)
     //Access redux store Data /  'save_ModuleSuccess' action data
     const {
         postMsg,
@@ -73,22 +73,25 @@ const WorkOrder = (props) => {
         pageField,
         userAccess,
         Items,
-        Unit,
-        GetItemUnits
+        GoButton
     } = useSelector((state) => ({
-        postMsg: state.BOMReducer.PostData,
+        postMsg: state.WorkOrderReducer.postMsg,
         updateMsg: state.BOMReducer.updateMsg,
         userAccess: state.Login.RoleAccessUpdateData,
         pageField: state.CommonPageFieldReducer.pageField,
         GetItemUnits: state.BOMReducer.GetItemUnits,
         Items: state.WorkOrderReducer.BOMList,
+        GoButton: state.WorkOrderReducer.GoButton
     }));
 
+
+    const { BOMItems = [], EstimatedOutputQty = '' } = GoButton
+
     useEffect(() => {
+        dispatch(postGoButtonForWorkOrder_MasterSuccess([]))
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(72))
-        dispatch(getBOMList())
-        // dispatch(getBaseUnit_ForDropDown());
+
     }, []);
 
     const location = { ...history.location }
@@ -114,53 +117,58 @@ const WorkOrder = (props) => {
     }, [userAccess])
 
     //This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
-    // useEffect(() => {
+    useEffect(() => {
+        debugger
+        if ((hasShowloction || hasShowModal)) {
 
-    //     if ((hasShowloction || hasShowModal)) {
+            let hasEditVal = null
+            if (hasShowloction) {
+                setPageMode(location.pageMode)
+                hasEditVal = location.editValue
+            }
+            else if (hasShowModal) {
+                hasEditVal = props.editValue
+                setPageMode(props.pageMode)
+                setModalCss(true)
+            }
 
-    //         let hasEditVal = null
-    //         if (hasShowloction) {
-    //             setPageMode(location.pageMode)
-    //             hasEditVal = location.editValue
-    //         }
-    //         else if (hasShowModal) {
-    //             hasEditVal = props.editValue
-    //             setPageMode(props.pageMode)
-    //             setModalCss(true)
-    //         }
+            if (hasEditVal) {
+                debugger
+                console.log("hasEditVal", hasEditVal)
+                setEditData(hasEditVal);
+                const { id, WorkOrderDate, Item, ItemName, NumberOfLot, EstimatedOutputQty,Quantity } = hasEditVal
+                const { values, fieldLabel, hasValid, required, isError } = { ...state }
 
-    //         if (hasEditVal) {
-    //             console.log("hasEditVal", hasEditVal)
-    //             setEditData(hasEditVal);
-    //             const { id, BomDate, Item, ItemName, Unit, UnitName, EstimatedOutput, Comment, IsActive } = hasEditVal
-    //             const { values, fieldLabel, hasValid, required, isError } = { ...state }
+                hasValid.id.valid = true;
+                hasValid.WorkOrderDate.valid = true;
+                hasValid.ItemName.valid = true;
+                hasValid.EstimatedOutputQty.valid = true;
+                hasValid.NumberOfLot.valid = true;
+                hasValid.Quantity.valid = true;
 
-    //             hasValid.id.valid = true;
-    //             hasValid.BomDate.valid = true;
-    //             hasValid.ItemName.valid = true;
-    //             hasValid.UnitName.valid = true;
-    //             hasValid.EstimatedOutput.valid = true;
-    //             hasValid.Comment.valid = true;
-    //             hasValid.IsActive.valid = true;
+                values.id = id
+                values.WorkOrderDate = WorkOrderDate;
+                values.EstimatedOutputQty = EstimatedOutputQty;
+                values.NumberOfLot = NumberOfLot;
+                values.Quantity = Quantity;
+                values.ItemName = { label: ItemName, value: Item };
 
-    //             values.id = id
-    //             values.BomDate = BomDate;
-    //             values.EstimatedOutput = EstimatedOutput;
-    //             values.Comment = Comment;
-    //             values.IsActive = IsActive;
-    //             values.ItemName = { label: ItemName, value: Item };
-    //             values.UnitName = { label: UnitName, value: Unit };
-    //             setItemTabDetails(hasEditVal.BOMItems)
-    //             setState({ values, fieldLabel, hasValid, required, isError })
-    //             dispatch(editBOMListSuccess({ Status: false }))
-    //             dispatch(Breadcrumb_inputName(hasEditVal.ItemName))
-    //         }
-    //     }
-    // }, [])
+                const jsonBody = JSON.stringify({
+                    ItemID: hasEditVal.Item,
+                    BomID: hasEditVal.Bom ,
+                    Quantity: parseInt(hasEditVal.Quantity)
+                });
+                dispatch(postGoButtonForWorkOrder_Master(jsonBody));
 
+                setState({ values, fieldLabel, hasValid, required, isError })
+                dispatch(editWorkOrderListSuccess({ Status: false }))
+                dispatch(Breadcrumb_inputName(hasEditVal.ItemName))
+            }
+        }
+    }, [])
     useEffect(() => {
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
-            dispatch(postBOMSuccess({ Status: false }))
+            dispatch(postWorkOrderMasterSuccess({ Status: false }))
             formRef.current.reset();
             if (pageMode === "dropdownAdd") {
                 dispatch(AlertState({
@@ -174,12 +182,12 @@ const WorkOrder = (props) => {
                     Type: 1,
                     Status: true,
                     Message: postMsg.Message,
-                    RedirectPath: BillOfMaterialsList,
+                    RedirectPath: WORKORDER,
                 }))
             }
         }
         else if (postMsg.Status === true) {
-            dispatch(postBOMSuccess({ Status: false }))
+            dispatch(postWorkOrderMasterSuccess({ Status: false }))
             dispatch(AlertState({
                 Type: 4,
                 Status: true,
@@ -189,24 +197,6 @@ const WorkOrder = (props) => {
             }));
         }
     }, [postMsg])
-
-    // useEffect(() => {
-    //     debugger
-    //     if ((updateMsg.Status === true) && (updateMsg.StatusCode === 200) && !(modalCss)) {
-    //         history.push({
-    //             pathname: BillOfMaterialsList,
-    //         })
-    //     } else if (updateMsg.Status === true && !modalCss) {
-    //         dispatch(updateBOMListSuccess({ Status: false }));
-    //         dispatch(
-    //             AlertState({
-    //                 Type: 3,
-    //                 Status: true,
-    //                 Message: JSON.stringify(updateMsg.Message),
-    //             })
-    //         );
-    //     }
-    // }, [updateMsg, modalCss]);
 
     useEffect(() => {
         if (pageField) {
@@ -218,112 +208,147 @@ const WorkOrder = (props) => {
     const ItemDropdown_Options = Items.map((index) => ({
         value: index.id,
         label: index.ItemName,
-        EstimatedOutput: index.EstimatedOutput
+        ItemID: index.Item,
+        EstimatedOutputQty: index.EstimatedOutputQty
     }));
 
-    // function Items_Dropdown_Handler(e) {
-    //     const jsonBody = JSON.stringify({
-    //         Item: e.value,
-    //     });
-    //     dispatch(GetItemUnitsDrodownAPI(jsonBody))
-    //     setState((i) => {
-
-    //         const a = { ...i }
-    //         a.values.UnitName = "";
-    //         a.hasValid.UnitName.valid = false
-    //         return a
-    //     })
-    // }
+    useEffect(() => {
+        let date = currentDate();
+        const jsonBody = JSON.stringify({
+            FromDate: "2022-12-01",
+            ToDate: date,
+            Company: userCompany(),
+        });
+        dispatch(getBOMList(jsonBody));
+    }, [])
 
     function ItemOnchange(e) {
-        debugger
-        setEstimatedOutputLabel(e)
-        setQuantity('')
+        setItemselect(e)
         setState((i) => {
-            debugger
-            const a = { ...i }
-            a.values.NumberOfLot = "";
-            // a.hasValid.NumberOfLot.valid = false
-            return a
+            i.values.NumberOfLot = "";
+            i.values.Quantity = "";
+            return i
         })
     }
 
     function NumberOfLotchange(e) {
-        debugger
-        let NumberOfLot = e * EstimatedOutputLabel.EstimatedOutput
-        setQuantity(NumberOfLot)
+        let qty = e * itemselect.EstimatedOutputQty
         setState((i) => {
-            debugger
-            const a = { ...i }
-            a.values.Quantity = "";
-            a.hasValid.Quantity.valid = false
-            return a
+            i.values.NumberOfLot = e;
+            i.values.Quantity = qty;
+            return i
         })
     }
 
     function Quantitychange(e) {
-        debugger
         setState((i) => {
-            debugger
-            const a = { ...i }
-            a.values.NumberOfLot = "22222";
-            a.hasValid.NumberOfLot.valid = false
-            return a
+            i.values.NumberOfLot = "1.000000";
+            i.values.Quantity = e;
+            return i
         })
     }
+
+    const goButtonHandler = (event, value) => {
+        const jsonBody = JSON.stringify({
+            ItemID: values.ItemName.ItemID,
+            BomID: values.ItemName.value,
+            Quantity: parseInt(values.Quantity)
+        });
+        dispatch(postGoButtonForWorkOrder_Master(jsonBody));
+    }
+
     const values = { ...state.values }
     const { isError } = state;
     const { fieldLabel } = state;
 
     const formSubmitHandler = (event) => {
-        debugger
-        const BOMItems = ItemTabDetails.map((index) => ({
+
+        const WorkOrderItems = BOMItems.map((index) => ({
             Item: index.Item,
+            Unit: index.Unit,
+            BomQuantity: index.BomQuantity,
             Quantity: index.Quantity,
-            Unit: index.Unit
         }))
 
         event.preventDefault();
         if (formValid(state, setState)) {
 
             const jsonBody = JSON.stringify({
-
-                BomDate: values.BomDate,
-                EstimatedOutput: values.EstimatedOutput,
-                Comment: values.Comment,
-                IsActive: values.IsActive,
-                Item: values.ItemName.value,
-                Unit: values.UnitName.value,
-                CreatedBy: createdBy(),
+                WorkOrderDate: values.WorkOrderDate,
+                Item: values.ItemName.ItemID,
+                Bom: values.ItemName.value,
+                NumberOfLot: values.NumberOfLot,
+                Quantity: values.Quantity,
                 Company: userCompany(),
-                BOMItems: BOMItems
+                Division: 2,
+                CreatedBy: createdBy(),
+                UpdatedBy: createdBy(),
+                WorkOrderItems: WorkOrderItems
             });
 
-            if (BOMItems.length === 0) {
-                dispatch(
-                    AlertState({
-                        Type: 4,
-                        Status: true,
-                        Message: "At Least One Matrial data Add in the table",
-                        RedirectPath: false,
-                        PermissionAction: false,
-                    })
-                );
-                return;
-            }
-
-            if (pageMode === 'edit') {
-
-                dispatch(updateBOMList(jsonBody, `${EditData.id}/${EditData.Company}`));
-                console.log("update jsonBody", jsonBody)
-            }
-            else {
-                dispatch(postBOM(jsonBody));
-                console.log("post jsonBody", jsonBody)
-            }
+            dispatch(postWorkOrderMaster(jsonBody));
         }
     };
 
+    const QuantityHandler = (e, user) => {
+        user["CurrentMRP"] = e.target.value
+    }
+
+    const pagesListColumns = [
+        {
+            text: "Item Name",
+            dataField: "ItemName",
+            sort: true,
+        },
+        {
+            text: "Stock Quantity",
+            dataField: "StockQuantity",
+            sort: true,
+        },
+        {
+            text: "BomQuantity",
+            dataField: "BomQuantity",
+            sort: true,
+        },
+        {
+            text: "Quantity",
+            dataField: "Quantity",
+            sort: true,
+            formatter: (cellContent, user) => (
+                <>
+                    <div style={{ justifyContent: 'center' }} >
+
+                        <Col>
+                            <FormGroup className=" col col-sm-4 ">
+                                <Input
+                                    id=""
+                                    type="text"
+                                    disabled={true}
+                                    defaultValue={cellContent}
+                                    className="col col-sm text-center"
+                                    onChange={(e) => QuantityHandler(e, user)}
+                                />
+                            </FormGroup>
+                        </Col>
+                    </div>
+                    {console.log("user", cellContent)}
+                </>
+            ),
+        },
+        {
+
+            text: "UnitName",
+            dataField: "UnitName",
+            sort: true,
+        },
+
+    ]
+
+    const pageOptions = {
+        sizePerPage: 10,
+        totalSize: GoButton.length,
+        custom: true,
+    };
 
     var IsEditMode_Css = ''
     if ((modalCss) || (pageMode === "dropdownAdd")) { IsEditMode_Css = "-5.5%" };
@@ -339,7 +364,7 @@ const WorkOrder = (props) => {
                         <Breadcrumb pageHeading={userPageAccessState.PageHeading} />
 
                         <Card className="text-black">
-                            <CardHeader className="card-header   text-black" style={{ backgroundColor: "#dddddd" }} >
+                            <CardHeader className="card-header   text-black c_card_header">
                                 <h4 className="card-title text-black">{userPageAccessState.PageDescription}</h4>
                                 <p className="card-title-desc text-black">{userPageAccessState.PageDescriptionDetails}</p>
                             </CardHeader>
@@ -349,7 +374,7 @@ const WorkOrder = (props) => {
                                 <form onSubmit={formSubmitHandler} ref={formRef} noValidate>
 
                                     <Card>
-                                        <CardBody style={{ backgroundColor: "whitesmoke" }}>
+                                        <CardBody className="c_card_body">
                                             <Row>
                                                 <FormGroup className="mb-2 col col-sm-4 ">
                                                     <Label >{fieldLabel.WorkOrderDate} </Label>
@@ -375,11 +400,11 @@ const WorkOrder = (props) => {
 
                                                 <Col md="1"></Col>
                                                 <FormGroup className="mb-3 col col-sm-4 ">
-                                                    <Label> {fieldLabel.ItemBom} </Label>
+                                                    <Label> {fieldLabel.ItemName} </Label>
                                                     <Col sm={12}>
                                                         <Select
-                                                            name="ItemBom"
-                                                            value={values.ItemBom}
+                                                            name="ItemName"
+                                                            value={values.ItemName}
                                                             isSearchable={true}
                                                             className="react-dropdown"
                                                             classNamePrefix="dropdown"
@@ -392,8 +417,8 @@ const WorkOrder = (props) => {
                                                             }
 
                                                         />
-                                                        {isError.ItemBom.length > 0 && (
-                                                            <span className="text-danger f-8"><small>{isError.ItemBom}</small></span>
+                                                        {isError.ItemName.length > 0 && (
+                                                            <span className="text-danger f-8"><small>{isError.ItemName}</small></span>
                                                         )}
                                                     </Col>
                                                 </FormGroup>
@@ -408,9 +433,9 @@ const WorkOrder = (props) => {
 
                                                 <Col md="1"></Col>
                                                 <FormGroup className="mb-2 col col-sm-4 ">
-                                                    <Label >{fieldLabel.EstimatedOutput} : </Label>
-                                                    <Label style={{ color: "#B0290B" }}>&nbsp;&nbsp; &nbsp; 
-                                                     {EstimatedOutputLabel.EstimatedOutput}&nbsp;&nbsp; &nbsp;(1 lot)</Label>
+                                                    <Label >{fieldLabel.EstimatedOutputQty} : </Label>
+                                                    <Label style={{ color: "#B0290B" }}>&nbsp;&nbsp; &nbsp;
+                                                        {itemselect.EstimatedOutputQty}&nbsp;&nbsp; &nbsp;(1 lot)</Label>
                                                 </FormGroup>
 
                                             </Row>
@@ -421,7 +446,8 @@ const WorkOrder = (props) => {
                                                     <Label >{fieldLabel.NumberOfLot} </Label>
                                                     <Input
                                                         name="NumberOfLot"
-                                                        defaultValue={values.NumberOfLot}
+                                                        value={values.NumberOfLot}
+
                                                         type="text"
                                                         className={isError.NumberOfLot.length > 0 ? "is-invalid form-control" : "form-control"}
                                                         placeholder="Please Enter NumberOfLot"
@@ -437,12 +463,12 @@ const WorkOrder = (props) => {
                                                 </FormGroup>
                                                 <Col md="1"></Col>
                                                 <FormGroup className="mb-2 col col-sm-4 ">
-                                                    <Label >Quantity </Label>
+                                                    <Label >{fieldLabel.Quantity} </Label>
                                                     <Input
                                                         name="Quantity"
-                                                        defaultValue={quantity}
+                                                        value={values.Quantity}
                                                         type="text"
-                                                        // className={isError.Quantity.length > 0 ? "is-invalid form-control" : "form-control"}
+                                                        className={isError.Quantity.length > 0 ? "is-invalid form-control" : "form-control"}
                                                         placeholder="Please Enter Quantity"
                                                         autoComplete='off'
                                                         onChange={(event) => {
@@ -450,32 +476,75 @@ const WorkOrder = (props) => {
                                                             Quantitychange(event.target.value)
                                                         }}
                                                     />
-                                                    {/* {isError.Quantity.length > 0 && (
+                                                    {isError.Quantity.length > 0 && (
                                                         <span className="invalid-feedback">{isError.Quantity}</span>
-                                                    )} */}
+                                                    )}
                                                 </FormGroup>
-                                                <Col md="1"></Col>
+
                                                 <Col md="1" className="mt-4 ">
-                                                    <Button type="button" color="btn btn-outline-success border-2 font-size-12 " style={{ marginTop: '6px' }}
-                                                    // onClick={() => goButtonHandler()}
+                                                    <Button color="btn btn-outline-success border-2 font-size-12 " style={{ marginTop: '6px' }}
+                                                        onClick={(e) => goButtonHandler(e)}
                                                     >Go</Button>
                                                 </Col>
                                             </Row>
                                         </CardBody>
                                     </Card>
 
-                                    <Row>
-                                        <FormGroup>
-                                            <Row>
-                                                <Col sm={2}>
-                                                    <SaveButton pageMode={pageMode} userAcc={userPageAccessState}
-                                                        module={"WorkOrder"}
-                                                    />
+                                    {BOMItems.length > 0 ?
+                                        <PaginationProvider pagination={paginationFactory(pageOptions)}>
+                                            {({ paginationProps, paginationTableProps }) => (
+                                                <ToolkitProvider
+                                                    keyField={"id"}
+                                                    data={BOMItems}
+                                                    columns={pagesListColumns}
+                                                    search
+                                                >
+                                                    {(toolkitProps) => (
+                                                        <React.Fragment>
+                                                            <Row>
+                                                                <Col xl="12">
+                                                                    <div className="table-responsive">
+                                                                        <BootstrapTable
+                                                                            keyField={"id"}
+                                                                            responsive
+                                                                            bordered={false}
+                                                                            striped={false}
+                                                                            // defaultSorted={defaultSorted}
+                                                                            classes={"table  table-bordered"}
+                                                                            // noDataIndication={<div className="text-danger text-center ">Items Not available</div>}
+                                                                            {...toolkitProps.baseProps}
+                                                                            {...paginationTableProps}
+                                                                        />
+                                                                        <div>
+                                                                            <label >EstimatedOutputQty :&nbsp;&nbsp; <span style={{ color: "#B0290B" }}>{EstimatedOutputQty}</span></label>
+                                                                        </div>
+                                                                    </div>
+                                                                </Col>
+                                                            </Row>
+                                                            <Row className="align-items-md-center mt-30">
+                                                                <Col className="pagination pagination-rounded justify-content-end mb-2">
+                                                                    <PaginationListStandalone {...paginationProps} />
+                                                                </Col>
+                                                            </Row>
+                                                        </React.Fragment>
+                                                    )}
+                                                </ToolkitProvider>
+                                            )}
 
-                                                </Col>
-                                            </Row>
-                                        </FormGroup >
-                                    </Row>
+                                        </PaginationProvider>
+                                        : null}
+
+                                    <FormGroup>
+                                        <Row >
+                                            <Col sm={2} >
+                                                <SaveButton pageMode={pageMode} userAcc={userPageAccessState}
+                                                    module={"WorkOrder"}
+                                                />
+
+                                            </Col>
+                                        </Row>
+                                    </FormGroup >
+
 
                                 </form>
                             </CardBody>

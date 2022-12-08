@@ -148,7 +148,7 @@ function GroupTab(props) {
 
             <Col md={12} >
                 <Card className="text-black" >
-                    <CardBody style={{ backgroundColor: "whitesmoke" }}>
+                    <CardBody className="c_card_body">
                         <Row className="mt-6">
                             <Col className="col-11 ">
                                 <Row>

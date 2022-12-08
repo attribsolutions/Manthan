@@ -420,7 +420,7 @@ const MRPMaster = (props) => {
                     >
 
                         <Card className="text-black">
-                            <CardHeader className="card-header   text-black" style={{ backgroundColor: "#dddddd" }} >
+                            <CardHeader className="card-header   text-black c_card_header"  >
                                 <h4 className="card-title text-black">{userPageAccessState.PageDescription}</h4>
                                 <p className="card-title-desc text-black">{userPageAccessState.PageDescriptionDetails}</p>
                             </CardHeader>
@@ -432,7 +432,7 @@ const MRPMaster = (props) => {
                                         <Card style={{ backgroundColor: "whitesmoke" }}>
 
 
-                                            <CardHeader className="card-header   text-black " style={{ backgroundColor: "#e9e9ef", width: "" }} >
+                                            <CardHeader className="card-header   text-black c_card_body" >
                                                 <Row className="mt-3 " >
                                                     <Col xs="3">
                                                         <FormGroup className="mb-3 row ">

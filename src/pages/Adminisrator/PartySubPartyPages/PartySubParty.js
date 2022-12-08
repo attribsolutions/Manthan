@@ -310,21 +310,21 @@ const PartySubParty = (props) => {
                         <Breadcrumb pageHeading={userPageAccessState.PageHeading} />
 
                         <Card className="text-black">
-                            <CardHeader className="card-header   text-black" style={{ backgroundColor: "#dddddd" }} >
+                            <CardHeader className="card-header   text-black c_card_header" >
                                 <h4 className="card-title text-black">{userPageAccessState.PageDescription}</h4>
                                 <p className="card-title-desc text-black">{userPageAccessState.PageDescriptionDetails}</p>
                             </CardHeader>
 
-                            <CardBody className=" vh-10 0 text-black" style={{ backgroundColor: "#whitesmoke" }} >
+                            <CardBody className=" vh-10 0 text-black" style={{ backgroundColor: "#whitesmoke"}} >
                                 <form onSubmit={formSubmitHandler} noValidate>
                                     <Row className="">
                                         <Col md={12}>
                                             <Card>
-                                                <CardBody style={{ backgroundColor: "whitesmoke" }}>
+                                                <CardBody className="c_card_body">
                                                     <Row>
                                                         <FormGroup className="mb-3">
                                                             <Row>
-                                                                <Col md="4">
+                                                                <Col sm="4">
                                                                     <FormGroup className="mb-3">
                                                                         <Label htmlFor="validationCustom01">{fieldLabel.Division} </Label>
                                                                         <Col sm={12}>
@@ -355,13 +355,11 @@ const PartySubParty = (props) => {
                                                         </FormGroup>
 
                                                         <Row>
-                                                            <Col md="4" style={{ width: "7.9cm" }}>
+                                                            <Col sm="4">
                                                                 <FormGroup >
                                                                     <Label htmlFor="validationCustom01"> {fieldLabel.Party}</Label>
                                                                     <Select
-                                                                        // value={Party_dropdown_Select}
-                                                                        // options={PartyValues}
-                                                                        // onChange={(e) => { handllerParty(e) }}
+                                                                    
 
 
                                                                         name="Party"
@@ -381,16 +379,16 @@ const PartySubParty = (props) => {
                                                                 </FormGroup>
                                                             </Col>
 
-                                                            <Col sm={2} style={{ marginTop: '24px' }} >
+                                                            <Col sm={2} style={{ marginTop: '16px' }} >
                                                                 <Button
 
                                                                     type="button"
-                                                                    className="btn btn-sm mt-1 mb-0 btn-light btn-outline-primary text-center"
+                                                                    className="button_add badge badge-soft-primary font-size-12 waves-effect  waves-light  btn-outline-primary"
                                                                     onClick={() =>
                                                                         AddPartyHandler()
                                                                     }
                                                                 >
-                                                                    <i className="dripicons-plus "></i>
+                                                                    <i className="dripicons-plus"></i>
                                                                 </Button>
                                                             </Col>
                                                         </Row>

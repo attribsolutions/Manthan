@@ -20,22 +20,25 @@ axiosApi.interceptors.response.use(
   error => Promise.reject(error)
 )
 export async function get(url, config = {}) {
-  console.log("getapiCall Url:",url);
+ 
   AuthonticationFunction();
-  return await axiosApi.get(url, { ...config }).then(response => response.data)
+  const res = await axiosApi.get(url, { ...config }).then(response => response.data)
+  console.log("getapiCall Url:", url);
+  console.log("getapiCall response:", res);
+  return res
 }
 
 export async function getModify(url) {
   AuthonticationFunction();
-  return await axiosApi.get(url).then(response => response.data)
+  const res = await axiosApi.get(url).then(response => response.data)
+  console.log("getModify Url:", url);
+  console.log("getModify response:", res);
+  return res
 }
 
 export async function post(url, data, config = {}) {
   AuthonticationFunction();
-  console.log("postapiCall Url:",url);
-  console.log("postapiCall Body:",data);
-
-  var a = axiosApi
+  const res = axiosApi
     .post(url, data, {
       headers: {
         "Accept": "application/json",
@@ -43,14 +46,16 @@ export async function post(url, data, config = {}) {
       }
     })
     .then(response => response.data)
-  return a
+  console.log("postapiCall Url:", url);
+  console.log("postapiCall Body:", data);
+  console.log("postapiCall Response:", res);
+  return res
 }
 
 export async function put(url, data, config = {}) {
-  console.log("putapiCall Url:",url);
-  console.log("putapiCall Body:",data);
+
   AuthonticationFunction();
-  return axiosApi
+  const res = await axiosApi
     .put(url, data, {
       headers: {
         "Accept": "application/json",
@@ -58,15 +63,21 @@ export async function put(url, data, config = {}) {
       }
     })
     .then(response => response.data)
+  console.log("putapiCall Url:", url);
+  console.log("putapiCall Body:", data);
+  console.log("putapiCall Response:", res);
+  return res
 }
 
 export async function del(url, config = {}) {
   AuthonticationFunction();
-  return await axiosApi
+ const rep= await axiosApi
     .delete(url, { ...config })
     .then(response => response.data)
+    console.log("deleteapiCall Url:", url);
+    console.log("deleteapiCall response:", rep);
+    return rep  
 }
-
 // for forget password
 export async function postForget(url, data, config = {}) {
   // debugger
