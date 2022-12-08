@@ -112,6 +112,7 @@ const GRNList = () => {
             Party: party,
         }
         );
+        console.log("GrnFilter",jsonBody)
         dispatch(getGRNListPage(jsonBody));
     }
 

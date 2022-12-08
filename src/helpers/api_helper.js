@@ -20,6 +20,7 @@ axiosApi.interceptors.response.use(
   error => Promise.reject(error)
 )
 export async function get(url, config = {}) {
+  console.log("getapiCall Url:",url);
   AuthonticationFunction();
   return await axiosApi.get(url, { ...config }).then(response => response.data)
 }
@@ -31,6 +32,9 @@ export async function getModify(url) {
 
 export async function post(url, data, config = {}) {
   AuthonticationFunction();
+  console.log("postapiCall Url:",url);
+  console.log("postapiCall Body:",data);
+
   var a = axiosApi
     .post(url, data, {
       headers: {
@@ -43,6 +47,8 @@ export async function post(url, data, config = {}) {
 }
 
 export async function put(url, data, config = {}) {
+  console.log("putapiCall Url:",url);
+  console.log("putapiCall Body:",data);
   AuthonticationFunction();
   return axiosApi
     .put(url, data, {

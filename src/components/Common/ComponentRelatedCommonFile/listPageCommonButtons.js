@@ -185,7 +185,7 @@ export const commonListPageDelete_UpdateMsgFunction = (props) => {
     }
 }
 
-export const excelDownCommonFunc = (props) => {
+export const excelDownCommonFunc = (props) => {//++++++++Common Excel Covernt Data Function ++++++++++++++
     const { tableList = [], PageFieldMaster = [] } = props
     let downList = [];
     let listObj = {};
@@ -204,7 +204,7 @@ export const excelDownCommonFunc = (props) => {
     return downList
 }
 
-export const currentDate = (props) => {
+export const currentDate = () => {//+++++++++++++++ Cuurnt Date++++++++++++++++++++++++++++++++++++
     const current = new Date();
     const month = current.getMonth() + 1;
     const currentDate = `${current.getFullYear()}-${month < 10 ? `0${month}` :
@@ -212,7 +212,7 @@ export const currentDate = (props) => {
     return currentDate
 }
 
-export const createdBy = () => {
+export const createdBy = () => {//++++++++++++++++++++++ Seesion User Id+++++++++++++++++++++++++++++
     let createdBy = 0
     try {
         createdBy = JSON.parse(localStorage.getItem('userId'))
@@ -220,10 +220,38 @@ export const createdBy = () => {
     return createdBy
 }
 
-export const userCompany = () => {
+export const userCompany = () => {//+++++++++++++++++++++ Seesion Company Id+++++++++++++++++++++++++++++++
     let userCompany = 0
     try {
         userCompany = JSON.parse(localStorage.getItem('Company'))
     } catch (e) { alert("Common userCompany  Error") }
     return userCompany
+}
+
+export function convertTimefunc(inputDate) { //+++++++++++Convert Time Format+++++++++++++++++++++++++++++++
+    const date = new Date(inputDate);
+    let month = date.getMonth() + 1;
+
+    let convDate = `${date.getDate() < 10 ? `0${date.getDate()}` :
+        `${date.getDate()}`}/${month < 10 ? `0${month}` :
+            `${month}`}`;
+
+    let hours = date.getHours() < 10 ? "0" + date.getHours() : date.getHours();
+    let minutes = date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes();
+    let timeString = hours + ":" + minutes;
+
+    let [hourString, minute] = timeString.split(":");
+    let hour = +hourString % 24;
+    let time = (hour % 12 || 12) + ":" + minute + (hour < 12 ? "AM" : "PM");
+
+    return (`(${convDate}-${time})`)
+}
+
+export function convertDatefunc(inputDate) {// +++++++++++Convert Date Format+++++++++++++++++++++++++++++++
+    const date = new Date(inputDate);
+    let month = date.getMonth() + 1;
+
+    let convDate = `${date.getDate() < 10 ? `0${date.getDate()}` : `${date.getDate()}`}-${month < 10 ? `0${month}`
+        : `${month}`}-${date.getFullYear()}`;
+    return convDate
 }
