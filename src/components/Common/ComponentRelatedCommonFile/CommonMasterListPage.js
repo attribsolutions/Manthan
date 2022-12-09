@@ -88,6 +88,7 @@ const CommonListPage = (props) => {
 
 
   useEffect(() => {
+    debugger
 
     const locationPath = history.location.pathname
     let userAcc = userAccess.find((inx) => {
@@ -100,6 +101,7 @@ const CommonListPage = (props) => {
 
   // this useEffect for MasterPagePath dynamically work 
   useEffect(() => {
+    debugger
 
     const locationPath = history.location.pathname
 

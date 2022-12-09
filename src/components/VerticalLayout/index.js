@@ -141,6 +141,7 @@ const Layout = props => {
 
       <div id="layout-wrapper">
         <CustomAlert/>
+       
         <Spinner/>
         <Header toggleMenuCallback={toggleMenuCallback} onChangeLayoutMode={onChangeLayoutMode} />
         <Sidebar

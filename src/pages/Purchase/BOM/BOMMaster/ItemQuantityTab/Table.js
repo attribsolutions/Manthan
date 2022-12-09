@@ -1,13 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Table, } from 'reactstrap';
 import { Tbody, Thead } from 'react-super-responsive-table';
-import { deleteGSTForMasterPage, deleteGSTForMasterPageSuccess } from '../../../../../store/Administrator/GSTRedux/action';
-import { useDispatch, useSelector } from 'react-redux';
-import { AlertState } from '../../../../../store/actions';
 
 function BOMTable(props) {
-  
-  const dispatch = useDispatch();
 
     const onDeleteHandeler = (ele) => {
  
@@ -18,54 +13,11 @@ function BOMTable(props) {
           props.func(fil);
         }
       };
-//     else {
-//       dispatch(
-//         AlertState({
-//           Type: 5,
-//           Status: true,
-//           Message: `Are you sure you want to delete this GST"`,
-//           RedirectPath: false,
-//         //   PermissionAction: deleteGSTForMasterPage,
-//           ID: info.id,
-//         })
-//       );
-//     }
-//   };
-
-//   useEffect(() => {
-//     if (deleteMsg.Status === true && deleteMsg.StatusCode === 200) {
-//       dispatch(deleteGSTForMasterPageSuccess({ Status: false }));
-
-//       var fil = props.tableData.filter((i) => {
-//         return !(i.id === deleteMsg.deletedId);
-//       });
-//       props.func(fil);
-
-//       dispatch(
-//         AlertState({
-//           Type: 1,
-//           Status: true,
-//           Message: deleteMsg.Message,
-//         })
-//       );
-//     } else if (deleteMsg.Status === true) {
-//       dispatch(deleteGSTForMasterPageSuccess({ Status: false }));
-//       dispatch(
-//         AlertState({
-//           Type: 3,
-//           Status: true,
-//           Message: JSON.stringify(deleteMsg.Message),
-//         })
-//       );
-//     }
-//   }, [deleteMsg]);
-
 
   const tableRows = props.tableData.map((info) => {
 
     return (
       <tr>
-        {/* <td>{info.id}</td> */}
         <td>{info.ItemName}</td>
         <td>{info.Quantity}</td>
         <td>{info.UnitName}</td>
