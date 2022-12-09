@@ -1,5 +1,4 @@
 import React, { useEffect, useMemo, useRef, useState, } from "react";
-// import Breadcrumb from "../../../components/Common/Breadcrumb3";
 import Breadcrumb from "../../../components/Common/Breadcrumb3"
 import {
     Button,
@@ -29,13 +28,13 @@ import {
 } from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
 import Select from "react-select";
 import SaveButton from "../../../components/Common/ComponentRelatedCommonFile/CommonSaveButton";
-import { postBOM, postBOMSuccess, updateBOMList, } from "../../../store/Purchase/BOMRedux/action";
-import { WORKORDER } from "../../../routes/route_url";
+import { WORKORDERLIST } from "../../../routes/route_url";
 import { createdBy, currentDate, userCompany } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
-import { getBOMList, postGoButtonForWorkOrder_Master, postWorkOrderMaster, postWorkOrderMasterSuccess } from "../../../store/Purchase/WorkOrder/action";
+import { editWorkOrderListSuccess, getBOMList, postGoButtonForWorkOrder_Master, postGoButtonForWorkOrder_MasterSuccess, postWorkOrderMaster, postWorkOrderMasterSuccess } from "../../../store/Purchase/WorkOrder/action";
 import paginationFactory, { PaginationListStandalone, PaginationProvider } from "react-bootstrap-table2-paginator";
 import ToolkitProvider, { Search } from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
+
 const WorkOrder = (props) => {
 
     const dispatch = useDispatch();
@@ -52,8 +51,8 @@ const WorkOrder = (props) => {
 
         const fileds = {
             id: "",
-            WorkOrderDate: "",
-            ItemBom: "",
+            WorkOrderDate:'',
+            ItemName: [],
             NumberOfLot: "",
             Quantity: "",
             StockQuantity: "",
@@ -86,8 +85,10 @@ const WorkOrder = (props) => {
     const { BOMItems = [], EstimatedOutputQty = '' } = GoButton
 
     useEffect(() => {
+        dispatch(postGoButtonForWorkOrder_MasterSuccess([]))
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(72))
+
     }, []);
 
     const location = { ...history.location }
@@ -112,6 +113,54 @@ const WorkOrder = (props) => {
         };
     }, [userAccess])
 
+    //This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
+    useEffect(() => {
+
+        if ((hasShowloction || hasShowModal)) {
+
+            let hasEditVal = null
+            if (hasShowloction) {
+                setPageMode(location.pageMode)
+                hasEditVal = location.editValue
+            }
+            else if (hasShowModal) {
+                hasEditVal = props.editValue
+                setPageMode(props.pageMode)
+                setModalCss(true)
+            }
+
+            if (hasEditVal) {
+
+                setEditData(hasEditVal);
+                const { id, WorkOrderDate, Item, ItemName, NumberOfLot, EstimatedOutputQty, Quantity } = hasEditVal
+                const { values, fieldLabel, hasValid, required, isError } = { ...state }
+
+                hasValid.id.valid = true;
+                hasValid.WorkOrderDate.valid = true;
+                hasValid.ItemName.valid = true;
+                hasValid.EstimatedOutputQty.valid = true;
+                hasValid.NumberOfLot.valid = true;
+                hasValid.Quantity.valid = true;
+
+                values.id = id
+                values.WorkOrderDate = WorkOrderDate;
+                values.EstimatedOutputQty = EstimatedOutputQty;
+                values.NumberOfLot = NumberOfLot;
+                values.Quantity = Quantity;
+                values.ItemName = { label: ItemName, value: Item };
+
+                const jsonBody = JSON.stringify({
+                    ItemID: hasEditVal.Item,
+                    BomID: hasEditVal.Bom,
+                    Quantity: parseInt(hasEditVal.Quantity)
+                });
+                dispatch(postGoButtonForWorkOrder_Master(jsonBody));
+                setState({ values, fieldLabel, hasValid, required, isError })
+                dispatch(editWorkOrderListSuccess({ Status: false }))
+                dispatch(Breadcrumb_inputName(hasEditVal.ItemName))
+            }
+        }
+    }, [])
     useEffect(() => {
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(postWorkOrderMasterSuccess({ Status: false }))
@@ -128,7 +177,7 @@ const WorkOrder = (props) => {
                     Type: 1,
                     Status: true,
                     Message: postMsg.Message,
-                    RedirectPath: WORKORDER,
+                    RedirectPath: WORKORDERLIST,
                 }))
             }
         }
@@ -159,7 +208,6 @@ const WorkOrder = (props) => {
     }));
 
     useEffect(() => {
-        debugger
         let date = currentDate();
         const jsonBody = JSON.stringify({
             FromDate: "2022-12-01",
@@ -176,7 +224,6 @@ const WorkOrder = (props) => {
             i.values.Quantity = "";
             return i
         })
-
     }
 
     function NumberOfLotchange(e) {
@@ -198,12 +245,11 @@ const WorkOrder = (props) => {
 
     const goButtonHandler = (event, value) => {
         const jsonBody = JSON.stringify({
-            ItemID: values.ItemBom.ItemID,
-            BomID: values.ItemBom.value,
+            ItemID: values.ItemName.ItemID,
+            BomID: values.ItemName.value,
             Quantity: parseInt(values.Quantity)
         });
         dispatch(postGoButtonForWorkOrder_Master(jsonBody));
-        console.log("go button post json", jsonBody)
     }
 
     const values = { ...state.values }
@@ -211,21 +257,21 @@ const WorkOrder = (props) => {
     const { fieldLabel } = state;
 
     const formSubmitHandler = (event) => {
-
+        debugger
         const WorkOrderItems = BOMItems.map((index) => ({
             Item: index.Item,
             Unit: index.Unit,
             BomQuantity: index.BomQuantity,
             Quantity: index.Quantity,
         }))
-
+        debugger
         event.preventDefault();
         if (formValid(state, setState)) {
 
             const jsonBody = JSON.stringify({
                 WorkOrderDate: values.WorkOrderDate,
-                Item: values.ItemBom.ItemID,
-                Bom: values.ItemBom.value,
+                Item: values.ItemName.ItemID,
+                Bom: values.ItemName.value,
                 NumberOfLot: values.NumberOfLot,
                 Quantity: values.Quantity,
                 Company: userCompany(),
@@ -236,8 +282,6 @@ const WorkOrder = (props) => {
             });
 
             dispatch(postWorkOrderMaster(jsonBody));
-            console.log("post jsonBody", jsonBody)
-
         }
     };
 
@@ -252,7 +296,6 @@ const WorkOrder = (props) => {
             sort: true,
         },
         {
-
             text: "Stock Quantity",
             dataField: "StockQuantity",
             sort: true,
@@ -262,9 +305,7 @@ const WorkOrder = (props) => {
             dataField: "BomQuantity",
             sort: true,
         },
-
         {
-
             text: "Quantity",
             dataField: "Quantity",
             sort: true,
@@ -333,19 +374,21 @@ const WorkOrder = (props) => {
                                                 <FormGroup className="mb-2 col col-sm-4 ">
                                                     <Label >{fieldLabel.WorkOrderDate} </Label>
                                                     <Flatpickr
+                                                        style={{ userselect: "all" }}
                                                         name="WorkOrderDate"
                                                         value={values.WorkOrderDate}
                                                         className="form-control d-block p-2 bg-white text-dark"
                                                         placeholder="YYYY-MM-DD"
                                                         autoComplete="0,''"
+                                                        disabled={pageMode === "edit" ? true : false}
                                                         options={{
                                                             altInput: true,
-                                                            altFormat: "F j, Y",
+                                                            altFormat: "d-m-Y",
                                                             dateFormat: "Y-m-d",
-                                                            // minDate: new Date().fp_incr("n"),
-                                                            // maxDate: new Date().fp_incr(0) // 14 days from now"0,''"
+                                                            defaultDate: pageMode === "edit" ? values.WorkOrderDate : "today"
                                                         }}
-                                                        onChange={(y, v, e) => { onChangeDate({ e, v, state, setState }) }}
+                                                        onChange={(y, v, e) => {onChangeDate({ e, v, state, setState })}}
+                                                        onReady={(y, v, e) => {onChangeDate({ e, v, state, setState })}}
                                                     />
                                                     {isError.WorkOrderDate.length > 0 && (
                                                         <span className="invalid-feedback">{isError.WorkOrderDate}</span>
@@ -354,11 +397,11 @@ const WorkOrder = (props) => {
 
                                                 <Col md="1"></Col>
                                                 <FormGroup className="mb-3 col col-sm-4 ">
-                                                    <Label> {fieldLabel.ItemBom} </Label>
+                                                    <Label> {fieldLabel.ItemName} </Label>
                                                     <Col sm={12}>
                                                         <Select
-                                                            name="ItemBom"
-                                                            value={values.ItemBom}
+                                                            name="ItemName"
+                                                            value={values.ItemName}
                                                             isSearchable={true}
                                                             className="react-dropdown"
                                                             classNamePrefix="dropdown"
@@ -371,8 +414,8 @@ const WorkOrder = (props) => {
                                                             }
 
                                                         />
-                                                        {isError.ItemBom.length > 0 && (
-                                                            <span className="text-danger f-8"><small>{isError.ItemBom}</small></span>
+                                                        {isError.ItemName.length > 0 && (
+                                                            <span className="text-danger f-8"><small>{isError.ItemName}</small></span>
                                                         )}
                                                     </Col>
                                                 </FormGroup>
