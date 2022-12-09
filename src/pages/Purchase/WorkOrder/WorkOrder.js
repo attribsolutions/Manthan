@@ -51,7 +51,7 @@ const WorkOrder = (props) => {
 
         const fileds = {
             id: "",
-            WorkOrderDate:'',
+            WorkOrderDate: '',
             ItemName: [],
             NumberOfLot: "",
             Quantity: "",
@@ -130,7 +130,7 @@ const WorkOrder = (props) => {
             }
 
             if (hasEditVal) {
-
+                debugger
                 setEditData(hasEditVal);
                 const { id, WorkOrderDate, Item, ItemName, NumberOfLot, EstimatedOutputQty, Quantity } = hasEditVal
                 const { values, fieldLabel, hasValid, required, isError } = { ...state }
@@ -387,8 +387,8 @@ const WorkOrder = (props) => {
                                                             dateFormat: "Y-m-d",
                                                             defaultDate: pageMode === "edit" ? values.WorkOrderDate : "today"
                                                         }}
-                                                        onChange={(y, v, e) => {onChangeDate({ e, v, state, setState })}}
-                                                        onReady={(y, v, e) => {onChangeDate({ e, v, state, setState })}}
+                                                        onChange={(y, v, e) => { onChangeDate({ e, v, state, setState }) }}
+                                                        onReady={(y, v, e) => { onChangeDate({ e, v, state, setState }) }}
                                                     />
                                                     {isError.WorkOrderDate.length > 0 && (
                                                         <span className="invalid-feedback">{isError.WorkOrderDate}</span>
@@ -430,9 +430,11 @@ const WorkOrder = (props) => {
 
                                                 <Col md="1"></Col>
                                                 <FormGroup className="mb-2 col col-sm-4 ">
-                                                    <Label >{fieldLabel.EstimatedOutputQty} : </Label>
+                                                    {/* <Label>{fieldLabel.EstimatedOutputQty} : </Label> */}
+                                                    <Label>{fieldLabel.EstimatedOutputQty} : </Label>
                                                     <Label style={{ color: "#B0290B" }}>&nbsp;&nbsp; &nbsp;
-                                                        {itemselect.EstimatedOutputQty}&nbsp;&nbsp; &nbsp;(1 lot)</Label>
+                                                    {pageMode === "edit" ? EditData.ActualBomqty :itemselect.EstimatedOutputQty}
+                                                        &nbsp;&nbsp; &nbsp;(1 lot)</Label>
                                                 </FormGroup>
 
                                             </Row>
