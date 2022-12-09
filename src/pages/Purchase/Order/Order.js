@@ -41,57 +41,12 @@ import { getTermAndCondition } from "../../../store/Administrator/TermsAndCondti
 import OrderPageTemsTable from "./OrderPageTemsTable";
 import Breadcrumb from "../../../components/Common/Breadcrumb3";
 import { mySearchProps } from "../../../components/Common/ComponentRelatedCommonFile/MySearch";
-import { createdBy, currentDate } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { createdBy, currentDate, userParty } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 
 let description = ''
 let editVal = {}
 
 const Order = (props) => {
-
-
-
-    // debugger
-
-    // const current1 = new Date('2022-12-02T12:44:33.154233');
-
-
-    // const month1 = current1.getMonth() + 1;
-    // const currentDate1 = `${current1.getFullYear()}-${month1 < 10 ? `0${month1}` :
-    //     `${month1}`}-${current1.getDate() < 10 ? `0${current1.getDate()}` : `${current1.getDate()}`}`;
-
-    // const currentDate2 = `(${current1.getDate() < 10 ? `0${current1.getDate()}` :
-    //     `${current1.getDate()}`}/${month1 < 10 ? `0${month1}` :
-    //         `${month1}`})`;
-
-    console.log("time stamp", formatTime('2022-12-02T12:44:33.154233'))
-
-
-    function formatTime(inputDate) {
-        const date = new Date(inputDate);
-        let month1 = date.getMonth() + 1;
-
-        let convDate1 = `${date.getFullYear()}-${month1 < 10 ? `0${month1}` :
-            `${month1}`}-${date.getDate() < 10 ? `0${date.getDate()}` : `${date.getDate()}`}`;
-
-        let convDate2 = `${date.getDate() < 10 ? `0${date.getDate()}` :
-            `${date.getDate()}`}/${month1 < 10 ? `0${month1}` :
-                `${month1}`}`;
-
-        let hours = date.getHours() < 10 ? "0" + date.getHours() : date.getHours();
-        let minutes = date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes();
-        let timeString = hours + ":" + minutes;
-
-        let [hourString, minute] = timeString.split(":");
-        let hour = +hourString % 24;
-        let time = (hour % 12 || 12) + ":" + minute + (hour < 12 ? "AM" : "PM");
-
-        return (`${convDate1} (${convDate2}-${time})`)
-    }
-
-
-
-
-
 
     const dispatch = useDispatch();
     const history = useHistory();
@@ -136,7 +91,7 @@ const Order = (props) => {
         pageField: state.CommonPageFieldReducer.pageFieldList,
         termsAndCondtions: state.TermsAndCondtionsReducer.TermsAndCondtionsList,
     }));
-
+    debugger
 
     // userAccess useEffect
     useEffect(() => {
@@ -235,6 +190,7 @@ const Order = (props) => {
             description = ''
             history.push({
                 pathname: ORDER_lIST,
+                // renderMode: true
             })
         } else if (updateMsg.Status === true && !modalCss) {
             dispatch(updateOrderIdSuccess({ Status: false }));
@@ -261,7 +217,9 @@ const Order = (props) => {
 
         let sum = 0
         items.forEach(ind => {
-            sum = sum + parseFloat(ind.totalAmount)
+            var amt = parseFloat(ind.totalAmount)
+            debugger
+            sum = sum + amt
         });
         setOrderAmount(sum.toFixed(2))
         dispatch(BreadcrumbFilterSize(`${"Order Amount"} :${sum.toFixed(2)}`))
@@ -285,9 +243,9 @@ const Order = (props) => {
             dataField: "",
             sort: true,
             formatter: (value, row, k) => {
-                if (row.inpRate === undefined) { row["inpRate"] = '' }
-                if (row.inpQty === undefined) { row["inpQty"] = '' }
-                if (row.totalAmount === undefined) { row["totalAmount"] = 0 }
+                // if (row.inpRate === undefined) { row["inpRate"] = '' }
+                // if (row.inpQty === undefined) { row["inpQty"] = '' }
+                // if (row.totalAmount === undefined) { row["totalAmount"] = 0 }
                 return (
 
                     <span >
@@ -327,6 +285,7 @@ const Order = (props) => {
                     row["UOM"] = row.UnitDetails[0].UnitID
                     row["UOMLabel"] = row.UnitDetails[0].UnitName
                     row["inpBaseUnitQty"] = row.UnitDetails[0].BaseUnitQuantity
+                    row["poBaseUnitQty"] = row.UnitDetails[0].BaseUnitQuantity
                 }
                 return (
                     <Select
@@ -461,21 +420,12 @@ const Order = (props) => {
     };
 
     const saveHandeller = () => {
-        let division = 0
-
-        const supplier = supplierSelect.value
-
-        try {
-            division = JSON.parse(localStorage.getItem("roleId")).Party_id
-        } catch (e) {
-            alert(e);
-            return
-        }
+        const division = userParty();
+        const supplier = supplierSelect.value;
 
         const validMsg = []
         const itemArr = []
-
-        items.forEach(i => {
+        function orderItem(i) {
             if ((i.inpQty > 0) && !(i.inpRate > 0)) {
                 validMsg.push(`${i.Name}:  This Item Rate Is Require...`);
             }
@@ -506,6 +456,16 @@ const Order = (props) => {
 
                 itemArr.push(arr)
             };
+        }
+
+        items.forEach(i => {
+            debugger
+            if (pageMode === "edit11") {
+                var ischange = (!(i.poQty === i.inpQty) ||
+                    !(i.poRate === i.inpRate) || !(i.poBaseUnitQty === i.inpBaseUnitQty))
+                if (ischange) { orderItem(i) }
+            }
+            else { orderItem(i) }
         })
         const termsAndCondition = termsAndConTable.map(i => ({ TermsAndCondition: i.value }))
 

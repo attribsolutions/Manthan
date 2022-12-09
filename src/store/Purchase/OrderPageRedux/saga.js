@@ -36,8 +36,9 @@ function* goButtonGenFunc({ data, hasEditVal }) {
   yield put(SpinnerState(true))
   try {
     const response = yield call(OrderPage_GoButton_API, data);
+
     if (hasEditVal) {
-      response.Data.forEach(element => {
+      yield response.Data.forEach(element => {
         hasEditVal.OrderItem.forEach(ele => {
           if (element.id === ele.Item) {
             element["inpRate"] = ele.Rate
@@ -46,11 +47,25 @@ function* goButtonGenFunc({ data, hasEditVal }) {
             element["UOM"] = ele.Unit
             element["UOMLabel"] = ele.UnitName
             element["inpBaseUnitQty"] = ele.BaseUnitQuantity
-
+            // **======== update mode required  variables======********
+            element["poRate"] = ele.Rate
+            element["poQty"] = ele.Quantity
+            element["poBaseUnitQty"] = ele.BaseUnitQuantity
           }
         })
       });
     }
+
+    yield response.Data.forEach(row => {
+      if (row.poRate === undefined) { row["poRate"] = '' }
+      if (row.poQty === undefined) { row["poQty"] = '' }
+      if (row.poBaseUnitQty === undefined) { row["poBaseUnitQty"] = '' }
+
+      if (row["inpRate"] === undefined) { row["inpRate"] = '' }
+      if (row["inpQty"] === undefined) { row["inpQty"] = '' }
+      if (row["totalAmount"] === undefined) { row["totalAmount"] = 0 }
+    });
+
     yield put(goButtonSuccess(response.Data));
     yield put(SpinnerState(false))
   } catch (error) {

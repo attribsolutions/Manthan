@@ -7,6 +7,7 @@ const SaveButton = (props) => {
           (userAcc.RoleAccess_IsEdit) || (userAcc.RoleAccess_IsEditSelf) ?
             <button
               type="submit"
+              id='form_submmit'
               data-mdb-toggle="tooltip" data-mdb-placement="top" title={`Update ${module}`}
               className="btn btn-success w-md"
               onClick={onClick}
@@ -19,6 +20,7 @@ const SaveButton = (props) => {
             userAcc.RoleAccess_IsSave ?
               <button
                 type="submit"
+                id='form_submmit'
                 data-mdb-toggle="tooltip" data-mdb-placement="top" title={`Save ${module}`}
                 className="btn btn-primary w-md"
                 onClick={onClick}
