@@ -1,4 +1,4 @@
-import React, { useEffect,  useRef, useState, } from "react";
+import React, { useEffect, useState, } from "react";
 import Breadcrumb from "../../../components/Common/Breadcrumb3";
 import {
     Button,
@@ -22,7 +22,12 @@ import {
     updatePartySubParty,
     updatePartySubPartySuccess
 } from "../../../store/Administrator/PartySubPartyRedux/action";
-import { AlertState, Breadcrumb_inputName, commonPageField, commonPageFieldSuccess } from "../../../store/actions";
+import {
+    AlertState,
+    Breadcrumb_inputName,
+    commonPageField,
+    commonPageFieldSuccess
+} from "../../../store/actions";
 import { useHistory } from "react-router-dom";
 import {
     get_Division_ForDropDown,
@@ -32,11 +37,15 @@ import { Tbody, Thead } from "react-super-responsive-table";
 import SaveButton from "../../../components/Common/ComponentRelatedCommonFile/CommonSaveButton";
 
 import { PARTY_SUB_PARTY_lIST } from "../../../routes/route_url";
-import { comAddPageFieldFunc, formValid, initialFiledFunc, onChangeSelect } from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
-import { createdBy } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import {
+    comAddPageFieldFunc,
+    formValid,
+    initialFiledFunc,
+    onChangeSelect
+} from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
+import { createdBy, saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 
 const PartySubParty = (props) => {
-
 
     const [pageMode, setPageMode] = useState("");
     const [modalCss, setModalCss] = useState(false);
@@ -46,6 +55,8 @@ const PartySubParty = (props) => {
     const [userPageAccessState, setUserPageAccessState] = useState(123);
     const [Party_dropdown_Select, setParty_dropdown_Select] = useState("");
     const history = useHistory()
+
+
 
     //Access redux store Data /  'save_ModuleSuccess' action data
     const { postMsg,
@@ -63,6 +74,7 @@ const PartySubParty = (props) => {
         }));
 
 
+
     {/** Dyanamic Page access state and OnChange function */ }
 
     const fileds = {
@@ -72,7 +84,6 @@ const PartySubParty = (props) => {
     }
 
     const [state, setState] = useState(() => initialFiledFunc(fileds))
-    debugger
     const values = { ...state.values }
     const { isError } = state;
     const { fieldLabel } = state;
@@ -107,10 +118,8 @@ const PartySubParty = (props) => {
     }, [userAccess])
 
 
-
     // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
     useEffect(() => {
-        debugger
 
         if ((hasShowloction || hasShowModal)) {
 
@@ -154,12 +163,16 @@ const PartySubParty = (props) => {
         }
     }, [pageField])
 
+
     useEffect(() => {
         if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
+            saveDissable(false);//+++++++++Update Button Is enable function
+            setState(() => initialFiledFunc(fileds)) //+++++++++ Clear form values
             history.push({
                 pathname: PARTY_SUB_PARTY_lIST,
             })
         } else if (updateMsg.Status === true && !modalCss) {
+            saveDissable(false);//+++++++++Update Button Is enable function
             dispatch(updatePartySubPartySuccess({ Status: false }));
             dispatch(
                 AlertState({
@@ -176,9 +189,9 @@ const PartySubParty = (props) => {
     useEffect(() => {
 
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200) && !(pageMode === "dropdownAdd")) {
-            // setDivision_dropdown_Select('')
-            // setParty_dropdown_Select('')
             dispatch(postPartySubPartySuccess({ Status: false }))
+            setState(() => initialFiledFunc(fileds)) //+++++++++ Clear form values 
+            saveDissable(false);//+++++++++save Button Is enable function
             if (pageMode === "dropdownAdd") {
                 dispatch(AlertState({
                     Type: 1,
@@ -196,6 +209,7 @@ const PartySubParty = (props) => {
             }
         }
         else if ((postMsg.Status === true) && !(pageMode === "dropdownAdd")) {
+            saveDissable(false);//+++++++++save Button Is enable function
             dispatch(postPartySubPartySuccess({ Status: false }))
             dispatch(AlertState({
                 Type: 4,
@@ -206,7 +220,6 @@ const PartySubParty = (props) => {
             }));
         }
     }, [postMsg])
-
 
 
     //get method for dropdown
@@ -251,6 +264,8 @@ const PartySubParty = (props) => {
             console.log(" jsonBody", jsonBody)
             // const jsonBody = JSON.stringify(arr);
             // dispatch(postPartySubParty(jsonBody));
+
+            saveDissable(true);//+++++++++save Button Is dissable function
 
             if (pageMode === "edit") {
                 dispatch(updatePartySubParty(jsonBody, values.id,));
@@ -315,8 +330,8 @@ const PartySubParty = (props) => {
                                 <p className="card-title-desc text-black">{userPageAccessState.PageDescriptionDetails}</p>
                             </CardHeader>
 
-                            <CardBody className=" vh-10 0 text-black" style={{ backgroundColor: "#whitesmoke"}} >
-                                <form onSubmit={formSubmitHandler} noValidate>
+                            <CardBody className=" vh-10 0 text-black" style={{ backgroundColor: "#whitesmoke" }} >
+                                <form onSubmit={formSubmitHandler}noValidate>
                                     <Row className="">
                                         <Col md={12}>
                                             <Card>
@@ -359,9 +374,6 @@ const PartySubParty = (props) => {
                                                                 <FormGroup >
                                                                     <Label htmlFor="validationCustom01"> {fieldLabel.Party}</Label>
                                                                     <Select
-                                                                    
-
-
                                                                         name="Party"
                                                                         value={values.Party}
                                                                         isSearchable={true}
@@ -417,9 +429,6 @@ const PartySubParty = (props) => {
                                                                                                 UserRoles_DeleteButton_Handller(TableValue.value)
                                                                                             }} >
                                                                                             </i>
-
-
-
                                                                                         </td>
                                                                                     </tr>
                                                                                 ))}
