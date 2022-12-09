@@ -460,7 +460,7 @@ const Order = (props) => {
 
         items.forEach(i => {
             debugger
-            if (pageMode === "edit11") {
+            if (pageMode === "edit") {
                 var ischange = (!(i.poQty === i.inpQty) ||
                     !(i.poRate === i.inpRate) || !(i.poBaseUnitQty === i.inpBaseUnitQty))
                 if (ischange) { orderItem(i) }
