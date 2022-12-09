@@ -850,8 +850,6 @@ const PageMaster = (props) => {
                                     />
                                   </FormGroup>
                                 </Col> : null}
-
-
                             </Row>
 
                             <Row>

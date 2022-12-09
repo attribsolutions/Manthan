@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState, } from "react";
+import React, { useEffect, useState } from "react";
 import Breadcrumb from "../../../components/Common/Breadcrumb3";
 import {
     Button,
@@ -14,15 +14,20 @@ import {
 } from "reactstrap";
 import Select from "react-select";
 import { MetaTags } from "react-meta-tags";
-
-
 import { useDispatch, useSelector } from "react-redux";
-import { AlertState, Breadcrumb_inputName, commonPageField, commonPageFieldSuccess, editGroupIDSuccess, getGroupList, updateGroupID, updategroupIDSuccess } from "../../../store/actions";
+import {
+    AlertState,
+    Breadcrumb_inputName,
+    commonPageField,
+    commonPageFieldSuccess,
+    editGroupIDSuccess,
+    getGroupList,
+    updategroupIDSuccess
+} from "../../../store/actions";
 import { useHistory } from "react-router-dom";
 import {
     getpartyItemList,
     getPartyItemListSuccess,
-    GetPartyList,
     getSupplier,
     PostPartyItems,
     PostPartyItemsSuccess
@@ -35,6 +40,7 @@ import { mySearchProps } from "../../../components/Common/ComponentRelatedCommon
 import SaveButton from "../../../components/Common/ComponentRelatedCommonFile/CommonSaveButton";
 import { PARTYITEM_LIST } from "../../../routes/route_url";
 import { comAddPageFieldFunc, formValid, initialFiledFunc, onChangeSelect } from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
+import { saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 
 
 
@@ -42,7 +48,6 @@ const PartyItems = (props) => {
 
     const history = useHistory()
     const dispatch = useDispatch();
-    const formRef = useRef(null);
     const [pageMode, setPageMode] = useState("");
     const [modalCss, setModalCss] = useState(false);
     const [supplierSelect, setSupplierSelect] = useState('');
@@ -163,6 +168,8 @@ const PartyItems = (props) => {
     useEffect(() => {
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(PostPartyItemsSuccess({ Status: false }))
+            setState(() => initialFiledFunc(fileds)) //+++++++++ Clear form values 
+            saveDissable(false);//+++++++++save Button Is enable function
             dispatch(getPartyItemListSuccess([]))
             dispatch(AlertState({
                 Type: 1,
@@ -173,6 +180,7 @@ const PartyItems = (props) => {
 
         } else if
             (postMsg.Status === true) {
+            saveDissable(false);//+++++++++save Button Is enable function
             dispatch(PostPartyItemsSuccess({ Status: false }))
             dispatch(AlertState({
                 Type: 1,
@@ -187,10 +195,13 @@ const PartyItems = (props) => {
 
     useEffect(() => {
         if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
+            saveDissable(false);//+++++++++Update Button Is enable function
+            setState(() => initialFiledFunc(fileds)) //+++++++++ Clear form values
             history.push({
                 pathname: PARTYITEM_LIST,
             })
         } else if (updateMsg.Status === true && !modalCss) {
+            saveDissable(false);//+++++++++Update Button Is enable function
             dispatch(updategroupIDSuccess({ Status: false }));
             dispatch(
                 AlertState({
@@ -348,9 +359,11 @@ const PartyItems = (props) => {
         }))
         const jsonBody = JSON.stringify(Find, PartyData)
         dispatch(PostPartyItems(PartyData));
-        console.log("post Data", jsonBody)
 
+        saveDissable(true);//+++++++++save Button Is dissable function
     };
+
+   
 
 
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
