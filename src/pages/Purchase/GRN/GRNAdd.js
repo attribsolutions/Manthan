@@ -665,7 +665,7 @@ const GRNAdd = (props) => {
                         <Row>
                         <Col sm={5}>
 
-                            <FormGroup className=" row mt-1 " >
+                            <FormGroup className=" row mt-2 " >
                                 <Label className="col-sm-4 p-2"
                                     style={{ width: "130px" }}>GRN Date</Label>
                                 <Col sm="7">
@@ -718,7 +718,7 @@ const GRNAdd = (props) => {
                             </FormGroup>
                             </Col>
                         <Col sm={5}>
-                            <FormGroup className=" row mt-1" >
+                            <FormGroup className=" row mt-2" >
                                 <Label className="col-md-4 p-2"
                                     style={{ width: "130px" }}>Invoice Date</Label>
                                 <Col md="7">
