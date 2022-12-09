@@ -228,6 +228,14 @@ export const userCompany = () => {//+++++++++++++++++++++ Seesion Company Id++++
     return userCompany
 }
 
+export const userParty = () => {//+++++++++++++++++++++ Seesion userParty Id+++++++++++++++++++++++++++++++
+    let userParty = 0
+    try {
+        userParty = JSON.parse(localStorage.getItem("roleId")).Party_id
+    } catch (e) { alert("Common userParty Func  Error") }
+    return userParty
+}
+
 export function convertTimefunc(inputDate) { //+++++++++++Convert Time Format+++++++++++++++++++++++++++++++
     const date = new Date(inputDate);
     let month = date.getMonth() + 1;
@@ -254,4 +262,11 @@ export function convertDatefunc(inputDate) {// +++++++++++Convert Date Format+++
     let convDate = `${date.getDate() < 10 ? `0${date.getDate()}` : `${date.getDate()}`}-${month < 10 ? `0${month}`
         : `${month}`}-${date.getFullYear()}`;
     return convDate
+}
+
+export function saveDissable(state = false) {//+++++++++++++++++++++ Save Button Dissable/Enable +++++++++++++++++++++++++++++++
+    try { document.getElementById('form_submmit').disabled = state }
+    catch (e) { alert("button dissable error") }
+
+
 }

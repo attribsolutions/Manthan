@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState, } from "react";
+import React, { useEffect, useState, } from "react";
 import Breadcrumb from "../../../components/Common/Breadcrumb3";
 import {
     Card,
@@ -24,7 +24,7 @@ import {
     editCompanyGroupTypeSuccess,
     updateCompanyGroupTypeID,
     PostMethodForCompanyGroupMaster,
-   
+
 } from "../../../store/Administrator/CompanyGroupRedux/action";
 import { useHistory } from "react-router-dom";
 import {
@@ -36,20 +36,18 @@ import {
 import { COMPANYGROUP_lIST } from "../../../routes/route_url";
 import { UPDATE_COMPANYGROUP_TYPE_ID_SUCCESS } from "../../../store/Administrator/CompanyGroupRedux/actionType";
 import SaveButton from "../../../components/Common/ComponentRelatedCommonFile/CommonSaveButton";
-import { createdBy } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { createdBy, saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 
 
 
 const CompanyGroupMaster = (props) => {
 
-    const formRef = useRef(null);
     const dispatch = useDispatch();
     const history = useHistory()
 
     const [pageMode, setPageMode] = useState();
     const [userPageAccessState, setUserPageAccessState] = useState('');
     const [modalCss, setModalCss] = useState(false);
-    const [Checkbox, setCheckbox] = useState(false);
 
     {/** Dyanamic Page access state and OnChange function */ }
 
@@ -134,9 +132,10 @@ const CompanyGroupMaster = (props) => {
     useEffect(() => {
 
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
+            saveDissable(false);//+++++++++save Button Is enable function
+            setState(() => initialFiledFunc(fileds)) //+++++++++ Clear form values 
 
             dispatch(PostMethod_ForCompanyGroupMasterSuccess({ Status: false }))
-            formRef.current.reset();
             if (pageMode === "dropdownAdd") {
                 dispatch(AlertState({
                     Type: 1,
@@ -154,6 +153,8 @@ const CompanyGroupMaster = (props) => {
             }
         }
         else if (postMsg.Status === true) {
+            saveDissable(false);//+++++++++save Button Is enable function
+
             dispatch(PostMethod_ForCompanyGroupMasterSuccess({ Status: false }))
             dispatch(AlertState({
                 Type: 4,
@@ -167,10 +168,14 @@ const CompanyGroupMaster = (props) => {
 
     useEffect(() => {
         if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
+            saveDissable(false);//+++++++++Update Button Is enable function
+            setState(() => initialFiledFunc(fileds)) //+++++++++ Clear form values
+
             history.push({
                 pathname: COMPANYGROUP_lIST,
             })
         } else if (updateMsg.Status === true && !modalCss) {
+            saveDissable(false);//+++++++++Update Button Is enable function
             dispatch(UPDATE_COMPANYGROUP_TYPE_ID_SUCCESS({ Status: false }));
             dispatch(
                 AlertState({
@@ -199,18 +204,18 @@ const CompanyGroupMaster = (props) => {
         if (formValid(state, setState)) {
             const jsonBody = JSON.stringify({
                 Name: values.Name,
-                IsSCM: Checkbox,
+                IsSCM: values.IsSCM,
                 CreatedBy: createdBy(),
                 UpdatedBy: createdBy()
             });
 
+            saveDissable(true);//+++++++++save Button Is dissable function
+
             if (pageMode === "edit") {
                 dispatch(updateCompanyGroupTypeID(jsonBody, values.id));
-                console.log("update data", jsonBody)
             }
             else {
                 dispatch(PostMethodForCompanyGroupMaster(jsonBody));
-                console.log("post data", jsonBody)
             }
         }
     };
@@ -237,7 +242,7 @@ const CompanyGroupMaster = (props) => {
 
                             <CardBody className=" vh-10 0 text-black" style={{ backgroundColor: "#whitesmoke" }} >
 
-                                <form onSubmit={formSubmitHandler} ref={formRef} noValidate>
+                                <form onSubmit={formSubmitHandler} noValidate>
 
                                     <Row className="">
                                         <Col md={12}>

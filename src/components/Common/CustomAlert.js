@@ -19,7 +19,6 @@ const CustomAlert = () => {
     AfterResponseAction = false,
     PermissionAction = false,
     RedirectPath = false,
-    afterResponseIsfunc = false
   } = AlertData;
 
   //  Alert Modal Show and Hide Controller
@@ -40,9 +39,6 @@ const CustomAlert = () => {
     if (AfterResponseAction) {
       dispatch(AfterResponseAction());
     };
-    if (afterResponseIsfunc) {
-      afterResponseIsfunc()
-    }
 
     if (RedirectPath) {
       history.push({
