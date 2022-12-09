@@ -197,9 +197,7 @@ const OrderList = () => {
                                             altFormat: "d-m-Y",
                                             dateFormat: "Y-m-d",
                                         }}
-                                        // onChange={(e, date) => { setFromdate(date) }}
                                         onChange={fromdateOnchange}
-                                    // onReady={(e, date) => { setFromdate(date) }}
                                     />
                                 </Col>
                             </FormGroup>
@@ -220,8 +218,6 @@ const OrderList = () => {
                                             dateFormat: "Y-m-d",
                                         }}
                                         onChange={todateOnchange}
-                                    // onReady={(e, date) => { setTodate(date) }}
-
                                     />
                                 </Col>
                             </FormGroup>
@@ -238,7 +234,6 @@ const OrderList = () => {
                                         classNamePrefix="select2-Customer"
                                         value={supplierSelect}
                                         options={supplierOptions}
-                                        // onChange={(e) => { setsupplierSelect(e) }}
                                         onChange={supplierOnchange}
                                     />
                                 </Col>
