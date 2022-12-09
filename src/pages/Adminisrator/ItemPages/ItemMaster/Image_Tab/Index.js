@@ -145,7 +145,7 @@ export default function Image(props) {
                             />
                         </FormGroup>
 
-                        <Col md={2}>
+                        <Col md={2} >
                             {(imageTable.length === key + 1) ?
                                 <Row className=" mt-3">
                                     <Col sm={1} className=" mt-3">
@@ -161,8 +161,10 @@ export default function Image(props) {
 
                                     </Col>
 
-                                    <Col md={2}>
-                                        <Button className="button_add badge badge-soft-primary font-size-12 waves-effect  waves-light  btn-outline-primary"
+                                    <Col sm={3} style={{ marginLeft: "17px" }}>
+                                        <Button
+                                            className=" button_add"
+                                            color="btn btn-outline-primary border-2 font-size-12"
                                             type="button"
                                             onClick={() => { addRowHandler(key) }} >
                                             <i className="dripicons-plus"></i>
@@ -181,7 +183,7 @@ export default function Image(props) {
 
                         </Col>
 
-                        <a id="img" href='#'> {(index.ImageUpload === "") ? null : <img id='images' src={index.ImageUpload} />} </a>
+                        <a id="img" href='#'> {(index.ImageUpload === "") ? null : < img id='images' src={index.ImageUpload} />} </a>
 
                     </Row>
                 })}

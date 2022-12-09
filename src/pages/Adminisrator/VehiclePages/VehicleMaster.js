@@ -483,11 +483,11 @@ const VehicleMaster = (props) => {
                                                                 )}
 
                                                             </FormGroup>
-                                                            <Col sm={1} style={{ marginTop: '28px' }} >
+                                                            <Col sm={1} style={{ marginTop: '17px' }} >
                                                                 {" "}
                                                                 <Button
                                                                     type="button"
-                                                                    className="btn btn-sm mt-1 mb-0 btn-light  btn-outline-primary"
+                                                                    className="button_add badge badge-soft-primary font-size-12 waves-effect  waves-light  btn-outline-primary"
                                                                     onClick={() =>
                                                                         AddDivisionHandler()
                                                                     }

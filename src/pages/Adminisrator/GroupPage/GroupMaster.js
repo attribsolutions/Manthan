@@ -150,6 +150,7 @@ const GroupMaster = (props) => {
 
 
     useEffect(() => {
+        debugger
 
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(postGroupSuccess({ Status: false }))
@@ -202,7 +203,7 @@ const GroupMaster = (props) => {
 
 
     useEffect(() => {
-        debugger
+
         if (pageField) {
             const fieldArr = pageField.PageFieldMaster
             comAddPageFieldFunc({ state, setState, fieldArr })// new change
@@ -223,7 +224,7 @@ const GroupMaster = (props) => {
     const formSubmitHandler = (event) => {
         event.preventDefault();
         if (formValid(state, setState)) {
-            debugger
+    
             const jsonBody = JSON.stringify({
                 Name: values.Name,
                 GroupType: values.GroupTypeName.value,

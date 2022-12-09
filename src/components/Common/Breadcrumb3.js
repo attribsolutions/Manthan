@@ -48,6 +48,7 @@ const Breadcrumb = props => {
     // New Button Handller
     const NewButtonHandeller = () => {
 
+
         let pathName = history.location.pathname
         let userAcc = userAccess.find((inx) => {
             return (`/${inx.ActualPagePath}` === pathName)
