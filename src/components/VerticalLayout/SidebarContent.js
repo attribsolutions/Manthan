@@ -151,7 +151,7 @@ const SidebarContent = (props) => {
 
   // Use ComponentDidMount and ComponentDidUpdate method symultaniously
   useEffect(() => {
-    debugger
+
     const pathName = props.location.pathname;
     const initMenu = () => {
       new MetisMenu("#side-menu");
