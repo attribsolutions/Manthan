@@ -1,4 +1,4 @@
-import { call, put, takeEvery } from "redux-saga/effects";
+import { call, delay, put, takeEvery } from "redux-saga/effects";
 
 import {
   deleteOrderIdSuccess,
@@ -28,12 +28,13 @@ import {
 
 import { SpinnerState } from "../../Utilites/Spinner/actions";
 import { AlertState } from "../../Utilites/CustomAlertRedux/actions";
-import { convertDatefunc, convertTimefunc } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { convertDatefunc, convertTimefunc, GoBtnDissable, saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 
 
 function* goButtonGenFunc({ data, hasEditVal }) {
 
-  yield put(SpinnerState(true))
+  yield GoBtnDissable(true)
+  yield delay(500)
   try {
     const response = yield call(OrderPage_GoButton_API, data);
 
@@ -67,9 +68,9 @@ function* goButtonGenFunc({ data, hasEditVal }) {
     });
 
     yield put(goButtonSuccess(response.Data));
-    yield put(SpinnerState(false))
+    yield GoBtnDissable(false)
   } catch (error) {
-    yield put(SpinnerState(false))
+    yield GoBtnDissable(false)
     yield put(AlertState({
       Type: 4,
       Status: true, Message: "500 Error Go Button-Order Page",
@@ -128,13 +129,13 @@ function* DeleteOrder_GenFunc({ id }) {
 function* UpdateOrder_ID_GenFunc({ data, id }) {
 
   try {
-    yield put(SpinnerState(true))
+    yield saveDissable(true)
     const response = yield call(UpdateOrder_ID_ApiCall, data, id);
-    yield put(SpinnerState(false))
     yield put(updateOrderIdSuccess(response))
+    yield saveDissable(false)
   }
   catch (error) {
-    yield put(SpinnerState(false))
+    yield saveDissable(false)
     yield put(AlertState({
       Type: 4,
       Status: true, Message: "500 Error UpdateOrder",
@@ -145,7 +146,8 @@ function* UpdateOrder_ID_GenFunc({ data, id }) {
 // List Page API
 function* get_OrderList_GenFunc({ filters }) {
 
-  yield put(SpinnerState(true))
+  yield GoBtnDissable(true)
+  yield delay(500)
   try {
     const response = yield call(Order_get_API, filters);
     const newList = yield response.Data.map((i) => {
@@ -154,11 +156,11 @@ function* get_OrderList_GenFunc({ filters }) {
       i.OrderDate = (`${date} ${time}`)
       return i
     })
-    yield put(SpinnerState(false))
     yield put(getOrderListPageSuccess(newList))
+    yield GoBtnDissable(false)
 
   } catch (error) {
-    yield put(SpinnerState(false))
+    yield GoBtnDissable(false)
     yield put(AlertState({
       Type: 4,
       Status: true, Message: "500 Error  Get OrderList",

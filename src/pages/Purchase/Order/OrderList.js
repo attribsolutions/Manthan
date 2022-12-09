@@ -54,7 +54,7 @@ const OrderList = () => {
         })
     );
     const { userAccess, pageField, GRNitem, supplier, tableList, orderlistFilter } = reducers;
-    const { fromdate, todate,supplierSelect } = orderlistFilter;
+    const { fromdate, todate, supplierSelect } = orderlistFilter;
 
     const action = {
         getList: getOrderListPage,
@@ -181,7 +181,7 @@ const OrderList = () => {
                     excelData={downList} />
 
                 <div className="px-2  mt-n1 c_card_filter" >
-                    <div className=" row" style={{marginBottom:"-13px"}}>
+                    <div className=" row" style={{ marginBottom: "-13px" }}>
                         <Col sm="3" className="">
                             <FormGroup className="mb- row mt-3 " >
                                 <Label className="col-sm-5 p-2"
@@ -241,7 +241,8 @@ const OrderList = () => {
                         </Col >
 
                         <Col sm="1" className="mt-3 ">
-                            <Button type="button" color="btn btn-outline-success border-2 font-size-12 mb-2 "
+                            <Button id="gobtn_submmit" type="button"
+                                color="btn btn-outline-success border-2 font-size-12 mb-2 "
                                 onClick={() => goButtonHandler()}
                             >Go</Button>
                         </Col>

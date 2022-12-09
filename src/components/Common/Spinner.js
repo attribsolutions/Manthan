@@ -27,12 +27,12 @@ const Spinner = () => {
         if (!SpinnerState) {
             setTimeout(() => {
                 try {
-                    document.getElementById("overlay").style.display = "none";
+                    // document.getElementById("overlay").style.display = "none";
                 } catch (e) { }
-            }, 500)
+            }, )
         } else {
             try {
-                document.getElementById("overlay").style.display = "block";
+                // document.getElementById("overlay").style.display = "block";
             } catch (e) { }
         }
     }, [SpinnerState])
