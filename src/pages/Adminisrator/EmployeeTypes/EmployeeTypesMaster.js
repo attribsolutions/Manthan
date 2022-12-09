@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState, } from "react";
+import React, { useEffect, useState, } from "react";
 import {
     Card,
     CardBody,
@@ -35,22 +35,20 @@ import {
 } from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
 import { EMPLOYEETYPE_lIST } from "../../../routes/route_url";
 import SaveButton from "../../../components/Common/ComponentRelatedCommonFile/CommonSaveButton";
-import { createdBy } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { createdBy, saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 
 
 
 const EmployeeTypesMaster = (props) => {
 
-    const formRef = useRef(null);
     const dispatch = useDispatch();
     const history = useHistory()
-
     const [pageMode, setPageMode] = useState();
     const [userPageAccessState, setUserPageAccessState] = useState('');
     const [modalCss, setModalCss] = useState(false);
 
-      {/** Dyanamic Page access state and OnChange function */ }
-      
+    {/** Dyanamic Page access state and OnChange function */ }
+
     const fileds = {
         id: "",
         Name: "",
@@ -137,9 +135,9 @@ const EmployeeTypesMaster = (props) => {
 
     useEffect(() => {
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200) && !(pageMode === "dropdownAdd")) {
-
             dispatch(PostEmployeeTypeSubmitSuccess({ Status: false }))
-            formRef.current.reset();
+            setState(() => initialFiledFunc(fileds)) //+++++++++ Clear form values 
+            saveDissable(false);//+++++++++save Button Is enable function
             if (pageMode === "dropdownAdd") {
                 dispatch(AlertState({
                     Type: 1,
@@ -158,6 +156,7 @@ const EmployeeTypesMaster = (props) => {
             }
         }
         else if ((postMsg.Status === true) && !(pageMode === "dropdownAdd")) {
+            saveDissable(false);//+++++++++save Button Is enable function
             dispatch(PostEmployeeTypeSubmitSuccess({ Status: false }))
             dispatch(AlertState({
                 Type: 4,
@@ -171,10 +170,13 @@ const EmployeeTypesMaster = (props) => {
 
     useEffect(() => {
         if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
+            saveDissable(false);//+++++++++Update Button Is enable function
+            setState(() => initialFiledFunc(fileds)) //+++++++++ Clear form values
             history.push({
                 pathname: EMPLOYEETYPE_lIST,
             })
         } else if (updateMsg.Status === true && !modalCss) {
+            saveDissable(false);//+++++++++Update Button Is enable function
             dispatch(updateEmployeeTypeIDSuccess({ Status: false }));
             dispatch(
                 AlertState({
@@ -214,6 +216,8 @@ const EmployeeTypesMaster = (props) => {
                 UpdatedOn: "2022-07-18T00:00:00"
             });
 
+            saveDissable(true);//+++++++++save Button Is dissable function
+
             if (pageMode === "edit") {
                 dispatch(updateEmployeeTypeID(jsonBody, values.id));
             }
@@ -243,7 +247,7 @@ const EmployeeTypesMaster = (props) => {
                             </CardHeader>
 
                             <CardBody className=" vh-10 0 text-black"  >
-                                <form onSubmit={formSubmitHandler} ref={formRef} noValidate>
+                                <form onSubmit={formSubmitHandler}noValidate>
                                     <Row className="">
                                         <Col md={12}>
                                             <Card>

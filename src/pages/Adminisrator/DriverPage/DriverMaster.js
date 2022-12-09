@@ -1,7 +1,6 @@
-import React, { useEffect, useRef, useState, } from "react";
+import React, { useEffect,useState, } from "react";
 import Breadcrumb from "../../../components/Common/Breadcrumb3";
 import {
-    Button,
     Card,
     CardBody,
     CardHeader,
@@ -35,14 +34,13 @@ import {
 } from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
 import { DRIVER_lIST } from "../../../routes/route_url";
 import SaveButton from "../../../components/Common/ComponentRelatedCommonFile/CommonSaveButton";
+import { saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 
 
 const DriverMaster = (props) => {
 
     const dispatch = useDispatch();
     const history = useHistory()
-
-    const formRef = useRef(null);
     const [pageMode, setPageMode] = useState("");
     const [userPageAccessState, setUserPageAccessState] = useState("");
     const [modalCss, setModalCss] = useState(false);// new change
@@ -145,8 +143,9 @@ const DriverMaster = (props) => {
 
     useEffect(() => {
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
+            setState(() => initialFiledFunc(fileds)) //+++++++++ Clear form values 
+            saveDissable(false);//+++++++++save Button Is enable function
             dispatch(PostMethod_ForDriverMasterSuccess({ Status: false }))
-            formRef.current.reset();
             if (pageMode === "dropdownAdd") {
                 dispatch(AlertState({
                     Type: 1,
@@ -164,6 +163,7 @@ const DriverMaster = (props) => {
             }
         }
         else if (postMsg.Status === true) {
+            saveDissable(false);//+++++++++save Button Is enable function
             dispatch(getMethod_ForDriverListSuccess({ Status: false }))
             dispatch(AlertState({
                 Type: 4,
@@ -177,10 +177,13 @@ const DriverMaster = (props) => {
 
     useEffect(() => {
         if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
+            saveDissable(false);//+++++++++Update Button Is enable function
+            setState(() => initialFiledFunc(fileds)) //+++++++++ Clear form values
             history.push({
                 pathname: DRIVER_lIST,
             })
         } else if (updateMsg.Status === true && !modalCss) {
+            saveDissable(false);//+++++++++Update Button Is enable function
             dispatch(updateDriverTypeIDSuccess({ Status: false }));
             dispatch(
                 AlertState({
@@ -192,8 +195,7 @@ const DriverMaster = (props) => {
         }
     }, [updateMsg, modalCss]);
 
-    // new change
-    // ////////////////////////////////////////////////////////////
+   
     useEffect(() => {
 
         if (pageField) {
@@ -220,6 +222,8 @@ const DriverMaster = (props) => {
                 DOB: values.DOB,
                 UID: values.UID
             });
+
+            saveDissable(true);//+++++++++save Button Is dissable function
 
             if (pageMode === 'edit') {
                 dispatch(updateDriverTypeID(jsonBody, values.id));// new change
@@ -256,7 +260,7 @@ const DriverMaster = (props) => {
 
                             <CardBody className=" vh-10 0 text-black" style={{ backgroundColor: "#whitesmoke" }} >
 
-                                <form onSubmit={formSubmitHandler} ref={formRef} noValidate>
+                                <form onSubmit={formSubmitHandler}noValidate>
 
                                     <Row className="">
                                         <Col md={12}>

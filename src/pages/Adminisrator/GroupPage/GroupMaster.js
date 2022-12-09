@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState, } from "react";
+import React, { useEffect, useState, } from "react";
 import Breadcrumb from "../../../components/Common/Breadcrumb3";
 import {
     Card,
@@ -39,15 +39,13 @@ import {
 import { getGroupTypeslist } from "../../../store/Administrator/GroupTypeRedux/action";
 import { GROUP_lIST } from "../../../routes/route_url";
 import SaveButton from "../../../components/Common/ComponentRelatedCommonFile/CommonSaveButton";
-import { createdBy } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { createdBy, saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 
 
 const GroupMaster = (props) => {
 
-    const formRef = useRef(null);
     const history = useHistory()
     const dispatch = useDispatch();
-
     const [EditData, setEditData] = useState({});
     const [pageMode, setPageMode] = useState("");
     const [modalCss, setModalCss] = useState(false);
@@ -150,11 +148,10 @@ const GroupMaster = (props) => {
 
 
     useEffect(() => {
-        debugger
-
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(postGroupSuccess({ Status: false }))
-            formRef.current.reset();
+            setState(() => initialFiledFunc(fileds)) //+++++++++ Clear form values 
+            saveDissable(false);//+++++++++save Button Is enable function
             if (pageMode === "other") {
                 dispatch(AlertState({
                     Type: 1,
@@ -172,6 +169,7 @@ const GroupMaster = (props) => {
             }
         }
         else if (postMsg.Status === true) {
+            saveDissable(false);//+++++++++save Button Is enable function
             dispatch(getGroupListSuccess({ Status: false }))
             dispatch(AlertState({
                 Type: 4,
@@ -185,10 +183,13 @@ const GroupMaster = (props) => {
 
     useEffect(() => {
         if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
+            saveDissable(false);//+++++++++Update Button Is enable function
+            setState(() => initialFiledFunc(fileds)) //+++++++++ Clear form values
             history.push({
                 pathname: GROUP_lIST,
             })
         } else if (updateMsg.Status === true && !modalCss) {
+            saveDissable(false);//+++++++++Update Button Is enable function
             dispatch(updategroupIDSuccess({ Status: false }));
             dispatch(
                 AlertState({
@@ -224,7 +225,7 @@ const GroupMaster = (props) => {
     const formSubmitHandler = (event) => {
         event.preventDefault();
         if (formValid(state, setState)) {
-    
+
             const jsonBody = JSON.stringify({
                 Name: values.Name,
                 GroupType: values.GroupTypeName.value,
@@ -234,10 +235,11 @@ const GroupMaster = (props) => {
                 UpdatedOn: "0002-10-03T12:48:14.910491"
             });
 
+            saveDissable(true);//+++++++++save Button Is dissable function
+
             if (pageMode === "edit") {
 
                 dispatch(updateGroupID(jsonBody, values.id));
-
 
             }
             else {
@@ -271,14 +273,12 @@ const GroupMaster = (props) => {
                             </CardHeader>
 
                             <CardBody className=" vh-10 0 text-black " >
-                                <form onSubmit={formSubmitHandler} ref={formRef} noValidate>
+                                <form onSubmit={formSubmitHandler}noValidate>
                                     <Row className="">
                                         <Col md={12} style={{ height: "9cm" }}>
                                             <Card>
                                                 <CardBody className="c_card_body">
                                                     <Row>
-
-                                                        
                                                         <FormGroup className="mb-3">
                                                             <Label htmlFor="validationCustom01">{fieldLabel.Name}</Label>
 
@@ -296,25 +296,18 @@ const GroupMaster = (props) => {
                                                                         onChangeText({ event, state, setState })
                                                                         dispatch(Breadcrumb_inputName(event.target.value))
                                                                     }}
-
                                                                 />
                                                                 {isError.Name.length > 0 && (
                                                                     <span className="invalid-feedback">{isError.Name}</span>
                                                                 )}
 
-
                                                             </Col>
                                                         </FormGroup>
-
-
                                                         <Row>
-                                                            <FormGroup className="mb-3  " style={{marginLeft:"8px" , paddingLeft:"4px"}}>
+                                                            <FormGroup className="mb-3  " style={{ marginLeft: "8px", paddingLeft: "4px" }}>
 
                                                                 <Label htmlFor="validationCustom01"> {fieldLabel.GroupTypeName} </Label>
                                                                 <Col md={4} >
-
-
-
                                                                     <Select
                                                                         name="GroupTypeName"
                                                                         // defaultValue={EmployeeType_DropdownOptions[0]}
@@ -329,12 +322,7 @@ const GroupMaster = (props) => {
                                                                         <span className="text-danger f-8"><small>{isError.GroupTypeName}</small></span>
                                                                     )}
                                                                 </Col>
-
-
-
-
                                                             </FormGroup>
-
                                                         </Row>
 
                                                         <FormGroup >

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, } from "react";
+import React, { useState, useEffect  } from "react";
 import Select from "react-select";
 import { Card, CardBody, Col, Container, Row, Label, CardHeader, FormGroup, Input } from "reactstrap";
 import { useDispatch, useSelector } from "react-redux";
@@ -12,7 +12,7 @@ import {
   Get_CompanyName_By_EmployeeTypeID,
   editEmployeeSuccess,
   updateEmployeeIDSuccess,
-  Get_CompanyName_By_EmployeeTypeID_Success
+
 } from "../../../store/Administrator/M_EmployeeRedux/action";
 import { AlertState, commonPageField, commonPageFieldSuccess } from "../../../store/actions";
 import { getDistrictOnState, getPartyListAPI } from "../../../store/Administrator/PartyRedux/action";
@@ -29,21 +29,17 @@ import {
   onChangeDate,
   onChangeSelect,
   onChangeText,
-
 } from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
 import SaveButton from "../../../components/Common/ComponentRelatedCommonFile/CommonSaveButton";
-import { createdBy } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { createdBy, saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 
 
 const AddEmployee = (props) => {
 
-  const formRef = useRef(null);
   const dispatch = useDispatch();
   const history = useHistory()
-
   const [pageMode, setPageMode] = useState("save");
   const [userPageAccessState, setUserPageAccessState] = useState('');
-
   const [modalCss, setModalCss] = useState(false);
   const [designation_DropdownSelect, setDesignation_DropdownSelect] = useState("");
   const [employeeType_DropdownSelect, setEmployeeType_DropdownSelect] = useState("");
@@ -155,7 +151,7 @@ const AddEmployee = (props) => {
       }
 
       if (hasEditVal) {
-        debugger
+    
         const listItems = hasEditVal.EmployeeParties.map((data) => ({
           value: data.id,
           label: data.Name
@@ -218,7 +214,8 @@ const AddEmployee = (props) => {
 
     if ((postMsg.Status === true) && (postMsg.StatusCode === 200) && !(pageMode === "dropdownAdd")) {
       dispatch(PostEmployeeSuccess({ Status: false }))
-      formRef.current.reset();
+      setState(() => initialFiledFunc(fileds)) //+++++++++ Clear form values 
+      saveDissable(false);//+++++++++save Button Is enable function
       setDesignation_DropdownSelect('')
       setEmployeeType_DropdownSelect('')
       setState_DropdownSelect('')
@@ -243,6 +240,7 @@ const AddEmployee = (props) => {
     }
 
     else if (postMsg.Status === true) {
+      saveDissable(false);//+++++++++save Button Is enable function
       dispatch(PostEmployeeSuccess({ Status: false }))
       dispatch(AlertState({
         Type: 4,
@@ -256,10 +254,13 @@ const AddEmployee = (props) => {
 
   useEffect(() => {
     if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
+      saveDissable(false);//+++++++++Update Button Is enable function
+      setState(() => initialFiledFunc(fileds)) //+++++++++ Clear form values
       history.push({
         pathname: EMPLOYEE_lIST,
       })
     } else if (updateMsg.Status === true && !modalCss) {
+      saveDissable(false);//+++++++++Update Button Is enable function
       dispatch(updateEmployeeIDSuccess({ Status: false }));
       dispatch(
         AlertState({
@@ -352,17 +353,12 @@ const AddEmployee = (props) => {
   }
 
   const formSubmitHandler = (event) => {
-
     event.preventDefault();
-
-
     if (formValid(state, setState)) {
       let emplPartie = [{ Party: "" }]
       if (!(values.EmployeeParties.length === 0)) {
         emplPartie = values.EmployeeParties.map((i) => { return ({ Party: i.value }) })
       }
-
-
       const jsonBody = JSON.stringify({
         Name: values.Name,
         Address: values.Address,
@@ -381,6 +377,8 @@ const AddEmployee = (props) => {
         CreatedBy: createdBy(),
         UpdatedBy: createdBy()
       });
+
+      saveDissable(true);//+++++++++save Button Is dissable function
 
       if (pageMode === "edit") {
         dispatch(updateEmployeeID(jsonBody, values.id,));
@@ -416,7 +414,7 @@ const AddEmployee = (props) => {
               </CardHeader>
 
               <CardBody>
-                <form onSubmit={formSubmitHandler} ref={formRef} noValidate>
+                <form onSubmit={formSubmitHandler} noValidate>
                   <Card  >
                     <CardBody className="c_card_body">
                       <Row >
