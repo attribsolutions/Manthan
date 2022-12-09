@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState, } from "react";
+import React, { useEffect, useState, } from "react";
 import Breadcrumb from "../../../components/Common/Breadcrumb3";
 import {
     Card,
@@ -13,7 +13,12 @@ import {
 } from "reactstrap";
 import Select from "react-select";
 import { MetaTags } from "react-meta-tags";
-import { Breadcrumb_inputName, commonPageField, commonPageFieldSuccess, getCategoryTypelist } from "../../../store/actions";
+import {
+    Breadcrumb_inputName,
+    commonPageField,
+    commonPageFieldSuccess,
+    getCategoryTypelist
+} from "../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
 import {
     editCategoryIDSuccess,
@@ -34,13 +39,12 @@ import {
 } from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
 import { CATEGORY_lIST } from "../../../routes/route_url";
 import SaveButton from "../../../components/Common/ComponentRelatedCommonFile/CommonSaveButton";
+import { saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 
 const CategoryMaster = (props) => {
 
-    const formRef = useRef(null);
     const history = useHistory()
     const dispatch = useDispatch();
-
     const [pageMode, setPageMode] = useState("");
     const [modalCss, setModalCss] = useState(false);
     const [userPageAccessState, setUserPageAccessState] = useState(123);
@@ -61,13 +65,13 @@ const CategoryMaster = (props) => {
 
 
     {/** Dyanamic Page access state and OnChange function */ }
-  
-        const fileds = {
-            id: "",
-            Name: "",
-            CategoryTypeName: ""
-        }
-       
+
+    const fileds = {
+        id: "",
+        Name: "",
+        CategoryTypeName: ""
+    }
+
 
     const [state, setState] = useState(() => initialFiledFunc(fileds))
 
@@ -142,7 +146,8 @@ const CategoryMaster = (props) => {
 
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(PostMethod_ForCategoryAPISuccess({ Status: false }))
-            formRef.current.reset();
+            setState(() => initialFiledFunc(fileds)) //+++++++++ Clear form values 
+            saveDissable(false);//+++++++++save Button Is enable function
             if (pageMode === "other") {
                 dispatch(AlertState({
                     Type: 1,
@@ -160,6 +165,7 @@ const CategoryMaster = (props) => {
             }
         }
         else if (postMsg.Status === true) {
+            saveDissable(false);//+++++++++save Button Is enable function
             dispatch(PostMethod_ForCategoryAPISuccess({ Status: false }))
             dispatch(AlertState({
                 Type: 4,
@@ -173,10 +179,13 @@ const CategoryMaster = (props) => {
 
     useEffect(() => {
         if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
+            saveDissable(false);//+++++++++Update Button Is enable function
+            setState(() => initialFiledFunc(fileds)) //+++++++++ Clear form values
             history.push({
                 pathname: CATEGORY_lIST,
             })
         } else if (updateMsg.Status === true && !modalCss) {
+            saveDissable(false);//+++++++++Update Button Is enable function
             dispatch(updateCategoryIDSuccess({ Status: false }));
             dispatch(
                 AlertState({
@@ -206,6 +215,7 @@ const CategoryMaster = (props) => {
         label: Data.Name
     }));
 
+
     const formSubmitHandler = (event) => {
         event.preventDefault();
         if (formValid(state, setState)) {
@@ -214,6 +224,8 @@ const CategoryMaster = (props) => {
                 CategoryType: values.CategoryTypeName.value,
             });
 
+            saveDissable(true);//+++++++++save Button Is dissable function
+
             if (pageMode === "edit") {
                 dispatch(updateCategoryID(jsonBody, values.id,));
             }
@@ -221,6 +233,7 @@ const CategoryMaster = (props) => {
                 dispatch(PostMethodForCategory(jsonBody));
             }
         }
+
     };
 
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
@@ -244,7 +257,7 @@ const CategoryMaster = (props) => {
                             </CardHeader>
 
                             <CardBody className=" vh-10 0 text-black" style={{ backgroundColor: "#whitesmoke" }} >
-                                <form onSubmit={formSubmitHandler} ref={formRef} noValidate>
+                                <form onSubmit={formSubmitHandler} noValidate>
                                     <Row className="">
                                         <Col md={12}>
                                             <Card>

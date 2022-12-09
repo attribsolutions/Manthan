@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState, } from "react";
+import React, { useEffect, useState, } from "react";
 import Breadcrumb from "../../../components/Common/Breadcrumb3";
 import {
     Card,
@@ -34,14 +34,14 @@ import {
 } from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
 import { CATEGORYTYPE_lIST } from "../../../routes/route_url";
 import SaveButton from "../../../components/Common/ComponentRelatedCommonFile/CommonSaveButton";
+import { saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 
 
 const CategoryTypeMaster = (props) => {
-    const formRef = useRef(null);
+
     const history = useHistory()
     const dispatch = useDispatch();
     const [modalCss, setModalCss] = useState(false);
-
     const [pageMode, setPageMode] = useState("");
     const [userPageAccessState, setUserPageAccessState] = useState(123);
 
@@ -63,7 +63,7 @@ const CategoryTypeMaster = (props) => {
         id: "",
         Name: "",
     }
-    
+
     const [state, setState] = useState(() => initialFiledFunc(fileds))
 
 
@@ -75,7 +75,7 @@ const CategoryTypeMaster = (props) => {
     const hasShowloction = location.hasOwnProperty("editValue")
     const hasShowModal = props.hasOwnProperty("editValue")
 
-    //userAccess useEffect
+
     // userAccess useEffect
     useEffect(() => {
         let userAcc = null;
@@ -93,6 +93,7 @@ const CategoryTypeMaster = (props) => {
             setUserPageAccessState(userAcc)
         };
     }, [userAccess])
+
 
     //This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
     useEffect(() => {
@@ -121,7 +122,6 @@ const CategoryTypeMaster = (props) => {
 
                 setState({ values, fieldLabel, hasValid, required, isError })
                 dispatch(Breadcrumb_inputName(hasEditVal.Name))
-
             }
             dispatch(editCategoryTypeIDSuccess({ Status: false }))
         }
@@ -131,8 +131,8 @@ const CategoryTypeMaster = (props) => {
 
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(PostMethod_ForCategoryTypeMasterAPISuccess({ Status: false }))
-
-
+            setState(() => initialFiledFunc(fileds)) //+++++++++ Clear form values 
+            saveDissable(false);//+++++++++save Button Is enable function
             if (pageMode === "other") {
                 dispatch(AlertState({
                     Type: 1,
@@ -151,6 +151,7 @@ const CategoryTypeMaster = (props) => {
             }
         }
         else if (postMsg.Status === true) {
+            saveDissable(false);//+++++++++save Button Is enable function
             dispatch(getCategoryTypelistSuccess({ Status: false }))
             dispatch(AlertState({
                 Type: 4,
@@ -164,10 +165,13 @@ const CategoryTypeMaster = (props) => {
 
     useEffect(() => {
         if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
+            saveDissable(false);//+++++++++Update Button Is enable function
+            setState(() => initialFiledFunc(fileds)) //+++++++++ Clear form values
             history.push({
                 pathname: CATEGORYTYPE_lIST,
             })
         } else if (updateMsg.Status === true && !modalCss) {
+            saveDissable(false);//+++++++++Update Button Is enable function
             dispatch(updateCategoryTypeIDSuccess({ Status: false }));
             dispatch(
                 AlertState({
@@ -194,13 +198,15 @@ const CategoryTypeMaster = (props) => {
             const jsonBody = JSON.stringify({
                 Name: values.Name,
             });
+
+            saveDissable(true);//+++++++++save Button Is dissable function
+
             if (pageMode === "edit") {
                 dispatch(updateCategoryTypeID(jsonBody, values.id));
             }
             else {
                 dispatch(PostMethodForCategoryTypeMaster(jsonBody))
             }
-
         }
     };
 
@@ -225,7 +231,7 @@ const CategoryTypeMaster = (props) => {
                             </CardHeader>
 
                             <CardBody className=" vh-10 0 text-black" style={{ backgroundColor: "#whitesmoke" }} >
-                                <form onSubmit={formSubmitHandler} ref={formRef} noValidate>
+                                <form onSubmit={formSubmitHandler}noValidate>
                                     <Row className="">
                                         <Col md={12}>
                                             <Card>
@@ -261,7 +267,6 @@ const CategoryTypeMaster = (props) => {
                                                                 </Col>
                                                             </Row>
                                                         </FormGroup>
-
                                                     </Row>
                                                 </CardBody>
                                             </Card>

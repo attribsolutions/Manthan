@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef,} from "react";
+import React, { useState, useEffect } from "react";
 import {
   Card,
   CardBody,
@@ -35,22 +35,19 @@ import {
 } from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
 import { COMPANY_lIST } from "../../../routes/route_url";
 import SaveButton from "../../../components/Common/ComponentRelatedCommonFile/CommonSaveButton";
-import { createdBy } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { createdBy, saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 
 
 const CompanyModule = (props) => {
 
-  const formRef = useRef(null);
   const dispatch = useDispatch();
   const history = useHistory()
 
   //*** "isEditdata get all data from ModuleID for Binding  Form controls
 
-  const [EditData, setEditData] = useState({});
   const [modalCss, setModalCss] = useState(false);
   const [pageMode, setPageMode] = useState("save");
   const [userPageAccessState, setUserPageAccessState] = useState('');
-
   const [CompanyGroupselect, setCompanyGroup] = useState("");
 
   //Access redux store Data /  'save_ModuleSuccess' action data
@@ -156,8 +153,9 @@ const CompanyModule = (props) => {
 
     if ((postMsg.Status === true) && (postMsg.StatusCode === 200) && !(pageMode === "dropdownAdd")) {
       dispatch(PostCompanySubmitSuccess({ Status: false }))
+      setState(() => initialFiledFunc(fileds)) //+++++++++ Clear form values 
+      saveDissable(false);//+++++++++save Button Is enable function
       setCompanyGroup('')
-      formRef.current.reset();
       if (pageMode === "other") {
         dispatch(AlertState({
           Type: 1,
@@ -175,6 +173,7 @@ const CompanyModule = (props) => {
       }
     }
     else if ((postMsg.Status === true) && !(pageMode === "dropdownAdd")) {
+      saveDissable(false);//+++++++++save Button Is enable function
       dispatch(PostCompanySubmitSuccess({ Status: false }))
       dispatch(AlertState({
         Type: 4,
@@ -188,10 +187,13 @@ const CompanyModule = (props) => {
 
   useEffect(() => {
     if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
+      saveDissable(false);//+++++++++Update Button Is enable function
+      setState(() => initialFiledFunc(fileds)) //+++++++++ Clear form values
       history.push({
         pathname: COMPANY_lIST,
       })
     } else if (updateMsg.Status === true && !modalCss) {
+      saveDissable(false);//+++++++++Update Button Is enable function
       dispatch(updateCompanyIDSuccess({ Status: false }));
       dispatch(
         AlertState({
@@ -235,6 +237,8 @@ const CompanyModule = (props) => {
         CreatedBy: createdBy(),
         UpdatedBy: createdBy(),
       });
+
+      saveDissable(true);//+++++++++save Button Is dissable function
 
       if (pageMode === "edit") {
         dispatch(updateCompanyID(jsonBody, values.id,));
@@ -295,7 +299,7 @@ const CompanyModule = (props) => {
                   </CardHeader>
 
                   <CardBody>
-                    <form onSubmit={formSubmitHandler} ref={formRef} noValidate>
+                    <form onSubmit={formSubmitHandler}noValidate>
                       <Card >
                         <CardBody className="c_card_body">
                           <Row>

@@ -59,7 +59,6 @@ function* Post_Method_For_CompanyGroup_GenFun({ data }) {
 
 
 
-
 // delete api 
 function* Delete_CompanyGroupType_ID_GenratorFunction({ id }) {
   try {

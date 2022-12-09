@@ -39,12 +39,10 @@ import SaveButton from "../../../components/Common/ComponentRelatedCommonFile/Co
 import { createdBy, saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 
 
-
 const CompanyGroupMaster = (props) => {
 
     const dispatch = useDispatch();
     const history = useHistory()
-
     const [pageMode, setPageMode] = useState();
     const [userPageAccessState, setUserPageAccessState] = useState('');
     const [modalCss, setModalCss] = useState(false);
@@ -132,9 +130,8 @@ const CompanyGroupMaster = (props) => {
     useEffect(() => {
 
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
-            saveDissable(false);//+++++++++save Button Is enable function
             setState(() => initialFiledFunc(fileds)) //+++++++++ Clear form values 
-
+            saveDissable(false);//+++++++++save Button Is enable function
             dispatch(PostMethod_ForCompanyGroupMasterSuccess({ Status: false }))
             if (pageMode === "dropdownAdd") {
                 dispatch(AlertState({
@@ -154,7 +151,6 @@ const CompanyGroupMaster = (props) => {
         }
         else if (postMsg.Status === true) {
             saveDissable(false);//+++++++++save Button Is enable function
-
             dispatch(PostMethod_ForCompanyGroupMasterSuccess({ Status: false }))
             dispatch(AlertState({
                 Type: 4,
