@@ -1,4 +1,4 @@
-import React, { useEffect,  useRef, useState, } from "react";
+import React, { useEffect, useState, } from "react";
 import Breadcrumb from "../../../components/Common/Breadcrumb3";
 import {
     Card,
@@ -32,29 +32,27 @@ import {
 } from "../../../store/Administrator/GroupTypeRedux/action";
 import { GROUPTYPE_lIST } from "../../../routes/route_url";
 import SaveButton from "../../../components/Common/ComponentRelatedCommonFile/CommonSaveButton";
-import { createdBy } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { createdBy, saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 
 
 const GroupTypeMaster = (props) => {
 
     const dispatch = useDispatch();
     const history = useHistory()
-
-    const formRef = useRef(null);
     const [EditData, setEditData] = useState({});
     const [modalCss, setModalCss] = useState(false);
     const [pageMode, setPageMode] = useState("save");
     const [userPageAccessState, setUserPageAccessState] = useState('');
 
-  
- {/** Dyanamic Page access state and OnChange function */ }
 
-        const fileds = {
-            id: "",
-            Name: "",
-            IsReserved:false
-        }
-    
+    {/** Dyanamic Page access state and OnChange function */ }
+
+    const fileds = {
+        id: "",
+        Name: "",
+        IsReserved: false
+    }
+
     const [state, setState] = useState(() => initialFiledFunc(fileds))
 
     //Access redux store Data /  'save_ModuleSuccess' action data
@@ -134,7 +132,8 @@ const GroupTypeMaster = (props) => {
     useEffect(() => {
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(PostGroupTypeSubmitSuccess({ Status: false }))
-            formRef.current.reset();
+            setState(() => initialFiledFunc(fileds)) //+++++++++ Clear form values 
+            saveDissable(false);//+++++++++save Button Is enable function
             if (pageMode === "dropdownAdd") {
                 dispatch(AlertState({
                     Type: 1,
@@ -152,6 +151,7 @@ const GroupTypeMaster = (props) => {
             }
         }
         else if (postMsg.Status === true) {
+            saveDissable(false);//+++++++++save Button Is enable function
             dispatch(getGroupTypeslistSuccess({ Status: false }))
             dispatch(AlertState({
                 Type: 4,
@@ -165,10 +165,13 @@ const GroupTypeMaster = (props) => {
 
     useEffect(() => {
         if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
+            saveDissable(false);//+++++++++Update Button Is enable function
+            setState(() => initialFiledFunc(fileds)) //+++++++++ Clear form values
             history.push({
                 pathname: GROUPTYPE_lIST,
             })
         } else if (updateMsg.Status === true && !modalCss) {
+            saveDissable(false);//+++++++++Update Button Is enable function
             dispatch(updateGroupTypeIDSuccess({ Status: false }));
             dispatch(
                 AlertState({
@@ -195,7 +198,6 @@ const GroupTypeMaster = (props) => {
 
         event.preventDefault();
         if (formValid(state, setState)) {
-            debugger
             const jsonBody = JSON.stringify({
                 Name: values.Name,
                 IsReserved: values.IsReserved,
@@ -205,6 +207,8 @@ const GroupTypeMaster = (props) => {
                 UpdatedOn: "0002-10-03T12:48:14.910491"
 
             });
+
+            saveDissable(true);//+++++++++save Button Is dissable function
 
             if (pageMode === 'edit') {
                 dispatch(updateGroupTypeID(jsonBody, EditData.id));
@@ -237,7 +241,7 @@ const GroupTypeMaster = (props) => {
 
                             <CardBody className=" vh-10 0 text-black"  >
 
-                                <form onSubmit={formSubmitHandler} ref={formRef} noValidate>
+                                <form onSubmit={formSubmitHandler}noValidate>
 
                                     <Row className="">
                                         <Col md={12}>
@@ -259,7 +263,6 @@ const GroupTypeMaster = (props) => {
                                                                     onChangeText({ event, state, setState })
                                                                     dispatch(Breadcrumb_inputName(event.target.value))
                                                                 }}
-
                                                             />
                                                             {isError.Name.length > 0 && (
                                                                 <span className="invalid-feedback">{isError.Name}</span>

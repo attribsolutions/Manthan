@@ -1,7 +1,16 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Breadcrumb from "../../../components/Common/Breadcrumb3";
-import { Card, CardBody, Col, Container, Row, Label, CardHeader, FormGroup, Input, } from "reactstrap";
-import { AvInput } from "availity-reactstrap-validation";
+import {
+  Card,
+  CardBody,
+  Col,
+  Container,
+  Row,
+  Label,
+  CardHeader,
+  FormGroup,
+  Input
+} from "reactstrap";
 import { useDispatch, useSelector } from "react-redux";
 import {
   editSuccess,
@@ -9,7 +18,12 @@ import {
   updateID,
   PostSuccess
 } from "../../../store/Administrator/RoleMasterRedux/action";
-import { AlertState, commonPageField, commonPageFieldSuccess, updateSuccess } from "../../../store/actions";
+import {
+  AlertState,
+  commonPageField,
+  commonPageFieldSuccess,
+  updateSuccess
+} from "../../../store/actions";
 import Select from "react-select";
 import { Breadcrumb_inputName } from "../../../store/Utilites/Breadcrumb/actions";
 import { MetaTags } from "react-meta-tags";
@@ -24,12 +38,11 @@ import {
 } from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
 import { ROLE_lIST } from "../../../routes/route_url";
 import SaveButton from "../../../components/Common/ComponentRelatedCommonFile/CommonSaveButton";
-import { createdBy } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { createdBy, saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 
 
 
 const RoleMaster = (props) => {
-  const formRef = useRef(null);
   const dispatch = useDispatch();
   const history = useHistory()
 
@@ -158,7 +171,8 @@ const RoleMaster = (props) => {
   useEffect(() => {
     if ((postMsg.Status === true) && (postMsg.StatusCode === 200) && !(pageMode === "dropdownAdd")) {
       dispatch(PostSuccess({ Status: false }))
-      formRef.current.reset();
+      setState(() => initialFiledFunc(fileds)) //+++++++++ Clear form values 
+      saveDissable(false);//+++++++++save Button Is enable function
       if (pageMode === "dropdownAdd") {
         dispatch(AlertState({
           Type: 1,
@@ -177,6 +191,7 @@ const RoleMaster = (props) => {
       }
     }
     else if ((postMsg.Status === true) && !(pageMode === "dropdownAdd")) {
+      saveDissable(false);//+++++++++save Button Is enable function
       dispatch(PostSuccess({ Status: false }))
       dispatch(AlertState({
         Type: 4,
@@ -190,10 +205,13 @@ const RoleMaster = (props) => {
 
   useEffect(() => {
     if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
+      saveDissable(false);//+++++++++Update Button Is enable function
+      setState(() => initialFiledFunc(fileds)) //+++++++++ Clear form values
       history.push({
         pathname: ROLE_lIST,
       })
     } else if (updateMsg.Status === true && !modalCss) {
+      saveDissable(false);//+++++++++Update Button Is enable function
       dispatch(updateSuccess({ Status: false }));
       dispatch(
         AlertState({
@@ -216,10 +234,8 @@ const RoleMaster = (props) => {
   const { fieldLabel } = state;
 
   const formSubmitHandler = (event) => {
-
     event.preventDefault();
     if (formValid(state, setState)) {
-
       const jsonBody = JSON.stringify({
         Name: values.Name,
         Description: values.Description,
@@ -238,6 +254,8 @@ const RoleMaster = (props) => {
         UpdatedBy: createdBy(),
         UpdatedOn: "2022-05-20T11:22:55.711483Z"
       });
+
+      saveDissable(true);//+++++++++save Button Is dissable function
 
       if (pageMode === 'edit') {
         dispatch(updateID(jsonBody, values.id));
@@ -273,7 +291,7 @@ const RoleMaster = (props) => {
 
               <CardBody className=" vh-10 0 text-black" style={{ backgroundColor: "#whitesmoke" }} >
 
-                <form onSubmit={formSubmitHandler} ref={formRef} noValidate>
+                <form onSubmit={formSubmitHandler}noValidate>
 
                   <Row className="">
                     <Col md={12}>
@@ -364,7 +382,7 @@ const RoleMaster = (props) => {
                               <FormGroup className="mb-2 col col-sm-5">
                                 <Row className="justify-content-md-left">
                                   <Label className="col-sm-4 col-form-label" >{fieldLabel.isSCMRole}</Label>
-                                  <Col md={2} style={{ marginTop: '9px', marginLeft:"1cm"  }} >
+                                  <Col md={2} style={{ marginTop: '9px', marginLeft: "1cm" }} >
 
                                     <div className="form-check form-switch form-switch-md mb-3" >
                                       <Input type="checkbox" className="form-check-input"

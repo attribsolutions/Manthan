@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import {
     Card,
     CardBody,
@@ -25,19 +25,21 @@ import { AlertState, commonPageField } from "../../../store/actions";
 import { Breadcrumb_inputName } from "../../../store/Utilites/Breadcrumb/actions";
 import { useHistory } from "react-router-dom";
 import { MODULE_lIST } from "../../../routes/route_url";
-import { comAddPageFieldFunc, formValid, initialFiledFunc, onChangeText } from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
+import {
+    comAddPageFieldFunc,
+    formValid,
+    initialFiledFunc,
+    onChangeText
+} from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
 import SaveButton from "../../../components/Common/ComponentRelatedCommonFile/CommonSaveButton";
-import { createdBy } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { createdBy, saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 
 
 const Modules = (props) => {
 
-    const formRef = useRef(null);
     const dispatch = useDispatch();
     const history = useHistory()
-
     const [modalCss, setModalCss] = useState(false);
-    const [EditData, setEditData] = useState([]);
     const [pageMode, setPageMode] = useState("save");
     const [userPageAccessState, setUserPageAccessState] = useState('');
 
@@ -56,14 +58,14 @@ const Modules = (props) => {
 
     {/** Dyanamic Page access state and OnChange function */ }
 
-        const fileds = {
-            id: "",
-            Name: "",
-            DisplayIndex: "",
-            Icon: "",
-            isActive: false,
-        }
-   
+    const fileds = {
+        id: "",
+        Name: "",
+        DisplayIndex: "",
+        Icon: "",
+        isActive: false,
+    }
+
     const [state, setState] = useState(() => initialFiledFunc(fileds))
 
     const values = { ...state.values }
@@ -111,7 +113,7 @@ const Modules = (props) => {
             }
 
             if (hasEditVal) {
-                debugger
+
                 const { id, Name, DisplayIndex, isActive, Icon } = hasEditVal
                 const { values, fieldLabel, hasValid, required, isError } = { ...state }
 
@@ -138,7 +140,8 @@ const Modules = (props) => {
 
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200) && !(pageMode === "dropdownAdd")) {
             dispatch(PostModelsSubmitSuccess({ Status: false }))
-            formRef.current.reset();
+            setState(() => initialFiledFunc(fileds)) //+++++++++ Clear form values 
+            saveDissable(false);//+++++++++save Button Is enable function
             if (pageMode === "dropdownAdd") {
                 dispatch(AlertState({
                     Type: 1,
@@ -156,6 +159,7 @@ const Modules = (props) => {
                 }))
             }
         } else if ((postMsg.Status === true) && !(pageMode === "dropdownAdd")) {
+            saveDissable(false);//+++++++++save Button Is enable function
             dispatch(PostModelsSubmitSuccess({ Status: false }))
             dispatch(AlertState({
                 Type: 4,
@@ -169,10 +173,13 @@ const Modules = (props) => {
 
     useEffect(() => {
         if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
+            saveDissable(false);//+++++++++Update Button Is enable function
+            setState(() => initialFiledFunc(fileds)) //+++++++++ Clear form values
             history.push({
                 pathname: MODULE_lIST,
             })
         } else if (updateMsg.Status === true && !modalCss) {
+            saveDissable(false);//+++++++++Update Button Is enable function
             dispatch(updateModuleIDSuccess({ Status: false }));
             dispatch(
                 AlertState({
@@ -202,8 +209,10 @@ const Modules = (props) => {
                 isActive: values.isActive,
                 Icon: values.Icon,
                 CreatedBy: createdBy(),
-                UpdatedBy:createdBy(),
+                UpdatedBy: createdBy(),
             });
+
+            saveDissable(true);//+++++++++save Button Is dissable function
 
             if (pageMode === 'edit') {
                 dispatch(updateModuleID(jsonBody, values.id));
@@ -236,7 +245,7 @@ const Modules = (props) => {
                                 <p className="card-title-desc text-black">{userPageAccessState.PageDescriptionDetails}</p>
                             </CardHeader>
                             <CardBody className=" vh-10 0 text-black" style={{ backgroundColor: "#whitesmoke" }} >
-                                <form onSubmit={formSubmitHandler} ref={formRef} noValidate>
+                                <form onSubmit={formSubmitHandler} noValidate>
 
                                     <Row className="">
                                         <Col md={12}  >
