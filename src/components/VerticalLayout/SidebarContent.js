@@ -33,11 +33,11 @@ const SidebarContent = (props) => {
   const {
     RoleAccessData,
     afterLoginUserDetails,
-    RoleAccessModifiedinSingleArray,
+    RoleAccessUpdateData,
   } = useSelector((state) => ({
     RoleAccessData: state.Login.RoleData,
     afterLoginUserDetails: state.Login.afterLoginUserDetails,
-    RoleAccessModifiedinSingleArray: state.Login.RoleAccessUpdateData,
+    RoleAccessUpdateData: state.Login.RoleAccessUpdateData,
 
   }));
 
@@ -152,37 +152,42 @@ const SidebarContent = (props) => {
   // Use ComponentDidMount and ComponentDidUpdate method symultaniously
   useEffect(() => {
 
-    const pathName = props.location.pathname;
+    let pathName = props.location.pathname
+    debugger
+    let userAcc = RoleAccessUpdateData.find((inx) => {
+      const path = inx.ActualPagePath.toLowerCase()
+      return (`/${path}` === (pathName.toLowerCase()))
+    })
+    if (userAcc === undefined) {
+      // pathName = "/Dashbord"
+    }
+    else if (!userAcc.RoleAccess_IsShowOnMenu) {
+      let listPagePath = RoleAccessUpdateData.find((inx) => {
+        return ((inx.id === userAcc.RelatedPageID))
+      })
+      if (!(listPagePath === undefined)) {
+        pathName = `/${listPagePath.ActualPagePath}`
+      }
+    }
+
     const initMenu = () => {
       new MetisMenu("#side-menu");
       let matchingMenuItem = null;
       const ul = document.getElementById("side-menu");
       const items = ul.getElementsByTagName("a");
-      console.log(items)
-      console.log(ul)
-
-
-      // let userAcc = RoleAccessModifiedinSingleArray.find((inx) => {
-      //   const path = inx.ActualPagePath.toLowerCase()
-      //   return (`/${path}` === pathName.toLowerCase())
-      // })
-      // console.log(userAcc)
-
-
+  
       for (let i = 0; i < items.length; ++i) {
         if (pathName === items[i].pathname) {
-
           matchingMenuItem = items[i];
-
         }
-        
       }
       if (matchingMenuItem){
         activateParentDropdown(matchingMenuItem);
       }
           };
     initMenu();
-  }, [props.location.pathname, activateParentDropdown]);
+}, [props.location.pathname, activateParentDropdown]);
+
 
   useEffect(() => {
     ref.current.recalculate();
@@ -209,7 +214,7 @@ const SidebarContent = (props) => {
               </Link>
               <ul className="sub-menu">
                 <li>
-                  <Link to="/dashboard">{props.t("Dashboard")}</Link>
+                  <Link to="/Dashboard">{props.t("Dashboard")}</Link>
                 </li>
               </ul>
             </li>
@@ -237,7 +242,7 @@ const SidebarContent = (props) => {
                   
                         return (
                           <li>
-                            <Link to={{ pathname: `/${index.ActualPagePath}`, }} >{props.t(index.Name)}</Link>
+                            <Link to={{ pathname: `/${index.ActualPagePath}` }} >{props.t(index.Name)}</Link>
                           </li>
                         )
                       }
