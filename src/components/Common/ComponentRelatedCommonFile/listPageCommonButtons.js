@@ -265,12 +265,21 @@ export function convertDatefunc(inputDate) {// +++++++++++Convert Date Format+++
 }
 
 export function saveDissable(state = false) {//+++++++++++++++++++++ Save Button Dissable/Enable +++++++++++++++++++++++++++++++
-    // try {
-    //     document.getElementById("overlay").style.display = state ? "block" : "none";
-    // } catch (e) { alert("button overlay error") }
+    try {
+        document.getElementById("overlay").style.display = state ? "block" : "none";
+    } catch (e) { alert("button overlay error") }
     try {
         document.getElementById('form_submmit').disabled = state;
     } catch (e) { alert("button dissable error") }
+}
+
+export function GoBtnDissable(state = false) {//+++++++++++++++++++++ Save Button Dissable/Enable +++++++++++++++++++++++++++++++
+    try {
+        document.getElementById("overlay").style.display = state ? "block" : "none";
+    } catch (e) { alert("Go btn dissable overlay error") }
+    try {
+        document.getElementById('gobtn_submmit').disabled = state;
+    } catch (e) { alert("Go btn dissable  error") }
 
 
 }

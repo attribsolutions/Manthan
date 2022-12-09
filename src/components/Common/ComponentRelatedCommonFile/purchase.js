@@ -342,14 +342,15 @@ const PurchaseListPage = (props) => {
                             </ToolkitProvider>
                         )}
 
-                        
+
                     </PaginationProvider>
 
                     {
                         pageMode === GST_ADD_Mode_2 ?
 
-                            <div className="button_save " style={{ paddingBottom: 'center'}}>
+                            <div className="button_save " style={{ paddingBottom: 'center' }}>
                                 <button
+                                    id='form_submmit'
                                     type="submit"
                                     data-mdb-toggle="tooltip" data-mdb-placement="top"
                                     className="btn btn-primary w-md  bt_save"
