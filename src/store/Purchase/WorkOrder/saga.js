@@ -43,7 +43,7 @@ function* WorkOrderGoButton_post_gunfun({ data }) {
 
 // WOrk Order Post API
 function* Post_WorkOrder_GenratorFunction({ Data }) {
-  
+  debugger
   yield put(SpinnerState(true))
   try {
    
