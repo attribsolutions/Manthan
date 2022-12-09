@@ -60,24 +60,39 @@
 }
 
 .button_add{
-width:0.8cm !important ;
-height: 0.8cm !important;
+width:30px !important ;
+height: 30px !important;
 //  background-color:#b3e7c0 !important; 
  border-radius: 10% !important;
  margin-top: 15px !important;
  padding-bottom: 3px !important;
- padding-top: 6px !important; 
- padding-left: 3px  !important;
+ padding-top: 5px !important; 
+ padding-left: 7px  !important;
  
 }
 
 .button_save{
+  margin-top: -1cm;
+  position: fixed;
 
-
+  
   // margin-bottom: 0 !important;
 
   // margin-top: -2cm;
   // position: -webkit-sticky;
+  
+}
+
+.bt_save{
+  margin-bottom: 1cm;
+  position: static;
+  bottom: 8;
+}
+
+
+header{
+
+  
   
 }
 

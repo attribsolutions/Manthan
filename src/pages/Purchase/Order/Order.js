@@ -581,13 +581,13 @@ const Order = (props) => {
                 </MetaTags>
 
 
-                <div className="page-content" style={{ marginTop: "-0.4cm" }}>
+                <div className="page-content">
 
                     <Breadcrumb
                         pageHeading={userAccState.PageHeading}
                         showCount={true}
                     />
-                    <div className="px-2 mb-1 mt-n3 c_card_filter" >
+                    <div className="px-2 mb-1 mt-n3 c_card_filter header" >
                         <div className=" mt-1 row ">
                             <Col sm="6" className="">
                                 <FormGroup className="mb- row mt-3 " >

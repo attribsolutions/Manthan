@@ -161,8 +161,10 @@ export default function Image(props) {
 
                                     </Col>
 
-                                    <Col sm={3} style={{marginLeft:"17px"}}>
-                                        <Button className="button_add badge badge-soft-primary font-size-12 waves-effect  waves-light  btn-outline-primary"
+                                    <Col sm={3} style={{ marginLeft: "17px" }}>
+                                        <Button
+                                            className=" button_add"
+                                            color="btn btn-outline-primary border-2 font-size-12"
                                             type="button"
                                             onClick={() => { addRowHandler(key) }} >
                                             <i className="dripicons-plus"></i>

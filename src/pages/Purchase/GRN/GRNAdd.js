@@ -656,19 +656,19 @@ const GRNAdd = (props) => {
                 <MetaTags>
                     <title>{userAccState.PageHeading}| FoodERP-React FrontEnd</title>
                 </MetaTags>
-                <div className="page-content" style={{marginTop:"-0.4cm"}}>
+                <div className="page-content" >
                     <Breadcrumb  
                         pageHeading={userAccState.PageHeading}
                         showCount={true}
                     />
-                    <div className="px-2 mb-1 mt-n4 c_card_header " >
+                    <div className="px-2 mb-1  c_card_header " style={{marginTop:"-15px"}} >
                         <Row>
                         <Col sm={5}>
 
-                            <FormGroup className="mb- row mt-3 " >
-                                <Label className="col-md-4 p-2"
+                            <FormGroup className=" row mt-1 " >
+                                <Label className="col-sm-4 p-2"
                                     style={{ width: "130px" }}>GRN Date</Label>
-                                <Col md="5">
+                                <Col sm="7">
                                     <Flatpickr
                                         name="grndate"
                                         className="form-control d-block p-2 bg-white text-dark"
@@ -687,10 +687,10 @@ const GRNAdd = (props) => {
 
 
 
-                            <FormGroup className="mb-2 row mt-3 " >
+                            <FormGroup className=" row  " >
                                 <Label className="col-md-4 p-2"
                                     style={{ width: "130px" }}>Supplier Name</Label>
-                                <Col md="5">
+                                <Col md="7">
                                     {/* <Select
                                             value={supplierSelect}
                                             classNamePrefix="select2-Customer"
@@ -704,10 +704,10 @@ const GRNAdd = (props) => {
                                 </Col>
                             </FormGroup>
 
-                            <FormGroup className="mb-2 row mt-3 " >
+                            <FormGroup className=" row " >
                                 <Label className="col-md-4 p-2"
                                     style={{ width: "130px" }}>PO.No</Label>
-                                <Col md="5">
+                                <Col sm="7">
                                     <Input type="text"
                                         style={{ backgroundColor: "white" }}
 
@@ -718,10 +718,10 @@ const GRNAdd = (props) => {
                             </FormGroup>
                             </Col>
                         <Col sm={5}>
-                            <FormGroup className="mb-2 row mt-3 " >
+                            <FormGroup className=" row mt-1" >
                                 <Label className="col-md-4 p-2"
                                     style={{ width: "130px" }}>Invoice Date</Label>
-                                <Col md="5">
+                                <Col md="7">
                                     <Flatpickr
                                         className="form-control d-block p-2 bg-white text-dark"
                                         placeholder="Select..."
@@ -736,10 +736,10 @@ const GRNAdd = (props) => {
                                     />
                                 </Col>
                             </FormGroup>
-                            <FormGroup className="mb-2 row mt-3 " >
+                            <FormGroup className="mb-2 row  " >
                                 <Label className="col-md-4 p-2"
                                     style={{ width: "130px" }}>Invoice No</Label>
-                                <Col md="5">
+                                <Col md="7">
                                     <Input type="text"
                                         // disabled={true}
                                         pattern={/[A-Za-z]{3}/}
