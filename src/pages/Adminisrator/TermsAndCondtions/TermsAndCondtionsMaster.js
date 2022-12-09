@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState, } from "react";
+import React, { useEffect, useState, } from "react";
 import Breadcrumb from "../../../components/Common/Breadcrumb3";
 import {
     Card,
@@ -26,15 +26,21 @@ import {
 } from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
 import SaveButton from "../../../components/Common/ComponentRelatedCommonFile/CommonSaveButton";
 
-import { EditTermsAndCondtions_Success, postTermAndCondition, postTermAndConditionSuccess, UpdateTermsAndCondtions, UpdateTermsAndCondtions_Success } from "../../../store/Administrator/TermsAndCondtionsRedux/actions";
+import {
+    EditTermsAndCondtions_Success,
+    postTermAndCondition,
+    postTermAndConditionSuccess,
+    UpdateTermsAndCondtions,
+    UpdateTermsAndCondtions_Success
+} from "../../../store/Administrator/TermsAndCondtionsRedux/actions";
 import { TERMS_AND_CONDITION_LIST } from "../../../routes/route_url";
+import { saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 
 const TermsAndCondtionsMaster = (props) => {
-    const formRef = useRef(null);
+   
     const history = useHistory()
     const dispatch = useDispatch();
     const [modalCss, setModalCss] = useState(false);
-
     const [pageMode, setPageMode] = useState("");
     const [userPageAccessState, setUserPageAccessState] = useState(123);
 
@@ -124,7 +130,8 @@ const TermsAndCondtionsMaster = (props) => {
 
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(postTermAndConditionSuccess({ Status: false }))
-
+            setState(() => initialFiledFunc(fileds)) //+++++++++ Clear form values 
+            saveDissable(false);//+++++++++save Button Is enable function
             if (pageMode === "other") {
                 dispatch(AlertState({
                     Type: 1,
@@ -143,6 +150,7 @@ const TermsAndCondtionsMaster = (props) => {
             }
         }
         else if (postMsg.Status === true) {
+            saveDissable(false);//+++++++++save Button Is enable function
             dispatch(postTermAndConditionSuccess({ Status: false }))
             dispatch(AlertState({
                 Type: 4,
@@ -156,10 +164,13 @@ const TermsAndCondtionsMaster = (props) => {
 
     useEffect(() => {
         if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
+            saveDissable(false);//+++++++++Update Button Is enable function
+            setState(() => initialFiledFunc(fileds)) //+++++++++ Clear form values
             history.push({
                 pathname: TERMS_AND_CONDITION_LIST,
             })
         } else if (updateMsg.Status === true && !modalCss) {
+            saveDissable(false);//+++++++++Update Button Is enable function
             dispatch(UpdateTermsAndCondtions_Success({ Status: false }));
             dispatch(
                 AlertState({
@@ -186,6 +197,9 @@ const TermsAndCondtionsMaster = (props) => {
             const jsonBody = JSON.stringify({
                 Name: values.Name,
             });
+
+            saveDissable(true);//+++++++++save Button Is dissable function
+
             if (pageMode === "edit") {
                 dispatch(UpdateTermsAndCondtions(jsonBody, values.id));
             }
@@ -196,6 +210,8 @@ const TermsAndCondtionsMaster = (props) => {
         }
     };
 
+
+    
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
     var IsEditMode_Css = ''
     if ((modalCss) || (pageMode === "dropdownAdd")) { IsEditMode_Css = "-5.5%" };
@@ -217,7 +233,7 @@ const TermsAndCondtionsMaster = (props) => {
                             </CardHeader>
 
                             <CardBody className=" vh-10 0 text-black" style={{ backgroundColor: "#whitesmoke" }} >
-                                <form onSubmit={formSubmitHandler} ref={formRef} noValidate>
+                                <form onSubmit={formSubmitHandler}noValidate>
                                     <Row className="">
                                         <Col md={12}>
                                             <Card>
