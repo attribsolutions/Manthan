@@ -1,4 +1,4 @@
-import React, { useEffect,  useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
     Card,
     CardBody,
@@ -15,13 +15,18 @@ import { MetaTags } from "react-meta-tags";
 import Breadcrumb from "../../../components/Common/Breadcrumb3";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
-import { Breadcrumb_inputName, AlertState, commonPageField } from "../../../store/actions";
+import {
+    Breadcrumb_inputName,
+    AlertState,
+    commonPageField
+} from "../../../store/actions";
 import {
     editPartyTypeSuccess,
     PostPartyTypeAPISuccess,
     getPartyTypelist,
     updatePartyTypeID,
     PostPartyTypeAPI,
+    updatePartyTypeIDSuccess,
 } from "../../../store/Administrator/PartyTypeRedux/action";
 import {
     comAddPageFieldFunc,
@@ -31,11 +36,11 @@ import {
 } from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
 import { PARTYTYPE_lIST } from "../../../routes/route_url";
 import SaveButton from "../../../components/Common/ComponentRelatedCommonFile/CommonSaveButton";
-import { createdBy } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { createdBy, saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 
 
 const PartyType = (props) => {
-    const formRef = useRef(null);
+
     const dispatch = useDispatch();
     const history = useHistory();
     const [modalCss, setModalCss] = useState(false);
@@ -44,11 +49,12 @@ const PartyType = (props) => {
 
     //Access redux store Data /  'save_ModuleSuccess' action data
 
-    const { PostAPIResponse, pageField, userAccess } =
+    const { PostAPIResponse, pageField, updateMsg, userAccess } =
         useSelector((state) => ({
             PostAPIResponse: state.PartyTypeReducer.PostData,
             pageField: state.CommonPageFieldReducer.pageField,
             userAccess: state.Login.RoleAccessUpdateData,
+            updateMsg: state.PartyTypeReducer.updateMessage
         }));
 
     useEffect(() => {
@@ -101,7 +107,6 @@ const PartyType = (props) => {
     // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
     useEffect(() => {
 
-        // if (!(userPageAccessState === '')) { document.getElementById("txtName").focus(); }
         if ((hasShowloction || hasShowModal)) {
 
             let hasEditVal = null
@@ -138,9 +143,9 @@ const PartyType = (props) => {
 
     useEffect(() => {
         if ((PostAPIResponse.Status === true) && (PostAPIResponse.StatusCode === 200) && !(pageMode === "dropdownAdd")) {
-            // setpartyType_dropdown_Select('')
             dispatch(PostPartyTypeAPISuccess({ Status: false }))
-            formRef.current.reset();
+            setState(() => initialFiledFunc(fileds)) //+++++++++ Clear form values 
+            saveDissable(false);//+++++++++save Button Is enable function
             if (pageMode === "dropdownAdd") {
                 dispatch(AlertState({
                     Type: 1,
@@ -159,6 +164,7 @@ const PartyType = (props) => {
             }
         }
         else if ((PostAPIResponse.Status === true) && !(pageMode === "dropdownAdd")) {
+            saveDissable(false);//+++++++++save Button Is enable function
             dispatch(PostPartyTypeAPISuccess({ Status: false }))
             dispatch(AlertState({
                 Type: 4,
@@ -169,6 +175,26 @@ const PartyType = (props) => {
             }));
         }
     }, [PostAPIResponse])
+
+    useEffect(() => {
+        if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
+            saveDissable(false);//+++++++++Update Button Is enable function
+            setState(() => initialFiledFunc(fileds)) //+++++++++ Clear form values
+            history.push({
+                pathname: PARTYTYPE_lIST,
+            })
+        } else if (updateMsg.Status === true && !modalCss) {
+            saveDissable(false);//+++++++++Update Button Is enable function
+            dispatch(updatePartyTypeIDSuccess({ Status: false }));
+            dispatch(
+                AlertState({
+                    Type: 3,
+                    Status: true,
+                    Message: JSON.stringify(updateMsg.Message),
+                })
+            );
+        }
+    }, [updateMsg, modalCss]);
 
     useEffect(() => {
 
@@ -190,7 +216,8 @@ const PartyType = (props) => {
                 UpdatedBy: createdBy(),
                 UpdatedOn: "2022-07-18T00:00:00"
             });
-            console.log("jsonBody", jsonBody)
+
+            saveDissable(true);//+++++++++save Button Is dissable function
 
             if (pageMode === "edit") {
                 dispatch(updatePartyTypeID(jsonBody, values.id));
@@ -221,7 +248,7 @@ const PartyType = (props) => {
                             </CardHeader>
 
                             <CardBody className=" vh-10 0 text-black" style={{ backgroundColor: "#whitesmoke" }} >
-                                <form onSubmit={formSubmitHandler} ref={formRef} noValidate>
+                                <form onSubmit={formSubmitHandler} noValidate>
                                     <Row className="">
                                         <Col md={12}>
                                             <Card>
