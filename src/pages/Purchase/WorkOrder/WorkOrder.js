@@ -225,8 +225,7 @@ const WorkOrder = (props) => {
         setState((i) => {
             i.values.NumberOfLot = "";
             i.values.Quantity = "";
-            i.hasValid.NumberOfLot.valid = false;
-            i.hasValid.Quantity.valid = false;
+
             return i
         })
 
@@ -238,24 +237,25 @@ const WorkOrder = (props) => {
         setState((i) => {
             i.values.NumberOfLot = e;
             i.values.Quantity = qty;
-            i.hasValid.NumberOfLot.valid = false;
-            i.hasValid.Quantity.valid = false;
+
             return i
         })
     }
 
     function Quantitychange(e) {
+        debugger
+        state.hasValid.Quantity.valid = true
+
         dispatch(postGoButtonForWorkOrder_MasterSuccess([]))
         setState((i) => {
             i.values.NumberOfLot = "1.000000";
             i.values.Quantity = e;
-            i.hasValid.NumberOfLot.valid = false;
-            i.hasValid.Quantity.valid = false;
             return i
         })
     }
 
-    const goButtonHandler = () => {
+    const goButtonHandler = (event) => {
+        event.preventDefault();
         if (formValid(state, setState)) {
             const jsonBody = JSON.stringify({
                 ItemID: values.ItemName.ItemID,
@@ -450,14 +450,14 @@ const WorkOrder = (props) => {
                                         <Label className=" p-2"
                                             style={{ width: "130px" }}>{fieldLabel.EstimatedOutputQty} :</Label>
 
-                                     
-                                            <Label
-                                                className="p-2 "
-                                                style={{ color: "#000000", width: "130px" }}>&nbsp;&nbsp;
-                                                {pageMode === "edit" ? EditData.EstimatedOutputQty : itemselect.EstimatedOutputQty}
-                                                &nbsp;&nbsp;(1 lot)
-                                            </Label>
-                                        
+
+                                        <Label
+                                            className="p-2 "
+                                            style={{ color: "#000000", width: "130px" }}>&nbsp;&nbsp;
+                                            {pageMode === "edit" ? EditData.EstimatedOutputQty : itemselect.EstimatedOutputQty}
+                                            &nbsp;&nbsp;(1 lot)
+                                        </Label>
+
 
 
                                     </FormGroup>
