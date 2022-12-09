@@ -2,54 +2,56 @@ import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import "flatpickr/dist/themes/material_blue.css"
 import Flatpickr from "react-flatpickr";
-import { commonPageFieldList, commonPageFieldListSuccess, } from "../../../../store/actions";
-import PurchaseListPage from "../../../../components/Common/ComponentRelatedCommonFile/purchase"
-import { BillOfMaterials, BillOfMaterialsList } from "../../../../routes/route_url";
+import { commonPageFieldList, commonPageFieldListSuccess, } from "../../../store/actions";
+import PurchaseListPage from "../../../components/Common/ComponentRelatedCommonFile/purchase"
+import { BillOfMaterials, BillOfMaterialsList, WORKORDER, WORKORDERLIST } from "../../../routes/route_url";
 import { Button, Col, FormGroup, Label } from "reactstrap";
-import Breadcrumb from "../../../../components/Common/Breadcrumb";
+import Breadcrumb from "../../../components/Common/Breadcrumb";
 import { useHistory } from "react-router-dom";
-import { currentDate, excelDownCommonFunc, userCompany } from "../../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { currentDate, excelDownCommonFunc, userCompany } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import { useMemo } from "react";
-import { deleteBOMId, deleteBOMIdSuccess, editBOMList, getBOMListPage, updateBOMListSuccess } from "../../../../store/Purchase/BOMRedux/action";
-import BOMMaster from "../BOMMaster/BOMIndex";
+import { updateBOMListSuccess } from "../../../store/Purchase/BOMRedux/action";
+import { deleteWorkOrderId, deleteWorkOrderIdSuccess, editWorkOrderList, getWorkOrderListPage } from "../../../store/Purchase/WorkOrder/action";
+import WorkOrder from "./WorkOrder";
+// import BOMMaster from "../BOMMaster/BOMIndex";
 
-const BOMList = () => {
+const WorkOrderList = () => {
 
     const dispatch = useDispatch();
     const history = useHistory();
 
     const hasPagePath = history.location.pathname
 
-    const [pageMode, setpageMode] = useState(BillOfMaterialsList)
+    const [pageMode, setpageMode] = useState(WORKORDERLIST)
     const [userAccState, setUserAccState] = useState('');
     const [fromdate, setFromdate] = useState();
     const [todate, setTodate] = useState();
     const reducers = useSelector(
         (state) => ({
-            tableList: state.BOMReducer.BOMList,
-            deleteMsg: state.BOMReducer.deleteMsg,
+            tableList: state.WorkOrderReducer.WorkOrderList,
+            deleteMsg: state.WorkOrderReducer.deleteMsg,
             updateMsg: state.BOMReducer.updateMsg,
             postMsg: state.OrderReducer.postMsg,
-            editData: state.BOMReducer.editData,
+            editData: state.WorkOrderReducer.editData,
             userAccess: state.Login.RoleAccessUpdateData,
             pageField: state.CommonPageFieldReducer.pageFieldList,
         })
     );
 
     const action = {
-        getList: getBOMListPage,
-        editId: editBOMList,
-        deleteId: deleteBOMId,
+        getList: getWorkOrderListPage,
+        editId: editWorkOrderList,
+        deleteId: deleteWorkOrderId,
         postSucc: postMessage,
         updateSucc: updateBOMListSuccess,
-        deleteSucc: deleteBOMIdSuccess
+        deleteSucc: deleteWorkOrderIdSuccess
     }
 
     // Featch Modules List data  First Rendering
     useEffect(() => {
         setpageMode(hasPagePath)
         dispatch(commonPageFieldListSuccess(null))
-        dispatch(commonPageFieldList(70))
+        dispatch(commonPageFieldList(73))
         goButtonHandler(true)
 
     }, []);
@@ -64,7 +66,7 @@ const BOMList = () => {
 
 
     useEffect(() => {
-        const pageId = 70
+        const pageId = 73
         let userAcc = userAccess.find((inx) => {
             return (inx.id === pageId)
         })
@@ -74,7 +76,7 @@ const BOMList = () => {
     }, [userAccess])
 
     const goButtonHandler = (onload = false) => {
-debugger
+        debugger
         let FromDate
         let ToDate
 
@@ -90,10 +92,10 @@ debugger
         const jsonBody = JSON.stringify({
             FromDate: FromDate,
             ToDate: ToDate,
-            Company: userCompany(),
+            // Company: userCompany(),
         });
-        dispatch(getBOMListPage(jsonBody));
-        console.log("go button post json",jsonBody)
+        dispatch(getWorkOrderListPage(jsonBody));
+        console.log("go button post json", jsonBody)
     }
 
     return (
@@ -106,7 +108,7 @@ debugger
                     excelBtnView={true}
                     excelData={downList} />
 
-                <div className="px-2  mt-n1 c_card_header" style={{marginBottom:"-12px"}} >
+                <div className="px-2 mb-1 mt-n1 c_card_header"  >
                     <div className=" mt-1 row">
                         <Col sm="4" className="">
                             <FormGroup className="mb- row mt-3 " >
@@ -153,8 +155,8 @@ debugger
                             </FormGroup>
                         </Col>
 
-                        <Col sm="1">
-                            <Button  type="button" color="btn btn-outline-success border-2 font-size-12 m-3  "
+                        <Col sm="1" >
+                            <Button type="button" color="btn btn-outline-success border-2 font-size-12 m-3  "
                                 onClick={() => goButtonHandler()}
                             >Go</Button>
                         </Col>
@@ -166,9 +168,9 @@ debugger
                             action={action}
                             reducers={reducers}
                             showBreadcrumb={false}
-                            MasterModal={BOMMaster}
-                            masterPath={BillOfMaterials}
-                            ButtonMsgLable={"BOM"}
+                            MasterModal={WorkOrder}
+                            masterPath={WORKORDER}
+                            ButtonMsgLable={"Work Order"}
                             deleteName={"ItemName"}
                             pageMode={pageMode}
                             goButnFunc={goButtonHandler}
@@ -182,4 +184,4 @@ debugger
     )
 }
 
-export default BOMList;
+export default WorkOrderList;

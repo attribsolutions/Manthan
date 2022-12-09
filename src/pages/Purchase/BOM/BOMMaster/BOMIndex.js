@@ -318,14 +318,15 @@ const BOMMaster = (props) => {
                                                         className="form-control d-block p-2 bg-white text-dark"
                                                         placeholder="YYYY-MM-DD"
                                                         autoComplete="0,''"
+                                                        disabled={pageMode === "edit" ? true : false}
                                                         options={{
                                                             altInput: true,
-                                                            altFormat: "F j, Y",
+                                                            altFormat: "d-m-Y",
                                                             dateFormat: "Y-m-d",
-                                                            // minDate: new Date().fp_incr("n"),
-                                                            // maxDate: new Date().fp_incr(0) // 14 days from now"0,''"
+                                                            defaultDate: pageMode === "edit" ? values.BomDate : "today"
                                                         }}
                                                         onChange={(y, v, e) => { onChangeDate({ e, v, state, setState }) }}
+                                                        onReady={(y, v, e) => { onChangeDate({ e, v, state, setState }) }}
                                                     />
                                                     {isError.BomDate.length > 0 && (
                                                         <span className="invalid-feedback">{isError.BomDate}</span>
@@ -458,7 +459,7 @@ const BOMMaster = (props) => {
                                                     <SaveButton pageMode={pageMode} userAcc={userPageAccessState}
                                                         module={"BOMMaster"}
                                                     />
-                                                    
+
                                                 </Col>
                                             </Row>
                                         </FormGroup >
