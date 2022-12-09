@@ -220,33 +220,31 @@ const WorkOrder = (props) => {
     }, [])
 
     function ItemOnchange(e) {
+        dispatch(postGoButtonForWorkOrder_MasterSuccess([]))
         setItemselect(e)
         setState((i) => {
             i.values.NumberOfLot = "";
             i.values.Quantity = "";
-            // i.hasValid.NumberOfLot.valid = false;
-            // i.hasValid.Quantity.valid = false;
             return i
         })
+
     }
 
     function NumberOfLotchange(e) {
+        dispatch(postGoButtonForWorkOrder_MasterSuccess([]))
         let qty = e * itemselect.EstimatedOutputQty
         setState((i) => {
             i.values.NumberOfLot = e;
             i.values.Quantity = qty;
-            // i.hasValid.NumberOfLot.valid = false;
-            // i.hasValid.Quantity.valid = false;
             return i
         })
     }
 
     function Quantitychange(e) {
+        dispatch(postGoButtonForWorkOrder_MasterSuccess([]))
         setState((i) => {
             i.values.NumberOfLot = "1.000000";
             i.values.Quantity = e;
-            // i.hasValid.NumberOfLot.valid = false;
-            // i.hasValid.Quantity.valid = false;
             return i
         })
     }
@@ -270,19 +268,18 @@ const WorkOrder = (props) => {
     }
 
     const values = { ...state.values }
-
     const { isError } = state;
     const { fieldLabel } = state;
 
     const formSubmitHandler = (event) => {
-        debugger
+    
         const WorkOrderItems = BOMItems.map((index) => ({
             Item: index.Item,
             Unit: index.Unit,
             BomQuantity: index.BomQuantity,
             Quantity: index.Quantity,
         }))
-        debugger
+     
         event.preventDefault();
         if (formValid(state, setState)) {
 
@@ -369,22 +366,13 @@ const WorkOrder = (props) => {
     if (!(userPageAccessState === '')) {
         return (
             <React.Fragment>
-                {/* <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
-                    <Container fluid> */}
+
                 <MetaTags>
                     <title>GroupTypeMaster | FoodERP-React FrontEnd</title>
                 </MetaTags>
                 <div className="page-content" style={{ marginTop: "-0.4cm" }}>
 
                     <Breadcrumb pageHeading={userPageAccessState.PageHeading} />
-
-                    {/* <Card className="text-black"> */}
-                    {/* <CardHeader className="card-header   text-black c_card_header">
-                                <h4 className="card-title text-black">{userPageAccessState.PageDescription}</h4>
-                                <p className="card-title-desc text-black">{userPageAccessState.PageDescriptionDetails}</p>
-                            </CardHeader> */}
-
-                    {/* <CardBody className=" vh-10 0 text-black" style={{ backgroundColor: "#whitesmoke" }} > */}
 
                     <form onSubmit={formSubmitHandler} ref={formRef} noValidate>
                         <div className="px-2 mb-1 mt-n3 c_card_filter" >
@@ -574,21 +562,20 @@ const WorkOrder = (props) => {
                             </PaginationProvider>
                             : null}
 
-                        <FormGroup className="mt-3">
+                        {BOMItems.length > 0 ? <FormGroup className="mt-3">
                             <Row >
                                 <Col sm={2} >
                                     <SaveButton pageMode={pageMode} userAcc={userPageAccessState}
                                         module={"WorkOrder"}
                                     />
-
                                 </Col>
                             </Row>
                         </FormGroup >
+                            : null
+                        }
+
                     </form>
                 </div>
-
-                {/* </Container>
-                </div> */}
             </React.Fragment>
         );
     }
