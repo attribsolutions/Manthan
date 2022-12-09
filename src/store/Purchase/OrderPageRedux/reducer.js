@@ -1,19 +1,16 @@
+import { currentDate } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons"
 import {
-  GET_ORDER_LIST_SUCCESS,
-  GET_ORDER_ITEMS_FOR_ORDER_PAGE_SUCCESS,
-  SUBMIT_ORDER_FROM_ORDER_PAGE_SUCCESS,
-  GET_DIVISIONORDER_LIST_SUCCESS,
-  GET_ORDER_LIST_MESSAGE,
-  EDIT_ORDER_SUCCESS,
+
   UPDATE_ORDER_ID_FROM_ORDER_PAGE_SUCCESS,
   EDIT_ORDER_FOR_ORDER_PAGE_SUCCESS,
   DELETE_ORDER_FOR_ORDER_PAGE_SUCCESS,
-  GET_SUPPLIER_SUCCESS,
-  GO_BUTTON_FOR_ORDER_PAGE,
   GO_BUTTON_FOR_ORDER_PAGE_SUCCESS,
   POST_ORDER_FROM_ORDER_PAGE_SUCCESS,
   GET_ORDER_LIST_PAGE_SUCCESS,
+  ORDER_LIST_FILTERS,
 } from "./actionType"
+
+const date = currentDate();
 
 const INIT_STATE = {
   orderItem: [],
@@ -21,13 +18,19 @@ const INIT_STATE = {
   editData: { Status: false, Items: [] },
   updateMsg: { Status: false },
   deleteMsg: { Status: false },
-  orderList: []
-
+  orderList: [],
+  orderlistFilter: { fromdate: date, todate: date, supplierSelect: ''}
 
 }
 
 const OrderReducer = (state = INIT_STATE, action) => {
   switch (action.type) {
+
+    case ORDER_LIST_FILTERS:
+      return {
+        ...state,
+        orderlistFilter: action.payload,
+      }
 
     case GO_BUTTON_FOR_ORDER_PAGE_SUCCESS:
       return {
@@ -35,13 +38,11 @@ const OrderReducer = (state = INIT_STATE, action) => {
         orderItem: action.payload,
       }
 
-
     case POST_ORDER_FROM_ORDER_PAGE_SUCCESS:
       return {
         ...state,
         postMsg: action.payload,
       }
-
 
     case EDIT_ORDER_FOR_ORDER_PAGE_SUCCESS:
       return {

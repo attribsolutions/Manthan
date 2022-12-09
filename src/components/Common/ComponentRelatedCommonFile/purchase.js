@@ -80,7 +80,6 @@ const PurchaseListPage = (props) => {
         deleteName,
         pageMode,
         onsavefunc = () => { },
-        goButnFunc = () => { },
     } = props;
 
     const fileds = pageField.PageFieldMaster;
@@ -151,7 +150,6 @@ const PurchaseListPage = (props) => {
                     Type: 1,
                     Status: true,
                     Message: deleteMsg.Message,
-                    afterResponseIsfunc: goButnFunc
                 })
             );
         } else if (deleteMsg.Status === true) {
@@ -200,14 +198,13 @@ const PurchaseListPage = (props) => {
 
     // Edit Modal Show When Edit Data is true
     useEffect(() => {
-debugger
+
         if (editData.Status === true) {
             if (pageField.IsEditPopuporComponent) {
                 history.push({
                     pathname: masterPath,
                     editValue: editData.Data,
                     pageMode: editData.pageMode,
-
                 })
             }
             else {
@@ -305,17 +302,6 @@ debugger
                     <title>{userAccState.PageHeading}| FoodERP-React FrontEnd</title>
                 </MetaTags>
                 <div >
-                    {/* {showBreadcrumb ?
-            <Breadcrumb
-              pageHeading={userAccState.PageHeading}
-              newBtnView={(userAccState.RoleAccess_IsSave) ? true : false}
-              showCount={true}
-              excelBtnView={true}
-             
-              excelData={downList}
-            />
-            : null
-          } */}
                     <PaginationProvider pagination={paginationFactory(pageOptions)}>
                         {({ paginationProps, paginationTableProps }) => (
                             <ToolkitProvider
@@ -362,7 +348,6 @@ debugger
                     {
                         pageMode === GST_ADD_Mode_2 ?
 
-
                             <div className="button_save " style={{ paddingBottom: 'center'}}>
                                 <button
                                     type="submit"
@@ -372,7 +357,7 @@ debugger
                                 >
                                     <i class="fas fa-edit me-2"></i>Make GRN
                                 </button>
-                             </div>
+                            </div>
                             :
                             null
                     }
@@ -387,7 +372,7 @@ debugger
                         <MasterModal editValue={editData.Data} masterPath={masterPath} pageMode={editData.pageMode} />
                     </Modal>
                 </div>
-                
+
 
             </React.Fragment>
         );

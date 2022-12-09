@@ -1,4 +1,16 @@
-import { DELETE_GRN_FOR_GRN_PAGE_SUCCESS, EDIT_GRN_FOR_GRN_PAGE_SUCCESS, GET_GRN_ITEM_MODE_2_SUCCESS, GET_GRN_ITEM_MODE_3_SUCCESS, GET_GRN_LIST_PAGE_SUCCESS, POST_GRN_FROM_GRN_PAGE_SUCCESS, UPDATE_GRN_ID_FROM_GRN_PAGE_SUCCESS, } from "./actionType"
+import { currentDate } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import {
+  DELETE_GRN_FOR_GRN_PAGE_SUCCESS,
+  EDIT_GRN_FOR_GRN_PAGE_SUCCESS,
+  GET_GRN_ITEM_MODE_2_SUCCESS,
+  GET_GRN_LIST_PAGE_SUCCESS,
+  POST_GRN_FROM_GRN_PAGE_SUCCESS,
+  SET_GRN_LIST_FILTERS,
+  UPDATE_GRN_ID_FROM_GRN_PAGE_SUCCESS,
+} from "./actionType"
+
+
+const date = currentDate();
 
 const INIT_STATE = {
   postMsg: { Status: false },
@@ -8,12 +20,17 @@ const INIT_STATE = {
   GRNList: [],
   grnItemList: [],
   GRNitem: { Status: false, Data: [], },
-  // GRNitem3: []
-
+  grnlistFilter: { fromdate: date, todate: date, supplierSelect: '' }
 }
 
 const GRNReducer = (state = INIT_STATE, action) => {
   switch (action.type) {
+
+    case SET_GRN_LIST_FILTERS:
+      return {
+        ...state,
+        grnlistFilter: action.payload,
+      }
 
     case GET_GRN_ITEM_MODE_2_SUCCESS:
       return {
