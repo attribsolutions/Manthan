@@ -46,7 +46,7 @@ const WorkOrder = (props) => {
     const [pageMode, setPageMode] = useState("save");
     const [userPageAccessState, setUserPageAccessState] = useState('');
     const [itemselect, setItemselect] = useState("")
-    console.log("itemselect", itemselect)
+
     const initialFiled = useMemo(() => {
 
         const fileds = {
@@ -225,6 +225,8 @@ const WorkOrder = (props) => {
         setState((i) => {
             i.values.NumberOfLot = "";
             i.values.Quantity = "";
+            i.hasValid.NumberOfLot.valid = false;
+            i.hasValid.Quantity.valid = false;
             return i
         })
 
@@ -236,6 +238,8 @@ const WorkOrder = (props) => {
         setState((i) => {
             i.values.NumberOfLot = e;
             i.values.Quantity = qty;
+            i.hasValid.NumberOfLot.valid = false;
+            i.hasValid.Quantity.valid = false;
             return i
         })
     }
@@ -245,25 +249,21 @@ const WorkOrder = (props) => {
         setState((i) => {
             i.values.NumberOfLot = "1.000000";
             i.values.Quantity = e;
+            i.hasValid.NumberOfLot.valid = false;
+            i.hasValid.Quantity.valid = false;
             return i
         })
     }
 
-    const goButtonHandler = (event, value) => {
-        debugger
-        if ((values.ItemName.ItemID === undefined)
-            && (values.ItemName.value === undefined)
-            && (values.Quantity === '')) {
-            alert("hello")
+    const goButtonHandler = () => {
+        if (formValid(state, setState)) {
+            const jsonBody = JSON.stringify({
+                ItemID: values.ItemName.ItemID,
+                BomID: values.ItemName.value,
+                Quantity: parseInt(values.Quantity)
+            });
+            dispatch(postGoButtonForWorkOrder_Master(jsonBody));
         }
-
-        const jsonBody = JSON.stringify({
-            ItemID: values.ItemName.ItemID,
-            BomID: values.ItemName.value,
-            Quantity: parseInt(values.Quantity)
-        });
-
-        dispatch(postGoButtonForWorkOrder_Master(jsonBody));
 
     }
 
@@ -272,14 +272,14 @@ const WorkOrder = (props) => {
     const { fieldLabel } = state;
 
     const formSubmitHandler = (event) => {
-    
+
         const WorkOrderItems = BOMItems.map((index) => ({
             Item: index.Item,
             Unit: index.Unit,
             BomQuantity: index.BomQuantity,
             Quantity: index.Quantity,
         }))
-     
+
         event.preventDefault();
         if (formValid(state, setState)) {
 
@@ -375,7 +375,7 @@ const WorkOrder = (props) => {
                     <Breadcrumb pageHeading={userPageAccessState.PageHeading} />
 
                     <form onSubmit={formSubmitHandler} ref={formRef} noValidate>
-                        <div className="px-2 mb-1 mt-n3 c_card_filter" >
+                        <div className="px-2 mb-1 mt-n3 c_card_filter text-black" >
 
                             <div className="row">
                                 <div className="col col-6">
@@ -441,7 +441,7 @@ const WorkOrder = (props) => {
                                     <FormGroup className="mb-2 row  " >
                                         <Label className=" p-2"
                                             style={{ width: "115px" }}>{fieldLabel.StockQuantity}:</Label>
-                                        <Label className=" p-2" style={{ color: "#B0290B", width: "130px" }}>&nbsp;&nbsp; &nbsp;
+                                        <Label className=" p-2" style={{ color: "#000000", width: "130px" }}>&nbsp;&nbsp;
                                             {pageMode === "edit" ? EditData.Stock : itemselect.StockQty}&nbsp;&nbsp; &nbsp;</Label>
                                     </FormGroup>
                                 </div >
@@ -449,8 +449,17 @@ const WorkOrder = (props) => {
                                     <FormGroup className="mb-2 row " >
                                         <Label className=" p-2"
                                             style={{ width: "130px" }}>{fieldLabel.EstimatedOutputQty} :</Label>
-                                        <Label className=" p-2" style={{ color: "#B0290B", width: "130px" }}>&nbsp;&nbsp; &nbsp;
-                                            {pageMode === "edit" ? EditData.EstimatedOutputQty : itemselect.EstimatedOutputQty}&nbsp;&nbsp; &nbsp;(1 lot)</Label>
+
+                                     
+                                            <Label
+                                                className="p-2 "
+                                                style={{ color: "#000000", width: "130px" }}>&nbsp;&nbsp;
+                                                {pageMode === "edit" ? EditData.EstimatedOutputQty : itemselect.EstimatedOutputQty}
+                                                &nbsp;&nbsp;(1 lot)
+                                            </Label>
+                                        
+
+
                                     </FormGroup>
                                 </div >
 
@@ -482,6 +491,7 @@ const WorkOrder = (props) => {
                                         </div>
                                     </FormGroup>
                                 </div >
+
                                 <div className="col col-6">
                                     <FormGroup className="mb-2 row " >
                                         <Label className=" p-2"
@@ -544,7 +554,7 @@ const WorkOrder = (props) => {
                                                                 {...paginationTableProps}
                                                             />
                                                             <div>
-                                                                <label >EstimatedOutputQty :&nbsp;&nbsp; <span style={{ color: "#B0290B" }}>{EstimatedOutputQty}</span></label>
+                                                                <label >EstimatedOutputQty :&nbsp;&nbsp; <span style={{ color: "#000000" }}>{EstimatedOutputQty}</span></label>
                                                             </div>
                                                         </div>
                                                     </Col>
