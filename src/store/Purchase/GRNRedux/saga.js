@@ -42,7 +42,6 @@ function* postGRNGenFunc({ data }) {
   }
 }
 
-
 function* DeleteGRNGenFunc({ id }) {
   yield put(SpinnerState(true))
   try {

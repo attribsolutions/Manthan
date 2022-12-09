@@ -10,6 +10,7 @@ import {
     editOrderId,
     getOrderListPage,
     updateOrderIdSuccess,
+    orderlistfilters,
     // getOrderList
 } from "../../../store/Purchase/OrderPageRedux/actions";
 import { commonPageFieldList, commonPageFieldListSuccess, } from "../../../store/actions";
@@ -21,7 +22,7 @@ import Breadcrumb from "../../../components/Common/Breadcrumb";
 import { useHistory } from "react-router-dom";
 import { getGRN_itemMode2 } from "../../../store/Purchase/GRNRedux/actions";
 import { getSupplier } from "../../../store/CommonAPI/SupplierRedux/actions";
-import { currentDate, excelDownCommonFunc } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { currentDate, excelDownCommonFunc, userParty } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import { useMemo } from "react";
 
 
@@ -31,12 +32,12 @@ const OrderList = () => {
     const history = useHistory();
 
     const hasPagePath = history.location.pathname
+    // const hasShowloction = history.location.hasOwnProperty("renderMode")
 
-    const [supplierSelect, setsupplierSelect] = useState({ value: '' });
+    // const [supplierSelect, setsupplierSelect] = useState({ value: '' });
     const [pageMode, setpageMode] = useState(ORDER_lIST)
     const [userAccState, setUserAccState] = useState('');
-    const [fromdate, setFromdate] = useState();
-    const [todate, setTodate] = useState();
+
 
     const reducers = useSelector(
         (state) => ({
@@ -47,10 +48,13 @@ const OrderList = () => {
             updateMsg: state.OrderReducer.updateMsg,
             postMsg: state.OrderReducer.postMsg,
             editData: state.OrderReducer.editData,
+            orderlistFilter: state.OrderReducer.orderlistFilter,
             userAccess: state.Login.RoleAccessUpdateData,
             pageField: state.CommonPageFieldReducer.pageFieldList,
         })
     );
+    const { userAccess, pageField, GRNitem, supplier, tableList, orderlistFilter } = reducers;
+    const { fromdate, todate,supplierSelect } = orderlistFilter;
 
     const action = {
         getList: getOrderListPage,
@@ -60,6 +64,7 @@ const OrderList = () => {
         updateSucc: updateOrderIdSuccess,
         deleteSucc: deleteOrderIdSuccess
     }
+
 
     // Featch Modules List data  First Rendering
     useEffect(() => {
@@ -72,7 +77,6 @@ const OrderList = () => {
 
     }, []);
 
-    const { userAccess, pageField, GRNitem, supplier, tableList } = reducers;
 
     const supplierOptions = supplier.map((i) => ({
         value: i.id,
@@ -136,36 +140,34 @@ const OrderList = () => {
 
     }
 
-    const goButtonHandler = (onload = false) => {
-        let FromDate
-        let ToDate
+    function goButtonHandler() {
 
-        if (onload) {
-            const currentdate = currentDate()
-            FromDate = currentdate;
-            ToDate = currentdate;
-        } else {
-            ToDate = todate;
-            FromDate = fromdate;
-        }
-
-        let supplier = supplierSelect.value
-        let customer = 0
-        try {
-            customer = JSON.parse(localStorage.getItem("roleId")).Party_id
-        } catch (e) {
-            alert(e)
-            return
-        }
         const jsonBody = JSON.stringify({
-            FromDate: FromDate,
-            ToDate: ToDate,
-            Supplier: supplier,
-            Customer: customer
-        }
-        );
-        console.log(jsonBody)
+            FromDate: fromdate,
+            ToDate: todate,
+            Supplier: supplierSelect === "" ? '' : supplierSelect.value,
+            Customer: userParty(),
+        });
+
         dispatch(getOrderListPage(jsonBody));
+    }
+
+    function fromdateOnchange(e, date) {
+        let newObj = { ...orderlistFilter }
+        newObj.fromdate = date
+        dispatch(orderlistfilters(newObj))
+    }
+
+    function todateOnchange(e, date) {
+        let newObj = { ...orderlistFilter }
+        newObj.todate = date
+        dispatch(orderlistfilters(newObj))
+    }
+
+    function supplierOnchange(e) {
+        let newObj = { ...orderlistFilter }
+        newObj.supplierSelect = e
+        dispatch(orderlistfilters(newObj))
     }
 
     return (
@@ -176,10 +178,10 @@ const OrderList = () => {
                     newBtnView={(pageMode === ORDER_lIST) ? true : false}
                     showCount={true}
                     excelBtnView={true}
-                    excelData={downList}/>
+                    excelData={downList} />
 
-                <div className="px-2 mb-1 mt-n1 c_card_filter"  >
-                    <div className=" mt-1 row">
+                <div className="px-2  mt-n1 c_card_filter" >
+                    <div className=" row" style={{marginBottom:"-13px"}}>
                         <Col sm="3" className="">
                             <FormGroup className="mb- row mt-3 " >
                                 <Label className="col-sm-5 p-2"
@@ -187,17 +189,15 @@ const OrderList = () => {
                                 <Col sm="7">
                                     <Flatpickr
                                         name='fromdate'
+                                        value={fromdate}
                                         className="form-control d-block p-2 bg-white text-dark"
                                         placeholder="Select..."
                                         options={{
                                             altInput: true,
                                             altFormat: "d-m-Y",
                                             dateFormat: "Y-m-d",
-                                            defaultDate: "today"
-
                                         }}
-                                        onChange={(e, date) => { setFromdate(date) }}
-                                        onReady={(e, date) => { setFromdate(date) }}
+                                        onChange={fromdateOnchange}
                                     />
                                 </Col>
                             </FormGroup>
@@ -209,17 +209,15 @@ const OrderList = () => {
                                 <Col sm="7">
                                     <Flatpickr
                                         name="todate"
+                                        value={todate}
                                         className="form-control d-block p-2 bg-white text-dark"
                                         placeholder="Select..."
                                         options={{
                                             altInput: true,
                                             altFormat: "d-m-Y",
                                             dateFormat: "Y-m-d",
-                                            defaultDate: "today"
                                         }}
-                                        onChange={(e, date) => { setTodate(date) }}
-                                        onReady={(e, date) => { setTodate(date) }}
-
+                                        onChange={todateOnchange}
                                     />
                                 </Col>
                             </FormGroup>
@@ -228,12 +226,15 @@ const OrderList = () => {
                         <Col sm="5">
                             <FormGroup className="mb-2 row mt-3 " >
                                 <Label className="col-md-4 p-2"
-                                    style={{ width:"115px"}}>Supplier Name</Label>
+
+                                    style={{ width: "115px" }}>Supplier Name</Label>
                                 <Col sm="5">
+
                                     <Select
                                         classNamePrefix="select2-Customer"
+                                        value={supplierSelect}
                                         options={supplierOptions}
-                                        onChange={(e) => { setsupplierSelect(e) }}
+                                        onChange={supplierOnchange}
                                     />
                                 </Col>
                             </FormGroup>

@@ -1,15 +1,22 @@
 import { call, put, takeEvery } from "redux-saga/effects";
 import { SpinnerState } from "../../Utilites/Spinner/actions";
- import { PostMethod_ForCompanyGroupMasterSuccess, getMethod_ForCompanyGroupListSuccess,  deleteCompanyGroupTypeIDSuccess, editCompanyGroupTypeSuccess, updateCompanyGroupTypeIDSuccess} from "./action";
 import {
-   get_CompanyGroupList_API,
-   Post_CompanyGroup_API,
-   detelet_CompanyGroupType_List_Api,
-   edit_CompanyGroupType_List_Api,
-   update_CompanyGroupType_List_Api,
+  PostMethod_ForCompanyGroupMasterSuccess,
+  getMethod_ForCompanyGroupListSuccess,
+  deleteCompanyGroupTypeIDSuccess,
+  editCompanyGroupTypeSuccess,
+  updateCompanyGroupTypeIDSuccess
+} from "./action";
+import {
+  get_CompanyGroupList_API,
+  Post_CompanyGroup_API,
+  detelet_CompanyGroupType_List_Api,
+  edit_CompanyGroupType_List_Api,
+  update_CompanyGroupType_List_Api,
 } from "../../../helpers/backend_helper";
 
-import { POST_METHOD_FOR_COMPANYGROUP_MASTER,
+import {
+  POST_METHOD_FOR_COMPANYGROUP_MASTER,
   GET_METHOD_FOR_COMPANYGROUP_LIST,
   DELETE_COMPANYGROUP_TYPE_ID,
   EDIT_COMPANYGROUP_TYPE_ID,
@@ -17,7 +24,6 @@ import { POST_METHOD_FOR_COMPANYGROUP_MASTER,
 
 } from "./actionType";
 import { AlertState } from "../../actions";
-import { PaginationListStandalone } from "react-bootstrap-table2-paginator";
 
 // Get List Page API
 function* Get_CompanyGroup_GenratorFunction() {
@@ -71,10 +77,10 @@ function* Delete_CompanyGroupType_ID_GenratorFunction({ id }) {
 }
 
 // edit api
-function* Edit_CompanyGroupType_ID_GenratorFunction({ id ,pageMode}) {
+function* Edit_CompanyGroupType_ID_GenratorFunction({ id, pageMode }) {
   try {
     const response = yield call(edit_CompanyGroupType_List_Api, id);
-    response.pageMode=pageMode
+    response.pageMode = pageMode
     yield put(editCompanyGroupTypeSuccess(response));
     console.log("response in saga", response)
 
