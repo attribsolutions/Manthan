@@ -151,12 +151,16 @@ const SidebarContent = (props) => {
 
   // Use ComponentDidMount and ComponentDidUpdate method symultaniously
   useEffect(() => {
+    debugger
     const pathName = props.location.pathname;
     const initMenu = () => {
       new MetisMenu("#side-menu");
       let matchingMenuItem = null;
       const ul = document.getElementById("side-menu");
       const items = ul.getElementsByTagName("a");
+      console.log(items)
+      console.log(ul)
+
 
       // let userAcc = RoleAccessModifiedinSingleArray.find((inx) => {
       //   const path = inx.ActualPagePath.toLowerCase()

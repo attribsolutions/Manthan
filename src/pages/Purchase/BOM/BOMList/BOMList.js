@@ -106,7 +106,7 @@ debugger
                     excelBtnView={true}
                     excelData={downList} />
 
-                <div className="px-2 mb-1 mt-n1 c_card_header"  >
+                <div className="px-2  mt-n1 c_card_header" style={{marginBottom:"-12px"}} >
                     <div className=" mt-1 row">
                         <Col sm="4" className="">
                             <FormGroup className="mb- row mt-3 " >

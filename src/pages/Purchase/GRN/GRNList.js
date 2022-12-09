@@ -112,7 +112,7 @@ const GRNList = () => {
             Party: party,
         }
         );
-        console.log("GrnFilter",jsonBody)
+        console.log("GrnFilter", jsonBody)
         dispatch(getGRNListPage(jsonBody));
     }
 
@@ -131,82 +131,81 @@ const GRNList = () => {
                     pageMode={GST_ADD_Mode_2}
                     newBtnPagePath={GST_ADD_Mode_2}
                     excelData={downList} />
+                    <div className="px-2  mt-n1 c_card_filter " style={{marginBottom:"-12px"}}>
+                        <div className="  row">
+                            <Col sm="3" className="">
+                                <FormGroup className="mb- row mt-3 " >
+                                    <Label className="col-sm-5 p-2"
+                                        style={{ width: "83px" }}>From Date</Label>
+                                    <Col sm="7">
+                                        <Flatpickr
+                                            name='fromdate'
+                                            className="form-control d-block p-2 bg-white text-dark"
+                                            placeholder="Select..."
+                                            options={{
+                                                altInput: true,
+                                                altFormat: "d-m-Y",
+                                                dateFormat: "Y-m-d",
+                                                defaultDate: "today"
+                                            }}
+                                            onChange={(e, date) => { setFromdate(date) }}
+                                            onReady={(e, date) => {
+                                                onlodFromdate = date;
+                                                setFromdate(date);
+                                                goButtonHandler(true)
+                                            }}
+                                        />
+                                    </Col>
+                                </FormGroup>
+                            </Col>
+                            <Col sm="3" className="">
+                                <FormGroup className="mb- row mt-3 " >
+                                    <Label className="col-sm-5 p-2"
+                                        style={{ width: "65px" }}>To Date</Label>
+                                    <Col sm="7">
+                                        <Flatpickr
+                                            nane='todate'
+                                            className="form-control d-block p-2 bg-white text-dark"
+                                            placeholder="Select..."
+                                            options={{
+                                                altInput: true,
+                                                altFormat: "d-m-Y",
+                                                dateFormat: "Y-m-d",
+                                                defaultDate: "today"
+                                            }}
+                                            onChange={(e, date) => { setTodate(date) }}
+                                            onReady={(e, date) => {
+                                                onlodTodate = date;
+                                                setTodate(date);
+                                                goButtonHandler(true)
+                                            }}
+                                        />
+                                    </Col>
+                                </FormGroup>
+                            </Col>
 
-                <div className="px-2 mb-1 mt-n1 c_card_filter">
-                    <div className=" mt-1 row">
-                        <Col sm="3" className="">
-                            <FormGroup className="mb- row mt-3 " >
-                                <Label className="col-sm-5 p-2"
-                                    style={{ width: "83px" }}>From Date</Label>
-                                <Col sm="7">
-                                    <Flatpickr
-                                        name='fromdate'
-                                        className="form-control d-block p-2 bg-white text-dark"
-                                        placeholder="Select..."
-                                        options={{
-                                            altInput: true,
-                                            altFormat: "d-m-Y",
-                                            dateFormat: "Y-m-d",
-                                            defaultDate: "today"
-                                        }}
-                                        onChange={(e, date) => { setFromdate(date) }}
-                                        onReady={(e, date) => {
-                                            onlodFromdate = date;
-                                            setFromdate(date);
-                                            goButtonHandler(true)
-                                        }}
-                                    />
-                                </Col>
-                            </FormGroup>
-                        </Col>
-                        <Col sm="3" className="">
-                            <FormGroup className="mb- row mt-3 " >
-                                <Label className="col-sm-5 p-2"
-                                    style={{ width: "65px" }}>To Date</Label>
-                                <Col sm="7">
-                                    <Flatpickr
-                                        nane='todate'
-                                        className="form-control d-block p-2 bg-white text-dark"
-                                        placeholder="Select..."
-                                        options={{
-                                            altInput: true,
-                                            altFormat: "d-m-Y",
-                                            dateFormat: "Y-m-d",
-                                            defaultDate: "today"
-                                        }}
-                                        onChange={(e, date) => { setTodate(date) }}
-                                        onReady={(e, date) => {
-                                            onlodTodate = date;
-                                            setTodate(date);
-                                            goButtonHandler(true)
-                                        }}
-                                    />
-                                </Col>
-                            </FormGroup>
-                        </Col>
+                            <Col sm="5">
+                                <FormGroup className="mb-2 row mt-3" >
+                                    <Label className="col-md-4 p-2"
+                                        style={{ width: "115px" }}>Supplier Name</Label>
+                                    <Col md="5">
+                                        <Select
+                                            // value={"supplier"}
+                                            classNamePrefix="select2-Customer"
+                                            // isDisabled={"pageMode" === "edit" ? true : false}
+                                            options={supplierOptions}
+                                            onChange={(e) => { setsupplierSelect(e) }}
+                                        />
+                                    </Col>
+                                </FormGroup>
+                            </Col >
 
-                        <Col sm="5">
-                            <FormGroup className="mb-2 row mt-3 " >
-                                <Label className="col-md-4 p-2"
-                                    style={{ width: "115px" }}>Supplier Name</Label>
-                                <Col md="5">
-                                    <Select
-                                        // value={"supplier"}
-                                        classNamePrefix="select2-Customer"
-                                        // isDisabled={"pageMode" === "edit" ? true : false}
-                                        options={supplierOptions}
-                                        onChange={(e) => { setsupplierSelect(e) }}
-                                    />
-                                </Col>
-                            </FormGroup>
-                        </Col >
-
-                        <Col sm="1" className="mt-3 ">
-                            <Button type="button" color="btn btn-outline-success border-2 font-size-12 "
-                                onClick={() => goButtonHandler()}
-                            >Go</Button>
-                        </Col>
-                    </div>
+                            <Col sm="1" className="mt-3 ">
+                                <Button type="button" color="btn btn-outline-success border-2 font-size-12 "
+                                    onClick={() => goButtonHandler()}
+                                >Go</Button>
+                            </Col>
+                        </div>
                 </div>
                 {
                     (pageField) ?
