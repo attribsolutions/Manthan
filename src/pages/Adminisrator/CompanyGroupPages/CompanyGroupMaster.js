@@ -24,7 +24,7 @@ import {
     editCompanyGroupTypeSuccess,
     updateCompanyGroupTypeID,
     PostMethodForCompanyGroupMaster,
-
+    updateCompanyGroupTypeIDSuccess
 } from "../../../store/Administrator/CompanyGroupRedux/action";
 import { useHistory } from "react-router-dom";
 import {
@@ -34,7 +34,6 @@ import {
     onChangeText
 } from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
 import { COMPANYGROUP_lIST } from "../../../routes/route_url";
-import { UPDATE_COMPANYGROUP_TYPE_ID_SUCCESS } from "../../../store/Administrator/CompanyGroupRedux/actionType";
 import SaveButton from "../../../components/Common/ComponentRelatedCommonFile/CommonSaveButton";
 import { createdBy, saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 
@@ -112,7 +111,6 @@ const CompanyGroupMaster = (props) => {
             }
 
             if (hasEditVal) {
-                debugger
                 const { id, Name, IsSCM } = hasEditVal
                 const { values, fieldLabel, hasValid, required, isError } = { ...state }
                 values.Name = Name;
@@ -166,13 +164,12 @@ const CompanyGroupMaster = (props) => {
         if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
             saveDissable(false);//+++++++++Update Button Is enable function
             setState(() => initialFiledFunc(fileds)) //+++++++++ Clear form values
-
             history.push({
                 pathname: COMPANYGROUP_lIST,
             })
         } else if (updateMsg.Status === true && !modalCss) {
             saveDissable(false);//+++++++++Update Button Is enable function
-            dispatch(UPDATE_COMPANYGROUP_TYPE_ID_SUCCESS({ Status: false }));
+            dispatch(updateCompanyGroupTypeIDSuccess({ Status: false }));
             dispatch(
                 AlertState({
                     Type: 3,
@@ -260,7 +257,6 @@ const CompanyGroupMaster = (props) => {
                                                                     onChangeText({ event, state, setState })
                                                                     dispatch(Breadcrumb_inputName(event.target.value))
                                                                 }}
-
                                                             />
                                                             {isError.Name.length > 0 && (
                                                                 <span className="invalid-feedback">{isError.Name}</span>
@@ -276,7 +272,6 @@ const CompanyGroupMaster = (props) => {
                                                                             <Input type="checkbox" className="form-check-input"
                                                                                 defaultChecked={values.IsSCM}
                                                                                 name="IsSCM"
-                                                                                // onChange={(event) => onChangeText({ event, state, setState })}
                                                                                 onChange={(e) => {
                                                                                     setState((i) => {
                                                                                         const a = { ...i }
@@ -284,7 +279,6 @@ const CompanyGroupMaster = (props) => {
                                                                                         return a
                                                                                     })
                                                                                 }}
-
                                                                             />
                                                                         </div>
                                                                     </Col>
