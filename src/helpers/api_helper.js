@@ -38,7 +38,7 @@ export async function getModify(url) {
 
 export async function post(url, data, config = {}) {
   AuthonticationFunction();
-  const res = axiosApi
+  const res = await axiosApi
     .post(url, data, {
       headers: {
         "Accept": "application/json",

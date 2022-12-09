@@ -1,16 +1,9 @@
 import { currentDate } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons"
 import {
-  GET_ORDER_LIST_SUCCESS,
-  GET_ORDER_ITEMS_FOR_ORDER_PAGE_SUCCESS,
-  SUBMIT_ORDER_FROM_ORDER_PAGE_SUCCESS,
-  GET_DIVISIONORDER_LIST_SUCCESS,
-  GET_ORDER_LIST_MESSAGE,
-  EDIT_ORDER_SUCCESS,
+
   UPDATE_ORDER_ID_FROM_ORDER_PAGE_SUCCESS,
   EDIT_ORDER_FOR_ORDER_PAGE_SUCCESS,
   DELETE_ORDER_FOR_ORDER_PAGE_SUCCESS,
-  GET_SUPPLIER_SUCCESS,
-  GO_BUTTON_FOR_ORDER_PAGE,
   GO_BUTTON_FOR_ORDER_PAGE_SUCCESS,
   POST_ORDER_FROM_ORDER_PAGE_SUCCESS,
   GET_ORDER_LIST_PAGE_SUCCESS,
@@ -18,6 +11,7 @@ import {
 } from "./actionType"
 
 const date = currentDate();
+
 const INIT_STATE = {
   orderItem: [],
   postMsg: { Status: false },
@@ -25,8 +19,7 @@ const INIT_STATE = {
   updateMsg: { Status: false },
   deleteMsg: { Status: false },
   orderList: [],
-  orderlistFilter: { FromDate: date, ToDate: date, Supplier:'' , Customer: 0 }
-
+  orderlistFilter: { fromdate: date, todate: date, supplierSelect: ''}
 
 }
 
@@ -45,13 +38,11 @@ const OrderReducer = (state = INIT_STATE, action) => {
         orderItem: action.payload,
       }
 
-
     case POST_ORDER_FROM_ORDER_PAGE_SUCCESS:
       return {
         ...state,
         postMsg: action.payload,
       }
-
 
     case EDIT_ORDER_FOR_ORDER_PAGE_SUCCESS:
       return {

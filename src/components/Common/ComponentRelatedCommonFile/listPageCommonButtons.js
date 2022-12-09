@@ -227,6 +227,7 @@ export const userCompany = () => {//+++++++++++++++++++++ Seesion Company Id++++
     } catch (e) { alert("Common userCompany  Error") }
     return userCompany
 }
+
 export const userParty = () => {//+++++++++++++++++++++ Seesion userParty Id+++++++++++++++++++++++++++++++
     let userParty = 0
     try {
@@ -261,4 +262,11 @@ export function convertDatefunc(inputDate) {// +++++++++++Convert Date Format+++
     let convDate = `${date.getDate() < 10 ? `0${date.getDate()}` : `${date.getDate()}`}-${month < 10 ? `0${month}`
         : `${month}`}-${date.getFullYear()}`;
     return convDate
+}
+
+export function saveDissable(state = false) {//+++++++++++++++++++++ Save Button Dissable/Enable +++++++++++++++++++++++++++++++
+    try { document.getElementById('form_submmit').disabled = state }
+    catch (e) { alert("button dissable error") }
+
+
 }

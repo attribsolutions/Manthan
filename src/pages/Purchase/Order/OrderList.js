@@ -10,6 +10,7 @@ import {
     editOrderId,
     getOrderListPage,
     updateOrderIdSuccess,
+    orderlistfilters,
     // getOrderList
 } from "../../../store/Purchase/OrderPageRedux/actions";
 import { commonPageFieldList, commonPageFieldListSuccess, } from "../../../store/actions";
@@ -33,11 +34,10 @@ const OrderList = () => {
     const hasPagePath = history.location.pathname
     // const hasShowloction = history.location.hasOwnProperty("renderMode")
 
-    const [supplierSelect, setsupplierSelect] = useState({ value: '' });
+    // const [supplierSelect, setsupplierSelect] = useState({ value: '' });
     const [pageMode, setpageMode] = useState(ORDER_lIST)
     const [userAccState, setUserAccState] = useState('');
-    const [fromdate, setFromdate] = useState(() => currentDate());
-    const [todate, setTodate] = useState(() => currentDate());
+
 
     const reducers = useSelector(
         (state) => ({
@@ -53,6 +53,8 @@ const OrderList = () => {
             pageField: state.CommonPageFieldReducer.pageFieldList,
         })
     );
+    const { userAccess, pageField, GRNitem, supplier, tableList, orderlistFilter } = reducers;
+    const { fromdate, todate,supplierSelect } = orderlistFilter;
 
     const action = {
         getList: getOrderListPage,
@@ -62,6 +64,7 @@ const OrderList = () => {
         updateSucc: updateOrderIdSuccess,
         deleteSucc: deleteOrderIdSuccess
     }
+
 
     // Featch Modules List data  First Rendering
     useEffect(() => {
@@ -74,7 +77,6 @@ const OrderList = () => {
 
     }, []);
 
-    const { userAccess, pageField, GRNitem, supplier, tableList, orderlistFilter } = reducers;
 
     const supplierOptions = supplier.map((i) => ({
         value: i.id,
@@ -138,16 +140,34 @@ const OrderList = () => {
 
     }
 
-    const goButtonHandler = (onload = false) => {
+    function goButtonHandler() {
 
         const jsonBody = JSON.stringify({
             FromDate: fromdate,
             ToDate: todate,
-            Supplier: supplierSelect.value,
+            Supplier: supplierSelect === "" ? '' : supplierSelect.value,
             Customer: userParty(),
-
         });
+
         dispatch(getOrderListPage(jsonBody));
+    }
+
+    function fromdateOnchange(e, date) {
+        let newObj = { ...orderlistFilter }
+        newObj.fromdate = date
+        dispatch(orderlistfilters(newObj))
+    }
+
+    function todateOnchange(e, date) {
+        let newObj = { ...orderlistFilter }
+        newObj.todate = date
+        dispatch(orderlistfilters(newObj))
+    }
+
+    function supplierOnchange(e) {
+        let newObj = { ...orderlistFilter }
+        newObj.supplierSelect = e
+        dispatch(orderlistfilters(newObj))
     }
 
     return (
@@ -169,17 +189,17 @@ const OrderList = () => {
                                 <Col sm="7">
                                     <Flatpickr
                                         name='fromdate'
+                                        value={fromdate}
                                         className="form-control d-block p-2 bg-white text-dark"
                                         placeholder="Select..."
                                         options={{
                                             altInput: true,
                                             altFormat: "d-m-Y",
                                             dateFormat: "Y-m-d",
-                                            defaultDate: "today"
-
                                         }}
-                                        onChange={(e, date) => { setFromdate(date) }}
-                                        onReady={(e, date) => { setFromdate(date) }}
+                                        // onChange={(e, date) => { setFromdate(date) }}
+                                        onChange={fromdateOnchange}
+                                    // onReady={(e, date) => { setFromdate(date) }}
                                     />
                                 </Col>
                             </FormGroup>
@@ -191,16 +211,16 @@ const OrderList = () => {
                                 <Col sm="7">
                                     <Flatpickr
                                         name="todate"
+                                        value={todate}
                                         className="form-control d-block p-2 bg-white text-dark"
                                         placeholder="Select..."
                                         options={{
                                             altInput: true,
                                             altFormat: "d-m-Y",
                                             dateFormat: "Y-m-d",
-                                            defaultDate: "today"
                                         }}
-                                        onChange={(e, date) => { setTodate(date) }}
-                                        onReady={(e, date) => { setTodate(date) }}
+                                        onChange={todateOnchange}
+                                    // onReady={(e, date) => { setTodate(date) }}
 
                                     />
                                 </Col>
@@ -211,13 +231,15 @@ const OrderList = () => {
                             <FormGroup className="mb-2 row mt-3 " >
                                 <Label className="col-md-4 p-2"
 
-                                    style={{ width:"115px"}}>Supplier Name</Label>
+                                    style={{ width: "115px" }}>Supplier Name</Label>
                                 <Col sm="5">
 
                                     <Select
                                         classNamePrefix="select2-Customer"
+                                        value={supplierSelect}
                                         options={supplierOptions}
-                                        onChange={(e) => { setsupplierSelect(e) }}
+                                        // onChange={(e) => { setsupplierSelect(e) }}
+                                        onChange={supplierOnchange}
                                     />
                                 </Col>
                             </FormGroup>

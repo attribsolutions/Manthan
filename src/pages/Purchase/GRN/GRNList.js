@@ -1,9 +1,9 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo } from "react";
 import { useSelector, useDispatch } from "react-redux";
 
 import { commonPageFieldList, commonPageFieldListSuccess, } from "../../../store/actions";
 import Order from "../Order/Order";
-import { GST_ADD_Mode_2, ORDER, ORDER_lIST } from "../../../routes/route_url";
+import { GST_ADD_Mode_2, ORDER } from "../../../routes/route_url";
 import { Button, Col, FormGroup, Label } from "reactstrap";
 import Breadcrumb from "../../../components/Common/Breadcrumb";
 import Select from "react-select";
@@ -14,25 +14,15 @@ import {
     deleteGRNId,
     deleteGRNIdSuccess,
     editGRNId, getGRNListPage,
+    grnlistfilters,
     updateGRNIdSuccess
 } from "../../../store/Purchase/GRNRedux/actions";
-import { goButton } from "../../../store/Purchase/OrderPageRedux/actions";
 import { getSupplier } from "../../../store/CommonAPI/SupplierRedux/actions";
-import { excelDownCommonFunc } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
-
-
-let onlodTodate = null
-let onlodFromdate = null
-
+import { excelDownCommonFunc, userParty } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 
 const GRNList = () => {
 
     const dispatch = useDispatch();
-    const [supplierSelect, setsupplierSelect] = useState({ value: '' });
-    const [fromdate, setFromdate] = useState('');
-    const [todate, setTodate] = useState('');
-
-
 
     const reducers = useSelector(
         (state) => ({
@@ -42,13 +32,14 @@ const GRNList = () => {
             updateMsg: state.GRNReducer.updateMsg,
             postMsg: state.GRNReducer.postMsg,
             editData: state.GRNReducer.editData,
+            grnlistFilter: state.GRNReducer.grnlistFilter,
             userAccess: state.Login.RoleAccessUpdateData,
             pageField: state.CommonPageFieldReducer.pageFieldList,
         })
     );
 
-    const { userAccess, pageField, supplier, tableList } = reducers;
-
+    const { userAccess, pageField, supplier, tableList, grnlistFilter } = reducers;
+    const { fromdate, todate, supplierSelect } = grnlistFilter;
 
     const supplierOptions = supplier.map((i) => ({
         value: i.id,
@@ -80,40 +71,34 @@ const GRNList = () => {
 
 
 
-    const goButtonHandler = (onload = false) => {
-        // debugger
-        let FromDate
-        let ToDate
 
-        if (!(onlodFromdate) || !(onlodTodate)) {
-            return
-        }
-        if (onload) {
-            FromDate = onlodFromdate;
-            ToDate = onlodTodate;
-        } else {
-            ToDate = todate;
-            FromDate = fromdate;
-        }
-
-        let supplier = supplierSelect.value;
-        let party;
-
-        try {
-            party = JSON.parse(localStorage.getItem("roleId")).Party_id
-        } catch (e) {
-            alert(e)
-            return
-        }
+    function goButtonHandler() {
         const jsonBody = JSON.stringify({
-            FromDate: FromDate,
-            ToDate: ToDate,
-            Supplier: supplier,
-            Party: party,
-        }
-        );
-        console.log("GrnFilter",jsonBody)
+            FromDate: fromdate,
+            ToDate: todate,
+            Supplier: supplierSelect === "" ? '' : supplierSelect.value,
+            Party: userParty(),
+        });
+
         dispatch(getGRNListPage(jsonBody));
+    }
+
+    function fromdateOnchange(e, date) {
+        let newObj = { ...grnlistFilter }
+        newObj.fromdate = date
+        dispatch(grnlistfilters(newObj))
+    }
+
+    function todateOnchange(e, date) {
+        let newObj = { ...grnlistFilter }
+        newObj.todate = date
+        dispatch(grnlistfilters(newObj))
+    }
+
+    function supplierOnchange(e) {
+        let newObj = { ...grnlistFilter }
+        newObj.supplierSelect = e
+        dispatch(grnlistfilters(newObj))
     }
 
 
@@ -143,18 +128,13 @@ const GRNList = () => {
                                         name='fromdate'
                                         className="form-control d-block p-2 bg-white text-dark"
                                         placeholder="Select..."
+                                        value={fromdate}
                                         options={{
                                             altInput: true,
                                             altFormat: "d-m-Y",
                                             dateFormat: "Y-m-d",
-                                            defaultDate: "today"
                                         }}
-                                        onChange={(e, date) => { setFromdate(date) }}
-                                        onReady={(e, date) => {
-                                            onlodFromdate = date;
-                                            setFromdate(date);
-                                            goButtonHandler(true)
-                                        }}
+                                        onChange={fromdateOnchange}
                                     />
                                 </Col>
                             </FormGroup>
@@ -167,19 +147,14 @@ const GRNList = () => {
                                     <Flatpickr
                                         nane='todate'
                                         className="form-control d-block p-2 bg-white text-dark"
+                                        value={todate}
                                         placeholder="Select..."
                                         options={{
                                             altInput: true,
                                             altFormat: "d-m-Y",
                                             dateFormat: "Y-m-d",
-                                            defaultDate: "today"
                                         }}
-                                        onChange={(e, date) => { setTodate(date) }}
-                                        onReady={(e, date) => {
-                                            onlodTodate = date;
-                                            setTodate(date);
-                                            goButtonHandler(true)
-                                        }}
+                                        onChange={todateOnchange}
                                     />
                                 </Col>
                             </FormGroup>
@@ -191,11 +166,10 @@ const GRNList = () => {
                                     style={{ width: "115px" }}>Supplier Name</Label>
                                 <Col md="5">
                                     <Select
-                                        // value={"supplier"}
+                                        value={supplierSelect}
                                         classNamePrefix="select2-Customer"
-                                        // isDisabled={"pageMode" === "edit" ? true : false}
                                         options={supplierOptions}
-                                        onChange={(e) => { setsupplierSelect(e) }}
+                                        onChange={supplierOnchange}
                                     />
                                 </Col>
                             </FormGroup>
