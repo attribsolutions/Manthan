@@ -144,7 +144,8 @@ export default function UnitConverstion(props) {
                                     <Col md={6} style={{marginRight:""}}>
                                         <Button
                                         style={{marginLeft:"-0.6cm"}}
-                                            className="button_add badge badge-soft-primary font-size-12 waves-effect  waves-light  btn-outline-primary mt-1"
+                                        className=" button_add"
+                                        color="btn btn-outline-primary border-2 font-size-12"
                                             type="button"
                                             onClick={() => { addRow_Handler(key) }}
                                         >

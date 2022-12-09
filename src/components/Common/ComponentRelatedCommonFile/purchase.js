@@ -341,18 +341,18 @@ const PurchaseListPage = (props) => {
                                 )}
                             </ToolkitProvider>
                         )}
+
+                        
                     </PaginationProvider>
 
                     {
                         pageMode === GST_ADD_Mode_2 ?
 
-
-                            <div className="row save1 " style={{ paddingBottom: 'center' }}>
+                            <div className="button_save " style={{ paddingBottom: 'center'}}>
                                 <button
-
                                     type="submit"
                                     data-mdb-toggle="tooltip" data-mdb-placement="top"
-                                    className="btn btn-primary w-md "
+                                    className="btn btn-primary w-md  bt_save"
                                     onClick={onSaveBtnClick}
                                 >
                                     <i class="fas fa-edit me-2"></i>Make GRN

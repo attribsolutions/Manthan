@@ -811,7 +811,8 @@ const PageMaster = (props) => {
                                 <Button
 
                                   // className=" mt-3 btn btn-sm"
-                                  className=" button_add badge badge-soft-primary font-size-12 waves-effect  waves-light  btn-outline-primary"
+                                  className=" button_add"
+                                  color="btn btn-outline-primary border-2 font-size-12"
                                   type="button" onClick={() => { DropDownAddHandler() }}>
                                   <i className="dripicons-plus"></i>
 
