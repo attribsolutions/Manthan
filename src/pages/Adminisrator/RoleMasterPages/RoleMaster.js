@@ -266,7 +266,7 @@ const RoleMaster = (props) => {
             <Breadcrumb pageHeading={userPageAccessState.PageHeading} />
 
             <Card className="text-black">
-              <CardHeader className="card-header   text-black c_card_header" >
+              <CardHeader className="card-header  text-black c_card_header" >
                 <h4 className="card-title text-black">{userPageAccessState.PageDescription}</h4>
                 <p className="card-title-desc text-black">{userPageAccessState.PageDescriptionDetails}</p>
               </CardHeader>
@@ -364,7 +364,7 @@ const RoleMaster = (props) => {
                               <FormGroup className="mb-2 col col-sm-5">
                                 <Row className="justify-content-md-left">
                                   <Label className="col-sm-4 col-form-label" >{fieldLabel.isSCMRole}</Label>
-                                  <Col md={2} style={{ marginTop: '9px' }} >
+                                  <Col md={2} style={{ marginTop: '9px', marginLeft:"1cm"  }} >
 
                                     <div className="form-check form-switch form-switch-md mb-3" >
                                       <Input type="checkbox" className="form-check-input"

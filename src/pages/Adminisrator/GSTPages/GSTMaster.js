@@ -432,7 +432,7 @@ const GSTMaster = (props) => {
                                     <Col md={12}>
                                         <Card style={{ backgroundColor: "whitesmoke" }}>
 
-                                            <CardHeader className="card-header   text-black " style={{ backgroundColor: "#e9e9ef" }} >
+                                            <CardHeader className="card-header   text-black c_card_body"  >
                                                 <Row className="mt-2">
                                                     <Col md="6">
                                                         <FormGroup className="mb-4 row">

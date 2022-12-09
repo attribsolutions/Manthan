@@ -130,7 +130,7 @@ const WorkOrder = (props) => {
             }
 
             if (hasEditVal) {
-                debugger
+
                 setEditData(hasEditVal);
                 const { id, WorkOrderDate, Item, ItemName, NumberOfLot, EstimatedOutputQty, Quantity } = hasEditVal
                 const { values, fieldLabel, hasValid, required, isError } = { ...state }
@@ -387,8 +387,10 @@ const WorkOrder = (props) => {
                                                             dateFormat: "Y-m-d",
                                                             defaultDate: pageMode === "edit" ? values.WorkOrderDate : "today"
                                                         }}
+
                                                         onChange={(y, v, e) => { onChangeDate({ e, v, state, setState }) }}
                                                         onReady={(y, v, e) => { onChangeDate({ e, v, state, setState }) }}
+
                                                     />
                                                     {isError.WorkOrderDate.length > 0 && (
                                                         <span className="invalid-feedback">{isError.WorkOrderDate}</span>
