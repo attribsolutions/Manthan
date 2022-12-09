@@ -63,7 +63,7 @@ const CategoryTypeMaster = (props) => {
         id: "",
         Name: "",
     }
-    
+
     const [state, setState] = useState(() => initialFiledFunc(fileds))
 
 
@@ -75,7 +75,7 @@ const CategoryTypeMaster = (props) => {
     const hasShowloction = location.hasOwnProperty("editValue")
     const hasShowModal = props.hasOwnProperty("editValue")
 
-    //userAccess useEffect
+   
     // userAccess useEffect
     useEffect(() => {
         let userAcc = null;
@@ -93,6 +93,7 @@ const CategoryTypeMaster = (props) => {
             setUserPageAccessState(userAcc)
         };
     }, [userAccess])
+
 
     //This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
     useEffect(() => {
@@ -121,7 +122,6 @@ const CategoryTypeMaster = (props) => {
 
                 setState({ values, fieldLabel, hasValid, required, isError })
                 dispatch(Breadcrumb_inputName(hasEditVal.Name))
-
             }
             dispatch(editCategoryTypeIDSuccess({ Status: false }))
         }
@@ -131,7 +131,6 @@ const CategoryTypeMaster = (props) => {
 
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(PostMethod_ForCategoryTypeMasterAPISuccess({ Status: false }))
-
 
             if (pageMode === "other") {
                 dispatch(AlertState({
@@ -200,7 +199,6 @@ const CategoryTypeMaster = (props) => {
             else {
                 dispatch(PostMethodForCategoryTypeMaster(jsonBody))
             }
-
         }
     };
 
@@ -261,7 +259,6 @@ const CategoryTypeMaster = (props) => {
                                                                 </Col>
                                                             </Row>
                                                         </FormGroup>
-
                                                     </Row>
                                                 </CardBody>
                                             </Card>

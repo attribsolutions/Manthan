@@ -40,7 +40,6 @@ const CategoryMaster = (props) => {
     const formRef = useRef(null);
     const history = useHistory()
     const dispatch = useDispatch();
-
     const [pageMode, setPageMode] = useState("");
     const [modalCss, setModalCss] = useState(false);
     const [userPageAccessState, setUserPageAccessState] = useState(123);
@@ -61,13 +60,13 @@ const CategoryMaster = (props) => {
 
 
     {/** Dyanamic Page access state and OnChange function */ }
-  
-        const fileds = {
-            id: "",
-            Name: "",
-            CategoryTypeName: ""
-        }
-       
+
+    const fileds = {
+        id: "",
+        Name: "",
+        CategoryTypeName: ""
+    }
+
 
     const [state, setState] = useState(() => initialFiledFunc(fileds))
 
@@ -206,9 +205,13 @@ const CategoryMaster = (props) => {
         label: Data.Name
     }));
 
+
     const formSubmitHandler = (event) => {
+
         event.preventDefault();
+
         if (formValid(state, setState)) {
+
             const jsonBody = JSON.stringify({
                 Name: values.Name,
                 CategoryType: values.CategoryTypeName.value,
@@ -221,7 +224,8 @@ const CategoryMaster = (props) => {
                 dispatch(PostMethodForCategory(jsonBody));
             }
         }
-    };
+        
+     };
 
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
     var IsEditMode_Css = ''
