@@ -11,7 +11,7 @@ import { useHistory } from "react-router-dom";
 import { currentDate, excelDownCommonFunc } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import { useMemo } from "react";
 import { updateBOMListSuccess } from "../../../store/Purchase/BOMRedux/action";
-import { deleteWorkOrderId, deleteWorkOrderIdSuccess, editWorkOrderList, getWorkOrderListPage } from "../../../store/Purchase/WorkOrder/action";
+import { deleteWorkOrderId, deleteWorkOrderIdSuccess, editWorkOrderList, getWorkOrderListPage, updateWorkOrderListSuccess } from "../../../store/Purchase/WorkOrder/action";
 import WorkOrder from "./WorkOrder";
 // import BOMMaster from "../BOMMaster/BOMIndex";
 
@@ -30,7 +30,7 @@ const WorkOrderList = () => {
         (state) => ({
             tableList: state.WorkOrderReducer.WorkOrderList,
             deleteMsg: state.WorkOrderReducer.deleteMsg,
-            updateMsg: state.BOMReducer.updateMsg,
+            updateMsg: state.WorkOrderReducer.updateMsg,
             postMsg: state.OrderReducer.postMsg,
             editData: state.WorkOrderReducer.editData,
             userAccess: state.Login.RoleAccessUpdateData,
@@ -43,7 +43,7 @@ const WorkOrderList = () => {
         editId: editWorkOrderList,
         deleteId: deleteWorkOrderId,
         postSucc: postMessage,
-        updateSucc: updateBOMListSuccess,
+        updateSucc: updateWorkOrderListSuccess,
         deleteSucc: deleteWorkOrderIdSuccess
     }
 
@@ -109,10 +109,10 @@ const WorkOrderList = () => {
                     excelBtnView={true}
                     excelData={downList} />
 
-                <div className="px-2 mb-1 mt-n1 c_card_header"  >
+                <div className="px-2 mt-n1 c_card_header"  >
                     <div className=" mt-1 row">
                         <Col sm="4" className="">
-                            <FormGroup className="mb- row mt-3 " >
+                            <FormGroup className=" row mt-3 " >
                                 <Label className="col-sm-5 p-2"
                                     style={{ width: "83px" }}>From Date</Label>
                                 <Col sm="7">
@@ -134,7 +134,7 @@ const WorkOrderList = () => {
                             </FormGroup>
                         </Col>
                         <Col sm="4" className="">
-                            <FormGroup className="mb- row mt-3 " >
+                            <FormGroup className=" row mt-3 " >
                                 <Label className="col-sm-5 p-2"
                                     style={{ width: "65px" }}>To Date</Label>
                                 <Col sm="7 ">
