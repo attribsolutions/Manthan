@@ -8,14 +8,14 @@ import {
 
 const INIT_STATE = {
     PostData: { Status: false },
-    TermsAndCondtionsList: [],
-    TermsAndCondtionsupdateMessage : {Status:false},
-    TermsAndCondtionseditData: { Status: false },
-    TermsAndCondtionsdeleteMessage:{Status:false}
+    TermsAndConditionsList: [],
+    TermsAndConditionsupdateMessage : {Status:false},
+    TermsAndConditionseditData: { Status: false },
+    TermsAndConditionsdeleteMessage:{Status:false}
 
 }
 
-const TermsAndCondtionsReducer = (state = INIT_STATE, action) => {
+const TermsAndConditionsReducer = (state = INIT_STATE, action) => {
     
     switch (action.type) {
 
@@ -52,4 +52,4 @@ const TermsAndCondtionsReducer = (state = INIT_STATE, action) => {
     }
 }
 
-export default TermsAndCondtionsReducer        
+export default TermsAndConditionsReducer        

@@ -34,14 +34,14 @@ import { basicAmount, GstAmount, handleKeyDown, totalAmount } from "./OrderPageC
 import '../../Order/div.css'
 
 import { ORDER_lIST } from "../../../routes/route_url";
-import SaveButton from "../../../components/Common/ComponentRelatedCommonFile/CommonSaveButton";
+import { SaveButton, Go_Button } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
 
-import { getTermAndCondition } from "../../../store/Administrator/TermsAndCondtionsRedux/actions";
+import { getTermAndCondition } from "../../../store/Administrator/TermsAndConditionsRedux/actions";
 
-import OrderPageTemsTable from "./OrderPageTemsTable";
 import Breadcrumb from "../../../components/Common/Breadcrumb3";
 import { mySearchProps } from "../../../components/Common/ComponentRelatedCommonFile/MySearch";
 import { createdBy, currentDate, userParty } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import OrderPageTermsTable from "./OrderPageTermsTable";
 
 let description = ''
 let editVal = {}
@@ -89,7 +89,7 @@ const Order = (props) => {
         updateMsg: state.OrderReducer.updateMsg,
         userAccess: state.Login.RoleAccessUpdateData,
         pageField: state.CommonPageFieldReducer.pageFieldList,
-        termsAndCondtions: state.TermsAndCondtionsReducer.TermsAndCondtionsList,
+        // termsAndCondtions: state.TermsAndConditionsReducer.TermsAndConditionsList,
     }));
     debugger
 
@@ -131,7 +131,7 @@ const Order = (props) => {
 
             if (hasEditVal) {
 
-                GoButton_Handler(hasEditVal)//=======Go Button API Call
+                goButtonHandler(hasEditVal)//=======Go Button API Call
                 dispatch(BreadcrumbFilterSize(`${"Order Amount"} :${hasEditVal.OrderAmount}`))
                 setsupplierSelect({ label: hasEditVal.SupplierName, value: hasEditVal.Supplier })
                 setpoDate(hasEditVal.OrderDate)
@@ -241,8 +241,8 @@ const Order = (props) => {
             sort: true,
         },
 
-        { //------------- Quntity column ----------------------------------
-            text: "Quntity",
+        { //------------- Quantity column ----------------------------------
+            text: "Quantity",
             dataField: "",
             sort: true,
             formatter: (value, row, k) => {
@@ -279,8 +279,8 @@ const Order = (props) => {
 
         },
 
-        {  //------------- UOM column ----------------------------------
-            text: "UOM",
+        {  //------------- Unit column ----------------------------------
+            text: "Unit",
             dataField: "",
             sort: true,
             formatter: (value, row, key) => {
@@ -319,7 +319,7 @@ const Order = (props) => {
         },
 
         {//------------- Rate column ----------------------------------
-            text: "Rate",
+            text: "Rate/Unit",
             dataField: "Rate",
             sort: true,
             formatter: (value, row, k) => {
@@ -384,8 +384,8 @@ const Order = (props) => {
         custom: true,
     };
 
-    const GoButton_Handler = (hasEditVal = false) => {
-
+    const goButtonHandler = (hasEditVal = false) => {
+        debugger
         if (hasEditVal) {
             const jsonBody = JSON.stringify({
                 Party: hasEditVal.Supplier,
@@ -593,8 +593,12 @@ const Order = (props) => {
                                         />
                                     </Col>
                                     <Col sm="1" className="mx-4 ">
-                                        {pageMode === "save" ? <Button type="button" color="btn btn-outline-success border-2 font-size-12"
-                                            onClick={(e) => GoButton_Handler()}>Go</Button>
+                                        {pageMode === "save" ?
+                                            //  <Button
+                                            //     id={""}
+                                            //      type="button" color="btn btn-outline-success border-2 font-size-12"
+                                            //         onClick={(e) => goButtonHandler()}>Go</Button> */}
+                                            <Go_Button onClick={(e) => goButtonHandler()} />
                                             : null}
                                     </Col>
                                 </FormGroup>
@@ -751,7 +755,7 @@ const Order = (props) => {
 
                     {
                         items.length > 0 ?
-                            <OrderPageTemsTable tableList={termsAndConTable} setfunc={setTermsAndConTable} />
+                            <OrderPageTermsTable tableList={termsAndConTable} setfunc={setTermsAndConTable} />
                             : null
                     }
 

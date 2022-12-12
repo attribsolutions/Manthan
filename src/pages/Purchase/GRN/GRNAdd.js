@@ -31,7 +31,7 @@ import { basicAmount, GstAmount, handleKeyDown, totalAmount } from "../Order/Ord
 import '../../Order/div.css'
 
 import { GRN_lIST, ORDER_lIST } from "../../../routes/route_url";
-import SaveButton from "../../../components/Common/ComponentRelatedCommonFile/CommonSaveButton";
+import { SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
 
 import Breadcrumb from "../../../components/Common/Breadcrumb3";
 import { getGRN_itemMode2_Success, postGRN, postGRNSuccess } from "../../../store/Purchase/GRNRedux/actions";

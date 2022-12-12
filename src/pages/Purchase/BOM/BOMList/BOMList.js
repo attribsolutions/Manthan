@@ -4,7 +4,7 @@ import "flatpickr/dist/themes/material_blue.css"
 import Flatpickr from "react-flatpickr";
 import { BreadcrumbFilterSize, commonPageFieldList, commonPageFieldListSuccess, } from "../../../../store/actions";
 import PurchaseListPage from "../../../../components/Common/ComponentRelatedCommonFile/purchase"
-import { BillOfMaterials, BillOfMaterialsList } from "../../../../routes/route_url";
+import { BIllOf_MATERIALS, BIllOf_MATERIALS_LIST } from "../../../../routes/route_url";
 import { Button, Col, FormGroup, Label } from "reactstrap";
 import Breadcrumb from "../../../../components/Common/Breadcrumb";
 import { useHistory } from "react-router-dom";
@@ -20,7 +20,7 @@ const BOMList = () => {
 
     const hasPagePath = history.location.pathname
 
-    const [pageMode, setpageMode] = useState(BillOfMaterialsList)
+    const [pageMode, setpageMode] = useState(BIllOf_MATERIALS_LIST)
     const [userAccState, setUserAccState] = useState('');
     const [fromdate, setFromdate] = useState();
     const [todate, setTodate] = useState();
@@ -167,7 +167,7 @@ const BOMList = () => {
                             reducers={reducers}
                             showBreadcrumb={false}
                             MasterModal={BOMMaster}
-                            masterPath={BillOfMaterials}
+                            masterPath={BIllOf_MATERIALS}
                             ButtonMsgLable={"BOM"}
                             deleteName={"ItemName"}
                             pageMode={pageMode}
