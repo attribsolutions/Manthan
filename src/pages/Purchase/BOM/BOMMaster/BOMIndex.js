@@ -191,7 +191,7 @@ const BOMMaster = (props) => {
         debugger
         if ((updateMsg.Status === true) && (updateMsg.StatusCode === 200) && !(modalCss)) {
             history.push({
-                pathname: BillOfMaterialsList,
+                pathname: BIllOf_MATERIALS_LIST,
             })
         } else if (updateMsg.Status === true && !modalCss) {
             dispatch(updateBOMListSuccess({ Status: false }));
