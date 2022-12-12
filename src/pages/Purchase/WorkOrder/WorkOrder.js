@@ -530,7 +530,7 @@ const WorkOrder = (props) => {
 
                         </div>
 
-                        {BOMItems.length > 0 ?
+                      
                             <PaginationProvider pagination={paginationFactory(pageOptions)}>
                                 {({ paginationProps, paginationTableProps }) => (
                                     <ToolkitProvider
@@ -572,7 +572,7 @@ const WorkOrder = (props) => {
                                 )}
 
                             </PaginationProvider>
-                            : null}
+                        
 
                         {BOMItems.length > 0 ? <FormGroup className="mt-3">
                             <Row >

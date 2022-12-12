@@ -57,14 +57,14 @@ function ItemTab(props) {
     };
 
     const addRowsHandler = (data) => {
-        
+
         const val = {
             Item: contentItemSelect === "" ? "" : contentItemSelect.value,
             ItemName: contentItemSelect.label,
             Unit: unitSelect === "" ? "" : unitSelect.value,
             UnitName: unitSelect.label,
-            Quantity: Quantity  ,
-           
+            Quantity: Quantity,
+
         };
 
         if (!(contentItemSelect === "")
@@ -89,15 +89,15 @@ function ItemTab(props) {
         setUnitSelect('');
     };
 
+
     return (
 
         <Row>
             <Col md={12}  >
-                
+
                 <Card className="mt-n3 text-black">
                     <CardBody className='c_card_body'>
                         <Row>
-
                             <FormGroup className="mb-3 col col-sm-3 ">
                                 <Label>Content Item</Label>
                                 <Select
@@ -126,7 +126,7 @@ function ItemTab(props) {
                                     onChange={Unit_Handler}
                                 />
                             </FormGroup>
-                            
+
                             <Col md={1}>
 
                                 <Row className=" mt-3">
