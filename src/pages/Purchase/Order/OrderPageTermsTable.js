@@ -7,7 +7,7 @@ export default function OrderPageTermsTable(props) {
     const { tableList, setfunc } = props;
 
     const { termsAndConditions = [] } = useSelector((state) => ({
-        termsAndConditions: state.TermsAndConditionsReducer.TermsAndConditions,
+        termsAndConditions: state.TermsAndConditionsReducer.TermsAndConditionsList,
     }));
 
     const onChange = (e) => {

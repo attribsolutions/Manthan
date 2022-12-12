@@ -270,7 +270,9 @@ export function saveDissable(state = false) {//+++++++++++++++++++++ Save Button
     } catch (e) { alert("button overlay error") }
     try {
         document.getElementById('form_submmit').disabled = state;
-    } catch (e) { alert("button dissable error") }
+    } catch (e) {
+        //alert("Save button dissable error") 
+    }
 }
 
 export function GoBtnDissable(state = false) {//+++++++++++++++++++++ Save Button Dissable/Enable +++++++++++++++++++++++++++++++

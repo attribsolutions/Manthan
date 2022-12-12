@@ -79,16 +79,12 @@ const GRNAdd = (props) => {
         updateMsg,
         supplierAddress,
     } = useSelector((state) => ({
-        supplier: state.SupplierReducer.supplier,
         supplierAddress: state.SupplierReducer.supplierAddress,
         items: state.GRNReducer.GRNitem,
-        grnItemList: state.GRNReducer.grnItemList,
-        table: state.GRNReducer.GRNitem3,
         postMsg: state.GRNReducer.postMsg,
         updateMsg: state.GRNReducer.updateMsg,
         userAccess: state.Login.RoleAccessUpdateData,
-        pageField: state.CommonPageFieldReducer.pageFieldList,
-        termsAndCondtions: state.TermsAndCondtionsReducer.TermsAndCondtionsList,
+       pageField: state.CommonPageFieldReducer.pageFieldList,
     }));
 
 

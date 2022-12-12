@@ -147,7 +147,7 @@ function* UpdateOrder_ID_GenFunc({ data, id }) {
 // List Page API
 function* get_OrderList_GenFunc({ filters }) {
 
-  yield GoBtnDissable(true)
+  // yield GoBtnDissable(true)
   yield delay(500)
   try {
     const response = yield call(Order_get_API, filters);
@@ -158,7 +158,7 @@ function* get_OrderList_GenFunc({ filters }) {
       return i
     })
     yield put(getOrderListPageSuccess(newList))
-    yield GoBtnDissable(false)
+    // yield GoBtnDissable(false)
 
   } catch (error) {
     yield GoBtnDissable(false)

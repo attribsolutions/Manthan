@@ -1,5 +1,4 @@
 import {
-    Button,
     Col,
     FormGroup,
     Input,
@@ -12,10 +11,10 @@ import "flatpickr/dist/themes/material_blue.css"
 import Flatpickr from "react-flatpickr";
 
 
-import React, { useEffect, useState, useRf, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import { MetaTags } from "react-meta-tags";
 
-import ToolkitProvider, { Search } from "react-bootstrap-table2-toolkit";
+import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 import paginationFactory, { PaginationListStandalone, PaginationProvider } from "react-bootstrap-table2-paginator";
 import { useHistory } from "react-router-dom";
@@ -80,7 +79,7 @@ const Order = (props) => {
         supplier,
         userAccess,
         updateMsg,
-        supplierAddress,
+        supplierAddress = [],
     } = useSelector((state) => ({
         items: state.OrderReducer.orderItem,
         supplier: state.SupplierReducer.supplier,
@@ -89,9 +88,7 @@ const Order = (props) => {
         updateMsg: state.OrderReducer.updateMsg,
         userAccess: state.Login.RoleAccessUpdateData,
         pageField: state.CommonPageFieldReducer.pageFieldList,
-        // termsAndCondtions: state.TermsAndConditionsReducer.TermsAndConditionsList,
     }));
-    debugger
 
     // userAccess useEffect
     useEffect(() => {
@@ -139,6 +136,7 @@ const Order = (props) => {
                 setshippAddr({ label: hasEditVal.ShippingAddress, value: hasEditVal.ShippingAddressID })
                 setbillAddr({ label: hasEditVal.BillingAddress, value: hasEditVal.BillingAddressID });
                 description = hasEditVal.Description
+                editVal = {}
                 editVal = hasEditVal
                 setOrderAmount(hasEditVal.OrderAmount)
                 const termsAndCondition = hasEditVal.OrderTermsAndCondition.map(i => ({
@@ -385,7 +383,6 @@ const Order = (props) => {
     };
 
     const goButtonHandler = (hasEditVal = false) => {
-        debugger
         if (hasEditVal) {
             const jsonBody = JSON.stringify({
                 Party: hasEditVal.Supplier,
@@ -428,6 +425,7 @@ const Order = (props) => {
 
         const validMsg = []
         const itemArr = []
+        let termsAndCondition = []
         function orderItem(i) {
             if ((i.inpQty > 0) && !(i.inpRate > 0)) {
                 validMsg.push(`${i.Name}:  This Item Rate Is Require...`);
@@ -463,7 +461,6 @@ const Order = (props) => {
         }
 
         items.forEach(i => {
-            debugger
             if (pageMode === "edit") {
                 var ischange = (!(i.poQty === i.inpQty) ||
                     !(i.poRate === i.inpRate) || !(i.poBaseUnitQty === i.inpBaseUnitQty))
@@ -471,8 +468,18 @@ const Order = (props) => {
             }
             else { orderItem(i) }
         })
-        const termsAndCondition = termsAndConTable.map(i => ({ TermsAndCondition: i.value }))
+        if (pageMode === "edit") {
+            termsAndConTable.forEach(i => {
+                var found = editVal.OrderTermsAndCondition.find(ele => (i.value === ele.id))
+                if (found === undefined) {
+                    termsAndCondition.push({ TermsAndCondition: i.value })
+                }
+            })
+        } else {
 
+            termsAndCondition = termsAndConTable.map(i => ({ TermsAndCondition: i.value }))
+        }
+        
         if (validMsg.length > 0) {
             dispatch(AlertState({
                 Type: 4,
@@ -526,12 +533,10 @@ const Order = (props) => {
 
         if (pageMode === "edit") {
             dispatch(updateOrderId(jsonBody, editVal.id))
-            console.log("orderEdit", jsonBody)
 
         } else {
 
             dispatch(postOrder(jsonBody))
-            console.log("ordersave", jsonBody)
         }
 
 
