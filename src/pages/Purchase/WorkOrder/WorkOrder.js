@@ -443,8 +443,10 @@ const WorkOrder = (props) => {
                                     <FormGroup className="mb-2 row  " >
                                         <Label className=" p-2"
                                             style={{ width: "115px" }}>{fieldLabel.StockQuantity}:</Label>
-                                        <Label className=" p-2" style={{ color: "#000000", width: "130px" }}>&nbsp;&nbsp;
-                                            {pageMode === "edit" ? EditData.Stock : itemselect.StockQty}&nbsp;&nbsp; &nbsp;</Label>
+                                        <Label className=" p-2" style={{ color: "#000000", width: "130px" }}
+                                        >&nbsp;&nbsp;
+                                            {pageMode === "edit" ? EditData.Stock : itemselect.StockQty}
+                                            &nbsp;&nbsp; &nbsp;</Label>
                                     </FormGroup>
                                 </div >
                                 <div className="col col-6">
@@ -476,7 +478,7 @@ const WorkOrder = (props) => {
                                             <Input
                                                 name="NumberOfLot"
                                                 value={values.NumberOfLot}
-
+                                                disabled={pageMode === "edit" ? true : false}
                                                 type="text"
                                                 className={isError.NumberOfLot.length > 0 ? "is-invalid form-control" : "form-control"}
                                                 placeholder="Please Enter Number Of Lot"
@@ -506,6 +508,7 @@ const WorkOrder = (props) => {
                                                 className={isError.Quantity.length > 0 ? "is-invalid form-control" : "form-control"}
                                                 placeholder="Please Enter Quantity"
                                                 autoComplete='off'
+                                                disabled={pageMode === "edit" ? true : false}
                                                 onChange={(event) => {
                                                     onChangeText({ event, state, setState })
                                                     Quantitychange(event.target.value)
@@ -515,12 +518,13 @@ const WorkOrder = (props) => {
                                                 <span className="invalid-feedback">{isError.Quantity}</span>
                                             )}
                                         </div>
-                                        <div className="col col-2">
+                                        {pageMode === "edit" ? null : <div className="col col-2">
                                             <Button
                                                 color="btn btn-outline-success border-2 font-size-12 " style={{ marginTop: '3px' }}
                                                 onClick={(e) => goButtonHandler(e)}
                                             >Go</Button>
-                                        </div>
+                                        </div>}
+
                                     </FormGroup>
 
 
@@ -530,49 +534,49 @@ const WorkOrder = (props) => {
 
                         </div>
 
-                      
-                            <PaginationProvider pagination={paginationFactory(pageOptions)}>
-                                {({ paginationProps, paginationTableProps }) => (
-                                    <ToolkitProvider
-                                        keyField={"id"}
-                                        data={BOMItems}
-                                        columns={pagesListColumns}
-                                        search
-                                    >
-                                        {(toolkitProps) => (
-                                            <React.Fragment>
-                                                <Row>
-                                                    <Col xl="12">
-                                                        <div className="table-responsive">
-                                                            <BootstrapTable
-                                                                keyField={"id"}
-                                                                responsive
-                                                                bordered={false}
-                                                                striped={false}
-                                                                // defaultSorted={defaultSorted}
-                                                                classes={"table  table-bordered"}
-                                                                // noDataIndication={<div className="text-danger text-center ">Items Not available</div>}
-                                                                {...toolkitProps.baseProps}
-                                                                {...paginationTableProps}
-                                                            />
-                                                            <div>
-                                                                <label >EstimatedOutputQty :&nbsp;&nbsp; <span style={{ color: "#000000" }}>{EstimatedOutputQty}</span></label>
-                                                            </div>
-                                                        </div>
-                                                    </Col>
-                                                </Row>
-                                                <Row className="align-items-md-center mt-30">
-                                                    <Col className="pagination pagination-rounded justify-content-end mb-2">
-                                                        <PaginationListStandalone {...paginationProps} />
-                                                    </Col>
-                                                </Row>
-                                            </React.Fragment>
-                                        )}
-                                    </ToolkitProvider>
-                                )}
 
-                            </PaginationProvider>
-                        
+                        <PaginationProvider pagination={paginationFactory(pageOptions)}>
+                            {({ paginationProps, paginationTableProps }) => (
+                                <ToolkitProvider
+                                    keyField={"id"}
+                                    data={BOMItems}
+                                    columns={pagesListColumns}
+                                    search
+                                >
+                                    {(toolkitProps) => (
+                                        <React.Fragment>
+                                            <Row>
+                                                <Col xl="12">
+                                                    <div className="table-responsive">
+                                                        <BootstrapTable
+                                                            keyField={"id"}
+                                                            responsive
+                                                            bordered={false}
+                                                            striped={false}
+                                                            // defaultSorted={defaultSorted}
+                                                            classes={"table  table-bordered"}
+                                                            // noDataIndication={<div className="text-danger text-center ">Items Not available</div>}
+                                                            {...toolkitProps.baseProps}
+                                                            {...paginationTableProps}
+                                                        />
+                                                        <div>
+                                                            <label >EstimatedOutputQty :&nbsp;&nbsp; <span style={{ color: "#000000" }}>{EstimatedOutputQty}</span></label>
+                                                        </div>
+                                                    </div>
+                                                </Col>
+                                            </Row>
+                                            <Row className="align-items-md-center mt-30">
+                                                <Col className="pagination pagination-rounded justify-content-end mb-2">
+                                                    <PaginationListStandalone {...paginationProps} />
+                                                </Col>
+                                            </Row>
+                                        </React.Fragment>
+                                    )}
+                                </ToolkitProvider>
+                            )}
+
+                        </PaginationProvider>
+
 
                         {BOMItems.length > 0 ? <FormGroup className="mt-3">
                             <Row >
