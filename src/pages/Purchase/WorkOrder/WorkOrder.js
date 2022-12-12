@@ -417,7 +417,7 @@ const WorkOrder = (props) => {
                                                 className="react-dropdown"
                                                 classNamePrefix="dropdown"
                                                 options={ItemDropdown_Options}
-                                                isDisabled={pageMode === "edit" ? true : false}
+                                                // isDisabled={pageMode === "edit" ? true : false}
                                                 onChange={(hasSelect, evn) => {
                                                     onChangeSelect({ hasSelect, evn, state, setState });
                                                     ItemOnchange(hasSelect)
@@ -474,7 +474,7 @@ const WorkOrder = (props) => {
                                             <Input
                                                 name="NumberOfLot"
                                                 value={values.NumberOfLot}
-                                                disabled={pageMode === "edit" ? true : false}
+                                                // disabled={pageMode === "edit" ? true : false}
                                                 type="text"
                                                 className={isError.NumberOfLot.length > 0 ? "is-invalid form-control" : "form-control"}
                                                 placeholder="Please Enter Number Of Lot"
@@ -504,7 +504,7 @@ const WorkOrder = (props) => {
                                                 className={isError.Quantity.length > 0 ? "is-invalid form-control" : "form-control"}
                                                 placeholder="Please Enter Quantity"
                                                 autoComplete='off'
-                                                disabled={pageMode === "edit" ? true : false}
+                                                // disabled={pageMode === "edit" ? true : false}
                                                 onChange={(event) => {
                                                     onChangeText({ event, state, setState })
                                                     Quantitychange(event.target.value)
