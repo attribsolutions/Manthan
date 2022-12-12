@@ -16,7 +16,6 @@ import { AlertState, BreadcrumbFilterSize } from "../../../store/actions";
 import { listPageCommonButtonFunction }
     from "./listPageCommonButtons";
 import { defaultSearch, mySearchProps } from "./MySearch";
-import { getModify } from "../../../helpers/api_helper";
 import { GST_ADD_Mode_2 } from "../../../routes/route_url";
 
 let sortType = "asc"
@@ -31,7 +30,7 @@ let searchProps = {
 }
 
 export const countlabelFunc = (toolkitProps, paginationProps, dispatch, ButtonMsgLable) => {
-debugger
+
     let iscall = 0
     if (paginationProps.dataSize) {
         iscall = paginationProps.dataSize

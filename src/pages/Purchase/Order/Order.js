@@ -426,48 +426,68 @@ const Order = (props) => {
         const validMsg = []
         const itemArr = []
         let termsAndCondition = []
-        function orderItem(i) {
-            if ((i.inpQty > 0) && !(i.inpRate > 0)) {
-                validMsg.push(`${i.Name}:  This Item Rate Is Require...`);
+
+        function isChanged({ i, isedit, isdel }) {
+
+            const basicAmt = parseFloat(basicAmount(i))
+            const cgstAmt = (GstAmount(i))
+            const arr = {
+                id: i.editrowId,
+                Item: i.id,
+                Quantity: isdel ? 0 : i.inpQty,
+                MRP: i.MRP,
+                Rate: i.inpRate,
+                Unit: i.UOM,
+                BaseUnitQuantity: i.inpBaseUnitQty,
+                Margin: "",
+                BasicAmount: basicAmt.toFixed(2),
+                GSTAmount: cgstAmt.toFixed(2),
+                GST: i.Gstid,
+                CGST: (cgstAmt / 2).toFixed(2),
+                SGST: (cgstAmt / 2).toFixed(2),
+                IGST: 0,
+                CGSTPercentage: (i.GSTPercentage / 2),
+                SGSTPercentage: (i.GSTPercentage / 2),
+                IGSTPercentage: 0,
+                Amount: i.totalAmount,
+                IsDeleted: isedit ? 1 : 0
             }
+            itemArr.push(arr)
+        };
+
+        function orderItem({ i, isedit }) {
 
             if ((i.inpQty > 0) && (i.inpRate > 0)) {
-                const basicAmt = parseFloat(basicAmount(i))
-                const cgstAmt = (GstAmount(i))
+                var isdel = false;
 
-                const arr = {
-                    id: i.editrowId,
-                    Item: i.id,
-                    Quantity: i.inpQty,
-                    MRP: i.MRP,
-                    Rate: i.inpRate,
-                    Unit: i.UOM,
-                    BaseUnitQuantity: i.inpBaseUnitQty,
-                    Margin: "",
-                    BasicAmount: basicAmt.toFixed(2),
-                    GSTAmount: cgstAmt.toFixed(2),
-                    GST: i.Gstid,
-                    CGST: (cgstAmt / 2).toFixed(2),
-                    SGST: (cgstAmt / 2).toFixed(2),
-                    IGST: 0,
-                    CGSTPercentage: (i.GSTPercentage / 2),
-                    SGSTPercentage: (i.GSTPercentage / 2),
-                    IGSTPercentage: 0,
-                    Amount: i.totalAmount,
-                }
-
-                itemArr.push(arr)
+                isChanged({ i, isedit, isdel })
+            }
+            else if ((i.inpQty < 1) && (i.editrowId)) {
+                var isdel = true;
+                isChanged({ i, isedit, isdel })
             };
         }
 
         items.forEach(i => {
+
+            if ((i.inpQty > 0) && !(i.inpRate > 0)) {
+                validMsg.push(`${i.Name}:  This Item Rate Is Require...`);
+            };
+
             if (pageMode === "edit") {
                 var ischange = (!(i.poQty === i.inpQty) ||
                     !(i.poRate === i.inpRate) || !(i.poBaseUnitQty === i.inpBaseUnitQty))
-                if (ischange) { orderItem(i) }
+                if (ischange) {
+                    var isedit = true;
+                    orderItem({ i, isedit })
+                } else {
+                    var isedit = false;
+                    orderItem({ i, isedit })
+                }
             }
             else { orderItem(i) }
         })
+        debugger
         if (pageMode === "edit") {
             termsAndConTable.forEach(i => {
                 var found = editVal.OrderTermsAndCondition.find(ele => (i.value === ele.id))
@@ -479,7 +499,7 @@ const Order = (props) => {
 
             termsAndCondition = termsAndConTable.map(i => ({ TermsAndCondition: i.value }))
         }
-        
+
         if (validMsg.length > 0) {
             dispatch(AlertState({
                 Type: 4,

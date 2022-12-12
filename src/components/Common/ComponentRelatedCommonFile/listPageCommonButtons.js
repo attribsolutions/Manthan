@@ -252,7 +252,7 @@ export function convertTimefunc(inputDate) { //+++++++++++Convert Time Format+++
     let hour = +hourString % 24;
     let time = (hour % 12 || 12) + ":" + minute + (hour < 12 ? "AM" : "PM");
 
-    return (`(${convDate}-${time})`)
+    return (`(${convDate} ${time})`)
 }
 
 export function convertDatefunc(inputDate) {// +++++++++++Convert Date Format+++++++++++++++++++++++++++++++
