@@ -1,5 +1,5 @@
 
-import React, { useEffect, useRef, useState, } from "react";
+import React, { useEffect, useState, } from "react";
 import Breadcrumb from "../../../components/Common/Breadcrumb3";
 import {
     Card,
@@ -41,14 +41,13 @@ import {
 // import { getGroupList } from "../../../store/Administrator/GroupRedux/action";
 import { SUBGROUP_LIST } from "../../../routes/route_url"
 import SaveButton from "../../../components/Common/ComponentRelatedCommonFile/CommonSaveButton";
+import { saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 
 
 const SubGroupMaster = (props) => {
 
-    const formRef = useRef(null);
     const history = useHistory()
     const dispatch = useDispatch();
-
     const [EditData, setEditData] = useState({});
     const [pageMode, setPageMode] = useState("");
     const [modalCss, setModalCss] = useState(false);
@@ -145,8 +144,6 @@ const SubGroupMaster = (props) => {
                 hasValid.GroupName.valid = true;
                 hasValid.Group.valid = true;
 
-
-
                 setState({ values, fieldLabel, hasValid, required, isError })
                 dispatch(Breadcrumb_inputName(hasEditVal.Name))
 
@@ -160,7 +157,8 @@ const SubGroupMaster = (props) => {
 
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(postSubGroupSuccess({ Status: false }))
-            formRef.current.reset();
+            setState(() => initialFiledFunc(fileds)) //+++++++++ Clear form values 
+            saveDissable(false);//+++++++++save Button Is enable function
             if (pageMode === "other") {
                 dispatch(AlertState({
                     Type: 1,
@@ -178,6 +176,7 @@ const SubGroupMaster = (props) => {
             }
         }
         else if (postMsg.Status === true) {
+            saveDissable(false);//+++++++++save Button Is enable function
             dispatch(getSubGroupListSuccess({ Status: false }))
             dispatch(AlertState({
                 Type: 4,
@@ -191,10 +190,13 @@ const SubGroupMaster = (props) => {
 
     useEffect(() => {
         if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
+            saveDissable(false);//+++++++++Update Button Is enable function
+            setState(() => initialFiledFunc(fileds)) //+++++++++ Clear form values
             history.push({
                 pathname: SUBGROUP_LIST,
             })
         } else if (updateMsg.Status === true && !modalCss) {
+            saveDissable(false);//+++++++++Update Button Is enable function
             dispatch(updateSubgroupIDSuccess({ Status: false }));
             dispatch(
                 AlertState({
@@ -229,7 +231,6 @@ const SubGroupMaster = (props) => {
     const formSubmitHandler = (event) => {
         event.preventDefault();
         if (formValid(state, setState)) {
-            debugger
             const jsonBody = JSON.stringify({
                 id: values.id,
                 Name: values.Name,
@@ -240,22 +241,20 @@ const SubGroupMaster = (props) => {
                 UpdatedOn: "2022-11-19T00:00:00"
             });
 
+            saveDissable(true);//+++++++++save Button Is dissable function
+
             if (pageMode === "edit") {
-
                 dispatch(updateSubGroupID(jsonBody, values.id));
-
-
             }
             else {
                 dispatch(postSubGroupList(jsonBody));
-                // console.log("jsonBody", jsonBody)
-
-
             }
         }
     };
 
 
+
+    
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
     var IsEditMode_Css = ''
     if ((modalCss) || (pageMode === "dropdownAdd")) { IsEditMode_Css = "-5.5%" };
@@ -277,7 +276,7 @@ const SubGroupMaster = (props) => {
                             </CardHeader>
 
                             <CardBody className=" vh-10 0 text-black" >
-                                <form onSubmit={formSubmitHandler} ref={formRef} noValidate>
+                                <form onSubmit={formSubmitHandler}noValidate>
                                     <Row className="">
                                         <Col md={12} style={{ height: "9cm" }}>
                                             <Card>

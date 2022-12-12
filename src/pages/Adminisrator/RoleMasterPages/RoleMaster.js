@@ -269,6 +269,9 @@ const RoleMaster = (props) => {
     }
   };
 
+
+
+  
   // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
   var IsEditMode_Css = ''
   if (modalCss || (pageMode === "dropdownAdd")) { IsEditMode_Css = "-5.5%" };
@@ -291,7 +294,7 @@ const RoleMaster = (props) => {
 
               <CardBody className=" vh-10 0 text-black" style={{ backgroundColor: "#whitesmoke" }} >
 
-                <form onSubmit={formSubmitHandler}noValidate>
+                <form onSubmit={formSubmitHandler} noValidate>
 
                   <Row className="">
                     <Col md={12}>
