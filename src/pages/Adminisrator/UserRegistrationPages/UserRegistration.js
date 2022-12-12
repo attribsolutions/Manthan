@@ -81,6 +81,7 @@ const AddUser = (props) => {
     userAccess: state.Login.RoleAccessUpdateData,
     pageField: state.CommonPageFieldReducer.pageField
   }));
+  
 console.log("employeelistForDropdown",employeelistForDropdown)
   const location = { ...history.location }
   const hasShowloction = location.hasOwnProperty("editValue")
@@ -150,7 +151,6 @@ console.log("employeelistForDropdown",employeelistForDropdown)
 
         setUserPartiesForUserMaster(hasEditVal.UserRole)
 
-
         let arraynew = []
         hasEditVal.UserRole.map((i) => {
           i.PartyRoles.map((i2) => {
@@ -207,9 +207,6 @@ console.log("employeelistForDropdown",employeelistForDropdown)
     dispatch(getEmployeeForUseRegistration());
     dispatch(getRoles());
   }, [dispatch]);
-
-
-
 
   function handllerEmployeeID(e) {
     setEmployeeSelect(e)
@@ -302,7 +299,6 @@ console.log("employeelistForDropdown",employeelistForDropdown)
               </td>
               <td>
                 <FormGroup className="" >
-
                   <Select
                     defaultValue={pageMode === "edit" ? index.PartyRoles.map((i) => ({ value: i.Role, label: i.RoleName })) : null}
                     options={RolesValues}
@@ -363,7 +359,6 @@ console.log("employeelistForDropdown",employeelistForDropdown)
                                     options={EmployeeValues}
                                     onChange={(e) => { handllerEmployeeID(e) }}
                                   />
-
                                 </Col>
                               </FormGroup>
 
@@ -397,7 +392,6 @@ console.log("employeelistForDropdown",employeelistForDropdown)
                                     placeholder="Please Enter Password"
                                     autoComplete="new-password"
                                     className="form-control"
-
                                     value={password}
                                     onChange={(e) => { setPassword(e.target.value) }} />
                               </FormGroup>
@@ -580,8 +574,6 @@ console.log("employeelistForDropdown",employeelistForDropdown)
                                           )
                                       }
                                     </div>
-
-
                                   </Col>
                                 </Row>
                               </Row>

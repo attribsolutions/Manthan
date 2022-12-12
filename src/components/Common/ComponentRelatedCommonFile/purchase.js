@@ -31,7 +31,7 @@ let searchProps = {
 }
 
 export const countlabelFunc = (toolkitProps, paginationProps, dispatch, ButtonMsgLable) => {
-
+debugger
     let iscall = 0
     if (paginationProps.dataSize) {
         iscall = paginationProps.dataSize
@@ -322,7 +322,7 @@ const PurchaseListPage = (props) => {
                                                         defaultSorted={defaultSorted}
                                                         striped={true}
                                                         classes={"table  table-bordered table-hover"}
-                                                        noDataIndication={<div className="text-danger text-center ">Record Not Found</div>}
+                                                        noDataIndication={<div className="text-danger text-center "> No record(s) Not Found.</div>}
                                                         {...toolkitProps.baseProps}
                                                         {...paginationTableProps}
                                                     />

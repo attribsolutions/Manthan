@@ -1,4 +1,4 @@
-import React, { useEffect,  useRef, useState, } from "react";
+import React, { useEffect, useState, } from "react";
 import Breadcrumb from "../../../components/Common/Breadcrumb3";
 import {
     Card,
@@ -15,7 +15,11 @@ import {
 } from "reactstrap";
 import Select from "react-select";
 import { MetaTags } from "react-meta-tags";
-import { Breadcrumb_inputName, commonPageField, commonPageFieldSuccess } from "../../../store/actions";
+import {
+    Breadcrumb_inputName,
+    commonPageField,
+    commonPageFieldSuccess
+} from "../../../store/actions";
 import { useDispatch, useSelector } from "react-redux";
 import { Tbody, Thead } from "react-super-responsive-table";
 import { AlertState } from "../../../store/actions";
@@ -33,7 +37,7 @@ import {
 import { get_Division_ForDropDown, } from "../../../store/Administrator/ItemsRedux/action";
 import { useHistory } from "react-router-dom";
 // import { actionChannel } from "redux-saga/effects";
-import { DRIVER_lIST, VEHICLE_lIST } from "../../../routes/route_url";
+import { VEHICLE_lIST } from "../../../routes/route_url";
 import {
     comAddPageFieldFunc,
     formValid,
@@ -42,24 +46,20 @@ import {
     onChangeText
 } from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
 import SaveButton from "../../../components/Common/ComponentRelatedCommonFile/CommonSaveButton";
+import { saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 
 
 
 const VehicleMaster = (props) => {
 
-
     const dispatch = useDispatch();
     const history = useHistory()
-    const formRef = useRef(null);
 
     //*** "isEditdata get all data from ModuleID for Binding  Form controls
-    const [EditData, setEditData] = useState({});
     const [modalCss, setModalCss] = useState(false);
     const [pageMode, setPageMode] = useState("save");
     const [userPageAccessState, setUserPageAccessState] = useState('');
-
     const [divisionData, setDivisionData] = useState([]);
-
     const [divisionType_dropdown_Select, setDivisionType_dropdown_Select] = useState("");
 
     {/** Dyanamic Page access state and OnChange function */ }
@@ -106,7 +106,6 @@ const VehicleMaster = (props) => {
     }, []);
 
 
-
     useEffect(() => {
         //  dispatch(PostMethodForVehicleMaster());
         dispatch(getMethodForVehicleList());
@@ -114,7 +113,6 @@ const VehicleMaster = (props) => {
         dispatch(getMethod_VehicleTypes_ForDropDown());
         dispatch(get_Division_ForDropDown());
     }, [dispatch]);
-
 
 
     // userAccess useEffect
@@ -135,10 +133,10 @@ const VehicleMaster = (props) => {
         };
     }, [userAccess])
 
-    // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
+
+    // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time
     useEffect(() => {
 
-        // if (!(userPageAccessState === '')) { document.getElementById("txtName").focus(); }
         if ((hasShowloction || hasShowModal)) {
 
             let hasEditVal = null
@@ -153,7 +151,7 @@ const VehicleMaster = (props) => {
             }
 
             if (hasEditVal) {
-                debugger
+
                 const divisionTable = hasEditVal.VehicleDivisions.map((data) => ({
                     value: data.Division,
                     label: data.DivisionName
@@ -180,21 +178,17 @@ const VehicleMaster = (props) => {
                 setState({ values, fieldLabel, hasValid, required, isError })
                 dispatch(Breadcrumb_inputName(hasEditVal.RoleMaster))
                 dispatch(editVehicleTypeSuccess({ Status: false }))
-
-
             }
         }
-
     }, []);
 
 
     useEffect(() => {
 
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
-
             dispatch(PostMethod_ForVehicleMasterSuccess({ Status: false }))
-            formRef.current.reset();
-
+            setState(() => initialFiledFunc(fileds)) //+++++++++ Clear form values 
+            saveDissable(false);//+++++++++save Button Is enable function
             if (pageMode === "dropdownAdd") {
                 dispatch(AlertState({
                     Type: 1,
@@ -212,6 +206,7 @@ const VehicleMaster = (props) => {
             }
         }
         else if (postMsg.Status === true) {
+            saveDissable(false);//+++++++++save Button Is enable function
             dispatch(getMethod_ForVehicleListSuccess({ Status: false }))
             dispatch(AlertState({
                 Type: 4,
@@ -225,10 +220,13 @@ const VehicleMaster = (props) => {
 
     useEffect(() => {
         if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
+            saveDissable(false);//+++++++++Update Button Is enable function
+            setState(() => initialFiledFunc(fileds)) //+++++++++ Clear form values
             history.push({
                 pathname: VEHICLE_lIST,
             })
         } else if (updateMsg.Status === true && !modalCss) {
+            saveDissable(false);//+++++++++Update Button Is enable function
             dispatch(updateVehicleTypeIDSuccess({ Status: false }));
             dispatch(
                 AlertState({
@@ -247,7 +245,7 @@ const VehicleMaster = (props) => {
             comAddPageFieldFunc({ state, setState, fieldArr })
         }
     }, [pageField])
-    
+
 
     const values = { ...state.values }
     const { isError } = state;
@@ -267,16 +265,13 @@ const VehicleMaster = (props) => {
         label: data.Name
     }));
 
-
     const VehicleType_DropdownOptions = VehicleTypes.map((data) => ({
         value: data.id,
         label: data.Name
     }));
 
 
-
     const formSubmitHandler = (event) => {
-
         event.preventDefault();
         const leng = divisionData.length
         if (leng === 0) {
@@ -296,6 +291,7 @@ const VehicleMaster = (props) => {
                 VehicleDivisions: division,
             });
 
+            saveDissable(true);//+++++++++save Button Is dissable function
 
             if (pageMode === 'edit') {
                 dispatch(updateVehicleTypeID(jsonBody, values.id));
@@ -307,7 +303,6 @@ const VehicleMaster = (props) => {
             }
         }
     };
-
 
     function AddDivisionHandler() {
 
@@ -332,7 +327,6 @@ const VehicleMaster = (props) => {
         }
     }
 
-
     // For Delete Button in table
     function UserRoles_DeleteButton_Handller(tableValue) {
         setDivisionData(divisionData.filter(
@@ -341,6 +335,9 @@ const VehicleMaster = (props) => {
         )
     }
 
+
+
+    
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
     var IsEditMode_Css = ''
     if ((modalCss) || (pageMode === "dropdownAdd")) { IsEditMode_Css = "-5.5%" };
@@ -362,7 +359,7 @@ const VehicleMaster = (props) => {
                             </CardHeader>
 
                             <CardBody className=" vh-10 0 text-black" style={{ backgroundColor: "#whitesmoke" }} >
-                                <form onSubmit={formSubmitHandler} ref={formRef} noValidate>
+                                <form onSubmit={formSubmitHandler} noValidate>
                                     <Row className="">
                                         <Col md={12}>
                                             <Card>
@@ -382,7 +379,6 @@ const VehicleMaster = (props) => {
                                                                         classNamePrefix="dropdown"
                                                                         options={DriverList_DropdownOptions}
                                                                         onChange={(hasSelect, evn) => onChangeSelect({ hasSelect, evn, state, setState, })}
-
                                                                     />
                                                                     {isError.Driver.length > 0 && (
                                                                         <span className="text-danger f-8"><small>{isError.Driver}</small></span>

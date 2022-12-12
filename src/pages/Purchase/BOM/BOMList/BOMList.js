@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import "flatpickr/dist/themes/material_blue.css"
 import Flatpickr from "react-flatpickr";
-import { commonPageFieldList, commonPageFieldListSuccess, } from "../../../../store/actions";
+import { BreadcrumbFilterSize, commonPageFieldList, commonPageFieldListSuccess, } from "../../../../store/actions";
 import PurchaseListPage from "../../../../components/Common/ComponentRelatedCommonFile/purchase"
 import { BillOfMaterials, BillOfMaterialsList } from "../../../../routes/route_url";
 import { Button, Col, FormGroup, Label } from "reactstrap";
@@ -50,6 +50,7 @@ const BOMList = () => {
         setpageMode(hasPagePath)
         dispatch(commonPageFieldListSuccess(null))
         dispatch(commonPageFieldList(70))
+        dispatch(BreadcrumbFilterSize(`${"BOM Count"} :0`))
         goButtonHandler(true)
 
     }, []);
@@ -74,7 +75,7 @@ const BOMList = () => {
     }, [userAccess])
 
     const goButtonHandler = (onload = false) => {
-debugger
+
         let FromDate
         let ToDate
 
@@ -93,7 +94,6 @@ debugger
             Company: userCompany(),
         });
         dispatch(getBOMListPage(jsonBody));
-        console.log("go button post json",jsonBody)
     }
 
     return (
@@ -106,7 +106,7 @@ debugger
                     excelBtnView={true}
                     excelData={downList} />
 
-                <div className="px-2  mt-n1 c_card_header" style={{marginBottom:"-12px"}} >
+                <div className="px-2  mt-n1 c_card_header" style={{ marginBottom: "-12px" }} >
                     <div className=" mt-1 row">
                         <Col sm="4" className="">
                             <FormGroup className="mb- row mt-3 " >
@@ -154,7 +154,7 @@ debugger
                         </Col>
 
                         <Col sm="1">
-                            <Button  type="button" color="btn btn-outline-success border-2 font-size-12 m-3  "
+                            <Button type="button" color="btn btn-outline-success border-2 font-size-12 m-3  "
                                 onClick={() => goButtonHandler()}
                             >Go</Button>
                         </Col>
