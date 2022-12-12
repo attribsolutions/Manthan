@@ -37,7 +37,7 @@ import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable, { CHECKBOX_STATUS_CHECKED } from "react-bootstrap-table-next";
 import { countlabelFunc } from "../../../components/Common/ComponentRelatedCommonFile/CommonMasterListPage";
 import { mySearchProps } from "../../../components/Common/ComponentRelatedCommonFile/SearchBox/MySearch";
-import SaveButton from "../../../components/Common/ComponentRelatedCommonFile/CommonSaveButton";
+import { SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
 import { PARTYITEM_LIST } from "../../../routes/route_url";
 import { comAddPageFieldFunc, formValid, initialFiledFunc, onChangeSelect } from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
 import { saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";

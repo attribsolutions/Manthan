@@ -40,7 +40,7 @@ import {
 } from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
 // import { getGroupList } from "../../../store/Administrator/GroupRedux/action";
 import { SUBGROUP_LIST } from "../../../routes/route_url"
-import SaveButton from "../../../components/Common/ComponentRelatedCommonFile/CommonSaveButton";
+import { SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
 import { saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 
 

@@ -1,12 +1,21 @@
 import { call, put, takeEvery } from "redux-saga/effects";
 
-import { DeleteTermsAndCondtions_Success,postTermAndConditionSuccess, getTermAndCondition, getTermAndCondition_Success} from "./actions";
+import {
+  postTermAndConditionSuccess,
+  getTermAndCondition_Success
+} from "./actions";
 
-import {Post_TermsAndCondtions_Master_API,get_TermsAndCondtionsList_API,delete_TermsAndCondtions_API } from "../../../helpers/backend_helper";
+import {
+  Post_TermsAndCondtions_Master_API,
+  get_TermsAndCondtionsList_API
+} from "../../../helpers/backend_helper";
 
 import { SpinnerState } from "../../Utilites/Spinner/actions";
 
-import {  DELETE_METHOD_FOR_TERMSANDCONDITIONSLIST_API,POST_METHOD_HANDLER_FOR_TERMSANDCONDITIONS_MASTER_API,GET_METHOD_FOR_TERMSANDCONDITIONSLIST_API } from "./actionTypes";
+import {
+  POST_METHOD_HANDLER_FOR_TERMSANDCONDITIONS_MASTER_API,
+  GET_METHOD_FOR_TERMSANDCONDITIONSLIST_API
+} from "./actionTypes";
 
 import { AlertState } from "../../actions";
 
@@ -29,11 +38,11 @@ function* Post_Method_ForTermsAndCondtionsMaster_GenFun({ data }) {
 
 // Get List Page API
 function* Get_TermsAndCondtions_GenratorFunction() {
-  
+
   yield put(SpinnerState(true))
   try {
     const response = yield call(get_TermsAndCondtionsList_API);
-    
+
     yield put(getTermAndCondition_Success(response.Data));
     yield put(SpinnerState(false))
   } catch (error) {
@@ -51,7 +60,7 @@ function* Get_TermsAndCondtions_GenratorFunction() {
 //   yield put(SpinnerState(true))
 //   try {
 //     const response = yield call(delete_TermsAndCondtions_API,id);
-    
+
 //     yield put(DeleteTermsAndCondtions_Success(response));
 //     yield put(SpinnerState(false))
 //   } catch (error) {
@@ -64,11 +73,10 @@ function* Get_TermsAndCondtions_GenratorFunction() {
 // }
 
 
-function* TermsAndCondtionsSaga () {
+function* TermsAndConditionsSaga() {
   yield takeEvery(POST_METHOD_HANDLER_FOR_TERMSANDCONDITIONS_MASTER_API, Post_Method_ForTermsAndCondtionsMaster_GenFun)
   yield takeEvery(GET_METHOD_FOR_TERMSANDCONDITIONSLIST_API, Get_TermsAndCondtions_GenratorFunction)
-  // yield takeEvery(DELETE_METHOD_FOR_TERMSANDCONDITIONSLIST_API, Delete_TermsAndCondtions_GenratorFunction)
 
 }
 
-export default TermsAndCondtionsSaga;
+export default TermsAndConditionsSaga;

@@ -1,4 +1,7 @@
-const SaveButton = (props) => {
+import { Button } from "reactstrap"
+
+export function SaveButton(props) {
+
   const { pageMode, userAcc, module, onClick } = props
   return (
     <div>
@@ -33,5 +36,14 @@ const SaveButton = (props) => {
     </div>
   )
 }
-export default SaveButton
 
+
+export function Go_Button(props) {
+  const { onClick } = props
+  return (
+    <Button id="gobtn_submmit" type="button"
+      color="btn btn-outline-success border-2 font-size-12 mb-2 "
+      onClick={onClick}
+    >Go</Button>
+  )
+}

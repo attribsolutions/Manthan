@@ -24,7 +24,7 @@ import {
     initialFiledFunc,
     onChangeText
 } from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
-import SaveButton from "../../../components/Common/ComponentRelatedCommonFile/CommonSaveButton";
+import { SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
 
 import {
     EditTermsAndCondtions_Success,
@@ -32,12 +32,12 @@ import {
     postTermAndConditionSuccess,
     UpdateTermsAndCondtions,
     UpdateTermsAndCondtions_Success
-} from "../../../store/Administrator/TermsAndCondtionsRedux/actions";
+} from "../../../store/Administrator/TermsAndConditionsRedux/actions";
 import { TERMS_AND_CONDITION_LIST } from "../../../routes/route_url";
 import { saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 
-const TermsAndCondtionsMaster = (props) => {
-   
+const TermsAndConditionsMaster = (props) => {
+
     const history = useHistory()
     const dispatch = useDispatch();
     const [modalCss, setModalCss] = useState(false);
@@ -46,8 +46,8 @@ const TermsAndCondtionsMaster = (props) => {
 
     //Access redux store Data /  'save_ModuleSuccess' action data
     const { postMsg, updateMsg, pageField, userAccess } = useSelector((state) => ({
-        postMsg: state.TermsAndCondtionsReducer.PostData,
-        updateMsg: state.TermsAndCondtionsReducer.TermsAndCondtionsupdateMessage,
+        postMsg: state.TermsAndConditionsReducer.PostData,
+        updateMsg: state.TermsAndConditionsReducer.TermsAndConditionsupdateMessage,
         userAccess: state.Login.RoleAccessUpdateData,
         pageField: state.CommonPageFieldReducer.pageField
     }));
@@ -211,7 +211,7 @@ const TermsAndCondtionsMaster = (props) => {
     };
 
 
-    
+
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
     var IsEditMode_Css = ''
     if ((modalCss) || (pageMode === "dropdownAdd")) { IsEditMode_Css = "-5.5%" };
@@ -233,7 +233,7 @@ const TermsAndCondtionsMaster = (props) => {
                             </CardHeader>
 
                             <CardBody className=" vh-10 0 text-black" style={{ backgroundColor: "#whitesmoke" }} >
-                                <form onSubmit={formSubmitHandler}noValidate>
+                                <form onSubmit={formSubmitHandler} noValidate>
                                     <Row className="">
                                         <Col md={12}>
                                             <Card>
@@ -292,5 +292,5 @@ const TermsAndCondtionsMaster = (props) => {
     }
 };
 
-export default TermsAndCondtionsMaster
+export default TermsAndConditionsMaster
 

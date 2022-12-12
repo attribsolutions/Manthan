@@ -4,11 +4,11 @@ import "flatpickr/dist/themes/material_blue.css"
 import Flatpickr from "react-flatpickr";
 import { BreadcrumbFilterSize, commonPageFieldList, commonPageFieldListSuccess, } from "../../../store/actions";
 import PurchaseListPage from "../../../components/Common/ComponentRelatedCommonFile/purchase"
-import { BillOfMaterials, BillOfMaterialsList, WORKORDER, WORKORDERLIST } from "../../../routes/route_url";
+import { WORK_ORDER, WORK_ORDER_LIST } from "../../../routes/route_url";
 import { Button, Col, FormGroup, Label } from "reactstrap";
 import Breadcrumb from "../../../components/Common/Breadcrumb";
 import { useHistory } from "react-router-dom";
-import { currentDate, excelDownCommonFunc, userCompany } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { currentDate, excelDownCommonFunc } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import { useMemo } from "react";
 import { updateBOMListSuccess } from "../../../store/Purchase/BOMRedux/action";
 import { deleteWorkOrderId, deleteWorkOrderIdSuccess, editWorkOrderList, getWorkOrderListPage } from "../../../store/Purchase/WorkOrder/action";
@@ -22,7 +22,7 @@ const WorkOrderList = () => {
 
     const hasPagePath = history.location.pathname
 
-    const [pageMode, setpageMode] = useState(WORKORDERLIST)
+    const [pageMode, setpageMode] = useState(WORK_ORDER_LIST)
     const [userAccState, setUserAccState] = useState('');
     const [fromdate, setFromdate] = useState();
     const [todate, setTodate] = useState();
@@ -170,7 +170,7 @@ const WorkOrderList = () => {
                             reducers={reducers}
                             showBreadcrumb={false}
                             MasterModal={WorkOrder}
-                            masterPath={WORKORDER}
+                            masterPath={WORK_ORDER}
                             ButtonMsgLable={"Work Order"}
                             deleteName={"ItemName"}
                             pageMode={pageMode}

@@ -27,10 +27,17 @@ import {
     onChangeText,
 } from "../../../../components/Common/ComponentRelatedCommonFile/validationFunction";
 import Select from "react-select";
-import SaveButton from "../../../../components/Common/ComponentRelatedCommonFile/CommonSaveButton";
+import { SaveButton } from "../../../../components/Common/ComponentRelatedCommonFile/CommonButton";
 import ItemTab from "./ItemQuantityTab";
-import { editBOMListSuccess, GetItemUnitsDrodownAPI, postBOM, postBOMSuccess, updateBOMList, updateBOMListSuccess } from "../../../../store/Purchase/BOMRedux/action";
-import { BillOfMaterialsList } from "../../../../routes/route_url";
+import {
+    editBOMListSuccess,
+    GetItemUnitsDrodownAPI,
+    postBOM,
+    postBOMSuccess,
+    updateBOMList,
+    updateBOMListSuccess
+} from "../../../../store/Purchase/BOMRedux/action";
+import {  BIllOf_MATERIALS_LIST } from "../../../../routes/route_url";
 import { createdBy, userCompany } from "../../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 
 const BOMMaster = (props) => {
@@ -64,7 +71,6 @@ const BOMMaster = (props) => {
         pageField,
         userAccess,
         Items,
-        Unit,
         GetItemUnits
     } = useSelector((state) => ({
         postMsg: state.BOMReducer.PostData,
@@ -165,7 +171,7 @@ const BOMMaster = (props) => {
                     Type: 1,
                     Status: true,
                     Message: postMsg.Message,
-                    RedirectPath: BillOfMaterialsList,
+                    RedirectPath: BIllOf_MATERIALS_LIST,
                 }))
             }
         }

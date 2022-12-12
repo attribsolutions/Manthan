@@ -3,11 +3,11 @@ import { useSelector } from 'react-redux';
 import Select from "react-select";
 import { Table } from 'reactstrap';
 
-export default function OrderPageTemsTable(props) {
+export default function OrderPageTermsTable(props) {
     const { tableList, setfunc } = props;
 
-    const { termsAndCondtions = [] } = useSelector((state) => ({
-        termsAndCondtions: state.TermsAndCondtionsReducer.TermsAndCondtionsList,
+    const { termsAndConditions = [] } = useSelector((state) => ({
+        termsAndConditions: state.TermsAndConditionsReducer.TermsAndConditions,
     }));
 
     const onChange = (e) => {
@@ -31,7 +31,7 @@ export default function OrderPageTemsTable(props) {
                 <div className="col-3  pt-3 pb-3">
                     <Select
                         options={
-                            termsAndCondtions.map(i => ({
+                            termsAndConditions.map(i => ({
                                 value: i.id,
                                 label: i.Name
                             }))
@@ -42,7 +42,7 @@ export default function OrderPageTemsTable(props) {
                 <div className=" col-9 pt-3" >
                     <Table className='table  table-borderless table-hover  '>
                         <tr>
-                            <th>Terms And Condation </th>
+                            <th>Terms and Condition</th>
                             <th>Action</th>
                         </tr >
                         {tableList.map((i, k) => (

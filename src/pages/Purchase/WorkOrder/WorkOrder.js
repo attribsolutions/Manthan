@@ -2,11 +2,7 @@ import React, { useEffect, useMemo, useRef, useState, } from "react";
 import Breadcrumb from "../../../components/Common/Breadcrumb3"
 import {
     Button,
-    Card,
-    CardBody,
-    CardHeader,
     Col,
-    Container,
     FormGroup,
     Input,
     Label,
@@ -27,12 +23,12 @@ import {
     onChangeText,
 } from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
 import Select from "react-select";
-import SaveButton from "../../../components/Common/ComponentRelatedCommonFile/CommonSaveButton";
-import { WORKORDERLIST } from "../../../routes/route_url";
+import { SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
+import { WORK_ORDER_LIST } from "../../../routes/route_url";
 import { createdBy, currentDate, userCompany } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import { editWorkOrderListSuccess, getBOMList, postGoButtonForWorkOrder_Master, postGoButtonForWorkOrder_MasterSuccess, postWorkOrderMaster, postWorkOrderMasterSuccess } from "../../../store/Purchase/WorkOrder/action";
 import paginationFactory, { PaginationListStandalone, PaginationProvider } from "react-bootstrap-table2-paginator";
-import ToolkitProvider, { Search } from "react-bootstrap-table2-toolkit";
+import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 import '../../Order/div.css'
 const WorkOrder = (props) => {
@@ -178,7 +174,7 @@ const WorkOrder = (props) => {
                     Type: 1,
                     Status: true,
                     Message: postMsg.Message,
-                    RedirectPath: WORKORDERLIST,
+                    RedirectPath: WORK_ORDER_LIST,
                 }))
             }
         }

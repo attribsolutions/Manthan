@@ -17,13 +17,14 @@ import { BreadcrumbFilterSize, commonPageFieldList, commonPageFieldListSuccess, 
 import PurchaseListPage from "../../../components/Common/ComponentRelatedCommonFile/purchase"
 import Order from "./Order";
 import { GRN_ADD, GST_ADD_Mode_2, ORDER, ORDER_lIST } from "../../../routes/route_url";
-import { Button, Col, FormGroup, Label } from "reactstrap";
+import {  Col, FormGroup, Label } from "reactstrap";
 import Breadcrumb from "../../../components/Common/Breadcrumb";
 import { useHistory } from "react-router-dom";
 import { getGRN_itemMode2 } from "../../../store/Purchase/GRNRedux/actions";
 import { getSupplier } from "../../../store/CommonAPI/SupplierRedux/actions";
-import { currentDate, excelDownCommonFunc, userParty } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import {  excelDownCommonFunc, userParty } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import { useMemo } from "react";
+import { Go_Button } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
 
 
 const OrderList = () => {
@@ -242,10 +243,11 @@ const OrderList = () => {
                         </Col >
 
                         <Col sm="1" className="mt-3 ">
-                            <Button id="gobtn_submmit" type="button"
+                            {/* <Button id="gobtn_submmit" type="button"
                                 color="btn btn-outline-success border-2 font-size-12 mb-2 "
                                 onClick={() => goButtonHandler()}
-                            >Go</Button>
+                            >Go</Button> */}
+                            <Go_Button onClick={goButtonHandler} />
                         </Col>
                     </div>
                 </div>

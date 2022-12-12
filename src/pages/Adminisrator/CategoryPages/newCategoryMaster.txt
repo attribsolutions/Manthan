@@ -34,7 +34,7 @@ import {
 } from "../../../components/Common/import { countlabelFunc } from "../../../components/Common/ComponentRelatedCommonFile/CommonMasterListPage";/validationFunction";
 
 
-import SaveButton from "../../../components/Common/ComponentRelatedCommonFile/CommonSaveButton";
+import { SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
 import { CATEGORY_lIST } from "../../../routes/route_url";
 
 
