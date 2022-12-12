@@ -250,7 +250,7 @@ const BOMMaster = (props) => {
 
         event.preventDefault();
         if (formValid(state, setState)) {
-
+debugger
             const jsonBody = JSON.stringify({
 
                 BomDate: values.BomDate,

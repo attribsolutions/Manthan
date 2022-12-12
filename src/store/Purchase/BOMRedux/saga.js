@@ -11,6 +11,7 @@ function* Post_BOM_GenratorFunction({ data }) {
 
   yield put(SpinnerState(true))
   try {
+
     const response = yield call(BOM_Post_API, data);
     yield put(SpinnerState(false))
     yield put(postBOMSuccess(response));
@@ -40,11 +41,11 @@ function* GetItemUnits_saga({ data }) {
 
 // List Page API
 function* get_BOMList_GenFunc({ filters }) {
-debugger
+
   yield put(SpinnerState(true))
-  
+
   try {
-    debugger
+
     const response = yield call(BOM_ListPage_API, filters);
     let data = response.Data.map((i) => {
       i.id = `${i.id}/${i.Company}`;
@@ -74,7 +75,11 @@ function* editBOMListGenFunc({ id1, pageMode }) {
     response.pageMode = pageMode
     response.Data = response.Data[0];
     yield put(SpinnerState(false))
-    yield put(editBOMListSuccess(response));
+    if (response.StatusCode === 200) yield put(editBOMListSuccess(response))
+    else yield put(AlertState({
+      Type: 4,
+      Status: true, Message: JSON.stringify(response.Message),
+    }));
   } catch (error) {
     yield put(SpinnerState(false))
     yield put(AlertState({
@@ -102,12 +107,15 @@ function* UpdateBOM_ID_GenFunc({ data, id1 }) {
 }
 
 function* DeleteBOM_GenFunc({ id }) {
-  debugger
   yield put(SpinnerState(true))
   try {
     const response = yield call(BOM_Delete_API, id);
     yield put(SpinnerState(false))
-    yield put(deleteBOMIdSuccess(response));
+    if (response.StatusCode === 200) yield put(deleteBOMIdSuccess(response))
+    else yield put(AlertState({
+      Type: 4,
+      Status: true, Message: JSON.stringify(response.Message),
+    }));
   } catch (error) {
     yield put(SpinnerState(false))
     yield put(AlertState({
