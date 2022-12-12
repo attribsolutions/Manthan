@@ -276,10 +276,14 @@ export function saveDissable(state = false) {//+++++++++++++++++++++ Save Button
 export function GoBtnDissable(state = false) {//+++++++++++++++++++++ Save Button Dissable/Enable +++++++++++++++++++++++++++++++
     try {
         document.getElementById("overlay").style.display = state ? "block" : "none";
-    } catch (e) { alert("Go btn dissable overlay error") }
+    } catch (e) {
+        alert("Go btn dissable overlay error")
+    }
     try {
         document.getElementById('gobtn_submmit').disabled = state;
-    } catch (e) { alert("Go btn dissable  error") }
+    } catch (e) {
+        // alert("Go btn dissable  error") 
+    }
 
 
 }

@@ -41,7 +41,8 @@ export function SaveButton(props) {
 export function Go_Button(props) {
   const { onClick } = props
   return (
-    <Button id="gobtn_submmit" type="button"
+    <Button
+      id="gobtn_submmit" type="button"
       color="btn btn-outline-success border-2 font-size-12 mb-2 "
       onClick={onClick}
     >Go</Button>

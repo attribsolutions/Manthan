@@ -37,7 +37,7 @@ function* goButtonGenFunc({ data, hasEditVal }) {
   yield delay(500)
   try {
     const response = yield call(OrderPage_GoButton_API, data);
-
+    debugger
     if (hasEditVal) {
       yield response.Data.forEach(element => {
         hasEditVal.OrderItem.forEach(ele => {
@@ -52,6 +52,7 @@ function* goButtonGenFunc({ data, hasEditVal }) {
             element["poRate"] = ele.Rate
             element["poQty"] = ele.Quantity
             element["poBaseUnitQty"] = ele.BaseUnitQuantity
+            element["editrowId"] = ele.id
           }
         })
       });

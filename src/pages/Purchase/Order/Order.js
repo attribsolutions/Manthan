@@ -438,6 +438,7 @@ const Order = (props) => {
                 const cgstAmt = (GstAmount(i))
 
                 const arr = {
+                    id: i.editrowId,
                     Item: i.id,
                     Quantity: i.inpQty,
                     MRP: i.MRP,
