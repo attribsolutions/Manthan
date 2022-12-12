@@ -89,6 +89,11 @@ function ItemTab(props) {
         setUnitSelect('');
     };
 
+    const handleChange = event => {
+        const result = event.target.value.replace(/\D/g, '');
+        setQuantity(result);
+    };
+
 
     return (
 
@@ -98,6 +103,7 @@ function ItemTab(props) {
                 <Card className="mt-n3 text-black">
                     <CardBody className='c_card_body'>
                         <Row>
+
                             <FormGroup className="mb-3 col col-sm-3 ">
                                 <Label>Content Item</Label>
                                 <Select
@@ -113,7 +119,7 @@ function ItemTab(props) {
                                     value={Quantity}
                                     placeholder="Please Enter Margin"
                                     autoComplete="off"
-                                    onChange={(event) => setQuantity(event.target.value)}
+                                    onChange={handleChange}
                                 />
 
                             </FormGroup>
