@@ -1,4 +1,5 @@
 import { call, put, takeEvery } from "redux-saga/effects";
+import { convertDatefunc, convertTimefunc } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import { BOM_Delete_API, BOM_ListPage_API, BOM_Post_API, BOM_Update_API, editBOMListID_forBOMPage_ApiCall, edit_BOMListID, GetItemUnits_For_Dropdown } from "../../../helpers/backend_helper";
 import { AlertState } from "../../Utilites/CustomAlertRedux/actions";
 import { SpinnerState } from "../../Utilites/Spinner/actions";
@@ -47,6 +48,9 @@ debugger
     const response = yield call(BOM_ListPage_API, filters);
     let data = response.Data.map((i) => {
       i.id = `${i.id}/${i.Company}`;
+      var date = convertDatefunc(i.BomDate)
+      var time = convertTimefunc(i.CreatedOn)
+      i.BomDate = (`${date} ${time}`)
       return i
     })
     yield put(SpinnerState(false))

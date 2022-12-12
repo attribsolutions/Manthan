@@ -13,7 +13,7 @@ import {
     orderlistfilters,
     // getOrderList
 } from "../../../store/Purchase/OrderPageRedux/actions";
-import { commonPageFieldList, commonPageFieldListSuccess, } from "../../../store/actions";
+import { BreadcrumbFilterSize, commonPageFieldList, commonPageFieldListSuccess, } from "../../../store/actions";
 import PurchaseListPage from "../../../components/Common/ComponentRelatedCommonFile/purchase"
 import Order from "./Order";
 import { GRN_ADD, GST_ADD_Mode_2, ORDER, ORDER_lIST } from "../../../routes/route_url";
@@ -72,6 +72,7 @@ const OrderList = () => {
         const pageId = (hasPagePath === GST_ADD_Mode_2) ? 60 : 54;
         dispatch(commonPageFieldListSuccess(null))
         dispatch(commonPageFieldList(pageId))
+        dispatch(BreadcrumbFilterSize(`${"Orders Count"} :0`))
         dispatch(getSupplier());
         goButtonHandler(true)
 

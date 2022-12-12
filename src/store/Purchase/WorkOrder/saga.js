@@ -1,4 +1,5 @@
 import { call, put, takeEvery } from "redux-saga/effects";
+import { convertDatefunc, convertTimefunc } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import { BOMList_Get_API, Post_WorkOrder_Master_API, WorkOrder_Delete_Api, WorkOrder_edit_Api, WorkOrder_Get_API, WorkOrder_GoButton_Post_API, WorkOrder_Update_Api } from "../../../helpers/backend_helper";
 import { AlertState } from "../../Utilites/CustomAlertRedux/actions";
 import { SpinnerState } from "../../Utilites/Spinner/actions";
@@ -62,11 +63,18 @@ function* Post_WorkOrder_GenratorFunction({ Data }) {
 
 // get Work Order List API Using post method
 function* GetWorkOrderGenFunc({ filters }) {
-
+debugger
   yield put(SpinnerState(true))
   try {
+    debugger
     const response = yield call(WorkOrder_Get_API, filters);
-    yield put(getWorkOrderListPageSuccess(response.Data));
+    const newList = yield response.Data.map((i) => {
+      var date = convertDatefunc(i.WorkOrderDate)
+      var time = convertTimefunc(i.CreatedOn)
+      i.WorkOrderDate = (`${date} ${time}`)
+      return i
+    })
+    yield put(getWorkOrderListPageSuccess(newList));
     yield put(SpinnerState(false))
   } catch (error) {
     yield put(SpinnerState(false))

@@ -148,6 +148,9 @@ const Order = (props) => {
                 setTermsAndConTable(termsAndCondition)
             }
             dispatch(editOrderIdSuccess({ Status: false }))
+        } else {
+            dispatch(BreadcrumbFilterSize(`${"Order Amount"} :0`))
+
         }
 
 
