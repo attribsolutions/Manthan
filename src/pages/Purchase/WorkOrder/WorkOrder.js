@@ -514,12 +514,12 @@ const WorkOrder = (props) => {
                                                 <span className="invalid-feedback">{isError.Quantity}</span>
                                             )}
                                         </div>
-                                        {pageMode === "edit" ? null : <div className="col col-2">
+                                        <div className="col col-2">
                                             <Button
                                                 color="btn btn-outline-success border-2 font-size-12 " style={{ marginTop: '3px' }}
                                                 onClick={(e) => goButtonHandler(e)}
                                             >Go</Button>
-                                        </div>}
+                                        </div>
 
                                     </FormGroup>
 
