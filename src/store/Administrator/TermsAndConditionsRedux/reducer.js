@@ -9,14 +9,14 @@ import {
 const INIT_STATE = {
     PostData: { Status: false },
     TermsAndConditionsList: [],
-    TermsAndConditionsupdateMessage : {Status:false},
+    TermsAndConditionsupdateMessage: { Status: false },
     TermsAndConditionseditData: { Status: false },
-    TermsAndConditionsdeleteMessage:{Status:false}
+    TermsAndConditionsdeleteMessage: { Status: false }
 
 }
 
 const TermsAndConditionsReducer = (state = INIT_STATE, action) => {
-    
+
     switch (action.type) {
 
         case POST_METHOD_HANDLER_FOR_TERMSANDCONDITIONS_MASTER_API_SUCCESS:
@@ -28,25 +28,25 @@ const TermsAndConditionsReducer = (state = INIT_STATE, action) => {
         case GET_METHOD_FOR_TERMSANDCONDITIONSLIST_API_SUCCESS:
             return {
                 ...state,
-                TermsAndCondtionsList: action.payload,
+                TermsAndConditionsList: action.payload,
             }
 
         case EDIT_METHOD_FOR_TERMSANDCONDITIONSLIST_API_SUCCESS:
             return {
                 ...state,
-                TermsAndCondtionseditData: action.payload,
-            }    
+                TermsAndConditionseditData: action.payload,
+            }
 
         case UPDATE_METHOD_FOR_TERMSANDCONDITIONSLIST_API_SUCCESS:
             return {
                 ...state,
-                TermsAndCondtionsupdateMessage: action.payload,
-            } 
+                TermsAndConditionsupdateMessage: action.payload,
+            }
         case DELETE_METHOD_FOR_TERMSANDCONDITIONSLIST_API_SUCCESS:
             return {
                 ...state,
-                TermsAndCondtionsdeleteMessage: action.payload,
-            }        
+                TermsAndConditionsdeleteMessage: action.payload,
+            }
         default:
             return state
     }
