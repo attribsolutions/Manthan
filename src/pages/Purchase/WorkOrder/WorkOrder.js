@@ -250,6 +250,7 @@ const WorkOrder = (props) => {
         setState((i) => {
             i.values.NumberOfLot = "1.000000";
             i.values.Quantity = e;
+            // i.hasValid.Quantity.valid = false
             return i
         })
     }
@@ -420,6 +421,7 @@ const WorkOrder = (props) => {
                                                 className="react-dropdown"
                                                 classNamePrefix="dropdown"
                                                 options={ItemDropdown_Options}
+                                                isDisabled={pageMode === "edit" ? true : false}
                                                 onChange={(hasSelect, evn) => {
                                                     onChangeSelect({ hasSelect, evn, state, setState });
                                                     ItemOnchange(hasSelect)
