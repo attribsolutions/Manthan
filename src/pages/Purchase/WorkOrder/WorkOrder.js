@@ -42,8 +42,6 @@ const WorkOrder = (props) => {
     const [pageMode, setPageMode] = useState("save");
     const [userPageAccessState, setUserPageAccessState] = useState('');
     const [itemselect, setItemselect] = useState("")
-    const [goButton, setGoButton] = useState("")
-
 
     const initialFiled = useMemo(() => {
 
@@ -78,7 +76,7 @@ const WorkOrder = (props) => {
         Items: state.WorkOrderReducer.BOMList,
         GoButton: state.WorkOrderReducer.GoButton
     }));
-    console.log("goButton", GoButton)
+
 
     const { BOMItems = [], EstimatedOutputQty = '', id = '', Item = '', Unit = '' } = GoButton
 
@@ -153,7 +151,6 @@ const WorkOrder = (props) => {
                     Quantity: parseInt(hasEditVal.Quantity)
                 });
                 dispatch(postGoButtonForWorkOrder_Master(jsonBody));
-                setGoButton(jsonBody)
                 setState({ values, fieldLabel, hasValid, required, isError })
                 dispatch(editWorkOrderListSuccess({ Status: false }))
                 dispatch(Breadcrumb_inputName(hasEditVal.ItemName))
@@ -250,8 +247,15 @@ const WorkOrder = (props) => {
     }
 
     function NumberOfLotchange(e) {
+        debugger
         dispatch(postGoButtonForWorkOrder_MasterSuccess([]))
-        let qty = e * itemselect.EstimatedOutputQty
+        let qty = ''
+        if (pageMode === "edit") {
+            qty=e * EditData.EstimatedOutputQty;
+        }
+       else{
+        qty=e*itemselect.EstimatedOutputQty
+       }
         setState((i) => {
             i.values.NumberOfLot = e;
             i.values.Quantity = qty;
@@ -276,14 +280,12 @@ const WorkOrder = (props) => {
         event.preventDefault();
         if (formValid(state, setState)) {
             const jsonBody = JSON.stringify({
-                ItemID: values.ItemName.ItemID,
-                BomID: values.ItemName.value,
+                ItemID: (pageMode === "edit" ? EditData.Item : values.ItemName.ItemID),
+                BomID: (pageMode === "edit" ? EditData.Bom : values.ItemName.value),
                 Quantity: parseInt(values.Quantity)
             });
             dispatch(postGoButtonForWorkOrder_Master(jsonBody));
-
         }
-
     }
 
     const values = { ...state.values }
@@ -362,7 +364,7 @@ const WorkOrder = (props) => {
                                     id=""
                                     type="text"
                                     disabled={true}
-                                    defaultValue={cellContent}
+                                    defaultValue={cellContent.toPrecision(10)}
                                     className="col col-sm text-center"
                                     onChange={(e) => QuantityHandler(e, user)}
                                 />
@@ -370,6 +372,7 @@ const WorkOrder = (props) => {
                         </Col>
                     </div>
                     {console.log("user", cellContent)}
+                    {console.log(cellContent.toPrecision(5))}
                 </>
             ),
         },
