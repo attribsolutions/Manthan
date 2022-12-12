@@ -382,7 +382,7 @@ export const WorkOrder_GoButton_Post_API = (data) => post(url.GO_BUTTON_POST_API
 export const Post_WorkOrder_Master_API = (data) => post(url.POST_WORK_ORDER_API, data)// post api
 export const WorkOrder_Get_API = (filters) => post(url.WORK_ORDER_LIST, filters)// get list api
 export const WorkOrder_edit_Api = (id1) => get(`${url.WORK_ORDER_LIST_API}/${id1}`) //Single get api BOMList 
-export const WorkOrder_Update_Api = (data, id) => put(`${url.WORK_ORDER_LIST}/${id}`, data)// update api
+export const WorkOrder_Update_Api = (data, id) => put(`${url.WORK_ORDER_LIST_API}/${id}`, data)// update api
 export const WorkOrder_Delete_Api = (id) => del(`${url.WORK_ORDER_LIST_API}/${id}`)// delete api
 
 export {

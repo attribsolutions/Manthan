@@ -26,7 +26,7 @@ import Select from "react-select";
 import { SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
 import { WORK_ORDER_LIST } from "../../../routes/route_url";
 import { createdBy, currentDate, userCompany } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
-import { editWorkOrderListSuccess, getBOMList, postGoButtonForWorkOrder_Master, postGoButtonForWorkOrder_MasterSuccess, postWorkOrderMaster, postWorkOrderMasterSuccess } from "../../../store/Purchase/WorkOrder/action";
+import { editWorkOrderListSuccess, getBOMList, postGoButtonForWorkOrder_Master, postGoButtonForWorkOrder_MasterSuccess, postWorkOrderMaster, postWorkOrderMasterSuccess, updateWorkOrderList, updateWorkOrderListSuccess } from "../../../store/Purchase/WorkOrder/action";
 import paginationFactory, { PaginationListStandalone, PaginationProvider } from "react-bootstrap-table2-paginator";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
@@ -42,6 +42,8 @@ const WorkOrder = (props) => {
     const [pageMode, setPageMode] = useState("save");
     const [userPageAccessState, setUserPageAccessState] = useState('');
     const [itemselect, setItemselect] = useState("")
+    const [goButton, setGoButton] = useState("")
+
 
     const initialFiled = useMemo(() => {
 
@@ -69,16 +71,16 @@ const WorkOrder = (props) => {
         GoButton
     } = useSelector((state) => ({
         postMsg: state.WorkOrderReducer.postMsg,
-        updateMsg: state.BOMReducer.updateMsg,
+        updateMsg: state.WorkOrderReducer.updateMsg,
         userAccess: state.Login.RoleAccessUpdateData,
         pageField: state.CommonPageFieldReducer.pageField,
         GetItemUnits: state.BOMReducer.GetItemUnits,
         Items: state.WorkOrderReducer.BOMList,
         GoButton: state.WorkOrderReducer.GoButton
     }));
+    console.log("goButton", GoButton)
 
-
-    const { BOMItems = [], EstimatedOutputQty = '' } = GoButton
+    const { BOMItems = [], EstimatedOutputQty = '', id = '', Item = '', Unit = '' } = GoButton
 
     useEffect(() => {
         dispatch(postGoButtonForWorkOrder_MasterSuccess([]))
@@ -126,7 +128,7 @@ const WorkOrder = (props) => {
             }
 
             if (hasEditVal) {
-
+                debugger
                 setEditData(hasEditVal);
                 const { id, WorkOrderDate, Item, ItemName, NumberOfLot, EstimatedOutputQty, Quantity } = hasEditVal
                 const { values, fieldLabel, hasValid, required, isError } = { ...state }
@@ -151,6 +153,7 @@ const WorkOrder = (props) => {
                     Quantity: parseInt(hasEditVal.Quantity)
                 });
                 dispatch(postGoButtonForWorkOrder_Master(jsonBody));
+                setGoButton(jsonBody)
                 setState({ values, fieldLabel, hasValid, required, isError })
                 dispatch(editWorkOrderListSuccess({ Status: false }))
                 dispatch(Breadcrumb_inputName(hasEditVal.ItemName))
@@ -191,6 +194,24 @@ const WorkOrder = (props) => {
     }, [postMsg])
 
     useEffect(() => {
+        debugger
+        if ((updateMsg.Status === true) && (updateMsg.StatusCode === 200) && !(modalCss)) {
+            history.push({
+                pathname: WORK_ORDER_LIST,
+            })
+        } else if (updateMsg.Status === true && !modalCss) {
+            dispatch(updateWorkOrderListSuccess({ Status: false }));
+            dispatch(
+                AlertState({
+                    Type: 3,
+                    Status: true,
+                    Message: JSON.stringify(updateMsg.Message),
+                })
+            );
+        }
+    }, [updateMsg, modalCss]);
+
+    useEffect(() => {
         if (pageField) {
             const fieldArr = pageField.PageFieldMaster
             comAddPageFieldFunc({ state, setState, fieldArr })// new change
@@ -201,6 +222,8 @@ const WorkOrder = (props) => {
         value: index.id,
         label: index.ItemName,
         ItemID: index.Item,
+        Unit: index.Unit,
+        UnitName: index.UnitName,
         EstimatedOutputQty: index.EstimatedOutputQty,
         StockQty: index.StockQty
     }));
@@ -216,15 +239,14 @@ const WorkOrder = (props) => {
     }, [])
 
     function ItemOnchange(e) {
+        debugger
         dispatch(postGoButtonForWorkOrder_MasterSuccess([]))
         setItemselect(e)
         setState((i) => {
             i.values.NumberOfLot = "";
             i.values.Quantity = "";
-
             return i
         })
-
     }
 
     function NumberOfLotchange(e) {
@@ -233,7 +255,6 @@ const WorkOrder = (props) => {
         setState((i) => {
             i.values.NumberOfLot = e;
             i.values.Quantity = qty;
-
             return i
         })
     }
@@ -241,7 +262,6 @@ const WorkOrder = (props) => {
     function Quantitychange(e) {
         debugger
         state.hasValid.Quantity.valid = true
-
         dispatch(postGoButtonForWorkOrder_MasterSuccess([]))
         setState((i) => {
             i.values.NumberOfLot = "1.000000";
@@ -252,6 +272,7 @@ const WorkOrder = (props) => {
     }
 
     const goButtonHandler = (event) => {
+        debugger
         event.preventDefault();
         if (formValid(state, setState)) {
             const jsonBody = JSON.stringify({
@@ -260,6 +281,7 @@ const WorkOrder = (props) => {
                 Quantity: parseInt(values.Quantity)
             });
             dispatch(postGoButtonForWorkOrder_Master(jsonBody));
+
         }
 
     }
@@ -269,7 +291,7 @@ const WorkOrder = (props) => {
     const { fieldLabel } = state;
 
     const formSubmitHandler = (event) => {
-
+        debugger
         const WorkOrderItems = BOMItems.map((index) => ({
             Item: index.Item,
             Unit: index.Unit,
@@ -282,8 +304,9 @@ const WorkOrder = (props) => {
 
             const jsonBody = JSON.stringify({
                 WorkOrderDate: values.WorkOrderDate,
-                Item: values.ItemName.ItemID,
-                Bom: values.ItemName.value,
+                Item: (pageMode === "edit" ? Item : values.ItemName.ItemID),
+                Bom: (pageMode === "edit" ? id : values.ItemName.value),
+                Unit: (pageMode === "edit" ? Unit : values.ItemName.Unit),
                 NumberOfLot: values.NumberOfLot,
                 Quantity: values.Quantity,
                 Company: userCompany(),
@@ -292,8 +315,16 @@ const WorkOrder = (props) => {
                 UpdatedBy: createdBy(),
                 WorkOrderItems: WorkOrderItems
             });
+            if (pageMode === 'edit') {
 
-            dispatch(postWorkOrderMaster(jsonBody));
+                dispatch(updateWorkOrderList(jsonBody, EditData.id));
+                console.log("update jsonBody", jsonBody)
+            }
+            else {
+                dispatch(postWorkOrderMaster(jsonBody));
+                console.log("post jsonBody", jsonBody)
+            }
+
         }
     };
 
@@ -484,10 +515,10 @@ const WorkOrder = (props) => {
                                                     NumberOfLotchange(event.target.value)
                                                 }}
                                             />
+
                                             {isError.NumberOfLot.length > 0 && (
                                                 <span className="invalid-feedback">{isError.NumberOfLot}</span>
                                             )}
-
                                         </div>
                                     </FormGroup>
                                 </div >
@@ -515,6 +546,10 @@ const WorkOrder = (props) => {
                                             )}
                                         </div>
                                         <div className="col col-2">
+                                            <Label style={{ marginTop: '5px' }}>
+                                                {pageMode === "edit" ? EditData.UnitName : itemselect.UnitName}</Label>
+                                        </div>
+                                        <div className="col col-1">
                                             <Button
                                                 color="btn btn-outline-success border-2 font-size-12 " style={{ marginTop: '3px' }}
                                                 onClick={(e) => goButtonHandler(e)}
