@@ -485,7 +485,10 @@ const Order = (props) => {
                     orderItem({ i, isedit })
                 }
             }
-            else { orderItem(i) }
+            else {
+                var isedit = false;
+                orderItem({ i, isedit })
+            }
         })
         debugger
         if (pageMode === "edit") {
