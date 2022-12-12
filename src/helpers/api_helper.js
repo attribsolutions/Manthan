@@ -20,7 +20,7 @@ axiosApi.interceptors.response.use(
   error => Promise.reject(error)
 )
 export async function get(url, config = {}) {
- 
+
   AuthonticationFunction();
   const res = await axiosApi.get(url, { ...config }).then(response => response.data)
   console.log("getapiCall Url:", url);
@@ -53,7 +53,8 @@ export async function post(url, data, config = {}) {
 }
 
 export async function put(url, data, config = {}) {
-
+  console.log("put-apiCall Url:", url);
+  console.log("put-apiCall Body:", data);
   AuthonticationFunction();
   const res = await axiosApi
     .put(url, data, {
@@ -63,20 +64,19 @@ export async function put(url, data, config = {}) {
       }
     })
     .then(response => response.data)
-  console.log("putapiCall Url:", url);
-  console.log("putapiCall Body:", data);
+
   console.log("putapiCall Response:", res);
   return res
 }
 
 export async function del(url, config = {}) {
   AuthonticationFunction();
- const rep= await axiosApi
+  console.log("deleteapiCall Url:", url);
+  const rep = await axiosApi
     .delete(url, { ...config })
     .then(response => response.data)
-    console.log("deleteapiCall Url:", url);
-    console.log("deleteapiCall response:", rep);
-    return rep  
+  console.log("deleteapiCall response:", rep);
+  return rep
 }
 // for forget password
 export async function postForget(url, data, config = {}) {
