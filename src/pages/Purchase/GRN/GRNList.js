@@ -116,10 +116,10 @@ const GRNList = () => {
                     excelData={downList} />
 
                 <div className="px-2  mt-n1 c_card_filter " style={{ marginBottom: "-12px" }}>
-                    <div className="  row">
+                    <div className=" mt-1 row">
 
 
-                        <div className=" mt-1 row">
+                        <div className=" row">
                             <Col sm="3" className="">
                                 <FormGroup className="mb- row mt-3 " >
                                     <Label className="col-sm-5 p-2"
