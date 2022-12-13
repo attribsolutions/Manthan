@@ -291,8 +291,8 @@ const WorkOrder = (props) => {
         event.preventDefault();
         if (formValid(state, setState)) {
             const jsonBody = JSON.stringify({
-                ItemID: (pageMode === "edit" ? EditData.Item : values.ItemName.ItemID),
-                BomID: (pageMode === "edit" ? EditData.Bom : values.ItemName.value),
+                Item: (pageMode === "edit" ? EditData.Item : values.ItemName.ItemID),
+                Bom: (pageMode === "edit" ? EditData.Bom : values.ItemName.value),
                 Quantity: parseInt(values.Quantity)
             });
             dispatch(postGoButtonForWorkOrder_Master(jsonBody));
@@ -323,7 +323,7 @@ const WorkOrder = (props) => {
                 NumberOfLot: values.NumberOfLot,
                 Quantity: values.Quantity,
                 Company: userCompany(),
-                Division: 2,
+                Party: 2,
                 CreatedBy: createdBy(),
                 UpdatedBy: createdBy(),
                 WorkOrderItems: WorkOrderItems
