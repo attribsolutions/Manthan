@@ -146,8 +146,8 @@ const WorkOrder = (props) => {
                 values.ItemName = { label: ItemName, value: Item };
 
                 const jsonBody = JSON.stringify({
-                    ItemID: hasEditVal.Item,
-                    BomID: hasEditVal.Bom,
+                    Item: hasEditVal.Item,
+                    Bom: hasEditVal.Bom,
                     Quantity: parseInt(hasEditVal.Quantity)
                 });
                 dispatch(postGoButtonForWorkOrder_Master(jsonBody));
