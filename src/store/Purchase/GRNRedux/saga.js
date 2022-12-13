@@ -99,17 +99,18 @@ function* get_GRN_GerFunc({ filters }) {
 
 // List Page API
 function* getGRNitem_Mode2_GenFunc({ data }) {
+  debugger
   const { jsonBody, pageMode, GRN_ADD, grnRef, challanNo } = data
   yield put(SpinnerState(true))
   try {
+    debugger
     const response = yield call(GRN_getItem_API, jsonBody);
 
     response["pageMode"] = pageMode;
     response.Data["GRNReferences"] = grnRef;
     response.Data["challanNo"] = challanNo;
-
     response["path"] = GRN_ADD; //Pagepath
-
+    response.Data = response.Data[0];
     yield put(SpinnerState(false))
     yield put(getGRN_itemMode2_Success(response))
   } catch (error) {
