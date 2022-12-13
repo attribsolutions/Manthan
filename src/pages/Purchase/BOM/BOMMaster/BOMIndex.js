@@ -37,7 +37,7 @@ import {
     updateBOMList,
     updateBOMListSuccess
 } from "../../../../store/Purchase/BOMRedux/action";
-import {  BIllOf_MATERIALS_LIST } from "../../../../routes/route_url";
+import { BIllOf_MATERIALS_LIST } from "../../../../routes/route_url";
 import { createdBy, userCompany } from "../../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 
 const BOMMaster = (props) => {
@@ -250,7 +250,7 @@ const BOMMaster = (props) => {
 
         event.preventDefault();
         if (formValid(state, setState)) {
-debugger
+            debugger
             const jsonBody = JSON.stringify({
 
                 BomDate: values.BomDate,
@@ -295,189 +295,415 @@ debugger
 
     if (!(userPageAccessState === '')) {
         return (
+
+
             <React.Fragment>
-                <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
-                    <Container fluid>
-                        <MetaTags>
-                            <title>GroupTypeMaster | FoodERP-React FrontEnd</title>
-                        </MetaTags>
-                        <Breadcrumb pageHeading={userPageAccessState.PageHeading} />
 
-                        <Card className="text-black">
-                            <CardHeader className="card-header  text-black c_card_header"  >
-                                <h4 className="card-title text-black">{userPageAccessState.PageDescription}</h4>
-                                <p className="card-title-desc text-black">{userPageAccessState.PageDescriptionDetails}</p>
-                            </CardHeader>
+                <MetaTags>
+                    <title>{userPageAccessState.PageHeading}| FoodERP-React FrontEnd</title>
+                </MetaTags>
+                <div className="page-content" style={{marginBottom:"5cm"}}>
 
-                            <CardBody className=" vh-10 0 text-black">
+                    <Breadcrumb pageHeading={userPageAccessState.PageHeading}
+                        showCount={true}
+                    />
+                    <form onSubmit={formSubmitHandler} ref={formRef} noValidate>
 
-                                <form onSubmit={formSubmitHandler} ref={formRef} noValidate>
+                        <div className="px-2 mb-1 mt-n3 c_card_filter header" >
 
-                                    <Card>
-                                        <CardBody className="c_card_body">
-                                            <Row>
-                                                <FormGroup className="mb-2 col col-sm-4 ">
-                                                    <Label >{fieldLabel.BomDate} </Label>
-                                                    <Flatpickr
-                                                        name="BomDate"
-                                                        value={values.BomDate}
-                                                        className="form-control d-block p-2 bg-white text-dark"
-                                                        placeholder="YYYY-MM-DD"
-                                                        autoComplete="0,''"
-                                                        disabled={pageMode === "edit" ? true : false}
-                                                        options={{
-                                                            altInput: true,
-                                                            altFormat: "d-m-Y",
-                                                            dateFormat: "Y-m-d",
-                                                            defaultDate: pageMode === "edit" ? values.BomDate : "today"
-                                                        }}
-                                                        onChange={(y, v, e) => { onChangeDate({ e, v, state, setState }) }}
-                                                        onReady={(y, v, e) => { onChangeDate({ e, v, state, setState }) }}
-                                                    />
-                                                    {isError.BomDate.length > 0 && (
-                                                        <span className="invalid-feedback">{isError.BomDate}</span>
-                                                    )}
-                                                </FormGroup>
+                            <div  className=" mt-1 row  ">
 
-                                                <Col md="1"></Col>
-                                                <FormGroup className="mb-2 col col-sm-4 ">
-                                                    <Label >{fieldLabel.EstimatedOutputQty} </Label>
-                                                    <Input
-                                                        name="EstimatedOutputQty"
-                                                        value={values.EstimatedOutputQty}
-                                                        type="text"
-                                                        className={isError.EstimatedOutputQty.length > 0 ? "is-invalid form-control" : "form-control"}
-                                                        placeholder="Please Enter EstimatedOutputQty"
-                                                        autoComplete='off'
-                                                        onChange={(event) => {
-                                                            onChangeText({ event, state, setState })
-                                                        }}
-                                                    />
-                                                    {isError.EstimatedOutputQty.length > 0 && (
-                                                        <span className="invalid-feedback">{isError.EstimatedOutputQty}</span>
-                                                    )}
-                                                </FormGroup>
-                                            </Row>
-
-                                            <Row>
-                                                <FormGroup className="mb-2 col col-sm-4 ">
-                                                    <Label> {fieldLabel.ItemName} </Label>
-                                                    <Col sm={12}>
-                                                        <Select
-                                                            name="ItemName"
-                                                            value={values.ItemName}
-                                                            isSearchable={true}
-                                                            className="react-dropdown"
-                                                            classNamePrefix="dropdown"
-                                                            options={ItemDropdown_Options}
-                                                            onChange={(hasSelect, evn) => {
-                                                                onChangeSelect({ hasSelect, evn, state, setState });
-                                                                Items_Dropdown_Handler(hasSelect);
-                                                                dispatch(Breadcrumb_inputName(hasSelect.label))
-                                                            }
-                                                            }
-
-                                                        />
-                                                        {isError.ItemName.length > 0 && (
-                                                            <span className="text-danger f-8"><small>{isError.ItemName}</small></span>
-                                                        )}
-                                                    </Col>
-                                                </FormGroup>
-
-                                                <Col md="1"></Col>
-                                                <FormGroup className="mb-2 col col-sm-4 ">
-                                                    <Label > {fieldLabel.UnitName} </Label>
-                                                    <Col sm={12}>
-                                                        <Select
-                                                            name="UnitName"
-                                                            value={values.UnitName}
-                                                            isSearchable={true}
-                                                            className="react-dropdown"
-                                                            classNamePrefix="dropdown"
-                                                            options={Unit_DropdownOptions}
-                                                            onChange={(hasSelect, evn) => onChangeSelect({ hasSelect, evn, state, setState, })}
-
-                                                        />
-                                                        {isError.UnitName.length > 0 && (
-                                                            <span className="text-danger f-8"><small>{isError.UnitName}</small></span>
-                                                        )}
-                                                    </Col>
-                                                </FormGroup>
-                                            </Row>
-
-                                            <Row>
-                                                <FormGroup className="mb-2 col col-sm-4 ">
-                                                    <Label >{fieldLabel.Comment} </Label>
-                                                    <Input
-                                                        name="Comment"
-                                                        value={values.Comment}
-                                                        type="text"
-                                                        className={isError.Comment.length > 0 ? "is-invalid form-control" : "form-control"}
-                                                        placeholder="Please Enter Comment"
-                                                        autoComplete='off'
-                                                        onChange={(event) => {
-                                                            onChangeText({ event, state, setState })
-                                                        }}
-                                                    />
-                                                    {isError.Comment.length > 0 && (
-                                                        <span className="invalid-feedback">{isError.Comment}</span>
-                                                    )}
-                                                </FormGroup>
-
-                                                <Col md="1"></Col>
-                                                <FormGroup className="mb-2 col col-sm-3 mt-4">
-                                                    <Row className="justify-content-md-left">
-                                                        <Label className="col-sm-6 col-form-label" >{fieldLabel.IsActive}</Label>
-                                                        <Col md={4} style={{ marginTop: '10px' }} >
-
-                                                            <div className="form-check form-switch form-switch-md mb-3" >
-                                                                <Input type="checkbox" className="form-check-input"
-                                                                    checked={values.IsActive}
-                                                                    name="IsActive"
-                                                                    onChange={(e) => {
-                                                                        setState((i) => {
-                                                                            const a = { ...i }
-                                                                            a.values.IsActive = e.target.checked;
-                                                                            return a
-                                                                        })
-                                                                    }}
-                                                                />
-                                                            </div>
-                                                        </Col>
-                                                    </Row>
-                                                </FormGroup>
-                                            </Row>
-
-                                        </CardBody>
-                                    </Card>
-
-                                    <Row>
-                                        <Col md={12}  >
-                                            <Row className="mt-3">
-                                                <Col className=" col col-12 ">
-                                                    <ItemTab tableData={ItemTabDetails} func={setItemTabDetails} />
-                                                </Col>
-                                            </Row>
+                                <Col sm="6">
+                                    <FormGroup className="mb-2 row mt-2  ">
+                                        <Label className="mt-2" style={{ width: "115px" }}>{fieldLabel.BomDate} </Label>
+                                        <Col sm="7">
+                                            <Flatpickr
+                                                name="BomDate"
+                                                value={values.BomDate}
+                                                className="form-control d-block p-2 bg-white text-dark"
+                                                placeholder="YYYY-MM-DD"
+                                                autoComplete="0,''"
+                                                disabled={pageMode === "edit" ? true : false}
+                                                options={{
+                                                    altInput: true,
+                                                    altFormat: "d-m-Y",
+                                                    dateFormat: "Y-m-d",
+                                                    defaultDate: pageMode === "edit" ? values.BomDate : "today"
+                                                }}
+                                                onChange={(y, v, e) => { onChangeDate({ e, v, state, setState }) }}
+                                                onReady={(y, v, e) => { onChangeDate({ e, v, state, setState }) }}
+                                            />
+                                            {isError.BomDate.length > 0 && (
+                                                <span className="invalid-feedback">{isError.BomDate}</span>
+                                            )}
                                         </Col>
-                                        <FormGroup>
-                                            <Row>
-                                                <Col sm={2}>
-                                                    <SaveButton pageMode={pageMode} userAcc={userPageAccessState}
-                                                        module={"BOMMaster"}
+
+                                    </FormGroup>
+                                </Col>
+
+                                <Col sm="6">
+
+
+                                    <FormGroup className="mb-2 row mt-2 ">
+                                        <Label className="mt-2" style={{ width: "115px"  }} >{fieldLabel.EstimatedOutputQty} </Label>
+                                        <Col sm="7">
+
+                                            <Input
+                                                name="EstimatedOutputQty"
+                                                value={values.EstimatedOutputQty}
+                                                type="text"
+                                                className={isError.EstimatedOutputQty.length > 0 ? "is-invalid form-control" : "form-control"}
+                                                placeholder="Please Enter EstimatedOutputQty"
+                                                autoComplete='off'
+                                                onChange={(event) => {
+                                                    onChangeText({ event, state, setState })
+                                                }}
+                                            />
+                                            {isError.EstimatedOutputQty.length > 0 && (
+                                                <span className="invalid-feedback">{isError.EstimatedOutputQty}</span>
+                                            )}
+                                        </Col>
+
+                                    </FormGroup>
+                                </Col >
+
+
+
+                                <Col sm="6">
+
+                                    <FormGroup className="mb-2 row  ">
+                                        <Label className="mt-2"  style={{ width: "115px" }}> {fieldLabel.ItemName} </Label>
+                                        <Col sm={7}>
+                                            <Select
+                                                name="ItemName"
+                                                value={values.ItemName}
+                                                isSearchable={true}
+                                                className="react-dropdown"
+                                                classNamePrefix="dropdown"
+                                                options={ItemDropdown_Options}
+                                                onChange={(hasSelect, evn) => {
+                                                    onChangeSelect({ hasSelect, evn, state, setState });
+                                                    Items_Dropdown_Handler(hasSelect);
+                                                    dispatch(Breadcrumb_inputName(hasSelect.label))
+                                                }
+                                                }
+
+                                            />
+                                            {isError.ItemName.length > 0 && (
+                                                <span className="text-danger f-8"><small>{isError.ItemName}</small></span>
+                                            )}
+                                        </Col>
+                                    </FormGroup>
+                                </Col>
+
+                                <Col sm="6">
+
+                                    <FormGroup className="mb-2 row  ">
+                                        <Label className="mt-2"  style={{ width: "115px" }}> {fieldLabel.UnitName} </Label>
+                                        <Col sm={7}>
+                                            <Select
+                                                name="UnitName"
+                                                value={values.UnitName}
+                                                isSearchable={true}
+                                                className="react-dropdown"
+                                                classNamePrefix="dropdown"
+                                                options={Unit_DropdownOptions}
+                                                onChange={(hasSelect, evn) => onChangeSelect({ hasSelect, evn, state, setState, })}
+
+                                            />
+                                            {isError.UnitName.length > 0 && (
+                                                <span className="text-danger f-8"><small>{isError.UnitName}</small></span>
+                                            )}
+                                        </Col>
+                                    </FormGroup>
+                                </Col>
+
+
+
+
+
+                                <Col sm="6">
+
+                                    <FormGroup className="mb-2 row  ">
+                                        <Label className="mt-2"  style={{ width: "115px" }} >{fieldLabel.Comment} </Label>
+                                        <Col sm="7">
+
+                                            <Input
+                                                name="Comment"
+                                                value={values.Comment}
+                                                type="text"
+                                                className={isError.Comment.length > 0 ? "is-invalid form-control" : "form-control"}
+                                                placeholder="Please Enter Comment"
+                                                autoComplete='off'
+                                                onChange={(event) => {
+                                                    onChangeText({ event, state, setState })
+                                                }}
+                                            />
+                                            {isError.Comment.length > 0 && (
+                                                <span className="invalid-feedback">{isError.Comment}</span>
+                                            )}
+                                        </Col>
+
+
+                                    </FormGroup>
+                                </Col>
+
+
+                                <Col sm="6">
+
+                                    <FormGroup className=" row  ">
+                                        <Row className="justify-content-md-left">
+                                            <Label className="col-sm-6 col-form-label mt-2"style={{ width: "115px" }} >{fieldLabel.IsActive}</Label>
+                                            <Col md={7} style={{ marginTop: '10px' }} >
+
+                                                <div className="form-check form-switch form-switch-md mb-3" >
+                                                    <Input type="checkbox" className="form-check-input"
+                                                        checked={values.IsActive}
+                                                        name="IsActive"
+                                                        onChange={(e) => {
+                                                            setState((i) => {
+                                                                const a = { ...i }
+                                                                a.values.IsActive = e.target.checked;
+                                                                return a
+                                                            })
+                                                        }}
                                                     />
+                                                </div>
+                                            </Col>
+                                        </Row>
+                                    </FormGroup>
+                                </Col>
 
-                                                </Col>
-                                            </Row>
-                                        </FormGroup >
-                                    </Row>
 
-                                </form>
-                            </CardBody>
-                        </Card>
 
-                    </Container>
+
+
+
+                               
+
+                            </div>
+
+
+                        </div>
+                    <div className="px-2 mb-1 mt-n3"  style={{marginRight:'-28px',marginLeft:"-8px"}}>
+                    <Row>
+                            
+                                        <Row className="mt-3">
+                                            <Col className=" col col-12">
+                                                <ItemTab tableData={ItemTabDetails} func={setItemTabDetails} />
+                                            </Col>
+                                        </Row>
+                                    
+                                    <FormGroup>
+                                        
+                                            <Col sm={2}style={{marginLeft:"9px"}}>
+                                                <SaveButton pageMode={pageMode} userAcc={userPageAccessState}
+                                                    module={"BOMMaster"}
+                                                />
+
+                                            </Col>
+                                    
+                                    </FormGroup >
+                                </Row>
+                    </div>
+
+
+                    </form>
+
+
+
                 </div>
             </React.Fragment>
+
+
+
+
+
+
+
+            // <React.Fragment>
+            //     <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
+            //         <Container fluid>
+            //             <MetaTags>
+            //                 <title>GroupTypeMaster | FoodERP-React FrontEnd</title>
+            //             </MetaTags>
+            //             <Breadcrumb pageHeading={userPageAccessState.PageHeading} />
+
+            //             <Card className="text-black">
+            //                 <CardHeader className="card-header  text-black c_card_header" >
+            //                     <h4 className="card-title text-black">{userPageAccessState.PageDescription}</h4>
+            //                     <p className="card-title-desc text-black">{userPageAccessState.PageDescriptionDetails}</p>
+            //                 </CardHeader>
+
+            //                 <CardBody className=" vh-10 0 text-black">
+
+            //                     <form onSubmit={formSubmitHandler} ref={formRef} noValidate>
+
+            //                         <Card>
+            //                             <CardBody className="c_card_body">
+            //                                 <Row>
+            //                                     <FormGroup className="mb-2 col col-sm-4 ">
+            //                                         <Label >{fieldLabel.BomDate} </Label>
+            //                                         <Flatpickr
+            //                                             name="BomDate"
+            //                                             value={values.BomDate}
+            //                                             className="form-control d-block p-2 bg-white text-dark"
+            //                                             placeholder="YYYY-MM-DD"
+            //                                             autoComplete="0,''"
+            //                                             disabled={pageMode === "edit" ? true : false}
+            //                                             options={{
+            //                                                 altInput: true,
+            //                                                 altFormat: "d-m-Y",
+            //                                                 dateFormat: "Y-m-d",
+            //                                                 defaultDate: pageMode === "edit" ? values.BomDate : "today"
+            //                                             }}
+            //                                             onChange={(y, v, e) => { onChangeDate({ e, v, state, setState }) }}
+            //                                             onReady={(y, v, e) => { onChangeDate({ e, v, state, setState }) }}
+            //                                         />
+            //                                         {isError.BomDate.length > 0 && (
+            //                                             <span className="invalid-feedback">{isError.BomDate}</span>
+            //                                         )}
+            //                                     </FormGroup>
+
+            //                                     <Col md="1"></Col>
+            //                                     <FormGroup className="mb-2 col col-sm-4 ">
+            //                                         <Label >{fieldLabel.EstimatedOutputQty} </Label>
+            //                                         <Input
+            //                                             name="EstimatedOutputQty"
+            //                                             value={values.EstimatedOutputQty}
+            //                                             type="text"
+            //                                             className={isError.EstimatedOutputQty.length > 0 ? "is-invalid form-control" : "form-control"}
+            //                                             placeholder="Please Enter EstimatedOutputQty"
+            //                                             autoComplete='off'
+            //                                             onChange={(event) => {
+            //                                                 onChangeText({ event, state, setState })
+            //                                             }}
+            //                                         />
+            //                                         {isError.EstimatedOutputQty.length > 0 && (
+            //                                             <span className="invalid-feedback">{isError.EstimatedOutputQty}</span>
+            //                                         )}
+            //                                     </FormGroup>
+            //                                 </Row>
+
+            //                                 <Row>
+            //                                     <FormGroup className="mb-2 col col-sm-4 ">
+            //                                         <Label> {fieldLabel.ItemName} </Label>
+            //                                         <Col sm={12}>
+            //                                             <Select
+            //                                                 name="ItemName"
+            //                                                 value={values.ItemName}
+            //                                                 isSearchable={true}
+            //                                                 className="react-dropdown"
+            //                                                 classNamePrefix="dropdown"
+            //                                                 options={ItemDropdown_Options}
+            //                                                 onChange={(hasSelect, evn) => {
+            //                                                     onChangeSelect({ hasSelect, evn, state, setState });
+            //                                                     Items_Dropdown_Handler(hasSelect);
+            //                                                     dispatch(Breadcrumb_inputName(hasSelect.label))
+            //                                                 }
+            //                                                 }
+
+            //                                             />
+            //                                             {isError.ItemName.length > 0 && (
+            //                                                 <span className="text-danger f-8"><small>{isError.ItemName}</small></span>
+            //                                             )}
+            //                                         </Col>
+            //                                     </FormGroup>
+
+            //                                     <Col md="1"></Col>
+            //                                     <FormGroup className="mb-2 col col-sm-4 ">
+            //                                         <Label > {fieldLabel.UnitName} </Label>
+            //                                         <Col sm={12}>
+            //                                             <Select
+            //                                                 name="UnitName"
+            //                                                 value={values.UnitName}
+            //                                                 isSearchable={true}
+            //                                                 className="react-dropdown"
+            //                                                 classNamePrefix="dropdown"
+            //                                                 options={Unit_DropdownOptions}
+            //                                                 onChange={(hasSelect, evn) => onChangeSelect({ hasSelect, evn, state, setState, })}
+
+            //                                             />
+            //                                             {isError.UnitName.length > 0 && (
+            //                                                 <span className="text-danger f-8"><small>{isError.UnitName}</small></span>
+            //                                             )}
+            //                                         </Col>
+            //                                     </FormGroup>
+            //                                 </Row>
+
+            //                                 <Row>
+            //                                     <FormGroup className="mb-2 col col-sm-4 ">
+            //                                         <Label >{fieldLabel.Comment} </Label>
+            //                                         <Input
+            //                                             name="Comment"
+            //                                             value={values.Comment}
+            //                                             type="text"
+            //                                             className={isError.Comment.length > 0 ? "is-invalid form-control" : "form-control"}
+            //                                             placeholder="Please Enter Comment"
+            //                                             autoComplete='off'
+            //                                             onChange={(event) => {
+            //                                                 onChangeText({ event, state, setState })
+            //                                             }}
+            //                                         />
+            //                                         {isError.Comment.length > 0 && (
+            //                                             <span className="invalid-feedback">{isError.Comment}</span>
+            //                                         )}
+            //                                     </FormGroup>
+
+            //                                     <Col md="1"></Col>
+            //                                     <FormGroup className="mb-2 col col-sm-3 mt-4">
+            //                                         <Row className="justify-content-md-left">
+            //                                             <Label className="col-sm-6 col-form-label" >{fieldLabel.IsActive}</Label>
+            //                                             <Col md={4} style={{ marginTop: '10px' }} >
+
+            //                                                 <div className="form-check form-switch form-switch-md mb-3" >
+            //                                                     <Input type="checkbox" className="form-check-input"
+            //                                                         checked={values.IsActive}
+            //                                                         name="IsActive"
+            //                                                         onChange={(e) => {
+            //                                                             setState((i) => {
+            //                                                                 const a = { ...i }
+            //                                                                 a.values.IsActive = e.target.checked;
+            //                                                                 return a
+            //                                                             })
+            //                                                         }}
+            //                                                     />
+            //                                                 </div>
+            //                                             </Col>
+            //                                         </Row>
+            //                                     </FormGroup>
+            //                                 </Row>
+
+            //                             </CardBody>
+            //                         </Card>
+
+            //                         <Row>
+            //                             <Col md={12}  >
+            //                                 <Row className="mt-3">
+            //                                     <Col className=" col col-12 ">
+            //                                         <ItemTab tableData={ItemTabDetails} func={setItemTabDetails} />
+            //                                     </Col>
+            //                                 </Row>
+            //                             </Col>
+            //                             <FormGroup>
+            //                                 <Row>
+            //                                     <Col sm={2}>
+            //                                         <SaveButton pageMode={pageMode} userAcc={userPageAccessState}
+            //                                             module={"BOMMaster"}
+            //                                         />
+
+            //                                     </Col>
+            //                                 </Row>
+            //                             </FormGroup >
+            //                         </Row>
+
+            //                     </form>
+            //                 </CardBody>
+            //             </Card>
+
+            //         </Container>
+            //     </div>
+            // </React.Fragment>
         );
     }
     else {

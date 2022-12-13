@@ -108,11 +108,11 @@ const BOMList = () => {
 
                 <div className="px-2  mt-n1 c_card_header" style={{ marginBottom: "-12px" }} >
                     <div className=" mt-1 row">
-                        <Col sm="4" className="">
-                            <FormGroup className="mb- row mt-3 " >
+                        <Col sm="5">
+                            <FormGroup className=" row mt-3 " >
                                 <Label className="col-sm-5 p-2"
                                     style={{ width: "83px" }}>From Date</Label>
-                                <Col sm="7">
+                                <Col sm="6">
                                     <Flatpickr
                                         name='fromdate'
                                         className="form-control d-block p-2 bg-white text-dark"
@@ -130,11 +130,11 @@ const BOMList = () => {
                                 </Col>
                             </FormGroup>
                         </Col>
-                        <Col sm="4" className="">
+                        <Col sm="5" className="">
                             <FormGroup className="mb- row mt-3 " >
                                 <Label className="col-sm-5 p-2"
-                                    style={{ width: "65px" }}>To Date</Label>
-                                <Col sm="7 ">
+                                    style={{ width: "65px",marginRight: "0.4cm" }}>To Date</Label>
+                                <Col sm="6 ">
                                     <Flatpickr
                                         name="todate"
                                         className="form-control d-block p-2 bg-white text-dark"
@@ -153,7 +153,7 @@ const BOMList = () => {
                             </FormGroup>
                         </Col>
 
-                        <Col sm="1">
+                        <Col sm="1" className="mx-4 ">
                             <Button type="button" color="btn btn-outline-success border-2 font-size-12 m-3  "
                                 onClick={() => goButtonHandler()}
                             >Go</Button>

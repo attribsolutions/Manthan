@@ -600,8 +600,8 @@ const Order = (props) => {
                     />
                     <div className="px-2 mb-1 mt-n3 c_card_filter header" >
                         <div className=" mt-1 row ">
-                            <Col sm="6" className="">
-                                <FormGroup className="mb- row mt-3 " >
+                            <Col sm="6">
+                                <FormGroup className=" row mt-3 " >
                                     <Label className="col-sm-5 p-2"
                                         style={{ width: "115px" }}>Order Date</Label>
                                     <Col sm="6">

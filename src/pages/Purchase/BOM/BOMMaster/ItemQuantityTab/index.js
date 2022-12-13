@@ -99,9 +99,9 @@ function ItemTab(props) {
 
         <Row>
             <Col md={12}  >
-
-                <Card className="mt-n3 text-black">
-                    <CardBody className='c_card_body'>
+            <div className="px-2  mb-1 c_card_body "style={{width:"100%"}}>
+                {/* <Card className="mt-n3 text-black c_card_body "> */}
+                    {/* <CardBody className='c_card_body'> */}
                         <Row>
 
                             <FormGroup className="mb-3 col col-sm-3 ">
@@ -148,8 +148,10 @@ function ItemTab(props) {
                                 </Row>
                             </Col>
                         </Row>
-                    </CardBody>
-                </Card>
+                    {/* </CardBody> */}
+                {/* </Card> */}
+                </div>
+
                 <Row>
                     <BOMTable tableData={props.tableData} func={props.func} />
                 </Row>
