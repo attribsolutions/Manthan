@@ -451,7 +451,7 @@ const Order = (props) => {
                 SGSTPercentage: (i.GSTPercentage / 2),
                 IGSTPercentage: 0,
                 Amount: i.totalAmount,
-                IsDeleted: isedit ? 1 : 0
+                IsDeleted: isedit
             }
             itemArr.push(arr)
         };
@@ -478,16 +478,20 @@ const Order = (props) => {
             if (pageMode === "edit") {
                 var ischange = (!(i.poQty === i.inpQty) ||
                     !(i.poRate === i.inpRate) || !(i.poBaseUnitQty === i.inpBaseUnitQty))
-                if (ischange) {
-                    var isedit = true;
+                if (ischange && (i.poQty === 0)) {
+                    var isedit = 0;
+                    orderItem({ i, isedit })
+                }
+                else if (ischange) {
+                    var isedit = 1;
                     orderItem({ i, isedit })
                 } else {
-                    var isedit = false;
+                    var isedit = 0;
                     orderItem({ i, isedit })
                 }
             }
             else {
-                var isedit = false;
+                var isedit = 0;
                 orderItem({ i, isedit })
             }
         })
@@ -799,7 +803,7 @@ const Order = (props) => {
 
                     {
                         items.length > 0 ?
-                            <OrderPageTermsTable tableList={termsAndConTable} setfunc={setTermsAndConTable} />
+                            <OrderPageTermsTable tableList={termsAndConTable} setfunc={setTermsAndConTable} privious={editVal.OrderTermsAndCondition} />
                             : null
                     }
 

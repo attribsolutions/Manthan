@@ -4,7 +4,7 @@ import Select from "react-select";
 import { Table } from 'reactstrap';
 
 export default function OrderPageTermsTable(props) {
-    const { tableList, setfunc } = props;
+    const { tableList, setfunc, privious = [] } = props;
 
     const { termsAndConditions = [] } = useSelector((state) => ({
         termsAndConditions: state.TermsAndConditionsReducer.TermsAndConditionsList,
@@ -27,17 +27,30 @@ export default function OrderPageTermsTable(props) {
         }
     }
     const ondelete = (i) => {
-        setfunc(terms => terms.map(ele => {
-            if (ele.value === i.value) {
-                ele.IsDeleted = 1
-            }
-            return ele
-        }))
+
+        const find = privious.find((ele) => {
+            return (i.value === ele.id)
+        });
+
+        if (!(find === undefined)) {
+            setfunc(terms => {
+                const a = terms.map(ele => {
+                    if (ele.value === i.value) {
+                        ele.IsDeleted = 1
+                    }
+                    return ele
+                })
+                return a
+            })
+        }
+        else {
+            setfunc(terms => {
+                const a = terms.filter(ele => !(ele.value === i.value))
+                return a
+            })
+        }
     }
 
-    // tablefunc(){
-
-    // }
     return (
         <div style={{ minHeight: "400px", marginTop: "-20px" }}>
             <div className="row mx-1 " style={{
