@@ -348,7 +348,7 @@ const PurchaseListPage = (props) => {
                     </PaginationProvider>
 
                     {
-                        pageMode === GST_ADD_Mode_2 ?
+                        (pageMode === GST_ADD_Mode_2 )?
 
                             <div className="button_save " style={{ paddingBottom: 'center' }}>
                                 <button
