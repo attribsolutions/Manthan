@@ -302,7 +302,7 @@ const BOMMaster = (props) => {
                 <MetaTags>
                     <title>{userPageAccessState.PageHeading}| FoodERP-React FrontEnd</title>
                 </MetaTags>
-                <div className="page-content" style={{marginBottom:"2cm"}}>
+                <div className="page-content" style={{marginBottom:"5cm"}}>
 
                     <Breadcrumb pageHeading={userPageAccessState.PageHeading}
                         showCount={true}
@@ -311,11 +311,11 @@ const BOMMaster = (props) => {
 
                         <div className="px-2 mb-1 mt-n3 c_card_filter header" >
 
-                            <div className=" mt-1 row ">
+                            <div  className=" mt-1 row  ">
 
-                                <Col sm="5">
+                                <Col sm="6">
                                     <FormGroup className="mb-2 row mt-2  ">
-                                        <Label  style={{ width: "115px" }}>{fieldLabel.BomDate} </Label>
+                                        <Label className="mt-2" style={{ width: "115px" }}>{fieldLabel.BomDate} </Label>
                                         <Col sm="7">
                                             <Flatpickr
                                                 name="BomDate"
@@ -341,11 +341,11 @@ const BOMMaster = (props) => {
                                     </FormGroup>
                                 </Col>
 
-                                <Col sm="5">
+                                <Col sm="6">
 
 
                                     <FormGroup className="mb-2 row mt-2 ">
-                                        <Label style={{ width: "115px" }} >{fieldLabel.EstimatedOutputQty} </Label>
+                                        <Label className="mt-2" style={{ width: "115px"  }} >{fieldLabel.EstimatedOutputQty} </Label>
                                         <Col sm="7">
 
                                             <Input
@@ -369,10 +369,10 @@ const BOMMaster = (props) => {
 
 
 
-                                <Col sm="5">
+                                <Col sm="6">
 
                                     <FormGroup className="mb-2 row  ">
-                                        <Label style={{ width: "115px" }}> {fieldLabel.ItemName} </Label>
+                                        <Label className="mt-2"  style={{ width: "115px" }}> {fieldLabel.ItemName} </Label>
                                         <Col sm={7}>
                                             <Select
                                                 name="ItemName"
@@ -396,10 +396,10 @@ const BOMMaster = (props) => {
                                     </FormGroup>
                                 </Col>
 
-                                <Col sm="5">
+                                <Col sm="6">
 
                                     <FormGroup className="mb-2 row  ">
-                                        <Label style={{ width: "115px" }}> {fieldLabel.UnitName} </Label>
+                                        <Label className="mt-2"  style={{ width: "115px" }}> {fieldLabel.UnitName} </Label>
                                         <Col sm={7}>
                                             <Select
                                                 name="UnitName"
@@ -422,10 +422,10 @@ const BOMMaster = (props) => {
 
 
 
-                                <Col sm="5">
+                                <Col sm="6">
 
                                     <FormGroup className="mb-2 row  ">
-                                        <Label style={{ width: "115px" }} >{fieldLabel.Comment} </Label>
+                                        <Label className="mt-2"  style={{ width: "115px" }} >{fieldLabel.Comment} </Label>
                                         <Col sm="7">
 
                                             <Input
@@ -449,11 +449,11 @@ const BOMMaster = (props) => {
                                 </Col>
 
 
-                                <Col sm="5">
+                                <Col sm="6">
 
                                     <FormGroup className=" row  ">
                                         <Row className="justify-content-md-left">
-                                            <Label className="col-sm-6 col-form-label"style={{ width: "115px" }} >{fieldLabel.IsActive}</Label>
+                                            <Label className="col-sm-6 col-form-label mt-2"style={{ width: "115px" }} >{fieldLabel.IsActive}</Label>
                                             <Col md={7} style={{ marginTop: '10px' }} >
 
                                                 <div className="form-check form-switch form-switch-md mb-3" >
