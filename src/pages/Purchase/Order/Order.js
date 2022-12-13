@@ -141,7 +141,8 @@ const Order = (props) => {
                 setOrderAmount(hasEditVal.OrderAmount)
                 const termsAndCondition = hasEditVal.OrderTermsAndCondition.map(i => ({
                     value: i.id,
-                    label: i.TermsAndCondition
+                    label: i.TermsAndCondition,
+                    IsDeleted: 0
                 }))
                 setTermsAndConTable(termsAndCondition)
             }
@@ -425,7 +426,7 @@ const Order = (props) => {
 
         const validMsg = []
         const itemArr = []
-        let termsAndCondition = []
+        // let termsAndCondition = []
 
         function isChanged({ i, isedit, isdel }) {
 
@@ -490,18 +491,32 @@ const Order = (props) => {
                 orderItem({ i, isedit })
             }
         })
-        debugger
-        if (pageMode === "edit") {
-            termsAndConTable.forEach(i => {
-                var found = editVal.OrderTermsAndCondition.find(ele => (i.value === ele.id))
-                if (found === undefined) {
-                    termsAndCondition.push({ TermsAndCondition: i.value })
-                }
-            })
-        } else {
+        // debugger
+        // if (pageMode === "edit11") {
+        //     termsAndConTable.forEach(i => {
+        //         var found = editVal.OrderTermsAndCondition.find(ele => (i.value === ele.id))
+        //         if (found === undefined) {
+        //             termsAndCondition.push({
+        //                 TermsAndCondition: i.value,
+        //                 IsDeleted: 0
+        //             })
 
-            termsAndCondition = termsAndConTable.map(i => ({ TermsAndCondition: i.value }))
-        }
+        //         }
+        //         else {
+        //             termsAndCondition.push({
+        //                 TermsAndCondition: i.value,
+        //                 IsDeleted: 0
+        //             })
+
+        //         }
+        //     })
+        // } else {
+
+        const termsAndCondition = termsAndConTable.map(i => ({
+            TermsAndCondition: i.value,
+            IsDeleted: i.IsDeleted
+        }))
+        // }
 
         if (validMsg.length > 0) {
             dispatch(AlertState({

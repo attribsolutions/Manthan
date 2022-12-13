@@ -15,10 +15,29 @@ export default function OrderPageTermsTable(props) {
             return (i.value === e.value)
         });
         if (find === undefined) {
-            setfunc(terms => [...terms, e]);
+            setfunc(terms => [...terms, { label: e.label, value: e.value, IsDeleted: 0 }]);
+        } else {
+
+            setfunc(terms => terms.map((i) => {
+                if (i.value === e.value) {
+                    i.IsDeleted = 0
+                }
+                return i
+            }));
         }
     }
+    const ondelete = (i) => {
+        setfunc(terms => terms.map(ele => {
+            if (ele.value === i.value) {
+                ele.IsDeleted = 1
+            }
+            return ele
+        }))
+    }
 
+    // tablefunc(){
+
+    // }
     return (
         <div style={{ minHeight: "400px", marginTop: "-20px" }}>
             <div className="row mx-1 " style={{
@@ -46,11 +65,11 @@ export default function OrderPageTermsTable(props) {
                             <th>Action</th>
                         </tr >
                         {tableList.map((i, k) => (
-                            <tr className='bordered-gray'>
+                            <tr className='bordered-gray' style={{ display: (i.IsDeleted === 0) ? "block" : "none" }}>
                                 <td className="px-2">
                                     <spam className="form-label">{k + 1}</spam>{i.label}</td>
                                 <td> <i className="mdi mdi-delete font-size-18 text-danger text-right"
-                                    onClick={() => { setfunc(terms => terms.filter(f => !(f.value === i.value))) }}></i></td>
+                                    onClick={() => ondelete(i)}></i></td>
                             </tr>
                         )
                         )}
