@@ -251,11 +251,11 @@ const WorkOrder = (props) => {
         dispatch(postGoButtonForWorkOrder_MasterSuccess([]))
         let qty = ''
         if (pageMode === "edit") {
-            qty=e * EditData.EstimatedOutputQty;
+            qty = e * EditData.EstimatedOutputQty;
         }
-       else{
-        qty=e*itemselect.EstimatedOutputQty
-       }
+        else {
+            qty = e * itemselect.EstimatedOutputQty
+        }
         setState((i) => {
             i.values.NumberOfLot = e;
             i.values.Quantity = qty;
@@ -265,14 +265,25 @@ const WorkOrder = (props) => {
 
     function Quantitychange(e) {
         debugger
-        state.hasValid.Quantity.valid = true
         dispatch(postGoButtonForWorkOrder_MasterSuccess([]))
-        setState((i) => {
-            i.values.NumberOfLot = "1.000000";
-            i.values.Quantity = e;
-            // i.hasValid.Quantity.valid = false
-            return i
-        })
+        state.hasValid.Quantity.valid = true
+        let NumberLot = e / itemselect.EstimatedOutputQty
+        if (Number.isInteger(NumberLot)){
+            setState((i) => {
+                i.values.NumberOfLot = NumberLot;
+                i.values.Quantity = e;
+                // i.hasValid.Quantity.valid = false
+                return i
+            })
+        }
+           else{
+            setState((i) => {
+                i.values.NumberOfLot = "1.000000";
+                i.values.Quantity = e;
+                // i.hasValid.Quantity.valid = false
+                return i
+            })
+           }
     }
 
     const goButtonHandler = (event) => {
