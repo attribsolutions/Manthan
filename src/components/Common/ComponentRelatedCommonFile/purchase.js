@@ -78,6 +78,7 @@ const PurchaseListPage = (props) => {
         ButtonMsgLable,
         deleteName,
         pageMode,
+        goButnFunc = () => { },
         onsavefunc = () => { },
     } = props;
 
@@ -118,6 +119,7 @@ const PurchaseListPage = (props) => {
 
         if (updateMsg.Status === true && updateMsg.StatusCode === 200) {
             dispatch(updateSucc({ Status: false }));
+            goButnFunc()
             dispatch(
                 AlertState({
                     Type: 1,
@@ -144,6 +146,7 @@ const PurchaseListPage = (props) => {
     useEffect(() => {
         if (deleteMsg.Status === true && deleteMsg.StatusCode === 200) {
             dispatch(deleteSucc({ Status: false }));
+            goButnFunc();
             dispatch(
                 AlertState({
                     Type: 1,
