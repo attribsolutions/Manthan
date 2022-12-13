@@ -37,7 +37,7 @@ function* goButtonGenFunc({ data, hasEditVal }) {
   yield delay(500)
   try {
     const response = yield call(OrderPage_GoButton_API, data);
-
+    debugger
     if (hasEditVal) {
       yield response.Data.forEach(element => {
         hasEditVal.OrderItem.forEach(ele => {
@@ -52,6 +52,7 @@ function* goButtonGenFunc({ data, hasEditVal }) {
             element["poRate"] = ele.Rate
             element["poQty"] = ele.Quantity
             element["poBaseUnitQty"] = ele.BaseUnitQuantity
+            element["editrowId"] = ele.id
           }
         })
       });
@@ -59,7 +60,7 @@ function* goButtonGenFunc({ data, hasEditVal }) {
 
     yield response.Data.forEach(row => {
       if (row.poRate === undefined) { row["poRate"] = '' }
-      if (row.poQty === undefined) { row["poQty"] = '' }
+      if (row.poQty === undefined) { row["poQty"] = 0 }
       if (row.poBaseUnitQty === undefined) { row["poBaseUnitQty"] = '' }
 
       if (row["inpRate"] === undefined) { row["inpRate"] = '' }
@@ -146,7 +147,7 @@ function* UpdateOrder_ID_GenFunc({ data, id }) {
 // List Page API
 function* get_OrderList_GenFunc({ filters }) {
 
-  yield GoBtnDissable(true)
+  // yield GoBtnDissable(true)
   yield delay(500)
   try {
     const response = yield call(Order_get_API, filters);
@@ -157,7 +158,7 @@ function* get_OrderList_GenFunc({ filters }) {
       return i
     })
     yield put(getOrderListPageSuccess(newList))
-    yield GoBtnDissable(false)
+    // yield GoBtnDissable(false)
 
   } catch (error) {
     yield GoBtnDissable(false)

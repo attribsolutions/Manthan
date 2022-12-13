@@ -90,10 +90,10 @@ export const PARTYITEM_LIST='/PartyItemsList'
 export const SUBGROUP="/SubGroupMaster"
 export const SUBGROUP_LIST="/SubGroupList"
 
-export const BillOfMaterials="/BOM"
-export const BillOfMaterialsList="/BOMList"
+export const BIllOf_MATERIALS="/BOM"
+export const BIllOf_MATERIALS_LIST="/BOMList"
 
-export const WORKORDER="/WorkOrder"
-export const WORKORDERLIST="/WorkOrderList"
+export const WORK_ORDER="/WorkOrder"
+export const WORK_ORDER_LIST="/WorkOrderList"
 
 

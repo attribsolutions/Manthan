@@ -31,7 +31,7 @@ import { basicAmount, GstAmount, handleKeyDown, totalAmount } from "../Order/Ord
 import '../../Order/div.css'
 
 import { GRN_lIST, ORDER_lIST } from "../../../routes/route_url";
-import SaveButton from "../../../components/Common/ComponentRelatedCommonFile/CommonSaveButton";
+import { SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
 
 import Breadcrumb from "../../../components/Common/Breadcrumb3";
 import { getGRN_itemMode2_Success, postGRN, postGRNSuccess } from "../../../store/Purchase/GRNRedux/actions";
@@ -79,16 +79,12 @@ const GRNAdd = (props) => {
         updateMsg,
         supplierAddress,
     } = useSelector((state) => ({
-        supplier: state.SupplierReducer.supplier,
         supplierAddress: state.SupplierReducer.supplierAddress,
         items: state.GRNReducer.GRNitem,
-        grnItemList: state.GRNReducer.grnItemList,
-        table: state.GRNReducer.GRNitem3,
         postMsg: state.GRNReducer.postMsg,
         updateMsg: state.GRNReducer.updateMsg,
         userAccess: state.Login.RoleAccessUpdateData,
-        pageField: state.CommonPageFieldReducer.pageFieldList,
-        termsAndCondtions: state.TermsAndCondtionsReducer.TermsAndCondtionsList,
+       pageField: state.CommonPageFieldReducer.pageFieldList,
     }));
 
 

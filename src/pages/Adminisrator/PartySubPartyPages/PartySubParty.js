@@ -34,7 +34,7 @@ import {
     get_Party_ForDropDown
 } from "../../../store/Administrator/ItemsRedux/action";
 import { Tbody, Thead } from "react-super-responsive-table";
-import SaveButton from "../../../components/Common/ComponentRelatedCommonFile/CommonSaveButton";
+import { SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
 
 import { PARTY_SUB_PARTY_lIST } from "../../../routes/route_url";
 import {

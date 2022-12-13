@@ -64,7 +64,6 @@ import MarginMaster from "../pages/Adminisrator/MarginMaster/MarginMaster";
 
 import MRPList from "../pages/Adminisrator/MRPMaster/MRPList";
 import MarginList from "../pages/Adminisrator/MarginMaster/MarginList";
-import TermsAndCondtionsMaster from "../pages/Adminisrator/TermsAndCondtions/TermsAndCondtionsMaster";
 
 import GroupMaster from "../pages/Adminisrator/GroupPage/GroupMaster"
 import GroupList from "../pages/Adminisrator/GroupPage/GroupList";
@@ -77,7 +76,8 @@ import PartySubPartyList from "../pages/Adminisrator/PartySubPartyPages/partysub
 import GSTMaster from "../pages/Adminisrator/GSTPages/GSTMaster";
 import GSTList from "../pages/Adminisrator/GSTPages/GSTList";
 
-import TermsAndCondtionsList from "../pages/Adminisrator/TermsAndCondtions/TermsAndCondtionsList";
+import TermsAndConditionsMaster from "../pages/Adminisrator/TermsAndConditions/TermsAndConditionsMaster";
+import TermsAndConditionsList from "../pages/Adminisrator/TermsAndConditions/TermsAndConditionsList";
 
 import Order from "../pages/Purchase/Order/Order"
 import OrderList from "../pages/Purchase/Order/OrderList"
@@ -162,8 +162,8 @@ const userRoutes = [
   { path: path.PARTY_SUB_PARTY, component: PartySubParty },
   { path: path.PARTY_SUB_PARTY_lIST, component: PartySubPartyList },
 
-  { path: path.TERMS_AND_CONDITION, component: TermsAndCondtionsMaster },
-  { path: path.TERMS_AND_CONDITION_LIST, component: TermsAndCondtionsList },
+  { path: path.TERMS_AND_CONDITION, component: TermsAndConditionsMaster },
+  { path: path.TERMS_AND_CONDITION_LIST, component: TermsAndConditionsList },
 
   { path: path.PRICE_lIST, component: PriceList },
   { path: path.PRICE, component: PriceMaster },
@@ -183,21 +183,21 @@ const userRoutes = [
   { path: path.PARTY_SUB_PARTY, component: PartySubParty },
   { path: path.PARTY_SUB_PARTY_lIST, component: PartySubPartyList },
 
- 
-  { path:path.PARTYITEM, component: PartyItems },
+
+  { path: path.PARTYITEM, component: PartyItems },
   { path: path.PARTYITEM_LIST, component: PartyItemsList },
 
-  { path:path.SUBGROUP, component: SubGroupMaster },
-  { path:path.SUBGROUP_LIST, component: SubGroupList },
+  { path: path.SUBGROUP, component: SubGroupMaster },
+  { path: path.SUBGROUP_LIST, component: SubGroupList },
 
 
   // { path:"/demo", component: demo },
 
-  { path:path.BillOfMaterials, component: BOMMaster },
-  { path:path.BillOfMaterialsList, component: BOMList },
+  { path: path.BIllOf_MATERIALS, component: BOMMaster },
+  { path: path.BIllOf_MATERIALS_LIST, component: BOMList },
 
-  { path:path.WORKORDER, component: WorkOrder },
-  { path:path.WORKORDERLIST, component: WorkOrderList },
+  { path: path.WORK_ORDER, component: WorkOrder },
+  { path: path.WORK_ORDER_LIST, component: WorkOrderList },
 
   { path: path.SEARCH_BOX2, component: SearchBoxSecond },
   { path: path.SEARCH_BOX3, component: SerachBox3 },

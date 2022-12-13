@@ -1,20 +1,30 @@
 import React, { useEffect } from "react";
 
 import { useDispatch, useSelector } from "react-redux";
-import TermsAndCondtionsMaster from "./TermsAndCondtionsMaster";
+import TermsAndConditionsMaster from "./TermsAndConditionsMaster";
 import CommonListPage from "../../../components/Common/ComponentRelatedCommonFile/CommonMasterListPage";
-import { commonPageFieldList, commonPageFieldListSuccess } from "../../../store/actions";
-import { postTermAndConditionSuccess, getTermAndCondition, EditTermsAndCondtions, DeleteTermsAndCondtions, DeleteTermsAndCondtions_Success, UpdateTermsAndCondtions_Success } from "../../../store/Administrator/TermsAndCondtionsRedux/actions";
+import {
+  commonPageFieldList,
+  commonPageFieldListSuccess
+} from "../../../store/actions";
+import {
+  postTermAndConditionSuccess,
+  getTermAndCondition,
+  EditTermsAndCondtions,
+  DeleteTermsAndCondtions,
+  DeleteTermsAndCondtions_Success,
+  UpdateTermsAndCondtions_Success
+} from "../../../store/Administrator/TermsAndConditionsRedux/actions";
 import { TERMS_AND_CONDITION } from "../../../routes/route_url";
 
-const TermsAndCondtionsList = (props) => {
+const TermsAndConditionsList = (props) => {
 
 
   const dispatch = useDispatch();
   //useSelector is used to access the redux store in function component
   const reducers = useSelector(
     (state) => ({
-      tableList: state.TermsAndCondtionsReducer.TermsAndCondtionsList,
+      tableList: state.TermsAndCondtionsReducer.TermsAndConditionsList,
       postMsg: state.TermsAndCondtionsReducer.PostData,
       editData: state.TermsAndCondtionsReducer.TermsAndCondtionseditData,
       updateMsg: state.TermsAndCondtionsReducer.TermsAndCondtionsupdateMessage,
@@ -53,7 +63,7 @@ const TermsAndCondtionsList = (props) => {
           <CommonListPage
             action={action}
             reducers={reducers}
-            MasterModal={TermsAndCondtionsMaster}
+            MasterModal={TermsAndConditionsMaster}
             masterPath={TERMS_AND_CONDITION}
             ButtonMsgLable={"Terms & Conditions"}
             deleteName={"Name"}
@@ -65,4 +75,4 @@ const TermsAndCondtionsList = (props) => {
   )
 }
 
-export default TermsAndCondtionsList;
+export default TermsAndConditionsList;

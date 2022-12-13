@@ -34,7 +34,7 @@ import {
 
 } from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
 import { COMPANY_lIST } from "../../../routes/route_url";
-import SaveButton from "../../../components/Common/ComponentRelatedCommonFile/CommonSaveButton";
+import { SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
 import { createdBy, saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 
 

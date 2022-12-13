@@ -34,7 +34,7 @@ import {
 import { get_Division_ForDropDown, } from "../../../store/Administrator/ItemsRedux/action";
 import { useHistory } from "react-router-dom";
 // import { actionChannel } from "redux-saga/effects";
-import SaveButton from "../../../components/Common/ComponentRelatedCommonFile/CommonSaveButton";
+import { SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
 import { DRIVER_lIST, VEHICLE_lIST } from "../../../routes/route_url";
 import {
     comAddPageFieldFunc,

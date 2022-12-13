@@ -4,7 +4,7 @@ import "flatpickr/dist/themes/material_blue.css"
 import Flatpickr from "react-flatpickr";
 import { BreadcrumbFilterSize, commonPageFieldList, commonPageFieldListSuccess, } from "../../../../store/actions";
 import PurchaseListPage from "../../../../components/Common/ComponentRelatedCommonFile/purchase"
-import { BillOfMaterials, BillOfMaterialsList } from "../../../../routes/route_url";
+import { BIllOf_MATERIALS, BIllOf_MATERIALS_LIST } from "../../../../routes/route_url";
 import { Button, Col, FormGroup, Label } from "reactstrap";
 import Breadcrumb from "../../../../components/Common/Breadcrumb";
 import { useHistory } from "react-router-dom";
@@ -20,7 +20,7 @@ const BOMList = () => {
 
     const hasPagePath = history.location.pathname
 
-    const [pageMode, setpageMode] = useState(BillOfMaterialsList)
+    const [pageMode, setpageMode] = useState(BIllOf_MATERIALS_LIST)
     const [userAccState, setUserAccState] = useState('');
     const [fromdate, setFromdate] = useState();
     const [todate, setTodate] = useState();
@@ -108,11 +108,11 @@ const BOMList = () => {
 
                 <div className="px-2  mt-n1 c_card_header" style={{ marginBottom: "-12px" }} >
                     <div className=" mt-1 row">
-                        <Col sm="4" className="">
-                            <FormGroup className="mb- row mt-3 " >
+                        <Col sm="5">
+                            <FormGroup className=" row mt-3 " >
                                 <Label className="col-sm-5 p-2"
                                     style={{ width: "83px" }}>From Date</Label>
-                                <Col sm="7">
+                                <Col sm="6">
                                     <Flatpickr
                                         name='fromdate'
                                         className="form-control d-block p-2 bg-white text-dark"
@@ -130,11 +130,11 @@ const BOMList = () => {
                                 </Col>
                             </FormGroup>
                         </Col>
-                        <Col sm="4" className="">
+                        <Col sm="5" className="">
                             <FormGroup className="mb- row mt-3 " >
                                 <Label className="col-sm-5 p-2"
-                                    style={{ width: "65px" }}>To Date</Label>
-                                <Col sm="7 ">
+                                    style={{ width: "65px",marginRight: "0.4cm" }}>To Date</Label>
+                                <Col sm="6 ">
                                     <Flatpickr
                                         name="todate"
                                         className="form-control d-block p-2 bg-white text-dark"
@@ -153,7 +153,7 @@ const BOMList = () => {
                             </FormGroup>
                         </Col>
 
-                        <Col sm="1">
+                        <Col sm="1" className="mx-4 ">
                             <Button type="button" color="btn btn-outline-success border-2 font-size-12 m-3  "
                                 onClick={() => goButtonHandler()}
                             >Go</Button>
@@ -167,7 +167,7 @@ const BOMList = () => {
                             reducers={reducers}
                             showBreadcrumb={false}
                             MasterModal={BOMMaster}
-                            masterPath={BillOfMaterials}
+                            masterPath={BIllOf_MATERIALS}
                             ButtonMsgLable={"BOM"}
                             deleteName={"ItemName"}
                             pageMode={pageMode}

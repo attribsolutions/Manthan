@@ -30,7 +30,7 @@ import {
   onChangeSelect,
   onChangeText,
 } from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
-import SaveButton from "../../../components/Common/ComponentRelatedCommonFile/CommonSaveButton";
+import { SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
 import { createdBy, saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 
 

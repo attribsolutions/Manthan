@@ -38,7 +38,7 @@ import {
 } from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
 import { getGroupTypeslist } from "../../../store/Administrator/GroupTypeRedux/action";
 import { GROUP_lIST } from "../../../routes/route_url";
-import SaveButton from "../../../components/Common/ComponentRelatedCommonFile/CommonSaveButton";
+import { SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
 import { createdBy, saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 
 

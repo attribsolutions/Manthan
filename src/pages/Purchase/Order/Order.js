@@ -1,5 +1,4 @@
 import {
-    Button,
     Col,
     FormGroup,
     Input,
@@ -12,10 +11,10 @@ import "flatpickr/dist/themes/material_blue.css"
 import Flatpickr from "react-flatpickr";
 
 
-import React, { useEffect, useState, useRf, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import { MetaTags } from "react-meta-tags";
 
-import ToolkitProvider, { Search } from "react-bootstrap-table2-toolkit";
+import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 import paginationFactory, { PaginationListStandalone, PaginationProvider } from "react-bootstrap-table2-paginator";
 import { useHistory } from "react-router-dom";
@@ -34,14 +33,14 @@ import { basicAmount, GstAmount, handleKeyDown, totalAmount } from "./OrderPageC
 import '../../Order/div.css'
 
 import { ORDER_lIST } from "../../../routes/route_url";
-import SaveButton from "../../../components/Common/ComponentRelatedCommonFile/CommonSaveButton";
+import { SaveButton, Go_Button } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
 
-import { getTermAndCondition } from "../../../store/Administrator/TermsAndCondtionsRedux/actions";
+import { getTermAndCondition } from "../../../store/Administrator/TermsAndConditionsRedux/actions";
 
-import OrderPageTemsTable from "./OrderPageTemsTable";
 import Breadcrumb from "../../../components/Common/Breadcrumb3";
 import { mySearchProps } from "../../../components/Common/ComponentRelatedCommonFile/MySearch";
 import { createdBy, currentDate, userParty } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import OrderPageTermsTable from "./OrderPageTermsTable";
 
 let description = ''
 let editVal = {}
@@ -80,7 +79,7 @@ const Order = (props) => {
         supplier,
         userAccess,
         updateMsg,
-        supplierAddress,
+        supplierAddress = [],
     } = useSelector((state) => ({
         items: state.OrderReducer.orderItem,
         supplier: state.SupplierReducer.supplier,
@@ -89,9 +88,7 @@ const Order = (props) => {
         updateMsg: state.OrderReducer.updateMsg,
         userAccess: state.Login.RoleAccessUpdateData,
         pageField: state.CommonPageFieldReducer.pageFieldList,
-        termsAndCondtions: state.TermsAndCondtionsReducer.TermsAndCondtionsList,
     }));
-    debugger
 
     // userAccess useEffect
     useEffect(() => {
@@ -131,7 +128,7 @@ const Order = (props) => {
 
             if (hasEditVal) {
 
-                GoButton_Handler(hasEditVal)//=======Go Button API Call
+                goButtonHandler(hasEditVal)//=======Go Button API Call
                 dispatch(BreadcrumbFilterSize(`${"Order Amount"} :${hasEditVal.OrderAmount}`))
                 setsupplierSelect({ label: hasEditVal.SupplierName, value: hasEditVal.Supplier })
                 setpoDate(hasEditVal.OrderDate)
@@ -139,11 +136,13 @@ const Order = (props) => {
                 setshippAddr({ label: hasEditVal.ShippingAddress, value: hasEditVal.ShippingAddressID })
                 setbillAddr({ label: hasEditVal.BillingAddress, value: hasEditVal.BillingAddressID });
                 description = hasEditVal.Description
+                editVal = {}
                 editVal = hasEditVal
                 setOrderAmount(hasEditVal.OrderAmount)
                 const termsAndCondition = hasEditVal.OrderTermsAndCondition.map(i => ({
                     value: i.id,
-                    label: i.TermsAndCondition
+                    label: i.TermsAndCondition,
+                    IsDeleted: 0
                 }))
                 setTermsAndConTable(termsAndCondition)
             }
@@ -241,8 +240,8 @@ const Order = (props) => {
             sort: true,
         },
 
-        { //------------- Quntity column ----------------------------------
-            text: "Quntity",
+        { //------------- Quantity column ----------------------------------
+            text: "Quantity",
             dataField: "",
             sort: true,
             formatter: (value, row, k) => {
@@ -279,8 +278,8 @@ const Order = (props) => {
 
         },
 
-        {  //------------- UOM column ----------------------------------
-            text: "UOM",
+        {  //------------- Unit column ----------------------------------
+            text: "Unit",
             dataField: "",
             sort: true,
             formatter: (value, row, key) => {
@@ -319,7 +318,7 @@ const Order = (props) => {
         },
 
         {//------------- Rate column ----------------------------------
-            text: "Rate",
+            text: "Rate/Unit",
             dataField: "Rate",
             sort: true,
             formatter: (value, row, k) => {
@@ -384,8 +383,7 @@ const Order = (props) => {
         custom: true,
     };
 
-    const GoButton_Handler = (hasEditVal = false) => {
-
+    const goButtonHandler = (hasEditVal = false) => {
         if (hasEditVal) {
             const jsonBody = JSON.stringify({
                 Party: hasEditVal.Supplier,
@@ -428,49 +426,101 @@ const Order = (props) => {
 
         const validMsg = []
         const itemArr = []
-        function orderItem(i) {
-            if ((i.inpQty > 0) && !(i.inpRate > 0)) {
-                validMsg.push(`${i.Name}:  This Item Rate Is Require...`);
+        // let termsAndCondition = []
+
+        function isChanged({ i, isedit, isdel }) {
+
+            const basicAmt = parseFloat(basicAmount(i))
+            const cgstAmt = (GstAmount(i))
+            const arr = {
+                id: i.editrowId,
+                Item: i.id,
+                Quantity: isdel ? 0 : i.inpQty,
+                MRP: i.MRP,
+                Rate: i.inpRate,
+                Unit: i.UOM,
+                BaseUnitQuantity: i.inpBaseUnitQty,
+                Margin: "",
+                BasicAmount: basicAmt.toFixed(2),
+                GSTAmount: cgstAmt.toFixed(2),
+                GST: i.Gstid,
+                CGST: (cgstAmt / 2).toFixed(2),
+                SGST: (cgstAmt / 2).toFixed(2),
+                IGST: 0,
+                CGSTPercentage: (i.GSTPercentage / 2),
+                SGSTPercentage: (i.GSTPercentage / 2),
+                IGSTPercentage: 0,
+                Amount: i.totalAmount,
+                IsDeleted: isedit
             }
+            itemArr.push(arr)
+        };
+
+        function orderItem({ i, isedit }) {
 
             if ((i.inpQty > 0) && (i.inpRate > 0)) {
-                const basicAmt = parseFloat(basicAmount(i))
-                const cgstAmt = (GstAmount(i))
+                var isdel = false;
 
-                const arr = {
-                    Item: i.id,
-                    Quantity: i.inpQty,
-                    MRP: i.MRP,
-                    Rate: i.inpRate,
-                    Unit: i.UOM,
-                    BaseUnitQuantity: i.inpBaseUnitQty,
-                    Margin: "",
-                    BasicAmount: basicAmt.toFixed(2),
-                    GSTAmount: cgstAmt.toFixed(2),
-                    GST: i.Gstid,
-                    CGST: (cgstAmt / 2).toFixed(2),
-                    SGST: (cgstAmt / 2).toFixed(2),
-                    IGST: 0,
-                    CGSTPercentage: (i.GSTPercentage / 2),
-                    SGSTPercentage: (i.GSTPercentage / 2),
-                    IGSTPercentage: 0,
-                    Amount: i.totalAmount,
-                }
-
-                itemArr.push(arr)
+                isChanged({ i, isedit, isdel })
+            }
+            else if ((i.inpQty < 1) && (i.editrowId)) {
+                var isdel = true;
+                isChanged({ i, isedit, isdel })
             };
         }
 
         items.forEach(i => {
-            debugger
+
+            if ((i.inpQty > 0) && !(i.inpRate > 0)) {
+                validMsg.push(`${i.Name}:  This Item Rate Is Require...`);
+            };
+
             if (pageMode === "edit") {
                 var ischange = (!(i.poQty === i.inpQty) ||
                     !(i.poRate === i.inpRate) || !(i.poBaseUnitQty === i.inpBaseUnitQty))
-                if (ischange) { orderItem(i) }
+                if (ischange && (i.poQty === 0)) {
+                    var isedit = 0;
+                    orderItem({ i, isedit })
+                }
+                else if (ischange) {
+                    var isedit = 1;
+                    orderItem({ i, isedit })
+                } else {
+                    var isedit = 0;
+                    orderItem({ i, isedit })
+                }
             }
-            else { orderItem(i) }
+            else {
+                var isedit = 0;
+                orderItem({ i, isedit })
+            }
         })
-        const termsAndCondition = termsAndConTable.map(i => ({ TermsAndCondition: i.value }))
+        // debugger
+        // if (pageMode === "edit11") {
+        //     termsAndConTable.forEach(i => {
+        //         var found = editVal.OrderTermsAndCondition.find(ele => (i.value === ele.id))
+        //         if (found === undefined) {
+        //             termsAndCondition.push({
+        //                 TermsAndCondition: i.value,
+        //                 IsDeleted: 0
+        //             })
+
+        //         }
+        //         else {
+        //             termsAndCondition.push({
+        //                 TermsAndCondition: i.value,
+        //                 IsDeleted: 0
+        //             })
+
+        //         }
+        //     })
+        // } else {
+
+        const termsAndCondition = termsAndConTable.map(i => ({
+            TermsAndCondition: i.value,
+            IsDeleted: i.IsDeleted
+        }))
+        // }
 
         if (validMsg.length > 0) {
             dispatch(AlertState({
@@ -525,12 +575,10 @@ const Order = (props) => {
 
         if (pageMode === "edit") {
             dispatch(updateOrderId(jsonBody, editVal.id))
-            console.log("orderEdit", jsonBody)
 
         } else {
 
             dispatch(postOrder(jsonBody))
-            console.log("ordersave", jsonBody)
         }
 
 
@@ -552,8 +600,8 @@ const Order = (props) => {
                     />
                     <div className="px-2 mb-1 mt-n3 c_card_filter header" >
                         <div className=" mt-1 row ">
-                            <Col sm="6" className="">
-                                <FormGroup className="mb- row mt-3 " >
+                            <Col sm="6">
+                                <FormGroup className=" row mt-3 " >
                                     <Label className="col-sm-5 p-2"
                                         style={{ width: "115px" }}>Order Date</Label>
                                     <Col sm="6">
@@ -593,8 +641,12 @@ const Order = (props) => {
                                         />
                                     </Col>
                                     <Col sm="1" className="mx-4 ">
-                                        {pageMode === "save" ? <Button type="button" color="btn btn-outline-success border-2 font-size-12"
-                                            onClick={(e) => GoButton_Handler()}>Go</Button>
+                                        {pageMode === "save" ?
+                                            //  <Button
+                                            //     id={""}
+                                            //      type="button" color="btn btn-outline-success border-2 font-size-12"
+                                            //         onClick={(e) => goButtonHandler()}>Go</Button> */}
+                                            <Go_Button onClick={(e) => goButtonHandler()} />
                                             : null}
                                     </Col>
                                 </FormGroup>
@@ -751,7 +803,7 @@ const Order = (props) => {
 
                     {
                         items.length > 0 ?
-                            <OrderPageTemsTable tableList={termsAndConTable} setfunc={setTermsAndConTable} />
+                            <OrderPageTermsTable tableList={termsAndConTable} setfunc={setTermsAndConTable} privious={editVal.OrderTermsAndCondition} />
                             : null
                     }
 

@@ -16,7 +16,6 @@ import { AlertState, BreadcrumbFilterSize } from "../../../store/actions";
 import { listPageCommonButtonFunction }
     from "./listPageCommonButtons";
 import { defaultSearch, mySearchProps } from "./MySearch";
-import { getModify } from "../../../helpers/api_helper";
 import { GST_ADD_Mode_2 } from "../../../routes/route_url";
 
 let sortType = "asc"
@@ -31,7 +30,7 @@ let searchProps = {
 }
 
 export const countlabelFunc = (toolkitProps, paginationProps, dispatch, ButtonMsgLable) => {
-debugger
+
     let iscall = 0
     if (paginationProps.dataSize) {
         iscall = paginationProps.dataSize
@@ -79,6 +78,7 @@ const PurchaseListPage = (props) => {
         ButtonMsgLable,
         deleteName,
         pageMode,
+        goButnFunc = () => { },
         onsavefunc = () => { },
     } = props;
 
@@ -119,6 +119,7 @@ const PurchaseListPage = (props) => {
 
         if (updateMsg.Status === true && updateMsg.StatusCode === 200) {
             dispatch(updateSucc({ Status: false }));
+            goButnFunc()
             dispatch(
                 AlertState({
                     Type: 1,
@@ -145,6 +146,7 @@ const PurchaseListPage = (props) => {
     useEffect(() => {
         if (deleteMsg.Status === true && deleteMsg.StatusCode === 200) {
             dispatch(deleteSucc({ Status: false }));
+            goButnFunc();
             dispatch(
                 AlertState({
                     Type: 1,
@@ -346,7 +348,7 @@ const PurchaseListPage = (props) => {
                     </PaginationProvider>
 
                     {
-                        pageMode === GST_ADD_Mode_2 ?
+                        (pageMode === GST_ADD_Mode_2 )?
 
                             <div className="button_save " style={{ paddingBottom: 'center' }}>
                                 <button

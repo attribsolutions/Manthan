@@ -3,11 +3,11 @@ import { useSelector } from 'react-redux';
 import Select from "react-select";
 import { Table } from 'reactstrap';
 
-export default function OrderPageTemsTable(props) {
-    const { tableList, setfunc } = props;
+export default function OrderPageTermsTable(props) {
+    const { tableList, setfunc, privious = [] } = props;
 
-    const { termsAndCondtions = [] } = useSelector((state) => ({
-        termsAndCondtions: state.TermsAndCondtionsReducer.TermsAndCondtionsList,
+    const { termsAndConditions = [] } = useSelector((state) => ({
+        termsAndConditions: state.TermsAndConditionsReducer.TermsAndConditionsList,
     }));
 
     const onChange = (e) => {
@@ -15,7 +15,39 @@ export default function OrderPageTemsTable(props) {
             return (i.value === e.value)
         });
         if (find === undefined) {
-            setfunc(terms => [...terms, e]);
+            setfunc(terms => [...terms, { label: e.label, value: e.value, IsDeleted: 0 }]);
+        } else {
+
+            setfunc(terms => terms.map((i) => {
+                if (i.value === e.value) {
+                    i.IsDeleted = 0
+                }
+                return i
+            }));
+        }
+    }
+    const ondelete = (i) => {
+
+        const find = privious.find((ele) => {
+            return (i.value === ele.id)
+        });
+
+        if (!(find === undefined)) {
+            setfunc(terms => {
+                const a = terms.map(ele => {
+                    if (ele.value === i.value) {
+                        ele.IsDeleted = 1
+                    }
+                    return ele
+                })
+                return a
+            })
+        }
+        else {
+            setfunc(terms => {
+                const a = terms.filter(ele => !(ele.value === i.value))
+                return a
+            })
         }
     }
 
@@ -31,7 +63,7 @@ export default function OrderPageTemsTable(props) {
                 <div className="col-3  pt-3 pb-3">
                     <Select
                         options={
-                            termsAndCondtions.map(i => ({
+                            termsAndConditions.map(i => ({
                                 value: i.id,
                                 label: i.Name
                             }))
@@ -42,15 +74,15 @@ export default function OrderPageTemsTable(props) {
                 <div className=" col-9 pt-3" >
                     <Table className='table  table-borderless table-hover  '>
                         <tr>
-                            <th>Terms And Condation </th>
+                            <th>Terms and Condition</th>
                             <th>Action</th>
                         </tr >
                         {tableList.map((i, k) => (
-                            <tr className='bordered-gray'>
+                            <tr className='bordered-gray' style={{ display: (i.IsDeleted === 0) ? "block" : "none" }}>
                                 <td className="px-2">
                                     <spam className="form-label">{k + 1}</spam>{i.label}</td>
                                 <td> <i className="mdi mdi-delete font-size-18 text-danger text-right"
-                                    onClick={() => { setfunc(terms => terms.filter(f => !(f.value === i.value))) }}></i></td>
+                                    onClick={() => ondelete(i)}></i></td>
                             </tr>
                         )
                         )}
