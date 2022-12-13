@@ -42,7 +42,7 @@ const WorkOrder = (props) => {
     const [pageMode, setPageMode] = useState("save");
     const [userPageAccessState, setUserPageAccessState] = useState('');
     const [itemselect, setItemselect] = useState("")
-
+    let numberOfLot="1"
     const initialFiled = useMemo(() => {
 
         const fileds = {
@@ -240,8 +240,8 @@ const WorkOrder = (props) => {
         dispatch(postGoButtonForWorkOrder_MasterSuccess([]))
         setItemselect(e)
         setState((i) => {
-            i.values.NumberOfLot = "";
-            i.values.Quantity = "";
+            i.values.NumberOfLot = "1";
+            i.values.Quantity = e.EstimatedOutputQty;
             return i
         })
     }
@@ -268,7 +268,7 @@ const WorkOrder = (props) => {
         dispatch(postGoButtonForWorkOrder_MasterSuccess([]))
         state.hasValid.Quantity.valid = true
         let NumberLot = e / itemselect.EstimatedOutputQty
-        if (Number.isInteger(NumberLot)){
+        if (Number.isInteger(NumberLot)) {
             setState((i) => {
                 i.values.NumberOfLot = NumberLot;
                 i.values.Quantity = e;
@@ -276,14 +276,14 @@ const WorkOrder = (props) => {
                 return i
             })
         }
-           else{
+        else {
             setState((i) => {
                 i.values.NumberOfLot = "1.000000";
                 i.values.Quantity = e;
                 // i.hasValid.Quantity.valid = false
                 return i
             })
-           }
+        }
     }
 
     const goButtonHandler = (event) => {
@@ -495,15 +495,12 @@ const WorkOrder = (props) => {
                                         <Label className=" p-2"
                                             style={{ width: "130px" }}>{fieldLabel.EstimatedOutputQty} :</Label>
 
-
                                         <Label
                                             className="p-2 "
                                             style={{ color: "#000000", width: "130px" }}>&nbsp;&nbsp;
                                             {pageMode === "edit" ? EditData.EstimatedOutputQty : itemselect.EstimatedOutputQty}
                                             &nbsp;&nbsp;(1 lot)
                                         </Label>
-
-
 
                                     </FormGroup>
                                 </div >
@@ -519,6 +516,7 @@ const WorkOrder = (props) => {
                                             <Input
                                                 name="NumberOfLot"
                                                 value={values.NumberOfLot}
+                                                // defaultValue={itemselect.EstimatedOutputQty}
                                                 // disabled={pageMode === "edit" ? true : false}
                                                 type="text"
                                                 className={isError.NumberOfLot.length > 0 ? "is-invalid form-control" : "form-control"}
@@ -545,6 +543,7 @@ const WorkOrder = (props) => {
                                             <Input
                                                 name="Quantity"
                                                 value={values.Quantity}
+                                                // defaultValue={itemselect.EstimatedOutputQty}
                                                 type="text"
                                                 className={isError.Quantity.length > 0 ? "is-invalid form-control" : "form-control"}
                                                 placeholder="Please Enter Quantity"
@@ -579,8 +578,7 @@ const WorkOrder = (props) => {
 
                         </div>
 
-
-                        <PaginationProvider pagination={paginationFactory(pageOptions)}>
+                        {BOMItems.length > 0 ? <PaginationProvider pagination={paginationFactory(pageOptions)}>
                             {({ paginationProps, paginationTableProps }) => (
                                 <ToolkitProvider
                                     keyField={"id"}
@@ -620,7 +618,8 @@ const WorkOrder = (props) => {
                                 </ToolkitProvider>
                             )}
 
-                        </PaginationProvider>
+                        </PaginationProvider> : <></>}
+
 
 
                         {BOMItems.length > 0 ? <FormGroup className="mt-3">
