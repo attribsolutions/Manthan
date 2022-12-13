@@ -323,7 +323,7 @@ const WorkOrder = (props) => {
                 NumberOfLot: values.NumberOfLot,
                 Quantity: values.Quantity,
                 Company: userCompany(),
-                Division: 2,
+                Party: 2,
                 CreatedBy: createdBy(),
                 UpdatedBy: createdBy(),
                 WorkOrderItems: WorkOrderItems
