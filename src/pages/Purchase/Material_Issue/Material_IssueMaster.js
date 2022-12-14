@@ -258,6 +258,7 @@ const MaterialIssueMaster = (props) => {
 
     function ItemOnchange(e) {
         debugger
+        dispatch(postGoButtonForMaterialIssue_MasterSuccess([]))
         setItemselect(e)
         setState((i) => {
             i.values.NumberOfLots = "1";
@@ -554,6 +555,7 @@ const MaterialIssueMaster = (props) => {
                                                 <span className="invalid-feedback">{isError.Quantity}</span>
                                             )}
                                         </Col>
+                                        
                                         <div className="col col-1">
                                             <Button
                                                 color="btn btn-outline-success border-2 font-size-12 " style={{ marginTop: '3px' }}
@@ -565,6 +567,7 @@ const MaterialIssueMaster = (props) => {
                             </div>
                         </div>
 
+                        {ItemsData.length>0 ?
                         <PaginationProvider pagination={paginationFactory(pageOptions)}>
                             {({ paginationProps, paginationTableProps }) => (
                                 <ToolkitProvider
@@ -604,6 +607,7 @@ const MaterialIssueMaster = (props) => {
                             )}
 
                         </PaginationProvider>
+                        :null}
 
 
                         {/* <div className="px-2 mb-1 mt-n3" style={{ marginRight: '-28px', marginLeft: "-8px" }}>
