@@ -567,7 +567,7 @@ const Order = (props) => {
             OrderType: 1,
             POType: 1,
             Division: division,
-            IsOpenPO: true,
+            IsOpenPO: false,
             POFromDate: currentDate(),
             POToDate: currentDate(),
             CreatedBy: createdBy(),
