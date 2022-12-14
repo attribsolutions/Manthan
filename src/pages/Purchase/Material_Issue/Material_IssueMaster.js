@@ -87,7 +87,7 @@ const MaterialIssueMaster = (props) => {
         GoButton: state.MaterialIssueReducer.GoButton
     }));
 
-    const { ItemsData = [], id = '', Item = '', Unit = '' } = GoButton
+    const { ItemsData = [] } = GoButton
 
     const BatchesData = ItemsData.map((index) => {
         return index.BatchesData
@@ -97,8 +97,6 @@ const MaterialIssueMaster = (props) => {
         dispatch(postGoButtonForMaterialIssue_MasterSuccess([]))
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(75))
-        dispatch(getItemList())
-        // dispatch(getBaseUnit_ForDropDown());
     }, []);
 
     const location = { ...history.location }
