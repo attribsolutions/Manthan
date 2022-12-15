@@ -119,11 +119,13 @@ function ItemTab(props) {
                             <Row className=" mt-3">
                                 <Col >
                                     <Button
-                                        className="btn btn-sm mt-1 mt-3 btn-light  btn-outline-primary  "
+
+                                        className=" button_add"
+                                        color="btn btn-outline-primary border-2 font-size-12"
                                         type="button"
                                         onClick={addRowsHandler}
                                     >
-                                        <i className="dripicons-plus mt-3"> </i> Add
+                                     <i className="dripicons-plus mt-3"> </i>
                                     </Button>
                                 </Col>
                             </Row>

@@ -715,9 +715,7 @@ const Order = (props) => {
                                 <FormGroup className="row  " >
                                     <Label className=" p-2"
                                         style={{ width: "115px" }}>Billing Address</Label>
-
                                     <div className="col col-6">
-
                                         <Select
                                             value={billAddr}
                                             classNamePrefix="select2-Customer"
@@ -732,7 +730,6 @@ const Order = (props) => {
                                             }}
                                             onChange={(e) => { setbillAddr(e) }}
                                         />
-
                                     </div>
                                 </FormGroup>
                             </div >
@@ -740,10 +737,7 @@ const Order = (props) => {
                                 <FormGroup className=" row " >
                                     <Label className=" p-2"
                                         style={{ width: "130px" }}>Shipping Address</Label>
-
-
                                     <div className="col col-6">
-
                                         <Select
                                             value={shippAddr}
                                             classNamePrefix="select2-Customer"
@@ -758,10 +752,13 @@ const Order = (props) => {
                                             options={supplierAddress}
                                             onChange={(e) => { setshippAddr(e) }}
                                         />
-
                                     </div>
-                                    <Col sm="2">
-                                        <Row className="justify-content-md-left">
+                                </FormGroup>
+                            </div >
+                            <div className="col col-6">
+                                {/* <Col sm="2"> */}
+                                    <FormGroup className=" row " >
+                                        {/* <Row className="justify-content-md-left"> */}
                                             <Label className="col-sm-6 col-form-label mt-2" style={{ width: "115px" }} >
                                                 Is Open PO
                                             </Label>
@@ -777,17 +774,17 @@ const Order = (props) => {
                                                     />
                                                 </div>
                                             </Col>
-                                        </Row>
-                                    </Col>
-                                </FormGroup>
-                            </div >
+                                        {/* </Row> */}
+                                    </FormGroup>
+                                {/* </Col> */}
+                            </div>
                         </div>
-                        <div className="row" style={{ display: isOpenPO ? "block" : "none" }}>
-                        <div className="col col-6" >
+                        <div className="row" >
+                            <div className="col col-6"  style={{ display: isOpenPO ? "block" : "none"}}>
                                 <FormGroup className=" row  " >
                                     <Label className=" p-2"
-                                        style={{ width: "130px" }}>PO From Date</Label>
-                                    <div className="col col-6 sm-1">
+                                        style={{ width: "115px" }}>PO From Date</Label>
+                                    <div className="col col-6 ">
                                         <Flatpickr
                                             id="pofromdate"
                                             name="pofromdate"
@@ -803,15 +800,13 @@ const Order = (props) => {
                                             onChange={(e, date) => { setpoFromDate(date) }}
                                         />
                                     </div>
-
-
                                 </FormGroup>
                             </div >
-                            <div className="col col-6" >
+                            <div className="col col-6" style={{ display: isOpenPO ? "block" : "none"}} >
                                 <FormGroup className=" row  " >
                                     <Label className=" p-2"
-                                        style={{ width: "130px" }}>PO To Date</Label>
-                                    <div className="col col-6 sm-1">
+                                      style={{ width:"130px" }}>PO To Date</Label>
+                                    <div className="col col-6 ">
                                         <Flatpickr
                                             id="potodate"
                                             name="potodate"
@@ -827,8 +822,6 @@ const Order = (props) => {
                                             onChange={(e, date) => { setpoToDate(date) }}
                                         />
                                     </div>
-
-
                                 </FormGroup>
                             </div >
                         </div>
