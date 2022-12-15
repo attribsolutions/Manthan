@@ -9,8 +9,17 @@ import {
   GET_ITEM_UNITS_DROPDOWN_API_SUCCESS,
   POST_BOM, POST_BOM_SUCCESS,
   UPDATE_BOM_LIST,
-  UPDATE_BOM_LIST_SUCCESS
+  UPDATE_BOM_LIST_SUCCESS,
+  BOM_LIST_FILTERS
 } from "./actionTypes";
+
+
+
+export const BOMlistfilters = filter => ({
+  type:BOM_LIST_FILTERS,
+  payload: filter,
+})
+
 
 // post api
 export const postBOM = (data) => ({

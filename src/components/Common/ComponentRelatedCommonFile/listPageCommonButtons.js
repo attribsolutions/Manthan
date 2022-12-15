@@ -204,13 +204,14 @@ export const excelDownCommonFunc = (props) => {//++++++++Common Excel Covernt Da
     return downList
 }
 
-export const currentDate = () => {//+++++++++++++++ Cuurnt Date++++++++++++++++++++++++++++++++++++
+const currentDatefunc = () => {//+++++++++++++++ Cuurnt Date++++++++++++++++++++++++++++++++++++
     const current = new Date();
     const month = current.getMonth() + 1;
     const currentDate = `${current.getFullYear()}-${month < 10 ? `0${month}` :
         `${month}`}-${current.getDate() < 10 ? `0${current.getDate()}` : `${current.getDate()}`}`;
     return currentDate
 }
+export const currentDate = currentDatefunc()
 
 export const createdBy = () => {//++++++++++++++++++++++ Seesion User Id+++++++++++++++++++++++++++++
     let createdBy = 0

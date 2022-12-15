@@ -10,7 +10,7 @@ import Breadcrumb from "../../../../components/Common/Breadcrumb";
 import { useHistory } from "react-router-dom";
 import { currentDate, excelDownCommonFunc, userCompany } from "../../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import { useMemo } from "react";
-import { deleteBOMId, deleteBOMIdSuccess, editBOMList, getBOMListPage, updateBOMListSuccess } from "../../../../store/Purchase/BOMRedux/action";
+import { BOMlistfilters, deleteBOMId, deleteBOMIdSuccess, editBOMList, getBOMListPage, updateBOMListSuccess } from "../../../../store/Purchase/BOMRedux/action";
 import BOMMaster from "../BOMMaster/BOMIndex";
 
 const BOMList = () => {
@@ -22,8 +22,7 @@ const BOMList = () => {
 
     const [pageMode, setpageMode] = useState(BIllOf_MATERIALS_LIST)
     const [userAccState, setUserAccState] = useState('');
-    const [fromdate, setFromdate] = useState();
-    const [todate, setTodate] = useState();
+
     const reducers = useSelector(
         (state) => ({
             tableList: state.BOMReducer.BOMList,
@@ -31,10 +30,13 @@ const BOMList = () => {
             updateMsg: state.BOMReducer.updateMsg,
             postMsg: state.OrderReducer.postMsg,
             editData: state.BOMReducer.editData,
+            bomlistFilters: state.BOMReducer.bomlistFilters,
             userAccess: state.Login.RoleAccessUpdateData,
             pageField: state.CommonPageFieldReducer.pageFieldList,
         })
     );
+    const { userAccess, pageField, tableList, bomlistFilters } = reducers;
+    const { fromdate, todate } = bomlistFilters;
 
     const action = {
         getList: getBOMListPage,
@@ -55,7 +57,6 @@ const BOMList = () => {
 
     }, []);
 
-    const { userAccess, pageField, tableList } = reducers;
 
     const downList = useMemo(() => {
         let PageFieldMaster = []
@@ -74,28 +75,26 @@ const BOMList = () => {
         }
     }, [userAccess])
 
-    const goButtonHandler = (onload = false) => {
-
-        let FromDate
-        let ToDate
-
-        if (onload) {
-            const currentdate = currentDate()
-            FromDate = currentdate;
-            ToDate = currentdate;
-        } else {
-            ToDate = todate;
-            FromDate = fromdate;
-        }
-
+    const goButtonHandler = () => {
         const jsonBody = JSON.stringify({
-            FromDate: FromDate,
-            ToDate: ToDate,
+            FromDate: fromdate,
+            ToDate: todate,
             Company: userCompany(),
         });
         dispatch(getBOMListPage(jsonBody));
     }
 
+    function fromdateOnchange(e, date) {
+        let newObj = { ...bomlistFilters }
+        newObj.fromdate = date
+        dispatch(BOMlistfilters(newObj))
+    }
+
+    function todateOnchange(e, date) {
+        let newObj = { ...bomlistFilters }
+        newObj.todate = date
+        dispatch(BOMlistfilters(newObj))
+    }
     return (
         <React.Fragment>
             <div className="page-content">
@@ -122,10 +121,8 @@ const BOMList = () => {
                                             altFormat: "d-m-Y",
                                             dateFormat: "Y-m-d",
                                             defaultDate: "today"
-
                                         }}
-                                        onChange={(e, date) => { setFromdate(date) }}
-                                        onReady={(e, date) => { setFromdate(date) }}
+                                        onChange={fromdateOnchange}
                                     />
                                 </Col>
                             </FormGroup>
@@ -133,7 +130,7 @@ const BOMList = () => {
                         <Col sm="5" className="">
                             <FormGroup className="mb- row mt-3 " >
                                 <Label className="col-sm-5 p-2"
-                                    style={{ width: "65px",marginRight: "0.4cm" }}>To Date</Label>
+                                    style={{ width: "65px", marginRight: "0.4cm" }}>To Date</Label>
                                 <Col sm="6 ">
                                     <Flatpickr
                                         name="todate"
@@ -145,9 +142,7 @@ const BOMList = () => {
                                             dateFormat: "Y-m-d",
                                             defaultDate: "today"
                                         }}
-                                        onChange={(e, date) => { setTodate(date) }}
-                                        onReady={(e, date) => { setTodate(date) }}
-
+                                        onChange={todateOnchange}
                                     />
                                 </Col>
                             </FormGroup>

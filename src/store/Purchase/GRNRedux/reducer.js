@@ -10,7 +10,7 @@ import {
 } from "./actionType"
 
 
-const date = currentDate();
+// const date = currentDate();
 
 const INIT_STATE = {
   postMsg: { Status: false },
@@ -20,7 +20,7 @@ const INIT_STATE = {
   GRNList: [],
   grnItemList: [],
   GRNitem: { Status: false, Data: [], },
-  grnlistFilter: { fromdate: date, todate: date, supplierSelect: '' }
+  grnlistFilter: { fromdate: currentDate, todate: currentDate, supplierSelect: '' }
 }
 
 const GRNReducer = (state = INIT_STATE, action) => {

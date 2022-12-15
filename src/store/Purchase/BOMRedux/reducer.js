@@ -1,4 +1,6 @@
+import { currentDate } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons"
 import {
+    BOM_LIST_FILTERS,
     DELETE_BOM_LIST_PAGE_SUCCESS,
     EDIT_BOM_LIST_ID_SUCCESS,
     GET_BOM_LIST_PAGE_SUCCESS,
@@ -14,10 +16,18 @@ const INIT_STATE = {
     editData: { Status: false, },
     updateMsg: { Status: false },
     deleteMsg: { Status: false },
+    bomlistFilters: { fromdate: currentDate, todate: currentDate, }
 }
 
 const BOMReducer = (state = INIT_STATE, action) => {
     switch (action.type) {
+
+
+        case BOM_LIST_FILTERS:
+            return {
+                ...state,
+                bomlistFilters: action.payload,
+            }
 
         case POST_BOM_SUCCESS:
             return {
