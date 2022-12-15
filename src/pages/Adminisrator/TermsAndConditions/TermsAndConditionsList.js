@@ -24,11 +24,11 @@ const TermsAndConditionsList = (props) => {
   //useSelector is used to access the redux store in function component
   const reducers = useSelector(
     (state) => ({
-      tableList: state.TermsAndCondtionsReducer.TermsAndConditionsList,
-      postMsg: state.TermsAndCondtionsReducer.PostData,
-      editData: state.TermsAndCondtionsReducer.TermsAndCondtionseditData,
-      updateMsg: state.TermsAndCondtionsReducer.TermsAndCondtionsupdateMessage,
-      deleteMsg: state.TermsAndCondtionsReducer.TermsAndCondtionsdeleteMessage,
+      tableList: state.TermsAndConditionsReducer.TermsAndConditionsList,
+      postMsg: state.TermsAndConditionsReducer.PostData,
+      editData: state.TermsAndConditionsReducer.TermsAndConditionseditData,
+      updateMsg: state.TermsAndConditionsReducer.TermsAndConditionsupdateMessage,
+      deleteMsg: state.TermsAndConditionsReducer.TermsAndConditionsdeleteMessage,
       userAccess: state.Login.RoleAccessUpdateData,
       pageField: state.CommonPageFieldReducer.pageFieldList
     })

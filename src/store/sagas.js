@@ -49,6 +49,7 @@ import SupplierSaga from "./CommonAPI/SupplierRedux/saga"
 import GRNSaga from "./Purchase/GRNRedux/saga"
 import BOMSaga from "./Purchase/BOMRedux/saga"
 import WorkOrderSaga from "./Purchase/WorkOrder/saga"
+import MaterialIssueSaga from "./Purchase/Matrial_Issue/saga"
 
 export default function* rootSaga() {
   yield all([
@@ -93,6 +94,6 @@ export default function* rootSaga() {
     fork(PartyItemssaga),
     fork(BOMSaga),
     fork(WorkOrderSaga),
-
+    fork(MaterialIssueSaga),
   ])
 }
