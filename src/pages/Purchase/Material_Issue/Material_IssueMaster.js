@@ -357,10 +357,11 @@ const MaterialIssueMaster = (props) => {
                         <Thead  >
                             <tr style={{ zIndex: "23" }} className="">
                                 <th className="">Batch Code </th>
+                                <th className="" >Supplier BatchCode</th>
                                 <th className="">Batch Date</th>
                                 <th className="">Stock Qty</th>
                                 <th className="" >Qty</th>
-                                <th className="" >Supplier BatchCode</th>
+                               
                             </tr>
                         </Thead>
 
@@ -372,6 +373,13 @@ const MaterialIssueMaster = (props) => {
                                             <div style={{ width: "150px" }}>
                                                 <Label  >
                                                     {index.SystemBatchCode}
+                                                </Label>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div style={{ width: "150px" }}>
+                                                <Label>
+                                                    {index.BatchCode}
                                                 </Label>
                                             </div>
                                         </td>
@@ -398,13 +406,7 @@ const MaterialIssueMaster = (props) => {
 
                                             </div>
                                         </td>
-                                        <td>
-                                            <div style={{ width: "150px" }}>
-                                                <Label>
-                                                    {index.BatchCode}
-                                                </Label>
-                                            </div>
-                                        </td>
+                                        
                                     </tr>
                                 )
 
