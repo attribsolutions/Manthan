@@ -44,7 +44,7 @@ function* WorkOrderGoButton_post_gunfun({ data }) {
 
 // WOrk Order Post API
 function* Post_WorkOrder_GenratorFunction({ Data }) {
-  debugger
+  
   yield put(SpinnerState(true))
   try {
    
@@ -63,10 +63,10 @@ function* Post_WorkOrder_GenratorFunction({ Data }) {
 
 // get Work Order List API Using post method
 function* GetWorkOrderGenFunc({ filters }) {
-debugger
+
   yield put(SpinnerState(true))
   try {
-    debugger
+    
     const response = yield call(WorkOrder_Get_API, filters);
     const newList = yield response.Data.map((i) => {
       var date = convertDatefunc(i.WorkOrderDate)
