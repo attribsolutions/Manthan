@@ -226,10 +226,10 @@ const WorkOrder = (props) => {
     }));
 
     useEffect(() => {
-        let date = currentDate();
+        
         const jsonBody = JSON.stringify({
             FromDate: "2022-12-01",
-            ToDate: date,
+            ToDate: currentDate,
             Company: userCompany(),
         });
         dispatch(getBOMList(jsonBody));

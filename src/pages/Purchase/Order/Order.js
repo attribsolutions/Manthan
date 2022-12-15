@@ -56,13 +56,13 @@ const Order = (props) => {
 
     //Access redux store Data /  'save_ModuleSuccess' action data
 
-    const [podate, setpoDate] = useState(() => currentDate());
-    const [deliverydate, setdeliverydate] = useState(() => currentDate())
+    const [podate, setpoDate] = useState(currentDate);
+    const [deliverydate, setdeliverydate] = useState(currentDate)
     const [billAddr, setbillAddr] = useState('')
     const [shippAddr, setshippAddr] = useState('')
     const [isOpenPO, setisOpenPO] = useState(false)
-    const [poFromDate, setpoFromDate] = useState(() => currentDate())
-    const [poToDate, setpoToDate] = useState(() => currentDate())
+    const [poFromDate, setpoFromDate] = useState(currentDate)
+    const [poToDate, setpoToDate] = useState(currentDate)
 
     const [supplierSelect, setsupplierSelect] = useState('');
     const [orderAmount, setOrderAmount] = useState(0);

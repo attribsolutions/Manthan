@@ -52,8 +52,8 @@ const GRNAdd = (props) => {
 
     //Access redux store Data /  'save_ModuleSuccess' action data
 
-    const [grnDate, setgrnDate] = useState(() => currentDate());
-    const [invoiceDate, setInvoiceDate] = useState(() => currentDate());
+    const [grnDate, setgrnDate] = useState(currentDate);
+    const [invoiceDate, setInvoiceDate] = useState( currentDate);
 
     const [deliverydate, setdeliverydate] = useState("today")
     const [billAddr, setbillAddr] = useState('')

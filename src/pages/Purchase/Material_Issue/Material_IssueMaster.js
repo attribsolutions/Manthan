@@ -118,7 +118,7 @@ const MaterialIssueMaster = (props) => {
     useEffect(() => {
         const jsonBody = JSON.stringify({
             FromDate: "2022-12-01",
-            ToDate: currentDate()
+            ToDate: currentDate
         });
         dispatch(getWorkOrderListPage(jsonBody));
     }, [])

@@ -86,6 +86,7 @@ const BOMMaster = (props) => {
         dispatch(getItemList())
         // dispatch(getBaseUnit_ForDropDown());
     }, []);
+    
     const location = { ...history.location }
     const hasShowloction = location.hasOwnProperty("editValue")
     const hasShowModal = props.hasOwnProperty("editValue")
@@ -177,6 +178,7 @@ const BOMMaster = (props) => {
             }));
         }
     }, [postMsg])
+
     useEffect(() => {
         debugger
         if ((updateMsg.Status === true) && (updateMsg.StatusCode === 200) && !(modalCss)) {
@@ -194,6 +196,7 @@ const BOMMaster = (props) => {
             );
         }
     }, [updateMsg, modalCss]);
+    
     useEffect(() => {
         if (pageField) {
             const fieldArr = pageField.PageFieldMaster
@@ -225,7 +228,7 @@ const BOMMaster = (props) => {
     const { isError } = state;
     const { fieldLabel } = state;
     const formSubmitHandler = (event) => {
-        
+        debugger
         const BOMItems = ItemTabDetails.map((index) => ({
             Item: index.Item,
             Quantity: index.Quantity,
@@ -233,7 +236,7 @@ const BOMMaster = (props) => {
         }))
         event.preventDefault();
         if (formValid(state, setState)) {
-            
+            debugger
             const jsonBody = JSON.stringify({
                 BomDate: values.BomDate,
                 EstimatedOutputQty: values.EstimatedOutputQty,
