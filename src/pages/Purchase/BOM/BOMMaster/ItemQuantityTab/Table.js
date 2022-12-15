@@ -1,25 +1,38 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Table, } from 'reactstrap';
+import { Button, Input, Table, } from 'reactstrap';
 import { Tbody, Thead } from 'react-super-responsive-table';
 
 function BOMTable(props) {
 
-    const onDeleteHandeler = (ele) => {
- 
-        if (!(ele === 0)) {
-          var fil = props.tableData.filter((i) => {
-            return !(i.id === ele.id);
-          });
-          props.func(fil);
-        }
-      };
+  const [quantity, setQuantity] = useState()
+  const onDeleteHandeler = (ele) => {
 
-  const tableRows = props.tableData.map((info) => {
+    if (!(ele === 0)) {
+      var fil = props.tableData.filter((i) => {
+        return !(i.id === ele.id);
+      });
+      props.func(fil);
+    }
+  };
+
+  const handleChange = (event, info) => {
+    info.Quantity = event.target.value
+  };
+
+  const tableRows = props.tableData.map((info, key) => {
 
     return (
       <tr>
         <td>{info.ItemName}</td>
-        <td>{info.Quantity}</td>
+        <td>
+          <div className='text-center'style={{ width: "150px" }}>
+            <Input type="text"
+              defaultValue={info.Quantity}
+              onChange={(event) => handleChange(event, info)}
+            >
+            </Input>
+          </div>
+        </td>
         <td>{info.UnitName}</td>
         <td>
           <Button
