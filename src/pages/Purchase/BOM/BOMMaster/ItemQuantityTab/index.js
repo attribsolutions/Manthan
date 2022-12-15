@@ -98,7 +98,9 @@ function ItemTab(props) {
                         </FormGroup>
                         <FormGroup className="mb-3 col col-sm-3 " >
                             <Label >Item Quantity</Label>
-                            <Input type="text"
+                            <Input
+                                style={{ textAlign: "right" }}
+                                type="text"
                                 value={Quantity}
                                 placeholder="Please Enter Margin"
                                 autoComplete="off"
