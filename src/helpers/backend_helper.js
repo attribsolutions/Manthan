@@ -385,6 +385,9 @@ export const WorkOrder_edit_Api = (id1) => get(`${url.WORK_ORDER_LIST_API}/${id1
 export const WorkOrder_Update_Api = (data, id) => put(`${url.WORK_ORDER_LIST_API}/${id}`, data)// update api
 export const WorkOrder_Delete_Api = (id) => del(`${url.WORK_ORDER_LIST_API}/${id}`)// delete api
 
+// Material Issue
+export const Material_Issue_GoButton_Post_API = (data) => post(url.GO_BUTTON_POST_API_FOR_MATERIAL_ISSUE, data)// go button postapi
+
 export {
   getLoggedInUser,
   isUserAuthenticated,

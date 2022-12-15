@@ -567,10 +567,14 @@ const Order = (props) => {
             OrderType: 1,
             POType: 1,
             Division: division,
+            IsOpenPO: false,
+            POFromDate: currentDate(),
+            POToDate: currentDate(),
             CreatedBy: createdBy(),
             UpdatedBy: createdBy(),
             OrderItem: itemArr,
-            OrderTermsAndConditions: termsAndCondition
+            OrderTermsAndConditions: termsAndCondition,
+           
         });
 
         if (pageMode === "edit") {
@@ -579,6 +583,7 @@ const Order = (props) => {
         } else {
 
             dispatch(postOrder(jsonBody))
+            console.log("Oder Post Json",jsonBody)
         }
 
 

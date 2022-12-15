@@ -50,6 +50,7 @@ import PartySubPartyReducer from "./Administrator/PartySubPartyRedux/reducer"
 import PartyItemsReducer from "./Administrator/PartyItemsRedux/reducer"
 import BOMReducer from "./Purchase/BOMRedux/reducer"
 import WorkOrderReducer from "./Purchase/WorkOrder/reducer"
+import MaterialIssueReducer from "./Purchase/Matrial_Issue/reducer"
 
 const rootReducer = combineReducers({
 
@@ -110,7 +111,7 @@ const rootReducer = combineReducers({
   PartyItemsReducer,
   BOMReducer,
   WorkOrderReducer,
-
+  MaterialIssueReducer,
 
 })
 

@@ -80,14 +80,12 @@ const BOMMaster = (props) => {
         GetItemUnits: state.BOMReducer.GetItemUnits,
         Items: state.ItemMastersReducer.pages,
     }));
-
     useEffect(() => {
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(69))
         dispatch(getItemList())
         // dispatch(getBaseUnit_ForDropDown());
     }, []);
-
     const location = { ...history.location }
     const hasShowloction = location.hasOwnProperty("editValue")
     const hasShowModal = props.hasOwnProperty("editValue")
@@ -96,15 +94,12 @@ const BOMMaster = (props) => {
     useEffect(() => {
         let userAcc = null;
         let locationPath = location.pathname;
-
         if (hasShowModal) {
             locationPath = props.masterPath;
         };
-
         userAcc = userAccess.find((inx) => {
             return (`/${inx.ActualPagePath}` === locationPath)
         })
-
         if (userAcc) {
             setUserPageAccessState(userAcc)
         };
@@ -112,9 +107,7 @@ const BOMMaster = (props) => {
 
     //This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
     useEffect(() => {
-
         if ((hasShowloction || hasShowModal)) {
-
             let hasEditVal = null
             if (hasShowloction) {
                 setPageMode(location.pageMode)
@@ -131,7 +124,6 @@ const BOMMaster = (props) => {
                 setEditData(hasEditVal);
                 const { id, BomDate, Item, ItemName, Unit, UnitName, EstimatedOutputQty, Comment, IsActive } = hasEditVal
                 const { values, fieldLabel, hasValid, required, isError } = { ...state }
-
                 hasValid.id.valid = true;
                 hasValid.BomDate.valid = true;
                 hasValid.ItemName.valid = true;
@@ -139,7 +131,6 @@ const BOMMaster = (props) => {
                 hasValid.EstimatedOutputQty.valid = true;
                 hasValid.Comment.valid = true;
                 hasValid.IsActive.valid = true;
-
                 values.id = id
                 values.BomDate = BomDate;
                 values.EstimatedOutputQty = EstimatedOutputQty;
@@ -186,7 +177,6 @@ const BOMMaster = (props) => {
             }));
         }
     }, [postMsg])
-
     useEffect(() => {
         debugger
         if ((updateMsg.Status === true) && (updateMsg.StatusCode === 200) && !(modalCss)) {
@@ -204,24 +194,20 @@ const BOMMaster = (props) => {
             );
         }
     }, [updateMsg, modalCss]);
-
     useEffect(() => {
         if (pageField) {
             const fieldArr = pageField.PageFieldMaster
             comAddPageFieldFunc({ state, setState, fieldArr })// new change
         }
     }, [pageField])
-
     const ItemDropdown_Options = Items.map((index) => ({
         value: index.id,
         label: index.Name,
     }));
-
     const Unit_DropdownOptions = GetItemUnits.map((data) => ({
         value: data.value,
         label: data.label
     }))
-
     function Items_Dropdown_Handler(e) {
         const jsonBody = JSON.stringify({
             Item: e.value,
@@ -235,11 +221,9 @@ const BOMMaster = (props) => {
             return a
         })
     }
-
     const values = { ...state.values }
     const { isError } = state;
     const { fieldLabel } = state;
-
     const formSubmitHandler = (event) => {
         debugger
         const BOMItems = ItemTabDetails.map((index) => ({
@@ -247,12 +231,10 @@ const BOMMaster = (props) => {
             Quantity: index.Quantity,
             Unit: index.Unit
         }))
-
         event.preventDefault();
         if (formValid(state, setState)) {
             debugger
             const jsonBody = JSON.stringify({
-
                 BomDate: values.BomDate,
                 EstimatedOutputQty: values.EstimatedOutputQty,
                 Comment: values.Comment,
@@ -263,7 +245,6 @@ const BOMMaster = (props) => {
                 Company: userCompany(),
                 BOMItems: BOMItems
             });
-
             if (BOMItems.length === 0) {
                 dispatch(
                     AlertState({
@@ -276,9 +257,7 @@ const BOMMaster = (props) => {
                 );
                 return;
             }
-
             if (pageMode === 'edit') {
-
                 dispatch(updateBOMList(jsonBody, `${EditData.id}/${EditData.Company}`));
                 console.log("update jsonBody", jsonBody)
             }
@@ -288,31 +267,21 @@ const BOMMaster = (props) => {
             }
         }
     };
-
-
     var IsEditMode_Css = ''
     if ((modalCss) || (pageMode === "dropdownAdd")) { IsEditMode_Css = "-5.5%" };
-
     if (!(userPageAccessState === '')) {
         return (
-
-
             <React.Fragment>
-
                 <MetaTags>
                     <title>{userPageAccessState.PageHeading}| FoodERP-React FrontEnd</title>
                 </MetaTags>
-                <div className="page-content" style={{marginBottom:"5cm"}}>
-
+                <div className="page-content" style={{ marginBottom: "5cm" }}>
                     <Breadcrumb pageHeading={userPageAccessState.PageHeading}
                         showCount={true}
                     />
                     <form onSubmit={formSubmitHandler} ref={formRef} noValidate>
-
                         <div className="px-2 mb-1 mt-n3 c_card_filter header" >
-
-                            <div  className=" mt-1 row  ">
-
+                            <div className=" mt-1 row  ">
                                 <Col sm="6">
                                     <FormGroup className="mb-2 row mt-2  ">
                                         <Label className="mt-2" style={{ width: "115px" }}>{fieldLabel.BomDate} </Label>
@@ -337,17 +306,12 @@ const BOMMaster = (props) => {
                                                 <span className="invalid-feedback">{isError.BomDate}</span>
                                             )}
                                         </Col>
-
                                     </FormGroup>
                                 </Col>
-
                                 <Col sm="6">
-
-
                                     <FormGroup className="mb-2 row mt-2 ">
-                                        <Label className="mt-2" style={{ width: "115px"  }} >{fieldLabel.EstimatedOutputQty} </Label>
+                                        <Label className="mt-2" style={{ width: "115px" }} >{fieldLabel.EstimatedOutputQty} </Label>
                                         <Col sm="7">
-
                                             <Input
                                                 name="EstimatedOutputQty"
                                                 value={values.EstimatedOutputQty}
@@ -363,16 +327,11 @@ const BOMMaster = (props) => {
                                                 <span className="invalid-feedback">{isError.EstimatedOutputQty}</span>
                                             )}
                                         </Col>
-
                                     </FormGroup>
                                 </Col >
-
-
-
                                 <Col sm="6">
-
                                     <FormGroup className="mb-2 row  ">
-                                        <Label className="mt-2"  style={{ width: "115px" }}> {fieldLabel.ItemName} </Label>
+                                        <Label className="mt-2" style={{ width: "115px" }}> {fieldLabel.ItemName} </Label>
                                         <Col sm={7}>
                                             <Select
                                                 name="ItemName"
@@ -387,7 +346,6 @@ const BOMMaster = (props) => {
                                                     dispatch(Breadcrumb_inputName(hasSelect.label))
                                                 }
                                                 }
-
                                             />
                                             {isError.ItemName.length > 0 && (
                                                 <span className="text-danger f-8"><small>{isError.ItemName}</small></span>
@@ -395,11 +353,9 @@ const BOMMaster = (props) => {
                                         </Col>
                                     </FormGroup>
                                 </Col>
-
                                 <Col sm="6">
-
                                     <FormGroup className="mb-2 row  ">
-                                        <Label className="mt-2"  style={{ width: "115px" }}> {fieldLabel.UnitName} </Label>
+                                        <Label className="mt-2" style={{ width: "115px" }}> {fieldLabel.UnitName} </Label>
                                         <Col sm={7}>
                                             <Select
                                                 name="UnitName"
@@ -409,7 +365,6 @@ const BOMMaster = (props) => {
                                                 classNamePrefix="dropdown"
                                                 options={Unit_DropdownOptions}
                                                 onChange={(hasSelect, evn) => onChangeSelect({ hasSelect, evn, state, setState, })}
-
                                             />
                                             {isError.UnitName.length > 0 && (
                                                 <span className="text-danger f-8"><small>{isError.UnitName}</small></span>
@@ -417,17 +372,10 @@ const BOMMaster = (props) => {
                                         </Col>
                                     </FormGroup>
                                 </Col>
-
-
-
-
-
                                 <Col sm="6">
-
                                     <FormGroup className="mb-2 row  ">
-                                        <Label className="mt-2"  style={{ width: "115px" }} >{fieldLabel.Comment} </Label>
+                                        <Label className="mt-2" style={{ width: "115px" }} >{fieldLabel.Comment} </Label>
                                         <Col sm="7">
-
                                             <Input
                                                 name="Comment"
                                                 value={values.Comment}
@@ -443,17 +391,12 @@ const BOMMaster = (props) => {
                                                 <span className="invalid-feedback">{isError.Comment}</span>
                                             )}
                                         </Col>
-
-
                                     </FormGroup>
                                 </Col>
-
-
                                 <Col sm="6">
-
                                     <FormGroup className=" row  ">
                                         <Row className="justify-content-md-left">
-                                            <Label className="col-sm-6 col-form-label mt-2"style={{ width: "115px" }} >{fieldLabel.IsActive}</Label>
+                                            <Label className="col-sm-6 col-form-label mt-2" style={{ width: "115px" }} >{fieldLabel.IsActive}</Label>
                                             <Col md={7} style={{ marginTop: '10px' }} >
 
                                                 <div className="form-check form-switch form-switch-md mb-3" >
@@ -473,54 +416,27 @@ const BOMMaster = (props) => {
                                         </Row>
                                     </FormGroup>
                                 </Col>
-
-
-
-
-
-
-                               
-
                             </div>
-
-
                         </div>
-                    <div className="px-2 mb-1 mt-n3"  style={{marginRight:'-28px',marginLeft:"-8px"}}>
-                    <Row>
-                            
-                                        <Row className="mt-3">
-                                            <Col className=" col col-12">
-                                                <ItemTab tableData={ItemTabDetails} func={setItemTabDetails} />
-                                            </Col>
-                                        </Row>
-                                    
-                                    <FormGroup>
-                                        
-                                            <Col sm={2}style={{marginLeft:"9px"}}>
-                                                <SaveButton pageMode={pageMode} userAcc={userPageAccessState}
-                                                    module={"BOMMaster"}
-                                                />
-
-                                            </Col>
-                                    
-                                    </FormGroup >
+                        <div className="px-2 mb-1 mt-n3" style={{ marginRight: '-28px', marginLeft: "-8px" }}>
+                            <Row>
+                                <Row className="mt-3">
+                                    <Col className=" col col-12">
+                                        <ItemTab tableData={ItemTabDetails} func={setItemTabDetails} />
+                                    </Col>
                                 </Row>
-                    </div>
-
-
+                                <FormGroup>
+                                    <Col sm={2} style={{ marginLeft: "9px" }}>
+                                        <SaveButton pageMode={pageMode} userAcc={userPageAccessState}
+                                            module={"BOMMaster"}
+                                        />
+                                    </Col>
+                                </FormGroup >
+                            </Row>
+                        </div>
                     </form>
-
-
-
                 </div>
             </React.Fragment>
-
-
-
-
-
-
-
             // <React.Fragment>
             //     <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
             //         <Container fluid>
@@ -602,14 +518,12 @@ const BOMMaster = (props) => {
             //                                                     dispatch(Breadcrumb_inputName(hasSelect.label))
             //                                                 }
             //                                                 }
-
             //                                             />
             //                                             {isError.ItemName.length > 0 && (
             //                                                 <span className="text-danger f-8"><small>{isError.ItemName}</small></span>
             //                                             )}
             //                                         </Col>
             //                                     </FormGroup>
-
             //                                     <Col md="1"></Col>
             //                                     <FormGroup className="mb-2 col col-sm-4 ">
             //                                         <Label > {fieldLabel.UnitName} </Label>
@@ -649,7 +563,6 @@ const BOMMaster = (props) => {
             //                                             <span className="invalid-feedback">{isError.Comment}</span>
             //                                         )}
             //                                     </FormGroup>
-
             //                                     <Col md="1"></Col>
             //                                     <FormGroup className="mb-2 col col-sm-3 mt-4">
             //                                         <Row className="justify-content-md-left">
@@ -676,7 +589,6 @@ const BOMMaster = (props) => {
 
             //                             </CardBody>
             //                         </Card>
-
             //                         <Row>
             //                             <Col md={12}  >
             //                                 <Row className="mt-3">
@@ -691,7 +603,6 @@ const BOMMaster = (props) => {
             //                                         <SaveButton pageMode={pageMode} userAcc={userPageAccessState}
             //                                             module={"BOMMaster"}
             //                                         />
-
             //                                     </Col>
             //                                 </Row>
             //                             </FormGroup >

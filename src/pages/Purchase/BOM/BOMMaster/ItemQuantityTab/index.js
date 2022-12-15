@@ -16,12 +16,10 @@ import BOMTable from './Table';
 import { GetItemUnitsDrodownAPI } from '../../../../../store/Purchase/BOMRedux/action';
 
 function ItemTab(props) {
-
     const dispatch = useDispatch();
     const [contentItemSelect, setContentItemSelect] = useState('');
     const [Quantity, setQuantity] = useState('');
     const [unitSelect, setUnitSelect] = useState('');
-
     const { Items, GetItemUnits } = useSelector((state) => ({
         Items: state.ItemMastersReducer.pages,
         GetItemUnits: state.BOMReducer.GetItemUnits,
@@ -30,14 +28,11 @@ function ItemTab(props) {
     useEffect(() => {
         dispatch(getItemList())
         dispatch(getBaseUnit_ForDropDown());
-
     }, [dispatch]);
-
     const ItemDropdown_Options = Items.map((index) => ({
         value: index.id,
         label: index.Name,
     }));
-
     const Unit_DropdownOptions = GetItemUnits.map((data) => ({
         value: data.value,
         label: data.label
@@ -51,20 +46,16 @@ function ItemTab(props) {
         setContentItemSelect(event);
         setUnitSelect('')
     };
-
     const Unit_Handler = (event) => {
         setUnitSelect(event);
     };
-
     const addRowsHandler = (data) => {
-
         const val = {
             Item: contentItemSelect === "" ? "" : contentItemSelect.value,
             ItemName: contentItemSelect.label,
             Unit: unitSelect === "" ? "" : unitSelect.value,
             UnitName: unitSelect.label,
             Quantity: Quantity,
-
         };
 
         if (!(contentItemSelect === "")
@@ -77,7 +68,6 @@ function ItemTab(props) {
             updatedTableData.push(val);
             props.func(updatedTableData)
             clearState();
-
         }
         else {
             alert("Please Enter value")
@@ -93,17 +83,11 @@ function ItemTab(props) {
         const result = event.target.value.replace(/\D/g, '');
         setQuantity(result);
     };
-
-
     return (
-
         <Row>
             <Col md={12}  >
                 <div className="px-2  mb-1 c_card_body " style={{ width: "100%" }}>
-                    {/* <Card className="mt-n3 text-black c_card_body "> */}
-                    {/* <CardBody className='c_card_body'> */}
                     <Row>
-
                         <FormGroup className="mb-3 col col-sm-3 ">
                             <Label>Content Item</Label>
                             <Select
@@ -112,20 +96,17 @@ function ItemTab(props) {
                                 onChange={ContentItem_Handler}
                             />
                         </FormGroup>
-
                         <FormGroup className="mb-3 col col-sm-3 " >
                             <Label >Item Quantity</Label>
                             <Input
-                            style={{textAlign:"right"}}
+                                style={{ textAlign: "right" }}
                                 type="text"
                                 value={Quantity}
                                 placeholder="Please Enter Margin"
                                 autoComplete="off"
                                 onChange={handleChange}
                             />
-
                         </FormGroup>
-
                         <FormGroup className="mb-3 col col-sm-3 ">
                             <Label>Unit</Label>
                             <Select
@@ -134,9 +115,7 @@ function ItemTab(props) {
                                 onChange={Unit_Handler}
                             />
                         </FormGroup>
-
                         <Col md={1}>
-
                             <Row className=" mt-3">
                                 <Col >
                                     <Button
@@ -150,10 +129,7 @@ function ItemTab(props) {
                             </Row>
                         </Col>
                     </Row>
-                    {/* </CardBody> */}
-                    {/* </Card> */}
                 </div>
-
                 <Row>
                     <BOMTable tableData={props.tableData} func={props.func} />
                 </Row>
@@ -161,5 +137,4 @@ function ItemTab(props) {
         </Row>
     );
 }
-
 export default ItemTab;

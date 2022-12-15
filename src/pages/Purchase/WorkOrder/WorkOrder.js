@@ -25,7 +25,7 @@ import {
 import Select from "react-select";
 import { SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
 import { WORK_ORDER_LIST } from "../../../routes/route_url";
-import { createdBy, currentDate, userCompany } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { createdBy, currentDate, userCompany, userParty } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import { editWorkOrderListSuccess, getBOMList, postGoButtonForWorkOrder_Master, postGoButtonForWorkOrder_MasterSuccess, postWorkOrderMaster, postWorkOrderMasterSuccess, updateWorkOrderList, updateWorkOrderListSuccess } from "../../../store/Purchase/WorkOrder/action";
 import paginationFactory, { PaginationListStandalone, PaginationProvider } from "react-bootstrap-table2-paginator";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
@@ -290,6 +290,7 @@ const WorkOrder = (props) => {
         debugger
         event.preventDefault();
         if (formValid(state, setState)) {
+            debugger
             const jsonBody = JSON.stringify({
                 Item: (pageMode === "edit" ? EditData.Item : values.ItemName.ItemID),
                 Bom: (pageMode === "edit" ? EditData.Bom : values.ItemName.value),
@@ -323,7 +324,7 @@ const WorkOrder = (props) => {
                 NumberOfLot: values.NumberOfLot,
                 Quantity: values.Quantity,
                 Company: userCompany(),
-                Party: 2,
+                Party: userParty(),
                 CreatedBy: createdBy(),
                 UpdatedBy: createdBy(),
                 WorkOrderItems: WorkOrderItems
@@ -357,7 +358,7 @@ const WorkOrder = (props) => {
             sort: true,
         },
         {
-            text: "BomQuantity",
+            text: "BOM Quantity",
             dataField: "BomQuantity",
             sort: true,
         },
@@ -389,7 +390,7 @@ const WorkOrder = (props) => {
         },
         {
 
-            text: "UnitName",
+            text: "Unit",
             dataField: "UnitName",
             sort: true,
         },
@@ -603,7 +604,7 @@ const WorkOrder = (props) => {
                                                             {...paginationTableProps}
                                                         />
                                                         <div>
-                                                            <label >EstimatedOutputQty :&nbsp;&nbsp; <span style={{ color: "#000000" }}>{EstimatedOutputQty}</span></label>
+                                                            <label >Estimated Output Qty :&nbsp;&nbsp; <span style={{ color: "#000000" }}>{EstimatedOutputQty}</span></label>
                                                         </div>
                                                     </div>
                                                 </Col>
