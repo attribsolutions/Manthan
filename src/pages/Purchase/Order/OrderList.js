@@ -38,7 +38,6 @@ const OrderList = () => {
     // const [supplierSelect, setsupplierSelect] = useState({ value: '' });
     const [pageMode, setpageMode] = useState(ORDER_lIST)
     const [userAccState, setUserAccState] = useState('');
-    const [GRNnRef, setGRNnRef] = useState('')
 
     const reducers = useSelector(
         (state) => ({
@@ -107,7 +106,6 @@ const OrderList = () => {
             history.push({
                 pathname: GRNitem.path,
                 pageMode: GRNitem.pageMode,
-                GRNReferences:GRNnRef
             })
         }
     }, [GRNitem])
@@ -116,7 +114,6 @@ const OrderList = () => {
         var isGRNSelect = ''
         var challanNo = ''
         const grnRef = []
-        setGRNnRef(grnRef)
         if (list.length > 0) {
             list.forEach(ele => {
                 if (ele.GRNSelect) {

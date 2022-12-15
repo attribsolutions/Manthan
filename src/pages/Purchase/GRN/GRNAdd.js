@@ -42,7 +42,7 @@ let description = ''
 let editVal = {}
 let initialTableData = []
 const GRNAdd = (props) => {
-debugger
+    debugger
     const dispatch = useDispatch();
     const history = useHistory();
 
@@ -63,7 +63,7 @@ debugger
     const [orderAmount, setOrderAmount] = useState(0);
     const [grnDetail, setGrnDetail] = useState({});
     const [grnItemList, setgrnItemList] = useState([]);
-    console.log("grnDetail",grnDetail)
+    console.log("grnDetail", grnDetail)
 
 
     useEffect(() => {
@@ -110,11 +110,9 @@ debugger
     const hasShowModal = props.hasOwnProperty("editValue")
 
     useEffect(() => {
-        debugger
         if ((items.Status === true) && (items.StatusCode === 200)) {
-            const hasEditVal = items.Data
-            hasEditVal.OrderItem.forEach((ele, k) => {
-                debugger
+            const grnItems = items.Data
+            grnItems.OrderItem.forEach((ele, k) => {
                 ele.id = k + 1;
                 ele["Name"] = ele.ItemName
                 ele["inpRate"] = ele.Rate
@@ -130,18 +128,19 @@ debugger
 
             });
             initialTableData = []
-            let details = { ...hasEditVal }
+            let details = { ...grnItems }
             initialTableData = details.OrderItem
             setgrnItemList(initialTableData)
             details.OrderItem = []
+
             setGrnDetail(details)
 
-            setsupplierSelect({ label: hasEditVal.SupplierName, value: hasEditVal.Supplier })
+            setsupplierSelect({ label: grnItems.SupplierName, value: grnItems.Supplier })
             // setOrderAmount(hasEditVal.OrderAmount)
             items.Status = false
             dispatch(getGRN_itemMode2_Success(items))
             debugger
-            dispatch(BreadcrumbFilterSize(`${"GRN Amount"} :${hasEditVal.OrderAmount}`))
+            dispatch(BreadcrumbFilterSize(`${"GRN Amount"} :${grnItems.OrderAmount}`))
         }
 
     }, [items])
@@ -630,8 +629,8 @@ debugger
             CreatedBy: createdBy(),
             UpdatedBy: 1,
             GRNItems: itemArr,
-            GRNReferences: props.location.GRNReferences
-       
+            GRNReferences: grnDetail.GRNReferences
+
         });
         debugger
         if (pageMode === "edit") {
