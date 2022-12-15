@@ -259,9 +259,11 @@ const MaterialIssueMaster = (props) => {
         })
     }
 
-    function Quantitychange(e) {
+    function Quantitychange(event) {
         debugger
-
+        const value1 = Math.max(1, Math.min(Itemselect.Quantity, Number(event.target.value)));
+        event.target.value = value1
+        onChangeText({ event, state, setState });
         // if (Itemselect.Quantity>e) {
         //     alert("Quantity is greter")
         //     setState((i) => {
@@ -271,6 +273,7 @@ const MaterialIssueMaster = (props) => {
         // }
 
     }
+
     const values = { ...state.values }
     const { isError } = state;
     const { fieldLabel } = state;
@@ -325,8 +328,10 @@ const MaterialIssueMaster = (props) => {
     };
 
     const handleChange = event => {
+
         const result = event.target.value.replace(/\D/g, '');
-        setQuantity(result);
+        const value = Math.max(1, Math.min(10, Number(result)));
+        setQuantity(value);
     };
 
     const pagesListColumns = [
@@ -537,10 +542,7 @@ const MaterialIssueMaster = (props) => {
                                                 className={isError.Quantity.length > 0 ? "is-invalid form-control" : "form-control"}
                                                 placeholder="Please Enter Quantity"
                                                 autoComplete='off'
-                                                onChange={(event) => {
-                                                    onChangeText({ event, state, setState });
-                                                    Quantitychange(event.target.value)
-                                                }}
+                                                onChange={Quantitychange}
                                             />
                                             {isError.Quantity.length > 0 && (
                                                 <span className="invalid-feedback">{isError.Quantity}</span>
