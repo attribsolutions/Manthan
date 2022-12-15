@@ -87,12 +87,6 @@ const MaterialIssueMaster = (props) => {
         GoButton: state.MaterialIssueReducer.GoButton
     }));
 
-    const { ItemsData = [] } = GoButton
-
-    const BatchesData = ItemsData.map((index) => {
-        return index.BatchesData
-    })
-
     useEffect(() => {
         dispatch(postGoButtonForMaterialIssue_MasterSuccess([]))
         dispatch(commonPageFieldSuccess(null));
@@ -221,7 +215,7 @@ const MaterialIssueMaster = (props) => {
     }, [postMsg])
 
     useEffect(() => {
-        debugger
+
         if ((updateMsg.Status === true) && (updateMsg.StatusCode === 200) && !(modalCss)) {
             history.push({
                 pathname: BIllOf_MATERIALS_LIST,
@@ -342,93 +336,92 @@ const MaterialIssueMaster = (props) => {
             sort: true,
         },
         {
-            text: "Work Order Quantity",
+            text: "Work Order Qty",
             dataField: "Quantity",
             sort: true,
         },
         {
             text: "Batch Code",
-            dataField: "",
+            dataField: "BatchesData",
             sort: true,
 
             formatter: (cellContent, user) => (
                 <>
-                    <Table className="table table-bordered table-responsive ">
+                    <Table className="table table-bordered table-responsive mb-1">
                         <Thead  >
                             <tr style={{ zIndex: "23" }} className="">
                                 <th className="">Batch Code </th>
                                 <th className="">Batch Date</th>
-                                <th className="">Stock Quantity</th>
-                                <th className="" >Quantity</th>
+                                <th className="">Stock Qty</th>
+                                <th className="" >Qty</th>
                                 <th className="" >Supplier BatchCode</th>
                             </tr>
                         </Thead>
 
                         <Tbody  >
-                            {BatchesData[0].map((TableValue, key) => (
-                                <tr >
-                                    <td>
-                                        <div style={{ width: "150px" }}>
-                                            <label>
-                                                {TableValue.SystemBatchCode}
-                                            </label>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div style={{ width: "150px" }}>
-                                            <label>
-                                                {TableValue.SystemBatchDate}
-                                            </label>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div style={{ width: "150px" }}>
-                                            <label>
-                                                {TableValue.ObatchwiseQuantity}
-                                            </label>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div style={{ width: "150px" }}>
-                                            <Input type="text"
-                                                defaultValue={TableValue.Qty}
-                                                onChange={handleChange}
-                                            ></Input>
+                            {cellContent.map((index, key) => {
+                                return (
+                                    < tr >
+                                        <td>
+                                            <div style={{ width: "150px" }}>
+                                                <Label  >
+                                                    {index.SystemBatchCode}
+                                                </Label>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div style={{ width: "150px" }}>
+                                                <Label>
+                                                    {index.SystemBatchDate}
+                                                </Label>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div style={{ width: "150px" }}>
+                                                <Label>
+                                                    {index.ObatchwiseQuantity}
+                                                </Label>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div style={{ width: "150px" }}>
+                                                <Input type="text"
+                                                    value={index.Qty}
+                                                    onChange={handleChange}
+                                                ></Input>
 
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div style={{ width: "150px" }}>
-                                            <label>
-                                                {TableValue.BatchCode}
-                                            </label>
-                                        </div>
-                                    </td>
-                                </tr>
-                            ))}
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div style={{ width: "150px" }}>
+                                                <Label>
+                                                    {index.BatchCode}
+                                                </Label>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                )
+
+                            })}
                         </Tbody>
                     </Table>
-
-
                 </>
             ),
 
         },
         {
 
-            text: "UnitName",
+            text: "Unit",
             dataField: "UnitName",
             sort: true,
         },
-
     ]
 
     const pageOptions = {
         sizePerPage: 10,
-        totalSize: ItemsData.length,
+        totalSize: GoButton.length,
         custom: true,
     };
-
 
     var IsEditMode_Css = ''
     if ((modalCss) || (pageMode === "dropdownAdd")) { IsEditMode_Css = "-5.5%" };
@@ -553,7 +546,7 @@ const MaterialIssueMaster = (props) => {
                                                 <span className="invalid-feedback">{isError.Quantity}</span>
                                             )}
                                         </Col>
-                                        
+
                                         <div className="col col-1">
                                             <Button
                                                 color="btn btn-outline-success border-2 font-size-12 " style={{ marginTop: '3px' }}
@@ -565,12 +558,12 @@ const MaterialIssueMaster = (props) => {
                             </div>
                         </div>
 
-                        {ItemsData.length>0 ?
+
                         <PaginationProvider pagination={paginationFactory(pageOptions)}>
                             {({ paginationProps, paginationTableProps }) => (
                                 <ToolkitProvider
                                     keyField={"id"}
-                                    data={ItemsData}
+                                    data={GoButton}
                                     columns={pagesListColumns}
                                     search
                                 >
@@ -605,7 +598,7 @@ const MaterialIssueMaster = (props) => {
                             )}
 
                         </PaginationProvider>
-                        :null}
+
 
 
                         {/* <div className="px-2 mb-1 mt-n3" style={{ marginRight: '-28px', marginLeft: "-8px" }}>
