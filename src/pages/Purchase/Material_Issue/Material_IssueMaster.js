@@ -386,7 +386,7 @@ const MaterialIssueMaster = (props) => {
                                         <td>
                                             <div style={{ width: "150px" }}>
                                                 <Label>
-                                                    {index.SystemBatchDate}
+                                                    {index.BatchDate}
                                                 </Label>
                                             </div>
                                         </td>
