@@ -359,8 +359,8 @@ const MaterialIssueMaster = (props) => {
                                 <th className="">Batch Code </th>
                                 <th className="" >Supplier BatchCode</th>
                                 <th className="">Batch Date</th>
-                                <th className="">Stock Qty</th>
-                                <th className="" >Qty</th>
+                                <th className="">Stock Quantity</th>
+                                <th className="" >Quantity</th>
                                
                             </tr>
                         </Thead>
