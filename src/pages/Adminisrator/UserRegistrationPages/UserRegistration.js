@@ -33,11 +33,10 @@ const AddUser = (props) => {
   const [modalCss, setModalCss] = useState(false);
   const [pageMode, setPageMode] = useState("save");
   const [userPageAccessState, setUserPageAccessState] = useState('');
-
   const [partyRoleData, setPartyRoleData] = useState([]);
   const [EmployeeSelect, setEmployeeSelect] = useState("");
   const [userPartiesForUserMaster, setUserPartiesForUserMaster] = useState([]);
-  console.log("EmployeeSelect",EmployeeSelect.length)
+  console.log("EmployeeSelect", EmployeeSelect.length)
   // M_Roles DropDown
 
   const [password, setPassword] = useState('');
@@ -81,8 +80,8 @@ const AddUser = (props) => {
     userAccess: state.Login.RoleAccessUpdateData,
     pageField: state.CommonPageFieldReducer.pageField
   }));
-  
-console.log("employeelistForDropdown",employeelistForDropdown)
+
+  console.log("employeelistForDropdown", employeelistForDropdown)
   const location = { ...history.location }
   const hasShowloction = location.hasOwnProperty("editValue")
   const hasShowModal = props.hasOwnProperty("editValue")
@@ -165,6 +164,7 @@ console.log("employeelistForDropdown",employeelistForDropdown)
     }
 
   }, [])
+
 
   useEffect(() => {
 
@@ -312,7 +312,6 @@ console.log("employeelistForDropdown",employeelistForDropdown)
             </tr>
           ))}
         </Tbody>
-
       </table>
     )
   }
@@ -347,7 +346,7 @@ console.log("employeelistForDropdown",employeelistForDropdown)
                       >
                         <Card className=" text-black">
                           <CardBody className="c_card_body">
-                            <Row >
+                            <Row>
 
                               <FormGroup className="mb-2 col col-sm-4 ">
                                 <Label htmlFor="validationCustom01"> Employee </Label>
@@ -368,7 +367,6 @@ console.log("employeelistForDropdown",employeelistForDropdown)
                               <FormGroup className="mb-2 col col-sm-4 ">
                                 <Label htmlFor="validationCustom01">Login Name</Label>
                                 <AvField
-
                                   name="loginName" id="txtName"
                                   type="text"
                                   placeholder="Please Enter Login Name"
@@ -388,12 +386,12 @@ console.log("employeelistForDropdown",employeelistForDropdown)
                               <FormGroup className="mb-2 col col-sm-4 ">
                                 <Label htmlFor="validationCustom01">Password</Label>
                                 <AvField name="password" id="password"
-                                    type="password"
-                                    placeholder="Please Enter Password"
-                                    autoComplete="new-password"
-                                    className="form-control"
-                                    value={password}
-                                    onChange={(e) => { setPassword(e.target.value) }} />
+                                  type="password"
+                                  placeholder="Please Enter Password"
+                                  autoComplete="new-password"
+                                  className="form-control"
+                                  value={password}
+                                  onChange={(e) => { setPassword(e.target.value) }} />
                               </FormGroup>
                             </Row>
 
@@ -401,14 +399,14 @@ console.log("employeelistForDropdown",employeelistForDropdown)
                               <FormGroup className="mb-2 col col-sm-4 ">
                                 <Label htmlFor="validationCustom01">Confirm Password</Label>
                                 <AvField name="password" id="password"
-                                    type="password"
-                                    // value={EditData.password}
-                                    placeholder="Please Enter Password"
-                                    autoComplete="new-password"
-                                    className={cPasswordClass}
-                                    value={cPassword}
-                                    onChange={handleCPassword} />
-                                  {showErrorMessage && isCPassword ? <div> Passwords did not match </div> : ''}
+                                  type="password"
+                                  // value={EditData.password}
+                                  placeholder="Please Enter Password"
+                                  autoComplete="new-password"
+                                  className={cPasswordClass}
+                                  value={cPassword}
+                                  onChange={handleCPassword} />
+                                {showErrorMessage && isCPassword ? <div> Passwords did not match </div> : ''}
                               </FormGroup>
                             </Row>
 
@@ -497,15 +495,15 @@ console.log("employeelistForDropdown",employeelistForDropdown)
                                               type="submit"
                                               data-mdb-toggle="tooltip" data-mdb-placement="top" title="Save User"
                                               className="btn btn-primary w-md"
-                                            > <i className="fas fa-save me-2"></i> Save
+                                              // onClick={this.handleClick} disabled={this.state.disabled}
+                                            >
+                                              <i className="fas fa-save me-2"></i> Save
                                             </button>
                                             :
                                             <></>
                                         )
                                     }
                                   </div>
-
-
                                 </Col>
                               </Row> : <></>}
 
@@ -543,8 +541,7 @@ console.log("employeelistForDropdown",employeelistForDropdown)
                                   </div> :
                                   <></>}
 
-
-                                <Row >
+                                <Row>
                                   <Col sm={2}>
                                     <div>
                                       {
@@ -592,9 +589,9 @@ console.log("employeelistForDropdown",employeelistForDropdown)
                 </Col>
               </Row>
             </div>
-          </Container >
-        </div >
-      </React.Fragment >
+          </Container>
+        </div>
+      </React.Fragment>
     );
   }
   else {
