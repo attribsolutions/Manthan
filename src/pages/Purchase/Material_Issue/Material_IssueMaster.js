@@ -261,6 +261,7 @@ const MaterialIssueMaster = (props) => {
 
     function Quantitychange(event) {
         debugger
+        dispatch(postGoButtonForMaterialIssue_MasterSuccess([]))
         const value1 = Math.max(1, Math.min(Itemselect.Quantity, Number(event.target.value)));
         event.target.value = value1
         onChangeText({ event, state, setState });
