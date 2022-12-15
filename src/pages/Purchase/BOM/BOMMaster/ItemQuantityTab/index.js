@@ -99,57 +99,59 @@ function ItemTab(props) {
 
         <Row>
             <Col md={12}  >
-            <div className="px-2  mb-1 c_card_body "style={{width:"100%"}}>
-                {/* <Card className="mt-n3 text-black c_card_body "> */}
+                <div className="px-2  mb-1 c_card_body " style={{ width: "100%" }}>
+                    {/* <Card className="mt-n3 text-black c_card_body "> */}
                     {/* <CardBody className='c_card_body'> */}
-                        <Row>
+                    <Row>
 
-                            <FormGroup className="mb-3 col col-sm-3 ">
-                                <Label>Content Item</Label>
-                                <Select
-                                    value={contentItemSelect}
-                                    options={ItemDropdown_Options}
-                                    onChange={ContentItem_Handler}
-                                />
-                            </FormGroup>
+                        <FormGroup className="mb-3 col col-sm-3 ">
+                            <Label>Content Item</Label>
+                            <Select
+                                value={contentItemSelect}
+                                options={ItemDropdown_Options}
+                                onChange={ContentItem_Handler}
+                            />
+                        </FormGroup>
 
-                            <FormGroup className="mb-3 col col-sm-3 " >
-                                <Label >Item Quantity</Label>
-                                <Input type="text"
-                                    value={Quantity}
-                                    placeholder="Please Enter Margin"
-                                    autoComplete="off"
-                                    onChange={handleChange}
-                                />
+                        <FormGroup className="mb-3 col col-sm-3 " >
+                            <Label >Item Quantity</Label>
+                            <Input
+                            style={{textAlign:"right"}}
+                                type="text"
+                                value={Quantity}
+                                placeholder="Please Enter Margin"
+                                autoComplete="off"
+                                onChange={handleChange}
+                            />
 
-                            </FormGroup>
+                        </FormGroup>
 
-                            <FormGroup className="mb-3 col col-sm-3 ">
-                                <Label>Unit</Label>
-                                <Select
-                                    value={unitSelect}
-                                    options={Unit_DropdownOptions}
-                                    onChange={Unit_Handler}
-                                />
-                            </FormGroup>
+                        <FormGroup className="mb-3 col col-sm-3 ">
+                            <Label>Unit</Label>
+                            <Select
+                                value={unitSelect}
+                                options={Unit_DropdownOptions}
+                                onChange={Unit_Handler}
+                            />
+                        </FormGroup>
 
-                            <Col md={1}>
+                        <Col md={1}>
 
-                                <Row className=" mt-3">
-                                    <Col >
-                                        <Button
-                                            className="btn btn-sm mt-1 mt-3 btn-light  btn-outline-primary  "
-                                            type="button"
-                                            onClick={addRowsHandler}
-                                        >
-                                            <i className="dripicons-plus mt-3"> </i> Add
-                                        </Button>
-                                    </Col>
-                                </Row>
-                            </Col>
-                        </Row>
+                            <Row className=" mt-3">
+                                <Col >
+                                    <Button
+                                        className="btn btn-sm mt-1 mt-3 btn-light  btn-outline-primary  "
+                                        type="button"
+                                        onClick={addRowsHandler}
+                                    >
+                                        <i className="dripicons-plus mt-3"> </i> Add
+                                    </Button>
+                                </Col>
+                            </Row>
+                        </Col>
+                    </Row>
                     {/* </CardBody> */}
-                {/* </Card> */}
+                    {/* </Card> */}
                 </div>
 
                 <Row>

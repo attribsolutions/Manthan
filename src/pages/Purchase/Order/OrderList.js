@@ -38,7 +38,7 @@ const OrderList = () => {
     // const [supplierSelect, setsupplierSelect] = useState({ value: '' });
     const [pageMode, setpageMode] = useState(ORDER_lIST)
     const [userAccState, setUserAccState] = useState('');
-
+    const [GRNnRef, setGRNnRef] = useState('')
 
     const reducers = useSelector(
         (state) => ({
@@ -106,7 +106,8 @@ const OrderList = () => {
         if (GRNitem.Status === true && GRNitem.StatusCode === 200) {
             history.push({
                 pathname: GRNitem.path,
-                pageMode: GRNitem.pageMode
+                pageMode: GRNitem.pageMode,
+                GRNReferences:GRNnRef
             })
         }
     }, [GRNitem])
@@ -115,6 +116,7 @@ const OrderList = () => {
         var isGRNSelect = ''
         var challanNo = ''
         const grnRef = []
+        setGRNnRef(grnRef)
         if (list.length > 0) {
             list.forEach(ele => {
                 if (ele.GRNSelect) {
@@ -129,8 +131,9 @@ const OrderList = () => {
             });
 
             if (isGRNSelect) {
+                const withoutLastComma = isGRNSelect.replace(/,*$/, '');
                 const jsonBody = JSON.stringify({
-                    OrderIDs: isGRNSelect
+                    OrderIDs: withoutLastComma
                 })
 
                 dispatch(getGRN_itemMode2({ jsonBody, pageMode, GRN_ADD, grnRef, challanNo }))

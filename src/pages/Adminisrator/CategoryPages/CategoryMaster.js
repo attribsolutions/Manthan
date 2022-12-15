@@ -48,6 +48,7 @@ const CategoryMaster = (props) => {
     const [pageMode, setPageMode] = useState("");
     const [modalCss, setModalCss] = useState(false);
     const [userPageAccessState, setUserPageAccessState] = useState(123);
+   
 
     //Access redux store Data /  'save_ModuleSuccess' action data
     const {
@@ -317,7 +318,7 @@ const CategoryMaster = (props) => {
                                                                     />
                                                                 </Col>
                                                             </Row>
-                                                        </FormGroup >
+                                                        </FormGroup>
                                                     </Row>
 
                                                 </CardBody>

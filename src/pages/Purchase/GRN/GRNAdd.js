@@ -34,7 +34,7 @@ import { GRN_lIST, ORDER_lIST } from "../../../routes/route_url";
 import { SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
 
 import Breadcrumb from "../../../components/Common/Breadcrumb3";
-import { getGRN_itemMode2_Success, postGRN, postGRNSuccess } from "../../../store/Purchase/GRNRedux/actions";
+import { editGRNId, getGRN_itemMode2_Success, postGRN, postGRNSuccess } from "../../../store/Purchase/GRNRedux/actions";
 import { mySearchProps } from "../../../components/Common/ComponentRelatedCommonFile/MySearch";
 import { createdBy, currentDate } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 
@@ -42,7 +42,7 @@ let description = ''
 let editVal = {}
 let initialTableData = []
 const GRNAdd = (props) => {
-
+debugger
     const dispatch = useDispatch();
     const history = useHistory();
 
@@ -63,7 +63,7 @@ const GRNAdd = (props) => {
     const [orderAmount, setOrderAmount] = useState(0);
     const [grnDetail, setGrnDetail] = useState({});
     const [grnItemList, setgrnItemList] = useState([]);
-
+    console.log("grnDetail",grnDetail)
 
 
     useEffect(() => {
@@ -84,7 +84,7 @@ const GRNAdd = (props) => {
         postMsg: state.GRNReducer.postMsg,
         updateMsg: state.GRNReducer.updateMsg,
         userAccess: state.Login.RoleAccessUpdateData,
-       pageField: state.CommonPageFieldReducer.pageFieldList,
+        pageField: state.CommonPageFieldReducer.pageFieldList,
     }));
 
 
@@ -114,6 +114,7 @@ const GRNAdd = (props) => {
         if ((items.Status === true) && (items.StatusCode === 200)) {
             const hasEditVal = items.Data
             hasEditVal.OrderItem.forEach((ele, k) => {
+                debugger
                 ele.id = k + 1;
                 ele["Name"] = ele.ItemName
                 ele["inpRate"] = ele.Rate
@@ -569,7 +570,7 @@ const GRNAdd = (props) => {
 
 
     const saveHandeller = () => {
-
+        debugger
         const itemArr = []
         grnItemList.forEach(i => {
             if ((i.inpQty > 0)) {
@@ -619,7 +620,7 @@ const GRNAdd = (props) => {
             }));
             return
         }
-
+        debugger
         const jsonBody = JSON.stringify({
             GRNDate: grnDate,
             Customer: grnDetail.Customer,
@@ -629,8 +630,8 @@ const GRNAdd = (props) => {
             CreatedBy: createdBy(),
             UpdatedBy: 1,
             GRNItems: itemArr,
-            GRNReferences: grnDetail.GRNReferences
-
+            GRNReferences: props.location.GRNReferences
+       
         });
         debugger
         if (pageMode === "edit") {
@@ -653,97 +654,97 @@ const GRNAdd = (props) => {
                     <title>{userAccState.PageHeading}| FoodERP-React FrontEnd</title>
                 </MetaTags>
                 <div className="page-content" >
-                    <Breadcrumb  
+                    <Breadcrumb
                         pageHeading={userAccState.PageHeading}
                         showCount={true}
                     />
-                    <div className="px-2 mb-1  c_card_header " style={{marginTop:"-15px"}} >
+                    <div className="px-2 mb-1  c_card_header " style={{ marginTop: "-15px" }} >
                         <Row>
-                        <Col sm={5}>
+                            <Col sm={5}>
 
-                            <FormGroup className=" row mt-2 " >
-                                <Label className="col-sm-4 p-2"
-                                    style={{ width: "130px" }}>GRN Date</Label>
-                                <Col sm="7">
-                                    <Flatpickr
-                                        name="grndate"
-                                        className="form-control d-block p-2 bg-white text-dark"
-                                        placeholder="Select..."
-                                        options={{
-                                            altInput: true,
-                                            altFormat: "d-m-Y",
-                                            dateFormat: "Y-m-d",
-                                            defaultDate: "today"
-                                        }}
-                                        onChange={(e, date) => { setgrnDate(date) }}
-                                        onReady={(e, date) => { setgrnDate(date); }}
-                                    />
-                                </Col>
-                            </FormGroup>
+                                <FormGroup className=" row mt-2 " >
+                                    <Label className="col-sm-4 p-2"
+                                        style={{ width: "130px" }}>GRN Date</Label>
+                                    <Col sm="7">
+                                        <Flatpickr
+                                            name="grndate"
+                                            className="form-control d-block p-2 bg-white text-dark"
+                                            placeholder="Select..."
+                                            options={{
+                                                altInput: true,
+                                                altFormat: "d-m-Y",
+                                                dateFormat: "Y-m-d",
+                                                defaultDate: "today"
+                                            }}
+                                            onChange={(e, date) => { setgrnDate(date) }}
+                                            onReady={(e, date) => { setgrnDate(date); }}
+                                        />
+                                    </Col>
+                                </FormGroup>
 
 
 
-                            <FormGroup className=" row  " >
-                                <Label className="col-md-4 p-2"
-                                    style={{ width: "130px" }}>Supplier Name</Label>
-                                <Col md="7">
-                                    {/* <Select
+                                <FormGroup className=" row  " >
+                                    <Label className="col-md-4 p-2"
+                                        style={{ width: "130px" }}>Supplier Name</Label>
+                                    <Col md="7">
+                                        {/* <Select
                                             value={supplierSelect}
                                             classNamePrefix="select2-Customer"
                                             isDisabled={pageMode === "edit" ? true : false}
                                             options={supplierOptions}
                                             onChange={(e) => { setsupplierSelect(e) }}
                                         /> */}
-                                    < Input
-                                        style={{ backgroundColor: "white" }}
-                                        type="text" value={grnDetail.SupplierName} disabled={true} />
-                                </Col>
-                            </FormGroup>
+                                        < Input
+                                            style={{ backgroundColor: "white" }}
+                                            type="text" value={grnDetail.SupplierName} disabled={true} />
+                                    </Col>
+                                </FormGroup>
 
-                            <FormGroup className=" row " >
-                                <Label className="col-md-4 p-2"
-                                    style={{ width: "130px" }}>PO.No</Label>
-                                <Col sm="7">
-                                    <Input type="text"
-                                        style={{ backgroundColor: "white" }}
+                                <FormGroup className=" row " >
+                                    <Label className="col-md-4 p-2"
+                                        style={{ width: "130px" }}>Challan No</Label>
+                                    <Col sm="7">
+                                        <Input type="text"
+                                            style={{ backgroundColor: "white" }}
 
-                                        disabled={true}
-                                        value={grnDetail.challanNo}
-                                        placeholder="Enter Challan No" />
-                                </Col>
-                            </FormGroup>
+                                            // disabled={true}
+                                            value={grnDetail.challanNo}
+                                            placeholder="Enter Challan No" />
+                                    </Col>
+                                </FormGroup>
                             </Col>
-                        <Col sm={5}>
-                            <FormGroup className=" row mt-2" >
-                                <Label className="col-md-4 p-2"
-                                    style={{ width: "130px" }}>Invoice Date</Label>
-                                <Col md="7">
-                                    <Flatpickr
-                                        className="form-control d-block p-2 bg-white text-dark"
-                                        placeholder="Select..."
-                                        options={{
-                                            altInput: true,
-                                            altFormat: "d-m-Y",
-                                            dateFormat: "Y-m-d",
-                                            defaultDate: "today"
-                                        }}
-                                        onChange={(e, date) => { setInvoiceDate(date) }}
-                                        onReady={(e, date) => { setInvoiceDate(date); }}
-                                    />
-                                </Col>
-                            </FormGroup>
-                            <FormGroup className="mb-2 row  " >
-                                <Label className="col-md-4 p-2"
-                                    style={{ width: "130px" }}>Invoice No</Label>
-                                <Col md="7">
-                                    <Input type="text"
-                                        // disabled={true}
-                                        pattern={/[A-Za-z]{3}/}
-                                        value={grnDetail.challanNo}
-                                        placeholder="Enter Invoice No" />
-                                </Col>
-                            </FormGroup>
-                        </Col>
+                            <Col sm={5}>
+                                <FormGroup className=" row mt-2" >
+                                    <Label className="col-md-4 p-2"
+                                        style={{ width: "130px" }}>Invoice Date</Label>
+                                    <Col md="7">
+                                        <Flatpickr
+                                            className="form-control d-block p-2 bg-white text-dark"
+                                            placeholder="Select..."
+                                            options={{
+                                                altInput: true,
+                                                altFormat: "d-m-Y",
+                                                dateFormat: "Y-m-d",
+                                                defaultDate: "today"
+                                            }}
+                                            onChange={(e, date) => { setInvoiceDate(date) }}
+                                            onReady={(e, date) => { setInvoiceDate(date); }}
+                                        />
+                                    </Col>
+                                </FormGroup>
+                                <FormGroup className="mb-2 row  " >
+                                    <Label className="col-md-4 p-2"
+                                        style={{ width: "130px" }}>Invoice No</Label>
+                                    <Col md="7">
+                                        <Input type="text"
+                                            // disabled={true}
+                                            pattern={/[A-Za-z]{3}/}
+                                            value={grnDetail.challanNo}
+                                            placeholder="Enter Invoice No" />
+                                    </Col>
+                                </FormGroup>
+                            </Col>
                         </Row>
 
 
