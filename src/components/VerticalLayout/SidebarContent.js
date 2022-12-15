@@ -188,7 +188,7 @@ const SidebarContent = (props) => {
 
 
             {RoleAccessData.map((item) => {
-              debugger
+            
               return (
                 <li >
                   <Link to="/#" className="has-arrow">

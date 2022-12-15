@@ -9,7 +9,7 @@ import { POST_GO_BUTTON_FOR_MATERIAL_ISSUE_MASTER } from "./actionType";
 
 // GO Botton Post API
 function* MaterialIssueGoButton_gunfun({ data }) {
-debugger
+
     yield put(SpinnerState(true))
     try {
         const response = yield call(Material_Issue_GoButton_Post_API, data);

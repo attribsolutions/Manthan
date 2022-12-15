@@ -226,10 +226,10 @@ const WorkOrder = (props) => {
     }));
 
     useEffect(() => {
-        let date = currentDate();
+        
         const jsonBody = JSON.stringify({
             FromDate: "2022-12-01",
-            ToDate: date,
+            ToDate: currentDate,
             Company: userCompany(),
         });
         dispatch(getBOMList(jsonBody));
@@ -358,7 +358,7 @@ const WorkOrder = (props) => {
             sort: true,
         },
         {
-            text: "BOM Quantity",
+            text: "BomQuantity",
             dataField: "BomQuantity",
             sort: true,
         },
@@ -390,7 +390,7 @@ const WorkOrder = (props) => {
         },
         {
 
-            text: "Unit",
+            text: "UnitName",
             dataField: "UnitName",
             sort: true,
         },
@@ -604,7 +604,7 @@ const WorkOrder = (props) => {
                                                             {...paginationTableProps}
                                                         />
                                                         <div>
-                                                            <label >Estimated Output Qty :&nbsp;&nbsp; <span style={{ color: "#000000" }}>{EstimatedOutputQty}</span></label>
+                                                            <label >EstimatedOutputQty :&nbsp;&nbsp; <span style={{ color: "#000000" }}>{EstimatedOutputQty}</span></label>
                                                         </div>
                                                     </div>
                                                 </Col>

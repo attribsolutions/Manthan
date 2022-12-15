@@ -86,6 +86,7 @@ const BOMMaster = (props) => {
         dispatch(getItemList())
         // dispatch(getBaseUnit_ForDropDown());
     }, []);
+    
     const location = { ...history.location }
     const hasShowloction = location.hasOwnProperty("editValue")
     const hasShowModal = props.hasOwnProperty("editValue")
@@ -177,6 +178,7 @@ const BOMMaster = (props) => {
             }));
         }
     }, [postMsg])
+
     useEffect(() => {
         debugger
         if ((updateMsg.Status === true) && (updateMsg.StatusCode === 200) && !(modalCss)) {
@@ -194,6 +196,7 @@ const BOMMaster = (props) => {
             );
         }
     }, [updateMsg, modalCss]);
+    
     useEffect(() => {
         if (pageField) {
             const fieldArr = pageField.PageFieldMaster

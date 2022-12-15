@@ -66,6 +66,7 @@ const GRNList = () => {
         dispatch(commonPageFieldListSuccess(null))
         dispatch(commonPageFieldList(56))
         dispatch(getSupplier())
+        goButtonHandler()
     }, []);
 
 
@@ -196,7 +197,7 @@ const GRNList = () => {
                             ButtonMsgLable={"GRN"}
                             deleteName={"CreatedBy"}
                             pageMode={"List"}
-
+                            goButnFunc={goButtonHandler}
                         />
                         : null
                 }

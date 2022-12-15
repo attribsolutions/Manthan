@@ -82,9 +82,8 @@ const WorkOrderList = () => {
         let ToDate
 
         if (onload) {
-            const currentdate = currentDate()
-            FromDate = currentdate;
-            ToDate = currentdate;
+            FromDate = currentDate;
+            ToDate = currentDate;
         } else {
             ToDate = todate;
             FromDate = fromdate;
