@@ -358,7 +358,7 @@ const WorkOrder = (props) => {
             sort: true,
         },
         {
-            text: "BomQuantity",
+            text: "BOM Quantity",
             dataField: "BomQuantity",
             sort: true,
         },
@@ -390,7 +390,7 @@ const WorkOrder = (props) => {
         },
         {
 
-            text: "UnitName",
+            text: "Unit",
             dataField: "UnitName",
             sort: true,
         },
@@ -604,7 +604,7 @@ const WorkOrder = (props) => {
                                                             {...paginationTableProps}
                                                         />
                                                         <div>
-                                                            <label >EstimatedOutputQty :&nbsp;&nbsp; <span style={{ color: "#000000" }}>{EstimatedOutputQty}</span></label>
+                                                            <label >Estimated Output Qty :&nbsp;&nbsp; <span style={{ color: "#000000" }}>{EstimatedOutputQty}</span></label>
                                                         </div>
                                                     </div>
                                                 </Col>
