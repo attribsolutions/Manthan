@@ -225,7 +225,7 @@ const BOMMaster = (props) => {
     const { isError } = state;
     const { fieldLabel } = state;
     const formSubmitHandler = (event) => {
-        debugger
+        
         const BOMItems = ItemTabDetails.map((index) => ({
             Item: index.Item,
             Quantity: index.Quantity,
@@ -233,7 +233,7 @@ const BOMMaster = (props) => {
         }))
         event.preventDefault();
         if (formValid(state, setState)) {
-            debugger
+            
             const jsonBody = JSON.stringify({
                 BomDate: values.BomDate,
                 EstimatedOutputQty: values.EstimatedOutputQty,

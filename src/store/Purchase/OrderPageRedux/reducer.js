@@ -10,7 +10,7 @@ import {
   ORDER_LIST_FILTERS,
 } from "./actionType"
 
-const date = currentDate();
+// const date = currentDate();
 
 const INIT_STATE = {
   orderItem: [],
@@ -19,7 +19,7 @@ const INIT_STATE = {
   updateMsg: { Status: false },
   deleteMsg: { Status: false },
   orderList: [],
-  orderlistFilter: { fromdate: date, todate: date, supplierSelect: ''}
+  orderlistFilter: { fromdate: currentDate, todate: currentDate, supplierSelect: ''}
 
 }
 
