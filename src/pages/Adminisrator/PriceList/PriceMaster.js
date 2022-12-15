@@ -232,6 +232,7 @@ const PriceMaster = (props) => {
         if (textInp1.value === "") {
             alert("please enter value")
         } else {
+            debugger
             var mkup = document.getElementById(`mkupMkdown`).checked
             const jsonBody = JSON.stringify({
                 Name: textInp1.value,
@@ -252,6 +253,7 @@ const PriceMaster = (props) => {
     // // edit price handler
     function sub_Price_edit_Handler () {
         debugger
+
         var textInp1 = document.getElementById("txtsubprice")
         // var id = document.getElementById("txtsubprice")
         if (textInp1.value === "") {
@@ -290,7 +292,7 @@ const PriceMaster = (props) => {
 
     // drop down tree
     const test1 = () => {
-        debugger
+  
 
 
 
@@ -355,7 +357,7 @@ const PriceMaster = (props) => {
     }
 
     function fun2(node) {
-        debugger
+    
 
         return (
             <div style={{ paddingLeft: "50px" }} className={"pricelistclass"} >
@@ -545,6 +547,7 @@ const PriceMaster = (props) => {
                                                                <Input id="Input"
                                                                             value={priceList.label}
                                                                             placeholder="Select..."
+                                                                            // defaultValue={}
                                                                             // onChange={(e) => setDropOpen(!dropOpen)}
                                                                             onClick={onclickselect}
                                                                         >

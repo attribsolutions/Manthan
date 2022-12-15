@@ -87,7 +87,11 @@ function ItemTab(props) {
         <Row>
             <Col md={12}  >
                 <div className="px-2  mb-1 c_card_body " style={{ width: "100%" }}>
+                    {/* <Card className="mt-n3 text-black c_card_body "> */}
+                    {/* <CardBody className='c_card_body'> */}
                     <Row>
+
+
                         <FormGroup className="mb-3 col col-sm-3 ">
                             <Label>Content Item</Label>
                             <Select
@@ -96,15 +100,30 @@ function ItemTab(props) {
                                 onChange={ContentItem_Handler}
                             />
                         </FormGroup>
+
                         <FormGroup className="mb-3 col col-sm-3 " >
                             <Label >Item Quantity</Label>
                             <Input type="text"
+
+
+                        <FormGroup className="mb-3 col col-sm-3 " >
+                            <Label >Item Quantity</Label>
+                            <Input
+                            style={{textAlign:"right"}}
+                                type="text"
+
                                 value={Quantity}
                                 placeholder="Please Enter Margin"
                                 autoComplete="off"
                                 onChange={handleChange}
                             />
+
                         </FormGroup>
+
+
+                        </FormGroup>
+
+
                         <FormGroup className="mb-3 col col-sm-3 ">
                             <Label>Unit</Label>
                             <Select
@@ -113,7 +132,12 @@ function ItemTab(props) {
                                 onChange={Unit_Handler}
                             />
                         </FormGroup>
+
                         <Col md={1}>
+
+
+                        <Col md={1}>
+
                             <Row className=" mt-3">
                                 <Col >
                                     <Button
@@ -127,6 +151,9 @@ function ItemTab(props) {
                             </Row>
                         </Col>
                     </Row>
+                    {/* </CardBody> */}
+                    {/* </Card> */}
+
                 </div>
                 <Row>
                     <BOMTable tableData={props.tableData} func={props.func} />

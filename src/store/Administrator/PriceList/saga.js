@@ -8,7 +8,6 @@ import { DELETE_PRICE_LIST, GET_PRICE_LIST_DATA, POST_PRICE_LIST_DATA,EDIT_PRICE
 
 
 function* Post_PriceList_GenratorFunction({ Data }) {
-  debugger
     yield put(SpinnerState(true))
     try {
       const response = yield call(Post_PriceList_API, Data);
@@ -41,6 +40,7 @@ function* get_PriceList_GenratorFunction({ partyType }) {
 function* get_PriceListPage_GenratorFunction() {
   yield put(SpinnerState(true))
   try {
+
     const response = yield call(GetPriceList_For_Listpage);
     yield put(SpinnerState(false))
     yield put(getPriceListPageSuccess(response.Data));
@@ -56,6 +56,9 @@ function* get_PriceListPage_GenratorFunction() {
 function* delete_PriceList_GenFun({ id }) {
   yield put(SpinnerState(true))
   try {
+    
+  
+
     const response = yield call(delete_PriceList_API, id);
     yield put(SpinnerState(false))
     yield put(delete_PriceListSuccess(response));
@@ -72,6 +75,7 @@ function* delete_PriceList_GenFun({ id }) {
 // edit api
 function* Edit_PriceList__GenratorFunction({ id ,pageMode}) {
   try {
+
     const response = yield call(edit_PriceList, id);
     response.pageMode=pageMode
     yield put(editPriceListSuccess(response));
