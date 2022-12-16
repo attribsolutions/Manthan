@@ -38,6 +38,8 @@ export async function getModify(url) {
 
 export async function post(url, data, config = {}) {
   AuthonticationFunction();
+  console.log("postapiCall Url:", url);
+  console.log("postapiCall Body:", data)
   const res = await axiosApi
     .post(url, data, {
       headers: {
@@ -46,8 +48,6 @@ export async function post(url, data, config = {}) {
       }
     })
     .then(response => response.data)
-  console.log("postapiCall Url:", url);
-  console.log("postapiCall Body:", data);
   console.log("postapiCall Response:", res);
   return res
 }

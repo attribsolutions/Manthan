@@ -19,6 +19,7 @@ const CustomAlert = () => {
     AfterResponseAction = false,
     PermissionAction = false,
     RedirectPath = false,
+    PermissionFunction = () => { }
   } = AlertData;
 
   //  Alert Modal Show and Hide Controller
@@ -67,6 +68,12 @@ const CustomAlert = () => {
     tog_standard();
   }
 
+  function Permission_Ok_handeler6() {
+    dispatch(AlertShow({ Status: false }));
+    if (PermissionFunction) {
+      PermissionFunction()
+    };
+  }
   return (
     <React.Fragment>
       <Modal
@@ -142,9 +149,37 @@ const CustomAlert = () => {
             <div className="d-flex flex-wrap gap-2 " style={{ float: "right" }}>
               <button
                 type="button"
-                className="btn btn-success"
+                className="btn btn-danger "
                 onClick={() => {
                   Permission_Ok_handeler()
+                }}
+              >
+                Yes
+              </button>
+              <button
+                type="button"
+
+                className="btn btn-success w-xm waves-effect waves-light"
+                onClick={() => {
+                  cancel_handeler()
+                }}
+              >
+                No
+              </button>
+            </div>
+          </UncontrolledAlert>
+        }
+        {(Type === 6) &&
+          <UncontrolledAlert color="info" className="px-4 mb-0 text-center">
+            <i className="mdi mdi-alert-circle-outline d-block display-6 mt-2 mb-3 text-info"></i>
+            <p>
+              <h5>{Message}</h5></p>
+            <div className="d-flex flex-wrap gap-2 " style={{ float: "right" }}>
+              <button
+                type="button"
+                className="btn btn-success"
+                onClick={() => {
+                  Permission_Ok_handeler6()
                 }}
               >
                 Yes

@@ -45,7 +45,6 @@ const BOMMaster = (props) => {
     const dispatch = useDispatch();
     const history = useHistory()
 
-    const formRef = useRef(null);
     const [EditData, setEditData] = useState({});
     const [modalCss, setModalCss] = useState(false);
     const [pageMode, setPageMode] = useState("save");
@@ -86,7 +85,6 @@ const BOMMaster = (props) => {
         dispatch(getItemList())
         // dispatch(getBaseUnit_ForDropDown());
     }, []);
-    
     const location = { ...history.location }
     const hasShowloction = location.hasOwnProperty("editValue")
     const hasShowModal = props.hasOwnProperty("editValue")
@@ -150,7 +148,7 @@ const BOMMaster = (props) => {
     useEffect(() => {
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(postBOMSuccess({ Status: false }))
-            formRef.current.reset();
+
             if (pageMode === "dropdownAdd") {
                 dispatch(AlertState({
                     Type: 1,
@@ -179,13 +177,29 @@ const BOMMaster = (props) => {
         }
     }, [postMsg])
 
+    function PermissionFunction() {
+        let event = { preventDefault: () => { } }
+        formSubmitHandler({ event, mode: true })
+    }
+
     useEffect(() => {
-        debugger
+
         if ((updateMsg.Status === true) && (updateMsg.StatusCode === 200) && !(modalCss)) {
             history.push({
                 pathname: BIllOf_MATERIALS_LIST,
             })
-        } else if (updateMsg.Status === true && !modalCss) {
+        } else if ((updateMsg.Status === true) && (updateMsg.StatusCode === 100) && !(modalCss)) {
+            dispatch(updateBOMListSuccess({ Status: false }));
+            dispatch(AlertState({
+                Type: 6, Status: true,
+                Message: JSON.stringify(updateMsg.Message),
+                PermissionFunction: PermissionFunction,
+
+            }));
+
+
+        }
+        else if (updateMsg.Status === true && !modalCss) {
             dispatch(updateBOMListSuccess({ Status: false }));
             dispatch(
                 AlertState({
@@ -196,7 +210,6 @@ const BOMMaster = (props) => {
             );
         }
     }, [updateMsg, modalCss]);
-    
     useEffect(() => {
         if (pageField) {
             const fieldArr = pageField.PageFieldMaster
@@ -227,16 +240,21 @@ const BOMMaster = (props) => {
     const values = { ...state.values }
     const { isError } = state;
     const { fieldLabel } = state;
-    const formSubmitHandler = (event) => {
-        debugger
+
+    const formSubmitHandler = ({ event, mode = false }) => {
+        event.preventDefault();
         const BOMItems = ItemTabDetails.map((index) => ({
             Item: index.Item,
             Quantity: index.Quantity,
             Unit: index.Unit
         }))
-        event.preventDefault();
         if (formValid(state, setState)) {
-            debugger
+
+            let BOMrefID = ''
+            if ((pageMode === 'edit') && mode) {
+                BOMrefID = EditData.id
+            };
+
             const jsonBody = JSON.stringify({
                 BomDate: values.BomDate,
                 EstimatedOutputQty: values.EstimatedOutputQty,
@@ -246,7 +264,8 @@ const BOMMaster = (props) => {
                 Unit: values.UnitName.value,
                 CreatedBy: createdBy(),
                 Company: userCompany(),
-                BOMItems: BOMItems
+                BOMItems: BOMItems,
+                ReferenceBom: BOMrefID
             });
             if (BOMItems.length === 0) {
                 dispatch(
@@ -260,16 +279,17 @@ const BOMMaster = (props) => {
                 );
                 return;
             }
-            if (pageMode === 'edit') {
+            debugger
+            if ((pageMode === 'edit') && !mode) {
                 dispatch(updateBOMList(jsonBody, `${EditData.id}/${EditData.Company}`));
-                console.log("update jsonBody", jsonBody)
+
             }
             else {
                 dispatch(postBOM(jsonBody));
-                console.log("post jsonBody", jsonBody)
             }
         }
     };
+
     var IsEditMode_Css = ''
     if ((modalCss) || (pageMode === "dropdownAdd")) { IsEditMode_Css = "-5.5%" };
     if (!(userPageAccessState === '')) {
@@ -282,7 +302,7 @@ const BOMMaster = (props) => {
                     <Breadcrumb pageHeading={userPageAccessState.PageHeading}
                         showCount={true}
                     />
-                    <form onSubmit={formSubmitHandler} ref={formRef} noValidate>
+                    <form onSubmit={(event) => formSubmitHandler({ event })} noValidate>
                         <div className="px-2 mb-1 mt-n3 c_card_filter header" >
                             <div className=" mt-1 row  ">
                                 <Col sm="6">
