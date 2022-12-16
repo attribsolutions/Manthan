@@ -10,7 +10,7 @@ import {
   ORDER_LIST_FILTERS,
 } from "./actionType"
 
-// const date = currentDate();
+// const date = currentDate;
 
 const INIT_STATE = {
   orderItem: [],
