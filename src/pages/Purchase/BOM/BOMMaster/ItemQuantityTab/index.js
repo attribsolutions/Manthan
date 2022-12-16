@@ -102,7 +102,7 @@ function ItemTab(props) {
                                 style={{ textAlign: "right" }}
                                 type="text"
                                 value={Quantity}
-                                placeholder="Please Enter Margin"
+                                placeholder="Please Enter Quantity"
                                 autoComplete="off"
                                 onChange={handleChange}
                             />

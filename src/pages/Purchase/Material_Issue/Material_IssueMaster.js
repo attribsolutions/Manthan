@@ -38,7 +38,7 @@ import {
     updateBOMListSuccess
 } from "../../../store/Purchase/BOMRedux/action";
 import { BIllOf_MATERIALS_LIST } from "../../../routes/route_url";
-import { createdBy, currentDate, userCompany, userParty } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { convertDatefunc, createdBy, currentDate, userCompany, userParty } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import { getWorkOrderListPage } from "../../../store/Purchase/WorkOrder/action";
 import { postGoButtonForMaterialIssue_Master, postGoButtonForMaterialIssue_MasterSuccess } from "../../../store/Purchase/Matrial_Issue/action";
 import paginationFactory, { PaginationListStandalone, PaginationProvider } from "react-bootstrap-table2-paginator";
@@ -353,6 +353,7 @@ const MaterialIssueMaster = (props) => {
 
             formatter: (cellContent, user) => (
                 <>
+
                     <Table className="table table-bordered table-responsive mb-1">
                         <Thead  >
                             <tr style={{ zIndex: "23" }} className="">
@@ -361,12 +362,19 @@ const MaterialIssueMaster = (props) => {
                                 <th className="">Batch Date</th>
                                 <th className="">Stock Quantity</th>
                                 <th className="" >Quantity</th>
-                               
+
                             </tr>
                         </Thead>
 
                         <Tbody  >
-                            {cellContent.map((index, key) => {
+                            {cellContent.map((index) => {
+                                // cellContent.map((i) => {
+                                //     debugger
+                                //     var date = convertDatefunc(i.BatchDate)
+                                //     i.BatchDate = (date)
+                                //     return i
+                                // }
+                                // )
                                 return (
                                     < tr >
                                         <td>
@@ -386,7 +394,7 @@ const MaterialIssueMaster = (props) => {
                                         <td>
                                             <div style={{ width: "150px" }}>
                                                 <Label>
-                                                    {index.BatchDate}
+                                                    {convertDatefunc(index.BatchDate)}
                                                 </Label>
                                             </div>
                                         </td>
@@ -406,7 +414,7 @@ const MaterialIssueMaster = (props) => {
 
                                             </div>
                                         </td>
-                                        
+
                                     </tr>
                                 )
 
