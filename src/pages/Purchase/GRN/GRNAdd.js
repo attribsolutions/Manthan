@@ -27,7 +27,7 @@ import {
 } from "../../../store/Purchase/OrderPageRedux/actions";
 import { getSupplierAddress } from "../../../store/CommonAPI/SupplierRedux/actions"
 import { AlertState, BreadcrumbFilterSize } from "../../../store/actions";
-import { basicAmount, GstAmount, handleKeyDown, totalAmount } from "../Order/OrderPageCalulation";
+import { basicAmount, GstAmount, handleKeyDown, Amount } from "../Order/OrderPageCalulation";
 import '../../Order/div.css'
 
 import { GRN_lIST, ORDER_lIST } from "../../../routes/route_url";
@@ -115,13 +115,13 @@ const GRNAdd = (props) => {
             grnItems.OrderItem.forEach((ele, k) => {
                 ele.id = k + 1;
                 ele["Name"] = ele.ItemName
-                ele["inpRate"] = ele.Rate
-                ele["inpQty"] = ''
+                ele["Rate"] = ele.Rate
+                ele["Quantity"] = ''
                 ele["POItemAmt"] = ele.Amount
-                ele["totalAmount"] = 0.00
-                ele["UOM"] = ele.Unit
-                ele["UOMLabel"] = ele.UnitName
-                ele["UOM"] = ele.Unit
+                ele["Amount"] = 0.00
+                ele["Unit"] = ele.Unit
+                ele["UnitName"] = ele.UnitName
+                ele["Unit"] = ele.Unit
                 ele["BatchDate"] = ''
                 ele["BatchCode"] = ''
                 ele["delbtn"] = false
@@ -241,13 +241,13 @@ const GRNAdd = (props) => {
     function val_onChange(val, row, type) {
 
         if (type === "qty") {
-            row["inpQty"] = val;
+            row["Quantity"] = val;
         }
         else {
-            row["inpRate"] = val
+            row["Rate"] = val
         }
-        const amount = totalAmount(row)
-        row["totalAmount"] = amount
+        const amount = Amount(row)
+        row["Amount"] = amount
         try {
             document.getElementById(`abc${row.id}`).innerText = amount
             // value = amount
@@ -256,7 +256,7 @@ const GRNAdd = (props) => {
 
         let sum = 0
         grnItemList.forEach(ind => {
-            sum = sum + parseFloat(ind.totalAmount)
+            sum = sum + parseFloat(ind.Amount)
         });
         setOrderAmount(sum.toFixed(2))
         dispatch(BreadcrumbFilterSize(`${"GRN Amount"} :${sum.toFixed(2)}`))
@@ -290,15 +290,15 @@ const GRNAdd = (props) => {
             sort: true,
             formatter: (value, row, k) => {
                 try {
-                    document.getElementById(`inpQty${k}`).value = row.inpQty
+                    document.getElementById(`Quantity${k}`).value = row.Quantity
                 } catch (e) { }
                 return (
                     <span >
                         <Input type="text"
-                            id={`inpQty${k}`}
-                            defaultValue={row.inpQty}
+                            id={`Quantity${k}`}
+                            defaultValue={row.Quantity}
                             className="text-end"
-                            key={row.inpQty}
+                            key={row.Quantity}
                             onChange={(e) => {
                                 debugger
                                 const val = e.target.value
@@ -306,7 +306,7 @@ const GRNAdd = (props) => {
                                 if ((isnum) || (val === '')) {
                                     val_onChange(val, row, "qty")
                                 } else {
-                                    document.getElementById(`inpQty${k}`).value = row.inpQty
+                                    document.getElementById(`Quantity${k}`).value = row.Quantity
                                 }
                             }}
                             autoComplete="off"
@@ -321,22 +321,22 @@ const GRNAdd = (props) => {
 
 
         },
-        {  //------------- UOM column ----------------------------------
-            text: "UOM",
+        {  //------------- Unit column ----------------------------------
+            text: "Unit",
             dataField: "",
             sort: true,
             formatter: (value, row, key) => {
-                if (row.UOMLabel === undefined) {
-                    row["UOM"] = row.UnitDetails[0].Unit
-                    row["UOMLabel"] = row.UnitDetails[0].UnitName
-                    row["inpBaseUnitQty"] = row.UnitDetails[0].BaseUnitQuantity
+                if (row.UnitName === undefined) {
+                    row["Unit"] = row.UnitDetails[0].Unit
+                    row["UnitName"] = row.UnitDetails[0].UnitName
+                    row["BaseUnitQuantity"] = row.UnitDetails[0].BaseUnitQuantity
                 }
                 return (
                     <Select
                         classNamePrefix="select2-selection"
                         id={"ddlUnit"}
-                        defaultValue={{ value: row.UOM, label: row.UOMLabel }}
-                        // value={{value:row.UOM,label:row.UOMLabel}}
+                        defaultValue={{ value: row.Unit, label: row.UnitName }}
+                        // value={{value:row.Unit,label:row.UnitName}}
                         options={
                             row.UnitDetails.map(i => ({
                                 label: i.UnitName,
@@ -345,9 +345,9 @@ const GRNAdd = (props) => {
                             }))
                         }
                         onChange={e => {
-                            row["UOM"] = e.value;
-                            row["UOMLabel"] = e.label
-                            row["inpBaseUnitQty"] = e.baseUnitQty
+                            row["Unit"] = e.value;
+                            row["UnitName"] = e.label
+                            row["BaseUnitQuantity"] = e.baseUnitQty
                         }}
                     >
                     </Select >
@@ -363,19 +363,19 @@ const GRNAdd = (props) => {
             dataField: "Rate",
             sort: true,
             formatter: (value, row, k) => {
-                if (row.inpRate === undefined) { row["inpRate"] = 0 }
-                if (row.totalAmount === undefined) { row["totalAmount"] = 0 }
+                if (row.Rate === undefined) { row["Rate"] = 0 }
+                if (row.Amount === undefined) { row["Amount"] = 0 }
                 return (
                     <span className="text-right" >
                         <Input
                             type="text"
-                            id={`inpRatey${k}`}
+                            id={`Ratey${k}`}
                             className="border-0 text-end"
-                            defaultValue={row.inpRate}
+                            defaultValue={row.Rate}
                             disabled={(row.GST === '') ? true : false}
                             onChange={e => {
-                                row["inpRate"] = e.target.value;
-                                const qty = document.getElementById(`inpQty${k}`)
+                                row["Rate"] = e.target.value;
+                                const qty = document.getElementById(`Quantity${k}`)
                                 const val = e.target.value
                                 if (val > 0) {
                                     val_onChange(val, row, "rate")
@@ -418,7 +418,7 @@ const GRNAdd = (props) => {
             formatter: (value, row, k) => (
                 <div className="row mt-1">
                     <div className="col ">
-                        <samp id={`abc${row.id}`}>{row.totalAmount}</samp>
+                        <samp id={`abc${row.id}`}>{row.Amount}</samp>
                     </div>
                 </div>
             ),
@@ -545,7 +545,7 @@ const GRNAdd = (props) => {
                 const ele = { ...element }
                 ele.id = element.id + 1
                 ele.delbtn = true
-                ele.inpQty = 0
+                ele.Quantity = 0
                 newArr.push(ele)
             }
             else {
@@ -572,22 +572,22 @@ const GRNAdd = (props) => {
         debugger
         const itemArr = []
         grnItemList.forEach(i => {
-            if ((i.inpQty > 0)) {
+            if ((i.Quantity > 0)) {
                 const basicAmt = parseFloat(basicAmount(i))
                 const cgstAmt = (GstAmount(i))
 
                 const arr = {
                     Item: i.Item,
-                    Quantity: i.inpQty,
+                    Quantity: i.Quantity,
                     MRP: i.MRP,
                     ReferenceRate: i.Rate,
-                    Rate: i.inpRate,
-                    Unit: i.UOM,
-                    BaseUnitQuantity: i.inpQty,
+                    Rate: i.Rate,
+                    Unit: i.Unit,
+                    BaseUnitQuantity: i.Quantity,
                     GST: i.GST,
                     BasicAmount: basicAmt.toFixed(2),
                     GSTAmount: cgstAmt.toFixed(2),
-                    Amount: i.totalAmount,
+                    Amount: i.Amount,
 
                     CGST: (cgstAmt / 2).toFixed(2),
                     SGST: (cgstAmt / 2).toFixed(2),

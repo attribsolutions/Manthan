@@ -3,8 +3,8 @@
 export const basicAmount = i => {
     let rate = 0
     let qty = 0
-    if (!(i.inpRate == '')) { rate = i.inpRate; };
-    if (!(i.inpQty == '')) { qty = i.inpQty; };
+    if (!(i.Rate == '')) { rate = i.Rate; };
+    if (!(i.Quantity == '')) { qty = i.Quantity; };
 
     let val = parseFloat(rate) * parseFloat(qty)
     if (!val) {
@@ -20,7 +20,7 @@ export const GstAmount = (i) => {
     return ((base * gst) / 100)
 }
 
-export const totalAmount = (i) => {
+export const Amount = (i) => {
 
     const gstAmt = GstAmount(i);
     const baseAmt = basicAmount(i);
