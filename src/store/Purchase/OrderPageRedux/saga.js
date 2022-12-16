@@ -59,6 +59,7 @@ function* goButtonGenFunc({ data, hasEditVal }) {
     }
 
     yield response.Data.forEach(row => {
+      
       if (row.poRate === undefined) { row["poRate"] = '' }
       if (row.poQty === undefined) { row["poQty"] = 0 }
       if (row.poBaseUnitQty === undefined) { row["poBaseUnitQty"] = '' }

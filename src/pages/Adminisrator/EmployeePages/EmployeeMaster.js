@@ -1,4 +1,4 @@
-import React, { useState, useEffect  } from "react";
+import React, { useState, useEffect } from "react";
 import Select from "react-select";
 import { Card, CardBody, Col, Container, Row, Label, CardHeader, FormGroup, Input } from "reactstrap";
 import { useDispatch, useSelector } from "react-redux";
@@ -73,7 +73,7 @@ const AddEmployee = (props) => {
 
     }));
   {/** Dyanamic Page access state and OnChange function */ }
-  
+
   const fileds = {
     id: "",
     Name: "",
@@ -94,7 +94,7 @@ const AddEmployee = (props) => {
 
 
   const [state, setState] = useState(() => initialFiledFunc(fileds))
-
+  debugger
   const values = { ...state.values }
   const { isError } = state;
   const { fieldLabel } = state;
@@ -151,7 +151,7 @@ const AddEmployee = (props) => {
       }
 
       if (hasEditVal) {
-    
+
         const listItems = hasEditVal.EmployeeParties.map((data) => ({
           value: data.id,
           label: data.Name
@@ -392,6 +392,8 @@ const AddEmployee = (props) => {
     }
   };
 
+
+
   // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
   var IsEditMode_Css = ''
   if ((modalCss) || (pageMode === "dropdownAdd")) { IsEditMode_Css = "-5.5%" };
@@ -486,6 +488,7 @@ const AddEmployee = (props) => {
                             name="DOB"
                             value={values.DOB}
                             className="form-control d-block p-2 bg-white text-dark"
+                            // className={values.DOB.length >0 ?"form-control":"bg-white form-control is-invalid"}
                             placeholder="YYYY-MM-DD"
                             autoComplete="0,''"
                             options={{
@@ -495,13 +498,15 @@ const AddEmployee = (props) => {
                               minDate: new Date().fp_incr("n"),
                               maxDate: new Date().fp_incr(0) // 14 days from now"0,''"
                             }}
-                            onChange={(y, v, e) => { onChangeDate({ e, v, state, setState }) }}
+                            onChange={(y, v, e) => {
+                              debugger
+                              onChangeDate({ e, v, state, setState })
+                            }}
                           />
                           {isError.DOB.length > 0 && (
                             <span className="invalid-feedback">{isError.DOB}</span>
                           )}
                         </FormGroup>
-
                         <Col md="1">  </Col>
                         <FormGroup className="mb-2 col col-sm-3 ">
                           <Label htmlFor="validationCustom01">{fieldLabel.AadharNo} </Label>
@@ -520,7 +525,6 @@ const AddEmployee = (props) => {
                             <span className="invalid-feedback">{isError.AadharNo}</span>
                           )}
                         </FormGroup>
-
                         <Col md="1">  </Col>
                         <FormGroup className="mb-2 col col-sm-3 ">
                           <Label htmlFor="validationCustom01">{fieldLabel.PAN} </Label>
@@ -540,7 +544,6 @@ const AddEmployee = (props) => {
                           )}
                         </FormGroup>
                       </Row>
-
                       <Row>
                         <FormGroup className="mb-2 col col-sm-3 ">
                           <Label htmlFor="validationCustom01">{fieldLabel.Address} </Label>
@@ -559,31 +562,32 @@ const AddEmployee = (props) => {
                             <span className="invalid-feedback">{isError.Address}</span>
                           )}
                         </FormGroup>
-
                         <Col md="1"></Col>
                         <FormGroup className="mb-2 col col-sm-3 ">
                           <Label htmlFor="validationCustom01"> {fieldLabel.StateName} </Label>
                           <Col sm={12}>
                             <Select
+                      
                               name="StateName"
                               id="state"
+                              class="Flatpickr"
+                              // id="validationCustom04"
                               value={values.StateName}
                               isSearchable={true}
-                              className="react-dropdown"
+                              // className={isError.PAN.length > 0 ? "Flatpickr":"form-control" }
+                              // className="Flatpickr"
                               classNamePrefix="dropdown"
                               options={State_DropdownOptions}
                               onChange={(hasSelect, evn) => {
                                 onChangeSelect({ hasSelect, evn, state, setState, })
                                 State_Dropdown_Handler(hasSelect)
                               }}
-
                             />
                             {isError.StateName.length > 0 && (
                               <span className="text-danger f-8"><small>{isError.StateName}</small></span>
                             )}
                           </Col>
                         </FormGroup>
-
                         <Col md="1"></Col>
                         <FormGroup className="mb-2 col col-sm-3 ">
                           <Label htmlFor="validationCustom01"> {fieldLabel.DistrictName} </Label>
@@ -598,7 +602,6 @@ const AddEmployee = (props) => {
                               onChange={(hasSelect, evn) => {
                                 onChangeSelect({ hasSelect, evn, state, setState, })
                               }}
-
                             />
                             {isError.DistrictName.length > 0 && (
                               <span className="text-danger f-8"><small>{isError.DistrictName}</small></span>
@@ -608,7 +611,6 @@ const AddEmployee = (props) => {
                       </Row>
                     </CardBody>
                   </Card>
-
                   <Card className="mt-n2">
                     <CardBody className="c_card_body">
                       <Row >
