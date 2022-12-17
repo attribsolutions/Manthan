@@ -52,7 +52,7 @@ const MaterialIssueList = () => {
     // Featch Modules List data  First Rendering
     useEffect(() => {
         setpageMode(hasPagePath)
-        dispatch(BreadcrumbFilterSize(`${"Work Order Count"} :0`))
+        dispatch(BreadcrumbFilterSize(`${"Material Issue Count"} :0`))
         dispatch(commonPageFieldListSuccess(null))
         dispatch(commonPageFieldList(76))
         goButtonHandler(true)
