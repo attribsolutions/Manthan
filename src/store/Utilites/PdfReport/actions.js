@@ -1,9 +1,12 @@
-import { GET_PDF_REPORT_DATA, GET_PDF_REPORT_DATA_SUCCESS } from "./actionType";
+import {
+  GET_PDF_REPORT_DATA,
+  GET_PDF_REPORT_DATA_SUCCESS
+} from "./actionType";
 
 
-export const getpdfReportdata = (urlpath, Id) => ({
+export const getpdfReportdata = (urlpath,reportType, Id) => ({
   type: GET_PDF_REPORT_DATA,
-  urlpath, Id
+  urlpath, reportType, Id
 });
 
 export const getpdfReportdataSuccess = (data) => ({
