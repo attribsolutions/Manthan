@@ -38,18 +38,18 @@ import MarginMasterSaga from "./Administrator/MarginMasterRedux/saga"
 import TermsAndConditionsSaga from "./Administrator/TermsAndConditionsRedux/saga"
 import GroupTypeSaga from "./Administrator/GroupTypeRedux/saga"
 import GSTSaga from "./Administrator/GSTRedux/saga"
-
 import GroupSaga from "./Administrator/GroupRedux/saga"
 import SubGroupSaga from "./Administrator/SubGroupsRedux/saga"
-
 import PartySubPartysaga from "./Administrator/PartySubPartyRedux/saga"
-
 import PartyItemssaga from "./Administrator/PartyItemsRedux/saga"
 import SupplierSaga from "./CommonAPI/SupplierRedux/saga"
 import GRNSaga from "./Purchase/GRNRedux/saga"
 import BOMSaga from "./Purchase/BOMRedux/saga"
 import WorkOrderSaga from "./Purchase/WorkOrder/saga"
 import MaterialIssueSaga from "./Purchase/Matrial_Issue/saga"
+import ProductionSaga from "./Purchase/ProductionRedux/saga"
+
+
 
 
 export default function* rootSaga() {
@@ -97,7 +97,6 @@ export default function* rootSaga() {
     fork(BOMSaga),
     fork(WorkOrderSaga),
     fork(MaterialIssueSaga),
-   
-    
+    fork(ProductionSaga),
   ])
 }

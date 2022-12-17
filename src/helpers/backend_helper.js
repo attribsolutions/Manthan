@@ -391,6 +391,13 @@ export const WorkOrder_Delete_Api = (id) => del(`${url.WORK_ORDER_LIST_API}/${id
 export const Material_Issue_GoButton_Post_API = (data) => post(url.GO_BUTTON_POST_API_FOR_MATERIAL_ISSUE, data)// go button postapi
 export const Material_Issue_Post_API = (data) => post(url.POST_API_FOR_MATERIAL_ISSUE, data)// go button postapi
 export const Material_Issue_Get_API = (filters) => post(url.POST_API_FOR_MATERIAL_ISSUE_LIST, filters)// get list api
+
+// Production 
+export const Production_Post_API = (data) => post(url.GO_BUTTON_POST_API_FOR_PRODUCTION,data)// go button postapi
+
+
+
+
 export {
   getLoggedInUser,
   isUserAuthenticated,
