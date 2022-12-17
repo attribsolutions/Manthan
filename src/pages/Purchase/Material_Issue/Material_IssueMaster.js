@@ -122,7 +122,6 @@ const MaterialIssueMaster = (props) => {
 
     const goButtonHandler = (event) => {
         debugger
-        
         event.preventDefault();
         if (formValid(state, setState)) {
             const jsonBody = JSON.stringify({

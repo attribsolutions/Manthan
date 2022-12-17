@@ -108,7 +108,7 @@ const WorkOrderList = () => {
                     excelBtnView={true}
                     excelData={downList} />
 
-                <div className="px-2 mt-n1  c_card_header" style={{ marginBottom: "-12px" }} >
+                <div className="px-2 mt-n1  c_card_header text-black" style={{ marginBottom: "-12px" }} >
                     <div className="mt-1  row" >
                         <Col sm="5" >
                             <FormGroup className=" row mt-3 " >

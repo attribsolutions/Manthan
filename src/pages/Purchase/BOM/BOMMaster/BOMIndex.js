@@ -303,7 +303,7 @@ const BOMMaster = (props) => {
                         showCount={true}
                     />
                     <form onSubmit={(event) => formSubmitHandler({ event })} noValidate>
-                        <div className="px-2 mb-1 mt-n3 c_card_filter header" >
+                        <div className="px-2 mb-1 mt-n3 c_card_filter header text-black" >
                             <div className=" mt-1 row  ">
                                 <Col sm="6">
                                     <FormGroup className="mb-2 row mt-2  ">
