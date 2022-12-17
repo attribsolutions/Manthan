@@ -62,10 +62,7 @@ const TermsAndConditionsMaster = (props) => {
         Name: "",
         id: ""
     }
-
     const [state, setState] = useState(() => initialFiledFunc(fileds))
-
-
     const values = { ...state.values }
     const { isError } = state;
     const { fieldLabel } = state;
@@ -95,9 +92,9 @@ const TermsAndConditionsMaster = (props) => {
 
     //This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
     useEffect(() => {
+        debugger
 
         if ((hasShowloction || hasShowModal)) {
-
             let hasEditVal = null
             if (hasShowloction) {
                 setPageMode(location.pageMode)
@@ -108,16 +105,12 @@ const TermsAndConditionsMaster = (props) => {
                 setPageMode(props.pageMode)
                 setModalCss(true)
             }
-
             if (hasEditVal) {
-
                 const { id, Name } = hasEditVal
                 const { values, fieldLabel, hasValid, required, isError } = { ...state }
                 values.Name = Name;
                 values.id = id
-
                 hasValid.Name.valid = true;
-
                 setState({ values, fieldLabel, hasValid, required, isError })
                 dispatch(Breadcrumb_inputName(hasEditVal.Name))
 
@@ -125,9 +118,7 @@ const TermsAndConditionsMaster = (props) => {
             dispatch(EditTermsAndCondtions_Success({ Status: false }))
         }
     }, [])
-
     useEffect(() => {
-
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(postTermAndConditionSuccess({ Status: false }))
             setState(() => initialFiledFunc(fileds)) //+++++++++ Clear form values 
@@ -139,7 +130,6 @@ const TermsAndConditionsMaster = (props) => {
                     Message: postMsg.Message,
                 }))
             }
-
             else {
                 dispatch(AlertState({
                     Type: 1,
@@ -161,7 +151,6 @@ const TermsAndConditionsMaster = (props) => {
             }));
         }
     }, [postMsg])
-
     useEffect(() => {
         if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
             saveDissable(false);//+++++++++Update Button Is enable function
@@ -181,8 +170,6 @@ const TermsAndConditionsMaster = (props) => {
             );
         }
     }, [updateMsg, modalCss]);
-
-
     useEffect(() => {
 
         if (pageField) {
@@ -190,16 +177,13 @@ const TermsAndConditionsMaster = (props) => {
             comAddPageFieldFunc({ state, setState, fieldArr })
         }
     }, [pageField])
-
     const formSubmitHandler = (event) => {
         event.preventDefault();
         if (formValid(state, setState)) {
             const jsonBody = JSON.stringify({
                 Name: values.Name,
             });
-
             saveDissable(true);//+++++++++save Button Is dissable function
-
             if (pageMode === "edit") {
                 dispatch(UpdateTermsAndCondtions(jsonBody, values.id));
             }
@@ -209,13 +193,9 @@ const TermsAndConditionsMaster = (props) => {
 
         }
     };
-
-
-
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
     var IsEditMode_Css = ''
     if ((modalCss) || (pageMode === "dropdownAdd")) { IsEditMode_Css = "-5.5%" };
-
     if (!(userPageAccessState === '')) {
         return (
             <React.Fragment>
