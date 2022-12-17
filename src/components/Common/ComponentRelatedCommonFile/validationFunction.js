@@ -13,7 +13,7 @@ export const formValid = ({ isError, required, hasValid, fieldLabel, values }, s
 };
 
 export const formValChange = ({ event, state, setState }) => {
-
+debugger
     let isError = { ...state.isError };
     let hasValid = { ...state.hasValid };
     let required = { ...state.required };
@@ -154,6 +154,7 @@ export const onChangeText = ({ event, state, setState }) => {
 
 
 export const initialFiledFunc = (filed) => {
+    debugger
     const obj = {}
     obj["values"] = filed;
     obj["fieldLabel"] = {}
