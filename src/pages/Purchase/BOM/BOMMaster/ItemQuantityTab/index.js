@@ -86,7 +86,7 @@ function ItemTab(props) {
     return (
         <Row>
             <Col md={12}  >
-                <div className="px-2  mb-1 c_card_body " style={{ width: "100%" }}>
+                <div className="px-2  mb-1 c_card_body text-black mt-1" style={{ width: "100%" }}>
                     <Row>
                         <FormGroup className="mb-3 col col-sm-3 ">
                             <Label>Content Item</Label>
