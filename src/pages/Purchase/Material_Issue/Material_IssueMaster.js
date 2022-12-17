@@ -59,7 +59,7 @@ const MaterialIssueMaster = (props) => {
         id: "",
         MaterialIssueDate: "",
         ItemName: "",
-        NumberOfLot: "",
+        NumberOfLot: "1",
         LotQuantity: "",
     }
 
@@ -121,6 +121,8 @@ const MaterialIssueMaster = (props) => {
     }, [])
 
     const goButtonHandler = (event) => {
+        debugger
+
         event.preventDefault();
         if (formValid(state, setState)) {
             const jsonBody = JSON.stringify({
@@ -130,8 +132,10 @@ const MaterialIssueMaster = (props) => {
                 Party: userParty(),
                 Quantity: parseInt(values.LotQuantity)
             });
+
             dispatch(postGoButtonForMaterialIssue_Master(jsonBody));
         }
+
     }
 
     //This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
@@ -253,6 +257,8 @@ const MaterialIssueMaster = (props) => {
         setState((i) => {
             i.values.NumberOfLot = "1";
             i.values.LotQuantity = e.Quantity;
+            i.hasValid.NumberOfLot.valid = true;
+            i.hasValid.LotQuantity.valid = true;
             return i
         })
     }
@@ -260,7 +266,7 @@ const MaterialIssueMaster = (props) => {
     function Quantitychange(event) {
         debugger
         dispatch(postGoButtonForMaterialIssue_MasterSuccess([]))
-        const value1 = Math.max(1, Math.min(Itemselect.Quantity, Number(event.target.value)));
+        const value1 = Math.max('', Math.min(Itemselect.Quantity, Number(event.target.value)));
         event.target.value = value1
         onChangeText({ event, state, setState });
         // if (Itemselect.Quantity>e) {
@@ -284,7 +290,7 @@ const MaterialIssueMaster = (props) => {
 
     const formSubmitHandler = (event) => {
         debugger
-      
+
         const MaterialIssueItems = []
         GoButton.map((index) => {
             index.BatchesData.map((ele) => {
@@ -310,7 +316,7 @@ const MaterialIssueMaster = (props) => {
 
         event.preventDefault();
         if (formValid(state, setState)) {
-           
+
             const jsonBody = JSON.stringify({
 
                 MaterialIssueDate: values.MaterialIssueDate,
@@ -456,7 +462,7 @@ const MaterialIssueMaster = (props) => {
                 <div className="page-content" style={{ marginBottom: "5cm" }}>
 
                     <Breadcrumb pageHeading={userPageAccessState.PageHeading}
-                        // showCount={true}
+                    // showCount={true}
                     />
                     <form onSubmit={formSubmitHandler} ref={formRef} noValidate>
 
@@ -532,7 +538,8 @@ const MaterialIssueMaster = (props) => {
                                                 placeholder="Please Enter Number Of Lots"
                                                 autoComplete='off'
                                                 onChange={(event) => {
-                                                    onChangeText({ event, state, setState })
+                                                    onChangeText({ event, state, setState });
+                                                    dispatch(postGoButtonForMaterialIssue_MasterSuccess([]))
                                                 }}
                                             />
                                             {isError.NumberOfLot.length > 0 && (
@@ -550,8 +557,6 @@ const MaterialIssueMaster = (props) => {
                                                 name="LotQuantity"
                                                 value={values.LotQuantity}
                                                 type="text"
-                                                min={"1"}
-                                                max={Itemselect.LotQuantity}
                                                 className={isError.LotQuantity.length > 0 ? "is-invalid form-control" : "form-control"}
                                                 placeholder="Please Enter LotQuantity"
                                                 autoComplete='off'
