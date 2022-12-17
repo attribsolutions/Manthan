@@ -61,12 +61,12 @@ function* goButtonGenFunc({ data, hasEditVal }) {
       response.Data.forEach(element => {
         hasEditVal.OrderItem.forEach(ele => {
           if (element.id === ele.Item) {
-            element["inpRate"] = ele.Rate
-            element["inpQty"] = ele.Quantity
-            element["totalAmount"] = ele.Amount
-            element["UOM"] = ele.Unit
-            element["UOMLabel"] = ele.UnitName
-            element["inpBaseUnitQty"] = ele.BaseUnitQuantity
+            element["Rate"] = ele.Rate
+            element["Quantity"] = ele.Quantity
+            element["Amount"] = ele.Amount
+            element["Unit"] = ele.Unit
+            element["UnitName"] = ele.UnitName
+            element["BaseUnitQuantity"] = ele.BaseUnitQuantity
 
           }
         })

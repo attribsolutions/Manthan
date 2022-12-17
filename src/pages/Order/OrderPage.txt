@@ -65,7 +65,7 @@ const OrderPage = (props) => {
   const [itemArray, setitemArray] = useState([])
   const [itemCount, setItemCount] = useState(0)
   const [customerName_dropdownSelect, setCustomerName_dropdownSelect] = useState({})
-  const [totalAmountCount, setTotalAmountCount] = useState(0)
+  const [AmountCount, setAmountCount] = useState(0)
 
 
   useEffect(() => {
@@ -177,7 +177,7 @@ const OrderPage = (props) => {
       body: JSON.stringify({
         CustomerID: 2,
         PartyID: 2,
-        OrderAmount: totalAmountCount,
+        OrderAmount: AmountCount,
         Descreption: disc,
         CreatedBy: 11,
         OrderDate: orderDate,
@@ -266,11 +266,11 @@ const OrderPage = (props) => {
     const Gst = parseFloat(itemIndex.GSTPercentage)
     const basicAmount = rate * quantity;
     const GstAmount = basicAmount * (Gst / 100)
-    const totalAmount = GstAmount + basicAmount
+    const Amount = GstAmount + basicAmount
 
 
     let test = []
-    let TotalAmountCount_initial = 0
+    let AmountCount_initial = 0
     let ItemCount_initial = 0
 
     const find = itemArray.find((element) => {
@@ -296,7 +296,7 @@ const OrderPage = (props) => {
         CGSTPercentage: 1,// change
         SGSTPercentage: 1,// change
         IGSTPercentage: 1,// change
-        Amount: parseInt(totalAmount.toFixed(2)) // change
+        Amount: parseInt(Amount.toFixed(2)) // change
       }
     }
 
@@ -322,15 +322,15 @@ const OrderPage = (props) => {
     }
 
     test.map((count) => {
-      TotalAmountCount_initial = TotalAmountCount_initial + count.Amount
+      AmountCount_initial = AmountCount_initial + count.Amount
       ItemCount_initial = ItemCount_initial + 1
     })
     if ((test.length > 0)) {
-      setTotalAmountCount(TotalAmountCount_initial);
+      setAmountCount(AmountCount_initial);
       setItemCount(ItemCount_initial);
     }
     else {
-      setTotalAmountCount(0)
+      setAmountCount(0)
       setItemCount(0)
     }
   }
@@ -439,10 +439,10 @@ const OrderPage = (props) => {
                 <Col md="2" className="mt-n1 ">
                   <Label htmlFor="validationCustom01"> </Label>
                   <div className=" bg-soft-info text-center text-black  external-event  col-form-label rounded-2 align-right">
-                    Order Amount : &nbsp;&nbsp; {totalAmountCount.toFixed(2)}&nbsp;
+                    Order Amount : &nbsp;&nbsp; {AmountCount.toFixed(2)}&nbsp;
                   </div>
                   {/* <h5 className=" text-left text-danger  align-left">
-    Order Amount:&nbsp; {totalAmountCount.toFixed(2)}
+    Order Amount:&nbsp; {AmountCount.toFixed(2)}
   </h5> */}
                 </Col>
 
@@ -474,7 +474,7 @@ const OrderPage = (props) => {
                           <Th data-priority="1" className="text-center" >GST %</Th>
                           <Th data-priority="1" className="col-sm-1 text-center">Quantity
                           </Th>
-                          <Th data-priority="1" className="col-sm-2 text-center" >UOM</Th>
+                          <Th data-priority="1" className="col-sm-2 text-center" >Unit</Th>
                         </Tr>
                       </Thead>
                       <Tbody>

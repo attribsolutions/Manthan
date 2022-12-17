@@ -97,6 +97,9 @@ import WorkOrderList from "../pages/Purchase/WorkOrder/WorkOrderList";
 import MaterialIssueMaster from "../pages/Purchase/Material_Issue/Material_IssueMaster";
 import MaterialIssueList from "../pages/Purchase/Material_Issue/Material_Issue_List";
 
+import ProductionMaster from "../pages/Purchase/Production/ProductionMaster";
+
+
 const userRoutes = [
 
   { path: "/dashboard", component: Dashboard },
@@ -204,6 +207,8 @@ const userRoutes = [
   { path: path.MATERIAL_ISSUE, component: MaterialIssueMaster },
   { path: path.MATERIAL_ISSUE_LIST, component: MaterialIssueList },
   
+
+  { path: path.PRODUCTION_MASTER, component: ProductionMaster },
 
   { path: path.SEARCH_BOX2, component: SearchBoxSecond },
   { path: path.SEARCH_BOX3, component: SerachBox3 },
