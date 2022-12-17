@@ -42,7 +42,7 @@ let description = ''
 let editVal = {}
 let initialTableData = []
 const GRNAdd = (props) => {
-    debugger
+    
     const dispatch = useDispatch();
     const history = useHistory();
 
@@ -112,18 +112,16 @@ const GRNAdd = (props) => {
     useEffect(() => {
         if ((items.Status === true) && (items.StatusCode === 200)) {
             const grnItems = items.Data
+            debugger
             grnItems.OrderItem.forEach((ele, k) => {
                 ele.id = k + 1;
-                ele["Name"] = ele.ItemName
-                ele["Rate"] = ele.Rate
+                ele["poQuantity"] =ele.Quantity
                 ele["Quantity"] = ''
-                ele["POItemAmt"] = ele.Amount
-                ele["Amount"] = 0.00
-                ele["Unit"] = ele.Unit
-                ele["UnitName"] = ele.UnitName
-                ele["Unit"] = ele.Unit
-                ele["BatchDate"] = ''
-                ele["BatchCode"] = ''
+
+                ele["poAmount"] = ele.Amount
+                ele["Amount"] = 0
+                ele["BatchDate"] = currentDate
+                ele["BatchCode"] = '0'
                 ele["delbtn"] = false
 
             });
@@ -139,7 +137,7 @@ const GRNAdd = (props) => {
             // setOrderAmount(hasEditVal.OrderAmount)
             items.Status = false
             dispatch(getGRN_itemMode2_Success(items))
-            debugger
+            
             dispatch(BreadcrumbFilterSize(`${"GRN Amount"} :${grnItems.OrderAmount}`))
         }
 
@@ -265,7 +263,7 @@ const GRNAdd = (props) => {
     const pagesListColumns = [
         {//------------- ItemName column ----------------------------------
             text: "Item Name",
-            dataField: "Name",
+            dataField: "ItemName",
             sort: true,
             formatter: (value, row) => (
                 <div className=" mt-2">
@@ -275,18 +273,20 @@ const GRNAdd = (props) => {
         },
         {//------------- Quntity first column ----------------------------------
             text: "PO-QTY",
-            dataField: "",
+            dataField: "poQuantity",
             sort: true,
-            formatter: (value, row, k) => (
-                <samp className="font-asian">{row.Quantity}</samp>
-            ),
+            formatter: (value, row, k) => {
+                debugger
+                return(
+                <samp className="font-asian">{value}</samp>
+            )},
             headerStyle: (colum, colIndex) => {
                 return { width: '100px', textAlign: 'center', text: "end" };
             }
         },
         {//  ------------Quntity column -----------------------------------  
             text: "GRN-QTY",
-            dataField: "rate",
+            dataField: "",
             sort: true,
             formatter: (value, row, k) => {
                 try {
@@ -298,9 +298,9 @@ const GRNAdd = (props) => {
                             id={`Quantity${k}`}
                             defaultValue={row.Quantity}
                             className="text-end"
+                            autoComplete="off"
                             key={row.Quantity}
                             onChange={(e) => {
-                                debugger
                                 const val = e.target.value
                                 let isnum = /^[+-]?([0-9]+([.][0-9]*)?|[.][0-9]+)?([eE][+-]?[0-9]+)?$/.test(val);
                                 if ((isnum) || (val === '')) {
@@ -309,8 +309,7 @@ const GRNAdd = (props) => {
                                     document.getElementById(`Quantity${k}`).value = row.Quantity
                                 }
                             }}
-                            autoComplete="off"
-                            onKeyDown={(e) => handleKeyDown(e, items)}
+                            onKeyDown={(e) => handleKeyDown(e, grnItemList)}
                         />
                     </span>
                 )
@@ -569,7 +568,7 @@ const GRNAdd = (props) => {
 
 
     const saveHandeller = () => {
-        debugger
+        
         const itemArr = []
         grnItemList.forEach(i => {
             if ((i.Quantity > 0)) {
@@ -619,7 +618,7 @@ const GRNAdd = (props) => {
             }));
             return
         }
-        debugger
+        
         const jsonBody = JSON.stringify({
             GRNDate: grnDate,
             Customer: grnDetail.Customer,
@@ -632,7 +631,7 @@ const GRNAdd = (props) => {
             GRNReferences: grnDetail.GRNReferences
 
         });
-        debugger
+        
         if (pageMode === "edit") {
             // dispatch(editGRNId(jsonBody, editVal.id))
             console.log("GRNedit", jsonBody)
