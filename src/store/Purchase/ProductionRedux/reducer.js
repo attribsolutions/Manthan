@@ -1,6 +1,7 @@
 import { currentDate } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import {
   DELETE_PRODUCTION_FOR_PRODUCTION_PAGE_SUCCESS,
+  DELETE_PRODUCTION_SUCCESS,
   EDIT_PRODUCTION_FOR_PRODUCTION_PAGE_SUCCESS,
   GET_PRODUCTION_ITEM_MODE_2_SUCCESS,
   GET_PRODUCTION_LIST_PAGE_SUCCESS,
@@ -42,44 +43,35 @@ const ProductionReducer = (state = INIT_STATE, action) => {
         ...state,
         grnItemList: action.payload,
       }
-
     // GRN List Page 
     case GET_PRODUCTION_LIST_PAGE_SUCCESS:
       return {
         ...state,
         GRNList: action.payload,
       }
-
     case POST_PRODUCTION_FROM_PRODUCTION_PAGE_SUCCESS:
       return {
         ...state,
         postMsg: action.payload,
       }
-
-
     case EDIT_PRODUCTION_FOR_PRODUCTION_PAGE_SUCCESS:
       return {
         ...state,
         editData: action.payload,
       }
-
     case UPDATE_PRODUCTION_ID_FROM_PRODUCTION_PAGE_SUCCESS:
       return {
         ...state,
         updateMsg: action.payload,
       }
-
-    case DELETE_PRODUCTION_FOR_PRODUCTION_PAGE_SUCCESS:
+    case DELETE_PRODUCTION_SUCCESS:
       return {
         ...state,
         deleteMsg: action.payload,
       }
-
-
     default:
       return state
   }
-
 }
 
 export default ProductionReducer

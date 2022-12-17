@@ -191,3 +191,6 @@ export const GO_BUTTON_POST_API_FOR_MATERIAL_ISSUE = '/WorkOrderDetails'
 export const POST_API_FOR_MATERIAL_ISSUE = '/MaterialIssue'
 export const POST_API_FOR_MATERIAL_ISSUE_LIST = '/MaterialIssueFilter'
 
+// Production master
+export const GO_BUTTON_POST_API_FOR_PRODUCTION ='/Production'
+

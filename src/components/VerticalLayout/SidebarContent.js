@@ -24,9 +24,6 @@ import { WindowScrollController } from "@fullcalendar/react";
 const SidebarContent = (props) => {
   const ref = useRef();
   const dispatch = useDispatch();
-
-
-
   // const  RoleAccessData=demoRolleAcess
 
   ;
@@ -153,15 +150,12 @@ const SidebarContent = (props) => {
                 </li>
               </ul>
             </li>
-
-
             {/* <li>
               <Link to="/#" className="has-arrow">
                 <FeatherIcon icon="home" />
                 <span>{props.t("Menu2")}</span>
               </Link> */}
             {/* <ul className="sub-menu"> */}
-
             {/* {RoleAccessData.find((item) => {
               debugger
               return (
