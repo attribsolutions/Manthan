@@ -122,7 +122,7 @@ const MaterialIssueMaster = (props) => {
 
     const goButtonHandler = (event) => {
         debugger
-
+        
         event.preventDefault();
         if (formValid(state, setState)) {
             const jsonBody = JSON.stringify({
@@ -132,7 +132,7 @@ const MaterialIssueMaster = (props) => {
                 Party: userParty(),
                 Quantity: parseInt(values.LotQuantity)
             });
-
+           
             dispatch(postGoButtonForMaterialIssue_Master(jsonBody));
         }
 
@@ -259,8 +259,10 @@ const MaterialIssueMaster = (props) => {
             i.values.LotQuantity = e.Quantity;
             i.hasValid.NumberOfLot.valid = true;
             i.hasValid.LotQuantity.valid = true;
+            
             return i
         })
+       
     }
 
     function Quantitychange(event) {
