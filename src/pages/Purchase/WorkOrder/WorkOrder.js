@@ -42,7 +42,7 @@ const WorkOrder = (props) => {
     const [pageMode, setPageMode] = useState("save");
     const [userPageAccessState, setUserPageAccessState] = useState('');
     const [itemselect, setItemselect] = useState("")
-    let numberOfLot="1"
+
     const initialFiled = useMemo(() => {
 
         const fileds = {
@@ -226,7 +226,7 @@ const WorkOrder = (props) => {
     }));
 
     useEffect(() => {
-        
+
         const jsonBody = JSON.stringify({
             FromDate: "2022-12-01",
             ToDate: currentDate,
@@ -242,6 +242,8 @@ const WorkOrder = (props) => {
         setState((i) => {
             i.values.NumberOfLot = "1";
             i.values.Quantity = e.EstimatedOutputQty;
+            i.hasValid.NumberOfLot.valid = true;
+            i.hasValid.Quantity.valid = true;
             return i
         })
     }
@@ -259,12 +261,14 @@ const WorkOrder = (props) => {
         setState((i) => {
             i.values.NumberOfLot = e;
             i.values.Quantity = qty;
+            i.hasValid.NumberOfLot.valid = true;
+            i.hasValid.Quantity.valid = true;
             return i
         })
     }
 
     function Quantitychange(e) {
-        debugger
+
         dispatch(postGoButtonForWorkOrder_MasterSuccess([]))
         state.hasValid.Quantity.valid = true
         let NumberLot = e / itemselect.EstimatedOutputQty
@@ -272,7 +276,8 @@ const WorkOrder = (props) => {
             setState((i) => {
                 i.values.NumberOfLot = NumberLot;
                 i.values.Quantity = e;
-                // i.hasValid.Quantity.valid = false
+                i.hasValid.NumberOfLot.valid = true;
+                i.hasValid.Quantity.valid = true;
                 return i
             })
         }
@@ -280,7 +285,8 @@ const WorkOrder = (props) => {
             setState((i) => {
                 i.values.NumberOfLot = "1.000000";
                 i.values.Quantity = e;
-                // i.hasValid.Quantity.valid = false
+                i.hasValid.NumberOfLot.valid = true;
+                i.hasValid.Quantity.valid = true;
                 return i
             })
         }
@@ -288,9 +294,10 @@ const WorkOrder = (props) => {
 
     const goButtonHandler = (event) => {
         debugger
+
         event.preventDefault();
         if (formValid(state, setState)) {
-            debugger
+
             const jsonBody = JSON.stringify({
                 Item: (pageMode === "edit" ? EditData.Item : values.ItemName.ItemID),
                 Bom: (pageMode === "edit" ? EditData.Bom : values.ItemName.value),
@@ -305,7 +312,7 @@ const WorkOrder = (props) => {
     const { fieldLabel } = state;
 
     const formSubmitHandler = (event) => {
-        debugger
+
         const WorkOrderItems = BOMItems.map((index) => ({
             Item: index.Item,
             Unit: index.Unit,
