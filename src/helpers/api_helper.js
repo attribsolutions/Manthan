@@ -23,8 +23,8 @@ export async function get(url, config = {}) {
 
   AuthonticationFunction();
   const res = await axiosApi.get(url, { ...config }).then(response => response.data)
-  console.log("getapiCall Url:", url);
-  console.log("getapiCall response:", res);
+  await console.log("getapiCall Url:", url);
+  await console.log("getapiCall response:", res);
   return res
 }
 
@@ -48,7 +48,7 @@ export async function post(url, data, config = {}) {
       }
     })
     .then(response => response.data)
-  console.log("postapiCall Response:", res);
+  await console.log("postapiCall Response:", res);
   return res
 }
 
@@ -65,7 +65,7 @@ export async function put(url, data, config = {}) {
     })
     .then(response => response.data)
 
-  console.log("putapiCall Response:", res);
+  await console.log("putapiCall Response:", res);
   return res
 }
 
@@ -75,7 +75,7 @@ export async function del(url, config = {}) {
   const rep = await axiosApi
     .delete(url, { ...config })
     .then(response => response.data)
-  console.log("deleteapiCall response:", rep);
+  await console.log("deleteapiCall response:", rep);
   return rep
 }
 // for forget password
