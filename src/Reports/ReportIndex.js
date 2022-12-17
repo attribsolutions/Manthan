@@ -1,10 +1,11 @@
+import ordeRreport from "./OrderReport/Page";
 
 export const order1="order1"
 export const order2="order2"
 
 
 const generateReport = (resp) => {
-
+debugger
     switch (resp.ReportType) {
         case order1:
             ordeRreport(resp.Data)

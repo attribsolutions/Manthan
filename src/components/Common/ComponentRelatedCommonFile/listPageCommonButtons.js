@@ -14,6 +14,7 @@ export const listPageCommonButtonFunction = (props) => {
         deleteName,
         downUrlPath,
         reportType
+
     } = props;
 
     const editBtnCss = "badge badge-soft-success font-size-12 btn btn-success waves-effect waves-light w-xxs border border-light"
@@ -35,7 +36,7 @@ export const listPageCommonButtonFunction = (props) => {
         dispatch(editActionFun(rowData.id, "copy",));
     }
     function downHandler(rowData) {
-        dispatch(getpdfReportdata(downUrlPath, rowData.id, reportType));
+        dispatch(getpdfReportdata(downUrlPath, reportType, rowData.id,));
     }
 
     function deleteHandler(rowData) {

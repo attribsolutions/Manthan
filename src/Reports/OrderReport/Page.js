@@ -15,7 +15,7 @@ function pageFooter(doc,data) {
     // style.reportFooter(doc,data);
     style.pageFooter(doc,data);
 }
- const generate=(data)=> {
+ const ordeRreport=(data)=> {
     var doc = new jsPDF('p', 'pt', 'a4');
     pageHeder(doc,data);
     reportBody(doc, data);
@@ -24,6 +24,6 @@ function pageFooter(doc,data) {
           title: "Report"
       });
     window.open(doc.output('dataurlnewwindow'));
-    return(<></>);
+   
 }
-export default generate;
+export default ordeRreport;

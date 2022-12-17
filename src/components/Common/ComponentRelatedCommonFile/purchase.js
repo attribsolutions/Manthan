@@ -81,7 +81,8 @@ const PurchaseListPage = (props) => {
         pageMode,
         goButnFunc = () => { },
         onsavefunc = () => { },
-        downUrlPath= () => { },
+        downUrlPath = () => { },
+        ReportType
     } = props;
 
     const fileds = pageField.PageFieldMaster;
@@ -277,7 +278,8 @@ const PurchaseListPage = (props) => {
                 userAccState: userAccState,
                 editActionFun: editId,
                 deleteActionFun: deleteId,
-                downUrlPath
+                downUrlPath,
+                ReportType
             })
             )
         }
@@ -380,7 +382,7 @@ const PurchaseListPage = (props) => {
                     </Modal>
                 </div>
 
-                <C_Report/>
+                <C_Report />
             </React.Fragment>
         );
     }
