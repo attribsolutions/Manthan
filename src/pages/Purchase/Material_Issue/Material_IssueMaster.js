@@ -30,21 +30,18 @@ import {
 import Select from "react-select";
 import { SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
 import {
-    editBOMListSuccess,
-    GetItemUnitsDrodownAPI,
-    postBOM,
-    postBOMSuccess,
     updateBOMList,
     updateBOMListSuccess
 } from "../../../store/Purchase/BOMRedux/action";
-import { BIllOf_MATERIALS_LIST } from "../../../routes/route_url";
+import { MATERIAL_ISSUE } from "../../../routes/route_url";
 import { convertDatefunc, createdBy, currentDate, userCompany, userParty } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import { getWorkOrderListPage } from "../../../store/Purchase/WorkOrder/action";
-import { postGoButtonForMaterialIssue_Master, postGoButtonForMaterialIssue_MasterSuccess } from "../../../store/Purchase/Matrial_Issue/action";
+import { postGoButtonForMaterialIssue_Master, postGoButtonForMaterialIssue_MasterSuccess, postMaterialIssue, postMaterialIssueSuccess } from "../../../store/Purchase/Matrial_Issue/action";
 import paginationFactory, { PaginationListStandalone, PaginationProvider } from "react-bootstrap-table2-paginator";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 import { Tbody, Thead } from "react-super-responsive-table";
+
 const MaterialIssueMaster = (props) => {
 
     const dispatch = useDispatch();
@@ -55,16 +52,15 @@ const MaterialIssueMaster = (props) => {
     const [modalCss, setModalCss] = useState(false);
     const [pageMode, setPageMode] = useState("save");
     const [userPageAccessState, setUserPageAccessState] = useState('');
-    const [ItemTabDetails, setItemTabDetails] = useState([])
-    const [Quantity, setQuantity] = useState([])
     const [Itemselect, setItemselect] = useState([])
+    const [quantity, setQuantity] = useState([])
 
     const initialFiled = {
         id: "",
-        Date: "",
-        Items: "",
-        NumberOfLots: "",
-        Quantity: "",
+        MaterialIssueDate: "",
+        ItemName: "",
+        NumberOfLot: "",
+        LotQuantity: "",
     }
 
     const [state, setState] = useState(initialFiledFunc(initialFiled))
@@ -79,7 +75,7 @@ const MaterialIssueMaster = (props) => {
         GoButton
 
     } = useSelector((state) => ({
-        postMsg: state.BOMReducer.PostData,
+        postMsg: state.MaterialIssueReducer.postMsg,
         updateMsg: state.BOMReducer.updateMsg,
         userAccess: state.Login.RoleAccessUpdateData,
         pageField: state.CommonPageFieldReducer.pageField,
@@ -88,6 +84,7 @@ const MaterialIssueMaster = (props) => {
     }));
 
     useEffect(() => {
+
         dispatch(postGoButtonForMaterialIssue_MasterSuccess([]))
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(75))
@@ -131,61 +128,61 @@ const MaterialIssueMaster = (props) => {
                 Item: Itemselect.Item,
                 Company: userCompany(),
                 Party: userParty(),
-                Quantity: parseInt(values.Quantity)
+                Quantity: parseInt(values.LotQuantity)
             });
             dispatch(postGoButtonForMaterialIssue_Master(jsonBody));
         }
     }
 
     //This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
-    useEffect(() => {
+    // useEffect(() => {
 
-        if ((hasShowloction || hasShowModal)) {
+    //     if ((hasShowloction || hasShowModal)) {
 
-            let hasEditVal = null
-            if (hasShowloction) {
-                setPageMode(location.pageMode)
-                hasEditVal = location.editValue
-            }
-            else if (hasShowModal) {
-                hasEditVal = props.editValue
-                setPageMode(props.pageMode)
-                setModalCss(true)
-            }
+    //         let hasEditVal = null
+    //         if (hasShowloction) {
+    //             setPageMode(location.pageMode)
+    //             hasEditVal = location.editValue
+    //         }
+    //         else if (hasShowModal) {
+    //             hasEditVal = props.editValue
+    //             setPageMode(props.pageMode)
+    //             setModalCss(true)
+    //         }
 
-            if (hasEditVal) {
-                console.log("hasEditVal", hasEditVal)
-                setEditData(hasEditVal);
-                const { id, BomDate, Item, ItemName, Unit, UnitName, EstimatedOutputQty, Comment, IsActive } = hasEditVal
-                const { values, fieldLabel, hasValid, required, isError } = { ...state }
+    //         if (hasEditVal) {
+    //             console.log("hasEditVal", hasEditVal)
+    //             setEditData(hasEditVal);
+    //             const { id, BomDate, Item, ItemName, Unit, UnitName, EstimatedOutputQty, Comment, IsActive } = hasEditVal
+    //             const { values, fieldLabel, hasValid, required, isError } = { ...state }
 
-                hasValid.id.valid = true;
-                hasValid.BomDate.valid = true;
-                hasValid.ItemName.valid = true;
-                hasValid.UnitName.valid = true;
-                hasValid.EstimatedOutputQty.valid = true;
-                hasValid.Comment.valid = true;
-                hasValid.IsActive.valid = true;
+    //             hasValid.id.valid = true;
+    //             hasValid.BomDate.valid = true;
+    //             hasValid.ItemName.valid = true;
+    //             hasValid.UnitName.valid = true;
+    //             hasValid.EstimatedOutputQty.valid = true;
+    //             hasValid.Comment.valid = true;
+    //             hasValid.IsActive.valid = true;
 
-                values.id = id
-                values.BomDate = BomDate;
-                values.EstimatedOutputQty = EstimatedOutputQty;
-                values.Comment = Comment;
-                values.IsActive = IsActive;
-                values.ItemName = { label: ItemName, value: Item };
-                values.UnitName = { label: UnitName, value: Unit };
-                setItemTabDetails(hasEditVal.BOMItems)
-                setState({ values, fieldLabel, hasValid, required, isError })
-                dispatch(editBOMListSuccess({ Status: false }))
-                dispatch(Breadcrumb_inputName(hasEditVal.ItemName))
-            }
-        }
-    }, [])
+    //             values.id = id
+    //             values.BomDate = BomDate;
+    //             values.EstimatedOutputQty = EstimatedOutputQty;
+    //             values.Comment = Comment;
+    //             values.IsActive = IsActive;
+    //             values.ItemName = { label: ItemName, value: Item };
+    //             values.UnitName = { label: UnitName, value: Unit };
+    //             setState({ values, fieldLabel, hasValid, required, isError })
+    //             dispatch(editBOMListSuccess({ Status: false }))
+    //             dispatch(Breadcrumb_inputName(hasEditVal.ItemName))
+    //         }
+    //     }
+    // }, [])
 
     useEffect(() => {
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
-            dispatch(postBOMSuccess({ Status: false }))
-            formRef.current.reset();
+            dispatch(postMaterialIssueSuccess({ Status: false }))
+            dispatch(postGoButtonForMaterialIssue_MasterSuccess([]))
+            dispatch(postMaterialIssueSuccess([]))
             if (pageMode === "dropdownAdd") {
                 dispatch(AlertState({
                     Type: 1,
@@ -198,12 +195,12 @@ const MaterialIssueMaster = (props) => {
                     Type: 1,
                     Status: true,
                     Message: postMsg.Message,
-                    RedirectPath: BIllOf_MATERIALS_LIST,
+                    RedirectPath: MATERIAL_ISSUE,
                 }))
             }
         }
         else if (postMsg.Status === true) {
-            dispatch(postBOMSuccess({ Status: false }))
+            dispatch(postMaterialIssueSuccess({ Status: false }))
             dispatch(AlertState({
                 Type: 4,
                 Status: true,
@@ -218,7 +215,7 @@ const MaterialIssueMaster = (props) => {
 
         if ((updateMsg.Status === true) && (updateMsg.StatusCode === 200) && !(modalCss)) {
             history.push({
-                pathname: BIllOf_MATERIALS_LIST,
+                pathname: MATERIAL_ISSUE,
             })
         } else if (updateMsg.Status === true && !modalCss) {
             dispatch(updateBOMListSuccess({ Status: false }));
@@ -245,7 +242,8 @@ const MaterialIssueMaster = (props) => {
         Quantity: index.Quantity,
         WorkOrderId: index.id,
         Item: index.Item,
-
+        BomID: index.Bom,
+        Unit: index.Unit
     }));
 
     function ItemOnchange(e) {
@@ -253,8 +251,8 @@ const MaterialIssueMaster = (props) => {
         dispatch(postGoButtonForMaterialIssue_MasterSuccess([]))
         setItemselect(e)
         setState((i) => {
-            i.values.NumberOfLots = "1";
-            i.values.Quantity = e.Quantity;
+            i.values.NumberOfLot = "1";
+            i.values.LotQuantity = e.Quantity;
             return i
         })
     }
@@ -279,61 +277,71 @@ const MaterialIssueMaster = (props) => {
     const { isError } = state;
     const { fieldLabel } = state;
 
+    const handleChange = (event, index) => {
+        debugger
+        index.Qty = event.target.value
+    };
+
     const formSubmitHandler = (event) => {
         debugger
-        const BOMItems = ItemTabDetails.map((index) => ({
-            Item: index.Item,
-            Quantity: index.Quantity,
-            Unit: index.Unit
-        }))
+      
+        const MaterialIssueItems = []
+        GoButton.map((index) => {
+            index.BatchesData.map((ele) => {
+
+                MaterialIssueItems.push({
+                    Item: index.Item,
+                    Unit: index.Unit,
+                    WorkOrderQuantity: index.Quantity,
+                    BatchCode: ele.BatchCode,
+                    BatchDate: ele.BatchDate,
+                    SystemBatchDate: ele.SystemBatchDate,
+                    SystemBatchCode: ele.SystemBatchCode,
+                    IssueQuantity: parseInt(ele.Qty)
+
+                })
+            })
+        })
+
+        const FilterData = MaterialIssueItems.filter((index) => {
+            return (index.IssueQuantity > 0)
+        })
+
 
         event.preventDefault();
         if (formValid(state, setState)) {
-            debugger
+           
             const jsonBody = JSON.stringify({
 
-                BomDate: values.BomDate,
-                EstimatedOutputQty: values.EstimatedOutputQty,
-                Comment: values.Comment,
-                IsActive: values.IsActive,
-                Item: values.ItemName.value,
-                Unit: values.UnitName.value,
+                MaterialIssueDate: values.MaterialIssueDate,
+                NumberOfLot: values.NumberOfLot,
+                LotQuantity: values.LotQuantity,
                 CreatedBy: createdBy(),
+                UpdatedBy: createdBy(),
                 Company: userCompany(),
-                BOMItems: BOMItems
-            });
-
-            if (BOMItems.length === 0) {
-                dispatch(
-                    AlertState({
-                        Type: 4,
-                        Status: true,
-                        Message: "At Least One Matrial data Add in the table",
-                        RedirectPath: false,
-                        PermissionAction: false,
-                    })
-                );
-                return;
+                Party: userParty(),
+                Item: Itemselect.Item,
+                Unit: Itemselect.Unit,
+                MaterialIssueItems: FilterData,
+                MaterialIssueWorkOrder: [
+                    {
+                        WorkOrder: Itemselect.WorkOrderId,
+                        Bom: Itemselect.BomID
+                    }
+                ]
             }
+            );
 
             if (pageMode === 'edit') {
-
                 dispatch(updateBOMList(jsonBody, `${EditData.id}/${EditData.Company}`));
                 console.log("update jsonBody", jsonBody)
             }
             else {
-                dispatch(postBOM(jsonBody));
+                dispatch(postMaterialIssue(jsonBody));
                 console.log("post jsonBody", jsonBody)
             }
-        }
-    };
-
-    const handleChange = event => {
-
-        const result = event.target.value.replace(/\D/g, '');
-        const value = Math.max(1, Math.min(10, Number(result)));
-        setQuantity(value);
-    };
+        };
+    }
 
     const pagesListColumns = [
         {
@@ -368,13 +376,7 @@ const MaterialIssueMaster = (props) => {
 
                         <Tbody  >
                             {cellContent.map((index) => {
-                                // cellContent.map((i) => {
-                                //     debugger
-                                //     var date = convertDatefunc(i.BatchDate)
-                                //     i.BatchDate = (date)
-                                //     return i
-                                // }
-                                // )
+
                                 return (
                                     < tr >
                                         <td>
@@ -408,8 +410,8 @@ const MaterialIssueMaster = (props) => {
                                         <td>
                                             <div style={{ width: "150px" }}>
                                                 <Input type="text"
-                                                    value={index.Qty}
-                                                    onChange={handleChange}
+                                                    defaultValue={index.Qty}
+                                                    onChange={(event) => handleChange(event, index)}
                                                 ></Input>
 
                                             </div>
@@ -454,7 +456,7 @@ const MaterialIssueMaster = (props) => {
                 <div className="page-content" style={{ marginBottom: "5cm" }}>
 
                     <Breadcrumb pageHeading={userPageAccessState.PageHeading}
-                        showCount={true}
+                        // showCount={true}
                     />
                     <form onSubmit={formSubmitHandler} ref={formRef} noValidate>
 
@@ -464,11 +466,11 @@ const MaterialIssueMaster = (props) => {
 
                                 <Col sm="6">
                                     <FormGroup className="mb-2 row mt-2  ">
-                                        <Label className="mt-2" style={{ width: "115px" }}>{fieldLabel.Date} </Label>
+                                        <Label className="mt-2" style={{ width: "115px" }}>{fieldLabel.MaterialIssueDate} </Label>
                                         <Col sm="7">
                                             <Flatpickr
-                                                name="Date"
-                                                value={values.Date}
+                                                name="MaterialIssueDate"
+                                                value={values.MaterialIssueDate}
                                                 className="form-control d-block p-2 bg-white text-dark"
                                                 placeholder="YYYY-MM-DD"
                                                 autoComplete="0,''"
@@ -482,8 +484,8 @@ const MaterialIssueMaster = (props) => {
                                                 onChange={(y, v, e) => { onChangeDate({ e, v, state, setState }) }}
                                                 onReady={(y, v, e) => { onChangeDate({ e, v, state, setState }) }}
                                             />
-                                            {isError.Date.length > 0 && (
-                                                <span className="invalid-feedback">{isError.Date}</span>
+                                            {isError.MaterialIssueDate.length > 0 && (
+                                                <span className="invalid-feedback">{isError.MaterialIssueDate}</span>
                                             )}
                                         </Col>
 
@@ -493,11 +495,11 @@ const MaterialIssueMaster = (props) => {
                                 <Col sm="6">
 
                                     <FormGroup className="mb-2 row mt-2 ">
-                                        <Label className="mt-2" style={{ width: "115px" }}> {fieldLabel.Items} </Label>
+                                        <Label className="mt-2" style={{ width: "115px" }}> {fieldLabel.ItemName} </Label>
                                         <Col sm={7}>
                                             <Select
-                                                name="Items"
-                                                value={values.Items}
+                                                name="ItemName"
+                                                value={values.ItemName}
                                                 isSearchable={true}
                                                 className="react-dropdown"
                                                 classNamePrefix="dropdown"
@@ -510,8 +512,8 @@ const MaterialIssueMaster = (props) => {
                                                 }
 
                                             />
-                                            {isError.Items.length > 0 && (
-                                                <span className="text-danger f-8"><small>{isError.Items}</small></span>
+                                            {isError.ItemName.length > 0 && (
+                                                <span className="text-danger f-8"><small>{isError.ItemName}</small></span>
                                             )}
                                         </Col>
                                     </FormGroup>
@@ -520,21 +522,21 @@ const MaterialIssueMaster = (props) => {
 
                                 <Col sm="6">
                                     <FormGroup className="mb-2 row  ">
-                                        <Label className="mt-2" style={{ width: "115px" }}> {fieldLabel.NumberOfLots} </Label>
+                                        <Label className="mt-2" style={{ width: "115px" }}> {fieldLabel.NumberOfLot} </Label>
                                         <Col sm={7}>
                                             <Input
-                                                name="NumberOfLots"
-                                                value={values.NumberOfLots}
+                                                name="NumberOfLot"
+                                                value={values.NumberOfLot}
                                                 type="text"
-                                                className={isError.Quantity.length > 0 ? "is-invalid form-control" : "form-control"}
+                                                className={isError.NumberOfLot.length > 0 ? "is-invalid form-control" : "form-control"}
                                                 placeholder="Please Enter Number Of Lots"
                                                 autoComplete='off'
                                                 onChange={(event) => {
                                                     onChangeText({ event, state, setState })
                                                 }}
                                             />
-                                            {isError.NumberOfLots.length > 0 && (
-                                                <span className="invalid-feedback">{isError.NumberOfLots}</span>
+                                            {isError.NumberOfLot.length > 0 && (
+                                                <span className="invalid-feedback">{isError.NumberOfLot}</span>
                                             )}
                                         </Col>
                                     </FormGroup>
@@ -542,21 +544,21 @@ const MaterialIssueMaster = (props) => {
 
                                 <Col sm="6">
                                     <FormGroup className="mb-2 row  ">
-                                        <Label className="mt-2" style={{ width: "115px" }}> {fieldLabel.Quantity} </Label>
+                                        <Label className="mt-2" style={{ width: "115px" }}> {fieldLabel.LotQuantity} </Label>
                                         <Col sm={7}>
                                             <Input
-                                                name="Quantity"
-                                                value={values.Quantity}
+                                                name="LotQuantity"
+                                                value={values.LotQuantity}
                                                 type="text"
                                                 min={"1"}
-                                                max={Itemselect.Quantity}
-                                                className={isError.Quantity.length > 0 ? "is-invalid form-control" : "form-control"}
-                                                placeholder="Please Enter Quantity"
+                                                max={Itemselect.LotQuantity}
+                                                className={isError.LotQuantity.length > 0 ? "is-invalid form-control" : "form-control"}
+                                                placeholder="Please Enter LotQuantity"
                                                 autoComplete='off'
                                                 onChange={Quantitychange}
                                             />
-                                            {isError.Quantity.length > 0 && (
-                                                <span className="invalid-feedback">{isError.Quantity}</span>
+                                            {isError.LotQuantity.length > 0 && (
+                                                <span className="invalid-feedback">{isError.LotQuantity}</span>
                                             )}
                                         </Col>
 
@@ -570,7 +572,6 @@ const MaterialIssueMaster = (props) => {
                                 </Col>
                             </div>
                         </div>
-
 
                         <PaginationProvider pagination={paginationFactory(pageOptions)}>
                             {({ paginationProps, paginationTableProps }) => (
@@ -612,22 +613,16 @@ const MaterialIssueMaster = (props) => {
 
                         </PaginationProvider>
 
+                        {GoButton.length > 0 ? <FormGroup>
+                            <Col sm={2} style={{ marginLeft: "9px" }}>
+                                <SaveButton pageMode={pageMode} userAcc={userPageAccessState}
+                                    module={"BOMMaster"}
+                                />
+                            </Col>
+
+                        </FormGroup > : null}
 
 
-                        {/* <div className="px-2 mb-1 mt-n3" style={{ marginRight: '-28px', marginLeft: "-8px" }}>
-                            <Row>
-                                <FormGroup>
-
-                                    <Col sm={2} style={{ marginLeft: "9px" }}>
-                                        <SaveButton pageMode={pageMode} userAcc={userPageAccessState}
-                                            module={"BOMMaster"}
-                                        />
-
-                                    </Col>
-
-                                </FormGroup >
-                            </Row>
-                        </div> */}
                     </form>
                 </div>
             </React.Fragment>
