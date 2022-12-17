@@ -34,7 +34,7 @@ import { convertDatefunc, convertTimefunc, GoBtnDissable, saveDissable } from ".
 function* goButtonGenFunc({ data, hasEditVal }) {
 
   yield GoBtnDissable(true)
-  yield delay(500)
+  yield delay(400)
   try {
     const response = yield call(OrderPage_GoButton_API, data);
     debugger
@@ -59,7 +59,7 @@ function* goButtonGenFunc({ data, hasEditVal }) {
     }
 
     yield response.Data.forEach(row => {
-      
+
       if (row.poRate === undefined) { row["poRate"] = '' }
       if (row.poQty === undefined) { row["poQty"] = 0 }
       if (row.poBaseUnitQty === undefined) { row["poBaseUnitQty"] = '' }
@@ -148,8 +148,8 @@ function* UpdateOrder_ID_GenFunc({ data, id }) {
 // List Page API
 function* get_OrderList_GenFunc({ filters }) {
 
-  // yield GoBtnDissable(true)
-  yield delay(500)
+  yield GoBtnDissable(true)
+  yield delay(400)
   try {
     const response = yield call(Order_get_API, filters);
     const newList = yield response.Data.map((i) => {
@@ -159,7 +159,7 @@ function* get_OrderList_GenFunc({ filters }) {
       return i
     })
     yield put(getOrderListPageSuccess(newList))
-    // yield GoBtnDissable(false)
+    yield GoBtnDissable(false)
 
   } catch (error) {
     yield GoBtnDissable(false)

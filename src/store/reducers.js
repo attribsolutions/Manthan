@@ -17,6 +17,7 @@ import CommonError from './Utilites/CommonError/reducer'
 import CustomSearchReducer from './Utilites/CustomSearchRedux/reducer'
 import BreadcrumbReducer from './Utilites/Breadcrumb/reducer'
 import CommonPageFieldReducer from './Utilites/PageFiled/reducer'
+import PdfReportReducers from  './Utilites/PdfReport/reducer'
 
 import Modules from './Administrator/ModulesRedux/reducer'
 import Company from './Administrator/CompanyRedux/reducer'
@@ -65,6 +66,7 @@ const rootReducer = combineReducers({
   CustomSearchReducer,
   BreadcrumbReducer,
   CommonPageFieldReducer,
+  PdfReportReducers,
   // Administator
   Modules,
   Company,
@@ -112,6 +114,7 @@ const rootReducer = combineReducers({
   BOMReducer,
   WorkOrderReducer,
   MaterialIssueReducer,
+
 
 })
 

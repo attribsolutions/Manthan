@@ -17,14 +17,15 @@ import { BreadcrumbFilterSize, commonPageFieldList, commonPageFieldListSuccess, 
 import PurchaseListPage from "../../../components/Common/ComponentRelatedCommonFile/purchase"
 import Order from "./Order";
 import { GRN_ADD, GST_ADD_Mode_2, ORDER, ORDER_lIST } from "../../../routes/route_url";
-import {  Col, FormGroup, Label } from "reactstrap";
+import { Col, FormGroup, Label } from "reactstrap";
 import Breadcrumb from "../../../components/Common/Breadcrumb";
 import { useHistory } from "react-router-dom";
 import { getGRN_itemMode2 } from "../../../store/Purchase/GRNRedux/actions";
 import { getSupplier } from "../../../store/CommonAPI/SupplierRedux/actions";
-import {  excelDownCommonFunc, userParty } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { excelDownCommonFunc, userParty } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import { useMemo } from "react";
 import { Go_Button } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
+import { editOrderID_forOrderPage_ApiCall } from "../../../helpers/backend_helper";
 
 
 const OrderList = () => {
@@ -264,6 +265,7 @@ const OrderList = () => {
                             pageMode={pageMode}
                             onsavefunc={onsavefunc}
                             goButnFunc={goButtonHandler}
+                            downUrlPath={editOrderID_forOrderPage_ApiCall}
 
                         />
                         : null
