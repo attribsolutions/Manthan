@@ -57,8 +57,8 @@ const MaterialIssueMaster = (props) => {
 
     const initialFiled = {
         id: "",
-        Date: "",
-        Items: "",
+        MaterialIssueDate: "",
+        ItemName: "",
         NumberOfLot: "",
         LotQuantity: "",
     }
@@ -313,9 +313,9 @@ const MaterialIssueMaster = (props) => {
            
             const jsonBody = JSON.stringify({
 
-                MaterialIssueDate: values.Date,
+                MaterialIssueDate: values.MaterialIssueDate,
                 NumberOfLot: values.NumberOfLot,
-                Quantity: values.LotQuantity,
+                LotQuantity: values.LotQuantity,
                 CreatedBy: createdBy(),
                 UpdatedBy: createdBy(),
                 Company: userCompany(),
@@ -456,7 +456,7 @@ const MaterialIssueMaster = (props) => {
                 <div className="page-content" style={{ marginBottom: "5cm" }}>
 
                     <Breadcrumb pageHeading={userPageAccessState.PageHeading}
-                        showCount={true}
+                        // showCount={true}
                     />
                     <form onSubmit={formSubmitHandler} ref={formRef} noValidate>
 
@@ -466,11 +466,11 @@ const MaterialIssueMaster = (props) => {
 
                                 <Col sm="6">
                                     <FormGroup className="mb-2 row mt-2  ">
-                                        <Label className="mt-2" style={{ width: "115px" }}>{fieldLabel.Date} </Label>
+                                        <Label className="mt-2" style={{ width: "115px" }}>{fieldLabel.MaterialIssueDate} </Label>
                                         <Col sm="7">
                                             <Flatpickr
-                                                name="Date"
-                                                value={values.Date}
+                                                name="MaterialIssueDate"
+                                                value={values.MaterialIssueDate}
                                                 className="form-control d-block p-2 bg-white text-dark"
                                                 placeholder="YYYY-MM-DD"
                                                 autoComplete="0,''"
@@ -484,8 +484,8 @@ const MaterialIssueMaster = (props) => {
                                                 onChange={(y, v, e) => { onChangeDate({ e, v, state, setState }) }}
                                                 onReady={(y, v, e) => { onChangeDate({ e, v, state, setState }) }}
                                             />
-                                            {isError.Date.length > 0 && (
-                                                <span className="invalid-feedback">{isError.Date}</span>
+                                            {isError.MaterialIssueDate.length > 0 && (
+                                                <span className="invalid-feedback">{isError.MaterialIssueDate}</span>
                                             )}
                                         </Col>
 
@@ -495,11 +495,11 @@ const MaterialIssueMaster = (props) => {
                                 <Col sm="6">
 
                                     <FormGroup className="mb-2 row mt-2 ">
-                                        <Label className="mt-2" style={{ width: "115px" }}> {fieldLabel.Items} </Label>
+                                        <Label className="mt-2" style={{ width: "115px" }}> {fieldLabel.ItemName} </Label>
                                         <Col sm={7}>
                                             <Select
-                                                name="Items"
-                                                value={values.Items}
+                                                name="ItemName"
+                                                value={values.ItemName}
                                                 isSearchable={true}
                                                 className="react-dropdown"
                                                 classNamePrefix="dropdown"
@@ -512,8 +512,8 @@ const MaterialIssueMaster = (props) => {
                                                 }
 
                                             />
-                                            {isError.Items.length > 0 && (
-                                                <span className="text-danger f-8"><small>{isError.Items}</small></span>
+                                            {isError.ItemName.length > 0 && (
+                                                <span className="text-danger f-8"><small>{isError.ItemName}</small></span>
                                             )}
                                         </Col>
                                     </FormGroup>
