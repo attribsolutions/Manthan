@@ -95,6 +95,7 @@ import BOMList from "../pages/Purchase/BOM/BOMList/BOMList";
 import WorkOrder from "../pages/Purchase/WorkOrder/WorkOrder";
 import WorkOrderList from "../pages/Purchase/WorkOrder/WorkOrderList";
 import MaterialIssueMaster from "../pages/Purchase/Material_Issue/Material_IssueMaster";
+import MaterialIssueList from "../pages/Purchase/Material_Issue/Material_Issue_List";
 
 const userRoutes = [
 
@@ -201,6 +202,8 @@ const userRoutes = [
   { path: path.WORK_ORDER_LIST, component: WorkOrderList },
 
   { path: path.MATERIAL_ISSUE, component: MaterialIssueMaster },
+  { path: path.MATERIAL_ISSUE_LIST, component: MaterialIssueList },
+  
 
   { path: path.SEARCH_BOX2, component: SearchBoxSecond },
   { path: path.SEARCH_BOX3, component: SerachBox3 },
