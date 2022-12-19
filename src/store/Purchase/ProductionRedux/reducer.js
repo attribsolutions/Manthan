@@ -33,6 +33,12 @@ const ProductionReducer = (state = INIT_STATE, action) => {
         grnlistFilter: action.payload,
       }
 
+      case POST_PRODUCTION_FROM_PRODUCTION_PAGE_SUCCESS:
+        return {
+          ...state,
+          postMsg: action.payload,
+        }
+
     case GET_PRODUCTION_ITEM_MODE_2_SUCCESS:
       return {
         ...state,
