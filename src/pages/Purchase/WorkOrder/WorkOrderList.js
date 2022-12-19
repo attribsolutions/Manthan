@@ -116,6 +116,7 @@ const WorkOrderList = () => {
                                 <Col sm="6">
                                     <Flatpickr
                                         name='fromdate'
+                                        value={fromdate}
                                         className="form-control d-block p-2 bg-white text-dark"
                                         placeholder="Select..."
                                         options={{
@@ -137,6 +138,7 @@ const WorkOrderList = () => {
                                 <Col sm="6 ">
                                     <Flatpickr
                                         name="todate"
+                                        value={todate}
                                         className="form-control d-block p-2 bg-white text-dark"
                                         placeholder="Select..."
                                         options={{

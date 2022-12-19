@@ -41,6 +41,7 @@ import paginationFactory, { PaginationListStandalone, PaginationProvider } from 
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 import { Tbody, Thead } from "react-super-responsive-table";
+import { handleKeyDown } from "../Order/OrderPageCalulation";
 
 const MaterialIssueMaster = (props) => {
 
@@ -131,7 +132,7 @@ const MaterialIssueMaster = (props) => {
                 Party: userParty(),
                 Quantity: parseInt(values.LotQuantity)
             });
-           
+
             dispatch(postGoButtonForMaterialIssue_Master(jsonBody));
         }
 
@@ -258,10 +259,10 @@ const MaterialIssueMaster = (props) => {
             i.values.LotQuantity = e.Quantity;
             i.hasValid.NumberOfLot.valid = true;
             i.hasValid.LotQuantity.valid = true;
-            
+
             return i
         })
-       
+
     }
 
     function Quantitychange(event) {
@@ -290,8 +291,7 @@ const MaterialIssueMaster = (props) => {
     };
 
     const formSubmitHandler = (event) => {
-        debugger
-
+    
         const MaterialIssueItems = []
         GoButton.map((index) => {
             index.BatchesData.map((ele) => {
@@ -313,7 +313,6 @@ const MaterialIssueMaster = (props) => {
         const FilterData = MaterialIssueItems.filter((index) => {
             return (index.IssueQuantity > 0)
         })
-
 
         event.preventDefault();
         if (formValid(state, setState)) {
@@ -409,8 +408,11 @@ const MaterialIssueMaster = (props) => {
                                         </td>
                                         <td>
                                             <div style={{ width: "150px" }}>
-                                                <Label>
+                                                <Label
+                                                    onKeyDown={(e) => handleKeyDown(e,GoButton)}
+                                                >
                                                     {index.ObatchwiseQuantity}
+
                                                 </Label>
                                             </div>
                                         </td>
