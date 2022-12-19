@@ -67,7 +67,6 @@ const MaterialIssueList = () => {
         return excelDownCommonFunc({ tableList, PageFieldMaster })
     }, [tableList])
 
-
     useEffect(() => {
         const pageId = 76
         let userAcc = userAccess.find((inx) => {
@@ -107,7 +106,6 @@ const MaterialIssueList = () => {
                     showCount={true}
                     excelBtnView={true}
                     excelData={downList} />
-
                 <div className="px-2 mt-n1  c_card_header text-black" style={{ marginBottom: "-12px" }} >
                     <div className="mt-1  row" >
                         <Col sm="5" >

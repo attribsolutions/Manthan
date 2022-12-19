@@ -79,13 +79,12 @@ const ProductionMaster = (props) => {
         pageField
     } = useSelector((state) => ({
         supplierAddress: state.SupplierReducer.supplierAddress,
-        items: state.GRNReducer.GRNitem,
+        items:state.WorkOrderReducer.BOMList,
         postMsg: state.ProductionReducer.postMsg,
         updateMsg: state.ProductionReducer.updateMsg,
         userAccess: state.Login.RoleAccessUpdateData,
         pageField: state.CommonPageFieldReducer.pageField,
     }));
-
     useEffect(() => {
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(77))
@@ -111,6 +110,16 @@ const ProductionMaster = (props) => {
             setUserPageAccessState(userAcc)
         };
     }, [userAccess])
+
+    const ItemDropdown_Options = items.map((index) => ({
+        value: index.id,
+        label: index.ItemName,
+        Quantity: index.Quantity,
+        WorkOrderId: index.id,
+        Item: index.Item,
+        BomID: index.Bom,
+        Unit: index.Unit
+    }));
     const location = { ...history.location }
     const hasShowloction = location.hasOwnProperty("editValue")
     const hasShowModal = props.hasOwnProperty("editValue")
@@ -174,7 +183,7 @@ const ProductionMaster = (props) => {
             const jsonBody = JSON.stringify({
                 ProductionDate: values.ProductionDate,
                 EstimatedQuantity: values.EstimatedQuantity,
-                NumberOfLot: 1,
+                NumberOfLot:1,
                 ActualQuantity: values.ActualQuantity,
                 BatchDate: "2022-12-17",
                 BatchCode: "aa",
@@ -183,13 +192,13 @@ const ProductionMaster = (props) => {
                 BestBefore: values.BestBefore,
                 Remark: values.Remark,
                 CreatedBy: 1,
-                Item: 1,
+                Item: values.Item.Item,
                 UpdatedBy: 1,
                 Company: 1,
                 Division: 4,
                 GST: 8,
                 Unit: 45,
-                MRP: "",
+                MRP: " ",
                 Rate: 55,
             });
             // if ((pageMode === 'edit') && !mode) {
@@ -322,7 +331,7 @@ const ProductionMaster = (props) => {
                                                 isSearchable={true}
                                                 className="react-dropdown"
                                                 classNamePrefix="dropdown"
-                                                //  options={ItemDropdown_Options}
+                                                 options={ItemDropdown_Options}
                                                 onChange={(hasSelect, evn) => {
                                                     onChangeSelect({ hasSelect, evn, state, setState });
                                                     //  Items_Dropdown_Handler(hasSelect);
