@@ -6,7 +6,7 @@ import paginationFactory, {
     PaginationListStandalone,
     PaginationProvider,
 } from "react-bootstrap-table2-paginator";
-import ToolkitProvider, { Search } from "react-bootstrap-table2-toolkit";
+import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 import { useDispatch } from "react-redux";
 import { MetaTags } from "react-meta-tags";
@@ -16,8 +16,8 @@ import { AlertState, BreadcrumbFilterSize } from "../../../store/actions";
 import { listPageCommonButtonFunction }
     from "./listPageCommonButtons";
 import { defaultSearch, mySearchProps } from "./MySearch";
-import { GST_ADD_Mode_2 } from "../../../routes/route_url";
 import C_Report from "./C_Report";
+import * as url from "../../../routes/route_url";
 
 let sortType = "asc"
 let searchCount = 0
@@ -59,8 +59,7 @@ const PurchaseListPage = (props) => {
         deleteMsg,
         userAccess,
         postMsg,
-        pageField
-
+        pageField,
     } = props.reducers;
 
     const {
@@ -253,7 +252,8 @@ const PurchaseListPage = (props) => {
 
         // ======================== for GRNMode2 Page Action Button ================================
 
-        if ((pageMode === GST_ADD_Mode_2) && (fileds.length - 1 === k)) {
+        if ((pageMode === url.GST_ADD_Mode_2) && (fileds.length - 1 === k)) {
+      
             columns.push({
                 text: "Select",
                 dataField: "GRNSelect",
@@ -268,19 +268,39 @@ const PurchaseListPage = (props) => {
                 }
             })
         }
+
+         // ======================== for GRNMode2 Page Action Button ================================
+
+        //  if ((pageMode === url.MATERIAL_ISSUE_LIST) && (fileds.length - 1 === k)) {
+        //     debugger
+        //     columns.push({
+        //         text: "Select",
+        //         dataField: "Select",
+        //         sort: true,
+        //         formatter: (cellContent, item, key) => {
+        //             item["Select"] = false
+        //             return (
+        //                 <Input type="checkbox"
+        //                     defaultChecked={item.Select}
+        //                     onChange={e => item.Select = e.target.checked}
+        //                 />)
+        //         }
+        //     })
+        // }
         // ======================== for List Page Action Button ================================
 
         else if ((fileds.length - 1 === k)) {
-            columns.push(listPageCommonButtonFunction({
-                dispatchHook: dispatch,
-                ButtonMsgLable: ButtonMsgLable,
-                deleteName: deleteName,
-                userAccState: userAccState,
-                editActionFun: editId,
-                deleteActionFun: deleteId,
-                downUrlPath,
-                ReportType
-            })
+            columns.push(
+                listPageCommonButtonFunction({
+                    dispatchHook: dispatch,
+                    ButtonMsgLable: ButtonMsgLable,
+                    deleteName: deleteName,
+                    userAccState: userAccState,
+                    editActionFun: editId,
+                    deleteActionFun: deleteId,
+                    downUrlPath: downUrlPath,
+                    ReportType: ReportType
+                })
             )
         }
     })
@@ -353,7 +373,9 @@ const PurchaseListPage = (props) => {
                     </PaginationProvider>
 
                     {
-                        (pageMode === GST_ADD_Mode_2) ?
+
+                        (pageMode === url.GST_ADD_Mode_2 )?
+
 
                             <div className="button_save " style={{ paddingBottom: 'center' }}>
                                 <button

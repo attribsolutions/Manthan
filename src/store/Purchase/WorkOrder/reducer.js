@@ -1,3 +1,4 @@
+import { currentDate } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons"
 import {
   DELETE_WORK_ORDER_LIST_PAGE_SUCCESS,
   EDIT_WORK_ORDER_LIST_ID_SUCCESS,
@@ -5,7 +6,8 @@ import {
   GET_WORK_ORDER_LIST_PAGE_SUCCESS,
   POST_GO_BUTTON_FOR_WORK_ORDER_MASTER_SUCCESS,
   POST_WORK_ORDER_MASTER_SUCCESS,
-  UPDATE_WORK_ORDER_LIST_SUCCESS
+  UPDATE_WORK_ORDER_LIST_SUCCESS,
+  WORK_ORDER_LIST_FILTERS
 } from "./actionTypes"
 
 const INIT_STATE = {
@@ -16,10 +18,17 @@ const INIT_STATE = {
   editData: { Status: false, },
   updateMsg: { Status: false },
   deleteMsg: { Status: false },
+  workOrderlistFilters: { fromdate: currentDate, todate: currentDate, }
 }
 
 const WorkOrderReducer = (state = INIT_STATE, action) => {
   switch (action.type) {
+
+    case WORK_ORDER_LIST_FILTERS:
+      return {
+        ...state,
+        workOrderlistFilters: action.payload,
+      }
 
     // get api
     case GET_BOM_LIST_SUCCESS:

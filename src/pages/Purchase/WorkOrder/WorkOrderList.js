@@ -11,7 +11,7 @@ import { useHistory } from "react-router-dom";
 import { currentDate, excelDownCommonFunc } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import { useMemo } from "react";
 import { updateBOMListSuccess } from "../../../store/Purchase/BOMRedux/action";
-import { deleteWorkOrderId, deleteWorkOrderIdSuccess, editWorkOrderList, getWorkOrderListPage, updateWorkOrderListSuccess } from "../../../store/Purchase/WorkOrder/action";
+import { deleteWorkOrderId, deleteWorkOrderIdSuccess, editWorkOrderList, getWorkOrderListPage, updateWorkOrderListSuccess, WorkOrderlistfilters } from "../../../store/Purchase/WorkOrder/action";
 import WorkOrder from "./WorkOrder";
 // import BOMMaster from "../BOMMaster/BOMIndex";
 
@@ -24,8 +24,7 @@ const WorkOrderList = () => {
 
     const [pageMode, setpageMode] = useState(WORK_ORDER_LIST)
     const [userAccState, setUserAccState] = useState('');
-    const [fromdate, setFromdate] = useState();
-    const [todate, setTodate] = useState();
+
     const reducers = useSelector(
         (state) => ({
             tableList: state.WorkOrderReducer.WorkOrderList,
@@ -33,10 +32,14 @@ const WorkOrderList = () => {
             updateMsg: state.WorkOrderReducer.updateMsg,
             postMsg: state.OrderReducer.postMsg,
             editData: state.WorkOrderReducer.editData,
+            workOrderlistFilters: state.WorkOrderReducer.workOrderlistFilters,
             userAccess: state.Login.RoleAccessUpdateData,
             pageField: state.CommonPageFieldReducer.pageFieldList,
         })
     );
+
+    const { userAccess, pageField, tableList, workOrderlistFilters } = reducers;
+    const { fromdate, todate } = workOrderlistFilters
 
     const action = {
         getList: getWorkOrderListPage,
@@ -57,8 +60,6 @@ const WorkOrderList = () => {
 
     }, []);
 
-    const { userAccess, pageField, tableList } = reducers;
-
     const downList = useMemo(() => {
         let PageFieldMaster = []
         if (pageField) { PageFieldMaster = pageField.PageFieldMaster; }
@@ -76,26 +77,24 @@ const WorkOrderList = () => {
         }
     }, [userAccess])
 
-    const goButtonHandler = (onload = false) => {
-        debugger
-        let FromDate
-        let ToDate
-
-        if (onload) {
-            FromDate = currentDate;
-            ToDate = currentDate;
-        } else {
-            ToDate = todate;
-            FromDate = fromdate;
-        }
-
+    const goButtonHandler = () => {
         const jsonBody = JSON.stringify({
-            FromDate: FromDate,
-            ToDate: ToDate,
-            // Company: userCompany(),
+            FromDate: fromdate,
+            ToDate: todate,
         });
         dispatch(getWorkOrderListPage(jsonBody));
-        console.log("go button post json", jsonBody)
+    }
+
+    function fromdateOnchange(e, date) {
+        let newObj = { ...workOrderlistFilters }
+        newObj.fromdate = date
+        dispatch(WorkOrderlistfilters(newObj))
+    }
+
+    function todateOnchange(e, date) {
+        let newObj = { ...workOrderlistFilters }
+        newObj.todate = date
+        dispatch(WorkOrderlistfilters(newObj))
     }
 
     return (
@@ -117,6 +116,7 @@ const WorkOrderList = () => {
                                 <Col sm="6">
                                     <Flatpickr
                                         name='fromdate'
+                                        value={fromdate}
                                         className="form-control d-block p-2 bg-white text-dark"
                                         placeholder="Select..."
                                         options={{
@@ -126,8 +126,7 @@ const WorkOrderList = () => {
                                             defaultDate: "today"
 
                                         }}
-                                        onChange={(e, date) => { setFromdate(date) }}
-                                        onReady={(e, date) => { setFromdate(date) }}
+                                        onChange={fromdateOnchange}
                                     />
                                 </Col>
                             </FormGroup>
@@ -139,6 +138,7 @@ const WorkOrderList = () => {
                                 <Col sm="6 ">
                                     <Flatpickr
                                         name="todate"
+                                        value={todate}
                                         className="form-control d-block p-2 bg-white text-dark"
                                         placeholder="Select..."
                                         options={{
@@ -147,15 +147,13 @@ const WorkOrderList = () => {
                                             dateFormat: "Y-m-d",
                                             defaultDate: "today"
                                         }}
-                                        onChange={(e, date) => { setTodate(date) }}
-                                        onReady={(e, date) => { setTodate(date) }}
-
+                                        onChange={todateOnchange}
                                     />
                                 </Col>
                             </FormGroup>
                         </Col>
 
-                        <Col sm="1"className="mx-4 ">
+                        <Col sm="1" className="mx-4 ">
                             <Button type="button" color="btn btn-outline-success border-2 font-size-12 m-3  "
                                 onClick={() => goButtonHandler()}
                             >Go</Button>

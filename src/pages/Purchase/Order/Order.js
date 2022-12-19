@@ -323,7 +323,7 @@ const Order = (props) => {
 
         {//------------- Rate column ----------------------------------
             text: "Rate/Unit",
-            dataField: "Rate",
+            dataField: "",
             sort: true,
             formatter: (value, row, k) => {
 

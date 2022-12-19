@@ -4,9 +4,9 @@ import {
 } from "./actionType";
 
 
-export const getpdfReportdata = (urlpath,reportType, Id) => ({
+export const getpdfReportdata = (urlpath,ReportType, Id) => ({
   type: GET_PDF_REPORT_DATA,
-  urlpath, reportType, Id
+  urlpath, ReportType, Id
 });
 
 export const getpdfReportdataSuccess = (data) => ({

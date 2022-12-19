@@ -35,6 +35,7 @@ const BOMList = () => {
             pageField: state.CommonPageFieldReducer.pageFieldList,
         })
     );
+    
     const { userAccess, pageField, tableList, bomlistFilters } = reducers;
     const { fromdate, todate } = bomlistFilters;
 
@@ -114,6 +115,7 @@ const BOMList = () => {
                                 <Col sm="6">
                                     <Flatpickr
                                         name='fromdate'
+                                        value={fromdate}
                                         className="form-control d-block p-2 bg-white text-dark"
                                         placeholder="Select..."
                                         options={{
@@ -134,6 +136,7 @@ const BOMList = () => {
                                 <Col sm="6 ">
                                     <Flatpickr
                                         name="todate"
+                                        value={todate}
                                         className="form-control d-block p-2 bg-white text-dark"
                                         placeholder="Select..."
                                         options={{

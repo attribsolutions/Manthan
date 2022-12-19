@@ -287,6 +287,7 @@ const BOMMaster = (props) => {
                 return;
             }
 
+
             saveDissable(true);//+++++++++save Button Is dissable function
 
             if ((pageMode === 'edit') && !mode) {

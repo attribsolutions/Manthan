@@ -38,8 +38,8 @@ export async function getModify(url) {
 
 export async function post(url, data, config = {}) {
   AuthonticationFunction();
-  console.log("postapiCall Url:", url);
-  console.log("postapiCall Body:", data)
+  await console.log("postapiCall Url:", url);
+  await console.log("postapiCall Body:", data)
   const res = await axiosApi
     .post(url, data, {
       headers: {
@@ -53,8 +53,8 @@ export async function post(url, data, config = {}) {
 }
 
 export async function put(url, data, config = {}) {
-  console.log("put-apiCall Url:", url);
-  console.log("put-apiCall Body:", data);
+  await console.log("put-apiCall Url:", url);
+  await  console.log("put-apiCall Body:", data);
   AuthonticationFunction();
   const res = await axiosApi
     .put(url, data, {
@@ -71,7 +71,7 @@ export async function put(url, data, config = {}) {
 
 export async function del(url, config = {}) {
   AuthonticationFunction();
-  console.log("deleteapiCall Url:", url);
+  await console.log("deleteapiCall Url:", url);
   const rep = await axiosApi
     .delete(url, { ...config })
     .then(response => response.data)
