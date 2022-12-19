@@ -259,6 +259,7 @@ const Order = (props) => {
                             id={`Quantity${k}`}
                             defaultValue={row.Quantity}
                             key={row.Quantity}
+                            className="text-end"
                             onChange={(e) => {
                                 const val = e.target.value
                                 let isnum = /^[+-]?([0-9]+([.][0-9]*)?|[.][0-9]+)?([eE][+-]?[0-9]+)?$/.test(val);
@@ -334,7 +335,7 @@ const Order = (props) => {
                             id={`Ratey${k}`}
                             defaultValue={row.Rate}
                             autoComplete="off"
-                            // disabled={(row.GST === '') ? true : false}
+                            className="text-end"
                             onChange={(e) => {
                                 const val = e.target.value
                                 let isnum = /^[+-]?([0-9]+([.][0-9]*)?|[.][0-9]+)?([eE][+-]?[0-9]+)?$/.test(val);
@@ -360,10 +361,10 @@ const Order = (props) => {
             dataField: "GSTPercentage",
             sort: true,
             formatter: (value, row) => (
+                <div className="text-end mt-2"><span >
+                    {value}%
+                </span></div>
 
-                <span >
-                    {value}
-                </span>
 
             ),
             headerStyle: (colum, colIndex) => {
@@ -399,7 +400,7 @@ const Order = (props) => {
 
         let supplier = supplierSelect.value
         if (!supplier > 0) {
-            alert("Please Select Customer")
+            alert("Please Select Supplier")
             return
         }
 
@@ -409,7 +410,7 @@ const Order = (props) => {
             } else { return }
         }
 
-      
+
         dispatch(BreadcrumbFilterSize(`${"Order Amount"} :0:00`))
         const jsonBody = JSON.stringify({
             Party: supplier,
@@ -472,9 +473,11 @@ const Order = (props) => {
 
             if ((i.Quantity > 0) && !(i.Rate > 0)) {
                 validMsg.push(`${i.Name}:  This Item Rate Is Require...`);
-            };
+            } else if (!(i.Quantity > 0) && (i.Rate > 0)) {
+                validMsg.push(`${i.Name}:  This Item Quantity Is Require...`);
+            }
 
-            if (pageMode === "edit") {
+            else if (pageMode === "edit") {
                 var ischange = (!(i.poQty === i.Quantity) ||
                     !(i.poRate === i.Rate) || !(i.poBaseUnitQty === i.BaseUnitQuantity))
                 if (ischange && (i.poQty === 0)) {
@@ -492,7 +495,7 @@ const Order = (props) => {
             else {
                 var isedit = 0;
                 orderItem({ i, isedit })
-            }
+            };
         })
         const termsAndCondition = termsAndConTable.map(i => ({
             TermsAndCondition: i.value,
@@ -732,30 +735,30 @@ const Order = (props) => {
                             </div >
                             <div className="col col-6">
                                 {/* <Col sm="2"> */}
-                                    <FormGroup className=" row " >
-                                        {/* <Row className="justify-content-md-left"> */}
-                                            <Label className="col-sm-6 col-form-label mt-2" style={{ width: "115px" }} >
-                                                Is Open PO
-                                            </Label>
-                                            <Col md={7} style={{ marginTop: '10px' }} >
+                                <FormGroup className=" row " >
+                                    {/* <Row className="justify-content-md-left"> */}
+                                    <Label className="col-sm-6 col-form-label mt-2" style={{ width: "115px" }} >
+                                        Is Open PO
+                                    </Label>
+                                    <Col md={7} style={{ marginTop: '10px' }} >
 
-                                                <div className="form-check form-switch form-switch-md mb-3" >
-                                                    <Input type="checkbox" className="form-check-input"
-                                                        checked={isOpenPO}
-                                                        name="IsActive"
-                                                        onChange={(e) => {
-                                                            setisOpenPO(!isOpenPO)
-                                                        }}
-                                                    />
-                                                </div>
-                                            </Col>
-                                        {/* </Row> */}
-                                    </FormGroup>
+                                        <div className="form-check form-switch form-switch-md mb-3" >
+                                            <Input type="checkbox" className="form-check-input"
+                                                checked={isOpenPO}
+                                                name="IsActive"
+                                                onChange={(e) => {
+                                                    setisOpenPO(!isOpenPO)
+                                                }}
+                                            />
+                                        </div>
+                                    </Col>
+                                    {/* </Row> */}
+                                </FormGroup>
                                 {/* </Col> */}
                             </div>
                         </div>
                         <div className="row" >
-                            <div className="col col-6"  style={{ display: isOpenPO ? "block" : "none"}}>
+                            <div className="col col-6" style={{ display: isOpenPO ? "block" : "none" }}>
                                 <FormGroup className=" row  " >
                                     <Label className=" p-2"
                                         style={{ width: "115px" }}>PO From Date</Label>
@@ -777,10 +780,10 @@ const Order = (props) => {
                                     </div>
                                 </FormGroup>
                             </div >
-                            <div className="col col-6" style={{ display: isOpenPO ? "block" : "none"}} >
+                            <div className="col col-6" style={{ display: isOpenPO ? "block" : "none" }} >
                                 <FormGroup className=" row  " >
                                     <Label className=" p-2"
-                                      style={{ width:"130px" }}>PO To Date</Label>
+                                        style={{ width: "130px" }}>PO To Date</Label>
                                     <div className="col col-6 ">
                                         <Flatpickr
                                             id="potodate"
