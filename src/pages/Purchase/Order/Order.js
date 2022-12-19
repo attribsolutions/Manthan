@@ -256,10 +256,10 @@ const Order = (props) => {
 
                     <span >
                         <Input type="text"
-                            style={{ textAlign: "right" }}
                             id={`Quantity${k}`}
                             defaultValue={row.Quantity}
                             key={row.Quantity}
+                            className="text-end"
                             onChange={(e) => {
                                 const val = e.target.value
                                 let isnum = /^[+-]?([0-9]+([.][0-9]*)?|[.][0-9]+)?([eE][+-]?[0-9]+)?$/.test(val);
@@ -331,12 +331,11 @@ const Order = (props) => {
                 return (
                     <span className="text-right" >
                         <Input
-                            style={{ textAlign: "right" }}
                             type="text"
                             id={`Ratey${k}`}
                             defaultValue={row.Rate}
                             autoComplete="off"
-                            // disabled={(row.GST === '') ? true : false}
+                            className="text-end"
                             onChange={(e) => {
                                 const val = e.target.value
                                 let isnum = /^[+-]?([0-9]+([.][0-9]*)?|[.][0-9]+)?([eE][+-]?[0-9]+)?$/.test(val);
@@ -362,13 +361,10 @@ const Order = (props) => {
             dataField: "GSTPercentage",
             sort: true,
             formatter: (value, row) => (
+                <div className="text-end mt-2"><span >
+                    {value}%
+                </span></div>
 
-                <div className="mt-2 text-end" >
-                    <Label >
-                    {value}
-                </Label>
-                </div>
-                
 
             ),
             headerStyle: (colum, colIndex) => {
@@ -404,7 +400,7 @@ const Order = (props) => {
 
         let supplier = supplierSelect.value
         if (!supplier > 0) {
-            alert("Please Select Supplier Name")
+            alert("Please Select Supplier")
             return
         }
 
@@ -477,9 +473,11 @@ const Order = (props) => {
 
             if ((i.Quantity > 0) && !(i.Rate > 0)) {
                 validMsg.push(`${i.Name}:  This Item Rate Is Require...`);
-            };
+            } else if (!(i.Quantity > 0) && (i.Rate > 0)) {
+                validMsg.push(`${i.Name}:  This Item Quantity Is Require...`);
+            }
 
-            if (pageMode === "edit") {
+            else if (pageMode === "edit") {
                 var ischange = (!(i.poQty === i.Quantity) ||
                     !(i.poRate === i.Rate) || !(i.poBaseUnitQty === i.BaseUnitQuantity))
                 if (ischange && (i.poQty === 0)) {
@@ -497,7 +495,7 @@ const Order = (props) => {
             else {
                 var isedit = 0;
                 orderItem({ i, isedit })
-            }
+            };
         })
         const termsAndCondition = termsAndConTable.map(i => ({
             TermsAndCondition: i.value,
