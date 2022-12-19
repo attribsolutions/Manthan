@@ -25,7 +25,7 @@ import {
 import Select from "react-select";
 import { SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
 import { WORK_ORDER_LIST } from "../../../routes/route_url";
-import { createdBy, currentDate, userCompany, userParty } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { createdBy, currentDate, saveDissable, userCompany, userParty } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import { editWorkOrderListSuccess, getBOMList, postGoButtonForWorkOrder_Master, postGoButtonForWorkOrder_MasterSuccess, postWorkOrderMaster, postWorkOrderMasterSuccess, updateWorkOrderList, updateWorkOrderListSuccess } from "../../../store/Purchase/WorkOrder/action";
 import paginationFactory, { PaginationListStandalone, PaginationProvider } from "react-bootstrap-table2-paginator";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
@@ -42,8 +42,8 @@ const WorkOrder = (props) => {
     const [pageMode, setPageMode] = useState("save");
     const [userPageAccessState, setUserPageAccessState] = useState('');
     const [itemselect, setItemselect] = useState("")
-
-    const initialFiled = useMemo(() => {
+    let numberOfLot="1"
+  
 
         const fileds = {
             id: "",
@@ -54,10 +54,9 @@ const WorkOrder = (props) => {
             StockQuantity: "",
             EstimatedOutputQty: ""
         }
-        return initialFiledFunc(fileds)
-    }, []);
+       
 
-    const [state, setState] = useState(initialFiled)
+        const [state, setState] = useState(() => initialFiledFunc(fileds))
 
     //Access redux store Data /  'save_ModuleSuccess' action data
     const {
@@ -161,7 +160,8 @@ const WorkOrder = (props) => {
     useEffect(() => {
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(postWorkOrderMasterSuccess({ Status: false }))
-            formRef.current.reset();
+            setState(() => initialFiledFunc(fileds)) //+++++++++ Clear form values 
+            saveDissable(false);//+++++++++save Button Is enable function
             if (pageMode === "dropdownAdd") {
                 dispatch(AlertState({
                     Type: 1,
@@ -179,6 +179,7 @@ const WorkOrder = (props) => {
             }
         }
         else if (postMsg.Status === true) {
+            saveDissable(false);//+++++++++save Button Is enable function
             dispatch(postWorkOrderMasterSuccess({ Status: false }))
             dispatch(AlertState({
                 Type: 4,
@@ -193,10 +194,13 @@ const WorkOrder = (props) => {
     useEffect(() => {
         debugger
         if ((updateMsg.Status === true) && (updateMsg.StatusCode === 200) && !(modalCss)) {
+            saveDissable(false);//+++++++++Update Button Is enable function
+            setState(() => initialFiledFunc(fileds)) //+++++++++ Clear form values
             history.push({
                 pathname: WORK_ORDER_LIST,
             })
         } else if (updateMsg.Status === true && !modalCss) {
+            saveDissable(false);//+++++++++Update Button Is enable function
             dispatch(updateWorkOrderListSuccess({ Status: false }));
             dispatch(
                 AlertState({
@@ -336,6 +340,9 @@ const WorkOrder = (props) => {
                 UpdatedBy: createdBy(),
                 WorkOrderItems: WorkOrderItems
             });
+
+            saveDissable(true);//+++++++++save Button Is dissable function
+
             if (pageMode === 'edit') {
 
                 dispatch(updateWorkOrderList(jsonBody, EditData.id));
@@ -424,7 +431,7 @@ const WorkOrder = (props) => {
 
                     <Breadcrumb pageHeading={userPageAccessState.PageHeading} />
 
-                    <form onSubmit={formSubmitHandler} ref={formRef} noValidate>
+                    <form onSubmit={formSubmitHandler}noValidate>
                         <div className="px-2 mb-1 mt-n3 c_card_filter text-black" >
 
                             <div className="row">

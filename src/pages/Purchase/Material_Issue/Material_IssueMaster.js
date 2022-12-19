@@ -30,11 +30,16 @@ import {
 import Select from "react-select";
 import { SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
 import {
+    postBOMSuccess,
     updateBOMList,
     updateBOMListSuccess
 } from "../../../store/Purchase/BOMRedux/action";
 import { MATERIAL_ISSUE } from "../../../routes/route_url";
 import { convertDatefunc, createdBy, currentDate, userCompany, userParty } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+
+import { BIllOf_MATERIALS_LIST } from "../../../routes/route_url";
+import { saveDissable, } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+
 import { getWorkOrderListPage } from "../../../store/Purchase/WorkOrder/action";
 import { postGoButtonForMaterialIssue_Master, postGoButtonForMaterialIssue_MasterSuccess, postMaterialIssue, postMaterialIssueSuccess } from "../../../store/Purchase/Matrial_Issue/action";
 import paginationFactory, { PaginationListStandalone, PaginationProvider } from "react-bootstrap-table2-paginator";
@@ -55,7 +60,7 @@ const MaterialIssueMaster = (props) => {
     const [Itemselect, setItemselect] = useState([])
     const [quantity, setQuantity] = useState([])
 
-    const initialFiled = {
+    const fileds = {
         id: "",
         MaterialIssueDate: "",
         ItemName: "",
@@ -63,7 +68,7 @@ const MaterialIssueMaster = (props) => {
         LotQuantity: "",
     }
 
-    const [state, setState] = useState(initialFiledFunc(initialFiled))
+    const [state, setState] = useState(() => initialFiledFunc(fileds))
 
     //Access redux store Data /  'save_ModuleSuccess' action data
     const {
@@ -186,6 +191,10 @@ const MaterialIssueMaster = (props) => {
             dispatch(postMaterialIssueSuccess({ Status: false }))
             dispatch(postGoButtonForMaterialIssue_MasterSuccess([]))
             dispatch(postMaterialIssueSuccess([]))
+            dispatch(postBOMSuccess({ Status: false }))
+            setState(() => initialFiledFunc(fileds)) //+++++++++ Clear form values 
+            saveDissable(false);//+++++++++save Button Is enable function
+
             if (pageMode === "dropdownAdd") {
                 dispatch(AlertState({
                     Type: 1,
@@ -203,7 +212,12 @@ const MaterialIssueMaster = (props) => {
             }
         }
         else if (postMsg.Status === true) {
+
             dispatch(postMaterialIssueSuccess({ Status: false }))
+
+            saveDissable(false);//+++++++++save Button Is enable function
+            dispatch(postBOMSuccess({ Status: false }))
+
             dispatch(AlertState({
                 Type: 4,
                 Status: true,
@@ -217,10 +231,13 @@ const MaterialIssueMaster = (props) => {
     useEffect(() => {
 
         if ((updateMsg.Status === true) && (updateMsg.StatusCode === 200) && !(modalCss)) {
+            saveDissable(false);//+++++++++Update Button Is enable function
+            setState(() => initialFiledFunc(fileds)) //+++++++++ Clear form values
             history.push({
                 pathname: MATERIAL_ISSUE,
             })
         } else if (updateMsg.Status === true && !modalCss) {
+            saveDissable(false);//+++++++++Update Button Is enable function
             dispatch(updateBOMListSuccess({ Status: false }));
             dispatch(
                 AlertState({
@@ -232,6 +249,7 @@ const MaterialIssueMaster = (props) => {
         }
     }, [updateMsg, modalCss]);
 
+
     useEffect(() => {
         if (pageField) {
             const fieldArr = pageField.PageFieldMaster
@@ -239,6 +257,7 @@ const MaterialIssueMaster = (props) => {
         }
     }, [pageField])
 
+    
     const ItemDropdown_Options = Items.map((index) => ({
         value: index.id,
         label: index.ItemName,
@@ -338,6 +357,9 @@ const MaterialIssueMaster = (props) => {
                 ]
             }
             );
+
+            saveDissable(true);//+++++++++save Button Is dissable function
+
 
             if (pageMode === 'edit') {
                 dispatch(updateBOMList(jsonBody, `${EditData.id}/${EditData.Company}`));
@@ -465,7 +487,7 @@ const MaterialIssueMaster = (props) => {
                     <Breadcrumb pageHeading={userPageAccessState.PageHeading}
                     // showCount={true}
                     />
-                    <form onSubmit={formSubmitHandler} ref={formRef} noValidate>
+                    <form onSubmit={formSubmitHandler}noValidate>
 
                         <div className="px-2 mb-1 mt-n3 c_card_filter header text-black" >
 

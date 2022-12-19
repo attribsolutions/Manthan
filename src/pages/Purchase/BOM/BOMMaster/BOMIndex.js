@@ -38,7 +38,7 @@ import {
     updateBOMListSuccess
 } from "../../../../store/Purchase/BOMRedux/action";
 import { BIllOf_MATERIALS_LIST } from "../../../../routes/route_url";
-import { createdBy, userCompany } from "../../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { createdBy, saveDissable, userCompany } from "../../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 
 const BOMMaster = (props) => {
 
@@ -51,7 +51,7 @@ const BOMMaster = (props) => {
     const [userPageAccessState, setUserPageAccessState] = useState('');
     const [ItemTabDetails, setItemTabDetails] = useState([])
 
-    const initialFiled = {
+    const fileds = {
         
         id: "",
         BomDate: "",
@@ -62,7 +62,7 @@ const BOMMaster = (props) => {
         IsActive: false
     }
 
-    const [state, setState] = useState(initialFiledFunc(initialFiled))
+    const [state, setState] = useState(initialFiledFunc(fileds))
 
     //Access redux store Data /  'save_ModuleSuccess' action data
     const {
@@ -149,7 +149,8 @@ const BOMMaster = (props) => {
     useEffect(() => {
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(postBOMSuccess({ Status: false }))
-
+            setState(() => initialFiledFunc(fileds)) //+++++++++ Clear form values 
+            saveDissable(false);//+++++++++save Button Is enable function
             if (pageMode === "dropdownAdd") {
                 dispatch(AlertState({
                     Type: 1,
@@ -168,6 +169,7 @@ const BOMMaster = (props) => {
         }
         else if (postMsg.Status === true) {
             dispatch(postBOMSuccess({ Status: false }))
+            saveDissable(false);//+++++++++save Button Is enable function
             dispatch(AlertState({
                 Type: 4,
                 Status: true,
@@ -186,6 +188,8 @@ const BOMMaster = (props) => {
     useEffect(() => {
 
         if ((updateMsg.Status === true) && (updateMsg.StatusCode === 200) && !(modalCss)) {
+            saveDissable(false);//+++++++++Update Button Is enable function
+            setState(() => initialFiledFunc(fileds)) //+++++++++ Clear form values
             history.push({
                 pathname: BIllOf_MATERIALS_LIST,
             })
@@ -197,10 +201,9 @@ const BOMMaster = (props) => {
                 PermissionFunction: PermissionFunction,
 
             }));
-
-
         }
         else if (updateMsg.Status === true && !modalCss) {
+            saveDissable(false);//+++++++++Update Button Is enable function
             dispatch(updateBOMListSuccess({ Status: false }));
             dispatch(
                 AlertState({
@@ -283,7 +286,9 @@ const BOMMaster = (props) => {
                 );
                 return;
             }
-            debugger
+
+            saveDissable(true);//+++++++++save Button Is dissable function
+
             if ((pageMode === 'edit') && !mode) {
                 dispatch(updateBOMList(jsonBody, `${EditData.id}/${EditData.Company}`));
 
