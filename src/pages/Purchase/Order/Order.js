@@ -210,6 +210,7 @@ const Order = (props) => {
         }
     }, [updateMsg, modalCss]);
 
+
     function val_onChange(val, row, type) {
 
         if (type === "qty") {
@@ -234,12 +235,15 @@ const Order = (props) => {
         value: i.id,
         label: i.Supplier,
     }));
+
+
     const pagesListColumns = [
         {//------------- ItemName column ----------------------------------
             text: "Item Name",
             dataField: "Name",
             sort: true,
         },
+
         { //------------- Quantity column ----------------------------------
             text: "Quantity",
             dataField: "",
@@ -249,6 +253,7 @@ const Order = (props) => {
                 // if (row.Quantity === undefined) { row["Quantity"] = '' }
                 // if (row.Amount === undefined) { row["Amount"] = 0 }
                 return (
+
                     <span >
                         <Input type="text"
                             id={`Quantity${k}`}
@@ -273,6 +278,8 @@ const Order = (props) => {
             headerStyle: (colum, colIndex) => {
                 return { width: '140px', textAlign: 'center' };
             }
+
+
         },
 
         {  //------------- Unit column ----------------------------------
@@ -316,7 +323,7 @@ const Order = (props) => {
 
         {//------------- Rate column ----------------------------------
             text: "Rate/Unit",
-            dataField: "Rate",
+            dataField: "",
             sort: true,
             formatter: (value, row, k) => {
 

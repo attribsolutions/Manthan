@@ -80,7 +80,7 @@ const ProductionMaster = (props) => {
         pageField
     } = useSelector((state) => ({
         supplierAddress: state.SupplierReducer.supplierAddress,
-        items:state.WorkOrderReducer.BOMList,
+        items: state.WorkOrderReducer.BOMList,
         postMsg: state.ProductionReducer.postMsg,
         updateMsg: state.ProductionReducer.updateMsg,
         userAccess: state.Login.RoleAccessUpdateData,
@@ -112,44 +112,44 @@ const ProductionMaster = (props) => {
         };
     }, [userAccess])
 
-    useEffect(() => {
-        if ((hasShowloction || hasShowModal)) {
-            let hasEditVal = null
-            if (hasShowloction) {
-                setPageMode(location.pageMode)
-                hasEditVal = location.editValue
-            }
-            else if (hasShowModal) {
-                hasEditVal = props.editValue
-                setPageMode(props.pageMode)
-                setModalCss(true)
-            }
-            if (hasEditVal) {
-                console.log("hasEditVal",hasEditVal)
-                setEditData(hasEditVal);
-                const { id, BomDate, Item, ItemName, Unit, UnitName, EstimatedOutputQty, Comment, IsActive } = hasEditVal
-                const { values, fieldLabel, hasValid, required, isError } = { ...state }
-                hasValid.id.valid = true;
-                hasValid.BomDate.valid = true;
-                hasValid.ItemName.valid = true;
-                hasValid.UnitName.valid = true;
-                hasValid.EstimatedOutputQty.valid = true;
-                hasValid.Comment.valid = true;
-                hasValid.IsActive.valid = true;
-                values.id = id
-                values.BomDate = BomDate;
-                values.EstimatedOutputQty = EstimatedOutputQty;
-                values.Comment = Comment;
-                values.IsActive = IsActive;
-                values.ItemName = { label: ItemName, value: Item };
-                values.UnitName = { label: UnitName, value: Unit };
-                setItemTabDetails(hasEditVal.BOMItems)
-                setState({ values, fieldLabel, hasValid, required, isError })
-                dispatch(editBOMListSuccess({ Status: false }))
-                dispatch(Breadcrumb_inputName(hasEditVal.ItemName))
-            }
-        }
-    }, [])
+    // useEffect(() => {
+    //     if ((hasShowloction || hasShowModal)) {
+    //         let hasEditVal = null
+    //         if (hasShowloction) {
+    //             setPageMode(location.pageMode)
+    //             hasEditVal = location.editValue
+    //         }
+    //         else if (hasShowModal) {
+    //             hasEditVal = props.editValue
+    //             setPageMode(props.pageMode)
+    //             setModalCss(true)
+    //         }
+    //         if (hasEditVal) {
+    //             console.log("hasEditVal", hasEditVal)
+    //             setEditData(hasEditVal);
+    //             const { id, BomDate, Item, ItemName, Unit, UnitName, EstimatedOutputQty, Comment, IsActive } = hasEditVal
+    //             const { values, fieldLabel, hasValid, required, isError } = { ...state }
+    //             hasValid.id.valid = true;
+    //             hasValid.BomDate.valid = true;
+    //             hasValid.ItemName.valid = true;
+    //             hasValid.UnitName.valid = true;
+    //             hasValid.EstimatedOutputQty.valid = true;
+    //             hasValid.Comment.valid = true;
+    //             hasValid.IsActive.valid = true;
+    //             values.ProductionDate = ProductionDate
+    //             values.EstimatedQuantity = EstimatedQuantity;
+    //             values.ActualQuantity = ActualQuantity;
+    //             values.Remark = Remark;
+    //             values.IsActive = IsActive;
+    //             values.ItemName = { label: ItemName, value: Item };
+    //             values.UnitName = { label: UnitName, value: Unit };
+    //             setItemTabDetails(hasEditVal.BOMItems)
+    //             setState({ values, fieldLabel, hasValid, required, isError })
+    //             dispatch(editBOMListSuccess({ Status: false }))
+    //             dispatch(Breadcrumb_inputName(hasEditVal.ItemName))
+    //         }
+    //     }
+    // }, [])
 
     const ItemDropdown_Options = items.map((index) => ({
         value: index.id,
@@ -216,38 +216,38 @@ const ProductionMaster = (props) => {
         debugger
         event.preventDefault();
         // if (formValid(state, setState)) {
-            // let BOMrefID = 0
-            // if ((pageMode === 'edit') && mode) {
-            //     BOMrefID = EditData.id
-            // };
-            const jsonBody = JSON.stringify({
-                ProductionDate: values.ProductionDate,
-                EstimatedQuantity: values.EstimatedQuantity,
-                NumberOfLot:1,
-                ActualQuantity: values.ActualQuantity,
-                BatchDate: "2022-12-17",
-                BatchCode: "aa",
-                StoreLocation: "aa",
-                SupplierBatchCode: values.SupplierBatchCode,
-                BestBefore: values.BestBefore,
-                Remark: values.Remark,
-                CreatedBy:1,
-                Item: values.Item.Item,
-                UpdatedBy: 1,
-                Company: 1,
-                Division: 4,
-                GST: 8,
-                Unit: 45,
-                MRP: " ",
-                Rate: 55,
-            });
-            // if ((pageMode === 'edit') && !mode) {
-            //     dispatch(update_ProductionId(jsonBody));
-            // }
-            // else
-            //  {
-                dispatch(post_Production(jsonBody));
-            // }
+        // let BOMrefID = 0
+        // if ((pageMode === 'edit') && mode) {
+        //     BOMrefID = EditData.id
+        // };
+        const jsonBody = JSON.stringify({
+            ProductionDate: values.ProductionDate,
+            EstimatedQuantity: values.EstimatedQuantity,
+            NumberOfLot: 1,
+            ActualQuantity: values.ActualQuantity,
+            BatchDate: "2022-12-17",
+            BatchCode: "aa",
+            StoreLocation: "aa",
+            SupplierBatchCode: values.SupplierBatchCode,
+            BestBefore: values.BestBefore,
+            Remark: values.Remark,
+            CreatedBy: 1,
+            Item: values.Item.Item,
+            UpdatedBy: 1,
+            Company: 1,
+            Division: 4,
+            GST: 8,
+            Unit: 45,
+            MRP: " ",
+            Rate: 55,
+        });
+        // if ((pageMode === 'edit') && !mode) {
+        //     dispatch(update_ProductionId(jsonBody));
+        // }
+        // else
+        //  {
+        dispatch(post_Production(jsonBody));
+        // }
         // }
     };
     if (!(userPageAccessState === "")) {
@@ -326,15 +326,15 @@ const ProductionMaster = (props) => {
                                         <Label className="col-sm-4 p-2"
                                             style={{ width: "170px" }}>{fieldLabel.Remark}</Label>
                                         <Col sm="7">
-                                            <Input 
-                                              type="text"
-                                              name="Remark"
-                                              value={values.Remark}
-                                              placeholder="Enter Remark"
-                                              onChange={(event) => {
-                                                  onChangeText({ event, state, setState })
-                                              }} 
-                                               />
+                                            <Input
+                                                type="text"
+                                                name="Remark"
+                                                value={values.Remark}
+                                                placeholder="Enter Remark"
+                                                onChange={(event) => {
+                                                    onChangeText({ event, state, setState })
+                                                }}
+                                            />
                                         </Col>
                                     </FormGroup>
                                     <FormGroup className=" row" >
@@ -342,20 +342,20 @@ const ProductionMaster = (props) => {
                                             style={{ width: "170px" }}>{fieldLabel.BestBefore}</Label>
                                         <Col md="7">
                                             <Flatpickr
-                                           name="BestBefore"
-                                           value={values.BestBefore}
-                                           className="form-control d-block p-2 bg-white text-dark"
-                                           placeholder="YYYY-MM-DD"
-                                           autoComplete="0,''"
-                                           disabled={pageMode === "edit" ? true : false}
-                                           options={{
-                                               altInput: true,
-                                               altFormat: "d-m-Y",
-                                               dateFormat: "Y-m-d",
-                                               defaultDate: pageMode === "edit" ? values.BestBefore : "today"
-                                           }}
-                                           onChange={(y, v, e) => { onChangeDate({ e, v, state, setState }) }}
-                                           onReady={(y, v, e) => { onChangeDate({ e, v, state, setState }) }}
+                                                name="BestBefore"
+                                                value={values.BestBefore}
+                                                className="form-control d-block p-2 bg-white text-dark"
+                                                placeholder="YYYY-MM-DD"
+                                                autoComplete="0,''"
+                                                disabled={pageMode === "edit" ? true : false}
+                                                options={{
+                                                    altInput: true,
+                                                    altFormat: "d-m-Y",
+                                                    dateFormat: "Y-m-d",
+                                                    defaultDate: pageMode === "edit" ? values.BestBefore : "today"
+                                                }}
+                                                onChange={(y, v, e) => { onChangeDate({ e, v, state, setState }) }}
+                                                onReady={(y, v, e) => { onChangeDate({ e, v, state, setState }) }}
                                             />
                                         </Col>
                                     </FormGroup>
@@ -371,7 +371,7 @@ const ProductionMaster = (props) => {
                                                 isSearchable={true}
                                                 className="react-dropdown"
                                                 classNamePrefix="dropdown"
-                                                 options={ItemDropdown_Options}
+                                                options={ItemDropdown_Options}
                                                 onChange={(hasSelect, evn) => {
                                                     onChangeSelect({ hasSelect, evn, state, setState });
                                                     //  Items_Dropdown_Handler(hasSelect);
@@ -424,13 +424,13 @@ const ProductionMaster = (props) => {
                                             style={{ width: "170px" }}>{fieldLabel.SupplierBatchCode}</Label>
                                         <Col md="7">
                                             <Input
-                                               type="text"
-                                               name="SupplierBatchCode"
-                                               value={values.SupplierBatchCode}
-                                               placeholder="Enter SupplierBatchCode"
-                                               onChange={(event) => {
-                                                   onChangeText({ event, state, setState })
-                                               }}
+                                                type="text"
+                                                name="SupplierBatchCode"
+                                                value={values.SupplierBatchCode}
+                                                placeholder="Enter SupplierBatchCode"
+                                                onChange={(event) => {
+                                                    onChangeText({ event, state, setState })
+                                                }}
                                             />
                                         </Col>
                                     </FormGroup>
@@ -439,15 +439,15 @@ const ProductionMaster = (props) => {
                         </div>
                         <div className="px-2 mb-1 mt-n3" style={{ marginRight: '-28px', marginLeft: "-8px" }}>
                             <Row>
-                            <Row className="mt-3">
-                                    <Col className=" col col-12">
-                                        <ItemTab tableData={ItemTabDetails} func={setItemTabDetails} />
-                                    </Col>
-                                </Row>
+                                    {/* <Row className="mt-3">
+                                        <Col className=" col col-12">
+                                            <ItemTab tableData={ItemTabDetails} func={setItemTabDetails} />
+                                        </Col>
+                                    </Row> */}
                                 <FormGroup>
-                                    <Col sm={2} style={{ marginLeft: "", marginTop:"20px" }}>
+                                    <Col sm={2} style={{ marginLeft: "", marginTop: "20px" }}>
                                         <SaveButton pageMode={pageMode} userAcc={userPageAccessState}
-                                            module={"BOMMaster"} 
+                                            module={"BOMMaster"}
                                         />
                                     </Col>
                                 </FormGroup >
@@ -462,4 +462,3 @@ const ProductionMaster = (props) => {
     }
 }
 export default ProductionMaster;
-

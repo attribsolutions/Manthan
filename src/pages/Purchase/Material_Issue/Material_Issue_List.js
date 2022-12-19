@@ -13,7 +13,7 @@ import { useMemo } from "react";
 import { updateBOMListSuccess } from "../../../store/Purchase/BOMRedux/action";
 import { deleteWorkOrderId, deleteWorkOrderIdSuccess, editWorkOrderList, getWorkOrderListPage, updateWorkOrderListSuccess } from "../../../store/Purchase/WorkOrder/action";
 import MaterialIssueMaster from "./Material_IssueMaster";
-import { getMaterialIssueListPage } from "../../../store/Purchase/Matrial_Issue/action";
+import { getMaterialIssueListPage, MaterialIssuelistfilters } from "../../../store/Purchase/Matrial_Issue/action";
 
 // import BOMMaster from "../BOMMaster/BOMIndex";
 
@@ -26,8 +26,6 @@ const MaterialIssueList = () => {
 
     const [pageMode, setpageMode] = useState(MATERIAL_ISSUE_LIST)
     const [userAccState, setUserAccState] = useState('');
-    const [fromdate, setFromdate] = useState();
-    const [todate, setTodate] = useState();
     const reducers = useSelector(
         (state) => ({
             tableList: state.MaterialIssueReducer.materialIssueList,
@@ -35,10 +33,14 @@ const MaterialIssueList = () => {
             updateMsg: state.WorkOrderReducer.updateMsg,
             postMsg: state.OrderReducer.postMsg,
             editData: state.WorkOrderReducer.editData,
+            materialIssuelistFilters: state.MaterialIssueReducer.materialIssuelistFilters,
             userAccess: state.Login.RoleAccessUpdateData,
             pageField: state.CommonPageFieldReducer.pageFieldList,
         })
     );
+
+    const { userAccess, pageField, tableList, materialIssuelistFilters } = reducers;
+    const { fromdate, todate } = materialIssuelistFilters
 
     const action = {
         getList: getMaterialIssueListPage,
@@ -59,13 +61,12 @@ const MaterialIssueList = () => {
 
     }, []);
 
-    const { userAccess, pageField, tableList } = reducers;
-
     const downList = useMemo(() => {
         let PageFieldMaster = []
         if (pageField) { PageFieldMaster = pageField.PageFieldMaster; }
         return excelDownCommonFunc({ tableList, PageFieldMaster })
     }, [tableList])
+
 
     useEffect(() => {
         const pageId = 76
@@ -77,24 +78,24 @@ const MaterialIssueList = () => {
         }
     }, [userAccess])
 
-    const goButtonHandler = (onload = false) => {
-        debugger
-        let FromDate
-        let ToDate
-
-        if (onload) {
-            FromDate = currentDate;
-            ToDate = currentDate;
-        } else {
-            ToDate = todate;
-            FromDate = fromdate;
-        }
-
+    const goButtonHandler = () => {
         const jsonBody = JSON.stringify({
-            FromDate: FromDate,
-            ToDate: ToDate,
+            FromDate: fromdate,
+            ToDate: fromdate,
         });
         dispatch(getMaterialIssueListPage(jsonBody));
+    }
+
+    function fromdateOnchange(e, date) {
+        let newObj = { ...materialIssuelistFilters }
+        newObj.fromdate = date
+        dispatch(MaterialIssuelistfilters(newObj))
+    }
+
+    function todateOnchange(e, date) {
+        let newObj = { ...materialIssuelistFilters }
+        newObj.todate = date
+        dispatch(MaterialIssuelistfilters(newObj))
     }
 
     return (
@@ -106,6 +107,7 @@ const MaterialIssueList = () => {
                     showCount={true}
                     excelBtnView={true}
                     excelData={downList} />
+
                 <div className="px-2 mt-n1  c_card_header text-black" style={{ marginBottom: "-12px" }} >
                     <div className="mt-1  row" >
                         <Col sm="5" >
@@ -115,6 +117,7 @@ const MaterialIssueList = () => {
                                 <Col sm="6">
                                     <Flatpickr
                                         name='fromdate'
+                                        value={fromdate}
                                         className="form-control d-block p-2 bg-white text-dark"
                                         placeholder="Select..."
                                         options={{
@@ -122,9 +125,9 @@ const MaterialIssueList = () => {
                                             altFormat: "d-m-Y",
                                             dateFormat: "Y-m-d",
                                             defaultDate: "today"
+
                                         }}
-                                        onChange={(e, date) => { setFromdate(date) }}
-                                        onReady={(e, date) => { setFromdate(date) }}
+                                        onChange={fromdateOnchange}
                                     />
                                 </Col>
                             </FormGroup>
@@ -136,6 +139,7 @@ const MaterialIssueList = () => {
                                 <Col sm="6 ">
                                     <Flatpickr
                                         name="todate"
+                                        value={todate}
                                         className="form-control d-block p-2 bg-white text-dark"
                                         placeholder="Select..."
                                         options={{
@@ -144,8 +148,7 @@ const MaterialIssueList = () => {
                                             dateFormat: "Y-m-d",
                                             defaultDate: "today"
                                         }}
-                                        onChange={(e, date) => { setTodate(date) }}
-                                        onReady={(e, date) => { setTodate(date) }}
+                                        onChange={todateOnchange}
                                     />
                                 </Col>
                             </FormGroup>
