@@ -49,6 +49,7 @@ const ProductionMaster = (props) => {
     const [modalCss, setModalCss] = useState(false);
     const [pageMode, setPageMode] = useState("save");
     const [userPageAccessState, setUserPageAccessState] = useState('');
+    const [ItemTabDetails, setItemTabDetails] = useState([])
     //Access redux store Data /  'save_ModuleSuccess' action data
     // const [grnDate, setgrnDate] = useState(currentDate);
     // const [invoiceDate, setInvoiceDate] = useState(currentDate);
@@ -110,6 +111,45 @@ const ProductionMaster = (props) => {
             setUserPageAccessState(userAcc)
         };
     }, [userAccess])
+
+    useEffect(() => {
+        if ((hasShowloction || hasShowModal)) {
+            let hasEditVal = null
+            if (hasShowloction) {
+                setPageMode(location.pageMode)
+                hasEditVal = location.editValue
+            }
+            else if (hasShowModal) {
+                hasEditVal = props.editValue
+                setPageMode(props.pageMode)
+                setModalCss(true)
+            }
+            if (hasEditVal) {
+                console.log("hasEditVal",hasEditVal)
+                setEditData(hasEditVal);
+                const { id, BomDate, Item, ItemName, Unit, UnitName, EstimatedOutputQty, Comment, IsActive } = hasEditVal
+                const { values, fieldLabel, hasValid, required, isError } = { ...state }
+                hasValid.id.valid = true;
+                hasValid.BomDate.valid = true;
+                hasValid.ItemName.valid = true;
+                hasValid.UnitName.valid = true;
+                hasValid.EstimatedOutputQty.valid = true;
+                hasValid.Comment.valid = true;
+                hasValid.IsActive.valid = true;
+                values.id = id
+                values.BomDate = BomDate;
+                values.EstimatedOutputQty = EstimatedOutputQty;
+                values.Comment = Comment;
+                values.IsActive = IsActive;
+                values.ItemName = { label: ItemName, value: Item };
+                values.UnitName = { label: UnitName, value: Unit };
+                setItemTabDetails(hasEditVal.BOMItems)
+                setState({ values, fieldLabel, hasValid, required, isError })
+                dispatch(editBOMListSuccess({ Status: false }))
+                dispatch(Breadcrumb_inputName(hasEditVal.ItemName))
+            }
+        }
+    }, [])
 
     const ItemDropdown_Options = items.map((index) => ({
         value: index.id,
@@ -191,7 +231,7 @@ const ProductionMaster = (props) => {
                 SupplierBatchCode: values.SupplierBatchCode,
                 BestBefore: values.BestBefore,
                 Remark: values.Remark,
-                CreatedBy: 1,
+                CreatedBy:1,
                 Item: values.Item.Item,
                 UpdatedBy: 1,
                 Company: 1,
@@ -391,7 +431,6 @@ const ProductionMaster = (props) => {
                                                onChange={(event) => {
                                                    onChangeText({ event, state, setState })
                                                }}
-                                                
                                             />
                                         </Col>
                                     </FormGroup>
@@ -400,6 +439,11 @@ const ProductionMaster = (props) => {
                         </div>
                         <div className="px-2 mb-1 mt-n3" style={{ marginRight: '-28px', marginLeft: "-8px" }}>
                             <Row>
+                            <Row className="mt-3">
+                                    <Col className=" col col-12">
+                                        <ItemTab tableData={ItemTabDetails} func={setItemTabDetails} />
+                                    </Col>
+                                </Row>
                                 <FormGroup>
                                     <Col sm={2} style={{ marginLeft: "", marginTop:"20px" }}>
                                         <SaveButton pageMode={pageMode} userAcc={userPageAccessState}
