@@ -586,7 +586,8 @@ const WorkOrder = (props) => {
 
                         </div>
 
-                        {BOMItems.length > 0 ? <PaginationProvider pagination={paginationFactory(pageOptions)}>
+                        {BOMItems.length > 0 ?
+                         <PaginationProvider pagination={paginationFactory(pageOptions)}>
                             {({ paginationProps, paginationTableProps }) => (
                                 <ToolkitProvider
                                     keyField={"id"}
@@ -626,7 +627,8 @@ const WorkOrder = (props) => {
                                 </ToolkitProvider>
                             )}
 
-                        </PaginationProvider> : <></>}
+                        </PaginationProvider> 
+                        : <></>} 
 
 
 

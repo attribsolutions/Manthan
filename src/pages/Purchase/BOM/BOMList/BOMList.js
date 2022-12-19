@@ -35,6 +35,7 @@ const BOMList = () => {
             pageField: state.CommonPageFieldReducer.pageFieldList,
         })
     );
+    
     const { userAccess, pageField, tableList, bomlistFilters } = reducers;
     const { fromdate, todate } = bomlistFilters;
 

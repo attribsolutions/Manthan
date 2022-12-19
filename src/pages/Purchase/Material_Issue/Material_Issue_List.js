@@ -124,7 +124,6 @@ const MaterialIssueList = () => {
                                             altFormat: "d-m-Y",
                                             dateFormat: "Y-m-d",
                                             defaultDate: "today"
-
                                         }}
                                         onChange={(e, date) => { setFromdate(date) }}
                                         onReady={(e, date) => { setFromdate(date) }}
@@ -149,7 +148,6 @@ const MaterialIssueList = () => {
                                         }}
                                         onChange={(e, date) => { setTodate(date) }}
                                         onReady={(e, date) => { setTodate(date) }}
-
                                     />
                                 </Col>
                             </FormGroup>

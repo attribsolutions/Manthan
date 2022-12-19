@@ -16,16 +16,17 @@ import {
 import { BreadcrumbFilterSize, commonPageFieldList, commonPageFieldListSuccess, } from "../../../store/actions";
 import PurchaseListPage from "../../../components/Common/ComponentRelatedCommonFile/purchase"
 import Order from "./Order";
-import { GRN_ADD, GST_ADD_Mode_2, ORDER, ORDER_lIST } from "../../../routes/route_url";
-import {  Col, FormGroup, Label } from "reactstrap";
+import * as url from "../../../routes/route_url";
+import { Col, FormGroup, Label } from "reactstrap";
 import Breadcrumb from "../../../components/Common/Breadcrumb";
 import { useHistory } from "react-router-dom";
 import { getGRN_itemMode2 } from "../../../store/Purchase/GRNRedux/actions";
 import { getSupplier } from "../../../store/CommonAPI/SupplierRedux/actions";
-import {  excelDownCommonFunc, userParty } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { excelDownCommonFunc, userParty } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import { useMemo } from "react";
 import { Go_Button } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
-
+import { editOrderID_forOrderPage_ApiCall } from "../../../helpers/backend_helper";
+import * as report from '../../../Reports/ReportIndex'
 
 const OrderList = () => {
 
@@ -36,7 +37,7 @@ const OrderList = () => {
     // const hasShowloction = history.location.hasOwnProperty("renderMode")
 
     // const [supplierSelect, setsupplierSelect] = useState({ value: '' });
-    const [pageMode, setpageMode] = useState(ORDER_lIST)
+    const [pageMode, setpageMode] = useState(url.ORDER_lIST)
     const [userAccState, setUserAccState] = useState('');
 
     const reducers = useSelector(
@@ -69,7 +70,7 @@ const OrderList = () => {
     // Featch Modules List data  First Rendering
     useEffect(() => {
         setpageMode(hasPagePath)
-        const pageId = (hasPagePath === GST_ADD_Mode_2) ? 60 : 54;
+        const pageId = (hasPagePath === url.GST_ADD_Mode_2) ? 60 : 54;
         dispatch(commonPageFieldListSuccess(null))
         dispatch(commonPageFieldList(pageId))
         dispatch(BreadcrumbFilterSize(`${"Orders Count"} :0`))
@@ -92,7 +93,7 @@ const OrderList = () => {
 
 
     useEffect(() => {
-        const pageId = (hasPagePath === GST_ADD_Mode_2) ? 60 : 54;
+        const pageId = (hasPagePath === url.GST_ADD_Mode_2) ? 60 : 54;
         let userAcc = userAccess.find((inx) => {
             return (inx.id === pageId)
         })
@@ -133,7 +134,7 @@ const OrderList = () => {
                     OrderIDs: withoutLastComma
                 })
 
-                dispatch(getGRN_itemMode2({ jsonBody, pageMode, GRN_ADD, grnRef, challanNo }))
+                dispatch(getGRN_itemMode2({ jsonBody, pageMode, path: url.GRN_ADD, grnRef, challanNo }))
 
             } else {
                 alert("Please Select Order1")
@@ -177,7 +178,7 @@ const OrderList = () => {
             <div className="page-content">
                 <Breadcrumb
                     pageHeading={userAccState.PageHeading}
-                    newBtnView={(pageMode === ORDER_lIST) ? true : false}
+                    newBtnView={(pageMode === url.ORDER_lIST) ? true : false}
                     showCount={true}
                     excelBtnView={true}
                     excelData={downList} />
@@ -258,12 +259,14 @@ const OrderList = () => {
                             reducers={reducers}
                             showBreadcrumb={false}
                             MasterModal={Order}
-                            masterPath={ORDER}
+                            masterPath={url.ORDER}
                             ButtonMsgLable={"Order"}
                             deleteName={"OrderDate"}
                             pageMode={pageMode}
                             onsavefunc={onsavefunc}
                             goButnFunc={goButtonHandler}
+                            downUrlPath={editOrderID_forOrderPage_ApiCall}
+                            ReportType={report.order1}
 
                         />
                         : null

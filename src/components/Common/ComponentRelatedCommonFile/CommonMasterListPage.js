@@ -101,7 +101,6 @@ const CommonListPage = (props) => {
 
   // this useEffect for MasterPagePath dynamically work 
   useEffect(() => {
-    debugger
 
     const locationPath = history.location.pathname
 

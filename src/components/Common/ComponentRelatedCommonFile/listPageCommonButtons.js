@@ -1,5 +1,6 @@
 import { Button } from "reactstrap";
 import { AlertState } from "../../../store/actions";
+import { getpdfReportdata } from "../../../store/Utilites/PdfReport/actions";
 
 export const listPageCommonButtonFunction = (props) => {
 
@@ -11,11 +12,15 @@ export const listPageCommonButtonFunction = (props) => {
         deleteActionFun,
         ButtonMsgLable,
         deleteName,
+        downUrlPath,
+        ReportType
+
     } = props;
 
     const editBtnCss = "badge badge-soft-success font-size-12 btn btn-success waves-effect waves-light w-xxs border border-light"
     const editSelfBtnCss = "badge badge-soft-primary font-size-12 btn btn-primary waves-effect waves-light w-xxs border border-light"
     const deltBtnCss = "badge badge-soft-danger font-size-12 btn btn-danger waves-effect waves-light w-xxs border border-light"
+    const downBtnCss = "badge badge-soft-primary font-size-12 btn btn-primary waves-effect waves-light w-xxs border border-light"
 
 
 
@@ -30,6 +35,9 @@ export const listPageCommonButtonFunction = (props) => {
     function copyHandler(rowData) {
         dispatch(editActionFun(rowData.id, "copy",));
     }
+    function downHandler(rowData) {
+        dispatch(getpdfReportdata(downUrlPath, ReportType, rowData.id));
+    }
 
     function deleteHandler(rowData) {
         dispatch(AlertState({
@@ -40,7 +48,6 @@ export const listPageCommonButtonFunction = (props) => {
             ID: rowData.id,
         }));
     }
-
 
 
     return ({
@@ -133,6 +140,18 @@ export const listPageCommonButtonFunction = (props) => {
                     onClick={() => { copyHandler(rowData) }}
                 >
                     <i className="bx bxs-copy font-size-18 "></i>
+                </Button>
+                : null
+            }
+
+            {((userAccState.RoleAccess_Pdfdownload)) ?
+                <Button
+                    type="button"
+                    className={downBtnCss}
+                    data-mdb-toggle="tooltip" data-mdb-placement="top" title={`Copy ${ButtonMsgLable}`}
+                    onClick={() => { downHandler(rowData) }}
+                >
+                    <i className="bx bx-printer font-size-18"></i>
                 </Button>
                 : null
             }

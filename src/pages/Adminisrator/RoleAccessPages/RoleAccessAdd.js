@@ -70,16 +70,6 @@ const RoleAccessAdd = (props) => {
         RoleAccessModifiedinSingleArray: state.Login.RoleAccessUpdateData,
     }));
 
-    console.log("PageAccess", PageAccess)
-    console.log("ModuleData", ModuleData)
-    console.log("PageDropdownForRoleAccess", PageDropdownForRoleAccess)
-    console.log("AddPage_PageMasterListForRoleAccess_Redux", AddPage_PageMasterListForRoleAccess_Redux)
-    console.log("GO_buttonPageMasterListForRoleAccess_Redux", GO_buttonPageMasterListForRoleAccess_Redux)
-    console.log("PostMessage_ForRoleAccessList", PostMessage_ForRoleAccessList)
-    console.log("Roles", Roles)
-    console.log("PartyTypes", PartyTypes)
-    console.log("RoleAccessModifiedinSingleArray", RoleAccessModifiedinSingleArray)
-
     useEffect(() => {
 
         const editDataGatingFromList = history.location.state
@@ -89,11 +79,9 @@ const RoleAccessAdd = (props) => {
             return (`/${inx.ActualPagePath}` === locationPath)
         })
 
-        debugger
         if (!(editDataGatingFromList === undefined)) {
 
             var divisionid = editDataGatingFromList.Division_id
-            var companyid = editDataGatingFromList.company
             var roleid = editDataGatingFromList.Role_id
             var roleName = editDataGatingFromList.RoleName
             var divisionName = editDataGatingFromList.DivisionName
@@ -119,13 +107,6 @@ const RoleAccessAdd = (props) => {
         dispatch(getPageAccess_DropDown_API());//for Page Access  API from pages saga file
         dispatch(PageDropdownForRoleAccessList_Success([]))// for clear page dropdown clear  list when first rendring
 
-        // dispatch(GetHpageListData())
-        // dispatch(fetchCompanyList());
-        // dispatch(getDivisionTypesID());
-        // dispatch(PageMasterForRoleAccessLit(1));
-        // dispatch(roleAceessAction(1, 1, 1))
-
-
     }, []);
 
     useEffect(() => {
@@ -146,8 +127,6 @@ const RoleAccessAdd = (props) => {
         })
 
         setTableListData(Array)
-        // console.log("GO_buttonPageMasterListForRoleAccess", JSON.stringify(GO_buttonPageMasterListForRoleAccess_Redux))
-
 
     }, [GO_buttonPageMasterListForRoleAccess_Redux])
 
@@ -157,11 +136,9 @@ const RoleAccessAdd = (props) => {
         var eleList = {}
         let NewID = tableListData.length + 1
         let previousData = tableListData
-        // debugger
 
-        // AddPage_PageMasterListForRoleAccess.map((indexdata) => {
         let indexdata = AddPage_PageMasterListForRoleAccess_Redux[0]
-        // let found =previousData.find((inx)=>{return inx.PageID===indexdata.PageID})
+
         if (!(indexdata === undefined)) {
             eleList = indexdata
             eleList["ID"] = NewID;
@@ -171,7 +148,6 @@ const RoleAccessAdd = (props) => {
             previousData = previousData.concat(Array)
             setTableListData(previousData)
         }
-        // console.log("AddPage_PageMasterListForRoleAccess", JSON.stringify(AddPage_PageMasterListForRoleAccess_Redux))
 
     }, [AddPage_PageMasterListForRoleAccess_Redux])
 
@@ -245,7 +221,6 @@ const RoleAccessAdd = (props) => {
         value: d.id,
         label: d.Name,
     }));
-    // console.log("PageDropdownForRoleAccess",PageDropdownForRoleAccess)
 
     /// Role dopdown
     function RoleDropDown_select_handler(e) {
@@ -282,16 +257,7 @@ const RoleAccessAdd = (props) => {
             dispatch(GO_Button_HandlerForRoleAccessListPage(role, division));
             setShowTableOnUI(true)
         }
-        // console.log("role", role)
-        // else {
-        //     dispatch(AlertState({
-        //         Type: 4,
-        //         Status: true,
-        //         Message: role > 0 ? "Please Select Division" : "Please Select Role",
-        //         RedirectPath: false,
-        //         AfterResponseAction: false
-        //     }));
-        // }
+
     }
 
     const AddPageButton_Handeler = () => {
@@ -349,7 +315,7 @@ const RoleAccessAdd = (props) => {
         let roleAccessArray2 = []
 
         for (var i = 0; i < tableListData.length; i++) {
-            debugger
+
             var moduleName = document.getElementById("ModuleID" + i).value;
             var pageName = document.getElementById("PageID" + i).value;
             var relatedPage = document.getElementById("RelatedPageID" + i).value;
@@ -368,15 +334,11 @@ const RoleAccessAdd = (props) => {
             var isDeleteSelf = document.getElementById("IsDeleteSelf" + i).checked;
             var isPrint = document.getElementById("IsPrint" + i).checked;
             var isTopOfTheDivision = document.getElementById("IsTopOfTheDivision" + i).checked;
-            var isCopy = document.getElementById("IsCopy" + i).checked;
+            var isPdfdownload = document.getElementById("Pdfdownload" + i).checked;
             var isExceldownload = document.getElementById("Exceldownload" + i).checked;
+            var isCopy = document.getElementById("IsCopy" + i).checked;
 
 
-            // if (isShowOnMenu) { isSave = true }
-            // if (isEdit || isEditSelf) { isView = true }
-
-
-            // roleAccessArray.push({ "PageAccess": 1 });
             if (listIsShowOnMenu) roleAccessArray.push({ "PageAccess": 1 });
             if (isSave) roleAccessArray.push({ "PageAccess": 2 });
             if (isView) roleAccessArray.push({ "PageAccess": 3 });
@@ -386,8 +348,9 @@ const RoleAccessAdd = (props) => {
             if (isDeleteSelf) roleAccessArray.push({ "PageAccess": 7 });
             if (isPrint) roleAccessArray.push({ "PageAccess": 8 });
             if (isTopOfTheDivision) roleAccessArray.push({ "PageAccess": 9 });
-            if (isCopy) roleAccessArray.push({ "PageAccess": 12 });
+            if (isPdfdownload) roleAccessArray.push({ "PageAccess": 10 });
             if (isExceldownload) roleAccessArray.push({ "PageAccess": 11 });
+            if (isCopy) roleAccessArray.push({ "PageAccess": 12 });
 
             if (addIsShowOnMenu) roleAccessArray2.push({ "PageAccess": 1 });
             if (isSave) roleAccessArray2.push({ "PageAccess": 2 });
@@ -398,9 +361,9 @@ const RoleAccessAdd = (props) => {
             if (isDeleteSelf) roleAccessArray2.push({ "PageAccess": 7 });
             if (isPrint) roleAccessArray2.push({ "PageAccess": 8 });
             if (isTopOfTheDivision) roleAccessArray2.push({ "PageAccess": 9 });
-            if (isCopy) roleAccessArray2.push({ "PageAccess": 12 });
+            if (isPdfdownload) roleAccessArray2.push({ "PageAccess": 10 });
             if (isExceldownload) roleAccessArray2.push({ "PageAccess": 11 });
-            // roleAccessArray.push(roleAccessElement)
+            if (isCopy) roleAccessArray2.push({ "PageAccess": 12 });
 
             let divisionID = division_dropdown_Select.value
 
@@ -455,7 +418,7 @@ const RoleAccessAdd = (props) => {
     function input_checkBoxHandler(e, v,) {
 
         if (e === "IsEdit") {
-            debugger
+
             let isEdit = document.getElementById(`IsEdit${v}`)
             let isView = document.getElementById(`IsView${v}`)
             let isEditSelf = document.getElementById(`IsEditSelf${v}`)

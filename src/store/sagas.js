@@ -12,7 +12,7 @@ import Spinner_Saga from "./Utilites/Spinner/saga"
 import Alert_Saga from "./Utilites/CustomAlertRedux/saga"
 import CustomSearch_Saga from "./Utilites/CustomSearchRedux/saga"
 import CommonPageField_Saga from "./Utilites/PageFiled/saga"
-
+import pdfReport_Saga from "./Utilites/PdfReport/saga"
 
 // import  Module saga
 import ModulesSaga from "./Administrator/ModulesRedux/saga"
@@ -38,18 +38,19 @@ import MarginMasterSaga from "./Administrator/MarginMasterRedux/saga"
 import TermsAndConditionsSaga from "./Administrator/TermsAndConditionsRedux/saga"
 import GroupTypeSaga from "./Administrator/GroupTypeRedux/saga"
 import GSTSaga from "./Administrator/GSTRedux/saga"
-
 import GroupSaga from "./Administrator/GroupRedux/saga"
 import SubGroupSaga from "./Administrator/SubGroupsRedux/saga"
-
 import PartySubPartysaga from "./Administrator/PartySubPartyRedux/saga"
-
 import PartyItemssaga from "./Administrator/PartyItemsRedux/saga"
 import SupplierSaga from "./CommonAPI/SupplierRedux/saga"
 import GRNSaga from "./Purchase/GRNRedux/saga"
 import BOMSaga from "./Purchase/BOMRedux/saga"
 import WorkOrderSaga from "./Purchase/WorkOrder/saga"
 import MaterialIssueSaga from "./Purchase/Matrial_Issue/saga"
+import ProductionSaga from "./Purchase/ProductionRedux/saga"
+
+
+
 
 export default function* rootSaga() {
   yield all([
@@ -61,7 +62,8 @@ export default function* rootSaga() {
     fork(Spinner_Saga),
     fork(CustomSearch_Saga),
     fork(CommonPageField_Saga),
-    
+    fork(pdfReport_Saga),
+
     fork(Alert_Saga),
     fork(SupplierSaga),
     fork(ModulesSaga),
@@ -95,5 +97,6 @@ export default function* rootSaga() {
     fork(BOMSaga),
     fork(WorkOrderSaga),
     fork(MaterialIssueSaga),
+    fork(ProductionSaga),
   ])
 }

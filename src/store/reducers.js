@@ -13,14 +13,13 @@ import Profile from "./auth/profile/reducer"
 import SpinnerReducer from './Utilites/Spinner/reducer'
 import AlertReducer from './Utilites/CustomAlertRedux/reducer'
 import CommonError from './Utilites/CommonError/reducer'
-
 import CustomSearchReducer from './Utilites/CustomSearchRedux/reducer'
 import BreadcrumbReducer from './Utilites/Breadcrumb/reducer'
 import CommonPageFieldReducer from './Utilites/PageFiled/reducer'
+import PdfReportReducers from './Utilites/PdfReport/reducer'
 
 import Modules from './Administrator/ModulesRedux/reducer'
 import Company from './Administrator/CompanyRedux/reducer'
-
 import H_Pages from './Administrator/HPagesRedux/reducer'
 import OrderReducer from "./Purchase/OrderPageRedux/reducer"
 import GRNReducer from "./Purchase/GRNRedux/reducer"
@@ -51,9 +50,8 @@ import PartyItemsReducer from "./Administrator/PartyItemsRedux/reducer"
 import BOMReducer from "./Purchase/BOMRedux/reducer"
 import WorkOrderReducer from "./Purchase/WorkOrder/reducer"
 import MaterialIssueReducer from "./Purchase/Matrial_Issue/reducer"
-
+import ProductionReducer from "./Purchase/ProductionRedux/reducer"
 const rootReducer = combineReducers({
-
   Layout,
   Login,
   Account,
@@ -65,6 +63,7 @@ const rootReducer = combineReducers({
   CustomSearchReducer,
   BreadcrumbReducer,
   CommonPageFieldReducer,
+  PdfReportReducers,
   // Administator
   Modules,
   Company,
@@ -112,7 +111,7 @@ const rootReducer = combineReducers({
   BOMReducer,
   WorkOrderReducer,
   MaterialIssueReducer,
+  ProductionReducer
 
 })
-
 export default rootReducer
