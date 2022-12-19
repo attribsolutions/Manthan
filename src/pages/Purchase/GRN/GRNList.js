@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 
 import { commonPageFieldList, commonPageFieldListSuccess, } from "../../../store/actions";
 import Order from "../Order/Order";
-import { GST_ADD_Mode_2, ORDER } from "../../../routes/route_url";
+import { GRN_ADD_Mode_2, ORDER } from "../../../routes/route_url";
 import { Button, Col, FormGroup, Label } from "reactstrap";
 import Breadcrumb from "../../../components/Common/Breadcrumb";
 import Select from "react-select";
@@ -112,8 +112,8 @@ const GRNList = () => {
                     newBtnView={true}
                     showCount={true}
                     excelBtnView={true}
-                    pageMode={GST_ADD_Mode_2}
-                    newBtnPagePath={GST_ADD_Mode_2}
+                    pageMode={GRN_ADD_Mode_2}
+                    newBtnPagePath={GRN_ADD_Mode_2}
                     excelData={downList} />
 
                 <div className="px-2  mt-n1 c_card_filter " style={{ marginBottom: "-12px" }}>

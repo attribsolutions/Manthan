@@ -19,7 +19,6 @@ export const EMPLOYEE_lIST = "/EmployeeList"
 
 export const GST = "/GSTMaster"
 export const GST_LIST = "/GSTList"
-export const GST_ADD_Mode_2 = "/GRN-Add-Mode2"
 
 export const ROLE = "/RoleMaster"
 export const ROLE_lIST = "/RoleList"
@@ -70,6 +69,7 @@ export const PAGE_lIST = "/PageList"
 export const ORDER = "/Order"
 export const ORDER_lIST = "/OrderList"
 
+export const GRN_ADD_Mode_2 = "/GRN-Add-Mode2"
 export const GRN_lIST = "/GRNList"
 export const GRN_ADD = "/GRN"
 
