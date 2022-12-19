@@ -70,7 +70,7 @@ const OrderList = () => {
     // Featch Modules List data  First Rendering
     useEffect(() => {
         setpageMode(hasPagePath)
-        const pageId = (hasPagePath === url.GST_ADD_Mode_2) ? 60 : 54;
+        const pageId = (hasPagePath === url.GRN_ADD_Mode_2) ? 60 : 54;
         dispatch(commonPageFieldListSuccess(null))
         dispatch(commonPageFieldList(pageId))
         dispatch(BreadcrumbFilterSize(`${"Orders Count"} :0`))
@@ -93,7 +93,7 @@ const OrderList = () => {
 
 
     useEffect(() => {
-        const pageId = (hasPagePath === url.GST_ADD_Mode_2) ? 60 : 54;
+        const pageId = (hasPagePath === url.GRN_ADD_Mode_2) ? 60 : 54;
         let userAcc = userAccess.find((inx) => {
             return (inx.id === pageId)
         })

@@ -256,6 +256,7 @@ const Order = (props) => {
 
                     <span >
                         <Input type="text"
+                            style={{ textAlign: "right" }}
                             id={`Quantity${k}`}
                             defaultValue={row.Quantity}
                             key={row.Quantity}
@@ -330,6 +331,7 @@ const Order = (props) => {
                 return (
                     <span className="text-right" >
                         <Input
+                            style={{ textAlign: "right" }}
                             type="text"
                             id={`Ratey${k}`}
                             defaultValue={row.Rate}
@@ -361,9 +363,12 @@ const Order = (props) => {
             sort: true,
             formatter: (value, row) => (
 
-                <span >
+                <div className="mt-2 text-end" >
+                    <Label >
                     {value}
-                </span>
+                </Label>
+                </div>
+                
 
             ),
             headerStyle: (colum, colIndex) => {
@@ -399,7 +404,7 @@ const Order = (props) => {
 
         let supplier = supplierSelect.value
         if (!supplier > 0) {
-            alert("Please Select Customer")
+            alert("Please Select Supplier Name")
             return
         }
 
@@ -409,7 +414,7 @@ const Order = (props) => {
             } else { return }
         }
 
-      
+
         dispatch(BreadcrumbFilterSize(`${"Order Amount"} :0:00`))
         const jsonBody = JSON.stringify({
             Party: supplier,
@@ -732,30 +737,30 @@ const Order = (props) => {
                             </div >
                             <div className="col col-6">
                                 {/* <Col sm="2"> */}
-                                    <FormGroup className=" row " >
-                                        {/* <Row className="justify-content-md-left"> */}
-                                            <Label className="col-sm-6 col-form-label mt-2" style={{ width: "115px" }} >
-                                                Is Open PO
-                                            </Label>
-                                            <Col md={7} style={{ marginTop: '10px' }} >
+                                <FormGroup className=" row " >
+                                    {/* <Row className="justify-content-md-left"> */}
+                                    <Label className="col-sm-6 col-form-label mt-2" style={{ width: "115px" }} >
+                                        Is Open PO
+                                    </Label>
+                                    <Col md={7} style={{ marginTop: '10px' }} >
 
-                                                <div className="form-check form-switch form-switch-md mb-3" >
-                                                    <Input type="checkbox" className="form-check-input"
-                                                        checked={isOpenPO}
-                                                        name="IsActive"
-                                                        onChange={(e) => {
-                                                            setisOpenPO(!isOpenPO)
-                                                        }}
-                                                    />
-                                                </div>
-                                            </Col>
-                                        {/* </Row> */}
-                                    </FormGroup>
+                                        <div className="form-check form-switch form-switch-md mb-3" >
+                                            <Input type="checkbox" className="form-check-input"
+                                                checked={isOpenPO}
+                                                name="IsActive"
+                                                onChange={(e) => {
+                                                    setisOpenPO(!isOpenPO)
+                                                }}
+                                            />
+                                        </div>
+                                    </Col>
+                                    {/* </Row> */}
+                                </FormGroup>
                                 {/* </Col> */}
                             </div>
                         </div>
                         <div className="row" >
-                            <div className="col col-6"  style={{ display: isOpenPO ? "block" : "none"}}>
+                            <div className="col col-6" style={{ display: isOpenPO ? "block" : "none" }}>
                                 <FormGroup className=" row  " >
                                     <Label className=" p-2"
                                         style={{ width: "115px" }}>PO From Date</Label>
@@ -777,10 +782,10 @@ const Order = (props) => {
                                     </div>
                                 </FormGroup>
                             </div >
-                            <div className="col col-6" style={{ display: isOpenPO ? "block" : "none"}} >
+                            <div className="col col-6" style={{ display: isOpenPO ? "block" : "none" }} >
                                 <FormGroup className=" row  " >
                                     <Label className=" p-2"
-                                      style={{ width:"130px" }}>PO To Date</Label>
+                                        style={{ width: "130px" }}>PO To Date</Label>
                                     <div className="col col-6 ">
                                         <Flatpickr
                                             id="potodate"
