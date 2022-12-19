@@ -7,11 +7,11 @@ import {
 import { getpdfReportdataSuccess } from "./actions";
 
 
-function* getpdfData_GenFunc({ urlpath = () => { }, reportType, Id }) {
+function* getpdfData_GenFunc({ urlpath = () => { }, ReportType, Id }) {
   yield put(SpinnerState(true))
   try {
     const response = yield call(urlpath, Id);
-    response["reportType"] = reportType
+    response["ReportType"] = ReportType
     yield put(getpdfReportdataSuccess(response));
     yield put(SpinnerState(false))
   } catch (error) {

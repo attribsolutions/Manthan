@@ -6,7 +6,7 @@ import paginationFactory, {
     PaginationListStandalone,
     PaginationProvider,
 } from "react-bootstrap-table2-paginator";
-import ToolkitProvider, { Search } from "react-bootstrap-table2-toolkit";
+import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 import { useDispatch } from "react-redux";
 import { MetaTags } from "react-meta-tags";
@@ -59,8 +59,7 @@ const PurchaseListPage = (props) => {
         deleteMsg,
         userAccess,
         postMsg,
-        pageField
-
+        pageField,
     } = props.reducers;
 
     const {
@@ -291,16 +290,17 @@ const PurchaseListPage = (props) => {
         // ======================== for List Page Action Button ================================
 
         else if ((fileds.length - 1 === k)) {
-            columns.push(listPageCommonButtonFunction({
-                dispatchHook: dispatch,
-                ButtonMsgLable: ButtonMsgLable,
-                deleteName: deleteName,
-                userAccState: userAccState,
-                editActionFun: editId,
-                deleteActionFun: deleteId,
-                downUrlPath,
-                ReportType
-            })
+            columns.push(
+                listPageCommonButtonFunction({
+                    dispatchHook: dispatch,
+                    ButtonMsgLable: ButtonMsgLable,
+                    deleteName: deleteName,
+                    userAccState: userAccState,
+                    editActionFun: editId,
+                    deleteActionFun: deleteId,
+                    downUrlPath: downUrlPath,
+                    ReportType: ReportType
+                })
             )
         }
     })

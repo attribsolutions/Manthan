@@ -5,7 +5,7 @@ export const order2="order2"
 
 
 const generateReport = (resp) => {
-debugger
+
     switch (resp.ReportType) {
         case order1:
             ordeRreport(resp.Data)

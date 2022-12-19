@@ -10,7 +10,7 @@ export const pageHeder = (doc) => {
     // doc.setFont('Courier')
 
     doc.setFontSize(20)
-    doc.text(' Tax Invoice', 460, 50)
+    doc.text('PURCHASE ORDER', 380, 50)
 }
 
 export const reportHeder1 = (doc, data) => {
@@ -329,19 +329,20 @@ export const tableBody = (doc, data) => {
         },
         columnStyles: {
             0: {
+                columnWidth:30,
                 valign: "top",
-                columnWidth: 140,
+                // columnWidth: 140,
                 // fontStyle: 'bold',
             },
             1: {
-                columnWidth: 50,
+                // columnWidth: 50,
                 // fontStyle: 'bold',
-                halign: 'right',
+                halign: 'left',
                 // fontStyle: 'bold',
                 //  height:50,
             },
             2: {
-                columnWidth: 40,
+                // columnWidth: 40,
                 // fontStyle: 'bold',
                 // fontStyle: 'bold',
                 halign: 'center',
@@ -361,19 +362,7 @@ export const tableBody = (doc, data) => {
                 // fontStyle: 'bold',
                 halign: 'center',
             },
-            6: {
-                // columnWidth: 40,
-                // fontStyle: 'bold',
-                halign: 'center',
-            },
-            7: {
-                halign: 'center',
-            },
-            8: {
-                // columnWidth: 40,
-                fontStyle: 'bold',
-                halign: 'center',
-            },
+            
         },
         didParseCell(data) {
             if (data.cell.row.index === 0) {
@@ -407,7 +396,7 @@ export const tableBody = (doc, data) => {
         // tableLineWidth: 0.01,
         startY: doc.autoTableEndPosY(),// 45,
     };
-    doc.autoTable(table.columns, table.Rows(data), options);
+    doc.autoTable(table.columns, table.tableRows(data), options);
 
 }
 export const pageFooter = (doc) => {

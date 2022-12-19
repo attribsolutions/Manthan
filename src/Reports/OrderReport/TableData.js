@@ -1,9 +1,11 @@
 
 export const columns = [
-    "HSNCode Item Name",
-    "Quantity", "Rate",
-    "Amount ", "Disc.Amt",
-    "TaxbleAmt.", "GST%", "GST.AMT", "Total Amt"];
+    "Sr.No",
+    "Item Name",
+    "Quantity",
+    "Rate",
+    "Order Amount"
+];
 
 export const PageHedercolumns = [
     "Billed by",
@@ -11,102 +13,32 @@ export const PageHedercolumns = [
     ''
 ]
 
-export const Rows = (data) => {
-    const { InvoiceServiceItems = [] } = data
-    var a = [];
-    var Amount = 0
-    var TotalCGst = 0
-    var TotalSGst = 0
-    var TotalValue = 0
-    var Gst = 0
-    InvoiceServiceItems.forEach(element => {
+export const tableRows = (data) => {
+    debugger
+    const { OrderItem = [] } = data
+    const datatable = [];
+    
+    OrderItem.forEach((element, k) => {
 
-        if (Gst === 0) { Gst = element.GSTPercentage };
-        if ((Gst === element.GSTPercentage)) {
-            Amount = Amount + element.BasicAmount;
-            TotalCGst = TotalCGst + element.CGST
-            TotalSGst = TotalSGst + element.SGST
-            TotalValue = TotalValue + element.Value
+        let TableListData = [
+            k,
+           `(${element.HSNCode})${element.ItemName}`,
+            element.Quantity,
+            element.Rate,
+            element.Amount,
+        ];
+        datatable.push(TableListData);
 
-            const TableListData = [
-                element.InvoiceID,
-                element.Quantity,
-                element.Rate,
-                element.BasicAmount,
-                element.DiscountAmount,
-                element.Amount,
-                element.GSTPercentage,
-                element.GSTAmount,
-                element.CGST,
-                element.SGST,
-                element.Value,
-            ];
-            a.push(TableListData);
-            Gst = element.GSTPercentage
-        } else {
-
-            Amount = Amount + element.BasicAmount;
-            const tableTotalRow = [
-                "",
-                "Total GST",
-                "% ",
-                parseFloat(Amount).toFixed(2),
-                ,
-                "",
-                "",
-                "",
-                "",
-                parseFloat(TotalCGst).toFixed(2),
-                parseFloat(TotalSGst).toFixed(2),
-                parseFloat(TotalValue).toFixed(2),
-            ];
-            a.push(tableTotalRow);
-
-            Amount = 0;
-            TotalCGst = 0
-            TotalSGst = 0
-            TotalValue = 0
-
-            Amount = Amount + element.BasicAmount;
-            TotalCGst = TotalCGst + element.CGST
-            TotalSGst = TotalSGst + element.SGST
-            TotalValue = TotalValue + element.Value
-
-            const tableTotalRowNew = [
-                element.InvoiceID,
-                element.Quantity,
-                element.Rate,
-                element.BasicAmount,
-                element.DiscountAmount,
-                element.Amount,
-                element.GSTPercentage,
-                element.GSTAmount,
-                element.CGST,
-                element.SGST,
-                element.Value,
-            ];
-
-            a.push(tableTotalRowNew);
-
-            Gst = element.GSTPercentage;
-        }
-    })
-    const tableTotalRowLast = [
-        "",
-        "Total GST",
-        "% ",
-        parseFloat(Amount).toFixed(2),
-        ,
+    });
+    let tableTotalRowLast = [
         "",
         "",
         "",
-        "",
-        parseFloat(TotalCGst).toFixed(2),
-        parseFloat(TotalSGst).toFixed(2),
-        parseFloat(TotalValue).toFixed(2),
+        "Total Amount :",
+        parseFloat(data.OrderAmount).toFixed(2),
     ];
-    a.push(tableTotalRowLast);
-    return a;
+    datatable.push(tableTotalRowLast);
+    return datatable;
 }
 export const ReportFotterColumns = [
     "SGST",
