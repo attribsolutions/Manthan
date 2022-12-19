@@ -8,7 +8,6 @@ import { DELETE_BOM_LIST_PAGE, EDIT_BOM_LIST_ID, GET_BOM_LIST_PAGE, GET_ITEM_UNI
 
 //post api
 function* Post_BOM_GenratorFunction({ data }) {
-
   yield put(SpinnerState(true))
   try {
 

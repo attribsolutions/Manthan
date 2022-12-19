@@ -13,7 +13,7 @@ export const PageHedercolumns = [
 
 export const Rows = (data) => {
     var a = [];
-    var totalAmount = 0
+    var Amount = 0
     var TotalCGst = 0
     var TotalSGst = 0
     var TotalValue = 0
@@ -22,7 +22,7 @@ export const Rows = (data) => {
 
         if (Gst === 0) { Gst = element.GSTPercentage };
         if ((Gst === element.GSTPercentage)) {
-            totalAmount = totalAmount + element.BasicAmount;
+            Amount = Amount + element.BasicAmount;
             TotalCGst = TotalCGst + element.CGST
             TotalSGst = TotalSGst + element.SGST
             TotalValue = TotalValue + element.Value
@@ -44,12 +44,12 @@ export const Rows = (data) => {
             Gst = element.GSTPercentage
         } else {
 
-            totalAmount = totalAmount + element.BasicAmount;
+            Amount = Amount + element.BasicAmount;
             const tableTotalRow = [
                 "",
                 "Total GST",
                 "% ",
-                parseFloat(totalAmount).toFixed(2),
+                parseFloat(Amount).toFixed(2),
                 ,
                 "",
                 "",
@@ -61,12 +61,12 @@ export const Rows = (data) => {
             ];
             a.push(tableTotalRow);
 
-            totalAmount = 0;
+            Amount = 0;
             TotalCGst = 0
             TotalSGst = 0
             TotalValue = 0
 
-            totalAmount = totalAmount + element.BasicAmount;
+            Amount = Amount + element.BasicAmount;
             TotalCGst = TotalCGst + element.CGST
             TotalSGst = TotalSGst + element.SGST
             TotalValue = TotalValue + element.Value
@@ -94,7 +94,7 @@ export const Rows = (data) => {
         "",
         "Total GST",
         "% ",
-        parseFloat(totalAmount).toFixed(2),
+        parseFloat(Amount).toFixed(2),
         ,
         "",
         "",

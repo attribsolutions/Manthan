@@ -42,12 +42,12 @@ function* goButtonGenFunc({ data, hasEditVal }) {
       yield response.Data.forEach(element => {
         hasEditVal.OrderItem.forEach(ele => {
           if (element.id === ele.Item) {
-            element["inpRate"] = ele.Rate
-            element["inpQty"] = ele.Quantity
-            element["totalAmount"] = ele.Amount
-            element["UOM"] = ele.Unit
-            element["UOMLabel"] = ele.UnitName
-            element["inpBaseUnitQty"] = ele.BaseUnitQuantity
+            element["Rate"] = ele.Rate
+            element["Quantity"] = ele.Quantity
+            element["Amount"] = ele.Amount
+            element["Unit"] = ele.Unit
+            element["UnitName"] = ele.UnitName
+            element["BaseUnitQuantity"] = ele.BaseUnitQuantity
             // **======== update mode required  variables======********
             element["poRate"] = ele.Rate
             element["poQty"] = ele.Quantity
@@ -59,13 +59,14 @@ function* goButtonGenFunc({ data, hasEditVal }) {
     }
 
     yield response.Data.forEach(row => {
+      
       if (row.poRate === undefined) { row["poRate"] = '' }
       if (row.poQty === undefined) { row["poQty"] = 0 }
       if (row.poBaseUnitQty === undefined) { row["poBaseUnitQty"] = '' }
 
-      if (row["inpRate"] === undefined) { row["inpRate"] = '' }
-      if (row["inpQty"] === undefined) { row["inpQty"] = '' }
-      if (row["totalAmount"] === undefined) { row["totalAmount"] = 0 }
+      if (row["Rate"] === undefined) { row["Rate"] = '' }
+      if (row["Quantity"] === undefined) { row["Quantity"] = '' }
+      if (row["Amount"] === undefined) { row["Amount"] = 0 }
     });
 
     yield put(goButtonSuccess(response.Data));

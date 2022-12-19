@@ -29,7 +29,7 @@ import {
 } from "../../../store/Purchase/OrderPageRedux/actions";
 import { getSupplier, getSupplierAddress } from "../../../store/CommonAPI/SupplierRedux/actions"
 import { AlertState, BreadcrumbFilterSize } from "../../../store/actions";
-import { basicAmount, GstAmount, handleKeyDown, totalAmount } from "./OrderPageCalulation";
+import { basicAmount, GstAmount, handleKeyDown, Amount } from "./OrderPageCalulation";
 import '../../Order/div.css'
 
 import { ORDER_lIST } from "../../../routes/route_url";
@@ -132,6 +132,7 @@ const Order = (props) => {
             if (hasEditVal) {
 
                 goButtonHandler(hasEditVal)//=======Go Button API Call
+
                 dispatch(BreadcrumbFilterSize(`${"Order Amount"} :${hasEditVal.OrderAmount}`))
                 setsupplierSelect({ label: hasEditVal.SupplierName, value: hasEditVal.Supplier })
                 setpoDate(hasEditVal.OrderDate)
@@ -213,16 +214,16 @@ const Order = (props) => {
     function val_onChange(val, row, type) {
 
         if (type === "qty") {
-            row["inpQty"] = val;
+            row["Quantity"] = val;
         }
         else {
-            row["inpRate"] = val
+            row["Rate"] = val
         }
-        row["totalAmount"] = totalAmount(row)
+        row["Amount"] = Amount(row)
 
         let sum = 0
         items.forEach(ind => {
-            var amt = parseFloat(ind.totalAmount)
+            var amt = parseFloat(ind.Amount)
             debugger
             sum = sum + amt
         });
@@ -248,23 +249,23 @@ const Order = (props) => {
             dataField: "",
             sort: true,
             formatter: (value, row, k) => {
-                // if (row.inpRate === undefined) { row["inpRate"] = '' }
-                // if (row.inpQty === undefined) { row["inpQty"] = '' }
-                // if (row.totalAmount === undefined) { row["totalAmount"] = 0 }
+                // if (row.Rate === undefined) { row["Rate"] = '' }
+                // if (row.Quantity === undefined) { row["Quantity"] = '' }
+                // if (row.Amount === undefined) { row["Amount"] = 0 }
                 return (
 
                     <span >
                         <Input type="text"
-                            id={`inpQty${k}`}
-                            defaultValue={row.inpQty}
-                            key={row.inpQty}
+                            id={`Quantity${k}`}
+                            defaultValue={row.Quantity}
+                            key={row.Quantity}
                             onChange={(e) => {
                                 const val = e.target.value
                                 let isnum = /^[+-]?([0-9]+([.][0-9]*)?|[.][0-9]+)?([eE][+-]?[0-9]+)?$/.test(val);
                                 if ((isnum) || (val === '')) {
                                     val_onChange(val, row, "qty")
                                 } else {
-                                    document.getElementById(`inpQty${k}`).value = row.inpQty
+                                    document.getElementById(`Quantity${k}`).value = row.Quantity
                                 }
                             }}
                             autoComplete="off"
@@ -286,18 +287,18 @@ const Order = (props) => {
             dataField: "",
             sort: true,
             formatter: (value, row, key) => {
-                if (row.UOMLabel === undefined) {
-                    row["UOM"] = row.UnitDetails[0].UnitID
-                    row["UOMLabel"] = row.UnitDetails[0].UnitName
-                    row["inpBaseUnitQty"] = row.UnitDetails[0].BaseUnitQuantity
+                if (row.UnitName === undefined) {
+                    row["Unit"] = row.UnitDetails[0].UnitID
+                    row["UnitName"] = row.UnitDetails[0].UnitName
+                    row["BaseUnitQuantity"] = row.UnitDetails[0].BaseUnitQuantity
                     row["poBaseUnitQty"] = row.UnitDetails[0].BaseUnitQuantity
                 }
                 return (
                     <Select
                         classNamePrefix="select2-selection"
                         id={"ddlUnit"}
-                        defaultValue={{ value: row.UOM, label: row.UOMLabel }}
-                        // value={{value:row.UOM,label:row.UOMLabel}}
+                        defaultValue={{ value: row.Unit, label: row.UnitName }}
+                        // value={{value:row.Unit,label:row.UnitName}}
                         options={
                             row.UnitDetails.map(i => ({
                                 label: i.UnitName,
@@ -306,9 +307,9 @@ const Order = (props) => {
                             }))
                         }
                         onChange={e => {
-                            row["UOM"] = e.value;
-                            row["UOMLabel"] = e.label
-                            row["inpBaseUnitQty"] = e.baseUnitQty
+                            row["Unit"] = e.value;
+                            row["UnitName"] = e.label
+                            row["BaseUnitQuantity"] = e.baseUnitQty
                         }}
                     >
                     </Select >
@@ -330,8 +331,8 @@ const Order = (props) => {
                     <span className="text-right" >
                         <Input
                             type="text"
-                            id={`inpRatey${k}`}
-                            defaultValue={row.inpRate}
+                            id={`Ratey${k}`}
+                            defaultValue={row.Rate}
                             autoComplete="off"
                             // disabled={(row.GST === '') ? true : false}
                             onChange={(e) => {
@@ -340,7 +341,7 @@ const Order = (props) => {
                                 if ((isnum) || (val === '')) {
                                     val_onChange(val, row, "rate")
                                 } else {
-                                    document.getElementById(`inpRatey${k}`).value = row.inpRate
+                                    document.getElementById(`Ratey${k}`).value = row.Rate
                                 }
                             }}
                             onKeyDown={(e) => handleKeyDown(e, items)}
@@ -408,12 +409,7 @@ const Order = (props) => {
             } else { return }
         }
 
-        let division = 0
-        try {
-            division = JSON.parse(localStorage.getItem("roleId")).Party_id
-        } catch (e) {
-            alert(e)
-        }
+      
         dispatch(BreadcrumbFilterSize(`${"Order Amount"} :0:00`))
         const jsonBody = JSON.stringify({
             Party: supplier,
@@ -438,11 +434,11 @@ const Order = (props) => {
             const arr = {
                 id: i.editrowId,
                 Item: i.id,
-                Quantity: isdel ? 0 : i.inpQty,
+                Quantity: isdel ? 0 : i.Quantity,
                 MRP: i.MRP,
-                Rate: i.inpRate,
-                Unit: i.UOM,
-                BaseUnitQuantity: i.inpBaseUnitQty,
+                Rate: i.Rate,
+                Unit: i.Unit,
+                BaseUnitQuantity: i.BaseUnitQuantity,
                 Margin: "",
                 BasicAmount: basicAmt.toFixed(2),
                 GSTAmount: cgstAmt.toFixed(2),
@@ -453,7 +449,7 @@ const Order = (props) => {
                 CGSTPercentage: (i.GSTPercentage / 2),
                 SGSTPercentage: (i.GSTPercentage / 2),
                 IGSTPercentage: 0,
-                Amount: i.totalAmount,
+                Amount: i.Amount,
                 IsDeleted: isedit
             }
             itemArr.push(arr)
@@ -461,12 +457,12 @@ const Order = (props) => {
 
         function orderItem({ i, isedit }) {
 
-            if ((i.inpQty > 0) && (i.inpRate > 0)) {
+            if ((i.Quantity > 0) && (i.Rate > 0)) {
                 var isdel = false;
 
                 isChanged({ i, isedit, isdel })
             }
-            else if ((i.inpQty < 1) && (i.editrowId)) {
+            else if ((i.Quantity < 1) && (i.editrowId)) {
                 var isdel = true;
                 isChanged({ i, isedit, isdel })
             };
@@ -474,13 +470,13 @@ const Order = (props) => {
 
         items.forEach(i => {
 
-            if ((i.inpQty > 0) && !(i.inpRate > 0)) {
+            if ((i.Quantity > 0) && !(i.Rate > 0)) {
                 validMsg.push(`${i.Name}:  This Item Rate Is Require...`);
             };
 
             if (pageMode === "edit") {
-                var ischange = (!(i.poQty === i.inpQty) ||
-                    !(i.poRate === i.inpRate) || !(i.poBaseUnitQty === i.inpBaseUnitQty))
+                var ischange = (!(i.poQty === i.Quantity) ||
+                    !(i.poRate === i.Rate) || !(i.poBaseUnitQty === i.BaseUnitQuantity))
                 if (ischange && (i.poQty === 0)) {
                     var isedit = 0;
                     orderItem({ i, isedit })
@@ -498,27 +494,6 @@ const Order = (props) => {
                 orderItem({ i, isedit })
             }
         })
-        // debugger
-        // if (pageMode === "edit11") {
-        //     termsAndConTable.forEach(i => {
-        //         var found = editVal.OrderTermsAndCondition.find(ele => (i.value === ele.id))
-        //         if (found === undefined) {
-        //             termsAndCondition.push({
-        //                 TermsAndCondition: i.value,
-        //                 IsDeleted: 0
-        //             })
-
-        //         }
-        //         else {
-        //             termsAndCondition.push({
-        //                 TermsAndCondition: i.value,
-        //                 IsDeleted: 0
-        //             })
-
-        //         }
-        //     })
-        // } else {
-
         const termsAndCondition = termsAndConTable.map(i => ({
             TermsAndCondition: i.value,
             IsDeleted: i.IsDeleted

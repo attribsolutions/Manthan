@@ -99,5 +99,8 @@ export const WORK_ORDER_LIST="/WorkOrderList"
 export const MATERIAL_ISSUE="/MaterialIssue"
 export const MATERIAL_ISSUE_LIST="/MaterialIssueList"
 
+export const PRODUCTION_MASTER="/ProductionMaster"
+export const PRODUCTION_LIST="/ProductionList"
+
 
 

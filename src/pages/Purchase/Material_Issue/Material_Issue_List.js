@@ -4,7 +4,7 @@ import "flatpickr/dist/themes/material_blue.css"
 import Flatpickr from "react-flatpickr";
 import { BreadcrumbFilterSize, commonPageFieldList, commonPageFieldListSuccess, } from "../../../store/actions";
 import PurchaseListPage from "../../../components/Common/ComponentRelatedCommonFile/purchase"
-import { WORK_ORDER, WORK_ORDER_LIST } from "../../../routes/route_url";
+import { MATERIAL_ISSUE, MATERIAL_ISSUE_LIST, WORK_ORDER, WORK_ORDER_LIST } from "../../../routes/route_url";
 import { Button, Col, FormGroup, Label } from "reactstrap";
 import Breadcrumb from "../../../components/Common/Breadcrumb";
 import { useHistory } from "react-router-dom";
@@ -12,23 +12,25 @@ import { currentDate, excelDownCommonFunc } from "../../../components/Common/Com
 import { useMemo } from "react";
 import { updateBOMListSuccess } from "../../../store/Purchase/BOMRedux/action";
 import { deleteWorkOrderId, deleteWorkOrderIdSuccess, editWorkOrderList, getWorkOrderListPage, updateWorkOrderListSuccess } from "../../../store/Purchase/WorkOrder/action";
-import WorkOrder from "./WorkOrder";
+import MaterialIssueMaster from "./Material_IssueMaster";
+import { getMaterialIssueListPage } from "../../../store/Purchase/Matrial_Issue/action";
+
 // import BOMMaster from "../BOMMaster/BOMIndex";
 
-const WorkOrderList = () => {
+const MaterialIssueList = () => {
 
     const dispatch = useDispatch();
     const history = useHistory();
 
     const hasPagePath = history.location.pathname
 
-    const [pageMode, setpageMode] = useState(WORK_ORDER_LIST)
+    const [pageMode, setpageMode] = useState(MATERIAL_ISSUE_LIST)
     const [userAccState, setUserAccState] = useState('');
     const [fromdate, setFromdate] = useState();
     const [todate, setTodate] = useState();
     const reducers = useSelector(
         (state) => ({
-            tableList: state.WorkOrderReducer.WorkOrderList,
+            tableList: state.MaterialIssueReducer.materialIssueList,
             deleteMsg: state.WorkOrderReducer.deleteMsg,
             updateMsg: state.WorkOrderReducer.updateMsg,
             postMsg: state.OrderReducer.postMsg,
@@ -39,7 +41,7 @@ const WorkOrderList = () => {
     );
 
     const action = {
-        getList: getWorkOrderListPage,
+        getList: getMaterialIssueListPage,
         editId: editWorkOrderList,
         deleteId: deleteWorkOrderId,
         postSucc: postMessage,
@@ -50,9 +52,9 @@ const WorkOrderList = () => {
     // Featch Modules List data  First Rendering
     useEffect(() => {
         setpageMode(hasPagePath)
-        dispatch(BreadcrumbFilterSize(`${"Work Order Count"} :0`))
+        dispatch(BreadcrumbFilterSize(`${"Material Issue Count"} :0`))
         dispatch(commonPageFieldListSuccess(null))
-        dispatch(commonPageFieldList(73))
+        dispatch(commonPageFieldList(76))
         goButtonHandler(true)
 
     }, []);
@@ -67,7 +69,7 @@ const WorkOrderList = () => {
 
 
     useEffect(() => {
-        const pageId = 73
+        const pageId = 76
         let userAcc = userAccess.find((inx) => {
             return (inx.id === pageId)
         })
@@ -92,10 +94,8 @@ const WorkOrderList = () => {
         const jsonBody = JSON.stringify({
             FromDate: FromDate,
             ToDate: ToDate,
-            // Company: userCompany(),
         });
-        dispatch(getWorkOrderListPage(jsonBody));
-        console.log("go button post json", jsonBody)
+        dispatch(getMaterialIssueListPage(jsonBody));
     }
 
     return (
@@ -155,7 +155,7 @@ const WorkOrderList = () => {
                             </FormGroup>
                         </Col>
 
-                        <Col sm="1"className="mx-4 ">
+                        <Col sm="1" className="mx-4 ">
                             <Button type="button" color="btn btn-outline-success border-2 font-size-12 m-3  "
                                 onClick={() => goButtonHandler()}
                             >Go</Button>
@@ -168,9 +168,9 @@ const WorkOrderList = () => {
                             action={action}
                             reducers={reducers}
                             showBreadcrumb={false}
-                            MasterModal={WorkOrder}
-                            masterPath={WORK_ORDER}
-                            ButtonMsgLable={"Work Order"}
+                            MasterModal={MaterialIssueMaster}
+                            masterPath={MATERIAL_ISSUE}
+                            ButtonMsgLable={"Material Issue"}
                             deleteName={"ItemName"}
                             pageMode={pageMode}
                             goButnFunc={goButtonHandler}
@@ -184,4 +184,4 @@ const WorkOrderList = () => {
     )
 }
 
-export default WorkOrderList;
+export default MaterialIssueList;

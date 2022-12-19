@@ -334,8 +334,10 @@ export const update_Group_List_Api = (data, id) => put(`${url.GROUP_API}/${id}`,
 
 // TermsAndCondtions API
 export const Post_TermsAndCondtions_Master_API = (data) => post(url.TERMSANDCONDITIONS_API, data)// post api
-
-export const get_TermsAndCondtionsList_API = (data) => get(url.TERMSANDCONDITIONS_API)// get api
+export const get_TermsAndCondtionsList_API = () => get(url.TERMSANDCONDITIONS_API)// get api
+export const del_TermsAndCondtions_Master_API = (id) => del(`${url.TERMSANDCONDITIONS_API}/${id}`)// delete api
+export const edit_TermsAndCondtions_Master_API = (id) => get(`${url.TERMSANDCONDITIONS_API}/${id}`)// edit api
+export const update_TermsAndCondtions_Master_API = (data, id) => put(`${url.TERMSANDCONDITIONS_API}/${id}`, data)// update api
 
 // GST API
 export const Post_GSTMaster_API = (data) => post(url.GST_LIST_API, data)// post api
@@ -387,7 +389,8 @@ export const WorkOrder_Delete_Api = (id) => del(`${url.WORK_ORDER_LIST_API}/${id
 
 // Material Issue
 export const Material_Issue_GoButton_Post_API = (data) => post(url.GO_BUTTON_POST_API_FOR_MATERIAL_ISSUE, data)// go button postapi
-
+export const Material_Issue_Post_API = (data) => post(url.POST_API_FOR_MATERIAL_ISSUE, data)// go button postapi
+export const Material_Issue_Get_API = (filters) => post(url.POST_API_FOR_MATERIAL_ISSUE_LIST, filters)// get list api
 export {
   getLoggedInUser,
   isUserAuthenticated,

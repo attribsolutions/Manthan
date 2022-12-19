@@ -31,7 +31,10 @@ import paginationFactory, { PaginationListStandalone, PaginationProvider } from 
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 import '../../Order/div.css'
-const WorkOrder = (props) => {
+
+
+
+const ProductionMaster = (props) => {
 
     const dispatch = useDispatch();
     const history = useHistory()
@@ -110,103 +113,103 @@ const WorkOrder = (props) => {
     }, [userAccess])
 
     //This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
-    useEffect(() => {
+    // useEffect(() => {
 
-        if ((hasShowloction || hasShowModal)) {
+    //     if ((hasShowloction || hasShowModal)) {
 
-            let hasEditVal = null
-            if (hasShowloction) {
-                setPageMode(location.pageMode)
-                hasEditVal = location.editValue
-            }
-            else if (hasShowModal) {
-                hasEditVal = props.editValue
-                setPageMode(props.pageMode)
-                setModalCss(true)
-            }
+    //         let hasEditVal = null
+    //         if (hasShowloction) {
+    //             setPageMode(location.pageMode)
+    //             hasEditVal = location.editValue
+    //         }
+    //         else if (hasShowModal) {
+    //             hasEditVal = props.editValue
+    //             setPageMode(props.pageMode)
+    //             setModalCss(true)
+    //         }
 
-            if (hasEditVal) {
-                debugger
-                setEditData(hasEditVal);
-                const { id, WorkOrderDate, Item, ItemName, NumberOfLot, EstimatedOutputQty, Quantity } = hasEditVal
-                const { values, fieldLabel, hasValid, required, isError } = { ...state }
+    //         if (hasEditVal) {
+    //             debugger
+    //             setEditData(hasEditVal);
+    //             const { id, WorkOrderDate, Item, ItemName, NumberOfLot, EstimatedOutputQty, Quantity } = hasEditVal
+    //             const { values, fieldLabel, hasValid, required, isError } = { ...state }
 
-                hasValid.id.valid = true;
-                hasValid.WorkOrderDate.valid = true;
-                hasValid.ItemName.valid = true;
-                hasValid.EstimatedOutputQty.valid = true;
-                hasValid.NumberOfLot.valid = true;
-                hasValid.Quantity.valid = true;
+    //             hasValid.id.valid = true;
+    //             hasValid.WorkOrderDate.valid = true;
+    //             hasValid.ItemName.valid = true;
+    //             hasValid.EstimatedOutputQty.valid = true;
+    //             hasValid.NumberOfLot.valid = true;
+    //             hasValid.Quantity.valid = true;
 
-                values.id = id
-                values.WorkOrderDate = WorkOrderDate;
-                values.EstimatedOutputQty = EstimatedOutputQty;
-                values.NumberOfLot = NumberOfLot;
-                values.Quantity = Quantity;
-                values.ItemName = { label: ItemName, value: Item };
+    //             values.id = id
+    //             values.WorkOrderDate = WorkOrderDate;
+    //             values.EstimatedOutputQty = EstimatedOutputQty;
+    //             values.NumberOfLot = NumberOfLot;
+    //             values.Quantity = Quantity;
+    //             values.ItemName = { label: ItemName, value: Item };
 
-                const jsonBody = JSON.stringify({
-                    Item: hasEditVal.Item,
-                    Bom: hasEditVal.Bom,
-                    Quantity: parseInt(hasEditVal.Quantity)
-                });
-                dispatch(postGoButtonForWorkOrder_Master(jsonBody));
-                setState({ values, fieldLabel, hasValid, required, isError })
-                dispatch(editWorkOrderListSuccess({ Status: false }))
-                dispatch(Breadcrumb_inputName(hasEditVal.ItemName))
-            }
-        }
-    }, [])
+    //             const jsonBody = JSON.stringify({
+    //                 Item: hasEditVal.Item,
+    //                 Bom: hasEditVal.Bom,
+    //                 Quantity: parseInt(hasEditVal.Quantity)
+    //             });
+    //             dispatch(postGoButtonForWorkOrder_Master(jsonBody));
+    //             setState({ values, fieldLabel, hasValid, required, isError })
+    //             dispatch(editWorkOrderListSuccess({ Status: false }))
+    //             dispatch(Breadcrumb_inputName(hasEditVal.ItemName))
+    //         }
+    //     }
+    // }, [])
 
-    useEffect(() => {
-        if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
-            dispatch(postWorkOrderMasterSuccess({ Status: false }))
-            formRef.current.reset();
-            if (pageMode === "dropdownAdd") {
-                dispatch(AlertState({
-                    Type: 1,
-                    Status: true,
-                    Message: postMsg.Message,
-                }))
-            }
-            else {
-                dispatch(AlertState({
-                    Type: 1,
-                    Status: true,
-                    Message: postMsg.Message,
-                    RedirectPath: WORK_ORDER_LIST,
-                }))
-            }
-        }
-        else if (postMsg.Status === true) {
-            dispatch(postWorkOrderMasterSuccess({ Status: false }))
-            dispatch(AlertState({
-                Type: 4,
-                Status: true,
-                Message: JSON.stringify(postMessage.Message),
-                RedirectPath: false,
-                AfterResponseAction: false
-            }));
-        }
-    }, [postMsg])
+    // useEffect(() => {
+    //     if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
+    //         dispatch(postWorkOrderMasterSuccess({ Status: false }))
+    //         formRef.current.reset();
+    //         if (pageMode === "dropdownAdd") {
+    //             dispatch(AlertState({
+    //                 Type: 1,
+    //                 Status: true,
+    //                 Message: postMsg.Message,
+    //             }))
+    //         }
+    //         else {
+    //             dispatch(AlertState({
+    //                 Type: 1,
+    //                 Status: true,
+    //                 Message: postMsg.Message,
+    //                 RedirectPath: WORK_ORDER_LIST,
+    //             }))
+    //         }
+    //     }
+    //     else if (postMsg.Status === true) {
+    //         dispatch(postWorkOrderMasterSuccess({ Status: false }))
+    //         dispatch(AlertState({
+    //             Type: 4,
+    //             Status: true,
+    //             Message: JSON.stringify(postMessage.Message),
+    //             RedirectPath: false,
+    //             AfterResponseAction: false
+    //         }));
+    //     }
+    // }, [postMsg])
 
-    useEffect(() => {
-        debugger
-        if ((updateMsg.Status === true) && (updateMsg.StatusCode === 200) && !(modalCss)) {
-            history.push({
-                pathname: WORK_ORDER_LIST,
-            })
-        } else if (updateMsg.Status === true && !modalCss) {
-            dispatch(updateWorkOrderListSuccess({ Status: false }));
-            dispatch(
-                AlertState({
-                    Type: 3,
-                    Status: true,
-                    Message: JSON.stringify(updateMsg.Message),
-                })
-            );
-        }
-    }, [updateMsg, modalCss]);
+    // useEffect(() => {
+    //     debugger
+    //     if ((updateMsg.Status === true) && (updateMsg.StatusCode === 200) && !(modalCss)) {
+    //         history.push({
+    //             pathname: WORK_ORDER_LIST,
+    //         })
+    //     } else if (updateMsg.Status === true && !modalCss) {
+    //         dispatch(updateWorkOrderListSuccess({ Status: false }));
+    //         dispatch(
+    //             AlertState({
+    //                 Type: 3,
+    //                 Status: true,
+    //                 Message: JSON.stringify(updateMsg.Message),
+    //             })
+    //         );
+    //     }
+    // }, [updateMsg, modalCss]);
 
     useEffect(() => {
         if (pageField) {
@@ -226,7 +229,7 @@ const WorkOrder = (props) => {
     }));
 
     useEffect(() => {
-
+        
         const jsonBody = JSON.stringify({
             FromDate: "2022-12-01",
             ToDate: currentDate,
@@ -236,75 +239,68 @@ const WorkOrder = (props) => {
     }, [])
 
     function ItemOnchange(e) {
-        debugger
-        dispatch(postGoButtonForWorkOrder_MasterSuccess([]))
-        setItemselect(e)
-        setState((i) => {
-            i.values.NumberOfLot = "1";
-            i.values.Quantity = e.EstimatedOutputQty;
-            i.hasValid.NumberOfLot.valid = true;
-            i.hasValid.Quantity.valid = true;
-            return i
-        })
+        // debugger
+        // dispatch(postGoButtonForWorkOrder_MasterSuccess([]))
+        // setItemselect(e)
+        // setState((i) => {
+        //     i.values.NumberOfLot = "1";
+        //     i.values.Quantity = e.EstimatedOutputQty;
+        //     return i
+        // })
     }
 
     function NumberOfLotchange(e) {
-        debugger
-        dispatch(postGoButtonForWorkOrder_MasterSuccess([]))
-        let qty = ''
-        if (pageMode === "edit") {
-            qty = e * EditData.EstimatedOutputQty;
-        }
-        else {
-            qty = e * itemselect.EstimatedOutputQty
-        }
-        setState((i) => {
-            i.values.NumberOfLot = e;
-            i.values.Quantity = qty;
-            i.hasValid.NumberOfLot.valid = true;
-            i.hasValid.Quantity.valid = true;
-            return i
-        })
+        // debugger
+        // dispatch(postGoButtonForWorkOrder_MasterSuccess([]))
+        // let qty = ''
+        // if (pageMode === "edit") {
+        //     qty = e * EditData.EstimatedOutputQty;
+        // }
+        // else {
+        //     qty = e * itemselect.EstimatedOutputQty
+        // }
+        // setState((i) => {
+        //     i.values.NumberOfLot = e;
+        //     i.values.Quantity = qty;
+        //     return i
+        // })
     }
 
     function Quantitychange(e) {
-
-        dispatch(postGoButtonForWorkOrder_MasterSuccess([]))
-        state.hasValid.Quantity.valid = true
-        let NumberLot = e / itemselect.EstimatedOutputQty
-        if (Number.isInteger(NumberLot)) {
-            setState((i) => {
-                i.values.NumberOfLot = NumberLot;
-                i.values.Quantity = e;
-                i.hasValid.NumberOfLot.valid = true;
-                i.hasValid.Quantity.valid = true;
-                return i
-            })
-        }
-        else {
-            setState((i) => {
-                i.values.NumberOfLot = "1.000000";
-                i.values.Quantity = e;
-                i.hasValid.NumberOfLot.valid = true;
-                i.hasValid.Quantity.valid = true;
-                return i
-            })
-        }
+        // debugger
+        // dispatch(postGoButtonForWorkOrder_MasterSuccess([]))
+        // state.hasValid.Quantity.valid = true
+        // let NumberLot = e / itemselect.EstimatedOutputQty
+        // if (Number.isInteger(NumberLot)) {
+        //     setState((i) => {
+        //         i.values.NumberOfLot = NumberLot;
+        //         i.values.Quantity = e;
+        //         // i.hasValid.Quantity.valid = false
+        //         return i
+        //     })
+        // }
+        // else {
+        //     setState((i) => {
+        //         i.values.NumberOfLot = "1.000000";
+        //         i.values.Quantity = e;
+        //         // i.hasValid.Quantity.valid = false
+        //         return i
+        //     })
+        // }
     }
 
     const goButtonHandler = (event) => {
-        debugger
-
-        event.preventDefault();
-        if (formValid(state, setState)) {
-
-            const jsonBody = JSON.stringify({
-                Item: (pageMode === "edit" ? EditData.Item : values.ItemName.ItemID),
-                Bom: (pageMode === "edit" ? EditData.Bom : values.ItemName.value),
-                Quantity: parseInt(values.Quantity)
-            });
-            dispatch(postGoButtonForWorkOrder_Master(jsonBody));
-        }
+        // debugger
+        // event.preventDefault();
+        // if (formValid(state, setState)) {
+        //     debugger
+        //     const jsonBody = JSON.stringify({
+        //         Item: (pageMode === "edit" ? EditData.Item : values.ItemName.ItemID),
+        //         Bom: (pageMode === "edit" ? EditData.Bom : values.ItemName.value),
+        //         Quantity: parseInt(values.Quantity)
+        //     });
+        //     dispatch(postGoButtonForWorkOrder_Master(jsonBody));
+        // }
     }
 
     const values = { ...state.values }
@@ -312,41 +308,41 @@ const WorkOrder = (props) => {
     const { fieldLabel } = state;
 
     const formSubmitHandler = (event) => {
+        // debugger
+        // const WorkOrderItems = BOMItems.map((index) => ({
+        //     Item: index.Item,
+        //     Unit: index.Unit,
+        //     BomQuantity: index.BomQuantity,
+        //     Quantity: index.Quantity,
+        // }))
 
-        const WorkOrderItems = BOMItems.map((index) => ({
-            Item: index.Item,
-            Unit: index.Unit,
-            BomQuantity: index.BomQuantity,
-            Quantity: index.Quantity,
-        }))
+        // event.preventDefault();
+        // if (formValid(state, setState)) {
 
-        event.preventDefault();
-        if (formValid(state, setState)) {
+        //     const jsonBody = JSON.stringify({
+        //         WorkOrderDate: values.WorkOrderDate,
+        //         Item: (pageMode === "edit" ? Item : values.ItemName.ItemID),
+        //         Bom: (pageMode === "edit" ? id : values.ItemName.value),
+        //         Unit: (pageMode === "edit" ? Unit : values.ItemName.Unit),
+        //         NumberOfLot: values.NumberOfLot,
+        //         Quantity: values.Quantity,
+        //         Company: userCompany(),
+        //         Party: userParty(),
+        //         CreatedBy: createdBy(),
+        //         UpdatedBy: createdBy(),
+        //         WorkOrderItems: WorkOrderItems
+        //     });
+        //     if (pageMode === 'edit') {
 
-            const jsonBody = JSON.stringify({
-                WorkOrderDate: values.WorkOrderDate,
-                Item: (pageMode === "edit" ? Item : values.ItemName.ItemID),
-                Bom: (pageMode === "edit" ? id : values.ItemName.value),
-                Unit: (pageMode === "edit" ? Unit : values.ItemName.Unit),
-                NumberOfLot: values.NumberOfLot,
-                Quantity: values.Quantity,
-                Company: userCompany(),
-                Party: userParty(),
-                CreatedBy: createdBy(),
-                UpdatedBy: createdBy(),
-                WorkOrderItems: WorkOrderItems
-            });
-            if (pageMode === 'edit') {
+        //         dispatch(updateWorkOrderList(jsonBody, EditData.id));
+        //         console.log("update jsonBody", jsonBody)
+        //     }
+        //     else {
+        //         dispatch(postWorkOrderMaster(jsonBody));
+        //         console.log("post jsonBody", jsonBody)
+        //     }
 
-                dispatch(updateWorkOrderList(jsonBody, EditData.id));
-                console.log("update jsonBody", jsonBody)
-            }
-            else {
-                dispatch(postWorkOrderMaster(jsonBody));
-                console.log("post jsonBody", jsonBody)
-            }
-
-        }
+        // }
     };
 
     const QuantityHandler = (e, user) => {
@@ -654,4 +650,4 @@ const WorkOrder = (props) => {
     }
 };
 
-export default WorkOrder
+export default ProductionMaster
