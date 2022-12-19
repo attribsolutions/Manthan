@@ -17,6 +17,7 @@ import { listPageCommonButtonFunction }
     from "./listPageCommonButtons";
 import { defaultSearch, mySearchProps } from "./MySearch";
 import { GST_ADD_Mode_2 } from "../../../routes/route_url";
+import C_Report from "./C_Report";
 
 let sortType = "asc"
 let searchCount = 0
@@ -80,6 +81,8 @@ const PurchaseListPage = (props) => {
         pageMode,
         goButnFunc = () => { },
         onsavefunc = () => { },
+        downUrlPath = () => { },
+        ReportType
     } = props;
 
     const fileds = pageField.PageFieldMaster;
@@ -274,7 +277,9 @@ const PurchaseListPage = (props) => {
                 deleteName: deleteName,
                 userAccState: userAccState,
                 editActionFun: editId,
-                deleteActionFun: deleteId
+                deleteActionFun: deleteId,
+                downUrlPath,
+                ReportType
             })
             )
         }
@@ -348,7 +353,7 @@ const PurchaseListPage = (props) => {
                     </PaginationProvider>
 
                     {
-                        (pageMode === GST_ADD_Mode_2 )?
+                        (pageMode === GST_ADD_Mode_2) ?
 
                             <div className="button_save " style={{ paddingBottom: 'center' }}>
                                 <button
@@ -373,10 +378,11 @@ const PurchaseListPage = (props) => {
                     >
 
                         <MasterModal editValue={editData.Data} masterPath={masterPath} pageMode={editData.pageMode} />
+
                     </Modal>
                 </div>
 
-
+                <C_Report />
             </React.Fragment>
         );
     }

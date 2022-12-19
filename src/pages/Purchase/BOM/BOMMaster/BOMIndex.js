@@ -52,6 +52,7 @@ const BOMMaster = (props) => {
     const [ItemTabDetails, setItemTabDetails] = useState([])
 
     const initialFiled = {
+        
         id: "",
         BomDate: "",
         ItemName: "",
@@ -211,6 +212,7 @@ const BOMMaster = (props) => {
         }
     }, [updateMsg, modalCss]);
     useEffect(() => {
+        debugger
         if (pageField) {
             const fieldArr = pageField.PageFieldMaster
             comAddPageFieldFunc({ state, setState, fieldArr })// new change
@@ -238,8 +240,10 @@ const BOMMaster = (props) => {
         })
     }
     const values = { ...state.values }
+    debugger
     const { isError } = state;
     const { fieldLabel } = state;
+    
 
     const formSubmitHandler = ({ event, mode = false }) => {
         event.preventDefault();
