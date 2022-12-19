@@ -197,8 +197,6 @@ const BOMMaster = (props) => {
                 PermissionFunction: PermissionFunction,
 
             }));
-
-
         }
         else if (updateMsg.Status === true && !modalCss) {
             dispatch(updateBOMListSuccess({ Status: false }));
@@ -283,7 +281,7 @@ const BOMMaster = (props) => {
                 );
                 return;
             }
-            debugger
+          
             if ((pageMode === 'edit') && !mode) {
                 dispatch(updateBOMList(jsonBody, `${EditData.id}/${EditData.Company}`));
 
