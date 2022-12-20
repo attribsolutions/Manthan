@@ -176,7 +176,7 @@ export const listPageCommonButtonFunction = (props) => {
                 data-mdb-toggle="tooltip" data-mdb-placement="top" title={makeBtnName}
                 onClick={() => { makeBtnHandler(rowData) }}
             >
-                <span style={{ marginLeft: "10px" }} className=" fas fa-edit me-2" ></span></Button> : <></>}
+                <span style={{ marginLeft: "6px" ,marginRight:"6px"}} className=" fas fa-file-invoice" ></span> </Button> : <></>}
 
         </div>
         )
@@ -293,7 +293,6 @@ export function convertTimefunc(inputDate) { //+++++++++++Convert Time Format+++
     let [hourString, minute] = timeString.split(":");
     let hour = +hourString % 24;
     let time = (hour % 12 || 12) + ":" + minute + (hour < 12 ? "AM" : "PM");
-
     return (`(${convDate} ${time})`)
 }
 
