@@ -150,7 +150,6 @@ const ProductionMaster = (props) => {
     //         }
     //     }
     // }, [])
-
     const ItemDropdown_Options = items.map((index) => ({
         value: index.id,
         label: index.ItemName,
@@ -221,6 +220,9 @@ const ProductionMaster = (props) => {
         //     BOMrefID = EditData.id
         // };
         const jsonBody = JSON.stringify({
+            
+                MaterialIssue: 1,
+              
             ProductionDate: values.ProductionDate,
             EstimatedQuantity: values.EstimatedQuantity,
             NumberOfLot: 1,

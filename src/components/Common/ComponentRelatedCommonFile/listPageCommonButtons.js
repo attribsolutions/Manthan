@@ -165,7 +165,7 @@ export const listPageCommonButtonFunction = (props) => {
                 data-mdb-toggle="tooltip" data-mdb-placement="top" title={`Make GRN `}
                 // onClick={() => { downHandler(rowData) }}
             >
-              <span className="text-center fas fa-edit me-2" ></span></Button> :<></> }
+              <span style={{marginLeft:"10px"}} className=" fas fa-edit me-2" ></span></Button> :<></> }
            
         </div>
         )
