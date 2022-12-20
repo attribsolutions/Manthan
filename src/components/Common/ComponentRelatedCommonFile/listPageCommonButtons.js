@@ -3,7 +3,6 @@ import { AlertState } from "../../../store/actions";
 import { getpdfReportdata } from "../../../store/Utilites/PdfReport/actions";
 
 export const listPageCommonButtonFunction = (props) => {
-    debugger
     const dispatch = props.dispatchHook;
     const userCreated = parseInt(localStorage.getItem("userId"))
     const {
@@ -13,7 +12,10 @@ export const listPageCommonButtonFunction = (props) => {
         ButtonMsgLable,
         deleteName,
         downUrlPath,
-        ReportType
+        ReportType,
+        makeBtnShow,
+        makeBtnFunc,
+        makeBtnName
 
     } = props;
 
@@ -21,6 +23,7 @@ export const listPageCommonButtonFunction = (props) => {
     const editSelfBtnCss = "badge badge-soft-primary font-size-12 btn btn-primary waves-effect waves-light w-xxs border border-light"
     const deltBtnCss = "badge badge-soft-danger font-size-12 btn btn-danger waves-effect waves-light w-xxs border border-light"
     const downBtnCss = "badge badge-soft-primary font-size-12 btn btn-primary waves-effect waves-light w-xxs border border-light"
+    const makeBtnCss = "badge badge-soft-info font-size-12 btn btn-info waves-effect waves-light w-xxs border border-light"
 
 
 
@@ -51,6 +54,13 @@ export const listPageCommonButtonFunction = (props) => {
             PermissionAction: deleteActionFun,
             ID: rowData.id,
         }));
+    }
+    function makeBtnHandler(rowData) {
+        rowData["hasSelect"] = true;
+        let arr = []
+        arr.push(rowData)
+
+        makeBtnFunc(arr)
     }
 
 
@@ -159,14 +169,14 @@ export const listPageCommonButtonFunction = (props) => {
                 </Button>
                 : null
             }
-            {props.userAccState.ActualPagePath==="OrderList" ? <Button
+            {makeBtnShow ? <Button
                 type="button"
-                className=" badge badge-soft-info font-size-12 btn btn-info waves-effect waves-light w-xxs border border-light"
-                data-mdb-toggle="tooltip" data-mdb-placement="top" title={`Make GRN `}
-                // onClick={() => { downHandler(rowData) }}
+                className={makeBtnCss}
+                data-mdb-toggle="tooltip" data-mdb-placement="top" title={makeBtnName}
+                onClick={() => { makeBtnHandler(rowData) }}
             >
-              <span style={{marginLeft:"10px"}} className=" fas fa-edit me-2" ></span></Button> :<></> }
-           
+                <span style={{ marginLeft: "10px" }} className=" fas fa-edit me-2" ></span></Button> : <></>}
+
         </div>
         )
     }
