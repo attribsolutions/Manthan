@@ -262,7 +262,7 @@ const OrderList = () => {
                             MasterModal={Order}
                             masterPath={url.ORDER}
                             ButtonMsgLable={"Order"}
-                            deleteName={"OrderDate"}
+                            deleteName={"FullOrderNumber"}
                             pageMode={pageMode}
                             makeBtnFunc={makeBtnFunc}
                             makeBtnShow={true}
