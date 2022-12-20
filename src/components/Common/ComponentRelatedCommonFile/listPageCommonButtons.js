@@ -3,7 +3,7 @@ import { AlertState } from "../../../store/actions";
 import { getpdfReportdata } from "../../../store/Utilites/PdfReport/actions";
 
 export const listPageCommonButtonFunction = (props) => {
-    debugger
+    
     const dispatch = props.dispatchHook;
     const userCreated = parseInt(localStorage.getItem("userId"))
     const {
@@ -272,7 +272,7 @@ export function convertTimefunc(inputDate) { //+++++++++++Convert Time Format+++
     let month = date.getMonth() + 1;
 
     let convDate = `${date.getDate() < 10 ? `0${date.getDate()}` :
-        `${date.getDate()}`}/${month < 10 ? `0${month}` :
+        `${date.getDate()}`}-${month < 10 ? `0${month}` :
             `${month}`}`;
 
     let hours = date.getHours() < 10 ? "0" + date.getHours() : date.getHours();
