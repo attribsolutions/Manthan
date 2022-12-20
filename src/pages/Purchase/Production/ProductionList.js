@@ -20,14 +20,23 @@ import {
 } from "../../../store/Purchase/WorkOrder/action";
 import ProductionMaster from "./ProductionMaster";
 
+import * as url from "../../../routes/route_url"
+
+import { getProductionListPage, Productionlistfilters } from "../../../store/Purchase/ProductionRedux/actions";
+
+
 const ProductionList = () => {
+
     const dispatch = useDispatch();
     const history = useHistory();
     const hasPagePath = history.location.pathname
     const [pageMode, setpageMode] = useState(PRODUCTION_LIST)
     const [userAccState, setUserAccState] = useState('');
-    const [fromdate, setFromdate] = useState();
-    const [todate, setTodate] = useState();
+
+
+
+   
+
     const reducers = useSelector(
         (state) => ({
             tableList: state.ProductionReducer.ProductionList,
@@ -60,8 +69,9 @@ const ProductionList = () => {
         goButtonHandler(true)
     }, []);
 
-    const { userAccess, pageField, tableList } = reducers;
-
+    const { userAccess, pageField, tableList,productionFilter } = reducers;
+    const { fromdate, todate } = productionFilter
+    
     const downList = useMemo(() => {
         let PageFieldMaster = []
         if (pageField) { PageFieldMaster = pageField.PageFieldMaster; }
@@ -89,25 +99,35 @@ const ProductionList = () => {
             FromDate = fromdate;
         }
         const jsonBody = JSON.stringify({
-
             FromDate: FromDate,
             ToDate: ToDate,
         });
         debugger
-        dispatch(getWorkOrderListPage(jsonBody));
+        dispatch(getProductionListPage(jsonBody));
     }
-
-
-
+    function fromdateOnchange(e, date) {
+        let newObj = { ...productionFilter }
+        newObj.fromdate = date
+        dispatch(Productionlistfilters(newObj))
+    }
+    function todateOnchange(e, date) {
+        let newObj = { ...productionFilter }
+        newObj.todate = date
+        dispatch(Productionlistfilters(newObj))
+    }
     return (
         <React.Fragment>
             <div className="page-content">
+
                 <Breadcrumb
                     pageHeading={userAccState.PageHeading}
                     newBtnView={true}
                     showCount={true}
                     excelBtnView={true}
+                    pageMode={url.PRODUCTION_ADD_Mode_2}
+                    newBtnPagePath={url.PRODUCTION_ADD_Mode_2}
                     excelData={downList} />
+
                 <div className="px-2 mt-n1  c_card_header" style={{ marginBottom: "-12px" }} >
                     <div className="mt-1  row" >
                         <Col sm="5" >
@@ -125,8 +145,7 @@ const ProductionList = () => {
                                             dateFormat: "Y-m-d",
                                             defaultDate: "today"
                                         }}
-                                        onChange={(e, date) => { setFromdate(date) }}
-                                        onReady={(e, date) => { setFromdate(date) }}
+                                        onChange={fromdateOnchange}  
                                     />
                                 </Col>
                             </FormGroup>
@@ -146,9 +165,7 @@ const ProductionList = () => {
                                             dateFormat: "Y-m-d",
                                             defaultDate: "today"
                                         }}
-                                        onChange={(e, date) => { setTodate(date) }}
-                                        onReady={(e, date) => { setTodate(date) }}
-
+                                        onChange={todateOnchange}
                                     />
                                 </Col>
                             </FormGroup>
@@ -168,7 +185,7 @@ const ProductionList = () => {
                             showBreadcrumb={false}
                             MasterModal={ProductionMaster}
                             masterPath={PRODUCTION_MASTER}
-                            ButtonMsgLable={"Work Order"}
+                            ButtonMsgLable={"Production"}
                             deleteName={"ItemName"}
                             pageMode={pageMode}
                             goButnFunc={goButtonHandler}

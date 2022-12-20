@@ -119,7 +119,7 @@ const userRoutes = [
   { path: path.ROLEACCESS, component: RoleAccessAdd },
   { path: path.ROLEACCESS_lIST, component: RoleAccessListPage },
   { path: path.COPY_ROLEACCESS, component: RoleAccessCopyFunctionality },
-  
+
   { path: path.ROLE, component: RoleMaster },
   { path: path.ROLE_lIST, component: RoleList },
 
@@ -206,10 +206,11 @@ const userRoutes = [
 
   { path: path.MATERIAL_ISSUE, component: MaterialIssueMaster },
   { path: path.MATERIAL_ISSUE_LIST, component: MaterialIssueList },
+  { path: path.MATERIAL_ISSUE_ADD_Mode_2, component: WorkOrderList },
 
   { path: path.PRODUCTION_MASTER, component: ProductionMaster },
   { path: path.PRODUCTION_LIST, component: ProductionList },
-
+  { path: path.PRODUCTION_ADD_Mode_2, component: MaterialIssueList },
 
 
   // ************************************ Utility **************************************//

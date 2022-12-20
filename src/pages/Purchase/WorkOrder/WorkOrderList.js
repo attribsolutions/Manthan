@@ -8,12 +8,20 @@ import { WORK_ORDER, WORK_ORDER_LIST } from "../../../routes/route_url";
 import { Button, Col, FormGroup, Label } from "reactstrap";
 import Breadcrumb from "../../../components/Common/Breadcrumb";
 import { useHistory } from "react-router-dom";
-import { currentDate, excelDownCommonFunc } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { excelDownCommonFunc } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import { useMemo } from "react";
-import { updateBOMListSuccess } from "../../../store/Purchase/BOMRedux/action";
-import { deleteWorkOrderId, deleteWorkOrderIdSuccess, editWorkOrderList, getWorkOrderListPage, updateWorkOrderListSuccess, WorkOrderlistfilters } from "../../../store/Purchase/WorkOrder/action";
+import {
+    deleteWorkOrderId,
+    deleteWorkOrderIdSuccess,
+    editWorkOrderList,
+    getWorkOrderListPage,
+    updateWorkOrderListSuccess,
+    WorkOrderlistfilters
+} from "../../../store/Purchase/WorkOrder/action";
 import WorkOrder from "./WorkOrder";
-// import BOMMaster from "../BOMMaster/BOMIndex";
+import { getProduction_Mode2 } from "../../../store/Purchase/ProductionRedux/actions";
+import * as url from "../../../routes/route_url"
+import * as pageId from "../../../routes/allPageID"
 
 const WorkOrderList = () => {
 
@@ -55,7 +63,7 @@ const WorkOrderList = () => {
         setpageMode(hasPagePath)
         dispatch(BreadcrumbFilterSize(`${"Work Order Count"} :0`))
         dispatch(commonPageFieldListSuccess(null))
-        dispatch(commonPageFieldList(73))
+        dispatch(commonPageFieldList(pageId.WORK_ORDER))
         goButtonHandler(true)
 
     }, []);
@@ -68,9 +76,9 @@ const WorkOrderList = () => {
 
 
     useEffect(() => {
-        const pageId = 73
+        // const pageId = 73
         let userAcc = userAccess.find((inx) => {
-            return (inx.id === pageId)
+            return (inx.id === pageId.WORK_ORDER)
         })
         if (!(userAcc === undefined)) {
             setUserAccState(userAcc)
@@ -97,6 +105,29 @@ const WorkOrderList = () => {
         dispatch(WorkOrderlistfilters(newObj))
     }
 
+    const makeBtnFunc = (list = []) => {
+        debugger
+        var isSelect = ''
+        if (list.length > 0) {
+            list.forEach(ele => {
+                if (ele.hasSelect) {
+                    isSelect = isSelect.concat(`${ele.id},`)
+                }
+            });
+            if (isSelect) {
+                const withoutLastComma = isSelect.replace(/,*$/, '');
+                const jsonBody = JSON.stringify({
+                    MaterialIssueID: withoutLastComma
+                })
+
+                dispatch(getProduction_Mode2({ jsonBody, pageMode, path: url.PRODUCTION_MASTER }))
+
+            } else {
+                alert("Please Select Material Issue")
+            }
+        }
+
+    }
     return (
         <React.Fragment>
             <div className="page-content">
@@ -172,6 +203,9 @@ const WorkOrderList = () => {
                             deleteName={"ItemName"}
                             pageMode={pageMode}
                             goButnFunc={goButtonHandler}
+                            makeBtnFunc={makeBtnFunc}
+                            makeBtnShow={true}
+                            makeBtnName={"Make Material Issue"}
                         />
                         : null
                 }

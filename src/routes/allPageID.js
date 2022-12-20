@@ -88,27 +88,27 @@ export const SUBGROUP = "/SubGroupMaster"
 export const SUBGROUP_LIST = "/SubGroupList"
 
 //******************************* Purchase Module ************************************//
-export const ORDER = "/Order"
-export const ORDER_lIST = "/OrderList"
+export const ORDER = 53
+export const ORDER_lIST = 54
 
-export const GRN_ADD_Mode_2 = "/GRN-Add-Mode2"
-export const GRN_lIST = "/GRNList"
-export const GRN_ADD = "/GRN"
+export const GRN_ADD = 55
+export const GRN_lIST = 56
+export const GRN_ADD_Mode_2 = 59
 
-export const BIllOf_MATERIALS = "/BOM"
-export const BIllOf_MATERIALS_LIST = "/BOMList"
+export const BIllOf_MATERIALS = 69
+export const BIllOf_MATERIALS_LIST = 70
 
-export const WORK_ORDER = "/WorkOrder"
-export const WORK_ORDER_LIST = "/WorkOrderList"
-export const WORK_ORDER_ADD_Mode_2 = "/WorkOrder-Add-Mode-2"
+export const WORK_ORDER = 72
+export const WORK_ORDER_LIST = 73
+export const WORK_ORDER_ADD_Mode_2 =79
 
-export const MATERIAL_ISSUE = "/MaterialIssue"
-export const MATERIAL_ISSUE_LIST = "/MaterialIssueList"
-export const MATERIAL_ISSUE_ADD_Mode_2 = "/MaterialIssue-Add-Mode-2"
+export const MATERIAL_ISSUE = 75
+export const MATERIAL_ISSUE_LIST = 76
+export const MATERIAL_ISSUE_ADD_Mode_2 = 81
 
-export const PRODUCTION_MASTER = "/ProductionMaster"
-export const PRODUCTION_LIST = "/ProductionList"
-export const PRODUCTION_ADD_Mode_2 = "/Production-Add-Mode-2"
+export const PRODUCTION_MASTER = 77
+export const PRODUCTION_LIST = 78
+export const PRODUCTION_ADD_Mode_2 = 83
 
 
 

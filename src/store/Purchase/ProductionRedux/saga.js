@@ -9,6 +9,7 @@ import {
 } from "./actions";
 import {
   production_get_API,
+  production_Make_API,
   Production_Post_API,
 } from "../../../helpers/backend_helper";
 
@@ -95,17 +96,15 @@ function* get_PRODUCTION_GerFunc({ filters }) {
 
 // List Page API
 function* getProduction_Mode2_GenFunc({ data }) {
-  const { jsonBody, pageMode, GRN_ADD, grnRef, challanNo } = data
+  debugger
+  const { jsonBody, pageMode,path } = data
   yield put(SpinnerState(true))
   try {
-    // debugger
-    const response = yield call( jsonBody);
+    const response = yield call(production_Make_API, jsonBody);
     response.Data = response.Data[0];
     response["pageMode"] = pageMode;
-    response.Data["GRNReferences"] = grnRef;
-    response.Data["challanNo"] = challanNo;
-    response["path"] = GRN_ADD; //Pagepath
-    // debugger
+    response["path"] = path; //Pagepath
+
     yield put(SpinnerState(false))
     yield put(getProduction_Mode2_Success(response))
   } catch (error) {

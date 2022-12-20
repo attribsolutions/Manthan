@@ -11,7 +11,7 @@ import {
 import {
   GRN_delete_API, 
   GRN_getItem_API,
-  GRN_get_API, GRN_Post_API,
+  GRN_get_API, GRN_MakeGrn_API, GRN_Make_API, GRN_Post_API,
   GRN_update_API,
 } from "../../../helpers/backend_helper";
 
@@ -104,7 +104,7 @@ function* getGRNitem_Mode2_GenFunc({ data }) {
   yield put(SpinnerState(true))
   try {
     // debugger
-    const response = yield call(GRN_getItem_API, jsonBody);
+    const response = yield call(GRN_Make_API, jsonBody);
     response.Data = response.Data[0];
 
     response["pageMode"] = pageMode;

@@ -8,13 +8,14 @@ import { MATERIAL_ISSUE, MATERIAL_ISSUE_LIST, } from "../../../routes/route_url"
 import { Button, Col, FormGroup, Label } from "reactstrap";
 import Breadcrumb from "../../../components/Common/Breadcrumb";
 import { useHistory } from "react-router-dom";
-import { currentDate, excelDownCommonFunc } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { excelDownCommonFunc } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import { useMemo } from "react";
 import { deleteWorkOrderId, deleteWorkOrderIdSuccess, editWorkOrderList, updateWorkOrderListSuccess } from "../../../store/Purchase/WorkOrder/action";
 import MaterialIssueMaster from "./Material_IssueMaster";
 import { getMaterialIssueListPage, MaterialIssuelistfilters } from "../../../store/Purchase/Matrial_Issue/action";
 import * as url from "../../../routes/route_url"
-import { getGRN_itemMode2 } from "../../../store/Purchase/GRNRedux/actions";
+import * as pageId from "../../../routes/allPageID"
+import { getProduction_Mode2 } from "../../../store/Purchase/ProductionRedux/actions";
 
 const MaterialIssueList = () => {
 
@@ -33,12 +34,13 @@ const MaterialIssueList = () => {
             postMsg: state.OrderReducer.postMsg,
             editData: state.WorkOrderReducer.editData,
             materialIssuelistFilters: state.MaterialIssueReducer.materialIssuelistFilters,
+            produtionMake: state.ProductionReducer.produtionMake,
             userAccess: state.Login.RoleAccessUpdateData,
             pageField: state.CommonPageFieldReducer.pageFieldList,
         })
     );
 
-    const { userAccess, pageField, tableList, materialIssuelistFilters } = reducers;
+    const { userAccess, pageField, tableList, materialIssuelistFilters, produtionMake } = reducers;
     const { fromdate, todate } = materialIssuelistFilters
 
     const action = {
@@ -52,10 +54,11 @@ const MaterialIssueList = () => {
 
     // Featch Modules List data  First Rendering
     useEffect(() => {
+        const page_Id = (hasPagePath === url.PRODUCTION_ADD_Mode_2) ? pageId.PRODUCTION_ADD_Mode_2 : pageId.BIllOf_MATERIALS_LIST;
         setpageMode(hasPagePath)
         dispatch(BreadcrumbFilterSize(`${"Material Issue Count"} :0`))
         dispatch(commonPageFieldListSuccess(null))
-        dispatch(commonPageFieldList(76))
+        dispatch(commonPageFieldList(page_Id))
         goButtonHandler(true)
 
     }, []);
@@ -68,16 +71,24 @@ const MaterialIssueList = () => {
 
 
     useEffect(() => {
-        const pageId = 76
+        const page_Id = (hasPagePath === url.PRODUCTION_ADD_Mode_2) ? pageId.PRODUCTION_ADD_Mode_2 : pageId.BIllOf_MATERIALS_LIST;
         let userAcc = userAccess.find((inx) => {
-            return (inx.id === pageId)
+            return (inx.id === page_Id)
         })
         if (!(userAcc === undefined)) {
             setUserAccState(userAcc)
         }
     }, [userAccess])
 
-
+    useEffect(() => {
+        debugger
+        if (produtionMake.Status === true && produtionMake.StatusCode === 406) {
+            history.push({
+                pathname: produtionMake.path,
+                pageMode: produtionMake.pageMode,
+            })
+        }
+    }, [produtionMake])
 
     const makeBtnFunc = (list = []) => {
         debugger
@@ -94,7 +105,7 @@ const MaterialIssueList = () => {
                     MaterialIssueID: withoutLastComma
                 })
 
-                dispatch(getGRN_itemMode2({ jsonBody, pageMode, path: url.PRODUCTION_MASTER }))
+                dispatch(getProduction_Mode2({ jsonBody, pageMode, path: url.PRODUCTION_MASTER }))
 
             } else {
                 alert("Please Select Material Issue")
@@ -125,11 +136,21 @@ const MaterialIssueList = () => {
     return (
         <React.Fragment>
             <div className="page-content">
-                <Breadcrumb
+
+                {/* <Breadcrumb
                     pageHeading={userAccState.PageHeading}
-                    newBtnView={true}
+                    newBtnView={(pageMode === url.MATERIAL_ISSUE_LIST) ? true : false}
                     showCount={true}
                     excelBtnView={true}
+                    excelData={downList} /> */}
+
+                <Breadcrumb
+                    pageHeading={userAccState.PageHeading}
+                    newBtnView={(pageMode === url.MATERIAL_ISSUE_LIST) ? true : false}
+                    showCount={true}
+                    excelBtnView={true}
+                    pageMode={url.WORK_ORDER_ADD_Mode_2}
+                    newBtnPagePath={url.WORK_ORDER_ADD_Mode_2}
                     excelData={downList} />
 
                 <div className="px-2 mt-n1  c_card_header text-black" style={{ marginBottom: "-12px" }} >
