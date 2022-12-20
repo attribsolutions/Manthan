@@ -19,15 +19,24 @@ import {
     updateWorkOrderListSuccess
 } from "../../../store/Purchase/WorkOrder/action";
 import ProductionMaster from "./ProductionMaster";
+
+import * as url from "../../../routes/route_url"
+
 import { getProductionListPage, Productionlistfilters } from "../../../store/Purchase/ProductionRedux/actions";
 
+
 const ProductionList = () => {
+
     const dispatch = useDispatch();
     const history = useHistory();
     const hasPagePath = history.location.pathname
     const [pageMode, setpageMode] = useState(PRODUCTION_LIST)
     const [userAccState, setUserAccState] = useState('');
+
+
+
    
+
     const reducers = useSelector(
         (state) => ({
             tableList: state.ProductionReducer.ProductionList,
@@ -109,12 +118,16 @@ const ProductionList = () => {
     return (
         <React.Fragment>
             <div className="page-content">
+
                 <Breadcrumb
                     pageHeading={userAccState.PageHeading}
                     newBtnView={true}
                     showCount={true}
                     excelBtnView={true}
+                    pageMode={url.PRODUCTION_ADD_Mode_2}
+                    newBtnPagePath={url.PRODUCTION_ADD_Mode_2}
                     excelData={downList} />
+
                 <div className="px-2 mt-n1  c_card_header" style={{ marginBottom: "-12px" }} >
                     <div className="mt-1  row" >
                         <Col sm="5" >
