@@ -15,6 +15,7 @@ import MaterialIssueMaster from "./Material_IssueMaster";
 import { getMaterialIssueListPage, MaterialIssuelistfilters } from "../../../store/Purchase/Matrial_Issue/action";
 import * as url from "../../../routes/route_url"
 import { getGRN_itemMode2 } from "../../../store/Purchase/GRNRedux/actions";
+import { getProduction_Mode2 } from "../../../store/Purchase/ProductionRedux/actions";
 
 const MaterialIssueList = () => {
 
@@ -33,12 +34,13 @@ const MaterialIssueList = () => {
             postMsg: state.OrderReducer.postMsg,
             editData: state.WorkOrderReducer.editData,
             materialIssuelistFilters: state.MaterialIssueReducer.materialIssuelistFilters,
+            produtionMake: state.ProductionReducer.produtionMake,
             userAccess: state.Login.RoleAccessUpdateData,
             pageField: state.CommonPageFieldReducer.pageFieldList,
         })
     );
 
-    const { userAccess, pageField, tableList, materialIssuelistFilters } = reducers;
+    const { userAccess, pageField, tableList, materialIssuelistFilters, produtionMake } = reducers;
     const { fromdate, todate } = materialIssuelistFilters
 
     const action = {
@@ -77,7 +79,14 @@ const MaterialIssueList = () => {
         }
     }, [userAccess])
 
-
+    useEffect(() => {
+        if (produtionMake.Status === true && produtionMake.StatusCode === 200) {
+            history.push({
+                pathname: produtionMake.path,
+                pageMode: produtionMake.pageMode,
+            })
+        }
+    }, [produtionMake])
 
     const makeBtnFunc = (list = []) => {
         debugger
@@ -94,7 +103,7 @@ const MaterialIssueList = () => {
                     MaterialIssueID: withoutLastComma
                 })
 
-                dispatch(getGRN_itemMode2({ jsonBody, pageMode, path: url.PRODUCTION_MASTER }))
+                dispatch(getProduction_Mode2({ jsonBody, pageMode, path: url.PRODUCTION_MASTER }))
 
             } else {
                 alert("Please Select Material Issue")
@@ -125,11 +134,21 @@ const MaterialIssueList = () => {
     return (
         <React.Fragment>
             <div className="page-content">
-                <Breadcrumb
+
+                {/* <Breadcrumb
                     pageHeading={userAccState.PageHeading}
-                    newBtnView={true}
+                    newBtnView={(pageMode === url.MATERIAL_ISSUE_LIST) ? true : false}
                     showCount={true}
                     excelBtnView={true}
+                    excelData={downList} /> */}
+
+                <Breadcrumb
+                    pageHeading={userAccState.PageHeading}
+                    newBtnView={(pageMode === url.MATERIAL_ISSUE_LIST) ? true : false}
+                    showCount={true}
+                    excelBtnView={true}
+                    pageMode={url.WORK_ORDER_ADD_Mode_2}
+                    newBtnPagePath={url.WORK_ORDER_ADD_Mode_2}
                     excelData={downList} />
 
                 <div className="px-2 mt-n1  c_card_header text-black" style={{ marginBottom: "-12px" }} >

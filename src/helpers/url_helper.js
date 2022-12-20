@@ -20,7 +20,7 @@ export const ORDER_PAGE_API = "Orders"
 export const GET_ITEM_FOR_ORDER = "/GetItemsForParty"
 
 // GRN
-export const GET_GRN_ITEM = "/MakeOrdersGrn"
+export const GRN_MAKE_API = "/MakeOrdersGrn"
 export const GRN = "/GRN"
 export const GRN_LiST_BY_FILTERS = "/GRNFilter"
 
@@ -193,4 +193,6 @@ export const POST_API_FOR_MATERIAL_ISSUE_LIST = '/MaterialIssueFilter'
 
 // Production master
 export const GO_BUTTON_POST_API_FOR_PRODUCTION ='/Production'
-export const POST_API_FOR_PRODUCTION_LIST ='/ProductionFilter'
+export const POST_API_FOR_PRODUCTION_LIST ='/Production'
+export const PRODUCTION_MAKE_API ='/MaterialIssueforProduction'
+
