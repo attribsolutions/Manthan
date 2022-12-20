@@ -16,7 +16,7 @@ import {
 import { BreadcrumbFilterSize, commonPageFieldList, commonPageFieldListSuccess, } from "../../../store/actions";
 import PurchaseListPage from "../../../components/Common/ComponentRelatedCommonFile/purchase"
 import Order from "./Order";
-import * as url from "../../../routes/route_url";
+
 import { Col, FormGroup, Label } from "reactstrap";
 import Breadcrumb from "../../../components/Common/Breadcrumb";
 import { useHistory } from "react-router-dom";
@@ -27,6 +27,8 @@ import { useMemo } from "react";
 import { Go_Button } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
 import { editOrderID_forOrderPage_ApiCall } from "../../../helpers/backend_helper";
 import * as report from '../../../Reports/ReportIndex'
+import * as url from "../../../routes/route_url";
+import * as pageId from "../../../routes/allPageID"
 
 const OrderList = () => {
 
@@ -70,9 +72,9 @@ const OrderList = () => {
     // Featch Modules List data  First Rendering
     useEffect(() => {
         setpageMode(hasPagePath)
-        const pageId = (hasPagePath === url.GRN_ADD_Mode_2) ? 60 : 54;
+        const page_Id = (hasPagePath === url.GRN_ADD_Mode_2) ? pageId.GRN_ADD_Mode_2 : pageId.ORDER_lIST;
         dispatch(commonPageFieldListSuccess(null))
-        dispatch(commonPageFieldList(pageId))
+        dispatch(commonPageFieldList(page_Id))
         dispatch(BreadcrumbFilterSize(`${"Orders Count"} :0`))
         dispatch(getSupplier());
         goButtonHandler(true)
@@ -93,9 +95,9 @@ const OrderList = () => {
 
 
     useEffect(() => {
-        const pageId = (hasPagePath === url.GRN_ADD_Mode_2) ? 60 : 54;
+        const page_Id = (hasPagePath === url.GRN_ADD_Mode_2) ? pageId.GRN_ADD_Mode_2 : pageId.ORDER_lIST;
         let userAcc = userAccess.find((inx) => {
-            return (inx.id === pageId)
+            return (inx.id === page_Id)
         })
         if (!(userAcc === undefined)) {
             setUserAccState(userAcc)

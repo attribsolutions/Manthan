@@ -54,10 +54,11 @@ const MaterialIssueList = () => {
 
     // Featch Modules List data  First Rendering
     useEffect(() => {
+        const page_Id = (hasPagePath === url.PRODUCTION_ADD_Mode_2) ? pageId.PRODUCTION_ADD_Mode_2 : pageId.BIllOf_MATERIALS_LIST;
         setpageMode(hasPagePath)
         dispatch(BreadcrumbFilterSize(`${"Material Issue Count"} :0`))
         dispatch(commonPageFieldListSuccess(null))
-        dispatch(commonPageFieldList(pageId.BIllOf_MATERIALS_LIST))
+        dispatch(commonPageFieldList(page_Id))
         goButtonHandler(true)
 
     }, []);
@@ -70,23 +71,24 @@ const MaterialIssueList = () => {
 
 
     useEffect(() => {
-    
+        const page_Id = (hasPagePath === url.PRODUCTION_ADD_Mode_2) ? pageId.PRODUCTION_ADD_Mode_2 : pageId.BIllOf_MATERIALS_LIST;
         let userAcc = userAccess.find((inx) => {
-            return (inx.id === pageId.BIllOf_MATERIALS_LIST)
+            return (inx.id === page_Id)
         })
         if (!(userAcc === undefined)) {
             setUserAccState(userAcc)
         }
     }, [userAccess])
 
-    // useEffect(() => {
-    //     if (produtionMake.Status === true && produtionMake.StatusCode === 200) {
-    //         history.push({
-    //             pathname: produtionMake.path,
-    //             pageMode: produtionMake.pageMode,
-    //         })
-    //     }
-    // }, [produtionMake])
+    useEffect(() => {
+        debugger
+        if (produtionMake.Status === true && produtionMake.StatusCode === 406) {
+            history.push({
+                pathname: produtionMake.path,
+                pageMode: produtionMake.pageMode,
+            })
+        }
+    }, [produtionMake])
 
     const makeBtnFunc = (list = []) => {
         debugger
