@@ -55,7 +55,7 @@ function* get_BOMList_GenFunc({ filters }) {
     })
     yield put(SpinnerState(false))
     yield put(getBOMListPageSuccess(data))
-    console.log(response)
+   
   } catch (error) {
     yield put(SpinnerState(false))
     yield put(AlertState({
