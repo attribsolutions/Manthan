@@ -100,7 +100,6 @@ export const BIllOf_MATERIALS_LIST = "/BOMList"
 
 export const WORK_ORDER = "/WorkOrder"
 export const WORK_ORDER_LIST = "/WorkOrderList"
-export const WORK_ORDER_ADD_Mode_2 = "/WorkOrder-Add-Mode-2"
 
 export const MATERIAL_ISSUE = "/MaterialIssue"
 export const MATERIAL_ISSUE_LIST = "/MaterialIssueList"

@@ -96,6 +96,7 @@ function* get_PRODUCTION_GerFunc({ filters }) {
 
 // List Page API
 function* getProduction_Mode2_GenFunc({ data }) {
+  debugger
   const { jsonBody, pageMode,path } = data
   yield put(SpinnerState(true))
   try {

@@ -24,7 +24,7 @@ import * as url from "../../../routes/route_url"
 import * as pageId from "../../../routes/allPageID"
 
 const WorkOrderList = () => {
-
+    debugger
     const dispatch = useDispatch();
     const history = useHistory();
 
@@ -46,7 +46,7 @@ const WorkOrderList = () => {
         })
     );
 
-    const { userAccess, pageField, tableList, workOrderlistFilters } = reducers;
+    const { userAccess, pageField, tableList, workOrderlistFilters, GRNitem } = reducers;
     const { fromdate, todate } = workOrderlistFilters
 
     const action = {
@@ -60,10 +60,11 @@ const WorkOrderList = () => {
 
     // Featch Modules List data  First Rendering
     useEffect(() => {
+        const page_Id = (hasPagePath === url.MATERIAL_ISSUE_ADD_Mode_2) ? pageId.MATERIAL_ISSUE_ADD_Mode_2 : pageId.WORK_ORDER_LIST;
         setpageMode(hasPagePath)
         dispatch(BreadcrumbFilterSize(`${"Work Order Count"} :0`))
         dispatch(commonPageFieldListSuccess(null))
-        dispatch(commonPageFieldList(pageId.WORK_ORDER))
+        dispatch(commonPageFieldList(page_Id))
         goButtonHandler(true)
 
     }, []);
@@ -76,14 +77,24 @@ const WorkOrderList = () => {
 
 
     useEffect(() => {
-        // const pageId = 73
+        const page_Id = (hasPagePath === url.MATERIAL_ISSUE_ADD_Mode_2) ? pageId.MATERIAL_ISSUE_ADD_Mode_2 : pageId.WORK_ORDER_LIST;
+
         let userAcc = userAccess.find((inx) => {
-            return (inx.id === pageId.WORK_ORDER)
+            return (inx.id === page_Id)
         })
         if (!(userAcc === undefined)) {
             setUserAccState(userAcc)
         }
     }, [userAccess])
+
+    // useEffect(() => {
+    //     if (GRNitem.Status === true && GRNitem.StatusCode === 200) {
+    //         history.push({
+    //             pathname: GRNitem.path,
+    //             pageMode: GRNitem.pageMode,
+    //         })
+    //     }
+    // }, [GRNitem])
 
     const goButtonHandler = () => {
         const jsonBody = JSON.stringify({
@@ -106,7 +117,7 @@ const WorkOrderList = () => {
     }
 
     const makeBtnFunc = (list = []) => {
-        debugger
+
         var isSelect = ''
         if (list.length > 0) {
             list.forEach(ele => {
@@ -133,7 +144,7 @@ const WorkOrderList = () => {
             <div className="page-content">
                 <Breadcrumb
                     pageHeading={userAccState.PageHeading}
-                    newBtnView={true}
+                    newBtnView={(pageMode === url.WORK_ORDER_LIST) ? true : false}
                     showCount={true}
                     excelBtnView={true}
                     excelData={downList} />
