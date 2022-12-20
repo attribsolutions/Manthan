@@ -137,27 +137,6 @@ export const Role_Master_Delete_API = (id) => del(`${url.ROLE_MASTER_API}/${id}`
 export const Role_Master_Edit_API = (id) => get(`${url.ROLE_MASTER_API}/${id}`)// edit api
 export const Role_Master_Update_API = (data, id) => put(`${url.ROLE_MASTER_API}/${id}`, data)// update api
 
-// Order Page api  
-
-export const OrderPage_GoButton_API = (data) => post(url.GET_ITEM_FOR_ORDER, data)//get api
-export const Order_get_API = (filters) => post(url.ORDER_LiST_BY_FILTERS, filters)
-export const OrderPage_Post_API = (data) => post(url.ORDER_PAGE_API, data)//get api
-export const OrderPage_Edit_API = (id) => get(`${url.ORDER_PAGE_API}/${id}`)//get api
-
-export const deleteOrderID_forOrderPage_ApiCall = (id) => del(`${url.ORDER_PAGE_API}/${id}`)//Delete Order
-export const editOrderID_forOrderPage_ApiCall = (id) => get(`${url.ORDER_PAGE_API}/${id}`)//Edit Order
-export const UpdateOrder_ID_ApiCall = (data, id) => put(`${url.ORDER_PAGE_API}/${id}`, data)// update api
-export const getOrderList_forOrderPage_ApiCall = (data) => get(url.ORDER_PAGE_API)
-export const getDivisionOrders = () => get(`${url.ORDER_PAGE_API}?FromDate=2022-01-25&ToDate=2022-01-25&CustomerID=0&DivisionID=3`)
-export const getOrderList_For_Listpage = () => get(url.ORDER_PAGE_API)// Get subModule For H_pages
-
-//GRN PAGE grn 
-export const GRN_get_API = (filter) => post(url.GRN_LiST_BY_FILTERS, filter)
-export const GRN_Edit_API = (id) => get(`${url.GRN}/${id}`)// edit api
-export const GRN_Post_API = (data) => post(url.GRN, data)//get api
-export const GRN_update_API = (id, data) => put(`${url.GRN}/${id}`, data)// update api
-export const GRN_delete_API = (id) => del(`${url.GRN}/${id}`)//Delete Order
-export const GRN_getItem_API = (data) => post(url.GET_GRN_ITEM, data)
 
 //Administrator   Modules submit  
 export const postSubmitModules = (data) => post(url.H_MODULES_API_URL, data)
@@ -297,7 +276,7 @@ export const get_PriceListByPartyType_API = (partyType) => get(`${url.PRICE_LIST
 export const GetPriceList_For_Listpage = () => get(url.PRICELIST)//  get priceList
 export const delete_PriceList_API = (id) => del(`${url.PRICE_LIST}/${id}`)// delete api
 export const edit_PriceList = (id) => get(`${url.PRICE_LIST}/${id}`) // edit api
-export const update_PriceList = (data, id) => put(`${url.PRICE_LIST}/${id}`,data)// update
+export const update_PriceList = (data, id) => put(`${url.PRICE_LIST}/${id}`, data)// update
 
 // MRP Master 
 export const Post_MRPMaster_API = (data) => post(url.MRP_MASTER_LIST, data)// post api
@@ -370,6 +349,30 @@ export const del_SubGroup_List_API = (id) => del(`${url.SUBGROUP_API}/${id}`)// 
 export const edit_SubGroup_List_Api = (id) => get(`${url.SUBGROUP_API}/${id}`)// edit api
 export const update_SubGroup_List_Api = (data, id) => put(`${url.SUBGROUP_API}/${id}`, data)// update api
 
+
+// Order Page api  
+
+export const OrderPage_GoButton_API = (data) => post(url.GET_ITEM_FOR_ORDER, data)//get api
+export const Order_get_API = (filters) => post(url.ORDER_LiST_BY_FILTERS, filters)
+export const OrderPage_Post_API = (data) => post(url.ORDER_PAGE_API, data)//get api
+export const OrderPage_Edit_API = (id) => get(`${url.ORDER_PAGE_API}/${id}`)//get api
+
+export const deleteOrderID_forOrderPage_ApiCall = (id) => del(`${url.ORDER_PAGE_API}/${id}`)//Delete Order
+export const editOrderID_forOrderPage_ApiCall = (id) => get(`${url.ORDER_PAGE_API}/${id}`)//Edit Order
+export const UpdateOrder_ID_ApiCall = (data, id) => put(`${url.ORDER_PAGE_API}/${id}`, data)// update api
+export const getOrderList_forOrderPage_ApiCall = (data) => get(url.ORDER_PAGE_API)
+export const getDivisionOrders = () => get(`${url.ORDER_PAGE_API}?FromDate=2022-01-25&ToDate=2022-01-25&CustomerID=0&DivisionID=3`)
+export const getOrderList_For_Listpage = () => get(url.ORDER_PAGE_API)// Get subModule For H_pages
+
+//GRN PAGE grn 
+export const GRN_get_API = (filter) => post(url.GRN_LiST_BY_FILTERS, filter)
+export const GRN_Edit_API = (id) => get(`${url.GRN}/${id}`)// edit api
+export const GRN_Post_API = (data) => post(url.GRN, data)//get api
+export const GRN_update_API = (id, data) => put(`${url.GRN}/${id}`, data)// update api
+export const GRN_delete_API = (id) => del(`${url.GRN}/${id}`)//Delete Order
+export const GRN_Make_API = (data) => post(url.GRN_MAKE_API, data)
+
+
 // BOM API
 export const GetItemUnits_For_Dropdown = (data) => post(url.GET_ITEM_UNITS, data)// post api
 export const BOM_ListPage_API = (filters) => post(url.BOM_LiST, filters)// get list api
@@ -393,8 +396,9 @@ export const Material_Issue_Post_API = (data) => post(url.POST_API_FOR_MATERIAL_
 export const Material_Issue_Get_API = (filters) => post(url.POST_API_FOR_MATERIAL_ISSUE_LIST, filters)// get list api
 
 // Production 
-export const Production_Post_API = (data) => post(url.GO_BUTTON_POST_API_FOR_PRODUCTION,data)// go button postapi
-// export const Production_Get_API = () => get(url.GO_BUTTON_POST_API_FOR_PRODUCTION)// go button postapi
+export const Production_Post_API = (data) => post(url.GO_BUTTON_POST_API_FOR_PRODUCTION, data)// go button postapi
+export const production_get_API = (filter) => post(url.POST_API_FOR_PRODUCTION_LIST, filter)// go button postapi
+export const production_Make_API = (data) => post(url.PRODUCTION_MAKE_API, data)// make production to material Issue postapi
 export {
   getLoggedInUser,
   isUserAuthenticated,

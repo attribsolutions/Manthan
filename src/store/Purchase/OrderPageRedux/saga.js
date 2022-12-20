@@ -147,15 +147,19 @@ function* UpdateOrder_ID_GenFunc({ data, id }) {
 
 // List Page API
 function* get_OrderList_GenFunc({ filters }) {
-
+debugger
   yield GoBtnDissable(true)
-  yield delay(400)
+  // yield delay(400)
   try {
+    debugger
     const response = yield call(Order_get_API, filters);
     const newList = yield response.Data.map((i) => {
+      debugger
       var date = convertDatefunc(i.OrderDate)
       var time = convertTimefunc(i.CreatedOn)
+      var DeliveryDate = convertDatefunc(i.DeliveryDate)
       i.OrderDate = (`${date} ${time}`)
+      i.DeliveryDate = (`${DeliveryDate}`)
       return i
     })
     yield put(getOrderListPageSuccess(newList))

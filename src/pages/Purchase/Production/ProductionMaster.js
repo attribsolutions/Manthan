@@ -26,7 +26,7 @@ import {
     updateOrderIdSuccess
 } from "../../../store/Purchase/OrderPageRedux/actions";
 import { getSupplierAddress } from "../../../store/CommonAPI/SupplierRedux/actions"
-import { AlertState, BreadcrumbFilterSize, commonPageField, commonPageFieldSuccess } from "../../../store/actions";
+import { AlertState, BreadcrumbFilterSize, Breadcrumb_inputName, commonPageField, commonPageFieldSuccess } from "../../../store/actions";
 import { basicAmount, GstAmount, handleKeyDown, Amount } from "../Order/OrderPageCalulation";
 import '../../Order/div.css'
 
@@ -39,6 +39,7 @@ import { mySearchProps } from "../../../components/Common/ComponentRelatedCommon
 import { createdBy, currentDate } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import { comAddPageFieldFunc, formValid, initialFiledFunc, onChangeDate, onChangeSelect, onChangeText } from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
 import { post_Production, post_ProductionSuccess, update_ProductionId, update_ProductionIdSuccess } from "../../../store/Purchase/ProductionRedux/actions";
+import { getMaterialIssueListPage } from "../../../store/Purchase/Matrial_Issue/action";
 
 let description = ''
 let editVal = {}
@@ -54,6 +55,7 @@ const ProductionMaster = (props) => {
     // const [grnDate, setgrnDate] = useState(currentDate);
     // const [invoiceDate, setInvoiceDate] = useState(currentDate);
     const initialFiled = {
+        id: '',
         ProductionDate: "",
         EstimatedQuantity: "",
         NumberOfLot: "",
@@ -69,36 +71,43 @@ const ProductionMaster = (props) => {
     const [state, setState] = useState(initialFiledFunc(initialFiled))
     useEffect(() => {
         // dispatch(getSupplier())
-        dispatch(getSupplierAddress())
+        // dispatch(getSupplierAddress())
     }, [])
     const {
-        items,
         postMsg,
         userAccess,
         updateMsg,
-        supplierAddress,
-        pageField
+        produtionMake,
+        pageField,
+        itemsDrop
     } = useSelector((state) => ({
         supplierAddress: state.SupplierReducer.supplierAddress,
-        items: state.WorkOrderReducer.BOMList,
         postMsg: state.ProductionReducer.postMsg,
         updateMsg: state.ProductionReducer.updateMsg,
+        produtionMake: state.ProductionReducer.produtionMake,
+        itemsDrop: state.MaterialIssueReducer.materialIssueList,
         userAccess: state.Login.RoleAccessUpdateData,
         pageField: state.CommonPageFieldReducer.pageField,
     }));
     useEffect(() => {
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(77))
-        // dispatch(getItemList())
-        // dispatch(getBaseUnit_ForDropDown());
+
+        const jsonBody = JSON.stringify({
+            FromDate: "2022-11-01",
+            ToDate: currentDate,
+        });
+        dispatch(getMaterialIssueListPage(jsonBody));
+
     }, []);
+
     const values = { ...state.values }
     const { isError } = state;
-    // const { fieldLabel } = state;
     const { fieldLabel } = state;
+
+
     // userAccess useEffect
     useEffect(() => {
-        debugger
         let userAcc = null;
         let locationPath = location.pathname;
         if (hasShowModal) {
@@ -110,7 +119,11 @@ const ProductionMaster = (props) => {
         if (userAcc) {
             setUserPageAccessState(userAcc)
         };
-    }, [userAccess])
+    }, [userAccess]);
+
+    const location = { ...history.location }
+    const hasShowloction = location.hasOwnProperty("editValue")
+    const hasShowModal = props.hasOwnProperty("editValue")
 
     // useEffect(() => {
     //     if ((hasShowloction || hasShowModal)) {
@@ -149,25 +162,50 @@ const ProductionMaster = (props) => {
     //             dispatch(Breadcrumb_inputName(hasEditVal.ItemName))
     //         }
     //     }
-    // }, [])
-    const ItemDropdown_Options = items.map((index) => ({
+    // }, []);
+
+    useEffect(() => {
+        if ((hasShowloction || hasShowModal)) {
+            let hasEditVal = null
+            if (hasShowloction) {
+                setPageMode(location.pageMode)
+                hasEditVal = location.editValue
+            }
+            else if (hasShowModal) {
+                hasEditVal = props.editValue
+                setPageMode(props.pageMode)
+                setModalCss(true)
+            }
+            if (hasEditVal) {
+
+                const { id, MaterialIssueDate, NumberOfLot, LotQuantity, } = hasEditVal
+                const { values, fieldLabel, hasValid, required, isError } = { ...state }
+
+                values.id = id;
+                // values.ProductionDate = ""
+                values.EstimatedQuantity = ""
+                values.NumberOfLot = ""
+                values.ActualQuantity = ""
+                values.BatchDate = ""
+                values.BatchCode = ""
+                values.StoreLocation = ""
+                values.SupplierBatchCode = ""
+                values.BestBefore = ""
+                values.Remark = ""
+                values.Item = ""
+                // setItemTabDetails(hasEditVal.BOMItems)
+                setState({ values, fieldLabel, hasValid, required, isError })
+                // dispatch(editBOMListSuccess({ Status: false }))
+                dispatch(Breadcrumb_inputName(hasEditVal.ItemName))
+            }
+        }
+    }, []);
+
+    const ItemDropdown_Options = itemsDrop.map((index) => ({
         value: index.id,
         label: index.ItemName,
-        Quantity: index.Quantity,
-        WorkOrderId: index.id,
-        Item: index.Item,
-        BomID: index.Bom,
-        Unit: index.Unit
     }));
-    const location = { ...history.location }
-    const hasShowloction = location.hasOwnProperty("editValue")
-    const hasShowModal = props.hasOwnProperty("editValue")
-    // useEffect(() => {
-    //     if ((supplierAddress.length > 0) && (!((hasShowloction || hasShowModal)))) {
-    //         setbillAddr(supplierAddress[0]);
-    //         setshippAddr(supplierAddress[0]);
-    //     }
-    // }, [supplierAddress])
+
     useEffect(() => {
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(post_ProductionSuccess({ Status: false }))
@@ -187,7 +225,8 @@ const ProductionMaster = (props) => {
                 AfterResponseAction: false
             }));
         }
-    }, [postMsg])
+    }, [postMsg]);
+
     useEffect(() => {
         if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
             history.push({
@@ -203,26 +242,26 @@ const ProductionMaster = (props) => {
                 })
             );
         }
-    }, [updateMsg, modalCss])
+    }, [updateMsg, modalCss]);
+
     useEffect(() => {
-        debugger
         if (pageField) {
             const fieldArr = pageField.PageFieldMaster
             comAddPageFieldFunc({ state, setState, fieldArr })// new change
         }
-    }, [pageField])
+    }, [pageField]);
+
     const formSubmitHandler = ({ event, mode = false }) => {
-        debugger
+
         event.preventDefault();
-        // if (formValid(state, setState)) {
-        // let BOMrefID = 0
-        // if ((pageMode === 'edit') && mode) {
-        //     BOMrefID = EditData.id
-        // };
         const jsonBody = JSON.stringify({
-            
-                MaterialIssue: 1,
-              
+            ProductionmaterialIssue: [
+                {
+                    // MaterialIssue: produtionMakeData.id,
+                    MaterialIssue: 1,
+                }
+            ],
+
             ProductionDate: values.ProductionDate,
             EstimatedQuantity: values.EstimatedQuantity,
             NumberOfLot: 1,
@@ -441,7 +480,7 @@ const ProductionMaster = (props) => {
                         </div>
                         <div className="px-2 mb-1 mt-n3" style={{ marginRight: '-28px', marginLeft: "-8px" }}>
                             <Row>
-                                    {/* <Row className="mt-3">
+                                {/* <Row className="mt-3">
                                         <Col className=" col col-12">
                                             <ItemTab tableData={ItemTabDetails} func={setItemTabDetails} />
                                         </Col>

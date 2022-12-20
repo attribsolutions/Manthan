@@ -111,13 +111,14 @@ const OrderList = () => {
         }
     }, [GRNitem])
 
-    const onsavefunc = (list = []) => {
+    const makeBtnFunc = (list = []) => {
+        debugger
         var isGRNSelect = ''
         var challanNo = ''
         const grnRef = []
         if (list.length > 0) {
             list.forEach(ele => {
-                if (ele.GRNSelect) {
+                if (ele.hasSelect) {
                     grnRef.push({
                         Invoice: null,
                         Order: ele.id,
@@ -261,9 +262,11 @@ const OrderList = () => {
                             MasterModal={Order}
                             masterPath={url.ORDER}
                             ButtonMsgLable={"Order"}
-                            deleteName={"OrderDate"}
+                            deleteName={"FullOrderNumber"}
                             pageMode={pageMode}
-                            onsavefunc={onsavefunc}
+                            makeBtnFunc={makeBtnFunc}
+                            makeBtnShow={true}
+                            makeBtnName={"Make GRN"}
                             goButnFunc={goButtonHandler}
                             downUrlPath={editOrderID_forOrderPage_ApiCall}
                             ReportType={report.order1}

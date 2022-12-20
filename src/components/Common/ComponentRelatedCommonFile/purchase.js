@@ -79,7 +79,9 @@ const PurchaseListPage = (props) => {
         deleteName,
         pageMode,
         goButnFunc = () => { },
-        onsavefunc = () => { },
+        makeBtnFunc = () => { },
+        makeBtnShow,
+        makeBtnName,
         downUrlPath = () => { },
         ReportType
     } = props;
@@ -256,14 +258,14 @@ const PurchaseListPage = (props) => {
 
             columns.push({
                 text: "Select",
-                dataField: "GRNSelect",
+                dataField: "hasSelect",
                 sort: true,
                 formatter: (cellContent, item, key) => {
-                    item["GRNSelect"] = false
+                    item["hasSelect"] = false
                     return (
                         <Input type="checkbox"
-                            defaultChecked={item.GRNSelect}
-                            onChange={e => item.GRNSelect = e.target.checked}
+                            defaultChecked={item.hasSelect}
+                            onChange={e => item.hasSelect = e.target.checked}
                         />)
                 }
             })
@@ -299,7 +301,10 @@ const PurchaseListPage = (props) => {
                     editActionFun: editId,
                     deleteActionFun: deleteId,
                     downUrlPath: downUrlPath,
-                    ReportType: ReportType
+                    ReportType: ReportType,
+                    makeBtnShow: makeBtnShow,
+                    makeBtnName: makeBtnName,
+                    makeBtnFunc: makeBtnFunc
                 })
             )
         }
@@ -320,7 +325,7 @@ const PurchaseListPage = (props) => {
     };
     function onSaveBtnClick() {
         debugger
-        onsavefunc(tableList);
+        makeBtnFunc(tableList);
 
     }
     if (!(userAccState === '')) {
@@ -377,19 +382,19 @@ const PurchaseListPage = (props) => {
 
                         (pageMode === url.GRN_ADD_Mode_2) ?
 
-                    <div className="button_save " style={{ paddingBottom: 'center' }}>
-                        <button
-                            id='form_submmit'
-                            type="submit"
-                            data-mdb-toggle="tooltip" data-mdb-placement="top"
-                            className="btn btn-primary w-md  bt_save"
-                            onClick={onSaveBtnClick}
-                        >
-                            <i class="fas fa-edit me-2"></i>Make GRN
-                        </button>
-                    </div>
-                    :
-                    null
+                            <div className="button_save " style={{ paddingBottom: 'center' }}>
+                                <button
+                                    id='form_submmit'
+                                    type="submit"
+                                    data-mdb-toggle="tooltip" data-mdb-placement="top"
+                                    className="btn btn-primary w-md  bt_save"
+                                    onClick={onSaveBtnClick}
+                                >
+                                    <i class="fas fa-edit me-2"></i>{makeBtnName}
+                                </button>
+                            </div>
+                            :
+                            null
                     }
                     <Modal
                         isOpen={modal_edit}

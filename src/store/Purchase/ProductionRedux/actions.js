@@ -5,6 +5,7 @@ import {
   DELETE_PRODUCTION_SUCCESS,
   EDIT_PRODUCTION_FOR_PRODUCTION_PAGE,
   EDIT_PRODUCTION_FOR_PRODUCTION_PAGE_SUCCESS,
+  GET_PRODUCTION_ITEM_MODE_2,
   GET_PRODUCTION_LIST_PAGE,
   GET_PRODUCTION_LIST_PAGE_SUCCESS,
   POST_PRODUCTION_FROM_PRODUCTION_PAGE,
@@ -14,19 +15,18 @@ import {
   UPDATE_PRODUCTION_ID_FROM_PRODUCTION_PAGE_SUCCESS
 } from './actionType'
 
-
 export const Productionlistfilters = filter => ({
   type: SET_PRODUCTION_LIST_FILTERS,
   payload: filter,
 })
 
 //get listpage api
-export const get_ProductionListPage = (filters) => ({
-  type: GET_PRODUCTION_LIST_PAGE,
-  filters,
+export const getProduction_Mode2 = (data, pageMode, path) => ({
+  type: GET_PRODUCTION_ITEM_MODE_2,
+  data, pageMode, path,
 });
 
-export const get_ProductionListPageSuccess = (data) => ({
+export const getProduction_Mode2_Success = (data) => ({
   type: GET_PRODUCTION_LIST_PAGE_SUCCESS,
   payload: data,
 });
@@ -39,6 +39,16 @@ export const post_Production = (data) => ({
 export const post_ProductionSuccess = (msg) => ({
   type: POST_PRODUCTION_FROM_PRODUCTION_PAGE_SUCCESS,
   payload: msg
+});
+
+export const getProductionListPage = (filters) => ({
+  type: GET_PRODUCTION_LIST_PAGE,
+  filters,
+});
+
+export const getProductionistPageSuccess = (data) => ({
+  type: GET_PRODUCTION_LIST_PAGE_SUCCESS,
+  payload: data,
 });
 
 

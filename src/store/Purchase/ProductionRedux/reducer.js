@@ -20,7 +20,7 @@ const INIT_STATE = {
   deleteMsg: { Status: false },
   ProductionList: [],
   grnItemList: [],
-  GRNitem: { Status: false, Data: [], },
+  produtionMake: { Status: false, Data: [], },
   productionFilter: { fromdate: currentDate, todate: currentDate }
 }
 
@@ -36,7 +36,7 @@ const ProductionReducer = (state = INIT_STATE, action) => {
     case GET_PRODUCTION_ITEM_MODE_2_SUCCESS:
       return {
         ...state,
-        GRNitem: action.payload,
+        produtionMake: action.payload,
       }
     case "GET_PRODUCTION_ITEM_MODE_3":
       return {

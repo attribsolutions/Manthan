@@ -73,6 +73,7 @@ const GRNList = () => {
 
 
     function goButtonHandler() {
+        debugger
         const jsonBody = JSON.stringify({
             FromDate: fromdate,
             ToDate: todate,
@@ -195,7 +196,7 @@ const GRNList = () => {
                             MasterModal={Order}
                             masterPath={ORDER}
                             ButtonMsgLable={"GRN"}
-                            deleteName={"CreatedBy"}
+                            deleteName={"GRNNumber"}
                             pageMode={"List"}
                             goButnFunc={goButtonHandler}
                         />
