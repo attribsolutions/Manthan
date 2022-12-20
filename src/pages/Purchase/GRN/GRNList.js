@@ -195,7 +195,7 @@ const GRNList = () => {
                             MasterModal={Order}
                             masterPath={ORDER}
                             ButtonMsgLable={"GRN"}
-                            deleteName={"CreatedBy"}
+                            deleteName={"GRNNumber"}
                             pageMode={"List"}
                             goButnFunc={goButtonHandler}
                         />
