@@ -54,7 +54,7 @@ const MaterialIssueList = () => {
 
     // Featch Modules List data  First Rendering
     useEffect(() => {
-        const page_Id = (hasPagePath === url.PRODUCTION_ADD_Mode_2) ? pageId.PRODUCTION_ADD_Mode_2 : pageId.BIllOf_MATERIALS_LIST;
+        const page_Id = (hasPagePath === url.PRODUCTION_ADD_Mode_2) ? pageId.PRODUCTION_ADD_Mode_2 : pageId.MATERIAL_ISSUE_LIST;
         setpageMode(hasPagePath)
         dispatch(BreadcrumbFilterSize(`${"Material Issue Count"} :0`))
         dispatch(commonPageFieldListSuccess(null))
@@ -71,7 +71,7 @@ const MaterialIssueList = () => {
 
 
     useEffect(() => {
-        const page_Id = (hasPagePath === url.PRODUCTION_ADD_Mode_2) ? pageId.PRODUCTION_ADD_Mode_2 : pageId.BIllOf_MATERIALS_LIST;
+        const page_Id = (hasPagePath === url.PRODUCTION_ADD_Mode_2) ? pageId.PRODUCTION_ADD_Mode_2 : pageId.MATERIAL_ISSUE_LIST;
         let userAcc = userAccess.find((inx) => {
             return (inx.id === page_Id)
         })
@@ -149,8 +149,8 @@ const MaterialIssueList = () => {
                     newBtnView={(pageMode === url.MATERIAL_ISSUE_LIST) ? true : false}
                     showCount={true}
                     excelBtnView={true}
-                    pageMode={url.WORK_ORDER_ADD_Mode_2}
-                    newBtnPagePath={url.WORK_ORDER_ADD_Mode_2}
+                    pageMode={url.MATERIAL_ISSUE_ADD_Mode_2}
+                    newBtnPagePath={url.MATERIAL_ISSUE_ADD_Mode_2}
                     excelData={downList} />
 
                 <div className="px-2 mt-n1  c_card_header text-black" style={{ marginBottom: "-12px" }} >
