@@ -69,7 +69,7 @@ const ProductionMaster = (props) => {
     const [state, setState] = useState(initialFiledFunc(initialFiled))
     useEffect(() => {
         // dispatch(getSupplier())
-        dispatch(getSupplierAddress())
+        // dispatch(getSupplierAddress())
     }, [])
     const {
         items,
