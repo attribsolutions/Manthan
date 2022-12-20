@@ -13,6 +13,7 @@ import { useMemo } from "react";
 import { updateBOMListSuccess } from "../../../store/Purchase/BOMRedux/action";
 import { deleteWorkOrderId, deleteWorkOrderIdSuccess, editWorkOrderList, getWorkOrderListPage, updateWorkOrderListSuccess } from "../../../store/Purchase/WorkOrder/action";
 import ProductionMaster from "./ProductionMaster";
+import { getProductionListPage } from "../../../store/Purchase/ProductionRedux/actions";
 // import BOMMaster from "../BOMMaster/BOMIndex";
 
 const ProductionList = () => {
@@ -33,9 +34,11 @@ const ProductionList = () => {
             productionFilter: state.ProductionReducer.productionFilter,
             userAccess: state.Login.RoleAccessUpdateData,
             pageField: state.CommonPageFieldReducer.pageFieldList,
-            
+  
         })
     );
+    // const { userAccess, pageField, tableList, materialIssuelistFilters } = reducers;
+    // const { fromdate, todate } = materialIssuelistFilters
 
     const action = {
         getList: getWorkOrderListPage,
@@ -55,7 +58,6 @@ const ProductionList = () => {
         goButtonHandler(true)
     }, []);
 
-    const { userAccess, pageField, tableList } = reducers;
     const downList = useMemo(() => {
         let PageFieldMaster = []
         if (pageField) { PageFieldMaster = pageField.PageFieldMaster; }
@@ -71,7 +73,6 @@ const ProductionList = () => {
         }
     }, [userAccess])
     const goButtonHandler = (onload = false) => {
-        debugger
         let FromDate
         let ToDate
         if (onload) {
@@ -87,9 +88,20 @@ const ProductionList = () => {
             ToDate: ToDate,
         });
         debugger
-        dispatch(getWorkOrderListPage(jsonBody));
+        dispatch(getProductionListPage(jsonBody));
         console.log("go button post json", jsonBody)
     }
+    function fromdateOnchange(e, date) {
+        let newObj = { ...materialIssuelistFilters }
+        newObj.fromdate = date
+        dispatch(MaterialIssuelistfilters(newObj))
+    }
+    function todateOnchange(e, date) {
+        let newObj = { ...materialIssuelistFilters }
+        newObj.todate = date
+        dispatch(MaterialIssuelistfilters(newObj))
+    }
+
     return (
         <React.Fragment>
             <div className="page-content">
@@ -116,8 +128,8 @@ const ProductionList = () => {
                                             dateFormat: "Y-m-d",
                                             defaultDate: "today"
                                         }}
-                                        onChange={(e, date) => { setFromdate(date) }}
-                                        onReady={(e, date) => { setFromdate(date) }}
+                                        onChange={fromdateOnchange}
+                                      
                                     />
                                 </Col>
                             </FormGroup>
@@ -137,9 +149,7 @@ const ProductionList = () => {
                                             dateFormat: "Y-m-d",
                                             defaultDate: "today"
                                         }}
-                                        onChange={(e, date) => { setTodate(date) }}
-                                        onReady={(e, date) => { setTodate(date) }}
-
+                                        onChange={todateOnchange}
                                     />
                                 </Col>
                             </FormGroup>
