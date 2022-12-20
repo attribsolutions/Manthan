@@ -4,18 +4,17 @@ import "flatpickr/dist/themes/material_blue.css"
 import Flatpickr from "react-flatpickr";
 import { BreadcrumbFilterSize, commonPageFieldList, commonPageFieldListSuccess, } from "../../../store/actions";
 import PurchaseListPage from "../../../components/Common/ComponentRelatedCommonFile/purchase"
-import { MATERIAL_ISSUE, MATERIAL_ISSUE_LIST, WORK_ORDER, WORK_ORDER_LIST } from "../../../routes/route_url";
+import { MATERIAL_ISSUE, MATERIAL_ISSUE_LIST, } from "../../../routes/route_url";
 import { Button, Col, FormGroup, Label } from "reactstrap";
 import Breadcrumb from "../../../components/Common/Breadcrumb";
 import { useHistory } from "react-router-dom";
 import { currentDate, excelDownCommonFunc } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import { useMemo } from "react";
-import { updateBOMListSuccess } from "../../../store/Purchase/BOMRedux/action";
-import { deleteWorkOrderId, deleteWorkOrderIdSuccess, editWorkOrderList, getWorkOrderListPage, updateWorkOrderListSuccess } from "../../../store/Purchase/WorkOrder/action";
+import { deleteWorkOrderId, deleteWorkOrderIdSuccess, editWorkOrderList, updateWorkOrderListSuccess } from "../../../store/Purchase/WorkOrder/action";
 import MaterialIssueMaster from "./Material_IssueMaster";
 import { getMaterialIssueListPage, MaterialIssuelistfilters } from "../../../store/Purchase/Matrial_Issue/action";
-
-// import BOMMaster from "../BOMMaster/BOMIndex";
+import * as url from "../../../routes/route_url"
+import { getGRN_itemMode2 } from "../../../store/Purchase/GRNRedux/actions";
 
 const MaterialIssueList = () => {
 
@@ -78,6 +77,31 @@ const MaterialIssueList = () => {
         }
     }, [userAccess])
 
+
+
+    const makeBtnFunc = (list = []) => {
+        debugger
+        var isSelect = ''
+        if (list.length > 0) {
+            list.forEach(ele => {
+                if (ele.hasSelect) {
+                    isSelect = isSelect.concat(`${ele.id},`)
+                }
+            });
+            if (isSelect) {
+                const withoutLastComma = isSelect.replace(/,*$/, '');
+                const jsonBody = JSON.stringify({
+                    MaterialIssueID: withoutLastComma
+                })
+
+                dispatch(getGRN_itemMode2({ jsonBody, pageMode, path: url.PRODUCTION_MASTER }))
+
+            } else {
+                alert("Please Select Material Issue")
+            }
+        }
+
+    }
     const goButtonHandler = () => {
         const jsonBody = JSON.stringify({
             FromDate: fromdate,
@@ -173,6 +197,9 @@ const MaterialIssueList = () => {
                             deleteName={"ItemName"}
                             pageMode={pageMode}
                             goButnFunc={goButtonHandler}
+                            makeBtnFunc={makeBtnFunc}
+                            makeBtnShow={true}
+                            makeBtnName={"Make Production"}
                         />
                         : null
                 }
