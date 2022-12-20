@@ -98,12 +98,12 @@ import MaterialIssueMaster from "../pages/Purchase/Material_Issue/Material_Issue
 import MaterialIssueList from "../pages/Purchase/Material_Issue/Material_Issue_List";
 
 import ProductionMaster from "../pages/Purchase/Production/ProductionMaster";
+import ProductionList from "../pages/Purchase/Production/ProductionList";
 
 
 const userRoutes = [
 
-  { path: "/dashboard", component: Dashboard },
-
+  // *************************** Administration *******************************//
   { path: path.MODULE, component: Modules },
   { path: path.MODULE_lIST, component: ModulesList },
 
@@ -113,32 +113,26 @@ const userRoutes = [
   { path: path.PAGE_lIST, component: PageList },
   { path: path.PAGE, component: PageMaster },
 
-  { path: path.ORDER, component: Order },
-  { path: path.ORDER_lIST, component: OrderList },
-
-
-  { path: path.GRN_lIST, component: GRNList },
-  { path: path.GRN_ADD, component: GRNAdd },
-  { path: path.GST_ADD_Mode_2, component: OrderList },
-
   { path: path.USER, component: AddUser },
   { path: path.USER_lIST, component: UserList },
 
-  { path: path.EMPLOYEE, component: AddEmployee },
-  { path: path.EMPLOYEE_lIST, component: Employee_List },
-
+  { path: path.ROLEACCESS, component: RoleAccessAdd },
+  { path: path.ROLEACCESS_lIST, component: RoleAccessListPage },
+  { path: path.COPY_ROLEACCESS, component: RoleAccessCopyFunctionality },
+  
   { path: path.ROLE, component: RoleMaster },
   { path: path.ROLE_lIST, component: RoleList },
+
+  // ******************************* Master Module ******************************//
+
+  { path: path.EMPLOYEE, component: AddEmployee },
+  { path: path.EMPLOYEE_lIST, component: Employee_List },
 
   { path: path.ITEM, component: ItemsMaster },
   { path: path.ITEM_lIST, component: ItemsList },
 
   { path: path.PARTY_lIST, component: PartyList },
   { path: path.PARTY, component: PartyMaster },
-
-  { path: path.ROLEACCESS, component: RoleAccessAdd },
-  { path: path.ROLEACCESS_lIST, component: RoleAccessListPage },
-  { path: path.COPY_ROLEACCESS, component: RoleAccessCopyFunctionality },
 
   { path: path.EMPLOYEETYPE, component: EmployeeTypesMaster },
   { path: path.EMPLOYEETYPE_lIST, component: EmployeeTypeList },
@@ -195,8 +189,14 @@ const userRoutes = [
   { path: path.SUBGROUP, component: SubGroupMaster },
   { path: path.SUBGROUP_LIST, component: SubGroupList },
 
+  //******************************* Purchase Module ************************************//
 
-  // { path:"/demo", component: demo },
+  { path: path.ORDER, component: Order },
+  { path: path.ORDER_lIST, component: OrderList },
+
+  { path: path.GRN_lIST, component: GRNList },
+  { path: path.GRN_ADD, component: GRNAdd },
+  { path: path.GRN_ADD_Mode_2, component: OrderList },
 
   { path: path.BIllOf_MATERIALS, component: BOMMaster },
   { path: path.BIllOf_MATERIALS_LIST, component: BOMList },
@@ -206,18 +206,21 @@ const userRoutes = [
 
   { path: path.MATERIAL_ISSUE, component: MaterialIssueMaster },
   { path: path.MATERIAL_ISSUE_LIST, component: MaterialIssueList },
-  
 
   { path: path.PRODUCTION_MASTER, component: ProductionMaster },
+  { path: path.PRODUCTION_LIST, component: ProductionList },
 
+
+
+  // ************************************ Utility **************************************//
   { path: path.SEARCH_BOX2, component: SearchBoxSecond },
   { path: path.SEARCH_BOX3, component: SerachBox3 },
+
+  { path: "/dashboard", component: Dashboard },
 
   { path: "/", exact: true, component: () => <Redirect to="/Dashboard" /> },
   { path: "/auth-404", component: Error404 },
   { path: "/auth-500", component: Error500 },
-
-
 
 ]
 

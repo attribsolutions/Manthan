@@ -530,7 +530,7 @@ const PageMaster = (props) => {
       PagePageAccess: Access,
       PageFieldMaster: PageFieldMaster,
     })
-    if ((pageType_DropdownSelect.value === 1) && (PageFieldMaster.length === 0)) {
+    if ((pageType_DropdownSelect.value === 2) && (PageFieldMaster.length === 0)) {
       {
         dispatch(
           AlertState({

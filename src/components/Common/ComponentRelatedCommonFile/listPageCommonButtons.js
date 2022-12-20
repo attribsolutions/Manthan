@@ -3,7 +3,7 @@ import { AlertState } from "../../../store/actions";
 import { getpdfReportdata } from "../../../store/Utilites/PdfReport/actions";
 
 export const listPageCommonButtonFunction = (props) => {
-
+    debugger
     const dispatch = props.dispatchHook;
     const userCreated = parseInt(localStorage.getItem("userId"))
     const {
@@ -28,10 +28,14 @@ export const listPageCommonButtonFunction = (props) => {
      * deletemsgLable change to=> ButtonMsgLable line no:11 
      *    autho by => Rohit  date :22-08-022 */
 
+    //  function editHandler(rowData) {
+    //     dispatch(editActionFun(rowData.id, "edit",));
+    // }
 
     function editHandler(rowData) {
         dispatch(editActionFun(rowData.id, "edit",));
     }
+
     function copyHandler(rowData) {
         dispatch(editActionFun(rowData.id, "copy",));
     }
@@ -155,7 +159,14 @@ export const listPageCommonButtonFunction = (props) => {
                 </Button>
                 : null
             }
-
+            {props.userAccState.ActualPagePath==="OrderList" ? <Button
+                type="button"
+                className=" badge badge-soft-info font-size-12 btn btn-info waves-effect waves-light w-xxs border border-light"
+                data-mdb-toggle="tooltip" data-mdb-placement="top" title={`Make GRN `}
+                // onClick={() => { downHandler(rowData) }}
+            >
+              <span style={{marginLeft:"10px"}} className=" fas fa-edit me-2" ></span></Button> :<></> }
+           
         </div>
         )
     }

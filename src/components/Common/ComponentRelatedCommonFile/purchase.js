@@ -252,8 +252,8 @@ const PurchaseListPage = (props) => {
 
         // ======================== for GRNMode2 Page Action Button ================================
 
-        if ((pageMode === url.GST_ADD_Mode_2) && (fileds.length - 1 === k)) {
-      
+        if ((pageMode === url.GRN_ADD_Mode_2) && (fileds.length - 1 === k)) {
+
             columns.push({
                 text: "Select",
                 dataField: "GRNSelect",
@@ -269,7 +269,7 @@ const PurchaseListPage = (props) => {
             })
         }
 
-         // ======================== for GRNMode2 Page Action Button ================================
+        // ======================== for GRNMode2 Page Action Button ================================
 
         //  if ((pageMode === url.MATERIAL_ISSUE_LIST) && (fileds.length - 1 === k)) {
         //     debugger
@@ -319,6 +319,7 @@ const PurchaseListPage = (props) => {
         custom: true,
     };
     function onSaveBtnClick() {
+        debugger
         onsavefunc(tableList);
 
     }
@@ -374,22 +375,21 @@ const PurchaseListPage = (props) => {
 
                     {
 
-                        (pageMode === url.GST_ADD_Mode_2 )?
+                        (pageMode === url.GRN_ADD_Mode_2) ?
 
-
-                            <div className="button_save " style={{ paddingBottom: 'center' }}>
-                                <button
-                                    id='form_submmit'
-                                    type="submit"
-                                    data-mdb-toggle="tooltip" data-mdb-placement="top"
-                                    className="btn btn-primary w-md  bt_save"
-                                    onClick={onSaveBtnClick}
-                                >
-                                    <i class="fas fa-edit me-2"></i>Make GRN
-                                </button>
-                            </div>
-                            :
-                            null
+                    <div className="button_save " style={{ paddingBottom: 'center' }}>
+                        <button
+                            id='form_submmit'
+                            type="submit"
+                            data-mdb-toggle="tooltip" data-mdb-placement="top"
+                            className="btn btn-primary w-md  bt_save"
+                            onClick={onSaveBtnClick}
+                        >
+                            <i class="fas fa-edit me-2"></i>Make GRN
+                        </button>
+                    </div>
+                    :
+                    null
                     }
                     <Modal
                         isOpen={modal_edit}
