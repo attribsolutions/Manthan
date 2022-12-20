@@ -26,6 +26,7 @@ import {
     onChangeDate,
     onChangeSelect,
     onChangeText,
+    resetFunction,
 } from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
 import Select from "react-select";
 import { SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
@@ -34,7 +35,7 @@ import {
     updateBOMList,
     updateBOMListSuccess
 } from "../../../store/Purchase/BOMRedux/action";
-import { MATERIAL_ISSUE } from "../../../routes/route_url";
+import { MATERIAL_ISSUE, MATERIAL_ISSUE_LIST } from "../../../routes/route_url";
 import { convertDatefunc, createdBy, currentDate, userCompany, userParty } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 
 import { BIllOf_MATERIALS_LIST } from "../../../routes/route_url";
@@ -127,7 +128,7 @@ const MaterialIssueMaster = (props) => {
     }, [])
 
     const goButtonHandler = (event) => {
-        debugger
+      
         event.preventDefault();
         if (formValid(state, setState)) {
             const jsonBody = JSON.stringify({
@@ -191,10 +192,10 @@ const MaterialIssueMaster = (props) => {
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(postMaterialIssueSuccess({ Status: false }))
             dispatch(postGoButtonForMaterialIssue_MasterSuccess([]))
-            dispatch(postMaterialIssueSuccess([]))
+            // dispatch(postMaterialIssueSuccess([]))
             dispatch(postBOMSuccess({ Status: false }))
-            setState(() => initialFiledFunc(fileds)) //+++++++++ Clear form values 
-            saveDissable(false);//+++++++++save Button Is enable function
+            // setState(() => resetFunction(fileds)) //+++++++++ Clear form values 
+            // saveDissable(false);//+++++++++save Button Is enable function
 
             if (pageMode === "dropdownAdd") {
                 dispatch(AlertState({
@@ -208,7 +209,7 @@ const MaterialIssueMaster = (props) => {
                     Type: 1,
                     Status: true,
                     Message: postMsg.Message,
-                    RedirectPath: MATERIAL_ISSUE,
+                    RedirectPath: MATERIAL_ISSUE_LIST,
                 }))
             }
         }
@@ -233,9 +234,9 @@ const MaterialIssueMaster = (props) => {
 
         if ((updateMsg.Status === true) && (updateMsg.StatusCode === 200) && !(modalCss)) {
             saveDissable(false);//+++++++++Update Button Is enable function
-            setState(() => initialFiledFunc(fileds)) //+++++++++ Clear form values
+            // setState(() => initialFiledFunc(fileds)) //+++++++++ Clear form values
             history.push({
-                pathname: MATERIAL_ISSUE,
+                pathname: MATERIAL_ISSUE_LIST,
             })
         } else if (updateMsg.Status === true && !modalCss) {
             saveDissable(false);//+++++++++Update Button Is enable function
@@ -270,7 +271,7 @@ const MaterialIssueMaster = (props) => {
     }));
 
     function ItemOnchange(e) {
-        debugger
+ 
         dispatch(postGoButtonForMaterialIssue_MasterSuccess([]))
         setItemselect(e)
         setState((i) => {
@@ -285,7 +286,7 @@ const MaterialIssueMaster = (props) => {
     }
 
     function Quantitychange(event) {
-        debugger
+      
         dispatch(postGoButtonForMaterialIssue_MasterSuccess([]))
         const value1 = Math.max('', Math.min(Itemselect.Quantity, Number(event.target.value)));
         event.target.value = value1
@@ -305,7 +306,7 @@ const MaterialIssueMaster = (props) => {
     const { fieldLabel } = state;
 
     const handleChange = (event, index) => {
-        debugger
+      
         index.Qty = event.target.value
     };
 
@@ -357,7 +358,7 @@ const MaterialIssueMaster = (props) => {
             }
             );
 
-            saveDissable(true);//+++++++++save Button Is dissable function
+            // saveDissable(true);//+++++++++save Button Is dissable function
 
 
             if (pageMode === 'edit') {
