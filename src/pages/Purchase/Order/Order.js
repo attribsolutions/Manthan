@@ -39,8 +39,9 @@ import { getTermAndCondition } from "../../../store/Administrator/TermsAndCondit
 
 import Breadcrumb from "../../../components/Common/Breadcrumb3";
 import { mySearchProps } from "../../../components/Common/ComponentRelatedCommonFile/MySearch";
-import { createdBy, currentDate, userParty } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { createdBy, currentDate, saveDissable, userParty } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import OrderPageTermsTable from "./OrderPageTermsTable";
+import { initialFiledFunc } from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
 
 let description = ''
 let editVal = {}
@@ -113,6 +114,15 @@ const Order = (props) => {
     const hasShowloction = location.hasOwnProperty("editValue")
     const hasShowModal = props.hasOwnProperty("editValue")
 
+
+    const fileds = {
+        id: "",
+        Name: "",
+
+    }
+
+    const [state, setState] = useState(() => initialFiledFunc(fileds))
+
     useEffect(() => {
 
         dispatch(goButtonSuccess([]))
@@ -169,6 +179,8 @@ const Order = (props) => {
     useEffect(() => {
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(postOrderSuccess({ Status: false }))
+            setState(() => initialFiledFunc(fileds)) //+++++++++ Clear form values 
+            saveDissable(false);//+++++++++save Button Is enable function
             setTermsAndConTable([])
             dispatch(goButtonSuccess([]))
             description = ''
@@ -180,6 +192,7 @@ const Order = (props) => {
             }))
 
         } else if (postMsg.Status === true) {
+            saveDissable(false);//+++++++++save Button Is enable function
             dispatch(postOrderSuccess({ Status: false }))
             dispatch(AlertState({
                 Type: 4,
@@ -193,12 +206,15 @@ const Order = (props) => {
 
     useEffect(() => {
         if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
+            saveDissable(false);//+++++++++Update Button Is enable function
+            setState(() => initialFiledFunc(fileds)) //+++++++++ Clear form values
             description = ''
             history.push({
                 pathname: ORDER_lIST,
                 // renderMode: true
             })
         } else if (updateMsg.Status === true && !modalCss) {
+            saveDissable(false);//+++++++++Update Button Is enable function
             dispatch(updateOrderIdSuccess({ Status: false }));
             dispatch(
                 AlertState({
@@ -558,6 +574,8 @@ const Order = (props) => {
 
 
         });
+
+        saveDissable(true);//+++++++++save Button Is dissable function
 
         if (pageMode === "edit") {
             dispatch(updateOrderId(jsonBody, editVal.id))

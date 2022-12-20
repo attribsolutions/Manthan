@@ -44,7 +44,8 @@ import Margin_Tab from "./MarginTab/index";
 import GroupTab from "./Group_Tab";
 import UnitConverstion from "./UnitConversion_Tab/Index";
 import Image from "./Image_Tab/Index";
-import { createdBy } from "../../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { createdBy, saveDissable } from "../../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { initialFiledFunc } from "../../../../components/Common/ComponentRelatedCommonFile/validationFunction";
 
 const ItemsMaster = (props) => {
     const dispatch = useDispatch();
@@ -126,6 +127,14 @@ const ItemsMaster = (props) => {
         CategoryList: state.ItemMastersReducer.Category,
     }));
 
+
+    const fileds = {
+        id: "",
+        Name: "",
+    
+      }
+    
+      const [state, setState] = useState(() => initialFiledFunc(fileds))
 
     const location = { ...history.location }
     const hasShowloction = location.hasOwnProperty("editValue")
@@ -261,6 +270,8 @@ const ItemsMaster = (props) => {
 
         if ((PostAPIResponse.Status === true) && (PostAPIResponse.StatusCode === 200) && !(pageMode === "dropdownAdd")) {
             dispatch(PostItemDataSuccess({ Status: false }))
+            setState(() => initialFiledFunc(fileds)) //+++++++++ Clear form values 
+            saveDissable(false);//+++++++++save Button Is enable function
 
             if (pageMode === "dropdownAdd") {
                 dispatch(AlertState({
@@ -280,6 +291,7 @@ const ItemsMaster = (props) => {
         }
 
         else if (PostAPIResponse.Status === true) {
+            saveDissable(false);//+++++++++save Button Is enable function
             dispatch(PostItemDataSuccess({ Status: false }))
             dispatch(AlertState({
                 Type: 4,
@@ -564,6 +576,9 @@ const ItemsMaster = (props) => {
                 ItemGroupDetails: Group_Tab_TableData,
 
             });
+
+            saveDissable(true);//+++++++++save Button Is dissable function
+
             if (pageMode === 'edit') {
                 dispatch(updateItemID(jsonBody, EditData.id));
                 console.log("items edit json", jsonBody)

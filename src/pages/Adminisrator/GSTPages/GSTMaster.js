@@ -26,7 +26,8 @@ import ToolkitProvider, { Search } from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 import { AvField, AvForm } from "availity-reactstrap-validation";
 import { deleteGSTForMasterPage, deleteGSTForMasterPageSuccess, getGSTListPage, postGoButtonForGST_Master, postGoButtonForGST_Master_Success, postGSTMasterData, postGSTMasterDataSuccess } from "../../../store/Administrator/GSTRedux/action";
-import { createdBy, userCompany } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { createdBy, saveDissable, userCompany } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { initialFiledFunc } from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
 
 const GSTMaster = (props) => {
     const dispatch = useDispatch();
@@ -56,6 +57,15 @@ const GSTMaster = (props) => {
     const location = { ...history.location }
     const hasShowloction = location.hasOwnProperty("editValue")
     const hasShowModal = props.hasOwnProperty("editValue")
+
+
+    const fileds = {
+        id: "",
+        Name: "",
+
+    }
+
+    const [state, setState] = useState(() => initialFiledFunc(fileds))
 
     // userAccess useEffect
     useEffect(() => {
@@ -108,7 +118,8 @@ const GSTMaster = (props) => {
 
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200) && !(pageMode === "dropdownAdd")) {
             dispatch(postGSTMasterDataSuccess({ Status: false }))
-            formRef.current.reset();
+            setState(() => initialFiledFunc(fileds)) //+++++++++ Clear form values 
+            saveDissable(false);//+++++++++save Button Is enable function
             setEffectiveDate('')
             if (pageMode === "dropdownAdd") {
                 dispatch(AlertState({
@@ -128,6 +139,7 @@ const GSTMaster = (props) => {
         }
 
         else if (postMsg.Status === true) {
+            saveDissable(false);//+++++++++save Button Is enable function
             dispatch(postGSTMasterDataSuccess({ Status: false }))
             dispatch(AlertState({
                 Type: 4,
@@ -168,19 +180,19 @@ const GSTMaster = (props) => {
         setEffectiveDate(date)
     }
 
-    const GSTPercentageHandler = (e,user) => {
+    const GSTPercentageHandler = (e, user) => {
         user["GSTPercentage"] = e.target.value
     }
 
-    const CurrentGSTPercentageHandler = (e,user) => {
+    const CurrentGSTPercentageHandler = (e, user) => {
         user["CurrentGSTPercentage"] = e.target.value
     }
 
-    const CurrentHSNCodeHandler = (e,user) => {
+    const CurrentHSNCodeHandler = (e, user) => {
         user["GSTPercentage"] = e.target.value
     }
 
-    const HSNCodeHandler = (e,user) => {
+    const HSNCodeHandler = (e, user) => {
         user["HSNCode"] = e.target.value
     }
     //select id for delete row
@@ -238,7 +250,7 @@ const GSTMaster = (props) => {
                                     disabled={true}
                                     defaultValue={cellContent}
                                     className="col col-sm text-center"
-                                    onChange={(e) => CurrentGSTPercentageHandler(e,user)}
+                                    onChange={(e) => CurrentGSTPercentageHandler(e, user)}
                                 />
                             </FormGroup>
                         </Col>
@@ -267,7 +279,7 @@ const GSTMaster = (props) => {
                                     defaultValue={cellContent}
                                     disabled={user.GSTPerDis}
                                     className="col col-sm text-center"
-                                    onChange={(e) => GSTPercentageHandler(e,user)}
+                                    onChange={(e) => GSTPercentageHandler(e, user)}
                                 />
                             </FormGroup>
                         </Col>
@@ -292,7 +304,7 @@ const GSTMaster = (props) => {
                                     disabled={true}
                                     defaultValue={cellContent}
                                     className="col col-sm text-center"
-                                    onChange={(e) => CurrentHSNCodeHandler(e,user)}
+                                    onChange={(e) => CurrentHSNCodeHandler(e, user)}
                                 />
                             </FormGroup>
                         </Col>
@@ -321,7 +333,7 @@ const GSTMaster = (props) => {
                                     defaultValue={cellContent}
                                     disabled={user.hsncodeDis}
                                     className="col col-sm text-center"
-                                    onChange={(e) => HSNCodeHandler(e,user)}
+                                    onChange={(e) => HSNCodeHandler(e, user)}
                                 />
                             </FormGroup>
                         </Col>
@@ -368,7 +380,7 @@ const GSTMaster = (props) => {
             Company: userCompany(),
             CreatedBy: createdBy(),
             IsDeleted: 0,
-            UpdatedBy:createdBy(),
+            UpdatedBy: createdBy(),
             Item: index.Item,
             GSTPercentage: index.GSTPercentage,
             HSNCode: index.HSNCode,
@@ -397,6 +409,8 @@ const GSTMaster = (props) => {
             dispatch(postGSTMasterData(jsonBody));
             console.log("jsonBody", jsonBody)
         }
+
+        saveDissable(true);//+++++++++save Button Is dissable function
 
     };
 

@@ -45,7 +45,8 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { PAGE_lIST } from "../../../routes/route_url";
-import { createdBy } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { createdBy, saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { initialFiledFunc } from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
 
 
 const PageMaster = (props) => {
@@ -105,6 +106,15 @@ const PageMaster = (props) => {
     modulePostAPIResponse: state.Modules.modulesSubmitSuccesss,
     PageList: state.H_Pages.PageList,
   }));
+
+  const fileds = {
+    id: "",
+    Name: "",
+
+  }
+
+  const [state, setState] = useState(() => initialFiledFunc(fileds))
+
   // debugger
   const location = { ...history.location }
   const hasShowloction = location.hasOwnProperty("editValue")
@@ -266,6 +276,8 @@ const PageMaster = (props) => {
   useEffect(() => {
     if (postMsg.Status === true && postMsg.StatusCode === 200) {
       dispatch(saveHPagesSuccess({ Status: false }));
+      setState(() => initialFiledFunc(fileds)) //+++++++++ Clear form values 
+      saveDissable(false);//+++++++++save Button Is enable function
       setModule_DropdownSelect("");
       setPageAccess_DropDownSelect("");
       setPageType_DropdownSelect("");
@@ -290,6 +302,7 @@ const PageMaster = (props) => {
         );
       }
     } else if (postMsg.Status === true) {
+      saveDissable(false);//+++++++++save Button Is enable function
       dispatch(saveHPagesSuccess({ Status: false }));
       dispatch(
         AlertState({
@@ -327,10 +340,13 @@ const PageMaster = (props) => {
 
   useEffect(() => {
     if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
+      saveDissable(false);//+++++++++Update Button Is enable function
+      setState(() => initialFiledFunc(fileds)) //+++++++++ Clear form values
       history.push({
         pathname: PAGE_lIST,
       })
     } else if (updateMsg.Status === true && !modalCss) {
+      saveDissable(false);//+++++++++Update Button Is enable function
       dispatch(updateHPagesSuccess({ Status: false }));
       dispatch(
         AlertState({
@@ -544,6 +560,8 @@ const PageMaster = (props) => {
         return;
       }
     }
+    saveDissable(true);//+++++++++save Button Is dissable function
+
     if (pageMode === "edit") {
       dispatch(updateHPages(jsonBody, EditData.id));
       console.log("updated jsonBody", jsonBody)
@@ -1021,7 +1039,7 @@ const PageMaster = (props) => {
                         {pageAccessDropDownView ? (
 
                           <Card className=" mt-n2  " >
-                            <CardBody style={{ backgroundColor: "whitesmoke"}}>
+                            <CardBody style={{ backgroundColor: "whitesmoke" }}>
                               <h5 className="text-black "> Page Access</h5><br></br>
 
                               <Row className="row ">

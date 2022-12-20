@@ -35,7 +35,8 @@ import {
     postMarginMasterDataSuccess
 } from "../../../store/Administrator/MarginMasterRedux/action";
 import { AvForm } from "availity-reactstrap-validation";
-import { createdBy, userCompany } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { createdBy, saveDissable, userCompany } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { initialFiledFunc } from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
 
 const MarginMaster = (props) => {
     const dispatch = useDispatch();
@@ -70,6 +71,15 @@ const MarginMaster = (props) => {
     console.log("tabledata", TableData)
     const location = { ...history.location }
     const hasShowModal = props.hasOwnProperty("editValue")
+
+
+    const fileds = {
+        id: "",
+        Name: "",
+       
+    }
+
+    const [state, setState] = useState(() => initialFiledFunc(fileds))
 
     // userAccess useEffect
     useEffect(() => {
@@ -221,7 +231,8 @@ const MarginMaster = (props) => {
 
         if ((PostAPIResponse.Status === true) && (PostAPIResponse.StatusCode === 200) && !(pageMode === "dropdownAdd")) {
             dispatch(postMarginMasterDataSuccess({ Status: false }))
-            formRef.current.reset();
+            setState(() => initialFiledFunc(fileds)) //+++++++++ Clear form values 
+            saveDissable(false);//+++++++++save Button Is enable function
             setPartyName_dropdown_Select('')
             setEffectiveDate('')
             setpriceList_dropdown_Select('')
@@ -244,6 +255,7 @@ const MarginMaster = (props) => {
         }
 
         else if (PostAPIResponse.Status === true) {
+            saveDissable(false);//+++++++++save Button Is enable function
             dispatch(postMarginMasterDataSuccess({ Status: false }))
             dispatch(AlertState({
                 Type: 4,
@@ -384,6 +396,8 @@ const MarginMaster = (props) => {
         const Find = ItemData.filter((index) => {
             return (!(index.Margin === '') && (index.id === ''))
         })
+
+        saveDissable(true);//+++++++++save Button Is dissable function
 
         const jsonBody = JSON.stringify(Find)
 

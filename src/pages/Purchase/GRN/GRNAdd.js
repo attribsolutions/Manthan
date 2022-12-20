@@ -36,13 +36,14 @@ import { SaveButton } from "../../../components/Common/ComponentRelatedCommonFil
 import Breadcrumb from "../../../components/Common/Breadcrumb3";
 import { editGRNId, getGRN_itemMode2_Success, postGRN, postGRNSuccess } from "../../../store/Purchase/GRNRedux/actions";
 import { mySearchProps } from "../../../components/Common/ComponentRelatedCommonFile/MySearch";
-import { createdBy, currentDate } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { createdBy, currentDate, saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { initialFiledFunc } from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
 
 let description = ''
 let editVal = {}
 let initialTableData = []
 const GRNAdd = (props) => {
-    
+
     const dispatch = useDispatch();
     const history = useHistory();
 
@@ -53,7 +54,7 @@ const GRNAdd = (props) => {
     //Access redux store Data /  'save_ModuleSuccess' action data
 
     const [grnDate, setgrnDate] = useState(currentDate);
-    const [invoiceDate, setInvoiceDate] = useState( currentDate);
+    const [invoiceDate, setInvoiceDate] = useState(currentDate);
 
     const [deliverydate, setdeliverydate] = useState("today")
     const [billAddr, setbillAddr] = useState('')
@@ -88,6 +89,13 @@ const GRNAdd = (props) => {
     }));
 
 
+    const fileds = {
+        id: "",
+        Name: "",
+    }
+
+    const [state, setState] = useState(() => initialFiledFunc(fileds))
+
 
     // userAccess useEffect
     useEffect(() => {
@@ -115,7 +123,7 @@ const GRNAdd = (props) => {
             debugger
             grnItems.OrderItem.forEach((ele, k) => {
                 ele.id = k + 1;
-                ele["poQuantity"] =ele.Quantity
+                ele["poQuantity"] = ele.Quantity
                 ele["Quantity"] = ''
 
                 ele["poAmount"] = ele.Amount
@@ -137,7 +145,7 @@ const GRNAdd = (props) => {
             // setOrderAmount(hasEditVal.OrderAmount)
             items.Status = false
             dispatch(getGRN_itemMode2_Success(items))
-            
+
             dispatch(BreadcrumbFilterSize(`${"GRN Amount"} :${grnItems.OrderAmount}`))
         }
 
@@ -197,6 +205,8 @@ const GRNAdd = (props) => {
 
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(postGRNSuccess({ Status: false }))
+            setState(() => initialFiledFunc(fileds)) //+++++++++ Clear form values 
+            saveDissable(false);//+++++++++save Button Is enable function
             dispatch(AlertState({
                 Type: 1,
                 Status: true,
@@ -205,6 +215,7 @@ const GRNAdd = (props) => {
             }))
 
         } else if (postMsg.Status === true) {
+            saveDissable(false);//+++++++++save Button Is enable function
             dispatch(postGRNSuccess({ Status: false }))
             dispatch(AlertState({
                 Type: 4,
@@ -220,10 +231,13 @@ const GRNAdd = (props) => {
 
     useEffect(() => {
         if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
+            saveDissable(false);//+++++++++Update Button Is enable function
+            setState(() => initialFiledFunc(fileds)) //+++++++++ Clear form values
             history.push({
                 pathname: ORDER_lIST,
             })
         } else if (updateMsg.Status === true && !modalCss) {
+            saveDissable(false);//+++++++++Update Button Is enable function
             dispatch(updateOrderIdSuccess({ Status: false }));
             dispatch(
                 AlertState({
@@ -277,9 +291,10 @@ const GRNAdd = (props) => {
             sort: true,
             formatter: (value, row, k) => {
                 debugger
-                return(
-                <samp className="font-asian">{value}</samp>
-            )},
+                return (
+                    <samp className="font-asian">{value}</samp>
+                )
+            },
             headerStyle: (colum, colIndex) => {
                 return { width: '100px', textAlign: 'center', text: "end" };
             }
@@ -568,7 +583,7 @@ const GRNAdd = (props) => {
 
 
     const saveHandeller = () => {
-        
+
         const itemArr = []
         grnItemList.forEach(i => {
             if ((i.Quantity > 0)) {
@@ -618,7 +633,7 @@ const GRNAdd = (props) => {
             }));
             return
         }
-        
+
         const jsonBody = JSON.stringify({
             GRNDate: grnDate,
             Customer: grnDetail.Customer,
@@ -631,7 +646,8 @@ const GRNAdd = (props) => {
             GRNReferences: grnDetail.GRNReferences
 
         });
-        
+        saveDissable(true);//+++++++++save Button Is dissable function
+
         if (pageMode === "edit") {
             // dispatch(editGRNId(jsonBody, editVal.id))
             console.log("GRNedit", jsonBody)

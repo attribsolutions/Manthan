@@ -20,7 +20,8 @@ import { Tbody, Thead } from "react-super-responsive-table";
 import { Breadcrumb_inputName } from "../../../store/Utilites/Breadcrumb/actions";
 import { MetaTags } from "react-meta-tags";
 import { useHistory } from "react-router-dom";
-import { createdBy } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { createdBy, saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { initialFiledFunc } from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
 
 const AddUser = (props) => {
 
@@ -85,6 +86,15 @@ const AddUser = (props) => {
   const location = { ...history.location }
   const hasShowloction = location.hasOwnProperty("editValue")
   const hasShowModal = props.hasOwnProperty("editValue")
+
+  const fileds = {
+    id: "",
+    Name: "",
+
+}
+
+const [state, setState] = useState(() => initialFiledFunc(fileds))
+
 
   // userAccess useEffect
   useEffect(() => {
@@ -170,7 +180,8 @@ const AddUser = (props) => {
 
     if ((PostAPIResponse.Status === true) && (PostAPIResponse.StatusCode === 200) && !(pageMode === "dropdownAdd")) {
       dispatch(addUserSuccess({ Status: false }))
-      formRef.current.reset();
+      setState(() => initialFiledFunc(fileds)) //+++++++++ Clear form values 
+      saveDissable(false);//+++++++++save Button Is enable function
       setEmployeeSelect('')
       setPartyRoleData('')
       if (pageMode === "other") {
@@ -191,6 +202,7 @@ const AddUser = (props) => {
       }
     }
     else if ((PostAPIResponse.Status === true) && !(pageMode === "dropdownAdd")) {
+      saveDissable(false);//+++++++++save Button Is enable function
       dispatch(addUserSuccess({ Status: false }))
       dispatch(AlertState({
         Type: 4,
@@ -266,7 +278,11 @@ const AddUser = (props) => {
         RedirectPath: false,
         PermissionAction: false,
       }));
+
+      saveDissable(true);//+++++++++save Button Is dissable function
     }
+
+  
     else if (pageMode === 'edit') {
 
       dispatch(updateID(jsonBody, EditData.id));
