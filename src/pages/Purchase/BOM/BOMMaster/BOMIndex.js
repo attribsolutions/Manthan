@@ -188,8 +188,8 @@ const BOMMaster = (props) => {
     useEffect(() => {
 
         if ((updateMsg.Status === true) && (updateMsg.StatusCode === 200) && !(modalCss)) {
-            saveDissable(false);//+++++++++Update Button Is enable function
-            setState(() => initialFiledFunc(fileds)) //+++++++++ Clear form values
+            // saveDissable(false);//+++++++++Update Button Is enable function
+            // setState(() => initialFiledFunc(fileds)) //+++++++++ Clear form values
             history.push({
                 pathname: BIllOf_MATERIALS_LIST,
             })
@@ -203,7 +203,7 @@ const BOMMaster = (props) => {
             }));
         }
         else if (updateMsg.Status === true && !modalCss) {
-            saveDissable(false);//+++++++++Update Button Is enable function
+            // saveDissable(false);//+++++++++Update Button Is enable function
             dispatch(updateBOMListSuccess({ Status: false }));
             dispatch(
                 AlertState({
@@ -221,6 +221,7 @@ const BOMMaster = (props) => {
             comAddPageFieldFunc({ state, setState, fieldArr })// new change
         }
     }, [pageField])
+    
     const ItemDropdown_Options = Items.map((index) => ({
         value: index.id,
         label: index.Name,
@@ -288,7 +289,7 @@ const BOMMaster = (props) => {
             }
 
 
-            saveDissable(true);//+++++++++save Button Is dissable function
+            // saveDissable(true);//+++++++++save Button Is dissable function
 
             if ((pageMode === 'edit') && !mode) {
                 dispatch(updateBOMList(jsonBody, `${EditData.id}/${EditData.Company}`));

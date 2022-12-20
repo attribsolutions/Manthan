@@ -111,9 +111,10 @@ function* GetWorkOrderGenFunc({ filters }) {
 
 // Work Order edit List page
 function* editWorkOrderGenFunc({ id1, pageMode }) {
-
+debugger
   yield put(SpinnerState(true))
   try {
+    debugger
     let response = yield call(WorkOrder_edit_Api, id1);
     response.pageMode = pageMode
     response.Data = response.Data[0];
