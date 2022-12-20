@@ -530,7 +530,7 @@ const PageMaster = (props) => {
       PagePageAccess: Access,
       PageFieldMaster: PageFieldMaster,
     })
-    if ((pageType_DropdownSelect.value === 2) && (PageFieldMaster.length === 0)) {
+    if ((pageType_DropdownSelect.value === 1) && (PageFieldMaster.length === 0)) {
       {
         dispatch(
           AlertState({
@@ -887,7 +887,7 @@ const PageMaster = (props) => {
                                     name="pagePath"
                                     id="pagePathid"
                                     value={EditData.ActualPagePath}
-                                    disabled={pageMode === 'edit' ? true : false}
+                                    // disabled={pageMode === 'edit' ? true : false}
                                     type="text"
                                     placeholder="Please Enter Page Path"
                                     validate={{

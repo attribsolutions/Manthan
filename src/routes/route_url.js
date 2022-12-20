@@ -6,7 +6,6 @@ export const SEARCH_BOX3 = "/SerachBox3"
 
 // *************************** Administration *******************************//
 
-
 export const MODULE = "/ModuleMaster"
 export const MODULE_lIST = "/ModuleList"
 
@@ -82,8 +81,6 @@ export const TERMS_AND_CONDITION_LIST = "/TermsAndCondtionsList"
 export const PARTY_SUB_PARTY = "/PartySubParty"
 export const PARTY_SUB_PARTY_lIST = "/PartySubPartyList"
 
-
-
 export const PARTYITEM = '/PartyItems'
 export const PARTYITEM_LIST = '/PartyItemsList'
 
@@ -103,7 +100,7 @@ export const BIllOf_MATERIALS_LIST = "/BOMList"
 
 export const WORK_ORDER = "/WorkOrder"
 export const WORK_ORDER_LIST = "/WorkOrderList"
-export const WORK_ORDER_ADD_Mode_2 = "/WorkOrder-Add-Mode-2"
+export const WORK_ORDER_ADD_Mode_2 = "/WorkOrder-Add-Mode2"
 
 export const MATERIAL_ISSUE = "/MaterialIssue"
 export const MATERIAL_ISSUE_LIST = "/MaterialIssueList"
