@@ -21,6 +21,7 @@ import {
 import WorkOrder from "./WorkOrder";
 import { getProduction_Mode2 } from "../../../store/Purchase/ProductionRedux/actions";
 import * as url from "../../../routes/route_url"
+import * as pageId from "../../../routes/allPageID"
 
 const WorkOrderList = () => {
 
@@ -62,7 +63,7 @@ const WorkOrderList = () => {
         setpageMode(hasPagePath)
         dispatch(BreadcrumbFilterSize(`${"Work Order Count"} :0`))
         dispatch(commonPageFieldListSuccess(null))
-        dispatch(commonPageFieldList(73))
+        dispatch(commonPageFieldList(pageId.WORK_ORDER))
         goButtonHandler(true)
 
     }, []);
@@ -75,9 +76,9 @@ const WorkOrderList = () => {
 
 
     useEffect(() => {
-        const pageId = 73
+        // const pageId = 73
         let userAcc = userAccess.find((inx) => {
-            return (inx.id === pageId)
+            return (inx.id === pageId.WORK_ORDER)
         })
         if (!(userAcc === undefined)) {
             setUserAccState(userAcc)
@@ -204,7 +205,7 @@ const WorkOrderList = () => {
                             goButnFunc={goButtonHandler}
                             makeBtnFunc={makeBtnFunc}
                             makeBtnShow={true}
-                            makeBtnName={"Make Production"}
+                            makeBtnName={"Make Material Issue"}
                         />
                         : null
                 }
