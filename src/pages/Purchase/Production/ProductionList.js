@@ -4,17 +4,21 @@ import "flatpickr/dist/themes/material_blue.css"
 import Flatpickr from "react-flatpickr";
 import { BreadcrumbFilterSize, commonPageFieldList, commonPageFieldListSuccess, } from "../../../store/actions";
 import PurchaseListPage from "../../../components/Common/ComponentRelatedCommonFile/purchase"
-import { PRODUCTION_LIST, PRODUCTION_MASTER, WORK_ORDER, WORK_ORDER_LIST } from "../../../routes/route_url";
+import { PRODUCTION_LIST, PRODUCTION_MASTER } from "../../../routes/route_url";
 import { Button, Col, FormGroup, Label } from "reactstrap";
 import Breadcrumb from "../../../components/Common/Breadcrumb";
 import { useHistory } from "react-router-dom";
 import { currentDate, excelDownCommonFunc } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import { useMemo } from "react";
-import { updateBOMListSuccess } from "../../../store/Purchase/BOMRedux/action";
-import { deleteWorkOrderId, deleteWorkOrderIdSuccess, editWorkOrderList, getWorkOrderListPage, updateWorkOrderListSuccess } from "../../../store/Purchase/WorkOrder/action";
+
+import {
+    deleteWorkOrderId,
+    deleteWorkOrderIdSuccess,
+    editWorkOrderList,
+    getWorkOrderListPage,
+    updateWorkOrderListSuccess
+} from "../../../store/Purchase/WorkOrder/action";
 import ProductionMaster from "./ProductionMaster";
-import { getProductionListPage } from "../../../store/Purchase/ProductionRedux/actions";
-// import BOMMaster from "../BOMMaster/BOMIndex";
 
 const ProductionList = () => {
     const dispatch = useDispatch();
@@ -34,11 +38,9 @@ const ProductionList = () => {
             productionFilter: state.ProductionReducer.productionFilter,
             userAccess: state.Login.RoleAccessUpdateData,
             pageField: state.CommonPageFieldReducer.pageFieldList,
-  
+
         })
     );
-    // const { userAccess, pageField, tableList, materialIssuelistFilters } = reducers;
-    // const { fromdate, todate } = materialIssuelistFilters
 
     const action = {
         getList: getWorkOrderListPage,
@@ -58,11 +60,14 @@ const ProductionList = () => {
         goButtonHandler(true)
     }, []);
 
+    const { userAccess, pageField, tableList } = reducers;
+
     const downList = useMemo(() => {
         let PageFieldMaster = []
         if (pageField) { PageFieldMaster = pageField.PageFieldMaster; }
         return excelDownCommonFunc({ tableList, PageFieldMaster })
-    }, [tableList])
+    }, [tableList]);
+
     useEffect(() => {
         const pageId = 78
         let userAcc = userAccess.find((inx) => {
@@ -72,6 +77,7 @@ const ProductionList = () => {
             setUserAccState(userAcc)
         }
     }, [userAccess])
+
     const goButtonHandler = (onload = false) => {
         let FromDate
         let ToDate
@@ -83,24 +89,15 @@ const ProductionList = () => {
             FromDate = fromdate;
         }
         const jsonBody = JSON.stringify({
-            
+
             FromDate: FromDate,
             ToDate: ToDate,
         });
         debugger
-        dispatch(getProductionListPage(jsonBody));
-        console.log("go button post json", jsonBody)
+        dispatch(getWorkOrderListPage(jsonBody));
     }
-    function fromdateOnchange(e, date) {
-        let newObj = { ...materialIssuelistFilters }
-        newObj.fromdate = date
-        dispatch(MaterialIssuelistfilters(newObj))
-    }
-    function todateOnchange(e, date) {
-        let newObj = { ...materialIssuelistFilters }
-        newObj.todate = date
-        dispatch(MaterialIssuelistfilters(newObj))
-    }
+
+
 
     return (
         <React.Fragment>
@@ -128,8 +125,8 @@ const ProductionList = () => {
                                             dateFormat: "Y-m-d",
                                             defaultDate: "today"
                                         }}
-                                        onChange={fromdateOnchange}
-                                      
+                                        onChange={(e, date) => { setFromdate(date) }}
+                                        onReady={(e, date) => { setFromdate(date) }}
                                     />
                                 </Col>
                             </FormGroup>
@@ -149,12 +146,14 @@ const ProductionList = () => {
                                             dateFormat: "Y-m-d",
                                             defaultDate: "today"
                                         }}
-                                        onChange={todateOnchange}
+                                        onChange={(e, date) => { setTodate(date) }}
+                                        onReady={(e, date) => { setTodate(date) }}
+
                                     />
                                 </Col>
                             </FormGroup>
                         </Col>
-                        <Col sm="1"className="mx-4 ">
+                        <Col sm="1" className="mx-4 ">
                             <Button type="button" color="btn btn-outline-success border-2 font-size-12 m-3  "
                                 onClick={() => goButtonHandler()}
                             >Go</Button>
@@ -173,6 +172,7 @@ const ProductionList = () => {
                             deleteName={"ItemName"}
                             pageMode={pageMode}
                             goButnFunc={goButtonHandler}
+
                         />
                         : null
                 }

@@ -170,6 +170,9 @@ const BOMList = () => {
                             deleteName={"ItemName"}
                             pageMode={pageMode}
                             goButnFunc={goButtonHandler}
+                            // makeBtnFunc={makeBtnFunc}
+                            // makeBtnShow={true}
+                            // makeBtnName={"Make Production"}
                         />
                         : null
                 }
