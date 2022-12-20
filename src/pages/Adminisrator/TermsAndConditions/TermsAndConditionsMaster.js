@@ -59,8 +59,10 @@ const TermsAndConditionsMaster = (props) => {
     {/** Dyanamic Page access state and OnChange function */ }
 
     const fileds = {
+        id: "",
         Name: "",
-        id: ""
+        IsDefault:""
+
     }
     const [state, setState] = useState(() => initialFiledFunc(fileds))
     const values = { ...state.values }
@@ -182,6 +184,7 @@ const TermsAndConditionsMaster = (props) => {
         if (formValid(state, setState)) {
             const jsonBody = JSON.stringify({
                 Name: values.Name,
+                IsDefault:values.IsDefault
             });
             saveDissable(true);//+++++++++save Button Is dissable function
             if (pageMode === "edit") {
@@ -239,7 +242,29 @@ const TermsAndConditionsMaster = (props) => {
                                                                 <span className="invalid-feedback">{isError.Name}</span>
                                                             )}
                                                         </FormGroup>
+                                                        <Row>
+                                                            <FormGroup className="mb-2 col col-sm-3">
+                                                                <Row className="justify-content-md-left">
+                                                                    <Label className="col-sm-4 col-form-label" >{fieldLabel.IsDefault}</Label>
+                                                                    <Col md={2} style={{ marginTop: '9px', marginLeft: "1cm" }} >
 
+                                                                        <div className="form-check form-switch form-switch-md mb-3" >
+                                                                            <Input type="checkbox" className="form-check-input"
+                                                                                checked={values.IsDefault}
+                                                                                name="IsDefault"
+                                                                                onChange={(e) => {
+                                                                                    setState((i) => {
+                                                                                        const a = { ...i }
+                                                                                        a.values.IsDefault = e.target.checked;
+                                                                                        return a
+                                                                                    })
+                                                                                }}
+                                                                            />
+                                                                        </div>
+                                                                    </Col>
+                                                                </Row>
+                                                            </FormGroup>
+                                                        </Row>
                                                         <FormGroup className="mt-2">
                                                             <Row>
                                                                 <Col sm={2}>
