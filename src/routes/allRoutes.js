@@ -98,6 +98,7 @@ import MaterialIssueMaster from "../pages/Purchase/Material_Issue/Material_Issue
 import MaterialIssueList from "../pages/Purchase/Material_Issue/Material_Issue_List";
 
 import ProductionMaster from "../pages/Purchase/Production/ProductionMaster";
+import ProductionList from "../pages/Purchase/Production/ProductionList";
 
 
 const userRoutes = [
@@ -207,6 +208,9 @@ const userRoutes = [
   { path: path.MATERIAL_ISSUE_LIST, component: MaterialIssueList },
 
   { path: path.PRODUCTION_MASTER, component: ProductionMaster },
+  { path: path.PRODUCTION_LIST, component: ProductionList },
+
+
 
   // ************************************ Utility **************************************//
   { path: path.SEARCH_BOX2, component: SearchBoxSecond },

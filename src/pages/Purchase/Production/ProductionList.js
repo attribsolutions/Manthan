@@ -4,7 +4,7 @@ import "flatpickr/dist/themes/material_blue.css"
 import Flatpickr from "react-flatpickr";
 import { BreadcrumbFilterSize, commonPageFieldList, commonPageFieldListSuccess, } from "../../../store/actions";
 import PurchaseListPage from "../../../components/Common/ComponentRelatedCommonFile/purchase"
-import { WORK_ORDER, WORK_ORDER_LIST } from "../../../routes/route_url";
+import { PRODUCTION_LIST, PRODUCTION_MASTER, WORK_ORDER, WORK_ORDER_LIST } from "../../../routes/route_url";
 import { Button, Col, FormGroup, Label } from "reactstrap";
 import Breadcrumb from "../../../components/Common/Breadcrumb";
 import { useHistory } from "react-router-dom";
@@ -12,29 +12,28 @@ import { currentDate, excelDownCommonFunc } from "../../../components/Common/Com
 import { useMemo } from "react";
 import { updateBOMListSuccess } from "../../../store/Purchase/BOMRedux/action";
 import { deleteWorkOrderId, deleteWorkOrderIdSuccess, editWorkOrderList, getWorkOrderListPage, updateWorkOrderListSuccess } from "../../../store/Purchase/WorkOrder/action";
-import WorkOrder from "./WorkOrder";
+import ProductionMaster from "./ProductionMaster";
 // import BOMMaster from "../BOMMaster/BOMIndex";
 
-const WorkOrderList = () => {
-
+const ProductionList = () => {
     const dispatch = useDispatch();
     const history = useHistory();
-
     const hasPagePath = history.location.pathname
-
-    const [pageMode, setpageMode] = useState(WORK_ORDER_LIST)
+    const [pageMode, setpageMode] = useState(PRODUCTION_LIST)
     const [userAccState, setUserAccState] = useState('');
     const [fromdate, setFromdate] = useState();
     const [todate, setTodate] = useState();
     const reducers = useSelector(
         (state) => ({
-            tableList: state.WorkOrderReducer.WorkOrderList,
+            tableList: state.ProductionReducer.ProductionList,
             deleteMsg: state.WorkOrderReducer.deleteMsg,
             updateMsg: state.WorkOrderReducer.updateMsg,
             postMsg: state.OrderReducer.postMsg,
             editData: state.WorkOrderReducer.editData,
+            productionFilter: state.ProductionReducer.productionFilter,
             userAccess: state.Login.RoleAccessUpdateData,
             pageField: state.CommonPageFieldReducer.pageFieldList,
+            
         })
     );
 
@@ -52,22 +51,18 @@ const WorkOrderList = () => {
         setpageMode(hasPagePath)
         dispatch(BreadcrumbFilterSize(`${"Work Order Count"} :0`))
         dispatch(commonPageFieldListSuccess(null))
-        dispatch(commonPageFieldList(73))
+        dispatch(commonPageFieldList(78))
         goButtonHandler(true)
-
     }, []);
 
     const { userAccess, pageField, tableList } = reducers;
-
     const downList = useMemo(() => {
         let PageFieldMaster = []
         if (pageField) { PageFieldMaster = pageField.PageFieldMaster; }
         return excelDownCommonFunc({ tableList, PageFieldMaster })
     }, [tableList])
-
-
     useEffect(() => {
-        const pageId = 73
+        const pageId = 78
         let userAcc = userAccess.find((inx) => {
             return (inx.id === pageId)
         })
@@ -75,12 +70,10 @@ const WorkOrderList = () => {
             setUserAccState(userAcc)
         }
     }, [userAccess])
-
     const goButtonHandler = (onload = false) => {
         debugger
         let FromDate
         let ToDate
-
         if (onload) {
             FromDate = currentDate;
             ToDate = currentDate;
@@ -88,16 +81,15 @@ const WorkOrderList = () => {
             ToDate = todate;
             FromDate = fromdate;
         }
-
         const jsonBody = JSON.stringify({
+            
             FromDate: FromDate,
             ToDate: ToDate,
-            // Company: userCompany(),
         });
+        debugger
         dispatch(getWorkOrderListPage(jsonBody));
         console.log("go button post json", jsonBody)
     }
-
     return (
         <React.Fragment>
             <div className="page-content">
@@ -107,7 +99,6 @@ const WorkOrderList = () => {
                     showCount={true}
                     excelBtnView={true}
                     excelData={downList} />
-
                 <div className="px-2 mt-n1  c_card_header" style={{ marginBottom: "-12px" }} >
                     <div className="mt-1  row" >
                         <Col sm="5" >
@@ -124,7 +115,6 @@ const WorkOrderList = () => {
                                             altFormat: "d-m-Y",
                                             dateFormat: "Y-m-d",
                                             defaultDate: "today"
-
                                         }}
                                         onChange={(e, date) => { setFromdate(date) }}
                                         onReady={(e, date) => { setFromdate(date) }}
@@ -154,7 +144,6 @@ const WorkOrderList = () => {
                                 </Col>
                             </FormGroup>
                         </Col>
-
                         <Col sm="1"className="mx-4 ">
                             <Button type="button" color="btn btn-outline-success border-2 font-size-12 m-3  "
                                 onClick={() => goButtonHandler()}
@@ -168,8 +157,8 @@ const WorkOrderList = () => {
                             action={action}
                             reducers={reducers}
                             showBreadcrumb={false}
-                            MasterModal={WorkOrder}
-                            masterPath={WORK_ORDER}
+                            MasterModal={ProductionMaster}
+                            masterPath={PRODUCTION_MASTER}
                             ButtonMsgLable={"Work Order"}
                             deleteName={"ItemName"}
                             pageMode={pageMode}
@@ -178,10 +167,7 @@ const WorkOrderList = () => {
                         : null
                 }
             </div>
-
-
         </React.Fragment>
     )
 }
-
-export default WorkOrderList;
+export default ProductionList;

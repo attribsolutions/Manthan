@@ -18,10 +18,10 @@ const INIT_STATE = {
   editData: { Status: false, Items: [] },
   updateMsg: { Status: false },
   deleteMsg: { Status: false },
-  GRNList: [],
+  ProductionList: [],
   grnItemList: [],
   GRNitem: { Status: false, Data: [], },
-  grnlistFilter: { fromdate: currentDate, todate: currentDate, supplierSelect: '' }
+  productionFilter: { fromdate: currentDate, todate: currentDate }
 }
 
 const ProductionReducer = (state = INIT_STATE, action) => {
@@ -30,7 +30,7 @@ const ProductionReducer = (state = INIT_STATE, action) => {
     case SET_PRODUCTION_LIST_FILTERS:
       return {
         ...state,
-        grnlistFilter: action.payload,
+        productionFilter: action.payload,
       }
 
     case GET_PRODUCTION_ITEM_MODE_2_SUCCESS:
@@ -47,7 +47,7 @@ const ProductionReducer = (state = INIT_STATE, action) => {
     case GET_PRODUCTION_LIST_PAGE_SUCCESS:
       return {
         ...state,
-        GRNList: action.payload,
+        ProductionList : action.payload,
       }
     case POST_PRODUCTION_FROM_PRODUCTION_PAGE_SUCCESS:
       return {

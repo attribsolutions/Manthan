@@ -394,10 +394,7 @@ export const Material_Issue_Get_API = (filters) => post(url.POST_API_FOR_MATERIA
 
 // Production 
 export const Production_Post_API = (data) => post(url.GO_BUTTON_POST_API_FOR_PRODUCTION,data)// go button postapi
-
-
-
-
+// export const Production_Get_API = () => get(url.GO_BUTTON_POST_API_FOR_PRODUCTION)// go button postapi
 export {
   getLoggedInUser,
   isUserAuthenticated,
