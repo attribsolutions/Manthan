@@ -6,86 +6,87 @@ export const SEARCH_BOX3 = "/SerachBox3"
 
 // *************************** Administration *******************************//
 
-export const MODULE = "/ModuleMaster"
-export const MODULE_lIST = "/ModuleList"
+export const MODULE = 5
+export const MODULE_lIST = 6
 
-export const COMPANY = "/CompanyMaster"
-export const COMPANY_lIST = "/CompanyList"
+export const COMPANY = 1
+export const COMPANY_lIST = 2
 
-export const USER = "/UserMaster"
-export const USER_lIST = "/UserList"
+export const USER = 13
+export const USER_lIST = 14
 
 
-export const ROLE = "/RoleMaster"
-export const ROLE_lIST = "/RoleList"
+export const ROLE = 19
+export const ROLE_lIST = 20
 
-export const ROLEACCESS = "/RoleAccess"
-export const ROLEACCESS_lIST = "/RoleAccessList"
+export const ROLEACCESS = 9
+export const ROLEACCESS_lIST = 10
 export const COPY_ROLEACCESS = "/RoleAccessCopyFunctionality"
 
 // *************************** Master Module **********************************//
 
-export const ITEM = "/ItemMaster"
-export const ITEM_lIST = "/ItemList"
+export const ITEM = 25
+export const ITEM_lIST = 26
 
-export const GST = "/GSTMaster"
-export const GST_LIST = "/GSTList"
+export const GST = 48
+export const GST_LIST = 49
 
-export const COMPANYGROUP = "/CompanyGroupMaster"
-export const COMPANYGROUP_lIST = "/CompanyGroupList"
+export const COMPANYGROUP = 3
+export const COMPANYGROUP_lIST = 4
 
-export const EMPLOYEE = "/EmployeeMaster"
-export const EMPLOYEE_lIST = "/EmployeeList"
+export const EMPLOYEE = 11
+export const EMPLOYEE_lIST = 12
 
-export const EMPLOYEETYPE = "/EmployeeType"
-export const EMPLOYEETYPE_lIST = "/EmployeeTypeList"
+export const EMPLOYEETYPE = 46
+export const EMPLOYEETYPE_lIST = 47
 
-export const CATEGORYTYPE = "/CategoryTypeMaster"
-export const CATEGORYTYPE_lIST = "/CategoryTypeList"
+export const CATEGORYTYPE = 21
+export const CATEGORYTYPE_lIST = 22
 
-export const DRIVER = "/DriverMaster"
-export const DRIVER_lIST = "/DriverList"
+export const DRIVER = 33
+export const DRIVER_lIST = 34
 
-export const PARTY = "/PartyMaster"
-export const PARTY_lIST = "/PartyList"
+export const PARTY = 57
+export const PARTY_lIST = 18
 
-export const PARTYTYPE = "/PartyType"
-export const PARTYTYPE_lIST = "/PartyTypeList"
+export const PARTYTYPE = 31
+export const PARTYTYPE_lIST = 32
 
-export const CATEGORY = "/CategoryMaster"
-export const CATEGORY_lIST = "/CategoryList"
+export const CATEGORY = 23
+export const CATEGORY_lIST = 24
 
-export const VEHICLE = "/VehicleMaster"
-export const VEHICLE_lIST = "/VehicleList"
+export const VEHICLE = 29
+export const VEHICLE_lIST = 30
 
-export const GROUPTYPE = "/GroupTypeMaster"
-export const GROUPTYPE_lIST = "/GroupTypeList"
+export const GROUPTYPE = 44
+export const GROUPTYPE_lIST = 45
 
-export const GROUP = "/GroupMaster"
-export const GROUP_lIST = "/GroupList"
+export const GROUP = 50
+export const GROUP_lIST = 51
 
-export const PRICE = "/PriceMaster"
-export const PRICE_lIST = "/PriceList"
+export const PRICE = 35
+export const PRICE_lIST = 37
 
-export const MRP = "/MRPMaster"
-export const MRP_lIST = "/MRPList"
+export const MRP = 38
+export const MRP_lIST = 39
 
-export const MARGIN = "/MarginMaster"
-export const MARGIN_lIST = "/MarginList"
+export const MARGIN = 40
+export const MARGIN_lIST = 41
 
-export const PAGE = "/PageMaster"
-export const PAGE_lIST = "/PageList"
+export const PAGE = 7
+export const PAGE_lIST = 8
 
-export const TERMS_AND_CONDITION = "/TermsAndCondtionsMaster"
-export const TERMS_AND_CONDITION_LIST = "/TermsAndCondtionsList"
-export const PARTY_SUB_PARTY = "/PartySubParty"
-export const PARTY_SUB_PARTY_lIST = "/PartySubPartyList"
+export const TERMS_AND_CONDITION = 42
+export const TERMS_AND_CONDITION_LIST = 43
 
-export const PARTYITEM = '/PartyItems'
-export const PARTYITEM_LIST = '/PartyItemsList'
+export const PARTY_SUB_PARTY = 52
+export const PARTY_SUB_PARTY_lIST = 58
 
-export const SUBGROUP = "/SubGroupMaster"
-export const SUBGROUP_LIST = "/SubGroupList"
+export const PARTYITEM = 36
+export const PARTYITEM_LIST = 62
+
+export const SUBGROUP = 61
+export const SUBGROUP_LIST = 63
 
 //******************************* Purchase Module ************************************//
 export const ORDER = 53

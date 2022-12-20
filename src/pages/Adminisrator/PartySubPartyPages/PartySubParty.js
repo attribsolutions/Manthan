@@ -164,27 +164,6 @@ const PartySubParty = (props) => {
     }, [pageField])
 
 
-    useEffect(() => {
-        if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
-            saveDissable(false);//+++++++++Update Button Is enable function
-            setState(() => initialFiledFunc(fileds)) //+++++++++ Clear form values
-            history.push({
-                pathname: PARTY_SUB_PARTY_lIST,
-            })
-        } else if (updateMsg.Status === true && !modalCss) {
-            saveDissable(false);//+++++++++Update Button Is enable function
-            dispatch(updatePartySubPartySuccess({ Status: false }));
-            dispatch(
-                AlertState({
-                    Type: 3,
-                    Status: true,
-                    Message: JSON.stringify(updateMsg.Message),
-                })
-            );
-        }
-    }, [updateMsg, modalCss]);
-
-
 
     useEffect(() => {
 
@@ -220,6 +199,27 @@ const PartySubParty = (props) => {
             }));
         }
     }, [postMsg])
+
+
+    useEffect(() => {
+        if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
+            saveDissable(false);//+++++++++Update Button Is enable function
+            setState(() => initialFiledFunc(fileds)) //+++++++++ Clear form values
+            history.push({
+                pathname: PARTY_SUB_PARTY_lIST,
+            })
+        } else if (updateMsg.Status === true && !modalCss) {
+            saveDissable(false);//+++++++++Update Button Is enable function
+            dispatch(updatePartySubPartySuccess({ Status: false }));
+            dispatch(
+                AlertState({
+                    Type: 3,
+                    Status: true,
+                    Message: JSON.stringify(updateMsg.Message),
+                })
+            );
+        }
+    }, [updateMsg, modalCss]);
 
 
     //get method for dropdown

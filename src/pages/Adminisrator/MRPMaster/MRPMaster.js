@@ -38,7 +38,8 @@ import {
     postMRPMasterData, postMRPMasterDataSuccess
 } from "../../../store/Administrator/MRPMasterRedux/action";
 import { MRP_lIST } from "../../../routes/route_url";
-import { createdBy, userCompany } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { createdBy, saveDissable, userCompany } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { initialFiledFunc } from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
 
 
 const MRPMaster = (props) => {
@@ -74,6 +75,14 @@ const MRPMaster = (props) => {
     console.log("Go button List Data", TableData)
     const location = { ...history.location }
     const hasShowModal = props.hasOwnProperty("editValue")
+
+    const fileds = {
+        id: "",
+        Name: "",
+
+    }
+
+    const [state, setState] = useState(() => initialFiledFunc(fileds))
 
     // userAccess useEffect
     useEffect(() => {
@@ -135,7 +144,8 @@ const MRPMaster = (props) => {
 
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200) && !(pageMode === "dropdownAdd")) {
             dispatch(postMRPMasterDataSuccess({ Status: false }))
-            formRef.current.reset();
+            setState(() => initialFiledFunc(fileds)) //+++++++++ Clear form values 
+            saveDissable(false);//+++++++++save Button Is enable function
             setDivision_dropdown_Select('')
             setEffectiveDate('')
             setParty_dropdown_Select('')
@@ -158,6 +168,7 @@ const MRPMaster = (props) => {
         }
 
         else if (postMsg.Status === true) {
+            saveDissable(false);//+++++++++save Button Is enable function
             dispatch(postMRPMasterDataSuccess({ Status: false }))
             dispatch(AlertState({
                 Type: 4,
@@ -216,7 +227,7 @@ const MRPMaster = (props) => {
         setEffectiveDate(date)
     }
 
-    const MRPHandler = (e,user) => {
+    const MRPHandler = (e, user) => {
 
         user["MRP"] = e.target.value
     }
@@ -273,7 +284,7 @@ const MRPMaster = (props) => {
             text: "Current MRP",
             dataField: "CurrentMRP",
             sort: true,
-            formatter: (cellContent,user) => (
+            formatter: (cellContent, user) => (
                 <>
                     <div style={{ justifyContent: 'center' }} >
 
@@ -285,7 +296,7 @@ const MRPMaster = (props) => {
                                     disabled={true}
                                     defaultValue={cellContent}
                                     className="col col-sm text-center"
-                                    onChange={(e) => CurrentMRPHandler(e,user)}
+                                    onChange={(e) => CurrentMRPHandler(e, user)}
                                 />
                             </FormGroup>
                         </Col>
@@ -315,9 +326,9 @@ const MRPMaster = (props) => {
             text: "MRP ",
             dataField: "MRP",
             sort: true,
-           
-            formatter: (cellContent,user) => {
-                
+
+            formatter: (cellContent, user) => {
+
                 if (((cellContent > 0) && (user["mrp"] === undefined) || user.mrp)) {
                     user["mrp"] = true
                 } else {
@@ -333,7 +344,7 @@ const MRPMaster = (props) => {
                                     defaultValue={cellContent}
                                     disabled={user.mrp}
                                     className="col col-sm text-center"
-                                    onChange={(e) => MRPHandler(e,user)}
+                                    onChange={(e) => MRPHandler(e, user)}
                                 />
                             </FormGroup>
                         </Col>
@@ -392,6 +403,7 @@ const MRPMaster = (props) => {
         const Find = ItemData.filter((index) => {
             return (!(index.MRP === '') && (index.id === ''))
         })
+        saveDissable(true);//+++++++++save Button Is dissable function
 
         const jsonBody = JSON.stringify(Find)
         dispatch(postMRPMasterData(jsonBody));
