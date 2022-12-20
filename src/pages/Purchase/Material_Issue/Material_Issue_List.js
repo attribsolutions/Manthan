@@ -8,13 +8,13 @@ import { MATERIAL_ISSUE, MATERIAL_ISSUE_LIST, } from "../../../routes/route_url"
 import { Button, Col, FormGroup, Label } from "reactstrap";
 import Breadcrumb from "../../../components/Common/Breadcrumb";
 import { useHistory } from "react-router-dom";
-import { currentDate, excelDownCommonFunc } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { excelDownCommonFunc } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import { useMemo } from "react";
 import { deleteWorkOrderId, deleteWorkOrderIdSuccess, editWorkOrderList, updateWorkOrderListSuccess } from "../../../store/Purchase/WorkOrder/action";
 import MaterialIssueMaster from "./Material_IssueMaster";
 import { getMaterialIssueListPage, MaterialIssuelistfilters } from "../../../store/Purchase/Matrial_Issue/action";
 import * as url from "../../../routes/route_url"
-import { getGRN_itemMode2 } from "../../../store/Purchase/GRNRedux/actions";
+import * as pageId from "../../../routes/allPageID"
 import { getProduction_Mode2 } from "../../../store/Purchase/ProductionRedux/actions";
 
 const MaterialIssueList = () => {
@@ -57,7 +57,7 @@ const MaterialIssueList = () => {
         setpageMode(hasPagePath)
         dispatch(BreadcrumbFilterSize(`${"Material Issue Count"} :0`))
         dispatch(commonPageFieldListSuccess(null))
-        dispatch(commonPageFieldList(76))
+        dispatch(commonPageFieldList(pageId.BIllOf_MATERIALS_LIST))
         goButtonHandler(true)
 
     }, []);
@@ -70,23 +70,23 @@ const MaterialIssueList = () => {
 
 
     useEffect(() => {
-        const pageId = 76
+    
         let userAcc = userAccess.find((inx) => {
-            return (inx.id === pageId)
+            return (inx.id === pageId.BIllOf_MATERIALS_LIST)
         })
         if (!(userAcc === undefined)) {
             setUserAccState(userAcc)
         }
     }, [userAccess])
 
-    useEffect(() => {
-        if (produtionMake.Status === true && produtionMake.StatusCode === 200) {
-            history.push({
-                pathname: produtionMake.path,
-                pageMode: produtionMake.pageMode,
-            })
-        }
-    }, [produtionMake])
+    // useEffect(() => {
+    //     if (produtionMake.Status === true && produtionMake.StatusCode === 200) {
+    //         history.push({
+    //             pathname: produtionMake.path,
+    //             pageMode: produtionMake.pageMode,
+    //         })
+    //     }
+    // }, [produtionMake])
 
     const makeBtnFunc = (list = []) => {
         debugger
