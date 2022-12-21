@@ -41,6 +41,7 @@ import { SaveButton } from "../../../components/Common/ComponentRelatedCommonFil
 import { PARTYITEM_LIST } from "../../../routes/route_url";
 import { comAddPageFieldFunc, formValid, initialFiledFunc, onChangeSelect, resetFunction } from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
 import { saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import * as url from "../../../routes/route_url";
 
 
 
@@ -52,6 +53,7 @@ const PartyItems = (props) => {
     const [modalCss, setModalCss] = useState(false);
     const [supplierSelect, setSupplierSelect] = useState('');
     const [userAccState, setUserPageAccessState] = useState("");
+    const [itemArr, setitemArr] = useState([]);
 
     // get method for dropdown
     useEffect(() => {
@@ -81,6 +83,7 @@ const PartyItems = (props) => {
     const location = { ...history.location }
     const hasShowloction = location.hasOwnProperty("editValue")
     const hasShowModal = props.hasOwnProperty("editValue")
+    const hasDropMode = props.hasOwnProperty("dropMode")
 
 
     //Access redux store Data /  'save_ModuleSuccess' action data
@@ -95,8 +98,8 @@ const PartyItems = (props) => {
 
             postMsg: state.PartyItemsReducer.postMsg,
             updateMsg: state.PartyItemsReducer.updateMsg,
-            partyItem: state.PartyItemsReducer.partyItem,
-            tableList: state.GroupReducer.groupList,
+            tableList: state.PartyItemsReducer.partyItem,
+
             supplier: state.PartyItemsReducer.supplier,
             userAccess: state.Login.RoleAccessUpdateData,
             pageField: state.CommonPageFieldReducer.pageField
@@ -107,7 +110,9 @@ const PartyItems = (props) => {
         dispatch(getGroupList());
     }, []);
 
-
+    useEffect(() => {
+        setitemArr(tableList)
+    }, [tableList]);
 
     // userAccess useEffect
     useEffect(() => {
@@ -116,7 +121,11 @@ const PartyItems = (props) => {
 
         if (hasShowModal) {
             locationPath = props.masterPath;
+        }
+        else if (hasDropMode) {
+            locationPath = props.masterPath;
         };
+
 
         userAcc = userAccess.find((inx) => {
             return (`/${inx.ActualPagePath}` === locationPath)
@@ -143,7 +152,10 @@ const PartyItems = (props) => {
                 hasEditVal = props.editValue
                 setPageMode(props.pageMode)
                 setModalCss(true)
-            }
+            } else if (hasDropMode) {
+                setModalCss(true)
+                hasEditVal = props.editValue
+            };
 
             if (hasEditVal) {
 
@@ -154,10 +166,10 @@ const PartyItems = (props) => {
 
 
                 values.id = id
-                values.SupplierName = { label: SupplierName, value: SupplierName };
-
+                values.SupplierName = SupplierName;
                 setState({ values, fieldLabel, hasValid, required, isError })
                 dispatch(Breadcrumb_inputName(hasEditVal.SupplierName))
+                dispatch(getpartyItemList(SupplierName.value))
 
             }
             dispatch(editGroupIDSuccess({ Status: false }))
@@ -167,9 +179,14 @@ const PartyItems = (props) => {
 
     useEffect(() => {
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
+
             dispatch(PostPartyItemsSuccess({ Status: false }))
             setState(() => resetFunction(fileds, state))// Clear form values 
             saveDissable(false);//+++++++++save Button Is enable function
+            if (hasDropMode) {
+                props.isOpenModal(false)
+            }
+            dispatch(PostPartyItemsSuccess({ Status: false }))
             dispatch(getPartyItemListSuccess([]))
             dispatch(Breadcrumb_inputName(''))
 
@@ -177,7 +194,7 @@ const PartyItems = (props) => {
                 Type: 1,
                 Status: true,
                 Message: postMsg.Message,
-                RedirectPath: false,
+                RedirectPath: hasDropMode ? url.ORDER : false,
             }))
 
         } else if
@@ -197,6 +214,7 @@ const PartyItems = (props) => {
 
     useEffect(() => {
         if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
+
             saveDissable(false);//+++++++++Update Button Is enable function
             setState(() => resetFunction(fileds, state))// Clear form values 
             history.push({
@@ -245,29 +263,23 @@ const PartyItems = (props) => {
             text: "SelectAll",
             dataField: "itemCheck",
             sort: true,
-            mode: 'checkbox',
-            clickToSelect: true,
-            headerColumnStyle: {
-                lable: 'SelectAll'
-            },
-
-
-            // formatter: (cellContent, row,i) => {
-            //     return (
-            //         <button
-            //             className="btn btn-danger btn-xs"
-            //             onClick={() => handleDelete(row.id,i)}
-            //         >
-            //             Add
-            //         </button>
-            //     );
-            // },
-
             formatter: (cellContent, row, col, k) => (
                 <span >
                     <Input type="checkbox"
                         defaultChecked={cellContent}
-                        onChange={e => row.itemCheck = e.target.checked}
+                        key={cellContent}
+                        onChange={e => {
+                            setitemArr(ele => {
+                                var newrr = ele.map(i => {
+                                    if (row.id === i.id) {
+                                        i.itemCheck = !i.itemCheck;
+                                    }
+                                    return i
+                                });
+                                return newrr
+                            })
+
+                        }}
                     />
 
                 </span>
@@ -277,48 +289,6 @@ const PartyItems = (props) => {
 
         }
     ];
-    // const handleDelete = (i) => {
-    //         var Index = i + 1
-    //         document.getElementById("BootstrapTable")
-    //         $table.bootstrapTable('insertRow', {
-    //           index: 1,
-    //           row: {
-    //             name: 'Item ' + Index,
-    //             price: '$' + Index
-    //           }
-    //         // })
-    //     //   } )
-    //     })
-
-    // };
-
-    // const selectRow = {
-
-    //     mode: 'checkbox',
-    //     clickToSelect: true,
-    //     text: "Action",
-    //     dataField: "itemCheck",
-    //     sort: true,
-    //     selectColumnPosition: 'right',
-    //     // headerColumnStyle: {
-    //     //     lable:'SelectAll'
-    //     //   },
-
-    //     formatter: (cellContent, row, col,k) => (
-    //         <span >
-    //             <Input type="checkbox"
-    //                 defaultChecked={cellContent}
-    //                 onChange={e => row.itemCheck = e.target.checked}
-    //             />
-
-    //         </span>
-
-
-    //     ),
-
-
-    // }
-
 
 
     const pageOptions = {
@@ -335,37 +305,37 @@ const PartyItems = (props) => {
             return
         }
 
-        if (partyItem.length > 0) {
+        if (tableList.length > 0) {
             if (window.confirm("Refresh  Item...!")) {
                 dispatch(getPartyItemListSuccess([]))
             } else {
-
-
                 return
             }
         }
         dispatch(getpartyItemList(supplier))
-        // dispatch(getItemList(ItemList))
+
     };
 
 
     const SubmitHandler = (event) => {
-
-        const Find = partyItem.filter((index) => {
+        debugger
+        const Find = itemArr.filter((index) => {
             return (index.itemCheck === true)
         })
+
         var PartyData = Find.map((index) => ({
             Item: index.id,
-            Party: supplierSelect.value
+            Party: values.SupplierName.value
 
         }))
-        const jsonBody = JSON.stringify(Find, PartyData)
-        dispatch(PostPartyItems(PartyData));
 
         saveDissable(true);//+++++++++save Button Is dissable function
+        const jsonBody = JSON.stringify(PartyData)
+        dispatch(PostPartyItems(jsonBody));
+
     };
 
-   
+
 
 
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
@@ -384,7 +354,7 @@ const PartyItems = (props) => {
                         <Breadcrumb
                             pageHeading={userAccState.PageHeading}
                             newBtnView={false}
-                            showCount={true}
+                            showCount={hasDropMode ? false : true}
                             excelBtnView={false}
                         />
 
@@ -445,7 +415,7 @@ const PartyItems = (props) => {
                                         <ToolkitProvider
 
                                             keyField="id"
-                                            data={partyItem}
+                                            data={tableList}
                                             columns={tableColumns}
 
                                             search

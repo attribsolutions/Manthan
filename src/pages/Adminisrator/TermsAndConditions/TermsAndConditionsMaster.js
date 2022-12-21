@@ -109,11 +109,16 @@ const TermsAndConditionsMaster = (props) => {
             }
             if (hasEditVal) {
                
-                const { id, Name } = hasEditVal
+                const { id, Name ,IsDefault} = hasEditVal
                 const { values, fieldLabel, hasValid, required, isError } = { ...state }
-                values.Name = Name;
+
                 values.id = id
+                values.Name = Name;
+                values.IsDefault = IsDefault;
+
                 hasValid.Name.valid = true;
+                hasValid.IsDefault.valid = true;
+
                 setState({ values, fieldLabel, hasValid, required, isError })
                 dispatch(Breadcrumb_inputName(hasEditVal.Name))
                 seteditCreatedBy(hasEditVal.CreatedBy)

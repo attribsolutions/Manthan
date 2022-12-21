@@ -8,6 +8,7 @@ import {
   POST_ORDER_FROM_ORDER_PAGE_SUCCESS,
   GET_ORDER_LIST_PAGE_SUCCESS,
   ORDER_LIST_FILTERS,
+  ORDER_ADD_FILTERS,
 } from "./actionType"
 
 // const date = currentDate;
@@ -19,12 +20,19 @@ const INIT_STATE = {
   updateMsg: { Status: false },
   deleteMsg: { Status: false },
   orderList: [],
-  orderlistFilter: { fromdate: currentDate, todate: currentDate, supplierSelect: ''}
-
+  orderlistFilter: { fromdate: currentDate, todate: currentDate, supplierSelect: ''},
+  orderAddFilter: { orderdate: currentDate,  supplierSelect: ''}
+  
 }
 
 const OrderReducer = (state = INIT_STATE, action) => {
   switch (action.type) {
+
+    case ORDER_ADD_FILTERS:
+      return {
+        ...state,
+        orderAddFilter: action.payload,
+      }
 
     case ORDER_LIST_FILTERS:
       return {

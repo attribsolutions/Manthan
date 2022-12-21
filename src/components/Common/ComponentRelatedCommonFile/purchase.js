@@ -289,7 +289,7 @@ const PurchaseListPage = (props) => {
 
         // ======================== for GRNMode2 Page Action Button ================================
 
-        if ((makeBtnShow) && (fileds.length - 1 === k)) {
+       else if ((makeBtnShow) && (fileds.length - 1 === k)) {
 
             columns.push({
                 text: "Select",

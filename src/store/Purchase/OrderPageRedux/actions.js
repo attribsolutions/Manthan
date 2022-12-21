@@ -15,11 +15,15 @@ import {
   POST_ORDER_FROM_ORDER_PAGE,
   GET_ORDER_LIST_PAGE,
   GET_ORDER_LIST_PAGE_SUCCESS,
-  ORDER_LIST_FILTERS
+  ORDER_LIST_FILTERS,
+  ORDER_ADD_FILTERS
 } from './actionType'
 
 
-
+export const orderAddfilters = filter => ({
+  type: ORDER_ADD_FILTERS,
+  payload: filter,
+})
 export const orderlistfilters = filter => ({
   type: ORDER_LIST_FILTERS,
   payload: filter,

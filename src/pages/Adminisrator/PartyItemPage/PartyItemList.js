@@ -10,12 +10,12 @@ import {
   postGroupSuccess,
   updategroupIDSuccess,
 } from "../../../store/actions";
-import { PARTYITEM_LIST } from "../../../routes/route_url";
 import PartyItems from "./PartyItems";
 import { GetPartyList } from "../../../store/Administrator/PartyItemsRedux/action";
-
+import * as pageId from "../../../routes/allPageID";
+import * as url from "../../../routes/route_url";
 const PartyItemsList = (props) => {
-  debugger
+
   const dispatch = useDispatch();
   const reducers = useSelector(
     (state) => ({
@@ -30,7 +30,7 @@ const PartyItemsList = (props) => {
   );
 
   const action = {
-    getList:GetPartyList,
+    getList: GetPartyList,
     editId: editGroupID,
     deleteId: delete_GroupList_ID,
     postSucc: postGroupSuccess,
@@ -40,10 +40,10 @@ const PartyItemsList = (props) => {
   }
   useEffect(() => {
     dispatch(commonPageFieldListSuccess(null))
-    dispatch(commonPageFieldList(62))
+    dispatch(commonPageFieldList(pageId.PARTYITEM_LIST))
     dispatch(GetPartyList());
-    
-    
+
+
 
   }, []);
 
@@ -57,10 +57,10 @@ const PartyItemsList = (props) => {
             action={action}
             reducers={reducers}
             MasterModal={PartyItems}
-            masterPath={PARTYITEM_LIST}
+            masterPath={url.PARTYITEM_LIST}
             ButtonMsgLable={"Group"}
             deleteName={"Name"}
-          
+
           />
           : null
       }
