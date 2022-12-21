@@ -34,21 +34,36 @@ import {
 import { SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
 import { createdBy, saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 
-
 const AddEmployee = (props) => {
 
   const dispatch = useDispatch();
   const history = useHistory()
+
+  const fileds = {
+    id: "",
+    Name: "",
+    Address: "",
+    Mobile: "",
+    email: "",
+    DOB: "",
+    PAN: "",
+    AadharNo: "",
+    working_hours: "",
+    CompanyName: "",
+    DesignationName: "",
+    EmployeeTypeName: "",
+    StateName: "",
+    DistrictName: "",
+    EmployeeParties: []
+  }
+
+  const [state, setState] = useState(() => initialFiledFunc(fileds))
+
   const [pageMode, setPageMode] = useState("save");
   const [userPageAccessState, setUserPageAccessState] = useState('');
   const [modalCss, setModalCss] = useState(false);
-  const [designation_DropdownSelect, setDesignation_DropdownSelect] = useState("");
-  const [employeeType_DropdownSelect, setEmployeeType_DropdownSelect] = useState("");
-  const [State_DropdownSelect, setState_DropdownSelect] = useState("");
-  const [company_DropdownSelect, setCompany_DropdownSelect] = useState("");
-  const [party_DropdownSelect, setParty_DropdownSelect] = useState('');
-  const [DOB_Date_Select, setDOB_Date_Select] = useState("");
   const [partyDropDownShow_UI, setPartyDropDownShow_UI] = useState(false);
+  const [editCreatedBy, seteditCreatedBy] = useState("");
 
   const {
     designation,
@@ -73,29 +88,7 @@ const AddEmployee = (props) => {
       pageField: state.CommonPageFieldReducer.pageField
 
     }));
-  {/** Dyanamic Page access state and OnChange function */ }
 
-  const fileds = {
-    id: "",
-    Name: "",
-    Address: "",
-    Mobile: "",
-    email: "",
-    DOB: "",
-    PAN: "",
-    AadharNo: "",
-    working_hours: "",
-    CompanyName: "",
-    DesignationName: "",
-    EmployeeTypeName: "",
-    StateName: "",
-    DistrictName: "",
-    EmployeeParties: []
-  }
-
-
-  const [state, setState] = useState(() => initialFiledFunc(fileds))
-  debugger
   const values = { ...state.values }
   const { isError } = state;
   const { fieldLabel } = state;
@@ -158,10 +151,9 @@ const AddEmployee = (props) => {
           label: data.Name
         }))
 
-        setParty_DropdownSelect(listItems)
+        // setParty_DropdownSelect(listItems)
 
         if ((hasEditVal.EmployeeParties).length > 0) { setPartyDropDownShow_UI(true) };
-
 
         const { id, Name, Address, Mobile, email, DOB, PAN, AadharNo, working_hours,
           CompanyName, DesignationName, EmployeeTypeName, StateName, DistrictName, EmployeeParties,
@@ -204,7 +196,7 @@ const AddEmployee = (props) => {
 
         setState({ values, fieldLabel, hasValid, required, isError })
         dispatch(Breadcrumb_inputName(hasEditVal.Name))
-
+        seteditCreatedBy(hasEditVal.CreatedBy)
       }
       dispatch(editEmployeeSuccess({ Status: false }))
     }
@@ -217,11 +209,11 @@ const AddEmployee = (props) => {
       dispatch(PostEmployeeSuccess({ Status: false }))
       setState(() => resetFunction(fileds, state))//+++++++++ Clear form values  
       saveDissable(false);//+++++++++save Button Is enable function
-      setDesignation_DropdownSelect('')
-      setEmployeeType_DropdownSelect('')
-      setState_DropdownSelect('')
-      setDOB_Date_Select('')
-      setCompany_DropdownSelect('')
+      // setDesignation_DropdownSelect('')
+      // setEmployeeType_DropdownSelect('')
+      // setState_DropdownSelect('')
+      // setDOB_Date_Select('')
+      // setCompany_DropdownSelect('')
       dispatch(Breadcrumb_inputName(''))
       if (pageMode === "other") {
         dispatch(AlertState({
@@ -324,7 +316,7 @@ const AddEmployee = (props) => {
     }
     else {
       setPartyDropDownShow_UI(false)
-      setParty_DropdownSelect([{ value: null }])
+      // setParty_DropdownSelect([{ value: null }])
     }
     setState((i) => {
       debugger
@@ -339,7 +331,7 @@ const AddEmployee = (props) => {
 
   function State_Dropdown_Handler(e, v) {
     dispatch(getDistrictOnState(e.value))
-    setState_DropdownSelect(e)
+    // setState_DropdownSelect(e)
     setState((i) => {
       const a = { ...i }
       a.values.DistrictName = "";
@@ -349,7 +341,7 @@ const AddEmployee = (props) => {
   }
 
   function Company_Dropdown_Handler(e, v) {
-    setCompany_DropdownSelect(e)
+    // setCompany_DropdownSelect(e)
 
   }
 
@@ -568,7 +560,7 @@ const AddEmployee = (props) => {
                           <Label htmlFor="validationCustom01"> {fieldLabel.StateName} </Label>
                           <Col sm={12}>
                             <Select
-                      
+
                               name="StateName"
                               id="state"
                               class="Flatpickr"
@@ -734,7 +726,10 @@ const AddEmployee = (props) => {
                       <FormGroup className="mt-3">
                         <Row>
                           <Col sm={2}>
-                            <SaveButton pageMode={pageMode} userAcc={userPageAccessState}
+                            <SaveButton
+                              pageMode={pageMode}
+                              userAcc={userPageAccessState}
+                              editCreatedBy={editCreatedBy}
                               module={"EmployeeMaster"}
                             />
                           </Col>

@@ -32,7 +32,8 @@ import {
     comAddPageFieldFunc,
     formValid,
     initialFiledFunc,
-    onChangeText
+    onChangeText,
+    resetFunction
 } from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
 import { PARTYTYPE_lIST } from "../../../routes/route_url";
 import { SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
@@ -144,8 +145,9 @@ const PartyType = (props) => {
     useEffect(() => {
         if ((PostAPIResponse.Status === true) && (PostAPIResponse.StatusCode === 200) && !(pageMode === "dropdownAdd")) {
             dispatch(PostPartyTypeAPISuccess({ Status: false }))
-            setState(() => initialFiledFunc(fileds)) //+++++++++ Clear form values 
+            setState(() => resetFunction(fileds, state))// Clear form values  
             saveDissable(false);//+++++++++save Button Is enable function
+            dispatch(Breadcrumb_inputName(''))
             if (pageMode === "dropdownAdd") {
                 dispatch(AlertState({
                     Type: 1,
@@ -179,7 +181,7 @@ const PartyType = (props) => {
     useEffect(() => {
         if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
             saveDissable(false);//+++++++++Update Button Is enable function
-            setState(() => initialFiledFunc(fileds)) //+++++++++ Clear form values
+            setState(() => resetFunction(fileds, state))// Clear form values 
             history.push({
                 pathname: PARTYTYPE_lIST,
             })
@@ -308,7 +310,7 @@ const PartyType = (props) => {
                                                                     <Col md={2} style={{ marginTop: '9px' }} >
                                                                         <div className="form-check form-switch form-switch-md mb-3">
                                                                             <Input type="checkbox" className="form-check-input"
-                                                                                defaultChecked={values.IsDivision}
+                                                                                checked={values.IsDivision}
                                                                                 name="IsDivision"
                                                                                 onChange={(e) => {
                                                                                     setState((i) => {
