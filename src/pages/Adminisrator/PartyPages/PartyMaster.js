@@ -42,7 +42,7 @@ import Tree from "./Tree"
 import { PARTY_lIST } from "../../../routes/route_url"
 import AddressDetails_Tab from "./AddressDetailsTab"
 import { createdBy, saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons"
-import { initialFiledFunc } from "../../../components/Common/ComponentRelatedCommonFile/validationFunction"
+import { initialFiledFunc, resetFunction } from "../../../components/Common/ComponentRelatedCommonFile/validationFunction"
 
 const PartyMaster = (props) => {
     const dispatch = useDispatch();
@@ -199,7 +199,7 @@ const PartyMaster = (props) => {
 
         if ((PostAPIResponse.Status === true) && (PostAPIResponse.StatusCode === 200) && !(pageMode === "dropdownAdd")) {
             dispatch(postPartyDataSuccess({ Status: false }))
-            setState(() => initialFiledFunc(fileds)) //+++++++++ Clear form values 
+            setState(() => resetFunction(fileds, state))// Clear form values 
             saveDissable(false);//+++++++++save Button Is enable function
             setCompanyList_dropdown_Select('')
             setPartyType_dropdown_Select('')
@@ -239,7 +239,7 @@ const PartyMaster = (props) => {
     useEffect(() => {
         if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
             saveDissable(false);//+++++++++Update Button Is enable function
-            setState(() => initialFiledFunc(fileds)) //+++++++++ Clear form values
+            setState(() => resetFunction(fileds, state))// Clear form values 
             history.push({
                 pathname: PARTY_lIST,
             })

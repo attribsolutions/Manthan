@@ -21,7 +21,7 @@ import {
 } from "../../../store/Administrator/ModulesRedux/actions";
 import Breadcrumb from "../../../components/Common/Breadcrumb3";
 import { MetaTags } from "react-meta-tags";
-import { AlertState, commonPageField } from "../../../store/actions";
+import { AlertState, commonPageField, commonPageFieldSuccess } from "../../../store/actions";
 import { Breadcrumb_inputName } from "../../../store/Utilites/Breadcrumb/actions";
 import { useHistory } from "react-router-dom";
 import { MODULE_lIST } from "../../../routes/route_url";
@@ -29,7 +29,8 @@ import {
     comAddPageFieldFunc,
     formValid,
     initialFiledFunc,
-    onChangeText
+    onChangeText,
+    resetFunction
 } from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
 import { SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
 import { createdBy, saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
@@ -53,6 +54,7 @@ const Modules = (props) => {
     }));
 
     useEffect(() => {
+        dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(5))
     }, []);
 
@@ -140,8 +142,9 @@ const Modules = (props) => {
 
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200) && !(pageMode === "dropdownAdd")) {
             dispatch(PostModelsSubmitSuccess({ Status: false }))
-            setState(() => initialFiledFunc(fileds)) //+++++++++ Clear form values 
+            setState(() => resetFunction(fileds, state)) //+++++++++ Clear form values 
             saveDissable(false);//+++++++++save Button Is enable function
+            dispatch(Breadcrumb_inputName(''))
             if (pageMode === "dropdownAdd") {
                 dispatch(AlertState({
                     Type: 1,
@@ -174,7 +177,7 @@ const Modules = (props) => {
     useEffect(() => {
         if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
             saveDissable(false);//+++++++++Update Button Is enable function
-            setState(() => initialFiledFunc(fileds)) //+++++++++ Clear form values
+            setState(() => resetFunction(fileds, state)) //+++++++++ Clear form values 
             history.push({
                 pathname: MODULE_lIST,
             })
@@ -317,11 +320,17 @@ const Modules = (props) => {
                                                         <Row className="justify-content-md-left">
                                                             <Label htmlFor="horizontal-firstname-input" className="col-sm-3 col-form-label" >{fieldLabel.isActive}  </Label>
                                                             <Col md={2} style={{ marginTop: '9px' }} >
-                                                                <div className="form-check form-switch form-switch-md mb-3" >
+                                                                <div className="form-check form-switch form-switch-md mb-3">
                                                                     <Input type="checkbox" className="form-check-input"
-                                                                        defaultChecked={values.isActive}
+                                                                        checked={values.isActive}
                                                                         name="isActive"
-                                                                        onChange={(event) => onChangeText({ event, state, setState })}
+                                                                        onChange={(e) => {
+                                                                            setState((i) => {
+                                                                                const a = { ...i }
+                                                                                a.values.isActive = e.target.checked;
+                                                                                return a
+                                                                            })
+                                                                        }}
                                                                     />
                                                                 </div>
                                                             </Col>

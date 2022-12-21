@@ -46,7 +46,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { PAGE_lIST } from "../../../routes/route_url";
 import { createdBy, saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
-import { initialFiledFunc } from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
+import { initialFiledFunc, resetFunction } from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
 
 
 const PageMaster = (props) => {
@@ -276,7 +276,7 @@ const PageMaster = (props) => {
   useEffect(() => {
     if (postMsg.Status === true && postMsg.StatusCode === 200) {
       dispatch(saveHPagesSuccess({ Status: false }));
-      setState(() => initialFiledFunc(fileds)) //+++++++++ Clear form values 
+      setState(() => resetFunction(fileds, state)) //+++++++++ Clear form values 
       saveDissable(false);//+++++++++save Button Is enable function
       setModule_DropdownSelect("");
       setPageAccess_DropDownSelect("");
@@ -341,7 +341,7 @@ const PageMaster = (props) => {
   useEffect(() => {
     if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
       saveDissable(false);//+++++++++Update Button Is enable function
-      setState(() => initialFiledFunc(fileds)) //+++++++++ Clear form values
+      setState(() => resetFunction(fileds, state)) //+++++++++ Clear form values 
       history.push({
         pathname: PAGE_lIST,
       })
