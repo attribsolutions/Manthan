@@ -31,6 +31,7 @@ import {
   initialFiledFunc,
   onChangeSelect,
   onChangeText,
+  resetFunction,
 
 } from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
 import { COMPANY_lIST } from "../../../routes/route_url";
@@ -48,7 +49,6 @@ const CompanyModule = (props) => {
   const [modalCss, setModalCss] = useState(false);
   const [pageMode, setPageMode] = useState("save");
   const [userPageAccessState, setUserPageAccessState] = useState('');
-  const [CompanyGroupselect, setCompanyGroup] = useState("");
   const [editData, setEditData] = useState("");
 
   //Access redux store Data /  'save_ModuleSuccess' action data
@@ -122,8 +122,7 @@ const CompanyModule = (props) => {
       }
 
       if (hasEditVal) {
-        debugger
-       
+
         const { id, Name, Address, GSTIN, PhoneNo, CompanyAbbreviation, EmailID, CompanyGroup, CompanyGroupName } = hasEditVal
         const { values, fieldLabel, hasValid, required, isError } = { ...state }
 
@@ -157,9 +156,11 @@ const CompanyModule = (props) => {
 
     if ((postMsg.Status === true) && (postMsg.StatusCode === 200) && !(pageMode === "dropdownAdd")) {
       dispatch(PostCompanySubmitSuccess({ Status: false }))
-      setState(() => initialFiledFunc(fileds)) //+++++++++ Clear form values 
+
+      setState(() => resetFunction(fileds, state))//+++++++++ Clear form values 
       saveDissable(false);//+++++++++save Button Is enable function
-      setCompanyGroup('')
+      dispatch(Breadcrumb_inputName(''))
+
       if (pageMode === "other") {
         dispatch(AlertState({
           Type: 1,
@@ -191,13 +192,16 @@ const CompanyModule = (props) => {
 
   useEffect(() => {
     if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
-      saveDissable(false);//+++++++++Update Button Is enable function
-      setState(() => initialFiledFunc(fileds)) //+++++++++ Clear form values
+
+      setState(() => resetFunction(fileds, state))//+++++++++ Clear form values 
+      saveDissable(false);//+++++++++save Button Is enable function
+
       history.push({
         pathname: COMPANY_lIST,
       })
     } else if (updateMsg.Status === true && !modalCss) {
       saveDissable(false);//+++++++++Update Button Is enable function
+
       dispatch(updateCompanyIDSuccess({ Status: false }));
       dispatch(
         AlertState({
@@ -227,7 +231,7 @@ const CompanyModule = (props) => {
   }, [pageField])
 
   const formSubmitHandler = (event) => {
-    debugger
+
     event.preventDefault();
     if (formValid(state, setState)) {
       const jsonBody = JSON.stringify({
@@ -246,41 +250,13 @@ const CompanyModule = (props) => {
 
       if (pageMode === "edit") {
         dispatch(updateCompanyID(jsonBody, values.id,));
-        console.log("Update jsonBody", jsonBody)
       }
       else {
         dispatch(PostCompanySubmit(jsonBody));
-        console.log("post jsonBody", jsonBody)
-
       }
     }
   };
 
-  // //'Save' And 'Update' Button Handller
-  // const handleValidSubmit = (event, values) => {
-  //   debugger
-  //   const jsonBody = JSON.stringify({
-  //     Name: values.Name,
-  //     Address: values.Address,
-  //     GSTIN: values.GSTIN,
-  //     PhoneNo: values.PhoneNo,
-  //     CompanyAbbreviation: values.CompanyAbbreviation,
-  //     EmailID: values.EmailID,
-  //     CompanyGroup: values.CompanyGroupselect,
-  //     CreatedBy: 1,
-  //     UpdatedBy: 1,
-  //   });
-
-  //   if (pageMode === 'edit') {
-  //     dispatch(updateCompanyID(jsonBody, EditData.id));
-  //     console.log("Update jsonBody", jsonBody)
-  //   }
-
-  //   else {
-  //     dispatch(PostCompanySubmit(jsonBody));
-  //     console.log("Post jsonBody", jsonBody)
-  //   }
-  // };
 
   var IsEditMode_Css = ''
   if ((modalCss) || (pageMode === "dropdownAdd")) { IsEditMode_Css = "-5.5%" };
@@ -303,7 +279,7 @@ const CompanyModule = (props) => {
                   </CardHeader>
 
                   <CardBody>
-                    <form onSubmit={formSubmitHandler}noValidate>
+                    <form onSubmit={formSubmitHandler} noValidate>
                       <Card >
                         <CardBody className="c_card_body">
                           <Row>
