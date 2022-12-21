@@ -154,7 +154,7 @@ export const onChangeText = ({ event, state, setState }) => {
 
 
 export const initialFiledFunc = (filed) => {
-    debugger
+  
     const obj = {}
     obj["values"] = filed;
     obj["fieldLabel"] = {}
@@ -163,6 +163,29 @@ export const initialFiledFunc = (filed) => {
     obj["required"] = {}
 
     Object.keys(filed).forEach(label => {
+
+        obj.fieldLabel[label] = ''
+        obj.isError[label] = ''
+        obj.hasValid[label] = {}
+        obj.hasValid[label]["regExp"] = ""
+        obj.hasValid[label]["inValidMsg"] = ""
+        obj.hasValid[label]["valid"] = false
+    })
+    return obj
+}
+
+
+export const resetFunction = (state) => {
+
+    var preState={...state}
+    const obj = {}
+    obj["values"] = state;
+    obj["fieldLabel"] = {}
+    obj["isError"] = {}
+    obj["hasValid"] = {}
+    obj["required"] = {}
+
+    Object.keys(state).forEach(label => {
 
         obj.fieldLabel[label] = ''
         obj.isError[label] = ''
