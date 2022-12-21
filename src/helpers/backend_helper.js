@@ -400,7 +400,7 @@ export const Material_Issue_Get_API = (filters) => post(url.POST_API_FOR_MATERIA
 
 // Production 
 export const Production_Post_API = (data) => post(url.GO_BUTTON_POST_API_FOR_PRODUCTION, data)// go button postapi
-export const production_get_API = (filter) => post(url.POST_API_FOR_PRODUCTION_LIST, filter)// go button postapi
+export const production_get_API = (filters) => post(url.POST_API_FOR_PRODUCTION_LIST, filters)// go button postapi
 export const production_Make_API = (data) => post(url.PRODUCTION_MAKE_API, data)// make production to material Issue postapi
 export {
   getLoggedInUser,

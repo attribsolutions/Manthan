@@ -75,6 +75,7 @@ function* UpdateGRNGenFunc({ data, id }) {
 
 // List Page API
 function* get_GRN_GerFunc({ filters }) {
+  debugger
   
   yield put(SpinnerState(true))
   try {
