@@ -36,20 +36,28 @@ import {
     onChangeSelect,
     onChangeText,
     resetFunction,
-
 } from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
 import { CATEGORY_lIST } from "../../../routes/route_url";
 import { SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
-import { saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { createdBy, saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 
 const CategoryMaster = (props) => {
 
     const history = useHistory()
     const dispatch = useDispatch();
+
+    const fileds = {
+        id: "",
+        Name: "",
+        CategoryTypeName: ""
+    }
+
+    const [state, setState] = useState(() => initialFiledFunc(fileds))
+
     const [pageMode, setPageMode] = useState("");
     const [modalCss, setModalCss] = useState(false);
     const [userPageAccessState, setUserPageAccessState] = useState(123);
-   
+    const [editCreatedBy, seteditCreatedBy] = useState("");
 
     //Access redux store Data /  'save_ModuleSuccess' action data
     const {
@@ -65,26 +73,15 @@ const CategoryMaster = (props) => {
             pageField: state.CommonPageFieldReducer.pageField
         }));
 
-
-    {/** Dyanamic Page access state and OnChange function */ }
-
-    const fileds = {
-        id: "",
-        Name: "",
-        CategoryTypeName: ""
-    }
-
-
-    const [state, setState] = useState(() => initialFiledFunc(fileds))
+    useEffect(() => {
+        dispatch(commonPageFieldSuccess(null));
+        dispatch(commonPageField(23))
+        dispatch(getCategoryTypelist());
+    }, []);
 
     const values = { ...state.values }
     const { isError } = state;
     const { fieldLabel } = state;
-
-    useEffect(() => {
-        dispatch(commonPageFieldSuccess(null));
-        dispatch(commonPageField(23))
-    }, []);
 
     const location = { ...history.location }
     const hasShowloction = location.hasOwnProperty("editValue")
@@ -138,7 +135,7 @@ const CategoryMaster = (props) => {
 
                 setState({ values, fieldLabel, hasValid, required, isError })
                 dispatch(Breadcrumb_inputName(hasEditVal.Name))
-
+                seteditCreatedBy(hasEditVal.CreatedBy)
             }
             dispatch(editCategoryIDSuccess({ Status: false }))
         }
@@ -148,8 +145,8 @@ const CategoryMaster = (props) => {
 
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(PostMethod_ForCategoryAPISuccess({ Status: false }))
-            setState(() => resetFunction(fileds, state)) //+++++++++ Clear form values 
-            saveDissable(false);//+++++++++save Button Is enable function
+            setState(() => resetFunction(fileds, state)) //Clear form values 
+            saveDissable(false);//save Button Is enable function
             dispatch(Breadcrumb_inputName(''))
 
             if (pageMode === "other") {
@@ -169,7 +166,7 @@ const CategoryMaster = (props) => {
             }
         }
         else if (postMsg.Status === true) {
-            saveDissable(false);//+++++++++save Button Is enable function
+            saveDissable(false);//save Button Is enable function
             dispatch(PostMethod_ForCategoryAPISuccess({ Status: false }))
             dispatch(AlertState({
                 Type: 4,
@@ -183,13 +180,13 @@ const CategoryMaster = (props) => {
 
     useEffect(() => {
         if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
-            saveDissable(false);//+++++++++Update Button Is enable function
-            setState(() => resetFunction(fileds, state)) //+++++++++ Clear form values 
+            saveDissable(false);//Update Button Is enable function
+            setState(() => resetFunction(fileds, state)) // Clear form values 
             history.push({
                 pathname: CATEGORY_lIST,
             })
         } else if (updateMsg.Status === true && !modalCss) {
-            saveDissable(false);//+++++++++Update Button Is enable function
+            saveDissable(false);//Update Button Is enable function
             dispatch(updateCategoryIDSuccess({ Status: false }));
             dispatch(
                 AlertState({
@@ -202,33 +199,29 @@ const CategoryMaster = (props) => {
     }, [updateMsg, modalCss]);
 
     useEffect(() => {
-
         if (pageField) {
             const fieldArr = pageField.PageFieldMaster
             comAddPageFieldFunc({ state, setState, fieldArr })
         }
     }, [pageField])
 
-    //get method for dropdown
-    useEffect(() => {
-        dispatch(getCategoryTypelist());
-    }, [dispatch]);
-
     const CategoryTypesValues = CategoryAPI.map((Data) => ({
         value: Data.id,
         label: Data.Name
     }));
 
+    const saveHandeller = (event) => {
 
-    const formSubmitHandler = (event) => {
         event.preventDefault();
         if (formValid(state, setState)) {
             const jsonBody = JSON.stringify({
                 Name: values.Name,
                 CategoryType: values.CategoryTypeName.value,
+                CreatedBy:createdBy(),
+                UpdatedBy:createdBy()
             });
 
-            saveDissable(true);//+++++++++save Button Is dissable function
+            saveDissable(true);//save Button Is dissable function
 
             if (pageMode === "edit") {
                 dispatch(updateCategoryID(jsonBody, values.id,));
@@ -240,8 +233,6 @@ const CategoryMaster = (props) => {
 
     };
 
-
-    
     // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
     var IsEditMode_Css = ''
     if ((modalCss) || (pageMode === "dropdownAdd")) { IsEditMode_Css = "-5.5%" };
@@ -249,7 +240,7 @@ const CategoryMaster = (props) => {
     if (!(userPageAccessState === '')) {
         return (
             <React.Fragment>
-                <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
+                <div className="page-content" style={{ marginTop: IsEditMode_Css,height: "18cm" }}>
                     <Container fluid>
                         <MetaTags>
                             <title>{userPageAccessState.PageHeading} | FoodERP-React FrontEnd</title>
@@ -263,7 +254,7 @@ const CategoryMaster = (props) => {
                             </CardHeader>
 
                             <CardBody className=" vh-10 0 text-black" style={{ backgroundColor: "#whitesmoke" }} >
-                                <form onSubmit={formSubmitHandler} noValidate>
+                                <form onSubmit={saveHandeller} noValidate>
                                     <Row className="">
                                         <Col md={12}>
                                             <Card>
@@ -291,10 +282,11 @@ const CategoryMaster = (props) => {
                                                         </FormGroup>
 
                                                         <Row>
+
                                                             <Col md="4" >
                                                                 <FormGroup className="mb-3">
                                                                     <Label htmlFor="validationCustom01"> {fieldLabel.CategoryTypeName} </Label>
-                                                                    <Col sm={12} style={{ height: "2.5cm" }}>
+                                                                    <Col sm={12} >
                                                                         <Select
                                                                             name="CategoryTypeName"
                                                                             value={values.CategoryTypeName}
@@ -313,10 +305,12 @@ const CategoryMaster = (props) => {
                                                             </Col>
                                                         </Row>
 
-                                                        <FormGroup>
+                                                        <FormGroup className="mt-1">
                                                             <Row>
                                                                 <Col sm={2}>
-                                                                    <SaveButton pageMode={pageMode} userAcc={userPageAccessState}
+                                                                    <SaveButton pageMode={pageMode}
+                                                                        userAcc={userPageAccessState}
+                                                                        editCreatedBy={editCreatedBy}
                                                                         module={"CategoryMaster"}
                                                                     />
                                                                 </Col>
