@@ -1,11 +1,13 @@
 import {
   GET_SUPPLIER_SUCCESS,
   GET_SUPPLIER_ADDRESS_SUCCESS,
+  GET_ORDER_TYPE_SUCCESS,
 } from "./actionType"
 
 const INIT_STATE = {
   supplier: [],
-  supplierAddress: []
+  supplierAddress: [],
+  orderType:[]
 }
 
 const SupplierReducer = (state = INIT_STATE, action) => {
@@ -21,7 +23,11 @@ const SupplierReducer = (state = INIT_STATE, action) => {
         ...state,
         supplierAddress: action.payload,
       }
-
+      case GET_ORDER_TYPE_SUCCESS:
+        return {
+          ...state,
+          orderType: action.payload,
+        }
     default:
       return state
   }

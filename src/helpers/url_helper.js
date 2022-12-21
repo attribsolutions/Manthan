@@ -196,3 +196,5 @@ export const GO_BUTTON_POST_API_FOR_PRODUCTION ='/Production'
 export const POST_API_FOR_PRODUCTION_LIST ='/Production'
 export const PRODUCTION_MAKE_API ='/MaterialIssueforProduction'
 
+// Order Type 
+export const ORDER_TYPE_API ='/POType'
