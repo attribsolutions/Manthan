@@ -1,14 +1,17 @@
 import { call, put, takeEvery } from "redux-saga/effects";
 import {
+  getOrderTypeSuccess,
   getSupplierAddressSuccess,
   getSupplierSuccess,
 } from "./actions";
 import {
   GetSupplier_API,
+  get_OrderType_Api,
   Party_Master_Edit_API,
 } from "../../../helpers/backend_helper";
 
 import {
+  GET_ORDER_TYPE,
   GET_SUPPLIER, GET_SUPPLIER_ADDRESS,
 } from "./actionType";
 
@@ -62,9 +65,24 @@ function* supplierAddressGenFunc() {
     }));
   }
 }
+
+// OrderType Dropdown
+function* OrderType_GenFunc() {
+  try {
+    const response = yield call(get_OrderType_Api);
+    yield put(getOrderTypeSuccess(response.Data));
+  } catch (error) {
+    yield put(AlertState({
+      Type: 4,
+      Status: true, Message: "500 Error for Order Type API ",
+    }));
+  }
+  }
+
 function* SupplierSaga() {
   yield takeEvery(GET_SUPPLIER, getSupplierGenFunc);
   yield takeEvery(GET_SUPPLIER_ADDRESS, supplierAddressGenFunc);
+  yield takeEvery(GET_ORDER_TYPE, OrderType_GenFunc);
 }
 
 export default SupplierSaga;
