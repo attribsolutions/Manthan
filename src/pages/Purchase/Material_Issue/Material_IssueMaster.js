@@ -66,7 +66,7 @@ const MaterialIssueMaster = (props) => {
         id: "",
         MaterialIssueDate: "",
         ItemName: "",
-        NumberOfLot: "1",
+        NumberOfLot: "",
         LotQuantity: "",
     }
 
@@ -267,7 +267,8 @@ const MaterialIssueMaster = (props) => {
         WorkOrderId: index.id,
         Item: index.Item,
         BomID: index.Bom,
-        Unit: index.Unit
+        Unit: index.Unit,
+        NumberOfLot:index.NumberOfLot
     }));
 
     function ItemOnchange(e) {
@@ -275,7 +276,7 @@ const MaterialIssueMaster = (props) => {
         dispatch(postGoButtonForMaterialIssue_MasterSuccess([]))
         setItemselect(e)
         setState((i) => {
-            i.values.NumberOfLot = "1";
+            i.values.NumberOfLot = e.NumberOfLot;
             i.values.LotQuantity = e.Quantity;
             i.hasValid.NumberOfLot.valid = true;
             i.hasValid.LotQuantity.valid = true;
