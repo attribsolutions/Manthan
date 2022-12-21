@@ -34,6 +34,7 @@ import {
     initialFiledFunc,
     onChangeSelect,
     onChangeText,
+    resetFunction,
 
 } from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
 import { getGroupTypeslist } from "../../../store/Administrator/GroupTypeRedux/action";
@@ -150,8 +151,9 @@ const GroupMaster = (props) => {
     useEffect(() => {
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(postGroupSuccess({ Status: false }))
-            setState(() => initialFiledFunc(fileds)) //+++++++++ Clear form values 
+            setState(() => resetFunction(fileds, state))//+++++++++ Clear form values
             saveDissable(false);//+++++++++save Button Is enable function
+            dispatch(Breadcrumb_inputName(''))
             if (pageMode === "other") {
                 dispatch(AlertState({
                     Type: 1,
@@ -184,7 +186,7 @@ const GroupMaster = (props) => {
     useEffect(() => {
         if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
             saveDissable(false);//+++++++++Update Button Is enable function
-            setState(() => initialFiledFunc(fileds)) //+++++++++ Clear form values
+            setState(() => resetFunction(fileds, state))//+++++++++ Clear form values
             history.push({
                 pathname: GROUP_lIST,
             })

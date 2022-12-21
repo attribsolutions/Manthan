@@ -36,7 +36,7 @@ import {
 } from "../../../store/Administrator/MarginMasterRedux/action";
 import { AvForm } from "availity-reactstrap-validation";
 import { createdBy, saveDissable, userCompany } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
-import { initialFiledFunc } from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
+import { initialFiledFunc, resetFunction } from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
 
 const MarginMaster = (props) => {
     const dispatch = useDispatch();
@@ -231,7 +231,7 @@ const MarginMaster = (props) => {
 
         if ((PostAPIResponse.Status === true) && (PostAPIResponse.StatusCode === 200) && !(pageMode === "dropdownAdd")) {
             dispatch(postMarginMasterDataSuccess({ Status: false }))
-            setState(() => initialFiledFunc(fileds)) //+++++++++ Clear form values 
+            setState(() => resetFunction(fileds, state))//+++++++++ Clear form values
             saveDissable(false);//+++++++++save Button Is enable function
             setPartyName_dropdown_Select('')
             setEffectiveDate('')

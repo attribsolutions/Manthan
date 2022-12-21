@@ -30,7 +30,8 @@ import {
     formValid,
     onChangeText,
     onChangeDate,
-    initialFiledFunc
+    initialFiledFunc,
+    resetFunction
 } from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
 import { DRIVER_lIST } from "../../../routes/route_url";
 import { SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
@@ -143,9 +144,10 @@ const DriverMaster = (props) => {
 
     useEffect(() => {
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
-            setState(() => initialFiledFunc(fileds)) //+++++++++ Clear form values 
-            saveDissable(false);//+++++++++save Button Is enable function
             dispatch(PostMethod_ForDriverMasterSuccess({ Status: false }))
+            setState(() => resetFunction(fileds, state))//+++++++++ Clear form values 
+            saveDissable(false);//+++++++++save Button Is enable function
+            dispatch(Breadcrumb_inputName(''))
             if (pageMode === "dropdownAdd") {
                 dispatch(AlertState({
                     Type: 1,
@@ -178,7 +180,7 @@ const DriverMaster = (props) => {
     useEffect(() => {
         if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
             saveDissable(false);//+++++++++Update Button Is enable function
-            setState(() => initialFiledFunc(fileds)) //+++++++++ Clear form values
+            setState(() => resetFunction(fileds, state))//+++++++++ Clear form values 
             history.push({
                 pathname: DRIVER_lIST,
             })

@@ -13,7 +13,7 @@ import {
 } from "reactstrap";
 
 import { MetaTags } from "react-meta-tags";
-import { AlertState, commonPageField } from "../../../store/actions";
+import { AlertState, commonPageField, commonPageFieldSuccess } from "../../../store/actions";
 import { useHistory } from "react-router-dom";
 import { Breadcrumb_inputName } from "../../../store/Utilites/Breadcrumb/actions";
 import { useDispatch, useSelector } from "react-redux";
@@ -22,7 +22,8 @@ import {
     comAddPageFieldFunc,
     formValid,
     initialFiledFunc,
-    onChangeText
+    onChangeText,
+    resetFunction
 } from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
 import { SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
 
@@ -40,9 +41,18 @@ const TermsAndConditionsMaster = (props) => {
 
     const history = useHistory()
     const dispatch = useDispatch();
+
+    const fileds = {
+        id: "",
+        Name: "",
+        IsDefault: false
+    }
+    const [state, setState] = useState(() => initialFiledFunc(fileds))
+
     const [modalCss, setModalCss] = useState(false);
     const [pageMode, setPageMode] = useState("");
     const [userPageAccessState, setUserPageAccessState] = useState(123);
+    const [editCreatedBy, seteditCreatedBy] = useState("");
 
     //Access redux store Data /  'save_ModuleSuccess' action data
     const { postMsg, updateMsg, pageField, userAccess } = useSelector((state) => ({
@@ -53,18 +63,10 @@ const TermsAndConditionsMaster = (props) => {
     }));
 
     useEffect(() => {
+        dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(42))
     }, []);
 
-    {/** Dyanamic Page access state and OnChange function */ }
-
-    const fileds = {
-        id: "",
-        Name: "",
-        IsDefault:""
-
-    }
-    const [state, setState] = useState(() => initialFiledFunc(fileds))
     const values = { ...state.values }
     const { isError } = state;
     const { fieldLabel } = state;
@@ -73,7 +75,6 @@ const TermsAndConditionsMaster = (props) => {
     const hasShowloction = location.hasOwnProperty("editValue")
     const hasShowModal = props.hasOwnProperty("editValue")
 
-    //userAccess useEffect
     // userAccess useEffect
     useEffect(() => {
         let userAcc = null;
@@ -94,7 +95,6 @@ const TermsAndConditionsMaster = (props) => {
 
     //This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
     useEffect(() => {
-        debugger
 
         if ((hasShowloction || hasShowModal)) {
             let hasEditVal = null
@@ -108,13 +108,20 @@ const TermsAndConditionsMaster = (props) => {
                 setModalCss(true)
             }
             if (hasEditVal) {
-                const { id, Name } = hasEditVal
+               
+                const { id, Name ,IsDefault} = hasEditVal
                 const { values, fieldLabel, hasValid, required, isError } = { ...state }
-                values.Name = Name;
+
                 values.id = id
+                values.Name = Name;
+                values.IsDefault = IsDefault;
+
                 hasValid.Name.valid = true;
+                hasValid.IsDefault.valid = true;
+
                 setState({ values, fieldLabel, hasValid, required, isError })
                 dispatch(Breadcrumb_inputName(hasEditVal.Name))
+                seteditCreatedBy(hasEditVal.CreatedBy)
 
             }
             dispatch(EditTermsAndCondtions_Success({ Status: false }))
@@ -123,8 +130,8 @@ const TermsAndConditionsMaster = (props) => {
     useEffect(() => {
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(postTermAndConditionSuccess({ Status: false }))
-            setState(() => initialFiledFunc(fileds)) //+++++++++ Clear form values 
-            saveDissable(false);//+++++++++save Button Is enable function
+            setState(() => resetFunction(fileds, state))// Clear form values 
+            saveDissable(false);//save Button Is enable function
             if (pageMode === "other") {
                 dispatch(AlertState({
                     Type: 1,
@@ -142,7 +149,7 @@ const TermsAndConditionsMaster = (props) => {
             }
         }
         else if (postMsg.Status === true) {
-            saveDissable(false);//+++++++++save Button Is enable function
+            saveDissable(false);//save Button Is enable function
             dispatch(postTermAndConditionSuccess({ Status: false }))
             dispatch(AlertState({
                 Type: 4,
@@ -153,15 +160,17 @@ const TermsAndConditionsMaster = (props) => {
             }));
         }
     }, [postMsg])
+
     useEffect(() => {
+
         if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
-            saveDissable(false);//+++++++++Update Button Is enable function
-            setState(() => initialFiledFunc(fileds)) //+++++++++ Clear form values
+            setState(() => resetFunction(fileds, state)) // Clear form values 
+            saveDissable(false); //save Button Is enable function
             history.push({
                 pathname: TERMS_AND_CONDITION_LIST,
             })
         } else if (updateMsg.Status === true && !modalCss) {
-            saveDissable(false);//+++++++++Update Button Is enable function
+            saveDissable(false); //Update Button Is enable function
             dispatch(UpdateTermsAndCondtions_Success({ Status: false }));
             dispatch(
                 AlertState({
@@ -172,6 +181,7 @@ const TermsAndConditionsMaster = (props) => {
             );
         }
     }, [updateMsg, modalCss]);
+
     useEffect(() => {
 
         if (pageField) {
@@ -179,14 +189,18 @@ const TermsAndConditionsMaster = (props) => {
             comAddPageFieldFunc({ state, setState, fieldArr })
         }
     }, [pageField])
+
     const formSubmitHandler = (event) => {
+
         event.preventDefault();
         if (formValid(state, setState)) {
             const jsonBody = JSON.stringify({
                 Name: values.Name,
-                IsDefault:values.IsDefault
+                IsDefault: values.IsDefault
             });
-            saveDissable(true);//+++++++++save Button Is dissable function
+
+            saveDissable(true);//save Button Is dissable function
+
             if (pageMode === "edit") {
                 dispatch(UpdateTermsAndCondtions(jsonBody, values.id));
             }
@@ -268,7 +282,10 @@ const TermsAndConditionsMaster = (props) => {
                                                         <FormGroup className="mt-2">
                                                             <Row>
                                                                 <Col sm={2}>
-                                                                    <SaveButton pageMode={pageMode} userAcc={userPageAccessState}
+                                                                    <SaveButton
+                                                                        pageMode={pageMode}
+                                                                        userAcc={userPageAccessState}
+                                                                        editCreatedBy={editCreatedBy}
                                                                         module={"TermsAndCondtionsMaster"}
                                                                     />
                                                                 </Col>
