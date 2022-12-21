@@ -32,11 +32,6 @@ const ProductionList = () => {
     const hasPagePath = history.location.pathname
     const [pageMode, setpageMode] = useState(PRODUCTION_LIST)
     const [userAccState, setUserAccState] = useState('');
-
-
-
-   
-
     const reducers = useSelector(
         (state) => ({
             tableList: state.ProductionReducer.ProductionList,
@@ -51,7 +46,7 @@ const ProductionList = () => {
         })
     );
 
-    const action = {
+    const action = {  
         getList: getWorkOrderListPage,
         editId: editWorkOrderList,
         deleteId: deleteWorkOrderId,
@@ -68,7 +63,6 @@ const ProductionList = () => {
         dispatch(commonPageFieldList(78))
         goButtonHandler(true)
     }, []);
-
     const { userAccess, pageField, tableList,productionFilter } = reducers;
     const { fromdate, todate } = productionFilter
     
@@ -89,6 +83,8 @@ const ProductionList = () => {
     }, [userAccess])
 
     const goButtonHandler = (onload = false) => {
+        debugger
+        
         let FromDate
         let ToDate
         if (onload) {
@@ -102,7 +98,7 @@ const ProductionList = () => {
             FromDate: FromDate,
             ToDate: ToDate,
         });
-        debugger
+        
         dispatch(getProductionListPage(jsonBody));
     }
     function fromdateOnchange(e, date) {
@@ -118,7 +114,6 @@ const ProductionList = () => {
     return (
         <React.Fragment>
             <div className="page-content">
-
                 <Breadcrumb
                     pageHeading={userAccState.PageHeading}
                     newBtnView={true}
@@ -127,8 +122,7 @@ const ProductionList = () => {
                     pageMode={url.PRODUCTION_ADD_Mode_2}
                     newBtnPagePath={url.PRODUCTION_ADD_Mode_2}
                     excelData={downList} />
-
-                <div className="px-2 mt-n1  c_card_header" style={{ marginBottom: "-12px" }} >
+                <div className="px-2 mt-n1  c_card_header" style={{marginBottom: "-12px" }} >
                     <div className="mt-1  row" >
                         <Col sm="5" >
                             <FormGroup className=" row mt-3 " >
