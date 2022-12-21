@@ -151,9 +151,8 @@ const CompanyModule = (props) => {
 
     if ((postMsg.Status === true) && (postMsg.StatusCode === 200) && !(pageMode === "dropdownAdd")) {
       dispatch(PostCompanySubmitSuccess({ Status: false }))
-
-      setState(() => resetFunction(fileds, state))//+++++++++ Clear form values 
-      saveDissable(false);//+++++++++save Button Is enable function
+      setState(() => resetFunction(fileds, state))// Clear form values 
+      saveDissable(false);//save Button Is enable function
       dispatch(Breadcrumb_inputName(''))
 
       if (pageMode === "other") {
@@ -196,7 +195,6 @@ const CompanyModule = (props) => {
       })
     } else if (updateMsg.Status === true && !modalCss) {
       saveDissable(false);//Update Button Is enable function
-
       dispatch(updateCompanyIDSuccess({ Status: false }));
       dispatch(
         AlertState({

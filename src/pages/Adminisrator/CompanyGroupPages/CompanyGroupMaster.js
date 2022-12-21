@@ -38,7 +38,6 @@ import { COMPANYGROUP_lIST } from "../../../routes/route_url";
 import { SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
 import { createdBy, saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 
-
 const CompanyGroupMaster = (props) => {
 
     const dispatch = useDispatch();
@@ -69,7 +68,6 @@ const CompanyGroupMaster = (props) => {
     const location = { ...history.location }
     const hasShowloction = location.hasOwnProperty("editValue")
     const hasShowModal = props.hasOwnProperty("editValue")
-
 
     useEffect(() => {
         dispatch(commonPageFieldSuccess(null));
