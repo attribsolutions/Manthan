@@ -9,6 +9,7 @@ export const formValid = ({ isError, required, hasValid, fieldLabel, values }, s
             setState({ isError, hasValid, required, fieldLabel, values })
         }
     });
+    debugger
     return isValid
 };
 

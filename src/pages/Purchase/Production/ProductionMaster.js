@@ -55,7 +55,7 @@ const ProductionMaster = (props) => {
     // const [grnDate, setgrnDate] = useState(currentDate);
     // const [invoiceDate, setInvoiceDate] = useState(currentDate);
     const initialFiled = {
-        id:"",
+        id: "",
         ProductionDate: "",
         EstimatedQuantity: "",
         NumberOfLot: "",
@@ -92,6 +92,7 @@ const ProductionMaster = (props) => {
         userAccess: state.Login.RoleAccessUpdateData,
         pageField: state.CommonPageFieldReducer.pageField,
     }));
+
     useEffect(() => {
         dispatch(commonPageFieldSuccess(null));
         dispatch(commonPageField(77))
@@ -103,8 +104,16 @@ const ProductionMaster = (props) => {
         dispatch(getMaterialIssueListPage(jsonBody));
 
     }, []);
-
-   
+    useEffect(() => {
+        let { Data } = produtionMake;
+        if (Data) {
+            setState(i => {
+                i.values.id = Data.id;
+                i.values.NumberOfLot = Data.LotQuantity;
+                return i
+            })
+        }
+    }, [produtionMake]);
 
 
     // userAccess useEffect
@@ -241,60 +250,63 @@ const ProductionMaster = (props) => {
             );
         }
     }, [updateMsg, modalCss]);
+
     useEffect(() => {
         if (pageField) {
             const fieldArr = pageField.PageFieldMaster
             comAddPageFieldFunc({ state, setState, fieldArr })// new change
         }
     }, [pageField]);
+
     const ItemDropdown_Options = itemsDrop.map((index) => ({
         value: index.id,
         label: index.ItemName,
     }));
-    const formSubmitHandler = ({ event }) => {
+
+    const formSubmitHandler = (event) => {
         debugger
         event.preventDefault();
-        const makeproduction = produtionMake.Data.id
-        const LotQuantity = produtionMake.Data.LotQuantity
-    if (formValid(state, setState)) {
-        const jsonBody = JSON.stringify({
-            ProductionMaterialIssue: [
-                {
-                    MaterialIssue: makeproduction,
-                }
-            ],
-            ProductionDate: values.ProductionDate,
-            EstimatedQuantity: values.EstimatedQuantity,
-            NumberOfLot: produtionMake.Data.NumberOfLot,
-            ActualQuantity:values.ActualQuantity,
-            BatchDate: "2022-12-17",
-            BatchCode: "aa",
-            StoreLocation: "aa",
-            SupplierBatchCode: values.SupplierBatchCode,
-            BestBefore: values.BestBefore,
-            Remark: values.Remark,
-            CreatedBy: 1,
-            Item: values.Item.value,
-            UpdatedBy: 1,
-            Company: 1,
-            Division: 4,
-            GST: 8,
-            Unit: 45,
-            MRP: " ",
-            Rate: 55,
-        });
-        saveDissable(true)
-        // if ((pageMode === 'edit') && !mode) {
-        //     dispatch(update_ProductionId(jsonBody));
-        // }
-        // else
-        //  {
-        dispatch(post_Production(jsonBody));
-        // }
-        // }
-    }
+        // const makeproduction = produtionMake.Data.id
+        // const LotQuantity = produtionMake.Data.LotQuantity
+        if (formValid(state, setState)) {
+            const jsonBody = JSON.stringify({
+                ProductionMaterialIssue: [
+                    {
+                        MaterialIssue: values.id,
+                    }
+                ],
+                ProductionDate: values.ProductionDate,
+                EstimatedQuantity: values.EstimatedQuantity,
+                NumberOfLot: values.NumberOfLot,
+                ActualQuantity: values.ActualQuantity,
+                BatchDate: "2022-12-17",
+                BatchCode: "aa",
+                StoreLocation: "aa",
+                SupplierBatchCode: values.SupplierBatchCode,
+                BestBefore: values.BestBefore,
+                Remark: values.Remark,
+                CreatedBy: 1,
+                Item: values.Item.value,
+                UpdatedBy: 1,
+                Company: 1,
+                Division: 4,
+                GST: 8,
+                Unit: 45,
+                MRP: " ",
+                Rate: 55,
+            });
+            // saveDissable(true)
+            // if ((pageMode === 'edit') && !mode) {
+            //     dispatch(update_ProductionId(jsonBody));
+            // }
+            // else
+            //  {
+            dispatch(post_Production(jsonBody));
+            // }
+            // }
+        }
     };
-    
+
     const LotQuantity = produtionMake.Data.LotQuantity
     // const makeproduction = produtionMake.Data.Item.Name
     // console.log(makeproduction)
@@ -311,7 +323,7 @@ const ProductionMaster = (props) => {
                         pageHeading={userPageAccessState.PageHeading}
                         showCount={true}
                     />
-                    <form onSubmit= {formSubmitHandler}noValidate>
+                    <form onSubmit={formSubmitHandler} noValidate>
                         <div className="px-2 mb-1  c_card_header " style={{ marginTop: "-15px" }} >
                             <Row>
                                 <Col sm={5}>
@@ -335,7 +347,7 @@ const ProductionMaster = (props) => {
                                                 onChange={(y, v, e) => { onChangeDate({ e, v, state, setState }) }}
                                                 onReady={(y, v, e) => { onChangeDate({ e, v, state, setState }) }}
                                             />
-                                              {isError.ProductionDate.length > 0 && (
+                                            {isError.ProductionDate.length > 0 && (
                                                 <span className="text-danger f-8"><small>{isError.ProductionDate}</small></span>
                                             )}
                                         </Col>
@@ -355,7 +367,7 @@ const ProductionMaster = (props) => {
                                                     onChangeText({ event, state, setState })
                                                 }}
                                             />
-                                             {isError.EstimatedQuantity.length > 0 && (
+                                            {isError.EstimatedQuantity.length > 0 && (
                                                 <span className="text-danger f-8"><small>{isError.EstimatedQuantity}</small></span>
                                             )}
                                         </Col>
@@ -365,8 +377,8 @@ const ProductionMaster = (props) => {
                                             style={{ width: "130px" }}>{fieldLabel.NumberOfLot} :</Label>
                                         <Label
                                             className=" "
-                                            style={{ color: "#000000", width: "130px" , marginLeft:"7cm",marginTop:"-40px"}}>&nbsp;&nbsp;
-                                            {`Lot(${produtionMake.Data.NumberOfLot?produtionMake.Data.NumberOfLot:"empty" })`}
+                                            style={{ color: "#000000", width: "130px", marginLeft: "7cm", marginTop: "-40px" }}>&nbsp;&nbsp;
+                                            {`Lot(${produtionMake.Data.NumberOfLot ? produtionMake.Data.NumberOfLot : "empty"})`}
                                             {/* {pageMode === "edit" ? EditData.EstimatedOutputQty : itemselect.EstimatedOutputQty}
                                             &nbsp;&nbsp;(1 lot) */}
                                         </Label>
@@ -403,7 +415,7 @@ const ProductionMaster = (props) => {
                                                     onChangeText({ event, state, setState })
                                                 }}
                                             />
-                                              {isError.Remark.length > 0 && (
+                                            {isError.Remark.length > 0 && (
                                                 <span className="text-danger f-8"><small>{isError.Remark}</small></span>
                                             )}
                                         </Col>
@@ -466,7 +478,7 @@ const ProductionMaster = (props) => {
                                                 placeholder="Enter ActualQuantity"
                                                 onChange={(event) => {
                                                     onChangeText({ event, state, setState })
-                                             }}
+                                                }}
                                             />
                                             {/* {isError.ActualQuantity.length > 0 && (
                                                 <span className="text-danger f-8"><small>{isError.ActualQuantity}</small></span>
@@ -503,8 +515,8 @@ const ProductionMaster = (props) => {
                                                 value={values.SupplierBatchCode}
                                                 placeholder="Enter SupplierBatchCode"
                                                 onChange={(event) => {
-                                                onChangeText({ event, state, setState })
-                                             }}
+                                                    onChangeText({ event, state, setState })
+                                                }}
                                             />
                                             {isError.SupplierBatchCode.length > 0 && (
                                                 <span className="text-danger f-8"><small>{isError.SupplierBatchCode}</small></span>
@@ -531,9 +543,9 @@ const ProductionMaster = (props) => {
                                                 onChange={(y, v, e) => { onChangeDate({ e, v, state, setState }) }}
                                                 onReady={(y, v, e) => { onChangeDate({ e, v, state, setState }) }}
                                             />
-                                             {isError.BestBefore.length > 0 && (
+                                            {isError.BestBefore.length > 0 && (
                                                 <span className="text-danger f-8"><small>{isError.BestBefore}</small></span>
-                                            )}                                      
+                                            )}
                                         </Col>
                                     </FormGroup>
                                 </Col>
