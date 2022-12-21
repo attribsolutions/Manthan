@@ -509,17 +509,18 @@ const Order = (props) => {
         });
         dispatch(goButton(jsonBody))
     };
+
     function orderdateOnchange(e, date) {
         let newObj = { ...orderAddFilter }
         newObj.orderdate = date
         dispatch(orderAddfilters(newObj))
-    }
+    };
 
     function supplierOnchange(e) {
         let newObj = { ...orderAddFilter }
         newObj.supplierSelect = e
         dispatch(orderAddfilters(newObj))
-    }
+    };
 
     const saveHandeller = () => {
         const division = userParty();
@@ -527,7 +528,6 @@ const Order = (props) => {
 
         const validMsg = []
         const itemArr = []
-        // let termsAndCondition = []
 
         function isChanged({ i, isedit, isdel }) {
 
