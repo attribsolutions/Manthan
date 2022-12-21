@@ -49,7 +49,7 @@ const Breadcrumb = props => {
 
   // New Button Handller
   const NewButtonHandeller = () => {
-    debugger
+    
     if (pageMode === "add") {
 
       let pathName = history.location.pathname
