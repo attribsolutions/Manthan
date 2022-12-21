@@ -2,6 +2,14 @@ import { Button } from "reactstrap";
 import { AlertState } from "../../../store/actions";
 import { getpdfReportdata } from "../../../store/Utilites/PdfReport/actions";
 
+
+const editBtnCss = "badge badge-soft-success font-size-12 btn btn-success waves-effect waves-light w-xxs border border-light"
+const editSelfBtnCss = "badge badge-soft-primary font-size-12 btn btn-primary waves-effect waves-light w-xxs border border-light"
+const deltBtnCss = "badge badge-soft-danger font-size-12 btn btn-danger waves-effect waves-light w-xxs border border-light"
+const downBtnCss = "badge badge-soft-primary font-size-12 btn btn-primary waves-effect waves-light w-xxs border border-light"
+export const makeBtnCss = "badge badge-soft-info font-size-12 btn btn-info waves-effect waves-light w-xxs border border-light"
+
+
 export const listPageCommonButtonFunction = (props) => {
 
     const dispatch = props.dispatchHook;
@@ -19,12 +27,6 @@ export const listPageCommonButtonFunction = (props) => {
         makeBtnName
 
     } = props;
-
-    const editBtnCss = "badge badge-soft-success font-size-12 btn btn-success waves-effect waves-light w-xxs border border-light"
-    const editSelfBtnCss = "badge badge-soft-primary font-size-12 btn btn-primary waves-effect waves-light w-xxs border border-light"
-    const deltBtnCss = "badge badge-soft-danger font-size-12 btn btn-danger waves-effect waves-light w-xxs border border-light"
-    const downBtnCss = "badge badge-soft-primary font-size-12 btn btn-primary waves-effect waves-light w-xxs border border-light"
-    const makeBtnCss = "badge badge-soft-info font-size-12 btn btn-info waves-effect waves-light w-xxs border border-light"
 
 
 
@@ -170,13 +172,14 @@ export const listPageCommonButtonFunction = (props) => {
                 </Button>
                 : null
             }
-            {makeBtnShow ? <Button
+            {/* {makeBtnShow ? <Button
                 type="button"
                 className={makeBtnCss}
                 data-mdb-toggle="tooltip" data-mdb-placement="top" title={makeBtnName}
                 onClick={() => { makeBtnHandler(rowData) }}
             >
-                <span style={{ marginLeft: "6px" ,marginRight:"6px"}} className=" fas fa-file-invoice" ></span> </Button> : <></>}
+                <span style={{ marginLeft: "6px" ,marginRight:"6px"}} className=" fas fa-file-invoice" ></span> </Button>
+                 : <></>} */}
 
         </div>
         )
