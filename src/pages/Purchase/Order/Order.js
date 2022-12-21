@@ -416,14 +416,40 @@ const Order = (props) => {
 
         let supplier = supplierSelect.value
         if (!supplier > 0) {
-            alert("Please Select Supplier")
-            return
+            dispatch(
+                AlertState({
+                    Type: 4,
+                    Status: true,
+                    Message: "Please Select upplier",
+                    RedirectPath: false,
+                    PermissionAction: false,
+                })
+            );
+            return;
         }
 
+
         if (items.length > 0) {
-            if (window.confirm("Refresh Order Item...!")) {
+            let ispermit = false
+            function hasPermitFunc(a) {
+                ispermit = a
+            }
+
+
+            dispatch(
+                AlertState({
+                    Type: 6,
+                    Status: true,
+                    Message: "Refresh Order Item...!",
+                    PermissionFunction: hasPermitFunc,
+                })
+            );
+            debugger
+            if (ispermit) {
                 dispatch(goButtonSuccess([]))
             } else { return }
+
+
         }
 
 

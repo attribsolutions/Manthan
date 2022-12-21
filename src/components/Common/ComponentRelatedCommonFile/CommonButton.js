@@ -1,13 +1,18 @@
 import { Button } from "reactstrap"
+import { createdBy } from "./listPageCommonButtons";
 
 export function SaveButton(props) {
 
-  const { pageMode, userAcc, module, onClick } = props
+  const { pageMode, userAcc, module, onClick ,editData={}} = props
+  
+  const {CreatedBy=''}=editData;
+  const isCreated=(createdBy()===CreatedBy ) 
+
   return (
     <div>
       {
         pageMode === "edit" ?
-          (userAcc.RoleAccess_IsEdit) || (userAcc.RoleAccess_IsEditSelf) ?
+          (userAcc.RoleAccess_IsEdit) || ((userAcc.RoleAccess_IsEditSelf) &&(isCreated)) ?
             <button
               type="submit"
               id='form_submmit'
