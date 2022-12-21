@@ -27,7 +27,7 @@ import {
     updateOrderId,
     updateOrderIdSuccess
 } from "../../../store/Purchase/OrderPageRedux/actions";
-import { getSupplier, getSupplierAddress } from "../../../store/CommonAPI/SupplierRedux/actions"
+import { getOrderType, getSupplier, getSupplierAddress } from "../../../store/CommonAPI/SupplierRedux/actions"
 import { AlertState, BreadcrumbFilterSize } from "../../../store/actions";
 import { basicAmount, GstAmount, handleKeyDown, Amount } from "./OrderPageCalulation";
 import '../../Order/div.css'
@@ -68,13 +68,13 @@ const Order = (props) => {
     const [supplierSelect, setsupplierSelect] = useState('');
     const [orderAmount, setOrderAmount] = useState(0);
     const [termsAndConTable, setTermsAndConTable] = useState([]);
-
-
+    const [orderTypeSelect, setorderTypeSelect] = useState('');
+   
     useEffect(() => {
         dispatch(getSupplier())
         dispatch(getSupplierAddress())
         dispatch(getTermAndCondition())
-
+        dispatch(getOrderType())
     }, [])
 
     const {
@@ -82,12 +82,14 @@ const Order = (props) => {
         postMsg,
         supplier,
         userAccess,
+        orderType,
         updateMsg,
         supplierAddress = [],
     } = useSelector((state) => ({
         items: state.OrderReducer.orderItem,
         supplier: state.SupplierReducer.supplier,
         supplierAddress: state.SupplierReducer.supplierAddress,
+        orderType: state.SupplierReducer.orderType,
         postMsg: state.OrderReducer.postMsg,
         updateMsg: state.OrderReducer.updateMsg,
         userAccess: state.Login.RoleAccessUpdateData,
@@ -163,10 +165,7 @@ const Order = (props) => {
             dispatch(editOrderIdSuccess({ Status: false }))
         } else {
             dispatch(BreadcrumbFilterSize(`${"Order Amount"} :0`))
-
         }
-
-
     }, [])
 
     useEffect(() => {
@@ -252,6 +251,10 @@ const Order = (props) => {
         label: i.Supplier,
     }));
 
+    const orderTypeOptions = orderType.map((i) => ({
+        value: i.id,
+        label: i.Name,
+    }));
 
     const pagesListColumns = [
         {//------------- ItemName column ----------------------------------
@@ -386,9 +389,7 @@ const Order = (props) => {
             headerStyle: (colum, colIndex) => {
                 return { width: '130px', textAlign: 'center', text: "left" };
             }
-
         },
-
     ];
 
     const defaultSorted = [
@@ -428,13 +429,11 @@ const Order = (props) => {
             return;
         }
 
-
         if (items.length > 0) {
             let ispermit = false
             function hasPermitFunc(a) {
                 ispermit = a
             }
-
 
             dispatch(
                 AlertState({
@@ -448,10 +447,7 @@ const Order = (props) => {
             if (ispermit) {
                 dispatch(goButtonSuccess([]))
             } else { return }
-
-
         }
-
 
         dispatch(BreadcrumbFilterSize(`${"Order Amount"} :0:00`))
         const jsonBody = JSON.stringify({
@@ -459,7 +455,6 @@ const Order = (props) => {
             EffectiveDate: podate
         });
         dispatch(goButton(jsonBody))
-
     };
 
     const saveHandeller = () => {
@@ -590,7 +585,7 @@ const Order = (props) => {
             OrderType: 1,
             POType: 1,
             Division: division,
-            IsOpenPO: isOpenPO ? 1 : 0,
+            POType: orderTypeSelect.value,
             POFromDate: poFromDate,
             POToDate: poToDate,
             CreatedBy: createdBy(),
@@ -755,6 +750,7 @@ const Order = (props) => {
                                     </div>
                                 </FormGroup>
                             </div >
+
                             <div className="col col-6">
                                 <FormGroup className=" row " >
                                     <Label className=" p-2"
@@ -777,32 +773,27 @@ const Order = (props) => {
                                     </div>
                                 </FormGroup>
                             </div >
-                            <div className="col col-6">
-                                {/* <Col sm="2"> */}
-                                <FormGroup className=" row " >
-                                    {/* <Row className="justify-content-md-left"> */}
-                                    <Label className="col-sm-6 col-form-label mt-2" style={{ width: "115px" }} >
-                                        Is Open PO
-                                    </Label>
-                                    <Col md={7} style={{ marginTop: '10px' }} >
-
-                                        <div className="form-check form-switch form-switch-md mb-3" >
-                                            <Input type="checkbox" className="form-check-input"
-                                                checked={isOpenPO}
-                                                name="IsActive"
-                                                onChange={(e) => {
-                                                    setisOpenPO(!isOpenPO)
-                                                }}
-                                            />
-                                        </div>
-                                    </Col>
-                                    {/* </Row> */}
-                                </FormGroup>
-                                {/* </Col> */}
-                            </div>
                         </div>
+
                         <div className="row" >
-                            <div className="col col-6" style={{ display: isOpenPO ? "block" : "none" }}>
+                            <div className="col col-6" >
+                                <FormGroup className=" row  " >
+                                    <Label className=" p-2"
+                                        style={{ width: "115px" }}>Order Type</Label>
+                                    <div className="col col-6 ">
+                                        <Select
+                                            value={orderTypeSelect}
+                                            classNamePrefix="select2-Customer"
+                                            options={orderTypeOptions}
+                                            onChange={(e) => { setorderTypeSelect(e) }}
+                                        />
+                                    </div>
+                                </FormGroup>
+                            </div >
+                        </div>
+
+                        {orderTypeSelect.label === 'Open PO' ?   <div className="row" >
+                            <div className="col col-6" >
                                 <FormGroup className=" row  " >
                                     <Label className=" p-2"
                                         style={{ width: "115px" }}>PO From Date</Label>
@@ -824,7 +815,8 @@ const Order = (props) => {
                                     </div>
                                 </FormGroup>
                             </div >
-                            <div className="col col-6" style={{ display: isOpenPO ? "block" : "none" }} >
+
+                            <div className="col col-6" >
                                 <FormGroup className=" row  " >
                                     <Label className=" p-2"
                                         style={{ width: "130px" }}>PO To Date</Label>
@@ -846,8 +838,10 @@ const Order = (props) => {
                                     </div>
                                 </FormGroup>
                             </div >
-                        </div>
+                        </div>:<></>}
+                      
                     </div>
+
                     <PaginationProvider pagination={paginationFactory(pageOptions)}>
                         {({ paginationProps, paginationTableProps }) => (
                             <ToolkitProvider

@@ -32,34 +32,15 @@ import {
   onChangeSelect,
   onChangeText,
   resetFunction,
-
 } from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
 import { COMPANY_lIST } from "../../../routes/route_url";
 import { SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
 import { createdBy, saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 
-
 const CompanyModule = (props) => {
 
   const dispatch = useDispatch();
   const history = useHistory()
-
-  //*** "isEditdata get all data from ModuleID for Binding  Form controls
-
-  const [modalCss, setModalCss] = useState(false);
-  const [pageMode, setPageMode] = useState("save");
-  const [userPageAccessState, setUserPageAccessState] = useState('');
-  const [editData, setEditData] = useState("");
-
-  //Access redux store Data /  'save_ModuleSuccess' action data
-  const { postMsg, updateMsg, userAccess, pageField } = useSelector((state) => ({
-    postMsg: state.Company.postMsg,
-    updateMsg: state.Company.updateMessage,
-    userAccess: state.Login.RoleAccessUpdateData,
-    pageField: state.CommonPageFieldReducer.pageField
-  }));
-
-  {/** Dyanamic Page access state and OnChange function */ }
 
   const fileds = {
     id: "",
@@ -74,15 +55,29 @@ const CompanyModule = (props) => {
 
   const [state, setState] = useState(() => initialFiledFunc(fileds))
 
-  const values = { ...state.values }
-  const { isError } = state;
-  const { fieldLabel } = state;
+  const [modalCss, setModalCss] = useState(false);
+  const [pageMode, setPageMode] = useState("save");
+  const [userPageAccessState, setUserPageAccessState] = useState('');
+  const [editCreatedBy, seteditCreatedBy] = useState("");
+
+  //Access redux store Data /  'save_ModuleSuccess' action data
+  const { postMsg, updateMsg, CompanyGroup, userAccess, pageField } = useSelector((state) => ({
+    postMsg: state.Company.postMsg,
+    updateMsg: state.Company.updateMessage,
+    CompanyGroup: state.Company.CompanyGroup,
+    userAccess: state.Login.RoleAccessUpdateData,
+    pageField: state.CommonPageFieldReducer.pageField
+  }));
 
   useEffect(() => {
     dispatch(commonPageFieldSuccess(null));
     dispatch(commonPageField(1))
     dispatch(getCompanyGroup());
   }, [dispatch]);
+
+  const values = { ...state.values }
+  const { isError } = state;
+  const { fieldLabel } = state;
 
   const location = { ...history.location }
   const hasShowloction = location.hasOwnProperty("editValue")
@@ -144,7 +139,7 @@ const CompanyModule = (props) => {
         values.CompanyGroupName = { label: CompanyGroupName, value: CompanyGroup };
         setState({ values, fieldLabel, hasValid, required, isError })
         dispatch(Breadcrumb_inputName(hasEditVal.Name))
-        setEditData(hasEditVal)
+        seteditCreatedBy(hasEditVal.CreatedBy)
       }
       dispatch(editCompanyIDSuccess({ Status: false }))
     }
@@ -156,9 +151,8 @@ const CompanyModule = (props) => {
 
     if ((postMsg.Status === true) && (postMsg.StatusCode === 200) && !(pageMode === "dropdownAdd")) {
       dispatch(PostCompanySubmitSuccess({ Status: false }))
-
-      setState(() => resetFunction(fileds, state))//+++++++++ Clear form values 
-      saveDissable(false);//+++++++++save Button Is enable function
+      setState(() => resetFunction(fileds, state))// Clear form values 
+      saveDissable(false);//save Button Is enable function
       dispatch(Breadcrumb_inputName(''))
 
       if (pageMode === "other") {
@@ -178,7 +172,7 @@ const CompanyModule = (props) => {
       }
     }
     else if ((postMsg.Status === true) && !(pageMode === "dropdownAdd")) {
-      saveDissable(false);//+++++++++save Button Is enable function
+      saveDissable(false);//save Button Is enable function
       dispatch(PostCompanySubmitSuccess({ Status: false }))
       dispatch(AlertState({
         Type: 4,
@@ -193,15 +187,14 @@ const CompanyModule = (props) => {
   useEffect(() => {
     if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
 
-      setState(() => resetFunction(fileds, state))//+++++++++ Clear form values 
-      saveDissable(false);//+++++++++save Button Is enable function
+      setState(() => resetFunction(fileds, state))// Clear form values 
+      saveDissable(false);//save Button Is enable function
 
       history.push({
         pathname: COMPANY_lIST,
       })
     } else if (updateMsg.Status === true && !modalCss) {
-      saveDissable(false);//+++++++++Update Button Is enable function
-
+      saveDissable(false);//Update Button Is enable function
       dispatch(updateCompanyIDSuccess({ Status: false }));
       dispatch(
         AlertState({
@@ -213,24 +206,19 @@ const CompanyModule = (props) => {
     }
   }, [updateMsg, modalCss]);
 
-  const { CompanyGroup } = useSelector((state) => ({
-    CompanyGroup: state.Company.CompanyGroup
-  }));
-
-  const CompanyGroupValues = CompanyGroup.map((Data) => ({
-    value: Data.id,
-    label: Data.Name
-  }));
-
   useEffect(() => {
-
     if (pageField) {
       const fieldArr = pageField.PageFieldMaster
       comAddPageFieldFunc({ state, setState, fieldArr })
     }
   }, [pageField])
 
-  const formSubmitHandler = (event) => {
+  const CompanyGroupValues = CompanyGroup.map((Data) => ({
+    value: Data.id,
+    label: Data.Name
+  }));
+
+  const saveHandeller = (event) => {
 
     event.preventDefault();
     if (formValid(state, setState)) {
@@ -246,7 +234,7 @@ const CompanyModule = (props) => {
         UpdatedBy: createdBy(),
       });
 
-      saveDissable(true);//+++++++++save Button Is dissable function
+      saveDissable(true);//save Button Is dissable function
 
       if (pageMode === "edit") {
         dispatch(updateCompanyID(jsonBody, values.id,));
@@ -256,7 +244,6 @@ const CompanyModule = (props) => {
       }
     }
   };
-
 
   var IsEditMode_Css = ''
   if ((modalCss) || (pageMode === "dropdownAdd")) { IsEditMode_Css = "-5.5%" };
@@ -279,11 +266,11 @@ const CompanyModule = (props) => {
                   </CardHeader>
 
                   <CardBody>
-                    <form onSubmit={formSubmitHandler} noValidate>
+                    <form onSubmit={saveHandeller} noValidate>
                       <Card >
                         <CardBody className="c_card_body">
-                          <Row>
 
+                          <Row>
                             <FormGroup className="mb-2 col col-sm-4 ">
                               <Label htmlFor="validationCustom01">{fieldLabel.Name} </Label>
                               <Input
@@ -321,12 +308,10 @@ const CompanyModule = (props) => {
                                 <span className="invalid-feedback">{isError.Address}</span>
                               )}
                             </FormGroup>
-
                           </Row>
 
                           <Row className="mb-1">
-
-                            <FormGroup className="mb-2 col col-sm-4 ">
+                            <FormGroup className=" col col-sm-4 ">
                               <Label htmlFor="validationCustom01">{fieldLabel.PhoneNo} </Label>
                               <Input
                                 name="PhoneNo"
@@ -345,7 +330,7 @@ const CompanyModule = (props) => {
                             </FormGroup>
 
                             <Col md="1">  </Col>
-                            <FormGroup className="mb-2 col col-sm-4 ">
+                            <FormGroup className=" col col-sm-4 ">
                               <Label htmlFor="validationCustom01">{fieldLabel.EmailID} </Label>
                               <Input
                                 name="EmailID"
@@ -363,6 +348,7 @@ const CompanyModule = (props) => {
                               )}
                             </FormGroup>
                           </Row>
+
                         </CardBody>
                       </Card>
 
@@ -370,7 +356,7 @@ const CompanyModule = (props) => {
                         <CardBody className="c_card_body">
 
                           <Row>
-                            <FormGroup className="mb-2 col col-sm-4 ">
+                            <FormGroup className="mb-1 col col-sm-4 ">
                               <Label htmlFor="validationCustom01">{fieldLabel.GSTIN} </Label>
                               <Input
                                 name="GSTIN"
@@ -409,15 +395,12 @@ const CompanyModule = (props) => {
                           </Row>
 
                           <Row className=" mb-3">
-
                             <Col md="4">
-
-                              <FormGroup className="mb-3 ">
+                              <FormGroup className="mb-2 ">
                                 <Label htmlFor="validationCustom01"> {fieldLabel.CompanyGroupName} </Label>
                                 <Select
                                   name="CompanyGroupName"
                                   value={values.CompanyGroupName}
-                                  //   value={{label:"abc",value:1}}//default value set
                                   className="react-dropdown"
                                   classNamePrefix="dropdown"
                                   options={CompanyGroupValues}
@@ -430,19 +413,22 @@ const CompanyModule = (props) => {
                             </Col>
                           </Row>
 
-
-                          <FormGroup >
+                          <FormGroup className="mt-2">
                             <Row >
                               <Col sm={2}>
-                                <SaveButton pageMode={pageMode} userAcc={userPageAccessState} editData={editData}
+                                <SaveButton
+                                  pageMode={pageMode}
+                                  userAcc={userPageAccessState}
+                                  editCreatedBy={editCreatedBy}
                                   module={"Company"}
                                 />
-
                               </Col>
                             </Row>
                           </FormGroup >
+
                         </CardBody>
                       </Card>
+
                     </form>
                   </CardBody>
                 </Card>

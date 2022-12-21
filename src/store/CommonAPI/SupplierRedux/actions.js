@@ -3,6 +3,8 @@ import {
   GET_SUPPLIER,
   GET_SUPPLIER_ADDRESS,
   GET_SUPPLIER_ADDRESS_SUCCESS,
+  GET_ORDER_TYPE,
+  GET_ORDER_TYPE_SUCCESS,
 } from './actionType'
 
 
@@ -24,4 +26,11 @@ export const getSupplierAddressSuccess = address => ({
   payload: address,
 })
 
+export const getOrderType = () => ({
+  type: GET_ORDER_TYPE,
+});
 
+export const getOrderTypeSuccess = orderType => ({
+  type: GET_ORDER_TYPE_SUCCESS,
+  payload: orderType,
+})

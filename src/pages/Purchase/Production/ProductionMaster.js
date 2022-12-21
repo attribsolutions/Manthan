@@ -30,7 +30,7 @@ import { AlertState, BreadcrumbFilterSize, Breadcrumb_inputName, commonPageField
 import { basicAmount, GstAmount, handleKeyDown, Amount } from "../Order/OrderPageCalulation";
 import '../../Order/div.css'
 
-import { GRN_lIST, ORDER_lIST } from "../../../routes/route_url";
+import { GRN_lIST, ORDER_lIST, PRODUCTION_LIST } from "../../../routes/route_url";
 import { SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
 
 import Breadcrumb from "../../../components/Common/Breadcrumb3";
@@ -100,7 +100,7 @@ const ProductionMaster = (props) => {
         dispatch(getMaterialIssueListPage(jsonBody));
 
     }, []);
-
+debugger
     const values = { ...state.values }
     const { isError } = state;
     const { fieldLabel } = state;
@@ -177,10 +177,8 @@ const ProductionMaster = (props) => {
                 setModalCss(true)
             }
             if (hasEditVal) {
-
                 const { id, MaterialIssueDate, NumberOfLot, LotQuantity, } = hasEditVal
                 const { values, fieldLabel, hasValid, required, isError } = { ...state }
-
                 values.id = id;
                 // values.ProductionDate = ""
                 values.EstimatedQuantity = ""
@@ -200,11 +198,12 @@ const ProductionMaster = (props) => {
             }
         }
     }, []);
+    // const produtionMakeData = produtionMake.map((index) => ({
+    //     value: index.id,
+    //     label: index.ItemName,
+    // }));
 
-    const ItemDropdown_Options = itemsDrop.map((index) => ({
-        value: index.id,
-        label: index.ItemName,
-    }));
+
 
     useEffect(() => {
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
@@ -213,7 +212,7 @@ const ProductionMaster = (props) => {
                 Type: 1,
                 Status: true,
                 Message: postMsg.Message,
-                RedirectPath: GRN_lIST,
+                RedirectPath: PRODUCTION_LIST,
             }))
         } else if (postMsg.Status === true) {
             dispatch(post_ProductionSuccess({ Status: false }))
@@ -243,29 +242,33 @@ const ProductionMaster = (props) => {
             );
         }
     }, [updateMsg, modalCss]);
-
     useEffect(() => {
         if (pageField) {
             const fieldArr = pageField.PageFieldMaster
             comAddPageFieldFunc({ state, setState, fieldArr })// new change
         }
     }, [pageField]);
-
+    const ItemDropdown_Options = itemsDrop.map((index) => ({
+        value: index.id,
+        label: index.ItemName,
+    }));
     const formSubmitHandler = ({ event, mode = false }) => {
-
+        const makeproduction = produtionMake.Data.id
+        const LotQuantity = produtionMake.Data.LotQuantity
         event.preventDefault();
+    if (formValid(state, setState)) {
+
         const jsonBody = JSON.stringify({
-            ProductionmaterialIssue: [
+            ProductionMaterialIssue: [
                 {
-                    // MaterialIssue: produtionMakeData.id,
-                    MaterialIssue: 1,
+                    MaterialIssue: makeproduction,
+                    // MaterialIssue: 1,
                 }
             ],
-
             ProductionDate: values.ProductionDate,
             EstimatedQuantity: values.EstimatedQuantity,
-            NumberOfLot: 1,
-            ActualQuantity: values.ActualQuantity,
+            NumberOfLot: produtionMake.Data.NumberOfLot,
+            ActualQuantity:LotQuantity,
             BatchDate: "2022-12-17",
             BatchCode: "aa",
             StoreLocation: "aa",
@@ -273,7 +276,7 @@ const ProductionMaster = (props) => {
             BestBefore: values.BestBefore,
             Remark: values.Remark,
             CreatedBy: 1,
-            Item: values.Item.Item,
+            Item: values.Item.value,
             UpdatedBy: 1,
             Company: 1,
             Division: 4,
@@ -290,14 +293,20 @@ const ProductionMaster = (props) => {
         dispatch(post_Production(jsonBody));
         // }
         // }
+    }
     };
+    const LotQuantity = produtionMake.Data.LotQuantity
+    const makeproduction = produtionMake.Data.Item
+    console.log(makeproduction)
+    // console.log(makeproduction)
+    // let ItemName= makeproduction.
     if (!(userPageAccessState === "")) {
         return (
             <React.Fragment>
                 <MetaTags>
                     <title>{userPageAccessState.PageHeading}| FoodERP-React FrontEnd</title>
                 </MetaTags>
-                <div className="page-content" >
+                <div className="page-content" style={{ marginBottom: "16cm" }} >
                     <Breadcrumb
                         pageHeading={userPageAccessState.PageHeading}
                         showCount={true}
@@ -326,6 +335,9 @@ const ProductionMaster = (props) => {
                                                 onChange={(y, v, e) => { onChangeDate({ e, v, state, setState }) }}
                                                 onReady={(y, v, e) => { onChangeDate({ e, v, state, setState }) }}
                                             />
+                                              {isError.ProductionDate.length > 0 && (
+                                                <span className="text-danger f-8"><small>{isError.ProductionDate}</small></span>
+                                            )}
                                         </Col>
                                     </FormGroup>
                                     <FormGroup className=" row  " >
@@ -335,14 +347,29 @@ const ProductionMaster = (props) => {
                                             < Input
                                                 name="EstimatedQuantity"
                                                 type="text"
-                                                value={values.EstimatedQuantity}
+                                                placeholder="Enter EstimatedQuantity"
+                                                value1={values.EstimatedQuantity}
                                                 // className={isError.EstimatedOutputQty.length > 0 ? "is-invalid form-control" : "form-control"}
                                                 style={{ backgroundColor: "white" }}
                                                 onChange={(event) => {
                                                     onChangeText({ event, state, setState })
                                                 }}
                                             />
+                                             {isError.EstimatedQuantity.length > 0 && (
+                                                <span className="text-danger f-8"><small>{isError.EstimatedQuantity}</small></span>
+                                            )}
                                         </Col>
+                                    </FormGroup>
+                                    <FormGroup className="row " >
+                                        <Label className=" p-2"
+                                            style={{ width: "130px" }}>{fieldLabel.NumberOfLot} :</Label>
+                                        <Label
+                                            className=" "
+                                            style={{ color: "#000000", width: "130px" , marginLeft:"7cm",marginTop:"-40px"}}>&nbsp;&nbsp;
+                                            {`Lot(${produtionMake.Data.NumberOfLot?produtionMake.Data.NumberOfLot:"empty" })`}
+                                            {/* {pageMode === "edit" ? EditData.EstimatedOutputQty : itemselect.EstimatedOutputQty}
+                                            &nbsp;&nbsp;(1 lot) */}
+                                        </Label>
                                     </FormGroup>
                                     {/* <FormGroup className=" row " >
                                     <Label className="col-md-4 p-2"
@@ -376,9 +403,12 @@ const ProductionMaster = (props) => {
                                                     onChangeText({ event, state, setState })
                                                 }}
                                             />
+                                              {isError.Remark.length > 0 && (
+                                                <span className="text-danger f-8"><small>{isError.Remark}</small></span>
+                                            )}
                                         </Col>
                                     </FormGroup>
-                                    <FormGroup className=" row" >
+                                    {/* <FormGroup className=" row" >
                                         <Label className="col-sm-4 p-2"
                                             style={{ width: "170px" }}>{fieldLabel.BestBefore}</Label>
                                         <Col md="7">
@@ -399,7 +429,7 @@ const ProductionMaster = (props) => {
                                                 onReady={(y, v, e) => { onChangeDate({ e, v, state, setState }) }}
                                             />
                                         </Col>
-                                    </FormGroup>
+                                    </FormGroup> */}
                                 </Col>
                                 <Col sm={5}>
                                     <FormGroup className=" row mt-2" >
@@ -408,7 +438,7 @@ const ProductionMaster = (props) => {
                                         <Col md="7">
                                             <Select
                                                 name="Item"
-                                                value={values.Item}
+                                                // value={makeproduction.name}
                                                 isSearchable={true}
                                                 className="react-dropdown"
                                                 classNamePrefix="dropdown"
@@ -432,12 +462,15 @@ const ProductionMaster = (props) => {
                                             <Input
                                                 type="text"
                                                 name="ActualQuantity"
-                                                value={values.ActualQuantity}
+                                                value={LotQuantity}
                                                 placeholder="Enter ActualQuantity"
                                                 onChange={(event) => {
                                                     onChangeText({ event, state, setState })
-                                                }}
+                                             }}
                                             />
+                                            {isError.ActualQuantity.length > 0 && (
+                                                <span className="text-danger f-8"><small>{isError.ActualQuantity}</small></span>
+                                            )}
                                         </Col>
                                     </FormGroup>
                                     {/*
@@ -460,7 +493,7 @@ const ProductionMaster = (props) => {
                                         />
                                     </Col>
                                 </FormGroup> */}
-                                    <FormGroup className="mb-2 row  " >
+                                    <FormGroup className=" row  " >
                                         <Label className="col-md-4 p-2"
                                             style={{ width: "170px" }}>{fieldLabel.SupplierBatchCode}</Label>
                                         <Col md="7">
@@ -470,9 +503,38 @@ const ProductionMaster = (props) => {
                                                 value={values.SupplierBatchCode}
                                                 placeholder="Enter SupplierBatchCode"
                                                 onChange={(event) => {
-                                                    onChangeText({ event, state, setState })
-                                                }}
+                                                onChangeText({ event, state, setState })
+                                             }}
                                             />
+                                            {isError.SupplierBatchCode.length > 0 && (
+                                                <span className="text-danger f-8"><small>{isError.SupplierBatchCode}</small></span>
+                                            )}
+                                        </Col>
+                                    </FormGroup>
+                                    <FormGroup className=" mb-2 row" >
+                                        <Label className="col-sm-4 "
+                                            style={{ width: "170px" }}>{fieldLabel.BestBefore}</Label>
+                                        <Col md="7">
+                                            <Flatpickr
+                                                name="BestBefore"
+                                                value={values.BestBefore}
+                                                className="form-control d-block p-2 bg-white text-dark"
+                                                placeholder="YYYY-MM-DD"
+                                                autoComplete="0,''"
+                                                disabled={pageMode === "edit" ? true : false}
+                                                options={{
+                                                    altInput: true,
+                                                    altFormat: "d-m-Y",
+                                                    dateFormat: "Y-m-d",
+                                                    // defaultDate: pageMode === "edit" ? values.BestBefore : "today"
+                                                }}
+                                                onChange={(y, v, e) => { onChangeDate({ e, v, state, setState }) }}
+                                                onReady={(y, v, e) => { onChangeDate({ e, v, state, setState }) }}
+                                            />
+                                             {isError.BestBefore.length > 0 && (
+                                                <span className="text-danger f-8"><small>{isError.BestBefore}</small></span>
+                                            )}
+                                            
                                         </Col>
                                     </FormGroup>
                                 </Col>
@@ -488,7 +550,7 @@ const ProductionMaster = (props) => {
                                 <FormGroup>
                                     <Col sm={2} style={{ marginLeft: "", marginTop: "20px" }}>
                                         <SaveButton pageMode={pageMode} userAcc={userPageAccessState}
-                                            module={"BOMMaster"}
+                                            module={"ProductionMaster"}
                                         />
                                     </Col>
                                 </FormGroup >

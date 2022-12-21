@@ -73,9 +73,9 @@ function* UpdateProductionGenFunc({ data, id }) {
 
 // List Page API
 function* get_PRODUCTION_GerFunc({ filters }) {
-  
   yield put(SpinnerState(true))
   try {
+    debugger
     const response = yield call(production_get_API, filters);
     const newList = yield response.Data.map((i) => {
       var date = convertDatefunc(i.GRNDate)
@@ -89,7 +89,7 @@ function* get_PRODUCTION_GerFunc({ filters }) {
     yield put(SpinnerState(false))
     yield put(AlertState({
       Type: 4,
-      Status: true, Message: "500 Error get_PRODUCTION LIst API ",
+      Status: true, Message: "500 Error get_PRODUCTION LIst API",
     }));
   }
 }

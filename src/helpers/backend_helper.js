@@ -316,7 +316,7 @@ export const Post_TermsAndCondtions_Master_API = (data) => post(url.TERMSANDCOND
 export const get_TermsAndCondtionsList_API = () => get(url.TERMSANDCONDITIONS_API)// get api
 export const del_TermsAndCondtions_Master_API = (id) => del(`${url.TERMSANDCONDITIONS_API}/${id}`)// delete api
 export const edit_TermsAndCondtions_Master_API = (id) => get(`${url.TERMSANDCONDITIONS_API}/${id}`)// edit api
-export const update_TermsAndCondtions_Master_API = (data, id) => put(`${url.TERMSANDCONDITIONS_API}/${id}`, data)// update api
+export const update_TermsAndCondtions_Master_API = (data, id) => put(`${url.TERMSANDCONDITIONS_API}/${id}`,data)// update api
 
 // GST API
 export const Post_GSTMaster_API = (data) => post(url.GST_LIST_API, data)// post api
@@ -364,6 +364,9 @@ export const getOrderList_forOrderPage_ApiCall = (data) => get(url.ORDER_PAGE_AP
 export const getDivisionOrders = () => get(`${url.ORDER_PAGE_API}?FromDate=2022-01-25&ToDate=2022-01-25&CustomerID=0&DivisionID=3`)
 export const getOrderList_For_Listpage = () => get(url.ORDER_PAGE_API)// Get subModule For H_pages
 
+// OrderType Dropdown API
+export const get_OrderType_Api = () => get(url.ORDER_TYPE_API) // get api
+
 //GRN PAGE grn 
 export const GRN_get_API = (filter) => post(url.GRN_LiST_BY_FILTERS, filter)
 export const GRN_Edit_API = (id) => get(`${url.GRN}/${id}`)// edit api
@@ -397,7 +400,7 @@ export const Material_Issue_Get_API = (filters) => post(url.POST_API_FOR_MATERIA
 
 // Production 
 export const Production_Post_API = (data) => post(url.GO_BUTTON_POST_API_FOR_PRODUCTION, data)// go button postapi
-export const production_get_API = (filter) => post(url.POST_API_FOR_PRODUCTION_LIST, filter)// go button postapi
+export const production_get_API = (filters) => post(url.POST_API_FOR_PRODUCTION_LIST, filters)// go button postapi
 export const production_Make_API = (data) => post(url.PRODUCTION_MAKE_API, data)// make production to material Issue postapi
 export {
   getLoggedInUser,

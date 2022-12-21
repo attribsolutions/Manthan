@@ -68,7 +68,6 @@ const OrderList = () => {
         deleteSucc: deleteOrderIdSuccess
     }
 
-
     // Featch Modules List data  First Rendering
     useEffect(() => {
         setpageMode(hasPagePath)

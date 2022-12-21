@@ -31,12 +31,12 @@ import {
     comAddPageFieldFunc,
     formValid,
     initialFiledFunc,
-    onChangeText
+    onChangeText,
+    resetFunction
 } from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
 import { COMPANYGROUP_lIST } from "../../../routes/route_url";
 import { SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
 import { createdBy, saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
-
 
 const CompanyGroupMaster = (props) => {
 
@@ -68,7 +68,6 @@ const CompanyGroupMaster = (props) => {
     const location = { ...history.location }
     const hasShowloction = location.hasOwnProperty("editValue")
     const hasShowModal = props.hasOwnProperty("editValue")
-
 
     useEffect(() => {
         dispatch(commonPageFieldSuccess(null));
@@ -128,8 +127,8 @@ const CompanyGroupMaster = (props) => {
     useEffect(() => {
 
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
-            setState(() => initialFiledFunc(fileds)) //+++++++++ Clear form values 
-            saveDissable(false);//+++++++++save Button Is enable function
+            setState(() => resetFunction(fileds, state))// Clear form values 
+            saveDissable(false);//save Button Is enable function
             dispatch(PostMethod_ForCompanyGroupMasterSuccess({ Status: false }))
             if (pageMode === "dropdownAdd") {
                 dispatch(AlertState({
@@ -148,7 +147,7 @@ const CompanyGroupMaster = (props) => {
             }
         }
         else if (postMsg.Status === true) {
-            saveDissable(false);//+++++++++save Button Is enable function
+            saveDissable(false);//save Button Is enable function
             dispatch(PostMethod_ForCompanyGroupMasterSuccess({ Status: false }))
             dispatch(AlertState({
                 Type: 4,
@@ -162,13 +161,13 @@ const CompanyGroupMaster = (props) => {
 
     useEffect(() => {
         if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
-            saveDissable(false);//+++++++++Update Button Is enable function
-            setState(() => initialFiledFunc(fileds)) //+++++++++ Clear form values
+            setState(() => resetFunction(fileds, state))// Clear form values 
+            saveDissable(false);//save Button Is enable function
             history.push({
                 pathname: COMPANYGROUP_lIST,
             })
         } else if (updateMsg.Status === true && !modalCss) {
-            saveDissable(false);//+++++++++Update Button Is enable function
+            saveDissable(false);//Update Button Is enable function
             dispatch(updateCompanyGroupTypeIDSuccess({ Status: false }));
             dispatch(
                 AlertState({
@@ -202,7 +201,7 @@ const CompanyGroupMaster = (props) => {
                 UpdatedBy: createdBy()
             });
 
-            saveDissable(true);//+++++++++save Button Is dissable function
+            saveDissable(true);//save Button Is dissable function
 
             if (pageMode === "edit") {
                 dispatch(updateCompanyGroupTypeID(jsonBody, values.id));
@@ -270,7 +269,7 @@ const CompanyGroupMaster = (props) => {
                                                                     <Col md={2} style={{ marginTop: '9px' }} >
                                                                         <div className="form-check form-switch form-switch-md mb-3">
                                                                             <Input type="checkbox" className="form-check-input"
-                                                                                defaultChecked={values.IsSCM}
+                                                                                checked={values.IsSCM}
                                                                                 name="IsSCM"
                                                                                 onChange={(e) => {
                                                                                     setState((i) => {
