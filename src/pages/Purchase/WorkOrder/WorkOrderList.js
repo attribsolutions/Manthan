@@ -4,8 +4,7 @@ import "flatpickr/dist/themes/material_blue.css"
 import Flatpickr from "react-flatpickr";
 import { BreadcrumbFilterSize, commonPageFieldList, commonPageFieldListSuccess, } from "../../../store/actions";
 import PurchaseListPage from "../../../components/Common/ComponentRelatedCommonFile/purchase"
-import { WORK_ORDER, WORK_ORDER_LIST } from "../../../routes/route_url";
-import { Button, Col, FormGroup, Label } from "reactstrap";
+import { Button, Col, Fade, FormGroup, Label } from "reactstrap";
 import Breadcrumb from "../../../components/Common/Breadcrumb";
 import { useHistory } from "react-router-dom";
 import { excelDownCommonFunc } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
@@ -30,7 +29,7 @@ const WorkOrderList = () => {
 
     const hasPagePath = history.location.pathname
 
-    const [pageMode, setpageMode] = useState(WORK_ORDER_LIST)
+    const [pageMode, setpageMode] = useState(url.WORK_ORDER_LIST)
     const [userAccState, setUserAccState] = useState('');
 
     const reducers = useSelector(
@@ -209,13 +208,13 @@ const WorkOrderList = () => {
                             reducers={reducers}
                             showBreadcrumb={false}
                             MasterModal={WorkOrder}
-                            masterPath={WORK_ORDER}
+                            masterPath={url.WORK_ORDER}
                             ButtonMsgLable={"Work Order"}
                             deleteName={"ItemName"}
                             pageMode={pageMode}
                             goButnFunc={goButtonHandler}
                             makeBtnFunc={makeBtnFunc}
-                            makeBtnShow={true}
+                            makeBtnShow={false}
                             makeBtnName={"Make Material Issue"}
                         />
                         : null
