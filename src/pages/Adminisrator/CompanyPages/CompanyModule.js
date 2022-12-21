@@ -49,6 +49,7 @@ const CompanyModule = (props) => {
   const [pageMode, setPageMode] = useState("save");
   const [userPageAccessState, setUserPageAccessState] = useState('');
   const [CompanyGroupselect, setCompanyGroup] = useState("");
+  const [editData, setEditData] = useState("");
 
   //Access redux store Data /  'save_ModuleSuccess' action data
   const { postMsg, updateMsg, userAccess, pageField } = useSelector((state) => ({
@@ -121,6 +122,8 @@ const CompanyModule = (props) => {
       }
 
       if (hasEditVal) {
+        debugger
+       
         const { id, Name, Address, GSTIN, PhoneNo, CompanyAbbreviation, EmailID, CompanyGroup, CompanyGroupName } = hasEditVal
         const { values, fieldLabel, hasValid, required, isError } = { ...state }
 
@@ -142,6 +145,7 @@ const CompanyModule = (props) => {
         values.CompanyGroupName = { label: CompanyGroupName, value: CompanyGroup };
         setState({ values, fieldLabel, hasValid, required, isError })
         dispatch(Breadcrumb_inputName(hasEditVal.Name))
+        setEditData(hasEditVal)
       }
       dispatch(editCompanyIDSuccess({ Status: false }))
     }
@@ -454,7 +458,7 @@ const CompanyModule = (props) => {
                           <FormGroup >
                             <Row >
                               <Col sm={2}>
-                                <SaveButton pageMode={pageMode} userAcc={userPageAccessState}
+                                <SaveButton pageMode={pageMode} userAcc={userPageAccessState} editData={editData}
                                   module={"Company"}
                                 />
 
