@@ -16,8 +16,9 @@ import {
   UpdateTermsAndCondtions_Success
 } from "../../../store/Administrator/TermsAndConditionsRedux/actions";
 import { TERMS_AND_CONDITION } from "../../../routes/route_url";
+
 const TermsAndConditionsList = (props) => {
-  debugger
+
   const dispatch = useDispatch();
   //useSelector is used to access the redux store in function component
   const reducers = useSelector(
@@ -31,7 +32,6 @@ const TermsAndConditionsList = (props) => {
       pageField: state.CommonPageFieldReducer.pageFieldList
     })
   );
-
 
   const action = {
     getList: getTermAndCondition,
@@ -50,6 +50,7 @@ const TermsAndConditionsList = (props) => {
     dispatch(getTermAndCondition())
 
   }, []);
+  
   const { pageField } = reducers
   return (
     <React.Fragment>

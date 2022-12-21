@@ -80,12 +80,12 @@ function* Delete_TermsAndCondtions_GenratorFunction({id }) {
 
 // edit api
 function* Edit_TermsAndCondtions_GenratorFunction({ id,pageMode }) {
+  debugger
   try {
     const response = yield call(edit_TermsAndCondtions_Master_API, id);
     response.pageMode=pageMode
     yield put(EditTermsAndCondtions_Success(response));
-    console.log("response in saga", response)
-
+    
   } catch (error) {
     yield put(AlertState({
       Type: 4,
@@ -96,9 +96,10 @@ function* Edit_TermsAndCondtions_GenratorFunction({ id,pageMode }) {
 
 // update api
 function* update_TermsAndCondtions_GenratorFunction({ updateData, ID }) {
+  
   try {
     yield put(SpinnerState(true))
-    const response = yield call(update_TermsAndCondtions_Master_API,updateData,ID);
+    const response = yield call(update_TermsAndCondtions_Master_API, updateData, ID);
     yield put(SpinnerState(false))
     yield put(UpdateTermsAndCondtions_Success(response))
   }
