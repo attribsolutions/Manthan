@@ -43,17 +43,17 @@ const WorkOrder = (props) => {
     const [userPageAccessState, setUserPageAccessState] = useState('');
     const [itemselect, setItemselect] = useState("")
 
-        const fileds = {
-            id: "",
-            WorkOrderDate: '',
-            ItemName: [],
-            NumberOfLot: "",
-            Quantity: "",
-            StockQuantity: "",
-            EstimatedOutputQty: ""
-        }
-       
-        const [state, setState] = useState(() => initialFiledFunc(fileds))
+    const fileds = {
+        id: "",
+        WorkOrderDate: '',
+        ItemName: [],
+        NumberOfLot: "",
+        Quantity: "",
+        StockQuantity: "",
+        EstimatedOutputQty: ""
+    }
+
+    const [state, setState] = useState(() => initialFiledFunc(fileds))
 
     //Access redux store Data /  'save_ModuleSuccess' action data
     const {
@@ -72,7 +72,6 @@ const WorkOrder = (props) => {
         Items: state.WorkOrderReducer.BOMList,
         GoButton: state.WorkOrderReducer.GoButton
     }));
-
 
     const { BOMItems = [], EstimatedOutputQty = '', id = '', Item = '', Unit = '' } = GoButton
 
@@ -189,7 +188,7 @@ const WorkOrder = (props) => {
     }, [postMsg])
 
     useEffect(() => {
-        debugger
+
         if ((updateMsg.Status === true) && (updateMsg.StatusCode === 200) && !(modalCss)) {
             // saveDissable(false);//+++++++++Update Button Is enable function
             // setState(() => initialFiledFunc(fileds)) //+++++++++ Clear form values
@@ -216,7 +215,12 @@ const WorkOrder = (props) => {
         }
     }, [pageField])
 
-    const ItemDropdown_Options = Items.map((index) => ({
+    let filterItems = Items.filter((index) => {
+        debugger
+        return index.IsActive === true
+    })
+
+    const ItemDropdown_Options = filterItems.map((index) => ({
         value: index.id,
         label: index.ItemName,
         ItemID: index.Item,
@@ -225,6 +229,7 @@ const WorkOrder = (props) => {
         EstimatedOutputQty: index.EstimatedOutputQty,
         StockQty: index.StockQty
     }));
+
 
     useEffect(() => {
 
@@ -428,7 +433,7 @@ const WorkOrder = (props) => {
 
                     <Breadcrumb pageHeading={userPageAccessState.PageHeading} />
 
-                    <form onSubmit={formSubmitHandler}noValidate>
+                    <form onSubmit={formSubmitHandler} noValidate>
                         <div className="px-2 mb-1 mt-n3 c_card_filter text-black" >
 
                             <div className="row">
@@ -591,48 +596,48 @@ const WorkOrder = (props) => {
                         </div>
 
                         {BOMItems.length > 0 ?
-                         <PaginationProvider pagination={paginationFactory(pageOptions)}>
-                            {({ paginationProps, paginationTableProps }) => (
-                                <ToolkitProvider
-                                    keyField={"id"}
-                                    data={BOMItems}
-                                    columns={pagesListColumns}
-                                    search
-                                >
-                                    {(toolkitProps) => (
-                                        <React.Fragment>
-                                            <Row>
-                                                <Col xl="12">
-                                                    <div className="table-responsive">
-                                                        <BootstrapTable
-                                                            keyField={"id"}
-                                                            responsive
-                                                            bordered={false}
-                                                            striped={false}
-                                                            // defaultSorted={defaultSorted}
-                                                            classes={"table  table-bordered"}
-                                                            // noDataIndication={<div className="text-danger text-center ">Items Not available</div>}
-                                                            {...toolkitProps.baseProps}
-                                                            {...paginationTableProps}
-                                                        />
-                                                        <div>
-                                                            <label >EstimatedOutputQty :&nbsp;&nbsp; <span style={{ color: "#000000" }}>{EstimatedOutputQty}</span></label>
+                            <PaginationProvider pagination={paginationFactory(pageOptions)}>
+                                {({ paginationProps, paginationTableProps }) => (
+                                    <ToolkitProvider
+                                        keyField={"id"}
+                                        data={BOMItems}
+                                        columns={pagesListColumns}
+                                        search
+                                    >
+                                        {(toolkitProps) => (
+                                            <React.Fragment>
+                                                <Row>
+                                                    <Col xl="12">
+                                                        <div className="table-responsive">
+                                                            <BootstrapTable
+                                                                keyField={"id"}
+                                                                responsive
+                                                                bordered={false}
+                                                                striped={false}
+                                                                // defaultSorted={defaultSorted}
+                                                                classes={"table  table-bordered"}
+                                                                // noDataIndication={<div className="text-danger text-center ">Items Not available</div>}
+                                                                {...toolkitProps.baseProps}
+                                                                {...paginationTableProps}
+                                                            />
+                                                            <div>
+                                                                <label >EstimatedOutputQty :&nbsp;&nbsp; <span style={{ color: "#000000" }}>{EstimatedOutputQty}</span></label>
+                                                            </div>
                                                         </div>
-                                                    </div>
-                                                </Col>
-                                            </Row>
-                                            <Row className="align-items-md-center mt-30">
-                                                <Col className="pagination pagination-rounded justify-content-end mb-2">
-                                                    <PaginationListStandalone {...paginationProps} />
-                                                </Col>
-                                            </Row>
-                                        </React.Fragment>
-                                    )}
-                                </ToolkitProvider>
-                            )}
+                                                    </Col>
+                                                </Row>
+                                                <Row className="align-items-md-center mt-30">
+                                                    <Col className="pagination pagination-rounded justify-content-end mb-2">
+                                                        <PaginationListStandalone {...paginationProps} />
+                                                    </Col>
+                                                </Row>
+                                            </React.Fragment>
+                                        )}
+                                    </ToolkitProvider>
+                                )}
 
-                        </PaginationProvider> 
-                        : <></>} 
+                            </PaginationProvider>
+                            : <></>}
 
 
 
