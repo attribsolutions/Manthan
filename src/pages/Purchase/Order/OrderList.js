@@ -266,7 +266,7 @@ const OrderList = () => {
                             deleteName={"FullOrderNumber"}
                             pageMode={pageMode}
                             makeBtnFunc={makeBtnFunc}
-                            makeBtnShow={true}
+                            makeBtnShow={pageMode === url.ORDER_lIST ? false : true}
                             makeBtnName={"Make GRN"}
                             goButnFunc={goButtonHandler}
                             downUrlPath={editOrderID_forOrderPage_ApiCall}
