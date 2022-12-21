@@ -36,7 +36,7 @@ import { SaveButton } from "../../../components/Common/ComponentRelatedCommonFil
 import Breadcrumb from "../../../components/Common/Breadcrumb3";
 import { editGRNId, getGRN_itemMode2_Success, postGRN, postGRNSuccess } from "../../../store/Purchase/GRNRedux/actions";
 import { mySearchProps } from "../../../components/Common/ComponentRelatedCommonFile/MySearch";
-import { createdBy, currentDate } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { createdBy, currentDate, saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import { comAddPageFieldFunc, formValid, initialFiledFunc, onChangeDate, onChangeSelect, onChangeText } from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
 import { post_Production, post_ProductionSuccess, update_ProductionId, update_ProductionIdSuccess } from "../../../store/Purchase/ProductionRedux/actions";
 import { getMaterialIssueListPage } from "../../../store/Purchase/Matrial_Issue/action";
@@ -55,20 +55,23 @@ const ProductionMaster = (props) => {
     // const [grnDate, setgrnDate] = useState(currentDate);
     // const [invoiceDate, setInvoiceDate] = useState(currentDate);
     const initialFiled = {
-        id: '',
+        id:"",
         ProductionDate: "",
         EstimatedQuantity: "",
         NumberOfLot: "",
         ActualQuantity: "",
-        BatchDate: "",
-        BatchCode: "",
-        StoreLocation: "",
+        // BatchDate: "",
+        // BatchCode: "",
+        // StoreLocation: "",
         SupplierBatchCode: "",
         BestBefore: "",
         Remark: "",
         Item: "",
     }
     const [state, setState] = useState(initialFiledFunc(initialFiled))
+    const values = { ...state.values }
+    const { isError } = state;
+    const { fieldLabel } = state;
     useEffect(() => {
         // dispatch(getSupplier())
         // dispatch(getSupplierAddress())
@@ -100,10 +103,8 @@ const ProductionMaster = (props) => {
         dispatch(getMaterialIssueListPage(jsonBody));
 
     }, []);
-debugger
-    const values = { ...state.values }
-    const { isError } = state;
-    const { fieldLabel } = state;
+
+   
 
 
     // userAccess useEffect
@@ -180,7 +181,7 @@ debugger
                 const { id, MaterialIssueDate, NumberOfLot, LotQuantity, } = hasEditVal
                 const { values, fieldLabel, hasValid, required, isError } = { ...state }
                 values.id = id;
-                // values.ProductionDate = ""
+                values.ProductionDate = ""
                 values.EstimatedQuantity = ""
                 values.NumberOfLot = ""
                 values.ActualQuantity = ""
@@ -202,8 +203,6 @@ debugger
     //     value: index.id,
     //     label: index.ItemName,
     // }));
-
-
 
     useEffect(() => {
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
@@ -229,7 +228,7 @@ debugger
     useEffect(() => {
         if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
             history.push({
-                pathname: ORDER_lIST,
+                pathname: PRODUCTION_LIST,
             })
         } else if (updateMsg.Status === true && !modalCss) {
             dispatch(update_ProductionIdSuccess({ Status: false }));
@@ -252,23 +251,22 @@ debugger
         value: index.id,
         label: index.ItemName,
     }));
-    const formSubmitHandler = ({ event, mode = false }) => {
+    const formSubmitHandler = ({ event }) => {
+        debugger
+        event.preventDefault();
         const makeproduction = produtionMake.Data.id
         const LotQuantity = produtionMake.Data.LotQuantity
-        event.preventDefault();
     if (formValid(state, setState)) {
-
         const jsonBody = JSON.stringify({
             ProductionMaterialIssue: [
                 {
                     MaterialIssue: makeproduction,
-                    // MaterialIssue: 1,
                 }
             ],
             ProductionDate: values.ProductionDate,
             EstimatedQuantity: values.EstimatedQuantity,
             NumberOfLot: produtionMake.Data.NumberOfLot,
-            ActualQuantity:LotQuantity,
+            ActualQuantity:values.ActualQuantity,
             BatchDate: "2022-12-17",
             BatchCode: "aa",
             StoreLocation: "aa",
@@ -285,6 +283,7 @@ debugger
             MRP: " ",
             Rate: 55,
         });
+        saveDissable(true)
         // if ((pageMode === 'edit') && !mode) {
         //     dispatch(update_ProductionId(jsonBody));
         // }
@@ -295,9 +294,10 @@ debugger
         // }
     }
     };
+    
     const LotQuantity = produtionMake.Data.LotQuantity
-    const makeproduction = produtionMake.Data.Item
-    console.log(makeproduction)
+    // const makeproduction = produtionMake.Data.Item.Name
+    // console.log(makeproduction)
     // console.log(makeproduction)
     // let ItemName= makeproduction.
     if (!(userPageAccessState === "")) {
@@ -311,7 +311,7 @@ debugger
                         pageHeading={userPageAccessState.PageHeading}
                         showCount={true}
                     />
-                    <form onSubmit={(event) => formSubmitHandler({ event })} noValidate>
+                    <form onSubmit= {formSubmitHandler}noValidate>
                         <div className="px-2 mb-1  c_card_header " style={{ marginTop: "-15px" }} >
                             <Row>
                                 <Col sm={5}>
@@ -348,7 +348,7 @@ debugger
                                                 name="EstimatedQuantity"
                                                 type="text"
                                                 placeholder="Enter EstimatedQuantity"
-                                                value1={values.EstimatedQuantity}
+                                                value={values.EstimatedQuantity}
                                                 // className={isError.EstimatedOutputQty.length > 0 ? "is-invalid form-control" : "form-control"}
                                                 style={{ backgroundColor: "white" }}
                                                 onChange={(event) => {
@@ -438,7 +438,7 @@ debugger
                                         <Col md="7">
                                             <Select
                                                 name="Item"
-                                                // value={makeproduction.name}
+                                                // value={makeproduction}
                                                 isSearchable={true}
                                                 className="react-dropdown"
                                                 classNamePrefix="dropdown"
@@ -462,15 +462,15 @@ debugger
                                             <Input
                                                 type="text"
                                                 name="ActualQuantity"
-                                                value={LotQuantity}
+                                                value={values.LotQuantity}
                                                 placeholder="Enter ActualQuantity"
                                                 onChange={(event) => {
                                                     onChangeText({ event, state, setState })
                                              }}
                                             />
-                                            {isError.ActualQuantity.length > 0 && (
+                                            {/* {isError.ActualQuantity.length > 0 && (
                                                 <span className="text-danger f-8"><small>{isError.ActualQuantity}</small></span>
-                                            )}
+                                            )} */}
                                         </Col>
                                     </FormGroup>
                                     {/*
@@ -533,8 +533,7 @@ debugger
                                             />
                                              {isError.BestBefore.length > 0 && (
                                                 <span className="text-danger f-8"><small>{isError.BestBefore}</small></span>
-                                            )}
-                                            
+                                            )}                                      
                                         </Col>
                                     </FormGroup>
                                 </Col>

@@ -74,7 +74,6 @@ const WorkOrder = (props) => {
     }));
 
     const { BOMItems = [], EstimatedOutputQty = '', id = '', Item = '', Unit = '' } = GoButton
-
     useEffect(() => {
         dispatch(postGoButtonForWorkOrder_MasterSuccess([]))
         dispatch(commonPageFieldSuccess(null));
@@ -230,7 +229,6 @@ const WorkOrder = (props) => {
         StockQty: index.StockQty
     }));
 
-
     useEffect(() => {
 
         const jsonBody = JSON.stringify({
@@ -253,7 +251,6 @@ const WorkOrder = (props) => {
             return i
         })
     }
-
     function NumberOfLotchange(e) {
         debugger
         dispatch(postGoButtonForWorkOrder_MasterSuccess([]))
@@ -299,7 +296,6 @@ const WorkOrder = (props) => {
     }
 
     const goButtonHandler = (event) => {
-        debugger
 
         event.preventDefault();
         if (formValid(state, setState)) {
@@ -318,6 +314,7 @@ const WorkOrder = (props) => {
     const { fieldLabel } = state;
 
     const formSubmitHandler = (event) => {
+        debugger
 
         const WorkOrderItems = BOMItems.map((index) => ({
             Item: index.Item,
@@ -328,7 +325,6 @@ const WorkOrder = (props) => {
 
         event.preventDefault();
         if (formValid(state, setState)) {
-
             const jsonBody = JSON.stringify({
                 WorkOrderDate: values.WorkOrderDate,
                 Item: (pageMode === "edit" ? Item : values.ItemName.ItemID),
@@ -342,11 +338,8 @@ const WorkOrder = (props) => {
                 UpdatedBy: createdBy(),
                 WorkOrderItems: WorkOrderItems
             });
-
             // saveDissable(true);//+++++++++save Button Is dissable function
-
             if (pageMode === 'edit') {
-
                 dispatch(updateWorkOrderList(jsonBody, EditData.id));
                 console.log("update jsonBody", jsonBody)
             }
@@ -354,14 +347,11 @@ const WorkOrder = (props) => {
                 dispatch(postWorkOrderMaster(jsonBody));
                 console.log("post jsonBody", jsonBody)
             }
-
         }
     };
-
     const QuantityHandler = (e, user) => {
         user["CurrentMRP"] = e.target.value
     }
-
     const pagesListColumns = [
         {
             text: "Item Name",
@@ -385,7 +375,6 @@ const WorkOrder = (props) => {
             formatter: (cellContent, user) => (
                 <>
                     <div style={{ justifyContent: 'center' }} >
-
                         <Col>
                             <FormGroup className=" col col-sm-4 ">
                                 <Input
@@ -405,14 +394,12 @@ const WorkOrder = (props) => {
             ),
         },
         {
-
             text: "UnitName",
             dataField: "UnitName",
             sort: true,
         },
 
     ]
-
     const pageOptions = {
         sizePerPage: 10,
         totalSize: GoButton.length,
@@ -421,21 +408,16 @@ const WorkOrder = (props) => {
 
     var IsEditMode_Css = ''
     if ((modalCss) || (pageMode === "dropdownAdd")) { IsEditMode_Css = "-5.5%" };
-
     if (!(userPageAccessState === '')) {
         return (
             <React.Fragment>
-
                 <MetaTags>
                     <title>GroupTypeMaster | FoodERP-React FrontEnd</title>
                 </MetaTags>
                 <div className="page-content" style={{ marginTop: "-0.4cm" }}>
-
                     <Breadcrumb pageHeading={userPageAccessState.PageHeading} />
-
                     <form onSubmit={formSubmitHandler} noValidate>
                         <div className="px-2 mb-1 mt-n3 c_card_filter text-black" >
-
                             <div className="row">
                                 <div className="col col-6">
                                     <FormGroup className=" row  mt-3" >
@@ -462,11 +444,9 @@ const WorkOrder = (props) => {
                                             {isError.WorkOrderDate.length > 0 && (
                                                 <span className="invalid-feedback">{isError.WorkOrderDate}</span>
                                             )}
-
                                         </div>
                                     </FormGroup>
                                 </div >
-
                                 <div className="col col-6" >
                                     <FormGroup className=" row mt-3 " >
                                         <Label className=" p-2"
