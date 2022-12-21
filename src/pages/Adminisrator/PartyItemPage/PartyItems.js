@@ -39,7 +39,7 @@ import { countlabelFunc } from "../../../components/Common/ComponentRelatedCommo
 import { mySearchProps } from "../../../components/Common/ComponentRelatedCommonFile/SearchBox/MySearch";
 import { SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
 import { PARTYITEM_LIST } from "../../../routes/route_url";
-import { comAddPageFieldFunc, formValid, initialFiledFunc, onChangeSelect } from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
+import { comAddPageFieldFunc, formValid, initialFiledFunc, onChangeSelect, resetFunction } from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
 import { saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 
 
@@ -168,9 +168,11 @@ const PartyItems = (props) => {
     useEffect(() => {
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(PostPartyItemsSuccess({ Status: false }))
-            setState(() => initialFiledFunc(fileds)) //+++++++++ Clear form values 
+            setState(() => resetFunction(fileds, state))// Clear form values 
             saveDissable(false);//+++++++++save Button Is enable function
             dispatch(getPartyItemListSuccess([]))
+            dispatch(Breadcrumb_inputName(''))
+
             dispatch(AlertState({
                 Type: 1,
                 Status: true,
@@ -196,7 +198,7 @@ const PartyItems = (props) => {
     useEffect(() => {
         if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
             saveDissable(false);//+++++++++Update Button Is enable function
-            setState(() => initialFiledFunc(fileds)) //+++++++++ Clear form values
+            setState(() => resetFunction(fileds, state))// Clear form values 
             history.push({
                 pathname: PARTYITEM_LIST,
             })
