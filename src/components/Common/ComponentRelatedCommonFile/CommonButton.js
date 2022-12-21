@@ -3,10 +3,9 @@ import { createdBy } from "./listPageCommonButtons";
 
 export function SaveButton(props) {
 
-  const { pageMode, userAcc, module, onClick ,editData={}} = props
-  
-  const {CreatedBy=''}=editData;
-  const isCreated=(createdBy()===CreatedBy ) 
+  const { pageMode, userAcc, module, onClick ,editCreatedBy={}} = props
+
+  const isCreated=(createdBy()===editCreatedBy ) 
 
   return (
     <div>

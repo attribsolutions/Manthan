@@ -63,6 +63,7 @@ const PageMaster = (props) => {
   const [tablePageAccessDataState, setTablePageAccessDataState] = useState([]);
   const [module_DropdownSelect, setModule_DropdownSelect] = useState("");
   const [pageType_DropdownSelect, setPageType_DropdownSelect] = useState("");
+  debugger
   const [relatedPage_DropdownSelect, setrelatedPage_DropdownSelect] = useState("");
   const [pageAccessDropDownView, setPageAccessDropDownView] = useState(false);
   const [modal_center, setmodal_center] = useState(false);
@@ -115,7 +116,6 @@ const PageMaster = (props) => {
 
   const [state, setState] = useState(() => initialFiledFunc(fileds))
 
-  // debugger
   const location = { ...history.location }
   const hasShowloction = location.hasOwnProperty("editValue")
   const hasShowModal = props.hasOwnProperty("editValue")
@@ -476,7 +476,7 @@ const PageMaster = (props) => {
   };
 
   const FormSubmitButton_Handler = (event, values) => {
-
+debugger
 
     let Access = []
     PageAccess.forEach((element, key) => {
@@ -513,21 +513,24 @@ const PageMaster = (props) => {
       );
       return;
     }
+    debugger
+    if ((pageType_DropdownSelect.value === 2) && (relatedPage_DropdownSelect ===undefined)){
+      debugger
+      dispatch(
+        AlertState({
+          Type: 4,
+          Status: true,
+          Message: "Please Select Related Page ID",
+          RedirectPath: false,
+          PermissionAction: false,
+        })
+      );
+      return;
+    }
 
-    // if ((pageType_DropdownSelect.value === 2)) {
-    //   dispatch(
-    //     AlertState({
-    //       Type: 4,
-    //       Status: true,
-    //       Message: "Please Select Related Page ID",
-    //       RedirectPath: false,
-    //       PermissionAction: false,
-    //     })
-    //   );
-    //   return;
-    // }
-
+    debugger
     const jsonBody = JSON.stringify({
+
       Name: values.Name,
       Module: module_DropdownSelect.value,
       isActive: values.isActive,
@@ -546,6 +549,7 @@ const PageMaster = (props) => {
       PagePageAccess: Access,
       PageFieldMaster: PageFieldMaster,
     })
+    debugger
     if ((pageType_DropdownSelect.value === 1) && (PageFieldMaster.length === 0)) {
       {
         dispatch(
@@ -560,6 +564,7 @@ const PageMaster = (props) => {
         return;
       }
     }
+
     saveDissable(true);//+++++++++save Button Is dissable function
 
     if (pageMode === "edit") {
@@ -597,6 +602,7 @@ const PageMaster = (props) => {
   };
 
   const relatedPage_DropdownSelectHandller = (e) => {
+    debugger
     setrelatedPage_DropdownSelect(e);
   };
 
@@ -1001,35 +1007,38 @@ const PageMaster = (props) => {
                                 </Row>
                               </FormGroup>
 
-                              <FormGroup className="mb-1 col col-sm-4">
-                                <Row className="justify-content-md-left">
+                              {pageType_DropdownSelect.value === 2 ?
+                                <FormGroup className="mb-1 col col-sm-4">
+                                  <Row className="justify-content-md-left">
 
-                                  <Label
-                                    htmlFor="horizontal-firstname-input"
-                                    className="col-sm-4 col-form-label mt-4"
-                                  >
-                                    EditMode show In Component
-                                  </Label>
-                                  <Col md={5} style={{ marginTop: "15px" }}>
-                                    <div
-                                      className="form-check form-switch form-switch-md mb-1"
-                                      dir="ltr"
+                                    <Label
+                                      htmlFor="horizontal-firstname-input"
+                                      className="col-sm-4 col-form-label mt-4"
                                     >
-                                      <AvInput
-                                        type="checkbox"
-                                        className="form-check-input mt-4"
-                                        id="customSwitchsizemd"
-                                        defaultChecked={EditData.IsEditPopuporComponent}
-                                        name="IsEditPopuporComponent"
-                                      />
-                                      <label
-                                        className="form-check-label"
-                                        htmlFor="customSwitchsizemd"
-                                      ></label>
-                                    </div>
-                                  </Col>
-                                </Row>
-                              </FormGroup>
+                                      EditMode show In Component
+                                    </Label>
+                                    <Col md={5} style={{ marginTop: "15px" }}>
+                                      <div
+                                        className="form-check form-switch form-switch-md mb-1"
+                                        dir="ltr"
+                                      >
+                                        <AvInput
+                                          type="checkbox"
+                                          className="form-check-input mt-4"
+                                          id="customSwitchsizemd"
+                                          defaultChecked={EditData.IsEditPopuporComponent}
+                                          name="IsEditPopuporComponent"
+                                        />
+                                        <label
+                                          className="form-check-label"
+                                          htmlFor="customSwitchsizemd"
+                                        ></label>
+                                      </div>
+                                    </Col>
+                                  </Row>
+                                </FormGroup>
+                                : null}
+
                             </Row>
 
                           </CardBody>

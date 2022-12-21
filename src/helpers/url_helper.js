@@ -193,7 +193,7 @@ export const POST_API_FOR_MATERIAL_ISSUE_LIST = '/MaterialIssueFilter'
 
 // Production master
 export const GO_BUTTON_POST_API_FOR_PRODUCTION ='/Production'
-export const POST_API_FOR_PRODUCTION_LIST ='/Production'
+export const POST_API_FOR_PRODUCTION_LIST ='/ProductionFilter'
 export const PRODUCTION_MAKE_API ='/MaterialIssueforProduction'
 
 // Order Type 

@@ -176,6 +176,7 @@ export const initialFiledFunc = (field) => {
 
 
 export const resetFunction = (field, state) => {
+   
     var preState = { ...state }
     preState.values = field
     Object.keys(field).forEach(label => {
