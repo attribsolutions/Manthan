@@ -4,7 +4,6 @@ import "flatpickr/dist/themes/material_blue.css"
 import Flatpickr from "react-flatpickr";
 import { BreadcrumbFilterSize, commonPageFieldList, commonPageFieldListSuccess, } from "../../../store/actions";
 import PurchaseListPage from "../../../components/Common/ComponentRelatedCommonFile/purchase"
-import { MATERIAL_ISSUE, MATERIAL_ISSUE_LIST, } from "../../../routes/route_url";
 import { Button, Col, FormGroup, Label } from "reactstrap";
 import Breadcrumb from "../../../components/Common/Breadcrumb";
 import { useHistory } from "react-router-dom";
@@ -24,7 +23,7 @@ const MaterialIssueList = () => {
 
     const hasPagePath = history.location.pathname
 
-    const [pageMode, setpageMode] = useState(MATERIAL_ISSUE_LIST)
+    const [pageMode, setpageMode] = useState(url.MATERIAL_ISSUE_LIST)
     const [userAccState, setUserAccState] = useState('');
     const reducers = useSelector(
         (state) => ({
@@ -213,13 +212,13 @@ const MaterialIssueList = () => {
                             reducers={reducers}
                             showBreadcrumb={false}
                             MasterModal={MaterialIssueMaster}
-                            masterPath={MATERIAL_ISSUE}
+                            masterPath={url.MATERIAL_ISSUE}
                             ButtonMsgLable={"Material Issue"}
                             deleteName={"ItemName"}
                             pageMode={pageMode}
                             goButnFunc={goButtonHandler}
                             makeBtnFunc={makeBtnFunc}
-                            makeBtnShow={true}
+                            makeBtnShow={pageMode === url.MATERIAL_ISSUE_LIST ? false : true}
                             makeBtnName={"Make Production"}
                         />
                         : null
