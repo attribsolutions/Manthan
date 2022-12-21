@@ -98,7 +98,7 @@ export const listPageCommonButtonFunction = (props) => {
                             type="button"
                             className={editSelfBtnCss}
                             data-mdb-toggle="tooltip" data-mdb-placement="top" title={`EditSelf ${ButtonMsgLable}`}
-                            onClick={() => { deleteHandler(rowData) }}
+                            onClick={() => { editHandler(rowData) }}
                         >
                             <i className="mdi mdi-pencil font-size-18" id="edittooltip"></i>
                         </Button>
