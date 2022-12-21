@@ -45,7 +45,7 @@ import GroupTab from "./Group_Tab";
 import UnitConverstion from "./UnitConversion_Tab/Index";
 import Image from "./Image_Tab/Index";
 import { createdBy, saveDissable } from "../../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
-import { initialFiledFunc } from "../../../../components/Common/ComponentRelatedCommonFile/validationFunction";
+import { initialFiledFunc, resetFunction } from "../../../../components/Common/ComponentRelatedCommonFile/validationFunction";
 
 const ItemsMaster = (props) => {
     const dispatch = useDispatch();
@@ -270,7 +270,7 @@ const ItemsMaster = (props) => {
 
         if ((PostAPIResponse.Status === true) && (PostAPIResponse.StatusCode === 200) && !(pageMode === "dropdownAdd")) {
             dispatch(PostItemDataSuccess({ Status: false }))
-            setState(() => initialFiledFunc(fileds)) //+++++++++ Clear form values 
+            setState(() => resetFunction(fileds, state))//+++++++++ Clear form values
             saveDissable(false);//+++++++++save Button Is enable function
 
             if (pageMode === "dropdownAdd") {
@@ -609,7 +609,7 @@ const ItemsMaster = (props) => {
             <React.Fragment>
                 <div className="page-content" style={{ marginTop: IsEditMode_Css, marginBottom: "1cm" }}>
                     <MetaTags>
-                        <title>Item Master| FoodERP-React FrontEnd</title>
+                        <title>{userPageAccessState.PageHeading} | FoodERP-React FrontEnd</title>
                     </MetaTags>
                     <Container fluid>
                         <Breadcrumb pageHeading={userPageAccessState.PageHeading} />

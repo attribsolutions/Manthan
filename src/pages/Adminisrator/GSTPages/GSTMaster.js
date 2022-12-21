@@ -27,7 +27,7 @@ import BootstrapTable from "react-bootstrap-table-next";
 import { AvField, AvForm } from "availity-reactstrap-validation";
 import { deleteGSTForMasterPage, deleteGSTForMasterPageSuccess, getGSTListPage, postGoButtonForGST_Master, postGoButtonForGST_Master_Success, postGSTMasterData, postGSTMasterDataSuccess } from "../../../store/Administrator/GSTRedux/action";
 import { createdBy, saveDissable, userCompany } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
-import { initialFiledFunc } from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
+import { initialFiledFunc, resetFunction } from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
 
 const GSTMaster = (props) => {
     const dispatch = useDispatch();
@@ -118,7 +118,7 @@ const GSTMaster = (props) => {
 
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200) && !(pageMode === "dropdownAdd")) {
             dispatch(postGSTMasterDataSuccess({ Status: false }))
-            setState(() => initialFiledFunc(fileds)) //+++++++++ Clear form values 
+            setState(() => resetFunction(fileds, state))//+++++++++ Clear form values
             saveDissable(false);//+++++++++save Button Is enable function
             setEffectiveDate('')
             if (pageMode === "dropdownAdd") {
