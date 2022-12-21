@@ -13,7 +13,7 @@ import { MetaTags } from "react-meta-tags";
 import { useHistory } from "react-router-dom";
 
 import { AlertState, BreadcrumbFilterSize } from "../../../store/actions";
-import { excelDownCommonFunc, listPageCommonButtonFunction }
+import { excelDownCommonFunc, listPageCommonButtonFunction, saveDissable }
   from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import { defaultSearch, mySearchProps } from "./MySearch";
 
@@ -127,6 +127,8 @@ const CommonListPage = (props) => {
   useEffect(() => {
 
     if (updateMsg.Status === true && updateMsg.StatusCode === 200) {
+      saveDissable(false);//+++++++++save Button Is enable function
+
       dispatch(updateSucc({ Status: false }));
       dispatch(
         AlertState({
@@ -138,6 +140,8 @@ const CommonListPage = (props) => {
       );
       tog_center();
     } else if (updateMsg.Status === true) {
+      
+      saveDissable(false);//+++++++++save Button Is enable function
       dispatch(updateSucc({ Status: false }));
       dispatch(
         AlertState({
@@ -178,6 +182,7 @@ const CommonListPage = (props) => {
 
     if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
       dispatch(postSucc({ Status: false }))
+      saveDissable(false);//+++++++++save Button Is enable function
       tog_center();
       dispatch(getList());
       dispatch(AlertState({
@@ -188,6 +193,7 @@ const CommonListPage = (props) => {
     }
 
     else if ((postMsg.Status === true)) {
+      saveDissable(false);//+++++++++save Button Is enable function
       dispatch(postSucc({ Status: false }))
       dispatch(AlertState({
         Type: 4,
