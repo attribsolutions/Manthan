@@ -29,6 +29,7 @@ import {
   onChangeDate,
   onChangeSelect,
   onChangeText,
+  resetFunction,
 } from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
 import { SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
 import { createdBy, saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
@@ -214,14 +215,14 @@ const AddEmployee = (props) => {
 
     if ((postMsg.Status === true) && (postMsg.StatusCode === 200) && !(pageMode === "dropdownAdd")) {
       dispatch(PostEmployeeSuccess({ Status: false }))
-      setState(() => initialFiledFunc(fileds)) //+++++++++ Clear form values 
+      setState(() => resetFunction(fileds, state))//+++++++++ Clear form values  
       saveDissable(false);//+++++++++save Button Is enable function
       setDesignation_DropdownSelect('')
       setEmployeeType_DropdownSelect('')
       setState_DropdownSelect('')
       setDOB_Date_Select('')
       setCompany_DropdownSelect('')
-
+      dispatch(Breadcrumb_inputName(''))
       if (pageMode === "other") {
         dispatch(AlertState({
           Type: 1,
@@ -255,7 +256,7 @@ const AddEmployee = (props) => {
   useEffect(() => {
     if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
       saveDissable(false);//+++++++++Update Button Is enable function
-      setState(() => initialFiledFunc(fileds)) //+++++++++ Clear form values
+      setState(() => resetFunction(fileds, state))//+++++++++ Clear form values 
       history.push({
         pathname: EMPLOYEE_lIST,
       })

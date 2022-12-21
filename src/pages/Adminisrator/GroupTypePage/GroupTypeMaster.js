@@ -21,6 +21,7 @@ import {
     formValid,
     initialFiledFunc,
     onChangeText,
+    resetFunction,
 } from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
 import {
     editGroupTypeIdSuccess,
@@ -124,7 +125,7 @@ const GroupTypeMaster = (props) => {
                 values.IsReserved = IsReserved;
                 setState({ values, fieldLabel, hasValid, required, isError })
                 dispatch(editGroupTypeIdSuccess({ Status: false }))
-                dispatch(Breadcrumb_inputName(hasEditVal.GroupTypeMaster))
+                dispatch(Breadcrumb_inputName(hasEditVal.Name))
             }
         }
     }, [])
@@ -132,8 +133,9 @@ const GroupTypeMaster = (props) => {
     useEffect(() => {
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(PostGroupTypeSubmitSuccess({ Status: false }))
-            setState(() => initialFiledFunc(fileds)) //+++++++++ Clear form values 
+            setState(() => resetFunction(fileds, state))//+++++++++ Clear form values
             saveDissable(false);//+++++++++save Button Is enable function
+            dispatch(Breadcrumb_inputName(''))
             if (pageMode === "dropdownAdd") {
                 dispatch(AlertState({
                     Type: 1,
@@ -166,7 +168,7 @@ const GroupTypeMaster = (props) => {
     useEffect(() => {
         if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
             saveDissable(false);//+++++++++Update Button Is enable function
-            setState(() => initialFiledFunc(fileds)) //+++++++++ Clear form values
+             setState(() => resetFunction(fileds, state))//+++++++++ Clear form values
             history.push({
                 pathname: GROUPTYPE_lIST,
             })
@@ -229,7 +231,7 @@ const GroupTypeMaster = (props) => {
                 <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
                     <Container fluid>
                         <MetaTags>
-                            <title>GroupTypeMaster | FoodERP-React FrontEnd</title>
+                            <title>{userPageAccessState.PageHeading} | FoodERP-React FrontEnd</title>
                         </MetaTags>
                         <Breadcrumb pageHeading={userPageAccessState.PageHeading} />
 
