@@ -35,7 +35,7 @@ import {
     UpdateTermsAndCondtions_Success
 } from "../../../store/Administrator/TermsAndConditionsRedux/actions";
 import { TERMS_AND_CONDITION_LIST } from "../../../routes/route_url";
-import { saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import { createdBy, saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 
 const TermsAndConditionsMaster = (props) => {
 
@@ -196,7 +196,9 @@ const TermsAndConditionsMaster = (props) => {
         if (formValid(state, setState)) {
             const jsonBody = JSON.stringify({
                 Name: values.Name,
-                IsDefault: values.IsDefault
+                IsDefault: values.IsDefault,
+                CreatedBy: createdBy(),
+                UpdatedBy: createdBy()
             });
 
             saveDissable(true);//save Button Is dissable function

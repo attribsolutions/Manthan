@@ -36,6 +36,8 @@ import {
 import { COMPANY_lIST } from "../../../routes/route_url";
 import { SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
 import { createdBy, saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import * as url from "../../../routes/route_url";
+import * as pageId from "../../../routes/allPageID"
 
 const CompanyModule = (props) => {
 
@@ -70,8 +72,9 @@ const CompanyModule = (props) => {
   }));
 
   useEffect(() => {
+    const page_Id =  pageId.COMPANY
     dispatch(commonPageFieldSuccess(null));
-    dispatch(commonPageField(1))
+    dispatch(commonPageField(page_Id))
     dispatch(getCompanyGroup());
   }, [dispatch]);
 
@@ -167,7 +170,7 @@ const CompanyModule = (props) => {
           Type: 1,
           Status: true,
           Message: postMsg.Message,
-          RedirectPath: COMPANY_lIST,
+          RedirectPath:url.COMPANY_lIST,
         }))
       }
     }
@@ -191,7 +194,7 @@ const CompanyModule = (props) => {
       saveDissable(false);//save Button Is enable function
 
       history.push({
-        pathname: COMPANY_lIST,
+        pathname:url.COMPANY_lIST,
       })
     } else if (updateMsg.Status === true && !modalCss) {
       saveDissable(false);//Update Button Is enable function

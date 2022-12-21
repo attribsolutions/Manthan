@@ -164,7 +164,6 @@ const PageMaster = (props) => {
       }
 
       if (hasEditVal) {
-
         let pageType_ID = hasEditVal.PageType;
 
         setEditData(hasEditVal);
@@ -476,7 +475,7 @@ const PageMaster = (props) => {
   };
 
   const FormSubmitButton_Handler = (event, values) => {
-debugger
+    debugger
 
     let Access = []
     PageAccess.forEach((element, key) => {
@@ -514,7 +513,7 @@ debugger
       return;
     }
     debugger
-    if ((pageType_DropdownSelect.value === 2) && (relatedPage_DropdownSelect ===undefined)){
+    if ((pageType_DropdownSelect.value === 2) && (relatedPage_DropdownSelect === undefined)) {
       debugger
       dispatch(
         AlertState({
