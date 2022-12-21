@@ -13,7 +13,7 @@ export const formValid = ({ isError, required, hasValid, fieldLabel, values }, s
 };
 
 export const formValChange = ({ event, state, setState }) => {
-debugger
+    debugger
     let isError = { ...state.isError };
     let hasValid = { ...state.hasValid };
     let required = { ...state.required };
@@ -66,7 +66,7 @@ debugger
         const { name, value, } = event.change
         const { type } = event
 
-    
+
         switch (type) {
             case "select":
                 const result = Array.isArray(value);
@@ -153,16 +153,16 @@ export const onChangeText = ({ event, state, setState }) => {
 }
 
 
-export const initialFiledFunc = (filed) => {
-    debugger
+export const initialFiledFunc = (field) => {
+
     const obj = {}
-    obj["values"] = filed;
+    obj["values"] = field;
     obj["fieldLabel"] = {}
     obj["isError"] = {}
     obj["hasValid"] = {}
     obj["required"] = {}
 
-    Object.keys(filed).forEach(label => {
+    Object.keys(field).forEach(label => {
 
         obj.fieldLabel[label] = ''
         obj.isError[label] = ''
@@ -172,4 +172,14 @@ export const initialFiledFunc = (filed) => {
         obj.hasValid[label]["valid"] = false
     })
     return obj
+}
+
+
+export const resetFunction = (field, state) => {
+    var preState = { ...state }
+    preState.values = field
+    Object.keys(field).forEach(label => {
+        preState.hasValid[label]["valid"] = false
+    })
+    return preState
 }

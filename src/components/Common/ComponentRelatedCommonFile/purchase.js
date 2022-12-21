@@ -1,7 +1,7 @@
 
 import React, { useEffect, useState } from "react";
 import Breadcrumb from "../Breadcrumb3";
-import { Col, Input, Modal, Row } from "reactstrap";
+import { Button, Col, Input, Modal, Row } from "reactstrap";
 import paginationFactory, {
     PaginationListStandalone,
     PaginationProvider,
@@ -13,7 +13,7 @@ import { MetaTags } from "react-meta-tags";
 import { useHistory } from "react-router-dom";
 
 import { AlertState, BreadcrumbFilterSize } from "../../../store/actions";
-import { listPageCommonButtonFunction }
+import { listPageCommonButtonFunction, makeBtnCss }
     from "./listPageCommonButtons";
 import { defaultSearch, mySearchProps } from "./MySearch";
 import C_Report from "./C_Report";
@@ -219,7 +219,12 @@ const PurchaseListPage = (props) => {
         }
     }, [editData]);
 
-
+    function makeBtnHandler(rowData) {
+        rowData["hasSelect"] = true;
+        let arr = []
+        arr.push(rowData)
+        makeBtnFunc(arr)
+    }
 
     function tog_center() {
         setmodal_edit(!modal_edit); //when edit mode show in pop up that modal view controle
@@ -254,41 +259,60 @@ const PurchaseListPage = (props) => {
 
         // ======================== for GRNMode2 Page Action Button ================================
 
-        if ((pageMode === url.GRN_ADD_Mode_2) && (fileds.length - 1 === k)) {
+        if ((pageMode === url.GRN_ADD_Mode_2) && (makeBtnShow) && (fileds.length - 1 === k)) {
 
             columns.push({
                 text: "Select",
                 dataField: "hasSelect",
                 sort: true,
-                formatter: (cellContent, item, key) => {
-                    item["hasSelect"] = false
+                formatter: (cellContent, rowData, key) => {
+                    rowData["hasSelect"] = false
                     return (
-                        <Input type="checkbox"
-                            defaultChecked={item.hasSelect}
-                            onChange={e => item.hasSelect = e.target.checked}
-                        />)
+                        <div>
+                            <Input type="checkbox"
+                                className="mx-2"
+                                defaultChecked={rowData.hasSelect}
+                                onChange={e => rowData.hasSelect = e.target.checked}
+                            />
+                            <Button
+                                type="button"
+                                className={makeBtnCss}
+                                data-mdb-toggle="tooltip" data-mdb-placement="top" title={makeBtnName}
+                                onClick={() => { makeBtnHandler(rowData) }}
+                            >
+                                <span style={{ marginLeft: "6px", marginRight: "6px" }}
+                                    className=" fas fa-file-invoice" ></span> </Button>
+                        </div>)
                 }
             })
         }
 
         // ======================== for GRNMode2 Page Action Button ================================
 
-        //  if ((pageMode === url.MATERIAL_ISSUE_LIST) && (fileds.length - 1 === k)) {
-        //     debugger
-        //     columns.push({
-        //         text: "Select",
-        //         dataField: "Select",
-        //         sort: true,
-        //         formatter: (cellContent, item, key) => {
-        //             item["Select"] = false
-        //             return (
-        //                 <Input type="checkbox"
-        //                     defaultChecked={item.Select}
-        //                     onChange={e => item.Select = e.target.checked}
-        //                 />)
-        //         }
-        //     })
-        // }
+        if ((makeBtnShow) && (fileds.length - 1 === k)) {
+
+            columns.push({
+                text: "Select",
+                dataField: "hasSelect",
+                sort: true,
+                formatter: (cellContent, rowData, key) => {
+                    rowData["hasSelect"] = false
+                    return (
+                        <div>
+                     
+                            <Button
+                                type="button"
+                                className={makeBtnCss}
+                                data-mdb-toggle="tooltip" data-mdb-placement="top" title={makeBtnName}
+                                onClick={() => { makeBtnHandler(rowData) }}
+                            >
+                                <span style={{ marginLeft: "6px", marginRight: "6px" }}
+                                    className=" fas fa-file-invoice" ></span> </Button>
+                        </div>)
+                }
+            })
+        }
+
         // ======================== for List Page Action Button ================================
 
         else if ((fileds.length - 1 === k)) {
