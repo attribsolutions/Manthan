@@ -91,7 +91,7 @@ export const SUBGROUP_LIST = "/SubGroupList"
 export const ORDER = "/Order"
 export const ORDER_lIST = "/OrderList"
 
-export const GRN_ADD_Mode_2 = "/GRN-Add-Mode2"
+export const GRN_ADD_Mode_2 = "/GRN-Master-Mode2"
 export const GRN_lIST = "/GRNList"
 export const GRN_ADD = "/GRN"
 
