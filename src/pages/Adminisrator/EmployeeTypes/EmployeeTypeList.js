@@ -10,9 +10,9 @@ import {
 } from "../../../store/Administrator/EmployeeTypeRedux/action";
 import EmployeeTypesMaster from "./EmployeeTypesMaster";
 import CommonListPage from "../../../components/Common/ComponentRelatedCommonFile/CommonMasterListPage";
-import {  commonPageFieldList, commonPageFieldListSuccess } from "../../../store/actions";
+import { commonPageFieldList, commonPageFieldListSuccess } from "../../../store/actions";
 import { EMPLOYEETYPE } from "../../../routes/route_url";
-
+import * as pageId from "../../../routes/allPageID"
 
 const EmployeeTypeList = (props) => {
 
@@ -39,11 +39,11 @@ const EmployeeTypeList = (props) => {
     deleteSucc: deleteEmployeeTypeIDSuccess
   }
 
-
   //  This UseEffect => Featch Modules List data  First Rendering
   useEffect(() => {
+    const page_Id = pageId.EMPLOYEETYPE_lIST
     dispatch(commonPageFieldListSuccess(null))
-    dispatch(commonPageFieldList(47))
+    dispatch(commonPageFieldList(page_Id))
     dispatch(getEmployeeTypelist());
   }, []);
 
@@ -63,7 +63,6 @@ const EmployeeTypeList = (props) => {
           />
           : null
       }
-
     </React.Fragment>
   )
 }
