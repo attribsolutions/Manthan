@@ -18,7 +18,6 @@ import {
     commonPageField,
     commonPageFieldSuccess,
     editGroupIDSuccess,
-    getGroupList,
     getGroupListSuccess,
     postGroupList,
     postGroupSuccess,
@@ -154,7 +153,7 @@ const GroupMaster = (props) => {
             setState(() => resetFunction(fileds, state))//Clear form values
             saveDissable(false);//save Button Is enable function
             dispatch(Breadcrumb_inputName(''))
-            
+
             if (pageMode === "other") {
                 dispatch(AlertState({
                     Type: 1,
