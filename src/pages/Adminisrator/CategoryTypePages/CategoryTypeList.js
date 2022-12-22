@@ -12,6 +12,7 @@ import {
 import {  commonPageFieldList, commonPageFieldListSuccess } from "../../../store/actions";
 import { CATEGORYTYPE } from "../../../routes/route_url";
 import CommonListPage from "../../../components/Common/ComponentRelatedCommonFile/CommonMasterListPage";
+import * as pageId from "../../../routes/allPageID"
 
 const CategoryTypeList = (props) => {
 
@@ -39,8 +40,9 @@ const CategoryTypeList = (props) => {
 
   //  This UseEffect => Featch Modules List data  First Rendering
   useEffect(() => {
+    const page_Id = pageId.CATEGORYTYPE_lIST
     dispatch(commonPageFieldListSuccess(null))
-    dispatch(commonPageFieldList(22))
+    dispatch(commonPageFieldList(page_Id))
     dispatch(getCategoryTypelist());
   }, []);
 
