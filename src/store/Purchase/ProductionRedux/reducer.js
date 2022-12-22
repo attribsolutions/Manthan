@@ -20,7 +20,7 @@ const INIT_STATE = {
   deleteMsg: { Status: false },
   ProductionList: [],
   grnItemList: [],
-  produtionMake: { Status: false, Data: [], },
+  produtionMake: { Status: false,  },
   productionFilter: { fromdate: currentDate, todate: currentDate }
 }
 
