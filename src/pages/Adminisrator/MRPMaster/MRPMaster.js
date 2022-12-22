@@ -81,7 +81,6 @@ const MRPMaster = (props) => {
         Name: "",
 
     }
-
     const [state, setState] = useState(() => initialFiledFunc(fileds))
 
     // userAccess useEffect
@@ -235,7 +234,6 @@ const MRPMaster = (props) => {
     const CurrentMRPHandler = (e, user) => {
         user["CurrentMRP"] = e.target.value
     }
-
     //select id for delete row
     const deleteHandeler = (id, name) => {
         dispatch(
@@ -249,7 +247,6 @@ const MRPMaster = (props) => {
             })
         );
     };
-
     const GoButton_Handler = (event, values) => {
 
         let division = { ...division_dropdown_Select }
@@ -436,20 +433,16 @@ const MRPMaster = (props) => {
                                 <h4 className="card-title text-black">{userPageAccessState.PageDescription}</h4>
                                 <p className="card-title-desc text-black">{userPageAccessState.PageDescriptionDetails}</p>
                             </CardHeader>
-
                             <CardBody>
-
                                 <Row >
-                                    <Col md={12}>
+                                    <Col>
                                         <Card style={{ backgroundColor: "whitesmoke" }}>
-
-
                                             <CardHeader className="card-header   text-black c_card_body" >
                                                 <Row className="mt-3 " >
-                                                    <Col xs="3">
+                                                    <Col sm={3}>
                                                         <FormGroup className="mb-3 row ">
-                                                            <Label className="col-sm-4 p-2 ml-n4">Division</Label>
-                                                            <Col >
+                                                            <Label className="col-sm-6 p-2 " style={{width:"2cm"}}>Division</Label>
+                                                            <Col sm={8} >
                                                                 <Select
                                                                     value={division_dropdown_Select}
                                                                     options={Division_DropdownOptions}
@@ -463,10 +456,10 @@ const MRPMaster = (props) => {
                                                         </FormGroup>
                                                     </Col>
 
-                                                    <Col xs="3" >
+                                                    <Col sm={3} >
                                                         <FormGroup className="mb-3 row ">
-                                                            <Label className="col-sm-3 p-2 ml-n4" style={{}} >Party Name</Label>
-                                                            <Col >
+                                                            <Label className="col-sm-6 p-2" style={{width:"2.5cm"}} >Party Name</Label>
+                                                            <Col sm={8} >
                                                                 <Select
                                                                     value={party_dropdown_Select}
                                                                     options={PartyDropdown_Options}
@@ -480,10 +473,10 @@ const MRPMaster = (props) => {
                                                         </FormGroup>
                                                     </Col>
 
-                                                    <Col sm="">
-                                                        <FormGroup className="mb-3 row col-lm-4 ">
-                                                            <Label className="col-sm-6 p-2 ml-n5">EffectiveDate</Label>
-                                                            <Col>
+                                                    <Col sm={4}>
+                                                        <FormGroup className="mb-3 row col ">
+                                                            <Label className="col-sm-6 p-2 " style={{width:"2.9cm"}}>EffectiveDate</Label>
+                                                            <Col sm={8}>
                                                                 <Flatpickr
                                                                     id="EffectiveDateid"
                                                                     name="effectiveDate"
@@ -501,11 +494,10 @@ const MRPMaster = (props) => {
                                                             </Col>
                                                         </FormGroup>
                                                     </Col >
-                                                    <Col xs="2" style={{ margin: "0.1cm" }} >
+                                                    <Col sm={1} style={{  }} >
                                                         <Button type="button" color="btn btn-outline-success border-2 font-size-12" onClick={() => { GoButton_Handler() }} >Go</Button>
                                                     </Col>
                                                 </Row>
-
                                             </CardHeader>
                                         </Card>
                                     </Col>

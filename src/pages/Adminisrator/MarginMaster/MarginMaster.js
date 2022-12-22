@@ -425,18 +425,16 @@ const MarginMaster = (props) => {
                                 <h4 className="card-title text-black">{userPageAccessState.PageDescription}</h4>
                                 <p className="card-title-desc text-black">{userPageAccessState.PageDescriptionDetails}</p>
                             </CardHeader>
-
                             <CardBody className=" vh-10 0 text-black" style={{ marginBottom: "4cm" }}>
                                 <Row className="">
                                     <Col md={12} >
                                         <Card style={{ backgroundColor: "whitesmoke" }}>
-
                                             <CardHeader className="card-header   text-black c_card_body "  >
                                                 <Row className="mt-3">
-                                                    <Col md="3">
+                                                    <Col sm={3}>
                                                         <FormGroup className="mb-3 row">
                                                             <Label className="col-sm-4 p-2 ml-n4 ">PriceList</Label>
-                                                            <Col md="8">
+                                                            <Col sm={8}>
                                                                 <Select
                                                                     value={priceList_dropdown_Select}
                                                                     options={PriceList_DropdownOptions}
@@ -449,11 +447,10 @@ const MarginMaster = (props) => {
                                                             </Col>
                                                         </FormGroup>
                                                     </Col>
-
-                                                    <Col md="3">
+                                                    <Col sm={3}>
                                                         <FormGroup className="mb-3 row ">
-                                                            <Label className="col-sm-3 p-2 ">Party Name</Label>
-                                                            <Col md="9" style={{}}>
+                                                            <Label className="col-sm-3 p-2"  style={{width:"2.5cm"}}>Party Name</Label>
+                                                            <Col sm={8} style={{}}>
                                                                 <Select
                                                                     value={partyName_dropdown_Select}
                                                                     options={PartyTypeDropdown_Options}
@@ -466,11 +463,10 @@ const MarginMaster = (props) => {
                                                             </Col>
                                                         </FormGroup>
                                                     </Col>
-
-                                                    <Col md="3">
+                                                    <Col sm={4}>
                                                         <FormGroup className="mb-3 row ">
-                                                            <Label className="col-md-6 p-2" >EffectiveDate</Label>
-                                                            <Col md="6">
+                                                            <Label className="col-md-6 p-2"style={{width:"2.9cm"}}>EffectiveDate</Label>
+                                                            <Col sm={8}>
                                                                 <Flatpickr
                                                                     id="EffectiveDateid"
                                                                     name="effectiveDate"
@@ -488,10 +484,9 @@ const MarginMaster = (props) => {
                                                             </Col>
                                                         </FormGroup>
                                                     </Col>
-                                                    <Col sm="2" >
+                                                    <Col sm={1}>
                                                         <Button type="button" color="btn btn-outline-success border-2 font-size-12 " onClick={() => { GoButton_Handler() }} >Go</Button>
                                                     </Col>
-
                                                 </Row>
                                             </CardHeader>
                                         </Card>
