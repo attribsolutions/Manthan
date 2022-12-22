@@ -82,7 +82,6 @@ const CompanyGroupMaster = (props) => {
     const { isError } = state;
     const { fieldLabel } = state;
 
-
     // userAccess useEffect
     useEffect(() => {
 

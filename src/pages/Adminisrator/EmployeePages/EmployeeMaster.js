@@ -33,6 +33,8 @@ import {
 } from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
 import { SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
 import { createdBy, saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
+import * as url from "../../../routes/route_url";
+import * as pageId from "../../../routes/allPageID"
 
 const AddEmployee = (props) => {
 
@@ -65,6 +67,7 @@ const AddEmployee = (props) => {
   const [partyDropDownShow_UI, setPartyDropDownShow_UI] = useState(false);
   const [editCreatedBy, seteditCreatedBy] = useState("");
 
+  //Access redux store Data /  'save_ModuleSuccess' action data
   const {
     designation,
     employeeType,
@@ -86,23 +89,22 @@ const AddEmployee = (props) => {
       updateMsg: state.M_EmployeesReducer.updateMessage,
       userAccess: state.Login.RoleAccessUpdateData,
       pageField: state.CommonPageFieldReducer.pageField
-
     }));
 
-  const values = { ...state.values }
-  const { isError } = state;
-  const { fieldLabel } = state;
-
   useEffect(() => {
-
+    const page_Id = pageId.EMPLOYEE
     dispatch(commonPageFieldSuccess(null));
-    dispatch(commonPageField(11))
+    dispatch(commonPageField(page_Id))
     dispatch(getDesignationID());
     dispatch(getEmployeeType());
     dispatch(getState());
     dispatch(getPartyListAPI());
     dispatch(Get_CompanyName_By_EmployeeTypeID());
   }, [dispatch]);
+
+  const values = { ...state.values }
+  const { isError } = state;
+  const { fieldLabel } = state;
 
   const location = { ...history.location }
   const hasShowloction = location.hasOwnProperty("editValue")
@@ -130,7 +132,6 @@ const AddEmployee = (props) => {
   // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
   useEffect(() => {
 
-    // if (!(userPageAccessState === '')) { document.getElementById("txtName").focus(); }
     if ((hasShowloction || hasShowModal)) {
 
       let hasEditVal = null
@@ -150,8 +151,6 @@ const AddEmployee = (props) => {
           value: data.id,
           label: data.Name
         }))
-
-        // setParty_DropdownSelect(listItems)
 
         if ((hasEditVal.EmployeeParties).length > 0) { setPartyDropDownShow_UI(true) };
 
@@ -175,7 +174,6 @@ const AddEmployee = (props) => {
         hasValid.DistrictName.valid = true;
         hasValid.EmployeeParties.valid = true;
 
-
         values.id = id
         values.Address = Address;
         values.Mobile = Mobile
@@ -191,9 +189,6 @@ const AddEmployee = (props) => {
         values.StateName = { label: StateName, value: State_id };
         values.DistrictName = { label: DistrictName, value: District_id };
         values.EmployeeParties = listItems;
-
-        // values.CategoryTypeName = { label: CategoryTypeName, value: CategoryType };
-
         setState({ values, fieldLabel, hasValid, required, isError })
         dispatch(Breadcrumb_inputName(hasEditVal.Name))
         seteditCreatedBy(hasEditVal.CreatedBy)
@@ -207,14 +202,10 @@ const AddEmployee = (props) => {
 
     if ((postMsg.Status === true) && (postMsg.StatusCode === 200) && !(pageMode === "dropdownAdd")) {
       dispatch(PostEmployeeSuccess({ Status: false }))
-      setState(() => resetFunction(fileds, state))//+++++++++ Clear form values  
-      saveDissable(false);//+++++++++save Button Is enable function
-      // setDesignation_DropdownSelect('')
-      // setEmployeeType_DropdownSelect('')
-      // setState_DropdownSelect('')
-      // setDOB_Date_Select('')
-      // setCompany_DropdownSelect('')
+      setState(() => resetFunction(fileds, state))// Clear form values  
+      saveDissable(false);//save Button Is enable function
       dispatch(Breadcrumb_inputName(''))
+
       if (pageMode === "other") {
         dispatch(AlertState({
           Type: 1,
@@ -227,13 +218,12 @@ const AddEmployee = (props) => {
           Type: 1,
           Status: true,
           Message: postMsg.Message,
-          RedirectPath: EMPLOYEE_lIST,
+          RedirectPath: url.EMPLOYEE_lIST,
         }))
       }
     }
-
     else if (postMsg.Status === true) {
-      saveDissable(false);//+++++++++save Button Is enable function
+      saveDissable(false);//save Button Is enable function
       dispatch(PostEmployeeSuccess({ Status: false }))
       dispatch(AlertState({
         Type: 4,
@@ -247,13 +237,13 @@ const AddEmployee = (props) => {
 
   useEffect(() => {
     if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
-      saveDissable(false);//+++++++++Update Button Is enable function
-      setState(() => resetFunction(fileds, state))//+++++++++ Clear form values 
+      saveDissable(false);//Update Button Is enable function
+      setState(() => resetFunction(fileds, state))// Clear form values 
       history.push({
-        pathname: EMPLOYEE_lIST,
+        pathname: url.EMPLOYEE_lIST,
       })
     } else if (updateMsg.Status === true && !modalCss) {
-      saveDissable(false);//+++++++++Update Button Is enable function
+      saveDissable(false);//Update Button Is enable function
       dispatch(updateEmployeeIDSuccess({ Status: false }));
       dispatch(
         AlertState({
@@ -316,10 +306,9 @@ const AddEmployee = (props) => {
     }
     else {
       setPartyDropDownShow_UI(false)
-      // setParty_DropdownSelect([{ value: null }])
+
     }
     setState((i) => {
-      debugger
       const a = { ...i }
       a.values.CompanyName = "";
       a.values.EmployeeParties = "";
@@ -331,7 +320,6 @@ const AddEmployee = (props) => {
 
   function State_Dropdown_Handler(e, v) {
     dispatch(getDistrictOnState(e.value))
-    // setState_DropdownSelect(e)
     setState((i) => {
       const a = { ...i }
       a.values.DistrictName = "";
@@ -341,11 +329,9 @@ const AddEmployee = (props) => {
   }
 
   function Company_Dropdown_Handler(e, v) {
-    // setCompany_DropdownSelect(e)
-
   }
 
-  const formSubmitHandler = (event) => {
+  const SaveHandler = (event) => {
     event.preventDefault();
     if (formValid(state, setState)) {
       let emplPartie = [{ Party: "" }]
@@ -371,7 +357,7 @@ const AddEmployee = (props) => {
         UpdatedBy: createdBy()
       });
 
-      saveDissable(true);//+++++++++save Button Is dissable function
+      saveDissable(true);//save Button Is dissable function
 
       if (pageMode === "edit") {
         dispatch(updateEmployeeID(jsonBody, values.id,));
@@ -384,7 +370,6 @@ const AddEmployee = (props) => {
       }
     }
   };
-
 
 
   // IsEditMode_Css is use of module Edit_mode (reduce page-content marging)
@@ -401,7 +386,6 @@ const AddEmployee = (props) => {
           <Breadcrumb pageHeading={userPageAccessState.PageHeading} />
 
           <Container fluid>
-
             <Card className="text-black">
               <CardHeader className="card-header   text-dark c_card_header" >
                 <h4 className="card-title text-black">{userPageAccessState.PageDescription}</h4>
@@ -409,11 +393,10 @@ const AddEmployee = (props) => {
               </CardHeader>
 
               <CardBody>
-                <form onSubmit={formSubmitHandler} noValidate>
+                <form onSubmit={SaveHandler} noValidate>
                   <Card  >
                     <CardBody className="c_card_body">
-                      <Row >
-
+                      <Row>
                         <FormGroup className="mb-2 col col-sm-3 ">
                           <Label htmlFor="validationCustom01">{fieldLabel.Name} </Label>
                           <Input
@@ -481,7 +464,6 @@ const AddEmployee = (props) => {
                             name="DOB"
                             value={values.DOB}
                             className="form-control d-block p-2 bg-white text-dark"
-                            // className={values.DOB.length >0 ?"form-control":"bg-white form-control is-invalid"}
                             placeholder="YYYY-MM-DD"
                             autoComplete="0,''"
                             options={{
@@ -492,7 +474,6 @@ const AddEmployee = (props) => {
                               maxDate: new Date().fp_incr(0) // 14 days from now"0,''"
                             }}
                             onChange={(y, v, e) => {
-                              debugger
                               onChangeDate({ e, v, state, setState })
                             }}
                           />
@@ -500,6 +481,7 @@ const AddEmployee = (props) => {
                             <span className="invalid-feedback">{isError.DOB}</span>
                           )}
                         </FormGroup>
+
                         <Col md="1">  </Col>
                         <FormGroup className="mb-2 col col-sm-3 ">
                           <Label htmlFor="validationCustom01">{fieldLabel.AadharNo} </Label>
@@ -518,6 +500,7 @@ const AddEmployee = (props) => {
                             <span className="invalid-feedback">{isError.AadharNo}</span>
                           )}
                         </FormGroup>
+
                         <Col md="1">  </Col>
                         <FormGroup className="mb-2 col col-sm-3 ">
                           <Label htmlFor="validationCustom01">{fieldLabel.PAN} </Label>
@@ -537,6 +520,7 @@ const AddEmployee = (props) => {
                           )}
                         </FormGroup>
                       </Row>
+
                       <Row>
                         <FormGroup className="mb-2 col col-sm-3 ">
                           <Label htmlFor="validationCustom01">{fieldLabel.Address} </Label>
@@ -555,20 +539,17 @@ const AddEmployee = (props) => {
                             <span className="invalid-feedback">{isError.Address}</span>
                           )}
                         </FormGroup>
+
                         <Col md="1"></Col>
                         <FormGroup className="mb-2 col col-sm-3 ">
                           <Label htmlFor="validationCustom01"> {fieldLabel.StateName} </Label>
                           <Col sm={12}>
                             <Select
-
                               name="StateName"
                               id="state"
                               class="Flatpickr"
-                              // id="validationCustom04"
                               value={values.StateName}
                               isSearchable={true}
-                              // className={isError.PAN.length > 0 ? "Flatpickr":"form-control" }
-                              // className="Flatpickr"
                               classNamePrefix="dropdown"
                               options={State_DropdownOptions}
                               onChange={(hasSelect, evn) => {
@@ -604,10 +585,10 @@ const AddEmployee = (props) => {
                       </Row>
                     </CardBody>
                   </Card>
+
                   <Card className="mt-n2">
                     <CardBody className="c_card_body">
                       <Row >
-
                         <FormGroup className="mb-2 col col-sm-3 ">
                           <Label htmlFor="validationCustom01"> {fieldLabel.EmployeeTypeName} </Label>
                           <Col sm={12}>
@@ -661,7 +642,6 @@ const AddEmployee = (props) => {
                               <Label htmlFor="validationCustom01">{fieldLabel.EmployeeParties} </Label>
                               <Select
                                 name="EmployeeParties"
-                                // defaultValue={EmployeeType_DropdownOptions[0]}
                                 value={values.EmployeeParties}
                                 isSearchable={true}
                                 isMulti={true}
@@ -702,7 +682,6 @@ const AddEmployee = (props) => {
 
 
                         <Col md="1">  </Col>
-
                         <FormGroup className="mb-2 col col-sm-3 ">
                           <Label htmlFor="validationCustom01">{fieldLabel.working_hours} </Label>
                           <Input
@@ -720,7 +699,6 @@ const AddEmployee = (props) => {
                             <span className="invalid-feedback">{isError.working_hours}</span>
                           )}
                         </FormGroup>
-
                       </Row>
 
                       <FormGroup className="mt-3">
@@ -734,10 +712,9 @@ const AddEmployee = (props) => {
                             />
                           </Col>
                         </Row>
-                      </FormGroup >
+                      </FormGroup>
                     </CardBody>
                   </Card>
-
                 </form>
               </CardBody>
             </Card>

@@ -33,20 +33,15 @@ import {
     initialFiledFunc,
     resetFunction
 } from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
-import { DRIVER_lIST } from "../../../routes/route_url";
 import { SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
 import { createdBy, saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
-
+import * as url from "../../../routes/route_url";
+import * as pageId from "../../../routes/allPageID"
 
 const DriverMaster = (props) => {
 
     const dispatch = useDispatch();
     const history = useHistory()
-    const [pageMode, setPageMode] = useState("");
-    const [userPageAccessState, setUserPageAccessState] = useState("");
-    const [modalCss, setModalCss] = useState(false);// new change
-    const [editCreatedBy, seteditCreatedBy] = useState("");
-    {/** Dyanamic Page access state and OnChange function */ }
 
     const fileds = {
         id: "",
@@ -56,6 +51,11 @@ const DriverMaster = (props) => {
         DOB: ''
     }
     const [state, setState] = useState(() => initialFiledFunc(fileds))
+
+    const [pageMode, setPageMode] = useState("");
+    const [userPageAccessState, setUserPageAccessState] = useState("");
+    const [modalCss, setModalCss] = useState(false);
+    const [editCreatedBy, seteditCreatedBy] = useState("");
 
     //Access redux store Data /  'save_ModuleSuccess' action data
     const {
@@ -70,18 +70,20 @@ const DriverMaster = (props) => {
         pageField: state.CommonPageFieldReducer.pageField
     }));
 
-    // new change
+    useEffect(() => {
+        const page_Id = pageId.DRIVER
+        dispatch(commonPageFieldSuccess(null));
+        dispatch(commonPageField(page_Id))
+    }, []);
+
     const location = { ...history.location }
     const hasShowloction = location.hasOwnProperty("editValue")
     const hasShowModal = props.hasOwnProperty("editValue")
 
+    const values = { ...state.values }
+    const { isError } = state;
+    const { fieldLabel } = state;
 
-    useEffect(() => {
-        dispatch(commonPageFieldSuccess(null));// new change
-        dispatch(commonPageField(33))
-    }, []);
-
-    // new change
     // userAccess useEffect
     useEffect(() => {
 
@@ -101,7 +103,6 @@ const DriverMaster = (props) => {
         };
     }, [userAccess])
 
-    // new change
     // This UseEffect 'SetEdit' data and 'autoFocus' while this Component load First Time.
     useEffect(() => {
 
@@ -141,13 +142,11 @@ const DriverMaster = (props) => {
         }
     }, [])
 
-
-
     useEffect(() => {
         if ((postMsg.Status === true) && (postMsg.StatusCode === 200)) {
             dispatch(PostMethod_ForDriverMasterSuccess({ Status: false }))
-            setState(() => resetFunction(fileds, state))//+++++++++ Clear form values 
-            saveDissable(false);//+++++++++save Button Is enable function
+            setState(() => resetFunction(fileds, state))// Clear form values 
+            saveDissable(false);//save Button Is enable function
             dispatch(Breadcrumb_inputName(''))
             if (pageMode === "dropdownAdd") {
                 dispatch(AlertState({
@@ -161,12 +160,12 @@ const DriverMaster = (props) => {
                     Type: 1,
                     Status: true,
                     Message: postMsg.Message,
-                    RedirectPath: DRIVER_lIST,
+                    RedirectPath: url.DRIVER_lIST,
                 }))
             }
         }
         else if (postMsg.Status === true) {
-            saveDissable(false);//+++++++++save Button Is enable function
+            saveDissable(false);//save Button Is enable function
             dispatch(getMethod_ForDriverListSuccess({ Status: false }))
             dispatch(AlertState({
                 Type: 4,
@@ -180,13 +179,13 @@ const DriverMaster = (props) => {
 
     useEffect(() => {
         if (updateMsg.Status === true && updateMsg.StatusCode === 200 && !modalCss) {
-            saveDissable(false);//+++++++++Update Button Is enable function
+            saveDissable(false);//Update Button Is enable function
             setState(() => resetFunction(fileds, state))//+++++++++ Clear form values 
             history.push({
-                pathname: DRIVER_lIST,
+                pathname: url.DRIVER_lIST,
             })
         } else if (updateMsg.Status === true && !modalCss) {
-            saveDissable(false);//+++++++++Update Button Is enable function
+            saveDissable(false);//Update Button Is enable function
             dispatch(updateDriverTypeIDSuccess({ Status: false }));
             dispatch(
                 AlertState({
@@ -203,22 +202,13 @@ const DriverMaster = (props) => {
 
         if (pageField) {
             const fieldArr = pageField.PageFieldMaster
-            comAddPageFieldFunc({ state, setState, fieldArr })// new change
+            comAddPageFieldFunc({ state, setState, fieldArr })
         }
     }, [pageField])
 
-
-    const values = { ...state.values }
-    const { isError } = state;
-    const { fieldLabel } = state;
-
-
-
-    const formSubmitHandler = (event) => {
-
+    const SaveHandler = (event) => {
         event.preventDefault();
         if (formValid(state, setState)) {
-
             const jsonBody = JSON.stringify({
                 Name: values.Name,
                 Address: values.Address,
@@ -228,18 +218,16 @@ const DriverMaster = (props) => {
                 UpdatedBy: createdBy()
             });
 
-            saveDissable(true);//+++++++++save Button Is dissable function
+            saveDissable(true);//save Button Is dissable function
 
             if (pageMode === 'edit') {
-                dispatch(updateDriverTypeID(jsonBody, values.id));// new change
+                dispatch(updateDriverTypeID(jsonBody, values.id));
             }
 
             else {
                 dispatch(PostMethodForDriverMaster(jsonBody));
             }
         }
-
-
     };
 
 
@@ -253,7 +241,7 @@ const DriverMaster = (props) => {
                 <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
                     <Container fluid>
                         <MetaTags>
-                            <title>DriverMaster | FoodERP-React FrontEnd</title>
+                            <title>{userPageAccessState.PageHeading} | FoodERP-React FrontEnd</title>
                         </MetaTags>
                         <Breadcrumb pageHeading={userPageAccessState.PageHeading} />
 
@@ -265,7 +253,7 @@ const DriverMaster = (props) => {
 
                             <CardBody className=" vh-10 0 text-black" style={{ backgroundColor: "#whitesmoke" }} >
 
-                                <form onSubmit={formSubmitHandler} noValidate>
+                                <form onSubmit={SaveHandler} noValidate>
 
                                     <Row className="">
                                         <Col md={12}>
@@ -296,7 +284,7 @@ const DriverMaster = (props) => {
                                                         <Row>
                                                             <Col md="4">
                                                                 <FormGroup className="mb-3">
-                                                                    <Label>Date of Birth</Label>
+                                                                    <Label>{fieldLabel.DOB} </Label>
                                                                     <Flatpickr
                                                                         name="DOB"
                                                                         value={values.DOB}
@@ -315,35 +303,6 @@ const DriverMaster = (props) => {
                                                                 </FormGroup>
                                                             </Col>
                                                         </Row>
-                                                        {/* <Row>
-                                                            <Col md="4">
-                                                                <FormGroup className="mb-3">
-                                                                    <Label htmlFor="validationCustom01">{fieldLabel.Address} </Label>
-                                                                    <Select
-                                                                        defaultValue={options[0]}
-                                                                        isSearchable={false}
-                                                                        className="react-dropdown"
-                                                                        onChange={(v, e) => onChangeSelect({ e, v, state, setState })}
-                                                                        classNamePrefix="dropdown"
-                                                                        options={options}
-                                                                        name="Address"
-                                                                        styles={{
-                                                                            control: base => ({
-                                                                                ...base,
-                                                                                border: isError.Address.length > 0 ? '1px solid red' : '',
-
-                                                                            })
-                                                                        }}
-                                                                    />
-                                                                     {isError.Name.length > 0 && (
-                                                                <span className="tex">{isError.Name}</span>
-                                                            )}
-                                                                </FormGroup>
-                                                            </Col>
-                                                        </Row> */}
-
-
-
 
                                                         <Row>
                                                             <FormGroup className="mb-2 col col-sm-4 ">
