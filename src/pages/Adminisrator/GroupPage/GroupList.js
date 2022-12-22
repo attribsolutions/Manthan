@@ -7,9 +7,18 @@ import {
 } from "../../../store/actions";
 import { GROUP } from "../../../routes/route_url";
 import GroupMaster from "./GroupMaster";
-import { deleteGrouplistSuccess, delete_GroupList_ID, editGroupID, getGroupList, postGroupSuccess, updategroupIDSuccess } from "../../../store/Administrator/GroupRedux/action";
+import {
+  deleteGrouplistSuccess,
+  delete_GroupList_ID,
+  editGroupID,
+  getGroupList,
+  postGroupSuccess,
+  updategroupIDSuccess
+} from "../../../store/Administrator/GroupRedux/action";
+import * as pageId from "../../../routes/allPageID"
 
 const GroupList = (props) => {
+
   const dispatch = useDispatch();
   const reducers = useSelector(
     (state) => ({
@@ -24,21 +33,19 @@ const GroupList = (props) => {
   );
 
   const action = {
-    getList:getGroupList,
+    getList: getGroupList,
     editId: editGroupID,
     deleteId: delete_GroupList_ID,
     postSucc: postGroupSuccess,
     updateSucc: updategroupIDSuccess,
     deleteSucc: deleteGrouplistSuccess
-
   }
-  useEffect(() => {
-    dispatch(commonPageFieldListSuccess(null))
-    dispatch(commonPageFieldList(51))
-    dispatch(getGroupList());
-    
-    
 
+  useEffect(() => {
+    const page_Id = pageId.GROUP_lIST
+    dispatch(commonPageFieldListSuccess(null))
+    dispatch(commonPageFieldList(page_Id))
+    dispatch(getGroupList());
   }, []);
 
   const { pageField } = reducers
@@ -54,7 +61,6 @@ const GroupList = (props) => {
             masterPath={GROUP}
             ButtonMsgLable={"Group"}
             deleteName={"Name"}
-          
           />
           : null
       }
