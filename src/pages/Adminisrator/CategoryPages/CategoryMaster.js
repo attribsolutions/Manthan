@@ -37,10 +37,10 @@ import {
     onChangeText,
     resetFunction,
 } from "../../../components/Common/ComponentRelatedCommonFile/validationFunction";
-import { CATEGORY_lIST } from "../../../routes/route_url";
 import { SaveButton } from "../../../components/Common/ComponentRelatedCommonFile/CommonButton";
 import { createdBy, saveDissable } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
-
+import * as url from "../../../routes/route_url";
+import * as pageId from "../../../routes/allPageID"
 const CategoryMaster = (props) => {
 
     const history = useHistory()
@@ -74,8 +74,9 @@ const CategoryMaster = (props) => {
         }));
 
     useEffect(() => {
+        const page_Id = pageId.CATEGORY
         dispatch(commonPageFieldSuccess(null));
-        dispatch(commonPageField(23))
+        dispatch(commonPageField(page_Id))
         dispatch(getCategoryTypelist());
     }, []);
 
@@ -161,7 +162,7 @@ const CategoryMaster = (props) => {
                     Type: 1,
                     Status: true,
                     Message: postMsg.Message,
-                    RedirectPath: CATEGORY_lIST,
+                    RedirectPath:url.CATEGORY_lIST,
                 }))
             }
         }
@@ -183,7 +184,7 @@ const CategoryMaster = (props) => {
             saveDissable(false);//Update Button Is enable function
             setState(() => resetFunction(fileds, state)) // Clear form values 
             history.push({
-                pathname: CATEGORY_lIST,
+                pathname:url.CATEGORY_lIST,
             })
         } else if (updateMsg.Status === true && !modalCss) {
             saveDissable(false);//Update Button Is enable function
