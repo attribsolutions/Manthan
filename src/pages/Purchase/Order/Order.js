@@ -69,7 +69,7 @@ const Order = (props) => {
 
     //Access redux store Data /  'save_ModuleSuccess' action data
 
-    const [podate, setpoDate] = useState(currentDate);
+    // const [podate, setpoDate] = useState(currentDate);
     const [deliverydate, setdeliverydate] = useState(currentDate)
     const [billAddr, setbillAddr] = useState('')
     const [shippAddr, setshippAddr] = useState('')
@@ -155,6 +155,13 @@ const Order = (props) => {
                 goButtonHandler(hasEditVal)//=======Go Button API Call
 
                 dispatch(BreadcrumbFilterSize(`${"Order Amount"} :${hasEditVal.OrderAmount}`))
+                dispatch(orderAddfilters({
+                    orderdate: hasEditVal.OrderDate,
+                    supplierSelect: {
+                        label: hasEditVal.SupplierName,
+                        value: hasEditVal.Supplier
+                    }
+                }))
                 // setsupplierSelect({ label: hasEditVal.SupplierName, value: hasEditVal.Supplier })
                 // setpoDate(hasEditVal.OrderDate)
                 setdeliverydate(hasEditVal.DeliveryDate)
@@ -254,7 +261,7 @@ const Order = (props) => {
         setOrderAmount(sum.toFixed(2))
         dispatch(BreadcrumbFilterSize(`${"Order Amount"} :${sum.toFixed(2)}`))
     };
-    
+
     function assignItem_onClick() {
 
         if (supplierSelect.value > 1) {
@@ -467,14 +474,21 @@ const Order = (props) => {
         setisOpen_TermsModal(false)
         goButtonHandler()
     }
-    const goButtonHandler = () => {
-        debugger
+    const goButtonHandler = (isedit) => {
+        if (isedit) {
+            const jsonBody = JSON.stringify({
+                Party: isedit.Supplier,
+                EffectiveDate: isedit.OrderDate
+            });
+            dispatch(goButton(jsonBody))
+            return
+        }
         if (!supplierSelect > 0) {
             dispatch(
                 AlertState({
                     Type: 4,
                     Status: true,
-                    Message: "Please Select upplier",
+                    Message: "Please select supplier",
                     RedirectPath: false,
                     PermissionAction: false,
                 })
@@ -505,7 +519,7 @@ const Order = (props) => {
         dispatch(BreadcrumbFilterSize(`${"Order Amount"} :0:00`))
         const jsonBody = JSON.stringify({
             Party: supplierSelect.value,
-            EffectiveDate: podate
+            EffectiveDate: orderdate
         });
         dispatch(goButton(jsonBody))
     };
@@ -636,7 +650,7 @@ const Order = (props) => {
             return
         }
         const jsonBody = JSON.stringify({
-            OrderDate: podate,
+            OrderDate: orderdate,
             DeliveryDate: deliverydate,
             Customer: division,
             Supplier: supplier,
@@ -779,7 +793,7 @@ const Order = (props) => {
                                                 altInput: true,
                                                 altFormat: "d-m-Y",
                                                 dateFormat: "Y-m-d",
-                                                minDate: pageMode === "edit" ? podate : "today",
+                                                // minDate: pageMode === "edit" ? orderdate : "today",
 
                                             }}
                                             onChange={(e, date) => { setdeliverydate(date) }}

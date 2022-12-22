@@ -264,7 +264,7 @@ const ProductionMaster = (props) => {
     }));
 
     const formSubmitHandler = (event) => {
-        debugger
+
         event.preventDefault();
         // const makeproduction = produtionMake.Data.id
         // const LotQuantity = produtionMake.Data.LotQuantity
@@ -360,7 +360,7 @@ const ProductionMaster = (props) => {
                                                 name="EstimatedQuantity"
                                                 type="text"
                                                 placeholder="Enter EstimatedQuantity"
-                                                value={values.EstimatedQuantity}
+                                                value={`${values.EstimatedQuantity}  ${values.NumberOfLot}`}
                                                 // className={isError.EstimatedOutputQty.length > 0 ? "is-invalid form-control" : "form-control"}
                                                 style={{ backgroundColor: "white" }}
                                                 onChange={(event) => {

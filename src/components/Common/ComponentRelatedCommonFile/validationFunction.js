@@ -9,12 +9,12 @@ export const formValid = ({ isError, required, hasValid, fieldLabel, values }, s
             setState({ isError, hasValid, required, fieldLabel, values })
         }
     });
-    debugger
+    
     return isValid
 };
 
 export const formValChange = ({ event, state, setState }) => {
-    debugger
+    
     let isError = { ...state.isError };
     let hasValid = { ...state.hasValid };
     let required = { ...state.required };
