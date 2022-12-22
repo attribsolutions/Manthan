@@ -37,7 +37,6 @@ import {
 import { AvForm } from "availity-reactstrap-validation";
 import { createdBy, userCompany } from "../../../components/Common/ComponentRelatedCommonFile/listPageCommonButtons";
 import * as url from "../../../routes/route_url";
-import * as pageId from "../../../routes/allPageID";
 
 const MarginMaster = (props) => {
     const dispatch = useDispatch();
@@ -202,8 +201,7 @@ const MarginMaster = (props) => {
             }));
             return
         }
-        else if (!(effectiveDate)) 
-        {
+        else if (!(effectiveDate)) {
             dispatch(AlertState({
                 Type: 4,
                 Status: true,
@@ -251,7 +249,7 @@ const MarginMaster = (props) => {
                     Type: 1,
                     Status: true,
                     Message: PostAPIResponse.Message,
-                    RedirectPath:url.MARGIN_lIST,
+                    RedirectPath: url.MARGIN_lIST,
                 }))
             }
         }
@@ -409,9 +407,7 @@ const MarginMaster = (props) => {
 
 
     return (
-        <React.Fragment
-
-        >
+        <React.Fragment>
             <div className="page-content" style={{ marginTop: IsEditMode_Css }}>
                 <MetaTags>
                     <title>PartyType| FoodERP-React FrontEnd</title>
@@ -435,7 +431,6 @@ const MarginMaster = (props) => {
                                     <Col md={12} >
                                         <Card style={{ backgroundColor: "whitesmoke" }}>
 
-
                                             <CardHeader className="card-header   text-black c_card_body "  >
                                                 <Row className="mt-3">
                                                     <Col md="3">
@@ -450,7 +445,6 @@ const MarginMaster = (props) => {
                                                                     placeholder="select"
                                                                     onChange={(e) => { PriceList_Dropdown_OnChange_Handller(e) }}
                                                                     classNamePrefix="select2-selection"
-
                                                                 />
                                                             </Col>
                                                         </FormGroup>
@@ -468,7 +462,6 @@ const MarginMaster = (props) => {
                                                                     placeholder="select"
                                                                     onChange={(e) => { PartyType_Dropdown_OnChange_Handller(e) }}
                                                                     classNamePrefix="select2-selection"
-
                                                                 />
                                                             </Col>
                                                         </FormGroup>
