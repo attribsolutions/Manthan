@@ -335,10 +335,6 @@ const ProductionMaster = (props) => {
                                         <Label className="col-sm-4 p-2"
                                             style={{ width: "170px" }}>{fieldLabel.ProductionDate}</Label>
                                         <Col sm="7">
-
-
-
-
                                             <Flatpickr
                                                 name="ProductionDate"
                                                 value={values.ProductionDate}
@@ -467,12 +463,12 @@ const ProductionMaster = (props) => {
                                             style={{ width: "170px" }}>{fieldLabel.Item}</Label>
                                         <Col md="7">
                                             <Select
-                                                disabled
+                                            isDisabled={true}
                                                 name="Item"
                                                 value={values.Item}
-                                                isSearchable={true}
-                                                className="react-dropdown"
-                                                classNamePrefix="dropdown"
+                                                // isSearchable={true}
+                                                // className="react-dropdown"
+                                                // classNamePrefix="dropdown"
                                                 options={ItemDropdown_Options}
                                                 onChange={(hasSelect, evn) => {
                                                     onChangeSelect({ hasSelect, evn, state, setState });
@@ -499,9 +495,9 @@ const ProductionMaster = (props) => {
                                                     onChangeText({ event, state, setState })
                                                 }}
                                             />
-                                            {/* {isError.ActualQuantity.length > 0 && (
+                                            {isError.ActualQuantity.length > 0 && (
                                                 <span className="text-danger f-8"><small>{isError.ActualQuantity}</small></span>
-                                            )} */}
+                                            )}
                                         </Col>
                                     </FormGroup>
                                     {/*
