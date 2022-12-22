@@ -21,7 +21,6 @@ import Flatpickr from "react-flatpickr"
 import { Breadcrumb_inputName } from "../../../store/Utilites/Breadcrumb/actions";
 import { MetaTags } from "react-meta-tags";
 import { useHistory } from "react-router-dom";
-import { EMPLOYEE_lIST } from "../../../routes/route_url";
 import {
   comAddPageFieldFunc,
   formValid,
@@ -196,7 +195,6 @@ const AddEmployee = (props) => {
       dispatch(editEmployeeSuccess({ Status: false }))
     }
   }, [])
-
 
   useEffect(() => {
 
