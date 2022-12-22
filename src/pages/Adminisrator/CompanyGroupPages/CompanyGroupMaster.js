@@ -57,13 +57,16 @@ const CompanyGroupMaster = (props) => {
     const [editCreatedBy, seteditCreatedBy] = useState("");
 
     //Access redux store Data /  'save_ModuleSuccess' action data
-    const { postMsg, updateMsg, pageField, userAccess } = useSelector((state) => ({
-        postMsg: state.CompanyGroupReducer.PostDataMessage,
-        updateMsg: state.CompanyGroupReducer.updateMessage,
-        userAccess: state.Login.RoleAccessUpdateData,
-        pageField: state.CommonPageFieldReducer.pageField
+    const { postMsg,
+        updateMsg,
+        pageField,
+        userAccess } = useSelector((state) => ({
+            postMsg: state.CompanyGroupReducer.PostDataMessage,
+            updateMsg: state.CompanyGroupReducer.updateMessage,
+            userAccess: state.Login.RoleAccessUpdateData,
+            pageField: state.CommonPageFieldReducer.pageField
 
-    }));
+        }));
 
     useEffect(() => {
         const page_Id = pageId.COMPANYGROUP
@@ -194,7 +197,7 @@ const CompanyGroupMaster = (props) => {
         }
     }, [pageField])
 
-   
+
     const SaveHandler = (event) => {
         event.preventDefault();
         if (formValid(state, setState)) {
